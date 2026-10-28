@@ -36,11 +36,10 @@
  *   6. The agent starter (website/public/<AGENT_STARTER_FILE>) and its
  *      module for the website (agent-starter.generated.ts) byte-match
  *      their builders, the file passes the same content screens, and each
- *      surface that offers it uses the accessor: the home hero copies the
- *      full text on click (AGENT_STARTER), get-started shows the full
- *      text in a copy frame (AGENT_STARTER), and llms.txt links the raw
- *      file (AGENT_STARTER_URL). None spells the file's URL by hand. The
- *      README, a fourth surface that cannot import, must carry the URL
+ *      surface that offers it uses the accessor: get-started shows the
+ *      full text in a copy frame (AGENT_STARTER), and llms.txt links the
+ *      raw file (AGENT_STARTER_URL). None spells the file's URL by hand.
+ *      The README, a third surface that cannot import, must carry the URL
  *      the accessor builds.
  *
  * Runs in the validate-registry chain: every input is source or generated
@@ -209,7 +208,6 @@ if (!existsSync(starterModulePath) || read(starterModulePath) !== starterModule)
 }
 // Each surface, the accessor name it must use, and what that name does there.
 const starterOffers = [
-  ['website/src/app/DesignSystemLanding.tsx', 'AGENT_STARTER', 'copies the full text from the hero'],
   ['website/src/app/docs/get-started/page.tsx', 'AGENT_STARTER', 'shows the full text in a copy frame'],
   ['website/src/app/llms.txt/route.ts', 'AGENT_STARTER_URL', 'links the raw file'],
 ];

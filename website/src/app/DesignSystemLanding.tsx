@@ -15,10 +15,6 @@ import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { AGENT_STARTER, AGENT_STARTER_FILE, AGENT_STARTER_PAGE } from "@/data/agent-skills";
-import { useRouter } from "next/navigation";
-import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
-import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -370,63 +366,6 @@ function DemoCard({
         ))}
       </footer>
     </article>
-  );
-}
-
-/** The hero's agent shortcut: one click puts the whole AGENTS.md starter on
-    the clipboard, and the copy glyph crossfades to a check while the label
-    says so. With no clipboard (an insecure origin, a denied permission) it
-    goes to the get-started section, where the same text sits in a copy
-    frame. The swap rides the motion tokens, so reduced motion makes it
-    instant. */
-function AgentStarterCopy() {
-  const router = useRouter();
-  const [copied, setCopied] = useState(false);
-  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => () => {
-    if (resetTimer.current) clearTimeout(resetTimer.current);
-  }, []);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(AGENT_STARTER);
-      trackEvent(SITE_EVENTS.copyAgentStarter, { surface: "home_hero", delivery: "copy" });
-      setCopied(true);
-      if (resetTimer.current) clearTimeout(resetTimer.current);
-      resetTimer.current = setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
-    } catch {
-      router.push(AGENT_STARTER_PAGE);
-    }
-  };
-
-  return (
-    <button
-      type="button"
-      className={styles.heroAgentCopy}
-      onClick={copy}
-      data-copied={copied || undefined}
-    >
-      <span className={styles.heroAgentSwap} aria-hidden="true">
-        <span className={`material-symbols-rounded ${styles.heroAgentGlyph} ${styles.heroAgentCopyGlyph}`}>
-          content_copy
-        </span>
-        <span className={`material-symbols-rounded ${styles.heroAgentGlyph} ${styles.heroAgentCheckGlyph}`}>
-          check
-        </span>
-      </span>
-      {/* Both labels share one grid cell, so the button keeps its width. The
-          done label is the shorter, so the idle label alone sets that width
-          and no slack sits before the next item; the live region says which
-          file was copied. */}
-      <span className={styles.heroAgentLabels}>
-        <span className={styles.heroAgentLabelIdle}>Copy {AGENT_STARTER_FILE}</span>
-        <span className={styles.heroAgentLabelDone}>Copied</span>
-      </span>
-      <span className={styles.heroAgentLive} aria-live="polite">
-        {copied ? `${AGENT_STARTER_FILE} copied to the clipboard` : ""}
-      </span>
-    </button>
   );
 }
 
@@ -1431,8 +1370,8 @@ export default function DesignSystemLanding() {
       <main className={styles.page} id="main-content">
         {/* ---------- page header (deliberately light: this is the index of
              the design-system section, so it carries the tagline, the
-             section links, and the accent swatches; the registry-counted
-             metrics band opens the collage below — nothing else. Figma, Storybook, GitHub and npm live in
+             section links, the accent swatches and the registry-counted
+             metrics band — nothing else. Figma, Storybook, GitHub and npm live in
              the resources strip below the collage, plus the footer and the
              Install card.) ---------- */}
         <section className={styles.hero} aria-label="About the design system">
@@ -1451,27 +1390,26 @@ export default function DesignSystemLanding() {
           <h1 className={styles.pageTitle}>The open source AI design system</h1>
           <RotatingSubtitle />
           <FadeDivider className={styles.heroDivider} />
+          {/* The counts, between two rules: every figure imports from the registry export that
+              owns it, so the band can never overstate. */}
+          <div className={styles.statStrip} role="group" aria-label="What the system counts today">
+            <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
+            <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
+            <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
+            <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
+            <Stat
+              value={<AnimatedNumber value={0} format={(v) => `$${Math.round(v)}`} />}
+              label="Cost"
+            />
+          </div>
+          <FadeDivider className={styles.heroDivider} />
           <ButtonGroup
             aria-label="Explore the system"
             buttons={[
               { label: "Playground", variant: "primary" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
-              { label: "Components", variant: "secondary" as const, tone: "neutral" as const, href: "/components", iconLeft: "category", iconRight: "arrow_forward" },
+              { label: "Get started", variant: "secondary" as const, tone: "neutral" as const, href: "/docs/get-started", iconLeft: "terminal", iconRight: "arrow_forward" },
             ]}
           />
-          {/* The agent starter, kept to one quiet line: the buttons are the
-              hero's call to action, this is the shortcut for agent users,
-              with the install guide beside it. */}
-          <p className={styles.heroAgentNote}>
-            <span>Using a coding agent?</span>
-            <AgentStarterCopy />
-            <span>or</span>
-            <Link href="/docs/get-started" className={styles.heroAgentCopy}>
-              <span className={`material-symbols-rounded ${styles.heroAgentGlyph}`} aria-hidden="true">
-                terminal
-              </span>
-              <span className={styles.heroAgentLinkLabel}>Get started</span>
-            </Link>
-          </p>
           </div>
         </section>
 
@@ -1485,28 +1423,14 @@ export default function DesignSystemLanding() {
           <HomeChatFrame />
         </section>
 
-        {/* ---------- the collage's own header, then the counts: every
-             figure imports from the registry export that owns it, so the
-             band can never overstate; the columns below show the things
-             counted ---------- */}
+        {/* ---------- the collage's own header and its one call to action;
+             the columns below show the things the hero counts ---------- */}
         <header className={styles.collageHeader}>
           <h2 className={styles.collageTitle}>Components you don’t have to build</h2>
           <p className={styles.collageSub}>
             Typed, keyboard-ready and checked with axe. Every card below is live in your theme.
           </p>
         </header>
-        <FadeDivider className={styles.statsDivider} />
-        <div className={styles.statStrip} role="group" aria-label="What the system counts today">
-          <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
-          <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
-          <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
-          <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
-          <Stat
-            value={<AnimatedNumber value={0} format={(v) => `$${v.toFixed(2)}`} />}
-            label="Cost"
-          />
-        </div>
-        <FadeDivider className={styles.statsDividerEnd} />
         <div className={styles.statsCta}>
           <Button
             label="Components"

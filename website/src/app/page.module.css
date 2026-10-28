@@ -203,19 +203,17 @@
 
 
 /* ============================================
-   STAT STRIP: the counts band opening the
-   collage, the library's own Stat, centred,
-   one figure per registry count export
+   STAT STRIP: the hero's counts band, the
+   library's own Stat, centred, one figure
+   per registry count export
    ============================================ */
 
-/* The hero's one rule breathes: air below the subtitle, on top of the
-   hero's own gap. */
+/* The hero's two rules frame the counts, each with air above it on top
+   of the hero's own gap. */
 .heroDivider {
   margin-top: var(--gap-400);
 }
 
-/* The agent starter line under the hero buttons: caption type in the
-   secondary text colour, so it reads as a footnote to the call to action. */
 /* Experiment: the maker's mark closing the page. A hairline pill, so
    it reads as a credit rather than another resource link. */
 .heroCredit {
@@ -248,121 +246,6 @@
   --icon-size: var(--icon-size-500);
 }
 
-.heroAgentNote {
-  /* A row, so the question and the copy button share one centre line
-     instead of each sitting on its own baseline. */
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  /* Wider than the glyph-to-label gap inside each link, so the icons read
-     as belonging to their labels rather than floating between items. */
-  gap: var(--gap-100);
-  margin: 0;
-  font-family: var(--font-caption-family);
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-caption-weight);
-  line-height: var(--font-caption-line-height);
-  letter-spacing: var(--font-caption-letter-spacing);
-  color: var(--color-text-secondary);
-}
-
-/* The copy button reads as a link in the footnote: no chrome, the caption's
-   type, an underline under the label only. */
-.heroAgentCopy {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-050);
-  padding: 0;
-  border: 0;
-  background: none;
-  text-decoration: none;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  --icon-size: var(--icon-size-500);
-}
-
-.heroAgentCopy:hover,
-.heroAgentCopy:focus-visible {
-  color: var(--color-text-primary);
-}
-
-.heroAgentCopy:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: 2px;
-  border-radius: var(--radius-100);
-}
-
-/* Glyphs and labels each stack in one grid cell and crossfade, so nothing
-   moves when the copy lands: the check blurs and scales in where the copy
-   glyph dissolved, the same swap as the component pages' copy button. The
-   timings ride the motion tokens, so reduced motion makes it instant. */
-.heroAgentSwap,
-.heroAgentLabels {
-  display: inline-grid;
-}
-
-/* A button centres its text; the labels start at the glyph instead. */
-.heroAgentLabels {
-  justify-items: start;
-  text-align: start;
-}
-
-.heroAgentGlyph,
-.heroAgentLabelIdle,
-.heroAgentLabelDone {
-  grid-area: 1 / 1;
-  transition:
-    opacity var(--motion-duration-base) var(--motion-ease-entrance),
-    filter var(--motion-duration-base) var(--motion-ease-entrance),
-    transform var(--motion-duration-base) var(--motion-ease-entrance);
-}
-
-.heroAgentLabelIdle,
-.heroAgentLabelDone,
-.heroAgentLinkLabel {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.heroAgentCheckGlyph,
-.heroAgentLabelDone {
-  opacity: 0;
-  filter: blur(2px);
-}
-
-.heroAgentCheckGlyph {
-  transform: scale(0.4);
-}
-
-.heroAgentCopy[data-copied] .heroAgentCheckGlyph,
-.heroAgentCopy[data-copied] .heroAgentLabelDone {
-  opacity: 1;
-  filter: blur(0);
-  transform: none;
-}
-
-.heroAgentCopy[data-copied] .heroAgentCopyGlyph,
-.heroAgentCopy[data-copied] .heroAgentLabelIdle {
-  opacity: 0;
-  filter: blur(2px);
-}
-
-.heroAgentCopy[data-copied] .heroAgentCopyGlyph {
-  transform: scale(0.4);
-}
-
-/* Announces the copy to screen readers; takes no space. */
-.heroAgentLive {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 .statStrip {
   display: flex;
   max-width: 1440px;
@@ -370,9 +253,9 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--gap-400) var(--gap-1500);
-  /* The band's step less a little: the figures' line height already adds
-     air above the numerals, so every gap in the band reads the same. */
-  margin-top: calc(var(--gap-1000) - var(--gap-200));
+  /* The same air under the opening rule as the closing rule has above it,
+     so the band sits evenly between the two. */
+  margin-top: var(--gap-400);
 }
 
 /* Stat left-aligns for dashboard rows; the centred counts band centres
@@ -680,25 +563,7 @@
 
 
 
-/* The rule opening the counts band: a full section step below the header
-   copy, so the subtitle and the counts read as separate beats. */
-.statsDivider {
-  /* Held to the same 1440px column as the chat frame and the collage, so
-     the rule's faded ends land under their outer edges. */
-  max-width: 1440px;
-  margin-block-start: var(--gap-1000);
-  margin-inline: auto;
-}
-
-/* The rule closing the counts band, in the same column as the one opening
-   it, the band's one step under the labels. */
-.statsDividerEnd {
-  max-width: 1440px;
-  margin-block-start: var(--gap-1000);
-  margin-inline: auto;
-}
-
-/* The band's one call to action, the same step under its rule, with room
+/* The collage's one call to action, a step under its header, with room
    before the escalator columns, whose fade opens the next band. */
 .statsCta {
   display: flex;

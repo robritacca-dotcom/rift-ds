@@ -810,9 +810,9 @@ function Reel({
       await waitFor(() => zone.querySelector(".ds-attachment-tile"));
     };
 
-    /** Answers the newest question card, one pick per question. A
-        single-choice pick in a set moves the card on by itself; where it
-        does not, the cursor takes the footer's Next or Send. */
+    /** Answers the newest question card, one pick per question. A pick in
+        a set waits for the footer's Next or Send, which the cursor takes; a
+        lone single-choice question sends on the pick itself. */
     const answer = async (picks: readonly string[]) => {
       const card = () => [...stage().querySelectorAll(".ds-question-card")].at(-1);
       await waitFor(card);

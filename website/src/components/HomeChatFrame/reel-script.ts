@@ -24,7 +24,7 @@ export const REEL_COPY = {
   revenue: "How did revenue do this quarter?",
   file: "Q3-expenses.pdf",
   spend: "Here is the Q3 expense report. Where is the money going?",
-  runway: "What would a 20% cut to cloud spend do to runway?",
+  runway: "What would a 20% cut to cloud spend do to runway, with or without a hiring freeze?",
   runwayPicks: ["From October", "Keep all three"],
   mention: { query: "Pri", id: "priya" },
   handoff: "Send this to @Priya Shah to check before the board pack",

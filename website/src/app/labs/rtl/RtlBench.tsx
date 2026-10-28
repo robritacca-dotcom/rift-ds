@@ -95,7 +95,7 @@ export function RtlBench() {
               value={direction}
               onValueChange={(next) => setDirection(next as Direction)}
             />
-            <ThemeToggle />
+            <ThemeToggle size="compact" />
           </div>
         </header>
 

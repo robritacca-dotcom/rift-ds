@@ -393,6 +393,12 @@
   min-width: 0;
 }
 
+/* The count and Select all N never give up width: the actions' fit is
+   measured against what they need, and what does not fit folds into More. */
+.ds-table-toolbar__bulk-start {
+  flex-shrink: 0;
+}
+
 /* Actions that do not fit stay laid out out of sight, so they can be measured. */
 .ds-table-toolbar__bulk-end {
   position: relative;

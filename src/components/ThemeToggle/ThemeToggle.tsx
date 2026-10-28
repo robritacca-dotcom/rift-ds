@@ -20,7 +20,7 @@ type ThemeToggleOwnProps = {
   defaultValue?: ColorModeSetting;
   /** Fires with the setting after every pick, controlled or not. */
   onValueChange?: (value: ColorModeSetting) => void;
-  /** Control size, on SegmentedControl's scale. */
+  /** Control size, on SegmentedControl's scale: `default` (the default), the height of the CommandPaletteTrigger and AiButton beside it in a top bar, or `compact`. */
   size?: 'default' | 'compact';
   /** Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name. */
   showLabels?: boolean;
@@ -54,7 +54,7 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
       value,
       defaultValue,
       onValueChange,
-      size = 'compact',
+      size = 'default',
       showLabels = true,
       storageKey,
       systemLabel = 'System',

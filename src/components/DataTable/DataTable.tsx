@@ -52,7 +52,7 @@ import {
   type StatusRole,
 } from './columnTypes';
 import { TypedCell } from './TypedCell';
-import { reconcileView, type TableView } from './views';
+import { reconcileView, slotStartingView, type TableView } from './views';
 import { NUMERIC_TOTALS, TOTALS, calculate, type Aggregate, type Result, type Total } from './aggregates';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { EDITOR_MIN_WIDTH, LIVE_KINDS, TYPED_KINDS, type CellEditorKind, type CellValue } from './editorKinds';
@@ -968,11 +968,26 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   const collator = useMemo(() => textCollator(locale), [locale]);
   const compareValues = useMemo(() => valueComparator(collator), [collator]);
 
-  const [size, setSize] = useControllable<'default' | 'compact'>(sizeProp, defaultSize ?? 'default', onSizeChange);
-  const [search, setSearchState] = useControllable<string>(searchProp, defaultSearch ?? '', onSearchChange);
+  /* A TableToolbar with saved views in the toolbar slot names the view the
+     table opens on, so its first render (the server's HTML too) is already
+     that view. Its parts lay over the table's own defaults; the defaults
+     stay the base a view that leaves a part out falls back to. */
+  const [startingView] = useState(() => slotStartingView(toolbar));
+  const startsWith = <K extends keyof DataTableView>(key: K, controlled: unknown) =>
+    controlled === undefined && startingView?.[key] !== undefined;
+  const [size, setSize] = useControllable<'default' | 'compact'>(
+    sizeProp,
+    (startsWith('size', sizeProp) ? startingView!.size : undefined) ?? defaultSize ?? 'default',
+    onSizeChange,
+  );
+  const [search, setSearchState] = useControllable<string>(
+    searchProp,
+    (startsWith('search', searchProp) ? startingView!.search : undefined) ?? defaultSearch ?? '',
+    onSearchChange,
+  );
   const [filters, setFiltersState] = useControllable<DataTableFilter[]>(
     filtersProp,
-    defaultFilters ?? [],
+    (startsWith('filters', filtersProp) ? startingView!.filters : undefined) ?? defaultFilters ?? [],
     onFiltersChange,
   );
   const filterLabels: FilterLabels = {
@@ -982,7 +997,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
   const [pageSize, setPageSize] = useControllable<number | undefined>(
     pageSizeProp,
-    defaultPageSize,
+    (startsWith('pageSize', pageSizeProp) ? startingView!.pageSize : undefined) ?? defaultPageSize,
     onPageSizeChange as ((next: number | undefined) => void) | undefined,
   );
   const [page, setPageState] = useControllable<number>(pageProp, defaultPage ?? 1, onPageChange);
@@ -1033,14 +1048,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
 
   /* One list of sorts, first sort first; `sort` is its one-column form. */
   const isSortControlled = sortsProp !== undefined || sort !== undefined;
+  const openingSorts = defaultSorts ?? (defaultSort ? [defaultSort] : []);
   const [uncontrolledSorts, setUncontrolledSorts] = useState<DataTableSort[]>(
-    defaultSorts ?? (defaultSort ? [defaultSort] : []),
+    (startsWith('sorts', sortsProp ?? sort) ? startingView!.sorts : undefined) ?? openingSorts,
   );
   const currentSorts: DataTableSort[] = sortsProp ?? (sort !== undefined ? (sort ? [sort] : []) : uncontrolledSorts);
   const sortOf = (key: string) => currentSorts.find((entry) => entry.key === key);
   const [groupingState, setGroupingState] = useControllable<string[]>(
     groupingProp,
-    defaultGrouping ?? [],
+    (startsWith('grouping', groupingProp) ? startingView!.grouping : undefined) ?? defaultGrouping ?? [],
     onGroupingChange,
   );
   const [expandedState, setExpanded] = useControllable<string[]>(
@@ -1119,7 +1135,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        drops a row. */
   const [widthsState, setWidths] = useControllable<Record<string, number>>(
     columnWidths,
-    defaultColumnWidths ?? {},
+    (startsWith('columnWidths', columnWidths) ? startingView!.columnWidths : undefined) ?? defaultColumnWidths ?? {},
     onColumnWidthsChange,
   );
   const [orderState, setOrder] = useControllable<string[]>(columnOrder, defaultColumnOrder ?? [], onColumnOrderChange);
@@ -1958,7 +1974,16 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   /* The setup the table opened with: a view that leaves a part out gets
      this part back, so switching views never carries one view's filters
      into the next. */
-  const [baseView] = useState(currentView);
+  const [baseView] = useState<DataTableView>(() => ({
+    ...currentView,
+    ...(startsWith('sorts', sortsProp ?? sort) ? { sorts: openingSorts } : {}),
+    ...(startsWith('filters', filtersProp) ? { filters: defaultFilters ?? [] } : {}),
+    ...(startsWith('search', searchProp) ? { search: defaultSearch ?? '' } : {}),
+    ...(startsWith('columnWidths', columnWidths) ? { columnWidths: defaultColumnWidths ?? {} } : {}),
+    ...(startsWith('grouping', groupingProp) ? { grouping: defaultGrouping ?? [] } : {}),
+    ...(startsWith('size', sizeProp) ? { size: defaultSize ?? 'default' } : {}),
+    ...(startsWith('pageSize', pageSizeProp) ? { pageSize: defaultPageSize } : {}),
+  }));
   const viewColumns = columns.map((col) => ({
     key: col.key,
     filterKind: col.type ? TYPE_DEFAULTS[col.type].filter : undefined,

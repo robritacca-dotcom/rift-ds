@@ -141,12 +141,11 @@ export function FilterEditor({
     );
   })();
 
-  // A list filter is its checkboxes: ticking is "any of", so it shows no
-  // condition to pick, only the search and the list.
-  const isList = column.kind === 'enum' || column.kind === 'tags';
+  // Every kind with more than one condition shows the picker; a list's
+  // conditions ("is any of", "is none of") say what its ticks mean.
   return (
     <div className="ds-data-table__filter-editor" role="group" aria-label={labels.editor(column.label)}>
-      {!isList && (
+      {operators.length > 1 && (
         <Dropdown
           size={size}
           options={operators.map((operator) => ({ value: operator, label: labels.operators[operator] }))}

@@ -61,8 +61,8 @@ export default function ThemeTogglePage() {
           <section className={styles.section}>
             <SectionTitle title="Default" />
             <p className={styles.demoText}>
-              Compact by default, the size a header or a settings row wants.
-              It is live: choosing a setting here changes this page, and every
+              The default size, the height of the search trigger and the AI
+              button beside it in a top bar. It is live: choosing a setting here changes this page, and every
               other toggle on it follows.
             </p>
             <div className={styles.row}>
@@ -80,8 +80,8 @@ export default function ThemeTogglePage() {
               with English defaults, so they can be translated.
             </p>
             <div className={styles.row}>
-              <ThemeToggle size="default" />
-              <ThemeToggle showLabels={false} />
+              <ThemeToggle size="compact" />
+              <ThemeToggle size="compact" showLabels={false} />
             </div>
           </section>
 

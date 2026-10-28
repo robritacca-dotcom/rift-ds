@@ -37,6 +37,28 @@ export interface TableView {
   pageSize?: number;
 }
 
+/**
+ * The view a table starts on when a TableToolbar with saved views sits
+ * directly in its `toolbar` slot: the active one (`activeView`, else
+ * `defaultActiveView`, else the first). Read from the element's props, so
+ * the table's first render, the server's HTML included, is already that
+ * view; the toolbar applies it on mount too, for a bar the table cannot
+ * see into (one wrapped in another component).
+ */
+export function slotStartingView(toolbar: unknown): TableView | undefined {
+  if (!toolbar || typeof toolbar !== 'object' || !('props' in toolbar)) return undefined;
+  const props = (toolbar as { props: unknown }).props as {
+    views?: { id: string; view: TableView }[];
+    defaultViews?: { id: string; view: TableView }[];
+    activeView?: string;
+    defaultActiveView?: string;
+  } | null;
+  const views = props?.views ?? props?.defaultViews;
+  if (!Array.isArray(views) || views.length === 0) return undefined;
+  const id = props?.activeView ?? props?.defaultActiveView;
+  return (views.find((v) => v.id === id) ?? views[0]).view;
+}
+
 /** What reconciling needs to know about a column. */
 export interface ViewColumn {
   key: string;

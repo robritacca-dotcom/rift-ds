@@ -13828,8 +13828,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Control size, on SegmentedControl's scale.",
-            "defaultValue": "compact"
+            "description": "Control size, on SegmentedControl's scale: `default` (the default), the height of the CommandPaletteTrigger and AiButton beside it in a top bar, or `compact`.",
+            "defaultValue": "default"
           },
           {
             "name": "showLabels",

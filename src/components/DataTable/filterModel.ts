@@ -62,9 +62,10 @@ export const OPERATORS: Record<FilterKind, FilterOperator[]> = {
   text: ['contains', 'notContains', 'is', 'isNot', 'startsWith', 'endsWith', 'isEmpty', 'isNotEmpty'],
   number: ['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'between', 'isEmpty', 'isNotEmpty'],
   date: ['is', 'before', 'after', 'between', 'isEmpty', 'isNotEmpty'],
-  // A list filter is its checkboxes, so it has the one condition they mean.
-  enum: ['isAnyOf'],
-  tags: ['hasAnyOf'],
+  // A list filter is its checkboxes; the condition says what a tick means,
+  // and the first, "any of", is the one a new filter starts with.
+  enum: ['isAnyOf', 'isNoneOf'],
+  tags: ['hasAnyOf', 'hasAllOf', 'hasNoneOf'],
   boolean: ['isChecked', 'isNotChecked'],
 };
 

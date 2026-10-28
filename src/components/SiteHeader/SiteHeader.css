@@ -172,11 +172,20 @@
 
 /* The mega menu hangs under the bar across its full width. It is not
    anchored to a control (useAnchoredPosition's job): it belongs to the bar
-   and spans it, so it rides the bar's own box. */
+   and spans it, so it rides the bar's own box.
+   The wrapper keeps the height of the last section shown after the menu
+   closes, so it never takes a press itself: a transparent box that size
+   would sit over the page and swallow its clicks. Only the menu does, and a
+   closed menu is hidden, which takes it out of hit testing too. */
 .ds-site-header__panel {
   position: absolute;
   inset-block-start: calc(100% + var(--gap-200));
   inset-inline: 0;
+  pointer-events: none;
+}
+
+.ds-site-header__panel > .ds-mega-menu {
+  pointer-events: auto;
 }
 
 /* Folded: the pills and the wide actions leave the row but stay measurable

@@ -8,7 +8,10 @@
   align-items: center;
   gap: var(--primitive-gap-500);
   flex-shrink: 0;
-  /* Pages can pass several link buttons (About passes four) — wrap rather
-     than force the page wider than a phone viewport. */
+  /* Pages can pass several link buttons (About passes four): wrap rather
+     than force the page wider than a phone viewport. The cap lets them,
+     since a header row that wraps would otherwise size the group to its
+     one-line width. */
   flex-wrap: wrap;
+  max-width: 100%;
 }

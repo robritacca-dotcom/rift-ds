@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }

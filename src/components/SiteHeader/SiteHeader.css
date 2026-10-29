@@ -261,8 +261,9 @@
   position: absolute;
   inset-block-start: var(--ds-site-header-close-top, var(--padding-500));
   inset-inline-start: var(--ds-site-header-close-start, auto);
-  width: var(--control-height-default);
-  height: var(--control-height-default);
+  /* The menu button's compact box, so the close lands exactly on it. */
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
   /* ds-allow(color): on-scrim furniture, as Lightbox's: the scrim is dark in both themes, so the glyph is white in both. */
   color: #ffffff;
   opacity: 0;
@@ -273,6 +274,9 @@
    turning into another. */
 .ds-site-header__drawer .ds-drawer__close .material-symbols-rounded {
   --icon-size: var(--icon-size-600);
+  /* The glyph takes the close's on-scrim white, not CircularButton's
+     icon colour, which is dark in light mode and vanished on the scrim. */
+  color: inherit;
 }
 
 .ds-site-header__drawer .ds-drawer__panel[data-state="open"] .ds-drawer__close {

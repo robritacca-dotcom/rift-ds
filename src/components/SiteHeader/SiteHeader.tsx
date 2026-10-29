@@ -440,6 +440,7 @@ export function SiteHeader({
               .filter(Boolean)
               .join(' ')}
             icon="menu"
+            size="compact"
             variant="secondary"
             tone="neutral"
             ariaLabel={drawerOpenLabel}

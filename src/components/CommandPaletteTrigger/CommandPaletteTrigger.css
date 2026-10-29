@@ -70,6 +70,15 @@
   padding: 0 var(--padding-200);
 }
 
+/* The compact field's keycaps step down to caption type with no block
+   padding, so they sit inside the shorter row with air around them
+   instead of filling it. */
+.ds-command-palette-trigger--compact .ds-kbd--compact {
+  padding-block: 0;
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
 /* Folded to the icon: a circle the row height across, hovering like the
    theme picker's trigger rather than like a field. */
 .ds-command-palette-trigger--icon-only {

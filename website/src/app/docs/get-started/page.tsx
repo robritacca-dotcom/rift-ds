@@ -361,13 +361,13 @@ export default function GetStartedPage() {
           {/* Intro */}
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              One package, one stylesheet, and every token is yours to override
+              One package, two stylesheets, and every token is yours to override
             </p>
             <p className={styles.introBody}>
               The design system ships as <code>rift-ds</code>, the same
               package this site is built with. There is no configuration API or theme
               provider: theming is plain CSS custom properties. Import the token
-              stylesheet, use the components, and re-theme by redefining tokens. (The
+              stylesheet and the base sheet, use the components, and re-theme by redefining tokens. (The
               library has three optional providers: <code>ToastProvider</code>, needed
               only if you use the toast queue via <code>useToast</code>,{" "}
               <code>LinkProvider</code>, which hands components your router&apos;s

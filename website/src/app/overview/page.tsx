@@ -83,7 +83,7 @@ export default function AboutDsPage() {
                 <SectionTitle title="Using it in your product" />
                 <p className={styles.sectionBody}>
                   The consumer&apos;s view first. Install the package, import
-                  one stylesheet, and compose the components; a{" "}
+                  the token stylesheet and the base sheet, and compose the components; a{" "}
                   <code>data-brand</code> attribute on your root element
                   applies a complete theme, light and dark included. Your
                   coding agent joins through this site: one command installs

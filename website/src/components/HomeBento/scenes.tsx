@@ -96,7 +96,7 @@ export function ThemesTileScene() {
 /** A small dashboard on the site's own tokens, so a theme pick redraws it. */
 export function ThemesShowcase() {
   const [range, setRange] = useState("month");
-  const [email, setEmail] = useState("ada@northwind.dev");
+  const [email, setEmail] = useState("ada@northwind.example");
   const [admin, setAdmin] = useState(false);
   const [note, setNote] = useState(true);
   const [tag, setTag] = useState("Design");

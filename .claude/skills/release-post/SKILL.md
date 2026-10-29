@@ -55,7 +55,7 @@ The faces the served theme declares load from Google Fonts via a `<link>` in the
 
 ### 4. Render to PNG
 
-Render headlessly with the Playwright already in the repo's dependencies — no browser pane, no manual export. Two Windows-checkout gotchas from the first run: ESM ignores `NODE_PATH`, so import Playwright by an absolute `file://` URL into its package inside the repo's `node_modules` (derive the repo root with `git rev-parse --show-toplevel`); and strip the leading slash a `file://` pathname puts before the drive letter.
+Render headlessly with the Playwright already in the repo's dependencies — no browser pane, no manual export. ESM ignores `NODE_PATH` on every platform, so import Playwright by an absolute `file://` URL into its package inside the repo's `node_modules` (derive the repo root with `git rev-parse --show-toplevel`). On a Windows checkout only, also strip the leading slash a `file://` pathname puts before the drive letter; on macOS or Linux that slash is the path's root and must stay.
 
 The render script: chromium headless, viewport 1200×675 with `deviceScaleFactor: 2`, `goto` the card file with `waitUntil: 'networkidle'`, then `await page.evaluate(() => document.fonts.ready)` plus a short settle before screenshotting the card element — without the fonts wait, the PNG ships in the fallback face. The result is 2400×1350: crisp at twice the post size.
 

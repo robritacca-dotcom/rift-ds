@@ -237,11 +237,44 @@ html[data-chat-resizing] body {
   transition: none;
 }
 
+/* The keyboard experiment (SiteChat/KeyboardLab.tsx, `?kb=<mode>`): ways
+   to size the phone takeover under the iOS soft keyboard, tried on a device
+   against each other. "vv" is the package's own rule, the visual viewport's
+   height and pan, so it needs nothing here. Temporary: the winner moves
+   into the package and this block goes. */
+@media (max-width: 719px) {
+  /* The rule before the experiment: in flow at 100dvh. */
+  html[data-kb="dvh"] .ds-chat-launcher__panel {
+    top: 0;
+    height: 100dvh;
+  }
+
+  /* The visual viewport's height, pinned to the document's top. */
+  html[data-kb="vv-flat"] .ds-chat-launcher__panel {
+    top: 0;
+  }
+
+  /* Out of flow: fixed to the visual viewport's box. */
+  html[data-kb="fixed"] .ds-chat-launcher__panel {
+    position: fixed;
+    inset-inline: 0;
+  }
+}
+
 /* MegaNav's mobile drawer is open (it sets the attribute on <html>). The chat
    launcher sits above the drawer's scrim, where it reads as a stray button
    laid over the menu, so it stands down until the menu closes. */
 html[data-nav-drawer="open"] .ds-chat-launcher__fab {
   display: none;
+}
+
+/* At phone widths the chat's entry point is the header's AI button
+   (MegaNav), between search and menu: a floating pill in the corner sits on
+   the page's own controls there. The takeover width, the chat's own. */
+@media (max-width: 719px) {
+  .ds-chat-launcher__fab {
+    display: none;
+  }
 }
 
 /* The header's drawer joins the header on the site's chrome layer: the
@@ -305,6 +338,16 @@ body:has([data-bg-full-bleed]) .blur-container {
 
 body:has([data-bg-full-bleed]) .blur-container::after {
   display: none;
+}
+
+/* Behind the phone takeover the layer is fixed rather than absolute, at the
+   same band. Absolute, a band taller than the panel (the home page's 900px,
+   a full-bleed page's 100vh under the soft keyboard) kept the document
+   taller than the chat, and iOS Safari scrolled into that spare height when
+   the composer took focus: the header went off the top and an empty band of
+   background opened under the composer. A fixed layer adds no height. */
+html[data-chat="takeover"] body .blur-container {
+  position: fixed;
 }
 
 /* Background off — the dotted stages (the playground) stand the ambient

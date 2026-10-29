@@ -119,6 +119,31 @@
 }
 
 /* ============================================
+   CHAT BUTTON
+   The chat's entry point in the bar at phone widths:
+   the AI button's field, ring and glow, cut to the
+   search and menu buttons' size and curve.
+   ============================================ */
+.chatBtn {
+  display: none;
+}
+
+/* The takeover width, where the floating launcher stands down for this.
+   Doubled for the production stylesheet order noted on .searchBtn. */
+@media (max-width: 719px) {
+  .chatBtn.chatBtn {
+    display: inline-flex;
+    width: var(--control-height-default);
+    padding: 0;
+    border-radius: calc(var(--radius-pill) + var(--padding-100));
+  }
+
+  .chatBtn :global(.ds-ai-button__text) {
+    display: none;
+  }
+}
+
+/* ============================================
    DRAWER FOOTER
    ============================================ */
 /* One row on the drawer floor: the look switcher beside the mode toggle,

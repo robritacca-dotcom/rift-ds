@@ -1,0 +1,23 @@
+/* The keyboard experiment's readout (KeyboardLab.tsx): pinned to the visual
+   viewport's top corner, over the chat, never in the way of a tap. */
+.readout {
+  display: none;
+}
+
+:global(html[data-kb]) .readout {
+  display: block;
+  position: fixed;
+  inset-block-start: var(--gap-200);
+  inset-inline-end: var(--gap-200);
+  z-index: var(--layer-site-overlay);
+  margin: 0;
+  padding: var(--padding-200);
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  pointer-events: none;
+  opacity: 0.9;
+}

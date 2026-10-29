@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { useChatWidget } from "rift-ds/chat";
+import { ASSISTANT_NAME } from "@/config/brand.generated";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import { openSitePalette } from "../SitePalette/palette-bus";
@@ -23,6 +26,7 @@ import styles from "./MegaNav.module.css";
 export default function MegaNav() {
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
+  const { setOpen: setChatOpen, returnFocusRef } = useChatWidget();
 
   // A navigation closes the drawer, including one the drawer did not start
   // (the back button). The setState reacts to external navigation, which is
@@ -90,7 +94,23 @@ export default function MegaNav() {
       actions={
         // Opens the global palette mounted from the root layout; the two
         // trees never meet, so the click travels via palette-bus.
-        <CommandPaletteTrigger className={styles.searchBtn} onClick={openSitePalette} />
+        <>
+          <CommandPaletteTrigger className={styles.searchBtn} onClick={openSitePalette} />
+          {/* The chat's phone entry point, between search and menu. Below
+              the takeover width the floating launcher stands down
+              (globals.css), because a pill in the corner sits on the page's
+              own controls; this one keeps the AI ring at the bar's size. */}
+          <AiButton
+            className={styles.chatBtn}
+            icon="forum"
+            label=""
+            aria-label={`Ask ${ASSISTANT_NAME}`}
+            onClick={(event) => {
+              returnFocusRef.current = event.currentTarget;
+              setChatOpen(true);
+            }}
+          />
+        </>
       }
       wideActions={
         <>

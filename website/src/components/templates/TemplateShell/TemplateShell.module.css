@@ -22,6 +22,10 @@
   --shell-panel: 0px;
   /* What the sticky top bar's fill paints: the colour under the content. */
   --sticky-fill: var(--color-bg-page-primary);
+  /* How far the bar's fill and blur reach past it to each side: the
+     scroller's own side padding, so they run to its edges (the inset
+     surface's rule below), or a step into the open page when floating. */
+  --sticky-bleed: var(--padding-400);
 }
 
 .shell:has(:global(.ds-app-sidebar--expanded)) {
@@ -70,7 +74,7 @@
 
 /* StickyTopBar: the template's search and actions row holds at the top of
    the scroller, one content padding step down, and the content runs under
-   it. The blur behind reaches up over that step, a step out to each side
+   it. The blur behind reaches up over that step, out to each side by --sticky-bleed
    and a few rows below, where it dissolves; it shows only once the content
    has left the top (the --tinted flag follows .topBarSentinel). */
 .stickyTopBar {
@@ -95,7 +99,7 @@
   position: absolute;
   top: calc(-1 * var(--padding-500));
   bottom: 0;
-  inset-inline: calc(-1 * var(--padding-400));
+  inset-inline: calc(-1 * var(--sticky-bleed));
   z-index: -1;
   background: linear-gradient(
     to bottom,
@@ -119,7 +123,7 @@
   position: absolute;
   top: calc(-1 * var(--padding-500));
   bottom: calc(-1 * var(--gap-1000));
-  inset-inline: calc(-1 * var(--padding-400));
+  inset-inline: calc(-1 * var(--sticky-bleed));
   height: auto;
   z-index: -1;
   opacity: 0;
@@ -207,6 +211,9 @@
   max-width: none;
   padding-left: var(--padding-500);
   padding-right: var(--padding-500);
+  /* The bar's fill and blur run to the surface's edges, and the surface's
+     clip masks them to its rounded corners. */
+  --sticky-bleed: var(--padding-500);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -229,6 +236,7 @@
   .surface .content.content {
     padding-left: var(--padding-400);
     padding-right: var(--padding-400);
+    --sticky-bleed: var(--padding-400);
   }
 }
 

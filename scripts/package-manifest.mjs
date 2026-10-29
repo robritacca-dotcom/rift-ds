@@ -37,7 +37,7 @@ export { PACKAGE_NAME, REPOSITORY_URL };
 // private forever and never publishes) and package-lock.json (refresh with
 // `npm install --package-lock-only`). validate-package-exports.mjs fails the
 // build when the three disagree; the release skill owns the bump procedure.
-export const PACKAGE_VERSION = '1.17.0';
+export const PACKAGE_VERSION = '1.18.0';
 export const PACKAGE_DESCRIPTION =
   'An AI-ready React design system: accessible components on composable tokens, light/dark theming, and CSS-variable overrides.';
 

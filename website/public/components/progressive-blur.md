@@ -2,7 +2,7 @@
 
 A backdrop blur that dissolves along one edge, with an optional page tint that fades in.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.17.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: effects
 - Import: `import { ProgressiveBlur } from 'rift-ds';`

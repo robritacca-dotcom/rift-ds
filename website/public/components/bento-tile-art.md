@@ -2,7 +2,7 @@
 
 The texture half of a bento tile's shader pair: six fine patterns in one vocabulary, fading in from a corner.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.17.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: effects
 - Import: `import { BentoTileArt } from 'rift-ds';`

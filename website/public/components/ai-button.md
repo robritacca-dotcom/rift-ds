@@ -2,7 +2,7 @@
 
 The AI entry point: a turning gradient ring that reports the agent's status, with a hover-summoned summary and a panel for what the agent asks of you.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.17.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { AiButton } from 'rift-ds';`

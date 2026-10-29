@@ -237,30 +237,6 @@ html[data-chat-resizing] body {
   transition: none;
 }
 
-/* The keyboard experiment (SiteChat/KeyboardLab.tsx, `?kb=<mode>`): ways
-   to size the phone takeover under the iOS soft keyboard, tried on a device
-   against each other. "vv" is the package's own rule, the visual viewport's
-   height and pan, so it needs nothing here. Temporary: the winner moves
-   into the package and this block goes. */
-@media (max-width: 719px) {
-  /* The rule before the experiment: in flow at 100dvh. */
-  html[data-kb="dvh"] .ds-chat-launcher__panel {
-    top: 0;
-    height: 100dvh;
-  }
-
-  /* The visual viewport's height, pinned to the document's top. */
-  html[data-kb="vv-flat"] .ds-chat-launcher__panel {
-    top: 0;
-  }
-
-  /* Out of flow: fixed to the visual viewport's box. */
-  html[data-kb="fixed"] .ds-chat-launcher__panel {
-    position: fixed;
-    inset-inline: 0;
-  }
-}
-
 /* MegaNav's mobile drawer is open (it sets the attribute on <html>). The chat
    launcher sits above the drawer's scrim, where it reads as a stray button
    laid over the menu, so it stands down until the menu closes. */

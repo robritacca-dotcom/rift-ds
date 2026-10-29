@@ -7,7 +7,6 @@ import { CHROMELESS_ROUTES } from "@/config/chromeless";
 import { getPageSummary } from "@/data/page-summaries";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import { useSiteWidgetProps } from "./useSiteWidgetProps";
-import { KeyboardLab } from "./KeyboardLab";
 import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 
 /* The TLDR panel is hover-summoned, so it exists only where hover exists: a
@@ -60,9 +59,6 @@ export function SiteChatMount() {
           : undefined
       }
       widget={widget}
-    >
-      {/* Inside the panel: the takeover hides everything else in the body. */}
-      <KeyboardLab />
-    </ChatLauncher>
+    />
   );
 }

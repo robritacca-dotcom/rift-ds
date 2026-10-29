@@ -22,6 +22,7 @@
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve, relative, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { PACKAGE_NAME } from './brand.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
@@ -182,6 +183,8 @@ export function buildGraph() {
     }
   }
 
+  // A deep import through the package's own name: rift-ds/components/<Folder>/<Name>.
+  const DEEP_IMPORT = new RegExp(`^${PACKAGE_NAME.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}/components/([A-Za-z0-9]+)/([A-Za-z0-9]+)`);
   const harvestSiteFile = (file, ownerId) => {
     const src = read(file);
     if (file.endsWith('.css')) {
@@ -192,13 +195,13 @@ export function buildGraph() {
     }
     for (const m of src.matchAll(/import\s+([^;]*?)\s+from\s+['"]([^'"]+)['"]/g)) {
       const [, clause, spec] = m;
-      const deep = spec.match(/^@robr0\/design-system\/components\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)/);
+      const deep = spec.match(DEEP_IMPORT);
       if (deep) {
         const target = componentByName.get(deep[2]) || (componentsByFolder.get(deep[1]) || [])[0];
         if (target) addEdge(ownerId, `component/${target.slug}`);
         continue;
       }
-      if (spec === 'rift-ds' || spec === 'rift-ds/charts') {
+      if (spec === PACKAGE_NAME || spec === `${PACKAGE_NAME}/charts`) {
         for (const name of clause.replace(/[{}]/g, '').split(',')) {
           const clean = name.trim().split(/\s+as\s+/)[0].trim();
           const target = componentByName.get(clean);

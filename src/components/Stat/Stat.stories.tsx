@@ -18,7 +18,7 @@ const meta = {
     },
     deltaPlacement: {
       control: 'select',
-      options: ['stacked', 'inline'],
+      options: ['stacked', 'inline', 'auto'],
     },
     size: {
       control: 'select',
@@ -67,6 +67,28 @@ export const InlineDelta: Story = {
     trend: 'up',
     deltaPlacement: 'inline',
   },
+};
+
+// The same stat at two widths: inline in the wide tile, the delta under
+// the label in the narrow one (a two-up KPI grid on a phone).
+export const AutoDelta: Story = {
+  args: {
+    value: '$24,380',
+    label: 'Ad spend',
+    delta: '+8.4%',
+    trend: 'up',
+    deltaPlacement: 'auto',
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+      <div style={{ width: '320px' }}>
+        <Stat {...args} />
+      </div>
+      <div style={{ width: '160px' }}>
+        <Stat {...args} />
+      </div>
+    </div>
+  ),
 };
 
 export const Large: Story = {

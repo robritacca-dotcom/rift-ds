@@ -111,6 +111,63 @@
   margin-bottom: var(--gap-100);
 }
 
+/* ============================================
+   AUTO DELTA — inline while the stat has room,
+   stacked under the label once it is narrow.
+   The root fills its parent and is the size
+   container; the body inside it re-templates.
+   ============================================ */
+
+.ds-stat--delta-auto {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  container: ds-stat / inline-size;
+}
+
+.ds-stat__body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'value delta'
+    'label label';
+  justify-items: start;
+  column-gap: var(--gap-200);
+  row-gap: var(--gap-050);
+}
+
+.ds-stat__body .ds-stat__value {
+  grid-area: value;
+}
+
+.ds-stat__body .ds-stat__label {
+  grid-area: label;
+}
+
+.ds-stat__body .ds-stat__delta {
+  grid-area: delta;
+  align-self: end;
+  /* The inline placement's optical baseline. */
+  margin-bottom: var(--gap-100);
+}
+
+/* Too narrow for the value and its delta side by side: the delta drops
+   under the label, the stacked placement's order. */
+@container ds-stat (max-width: 180px) {
+  .ds-stat__body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'value'
+      'label'
+      'delta';
+  }
+
+  .ds-stat__body .ds-stat__delta {
+    align-self: start;
+    margin-bottom: 0;
+  }
+}
+
 /* Icons take the colour of the text around them. Explicit, not just
    inherited by default: a consumer stylesheet that sets a colour on
    .material-symbols-rounded itself (a common global default) would

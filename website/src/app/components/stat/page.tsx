@@ -65,10 +65,21 @@ export default function StatPage() {
               Where the delta sits is a prop. The default stacks it at the bottom, under
               the label; deltaPlacement=&quot;inline&quot; moves it to the top, riding the
               value&apos;s baseline, which is the arrangement dashboard KPI tiles want.
+              deltaPlacement=&quot;auto&quot; chooses by the room it has: inline in a wide tile,
+              stacked once the tile is narrow, such as two KPI tiles side by side on a phone.
+              It fills its parent and reads its own width, so it restacks wherever it sits.
             </p>
             <div className={styles.variantRow}>
               <Stat value="$24,380" label="Stacked, the default" trend="up" delta="+8.4%" />
               <Stat value="$24,380" label="Inline, for KPI tiles" trend="up" delta="+8.4%" deltaPlacement="inline" />
+            </div>
+            <div className={styles.variantRow}>
+              <div className={styles.autoWide}>
+                <Stat value="$24,380" label="Auto, in a wide tile" trend="up" delta="+8.4%" deltaPlacement="auto" />
+              </div>
+              <div className={styles.autoNarrow}>
+                <Stat value="$24,380" label="Auto, narrow" trend="up" delta="+8.4%" deltaPlacement="auto" />
+              </div>
             </div>
           </section>
 

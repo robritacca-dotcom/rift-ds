@@ -13,8 +13,14 @@ type StatOwnProps = {
   delta?: string;
   /** Direction of the delta — colours it and adds an arrow */
   trend?: 'up' | 'down' | 'neutral';
-  /** Where the delta sits: stacked below the label, or inline to the right of the value, bottom-aligned */
-  deltaPlacement?: 'stacked' | 'inline';
+  /**
+   * Where the delta sits: stacked below the label, inline to the right of the
+   * value (bottom-aligned), or `auto`: inline while the stat has room and
+   * stacked once it is narrow, such as a KPI tile in a two-up phone grid.
+   * `auto` fills its parent's width and reads its own, so it restacks
+   * wherever it sits, whatever the viewport.
+   */
+  deltaPlacement?: 'stacked' | 'inline' | 'auto';
   /** Stat size */
   size?: 'default' | 'large';
   /** The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
@@ -59,13 +65,14 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
       baseClass,
       `${baseClass}--${size}`,
       deltaPlacement === 'inline' ? `${baseClass}--delta-inline` : '',
+      deltaPlacement === 'auto' ? `${baseClass}--delta-auto` : '',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
-    return (
-      <div {...rest} ref={ref} className={classes}>
+    const parts = (
+      <>
         <span className={`${baseClass}__value`}>{typeof value === 'number' ? formatNumber(value, locale) : value}</span>
         <span className={`${baseClass}__label`}>{label}</span>
         {delta && (
@@ -76,6 +83,14 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
             {delta}
           </span>
         )}
+      </>
+    );
+
+    return (
+      <div {...rest} ref={ref} className={classes}>
+        {/* A container query styles only what sits inside the container,
+            so `auto` lays its parts out on an inner body the root measures. */}
+        {deltaPlacement === 'auto' ? <span className={`${baseClass}__body`}>{parts}</span> : parts}
       </div>
     );
   },

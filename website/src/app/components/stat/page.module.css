@@ -106,3 +106,14 @@
   .dsLayout { padding-left: 0; min-width: 0; }
   .dsContent { max-width: 100%; min-width: 0; }
 }
+
+/* The auto placement's demo: one tile wide enough for the inline delta,
+   one narrower than its restack width, so both arrangements show. */
+.autoWide {
+  width: 320px;
+  max-width: 100%;
+}
+
+.autoNarrow {
+  width: 160px;
+}

@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.18.0",
+      "date": "2026-10-29",
+      "title": "Stats that restack themselves",
+      "body": [
+        "Stat takes `deltaPlacement=\"auto\"`: the delta sits beside the value while the stat has room and drops under the label once it is narrow, such as two KPI tiles side by side on a phone. It reads its own width with a container query, so it restacks wherever it sits.",
+        "ChatWidget's history rail takes a footer through `threadsProps.footerSlot`, for controls or a link out, shown in both seats and faded out while the inline rail is collapsed.",
+        "AppSidebar's panel mode now opens and closes with the logo, every icon and the avatar holding their place, and its inset layout draws a divider between the rail and the side panel. The app shell block's top bar stays in view over a blur, and the dashboard block's stats restack on a phone. Nothing published was renamed or removed."
+      ]
+    },
+    {
       "version": "1.17.0",
       "date": "2026-10-29",
       "title": "An inset layout for app shells",

@@ -865,7 +865,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "App layout",
     "slug": "app-layout",
     "category": "layout",
-    "description": "Full-page template pairing the collapsible App sidebar with a centred content area.",
+    "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.",
     "client": true,
     "importPath": "rift-ds/components/AppLayout/AppLayout",
     "barrel": "main",
@@ -933,6 +933,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": true,
             "description": "Page content — centred in the main area"
+          },
+          {
+            "name": "layout",
+            "type": "AppSidebarLayout",
+            "required": false,
+            "description": "How the rail and the content meet the page. `flush` (the default) runs\nthe rail edge to edge with the content centred beside it. `floating`\nfloats the rail as a glass card, the content still centred. `inset` runs\nthe rail flush on the app shell colour and sets the content full width\nin a surface inset from the other edges, which scrolls inside itself.",
+            "defaultValue": "flush"
           },
           {
             "name": "theme",
@@ -1054,11 +1061,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Callback when profile more button clicked"
           },
           {
+            "name": "layout",
+            "type": "AppSidebarLayout",
+            "required": false,
+            "description": "How the rail meets the page. `flush` runs it edge to edge on the page\ncolour. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a content surface inset\nfrom the edges, as AppLayout's `inset` layout draws it. Defaults to\n`flush` (or `floating` while the deprecated `floating` is set)."
+          },
+          {
             "name": "floating",
             "type": "boolean",
             "required": false,
-            "description": "Floats the rail off the viewport edges as a glass card: inset with\nrounded corners, the translucent glass fill over a backdrop blur, and\nthe floating shadow. The inset defaults to 20px and is overridable via\nthe --ds-sidebar-float-inset custom property.",
-            "defaultValue": "false"
+            "description": "Floats the rail as a glass card, the same as `layout=\"floating\"`.",
+            "defaultValue": "false",
+            "deprecated": "Use `layout=\"floating\"`."
           },
           {
             "name": "topSlot",
@@ -11628,7 +11642,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "showLabels",
             "type": "boolean",
             "required": false,
-            "description": "Show each segment's label beside its icon. Set it to `false` for an\nicon-only strip: the labels stay in the accessibility tree as the\nsegments' names, and a segment without an icon keeps its label on\nscreen. Defaults to `true`.",
+            "description": "Show each segment's label beside its icon. Set it to `false` for an\nicon-only strip: each label becomes its segment's tooltip on hover and\nkeyboard focus and stays the segment's name in the accessibility tree,\nand a segment without an icon keeps its label on screen. Defaults to\n`true`.",
             "defaultValue": "true"
           },
           {
@@ -16352,6 +16366,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Rendered inside the panel after the widget: for a host's extra chrome."
+          },
+          {
+            "name": "surface",
+            "type": "\"inset\" | \"raised\"",
+            "required": false,
+            "description": "How the docked panel sits on the page. `raised` (the default) is a glass\ncard with the floating shadow, inset by `--ds-chat-inset`. `inset` is\nflat: the app surface colour, no shadow, border or blur, and the\n`--ds-shell-inset` gap, so it matches AppLayout's `inset` content\nsurface beside it. The overlay below the dock threshold takes the same\ngap but keeps its shadow, since it still covers the page; the floating\ncard and the takeover keep their own look.",
+            "defaultValue": "raised"
           }
         ]
       },

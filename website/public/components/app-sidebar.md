@@ -27,7 +27,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.16.0. The same dat
 | expanded | `boolean` | no |  | Controlled expanded state |
 | onExpandedChange | `((expanded: boolean) => void)` | no |  | Callback when expand/collapse changes |
 | onProfileMore | `(() => void)` | no |  | Callback when profile more button clicked |
-| floating | `boolean` | no | `false` | Floats the rail off the viewport edges as a glass card: inset with rounded corners, the translucent glass fill over a backdrop blur, and the floating shadow. The inset defaults to 20px and is overridable via the --ds-sidebar-float-inset custom property. |
+| layout | `AppSidebarLayout` | no |  | How the rail meets the page. `flush` runs it edge to edge on the page colour. `floating` floats it off the viewport edges as a glass card: inset with rounded corners, the translucent glass fill over a backdrop blur, and the floating shadow (the inset defaults to 20px and is overridable via the --ds-sidebar-float-inset custom property). `inset` runs it flush on the app shell colour, beside a content surface inset from the edges, as AppLayout's `inset` layout draws it. Defaults to `flush` (or `floating` while the deprecated `floating` is set). |
+| floating | `boolean` | no | `false` | Floats the rail as a glass card, the same as `layout="floating"`. Deprecated: Use `layout="floating"`. |
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
 | className | `string` | no | `` | Additional CSS classes |

@@ -67,7 +67,7 @@
       "name": "app-layout",
       "type": "registry:ui",
       "title": "App layout",
-      "description": "Full-page template pairing the collapsible App sidebar with a centred content area."
+      "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface."
     },
     {
       "name": "app-sidebar",

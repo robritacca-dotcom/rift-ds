@@ -129,6 +129,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.16.0. The same dat
 | aiButtonLabels | `Pick<AiButtonProps, "summaryRegionLabel" \| "dismissLabel" \| "suggestionsLabel">` | no |  | The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title ("Summary: <title>"), its dismiss button ("Dismiss summary") and its chips' group ("Suggested prompts"). |
 | widget | `Omit<ChatWidgetProps, "compact" \| "fullscreenEnabled" \| "placementEnabled" \| "phone">` | no |  | Everything the widget takes. The launcher sets the responsive ones itself. |
 | children | `ReactNode` | no |  | Rendered inside the panel after the widget: for a host's extra chrome. |
+| surface | `"inset" \| "raised"` | no | `raised` | How the docked panel sits on the page. `raised` (the default) is a glass card with the floating shadow, inset by `--ds-chat-inset`. `inset` is flat: the app surface colour, no shadow, border or blur, and the `--ds-shell-inset` gap, so it matches AppLayout's `inset` content surface beside it. The overlay below the dock threshold takes the same gap but keeps its shadow, since it still covers the page; the floating card and the takeover keep their own look. |
 
 ## ChatThreads props
 

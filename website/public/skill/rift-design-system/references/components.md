@@ -1073,7 +1073,7 @@ Page scaffolding: app shells, sidebars, dividers, and section headings.
 
 ### App layout
 
-Full-page template pairing the collapsible App sidebar with a centred content area.
+Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.
 
 - Import: `import { AppLayout } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

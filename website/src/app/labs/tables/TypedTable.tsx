@@ -57,7 +57,7 @@ export const typedColumns: DataTableColumn[] = [
   { key: "team", header: "Team", type: "person", width: "120px" },
   { key: "value", header: "Value", type: "currency", sortable: true, editable: true, width: "120px" },
   { key: "seats", header: "Seats", type: "number", sortable: true, width: "100px" },
-  { key: "onboarded", header: "Onboarded", type: "progress", sortable: true, width: "160px" },
+  { key: "onboarded", header: "Onboarded", type: "progress", sortable: true, width: "180px" },
   { key: "renews", header: "Renews", type: "date", sortable: true, editable: true, width: "140px" },
   { key: "contacted", header: "Last contact", type: "date", format: { date: "relative" }, sortable: true, width: "140px" },
   { key: "tags", header: "Tags", type: "tags", width: "200px" },

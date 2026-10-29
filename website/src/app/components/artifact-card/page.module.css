@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -254,4 +255,21 @@
   flex: 1.2 1 0;
   min-width: 0;
   border-left: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* On a phone the card and its panel cannot share a row (each shrank to a
+   few letters), so they stack, the panel under the card the way a thread
+   hands its panel the screen. */
+@media (max-width: 480px) {
+  .panelFrame:has(.cardColumn) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .cardPanel {
+    flex: none;
+    height: 360px;
+    border-inline-start: none;
+    border-block-start: var(--border-025) solid var(--color-bg-container-border);
+  }
 }

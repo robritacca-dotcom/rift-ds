@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -84,14 +85,18 @@
 /* Demo stage — the rail is surface-less and height-filling, so every demo
    seats it in a band the way a host app would: a fixed rail on the page
    ground with a hairline edge. */
+/* The rail is a fixed width by design (AgentRail.css); on a phone the
+   frame scrolls sideways to it rather than pushing the page wider. */
 .railFrame {
   display: flex;
   width: fit-content;
+  max-width: 100%;
   height: 540px;
   background-color: var(--color-bg-page-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .railPlaceholder {

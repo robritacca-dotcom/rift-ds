@@ -42,6 +42,7 @@ export function BlockPreview({ src, title }: { src: string; title: string }) {
     <div className={s.preview}>
       <SegmentedControl
         size="compact"
+        collapse
         aria-label={`${title} preview width`}
         segments={DEVICES.map(({ value, label, icon }) => ({ value, label, icon }))}
         value={device}

@@ -299,7 +299,10 @@
     padding: var(--padding-400);
   }
 
+  /* Stacked, the stage is as tall as what it holds and the content
+     scrolls; held to the column's height it cut the legend off. */
   .stage {
+    flex: none;
     display: flex;
     flex-direction: column;
     align-items: center;

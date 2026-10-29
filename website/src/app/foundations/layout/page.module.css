@@ -196,10 +196,13 @@
   background: var(--color-bg-container-primary);
 }
 
+/* A block with its label centred, not a flex box: an ellipsis never draws
+   on bare text in a flex container, and a column too narrow for its label
+   cut it mid-letter. */
 .shellColumn {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: block;
+  text-align: center;
+  text-overflow: ellipsis;
   min-width: 0;
   padding-top: var(--padding-200);
   border-radius: var(--radius-100);
@@ -316,5 +319,18 @@
 
   .dsContent {
     max-width: 100%;
+  }
+}
+
+/* On a phone the stacking bar takes a fixed narrow column, so the token
+   and its role keep the rest; a token name longer than that breaks. */
+@media (max-width: 600px) {
+  .layer {
+    grid-template-columns: 3.5rem 48px minmax(0, 1fr) auto;
+  }
+
+  .layer .query {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }

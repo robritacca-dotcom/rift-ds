@@ -88,6 +88,7 @@ function Station({
       <div className={styles.controls}>
         <SegmentedControl
           size="compact"
+          collapse
           aria-label={`${title} width`}
           segments={[
             { value: "desktop", label: "Desktop", icon: "desktop_windows" },

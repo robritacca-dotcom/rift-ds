@@ -280,4 +280,10 @@
   .surface .content.content {
     overflow-y: visible;
   }
+
+  /* The page scrolls now, not the surface, so the bar keeps the floating
+     layout's padding step off the top, and its fill covers that strip. */
+  .inset .stickyTopBar {
+    top: var(--padding-500);
+  }
 }

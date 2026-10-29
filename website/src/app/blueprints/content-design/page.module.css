@@ -172,7 +172,8 @@
   border-radius: var(--primitive-radius-100);
   background: var(--color-bg-container-secondary);
   color: var(--color-text-primary);
-  white-space: nowrap;
+  /* A long path breaks rather than running off a phone screen. */
+  overflow-wrap: anywhere;
 }
 
 /* Code blocks (pre > code) */

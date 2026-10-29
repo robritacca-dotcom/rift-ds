@@ -147,7 +147,17 @@ export const Collapsed: Story = {
 export const Floating: Story = {
   args: {
     defaultExpanded: true,
-    floating: true,
+    layout: 'floating',
+  },
+};
+
+/** The inset layout's rail: flush on the app shell colour, beside a
+    content surface inset from the other edges (AppLayout draws the
+    surface; see its Inset story). */
+export const Inset: Story = {
+  args: {
+    defaultExpanded: true,
+    layout: 'inset',
   },
 };
 
@@ -306,13 +316,27 @@ export const PanelModeExpanded: Story = {
 export const PanelModeFloating: Story = {
   args: {
     defaultExpanded: false,
-    floating: true,
+    layout: 'floating',
     subNav: 'panel',
     sections: threeLevelSections,
     activeKey: 'reports',
     activeSubKey: 'kpis',
   },
   parameters: { contentOffset: 20 + 80 + 12 + 240 + 20 },
+};
+
+/** Inset: the side panel continues the rail on the shell colour, with no
+    border between them, and the content surface starts beyond both. */
+export const PanelModeInset: Story = {
+  args: {
+    defaultExpanded: false,
+    layout: 'inset',
+    subNav: 'panel',
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'kpis',
+  },
+  parameters: { contentOffset: 80 + 240 },
 };
 
 /** The row feeding the panel toggles it, and the panel's own collapse

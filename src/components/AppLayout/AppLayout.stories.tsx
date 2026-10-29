@@ -60,6 +60,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     defaultExpanded: { control: 'boolean' },
+    layout: { control: 'inline-radio', options: ['flush', 'floating', 'inset'] },
     activeKey: { control: 'text' },
     activeSubKey: { control: 'text' },
     logoText: { control: 'text' },
@@ -102,6 +103,41 @@ export const CollapsedByDefault: Story = {
         </h1>
         <p style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
           Sidebar starts collapsed. Click the sidebar to expand it.
+        </p>
+      </div>
+    ),
+  },
+};
+
+/** The rail floats as a glass card; the content stays centred. */
+export const Floating: Story = {
+  args: {
+    layout: 'floating',
+    children: (
+      <div>
+        <h1 style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 8 }}>
+          Dashboard
+        </h1>
+        <p style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
+          The rail floats off the viewport edges as a glass card, and the content stays centred beside it.
+        </p>
+      </div>
+    ),
+  },
+};
+
+/** The rail runs flush on the shell colour and the content runs full width
+    in a surface inset from the other edges, scrolling inside itself. */
+export const Inset: Story = {
+  args: {
+    layout: 'inset',
+    children: (
+      <div>
+        <h1 style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 8 }}>
+          Dashboard
+        </h1>
+        <p style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
+          The rail sits flush on the shell colour, and the content runs full width in an inset surface that scrolls on its own.
         </p>
       </div>
     ),

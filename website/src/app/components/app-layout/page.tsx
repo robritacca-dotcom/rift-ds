@@ -75,8 +75,10 @@ export default function AppLayoutPage() {
               Full-page template with a collapsible sidebar
             </p>
             <p className={styles.introBody}>
-              A page shell that pairs the App sidebar with a centred content area. The sidebar
-              collapses to an icon rail; the main region reflows automatically. The component
+              A page shell that pairs the App sidebar with a content area. The sidebar
+              collapses to an icon rail; the main region reflows automatically. The layout prop
+              sets how the two meet the page: flush (the default) or floating with the content
+              centred, or inset with the content full width in a surface of its own. The component
               pins itself to the dark theme by default, which is why the demos below appear
               dark; pass theme=&quot;inherit&quot; to drop the pin and let the layout follow the
               surrounding data-theme like any other component.
@@ -116,6 +118,44 @@ export default function AppLayoutPage() {
                 <DemoContent
                   heading="Analytics"
                   body="The sidebar starts as a 64px icon rail and expands on demand."
+                />
+              </AppLayout>
+            </div>
+          </section>
+
+          {/* Floating */}
+          <section className={styles.section}>
+            <SectionTitle title="Floating layout" />
+            <div className={styles.layoutDemo}>
+              <AppLayout
+                sections={demoSections}
+                profile={demoProfile}
+                activeKey="dashboard"
+                logoText="Northlight"
+                layout="floating"
+              >
+                <DemoContent
+                  heading="Dashboard"
+                  body="The rail floats off the edges as a glass card, and the content stays centred beside it."
+                />
+              </AppLayout>
+            </div>
+          </section>
+
+          {/* Inset */}
+          <section className={styles.section}>
+            <SectionTitle title="Inset layout" />
+            <div className={styles.layoutDemo}>
+              <AppLayout
+                sections={demoSections}
+                profile={demoProfile}
+                activeKey="dashboard"
+                logoText="Northlight"
+                layout="inset"
+              >
+                <DemoContent
+                  heading="Dashboard"
+                  body="The rail sits flush on the shell colour, and the content runs full width in an inset surface that scrolls on its own."
                 />
               </AppLayout>
             </div>

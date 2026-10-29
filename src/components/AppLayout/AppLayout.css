@@ -19,7 +19,7 @@
   /* The rail's width plus, while it shows, the side panel's. */
   margin-inline-start: calc(var(--ds-app-layout-rail, 64px) + var(--ds-app-layout-panel, 0px));
   padding: var(--padding-1000) var(--padding-500);
-  transition: margin-left var(--motion-duration-slow) var(--motion-ease-emphasized);
+  transition: margin-inline-start var(--motion-duration-slow) var(--motion-ease-emphasized);
   min-width: 0;
 }
 
@@ -48,6 +48,72 @@
 }
 
 /* ============================================
+   FLOATING LAYOUT — the rail floats as a glass
+   card, so the main column clears its inset on
+   both sides of it
+   ============================================ */
+.ds-app-layout--floating .ds-app-layout__main {
+  margin-inline-start: calc(
+    var(--ds-app-layout-rail, 64px) + var(--ds-app-layout-panel, 0px) +
+      var(--ds-sidebar-float-inset, 20px) * 2
+  );
+}
+
+/* ============================================
+   INSET LAYOUT — the rail flush on the shell
+   colour, the content full width in a surface
+   inset from the other three edges. The page
+   holds the viewport and the surface scrolls.
+   The rail's own item inset is the gap on its
+   side, so the selected item sits evenly
+   between the two edges.
+   ============================================ */
+.ds-app-layout--inset {
+  height: 100dvh;
+  min-height: 0;
+  background-color: var(--color-bg-app-shell);
+}
+
+.ds-app-layout--inset .ds-app-layout__main {
+  padding: var(--ds-shell-inset);
+  padding-inline-start: 0;
+  min-height: 0;
+}
+
+.ds-app-layout__surface {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+  background-color: var(--color-bg-app-surface);
+  border-radius: var(--radius-600);
+}
+
+.ds-app-layout__scroller {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: var(--padding-1000) var(--padding-1000);
+  /* The scrollbar stays invisible until the surface scrolls (data-scrolling
+     is set by the scroll handler and cleared once it settles). */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.ds-app-layout__scroller[data-scrolling] {
+  scrollbar-color: var(--color-bg-container-border) transparent;
+}
+
+/* Full width in the surface, and a size container: content inside can
+   restack by the room the surface gives it (an open chat panel or an
+   expanded rail narrows it without the viewport changing) with
+   @container ds-app-layout-content queries. */
+.ds-app-layout--inset .ds-app-layout__content {
+  max-width: none;
+  container: ds-app-layout-content / inline-size;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
@@ -56,7 +122,29 @@
     padding: var(--padding-500) var(--padding-400);
   }
 
-  .ds-app-layout--expanded .ds-app-layout__main {
+  .ds-app-layout--expanded .ds-app-layout__main,
+  .ds-app-layout--floating .ds-app-layout__main {
     margin-inline-start: 0;
+  }
+
+  /* Phones: the rail is a drawer, so the inset surface runs edge to edge
+     and the page scrolls normally. */
+  .ds-app-layout--inset {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .ds-app-layout--inset .ds-app-layout__main {
+    padding: 0;
+  }
+
+  .ds-app-layout__surface {
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  .ds-app-layout__scroller {
+    overflow-y: visible;
+    padding: var(--padding-500) var(--padding-400);
   }
 }

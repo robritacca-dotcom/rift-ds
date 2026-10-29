@@ -78,7 +78,7 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
         expanded={expanded}
         onExpandedChange={setExpanded}
         logoText={PRODUCT_NAME}
-        floating
+        layout="floating"
       />
 
       <div className={`${styles.main} ${expanded ? styles.mainExpanded : ''}`}>

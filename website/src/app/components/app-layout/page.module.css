@@ -85,6 +85,12 @@
   height: 100%;
 }
 
+/* The floating rail sizes itself against the viewport; in the demo frame
+   it sizes against the frame, inset the same distance. */
+.layoutDemo :global(.ds-app-sidebar--floating) {
+  height: calc(100% - var(--ds-sidebar-float-inset, 20px) * 2);
+}
+
 /* Demo content inside the layout */
 .demoHeading {
   font-family: var(--font-heading-1-family);

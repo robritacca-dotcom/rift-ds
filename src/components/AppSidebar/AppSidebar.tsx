@@ -85,6 +85,9 @@ export interface AppSidebarProfile {
   avatarUrl?: string;
 }
 
+/** How the rail meets the page: edge to edge, floating as a card, or flush beside an inset content surface. */
+export type AppSidebarLayout = 'flush' | 'floating' | 'inset';
+
 /** Props owned by AppSidebar itself — everything else falls through to the `<nav>`. */
 type AppSidebarOwnProps = {
   /** Navigation sections */
@@ -121,10 +124,19 @@ type AppSidebarOwnProps = {
   /** Callback when profile more button clicked */
   onProfileMore?: () => void;
   /**
-   * Floats the rail off the viewport edges as a glass card: inset with
-   * rounded corners, the translucent glass fill over a backdrop blur, and
-   * the floating shadow. The inset defaults to 20px and is overridable via
-   * the --ds-sidebar-float-inset custom property.
+   * How the rail meets the page. `flush` runs it edge to edge on the page
+   * colour. `floating` floats it off the viewport edges as a glass card:
+   * inset with rounded corners, the translucent glass fill over a backdrop
+   * blur, and the floating shadow (the inset defaults to 20px and is
+   * overridable via the --ds-sidebar-float-inset custom property). `inset`
+   * runs it flush on the app shell colour, beside a content surface inset
+   * from the edges, as AppLayout's `inset` layout draws it. Defaults to
+   * `flush` (or `floating` while the deprecated `floating` is set).
+   */
+  layout?: AppSidebarLayout;
+  /**
+   * Floats the rail as a glass card, the same as `layout="floating"`.
+   * @deprecated Use `layout="floating"`.
    */
   floating?: boolean;
   /** Rendered under the logo row, above the nav; fades out while collapsed */
@@ -226,7 +238,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   expanded: controlledExpanded,
   onExpandedChange,
   onProfileMore,
-  floating = false,
+  layout: layoutProp,
+  floating: floatingProp = false,
   topSlot,
   footerSlot,
   className = '',
@@ -243,6 +256,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   ...rest
 }, ref) {
   const baseClass = 'ds-app-sidebar';
+  // The deprecated boolean still floats the rail when no layout is given.
+  const layout: AppSidebarLayout = layoutProp ?? (floatingProp ? 'floating' : 'flush');
+  const floating = layout === 'floating';
   const Link = useLinkComponent(linkComponent);
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours
@@ -462,6 +478,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     // a modal overlay would be all cost and no labels.
     isExpanded || mobileOpen ? `${baseClass}--expanded` : '',
     floating ? `${baseClass}--floating` : '',
+    layout === 'inset' ? `${baseClass}--inset` : '',
     mobileOpen ? `${baseClass}--mobile-open` : '',
     isPanelMode ? `${baseClass}--panel-mode` : '',
     className,
@@ -799,6 +816,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             isExpanded ? `${baseClass}__panel--beside-expanded` : '',
             isPanelMode ? `${baseClass}__panel--panel-mode` : '',
             floating ? `${baseClass}__panel--floating` : '',
+            layout === 'inset' ? `${baseClass}__panel--inset` : '',
           ]
             .filter(Boolean)
             .join(' ')}

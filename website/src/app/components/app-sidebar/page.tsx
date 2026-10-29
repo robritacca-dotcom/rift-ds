@@ -116,7 +116,7 @@ export default function AppSidebarPage() {
               Collapsible navigation for app layouts
             </p>
             <p className={styles.introBody}>
-              A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed; and the floating prop renders the rail as a glass card inset from the viewport edges.
+              A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed; and the layout prop sets how the rail meets the page: flush, floating as a glass card inset from the viewport edges, or inset, flush on the app shell colour beside an inset content surface.
             </p>
             <p className={styles.introBody}>
               Navigation runs three levels deep, and subNav picks the shape once per sidebar. In the default accordion mode the second level is the accordion under a row, and a sub-item with children of its own opens them as the third level in a SidebarPanel beside the rail. In panel mode a top-level row opens its sub-items straight into the panel, whose own accordion carries the third level, and the collapsed rail widens to 80px to put a label under every icon. On small screens neither shows a panel: the drawer drills in to a second screen with a back row.
@@ -191,7 +191,7 @@ export default function AppSidebarPage() {
           <section className={styles.section}>
             <SectionTitle title="Panel mode, floating" />
             <p className={styles.sectionBody}>
-              With floating set, the panel joins the rail as a second glass card, one gap along from the first.
+              In the floating layout, the panel joins the rail as a second glass card, one gap along from the first.
             </p>
             <div className={`${styles.sidebarDemo} ${styles.sidebarDemoTinted}`} data-anchor-ignore>
               <AppSidebar
@@ -200,7 +200,27 @@ export default function AppSidebarPage() {
                 activeKey="reports"
                 activeSubKey="kpis"
                 subNav="panel"
-                floating={true}
+                layout="floating"
+                defaultExpanded={false}
+                showMobileTrigger={false}
+              />
+            </div>
+          </section>
+
+          {/* Panel mode, inset */}
+          <section className={styles.section}>
+            <SectionTitle title="Panel mode, inset" />
+            <p className={styles.sectionBody}>
+              In the inset layout, the panel continues the rail on the shell colour with no border between them, and the content surface starts beyond both.
+            </p>
+            <div className={`${styles.sidebarDemo} ${styles.sidebarDemoTinted}`} data-anchor-ignore>
+              <AppSidebar
+                sections={threeLevelSections}
+                profile={demoProfile}
+                activeKey="reports"
+                activeSubKey="kpis"
+                subNav="panel"
+                layout="inset"
                 defaultExpanded={false}
                 showMobileTrigger={false}
               />

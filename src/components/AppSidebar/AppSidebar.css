@@ -51,6 +51,22 @@
   backdrop-filter: blur(24px);
 }
 
+/* The inset layout's gap: between the content surface and the viewport
+   edges, and around a docked chat panel's inset surface (ChatLauncher's
+   surface="inset" falls back to the same value when this sheet is absent). */
+:root {
+  --ds-shell-inset: 10px;
+}
+
+/* ============================================
+   INSET VARIANT — the rail flush on the app
+   shell colour, beside a content surface inset
+   from the edges (AppLayout's inset layout)
+   ============================================ */
+.ds-app-sidebar--inset {
+  background-color: var(--color-bg-app-shell);
+}
+
 /* ============================================
    TOP SECTION — logo + nav
    ============================================ */
@@ -603,6 +619,16 @@
 
 .ds-app-sidebar__panel--floating.ds-app-sidebar__panel--beside-expanded {
   inset-inline-start: calc(var(--ds-sidebar-float-inset, 20px) + 280px + var(--gap-300));
+}
+
+/* Inset: the side panel joins the rail on the shell plane, with no borders
+   between them, so rail and panel read as one column of navigation and the
+   inset content surface starts beyond both (AppLayout reserves the panel's
+   width while it shows). */
+.ds-app-sidebar__panel--inset {
+  background-color: var(--color-bg-app-shell);
+  border-inline-start-color: transparent;
+  border-inline-end-color: transparent;
 }
 
 /* ============================================

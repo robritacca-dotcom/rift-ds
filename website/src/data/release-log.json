@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.17.0",
+      "date": "2026-10-29",
+      "title": "An inset layout for app shells",
+      "body": [
+        "AppLayout and AppSidebar take a `layout` prop: `flush`, `floating` or `inset`. Inset runs the rail flush on a shell colour and sets the content full width in a surface inset from the other edges, which scrolls inside itself, with a side panel joining the rail. Two colour roles name the planes, `--color-bg-app-shell` and `--color-bg-app-surface`. AppSidebar's boolean `floating` is deprecated in favour of `layout=\"floating\"` and keeps working.",
+        "ChatLauncher takes `surface=\"inset\"`: docked beside an inset layout, the panel goes flat on the surface colour at the same gap and its widen grip follows, and as an overlay it takes the gap but keeps its shadow.",
+        "Icon-only SegmentedControl strips now show their labels as tooltips on hover and keyboard focus, and the label stays each segment's name. ThemeToggle defaults to `size=\"default\"`, and TableToolbar starts the table on its active view, offers \"is none of\" for enum filters and keeps a narrow bulk bar from overlapping. Nothing published was renamed or removed."
+      ]
+    },
+    {
       "version": "1.16.0",
       "date": "2026-10-28",
       "title": "A site header, its mega menus and a progressive blur",

@@ -24,7 +24,7 @@ It sees geometry: where boxes and text sit relative to the viewport, their own b
 
 ### 1. Build
 
-The sweep reads `website/.next`, so the build must be of the tree under review:
+The sweep reads `website/.next/`, so the build must be of the tree under review:
 
 ```bash
 npm --prefix website run build

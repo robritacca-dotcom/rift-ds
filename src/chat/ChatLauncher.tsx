@@ -167,7 +167,7 @@ export function ChatLauncher({
        width under the card.
      - takeover (phone widths): html[data-chat="takeover"] is the cue to
        hide the page around the panel, which leaves the fixed layer for
-       normal flow at 100dvh: the chat is the document. That is what lets
+       normal flow at the visual viewport's height: the chat is the document. That is what lets
        the soft keyboard be the browser's problem rather than the panel's.
        A viewport-sized position: fixed panel is exactly what iOS Safari
        renders short under the keyboard, so no fixed geometry is trusted
@@ -202,6 +202,37 @@ export function ChatLauncher({
   useScrollLock(modal && !takeover);
 
   const panelRef = useRef<HTMLDivElement | null>(null);
+
+  /* The takeover is as tall as what the visitor can see. iOS Safari never
+     shrinks 100dvh for the soft keyboard (and ignores interactive-widget), so
+     a 100dvh document leaves Safari to scroll the composer into view by its
+     own rules: the header scrolls off the top and a band of empty panel
+     opens under the composer. The visual viewport is the one number that
+     shrinks with the keyboard, so the panel takes its height and follows its
+     pan, written to the DOM per frame rather than through state. */
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    const vv = window.visualViewport;
+    if (!showPanel || !takeover || !panel || !vv) return;
+    let frame = 0;
+    const sync = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        panel.style.setProperty('--ds-chat-viewport-height', `${vv.height}px`);
+        panel.style.setProperty('--ds-chat-viewport-top', `${vv.offsetTop}px`);
+      });
+    };
+    sync();
+    vv.addEventListener('resize', sync);
+    vv.addEventListener('scroll', sync);
+    return () => {
+      cancelAnimationFrame(frame);
+      vv.removeEventListener('resize', sync);
+      vv.removeEventListener('scroll', sync);
+      panel.style.removeProperty('--ds-chat-viewport-height');
+      panel.style.removeProperty('--ds-chat-viewport-top');
+    };
+  }, [showPanel, takeover]);
 
   /* Closing restores focus to whichever launcher opened the panel, when it
      is still on the page. */

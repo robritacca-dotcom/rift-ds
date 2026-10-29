@@ -1207,13 +1207,18 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
    way the browser handles any page with a field at the bottom. The launcher
    reads the same threshold as TAKEOVER_QUERY; this rule covers the first
    render, before a media query has been read, so the two must stay in step.
-   No transition: there is no card form to glide from. */
+   No transition: there is no card form to glide from. Once open, the
+   launcher writes the visual viewport's height and pan here, so the
+   composer ends at the keyboard and the header stays on screen; 100dvh is
+   the first paint's height and the fallback without visualViewport. */
 @media (max-width: 719px) {
   .ds-chat-launcher__panel {
     position: relative;
-    top: auto;
+    /* A relative offset, not a transform: a transform would become the
+       containing block of every fixed popup inside the panel. */
+    top: var(--ds-chat-viewport-top, 0px);
     left: auto;
-    height: 100dvh;
+    height: var(--ds-chat-viewport-height, 100dvh);
     width: 100%;
     max-width: none;
     border: none;

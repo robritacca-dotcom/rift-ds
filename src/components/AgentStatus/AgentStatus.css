@@ -269,6 +269,14 @@
   white-space: nowrap;
 }
 
+/* The text itself sits in an inline-block span, which an ellipsis on the
+   label cannot cut, so the span carries its own. */
+.ds-agent-status--pill .ds-agent-status__label-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .ds-agent-status__action {
   display: inline-flex;
   flex: none;

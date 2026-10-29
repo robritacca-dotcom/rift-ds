@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { ToolCall } from './ToolCall';
 import { Button } from '../Button/Button';
 import { CodeBlock } from '../CodeBlock/CodeBlock';
@@ -79,4 +80,39 @@ export const Sequence: Story = {
     </div>
   ),
   args: { children: undefined },
+};
+
+// A long tool name in a phone-width card: the name ends in an ellipsis and
+// the status keeps its place inside the card.
+export const LongNameNarrow: Story = {
+  args: {
+    status: 'success',
+    name: 'search_transactions_by_merchant',
+    summary: '86 transactions scanned',
+  },
+  render: (args) => (
+    <div style={{ width: '260px' }}>
+      <ToolCall {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const card = canvasElement.querySelector<HTMLElement>('.ds-tool-call')!;
+    const status = canvasElement.querySelector<HTMLElement>('.ds-tool-call__status')!;
+    await expect(status.getBoundingClientRect().right).toBeLessThanOrEqual(card.getBoundingClientRect().right);
+  },
+};
+
+// A short name keeps every letter at a phone's width: the summary gives up
+// its room first.
+export const ShortNameNarrow: Story = {
+  args: { status: 'error', name: 'fetch', summary: 'https://api.example.com/v1/rates?base=EUR', duration: '1.1s' },
+  render: (args) => (
+    <div style={{ width: 260 }}>
+      <ToolCall {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const name = canvasElement.querySelector<HTMLElement>('.ds-tool-call__name')!;
+    await expect(name.scrollWidth).toBeLessThanOrEqual(name.clientWidth);
+  },
 };

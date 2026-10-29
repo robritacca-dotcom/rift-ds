@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Reasoning } from './Reasoning';
 import { AgentStatus } from '../AgentStatus/AgentStatus';
 import { Button } from '../Button/Button';
@@ -41,6 +42,21 @@ export const NoDuration: Story = {};
 
 export const CustomLabel: Story = {
   args: { label: 'Checked the currency conversion', duration: 8 },
+};
+
+/** A long summary in a phone-width column ends in an ellipsis; the trigger stays inside the column. */
+export const LongLabelNarrow: Story = {
+  args: { label: 'Compared the token docs against the changelog and the release notes', duration: 8 },
+  render: (args) => (
+    <div style={{ width: 240 }}>
+      <Reasoning {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const column = canvasElement.firstElementChild as HTMLElement;
+    const trigger = canvasElement.querySelector<HTMLElement>('.ds-reasoning__trigger')!;
+    await expect(trigger.getBoundingClientRect().right).toBeLessThanOrEqual(column.getBoundingClientRect().right + 1);
+  },
 };
 
 /** Compact matches compact ChatMessage text, for dense transcripts. */

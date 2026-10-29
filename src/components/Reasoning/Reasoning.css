@@ -89,6 +89,20 @@
   white-space: nowrap;
 }
 
+/* A text summary longer than its column ends in an ellipsis rather than
+   running the trigger off a phone screen; the trigger never grows past its
+   column. A node summary keeps its own layout. */
+.ds-reasoning__trigger {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.ds-reasoning__summary:not(.ds-reasoning__summary--node) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* The live→done handoff. The departing node summary (an AgentStatus)
    overlays the incoming text, fading out in place, while the text summary
    slides left from where its label sat into the flush position. The

@@ -35,6 +35,13 @@
   line-height: var(--font-caption-line-height);
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-secondary);
+}
+
+/* The text sits in its own span: an ellipsis never draws on bare text
+   inside a flex container, so on the label itself a long caption was cut
+   mid-letter. */
+.ds-legend-tile__label-text {
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

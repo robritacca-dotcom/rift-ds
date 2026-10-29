@@ -37,7 +37,6 @@ import {
   type DataTableRow,
 } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
-import { Divider } from "rift-ds/components/Divider/Divider";
 import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Meter } from "rift-ds/components/Meter/Meter";
@@ -46,6 +45,7 @@ import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./SalesPipeline.module.css";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
+import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
@@ -55,9 +55,27 @@ const NAV_SECTIONS: AppSidebarSection[] = [
     items: [
       { key: "companies", icon: "domain", label: "Companies" },
       { key: "deals", icon: "view_kanban", label: "Deals board" },
-      { key: "forecast", icon: "query_stats", label: "Forecast" },
+      {
+        key: "forecast",
+        icon: "query_stats",
+        label: "Forecast",
+        children: [
+          { key: "forecast-this-quarter", label: "This quarter" },
+          { key: "forecast-next-quarter", label: "Next quarter" },
+          { key: "forecast-by-rep", label: "By rep" },
+        ],
+      },
       { key: "activities", icon: "bolt", label: "Activities" },
-      { key: "contacts", icon: "group", label: "Contacts" },
+      {
+        key: "contacts",
+        icon: "group",
+        label: "Contacts",
+        children: [
+          { key: "contacts-all-contacts", label: "All contacts" },
+          { key: "contacts-champions", label: "Champions" },
+          { key: "contacts-lists", label: "Lists" },
+        ],
+      },
       { key: "sequences", icon: "mail", label: "Sequences" },
     ],
   },
@@ -672,43 +690,41 @@ export default function SalesPipeline() {
       }
     >
           {!appFrame && (
-          <div className={styles.topBar}>
-            <div className={styles.search}>
-              <Input
-                placeholder="Search Meridian"
-                iconLeft="search"
-                aria-label="Search Meridian"
-              />
-              <span className={styles.searchKbd} aria-hidden="true">
-                <Kbd size="compact">⌘</Kbd>
-                <Kbd size="compact">K</Kbd>
-              </span>
+          <StickyTopBar>
+            <div className={styles.topBar}>
+              <div className={styles.search}>
+                <Input
+                  placeholder="Search Meridian"
+                  iconLeft="search"
+                  aria-label="Search Meridian"
+                />
+                <span className={styles.searchKbd} aria-hidden="true">
+                  <Kbd size="compact">⌘</Kbd>
+                  <Kbd size="compact">K</Kbd>
+                </span>
+              </div>
+              <div className={styles.topBarActions}>
+                {/* Mobile: the full search field folds to this icon, riding
+                    with the other actions on the right. */}
+                <CircularButton
+                  icon="search"
+                  variant="secondary"
+                  ariaLabel="Search Meridian"
+                  className={styles.searchIconMobile}
+                />
+                <AiButton
+                  label="Ask AI"
+                  onClick={() => setChatOpen(true)}
+                />
+                <CircularButton
+                  icon="notifications"
+                  variant="secondary"
+                  ariaLabel="Notifications"
+                />
+              </div>
             </div>
-            <div className={styles.topBarActions}>
-              {/* Mobile: the full search field folds to this icon, riding
-                  with the other actions on the right. */}
-              <CircularButton
-                icon="search"
-                variant="secondary"
-                size="compact"
-                ariaLabel="Search Meridian"
-                className={styles.searchIconMobile}
-              />
-              <AiButton
-                label="Ask AI"
-                size="compact"
-                onClick={() => setChatOpen(true)}
-              />
-              <CircularButton
-                icon="notifications"
-                variant="secondary"
-                size="compact"
-                ariaLabel="Notifications"
-              />
-            </div>
-          </div>
+          </StickyTopBar>
           )}
-          {!appFrame && <Divider spacing="none" />}
 
           {/* --------------------------------------------- page head */}
           <header className={styles.pageHead}>

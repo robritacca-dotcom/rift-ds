@@ -37,6 +37,7 @@ import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./TeamCalendar.module.css";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
+import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
@@ -47,8 +48,26 @@ const NAV_SECTIONS: AppSidebarSection[] = [
       { key: "home", icon: "home", label: "Home" },
       { key: "tasks", icon: "task_alt", label: "Tasks" },
       { key: "calendar", icon: "calendar_month", label: "Calendar" },
-      { key: "team", icon: "group", label: "Team" },
-      { key: "reports", icon: "monitoring", label: "Reports" },
+      {
+        key: "team",
+        icon: "group",
+        label: "Team",
+        children: [
+          { key: "team-members", label: "Members" },
+          { key: "team-schedules", label: "Schedules" },
+          { key: "team-time-off", label: "Time off" },
+        ],
+      },
+      {
+        key: "reports",
+        icon: "monitoring",
+        label: "Reports",
+        children: [
+          { key: "reports-utilisation", label: "Utilisation" },
+          { key: "reports-meetings", label: "Meeting load" },
+          { key: "reports-exports", label: "Exports" },
+        ],
+      },
     ],
   },
   {
@@ -239,41 +258,40 @@ export default function TeamCalendar() {
       }
     >
           {!appFrame && (
-          <div className={styles.topBar}>
-            <div className={styles.search}>
-              <Input
-                placeholder="Search events"
-                iconLeft="search"
-                aria-label="Search events"
-              />
-              <span className={styles.searchKbd} aria-hidden="true">
-                <Kbd size="compact">⌘</Kbd>
-                <Kbd size="compact">K</Kbd>
-              </span>
+          <StickyTopBar>
+            <div className={styles.topBar}>
+              <div className={styles.search}>
+                <Input
+                  placeholder="Search events"
+                  iconLeft="search"
+                  aria-label="Search events"
+                />
+                <span className={styles.searchKbd} aria-hidden="true">
+                  <Kbd size="compact">⌘</Kbd>
+                  <Kbd size="compact">K</Kbd>
+                </span>
+              </div>
+              <div className={styles.topBarActions}>
+                {/* Mobile: the full search field folds to this icon, riding
+                    with the other actions on the right. */}
+                <CircularButton
+                  icon="search"
+                  variant="secondary"
+                  ariaLabel="Search events"
+                  className={styles.searchIconMobile}
+                />
+                <AiButton
+                  label="Ask AI"
+                  onClick={() => setChatOpen(true)}
+                />
+                <CircularButton
+                  icon="notifications"
+                  variant="secondary"
+                  ariaLabel="Notifications"
+                />
+              </div>
             </div>
-            <div className={styles.topBarActions}>
-              {/* Mobile: the full search field folds to this icon, riding
-                  with the other actions on the right. */}
-              <CircularButton
-                icon="search"
-                variant="secondary"
-                size="compact"
-                ariaLabel="Search events"
-                className={styles.searchIconMobile}
-              />
-              <AiButton
-                label="Ask AI"
-                size="compact"
-                onClick={() => setChatOpen(true)}
-              />
-              <CircularButton
-                icon="notifications"
-                variant="secondary"
-                size="compact"
-                ariaLabel="Notifications"
-              />
-            </div>
-          </div>
+          </StickyTopBar>
           )}
 
           <div className={styles.board}>

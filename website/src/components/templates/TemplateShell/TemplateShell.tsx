@@ -5,7 +5,9 @@
  * sales pipeline, the relay console, the roadmap planner and the team
  * calendar all lay out through it. It owns the AppSidebar (with the footer
  * switchers), the main column, the room a docked assistant takes, and the
- * two layouts the footer's layout switch flips between:
+ * two layouts the footer's layout switch flips between. The rail always
+ * runs in panel mode, purely to demonstrate the secondary nav: a row with
+ * children opens them in the side panel, which starts closed.
  *
  * - `floating`: the rail floats as a glass card and the content column is
  *   centred at the template's own max width; the page scrolls.
@@ -31,10 +33,17 @@ import styles from "./TemplateShell.module.css";
 
 
 export interface TemplateShellProps {
-  /** The rail's own props; the shell sets its layout, expanded state and footer. */
+  /** The rail's own props; the shell sets its layout, sub-nav mode, expanded state and footer. */
   sidebar: Omit<
     AppSidebarProps,
-    "layout" | "floating" | "expanded" | "defaultExpanded" | "onExpandedChange" | "footerSlot"
+    | "layout"
+    | "floating"
+    | "subNav"
+    | "defaultPanelOpen"
+    | "expanded"
+    | "defaultExpanded"
+    | "onExpandedChange"
+    | "footerSlot"
   >;
   /** Whether the docked assistant is open, so the content makes room for it. */
   chatOpen: boolean;
@@ -119,9 +128,11 @@ export default function TemplateShell({
             <AppSidebar
               {...sidebar}
               layout={layout}
+              subNav="panel"
+              defaultPanelOpen={false}
               expanded={expanded}
               onExpandedChange={setExpanded}
-              footerSlot={<SidebarSwitchers showLayout />}
+              footerSlot={<SidebarSwitchers showLayout backLink />}
             />
           </div>
         )}

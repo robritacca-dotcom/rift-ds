@@ -20,6 +20,8 @@
   /* The rail and side panel widths the main column clears. */
   --shell-rail: 64px;
   --shell-panel: 0px;
+  /* What the sticky top bar's fill paints: the colour under the content. */
+  --sticky-fill: var(--color-bg-page-primary);
 }
 
 .shell:has(:global(.ds-app-sidebar--expanded)) {
@@ -58,9 +60,84 @@
    the column has (an open chat or an expanded rail narrows it without the
    viewport changing) with @container template-content queries. */
 .content {
+  position: relative;
   width: 100%;
   min-width: 0;
   container: template-content / inline-size;
+}
+
+/* -------------------------------------------------------- sticky top bar */
+
+/* StickyTopBar: the template's search and actions row holds at the top of
+   the scroller, one content padding step down, and the content runs under
+   it. The blur behind reaches up over that step, a step out to each side
+   and a few rows below, where it dissolves; it shows only once the content
+   has left the top (the --tinted flag follows .topBarSentinel). */
+.stickyTopBar {
+  position: sticky;
+  /* The inset surface's scroller has the content padding itself, and a
+     sticky offset counts from inside it, so the bar holds at its resting
+     place with no offset of its own. The floating layout scrolls the page,
+     which has no padding, so the bar keeps a padding step off the top
+     there (the .floating rule below). */
+  top: 0;
+  z-index: var(--layer-sticky);
+  /* The room the rule under the bar used to take, so the page's first row
+     keeps its distance now that the blur marks the edge instead. */
+  margin-bottom: var(--gap-400);
+}
+
+/* The fill above the bar: the scroller's own colour from its top edge to
+   the bar's, so nothing shows in the strip over it, then fading across the
+   bar into the blur below. Arrives with the blur. */
+.stickyTopBar::before {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--padding-500));
+  bottom: 0;
+  inset-inline: calc(-1 * var(--padding-400));
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    var(--sticky-fill) var(--padding-500),
+    transparent
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.stickyTopBar[data-stuck]::before {
+  opacity: 1;
+}
+
+.floating .stickyTopBar {
+  top: var(--padding-500);
+}
+
+.topBarBlur:global(.ds-progressive-blur) {
+  position: absolute;
+  top: calc(-1 * var(--padding-500));
+  bottom: calc(-1 * var(--gap-1000));
+  inset-inline: calc(-1 * var(--padding-400));
+  height: auto;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.topBarBlur:global(.ds-progressive-blur--tinted) {
+  opacity: 1;
+}
+
+/* A one-pixel marker at the bar's resting place: the bar is stuck once
+   it scrolls out of view. Absolute, so the column's flex gap skips it; it
+   keeps its static position at the column's top, and the column is its
+   containing block, so it scrolls with the content in either layout. */
+.topBarSentinel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
 }
 
 /* -------------------------------------------------------------- floating */
@@ -96,6 +173,7 @@
 .inset {
   height: calc(var(--layout-viewport-height, 100vh));
   background-color: var(--color-bg-app-shell);
+  --sticky-fill: var(--color-bg-app-surface);
 }
 
 .inset .main {

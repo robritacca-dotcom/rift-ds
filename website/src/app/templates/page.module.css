@@ -248,3 +248,9 @@
   padding-inline: var(--showcase-inset);
   margin-bottom: var(--gap-500);
 }
+
+.inlineLink {
+  color: var(--color-action-primary-text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

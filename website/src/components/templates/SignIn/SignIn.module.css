@@ -200,18 +200,6 @@
 
 .paneFooter {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-300);
-}
-
-.legal {
-  margin: 0;
-  font-family: var(--font-caption-family);
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-caption-weight);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
 }
 
 /* ── The ambient pane ──────────────────────────────────────────── */
@@ -264,11 +252,5 @@
     width: calc(100% + var(--primitive-padding-400) * 2);
     margin: calc(-1 * var(--primitive-padding-500))
       calc(-1 * var(--primitive-padding-400));
-  }
-
-  .paneFooter {
-    flex-direction: column-reverse;
-    align-items: flex-start;
-    gap: var(--gap-200);
   }
 }

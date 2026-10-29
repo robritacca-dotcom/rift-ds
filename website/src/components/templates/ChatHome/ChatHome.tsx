@@ -60,6 +60,7 @@ import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
 import { ProductMark } from "../ProductMark/ProductMark";
+import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 
 /* ------------------------------------------------------------- the page */
 
@@ -124,6 +125,9 @@ function ChatHomeShell() {
           logoText: product,
           defaultExpanded: true,
           profile: { name: "Jordan Reyes", meta: "Pro" },
+          /* The templates' shared footer, as the agent workbench carries
+             it: the way back to the index above the theme controls. */
+          footerSlot: <SidebarSwitchers backLink />,
         }}
         agent={{
           /* Closed on arrival, so the home screen opens on the board and the

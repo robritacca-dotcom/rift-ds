@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { sectionLandingMetadata } from "@/config/navigation";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
@@ -33,14 +34,14 @@ export default function TemplatesPage() {
               Whole screens built from the system alone
             </p>
             <p className={styles.introBody}>
-              A template is a complete screen assembled from the library: every
-              control is a component, and every colour, space, and type style
-              resolves to a semantic token. The first began as a labs rebuild
-              of a reference product, a way to find where the system falls
-              short; the others are original screens, composed to
-              stretch the parts a rebuild never reaches. All data in them is
-              fictional. Each preview below is the template itself, live and
-              following the site’s theme; open one to use it full screen.
+              A template is a complete product screen made only from the
+              library’s components and tokens, so it follows every theme. Open
+              one to use it full screen, and take it as a reference for your
+              own. To start an app from the same pieces, the{" "}
+              <Link href="/docs/blocks" className={styles.inlineLink}>
+                blocks
+              </Link>{" "}
+              install as pages you own.
             </p>
           </div>
 

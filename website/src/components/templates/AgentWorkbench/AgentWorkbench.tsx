@@ -466,7 +466,7 @@ export default function AgentWorkbench() {
             moreLabel="Show 20 more"
             historyLabel="Session history"
             profile={{ name: "Ada Okafor", meta: "Team" }}
-            footerSlot={<SidebarSwitchers />}
+            footerSlot={<SidebarSwitchers backLink />}
           />
         </aside>
 

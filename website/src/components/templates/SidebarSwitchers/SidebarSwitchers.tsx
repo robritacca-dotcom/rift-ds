@@ -1,10 +1,12 @@
 "use client";
 
+import { Button } from "rift-ds/components/Button/Button";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../../BrandSwitcher/BrandSwitcher";
 import { TEMPLATE_LAYOUTS, setTemplateLayout, type TemplateLayout } from "@/lib/templateLayout";
 import { useTemplateLayout } from "../TemplateShell/useTemplateLayout";
+import { useIsStaged } from "../useStagedProductName";
 import styles from "./SidebarSwitchers.module.css";
 
 /**
@@ -17,11 +19,19 @@ import styles from "./SidebarSwitchers.module.css";
  * so every template's rows stay identical, including the sign-in screen,
  * which has no sidebar and carries it on the form pane's floor instead. The
  * layout row shows only where TemplateShell lays the screen out
- * (`showLayout`); elsewhere it would switch nothing.
+ * (`showLayout`); elsewhere it would switch nothing. `backLink` stacks the
+ * way back to the templates index above the row, for screens whose
+ * controls sit in a column of their own.
  */
-export default function SidebarSwitchers({ showLayout = false }: { showLayout?: boolean }) {
+export default function SidebarSwitchers({
+  showLayout = false,
+  backLink = false,
+}: {
+  showLayout?: boolean;
+  backLink?: boolean;
+}) {
   const layout = useTemplateLayout();
-  return (
+  const row = (
     <div className={`${styles.row} ${showLayout ? styles.rowTight : ""}`}>
       {/* Three controls share the rail's width, so all three go compact
           when the layout switch joins the row. */}
@@ -38,5 +48,31 @@ export default function SidebarSwitchers({ showLayout = false }: { showLayout?: 
         />
       )}
     </div>
+  );
+  if (!backLink) return row;
+  return (
+    <div className={styles.stack}>
+      <TemplatesBackLink />
+      {row}
+    </div>
+  );
+}
+
+/**
+ * The way back to the templates index from a template at its own route.
+ * Staged in the playground, the screen is a stranger's product in a frame,
+ * so the link is not drawn.
+ */
+export function TemplatesBackLink() {
+  const staged = useIsStaged();
+  if (staged) return null;
+  return (
+    <Button
+      href="/templates"
+      label="Templates"
+      iconLeft="arrow_back"
+      variant="tertiary"
+      size="compact"
+    />
   );
 }

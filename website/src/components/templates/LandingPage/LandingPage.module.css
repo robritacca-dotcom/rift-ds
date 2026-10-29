@@ -37,13 +37,38 @@
 
 /* ------------------------------------------------------------ header */
 
+/* The site header's recipe: no fill at the top of the page, then the
+   progressive blur and its tint fade in once the page scrolls (the tinted flag
+   follows .topSentinel). The blur hangs below the bar and dissolves, so
+   there is no hard edge to draw a border on. */
 .header {
   position: sticky;
   top: 0;
   z-index: var(--layer-sticky);
-  background: var(--color-bg-glass);
-  border-bottom: var(--border-025) solid var(--color-bg-container-border);
-  backdrop-filter: blur(16px);
+}
+
+.headerBlur:global(.ds-progressive-blur) {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(100% + var(--gap-1500));
+  z-index: -1;
+  /* Bare at the top of the page: nothing behind the bar at all, the blur
+     included, until the page scrolls and the blur fades in with its tint. */
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.headerBlur:global(.ds-progressive-blur--tinted) {
+  opacity: 1;
+}
+
+/* One pixel tall at the very top of the shell: the header is tinted once
+   it scrolls out of view. */
+.topSentinel {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
 }
 
 .headerInner {

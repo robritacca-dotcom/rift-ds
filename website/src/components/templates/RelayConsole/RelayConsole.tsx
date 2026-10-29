@@ -57,6 +57,7 @@ import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RelayConsole.module.css";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
+import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
@@ -65,10 +66,28 @@ const NAV_SECTIONS: AppSidebarSection[] = [
   {
     items: [
       { key: "network", icon: "public", label: "Network" },
-      { key: "stations", icon: "cell_tower", label: "Stations" },
+      {
+        key: "stations",
+        icon: "cell_tower",
+        label: "Stations",
+        children: [
+          { key: "stations-north", label: "North region" },
+          { key: "stations-south", label: "South region" },
+          { key: "stations-offline", label: "Offline" },
+        ],
+      },
       { key: "traffic", icon: "monitoring", label: "Traffic" },
       { key: "alerts", icon: "notifications", label: "Alerts", badge: 2 },
-      { key: "reports", icon: "description", label: "Reports" },
+      {
+        key: "reports",
+        icon: "description",
+        label: "Reports",
+        children: [
+          { key: "reports-uptime", label: "Uptime" },
+          { key: "reports-latency", label: "Latency" },
+          { key: "reports-exports", label: "Exports" },
+        ],
+      },
     ],
   },
   {
@@ -463,41 +482,40 @@ export default function RelayConsole() {
       }
     >
           {!appFrame && (
-          <div className={styles.topBar}>
-            <div className={styles.search}>
-              <Input
-                placeholder="Search stations"
-                iconLeft="search"
-                aria-label="Search stations"
-              />
-              <span className={styles.searchKbd} aria-hidden="true">
-                <Kbd size="compact">⌘</Kbd>
-                <Kbd size="compact">K</Kbd>
-              </span>
+          <StickyTopBar>
+            <div className={styles.topBar}>
+              <div className={styles.search}>
+                <Input
+                  placeholder="Search stations"
+                  iconLeft="search"
+                  aria-label="Search stations"
+                />
+                <span className={styles.searchKbd} aria-hidden="true">
+                  <Kbd size="compact">⌘</Kbd>
+                  <Kbd size="compact">K</Kbd>
+                </span>
+              </div>
+              <div className={styles.topBarActions}>
+                {/* Mobile: the full search field folds to this icon, riding
+                    with the other actions on the right. */}
+                <CircularButton
+                  icon="search"
+                  variant="secondary"
+                  ariaLabel="Search stations"
+                  className={styles.searchIconMobile}
+                />
+                <AiButton
+                  label="Ask AI"
+                  onClick={() => setChatOpen(true)}
+                />
+                <CircularButton
+                  icon="notifications"
+                  variant="secondary"
+                  ariaLabel="Notifications"
+                />
+              </div>
             </div>
-            <div className={styles.topBarActions}>
-              {/* Mobile: the full search field folds to this icon, riding
-                  with the other actions on the right. */}
-              <CircularButton
-                icon="search"
-                variant="secondary"
-                size="compact"
-                ariaLabel="Search stations"
-                className={styles.searchIconMobile}
-              />
-              <AiButton
-                label="Ask AI"
-                size="compact"
-                onClick={() => setChatOpen(true)}
-              />
-              <CircularButton
-                icon="notifications"
-                variant="secondary"
-                size="compact"
-                ariaLabel="Notifications"
-              />
-            </div>
-          </div>
+          </StickyTopBar>
           )}
 
           {/* ------------------------------------------------- the stage */}

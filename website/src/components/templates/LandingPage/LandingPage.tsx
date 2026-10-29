@@ -62,6 +62,7 @@ import { Gauge } from "rift-ds/components/Gauge/Gauge";
 import { Input } from "rift-ds/components/Input/Input";
 import { Meter } from "rift-ds/components/Meter/Meter";
 import { NavList } from "rift-ds/components/NavList/NavList";
+import { ProgressiveBlur } from "rift-ds/components/ProgressiveBlur/ProgressiveBlur";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
 import { Stat } from "rift-ds/components/Stat/Stat";
@@ -69,7 +70,7 @@ import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
 import { Widget } from "rift-ds/components/Widget/Widget";
 import { ExtendedBackground } from "@/components/BlurBackground/BlurBackground";
 import FadeDivider from "@/components/FadeDivider/FadeDivider";
-import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
+import SidebarSwitchers, { TemplatesBackLink } from "../SidebarSwitchers/SidebarSwitchers";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { useStagedProductName } from "../useStagedProductName";
 import { useAppFrame } from "../AppFrame/AppFrame";
@@ -618,6 +619,18 @@ export default function LandingPage() {
   const [paletteOpen, setPaletteOpen] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [tab, setTab] = React.useState("top");
+  /* The header is bare over the hero and takes the site header's tint once
+     the page leaves the top. A sentinel at the top of the shell, rather
+     than window.scrollY, so it holds in whatever box does the scrolling. */
+  const topRef = React.useRef<HTMLDivElement>(null);
+  const [tinted, setTinted] = React.useState(false);
+  React.useEffect(() => {
+    const sentinel = topRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(([entry]) => setTinted(!entry.isIntersecting));
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
   const language = LANGUAGES.find((l) => l.id === languageId) ?? LANGUAGES[0];
 
   /* Every command jumps to its section or does what the header would, so
@@ -664,7 +677,9 @@ export default function LandingPage() {
   return (
     <div className={styles.shell} data-phone={phonePreview ? "" : undefined}>
       <ExtendedBackground />
+      <div ref={topRef} className={styles.topSentinel} aria-hidden="true" />
       <header className={styles.header}>
+        <ProgressiveBlur className={styles.headerBlur} tinted={tinted} />
         <div className={styles.headerInner}>
           {/* The dashboards' pattern: under the full layout, the menu sits
               top left, before the brand, and opens a drawer from that edge. */}
@@ -925,6 +940,7 @@ export default function LandingPage() {
             </span>
             <p className={styles.legal}>{product} is a fictional product, built from the design system alone.</p>
             <SidebarSwitchers />
+            <TemplatesBackLink />
           </div>
           {FOOTER.map((col) => (
             <nav key={col.heading} aria-label={col.heading} className={styles.footerCol}>

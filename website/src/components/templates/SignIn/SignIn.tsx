@@ -267,10 +267,7 @@ export default function SignIn() {
         </div>
 
         <footer className={styles.paneFooter}>
-          <p className={styles.legal}>
-            Tessera is a fictional product, built from the design system alone.
-          </p>
-          <SidebarSwitchers />
+          <SidebarSwitchers backLink />
         </footer>
       </div>
 

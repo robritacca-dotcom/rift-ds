@@ -9,3 +9,11 @@
 .rowTight {
   gap: var(--gap-100);
 }
+
+/* The back link stacked above the row (the `backLink` prop). */
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+}

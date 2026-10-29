@@ -32,7 +32,6 @@ import {
   Dropdown,
   type DropdownOption,
 } from "rift-ds/components/Dropdown/Dropdown";
-import { Divider } from "rift-ds/components/Divider/Divider";
 import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
 import { FunnelChart } from "rift-ds/components/FunnelChart/FunnelChart";
 import { Input } from "rift-ds/components/Input/Input";
@@ -48,6 +47,7 @@ import styles from "./MarketingDashboard.module.css";
 import { useStagedProductName } from "../useStagedProductName";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
+import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { PUBLISHER_MARKS, PublisherMark } from "../PublisherMarks/PublisherMarks";
 import { ProductMark } from "../ProductMark/ProductMark";
 
@@ -59,8 +59,27 @@ const NAV_SECTIONS: AppSidebarSection[] = [
       { key: "home", icon: "home", label: "Home", badge: 152 },
       { key: "marketing", icon: "campaign", label: "Marketing" },
       { key: "calendar", icon: "calendar_month", label: "Calendar" },
-      { key: "projects", icon: "folder", label: "Projects" },
-      { key: "reports", icon: "monitoring", label: "Reports" },
+      {
+        key: "projects",
+        icon: "folder",
+        label: "Projects",
+        children: [
+          { key: "projects-q4-launch", label: "Q4 launch" },
+          { key: "projects-brand-refresh", label: "Brand refresh" },
+          { key: "projects-partner-week", label: "Partner week" },
+        ],
+      },
+      {
+        key: "reports",
+        icon: "monitoring",
+        label: "Reports",
+        children: [
+          { key: "reports-overview", label: "Overview" },
+          { key: "reports-attribution", label: "Attribution" },
+          { key: "reports-channels", label: "Channels" },
+          { key: "reports-exports", label: "Exports" },
+        ],
+      },
       { key: "profile", icon: "person", label: "Profile" },
       { key: "inbox", icon: "inbox", label: "Inbox", badge: 91 },
     ],
@@ -413,42 +432,40 @@ export default function MarketingDashboard() {
     >
         {!appFrame && (
         <>
-        <div className={styles.topBar}>
-          <div className={styles.search}>
-            <Input
-              placeholder="Search campaigns"
-              iconLeft="search"
-              aria-label="Search campaigns"
-            />
-            <span className={styles.searchKbd} aria-hidden="true">
-              <Kbd size="compact">⌘</Kbd>
-              <Kbd size="compact">K</Kbd>
-            </span>
+        <StickyTopBar>
+          <div className={styles.topBar}>
+            <div className={styles.search}>
+              <Input
+                placeholder="Search campaigns"
+                iconLeft="search"
+                aria-label="Search campaigns"
+              />
+              <span className={styles.searchKbd} aria-hidden="true">
+                <Kbd size="compact">⌘</Kbd>
+                <Kbd size="compact">K</Kbd>
+              </span>
+            </div>
+            <div className={styles.topBarActions}>
+              {/* Mobile: the full search field folds to this icon, riding
+                  with the other actions on the right. */}
+              <CircularButton
+                icon="search"
+                variant="secondary"
+                ariaLabel="Search campaigns"
+                className={styles.searchIconMobile}
+              />
+              <AiButton
+                label="Ask AI"
+                onClick={() => setChatOpen(true)}
+              />
+              <CircularButton
+                icon="notifications"
+                variant="secondary"
+                ariaLabel="Notifications"
+              />
+            </div>
           </div>
-          <div className={styles.topBarActions}>
-            {/* Mobile: the full search field folds to this icon, riding
-                with the other actions on the right. */}
-            <CircularButton
-              icon="search"
-              variant="secondary"
-              size="compact"
-              ariaLabel="Search campaigns"
-              className={styles.searchIconMobile}
-            />
-            <AiButton
-              label="Ask AI"
-              size="compact"
-              onClick={() => setChatOpen(true)}
-            />
-            <CircularButton
-              icon="notifications"
-              variant="secondary"
-              size="compact"
-              ariaLabel="Notifications"
-            />
-          </div>
-        </div>
-        <Divider spacing="none" />
+        </StickyTopBar>
         </>
         )}
         <header className={styles.pageHead}>
@@ -491,7 +508,7 @@ export default function MarketingDashboard() {
                 label={kpi.label}
                 delta={kpi.delta}
                 trend={kpi.trend}
-                deltaPlacement="inline"
+                deltaPlacement="auto"
               />
             </div>
           ))}

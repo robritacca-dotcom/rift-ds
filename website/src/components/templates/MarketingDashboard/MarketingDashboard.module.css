@@ -110,6 +110,9 @@
   flex-direction: column;
   gap: var(--gap-400);
   min-width: 0;
+  /* A second column gap above: the table is its own section, not one more
+     card in the grid above it. */
+  margin-top: var(--gap-500);
 }
 
 /* The stat and its range select share a row while the panel has room;
@@ -293,11 +296,17 @@
   }
 }
 
-@media (max-width: 760px) {
-
-  .kpiGrid,
+/* A phone-width column keeps the KPIs two up, as the mobile dashboard
+   lays them out, on tighter gaps and padding. Each Stat restacks itself
+   (deltaPlacement="auto"), dropping its delta under the label once the
+   half-width card is too narrow for both on one line. */
+@container template-content (max-width: 600px) {
   .content .kpiGrid {
-    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-300);
+  }
+
+  .kpi {
+    padding: var(--padding-400);
   }
 }
 

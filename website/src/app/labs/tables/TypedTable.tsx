@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DataTable,
   type DataTableCellEdit,
@@ -67,11 +67,14 @@ export const typedColumns: DataTableColumn[] = [
 
 const DAY_MS = 86_400_000;
 /* Dates from a fixed origin, so the bench reads the same on every render;
-   the last-contact dates sit around today so relative dates read naturally. */
+   the last-contact dates sit around `today` so relative dates read naturally. */
 const isoDay = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 const ORIGIN = Date.UTC(2026, 9, 1);
 
-export const makeTypedRows = (): DataTableRow[] =>
+// Left empty on one row: an empty value draws nothing.
+const contactedOn = (today: number, i: number) => (i === 5 ? null : isoDay(today - ((i * 9) % 70) * DAY_MS));
+
+const makeTypedRows = (today: number): DataTableRow[] =>
   ACCOUNTS.map((account, i) => ({
     id: `a${i + 1}`,
     values: {
@@ -83,16 +86,31 @@ export const makeTypedRows = (): DataTableRow[] =>
       seats: 5 + ((i * 37) % 480),
       onboarded: (i * 23) % 101,
       renews: isoDay(ORIGIN + ((i * 41) % 300) * DAY_MS),
-      // Left empty on one row: an empty value draws nothing.
-      contacted: i === 5 ? null : isoDay(Date.now() - ((i * 9) % 70) * DAY_MS),
+      contacted: contactedOn(today, i),
       tags: TAGS.filter((_, t) => (i + t) % 3 === 0),
       billable: i % 3 !== 1,
       site: `https://www.${account.toLowerCase()}.example/`,
     },
   }));
 
+/** The accounts as state. The page is prerendered, so the server and the
+    first client render date the last contacts from ORIGIN, never the clock:
+    a build on one day and a visit on the next would otherwise disagree and
+    fail hydration. Once mounted, they move to around the real today. */
+export function useTypedRows() {
+  const [rows, setRows] = useState(() => makeTypedRows(ORIGIN));
+  useEffect(() => {
+    const today = Date.now();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the clock is only read after hydration
+    setRows((current) =>
+      current.map((r) => ({ ...r, values: { ...r.values, contacted: contactedOn(today, Number(r.id.slice(1)) - 1) } })),
+    );
+  }, []);
+  return [rows, setRows] as const;
+}
+
 export function TypedTable({ size, lines }: { size: "default" | "compact"; lines: boolean }) {
-  const [rows, setRows] = useState(makeTypedRows);
+  const [rows, setRows] = useTypedRows();
   const onCellEdit = ({ row, key, value }: DataTableCellEdit) =>
     setRows((current) =>
       current.map((r) => (r.id === row.id ? { ...r, values: { ...r.values, [key]: value } } : r)),

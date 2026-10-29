@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { DataTable, type DataTableColumn } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar, type TableToolbarView } from "rift-ds/components/TableToolbar/TableToolbar";
-import { makeTypedRows, typedColumns } from "./TypedTable";
+import { typedColumns, useTypedRows } from "./TypedTable";
 
 /* The typed accounts with three saved views: all of them, the open
    pipeline (a filter and a sort), and by owner (grouped, two columns
@@ -34,7 +33,7 @@ const VIEWS: TableToolbarView[] = [
 ];
 
 export function ViewsTable({ size, lines }: { size: "default" | "compact"; lines: boolean }) {
-  const [rows] = useState(makeTypedRows);
+  const [rows] = useTypedRows();
   return (
     <DataTable
       columns={columns}

@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { DataTable, type DataTableCellEdit, type DataTableColumn } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
-import { makeTypedRows, typedColumns } from "./TypedTable";
+import { typedColumns, useTypedRows } from "./TypedTable";
 
 /* The typed accounts, grouped: Stage and Owner can group the rows (from a
    header menu or the bar's Group control), the figures total per group,
@@ -22,7 +21,7 @@ const columns: DataTableColumn[] = typedColumns.map((col) => ({
 }));
 
 export function GroupedTable({ size, lines }: { size: "default" | "compact"; lines: boolean }) {
-  const [rows, setRows] = useState(makeTypedRows);
+  const [rows, setRows] = useTypedRows();
   const onCellEdit = ({ row, key, value }: DataTableCellEdit) =>
     setRows((current) => current.map((r) => (r.id === row.id ? { ...r, values: { ...r.values, [key]: value } } : r)));
   return (

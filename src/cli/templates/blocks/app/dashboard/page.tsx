@@ -85,7 +85,7 @@ export default function DashboardPage() {
               value={stat.value}
               delta={stat.delta}
               trend={stat.trend}
-              deltaPlacement="inline"
+              deltaPlacement="auto"
             />
           </Panel>
         ))}

@@ -29,6 +29,7 @@
 }
 
 .content {
+  position: relative;
   width: 100%;
   max-width: 1440px;
   min-width: 0;
@@ -40,12 +41,61 @@
 
 /* ---------------------------------------------------------- top bar */
 
+/* The bar holds one inset off the top of the page and the content runs
+   under it. Once the page scrolls (data-stuck), the page colour fills the
+   strip above it, fading out across the bar, and the blur behind it
+   dissolves a few rows below. */
 .topBar {
+  position: sticky;
+  top: var(--shell-inset);
+  z-index: var(--layer-sticky);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-200);
   min-height: var(--control-height-default);
+  /* Room between the bar and the page header under it. */
+  margin-bottom: var(--gap-400);
+}
+
+.topBar::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--shell-inset));
+  bottom: 0;
+  inset-inline: calc(-1 * var(--padding-400));
+  z-index: -1;
+  background: linear-gradient(to bottom, var(--color-bg-page-primary) var(--shell-inset), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.topBar[data-stuck]::before {
+  opacity: 1;
+}
+
+.topBarBlur:global(.ds-progressive-blur) {
+  position: absolute;
+  top: calc(-1 * var(--shell-inset));
+  bottom: calc(-1 * var(--gap-1000));
+  inset-inline: calc(-1 * var(--padding-400));
+  height: auto;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.topBarBlur:global(.ds-progressive-blur--tinted) {
+  opacity: 1;
+}
+
+/* A one-pixel marker at the bar's resting place. Absolute, so the
+   column's gap skips it; it keeps its static place at the column's top. */
+.topBarMarker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
 }
 
 .search {

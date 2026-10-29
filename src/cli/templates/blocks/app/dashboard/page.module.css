@@ -1,6 +1,7 @@
 /* The dashboard's grid. Four stats across on a desktop, two from the
-   laptop width down to a phone; the two panels sit side by side until the
-   tablet width, then stack. */
+   laptop width down to a phone, where each stat drops its delta under its
+   label once its tile is narrow (deltaPlacement="auto"); the two panels sit
+   side by side until the tablet width, then stack. */
 
 .stats {
   display: grid;
@@ -81,7 +82,7 @@
 
 @media (max-width: 600px) {
   .stats {
-    gap: var(--gap-400);
+    gap: var(--gap-300);
   }
 
   .panels {

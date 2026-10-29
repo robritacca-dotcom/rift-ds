@@ -7,13 +7,17 @@
  * set. This file is yours: rename the product, change the navigation, and
  * grow it with your app.
  *
+ * The top bar sticks to the top of the page and the content scrolls under
+ * it: bare while the page is at the top, then a fill above it and the
+ * library's ProgressiveBlur behind it fade in once the page scrolls.
+ *
  * Responsive by construction: above 768px the sidebar floats beside the
  * page and the content moves over by its width; below it the sidebar
  * becomes a drawer behind its own menu button, the search field folds to
  * its icon, and the content runs edge to edge at a tighter gutter.
  */
 
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AiButton } from 'rift-ds/components/AiButton/AiButton';
 import {
   AppSidebar,
@@ -22,6 +26,7 @@ import {
 } from 'rift-ds/components/AppSidebar/AppSidebar';
 import { Breadcrumb, type BreadcrumbItem } from 'rift-ds/components/Breadcrumb/Breadcrumb';
 import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger';
+import { ProgressiveBlur } from 'rift-ds/components/ProgressiveBlur/ProgressiveBlur';
 import { ThemeToggle } from 'rift-ds/components/ThemeToggle/ThemeToggle';
 import styles from './AppShell.module.css';
 
@@ -69,6 +74,18 @@ export interface AppShellProps {
 export function AppShell({ activeKey, breadcrumb, title, actions, children }: AppShellProps) {
   const [expanded, setExpanded] = useState(true);
 
+  // The top bar is stuck once the marker at its resting place scrolls out
+  // of view; the fill and the blur behind the bar follow.
+  const markerRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const marker = markerRef.current;
+    if (!marker) return;
+    const observer = new IntersectionObserver(([entry]) => setStuck(!entry.isIntersecting));
+    observer.observe(marker);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className={styles.shell}>
       <AppSidebar
@@ -83,16 +100,18 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
 
       <div className={`${styles.main} ${expanded ? styles.mainExpanded : ''}`}>
         <div className={styles.content}>
-          <header className={styles.topBar}>
+          <div ref={markerRef} className={styles.topBarMarker} aria-hidden="true" />
+          <header className={styles.topBar} data-stuck={stuck ? '' : undefined}>
+            <ProgressiveBlur className={styles.topBarBlur} tinted={stuck} />
             {/* Wire both to your command palette: CommandPalette from
                 rift-ds, opened from here and from Cmd+K. */}
-            <CommandPaletteTrigger size="compact" className={styles.search} />
+            <CommandPaletteTrigger className={styles.search} />
             <div className={styles.topBarActions}>
-              <CommandPaletteTrigger size="compact" iconOnly className={styles.searchIcon} />
+              <CommandPaletteTrigger iconOnly className={styles.searchIcon} />
               {/* The AI entry. Point it at your chat: `npx rift-ds init chat`
                   scaffolds one, and ChatLauncher opens it. */}
-              <AiButton size="compact" />
-              <ThemeToggle size="compact" showLabels={false} />
+              <AiButton />
+              <ThemeToggle showLabels={false} />
             </div>
           </header>
 

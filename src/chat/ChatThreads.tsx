@@ -19,6 +19,8 @@ export interface ChatThreadsProps {
   logoText?: string;
   /** The signed-in person, shown on the inline rail. */
   profile?: ThreadPanelProfile;
+  /** Rendered in the rail's footer, above the profile row, in both seats: a theme toggle, a link out. Fades out while the inline rail is collapsed. */
+  footerSlot?: ReactNode;
   /** Whether the inline rail can collapse to its icon strip. */
   collapsible?: boolean;
   /**
@@ -63,6 +65,7 @@ export function ChatThreads({
   logo,
   logoText,
   profile,
+  footerSlot,
   collapsible = true,
   defaultExpanded = false,
   historyLabel = 'Chat history',
@@ -127,6 +130,7 @@ export function ChatThreads({
       expanded={overlay || !collapsible ? true : expanded}
       onExpandedChange={overlay || !collapsible ? undefined : setExpanded}
       profile={overlay ? undefined : profile}
+      footerSlot={footerSlot}
     />
   );
 }

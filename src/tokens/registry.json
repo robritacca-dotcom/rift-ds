@@ -51,6 +51,8 @@
       "--color-avatar-text-4",
       "--color-avatar-text-5",
       "--color-avatar-text-6",
+      "--color-bg-app-shell",
+      "--color-bg-app-surface",
       "--color-bg-container-border",
       "--color-bg-container-inverse",
       "--color-bg-container-primary",

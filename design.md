@@ -82,6 +82,8 @@ The action roles are the one token family that splits per mode by design (see Ov
 - **Container border** (`--color-bg-container-border`): Hairline borders on containers.
 - **Container inverse** (`--color-bg-container-inverse`): High-contrast inverted surface — ImageCompare's handle label, the calendar and Gantt "today" markers. Always paired with `--color-text-on-inverse`.
 - **Glass** (`--color-bg-glass`): The floating-surface fill — deliberately translucent in both modes so the page's colours reach the surface. Paired with `backdrop-filter: blur(24px)`, which is what keeps content readable through it; the blur radius is a documented constant, not a token, and MegaMenu raises it to 32px because it lands on display type (its spec says why). Every floating surface takes it.
+- **App shell** (`--color-bg-app-shell`): The inset layout's back plane: the colour behind a flush rail (and its side panel) and around the inset content surface. It sits a step off the surface toward the middle of the ramp, so the surface reads forward of it.
+- **App surface** (`--color-bg-app-surface`): The inset layout's content plane, the far end of the neutral ramp in each mode (the brightest step in light, the deepest in dark), so the page's content sits furthest forward. A docked chat panel in the inset layout takes it too. Cards on it keep their own container fill, held off it by a hairline.
 - **Divider** (`--color-divider`): Horizontal/vertical rule between sections.
 
 ### Table surfaces

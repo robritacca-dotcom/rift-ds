@@ -39,6 +39,13 @@
   --color-bg-page-primary: var(--primitive-neutral-01);
   --color-bg-page-inverse: var(--primitive-neutral-10);
 
+  /* Background - App shell: the inset layout's two planes. The shell is
+     the colour behind the rail and around the inset box; the surface is
+     the box the page's content sits in, the far end of the neutral ramp,
+     so the content plane reads furthest forward. */
+  --color-bg-app-shell: var(--primitive-neutral-01);
+  --color-bg-app-surface: var(--primitive-neutral-00);
+
   /* Background - Container */
   --color-bg-container-primary: var(--primitive-neutral-00);
   --color-bg-container-primary-transparent: var(--primitive-neutral-00-a01);

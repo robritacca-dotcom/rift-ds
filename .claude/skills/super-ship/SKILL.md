@@ -1,14 +1,14 @@
 ---
 name: super-ship
-description: The bulletproof ship for structural work. Run the full drift audit and a scoped API consistency audit, fix the broken and stale findings, then ship the combined result live via the ship flow. Use when asked to super ship, audit and ship, or ship bulletproof, or when shipping a structural change where the docs and skills may have gone stale. For a small change, plain ship is enough.
+description: The bulletproof ship for structural work. Run the full drift audit and a scoped API consistency audit, fix the broken and stale findings, sweep every page at every breakpoint width for layout breaks and fix those, then ship the combined result live via the ship flow. Use when asked to super ship, audit and ship, or ship bulletproof, or when shipping a structural change where the docs and skills may have gone stale. For a small change, plain ship is enough.
 icon: rocket_launch
-displayDescription: "Chains the drift audit and an API consistency audit into the ship flow for structural work. Runs the full drift audit, then the API audit over the components the work touched, fixes the broken and stale findings both surface, stops to ask if any audit section was skipped, then ships the combined result: full verify, merge into main, push, CI watched to green, and the live site proven rendering. Gap findings and new-validator recommendations are reported as follow-ups, never built mid-ship."
+displayDescription: "Chains the drift audit, an API consistency audit and the responsive sweep into the ship flow for structural work. Runs the full drift audit, then the API audit over the components the work touched, fixes the broken and stale findings both surface, stops to ask if any audit section was skipped, sweeps every page at every breakpoint width and fixes the layout breaks it finds, then ships the combined result: full verify, merge into main, push, CI watched to green, and the live site proven rendering. Gap findings and new-validator recommendations are reported as follow-ups, never built mid-ship."
 invoke: ["super ship","super ship it","audit and ship","bulletproof ship","audit the API and ship"]
 ---
 
 # super-ship
 
-Drift audit, API audit, fix, re-check, ship — one invocation. A higher-order skill: it composes `drift-audit`, `api-consistency` and `ship` and owns only the rules of the composition. Everything about *how* to audit lives in `.claude/skills/drift-audit/SKILL.md` and `.claude/skills/api-consistency/SKILL.md`; everything about *how* to ship lives in `.claude/skills/ship/SKILL.md`. Read all three and follow them; this file only says how they connect.
+Drift audit, API audit, fix, re-check, responsive sweep, ship — one invocation. A higher-order skill: it composes `drift-audit`, `api-consistency`, `responsive-sweep` and `ship` and owns only the rules of the composition. Everything about *how* to audit lives in `.claude/skills/drift-audit/SKILL.md` and `.claude/skills/api-consistency/SKILL.md`; everything about *how* to sweep lives in `.claude/skills/responsive-sweep/SKILL.md`; everything about *how* to ship lives in `.claude/skills/ship/SKILL.md`. Read all four and follow them; this file only says how they connect.
 
 ## When invoked
 
@@ -50,12 +50,21 @@ Two categories of finding are **reported, not acted on**:
 
 Re-run the audit's mechanical checks over whatever the fixes touched (at minimum `npm run validate-registry`), so a fix can't itself introduce a dangling reference, and re-run the scoped API audit over any component a fix changed. Then check the combined change against drift-audit's change-type playbook: every surface it names for the kinds of change present has moved. There's no need to repeat the full prose read.
 
+### 3b. Responsive sweep
+
+Run the `responsive-sweep` flow per its SKILL.md, against a website build of the combined tree (session work plus the audit fixes), so what is swept is what deploys. Every route, the full width ladder: never `--quick` or `--routes` for the sweep of record. Two composition rules:
+
+- **Defects are fixed in-session**, under the same pre-approval as drift: a layout break with one right answer is a repair, not new work. A break whose fix is a design decision (a new arrangement at a width, a change to a component's published behaviour) is a judgement call: stop and ask.
+- **Proposed acceptances stop the flow.** An entry in the script's `ACCEPTED` list hides a finding from every later run, so it waits for the owner's yes, like a judgement call. Ship once the owner has answered: each accepted entry is committed, each rejected one is fixed or left as a reported follow-up.
+
+The sweep's fixes are their own concern for ship's commit rule: something like `fix: responsive breaks found by the pre-ship sweep`, with each break and its widths in the body.
+
 ### 4. Ship
 
 Follow the `ship` flow per its SKILL.md, from its step 0, with everything that entails — tree survey, full verify, logical commits, merge if on a branch, push, CI watched to green, and the live render proven with the deployed-site smoke. Two composition rules on top:
 
 - **Commit the drift fixes separately** from the session's own work — they are a different concern, and ship's one-commit-per-concern rule already implies it. Something like `docs: repair drift found by pre-ship audit` with the findings named in the body.
-- **Ship the combined result or nothing.** Never push the session work while leaving audit fixes uncommitted, or the reverse — the whole point is that what deploys and what describes it move together. If verify goes red on an audit fix, that fix is in scope to repair, same as session work.
+- **Ship the combined result or nothing.** Never push the session work while leaving audit or sweep fixes uncommitted, or the reverse — the whole point is that what deploys and what describes it move together. If verify goes red on an audit fix, that fix is in scope to repair, same as session work.
 
 ### 5. Report
 
@@ -63,11 +72,12 @@ One combined final message:
 
 - The audit summary in `drift-audit`'s report format (broken / stale / gaps / verified counts), with its coverage table, and any narrowing the owner accepted at the coverage gate
 - An API consistency section: the components in scope (and whether it was widened to the whole library, and why), the findings fixed, and the contract changes left for the owner
+- A responsive sweep section in `responsive-sweep`'s report format: routes and widths swept, breaks fixed, acceptances the owner approved, and breaks left for a design decision
 - Which findings were fixed and shipped, and which are left as follow-ups (gaps, judgement calls)
 - Everything `ship`'s report requires: commits pushed, verify and CI results, files left out, what visibly changes on the live site
 
 ## Guardrails
 
-- This file never restates a step from `drift-audit` or `ship` — a change to either flows through automatically. If a conflict appears between this file and one of them, theirs wins for their own steps; this file wins only on the composition rules above.
+- This file never restates a step from `drift-audit`, `responsive-sweep` or `ship` — a change to any of them flows through automatically. If a conflict appears between this file and one of them, theirs wins for their own steps; this file wins only on the composition rules above.
 - The pre-approval covers fixing drift and deploying; it does not cover changing the published contract, shipping past a skipped audit section, resolving judgement calls, building new validators, or resolving merge conflicts — those stop and ask, per the rules above and ship's own guardrails.
 - If the audit comes back completely clean and there is nothing to ship, say so and stop — a clean audit is a valid outcome, not a failure to find something.

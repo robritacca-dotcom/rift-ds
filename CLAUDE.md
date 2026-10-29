@@ -143,7 +143,7 @@ Manual, following the `release` skill. The `Release` workflow (`.github/workflow
 
 Skills are named for their end state, because a push to `main` deploys the live site (`.claude/skills/registry.json` lists what exists):
 - **`ship`**: make it live. Full verify, merge into `main` if needed, push, watch CI, prove the deployed site renders.
-- **`super-ship`**: the bulletproof ship for structural work. Full `drift-audit`, a scoped `api-consistency`, a coverage gate, fix the findings, then `ship`. For a small change, plain `ship` is enough.
+- **`super-ship`**: the bulletproof ship for structural work. Full `drift-audit`, a scoped `api-consistency`, a coverage gate, fix the findings, a `responsive-sweep` of every page at every breakpoint width with its breaks fixed, then `ship`. For a small change, plain `ship` is enough.
 - **`checkpoint`**: save progress to a remote branch. Never touches `main`, never deploys.
 - **`park`**: checkpoint, then return to a clean `main`.
 - **`land`**: triage all pending work (worktrees, branches, stashes) as land / keep / delete, merge into a **local, unpushed** `main`, verify. Deleted work is archived to an `archive/*` tag first.

@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
-import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { DEFAULT_COLOR_MODE_STORAGE_KEY, type ColorModeSetting } from './colorMode';
 import { useColorMode } from './useColorMode';
 import './ThemeToggle.css';
@@ -81,37 +80,6 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
     }, []);
 
-    // The icon strip's tooltips: the label of the segment under the pointer
-    // or keyboard focus is placed against its segment by the shared
-    // anchored-position behaviour, so a seat that clips (a sidebar's floor)
-    // cannot cut it off, and it flips above when there is no room below.
-    const stripRef = useRef<HTMLDivElement | null>(null);
-    const segmentRef = useRef<HTMLElement | null>(null);
-    const labelRef = useRef<HTMLElement | null>(null);
-    const [tip, setTip] = useState<number | null>(null);
-    const setStripRef = (node: HTMLDivElement | null) => {
-      stripRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
-    const showTip = (target: EventTarget | null) => {
-      if (showLabels) return;
-      const segment = (target as HTMLElement | null)?.closest<HTMLElement>('.ds-segmented-control__segment');
-      const strip = stripRef.current;
-      if (!segment || !strip) return;
-      segmentRef.current = segment;
-      labelRef.current = segment.querySelector<HTMLElement>('.ds-segmented-control__label');
-      setTip([...strip.querySelectorAll('.ds-segmented-control__segment')].indexOf(segment));
-    };
-    useAnchoredPosition({
-      open: tip !== null,
-      target: tip,
-      anchorRef: segmentRef,
-      panelRef: labelRef,
-      side: 'bottom',
-      align: 'center',
-      gapProperty: '--gap-100',
-    });
     const segments = [
       { value: 'system', label: systemLabel, icon: 'routine' },
       { value: 'light', label: lightLabel, icon: 'light_mode' },
@@ -121,15 +89,9 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
       <SegmentedControl
         aria-label={ariaLabel}
         {...rest}
-        ref={setStripRef}
-        onPointerOver={(event) => {
-          rest.onPointerOver?.(event);
-          showTip(event.target);
-        }}
-        onFocus={(event) => {
-          rest.onFocus?.(event);
-          showTip(event.target);
-        }}
+        ref={ref}
+        // `ds-theme-toggle--icons` styles nothing now (the icon strip is
+        // SegmentedControl's `--icons` form); it stays as a consumer hook.
         className={['ds-theme-toggle', !showLabels && 'ds-theme-toggle--icons', className]
           .filter(Boolean)
           .join(' ')}
@@ -141,9 +103,9 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
           onValueChange?.(next);
         }}
         size={size}
-        // The icon strip keeps its labels rendered: the stylesheet turns each
-        // into the segment's tooltip, so the glyphs are never left unnamed.
-        showLabels
+        // An icon strip turns each label into its segment's tooltip (the
+        // SegmentedControl's own icon-only form), so no glyph goes unnamed.
+        showLabels={showLabels}
       />
     );
   },

@@ -5,6 +5,7 @@ import './SegmentedControl.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
+import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 
 export interface Segment {
   /** Unique value for this segment */
@@ -73,9 +74,10 @@ type SegmentedControlOwnProps = {
   collapse?: boolean;
   /**
    * Show each segment's label beside its icon. Set it to `false` for an
-   * icon-only strip: the labels stay in the accessibility tree as the
-   * segments' names, and a segment without an icon keeps its label on
-   * screen. Defaults to `true`.
+   * icon-only strip: each label becomes its segment's tooltip on hover and
+   * keyboard focus and stays the segment's name in the accessibility tree,
+   * and a segment without an icon keeps its label on screen. Defaults to
+   * `true`.
    */
   showLabels?: boolean;
   /**
@@ -190,8 +192,9 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       // one frame of it.
       setCollapseState({ key: collapseKey, mode: 'full' });
     }
-    // `showLabels={false}` asks for the icon rung outright; the label is
-    // hidden per segment only where an icon stands in for it.
+    // `showLabels={false}` asks for the icon rung outright; where an icon
+    // stands in for a label, the label becomes the segment's tooltip (see the
+    // icon strip below).
     const collapseMode: CollapseMode = !showLabels
       ? 'icons'
       : collapseState.key === collapseKey
@@ -204,6 +207,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       variantClass,
       fullWidthClass,
       pillReady ? `${baseClass}--pill-ready` : '',
+      !showLabels ? `${baseClass}--icons` : '',
       className,
     ]
       .filter(Boolean)
@@ -367,6 +371,35 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       };
     }, []);
 
+    // The icon strip's tooltips: the label of the segment under the pointer
+    // or keyboard focus is placed against its segment by the shared
+    // anchored-position behaviour, so a seat that clips (a sidebar's floor)
+    // cannot cut it off, and it flips above when there is no room below.
+    // Only an explicit `showLabels={false}` strip shows them; a strip the
+    // collapse ladder squeezed to icons keeps its labels visually hidden.
+    const tipSegmentRef = useRef<HTMLElement | null>(null);
+    const tipLabelRef = useRef<HTMLElement | null>(null);
+    const [tip, setTip] = useState<number | null>(null);
+    const showTip = (target: EventTarget | null) => {
+      if (showLabels) return;
+      const segment = (target as HTMLElement | null)?.closest<HTMLElement>(`.${baseClass}__segment`);
+      const strip = containerRef.current;
+      const label = segment?.querySelector<HTMLElement>(`.${baseClass}__label--tip`);
+      if (!segment || !strip || !label) return;
+      tipSegmentRef.current = segment;
+      tipLabelRef.current = label;
+      setTip([...strip.querySelectorAll(`.${baseClass}__segment`)].indexOf(segment));
+    };
+    useAnchoredPosition({
+      open: tip !== null,
+      target: tip,
+      anchorRef: tipSegmentRef,
+      panelRef: tipLabelRef,
+      side: 'bottom',
+      align: 'center',
+      gapProperty: '--gap-100',
+    });
+
     const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
       const enabledSegments = segments.filter((s) => !s.disabled);
       const currentEnabledIdx = enabledSegments.findIndex((s) => s.value === segments[idx].value);
@@ -405,7 +438,21 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
     };
 
     return (
-      <div aria-label={ariaLabel} {...rest} ref={setRef} className={classes} role="tablist">
+      <div
+        aria-label={ariaLabel}
+        {...rest}
+        ref={setRef}
+        className={classes}
+        role="tablist"
+        onPointerOver={(event) => {
+          rest.onPointerOver?.(event);
+          showTip(event.target);
+        }}
+        onFocus={(event) => {
+          rest.onFocus?.(event);
+          showTip(event.target);
+        }}
+      >
         <span className={`${baseClass}__pill`} aria-hidden="true" ref={pillRef} />
         {segments.map((segment, idx) => {
           const isActive = segment.value === activeSegment;
@@ -447,7 +494,13 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
                   the word on screen, never in the accessibility tree. */}
               <span
                 className={`${baseClass}__label${
-                  collapseMode === 'icons' && segment.icon ? ` ${baseClass}__label--hidden ds-visually-hidden` : ''
+                  !segment.icon
+                    ? ''
+                    : !showLabels
+                      ? ` ${baseClass}__label--tip`
+                      : collapseMode === 'icons'
+                        ? ` ${baseClass}__label--hidden ds-visually-hidden`
+                        : ''
                 }`}
               >
                 {segment.label}

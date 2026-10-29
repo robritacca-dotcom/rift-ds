@@ -126,6 +126,10 @@
   inset-inline: calc(-1 * var(--sticky-bleed));
   height: auto;
   z-index: -1;
+  /* The tint paints the scroller's colour, as the fill above does, so the
+     fade melts into the surface instead of laying the site header's page
+     colour over it. */
+  --ds-progressive-blur-tint: var(--sticky-fill);
   opacity: 0;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
 }

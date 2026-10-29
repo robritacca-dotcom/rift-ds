@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -91,7 +92,8 @@
   margin: 0;
 }
 
-/* The page floor, so the tint reads as one with it. */
+/* The page floor, so the tint reads as one with it. A fixed-height window
+   onto content scrolling under the bar: cropping that content is the demo. */
 .surface {
   position: relative;
   height: 220px;

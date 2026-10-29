@@ -103,9 +103,15 @@ function ladder() {
 const ACCEPTED = [
   {
     kind: 'clipped',
-    selector: '_collage > div.',
+    selector: 'section.collage > div.col',
     routes: ['/'],
     reason: 'The home collage is a fixed-height window onto escalator columns (page.module.css); cropping the cards is the design.',
+  },
+  {
+    kind: 'clipped',
+    selector: 'figure.demo > div.surface',
+    routes: ['/components/progressive-blur'],
+    reason: 'Each demo is a fixed-height window onto content scrolling under the bar (page.module.css); cropping that content is the demo.',
   },
   {
     kind: 'spill',

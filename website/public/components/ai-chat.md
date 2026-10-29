@@ -140,6 +140,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.17.0. The same dat
 | logo | `ReactNode` | no |  | The brand row's mark, in both seats. |
 | logoText | `string` | no |  | The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out. |
 | profile | `ThreadPanelProfile` | no |  | The signed-in person, shown on the inline rail. |
+| footerSlot | `ReactNode` | no |  | Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed. |
 | collapsible | `boolean` | no | `true` | Whether the inline rail can collapse to its icon strip. |
 | defaultExpanded | `boolean` | no | `false` | Whether the inline rail starts expanded. Defaults to `false`: it starts collapsed to its icon strip. The sheet, and a rail that is not `collapsible`, always show expanded. |
 | historyLabel | `string` | no | `Chat history` | Accessible heading over the history. |

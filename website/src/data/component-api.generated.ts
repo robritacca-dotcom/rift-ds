@@ -12778,9 +12778,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "deltaPlacement",
-            "type": "\"inline\" | \"stacked\"",
+            "type": "\"auto\" | \"inline\" | \"stacked\"",
             "required": false,
-            "description": "Where the delta sits: stacked below the label, or inline to the right of the value, bottom-aligned",
+            "description": "Where the delta sits: stacked below the label, inline to the right of the\nvalue (bottom-aligned), or `auto`: inline while the stat has room and\nstacked once it is narrow, such as a KPI tile in a two-up phone grid.\n`auto` fills its parent's width and reads its own, so it restacks\nwherever it sits, whatever the viewport.",
             "defaultValue": "stacked"
           },
           {
@@ -16408,6 +16408,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ThreadPanelProfile",
             "required": false,
             "description": "The signed-in person, shown on the inline rail."
+          },
+          {
+            "name": "footerSlot",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed."
           },
           {
             "name": "collapsible",

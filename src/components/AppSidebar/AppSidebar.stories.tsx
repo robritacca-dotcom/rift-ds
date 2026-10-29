@@ -325,8 +325,8 @@ export const PanelModeFloating: Story = {
   parameters: { contentOffset: 20 + 80 + 12 + 240 + 20 },
 };
 
-/** Inset: the side panel continues the rail on the shell colour, with no
-    border between them, and the content surface starts beyond both. */
+/** Inset: the side panel continues the rail on the shell colour, a divider
+    between them, and the content surface starts beyond both. */
 export const PanelModeInset: Story = {
   args: {
     defaultExpanded: false,

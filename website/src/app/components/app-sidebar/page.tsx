@@ -211,7 +211,7 @@ export default function AppSidebarPage() {
           <section className={styles.section}>
             <SectionTitle title="Panel mode, inset" />
             <p className={styles.sectionBody}>
-              In the inset layout, the panel continues the rail on the shell colour with no border between them, and the content surface starts beyond both.
+              In the inset layout, the panel continues the rail on the shell colour with a divider between them, and the content surface starts beyond both.
             </p>
             <div className={`${styles.sidebarDemo} ${styles.sidebarDemoTinted}`} data-anchor-ignore>
               <AppSidebar

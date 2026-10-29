@@ -610,6 +610,15 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                     )}
                     <span className={`${baseClass}__btn-label`}>{item.label}</span>
                   </span>
+                  {/* Panel mode's rail names each destination under its
+                      icon. A second, presentational copy of the label, so
+                      the inline label can fade in beside the icon while
+                      this one fades out beneath it, and neither moves. */}
+                  {isPanelMode && (
+                    <span className={`${baseClass}__btn-caption`} aria-hidden="true">
+                      {item.label}
+                    </span>
+                  )}
                   {item.badge !== undefined && (
                     <span className={`${baseClass}__btn-badge`}>{item.badge}</span>
                   )}

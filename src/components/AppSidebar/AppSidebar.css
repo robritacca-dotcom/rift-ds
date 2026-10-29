@@ -621,13 +621,12 @@
   inset-inline-start: calc(var(--ds-sidebar-float-inset, 20px) + 280px + var(--gap-300));
 }
 
-/* Inset: the side panel joins the rail on the shell plane, with no borders
-   between them, so rail and panel read as one column of navigation and the
-   inset content surface starts beyond both (AppLayout reserves the panel's
-   width while it shows). */
+/* Inset: the side panel joins the rail on the shell plane, one hairline
+   divider between the two levels, and the inset content surface starts
+   beyond both (AppLayout reserves the panel's width while it shows). The
+   trailing edge needs no border: the surface's own edge ends the panel. */
 .ds-app-sidebar__panel--inset {
   background-color: var(--color-bg-app-shell);
-  border-inline-start-color: transparent;
   border-inline-end-color: transparent;
 }
 
@@ -638,29 +637,81 @@
    widens to 80px and names every destination:
    a pill indicator behind the icon, the label
    beneath (the navigation-rail pattern).
+
+   Expand/collapse holds one seat, as ThreadPanel
+   does: the logo, every icon and the avatar sit
+   at the same x and y in both states, so only the
+   rail's width, the rows' explicit heights and
+   the labels' opacity move. The caption under the
+   icon fades out as the inline label fades in.
    ============================================ */
 .ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) {
   width: 80px;
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__logo {
-  /* Centres the 24px mark in the 80px rail: (80 - 24) / 2. */
-  padding: 0 calc(var(--padding-500) + var(--padding-200));
+/* The seat: 12px row margin + 16px row padding puts every 24px icon's
+   centre on the 80px rail's centre line (28 + 12 = 40), and the logo,
+   the category labels and the profile row share that leading edge. */
+.ds-app-sidebar--panel-mode .ds-app-sidebar__logo {
+  padding-inline-start: calc(var(--padding-500) + var(--padding-200));
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__nav {
+.ds-app-sidebar--panel-mode .ds-app-sidebar__category {
+  padding-inline-start: calc(var(--padding-500) + var(--padding-200));
+}
+
+.ds-app-sidebar--panel-mode .ds-app-sidebar__nav {
   gap: 0;
+  transition: gap var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn {
-  height: auto;
-  margin: 0 var(--padding-100);
-  /* Room between the content and the focus ring; the rows' spacing lives
-     here rather than in the nav gap, so the rhythm is unchanged. */
-  padding: var(--padding-100) 0;
-  justify-content: center;
-  border-radius: var(--radius-300);
+.ds-app-sidebar--panel-mode.ds-app-sidebar--expanded .ds-app-sidebar__nav {
+  gap: var(--gap-100);
+}
+
+/* The icon is pinned to the row's top in both states, so it holds its
+   y while the row's height glides between its two explicit values. */
+.ds-app-sidebar--panel-mode .ds-app-sidebar__btn {
+  position: relative;
+  isolation: isolate;
+  align-items: flex-start;
+  /* Collapsed: the 32px indicator, the caption beneath it, a 4px beat
+     above, between and below. */
+  height: calc(32px + var(--font-caption-line-height) + var(--padding-100) * 3);
+  margin: 0 var(--padding-300);
+  padding: var(--padding-200) var(--padding-200) var(--padding-200) var(--padding-400);
   overflow: visible;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    height var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.ds-app-sidebar--panel-mode.ds-app-sidebar--expanded .ds-app-sidebar__btn {
+  height: 40px;
+}
+
+.ds-app-sidebar--panel-mode .ds-app-sidebar__btn-left {
+  height: 24px;
+}
+
+.ds-app-sidebar--panel-mode .ds-app-sidebar__btn-chevron {
+  flex-shrink: 0;
+}
+
+/* The indicator: a 56 x 32 pill behind the icon carries hover and the
+   selection while collapsed, so the caption stays legible on the page
+   ground; expanded, the row's own pill takes over and the two crossfade. */
+.ds-app-sidebar--panel-mode .ds-app-sidebar__btn::before {
+  content: '';
+  position: absolute;
+  top: var(--padding-100);
+  inset-inline-start: 0;
+  z-index: -1;
+  width: 56px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover,
@@ -668,55 +719,44 @@
   background-color: transparent;
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-left {
-  flex-direction: column;
-  gap: var(--gap-100);
-  width: 100%;
-}
-
-/* The trailing chevron and count pill are faded out on any collapsed
-   rail, but faded still takes width: on this centred column it pushed
-   the icon and label off centre. Here they leave the layout outright. */
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-chevron,
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-badge {
-  display: none;
-}
-
-/* The indicator: a 56 x 32 pill behind the icon carries hover and the
-   selection, so the label stays legible on the page ground. */
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 32px;
-  border-radius: var(--radius-pill);
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover .ds-app-sidebar__btn-icon,
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active .ds-app-sidebar__btn-icon {
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn:hover::before,
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active::before {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn-label {
-  opacity: 1;
-  max-width: 100%;
+/* The caption: centred under the indicator, the rail's 72px wide
+   (80 less a 4px inset either side), fading out as the rail opens. */
+.ds-app-sidebar__btn-caption {
+  position: absolute;
+  top: calc(32px + var(--padding-100) * 2);
+  inset-inline-start: calc(var(--padding-200) * -1);
+  width: 72px;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);
   line-height: var(--font-caption-line-height);
   letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-primary);
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active .ds-app-sidebar__btn-label {
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-caption {
+  opacity: 0;
+  transition-duration: var(--motion-duration-fast);
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn--active .ds-app-sidebar__btn-caption {
   font-weight: var(--font-paragraph-sm-emphasis-weight);
 }
 
-.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__profile {
-  /* Centres the 40px avatar in the 80px rail. */
+.ds-app-sidebar--panel-mode .ds-app-sidebar__profile {
+  /* Centres the 40px avatar in the 80px rail, and holds it there open. */
   padding: 0 var(--padding-500);
 }
 

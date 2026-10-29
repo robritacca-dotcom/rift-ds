@@ -322,10 +322,14 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
         }
         const metrics = metricsRef.current;
         if (!metrics) return;
-        const available = host.clientWidth;
+        // The host's content box: clientWidth counts its padding, which the
+        // strip cannot use.
+        const hostStyle = getComputedStyle(host);
+        const available =
+          host.clientWidth - parseFloat(hostStyle.paddingInlineStart) - parseFloat(hostStyle.paddingInlineEnd);
         // Zero means the host is not laid out yet; keep what we have rather
         // than collapsing to icons on a measurement that means nothing.
-        if (available === 0) return;
+        if (host.clientWidth === 0) return;
         const next: CollapseMode =
           available >= metrics.full
             ? 'full'

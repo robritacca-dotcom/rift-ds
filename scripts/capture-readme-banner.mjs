@@ -58,6 +58,8 @@ const context = await browser.newContext({
   viewport: { width: WIDTH, height: HEIGHT },
   deviceScaleFactor: SCALE,
   colorScheme: 'dark',
+  // A still has no use for motion: the hero's entrance settles at once.
+  reducedMotion: 'reduce',
 });
 
 // layout.tsx reads localStorage('theme') in its pre-paint guard.
@@ -76,6 +78,13 @@ await page.goto(origin, { waitUntil: 'networkidle', timeout: 60_000 });
 // The hero's entrance animation and the shader's first frames both settle
 // well inside a second; without this the stats row can be caught mid-fade.
 await page.waitForTimeout(2_000);
+
+// The chat frame's staged demo cursor tours the frame and rests on its
+// top-left corner, over the frame's own heading; a still freezes it there,
+// so the banner leaves it out.
+await page.addStyleTag({
+  content: 'section[class*="chatFrame"] [class*="_cursor"] { visibility: hidden !important; }',
+});
 
 const tmp = mkdtempSync(join(tmpdir(), 'rift-banner-'));
 const raw = join(tmp, 'raw.png');

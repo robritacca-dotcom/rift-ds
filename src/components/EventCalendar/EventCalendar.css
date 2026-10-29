@@ -32,9 +32,11 @@
   gap: var(--gap-200);
 }
 
+/* Never narrower than its longest word, so "September" stays whole on a
+   small phone and the year wraps under it instead. */
 .ds-event-calendar__month {
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: min-content;
   color: var(--color-text-primary);
   font-family: var(--font-title-body-family);
   font-size: var(--font-title-body-size);

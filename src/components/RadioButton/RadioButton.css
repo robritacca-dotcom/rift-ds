@@ -163,7 +163,10 @@
   gap: var(--gap-200); /* 8px */
 }
 
+/* A row that runs out of room wraps, at the vertical layout's own gap,
+   rather than running past its container on a phone. */
 .ds-radio-group--horizontal .ds-radio-group__options {
   flex-direction: row;
-  gap: var(--gap-500); /* 20px */
+  flex-wrap: wrap;
+  gap: var(--gap-200) var(--gap-500); /* 8px rows, 20px between options */
 }

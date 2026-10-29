@@ -141,6 +141,20 @@ export const GroupHorizontal: GroupStory = {
   },
 };
 
+/** A horizontal group narrower than its row, as on a phone: the options wrap inside it. */
+export const GroupHorizontalNarrow: GroupStory = {
+  render: (args) => (
+    <div style={{ width: 220 }}>
+      <CheckboxGroup {...args} />
+    </div>
+  ),
+  args: GroupHorizontal.args,
+  play: async ({ canvasElement }) => {
+    const items = canvasElement.querySelector<HTMLElement>('.ds-checkbox-group__items')!;
+    await expect(items.scrollWidth).toBeLessThanOrEqual(items.clientWidth + 1);
+  },
+};
+
 export const GroupWithDisabled: GroupStory = {
   render: (args) => <CheckboxGroup {...args} />,
   args: {

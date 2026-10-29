@@ -253,16 +253,21 @@
   gap: var(--gap-200);
 }
 
+/* A long role title takes its own line above the dates rather than
+   running under them. */
 .ds-timeline__role-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-400);
+  gap: var(--gap-100) var(--gap-400);
 }
 
 .ds-timeline__role-title {
   margin: 0;
-  flex: 1;
+  /* Sized by its text, so a title that cannot sit beside the dates wraps
+     the header (a zero basis would never wrap it). */
+  flex: 1 1 auto;
   min-width: 0;
   font-family: var(--font-heading-3-family);
   font-size: var(--font-heading-3-size);

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Timeline, type TimelineCompany } from './Timeline';
 
 /** Self-contained placeholder logo — a rounded tile with an initial, no external assets. */
@@ -156,5 +157,25 @@ export const Company: Story = {
   args: {
     variant: 'company',
     items: COMPANY_ITEMS,
+  },
+};
+
+/** A company timeline in a phone-width column: a long role title takes its own line instead of running under the dates. */
+export const CompanyNarrow: Story = {
+  args: {
+    variant: 'company',
+    items: COMPANY_ITEMS,
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 260 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    for (const title of canvasElement.querySelectorAll<HTMLElement>('.ds-timeline__role-title')) {
+      await expect(title.scrollWidth).toBeLessThanOrEqual(title.clientWidth + 1);
+    }
   },
 };

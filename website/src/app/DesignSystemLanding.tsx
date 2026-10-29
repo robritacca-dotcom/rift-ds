@@ -1407,7 +1407,7 @@ export default function DesignSystemLanding() {
             aria-label="Explore the system"
             buttons={[
               { label: "Playground", variant: "primary" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
-              { label: "Get started", variant: "secondary" as const, tone: "neutral" as const, href: "/docs/get-started", iconLeft: "terminal", iconRight: "arrow_forward" },
+              { label: "Templates", variant: "secondary" as const, tone: "neutral" as const, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
             ]}
           />
           </div>

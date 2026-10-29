@@ -93,6 +93,17 @@
       "axis": "x"
     },
     {
+      "label": "template shell: assistant widen grip",
+      "route": "/templates/sales-pipeline",
+      "ready": "main .ds-ai-button",
+      "setup": [
+        { "click": "main .ds-ai-button" },
+        { "waitFor": "[data-chat-grip]" }
+      ],
+      "grip": "[data-chat-grip]",
+      "axis": "x"
+    },
+    {
       "label": "overview: architecture map pan",
       "route": "/overview",
       "grip": "[class*=\"surfaceEmbed\"]",

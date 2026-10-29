@@ -2,69 +2,29 @@
    style is a semantic token; the only raw values are structural layout sizes
    (grid tracks, breakpoints), which pages own everywhere else on the site. */
 
-.shell {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  /* From the pinned viewport variable, never bare 100vh — the templates
-     carousel and the canvas board size viewport-tall shells through it. */
-  min-height: calc(var(--layout-viewport-height, 100vh));
-  /* Stretch across the body's own padding (the playground's pattern), so
-     the app shell runs edge to edge instead of sitting in the doc-page
-     column; the primitives here mirror the body's inset in globals.css. */
-  width: calc(100% + var(--primitive-padding-1000) * 2);
-  margin: calc(-1 * var(--primitive-padding-500))
-    calc(-1 * var(--primitive-padding-1000));
-  /* Deliberately no opaque background: the body's page colour carries the
-     shell, and the site's ambient background reaches the top of the page
-     the way it does everywhere else, so the glass sidebar below has real
-     colour to blur. */
-}
+/* The shell (rail, main column, inset surface, the room the docked
+   assistant takes) is TemplateShell's; this sheet styles the page inside
+   its content column. */
 
-/* One inset source for the whole shell: the floating sidebar reads the
-   same value the chat panel uses. */
-.sidebar {
-  --ds-sidebar-float-inset: var(--layout-chat-inset);
-}
-
-/* AppSidebar positions itself fixed; the main column reserves its width the
-   same way AppLayout does (64px rail, 280px expanded — the component's own
-   constants). */
-.main {
-  flex: 1;
-  min-width: 0;
-  padding-left: calc(64px + var(--layout-chat-inset) * 2);
-  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
-  display: flex;
-  justify-content: center;
-}
-
-.mainExpanded {
-  padding-left: calc(280px + var(--layout-chat-inset) * 2);
-}
-
-/* The docked chat pushes the page over instead of covering it — the site's
-   body-inset pattern, applied to the main column since this shell owns its
-   own layout. Only at the site's dock threshold (DOCK_QUERY in
-   src/chat/queries.ts, published from rift-ds/chat): below it the page has no width to give, and
-   TemplateAssistant covers it as a modal overlay instead. */
-@media (min-width: 1440px) {
-  .mainChatOpen {
-    padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
-  }
-}
-
-/* The content column centres in the space between the rail and the right
-   viewport edge (the playground's centring pattern), with equal side
-   padding, so the page never lists to one side. */
+/* The content column: centred at 1440px in the floating layout (the shell
+   lifts the cap in the inset one), with equal side padding. */
 .content {
-  width: 100%;
   max-width: 1440px;
-  min-width: 0;
   padding: var(--padding-500) var(--padding-1000) var(--padding-1500);
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);
+}
+
+/* The grids restack by the room the content column actually has, not the
+   window: an open chat or an expanded rail narrows the column without the
+   viewport changing, and four KPI cards clipped their deltas. 1020px is the
+   column's inner width where four of the widest card (about 240px) fit. */
+@container template-content (max-width: 1020px) {
+  .content .kpiGrid,
+  .content .midGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ------------------------------------------------------------- header */
@@ -131,6 +91,10 @@
 
 .panel {
   background-color: var(--color-bg-container-primary);
+  /* A very light border, so the cards lift off the surface in both
+     layouts and both themes. */
+  border: var(--border-025) solid
+    color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
   border-radius: var(--radius-600);
   padding: var(--padding-500);
   display: flex;
@@ -271,7 +235,6 @@
   flex-wrap: wrap;
 }
 
-
 .campaignCell {
   display: inline-flex;
   align-items: center;
@@ -308,29 +271,6 @@
   line-height: var(--font-caption-line-height);
 }
 
-
-
-
-/* ---------------------------------------------------------- responsive */
-
-/* The shell's negative margins mirror the body's inset in globals.css,
-   which steps down at these same breakpoints — an unmirrored step leaves
-   the shell pulled past the viewport's left edge on phones. */
-@media (max-width: 959px) {
-  .shell {
-    width: calc(100% + var(--primitive-padding-500) * 2);
-    margin: calc(-1 * var(--primitive-padding-500));
-  }
-}
-
-@media (max-width: 600px) {
-  .shell {
-    width: calc(100% + var(--primitive-padding-400) * 2);
-    margin: calc(-1 * var(--primitive-padding-500))
-      calc(-1 * var(--primitive-padding-400));
-  }
-}
-
 /* ds-allow(breakpoint): content-driven: the width where the mid grid runs out of room for three columns. */
 @media (max-width: 1360px) {
   .midGrid {
@@ -354,19 +294,9 @@
 }
 
 @media (max-width: 760px) {
-  .sidebar {
-    /* The wrapper stays in the tree: AppSidebar owns mobile itself now —
-       the rail collapses to zero width and its fixed hamburger opens the
-       drawer. display: none here would take the trigger down with it. */
-    width: auto;
-  }
 
-  .main,
-  .mainExpanded {
-    padding-left: 0;
-  }
-
-  .kpiGrid {
+  .kpiGrid,
+  .content .kpiGrid {
     grid-template-columns: minmax(0, 1fr);
   }
 }

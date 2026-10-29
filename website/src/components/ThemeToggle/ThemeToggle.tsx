@@ -29,12 +29,19 @@ export function useThemeSetting(): [setting: string, setSetting: (value: string)
 /**
  * The site's header toggle: the package's ThemeToggle as an icon strip
  * (its labels become tooltips) at the default size, the 40px row height the
- * header's other controls share.
+ * header's other controls share, or compact where a row is short of room.
  */
-export default function ThemeToggle({ className }: { className?: string }) {
+export default function ThemeToggle({
+  className,
+  size = "default",
+}: {
+  className?: string;
+  /** `compact` for a seat with less room, such as the template sidebars' footer row. */
+  size?: "default" | "compact";
+}) {
   return (
     <div className={`${styles.themeToggle} ${className || ""}`}>
-      <LibraryThemeToggle size="default" showLabels={false} aria-label="Theme" />
+      <LibraryThemeToggle size={size} showLabels={false} aria-label="Theme" />
     </div>
   );
 }

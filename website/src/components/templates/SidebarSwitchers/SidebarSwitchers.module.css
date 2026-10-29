@@ -3,3 +3,9 @@
   align-items: center;
   gap: var(--gap-200);
 }
+
+/* With the layout switch on the row, three controls share the rail's
+   width: the gap tightens a step. */
+.rowTight {
+  gap: var(--gap-100);
+}

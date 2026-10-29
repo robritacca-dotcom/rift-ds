@@ -1,0 +1,205 @@
+/* The app-shell template family's shell (TemplateShell.tsx owns the
+   contract). Every colour, space and radius is a semantic token; the raw
+   values are the rail's own widths (AppSidebar's constants: 64px collapsed,
+   80px collapsed in panel mode, 280px expanded, 240px side panel) and the
+   breakpoints, which pages own everywhere else on the site. */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  /* From the pinned viewport variable, never bare 100vh: the templates
+     carousel and the canvas board size viewport-tall shells through it. */
+  min-height: calc(var(--layout-viewport-height, 100vh));
+  /* Stretch across the body's own padding (the playground's pattern), so
+     the shell runs edge to edge instead of sitting in the doc-page column;
+     the primitives mirror the body's inset in globals.css. */
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500))
+    calc(-1 * var(--primitive-padding-1000));
+  /* The rail and side panel widths the main column clears. */
+  --shell-rail: 64px;
+  --shell-panel: 0px;
+}
+
+.shell:has(:global(.ds-app-sidebar--expanded)) {
+  --shell-rail: 280px;
+}
+
+.shell:has(:global(.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded))) {
+  --shell-rail: 80px;
+}
+
+.shell:has(:global(.ds-app-sidebar__panel--visible)) {
+  --shell-panel: 240px;
+}
+
+.fillViewport {
+  height: calc(var(--layout-viewport-height, 100vh));
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* The chat's widen grip drives the reserved width frame by frame; the
+   padding glide would rubber-band behind the pointer, so a drag suspends it. */
+:global(html[data-chat-resizing]) .main {
+  transition: none;
+}
+
+/* The content column: the template's class adds its padding, gap and the
+   floating max width. A size container, so a template restacks by the room
+   the column has (an open chat or an expanded rail narrows it without the
+   viewport changing) with @container template-content queries. */
+.content {
+  width: 100%;
+  min-width: 0;
+  container: template-content / inline-size;
+}
+
+/* -------------------------------------------------------------- floating */
+
+/* One inset source for the floating shell: the rail floats off the edges
+   by the same value the assistant panel uses. */
+.floating .sidebar {
+  --ds-sidebar-float-inset: var(--layout-chat-inset);
+}
+
+.floating .main {
+  padding-left: calc(
+    var(--shell-rail) + var(--shell-panel) + var(--layout-chat-inset) * 2
+  );
+}
+
+/* The docked chat pushes the page over instead of covering it, only at the
+   site's dock threshold (DOCK_QUERY in src/chat/queries.ts, published from
+   rift-ds/chat): below it the page has no width to give, and
+   TemplateAssistant covers it as a modal overlay instead. */
+@media (min-width: 1440px) {
+  .floating .mainChatOpen {
+    padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
+  }
+}
+
+/* ----------------------------------------------------------------- inset */
+
+/* The rail runs flush on the shell colour and the content sits in a
+   surface inset from the other three edges. The rail's own item inset is
+   the gap on its side, so the selected item sits evenly between the rail's
+   edge and the surface. The shell holds the viewport; the surface scrolls. */
+.inset {
+  height: calc(var(--layout-viewport-height, 100vh));
+  background-color: var(--color-bg-app-shell);
+}
+
+.inset .main {
+  padding: var(--layout-shell-inset);
+  padding-left: calc(var(--shell-rail) + var(--shell-panel));
+}
+
+@media (min-width: 1440px) {
+  .inset .mainChatOpen {
+    padding-right: calc(var(--layout-chat-width) + var(--layout-shell-inset) * 2);
+  }
+}
+
+.surface {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+  background-color: var(--color-bg-app-surface);
+  border-radius: var(--radius-600);
+}
+
+/* Full width in the surface, its side padding matching its top padding
+   (the templates' 20px, stepping to 16px with theirs below 1080px), and
+   the scroller: its scrollbar stays
+   invisible until it scrolls (data-scrolling, set by the scroll handler and
+   cleared once it settles). The doubled class outranks a template's own
+   max width whatever order the stylesheets load in. */
+.surface .content.content {
+  max-width: none;
+  padding-left: var(--padding-500);
+  padding-right: var(--padding-500);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.surface .content[data-scrolling] {
+  scrollbar-color: var(--color-bg-container-border) transparent;
+}
+
+/* ------------------------------------------------------------ responsive */
+
+/* A viewport-held floating screen trades the hold for page flow once its
+   panes stack. */
+@media (max-width: 1080px) {
+  .floating.fillViewport {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .surface .content.content {
+    padding-left: var(--padding-400);
+    padding-right: var(--padding-400);
+  }
+}
+
+/* The shell's negative margins mirror the body's inset in globals.css,
+   which steps down at these same breakpoints: an unmirrored step leaves the
+   shell pulled past the viewport's left edge on phones. */
+@media (max-width: 959px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500))
+      calc(-1 * var(--primitive-padding-400));
+  }
+}
+
+/* Phones: AppSidebar owns mobile itself (below its 768px breakpoint the
+   rail leaves the layout and its fixed hamburger opens the drawer), so the
+   main column takes the whole width, and the inset surface runs edge to
+   edge in page flow. Same breakpoint as the rail's, so no band pads for a
+   rail that is gone. */
+@media (max-width: 768px) {
+  .sidebar {
+    /* The wrapper stays in the tree: display: none would take the drawer's
+       trigger down with it. */
+    width: auto;
+  }
+
+  .floating .main,
+  .inset .main {
+    padding: 0;
+  }
+
+  .inset {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .surface {
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  .surface .content.content {
+    overflow-y: visible;
+  }
+}

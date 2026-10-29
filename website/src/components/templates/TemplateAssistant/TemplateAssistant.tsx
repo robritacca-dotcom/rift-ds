@@ -15,10 +15,16 @@
  * chat responsive rule), so no host restates it:
  *
  * - Docked (DOCK_QUERY): a non-modal complementary region. The host reserves
- *   the width by gating its own padding rule on the same breakpoint.
+ *   the width (TemplateShell does it for the family) on the same breakpoint.
+ *   Docked, the panel carries the site chat's widen grip, which writes
+ *   --ds-chat-width per frame (registered in scripts/gestures.json).
  * - Overlay (below the dock threshold): modal over a scrim, with a focus
  *   trap, the body scroll lock, and Escape or a scrim tap to close.
  * - Takeover (TAKEOVER_QUERY): the panel fills the viewport, still modal.
+ *
+ * Inside TemplateShell's inset layout (the `surface` prop, defaulted from the
+ * shell's context) the dock goes flat at the shell's gap and the overlay takes
+ * the same gap with its shadow kept: ChatLauncher's `surface="inset"`.
  *
  * A host that seats the panel inside its own frame (the mobile dashboard's
  * phone) passes `placement="contained"` and keeps none of that: the frame,
@@ -27,13 +33,14 @@
 
 import React from "react";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
-import { DOCK_QUERY, readGreeting, serverGreeting, subscribeClock } from "rift-ds/chat";
+import { DOCK_QUERY, dockWidthFromDrag, readGreeting, serverGreeting, subscribeClock } from "rift-ds/chat";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { TemplateShellContext } from "../TemplateShell/context";
 import styles from "./TemplateAssistant.module.css";
 
 export type TemplateAssistantSuggestion = { id: string; label: string };
@@ -77,6 +84,15 @@ export interface TemplateAssistantProps {
    * frame of its own and places it with `className`.
    */
   placement?: "viewport" | "contained";
+  /**
+   * How the docked panel sits on the page, ChatLauncher's `surface`:
+   * `raised` is the glass card with the floating shadow, `inset` the flat
+   * plane on the app surface colour at the shell's gap. Defaults to the
+   * enclosing TemplateShell's layout (`inset` for its inset layout). The
+   * overlay takes the same gap but keeps its shadow; the takeover is
+   * unchanged.
+   */
+  surface?: "raised" | "inset";
 }
 
 export default function TemplateAssistant({
@@ -90,7 +106,10 @@ export default function TemplateAssistant({
   disclaimer,
   className,
   placement = "viewport",
+  surface: surfaceProp,
 }: TemplateAssistantProps) {
+  const shellLayout = React.useContext(TemplateShellContext);
+  const surface = surfaceProp ?? (shellLayout === "inset" ? "inset" : "raised");
   const [value, setValue] = React.useState("");
   const [turns, setTurns] = React.useState<
     { id: number; role: "user" | "assistant"; text: string }[]
@@ -142,6 +161,34 @@ export default function TemplateAssistant({
   }, [modal]);
 
   const panelRef = React.useRef<HTMLElement | null>(null);
+
+  /* The widen grip, docked only: the site chat's (ChatLauncher's dock
+     handle, restated). A drag writes --ds-chat-width onto <html> frame by
+     frame, so the panel and the room TemplateShell reserves for it (both
+     sized from --layout-chat-width) follow the edge without a re-render;
+     React state only changes as the drag starts and ends. */
+  const dragRef = React.useRef<{ startX: number; width: number } | null>(null);
+  const [resizing, setResizing] = React.useState(false);
+  const beginResize = (event: React.PointerEvent<HTMLDivElement>) => {
+    if ((event.pointerType === "mouse" && event.button !== 0) || dragRef.current) return;
+    const rect = panelRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    dragRef.current = { startX: event.clientX, width: rect.width };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setResizing(true);
+    document.documentElement.setAttribute("data-chat-resizing", "");
+  };
+  const moveResize = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag) return;
+    const width = dockWidthFromDrag(drag.width, event.clientX - drag.startX, "right");
+    document.documentElement.style.setProperty("--ds-chat-width", `${width}px`);
+  };
+  const endResize = () => {
+    dragRef.current = null;
+    setResizing(false);
+    document.documentElement.removeAttribute("data-chat-resizing");
+  };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === "Escape") {
       onClose();
@@ -174,7 +221,15 @@ export default function TemplateAssistant({
     )}
     <aside
       ref={panelRef}
-      className={[styles.chatPanel, viewport && styles.viewport, className]
+      className={[
+        styles.chatPanel,
+        viewport && styles.viewport,
+        // Inset: the dock and the overlay both sit at the shell's gap; only
+        // the dock goes flat, since the overlay still covers the page.
+        viewport && surface === "inset" && styles.inset,
+        viewport && !modal && surface === "inset" && styles.flat,
+        className,
+      ]
         .filter(Boolean)
         .join(" ")}
       role={modal ? "dialog" : undefined}
@@ -274,6 +329,25 @@ export default function TemplateAssistant({
         </div>
       </div>
     </aside>
+    {viewport && docked && (
+      // A fixed sibling on the panel's inner edge: the panel clips its own
+      // overflow, so a straddling child would be cut in half.
+      <div
+        className={[
+          styles.dockHandle,
+          surface === "inset" && styles.dockHandleInset,
+          resizing && styles.dockHandleResizing,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        data-chat-grip=""
+        aria-hidden="true"
+        onPointerDown={beginResize}
+        onPointerMove={moveResize}
+        onPointerUp={endResize}
+        onPointerCancel={endResize}
+      />
+    )}
     </>
   );
 }

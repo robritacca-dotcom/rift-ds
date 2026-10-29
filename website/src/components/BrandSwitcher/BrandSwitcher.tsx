@@ -23,8 +23,11 @@ export default function BrandSwitcher({
   className,
   placement = "down",
   align = "right",
+  size = "default",
 }: {
   className?: string;
+  /** The trigger's size: `compact` for a seat with less room. */
+  size?: "default" | "compact";
   /** Which way the menu prefers to open; it flips when that side has no room. */
   placement?: "down" | "up";
   /** Which trigger edge the menu hugs. */
@@ -37,6 +40,7 @@ export default function BrandSwitcher({
   return (
     <ThemePicker
       className={className}
+      size={size}
       themes={tiles}
       value={active}
       onValueChange={applyBrand}

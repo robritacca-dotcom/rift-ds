@@ -71,4 +71,8 @@ export const LAYOUT_PROPERTIES: readonly LayoutProperty[] = [
     name: "--layout-chat-inset",
     role: "The gap the chat panel and its button keep from the viewport edges.",
   },
+  {
+    name: "--layout-shell-inset",
+    role: "The gap around the inset layout’s content surface and its docked assistant.",
+  },
 ];

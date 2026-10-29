@@ -31,6 +31,65 @@
   max-width: calc(100vw - var(--layout-chat-inset) * 2);
 }
 
+/* The inset surface (ChatLauncher's surface="inset", restated). Docked
+   and as an overlay the panel sits at the shell's gap, lined up with
+   TemplateShell's inset content surface; docked it is also flat, a plane on
+   the app surface colour with no shadow, border or blur. The overlay keeps
+   its shadow over the page. */
+.inset {
+  top: var(--layout-shell-inset);
+  right: var(--layout-shell-inset);
+  height: calc(100dvh - var(--layout-shell-inset) * 2);
+  max-width: calc(100vw - var(--layout-shell-inset) * 2);
+}
+
+.flat {
+  background: var(--color-bg-app-surface);
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* The widen grip (ChatLauncher's dock handle, restated): a 20px zone
+   centred on the docked panel's inner edge, tracking it as the drag
+   rewrites the width. A short bar shows on hover and while dragging. */
+.dockHandle {
+  --dock-gap: var(--layout-chat-inset);
+  position: fixed;
+  top: var(--dock-gap);
+  height: calc(100dvh - var(--dock-gap) * 2);
+  right: calc(var(--dock-gap) + var(--layout-chat-width) - 10px);
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: calc(var(--layer-chat-panel) + 1);
+}
+
+.dockHandleInset {
+  --dock-gap: var(--layout-shell-inset);
+}
+
+.dockHandle::after {
+  content: "";
+  width: 4px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.dockHandle:hover::after,
+.dockHandleResizing::after {
+  background: var(--color-text-tertiary);
+}
+
+.dockHandle:active::after {
+  background: var(--color-text-secondary);
+}
+
 /* Below the dock threshold the panel covers the page, so the page dims
    behind it: the site panel's scrim, at the same layer. */
 .scrim {

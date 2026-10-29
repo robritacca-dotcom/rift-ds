@@ -80,6 +80,9 @@ html[data-theme-ready] {
      resting width is the docked width above. */
   --layout-chat-float-height: var(--ds-chat-float-height);
   --layout-chat-inset: var(--ds-chat-inset);
+  /* The inset layout's gap (the package's AppSidebar.css): around the
+     template shell's content surface and its docked assistant. */
+  --layout-shell-inset: var(--ds-shell-inset);
 
   /* Toasts go last: they are transient feedback and must be seen, so on
      the site they outrank the chat chrome the same way they outrank a

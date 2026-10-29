@@ -18,10 +18,7 @@
 
 import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
-import {
-  AppSidebar,
-  type AppSidebarSection,
-} from "rift-ds/components/AppSidebar/AppSidebar";
+import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
@@ -46,11 +43,11 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Stat } from "rift-ds/components/Stat/Stat";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { AreaChart, ComboChart, RadialChart } from "rift-ds/charts";
-import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./MarketingDashboard.module.css";
 import { useStagedProductName } from "../useStagedProductName";
-import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
+import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
+import TemplateShell from "../TemplateShell/TemplateShell";
 import { PUBLISHER_MARKS, PublisherMark } from "../PublisherMarks/PublisherMarks";
 import { ProductMark } from "../ProductMark/ProductMark";
 
@@ -302,7 +299,6 @@ export default function MarketingDashboard() {
   const productName = useStagedProductName("Boardline");
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
-  const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [channelTab, setChannelTab] = React.useState("channels");
   const [chatOpen, setChatOpen] = React.useState(false);
 
@@ -380,40 +376,41 @@ export default function MarketingDashboard() {
   }));
 
   return (
-    // data-bg-hidden is the layout's own switch for the ambient background
-    // (the dotted stages' HiddenBackground marker reads the same way): the
-    // dashboard sits on the flat page colour, no gradient.
-    <div className={styles.shell} data-bg-hidden="">
-      {!appFrame && (
-      <div className={styles.sidebar}>
-        <AppSidebar
+    <TemplateShell
+      sidebar={{
+        sections: NAV_SECTIONS,
+        profile: {
+          name: "Mara Esmer",
+          email: "mara@boardline.example",
+        },
+        activeKey: "marketing",
+        logo: <ProductMark />,
+        logoText: productName,
+      }}
+      chatOpen={chatOpen}
+      frame={{ title: "Marketing", subtitle: `${productName} · Team space` }}
+      contentClassName={styles.content}
+      tabBar={
+        <AppFrameTabBar
           sections={NAV_SECTIONS}
-          profile={{
-            name: "Mara Esmer",
-            email: "mara@boardline.example",
-          }}
           activeKey="marketing"
-          expanded={sidebarExpanded}
-          onExpandedChange={setSidebarExpanded}
-          logo={<ProductMark />}
-          logoText={productName}
-          floating
-          footerSlot={<SidebarSwitchers />}
+          productName={productName}
+          onAsk={() => setChatOpen(true)}
         />
-      </div>
-      )}
-
-      <AppFrameScreen
-        enabled={appFrame}
-        title="Marketing"
-        subtitle={`${productName} · Team space`}
-      >
-      <main
-        className={`${styles.main} ${
-          sidebarExpanded ? styles.mainExpanded : ""
-        } ${chatOpen ? styles.mainChatOpen : ""}`}
-      >
-        <div className={styles.content}>
+      }
+      assistant={
+        <TemplateAssistant
+          open={chatOpen}
+          onClose={() => setChatOpen(false)}
+          title={`${productName} AI`}
+          askLine="Ask about campaigns, channels, spend, or performance"
+          suggestions={CHAT_SUGGESTIONS}
+          replies={CHAT_REPLIES}
+          fallback={CHAT_FALLBACK}
+          disclaimer="A mock assistant with canned answers over this page's numbers."
+        />
+      }
+    >
         {!appFrame && (
         <>
         <div className={styles.topBar}>
@@ -741,29 +738,6 @@ export default function MarketingDashboard() {
             }
           />
         </section>
-        </div>
-      </main>
-      </AppFrameScreen>
-
-      {appFrame && (
-        <AppFrameTabBar
-          sections={NAV_SECTIONS}
-          activeKey="marketing"
-          productName={productName}
-          onAsk={() => setChatOpen(true)}
-        />
-      )}
-
-      <TemplateAssistant
-        open={chatOpen}
-        onClose={() => setChatOpen(false)}
-        title={`${productName} AI`}
-        askLine="Ask about campaigns, channels, spend, or performance"
-        suggestions={CHAT_SUGGESTIONS}
-        replies={CHAT_REPLIES}
-        fallback={CHAT_FALLBACK}
-        disclaimer="A mock assistant with canned answers over this page's numbers."
-      />
-    </div>
+    </TemplateShell>
   );
 }

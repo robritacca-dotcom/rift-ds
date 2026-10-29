@@ -3,7 +3,7 @@
 /**
  * The roadmap planner template: the planning screen for Waypoint, a fictional
  * product roadmap tool, built from the design system alone. The shell is the
- * template family's (floating AppSidebar, slim top bar, docked mock
+ * template family's (TemplateShell's switchable rail and surface, slim top bar, docked mock
  * assistant); the page is a controls row and a two-pane board. The
  * GanttChart holds the stage, and a rail beside it carries the selected
  * initiative: owner, window, progress, and the dependency chain, with
@@ -23,10 +23,7 @@
 
 import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
-import {
-  AppSidebar,
-  type AppSidebarSection,
-} from "rift-ds/components/AppSidebar/AppSidebar";
+import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { Button } from "rift-ds/components/Button/Button";
@@ -46,10 +43,10 @@ import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Panel } from "rift-ds/components/Panel/Panel";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
-import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./RoadmapPlanner.module.css";
-import { AppFrameScreen, AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
+import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
+import TemplateShell from "../TemplateShell/TemplateShell";
 import { ProductMark } from "../ProductMark/ProductMark";
 
 /* ---------------------------------------------------------------- data */
@@ -429,7 +426,6 @@ const overlaps = (item: { start: string; end: string }, view: { start: string; e
 /* ---------------------------------------------------------------- page */
 
 export default function RoadmapPlanner() {
-  const [sidebarExpanded, setSidebarExpanded] = React.useState(true);
   const [chatOpen, setChatOpen] = React.useState(false);
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
@@ -483,32 +479,38 @@ export default function RoadmapPlanner() {
     : [];
 
   return (
-    // data-bg-hidden: the planner sits on the flat page colour, the same
-    // switch the other templates use.
-    <div className={styles.shell} data-bg-hidden="">
-      {!appFrame && (
-      <div className={styles.sidebar}>
-        <AppSidebar
+    <TemplateShell
+      sidebar={{
+        sections: NAV_SECTIONS,
+        profile: { name: "Jonas Lindqvist", email: "jonas@waypoint.example" },
+        activeKey: "roadmap",
+        logo: <ProductMark />,
+        logoText: "Waypoint",
+      }}
+      chatOpen={chatOpen}
+      frame={{ title: "Roadmap" }}
+      contentClassName={styles.content}
+      tabBar={
+        <AppFrameTabBar
           sections={NAV_SECTIONS}
-          profile={{ name: "Jonas Lindqvist", email: "jonas@waypoint.example" }}
           activeKey="roadmap"
-          expanded={sidebarExpanded}
-          onExpandedChange={setSidebarExpanded}
-          logo={<ProductMark />}
-          logoText="Waypoint"
-          floating
-          footerSlot={<SidebarSwitchers />}
+          productName="Waypoint"
+          onAsk={() => setChatOpen(true)}
         />
-      </div>
-      )}
-
-      <AppFrameScreen enabled={appFrame} title="Roadmap">
-      <main
-        className={`${styles.main} ${
-          sidebarExpanded ? styles.mainExpanded : ""
-        } ${chatOpen ? styles.mainChatOpen : ""}`}
-      >
-        <div className={styles.content}>
+      }
+      assistant={
+        <TemplateAssistant
+          open={chatOpen}
+          onClose={() => setChatOpen(false)}
+          title="Waypoint AI"
+          askLine="Ask about risk, the quarter, or a dependency chain"
+          suggestions={CHAT_SUGGESTIONS}
+          replies={CHAT_REPLIES}
+          fallback={CHAT_FALLBACK}
+          disclaimer="A mock assistant with canned answers over this plan."
+        />
+      }
+    >
           {!appFrame && (
           <div className={styles.topBar}>
             <div className={styles.search}>
@@ -730,29 +732,6 @@ export default function RoadmapPlanner() {
               </div>
             </Panel>
           </div>
-        </div>
-      </main>
-      </AppFrameScreen>
-
-      {appFrame && (
-        <AppFrameTabBar
-          sections={NAV_SECTIONS}
-          activeKey="roadmap"
-          productName="Waypoint"
-          onAsk={() => setChatOpen(true)}
-        />
-      )}
-
-      <TemplateAssistant
-        open={chatOpen}
-        onClose={() => setChatOpen(false)}
-        title="Waypoint AI"
-        askLine="Ask about risk, the quarter, or a dependency chain"
-        suggestions={CHAT_SUGGESTIONS}
-        replies={CHAT_REPLIES}
-        fallback={CHAT_FALLBACK}
-        disclaimer="A mock assistant with canned answers over this plan."
-      />
-    </div>
+    </TemplateShell>
   );
 }

@@ -1,57 +1,8 @@
 /* Templates: the Cadence team calendar. Every colour, space, radius, and
    type style is a semantic token; the only raw values are structural layout
    sizes (rail widths, breakpoints), which pages own everywhere else on the
-   site. The shell is the marketing dashboard's; the page is a two-pane
+   site. The shell is TemplateShell's; the page is a two-pane
    spread, the to-do rail beside the month grid. */
-
-.shell {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  /* The planner holds the viewport; narrow layouts below trade this for
-     normal page flow. */
-  height: calc(var(--layout-viewport-height, 100vh));
-  /* Stretch across the body's own padding (the marketing dashboard's
-     pattern), so the shell runs edge to edge; the primitives mirror the
-     body's inset in globals.css. */
-  width: calc(100% + var(--primitive-padding-1000) * 2);
-  margin: calc(-1 * var(--primitive-padding-500))
-    calc(-1 * var(--primitive-padding-1000));
-}
-
-/* One inset source for the whole shell: the floating sidebar reads the
-   same value the chat panel uses. */
-.sidebar {
-  --ds-sidebar-float-inset: var(--layout-chat-inset);
-}
-
-/* AppSidebar positions itself fixed; the main column reserves its width the
-   same way AppLayout does (64px rail, 280px expanded — the component's own
-   constants). */
-.main {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  justify-content: center;
-  padding-left: calc(64px + var(--layout-chat-inset) * 2);
-  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
-}
-
-.mainExpanded {
-  padding-left: calc(280px + var(--layout-chat-inset) * 2);
-}
-
-/* The docked chat pushes the page over instead of covering it — the site's
-   body-inset pattern, applied to the main column since this shell owns its
-   own layout. Only at the site's dock threshold (DOCK_QUERY in
-   src/chat/queries.ts, published from rift-ds/chat): below it the page has no width to give, and
-   TemplateAssistant covers it as a modal overlay instead. */
-@media (min-width: 1440px) {
-  .mainChatOpen {
-    padding-right: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
-  }
-}
 
 .content {
   width: 100%;
@@ -333,10 +284,6 @@
 /* Below the two-pane width the board stacks: the calendar first, since it
    is the point of the screen, then the rail in normal flow. */
 @media (max-width: 1080px) {
-  .shell {
-    height: auto;
-    min-height: 100vh;
-  }
 
   .rail,
   .calendar {
@@ -353,38 +300,6 @@
 
   .calendar {
     order: -1;
-  }
-}
-
-/* The shell's negative margins mirror the body's inset in globals.css,
-   which steps down at these same breakpoints — an unmirrored step leaves
-   the shell pulled past the viewport's left edge on phones. */
-@media (max-width: 959px) {
-  .shell {
-    width: calc(100% + var(--primitive-padding-500) * 2);
-    margin: calc(-1 * var(--primitive-padding-500));
-  }
-}
-
-@media (max-width: 760px) {
-  .sidebar {
-    /* The wrapper stays in the tree: AppSidebar owns mobile itself now —
-       the rail collapses to zero width and its fixed hamburger opens the
-       drawer. display: none here would take the trigger down with it. */
-    width: auto;
-  }
-
-  .main,
-  .mainExpanded {
-    padding-left: 0;
-  }
-}
-
-@media (max-width: 600px) {
-  .shell {
-    width: calc(100% + var(--primitive-padding-400) * 2);
-    margin: calc(-1 * var(--primitive-padding-500))
-      calc(-1 * var(--primitive-padding-400));
   }
 }
 

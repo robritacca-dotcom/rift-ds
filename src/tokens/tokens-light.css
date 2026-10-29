@@ -299,8 +299,9 @@
   --color-pixel-ink-5: var(--primitive-blue-07);
   --color-pixel-ink-6: var(--primitive-purple-08);
 
-  /* Count badge - The solid pill a count rides on an icon's corner (a
-     toolbar's filter count, a tab's unread count, a bar's dot): the error
+  /* Count badge - The solid pill a count rides on an icon's corner or
+     trails a row with (a toolbar's filter count, a tab's unread count, a
+     nav row's count, a bar's dot): the error
      ramp at a step its figures read on, so it is seen at a glance. */
   --color-count-badge-bg: var(--primitive-red-08);
   --color-count-badge-text: var(--primitive-neutral-01);

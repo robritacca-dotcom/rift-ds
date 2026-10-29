@@ -268,6 +268,9 @@
   opacity: 1;
 }
 
+/* The trailing pill holds a beat off the row's end, so it sits as far in
+   from the rail's edge as the icon does at the start. A word is a quiet
+   pill; a count takes the count badge pair (the --count rule below). */
 .ds-app-sidebar__btn-badge {
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
@@ -277,6 +280,7 @@
   background-color: var(--color-bg-container-tertiary);
   border-radius: var(--radius-pill);
   padding: var(--padding-050) var(--padding-200);
+  margin-inline-end: var(--padding-100);
   min-width: 0;
   flex-shrink: 1;
   overflow: hidden;
@@ -286,6 +290,61 @@
 
 .ds-app-sidebar--expanded .ds-app-sidebar__btn-badge {
   opacity: 1;
+}
+
+/* On a filled row the quiet pill steps back to the page ground, or it
+   would share the row's fill and dissolve into it. */
+.ds-app-sidebar__btn--active .ds-app-sidebar__btn-badge:not(.ds-app-sidebar__btn-badge--count),
+.ds-app-sidebar__btn:hover .ds-app-sidebar__btn-badge:not(.ds-app-sidebar__btn-badge--count),
+.ds-app-sidebar__sub-btn--active .ds-app-sidebar__btn-badge:not(.ds-app-sidebar__btn-badge--count),
+.ds-app-sidebar__sub-btn:hover .ds-app-sidebar__btn-badge:not(.ds-app-sidebar__btn-badge--count) {
+  background-color: var(--color-bg-page-primary);
+}
+
+/* A count: a solid pill on the count badge pair, the "how many" mark
+   BottomNav and TableToolbar share, which reads on any row fill. */
+.ds-app-sidebar__btn-badge--count {
+  color: var(--color-count-badge-text);
+  background-color: var(--color-count-badge-bg);
+}
+
+/* The icon's seat: the same box as the icon, there to anchor the corner
+   copy of the count. */
+.ds-app-sidebar__btn-seat {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* The collapsed rail's count rides the icon's top-end corner, BottomNav's
+   badge in size and pair. Its end edge sits on the row's padding edge, so
+   it stays inside the collapsed row's clip, and it grows back over the
+   icon; it fades out as the trailing pill fades in. */
+.ds-app-sidebar__btn-corner-badge {
+  position: absolute;
+  top: calc(var(--padding-100) * -1);
+  inset-inline-end: calc(var(--padding-200) * -1);
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--padding-100);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-count-badge-bg);
+  color: var(--color-count-badge-text);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-caption-line-height);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-corner-badge {
+  opacity: 0;
+  transition-duration: var(--motion-duration-fast);
 }
 
 .ds-app-sidebar__btn-chevron {
@@ -398,15 +457,6 @@
 .ds-app-sidebar__sub-btn .ds-app-sidebar__btn-badge {
   opacity: 1;
   flex-shrink: 0;
-}
-
-/* On a filled row the pill steps back to the page ground, or it would
-   share the row's fill and dissolve into it. */
-.ds-app-sidebar__btn--active .ds-app-sidebar__btn-badge,
-.ds-app-sidebar__btn:hover .ds-app-sidebar__btn-badge,
-.ds-app-sidebar__sub-btn--active .ds-app-sidebar__btn-badge,
-.ds-app-sidebar__sub-btn:hover .ds-app-sidebar__btn-badge {
-  background-color: var(--color-bg-page-primary);
 }
 
 .ds-app-sidebar__sub-chevron {

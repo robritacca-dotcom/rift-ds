@@ -29,7 +29,7 @@ export interface AppSidebarSubItem {
   onClick?: () => void;
   /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */
   href?: string;
-  /** Trailing count pill, e.g. unread items */
+  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
   badge?: string | number;
   /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */
   group?: string;
@@ -63,7 +63,7 @@ export interface AppSidebarItem {
   onClick?: () => void;
   /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */
   href?: string;
-  /** Trailing count pill, e.g. unread items; hidden while the rail is collapsed */
+  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */
   badge?: string | number;
   /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
   children?: AppSidebarSubItem[];
@@ -181,6 +181,12 @@ type AppSidebarOwnProps = {
 export interface AppSidebarProps
   extends AppSidebarOwnProps,
     Omit<React.ComponentPropsWithoutRef<'nav'>, keyof AppSidebarOwnProps | 'children'> {}
+
+/** A badge that is a count (`3`, `"12"`, `"99+"`), which takes the count
+    badge pair; a word such as "New" keeps the quiet pill. */
+function isCount(badge: string | number) {
+  return typeof badge === 'number' || /^\d+\+?$/.test(badge.trim());
+}
 
 /* ============================================
    INLINE LOGO SVG
@@ -597,17 +603,28 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
               const itemContent = (
                 <>
                   <span className={`${baseClass}__btn-left`}>
-                    {item.pixelAvatar ? (
-                      <span className={`${baseClass}__btn-icon ${baseClass}__btn-icon--avatar`}>
-                        <PixelAvatar name={avatarSeed(item)} ink={avatarInks.get(item.key)} />
-                      </span>
-                    ) : (
-                      <span
-                        className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(item.icon)}` : ''}`}
-                      >
-                        {item.icon}
-                      </span>
-                    )}
+                    {/* The icon's seat anchors the collapsed rail's copy of
+                        the count to the icon's corner, presentational like
+                        the caption: the trailing pill stays the one that is
+                        read, and the two crossfade with the rail. */}
+                    <span className={`${baseClass}__btn-seat`}>
+                      {item.pixelAvatar ? (
+                        <span className={`${baseClass}__btn-icon ${baseClass}__btn-icon--avatar`}>
+                          <PixelAvatar name={avatarSeed(item)} ink={avatarInks.get(item.key)} />
+                        </span>
+                      ) : (
+                        <span
+                          className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(item.icon)}` : ''}`}
+                        >
+                          {item.icon}
+                        </span>
+                      )}
+                      {item.badge !== undefined && isCount(item.badge) && (
+                        <span className={`${baseClass}__btn-corner-badge`} aria-hidden="true">
+                          {item.badge}
+                        </span>
+                      )}
+                    </span>
                     <span className={`${baseClass}__btn-label`}>{item.label}</span>
                   </span>
                   {/* Panel mode's rail names each destination under its
@@ -620,7 +637,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                     </span>
                   )}
                   {item.badge !== undefined && (
-                    <span className={`${baseClass}__btn-badge`}>{item.badge}</span>
+                    <span className={`${baseClass}__btn-badge${isCount(item.badge) ? ` ${baseClass}__btn-badge--count` : ''}`}>
+                      {item.badge}
+                    </span>
                   )}
                   {/* Accordion rows turn the chevron down when open; a row
                       feeding the panel points it at the panel and holds. */}
@@ -714,7 +733,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                           <>
                             <span className={`${baseClass}__sub-label`}>{sub.label}</span>
                             {sub.badge !== undefined && (
-                              <span className={`${baseClass}__btn-badge`}>{sub.badge}</span>
+                              <span className={`${baseClass}__btn-badge${isCount(sub.badge) ? ` ${baseClass}__btn-badge--count` : ''}`}>
+                                {sub.badge}
+                              </span>
                             )}
                             {subHasChildren && (
                               <span

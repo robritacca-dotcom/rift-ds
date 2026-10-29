@@ -161,20 +161,53 @@ export const Inset: Story = {
   },
 };
 
-/** Count pills on nav rows, hidden while the rail is collapsed. */
+const badgeSections = [
+  {
+    items: [
+      { key: 'home', icon: 'home', label: 'Home', badge: 152 },
+      { key: 'campaigns', icon: 'campaign', label: 'Campaigns', badge: 'New' },
+      { key: 'inbox', icon: 'inbox', label: 'Inbox', badge: 91 },
+      { key: 'archive', icon: 'archive', label: 'Archive', badge: '9+' },
+    ],
+  },
+];
+
+/** Pills on nav rows: a count on the count badge pair, a word on the
+    quiet pill. */
 export const WithBadges: Story = {
   args: {
     defaultExpanded: true,
-    sections: [
-      {
-        items: [
-          { key: 'home', icon: 'home', label: 'Home', badge: 152 },
-          { key: 'campaigns', icon: 'campaign', label: 'Campaigns' },
-          { key: 'inbox', icon: 'inbox', label: 'Inbox', badge: 91 },
-          { key: 'archive', icon: 'archive', label: 'Archive', badge: '9+' },
-        ],
-      },
-    ],
+    sections: badgeSections,
+  },
+};
+
+/** Collapsed, a count rides its icon's corner and a word is hidden. The
+    corner copy is presentational: the trailing pill stays the one read. */
+export const CollapsedWithBadges: Story = {
+  args: {
+    defaultExpanded: false,
+    sections: badgeSections,
+  },
+  play: async ({ canvasElement }) => {
+    const corners = Array.from(
+      canvasElement.querySelectorAll<HTMLElement>('.ds-app-sidebar__btn-corner-badge'),
+    );
+    await expect(corners.map((corner) => corner.textContent)).toEqual(['152', '91', '9+']);
+    for (const corner of corners) {
+      await expect(corner).toHaveAttribute('aria-hidden', 'true');
+    }
+    const word = canvasElement.querySelector('.ds-app-sidebar__btn-badge:not(.ds-app-sidebar__btn-badge--count)');
+    await expect(word).toHaveTextContent('New');
+  },
+};
+
+/** The labelled panel-mode rail, collapsed: the counts ride the icons
+    above their captions. */
+export const PanelModeCollapsedWithBadges: Story = {
+  args: {
+    defaultExpanded: false,
+    subNav: 'panel',
+    sections: badgeSections,
   },
 };
 

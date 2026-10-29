@@ -18,7 +18,7 @@ export interface SidebarPanelItem {
   href?: string;
   /** Click handler — also fires on a link item, so a consumer can route client-side */
   onClick?: () => void;
-  /** Trailing count pill, e.g. unread items */
+  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
   badge?: string | number;
   /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */
   group?: string;
@@ -59,6 +59,12 @@ type SidebarPanelOwnProps = {
 export interface SidebarPanelProps
   extends SidebarPanelOwnProps,
     Omit<React.ComponentPropsWithoutRef<'nav'>, keyof SidebarPanelOwnProps> {}
+
+/** A badge that is a count (`3`, `"12"`, `"99+"`), which takes the count
+    badge pair; a word such as "New" keeps the quiet pill. */
+function isCount(badge: string | number) {
+  return typeof badge === 'number' || /^\d+\+?$/.test(badge.trim());
+}
 
 /** Splits items into runs that share a group, preserving order. */
 function groupRuns(items: SidebarPanelItem[]) {
@@ -135,7 +141,11 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
       const content = (
         <>
           <span className={`${baseClass}__label`}>{item.label}</span>
-          {item.badge !== undefined && <span className={`${baseClass}__badge`}>{item.badge}</span>}
+          {item.badge !== undefined && (
+            <span className={`${baseClass}__badge${isCount(item.badge) ? ` ${baseClass}__badge--count` : ''}`}>
+              {item.badge}
+            </span>
+          )}
         </>
       );
       return item.href ? (
@@ -186,7 +196,11 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
             }}
           >
             <span className={`${baseClass}__label`}>{item.label}</span>
-            {item.badge !== undefined && <span className={`${baseClass}__badge`}>{item.badge}</span>}
+            {item.badge !== undefined && (
+            <span className={`${baseClass}__badge${isCount(item.badge) ? ` ${baseClass}__badge--count` : ''}`}>
+              {item.badge}
+            </span>
+          )}
             <span
               className={[
                 `${baseClass}__chevron material-symbols-rounded`,

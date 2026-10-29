@@ -17,7 +17,7 @@ export interface A11yCoverage {
 }
 
 export const a11yCoverage: A11yCoverage = {
-  "stories": 1333,
+  "stories": 1335,
   "storiedComponents": 162,
   "behaviourModules": 10,
   "modalOverlays": [

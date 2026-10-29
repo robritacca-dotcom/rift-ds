@@ -223,9 +223,17 @@
 
 /* On a filled row the pill steps back to the page ground, or it would
    share the row's fill and dissolve into it. */
-.ds-sidebar-panel__row--active .ds-sidebar-panel__badge,
-.ds-sidebar-panel__row:hover .ds-sidebar-panel__badge {
+.ds-sidebar-panel__row--active .ds-sidebar-panel__badge:not(.ds-sidebar-panel__badge--count),
+.ds-sidebar-panel__row:hover .ds-sidebar-panel__badge:not(.ds-sidebar-panel__badge--count) {
   background-color: var(--color-bg-page-primary);
+}
+
+/* A count: a solid pill on the count badge pair, the "how many" mark the
+   rail beside it, BottomNav and TableToolbar share, which reads on any
+   row fill. A word such as "New" keeps the quiet pill above. */
+.ds-sidebar-panel__badge--count {
+  color: var(--color-count-badge-text);
+  background-color: var(--color-count-badge-bg);
 }
 
 .ds-sidebar-panel__chevron {

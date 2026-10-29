@@ -83,6 +83,16 @@ export interface ChatLauncherProps {
   widget?: Omit<ChatWidgetProps, 'fullscreenEnabled' | 'placementEnabled' | 'compact' | 'phone'>;
   /** Rendered inside the panel after the widget: for a host's extra chrome. */
   children?: ReactNode;
+  /**
+   * How the docked panel sits on the page. `raised` (the default) is a glass
+   * card with the floating shadow, inset by `--ds-chat-inset`. `inset` is
+   * flat: the app surface colour, no shadow, border or blur, and the
+   * `--ds-shell-inset` gap, so it matches AppLayout's `inset` content
+   * surface beside it. The overlay below the dock threshold takes the same
+   * gap but keeps its shadow, since it still covers the page; the floating
+   * card and the takeover keep their own look.
+   */
+  surface?: 'raised' | 'inset';
 }
 
 /**
@@ -119,6 +129,7 @@ export function ChatLauncher({
   aiButtonLabels,
   widget,
   children,
+  surface = 'raised',
 }: ChatLauncherProps) {
   const { open, setOpen, panelPhase, view, side, floating, returnFocusRef, send } =
     useChatWidget();
@@ -456,6 +467,10 @@ export function ChatLauncher({
     side === 'left' ? 'ds-chat-launcher__panel--left' : '',
     isFloating ? 'ds-chat-launcher__panel--floating' : '',
     isFull ? 'ds-chat-launcher__panel--full' : '',
+    // Inset: the dock and the overlay both sit at the shell's gap; only the
+    // dock goes flat, since the overlay still covers the page.
+    surface === 'inset' && !isFloating && !isFull ? 'ds-chat-launcher__panel--inset' : '',
+    surface === 'inset' && docked && !isFloating && !isFull ? 'ds-chat-launcher__panel--flat' : '',
     panelPhase === 'closing' ? 'ds-chat-launcher__panel--closing' : '',
   ]
     .filter(Boolean)
@@ -528,6 +543,7 @@ export function ChatLauncher({
           className={[
             'ds-chat-launcher__dock-handle',
             side === 'left' ? 'ds-chat-launcher__dock-handle--left' : '',
+            surface === 'inset' ? 'ds-chat-launcher__dock-handle--inset' : '',
             resizing ? 'ds-chat-launcher__dock-handle--resizing' : '',
           ]
             .filter(Boolean)

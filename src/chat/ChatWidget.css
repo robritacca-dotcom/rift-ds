@@ -995,6 +995,22 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
   left: var(--ds-chat-inset); /* ds-allow(physical): the left dock is the screen's left edge */
 }
 
+/* The inset surface (ChatLauncher's surface="inset"). Docked and as an
+   overlay, the panel is held off the edges by the shell's gap rather than
+   the chat's own, so it lines up with AppLayout's inset content surface.
+   Docked, it is also flat: a plane on the app surface colour with no
+   shadow, border or blur. The overlay keeps its shadow over the page. */
+.ds-chat-launcher__panel--inset {
+  --ds-chat-inset: var(--ds-shell-inset, 10px); /* AppSidebar.css declares the gap; the fallback mirrors it */
+}
+
+.ds-chat-launcher__panel--flat {
+  background: var(--color-bg-app-surface);
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
 /* Fullscreen view: a true viewport takeover. The stronger blur keeps the
    transcript readable while the page's colours still shine through. The
    border fades rather than vanishing, so the geometry never snaps mid-glide. */
@@ -1045,6 +1061,11 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
 .ds-chat-launcher__dock-handle--left {
   right: auto;
   left: calc(var(--ds-chat-inset) + var(--ds-chat-width) - 10px); /* ds-allow(physical): the dock grip tracks the docked card's screen edge */
+}
+
+/* The inset surface's dock sits at the shell's gap, so its grip does too. */
+.ds-chat-launcher__dock-handle--inset {
+  --ds-chat-inset: var(--ds-shell-inset, 10px); /* AppSidebar.css declares the gap; the fallback mirrors it */
 }
 
 .ds-chat-launcher__dock-handle::after {

@@ -71,9 +71,9 @@
   /* The field is the package's CommandPaletteTrigger, which draws every
      pixel; the header sets only its width. Wide enough for the full
      "Search or ask anything" prompt plus the icon and the ⌘K keycaps in
-     every theme's face (the monospace themes run widest), so the label
-     never wraps. */
-  width: 320px;
+     every theme's face at the compact size (the monospace theme runs
+     widest, about 282px of content), so the label never wraps. */
+  width: 288px;
 }
 
 /* The full field needs the bar at its whole 1440px; any narrower and it
@@ -86,7 +86,7 @@
      stylesheet after page modules, where a tie would go to the library. */
   .searchBtn.searchBtn {
     justify-content: center;
-    width: var(--control-height-default);
+    width: var(--control-height-compact);
     padding: 0;
   }
 
@@ -122,7 +122,7 @@
    CHAT BUTTON
    The chat's entry point in the bar at phone widths:
    the AI button's field, ring and glow, cut to the
-   search and menu buttons' size and curve.
+   search and menu buttons' compact size and curve.
    ============================================ */
 .chatBtn {
   display: none;
@@ -133,7 +133,7 @@
 @media (max-width: 719px) {
   .chatBtn.chatBtn {
     display: inline-flex;
-    width: var(--control-height-default);
+    width: var(--control-height-compact);
     padding: 0;
     border-radius: calc(var(--radius-pill) + var(--padding-100));
   }
@@ -146,10 +146,14 @@
 /* ============================================
    DRAWER FOOTER
    ============================================ */
-/* One row on the drawer floor: the look switcher beside the mode toggle,
-   matching the bar's wide actions. */
+/* The drawer floor: the bar's wide actions stacked in their order (the
+   look switcher, the mode toggle, Get started), stepped in by the logo's
+   lead-in so each starts on the nav labels' line, as globals.css steps
+   the drawer's list. */
 .drawerFooter {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--primitive-gap-300);
+  padding-inline-start: calc(var(--icon-size-600) + var(--primitive-gap-200));
 }

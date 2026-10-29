@@ -28,15 +28,15 @@ export function useThemeSetting(): [setting: string, setSetting: (value: string)
 
 /**
  * The site's header toggle: the package's ThemeToggle as an icon strip
- * (its labels become tooltips) at the default size, the 40px row height the
- * header's other controls share, or compact where a row is short of room.
+ * (its labels become tooltips), compact in the header to match the row's
+ * other controls, or at the default size where a seat has room.
  */
 export default function ThemeToggle({
   className,
   size = "default",
 }: {
   className?: string;
-  /** `compact` for a seat with less room, such as the template sidebars' footer row. */
+  /** `compact` for a seat with less room, such as the header or the template sidebars' footer row. */
   size?: "default" | "compact";
 }) {
   return (

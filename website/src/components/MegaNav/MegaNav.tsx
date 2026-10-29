@@ -13,6 +13,7 @@ import { openSitePalette } from "../SitePalette/palette-bus";
 import { getNavSections } from "@/config/navigation";
 import { ShowcaseCover } from "./ShowcaseCover";
 import SiteLogo from "./SiteLogo";
+import GetStartedSplit from "./GetStartedSplit";
 import styles from "./MegaNav.module.css";
 
 /**
@@ -95,13 +96,14 @@ export default function MegaNav() {
         // Opens the global palette mounted from the root layout; the two
         // trees never meet, so the click travels via palette-bus.
         <>
-          <CommandPaletteTrigger className={styles.searchBtn} onClick={openSitePalette} />
+          <CommandPaletteTrigger size="compact" className={styles.searchBtn} onClick={openSitePalette} />
           {/* The chat's phone entry point, between search and menu. Below
               the takeover width the floating launcher stands down
               (globals.css), because a pill in the corner sits on the page's
               own controls; this one keeps the AI ring at the bar's size. */}
           <AiButton
             className={styles.chatBtn}
+            size="compact"
             icon="forum"
             label=""
             aria-label={`Ask ${ASSISTANT_NAME}`}
@@ -114,17 +116,20 @@ export default function MegaNav() {
       }
       wideActions={
         <>
-          <BrandSwitcher />
-          <ThemeToggle />
+          <BrandSwitcher size="compact" />
+          <ThemeToggle size="compact" />
+          <GetStartedSplit />
         </>
       }
       drawerFooter={
-        // The drawer serves every width the pills leave, so it carries both
-        // selectors: look, then light and dark. The look menu opens upward,
-        // since the row sits on the drawer floor.
+        // The drawer serves every width the pills leave, so it carries what
+        // the bar's wide actions do, stacked in their order: look, light and
+        // dark, then Get started. The look menu opens upward, since the
+        // stack sits on the drawer floor.
         <div className={styles.drawerFooter}>
-          <BrandSwitcher placement="up" align="left" />
-          <ThemeToggle />
+          <BrandSwitcher size="compact" placement="up" align="left" />
+          <ThemeToggle size="compact" />
+          <GetStartedSplit onNavigate={() => setMenuOpen(false)} />
         </div>
       }
       drawerOpen={menuOpen}

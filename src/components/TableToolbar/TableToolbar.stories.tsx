@@ -437,3 +437,37 @@ export const SavedViews: Story = {
     await expect(repaired.columnOrder).toEqual(['due', 'title', 'status', 'points']);
   },
 };
+
+/** Wider than a phone but too narrow for search at its floor, the Filter button and every end control on one line: the bar folds to icons rather than drawing its controls over each other. */
+export const CrowdedFold: Story = {
+  render: () => (
+    <div style={{ inlineSize: 640 }}>
+      <DataTable
+        columns={columns}
+        rows={rows}
+        caption="Issues"
+        toolbar={
+          <TableToolbar
+            showCount
+            actions={
+              <>
+                <Button variant="secondary" size="compact" iconLeft="download" label="Export" />
+                <Button variant="primary" size="compact" iconLeft="add" label="New issue" />
+              </>
+            }
+          />
+        }
+      />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const bar = canvasElement.querySelector<HTMLElement>('.ds-table-toolbar')!;
+    await waitFor(() => {
+      const start = bar.querySelector<HTMLElement>('.ds-table-toolbar__start');
+      const end = bar.querySelector<HTMLElement>('.ds-table-toolbar__end');
+      if (!start || !end) throw new Error('toolbar clusters missing');
+      const startRight = Math.max(...[...start.children].map((el) => el.getBoundingClientRect().right));
+      expect(startRight).toBeLessThanOrEqual(end.getBoundingClientRect().left + 1);
+    });
+  },
+};

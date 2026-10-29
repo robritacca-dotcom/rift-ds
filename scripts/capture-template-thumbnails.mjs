@@ -64,10 +64,13 @@ try {
       deviceScaleFactor: SCALE,
       colorScheme: mode,
     });
-    // layout.tsx reads localStorage('theme') in its pre-paint guard.
+    // layout.tsx reads localStorage('theme') in its pre-paint guard, and
+    // TemplateShell reads 'template-layout': the stills show the default
+    // layout whatever the default happens to be stored as later.
     await context.addInitScript((theme) => {
       try {
         localStorage.setItem('theme', theme);
+        localStorage.setItem('template-layout', 'inset');
       } catch {
         /* private mode: the colorScheme hint still applies */
       }

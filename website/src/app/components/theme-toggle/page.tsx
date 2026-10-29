@@ -75,8 +75,8 @@ export default function ThemeTogglePage() {
             <SectionTitle title="Sizes and labels" />
             <p className={styles.demoText}>
               Two sizes on SegmentedControl&rsquo;s scale. With showLabels off
-              it is an icon strip, and each label stays as its segment&rsquo;s
-              accessible name. The labels and the strip&rsquo;s name are props
+              it is an icon strip, and each label shows as its segment&rsquo;s
+              tooltip and stays its accessible name. The labels and the strip&rsquo;s name are props
               with English defaults, so they can be translated.
             </p>
             <div className={styles.row}>

@@ -139,7 +139,7 @@
       "name": "AppLayout",
       "label": "App layout",
       "slug": "app-layout",
-      "description": "Full-page template pairing the collapsible App sidebar with a centred content area.",
+      "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.",
       "category": "layout",
       "client": true
     },

@@ -329,6 +329,7 @@ export default function MarketingDashboard() {
     {
       key: "name",
       header: "Campaign",
+      rowHeader: true,
       sortable: true,
       width: "260px",
       render: (row: DataTableRow) => (

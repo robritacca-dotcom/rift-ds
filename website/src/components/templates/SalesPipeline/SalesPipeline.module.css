@@ -116,6 +116,11 @@
   min-width: 0;
 }
 
+/* On a phone card the value starts its line like every other value. */
+:global(.ds-data-table__grid--stacked) .pipelineCell {
+  align-items: flex-start;
+}
+
 .pipelineValue {
   font-weight: var(--font-paragraph-sm-emphasis-weight);
   color: var(--color-text-primary);

@@ -848,7 +848,10 @@
    read, from a visually hidden thead.
    ============================================ */
 
+/* The wrapper qualifier outranks Table's phone rule, which holds a
+   column table at max-content so it scrolls: cards fit the frame. */
 .ds-data-table__grid--stacked,
+.ds-table__wrapper .ds-data-table__grid--stacked,
 .ds-data-table__grid--stacked > tbody {
   display: block;
   width: 100%;
@@ -901,8 +904,10 @@
   width: auto;
 }
 
+/* The actions close the title line, at its end, with or without a row header beside them. */
 .ds-data-table__grid--stacked .ds-data-table__actions {
   order: 1;
+  margin-inline-start: auto;
 }
 
 /* A row has no drag on a card, and no filler column. */
@@ -922,11 +927,10 @@
   gap: var(--gap-200);
 }
 
+/* A long header wraps in its quarter rather than losing its end. */
 .ds-data-table__stack-label {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: break-word;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);

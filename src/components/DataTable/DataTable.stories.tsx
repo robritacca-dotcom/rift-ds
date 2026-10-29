@@ -665,12 +665,22 @@ export const PageSize: Story = {
 /** Narrower than a phone, `phoneLayout="stack"` draws each row as a card: the row header as its title, every other column as a label and value. */
 export const PhoneStack: Story = {
   args: {
-    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    columns: columns.map((col) =>
+      col.key === 'name'
+        ? { ...col, rowHeader: true }
+        : col.key === 'price'
+          ? { ...col, header: 'Price including delivery and tax' }
+          : col,
+    ),
     rows: rows.slice(0, 3),
     phoneLayout: 'stack',
     selectable: true,
+    rowActions: () => [{ id: 'duplicate', label: 'Duplicate', icon: 'content_copy', onSelect: () => {} }],
+    rowActionsVisibility: 'always',
     caption: 'Orders',
   },
+  // A phone viewport, so Table's phone-width rules apply as they do on a device.
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
   decorators: [
     (Story) => (
       <div style={{ width: 360 }}>
@@ -687,6 +697,24 @@ export const PhoneStack: Story = {
     // Each value carries its column's label.
     const firstRow = canvasElement.querySelector('tbody tr')!;
     await expect(firstRow.querySelector('.ds-data-table__stack-label')).toHaveTextContent('Status');
+    // The cards fit the frame: Table's phone rule, which holds a column
+    // table at its max-content width, never stretches them sideways.
+    const frame = canvasElement.querySelector<HTMLElement>('.ds-data-table__frame')!;
+    // Measured once the icon font has loaded, so an icon is its glyph, not its name in text.
+    await document.fonts.ready;
+    await expect(frame.scrollWidth).toBeLessThanOrEqual(frame.clientWidth);
+    // The actions close the title line at its end, above the label rows.
+    const actions = firstRow.querySelector('.ds-data-table__actions')!.getBoundingClientRect();
+    const title = firstRow.querySelector('[role="rowheader"]')!.getBoundingClientRect();
+    const rowBox = firstRow.getBoundingClientRect();
+    await expect(actions.left).toBeGreaterThan(title.left);
+    await expect(rowBox.right - actions.right).toBeLessThan(rowBox.width / 4);
+    await expect(actions.bottom).toBeLessThanOrEqual(firstRow.querySelector('.ds-data-table__stack-label')!.getBoundingClientRect().top);
+    // A long header wraps in its quarter rather than losing its end.
+    const longLabel = [...firstRow.querySelectorAll<HTMLElement>('.ds-data-table__stack-label')].find((el) =>
+      el.textContent?.startsWith('Price including'),
+    )!;
+    await expect(longLabel.scrollWidth).toBeLessThanOrEqual(longLabel.clientWidth);
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select John Clarkson' }));
     await expect(firstRow).toHaveClass('ds-table__row--selected');
   },

@@ -762,7 +762,7 @@ export default function LandingPage() {
               <Button label="Sign in" variant="secondary" iconLeft="account_circle" />
               <Button label="Start now" variant="primary" iconRight="arrow_forward" />
             </div>
-            <SidebarSwitchers />
+            <SidebarSwitchers backLink />
           </div>
         }
       >

@@ -394,8 +394,8 @@ export default function AiChatPage() {
             <p className={styles.sectionNote}>
               <code>threads</code> turns the history rail on. Every chat is kept and a new chat is
               named after its first reply; a chat can be pinned, renamed or deleted from its row.{" "}
-              <code>threadsProps</code> sets the rail&apos;s brand, profile and whether it starts
-              expanded; the provider&apos;s <code>threads</code> option seeds the history, switches
+              <code>threadsProps</code> sets the rail&apos;s brand, profile, footer and whether it
+              starts expanded; the provider&apos;s <code>threads</code> option seeds the history, switches
               the detail lines and pins, and takes the rename, delete and pin callbacks.{" "}
               <code>tabs</code> is a separate switch: a tab per open chat, in sync with the rail,
               closing back to the welcome screen when the last one goes. On a phone the rail opens

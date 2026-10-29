@@ -19,7 +19,7 @@ export interface ChatThreadsProps {
   logoText?: string;
   /** The signed-in person, shown on the inline rail. */
   profile?: ThreadPanelProfile;
-  /** Rendered in the rail's footer, above the profile row, in both seats: a theme toggle, a link out. Fades out while the inline rail is collapsed. */
+  /** Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed. */
   footerSlot?: ReactNode;
   /** Whether the inline rail can collapse to its icon strip. */
   collapsible?: boolean;

@@ -28,11 +28,15 @@
  *              between it and the page that scrolls or clips it.
  *   clipped    text crosses the edge of an ancestor that hides overflow,
  *              with no ellipsis, so part of it is simply gone.
- *   truncated  the same, ended by an ellipsis or a line clamp. Often
- *              deliberate, so it is reported for review, never as an error.
+ *   truncated  the same, ended by an ellipsis, a line clamp or a mask that
+ *              fades the text out at the cut. Often deliberate, so it is
+ *              reported for review, never as an error.
  *   spill      text runs out of its own box while nothing clips it, so it
  *              draws over whatever sits beside it.
  *   overlap    two controls, neither inside the other, cover the same area.
+ *              A control in a fixed or sticky layer floats by design and is
+ *              left out, as is an empty stretched link under a card's own
+ *              controls when a press on them reaches them.
  *   error      the page failed to load or threw during the sweep, so
  *              nothing on it was measured. Reported first.
  *
@@ -52,7 +56,7 @@
  *     --shots <dir>         save a marked screenshot of each finding there
  *     --json <file>         write the grouped findings as JSON
  */
-/* global document, getComputedStyle, NodeFilter -- inspect() runs in the browser */
+/* global document, getComputedStyle, NodeFilter, window -- inspect() runs in the browser */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -197,6 +201,16 @@ function inspect() {
     }
     return document.body;
   };
+  /* A mask-image on the text or any box up to the one that clips it is a
+     deliberate fade at the cut (a title dissolving at its trailing edge, a
+     tile's body fading at its foot), read like an ellipsis. */
+  const fades = (from, to) => {
+    for (let n = from; n; n = n.parentElement) {
+      if (getComputedStyle(n).maskImage !== 'none') return true;
+      if (n === to) break;
+    }
+    return false;
+  };
   const seen = new Set();
   const cutBy = new Map();
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -235,7 +249,11 @@ function inspect() {
           const hostCs = getComputedStyle(host);
           const ellipsis = cs.textOverflow === 'ellipsis' || hostCs.textOverflow === 'ellipsis';
           const clamp = cs.webkitLineClamp !== 'none' || hostCs.webkitLineClamp !== 'none';
-          record(ellipsis || clamp ? 'truncated' : 'clipped', host, `${quote(node)} cut by its own box`);
+          record(ellipsis || clamp || fades(host, n) ? 'truncated' : 'clipped', host, `${quote(node)} cut by its own box`);
+        } else if (fades(host, n)) {
+          // A box that fades its overflow out with a mask cuts on purpose,
+          // like an ellipsis: one truncation about the box.
+          record('truncated', n, `fades out ${quote(node)}`);
         } else {
           // Text cut by a container further out is one finding about the
           // container, however many texts it cuts.
@@ -258,13 +276,17 @@ function inspect() {
 
   /* overlap: controls, neither inside the other, covering the same area.
      Each is measured by the part of it left visible after every clipping
-     ancestor, and anything under a fixed layer (the chat button, a
-     drawer) is left out, since floating over the page is its job. */
+     ancestor, and anything under a fixed or sticky layer (the chat
+     button, a drawer, a jump-to-latest button) is left out, since floating
+     over the page is its job. */
+  const floats = (cs) => cs.position === 'fixed' || cs.position === 'sticky';
   const visibleRect = (el) => {
     let { left, top, right, bottom } = el.getBoundingClientRect();
     for (let n = el.parentElement; n && !isRoot(n); n = n.parentElement) {
       const cs = getComputedStyle(n);
-      if (cs.position === 'fixed') return null;
+      // A sticky layer (a jump-to-latest button) floats over what scrolls
+      // under it, which is its job, as a fixed one does.
+      if (floats(cs)) return null;
       if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue;
       const r = n.getBoundingClientRect();
       left = Math.max(left, r.left);
@@ -283,11 +305,27 @@ function inspect() {
     // links in running prose are left out rather than reported as stacked.
     .filter((el) => {
       const cs = getComputedStyle(el);
-      return shown(el) && !el.disabled && cs.position !== 'fixed' && cs.display !== 'inline';
+      return shown(el) && !el.disabled && !floats(cs) && cs.display !== 'inline';
     })
     .map((el) => ({ el, r: visibleRect(el) }))
     .filter(({ r }) => r);
   const area = (r) => (r.right - r.left) * (r.bottom - r.top);
+  /* A stretched link: an empty link (named by aria-label) laid over a whole
+     card as its hit area, with the card's own controls stacked above it.
+     When the other control is what a press at its centre reaches, the two
+     are layered on purpose, not drawn over each other. */
+  const stretchedUnder = (link, other) => {
+    if (link.el.tagName !== 'A' || link.el.textContent.trim()) return false;
+    // elementFromPoint sees only the viewport, so the page scrolls the
+    // point into view for the probe and back again.
+    const { scrollX, scrollY } = window;
+    const r = other.el.getBoundingClientRect();
+    window.scrollTo(scrollX, scrollY + (r.top + r.bottom) / 2 - window.innerHeight / 2);
+    const now = other.el.getBoundingClientRect();
+    const hit = document.elementFromPoint((now.left + now.right) / 2, (now.top + now.bottom) / 2);
+    window.scrollTo(scrollX, scrollY);
+    return Boolean(hit && other.el.contains(hit));
+  };
   for (let i = 0; i < controls.length; i++) {
     for (let j = i + 1; j < controls.length; j++) {
       const a = controls[i];
@@ -298,6 +336,7 @@ function inspect() {
       if (w <= 0 || h <= 0) continue;
       const share = (w * h) / Math.min(area(a.r), area(b.r));
       if (share < 0.3) continue;
+      if (stretchedUnder(a, b) || stretchedUnder(b, a)) continue;
       record('overlap', a.el, `covers ${label(b.el)} (${Math.round(share * 100)}%)`);
     }
   }

@@ -2,7 +2,7 @@
 
 Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.16.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.17.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: layout
 - Import: `import { AppLayout } from 'rift-ds';`

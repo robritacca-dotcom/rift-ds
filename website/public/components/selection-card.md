@@ -2,7 +2,7 @@
 
 Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.16.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.17.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { SelectionCard } from 'rift-ds';`

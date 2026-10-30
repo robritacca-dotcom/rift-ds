@@ -11899,13 +11899,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "actions",
             "type": "ReactNode",
             "required": false,
-            "description": "Controls at the bar's end that stay at every width, such as a search button."
+            "description": "Controls at the bar's end that stay at every width, such as a search button; `condensedActions`, when given, stand in for them on the condensed step."
+          },
+          {
+            "name": "condensedActions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The same controls drawn narrower, such as an icon-only CommandPaletteTrigger and a\n`cycle` ThemeToggle. When the full row stops fitting, these take the place of\n`actions` (the header adds `ds-site-header--condensed`), and the pills fold to the\nmenu button only when the condensed row does not fit either. Without it the\nheader folds as soon as the full row stops fitting."
           },
           {
             "name": "wideActions",
             "type": "ReactNode",
             "required": false,
-            "description": "Controls at the bar's end that show only while the pills fit, such as a\ntheme toggle. Once the bar folds to its menu button they leave it; put\ntheir drawer twin in `drawerFooter`."
+            "description": "Controls at the bar's end that show only while the pills fit, such as a\nGet started button. Once the bar folds to its menu button they leave it; put\ntheir drawer twin in `drawerFooter`."
           },
           {
             "name": "drawerFooter",
@@ -13851,6 +13857,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name.",
             "defaultValue": "true"
+          },
+          {
+            "name": "cycle",
+            "type": "boolean",
+            "required": false,
+            "description": "Draw one circle that shows the current setting and steps to the next on\neach press (System, Light, Dark), in place of the strip, for a row short\nof room, such as a condensed SiteHeader's `condensedActions`. Each label\nbecomes the circle's tooltip and its accessible name comes from `cycleLabel`.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "cycleLabel",
+            "type": "((current: string, next: string) => string)",
+            "required": false,
+            "description": "The cycle circle's accessible name, from the current setting's label and the next one's. Default: the control's `aria-label`, then both, as in \"Colour mode: Light. Switch to Dark\".",
+            "defaultValue": "(current: string, next: string) => `${ariaLabel}: ${current}. Switch to ${next}`"
           },
           {
             "name": "storageKey",

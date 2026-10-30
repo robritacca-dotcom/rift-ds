@@ -17,8 +17,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same dat
 | brand | `ReactNode` | no |  | The brand at the bar's start, usually a logo linking home. Rendered as given, so it carries its own link. |
 | sections | `SiteHeaderSection[]` | yes |  | The site's top-level sections, in order. |
 | currentHref | `string` | no |  | The path of the page being viewed, used to mark the current section, row and drawer item. |
-| actions | `ReactNode` | no |  | Controls at the bar's end that stay at every width, such as a search button. |
-| wideActions | `ReactNode` | no |  | Controls at the bar's end that show only while the pills fit, such as a theme toggle. Once the bar folds to its menu button they leave it; put their drawer twin in `drawerFooter`. |
+| actions | `ReactNode` | no |  | Controls at the bar's end that stay at every width, such as a search button; `condensedActions`, when given, stand in for them on the condensed step. |
+| condensedActions | `ReactNode` | no |  | The same controls drawn narrower, such as an icon-only CommandPaletteTrigger and a `cycle` ThemeToggle. When the full row stops fitting, these take the place of `actions` (the header adds `ds-site-header--condensed`), and the pills fold to the menu button only when the condensed row does not fit either. Without it the header folds as soon as the full row stops fitting. |
+| wideActions | `ReactNode` | no |  | Controls at the bar's end that show only while the pills fit, such as a Get started button. Once the bar folds to its menu button they leave it; put their drawer twin in `drawerFooter`. |
 | drawerFooter | `ReactNode` | no |  | Content for the drawer's footer, such as the controls `wideActions` holds in the bar. |
 | drawerOpen | `boolean` | no |  | Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. |
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer starts open, when the header owns its state. |

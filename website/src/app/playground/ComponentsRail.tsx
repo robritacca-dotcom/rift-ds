@@ -7,8 +7,8 @@ import { FloatingRail } from "./FloatingRail";
 import layout from "./page.module.css";
 
 /* ============================================
-   The components rail: the Components view's own panel. Which sections
-   the showcase shows, and what they sit on. Viewing choices only: none of
+   The components rail: the Components view's own panel. The collage or the
+   full list, and in the list which sections show and what they sit on. Viewing choices only: none of
    it reaches the theme or the export.
    ============================================ */
 
@@ -38,9 +38,14 @@ export const sectionAnchor = (id: string) => `components-${id}`;
     since a theme can read well on one and badly on the other. */
 export type ComponentsSurface = "page" | "card";
 
+/** How the view lays the library out: one packed mosaic, or every section
+    in full down a column. */
+export type ComponentsLayout = "collage" | "list";
+
 export interface ComponentsRailState {
   hidden: ReadonlySet<string>;
   surface: ComponentsSurface;
+  layout: ComponentsLayout;
 }
 
 export default function ComponentsRail({
@@ -72,29 +77,45 @@ export default function ComponentsRail({
 
   const content = (
     <>
-      <InspectorSection title="Surface" defaultOpen>
+      <InspectorSection title="Layout" defaultOpen>
         <InspectorSegmentedControl
           size="compact"
-          label="Sit on"
-          value={state.surface}
+          label="Show as"
+          value={state.layout}
           options={[
-            { value: "page", label: "Page" },
-            { value: "card", label: "Card" },
+            { value: "collage", label: "Collage" },
+            { value: "list", label: "Full list" },
           ]}
-          onValueChange={(surface) => onChange({ ...state, surface: surface as ComponentsSurface })}
+          onValueChange={(layout) => onChange({ ...state, layout: layout as ComponentsLayout })}
         />
       </InspectorSection>
-      <InspectorSection title="Show" defaultOpen>
-        {COMPONENT_SECTIONS.map((section) => (
-          <InspectorToggleSwitch
-            size="compact"
-            key={section.id}
-            label={section.label}
-            checked={!state.hidden.has(section.id)}
-            onCheckedChange={(shown) => toggle(section.id, shown)}
-          />
-        ))}
-      </InspectorSection>
+      {state.layout === "list" && (
+        <>
+          <InspectorSection title="Surface" defaultOpen>
+            <InspectorSegmentedControl
+              size="compact"
+              label="Sit on"
+              value={state.surface}
+              options={[
+                { value: "page", label: "Page" },
+                { value: "card", label: "Card" },
+              ]}
+              onValueChange={(surface) => onChange({ ...state, surface: surface as ComponentsSurface })}
+            />
+          </InspectorSection>
+          <InspectorSection title="Show" defaultOpen>
+            {COMPONENT_SECTIONS.map((section) => (
+              <InspectorToggleSwitch
+                size="compact"
+                key={section.id}
+                label={section.label}
+                checked={!state.hidden.has(section.id)}
+                onCheckedChange={(shown) => toggle(section.id, shown)}
+              />
+            ))}
+          </InspectorSection>
+        </>
+      )}
     </>
   );
 
@@ -109,9 +130,9 @@ export default function ComponentsRail({
       title="Components"
       collapsed={collapsed}
       onCollapsedChange={onCollapsedChange ?? (() => {})}
-      onReset={() => onChange({ hidden: new Set(), surface: "page" })}
+      onReset={() => onChange({ hidden: new Set(), surface: "page", layout: "collage" })}
       resetLabel="Show every section"
-      resetDisabled={state.hidden.size === 0 && state.surface === "page"}
+      resetDisabled={state.hidden.size === 0 && state.surface === "page" && state.layout === "collage"}
     >
       {content}
     </FloatingRail>

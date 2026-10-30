@@ -30,7 +30,7 @@ const SPARK_SERIES = [
   { label: "Latency", data: [3, 4, 3, 5, 6, 5, 7, 8, 9], tone: "error" as const },
 ];
 
-const TREEMAP_DATA = [
+export const TREEMAP_DATA = [
   { name: "Forms", size: 21 },
   { name: "AI", size: 26 },
   { name: "Data display", size: 18 },
@@ -41,7 +41,7 @@ const TREEMAP_DATA = [
 
 /** A year of contribution days ending on a fixed date. Deterministic, so
     the server render and the client hydration agree. */
-const CONTRIBUTION_DAYS: ContributionDay[] = (() => {
+export const CONTRIBUTION_DAYS: ContributionDay[] = (() => {
   const end = Date.UTC(2026, 8, 30);
   const days: ContributionDay[] = [];
   for (let i = 364; i >= 0; i--) {
@@ -53,7 +53,7 @@ const CONTRIBUTION_DAYS: ContributionDay[] = (() => {
   }
   return days;
 })();
-const CONTRIBUTION_TOTAL = CONTRIBUTION_DAYS.reduce((sum, d) => sum + d.count, 0);
+export const CONTRIBUTION_TOTAL =CONTRIBUTION_DAYS.reduce((sum, d) => sum + d.count, 0);
 
 const CHART_DATA = [
   { label: "Mon", value: 320 },
@@ -74,7 +74,7 @@ const TREND_DATA = [
   { month: "Jun", sessions: 520, signups: 260 },
 ];
 
-const USAGE_DATA = [
+export const USAGE_DATA = [
   { week: "W1", docs: 140, api: 90 },
   { week: "W2", docs: 210, api: 130 },
   { week: "W3", docs: 180, api: 170 },
@@ -83,7 +83,7 @@ const USAGE_DATA = [
   { week: "W6", docs: 300, api: 310 },
 ];
 
-const CHANNEL_DATA = [
+export const CHANNEL_DATA = [
   { quarter: "Q1", organic: 220, referral: 140, direct: 90 },
   { quarter: "Q2", organic: 280, referral: 160, direct: 120 },
   { quarter: "Q3", organic: 340, referral: 150, direct: 170 },
@@ -94,7 +94,7 @@ const CHANNEL_DATA = [
     lighter companion shades the multi-series charts need. Local to the
     section: these are demo series colours derived from the lever, not
     theme tokens. */
-function shade(hex: string, w: number): string {
+export function shade(hex: string, w: number): string {
   const h = hex.replace("#", "");
   const channels = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
   const pole = w > 0 ? 255 : 0;
@@ -114,7 +114,7 @@ function shade(hex: string, w: number): string {
 /* A theme rollout on a timeline: bars in the accent roles, progress fills,
    a dashed projected phase and milestones. The today rule is pinned so the
    built page and the hydrating client agree on where it sits. */
-const ROLLOUT_ITEMS: GanttChartItem[] = [
+export const ROLLOUT_ITEMS: GanttChartItem[] = [
   { id: "audit", label: "Token audit", start: "2026-08-03", end: "2026-08-28", color: "cobalt", progress: 100, group: "Foundations" },
   { id: "palette", label: "New palette", start: "2026-08-24", end: "2026-09-25", color: "violet", progress: 100, group: "Foundations" },
   { id: "type", label: "Type scale", start: "2026-09-14", end: "2026-10-23", color: "mint", progress: 70, group: "Foundations" },
@@ -123,7 +123,7 @@ const ROLLOUT_ITEMS: GanttChartItem[] = [
   { id: "app", label: "App migration", start: "2026-11-23", end: "2027-01-29", color: "gold", projected: true, group: "Rollout", detail: "Target: end of January" },
 ];
 
-const ROLLOUT_MILESTONES: GanttChartMilestone[] = [
+export const ROLLOUT_MILESTONES: GanttChartMilestone[] = [
   { id: "freeze", label: "Token freeze", date: "2026-09-28", color: "violet", group: "Foundations" },
   { id: "launch", label: "Public launch", date: "2027-01-11", color: "coral", group: "Rollout" },
 ];

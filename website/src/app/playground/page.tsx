@@ -1,12 +1,13 @@
 "use client";
 
 /**
- * The playground: the immersive re-theming tool. Four views (Components,
- * Type, Chat, Templates) over one set of levers, chromeless, its rails
- * built from the library's Inspector family. The theme rail sits on the
+ * The playground: the immersive re-theming tool. Five views (DESIGN.md,
+ * Components, Type, Chat, Templates) over one set of levers, chromeless, its
+ * rails built from the library's Inspector family. The theme rail sits on the
  * left and every view seats a panel of its own on the right, so each stage
- * centres under the toolbar's view switch: the Components view's section
- * switches and surface, the Type view's specimen text and tier switches
+ * centres under the toolbar's view switch: the DESIGN.md view's specimen
+ * switches, the Components view's layout, section switches and surface, the
+ * Type view's specimen text and tier switches
  * (viewing choices that never reach the theme or its export), the chat
  * director (views/ChatView.tsx, ChatDirector.tsx) and the templates rail
  * (views/TemplatesView.tsx, TemplatesRail.tsx).
@@ -97,6 +98,9 @@ import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
 import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette";
 import { DesignMdCard } from "./DesignMdCard";
 import { ThemeSourceInvite } from "./ThemeSourceInvite";
+import DesignRail from "./DesignRail";
+import { DesignView } from "./views/DesignView";
+import { CollageView } from "./views/CollageView";
 import {
   DESIGN_MD_MAX_BYTES,
   isDesignMdFile,
@@ -163,10 +167,11 @@ import ChartsSection from "./sections/ChartsSection";
 import OverlaysSection from "./sections/OverlaysSection";
 import FeedbackSection from "./sections/FeedbackSection";
 
-/* The tool's four lenses on the same theme state. One page, one set of
-   levers — switching views never resets what you've styled. */
-type View = "components" | "type" | "chat" | "templates";
+/* The tool's lenses on the same theme state. One page, one set of levers —
+   switching views never resets what you've styled. */
+type View = "design" | "components" | "type" | "chat" | "templates";
 const VIEWS = [
+  { value: "design", label: "DESIGN.md" },
   { value: "components", label: "Components" },
   { value: "type", label: "Typography" },
   { value: "chat", label: "AI Chat" },
@@ -267,14 +272,14 @@ export default function PlaygroundPage() {
      so a specific view can be linked. Read once on mount rather than via
      useSearchParams, which would force a Suspense boundary on a fully
      client-rendered page. */
-  const [view, setView] = useState<View>("components");
+  const [view, setView] = useState<View>("design");
   useEffect(() => {
     // The setState here is intentional — a once-on-mount sync from the
     // URL, which the server prerender can't see (same pattern as
     // MegaNav's navigation effect).
     const q = new URLSearchParams(window.location.search).get("view");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (q === "chat" || q === "type" || q === "templates") setView(q);
+    if (q === "components" || q === "chat" || q === "type" || q === "templates") setView(q);
     /* The Templates view was the Dashboard view, and links to it remain. */
     else if (q === "dashboard") setView("templates");
   }, []);
@@ -286,7 +291,7 @@ export default function PlaygroundPage() {
     if (value !== view) setEnterAlt((alt) => !alt);
     setView(value as View);
     const url = new URL(window.location.href);
-    if (value === "components") url.searchParams.delete("view");
+    if (value === "design") url.searchParams.delete("view");
     else url.searchParams.set("view", value);
     window.history.replaceState(null, "", url);
   };
@@ -383,7 +388,9 @@ export default function PlaygroundPage() {
   const [componentsView, setComponentsView] = useState<ComponentsRailState>({
     hidden: new Set(),
     surface: "page",
+    layout: "collage",
   });
+  const [designHidden, setDesignHidden] = useState<ReadonlySet<string>>(new Set());
   const [typeView, setTypeView] = useState<TypeRailState>({
     sample: DEFAULT_TYPE_SAMPLE.value,
     heading: DEFAULT_TYPE_SAMPLE.heading,
@@ -391,7 +398,7 @@ export default function PlaygroundPage() {
     hiddenTiers: new Set(),
   });
 
-  /* The staged shader banner's levers (Components view). They tune the
+  /* The staged shader banner's levers (DESIGN.md view). They tune the
      banner only, never the site background, and no theme preset owns them,
      so picking a preset leaves them where they are; their own reset puts
      them back on the site's config. */
@@ -623,9 +630,9 @@ export default function PlaygroundPage() {
     setTintStrength(source.theme.tintStrength);
     setAccents(source.theme.accents);
 
-    /* The banner heads the components stage, so a drop from the Type or Chat
-       view lands somewhere it can be seen. */
-    pickView("components");
+    /* The source card heads the DESIGN.md view, so a drop from any other view
+       lands somewhere it can be seen. */
+    pickView("design");
   };
 
   /** A matched face's picker entry, loaded and selectable. A face outside
@@ -707,7 +714,7 @@ export default function PlaygroundPage() {
     /* The Product name stays as the visitor left it: a file is the look to
        be inspired by, not the product being built, so its brand never
        becomes the app's name. Typing it in is the visitor's call. */
-    pickView("components");
+    pickView("design");
   };
 
   /** The one entry point for a dropped or chosen file: a DESIGN.md (.md,
@@ -1201,9 +1208,9 @@ export default function PlaygroundPage() {
     </InspectorSection>
   );
 
-  /* The Components view's shader levers, slotted under the shared ones
+  /* The DESIGN.md view's shader levers, slotted under the shared ones
      because the banner is the only thing on any stage they move. */
-  const shaderLevers = view === "components" && (
+  const shaderLevers = view === "design" && (
     <InspectorSection title="Shader banner">
       {SHADER_PARAM_CONTROLS.map((c) => (
         <InspectorSlider
@@ -1328,14 +1335,17 @@ export default function PlaygroundPage() {
                   /* And the type rail's specimen and tiers. */
                   <TypeRail variant="drawer" state={typeView} onChange={setTypeView} />
                 ) : view === "components" && compact ? (
-                  /* And the components rail's, after the shader's levers. */
+                  /* And the components rail's. */
+                  <ComponentsRail
+                    variant="drawer"
+                    state={componentsView}
+                    onChange={setComponentsView}
+                  />
+                ) : view === "design" && compact ? (
+                  /* And the specimen's, after the shader's levers. */
                   <>
                     {shaderLevers}
-                    <ComponentsRail
-                      variant="drawer"
-                      state={componentsView}
-                      onChange={setComponentsView}
-                    />
+                    <DesignRail variant="drawer" hidden={designHidden} onChange={setDesignHidden} />
                   </>
                 ) : (
                   shaderLevers || undefined
@@ -1380,7 +1390,7 @@ export default function PlaygroundPage() {
     <>
       {/* The stage ground is the dotted working canvas, not the ambient
           field — the shader stands down here (and is staged as a banner in
-          the components view instead). */}
+          the DESIGN.md view instead). */}
       <HiddenBackground />
       <DotBackground dots={showDots} />
       {/* The stage has no visible title; this names the page for screen
@@ -1450,6 +1460,7 @@ export default function PlaygroundPage() {
       <div
         className={[
           styles.dsLayout,
+          view === "design" || view === "components" || view === "type" ? styles.dsLayoutDocument : "",
           view === "chat" && !compact ? styles.dsLayoutChat : "",
           view === "templates" ? styles.dsLayoutTemplates : "",
         ]
@@ -1591,6 +1602,9 @@ export default function PlaygroundPage() {
                Desktop/Mobile means. */
             stageMobile ? styles.dsContentMobile : "",
             view === "templates" ? styles.dsContentTemplates : "",
+            view === "components" && componentsView.layout === "collage" && !stageMobile
+              ? styles.dsContentCollage
+              : "",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -1601,12 +1615,12 @@ export default function PlaygroundPage() {
           {/* The phone rules the narrowed column can't trigger, derived
               from the loaded stylesheets and scoped to the stage. */}
           {stageCss && <style>{stageCss}</style>}
-          {view === "components" && (
-            <>
-              {/* No animate-in on the sections: the class creates a
-                  stacking context per section, which would let later
-                  sections paint over an open Dropdown/Popover in an
-                  earlier one. */}
+          {view === "design" && (
+            <DesignView
+              overrides={overrides}
+              hidden={designHidden}
+              narrow={compact || stageMobile}
+            >
               {/* The ambient shader, demoted from stage backdrop to staged
                   component: the stage's opening banner, on the site's own field
                   config, re-theming live with the levers like everything
@@ -1651,21 +1665,25 @@ export default function PlaygroundPage() {
                   />
                 )}
               </div>
-              {/* The sections with no buttons come first, so the source
-                  card's own buttons (Reset, Upload new, Export theme) are
-                  the only ones in view as the stage opens and nothing
-                  near them competes for the click. The white-label header
-                  and the action showcase follow. */}
-              {/* In the components rail's order, less the sections it has
-                  switched off. Each sits in a wrapper the rail can scroll
-                  to. */}
-              {COMPONENT_SECTIONS.filter(({ id }) => !componentsView.hidden.has(id)).map(({ id }) => (
-                <div key={id} id={sectionAnchor(id)} className={styles.sectionAnchor}>
-                  {componentSection(id)}
-                </div>
-              ))}
-            </>
+            </DesignView>
           )}
+
+          {view === "components" && componentsView.layout === "collage" && (
+            <CollageView brand={effectiveBrand} narrow={compact || stageMobile} />
+          )}
+
+          {/* In the components rail's order, less the sections it has
+              switched off. No animate-in on the sections: the class creates
+              a stacking context per section, which would let later sections
+              paint over an open Dropdown/Popover in an earlier one. Each
+              sits in a wrapper the rail can scroll to. */}
+          {view === "components" &&
+            componentsView.layout === "list" &&
+            COMPONENT_SECTIONS.filter(({ id }) => !componentsView.hidden.has(id)).map(({ id }) => (
+              <div key={id} id={sectionAnchor(id)} className={styles.sectionAnchor}>
+                {componentSection(id)}
+              </div>
+            ))}
 
           {/* The Type view: the full ramp as a live specimen sheet, with
               the heading and body family roles resolved per step. The
@@ -1747,6 +1765,16 @@ export default function PlaygroundPage() {
             variant="panel"
             state={typeView}
             onChange={setTypeView}
+            collapsed={rightRailCollapsed}
+            onCollapsedChange={setRightRailCollapsed}
+          />
+        )}
+
+        {view === "design" && !compact && (
+          <DesignRail
+            variant="panel"
+            hidden={designHidden}
+            onChange={setDesignHidden}
             collapsed={rightRailCollapsed}
             onCollapsedChange={setRightRailCollapsed}
           />

@@ -4,7 +4,7 @@ import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import styles from "./MockNav.module.css";
 
 /**
- * A white-label site header at the top of the Components view — brand mark
+ * A white-label site header in the Components view's full list — brand mark
  * and name on the left, a link row with one active trigger, the real theme
  * toggle on the right — so a theme change reads the way it does on a full
  * page: navigation first. The links are decorative; the toggle is live and

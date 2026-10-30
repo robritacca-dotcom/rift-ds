@@ -1,0 +1,110 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.swatches,
+.swatchesNarrow {
+  display: grid;
+  gap: var(--gap-300);
+}
+
+.swatches {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.swatchesNarrow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.swatchFill {
+  height: 88px;
+  margin-bottom: var(--gap-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+}
+
+.swatchLabel {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+.swatchValue {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ladder {
+  display: flex;
+  flex-direction: column;
+}
+
+.row,
+.rowNarrow {
+  display: grid;
+  gap: var(--gap-500);
+  align-items: baseline;
+  padding: var(--padding-400) 0;
+  border-top: var(--border-025) solid var(--color-divider);
+}
+
+.row {
+  grid-template-columns: 120px minmax(0, 1fr);
+}
+
+.rowNarrow {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-100);
+}
+
+/* The section title already draws the line above the first row. */
+.row:first-child,
+.rowNarrow:first-child {
+  border-top: none;
+}
+
+.rowName {
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+}
+
+.sample {
+  overflow-wrap: anywhere;
+}
+
+.radii {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-500);
+}
+
+.radius {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.radiusShape {
+  width: 72px;
+  height: 72px;
+  background: var(--color-bg-container-secondary);
+  border-top: var(--border-050) solid var(--color-text-primary);
+  border-left: var(--border-050) solid var(--color-text-primary);
+}

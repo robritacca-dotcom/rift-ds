@@ -37,7 +37,7 @@ const EXAMPLES = [
 ] as const;
 
 /**
- * The dropzone that opens the Components view while no theme source is
+ * The dropzone that opens the DESIGN.md view while no theme source is
  * loaded: drag a picture or a DESIGN.md onto it, or use the upload button
  * under the heading. Either route lands where a drop anywhere on the tool
  * does (the window listener in ImageThemeDrop stands down for a drop this

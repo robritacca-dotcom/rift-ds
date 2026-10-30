@@ -13,7 +13,7 @@ import { Table, type TableColumn, type TableRow } from "rift-ds/components/Table
 /* The working table: typed columns so every cell kind the table draws
    (status, person, currency, progress, date, tags) sits under
    one theme at once, with a toolbar, selectable rows and a pager. */
-const ACCOUNT_COLUMNS: DataTableColumn[] = [
+export const ACCOUNT_COLUMNS: DataTableColumn[] = [
   { key: "account", header: "Account", type: "text", rowHeader: true, sortable: true },
   {
     key: "stage",
@@ -34,7 +34,7 @@ const ACCOUNT_COLUMNS: DataTableColumn[] = [
   { key: "tags", header: "Tags", type: "tags" },
 ];
 
-const ACCOUNT_ROWS: DataTableRow[] = [
+export const ACCOUNT_ROWS: DataTableRow[] = [
   { id: "a1", values: { account: "Northwind", stage: "won", owner: "Priya Shah", value: 48000, onboarded: 80, renews: "2026-11-04", tags: ["enterprise", "renewal"] } },
   { id: "a2", values: { account: "Fabrikam", stage: "trial", owner: "Avery Chen", value: 12500, onboarded: 35, renews: "2027-01-18", tags: ["self-serve"] } },
   { id: "a3", values: { account: "Contoso", stage: "at-risk", owner: "Jonas Berg", value: 31200, onboarded: 60, renews: "2026-12-02", tags: ["enterprise", "support"] } },
@@ -46,13 +46,13 @@ const ACCOUNT_ROWS: DataTableRow[] = [
 
 /* The reading table: the bordered style a doc page uses, with the
    tokens it carries and what each one re-themes. */
-const TOKEN_COLUMNS: TableColumn[] = [
+export const TOKEN_COLUMNS: TableColumn[] = [
   { key: "lever", header: "Lever", rowHeader: true },
   { key: "token", header: "Token" },
   { key: "reaches", header: "Reaches" },
 ];
 
-const TOKEN_ROWS: TableRow[] = [
+export const TOKEN_ROWS: TableRow[] = [
   { id: "t1", cells: { lever: "Action colour", token: <code>--color-action-primary-bg</code>, reaches: "Checkboxes and the current page" } },
   { id: "t2", cells: { lever: "Neutral tint", token: <code>--color-table-header-bg</code>, reaches: "Header fill, selected rows and row lines" } },
   { id: "t3", cells: { lever: "Corner radius", token: <code>--radius-600</code>, reaches: "The bordered container" } },

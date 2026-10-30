@@ -1,0 +1,109 @@
+.collage,
+.collageNarrow {
+  display: grid;
+  gap: var(--gap-300);
+}
+
+.collage {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.collageNarrow {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.collage .span3 {
+  grid-column: span 3;
+}
+
+.collage .span4 {
+  grid-column: span 4;
+}
+
+.collage .span5 {
+  grid-column: span 5;
+}
+
+.collage .span8 {
+  grid-column: span 8;
+}
+
+.collage .span12 {
+  grid-column: span 12;
+}
+
+.span3,
+.span4,
+.span5,
+.span8,
+.span12 {
+  min-width: 0;
+}
+
+/* A chart's card sizes to its plot; stretched here, a row's cards end level. */
+.chart > * {
+  height: 100%;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding: var(--padding-500);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
+}
+
+.tileTitle {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.grow {
+  flex: 1;
+}
+
+.trends {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.trendLabel {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}
+
+.trendValue {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-200);
+}

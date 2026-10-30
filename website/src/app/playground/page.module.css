@@ -61,6 +61,12 @@
   padding-bottom: var(--layout-stage-bottom-clearance);
 }
 
+/* The views that scroll as a document end above the bar's fade too, which
+   stands twice the clearance tall, so their last row is never dimmed. */
+.dsLayoutDocument {
+  padding-bottom: calc(var(--layout-stage-bottom-clearance) * 2);
+}
+
 .dsLayout[data-left-rail="collapsed"] {
   --rail-left: calc(var(--rail-collapsed) + var(--rail-inset));
 }
@@ -139,6 +145,12 @@
    stage presets — set dressing, not a layout token. */
 .dsContentMobile {
   max-width: 420px;
+}
+
+/* The collage packs the library into the width between the rails, so more
+   of it reads before the first scroll. */
+.dsContentCollage {
+  max-width: 1400px;
 }
 
 /* The template window runs the full width between the rails — a desktop

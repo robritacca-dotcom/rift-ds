@@ -42,6 +42,13 @@ export default function PrivacyPage() {
             an address. Everything is deleted after
             30 days. Do not type anything private into it.
           </p>
+          <p className={styles.body}>
+            The table command on the labs bench works the same way, with less
+            kept: what you type and the table&apos;s current setup go to
+            Anthropic, whose model picks the new setup. Its rate limit and
+            budget share the chat&apos;s, and the commands themselves are not
+            stored.
+          </p>
         </div>
 
         <div className={`${styles.section} animate-in animate-delay-3`}>

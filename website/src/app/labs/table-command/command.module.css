@@ -1,0 +1,17 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  width: 100%;
+  gap: var(--gap-200);
+  padding: var(--gap-400);
+  min-height: 100dvh;
+  background-color: var(--color-bg-page-primary);
+}
+
+.trace {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-caption-size);
+}

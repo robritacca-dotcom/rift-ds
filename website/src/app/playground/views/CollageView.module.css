@@ -1,35 +1,61 @@
-.collage,
-.collageNarrow {
-  display: grid;
-  gap: var(--gap-300);
+/* The grid answers to its own width, not the viewport's: the rails, a folded
+   rail and the Mobile stage all change the room it has with the screen
+   unchanged. One column, then two, then the full mosaic, each step taken
+   before its narrowest tile would start to squeeze. */
+.root {
+  container-type: inline-size;
 }
 
 .collage {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
-.collageNarrow {
+  display: grid;
   grid-template-columns: minmax(0, 1fr);
+  /* A wide tile can leave a hole at two columns; a later small one fills it. */
+  grid-auto-flow: dense;
+  gap: var(--gap-300);
 }
 
-.collage .span3 {
-  grid-column: span 3;
+@container (min-width: 640px) {
+  .collage {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .span3,
+  .span4 {
+    grid-column: span 3;
+  }
+
+  .span5,
+  .span8,
+  .span12 {
+    grid-column: span 6;
+  }
 }
 
-.collage .span4 {
-  grid-column: span 4;
-}
+@container (min-width: 1150px) {
+  .collage {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-flow: row;
+  }
 
-.collage .span5 {
-  grid-column: span 5;
-}
+  .span3 {
+    grid-column: span 3;
+  }
 
-.collage .span8 {
-  grid-column: span 8;
-}
+  .span4 {
+    grid-column: span 4;
+  }
 
-.collage .span12 {
-  grid-column: span 12;
+  .span5 {
+    grid-column: span 5;
+  }
+
+  .span8 {
+    grid-column: span 8;
+  }
+
+  .span12 {
+    grid-column: span 12;
+  }
 }
 
 .span3,

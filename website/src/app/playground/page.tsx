@@ -1669,7 +1669,7 @@ export default function PlaygroundPage() {
           )}
 
           {view === "components" && componentsView.layout === "collage" && (
-            <CollageView brand={effectiveBrand} narrow={compact || stageMobile} />
+            <CollageView brand={effectiveBrand} />
           )}
 
           {/* In the components rail's order, less the sections it has

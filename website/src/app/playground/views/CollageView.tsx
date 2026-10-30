@@ -126,7 +126,7 @@ const ROWS: TableRow[] = [
   { id: "c", cells: { account: "Contoso", stage: <Badge label="At risk" variant="warning" />, value: "$31,200" } },
 ];
 
-export function CollageView({ brand, narrow }: { brand: string; narrow: boolean }) {
+export function CollageView({ brand }: { brand: string }) {
   const [role, setRole] = useState("designer");
   const [range, setRange] = useState("week");
   const [page, setPage] = useState(2);
@@ -135,7 +135,8 @@ export function CollageView({ brand, narrow }: { brand: string; narrow: boolean 
   const shades = [brand, shade(brand, 0.35), shade(brand, 0.63)];
 
   return (
-    <div className={narrow ? styles.collageNarrow : styles.collage}>
+    <div className={styles.root}>
+    <div className={styles.collage}>
       <div className={`${styles.stack} ${styles.span5}`}>
         <BarChart data={WEEK} title="Weekly views" dataLabel="Views" barColor={brand} height={220} />
         {/* Takes whatever the row has left, so the column ends level with
@@ -414,6 +415,7 @@ export function CollageView({ brand, narrow }: { brand: string; narrow: boolean 
         </Banner>
       </div>
 
+    </div>
     </div>
   );
 }

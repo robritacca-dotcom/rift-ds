@@ -19,6 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same dat
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Toast variant |
 | dismissible | `boolean` | no | `true` | Whether the toast can be manually dismissed. The dismiss button renders only when `onDismiss` is also given |
 | icon | `ReactNode` | no |  | Custom icon override — Material Symbol name (string) or custom element (ReactNode) |
+| action | `ReactNode` | no |  | A control under the text, such as an Undo. |
 | onDismiss | `(() => void)` | no |  | Fires when the dismiss button is pressed. The button renders only when this is given (and `dismissible` is not false); the host owns removing the toast |
 | dismissLabel | `string` | no | `Dismiss notification` | Accessible name of the dismiss button |
 | className | `string` | no | `` | Additional CSS classes |

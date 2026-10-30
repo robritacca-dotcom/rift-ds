@@ -141,6 +141,7 @@ export * from './components/StreamingText/StreamingText';
 export * from './components/Swatch/Swatch';
 export * from './components/Table/Table';
 export * from './components/TableToolbar/TableToolbar';
+export * from './components/TableToolbar/ToolbarCommand';
 export * from './components/Tabs/Tabs';
 export * from './components/TagInput/TagInput';
 export * from './components/Textarea/Textarea';

@@ -4719,6 +4719,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Fires when the stop button is pressed while `streaming`."
           },
           {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "`compact` is the mini composer: one row, with the send button on the text's line, for a popover or a tight bar. Pair it with `maxRows={1}`.",
+            "defaultValue": "default"
+          },
+          {
             "name": "maxRows",
             "type": "number",
             "required": false,
@@ -10295,6 +10302,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "bottom"
           },
           {
+            "name": "align",
+            "type": "\"start\" | \"end\"",
+            "required": false,
+            "description": "Which edge of the trigger the panel lines up with, on the top and bottom sides. `start` and `end` follow the reading direction. Defaults to `start`.",
+            "defaultValue": "start"
+          },
+          {
             "name": "trigger",
             "type": "\"hover\" | \"click\"",
             "required": false,
@@ -13419,6 +13433,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Any other controls at the bar's end, after the actions."
           },
           {
+            "name": "command",
+            "type": "TableToolbarCommand",
+            "required": false,
+            "description": "The AI command: a button in the bar that opens a one-off composer, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nThe library calls no model; your handler does. Shows only inside a DataTable."
+          },
+          {
             "name": "labels",
             "type": "Partial<TableToolbarLabels>",
             "required": false,
@@ -14500,6 +14520,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A control under the text, such as an Undo."
           },
           {
             "name": "onDismiss",

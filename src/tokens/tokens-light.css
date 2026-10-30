@@ -400,7 +400,7 @@
      a modal sits level with the app rail it covers by DOM order. */
   --layer-dropdown: 10;        /* menus and panels anchored to a control */
   --layer-sticky: 10;          /* bars pinned to an edge while the page scrolls */
-  --layer-floating: 50;        /* tooltips, hover cards, context menus */
+  --layer-floating: 50;        /* hover cards, context menus; tooltips without the top layer */
   --layer-nav: 80;             /* fixed mobile navigation and its trigger */
   --layer-nav-scrim: 90;       /* the scrim behind the mobile nav drawer */
   --layer-nav-rail: 100;       /* the app rail and its open mobile drawer */

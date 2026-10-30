@@ -57,9 +57,51 @@
   letter-spacing: var(--font-title-body-letter-spacing);
 }
 
+/* The still wears the theme as a duotone: drained to greys, then its lights
+   and darks are clamped between the page colour and the action colour, one
+   blend layer each. The floor and the ceiling swap with the mode, because the
+   page is the dark end of a dark theme and the light end of a light one. Two
+   tokens and no script, so it follows the levers at no cost. */
+.still {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.still::before,
+.still::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Over the filtered image, which is a stacking context of its own and would
+   otherwise paint over the first layer. */
+.still::before {
+  z-index: 1;
+  mix-blend-mode: lighten;
+}
+
+.still::after {
+  z-index: 2;
+  mix-blend-mode: darken;
+}
+
+.still[data-mode="dark"]::before,
+.still[data-mode="light"]::after {
+  background: var(--color-bg-page-primary);
+}
+
+.still[data-mode="dark"]::after,
+.still[data-mode="light"]::before {
+  background: var(--color-action-primary-bg);
+}
+
 /* The still fills the card's inset media slot at the shot's own shape. */
 .image {
   display: block;
   width: 100%;
   height: auto;
+  filter: grayscale(1);
 }

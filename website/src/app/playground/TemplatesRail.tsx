@@ -17,8 +17,9 @@ import layout from "./page.module.css";
    its charts and data), so a rail of them would run every template at once
    to show a strip of thumbnails. A still costs one small image, lazy-loaded
    and resized by next/image, and only the picked template runs, in the
-   stage's one frame, where the levers reach it. The cost is that the
-   stills show the served theme in the current mode, not the levers' look.
+   stage's one frame, where the levers reach it. A duotone in the stylesheet
+   carries the levers' page and action colours onto the stills; their shapes
+   and faces stay the served theme's.
    scripts/capture-template-thumbnails.mjs shoots them, and
    validate-template-thumbnails.mjs holds the folder to this list.
    ============================================ */
@@ -76,14 +77,16 @@ export default function TemplatesRail({
                 <MessageCard
                   className={styles.card}
                   media={
-                    <Image
-                      src={thumbnail(template.href, mode)}
-                      alt=""
-                      width={720}
-                      height={450}
-                      sizes="244px"
-                      className={styles.image}
-                    />
+                    <span className={styles.still} data-mode={mode === "light" ? "light" : "dark"}>
+                      <Image
+                        src={thumbnail(template.href, mode)}
+                        alt=""
+                        width={720}
+                        height={450}
+                        sizes="244px"
+                        className={styles.image}
+                      />
+                    </span>
                   }
                   title={template.label}
                   meta={template.description}

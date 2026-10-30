@@ -51,6 +51,8 @@ type ComposerOwnProps = {
   streaming?: boolean;
   /** Fires when the stop button is pressed while `streaming`. */
   onStop?: () => void;
+  /** `compact` is the mini composer: one row, with the send button on the text's line, for a popover or a tight bar. Pair it with `maxRows={1}`. */
+  size?: 'default' | 'compact';
   /** Growth cap in text rows before the textarea scrolls internally. */
   maxRows?: number;
   /**
@@ -244,6 +246,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       onSubmit,
       streaming = false,
       onStop,
+      size = 'default',
       maxRows = 8,
       aiGlow = false,
       context,
@@ -668,6 +671,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     const classes = [
       baseClass,
       aiGlow ? `${baseClass}--ai-glow` : '',
+      size === 'compact' ? `${baseClass}--compact` : '',
       streaming ? `${baseClass}--streaming` : '',
       disabled ? `${baseClass}--disabled` : '',
       dragging ? `${baseClass}--dragging` : '',

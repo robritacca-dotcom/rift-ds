@@ -34,6 +34,8 @@ import type {
   DataTableView,
 } from '../DataTable/DataTable';
 import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
+import type { TableView } from '../DataTable/views';
+import { useToolbarCommand } from './ToolbarCommand';
 import { BREAKPOINT_PHONE_PX, mediaBelow } from '../../tokens/breakpoints';
 import './TableToolbar.css';
 import { mirrorClass } from '../../behaviors/direction';
@@ -195,6 +197,18 @@ export interface TableToolbarLabels {
   selected: (count: number) => string;
   /** The bulk bar's count once every matching row is selected, given how many. */
   allSelected: (count: number) => string;
+  /** The command button's label. */
+  command: string;
+  /** The command composer's placeholder. */
+  commandPlaceholder: string;
+  /** The command composer's send button. */
+  commandSend: string;
+  /** Shown when a command fails without a message of its own. */
+  commandFailed: string;
+  /** Puts the table back as it was before the last command. */
+  commandUndo: string;
+  /** Closes a command's toast. */
+  commandDismiss: string;
   /** The bulk bar's menu of the actions that do not fit. */
   moreBulkActions: string;
   /** The bulk bar's button that selects every matching row, given how many match. */
@@ -253,6 +267,12 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   movedSort: (column, rank, count) => `${column}, sort ${rank} of ${count}`,
   selected: (count) => `${count} selected`,
   allSelected: (count) => `All ${count} selected`,
+  command: 'Ask AI',
+  commandPlaceholder: 'Tell the table what to show',
+  commandSend: 'Apply',
+  commandFailed: 'That did not work. The table has not changed.',
+  commandUndo: 'Undo',
+  commandDismiss: 'Dismiss',
   moreBulkActions: 'More actions',
   selectAll: (count) => `Select all ${count}`,
   clearSelection: 'Clear selection',
@@ -349,6 +369,14 @@ type TableToolbarOwnProps = {
   secondaryActions?: TableToolbarAction[];
   /** Any other controls at the bar's end, after the actions. */
   actions?: React.ReactNode;
+  /**
+   * The AI command: a button in the bar that opens a one-off composer, whose
+   * text your handler turns into a whole table setup. It reaches everything a
+   * view holds (filters, sorts, search, columns, pinning, grouping, density),
+   * so it can do in a sentence what the bar's other controls do one at a time.
+   * The library calls no model; your handler does. Shows only inside a DataTable.
+   */
+  command?: TableToolbarCommand;
   /** The bar's words, merged over their English defaults. */
   labels?: Partial<TableToolbarLabels>;
   /** The filters' words, merged over their English defaults (inside a DataTable, over the table's). */
@@ -356,6 +384,34 @@ type TableToolbarOwnProps = {
   /** Additional CSS classes */
   className?: string;
 };
+
+/** What a TableToolbar's command handler is given. */
+export interface TableToolbarCommandRequest {
+  /** What the reader typed. */
+  text: string;
+  /** The table's setup right now, so a command can refine it. */
+  view: TableView;
+  /** The columns, as the bar knows them: keys, labels, filter kinds and choices. */
+  columns: ToolbarColumn[];
+  /** Aborts when the reader stops the command. */
+  signal: AbortSignal;
+}
+
+/** What a TableToolbar's command handler answers with. */
+export interface TableToolbarCommandResult {
+  /** The whole setup to apply; applying replaces the setup, and leaving it out changes nothing. */
+  view?: TableView;
+  /** What was done or found, shown as a toast with an Undo. */
+  message?: string;
+}
+
+/** The AI command in a TableToolbar. */
+export interface TableToolbarCommand {
+  /** Turns the reader's text into a setup. A rejection shows as a failure and leaves the table alone. */
+  onSubmit: (request: TableToolbarCommandRequest) => Promise<TableToolbarCommandResult>;
+  /** Commands to offer under the empty composer. */
+  suggestions?: string[];
+}
 
 export interface TableToolbarProps
   extends TableToolbarOwnProps, Omit<React.ComponentPropsWithoutRef<'div'>, keyof TableToolbarOwnProps> {}
@@ -504,6 +560,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       primaryAction,
       secondaryActions = [],
       actions,
+      command,
       labels: labelsProp,
       filterLabels: filterLabelsProp,
       className = '',
@@ -513,6 +570,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
   ) => {
     const table = useTableContext();
     const labels: TableToolbarLabels = { ...DEFAULT_LABELS, ...labelsProp };
+    const commandUi = useToolbarCommand(command, table, labels);
     const baseFilterLabels = table?.filterLabels ?? DEFAULT_FILTER_LABELS;
     const filterLabels: FilterLabels = {
       ...baseFilterLabels,
@@ -1736,6 +1794,8 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   />
                 </ToolbarPanel>
               )}
+              {commandUi.control(size)}
+              {commandUi.toast}
               {/* The icon controls sit together: Sort, Group, Columns, density, then More. */}
               {showFilters && narrow && filterPanel}
               {sortControl}

@@ -26,6 +26,8 @@ type PopoverOwnProps = {
   surface?: 'panel' | 'menu';
   /** Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic. */
   position?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
+  /** Which edge of the trigger the panel lines up with, on the top and bottom sides. `start` and `end` follow the reading direction. Defaults to `start`. */
+  align?: 'start' | 'end';
   /** Trigger mode */
   trigger?: 'click' | 'hover';
   /** Whether the popover is open (controlled mode) */
@@ -70,6 +72,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       size = 'default',
       surface = 'panel',
       position = 'bottom',
+      align = 'start',
       trigger = 'click',
       open: controlledOpen,
       defaultOpen = false,
@@ -147,7 +150,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       anchorRef: triggerRef,
       panelRef,
       side: position,
-      align: 'start',
+      align,
       gapProperty: '--gap-050',
     });
 

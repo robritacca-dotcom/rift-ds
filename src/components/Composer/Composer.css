@@ -633,3 +633,24 @@
 .ds-composer--disabled.ds-composer--mentions .ds-composer__textarea {
   color: transparent;
 }
+
+/* ============================================
+   COMPACT: the mini composer, one row, the send button on the text's line
+   ============================================ */
+.ds-composer--compact {
+  flex-direction: row;
+  align-items: center;
+}
+
+.ds-composer--compact .ds-composer__content {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding: var(--padding-200) var(--padding-100) var(--padding-200) var(--ds-composer-text-inset);
+  height: calc(var(--ds-composer-text-height, var(--font-paragraph-line-height)) + var(--padding-200) * 2);
+}
+
+.ds-composer--compact .ds-composer__footer {
+  flex-shrink: 0;
+  padding: var(--padding-200);
+}

@@ -103,6 +103,38 @@ export const InDataTable: Story = {
   },
 };
 
+/** The AI command: a sentence in the mini composer becomes a whole setup, with the result in a toast and an Undo. The handler here is a stand-in for one that calls a model. */
+export const AiCommand: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      pageSize={10}
+      caption="Issues"
+      toolbar={
+        <TableToolbar
+          command={{
+            suggestions: ['Only blocked issues', 'Biggest first'],
+            onSubmit: async ({ view }) => ({
+              view: { ...view, filters: [{ id: 'status-1', column: 'status', operator: 'isAnyOf', value: ['Blocked'] }] },
+              message: 'The table now shows the blocked issues.',
+            }),
+          }}
+        />
+      }
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Ask AI' }));
+    await userEvent.click(await canvas.findByRole('button', { name: 'Only blocked issues' }));
+    await waitFor(() => expect(canvas.getAllByRole('rowheader').map((cell) => cell.textContent)).toEqual(['Chart palette drifts']));
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(await body.findByRole('button', { name: 'Undo' }));
+    await waitFor(() => expect(canvas.getAllByRole('rowheader')).toHaveLength(4));
+  },
+};
+
 /** The Columns panel hides and shows columns; the row header stays. */
 export const ColumnsPanel: Story = {
   render: () => <DataTable columns={columns} rows={rows} caption="Issues" toolbar={<TableToolbar />} />,

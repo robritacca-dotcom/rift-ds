@@ -317,6 +317,8 @@ type ToastOwnProps = {
   dismissible?: boolean;
   /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** A control under the text, such as an Undo. */
+  action?: React.ReactNode;
   /** Fires when the dismiss button is pressed. The button renders only when this is given (and `dismissible` is not false); the host owns removing the toast */
   onDismiss?: () => void;
   /** Accessible name of the dismiss button */
@@ -344,6 +346,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       variant = 'info',
       dismissible = true,
       icon,
+      action,
       onDismiss,
       dismissLabel = 'Dismiss notification',
       className = '',
@@ -372,6 +375,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
           {description && (
             <p className={`${baseClass}__description`}>{description}</p>
           )}
+          {action && <div className={`${baseClass}__action`}>{action}</div>}
         </div>
 
         {dismissible && onDismiss && (

@@ -53,6 +53,14 @@ export const AiGlow: Story = {
   },
 };
 
+/** The mini composer: one row, with send on the text's line, for a popover or a tight bar. */
+export const Compact: Story = {
+  args: {
+    size: 'compact',
+    maxRows: 1,
+  },
+};
+
 /** While a response streams, send becomes stop and Enter is inert. */
 export const Streaming: Story = {
   args: {

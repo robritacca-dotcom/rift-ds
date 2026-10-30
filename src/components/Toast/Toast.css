@@ -361,3 +361,7 @@
 .ds-toast .material-symbols-rounded {
   color: inherit;
 }
+
+.ds-toast__action {
+  margin-block-start: var(--gap-200);
+}

@@ -498,3 +498,20 @@
   display: inline-flex;
   flex-shrink: 0;
 }
+
+/* The AI command: its mini composer, and the toast that reports the result,
+   fixed to the bottom-left corner over everything. */
+.ds-table-toolbar__command-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: min(22rem, calc(100vw - var(--gap-500)));
+}
+
+.ds-table-toolbar__command-toast {
+  position: fixed;
+  inset-block-end: var(--gap-400);
+  inset-inline-start: var(--gap-400);
+  z-index: var(--layer-toast);
+  width: min(26rem, calc(100vw - var(--gap-500)));
+}

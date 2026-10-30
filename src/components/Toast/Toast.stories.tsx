@@ -48,6 +48,15 @@ export const Info: Story = {
   },
 };
 
+/** A control under the text, such as an Undo. */
+export const WithAction: Story = {
+  args: {
+    variant: 'positive',
+    description: 'The table now shows the blocked issues.',
+    action: <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label="Undo" />,
+  },
+};
+
 export const Positive: Story = {
   args: {
     variant: 'positive',

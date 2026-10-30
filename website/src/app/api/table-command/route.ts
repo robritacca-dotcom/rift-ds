@@ -21,7 +21,9 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const MODEL = 'claude-sonnet-5-5';
-const MAX_TURNS = 8;
+const MAX_TURNS = 6;
+/* Lookups stop here and the model must answer: at low effort Sonnet can re-run a query it already has the answer to until the turns run out. */
+const MAX_LOOKUP_TURNS = 3;
 const MAX_TEXT_CHARS = 300;
 const MAX_BODY_CHARS = 16 * 1024;
 const client = new Anthropic();
@@ -109,7 +111,7 @@ ${COLUMNS.map((col) =>
 
 Your answer sets the table's new state. For each field of view, null leaves it as it is and a value replaces it whole, so to add a filter send the existing filters plus the new one, and to clear filters send an empty list. visibleColumns is the complete ordered list of columns to show; keep orderId first unless told otherwise, and bring in the columns the instruction is about. Each table groups by one column at a time. Filters always combine with AND. Group rows show each column's built-in aggregate, and groups cannot be ordered by an aggregate.
 
-Before answering, use query_data whenever the instruction depends on the data: a threshold ("unusually large", "above average"), a ranking of groups ("worst carrier", "top 10 customers"), or an exact name the person only half typed (column_values). Turn what you learn into filters, for example a top-10 becomes customer isAnyOf those ten names. Only cite numbers a tool gave you.
+Before answering, use query_data whenever the instruction depends on the data: a threshold ("unusually large", "above average"), a ranking of groups ("worst carrier", "top 10 customers"), or an exact name the person only half typed (column_values). Turn what you learn into filters, for example a top-10 becomes customer isAnyOf those ten names. Only cite numbers a tool gave you. The ledger never changes, so run a query once and never repeat one; as soon as you have what you need, answer.
 
 message is one or two plain sentences saying what the table now shows and, if you looked anything up, what you found, with the figures. If part of the request can't be done with these controls (editing data, charts, totals footers), do what you can and say which part you left out. If the instruction has nothing to do with the table, leave every view field null and say so.`;
 
@@ -279,6 +281,7 @@ export async function POST(request: Request) {
           output_config: { effort: 'low', format: { type: 'json_schema', schema: ANSWER_SCHEMA } },
           system: [{ type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral' } }],
           tools: TOOLS,
+          tool_choice: { type: turn >= MAX_LOOKUP_TURNS ? 'none' : 'auto' },
           messages,
         } as unknown as Anthropic.Beta.Messages.MessageCreateParamsNonStreaming,
         { signal: request.signal },

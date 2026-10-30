@@ -81,6 +81,26 @@ export default function MegaNav() {
     };
   });
 
+  // The chat's phone entry point, between search and menu. Below the
+  // takeover width the floating launcher stands down (globals.css), because a
+  // pill in the corner sits on the page's own controls; this one keeps the
+  // AI ring at the bar's size. The look and mode controls beside it stay in
+  // the bar after the pills fold, and leave it for the drawer only at phone
+  // widths (`barOnly`).
+  const chatButton = (
+    <AiButton
+      className={styles.chatBtn}
+      size="compact"
+      icon="forum"
+      label=""
+      aria-label={`Ask ${ASSISTANT_NAME}`}
+      onClick={(event) => {
+        returnFocusRef.current = event.currentTarget;
+        setChatOpen(true);
+      }}
+    />
+  );
+
   return (
     <SiteHeader
       className={styles.header}
@@ -92,43 +112,35 @@ export default function MegaNav() {
       // below it until the bar has measured itself. The wider "mid" step
       // would show the menu button first on every laptop between the two.
       initialFold="tablet"
+      // Each action set opens the global palette mounted from the root
+      // layout; the two trees never meet, so the click travels via
+      // palette-bus. The condensed set is the same controls in their
+      // narrower forms, which the header swaps in before the pills fold.
       actions={
-        // Opens the global palette mounted from the root layout; the two
-        // trees never meet, so the click travels via palette-bus.
         <>
           <CommandPaletteTrigger size="compact" className={styles.searchBtn} onClick={openSitePalette} />
-          {/* The chat's phone entry point, between search and menu. Below
-              the takeover width the floating launcher stands down
-              (globals.css), because a pill in the corner sits on the page's
-              own controls; this one keeps the AI ring at the bar's size. */}
-          <AiButton
-            className={styles.chatBtn}
-            size="compact"
-            icon="forum"
-            label=""
-            aria-label={`Ask ${ASSISTANT_NAME}`}
-            onClick={(event) => {
-              returnFocusRef.current = event.currentTarget;
-              setChatOpen(true);
-            }}
-          />
+          {chatButton}
+          <BrandSwitcher size="compact" className={styles.barOnly} />
+          <ThemeToggle size="compact" className={styles.barOnly} />
         </>
       }
-      wideActions={
+      condensedActions={
         <>
-          <BrandSwitcher size="compact" />
-          <ThemeToggle size="compact" />
-          <GetStartedSplit />
+          <CommandPaletteTrigger size="compact" iconOnly onClick={openSitePalette} />
+          {chatButton}
+          <BrandSwitcher size="compact" className={styles.barOnly} />
+          <ThemeToggle size="compact" cycle className={styles.barOnly} />
         </>
       }
+      wideActions={<GetStartedSplit />}
       drawerFooter={
-        // The drawer serves every width the pills leave, so it carries what
-        // the bar's wide actions do, stacked in their order: look, light and
-        // dark, then Get started. The look menu opens upward, since the
+        // The drawer floor carries Get started, which folds with the pills,
+        // and at phone widths the look and mode controls the bar gives up,
+        // stacked in the bar's order. The look menu opens upward, since the
         // stack sits on the drawer floor.
         <div className={styles.drawerFooter}>
-          <BrandSwitcher size="compact" placement="up" align="left" />
-          <ThemeToggle size="compact" />
+          <BrandSwitcher size="compact" placement="up" align="left" className={styles.drawerOnly} />
+          <ThemeToggle size="compact" className={styles.drawerOnly} />
           <GetStartedSplit onNavigate={() => setMenuOpen(false)} />
         </div>
       }

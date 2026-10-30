@@ -80,11 +80,14 @@
 }
 
 /* Folded to the icon: a circle the row height across, hovering like the
-   theme picker's trigger rather than like a field. */
+   theme picker's trigger rather than like a field. With no prompt beside it
+   the glyph is the control, so it takes the icon colour the family's other
+   circles wear rather than the field's placeholder tone. */
 .ds-command-palette-trigger--icon-only {
   justify-content: center;
   width: var(--control-height-default);
   padding: 0;
+  color: var(--color-action-icon-default);
 }
 
 .ds-command-palette-trigger--compact.ds-command-palette-trigger--icon-only {

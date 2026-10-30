@@ -18,12 +18,13 @@
    carry sticky table headers, top app bars and tooltips at --layer-sticky
    and above, and later in the page they would paint over the stuck bar as
    it scrolls. Doubled for the production stylesheet order noted on
-   .searchBtn below. */
+   the condensed set below. */
 .header.header {
   z-index: var(--layer-site-chrome);
 }
 
-/* The bar is the size container the search field folds on. Not the header
+/* The bar is the size container for the condensed set's pre-measurement
+   stand-in (below). Not the header
    root: a container gets layout containment, which would make the sticky
    header the containing block for the viewport-fixed blur behind it, and
    the blur would stop spanning the viewport. */
@@ -76,46 +77,27 @@
   width: 288px;
 }
 
-/* The full field needs the bar at its whole 1440px; any narrower and it
-   folds to the icon circle, before the bar runs out of room for the pills
-   (the header's own fold, measured by the component, comes after).
+/* The bar's condensed set (SiteHeader's `condensedActions`) carries the
+   field's icon circle and the theme toggle's cycle circle, both the
+   package's own forms. Before the first measurement (a server-rendered
+   first frame) the header shows the condensed set below a 1440px bar, the
+   one width the full field is sure to fit beside the pills, so the row
+   never overflows before the header measures. Doubled where the production
+   build's stylesheet order (library after page modules) would hand a tie
+   to the library.
    ds-allow(breakpoint): content-driven: the full search field fits only beside the pills at the bar's full content width. */
 @container site-header (max-width: 1439px) {
-  /* The trigger's icon-only form, by container rather than by prop: the
-     class is doubled because the production build orders the library
-     stylesheet after page modules, where a tie would go to the library. */
-  .searchBtn.searchBtn {
-    justify-content: center;
-    width: var(--control-height-compact);
-    padding: 0;
+  .header:global(.ds-site-header--prefold-tablet) :global(.ds-site-header__actions:not(.ds-site-header__actions--condensed)) {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
   }
 
-  /* The circle hovers like the theme picker's trigger rather than like an
-     input: the fill steps up a container, the border stays put. */
-  .searchBtn.searchBtn:hover {
-    border-color: var(--color-bg-container-border);
-    background: var(--color-bg-container-secondary);
+  .header.header:global(.ds-site-header--prefold-tablet) :global(.ds-site-header__actions--condensed) {
+    position: static;
+    visibility: visible;
+    pointer-events: auto;
   }
-
-  .searchBtn :global(.ds-command-palette-trigger__label),
-  .searchBtn :global(.ds-command-palette-trigger__keys) {
-    display: none;
-  }
-}
-
-/* The folded bar's menu button wears the search circle's dress beside it
-   (the trigger's container fill, hairline border and track curve), so the
-   two read as one pair of controls at every width the menu button shows.
-   The class is doubled for the same reason as .searchBtn's: the production
-   build orders the library stylesheet after page modules. */
-.header :global(.ds-site-header__menu-button.ds-site-header__menu-button) {
-  background-color: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: calc(var(--radius-pill) + var(--padding-100));
-}
-
-.header :global(.ds-site-header__menu-button.ds-site-header__menu-button:hover) {
-  background-color: var(--color-bg-container-secondary);
 }
 
 /* ============================================
@@ -129,7 +111,7 @@
 }
 
 /* The takeover width, where the floating launcher stands down for this.
-   Doubled for the production stylesheet order noted on .searchBtn. */
+   Doubled for the production stylesheet order noted on the condensed set. */
 @media (max-width: 719px) {
   .chatBtn.chatBtn {
     display: inline-flex;
@@ -146,8 +128,9 @@
 /* ============================================
    DRAWER FOOTER
    ============================================ */
-/* The drawer floor: the bar's wide actions stacked in their order (the
-   look switcher, the mode toggle, Get started), stepped in by the logo's
+/* The drawer floor: Get started, which folds with the pills, under the
+   look switcher and the mode toggle at phone widths, where the bar gives
+   them up; stacked in the bar's order and stepped in by the logo's
    lead-in so each starts on the nav labels' line, as globals.css steps
    the drawer's list. */
 .drawerFooter {
@@ -156,4 +139,24 @@
   align-items: flex-start;
   gap: var(--primitive-gap-300);
   padding-inline-start: calc(var(--icon-size-600) + var(--primitive-gap-200));
+}
+
+/* ============================================
+   LOOK AND MODE CONTROLS
+   ============================================ */
+/* The look and mode controls hold their seat in the bar after the pills
+   fold, and move to the drawer only at the takeover width, where the bar
+   keeps search, chat and menu. Above it the drawer leaves them out, since
+   the bar already shows them. Doubled for the production stylesheet order
+   noted above. */
+@media (max-width: 719px) {
+  .header .barOnly.barOnly {
+    display: none;
+  }
+}
+
+@media (min-width: 720px) {
+  .drawerOnly.drawerOnly {
+    display: none;
+  }
 }

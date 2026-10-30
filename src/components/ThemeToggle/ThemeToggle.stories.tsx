@@ -35,6 +35,20 @@ export const IconsOnly: Story = {
   args: { showLabels: false },
 };
 
+/**
+ * One circle for a row short of room: it shows the current setting and each
+ * press steps to the next, System, Light, Dark and round again.
+ */
+export const Cycle: Story = {
+  args: { cycle: true, size: 'compact', defaultValue: 'system' },
+  play: async ({ canvas, userEvent }) => {
+    const circle = canvas.getByRole('button', { name: /^Colour mode: / });
+    const start = circle.getAttribute('aria-label') ?? '';
+    await userEvent.click(circle);
+    await expect(canvas.getByRole('button', { name: /^Colour mode: / }).getAttribute('aria-label')).not.toBe(start);
+  },
+};
+
 /** Choosing a setting writes both attributes on the root and stores the choice. */
 export const SetsTheMode: Story = {
   play: async ({ canvas, userEvent }) => {

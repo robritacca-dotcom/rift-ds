@@ -53,7 +53,8 @@ export default function ThemeTogglePage() {
               follows it, and System follows the operating system. A small
               script applies the stored choice before first paint, so a
               returning visitor never sees the wrong mode flash. It is the
-              control in this site&rsquo;s header.
+              control in this site&rsquo;s header, which switches to its
+              one-circle cycle form as the bar runs short of room.
             </p>
           </div>
 
@@ -76,12 +77,15 @@ export default function ThemeTogglePage() {
             <p className={styles.demoText}>
               Two sizes on SegmentedControl&rsquo;s scale. With showLabels off
               it is an icon strip, and each label shows as its segment&rsquo;s
-              tooltip and stays its accessible name. The labels and the strip&rsquo;s name are props
-              with English defaults, so they can be translated.
+              tooltip and stays its accessible name. With cycle it is one
+              circle for a row short of room, showing the current setting and
+              stepping to the next on each press. The labels, the strip&rsquo;s name and the
+              circle&rsquo;s cycleLabel are props with English defaults, so they can be translated.
             </p>
             <div className={styles.row}>
               <ThemeToggle size="compact" />
               <ThemeToggle size="compact" showLabels={false} />
+              <ThemeToggle size="compact" cycle />
             </div>
           </section>
 

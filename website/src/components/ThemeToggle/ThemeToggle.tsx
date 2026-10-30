@@ -34,14 +34,23 @@ export function useThemeSetting(): [setting: string, setSetting: (value: string)
 export default function ThemeToggle({
   className,
   size = "default",
+  cycle = false,
 }: {
   className?: string;
   /** `compact` for a seat with less room, such as the header or the template sidebars' footer row. */
   size?: "default" | "compact";
+  /** The package's one-circle form, which steps through the settings, for the header's condensed bar. */
+  cycle?: boolean;
 }) {
   return (
     <div className={`${styles.themeToggle} ${className || ""}`}>
-      <LibraryThemeToggle size={size} showLabels={false} aria-label="Theme" />
+      <LibraryThemeToggle
+        size={size}
+        showLabels={false}
+        cycle={cycle}
+        aria-label="Theme"
+      />
     </div>
   );
 }
+

@@ -91,6 +91,18 @@
   max-width: 480px;
 }
 
+/* Wide enough for the pills beside the condensed controls, too narrow for
+   the full search field beside them. */
+.frameMid {
+  max-width: 640px;
+}
+
+/* The full search field's width; the host sets it, as the site's own
+   header does. */
+.searchField {
+  width: 240px;
+}
+
 .brand {
   display: flex;
   align-items: center;

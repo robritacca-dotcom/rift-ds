@@ -159,9 +159,29 @@
   rotate: 180deg;
 }
 
-/* The menu button only exists once the bar folds. */
+/* The menu button only exists once the bar folds. It wears the track
+   recipe the CommandPaletteTrigger, the ThemePicker's trigger and the
+   ThemeToggle's cycle circle wear (container fill, hairline border, the
+   track's curve), so the circles at the bar's end read as one set, and it
+   hovers as they do: the fill steps up, the glyph holds its colour. */
 .ds-site-header__menu-button {
   display: none;
+}
+
+.ds-site-header .ds-site-header__menu-button {
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
+}
+
+.ds-site-header .ds-site-header__menu-button:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-site-header .ds-site-header__menu-button .ds-circular-button__icon,
+.ds-site-header .ds-site-header__menu-button:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
+.ds-site-header .ds-site-header__menu-button:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+  color: var(--color-action-icon-default);
 }
 
 /* While the drawer is open its close button stands in this exact spot, on
@@ -188,6 +208,16 @@
   pointer-events: auto;
 }
 
+/* Condensed: `condensedActions` take the place of `actions`. Whichever set
+   is not showing leaves the row but stays measurable (hidden, out of flow,
+   inert), as the folded pills do. */
+.ds-site-header--condensed .ds-site-header__actions:not(.ds-site-header__actions--condensed),
+.ds-site-header:not(.ds-site-header--condensed) .ds-site-header__actions--condensed {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Folded: the pills and the wide actions leave the row but stay measurable
    (hidden, out of flow, inert), and the menu button takes their place. */
 .ds-site-header--folded .ds-site-header__nav,
@@ -207,8 +237,8 @@
 
 /* Before the bar has measured itself (the first frame, which a
    server-rendered page shows before its script runs), it folds by CSS below
-   the `initialFold` step, so a phone never sees the pills spill past the
-   actions. The first measurement replaces this in the same commit as
+   the `initialFold` step, with `condensedActions` in place of `actions`, so
+   a phone never sees the pills spill past the actions. The first measurement replaces this in the same commit as
    hydration. */
 @media (max-width: 959px) {
   .ds-site-header--prefold-tablet .ds-site-header__nav,
@@ -220,6 +250,18 @@
 
   .ds-site-header--prefold-tablet .ds-site-header__menu-button {
     display: inline-flex;
+  }
+
+  .ds-site-header--prefold-tablet .ds-site-header__actions:not(.ds-site-header__actions--condensed) {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ds-site-header.ds-site-header--prefold-tablet .ds-site-header__actions--condensed {
+    position: static;
+    visibility: visible;
+    pointer-events: auto;
   }
 }
 
@@ -233,6 +275,18 @@
 
   .ds-site-header--prefold-mid .ds-site-header__menu-button {
     display: inline-flex;
+  }
+
+  .ds-site-header--prefold-mid .ds-site-header__actions:not(.ds-site-header__actions--condensed) {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ds-site-header.ds-site-header--prefold-mid .ds-site-header__actions--condensed {
+    position: static;
+    visibility: visible;
+    pointer-events: auto;
   }
 }
 

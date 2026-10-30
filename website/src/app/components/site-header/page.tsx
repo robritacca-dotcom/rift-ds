@@ -4,6 +4,8 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
+import { ThemeToggle } from "rift-ds/components/ThemeToggle/ThemeToggle";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -50,6 +52,21 @@ const brand = (
 
 const search = <CircularButton icon="search" variant="secondary" tone="neutral" ariaLabel="Search" tooltip={false} />;
 
+/* The condensed demo's two sets: the same controls, then their narrower forms. */
+const fullActions = (
+  <>
+    <CommandPaletteTrigger size="compact" className={styles.searchField} />
+    <ThemeToggle size="compact" showLabels={false} />
+  </>
+);
+
+const condensedActions = (
+  <>
+    <CommandPaletteTrigger size="compact" iconOnly />
+    <ThemeToggle size="compact" cycle />
+  </>
+);
+
 /* ============================================
    PAGE
    ============================================ */
@@ -87,6 +104,25 @@ export default function SiteHeaderPage() {
             </p>
             <div className={styles.frame}>
               <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} navLabel="Example" />
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Condensing first" />
+            <p className={styles.introBody}>
+              Give the header a narrower set of the same controls and it uses them before it folds: when the full row
+              stops fitting, the search field becomes its icon circle and the mode strip one circle that steps through
+              the settings, and the pills stay. Only when that row runs out of room too does the bar fold.
+            </p>
+            <div className={`${styles.frame} ${styles.frameMid}`}>
+              <SiteHeader
+                brand={brand}
+                sections={SECTIONS}
+                actions={fullActions}
+                condensedActions={condensedActions}
+                sticky={false}
+                navLabel="Example, condensed"
+              />
             </div>
           </section>
 

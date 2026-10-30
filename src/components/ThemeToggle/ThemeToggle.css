@@ -10,3 +10,29 @@
 .ds-theme-toggle {
   flex-shrink: 0;
 }
+
+/* The cycle form: one circle in the track recipe the strip, the
+   CommandPaletteTrigger and the ThemePicker's trigger wear (container fill,
+   hairline border, the track's curve), so it reads as one of that family in
+   a row; it hovers like the picker's trigger, the fill stepping up. */
+.ds-theme-toggle--cycle {
+  display: inline-flex;
+}
+
+.ds-theme-toggle--cycle .ds-circular-button {
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
+}
+
+.ds-theme-toggle--cycle .ds-circular-button:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* The glyph holds the icon colour in every state, as the family's glyphs
+   do: only the fill steps on hover. */
+.ds-theme-toggle--cycle .ds-circular-button .ds-circular-button__icon,
+.ds-theme-toggle--cycle .ds-circular-button:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
+.ds-theme-toggle--cycle .ds-circular-button:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+  color: var(--color-action-icon-default);
+}

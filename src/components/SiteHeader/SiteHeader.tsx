@@ -56,11 +56,19 @@ type SiteHeaderOwnProps = {
   sections: SiteHeaderSection[];
   /** The path of the page being viewed, used to mark the current section, row and drawer item. */
   currentHref?: string;
-  /** Controls at the bar's end that stay at every width, such as a search button. */
+  /** Controls at the bar's end that stay at every width, such as a search button; `condensedActions`, when given, stand in for them on the condensed step. */
   actions?: React.ReactNode;
   /**
+   * The same controls drawn narrower, such as an icon-only CommandPaletteTrigger and a
+   * `cycle` ThemeToggle. When the full row stops fitting, these take the place of
+   * `actions` (the header adds `ds-site-header--condensed`), and the pills fold to the
+   * menu button only when the condensed row does not fit either. Without it the
+   * header folds as soon as the full row stops fitting.
+   */
+  condensedActions?: React.ReactNode;
+  /**
    * Controls at the bar's end that show only while the pills fit, such as a
-   * theme toggle. Once the bar folds to its menu button they leave it; put
+   * Get started button. Once the bar folds to its menu button they leave it; put
    * their drawer twin in `drawerFooter`.
    */
   wideActions?: React.ReactNode;
@@ -139,6 +147,7 @@ export function SiteHeader({
   sections,
   currentHref,
   actions,
+  condensedActions,
   wideActions,
   drawerFooter,
   drawerOpen: drawerOpenProp,
@@ -166,17 +175,24 @@ export function SiteHeader({
   const navRef = useRef<HTMLElement>(null);
   const wideRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
+  const condensedActionsRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // Set while Escape hands focus back to a pill, so that focus does not
   // reopen the panel it just closed.
   const returningFocus = useRef(false);
+  // The page scrollbar's width as the drawer opened. The drawer's scroll lock
+  // takes the scrollbar away and widens the bar by that much; measured
+  // against the wider bar, a header within a scrollbar of its fold would
+  // unfold, close the drawer, get its scrollbar back and fold again.
+  const lockedGutter = useRef(0);
 
   const [openId, setOpenId] = useState<string | null>(null);
   // The section whose content the panel holds. It outlives openId, so a
   // closing panel fades out with its rows still in it rather than empty.
   const [shownId, setShownId] = useState<string | null>(null);
+  const [condensed, setCondensed] = useState(false);
   const [folded, setFolded] = useState(false);
   // False until the first measurement: the CSS fold stands in until then.
   const [measured, setMeasured] = useState(false);
@@ -188,6 +204,7 @@ export function SiteHeader({
   const drawerOpen = drawerOpenProp ?? drawerOpenState;
   const setDrawerOpen = useCallback(
     (next: boolean) => {
+      lockedGutter.current = next ? window.innerWidth - document.documentElement.clientWidth : 0;
       if (drawerOpenProp === undefined) setDrawerOpenState(next);
       onDrawerOpenChange?.(next);
     },
@@ -202,29 +219,41 @@ export function SiteHeader({
 
   // The fold: the room the full row needs against the room the bar has.
   // Folded pills stay in the DOM, hidden and out of flow, so they keep
-  // their width for the next measurement; state changes only when the
-  // answer flips, never per resize frame.
+  // their width for the next measurement; so do whichever of `actions` and
+  // `condensedActions` is not showing. The row is measured with each set,
+  // so the actions condense before the pills fold, and state changes only
+  // when an answer flips, never per resize frame.
   useLayoutEffect(() => {
     const bar = barRef.current;
     if (!bar) return;
     const measure = () => {
-      const style = getComputedStyle(bar);
-      const gap = parseFloat(style.columnGap) || 0;
+      const gap = parseFloat(getComputedStyle(bar).columnGap) || 0;
       const navStart = navRef.current ? parseFloat(getComputedStyle(navRef.current).marginInlineStart) || 0 : 0;
-      const parts = [brandRef.current, navRef.current, wideRef.current, actionsRef.current];
-      const widths = parts.map((el) => (el ? el.scrollWidth : 0));
-      const present = widths.filter((w) => w > 0).length;
-      const needed = widths.reduce((sum, w) => sum + w, 0) + navStart + gap * Math.max(present - 1, 0);
-      setFolded(needed > bar.clientWidth);
+      const rowWidth = (actionsEl: HTMLElement | null) => {
+        const parts = [brandRef.current, navRef.current, wideRef.current, actionsEl];
+        const widths = parts.map((el) => (el ? el.scrollWidth : 0));
+        const present = widths.filter((w) => w > 0).length;
+        return widths.reduce((sum, w) => sum + w, 0) + navStart + gap * Math.max(present - 1, 0);
+      };
+      const room = bar.clientWidth - lockedGutter.current;
+      const full = rowWidth(actionsRef.current);
+      const tight = condensedActionsRef.current ? rowWidth(condensedActionsRef.current) : full;
+      setCondensed(condensedActionsRef.current != null && full > room);
+      setFolded(tight > room);
       setMeasured(true);
     };
     measure();
     const observer = new ResizeObserver(measure);
-    [bar, brandRef.current, navRef.current, wideRef.current, actionsRef.current].forEach(
-      (el) => el && observer.observe(el),
-    );
+    [
+      bar,
+      brandRef.current,
+      navRef.current,
+      wideRef.current,
+      actionsRef.current,
+      condensedActionsRef.current,
+    ].forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
-  }, [sections, actions, wideActions, brand]);
+  }, [sections, actions, condensedActions, wideActions, brand]);
 
   // The tint over the sticky blur follows the page's scroll past `tintAfter`.
   useEffect(() => {
@@ -252,12 +281,11 @@ export function SiteHeader({
   // the menu button it replaces, whatever the scroll, the gutter or the
   // reading direction. Measured on open, not live: a scroll event mid-open
   // (iOS fires them as the scroll lock engages) must not move the X.
-  useLayoutEffect(() => {
-    if (!drawerOpen) return;
+  const placeDrawer = useCallback(() => {
     const bar = barRef.current;
     if (!bar) return;
     const rtl = isRtl(bar);
-    const start = (rect: DOMRect) => (rtl ? window.innerWidth - rect.right : rect.left);
+    const start = (rect: DOMRect) => (rtl ? document.documentElement.clientWidth - rect.right : rect.left);
     const barRect = bar.getBoundingClientRect();
     const offsets: Record<string, string> = {
       '--ds-site-header-height': `${bar.offsetHeight}px`,
@@ -270,7 +298,26 @@ export function SiteHeader({
       offsets['--ds-site-header-close-start'] = `${start(button)}px`;
     }
     setDrawerOffset(offsets as React.CSSProperties);
-  }, [drawerOpen]);
+  }, []);
+
+  // Once before the first frame, so the drawer never paints unplaced.
+  useLayoutEffect(() => {
+    if (!drawerOpen) {
+      // A host that closes a controlled drawer itself never calls setDrawerOpen.
+      lockedGutter.current = 0;
+      return;
+    }
+    placeDrawer();
+  }, [drawerOpen, placeDrawer]);
+
+  // And once more after the drawer's scroll lock engages (a child's effect,
+  // so it has run by the time this one does): taking the scrollbar away
+  // widens the page and moves the menu button by the scrollbar's width,
+  // which the first measurement could not see. The close button fades in
+  // only once the panel has slid home, so the correction never shows.
+  useEffect(() => {
+    if (drawerOpen) placeDrawer();
+  }, [drawerOpen, placeDrawer]);
 
   const openSection = useCallback((id: string) => {
     clearTimeout(closeTimer.current);
@@ -337,6 +384,7 @@ export function SiteHeader({
   const classes = [
     baseClass,
     sticky && `${baseClass}--sticky`,
+    condensed && `${baseClass}--condensed`,
     folded && `${baseClass}--folded`,
     !measured && initialFold !== 'never' && `${baseClass}--prefold-${initialFold}`,
     className,
@@ -425,8 +473,17 @@ export function SiteHeader({
 
         <div className={`${baseClass}__end`}>
           {actions && (
-            <div ref={actionsRef} className={`${baseClass}__actions`}>
+            <div ref={actionsRef} className={`${baseClass}__actions`} inert={condensed}>
               {actions}
+            </div>
+          )}
+          {condensedActions && (
+            <div
+              ref={condensedActionsRef}
+              className={`${baseClass}__actions ${baseClass}__actions--condensed`}
+              inert={!condensed}
+            >
+              {condensedActions}
             </div>
           )}
           {wideActions && (

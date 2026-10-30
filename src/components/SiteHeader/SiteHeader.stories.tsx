@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CircularButton } from '../CircularButton/CircularButton';
+import { CommandPaletteTrigger } from '../CommandPaletteTrigger/CommandPaletteTrigger';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { SiteHeader, type SiteHeaderSection } from './SiteHeader';
 
 /** A fictional docs site: the header's shape, not any real site's pages. */
@@ -113,6 +115,42 @@ export const Folded: Story = {
   decorators: [
     (Story) => (
       <div style={{ maxWidth: 480 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/* The condensed story's mode control stores under its own key, so trying it
+   never changes the mode Storybook itself remembers. */
+const CONDENSED_STORY_KEY = 'rift-ds-site-header-story';
+
+/**
+ * Short of room for the full row: `condensedActions` take the place of
+ * `actions` (here the search field folds to its icon circle and the mode
+ * strip to its cycle circle) and the pills stay. Narrow it further and the
+ * bar folds to its menu button, with the condensed set still showing.
+ */
+export const Condensed: Story = {
+  args: {
+    actions: (
+      <>
+        <CommandPaletteTrigger size="compact" style={{ width: 240 }} />
+        <ThemeToggle size="compact" showLabels={false} storageKey={CONDENSED_STORY_KEY} />
+      </>
+    ),
+    condensedActions: (
+      <>
+        <CommandPaletteTrigger size="compact" iconOnly />
+        <ThemeToggle size="compact" cycle storageKey={CONDENSED_STORY_KEY} />
+      </>
+    ),
+    wideActions: undefined,
+    drawerFooter: undefined,
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 720 }}>
         <Story />
       </div>
     ),

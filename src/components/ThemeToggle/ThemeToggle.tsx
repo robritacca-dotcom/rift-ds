@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
+import { CircularButton } from '../CircularButton/CircularButton';
 import { DEFAULT_COLOR_MODE_STORAGE_KEY, type ColorModeSetting } from './colorMode';
 import { useColorMode } from './useColorMode';
 import './ThemeToggle.css';
@@ -23,6 +24,15 @@ type ThemeToggleOwnProps = {
   size?: 'default' | 'compact';
   /** Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name. */
   showLabels?: boolean;
+  /**
+   * Draw one circle that shows the current setting and steps to the next on
+   * each press (System, Light, Dark), in place of the strip, for a row short
+   * of room, such as a condensed SiteHeader's `condensedActions`. Each label
+   * becomes the circle's tooltip and its accessible name comes from `cycleLabel`.
+   */
+  cycle?: boolean;
+  /** The cycle circle's accessible name, from the current setting's label and the next one's. Default: the control's `aria-label`, then both, as in "Colour mode: Light. Switch to Dark". */
+  cycleLabel?: (current: string, next: string) => string;
   /** The localStorage key the choice is kept under. Match the key given to `colorModeScript`. Default `theme`. */
   storageKey?: string;
   /** Label of the setting that follows the operating system. */
@@ -45,7 +55,8 @@ export interface ThemeToggleProps
  * choice survives a reload. Pair it with `colorModeScript` in the document
  * head, which applies the stored choice before first paint.
  *
- * Forwards a ref to the strip and spreads unrecognised props onto it.
+ * Forwards a ref to the strip (in the `cycle` form, the circle's wrapper)
+ * and spreads unrecognised props onto it.
  */
 export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
   (
@@ -55,12 +66,14 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
       onValueChange,
       size = 'default',
       showLabels = true,
+      cycle = false,
       storageKey,
       systemLabel = 'System',
       lightLabel = 'Light',
       darkLabel = 'Dark',
       className = '',
       'aria-label': ariaLabel = 'Colour mode',
+      cycleLabel = (current: string, next: string) => `${ariaLabel}: ${current}. Switch to ${next}`,
       ...rest
     },
     ref,
@@ -85,6 +98,37 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
       { value: 'light', label: lightLabel, icon: 'light_mode' },
       { value: 'dark', label: darkLabel, icon: 'dark_mode' },
     ];
+    const pick = (next: ColorModeSetting) => {
+      if (value === undefined) setSetting(next);
+      onValueChange?.(next);
+    };
+
+    if (cycle) {
+      const index = Math.max(
+        segments.findIndex((segment) => segment.value === setting),
+        0,
+      );
+      const current = segments[index];
+      const next = segments[(index + 1) % segments.length];
+      return (
+        <div
+          {...rest}
+          ref={ref}
+          className={['ds-theme-toggle', 'ds-theme-toggle--cycle', className].filter(Boolean).join(' ')}
+        >
+          <CircularButton
+            icon={current.icon}
+            size={size}
+            variant="secondary"
+            tone="neutral"
+            ariaLabel={cycleLabel(current.label, next.label)}
+            tooltip={current.label}
+            onClick={() => pick(next.value as ColorModeSetting)}
+          />
+        </div>
+      );
+    }
+
     return (
       <SegmentedControl
         aria-label={ariaLabel}
@@ -97,11 +141,7 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
           .join(' ')}
         segments={segments}
         value={setting}
-        onValueChange={(picked) => {
-          const next = picked as ColorModeSetting;
-          if (value === undefined) setSetting(next);
-          onValueChange?.(next);
-        }}
+        onValueChange={(picked) => pick(picked as ColorModeSetting)}
         size={size}
         // An icon strip turns each label into its segment's tooltip (the
         // SegmentedControl's own icon-only form), so no glyph goes unnamed.

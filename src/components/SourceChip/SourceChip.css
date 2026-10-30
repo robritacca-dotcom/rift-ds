@@ -188,7 +188,11 @@ button.ds-source-chip {
 }
 
 .ds-source-chip__preview {
+  /* A manual popover in the top layer while visible
+     (src/behaviors/useTopLayer); the floating layer only ranks it in a
+     browser without the Popover API. */
   z-index: var(--layer-floating);
+  overflow: visible;
   width: max-content;
   max-width: min(320px, calc(100vw - var(--padding-400)));
   padding: var(--padding-300) var(--padding-400);
@@ -216,7 +220,7 @@ button.ds-source-chip {
   display: none;
   opacity: 0;
   transform: translateY(4px);
-  transition-property: opacity, transform, display;
+  transition-property: opacity, transform, display, overlay;
   transition-duration: var(--motion-duration-fast);
   transition-timing-function: var(--motion-ease-standard);
   transition-behavior: allow-discrete;

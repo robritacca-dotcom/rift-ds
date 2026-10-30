@@ -9,7 +9,9 @@ import { isRtl } from './direction';
  * hover cards, tooltips).
  *
  * The panel stays where it is in the DOM, so it keeps the trigger's stacking
- * context and any theme scoped above it, but is `position: fixed`, placed
+ * context (a tooltip excepted, which paints in the top layer through
+ * src/behaviors/useTopLayer) and any theme scoped above it, but is
+ * `position: fixed`, placed
  * from the anchor's rectangle. A fixed panel is not clipped by an ancestor's
  * `overflow`, which is what lets a menu inside a table's scroll wrapper, a
  * rail or a card show whole. Portals would escape the same way but would
@@ -124,6 +126,9 @@ export type AnchoredPositionOptions = {
  * the viewport. Null means the viewport.
  */
 export function fixedContainingBlock(element: HTMLElement): HTMLElement | null {
+  // A panel in the top layer (src/behaviors/useTopLayer) is placed from the
+  // viewport whatever its ancestors do.
+  if (element.matches(':popover-open')) return null;
   for (let node = element.parentElement; node; node = node.parentElement) {
     const style = getComputedStyle(node);
     const read = (property: string) => style.getPropertyValue(property).trim();

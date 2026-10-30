@@ -6,6 +6,7 @@ import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
+import { useTopLayer } from '../../behaviors/useTopLayer';
 
 export interface Segment {
   /** Unique value for this segment */
@@ -390,6 +391,9 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       tipLabelRef.current = label;
       setTip([...strip.querySelectorAll(`.${baseClass}__segment`)].indexOf(segment));
     };
+    // Tooltips always paint in the top layer, above every z-index and
+    // stacking context (src/behaviors/useTopLayer). Before placement.
+    useTopLayer({ open: tip !== null, panelRef: tipLabelRef, target: tip });
     useAnchoredPosition({
       open: tip !== null,
       target: tip,

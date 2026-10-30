@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
+import { useTopLayer } from '../../behaviors/useTopLayer';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { useLayer } from '../../behaviors/useLayer';
 import './SourceChip.css';
@@ -150,6 +151,10 @@ export const SourceChip = React.forwardRef<
     };
   }, [visible]);
 
+  // Tooltips always paint in the top layer, above every z-index and
+  // stacking context (src/behaviors/useTopLayer). Before placement.
+  useTopLayer({ open: visible, panelRef });
+
   // The shared anchored-position behaviour places the panel before it
   // paints: above the chip and flush with its leading edge, flipped below
   // when the space above is short, and shifted sideways to stay on screen.
@@ -264,6 +269,7 @@ export const SourceChip = React.forwardRef<
         ref={panelRef}
         id={panelId}
         role="tooltip"
+        popover="manual"
         className={`${baseClass}__preview${visible ? ` ${baseClass}__preview--visible` : ''}`}
       >
         {(logo || source || meta || href) && (

@@ -12,6 +12,7 @@ import React, {
 } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
+import { useTopLayer } from '../../behaviors/useTopLayer';
 import './Tooltip.css';
 import { MOTION_HOVER_SHOW_DELAY_MS, MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 
@@ -46,8 +47,10 @@ const clamp = (value: number, min: number, max: number) =>
  * Rides the system's floating surface — page background, hairline border,
  * floating shadow — so the bubble stays light in light theme and dark in dark.
  *
- * The panel stays in the trigger's DOM position (so it keeps the trigger's
- * stacking context and any theme scoped above it) but is `position: fixed`,
+ * The panel stays in the trigger's DOM position (so it keeps any theme
+ * scoped above it) but paints in the browser's top layer while visible
+ * (src/behaviors/useTopLayer), above every z-index on the page, and is
+ * `position: fixed`,
  * placed from the trigger's rectangle each time it shows and again on scroll
  * and resize while visible. That is what lets a tooltip inside a scroll
  * container — a bordered table's wrapper, a rail — show whole instead of
@@ -118,6 +121,11 @@ export const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
         setVisible(false);
       },
     });
+
+    // Tooltips always paint in the top layer, above every z-index and
+    // stacking context (src/behaviors/useTopLayer). Before placement, so the
+    // panel is placed from the viewport.
+    useTopLayer({ open: visible, panelRef });
 
     // Placement writes straight onto the panel rather than through state
     // (src/behaviors/useAnchoredPosition): it runs before paint, so the bubble
@@ -193,7 +201,13 @@ export const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
           computation includes hidden nodes referenced by IDREF, so the
           description survives), so a hidden panel is never measured or placed.
         */}
-        <span ref={panelRef} className={panelClasses} role="tooltip" id={tooltipId}>
+        <span
+          ref={panelRef}
+          className={panelClasses}
+          role="tooltip"
+          id={tooltipId}
+          popover="manual"
+        >
           {content}
           <span className={`${baseClass}__arrow`} />
         </span>

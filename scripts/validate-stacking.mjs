@@ -23,6 +23,13 @@
  *   - Each token set is declared lowest to highest, so the file reads as
  *     the stack it defines.
  *
+ *
+ * Tooltips sit above every layer: a component that places a tooltip panel
+ * against its trigger (it calls useAnchoredPosition and renders
+ * role="tooltip", or SegmentedControl's `__label--tip`) must also call
+ * useTopLayer (src/behaviors/useTopLayer.ts), which paints the panel in the
+ * browser's top layer while it shows, where no z-index can cover it.
+ *
  * /foundations/layout renders both sets. Runs in the validate-registry
  * chain and the website's prebuild.
  */
@@ -136,6 +143,21 @@ for (const { file, names, scope } of targets) {
   }
 }
 
+// Tooltips always paint in the top layer.
+let tooltips = 0;
+for (const dir of ['src', 'website/src']) {
+  for (const e of readdirSync(join(repoRoot, dir), { withFileTypes: true, recursive: true })) {
+    if (!e.isFile() || !/\.tsx?$/.test(e.name) || /\.stories\./.test(e.name)) continue;
+    const file = relative(repoRoot, join(e.parentPath ?? e.path, e.name)).replace(/\\/g, '/');
+    const source = read(file);
+    if (!/\buseAnchoredPosition\(/.test(source) || !/role="tooltip"|__label--tip/.test(source)) continue;
+    tooltips += 1;
+    if (!/\buseTopLayer\(/.test(source)) {
+      errors.push(`${file} — places a tooltip without useTopLayer: tooltips always paint in the top layer (src/behaviors/useTopLayer.ts)`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error('✗ Stacking:\n' + errors.map((e) => `    - ${e}`).join('\n'));
   process.exit(1);
@@ -143,5 +165,5 @@ if (errors.length) {
 
 console.log(
   `✓ Stacking — ${declarations} z-index declarations: ${layered} on ${libraryLayers.length} library + ${siteLayers.length} site layers, ` +
-    `${local} local, ${sanctioned} sanctioned in place.`
+    `${local} local, ${sanctioned} sanctioned in place; ${tooltips} tooltips in the top layer.`
 );

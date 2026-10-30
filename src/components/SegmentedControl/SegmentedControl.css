@@ -247,7 +247,9 @@
    ============================================ */
 
 .ds-segmented-control__label--tip {
-  /* Out of flow at rest; the behaviour makes it fixed once it shows. */
+  /* Out of flow at rest; the behaviour makes it fixed once it shows, and
+     lifts it into the top layer (src/behaviors/useTopLayer), above every
+     z-index on the page. */
   position: absolute;
   z-index: var(--layer-floating);
   padding: var(--padding-150) var(--padding-200);

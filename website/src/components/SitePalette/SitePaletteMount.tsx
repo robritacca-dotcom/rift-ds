@@ -11,7 +11,7 @@ import {
   getSectionItems,
   foundationsSidebarLinks,
 } from "@/config/navigation";
-import { CHROMELESS_ROUTES } from "@/config/chromeless";
+import { isChromeless } from "@/config/chromeless";
 import { useChatWidget } from "rift-ds/chat";
 import { SITE_PALETTE_OPEN_EVENT } from "./palette-bus";
 import styles from "./SitePalette.module.css";
@@ -241,7 +241,7 @@ export function SitePaletteMount() {
     ];
   }, [hasQuery, trimmedQuery, isDesktop, router, setChatOpen, sendChat]);
 
-  if (CHROMELESS_ROUTES.has(pathname)) return null;
+  if (isChromeless(pathname)) return null;
 
   return (
     <CommandPalette

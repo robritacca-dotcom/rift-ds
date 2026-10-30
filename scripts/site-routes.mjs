@@ -11,10 +11,14 @@
  *
  * Consumers: scripts/validate-chat-coverage.mjs (build gate) and
  * evals/chat/assert-paths.js (every path the model cites must resolve).
+ *
+ * Local labs (scripts/local-labs.mjs) are left out: they exist only on the
+ * owner's machine, never on the site.
  */
 import { readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isLocalPath } from './local-labs.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const appDir = join(repoRoot, 'website', 'src', 'app');
@@ -32,6 +36,7 @@ export function siteRoutes() {
   const walk = (dir, route) => {
     for (const entry of readdirSync(dir)) {
       const path = join(dir, entry);
+      if (isLocalPath(path)) continue;
       if (statSync(path).isDirectory()) {
         walk(path, `${route}/${entry}`);
       } else if (entry === 'page.tsx') {

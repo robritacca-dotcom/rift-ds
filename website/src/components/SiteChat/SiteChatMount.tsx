@@ -3,7 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { ChatLauncher, useChatWidget } from "rift-ds/chat";
-import { CHROMELESS_ROUTES } from "@/config/chromeless";
+import { isChromeless } from "@/config/chromeless";
 import { getPageSummary } from "@/data/page-summaries";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import { useSiteWidgetProps } from "./useSiteWidgetProps";
@@ -51,7 +51,7 @@ export function SiteChatMount() {
   return (
     <ChatLauncher
       label={`Ask ${ASSISTANT_NAME}`}
-      hidden={CHROMELESS_ROUTES.has(pathname)}
+      hidden={isChromeless(pathname)}
       panelLabel="Site chat"
       summary={
         summary

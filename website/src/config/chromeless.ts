@@ -11,7 +11,10 @@
  * instrument, a full-width tracing surface with its own top bar, where the
  * shared chrome would crowd the columns it exists to show.
  *
- * Matching is exact, so a nested route needs its own entry.
+ * Matching is exact, so a nested route needs its own entry. The one prefix
+ * rule is the local labs: everything under LOCAL_LABS_PREFIX is gitignored
+ * work in progress that only exists on the owner's machine, so it can never
+ * be listed here by name (scripts/local-labs.mjs owns the contract).
  */
 export const CHROMELESS_ROUTES = new Set([
   "/playground",
@@ -36,3 +39,11 @@ export const CHROMELESS_ROUTES = new Set([
   "/docs/blocks/dashboard",
   "/docs/blocks/sign-in",
 ]);
+
+/** Gitignored local labs; every route under it is chromeless and never ships. */
+export const LOCAL_LABS_PREFIX = "/labs/local/";
+
+/** True when a route renders none of the shared site chrome. */
+export function isChromeless(pathname: string): boolean {
+  return CHROMELESS_ROUTES.has(pathname) || pathname.startsWith(LOCAL_LABS_PREFIX);
+}

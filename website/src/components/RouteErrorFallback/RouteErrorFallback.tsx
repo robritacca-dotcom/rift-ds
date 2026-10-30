@@ -11,7 +11,7 @@ import {
   HiddenBackground,
 } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
-import { CHROMELESS_ROUTES } from "@/config/chromeless";
+import { isChromeless } from "@/config/chromeless";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID } from "@/lib/theme/brand";
 import styles from "./RouteErrorFallback.module.css";
 
@@ -45,7 +45,7 @@ export default function RouteErrorFallback({
   surface,
 }: RouteErrorFallbackProps) {
   const pathname = usePathname() ?? "/";
-  const onStage = surface ? surface === "stage" : CHROMELESS_ROUTES.has(pathname);
+  const onStage = surface ? surface === "stage" : isChromeless(pathname);
 
   useEffect(() => {
     // The dev overlay shows the error already; in production this is the

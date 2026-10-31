@@ -240,6 +240,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
             />
             <Bar
               {...animation}
+              className={`${baseClass}__bar`}
               yAxisId="bar"
               dataKey={barKey}
               name={resolvedBarLabel}

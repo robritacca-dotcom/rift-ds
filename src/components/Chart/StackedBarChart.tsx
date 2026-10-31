@@ -205,6 +205,7 @@ export const StackedBarChart = React.forwardRef<HTMLDivElement, StackedBarChartP
               <Bar
                 key={s.dataKey}
                 {...animation}
+                className={`${baseClass}__bar`}
                 dataKey={s.dataKey}
                 name={s.label}
                 fill={s.color || defaultColors[i % defaultColors.length]}

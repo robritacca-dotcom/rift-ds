@@ -222,6 +222,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
             />
             <Bar
               {...animation}
+              className={`${baseClass}__bar`}
               dataKey={yKey}
               fill={resolvedBarColor}
               radius={[3, 3, 0, 0]}

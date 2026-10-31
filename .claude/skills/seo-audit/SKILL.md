@@ -25,7 +25,7 @@ Run when asked to "run the SEO audit" (`/seo-audit`).
 
 ### 1. Inventory the surfaces
 
-The crawl/index surface lives in `website/src/app/`: the root `layout.tsx` (site-wide metadata and `metadataBase`), `sitemap.ts`, `robots.ts`, `manifest.ts`, `opengraph-image.tsx`, `icon.tsx` and `apple-icon.tsx`, and the `llms.txt` route — plus the structured data the layout injects, built in `website/src/lib/structuredData.ts` (its `sameAs` derives from `website/src/config/social.ts`). Per-page metadata comes from each page's `layout.tsx`; component pages derive theirs from the registry via `componentPageMetadata`. Read these fresh each run — the list above says where to look, not what is there.
+The crawl/index surface lives in `website/src/app/`: the root `layout.tsx` (site-wide metadata and `metadataBase`), `sitemap.ts`, `robots.ts`, `manifest.ts`, `opengraph-image.tsx`, `icon.tsx` and `apple-icon.tsx`, and the `llms.txt` route — plus the structured data the layout injects, built in `website/src/lib/structuredData.ts`. Per-page metadata comes from each page's `layout.tsx`; component pages derive theirs from the registry via `componentPageMetadata`. Read these fresh each run — the list above says where to look, not what is there.
 
 ### 2. Verify the rendered output, not the source
 

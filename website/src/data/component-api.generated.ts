@@ -4729,15 +4729,22 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "`compact` is the mini composer: one row, with the send button on the text's line, for a popover or a tight bar. Pair it with `maxRows={1}`.",
+            "description": "The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons.",
             "defaultValue": "default"
+          },
+          {
+            "name": "inline",
+            "type": "boolean",
+            "required": false,
+            "description": "One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1.",
+            "defaultValue": "false"
           },
           {
             "name": "maxRows",
             "type": "number",
             "required": false,
-            "description": "Growth cap in text rows before the textarea scrolls internally.",
-            "defaultValue": "8"
+            "description": "Growth cap in text rows before the textarea scrolls internally. Defaults to 8, or 1 when `inline`.",
+            "defaultValue": "inline ? 1 : 8"
           },
           {
             "name": "aiGlow",
@@ -13443,7 +13450,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "command",
             "type": "TableToolbarCommand",
             "required": false,
-            "description": "The AI command: a button in the bar that opens a one-off composer, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nThe library calls no model; your handler does. Shows only inside a DataTable."
+            "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable."
           },
           {
             "name": "labels",

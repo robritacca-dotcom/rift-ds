@@ -13,7 +13,7 @@ import {
 } from "rift-ds/components/DataTable/DataTable";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Table } from "rift-ds/components/Table/Table";
-import { TableToolbar, type TableToolbarView } from "rift-ds/components/TableToolbar/TableToolbar";
+import { TableToolbar, type TableToolbarCommand, type TableToolbarView } from "rift-ds/components/TableToolbar/TableToolbar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -134,6 +134,21 @@ const VIEWS: TableToolbarView[] = [
   },
   { id: "owner", label: "By owner", view: { version: 1, grouping: ["owner"] } },
 ];
+
+/* A stand-in for a handler that calls a model, so the command can be tried for
+   free: it reads a status out of the sentence, says when it cannot, and fails on request. */
+const DEMO_COMMAND: TableToolbarCommand = {
+  onSubmit: async ({ text, view }) => {
+    const asked = text.toLowerCase();
+    if (asked.includes("fail")) throw new Error("The stand-in failed on request. The table has not changed.");
+    const status = Object.keys(STATUS).find((value) => asked.includes(value.toLowerCase()));
+    if (!status) return { message: "This stand-in only knows the statuses. Your handler would call a model." };
+    return {
+      view: { ...view, filters: [{ id: "status-1", column: "status", operator: "isAnyOf", value: [status] }] },
+      message: `The table now shows the ${status.toLowerCase()} issues.`,
+    };
+  },
+};
 
 export default function TableToolbarPage() {
   const [filters, setFilters] = useState<DataTableFilter[]>([]);
@@ -305,6 +320,32 @@ export default function TableToolbarPage() {
                 }
               />
             </div>
+          </section>
+
+          <section className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="AI command" />
+            <p className={styles.sectionBody}>
+              The <code>command</code> prop adds a Describe button at the start of
+              the bar. Pressing it turns the whole row into a composer, the way
+              selecting rows turns it into the bulk bar. Your handler turns the sentence into a whole table
+              setup, and the library calls no model. A change lands in a toast
+              with an Undo, and an error lands in a toast with the table left
+              alone and the text back in the composer. Try it here; the
+              handler is a stand-in, and the merchant sales template runs it on a
+              real model.
+            </p>
+            <DataTable
+              columns={columns}
+              rows={rows}
+              pageSize={3}
+              caption="Issues, with an AI command"
+              toolbar={
+                <TableToolbar
+                  command={DEMO_COMMAND}
+                  labels={{ commandPlaceholder: "Try: only blocked issues, or fail" }}
+                />
+              }
+            />
           </section>
 
           <section className={`${styles.section} animate-in animate-delay-3`}>

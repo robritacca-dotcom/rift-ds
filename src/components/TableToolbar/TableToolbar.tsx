@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
+import { AiButton } from '../AiButton/AiButton';
 import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
+import { Composer } from '../Composer/Composer';
 import { Dropdown } from '../Dropdown/Dropdown';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
@@ -13,7 +15,9 @@ import { Popover } from '../Popover/Popover';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { SplitButton } from '../SplitButton/SplitButton';
 import { Tabs } from '../Tabs/Tabs';
+import { ToastProvider, useOptionalToast, useToast, type ToastData } from '../Toast/Toast';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { FilterEditor } from '../DataTable/FilterEditor';
 import { startDrag } from '../DataTable/dragGesture';
 import { absoluteDate, parseDate } from '../DataTable/columnTypes';
@@ -33,10 +37,10 @@ import type {
   DataTableSort as Sort,
   DataTableView,
 } from '../DataTable/DataTable';
-import { useTableContext, type ToolbarColumn } from '../DataTable/tableContext';
+import { useTableContext, type TableContextValue, type ToolbarColumn } from '../DataTable/tableContext';
 import type { TableView } from '../DataTable/views';
-import { useToolbarCommand } from './ToolbarCommand';
-import { BREAKPOINT_PHONE_PX, mediaBelow } from '../../tokens/breakpoints';
+import { MOTION_ACTION_DISMISS_MS } from '../../tokens/motion';
+import { BREAKPOINT_PHONE_PX, BREAKPOINT_SHEET_PX, mediaBelow } from '../../tokens/breakpoints';
 import './TableToolbar.css';
 import { mirrorClass } from '../../behaviors/direction';
 
@@ -199,15 +203,19 @@ export interface TableToolbarLabels {
   allSelected: (count: number) => string;
   /** The command button's label. */
   command: string;
+  /** Closes the command's row and brings the bar back. */
+  commandClose: string;
   /** The command composer's placeholder. */
   commandPlaceholder: string;
   /** The command composer's send button. */
   commandSend: string;
+  /** Shown when a command changes the table without a message of its own. */
+  commandApplied: string;
   /** Shown when a command fails without a message of its own. */
   commandFailed: string;
   /** Puts the table back as it was before the last command. */
   commandUndo: string;
-  /** Closes a command's toast. */
+  /** Closes a command's toast in the bar's own stack; inside a ToastProvider, its `dismissLabel` applies instead. */
   commandDismiss: string;
   /** The bulk bar's menu of the actions that do not fit. */
   moreBulkActions: string;
@@ -267,9 +275,11 @@ const DEFAULT_LABELS: TableToolbarLabels = {
   movedSort: (column, rank, count) => `${column}, sort ${rank} of ${count}`,
   selected: (count) => `${count} selected`,
   allSelected: (count) => `All ${count} selected`,
-  command: 'Ask AI',
+  command: 'Describe',
+  commandClose: 'Close',
   commandPlaceholder: 'Tell the table what to show',
   commandSend: 'Apply',
+  commandApplied: 'The table has been updated.',
   commandFailed: 'That did not work. The table has not changed.',
   commandUndo: 'Undo',
   commandDismiss: 'Dismiss',
@@ -370,11 +380,14 @@ type TableToolbarOwnProps = {
   /** Any other controls at the bar's end, after the actions. */
   actions?: React.ReactNode;
   /**
-   * The AI command: a button in the bar that opens a one-off composer, whose
+   * The AI command: a button at the bar's start that turns the whole row into a
+   * one-off composer, as selecting rows turns it into the bulk bar, whose
    * text your handler turns into a whole table setup. It reaches everything a
    * view holds (filters, sorts, search, columns, pinning, grouping, density),
    * so it can do in a sentence what the bar's other controls do one at a time.
-   * The library calls no model; your handler does. Shows only inside a DataTable.
+   * The library calls no model; your handler does. A change or an error lands in
+   * a toast, in the surrounding ToastProvider's stack if there is one, else in the
+   * bar's own at the bottom-right. Shows only inside a DataTable.
    */
   command?: TableToolbarCommand;
   /** The bar's words, merged over their English defaults. */
@@ -393,7 +406,7 @@ export interface TableToolbarCommandRequest {
   view: TableView;
   /** The columns, as the bar knows them: keys, labels, filter kinds and choices. */
   columns: ToolbarColumn[];
-  /** Aborts when the reader stops the command. */
+  /** Aborts when the table leaves the page while the command runs. */
   signal: AbortSignal;
 }
 
@@ -401,16 +414,14 @@ export interface TableToolbarCommandRequest {
 export interface TableToolbarCommandResult {
   /** The whole setup to apply; applying replaces the setup, and leaving it out changes nothing. */
   view?: TableView;
-  /** What was done or found, shown as a toast with an Undo. */
+  /** What was done or found. A toast carries it, with an Undo when the setup changed; a setup that changed with no message takes the `commandApplied` label. */
   message?: string;
 }
 
 /** The AI command in a TableToolbar. */
 export interface TableToolbarCommand {
-  /** Turns the reader's text into a setup. A rejection shows as a failure and leaves the table alone. */
+  /** Turns the reader's text into a setup. A rejection shows as an error toast, using the error's message, and leaves the table alone. */
   onSubmit: (request: TableToolbarCommandRequest) => Promise<TableToolbarCommandResult>;
-  /** Commands to offer under the empty composer. */
-  suggestions?: string[];
 }
 
 export interface TableToolbarProps
@@ -487,6 +498,168 @@ function ToolbarPanel({
         {content}
       </Drawer>
     </>
+  );
+}
+
+/**
+ * TableToolbar's AI command: the row that takes over the bar when the button
+ * at its start is pressed, and the toast that reports the result. The public
+ * surface is TableToolbar's `command` prop. It applies what comes back
+ * through the table's own applyView, so the command can do exactly what the
+ * bar's other controls can, and nothing else; the handler it calls owns the
+ * model.
+ *
+ * It stays mounted while shut, so a command that is running can still report
+ * and so the row can transition out as well as in; the CSS owns the sequence.
+ * The outcome goes through the Toast stack, the host's when a ToastProvider
+ * surrounds the bar, else the bar's own. A change leaves on a longer timer, for
+ * its Undo; an error stays until dismissed; a message with no change leaves on
+ * the usual timer; no change and no message shows nothing.
+ */
+type ToolbarCommandState = 'idle' | 'working' | 'done' | 'error';
+
+type ToolbarCommandProps = {
+  command: TableToolbarCommand;
+  table: TableContextValue;
+  labels: TableToolbarLabels;
+  size: 'default' | 'compact';
+  /** Whether the row covers the bar. */
+  open: boolean;
+  onClose: () => void;
+  /** What the bar's button shows. */
+  state: ToolbarCommandState;
+  onStateChange: (state: ToolbarCommandState) => void;
+};
+
+function CommandRow({ command, table, labels, size, open, onClose, state, onStateChange }: ToolbarCommandProps) {
+  const { toast, dismiss } = useToast();
+  const [text, setText] = useState('');
+  const row = useRef<HTMLDivElement | null>(null);
+  const lastToast = useRef<string | null>(null);
+  const controller = useRef<AbortController | null>(null);
+  // Undo can be pressed long after the command ran, so it reaches the table as it is then.
+  const latestTable = useRef(table);
+  useEffect(() => {
+    latestTable.current = table;
+  }, [table]);
+
+  useEffect(() => {
+    if (open) row.current?.querySelector('textarea')?.focus();
+  }, [open]);
+
+  useEffect(() => () => controller.current?.abort(), []);
+
+  const report = useCallback(
+    (data: ToastData) => {
+      lastToast.current = toast(data);
+    },
+    [toast],
+  );
+
+  const run = useCallback(
+    async (typed: string) => {
+      const trimmed = typed.trim();
+      if (!trimmed || state === 'working') return;
+      const before = JSON.parse(JSON.stringify(table.view)) as TableView;
+      onClose();
+      setText('');
+      onStateChange('working');
+      if (lastToast.current) dismiss(lastToast.current);
+      lastToast.current = null;
+      const running = new AbortController();
+      controller.current = running;
+      try {
+        const result = await command.onSubmit({
+          text: trimmed,
+          view: before,
+          columns: table.columns,
+          signal: running.signal,
+        });
+        if (running.signal.aborted) return;
+        const changed = Boolean(result.view) && JSON.stringify(result.view) !== JSON.stringify(before);
+        if (changed) {
+          latestTable.current.applyView(result.view!);
+          const id = `table-command-${Date.now()}`;
+          report({
+            id,
+            variant: 'positive',
+            description: result.message || labels.commandApplied,
+            duration: MOTION_ACTION_DISMISS_MS,
+            action: (
+              <Button
+                variant="secondary"
+                tone="neutral"
+                size="compact"
+                iconLeft="refresh"
+                label={labels.commandUndo}
+                onClick={() => {
+                  latestTable.current.applyView(before);
+                  dismiss(id);
+                }}
+              />
+            ),
+          });
+        } else if (result.message) {
+          report({ variant: 'info', description: result.message });
+        }
+        onStateChange('done');
+      } catch (error) {
+        if (running.signal.aborted) return;
+        // What was asked goes back in the composer, so a failed command is one click from another try.
+        setText(trimmed);
+        report({
+          variant: 'error',
+          description: error instanceof Error && error.message ? error.message : labels.commandFailed,
+          duration: 0,
+        });
+        onStateChange('error');
+      }
+    },
+    [command, table, state, onClose, onStateChange, labels.commandApplied, labels.commandFailed, labels.commandUndo, report, dismiss],
+  );
+
+  return (
+    <div
+      className="ds-table-toolbar__command-row"
+      data-open={open || undefined}
+      inert={!open || undefined}
+      ref={row}
+      onKeyDown={(event) => {
+        if (event.key !== 'Escape') return;
+        event.preventDefault();
+        onClose();
+      }}
+    >
+      <CircularButton
+        className="ds-table-toolbar__command-close"
+        icon="close"
+        variant="tertiary"
+        size={size}
+        ariaLabel={labels.commandClose}
+        tooltip={false}
+        onClick={onClose}
+      />
+      <Composer
+        inline
+        size={size}
+        value={text}
+        onValueChange={setText}
+        onSubmit={run}
+        placeholder={labels.commandPlaceholder}
+        sendLabel={labels.commandSend}
+        attachButton={false}
+      />
+    </div>
+  );
+}
+
+function ToolbarCommand(props: ToolbarCommandProps) {
+  const host = useOptionalToast();
+  if (host) return <CommandRow {...props} />;
+  return (
+    <ToastProvider position="bottom-right" dismissLabel={props.labels.commandDismiss}>
+      <CommandRow {...props} />
+    </ToastProvider>
   );
 }
 
@@ -570,7 +743,6 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
   ) => {
     const table = useTableContext();
     const labels: TableToolbarLabels = { ...DEFAULT_LABELS, ...labelsProp };
-    const commandUi = useToolbarCommand(command, table, labels);
     const baseFilterLabels = table?.filterLabels ?? DEFAULT_FILTER_LABELS;
     const filterLabels: FilterLabels = {
       ...baseFilterLabels,
@@ -779,10 +951,15 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        so a bar in a narrow panel folds too. */
     const rootRef = useRef<HTMLDivElement | null>(null);
     const [narrow, setNarrow] = useState(false);
+    const [crowded, setCrowded] = useState(false);
     useEffect(() => {
       const node = rootRef.current;
       if (!node) return;
-      const observer = new ResizeObserver(([entry]) => setNarrow(entry.contentRect.width < BREAKPOINT_PHONE_PX));
+      const observer = new ResizeObserver(([entry]) => {
+        setNarrow(entry.contentRect.width < BREAKPOINT_PHONE_PX);
+        // Seven controls at their height need more room than this to keep their gaps.
+        setCrowded(entry.contentRect.width < BREAKPOINT_SHEET_PX);
+      });
       observer.observe(node);
       return () => observer.disconnect();
     }, []);
@@ -901,6 +1078,32 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        safe area, where a thumb reaches it, and the bar's own row stays. */
     const phoneScreen = useSyncExternalStore(subscribePhone, isPhone, () => false);
     const floating = phoneScreen && bulkMode;
+    /* The command takes the whole row, as the bulk bar does. A bulk bar in the
+       same row wins; the command returns when the selection clears. */
+    const [commandOpen, setCommandOpen] = useState(false);
+    const [commandState, setCommandState] = useState<ToolbarCommandState>('idle');
+    const commandButton = useRef<HTMLButtonElement | null>(null);
+    const commandShown = commandOpen && Boolean(command && table) && !(bulkMode && !floating);
+    const closeCommand = () => {
+      setCommandOpen(false);
+      // After the row is back, since the bar is inert until then.
+      requestAnimationFrame(() => commandButton.current?.focus());
+    };
+    const covered = commandShown || (bulkMode && !floating);
+    const commandButtonDrawn = (
+      <AiButton
+        ref={commandButton}
+        className="ds-table-toolbar__command"
+        iconOnly={narrow}
+        size={size}
+        label={labels.command}
+        state={commandState}
+        aria-expanded={commandShown}
+        onClick={() => setCommandOpen(true)}
+      />
+    );
+    /* Folded to its icon, it says its name on hover, as the bar's other icons do. */
+    const commandTrigger = narrow ? <Tooltip content={labels.command}>{commandButtonDrawn}</Tooltip> : commandButtonDrawn;
     const matching = table?.matchingIds ?? [];
     const matchingCount = table?.matchingCount ?? matching.length;
     const allMatching =
@@ -1561,7 +1764,35 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
 
     /* The Group panel: the column the rows group by (or none), then, inside
        a table, Collapse all and Expand all. */
-    const groupControl = groupable && groupableColumns.length > 0 && (
+    const groupOffered = groupable && groupableColumns.length > 0;
+    const groupPanel = (
+        <div className="ds-table-toolbar__menu">
+          <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
+            {labels.groupBy}
+          </div>
+          <div className="ds-table-toolbar__menu-row">
+            <Dropdown
+              className="ds-table-toolbar__menu-field"
+              size={size}
+              aria-label={labels.groupBy}
+              options={[
+                { value: '', label: labels.noGrouping },
+                ...groupableColumns.map((col) => ({ value: col.key, label: col.label })),
+              ]}
+              value={groupedBy ?? ''}
+              onValueChange={(next) => setGrouping(next ? [String(next)] : [])}
+            />
+          </div>
+          {table && groupedBy && menuSeparator}
+          {table && groupedBy && (
+            <div className="ds-table-toolbar__menu-actions">
+              {menuItem(labels.collapseAll, 'unfold_less', () => table.setAllGroupsOpen(false))}
+              {menuItem(labels.expandAll, 'unfold_more', () => table.setAllGroupsOpen(true))}
+            </div>
+          )}
+        </div>
+    );
+    const groupControl = groupOffered && (
       <span className="ds-table-toolbar__badge-host">
         <ToolbarPanel
           sheet={phoneScreen}
@@ -1569,33 +1800,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           size={size}
           ariaLabel={labels.group(Boolean(groupedBy))}
           position="bottom"
-          content={
-            <div className="ds-table-toolbar__menu">
-              <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
-                {labels.groupBy}
-              </div>
-              <div className="ds-table-toolbar__menu-row">
-                <Dropdown
-                  className="ds-table-toolbar__menu-field"
-                  size={size}
-                  aria-label={labels.groupBy}
-                  options={[
-                    { value: '', label: labels.noGrouping },
-                    ...groupableColumns.map((col) => ({ value: col.key, label: col.label })),
-                  ]}
-                  value={groupedBy ?? ''}
-                  onValueChange={(next) => setGrouping(next ? [String(next)] : [])}
-                />
-              </div>
-              {table && groupedBy && menuSeparator}
-              {table && groupedBy && (
-                <div className="ds-table-toolbar__menu-actions">
-                  {menuItem(labels.collapseAll, 'unfold_less', () => table.setAllGroupsOpen(false))}
-                  {menuItem(labels.expandAll, 'unfold_more', () => table.setAllGroupsOpen(true))}
-                </div>
-              )}
-            </div>
-          }
+          content={groupPanel}
         >
           <CircularButton
             icon="view_agenda"
@@ -1648,7 +1853,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
        icon besides. */
     const foldedActions = narrow ? [...secondaryActions, ...(primaryAction?.menu ?? [])] : [];
     const foldedDensity = narrow ? density : false;
-    const moreControl = (foldedDensity || foldedActions.length > 0) && (
+    /* Too tight for every icon at its size, Group and Columns move into More too. */
+    const foldedGroup = crowded && groupOffered;
+    const foldedColumns = crowded ? columnsList : false;
+    const morePanel = (
       <ToolbarPanel
         sheet={phoneScreen}
         title={labels.more}
@@ -1669,13 +1877,26 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 </div>
               </>
             )}
-            {foldedActions.length > 0 && foldedDensity && menuSeparator}
+            {foldedActions.length > 0 && (foldedGroup || foldedDensity) && menuSeparator}
+            {foldedGroup && groupPanel}
+            {foldedGroup && foldedDensity && menuSeparator}
             {foldedDensity && (
               <>
                 <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
                   {labels.density}
                 </div>
                 <div className="ds-table-toolbar__menu-row">{foldedDensity}</div>
+              </>
+            )}
+            {foldedColumns && (foldedActions.length > 0 || foldedGroup || foldedDensity) && menuSeparator}
+            {foldedColumns && (
+              <>
+                <div className="ds-table-toolbar__menu-heading" aria-hidden="true">
+                  {labels.columns}
+                </div>
+                {foldedColumns}
+                {menuSeparator}
+                <div className="ds-table-toolbar__menu-actions">{showAllColumns}</div>
               </>
             )}
           </div>
@@ -1690,6 +1911,16 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           tooltip={labels.more}
         />
       </ToolbarPanel>
+    );
+    const moreControl = (foldedDensity || foldedActions.length > 0 || foldedGroup || foldedColumns) && (
+      <span className="ds-table-toolbar__badge-host">
+        {morePanel}
+        {foldedGroup && groupedBy && (
+          <span className="ds-table-toolbar__badge" aria-hidden="true">
+            1
+          </span>
+        )}
+      </span>
     );
 
     const showFilters = filterable && filterableColumns.length > 0;
@@ -1729,12 +1960,25 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
               </button>
             </>
           )}
+          {command && table && (
+            <ToolbarCommand
+              command={command}
+              table={table}
+              labels={labels}
+              size={size}
+              open={commandShown}
+              onClose={closeCommand}
+              state={commandState}
+              onStateChange={setCommandState}
+            />
+          )}
           <div
             className="ds-table-toolbar__main"
-            inert={(bulkMode && !floating) || undefined}
-            data-covered={(bulkMode && !floating) || undefined}
+            inert={covered || undefined}
+            data-covered={commandShown ? 'command' : covered ? 'bulk' : undefined}
           >
             <div className="ds-table-toolbar__start" ref={startRef}>
+              {command && table && commandTrigger}
               {searchable && !narrow && searchField}
               {/* Filter sits with what it makes: after search, before the chips it adds. */}
               {showFilters && !narrow && (
@@ -1794,13 +2038,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   />
                 </ToolbarPanel>
               )}
-              {commandUi.control(size, narrow)}
-              {commandUi.toast}
               {/* The icon controls sit together: Sort, Group, Columns, density, then More. */}
               {showFilters && narrow && filterPanel}
               {sortControl}
-              {groupControl}
-              {columnsControl}
+              {!crowded && groupControl}
+              {!crowded && columnsControl}
               {!narrow && densityIcons}
               {moreControl}
               {(primaryAction || (!narrow && secondaryActions.length > 0)) && (

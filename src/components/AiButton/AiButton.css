@@ -279,6 +279,7 @@
    focus outline is its signal, as on Button, and a widened ring inside it
    would read as two concentric strokes. */
 .ds-ai-button:hover::before,
+.ds-ai-button[aria-expanded='true']::before,
 .ds-ai-button--busy::before,
 .ds-ai-button--done::before,
 .ds-ai-button--error::before {
@@ -287,6 +288,7 @@
 }
 
 .ds-ai-button:hover::after,
+.ds-ai-button[aria-expanded='true']::after,
 .ds-ai-button--busy::after,
 .ds-ai-button--done::after,
 .ds-ai-button--error::after {

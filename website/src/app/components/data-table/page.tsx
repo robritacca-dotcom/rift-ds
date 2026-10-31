@@ -11,6 +11,7 @@ import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 import {
   ColumnsDemo,
+  CommandDemo,
   DetailsDemo,
   EditingDemo,
   GroupingDemo,
@@ -117,6 +118,18 @@ export default function DataTablePage() {
               details beneath it, across the table, rendered only once opened.
             </p>
             <DetailsDemo />
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="AI command" />
+            <p className={styles.demoText}>
+              Press Describe in the bar and type what you want to see. The row
+              turns into a composer, your handler turns the sentence into a whole
+              view, and a toast reports the change with an Undo. The library calls
+              no model; this demo&apos;s handler is a stand-in you can try for free.
+              The merchant sales template runs it on a real model.
+            </p>
+            <CommandDemo />
           </section>
 
           <section className={styles.section}>

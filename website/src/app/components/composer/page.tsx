@@ -201,6 +201,22 @@ export default function ComposerPage() {
             <StreamingDemo />
           </section>
 
+          {/* Compact */}
+          <section className={styles.section}>
+            <SectionTitle title="Compact and inline" />
+            <p className={styles.sectionBody}>
+              <code>size</code> is the density, the same default and compact pair
+              a table uses. <code>inline</code> puts everything on one row at that
+              density&apos;s control height, for a popover or a tight bar.
+              TableToolbar&apos;s AI command opens one at the table&apos;s density.
+            </p>
+            <div className={styles.stack}>
+              <Composer inline placeholder="Inline, default" attachButton={false} />
+              <Composer inline size="compact" placeholder="Inline, compact" attachButton={false} />
+              <Composer size="compact" placeholder="Compact" attachButton={false} />
+            </div>
+          </section>
+
           {/* AI glow */}
           <section className={styles.section}>
             <SectionTitle title="AI glow" />

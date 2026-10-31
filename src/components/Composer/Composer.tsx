@@ -51,9 +51,11 @@ type ComposerOwnProps = {
   streaming?: boolean;
   /** Fires when the stop button is pressed while `streaming`. */
   onStop?: () => void;
-  /** `compact` is the mini composer: one row, with the send button on the text's line, for a popover or a tight bar. Pair it with `maxRows={1}`. */
+  /** The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons. */
   size?: 'default' | 'compact';
-  /** Growth cap in text rows before the textarea scrolls internally. */
+  /** One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1. */
+  inline?: boolean;
+  /** Growth cap in text rows before the textarea scrolls internally. Defaults to 8, or 1 when `inline`. */
   maxRows?: number;
   /**
    * While focused, the shell wears AiButton's slowly rotating gradient ring
@@ -247,7 +249,8 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       streaming = false,
       onStop,
       size = 'default',
-      maxRows = 8,
+      inline = false,
+      maxRows = inline ? 1 : 8,
       aiGlow = false,
       context,
       contextIcon,
@@ -672,6 +675,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       baseClass,
       aiGlow ? `${baseClass}--ai-glow` : '',
       size === 'compact' ? `${baseClass}--compact` : '',
+      inline ? `${baseClass}--inline` : '',
       streaming ? `${baseClass}--streaming` : '',
       disabled ? `${baseClass}--disabled` : '',
       dragging ? `${baseClass}--dragging` : '',
@@ -813,6 +817,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
                 <CircularButton
                   icon="add"
                   variant="tertiary"
+                  size={size}
                   ariaLabel={attachLabel}
                   disabled={disabled}
                   onClick={() => fileInputRef.current?.click()}
@@ -827,6 +832,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
               <CircularButton
                 icon="stop"
                 variant="primary"
+                size={size}
                 ariaLabel={stopLabel}
                 disabled={disabled}
                 onClick={onStop}
@@ -835,6 +841,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
               <CircularButton
                 icon="arrow_upward"
                 variant="primary"
+                size={size}
                 ariaLabel={sendLabel}
                 disabled={!canSend}
                 onClick={submit}

@@ -8,7 +8,7 @@ import {
   type DataTableRow,
 } from "rift-ds/components/DataTable/DataTable";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
-import { TableToolbar, type TableToolbarView } from "rift-ds/components/TableToolbar/TableToolbar";
+import { TableToolbar, type TableToolbarCommand, type TableToolbarView  } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./page.module.css";
 
 /* Fictional accounts, typed columns and no render functions: each column's
@@ -104,6 +104,47 @@ export function OverviewDemo() {
 }
 
 /** Every column type, one column each. */
+/**
+ * A stand-in for a handler that calls a model, so the command can be tried here
+ * for free: it reads a stage or "biggest" out of the sentence, says when it can do
+ * neither, and fails on request. Your handler would turn any sentence into a view.
+ */
+const DEMO_COMMAND: TableToolbarCommand = {
+  onSubmit: async ({ text, view }) => {
+    const asked = text.toLowerCase();
+    if (asked.includes("fail")) throw new Error("The stand-in failed on request. The table has not changed.");
+    const stage = STAGES.find((option) => asked.includes(option.label.toLowerCase()));
+    if (stage)
+      return {
+        view: { ...view, filters: [{ id: "stage-1", column: "stage", operator: "isAnyOf", value: [stage.value] }] },
+        message: `The table now shows ${stage.label} accounts.`,
+      };
+    if (/big|large|value/.test(asked))
+      return { view: { ...view, sorts: [{ key: "value", direction: "desc" }] }, message: "The biggest accounts now come first." };
+    return { message: "This stand-in only knows the stages and biggest first. Your handler would call a model." };
+  },
+};
+
+/** The AI command: Describe takes the bar's row, and the sentence becomes a view. */
+export function CommandDemo() {
+  return (
+    <DataTable
+      columns={accountColumns}
+      rows={makeAccounts(16)}
+      columnMenu
+      multiSort
+      pageSize={5}
+      caption="Accounts, with an AI command"
+      toolbar={
+        <TableToolbar
+          command={DEMO_COMMAND}
+          labels={{ commandPlaceholder: "Try: biggest first, a stage such as Won, or fail" }}
+        />
+      }
+    />
+  );
+}
+
 export function TypesDemo() {
   return <DataTable columns={accountColumns} rows={ACCOUNTS_ROWS.slice(0, 4)} caption="Accounts, every column type" />;
 }

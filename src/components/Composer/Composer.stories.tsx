@@ -53,11 +53,27 @@ export const AiGlow: Story = {
   },
 };
 
-/** The mini composer: one row, with send on the text's line, for a popover or a tight bar. */
+/** The compact density: the tighter padding, with the smaller text and buttons. */
 export const Compact: Story = {
   args: {
     size: 'compact',
-    maxRows: 1,
+  },
+};
+
+/** One row at the control height, for a popover, a sheet or a tight bar. */
+export const Inline: Story = {
+  args: {
+    inline: true,
+    attachButton: false,
+  },
+};
+
+/** Inline at the compact density, the height of a compact Input or table toolbar. */
+export const InlineCompact: Story = {
+  args: {
+    inline: true,
+    size: 'compact',
+    attachButton: false,
   },
 };
 

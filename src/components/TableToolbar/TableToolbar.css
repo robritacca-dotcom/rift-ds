@@ -1,7 +1,7 @@
 /* ============================================
    TABLE TOOLBAR
    The control bar over a table: search, filter chips, the More panel's columns,
-   the density switch, the count and actions, in one row that wraps.
+   the density switch, the count, the actions and the AI command, in one line.
    ============================================ */
 
 .ds-table-toolbar {
@@ -61,6 +61,11 @@
 
 .ds-table-toolbar__end {
   flex-shrink: 0;
+}
+
+/* Folded, the start cluster holds only the AI command, at its own size. */
+.ds-table-toolbar--narrow .ds-table-toolbar__start {
+  flex: 0 0 auto;
 }
 
 /* Folded, search moves into the end cluster and the start cluster is empty:
@@ -377,8 +382,68 @@
   min-width: 0;
 }
 
+/* A row that takes over the bar: the bar's controls fade out, then the row
+   comes in. Coming back is the reverse. The bar stays laid out throughout, so the
+   row never changes height. */
+.ds-table-toolbar__start > *,
+.ds-table-toolbar__end {
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard) var(--motion-duration-fast);
+}
+
 .ds-table-toolbar__main[data-covered] {
   visibility: hidden;
+  transition: visibility 0s linear calc(var(--motion-duration-fast) + var(--motion-duration-base));
+}
+
+.ds-table-toolbar__main[data-covered] .ds-table-toolbar__start > *,
+.ds-table-toolbar__main[data-covered] .ds-table-toolbar__end {
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* The AI button collapses to the circle the row's close button takes over,
+   clipped from its far end. Only while it does: a clip at rest would make the
+   button a stacking context and paint its glow over its fill. */
+.ds-table-toolbar__start > .ds-table-toolbar__command {
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard) var(--motion-duration-fast);
+}
+
+.ds-table-toolbar__main[data-covered='command'] .ds-table-toolbar__start > .ds-table-toolbar__command {
+  --ds-table-toolbar-circle: var(--control-height-default);
+  /* ds-allow(physical): inset() has no logical form; the rtl rule below mirrors it */
+  --ds-table-toolbar-collapsed: inset(0 calc(100% - var(--ds-table-toolbar-circle)) 0 0 round var(--radius-pill));
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard) var(--motion-duration-base);
+  animation: ds-table-toolbar-collapse var(--motion-duration-base) var(--motion-ease-standard) forwards;
+}
+
+.ds-table-toolbar__main[data-covered='command'] .ds-table-toolbar__start > .ds-table-toolbar__command.ds-ai-button--compact {
+  --ds-table-toolbar-circle: var(--control-height-compact);
+}
+
+.ds-table-toolbar__main[data-covered='command'] .ds-table-toolbar__start > .ds-table-toolbar__command:dir(rtl) {
+  /* ds-allow(physical): the mirror of the rule above */
+  --ds-table-toolbar-collapsed: inset(0 0 0 calc(100% - var(--ds-table-toolbar-circle)) round var(--radius-pill));
+}
+
+@keyframes ds-table-toolbar-collapse {
+  from {
+    clip-path: inset(calc(var(--gap-400) * -1) calc(var(--gap-400) * -1) round var(--radius-pill));
+  }
+  to {
+    clip-path: var(--ds-table-toolbar-collapsed);
+  }
+}
+
+/* The bulk bar fades in as the bar finishes fading out. */
+.ds-table-toolbar__bulk:not(.ds-table-toolbar__bulk--floating) {
+  animation: ds-table-toolbar-row-in var(--motion-duration-base) var(--motion-ease-entrance) var(--motion-duration-fast) backwards;
+}
+
+@keyframes ds-table-toolbar-row-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .ds-table-toolbar__bulk {
@@ -505,19 +570,60 @@
   flex-shrink: 0;
 }
 
-/* The AI command: its mini composer, and the toast that reports the result,
-   fixed to the bottom-left corner over everything. */
-.ds-table-toolbar__command-panel {
+/* The AI command's row: it covers the bar as the bulk bar does, the composer
+   taking all of it after the close button. Shut, it stays laid out and out of
+   sight. Opening, the close button arrives as the AI button finishes collapsing
+   and the composer opens out from beside it; closing, both leave first. */
+.ds-table-toolbar__command-row {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--gap-200);
-  width: min(22rem, calc(100vw - var(--gap-500)));
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear var(--motion-duration-fast);
 }
 
-.ds-table-toolbar__command-toast {
-  position: fixed;
-  inset-block-end: var(--gap-400);
-  inset-inline-start: var(--gap-400);
-  z-index: var(--layer-toast);
-  width: min(26rem, calc(100vw - var(--gap-500)));
+.ds-table-toolbar__command-row[data-open] {
+  visibility: visible;
+  pointer-events: auto;
+  transition: visibility 0s;
+}
+
+.ds-table-toolbar__command-row .ds-composer {
+  flex: 1;
+  min-width: 0;
+  opacity: 0;
+  /* ds-allow(physical): inset() has no logical form; the rtl rule below mirrors it */
+  clip-path: inset(0 100% 0 0 round var(--radius-300));
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    clip-path var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-table-toolbar__command-row .ds-composer:dir(rtl) {
+  /* ds-allow(physical): the mirror of the rule above */
+  clip-path: inset(0 0 0 100% round var(--radius-300));
+}
+
+.ds-table-toolbar__command-row[data-open] .ds-composer {
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round var(--radius-300));
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-entrance) var(--motion-duration-base),
+    clip-path var(--motion-duration-base) var(--motion-ease-entrance) var(--motion-duration-base),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-table-toolbar__command-close {
+  opacity: 0;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-table-toolbar__command-row[data-open] .ds-table-toolbar__command-close {
+  opacity: 1;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard) var(--motion-duration-base);
 }

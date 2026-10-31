@@ -28,6 +28,8 @@ export interface ToastData {
   dismissible?: boolean;
   /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** A control under the text, such as an Undo. One whose control must not leave on a timer sets `duration` to 0. */
+  action?: React.ReactNode;
 }
 
 export interface ToastProviderProps {
@@ -71,6 +73,13 @@ export const useToast = (): ToastContextValue => {
   return context;
 };
 
+/**
+ * The toast API when a ToastProvider surrounds the caller, else null: for a
+ * component that joins the host's stack if there is one and brings its own if not.
+ */
+// eslint-disable-next-line react-refresh/only-export-components -- part of the Toast public API, beside useToast
+export const useOptionalToast = (): ToastContextValue | null => useContext(ToastContext);
+
 /* ============================================
    DEFAULTS
    ============================================ */
@@ -95,6 +104,7 @@ interface ToastItemProps extends Required<Pick<ToastData, 'variant'>> {
   description?: string;
   dismissible: boolean;
   icon?: string | React.ReactNode;
+  action?: React.ReactNode;
   duration: number;
   dismissLabel: string;
   onDismiss: (id: string) => void;
@@ -107,6 +117,7 @@ const ToastItem = ({
   variant,
   dismissible,
   icon,
+  action,
   duration,
   dismissLabel,
   onDismiss,
@@ -174,6 +185,7 @@ const ToastItem = ({
         {description && (
           <p className={`${baseClass}__description`}>{description}</p>
         )}
+        {action && <div className={`${baseClass}__action`}>{action}</div>}
       </div>
 
       {dismissible && (
@@ -286,6 +298,7 @@ export const ToastProvider = ({
                 variant={t.variant || 'info'}
                 dismissible={t.dismissible ?? true}
                 icon={t.icon}
+                action={t.action}
                 duration={t.duration ?? MOTION_AUTO_DISMISS_MS}
                 dismissLabel={dismissLabel}
                 onDismiss={dismiss}

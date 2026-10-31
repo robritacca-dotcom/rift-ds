@@ -635,22 +635,73 @@
 }
 
 /* ============================================
-   COMPACT: the mini composer, one row, the send button on the text's line
+   COMPACT: the same shell at the compact density
    ============================================ */
 .ds-composer--compact {
-  flex-direction: row;
-  align-items: center;
+  --ds-composer-send-size: var(--control-height-compact);
+  --ds-composer-text-inset: var(--padding-300);
+  /* Concentric on this density's tighter ring. */
+  --ds-composer-radius: calc(
+    min(var(--radius-pill), var(--ds-composer-send-size) / 2) + var(--padding-100) + var(--border-025)
+  );
 }
 
 .ds-composer--compact .ds-composer__content {
-  flex: 1;
-  min-width: 0;
-  width: auto;
-  padding: var(--padding-200) var(--padding-100) var(--padding-200) var(--ds-composer-text-inset);
-  height: calc(var(--ds-composer-text-height, var(--font-paragraph-line-height)) + var(--padding-200) * 2);
+  padding-block: var(--padding-200) var(--padding-100);
+  height: calc(var(--ds-composer-text-height, var(--font-paragraph-sm-line-height)) + var(--padding-200) + var(--padding-100));
+}
+
+.ds-composer--compact .ds-composer__textarea {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  max-height: calc(var(--ds-composer-max-rows, 8) * var(--font-paragraph-sm-line-height));
 }
 
 .ds-composer--compact .ds-composer__footer {
+  padding: var(--padding-100);
+}
+
+/* ============================================
+   INLINE: one row at the control height, the send button on the text's line.
+   The shell is an input here, so it does not float, and the button sits
+   inside the height, concentric on a thinner ring.
+   ============================================ */
+.ds-composer--inline {
+  --ds-composer-control: var(--control-height-default);
+  --ds-composer-line: var(--font-paragraph-line-height);
+  --ds-composer-send-size: calc(var(--ds-composer-control) - var(--padding-050) * 2 - var(--border-025) * 2);
+  --ds-composer-radius: calc(
+    min(var(--radius-pill), var(--ds-composer-send-size) / 2) + var(--padding-050) + var(--border-025)
+  );
+  flex-direction: row;
+  align-items: center;
+  box-shadow: none;
+}
+
+.ds-composer--inline.ds-composer--compact {
+  --ds-composer-control: var(--control-height-compact);
+  --ds-composer-line: var(--font-paragraph-sm-line-height);
+}
+
+.ds-composer--inline .ds-composer__content,
+.ds-composer--inline.ds-composer--compact .ds-composer__content {
+  --ds-composer-text-block: calc((var(--ds-composer-control) - var(--ds-composer-line)) / 2 - var(--border-025));
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding-block: var(--ds-composer-text-block);
+  padding-inline: var(--ds-composer-text-inset) var(--padding-100);
+  height: calc(var(--ds-composer-text-height, var(--ds-composer-line)) + var(--ds-composer-text-block) * 2);
+}
+
+.ds-composer--inline .ds-composer__footer,
+.ds-composer--inline.ds-composer--compact .ds-composer__footer {
   flex-shrink: 0;
-  padding: var(--padding-200);
+  padding: var(--padding-050);
+}
+
+.ds-composer--inline .ds-composer__footer .ds-circular-button {
+  width: var(--ds-composer-send-size);
+  height: var(--ds-composer-send-size);
 }

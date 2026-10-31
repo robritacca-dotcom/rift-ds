@@ -32,6 +32,11 @@ export const IconOnly: Story = {
   args: { iconOnly: true },
 };
 
+/** Open: while the button's panel is open its ring stays awake, read from `aria-expanded`, which Popover sets on its trigger. */
+export const Open: Story = {
+  args: { 'aria-expanded': true },
+};
+
 export const Compact: Story = {
   args: { size: 'compact' },
 };

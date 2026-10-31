@@ -5,16 +5,17 @@
 <title>Rift DS hype reel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  @font-face { font-family: "Inter Tight"; src: url("../src/fonts/presets/inter-tight-300-900-latin.woff2") format("woff2"); font-weight: 300 900; }
-  @font-face { font-family: "Plex Mono"; src: url("../src/fonts/presets/ibm-plex-mono-500-latin.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Inter Tight"; src: url("fonts/inter-tight-300-900-latin.woff2") format("woff2"); font-weight: 300 900; }
+  @font-face { font-family: "Plex Mono"; src: url("fonts/ibm-plex-mono-500-latin.woff2") format("woff2"); font-weight: 500; }
 
   :root { --teal: #0E6E8F; --glow: #2FC4E8; --ink: #050505; --paper: #F4F6F7; --accent: var(--glow); }
   * { box-sizing: border-box; margin: 0; }
-  html, body { height: 100%; background: #000; overflow: hidden; cursor: none; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body.recording { cursor: none; }
   body { font-family: "Inter Tight", system-ui, sans-serif; color: #fff; display: grid; place-items: center; }
 
   /* A fixed 16:9 stage, scaled to the window, so a screen recording frames the same at any size. */
-  #stage { width: 1920px; height: 1080px; position: relative; overflow: hidden; background: var(--ink); transform-origin: center; flex: none; }
+  #stage { width: 1920px; height: 1080px; position: absolute; left: 50%; top: 50%; overflow: hidden; background: var(--ink); transform-origin: center; }
   .scene { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
   .center { display: grid; place-items: center; text-align: center; }
 
@@ -96,7 +97,10 @@
   #endCmd { margin-top: 60px; font-size: 46px; padding: 22px 44px; border-radius: 999px; border: 2px solid rgba(255,255,255,.25); display: inline-block; }
   #endUrl { margin-top: 40px; font-size: 52px; font-weight: 800; color: var(--glow); letter-spacing: -0.02em; }
 
-  #hint { position: fixed; inset: auto 0 24px 0; text-align: center; font: 500 15px system-ui; color: #889; z-index: 99; cursor: default; }
+  #hint { position: fixed; inset: 0; display: grid; place-content: center; gap: 22px; text-align: center; z-index: 99; cursor: pointer;
+    background: rgba(0,0,0,.55); font: 500 16px system-ui, sans-serif; color: #aab; }
+  #hint button { justify-self: center; font: 700 22px system-ui, sans-serif; color: #050505; background: #2FC4E8; border: 0;
+    border-radius: 999px; padding: 18px 40px; cursor: pointer; }
   #hint.gone { display: none; }
   #progress { position: fixed; left: 0; bottom: 0; height: 3px; background: var(--glow); z-index: 99; width: 0; }
   body.recording #progress { display: none; }
@@ -154,7 +158,7 @@
     </div>
   </section>
 </div>
-<div id="hint">Click or press Space to play. F for fullscreen. R to restart. ?loop=1 loops.</div>
+<div id="hint"><button type="button">▶ Play</button><div>Space pauses · F fullscreen · R restart · ← → step a beat</div></div>
 <div id="progress"></div>
 
 <script src="data.js"></script>
@@ -394,7 +398,8 @@ function render(t) {
 }
 
 /* ---------- playback ---------- */
-const LOOP = new URLSearchParams(location.search).has('loop');
+const Q = new URLSearchParams(location.search);
+const LOOP = Q.has('loop') || location.hash === '#loop';
 let start = null, paused = true, at = 0;
 function frame(now) {
   if (!paused) {
@@ -405,19 +410,20 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 function play() { $('hint').classList.add('gone'); document.body.classList.add('recording'); paused = false; start = performance.now() - at * 1000; }
-function toggle() { if (at >= DURATION - 0.01) at = 0; paused ? play() : (paused = true); }
+function fullscreen() { try { const r = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); r && r.catch(() => {}); } catch (e) { /* the frame may refuse fullscreen */ } }
+function toggle() { if (at >= DURATION - 0.01) at = 0; if (paused) play(); else { paused = true; document.body.classList.remove('recording'); } }
 addEventListener('click', toggle);
 addEventListener('keydown', (e) => {
   if (e.key === ' ') { e.preventDefault(); toggle(); }
   if (e.key === 'r') { at = 0; start = performance.now(); }
-  if (e.key === 'f') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  if (e.key === 'f') fullscreen();
   if (e.key === 'ArrowRight') { at = Math.min(DURATION - 0.01, at + BEAT); start = performance.now() - at * 1000; }
   if (e.key === 'ArrowLeft') { at = Math.max(0, at - BEAT); start = performance.now() - at * 1000; }
 });
-function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080); $('stage').style.transform = `scale(${s})`; }
+function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080); $('stage').style.transform = `translate(-50%, -50%) scale(${s})`; }
 addEventListener('resize', fit); fit();
 // ?t=12 opens paused on second 12, for checking a frame.
-const seek = parseFloat(new URLSearchParams(location.search).get('t'));
+const seek = parseFloat(Q.get('t'));
 if (!isNaN(seek)) at = seek;
 requestAnimationFrame(frame);
 </script>

@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.19.0",
+      "date": "2026-10-31",
+      "title": "Describe a table and it changes",
+      "body": [
+        "TableToolbar takes `command`: a Describe button at the start of the bar turns the whole row into a composer, the way selecting rows turns it into the bulk bar. Your handler turns the sentence into a table view, and the library calls no model. A change lands in a toast with an Undo for 10 seconds, and an error lands in a toast that stays, with the table left alone and the text back in the composer.",
+        "Composer takes `inline` and `size`: `size` is the default and compact density a table uses, and `inline` puts everything on one row at that density's control height. Toast takes `action` in the stack as well as standalone, and `useOptionalToast` lets a component join the host's stack or bring its own.",
+        "Bar, stacked bar and combo charts now draw bars as a wash of their series colour. TableToolbar moves Group and Columns into More under 480px, AppSidebar shows counts on the collapsed rail, and tooltips always paint in the top layer. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.18.0",
       "date": "2026-10-29",
       "title": "Stats that restack themselves",

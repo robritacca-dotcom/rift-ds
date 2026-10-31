@@ -27,6 +27,11 @@ export const CustomLabel: Story = {
   args: { label: 'Chat with the agent', icon: 'forum' },
 };
 
+/** A circle holding only the icon, for a tight bar; the label stays as its accessible name. */
+export const IconOnly: Story = {
+  args: { iconOnly: true },
+};
+
 export const Compact: Story = {
   args: { size: 'compact' },
 };

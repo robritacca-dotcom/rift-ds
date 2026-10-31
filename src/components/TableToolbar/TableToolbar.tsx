@@ -1794,7 +1794,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   />
                 </ToolbarPanel>
               )}
-              {commandUi.control(size)}
+              {commandUi.control(size, narrow)}
               {commandUi.toast}
               {/* The icon controls sit together: Sort, Group, Columns, density, then More. */}
               {showFilters && narrow && filterPanel}

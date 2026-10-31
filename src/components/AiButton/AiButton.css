@@ -339,6 +339,15 @@
   --icon-size: var(--icon-size-500);
 }
 
+.ds-ai-button--icon-only {
+  width: var(--control-height-default);
+  padding: 0;
+}
+
+.ds-ai-button--compact.ds-ai-button--icon-only {
+  width: var(--control-height-compact);
+}
+
 /* Reduced motion: the ring and glow stay, the turning stops. */
 /* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (the ring's turn and the busy spin), and drops the status icon's entrance. */
 @media (prefers-reduced-motion: reduce) {

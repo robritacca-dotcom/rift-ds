@@ -16,6 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | no | `Ask AI` | Button text content |
 | icon | `ReactNode` | no | `auto_awesome` | Leading icon — Material Symbol name (string) or custom element (ReactNode) |
+| iconOnly | `boolean` | no | `false` | Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name. |
 | size | `"default" \| "compact"` | no | `default` | Button size |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | state | `AgentStatusState` | no |  | What the agent behind the button is doing, in AgentStatus's vocabulary. The label never changes; the icon carries the state. `thinking` and `working` show AgentStatusMark and spin the ring faster, `waiting` shows the mark breathing in the warning colour with the ring at rest, and `done` and `error` turn the button to their status colours with the mark filled solid in the status colour, then return to the resting look after a beat. The button stays clickable throughout, unlike Button's `loading`, so a click can open the conversation to watch the work. |

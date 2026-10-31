@@ -54,6 +54,8 @@ type AiButtonOwnProps = {
   label?: string;
   /** Leading icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name. */
+  iconOnly?: boolean;
   /** Button size */
   size?: 'default' | 'compact';
   /** Whether the button is disabled */
@@ -163,6 +165,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     {
       label = 'Ask AI',
       icon = 'auto_awesome',
+      iconOnly = false,
       size = 'default',
       disabled,
       state: status,
@@ -338,6 +341,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     };
 
     const classes = [
+      iconOnly ? `${baseClass}--icon-only` : '',
       baseClass,
       `${baseClass}--${size}`,
       disabled && `${baseClass}--disabled`,
@@ -373,7 +377,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
             </span>
           </span>
         )}
-        <span className={`${baseClass}__text`}>{label}</span>
+        <span className={iconOnly ? 'ds-visually-hidden' : `${baseClass}__text`}>{label}</span>
       </>
     );
 

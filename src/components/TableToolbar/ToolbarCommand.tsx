@@ -75,7 +75,7 @@ export function useToolbarCommand(
     [command, table, running, labels.commandFailed],
   );
 
-  const control = (size: 'default' | 'compact') =>
+  const control = (size: 'default' | 'compact', iconOnly: boolean) =>
     command && table ? (
       <Popover
         size={size}
@@ -95,7 +95,6 @@ export function useToolbarCommand(
               placeholder={labels.commandPlaceholder}
               sendLabel={labels.commandSend}
               attachButton={false}
-              aiGlow
               maxRows={1}
             />
             {!text && command.suggestions && command.suggestions.length > 0 && (
@@ -109,6 +108,7 @@ export function useToolbarCommand(
         }
       >
         <AiButton
+          iconOnly={iconOnly}
           size={size}
           label={labels.command}
           state={running ? 'working' : outcome?.failed ? 'error' : outcome ? 'done' : 'idle'}

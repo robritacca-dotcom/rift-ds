@@ -415,6 +415,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "auto_awesome"
           },
           {
+            "name": "iconOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name.",
+            "defaultValue": "false"
+          },
+          {
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,

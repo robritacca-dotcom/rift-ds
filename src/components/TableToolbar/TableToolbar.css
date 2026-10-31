@@ -63,6 +63,12 @@
   flex-shrink: 0;
 }
 
+/* Folded, search moves into the end cluster and the start cluster is empty:
+   out of the row, so its gap cannot push the controls off the table's edge. */
+.ds-table-toolbar__start:empty {
+  display: none;
+}
+
 /* The search field flexes between a floor and a ceiling: the line wraps
    against its basis, so chips take the room it would otherwise hold, and it
    grows into room nothing else uses. */

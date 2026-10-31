@@ -3,16 +3,10 @@
 import { useMemo, useState } from 'react';
 import { DataTable, type DataTableColumn } from 'rift-ds/components/DataTable/DataTable';
 import { TableToolbar, type TableToolbarCommand } from 'rift-ds/components/TableToolbar/TableToolbar';
-import { LEDGER_COLUMNS, ledgerRows } from './_data/ledger';
+import BrandSwitcher from '@/components/BrandSwitcher/BrandSwitcher';
+import { LEDGER_COLUMNS, ledgerRows } from '@/data/order-ledger';
+import { askOrderLedger, type OrderLedgerTrace as Trace } from '@/lib/order-ledger-command';
 import styles from './command.module.css';
-
-type Trace = {
-  steps: string[];
-  turns: number;
-  ms: number;
-  matching: number;
-  usage: { input: number; cached: number; cacheWrite: number; output: number };
-};
 
 /* Sonnet 5.5's rates per token: input, cache read, cache write, output. */
 const costOf = ({ input, cached, cacheWrite, output }: Trace['usage']) =>
@@ -29,18 +23,10 @@ export default function CommandTable() {
 
   const command = useMemo<TableToolbarCommand>(
     () => ({
-      suggestions: ['Worst carrier by lateness', 'Top 10 customers by revenue', 'Overdue payments, largest first'],
-      onSubmit: async ({ text, view, signal }) => {
-        const response = await fetch('/api/table-command', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ text, view }),
-          signal,
-        });
-        const body = await response.json();
-        if (!response.ok) throw new Error(body.error);
-        setTrace(body.trace);
-        return { view: body.view, message: body.message };
+      onSubmit: async (request) => {
+        const { view, message, trace: next } = await askOrderLedger(request);
+        setTrace(next);
+        return { view, message };
       },
     }),
     [],
@@ -48,6 +34,9 @@ export default function CommandTable() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.bar}>
+        <BrandSwitcher size="compact" />
+      </div>
       <DataTable
         columns={COLUMNS}
         rows={rows}
@@ -55,7 +44,7 @@ export default function CommandTable() {
         defaultHiddenColumns={DEFAULT_HIDDEN}
         defaultPageSize={100}
         virtualize="auto"
-        maxHeight="calc(100dvh - 180px)"
+        maxHeight="calc(100dvh - 230px)"
         stickyHeader
         columnMenu
         resizableColumns

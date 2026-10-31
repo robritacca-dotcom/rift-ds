@@ -30,7 +30,7 @@ export const CHROMELESS_ROUTES = new Set([
   "/templates/team-calendar",
   "/templates/agent-workbench",
   "/templates/roadmap-planner",
-  "/templates/sales-pipeline",
+  "/templates/merchant-sales",
   "/templates/sign-in",
   "/templates/landing-page",
   "/docs/blocks/app-shell",

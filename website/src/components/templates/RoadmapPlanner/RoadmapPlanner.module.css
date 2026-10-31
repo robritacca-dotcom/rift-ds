@@ -59,7 +59,7 @@
   flex-wrap: wrap;
 }
 
-/* Three matching compact selects, the sales pipeline's toolbar
+/* Three matching compact selects, the merchant sales toolbar
    convention. */
 .controlsFilters {
   display: flex;

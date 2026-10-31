@@ -9,7 +9,7 @@
  * initiative: owner, window, progress, and the dependency chain, with
  * clicks on a bar or a dependency moving the rail, so the two panes stay
  * one screen rather than two widgets. The controls row is three matching
- * compact selects, the sales pipeline's toolbar convention: the window
+ * compact selects, the merchant sales toolbar convention: the window
  * select redraws the timeline over a quarter or the half, and the team and
  * status selects thin the board. Every colour, radius, space, and type
  * style is a semantic token; every control is a library component.
@@ -379,8 +379,8 @@ const VIEWS = [
   { value: "q4", label: "Q4 2026", start: "2026-10-01", end: "2026-12-31" },
 ];
 
-/* The controls row's three selects share one option shape, the sales
-   pipeline's toolbar convention. */
+/* The controls row's three selects share one option shape, the merchant
+   sales toolbar convention. */
 const VIEW_OPTIONS: DropdownOption[] = VIEWS.map(({ value, label }) => ({
   value,
   label,

@@ -9,6 +9,11 @@
   background-color: var(--color-bg-page-primary);
 }
 
+.bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .trace {
   margin: 0;
   color: var(--color-text-secondary);

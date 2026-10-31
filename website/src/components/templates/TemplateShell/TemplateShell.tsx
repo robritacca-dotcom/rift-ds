@@ -2,7 +2,7 @@
 
 /**
  * The app-shell template family's one shell: the marketing dashboard, the
- * sales pipeline, the relay console, the roadmap planner and the team
+ * merchant sales, the relay console, the roadmap planner and the team
  * calendar all lay out through it. It owns the AppSidebar (with the footer
  * switchers), the main column, the room a docked assistant takes, and the
  * two layouts the footer's layout switch flips between. The rail always

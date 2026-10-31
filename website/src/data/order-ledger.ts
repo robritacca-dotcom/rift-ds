@@ -1,5 +1,5 @@
 /**
- * The lab's table: a seeded order ledger, the same rows on the server and in
+ * The merchant sales template's and the labs bench's table: a seeded order ledger, the same rows on the server and in
  * the browser, so what the route counts is what the table shows. No JSX, so
  * the API route can import it. The numbers lean on each other on purpose
  * (carriers differ in lateness, categories in margin and returns), so a

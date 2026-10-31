@@ -480,9 +480,9 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A planning tool around the Gantt timeline and its detail rail",
   },
   {
-    href: "/templates/sales-pipeline",
-    label: "Sales pipeline",
-    description: "A CRM companies view built around the wired data table",
+    href: "/templates/merchant-sales",
+    label: "Merchant sales",
+    description: "A merchant's month and orders, in a table you change by describing it",
   },
   {
     href: "/templates/sign-in",

@@ -28,7 +28,7 @@ A template is a **website surface, not a library component**: it lives in `websi
 
 The live implementations under `website/src/components/templates/` are the source of truth for structure — pick the one nearest the new screen's shape and mirror it rather than improvising:
 
-- A data view (table or board as the stage) — the sales pipeline
+- A data view (table or board as the stage) — merchant sales
 - A timeline or scheduling stage — the roadmap planner or team calendar
 - An analytics screen on `TemplateShell` — the marketing dashboard
 - A conversation-centred screen — the agent workbench

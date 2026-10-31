@@ -1,5 +1,5 @@
 /**
- * The table-command lab's model route: one sentence and the table's current
+ * The table command's model route, for the merchant sales template and the labs bench: one sentence and the table's current
  * setup in, a new setup and a one-line account out. Claude never sees the
  * rows wholesale. It reads the schema, asks the ledger questions through two
  * tools that run here over the same seeded rows the browser shows, and answers
@@ -12,7 +12,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { guardrails } from '../chat/guardrails';
 import type { DataTableRow } from 'rift-ds/components/DataTable/DataTable';
-import { COLUMN_KEYS, LEDGER_COLUMNS, LEDGER_TODAY, ROW_COUNT, ledgerRows } from '@/app/labs/table-command/_data/ledger';
+import { COLUMN_KEYS, LEDGER_COLUMNS, LEDGER_TODAY, ROW_COUNT, ledgerRows } from '@/data/order-ledger';
 import { TYPE_DEFAULTS, type ColumnType } from '../../../../../src/components/DataTable/columnTypes';
 import { OPERATORS, VALUELESS, matches, type Filter, type FilterKind, type FilterOperator } from '../../../../../src/components/DataTable/filterModel';
 import type { TableView } from '../../../../../src/components/DataTable/views';

@@ -1,4 +1,4 @@
-/* Templates: the Meridian sales pipeline. Every colour, space, radius, and
+/* Templates: Larkspur's merchant sales. Every colour, space, radius, and
    type style is a semantic token; the only raw values are structural layout
    sizes (column widths, breakpoints), which pages own everywhere else on
    the site. The shell is TemplateShell's; the page follows the
@@ -76,6 +76,38 @@
   flex-wrap: wrap;
 }
 
+/* --------------------------------------------------------------- KPIs */
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+  min-width: 0;
+  padding: var(--padding-500);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
+  border-radius: var(--radius-600);
+}
+
+.kpiIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-500);
+}
+
 /* -------------------------------------------------------- table section */
 
 /* The table sits directly on the page — the DataTable brings its own
@@ -88,97 +120,16 @@
   min-width: 0;
 }
 
-/* ---------------------------------------------------------------- cells */
-
-.companyCell {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.companyName {
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  color: var(--color-text-primary);
-  white-space: nowrap;
-}
-
-.companySegment {
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
-  white-space: nowrap;
-}
-
-.pipelineCell {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
-  min-width: 0;
-}
-
-/* On a phone card the value starts its line like every other value. */
-:global(.ds-data-table__grid--stacked) .pipelineCell {
-  align-items: flex-start;
-}
-
-.pipelineValue {
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  color: var(--color-text-primary);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.pipelineDeals {
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
-  white-space: nowrap;
-}
-
-.winCell {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-200);
-  min-width: 120px;
-}
-
-.winMeter {
-  flex: 1;
-  min-width: 0;
-}
-
-.winValue {
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-secondary);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.touchCell {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.touchDate {
-  color: var(--color-text-primary);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.touchType {
-  font-size: var(--font-caption-size);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
-  white-space: nowrap;
-}
-
 /* ---------------------------------------------------------- responsive */
 
 @media (max-width: 1080px) {
   .content {
     padding: var(--padding-400) var(--padding-400) var(--padding-1000);
+  }
+
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-300);
   }
 }
 

@@ -43,7 +43,7 @@ export default function PrivacyPage() {
             30 days. Do not type anything private into it.
           </p>
           <p className={styles.body}>
-            The table command on the labs bench works the same way, with less
+            The table command on the merchant sales template and the labs bench works the same way, with less
             kept: what you type and the table&apos;s current setup go to
             Anthropic, whose model picks the new setup. Its rate limit and
             budget share the chat&apos;s, and the commands themselves are not

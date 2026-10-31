@@ -1,6 +1,6 @@
 # Building with rift-ds
 
-You are building React UI with rift-ds 1.18.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
+You are building React UI with rift-ds 1.19.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists.
 
 ## Start a Next.js app
 

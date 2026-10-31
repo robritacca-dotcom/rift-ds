@@ -2,7 +2,7 @@
 
 A circular trigger wearing the active theme's swatch, opening a menu of every theme on offer with its colour, corner and faces.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.19.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: actions
 - Import: `import { ThemePicker } from 'rift-ds';`

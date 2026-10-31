@@ -2,7 +2,7 @@
 
 The tile a chat leaves in the thread for something it made, a toggle that opens the artifact in its panel.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.19.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { ArtifactCard } from 'rift-ds';`

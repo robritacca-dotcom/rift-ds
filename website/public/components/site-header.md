@@ -2,7 +2,7 @@
 
 A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.18.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.19.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
 - Import: `import { SiteHeader } from 'rift-ds';`

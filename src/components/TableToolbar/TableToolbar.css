@@ -120,6 +120,7 @@
    chip's editor) holds its pressed fill until the panel closes, so the
    bar says which control the open panel belongs to. */
 .ds-table-toolbar .ds-circular-button--tertiary[aria-expanded='true'],
+.ds-table-toolbar .ds-circular-button--secondary-neutral[aria-expanded='true'],
 .ds-table-toolbar .ds-chip[aria-expanded='true'],
 .ds-table-toolbar .ds-button[aria-expanded='true'] {
   background-color: var(--color-action-passive-bg-active);
@@ -302,7 +303,7 @@
 
 /* A count on an icon's top-end corner, drawn as BottomNav's count badge:
    a solid pill on the count badge pair, so it reads at a glance on the
-   filled icon buttons in both modes. */
+   outlined icon buttons in both modes. */
 .ds-table-toolbar__badge {
   position: absolute;
   inset-block-start: calc(-1 * var(--padding-100));

@@ -1274,7 +1274,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const filterIcon = (
       <CircularButton
         icon="filter_list"
-        variant="primary"
+        variant="secondary"
         tone="neutral"
         size={size}
         ariaLabel={labels.filters(activeFilters)}
@@ -1593,7 +1593,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         >
           <CircularButton
             icon="swap_vert"
-            variant="primary"
+            variant="secondary"
             tone="neutral"
             size={size}
             ariaLabel={labels.sort(sorts.length)}
@@ -1804,7 +1804,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         >
           <CircularButton
             icon="view_agenda"
-            variant="primary"
+            variant="secondary"
             tone="neutral"
             size={size}
             ariaLabel={labels.group(Boolean(groupedBy))}
@@ -1838,7 +1838,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       >
         <CircularButton
           icon="view_column"
-          variant="primary"
+          variant="secondary"
           tone="neutral"
           size={size}
           ariaLabel={labels.columns}
@@ -1904,7 +1904,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       >
         <CircularButton
           icon="more_horiz"
-          variant="primary"
+          variant="secondary"
           tone="neutral"
           size={size}
           ariaLabel={labels.more}
@@ -2030,7 +2030,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 >
                   <CircularButton
                     icon="search"
-                    variant="primary"
+                    variant="secondary"
                     tone="neutral"
                     size={size}
                     ariaLabel={labels.search}
@@ -2053,7 +2053,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                         <CircularButton
                           key={action.id}
                           icon={action.icon}
-                          variant="primary"
+                          variant="secondary"
                           tone="neutral"
                           size={size}
                           ariaLabel={action.label}

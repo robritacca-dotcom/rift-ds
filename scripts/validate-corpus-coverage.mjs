@@ -58,6 +58,10 @@ const corpusPath = join(repoRoot, 'website', 'src', 'data', 'site-corpus.generat
  * than the answers are worth.
  */
 const CONDENSED_ROUTES = new Map([
+  ['/playground',
+    'the page opens on the component collage, and the shortfall is its live demo ' +
+    'data (the Gantt chart\'s invented rollout rows), which states nothing about ' +
+    'the site or the system; the corpus carries the tool\'s summary'],
   ['/skills',
     'the page publishes every SKILL.md in full; the corpus carries each skill\'s ' +
     'name and description, which is what a visitor asks about — the procedures ' +

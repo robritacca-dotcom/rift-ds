@@ -68,7 +68,9 @@
   flex-wrap: wrap;
 }
 
-.filterSelect {
+/* The doubled class outranks .ds-dropdown whichever order the build loads
+   the two stylesheets in. */
+.filterSelect.filterSelect {
   width: 160px;
   flex-shrink: 0;
 }

@@ -128,8 +128,9 @@
 }
 
 /* Dropdown fills its container by design; the selects on this page are
-   fixed-width furniture, not form fields. */
-.rangeSelect {
+   fixed-width furniture, not form fields. The doubled class outranks
+   .ds-dropdown whichever order the build loads the two stylesheets in. */
+.rangeSelect.rangeSelect {
   width: 160px;
   flex-shrink: 0;
 }

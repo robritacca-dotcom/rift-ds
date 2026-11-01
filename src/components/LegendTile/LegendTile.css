@@ -1,7 +1,7 @@
 /* ============================================
    LEGEND TILE COMPONENT
-   The labelled value tile under a chart: an
-   inset surface one step below its panel, a
+   The labelled value tile under a chart: a
+   soft neutral fill inside its panel, a
    caption label with an optional series dot,
    and the value beneath. The dot's colour
    arrives per instance via the
@@ -17,7 +17,7 @@
   flex-direction: column;
   gap: var(--gap-050);
   min-width: 0;
-  background-color: var(--color-bg-page-primary);
+  background-color: var(--color-label-bg);
   border-radius: var(--radius-300);
   padding: var(--padding-200) var(--padding-300);
 }

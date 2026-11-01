@@ -190,12 +190,12 @@ const trendColours: SwatchData[] = [
   {
     label: "Up", cssVar: "--color-trend-up",
     dark: { primitive: "--green--07--", hex: "#06D6A0", rgb: "6 / 214 / 160" },
-    light: { primitive: "--green--10--", hex: "#024336", rgb: "2 / 67 / 54" },
+    light: { primitive: "--green--09--", hex: "#03765A", rgb: "3 / 118 / 90" },
   },
   {
     label: "Down", cssVar: "--color-trend-down",
     dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
-    light: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
+    light: { primitive: "--red--08--", hex: "#C93A5C", rgb: "201 / 58 / 92" },
   },
 ];
 
@@ -385,6 +385,20 @@ const iconColours: SwatchData[] = [
     label: "Secondary", cssVar: "--color-icon-secondary",
     dark: { primitive: "--neutral--04--", hex: "#A2A2A2", rgb: "162 / 162 / 162" },
     light: { primitive: "--neutral--04--", hex: "#A2A2A2", rgb: "162 / 162 / 162" },
+  },
+  {
+    label: "Background", cssVar: "--color-icon-bg",
+    dark: { primitive: "--neutral--08--", hex: "#232323", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
+  },
+];
+
+/* --- Label --- */
+const labelColours: SwatchData[] = [
+  {
+    label: "Background", cssVar: "--color-label-bg",
+    dark: { primitive: "--neutral--08--", hex: "#232323", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
 ];
 
@@ -1057,6 +1071,16 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Icon" />
             <div className={styles.colourSwatches}>
               {iconColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+
+          {/* Label */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Label" />
+            <div className={styles.colourSwatches}>
+              {labelColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

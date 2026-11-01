@@ -132,6 +132,8 @@ EventCalendar's day cells and event pills get their own colour roles, for the sa
 ### Icons
 - **Primary** (`--color-icon-primary`): Default icon fill — tertiary buttons, input icons, nav icons.
 - **Secondary** (`--color-icon-secondary`): De-emphasized icons.
+- **Background** (`--color-icon-bg`): The neutral disc behind an icon in the icon tile pattern. A fill for a small mark, not a surface, so it sits outside the container ramp.
+- **Label background** (`--color-label-bg`): The neutral fill behind a small data label, LegendTile's tile. It moves apart from `--color-icon-bg` only if a theme wants labels and icon discs told apart.
 
 ### Status (backgrounds and text invert between modes; borders hold their key)
 Each of the five variants (`positive`, `warning`, `error`, `info`, `neutral`) carries the same steps, drawn from one ramp per variant (green, orange, red and blue in the base wiring; `neutral` from the neutral ramp):
@@ -147,10 +149,10 @@ A theme that re-keys the chromatic ramps re-keys its status colours with them; w
 Each role also carries an **icon step** (`--color-status-<role>-icon`): the glyph colour for status indicators sitting on plain container surfaces (AgentPlan's step indicators, ToolCall's state glyph, SourceTrail's rows). The text step is tuned for its tinted status background and washes out on a bare container — in dark mode the near-white text tints all read as grey. Light mode uses the deep inks, around step 08 of each ramp, and dark mode brightens to mid-ramp steps that hold at least 3:1 on the dark container floor.
 
 ### Trend (mode-split — the "number went up / went down" role)
-- Up: `--color-trend-up` — a deep green-ramp ink in light mode, the ramp's vivid key in dark
-- Down: `--color-trend-down` — a deep red-ramp ink in light mode, the ramp's vivid key in dark
+- Up: `--color-trend-up` — in the base wiring's light mode the brightest green-ramp step that holds AA on the primary container, the ramp's vivid key in dark
+- Down: `--color-trend-down` — in the base wiring's light mode the brightest red-ramp step that holds AA on the primary container, the ramp's vivid key in dark
 
-Stat deltas and any table mover colour through these, never through the accents directly: on light surfaces the vivid keys fall below readable contrast, so the light half uses the deep status inks, while the dark half keeps the vivid keys, which read well on dark fills. The role exists so that "went up" has one colour everywhere it appears.
+Stat deltas and any table mover colour through these, never through the accents directly: on light surfaces the vivid keys fall below readable contrast, so the light half steps down the ramp until it holds, while the dark half keeps the vivid keys, which read well on dark fills. The role exists so that "went up" has one colour everywhere it appears.
 
 ### File type (the "what kind of document" role)
 - PDF: `--color-file-pdf`, red
@@ -484,7 +486,7 @@ Every control that can share a row takes one height at each size, border include
 
 A control sets the token as its height with `box-sizing: border-box` and keeps only its horizontal padding, so a bordered control (a field, the secondary Button) and a borderless one (the primary Button) measure the same. SegmentedControl keeps its 4px track padding and sizes its segments to fit inside the height. Combobox takes the token as a minimum, with its border taken out of the vertical padding, because selected chips may wrap it onto a second line, and so does RichDropdown, keeping its vertical padding, because its trigger previews the chosen option's two-line cell. A tag (Chip) and a keyboard hint (Kbd) are content, not row controls, and keep their own heights. A control of your own that sits in a row takes the same token.
 
-**The icon tile pattern** — an icon on a filled circle, for KPI cards and table cells: a `--radius-pill` disc in `--color-bg-container-tertiary` holding a `--icon-size-500` glyph in `--color-text-primary`, at 40px (stat and KPI headers) or 32px (table cells and list rows). It is a page pattern, not a component: four declarations in module CSS, worked out on the labs marketing rebuild.
+**The icon tile pattern** — an icon on a filled circle, for KPI cards and table cells: a `--radius-pill` disc in `--color-icon-bg` holding a `--icon-size-500` glyph in `--color-text-primary`, at 40px (stat and KPI headers) or 32px (table cells and list rows). It is a page pattern, not a component: four declarations in module CSS, worked out on the labs marketing rebuild.
 
 Components set **`--icon-size`**, never `font-size`:
 
@@ -1174,7 +1176,7 @@ Month labels, caption, and Less→More legend use `--font-paragraph-sm-*` in `--
 
 ### LegendTile
 
-**`ds-legend-tile`** — The labelled value tile that sits under a chart and ties a series to its number: an optional 8px series dot (any CSS colour via `swatch`, typically a `--color-chart-series-*` token), the series name in `--font-caption-*` secondary with ellipsis, and the reading in `--font-paragraph-sm-emphasis-*` primary. Fill is `--color-bg-page-primary` at `--radius-300` — one step below a panel's `container-primary`, so the tile reads as an inset rather than a raised card. Presentational and server-renderable; a number is written in its `locale` prop (default `en-US`).
+**`ds-legend-tile`** — The labelled value tile that sits under a chart and ties a series to its number: an optional 8px series dot (any CSS colour via `swatch`, typically a `--color-chart-series-*` token), the series name in `--font-caption-*` secondary with ellipsis, and the reading in `--font-paragraph-sm-emphasis-*` primary. Fill is `--color-label-bg` at `--radius-300`, a soft neutral that holds the tile apart from its panel in both themes. Presentational and server-renderable; a number is written in its `locale` prop (default `en-US`).
 
 ### Globe
 

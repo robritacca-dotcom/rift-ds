@@ -316,7 +316,7 @@
   height: 40px;
   flex-shrink: 0;
   border-radius: var(--radius-pill);
-  background-color: var(--color-bg-container-tertiary);
+  background-color: var(--color-icon-bg);
   color: var(--color-text-primary);
   --icon-size: var(--icon-size-500);
 }
@@ -397,7 +397,7 @@
   height: 32px;
   flex-shrink: 0;
   border-radius: var(--radius-pill);
-  background-color: var(--color-bg-container-tertiary);
+  background-color: var(--color-icon-bg);
   color: var(--color-text-primary);
   --icon-size: var(--icon-size-500);
 }

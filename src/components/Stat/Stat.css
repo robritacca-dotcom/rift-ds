@@ -66,8 +66,8 @@
   line-height: 1;
 }
 
-/* The trend tokens are theme-split for contrast: deep status inks on
-   light surfaces, the mint/coral accents on dark ones. */
+/* The trend tokens are theme-split for contrast: the brightest ramp steps
+   that hold AA on the primary container, the mint/coral accents on dark ones. */
 .ds-stat__delta--up {
   color: var(--color-trend-up);
 }

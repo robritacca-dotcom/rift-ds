@@ -435,6 +435,11 @@ export const SemanticColors: Story = {
       <TokenSection title="Icon Colors">
         <ColorToken name="Primary" value="--color-icon-primary" />
         <ColorToken name="Secondary" value="--color-icon-secondary" />
+        <ColorToken name="Background" value="--color-icon-bg" />
+      </TokenSection>
+
+      <TokenSection title="Label Colors">
+        <ColorToken name="Background" value="--color-label-bg" />
       </TokenSection>
 
       <TokenSection title="Background - Page">

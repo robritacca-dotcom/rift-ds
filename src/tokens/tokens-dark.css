@@ -33,6 +33,10 @@
   /* Icon */
   --color-icon-primary: var(--primitive-neutral-02);
   --color-icon-secondary: var(--primitive-neutral-04);
+  --color-icon-bg: var(--primitive-neutral-08);
+
+  /* Label */
+  --color-label-bg: var(--primitive-neutral-08);
 
   /* Background - Page */
   --color-bg-page-primary: var(--primitive-neutral-10);

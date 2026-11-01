@@ -327,7 +327,8 @@ export default function TableToolbarPage() {
             <p className={styles.sectionBody}>
               The <code>command</code> prop adds a Describe button at the start of
               the bar. Pressing it turns the whole row into a composer, the way
-              selecting rows turns it into the bulk bar. Your handler turns the sentence into a whole table
+              selecting rows turns it into the bulk bar. A long request grows the
+              composer to three rows and pushes the table down. Your handler turns the sentence into a whole table
               setup, and the library calls no model. A change lands in a toast
               with an Undo, and an error lands in a toast with the table left
               alone and the text back in the composer. Try it here; the

@@ -408,8 +408,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     headingWeight: 700,
     bodyWeight: SHIPPED_BODY_WEIGHT,
     tracking: -1,
-    // Icons carry the same heavy line as the headings.
-    iconWeight: 500,
+    iconWeight: SHIPPED_ICON_WEIGHT,
     iconFill: false,
     logoTone: "action",
     logoEndTone: "matched",
@@ -457,6 +456,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-bg-active": "var(--primitive-neutral-10)",
       "--color-action-primary-text": "var(--primitive-yellow-07)",
       "--color-action-primary-text-active": "var(--primitive-yellow-07)",
+      // Series 1 follows the action colour by default, which light mode's
+      // ink fill would turn grey, so it stays on the key. The gold accent
+      // series 3 would then repeat it, so that slot takes the bold blue.
+      "--color-chart-series-1": "var(--primitive-yellow-07)",
+      "--color-chart-series-3": "var(--primitive-blue-07)",
     },
     extraOverridesDark: {
       "--color-action-primary-bg": "var(--primitive-yellow-07)",
@@ -670,8 +674,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Trail-sign bold: the display tiers ship at a light 300, which reads
     // wispy in Montserrat — Forest sets them semibold instead, with the
     // sub-display a step lighter so the hero pair keeps its hierarchy.
+    // Forest's green ramp runs darker than the shipped one, so its step 09
+    // reads near-black: the up trend takes the brightest step that holds AA
+    // on a light container. On dark, the whole ramp sits too low to hold AA,
+    // so the up trend takes the leaf-green accent.
     extraOverrides: {
       "--font-sub-display-weight": "500",
+      "--color-trend-up": "var(--primitive-green-06)",
+    },
+    extraOverridesDark: {
+      "--color-trend-up": "var(--color-core-accent-mint)",
     },
     // Woodland neighbours: every hue muted toward the understory. Green
     // is the action family, left alone.

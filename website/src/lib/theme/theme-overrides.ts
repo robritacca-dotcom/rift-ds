@@ -459,9 +459,9 @@ const LIGHT_SURFACE_STEPS: ReadonlySet<string> = new Set(["00", "01"]);
 /** How much of the tint light mode's surface steps take. A full-strength
     tint pulls white and the page floor down far enough that a tinted theme
     reads grey in light mode and body copy loses contrast against it, so the
-    two surface steps carry half: the hue still shows, the floor stays
+    two surface steps carry a quarter: the hue still shows, the floor stays
     bright. Every other step, and every step in dark mode, takes it whole. */
-export const LIGHT_SURFACE_TINT_RATIO = 0.5;
+export const LIGHT_SURFACE_TINT_RATIO = 0.25;
 
 /* A renumbered neutral scale must not drop the rule silently: the preset
    stylesheet generator imports this module, so a stale step fails the build. */

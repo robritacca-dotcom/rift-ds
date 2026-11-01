@@ -202,9 +202,9 @@
 }
 
 /* Smoke's action colour is the neutral at its lightest, close enough to a
-   system pointer to pass for one, and Smoke turns the accents and chart
-   colours neutral too. Its cursor borrows the info status blue, the one
-   hue Smoke keeps that says nothing good or bad, with a text colour that
+   system pointer to pass for one, and Smoke turns the accents neutral too.
+   Its cursor borrows the info status blue, a hue that says nothing good
+   or bad, with a text colour that
    stays light on it in either mode. */
 :global(:root[data-brand="mono"]) .cursor {
   --cursor-fill: var(--color-status-info-border);

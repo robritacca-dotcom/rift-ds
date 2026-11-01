@@ -115,8 +115,8 @@ export default function CircularButtonPage() {
             <SectionTitle title="Primary, neutral" />
             <p className={styles.introBody}>
               A solid grey fill that stays visible at rest, unlike the
-              transparent tertiary. For toolbar actions that deserve a
-              button&apos;s full shape without the accent colour.
+              transparent tertiary, with a button&apos;s full shape and no
+              accent colour.
             </p>
             <div className={styles.stateGrid}>
               <div className={styles.gridCorner} />
@@ -140,8 +140,9 @@ export default function CircularButtonPage() {
           <section className={styles.section}>
             <SectionTitle title="Secondary, neutral" />
             <p className={styles.introBody}>
-              The outlined shape with a grey edge in place of the accent.
-              Hover and press fill it with the neutral greys.
+              The outlined shape with a grey edge in place of the accent, for
+              utility controls such as toolbar actions and a notification
+              bell. Hover and press fill it with the neutral greys.
             </p>
             <div className={styles.stateGrid}>
               <div className={styles.gridCorner} />

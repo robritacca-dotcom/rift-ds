@@ -12,7 +12,7 @@ Produce the X announcement for a release: a bento release card as a paste-ready 
 
 ## When invoked
 
-Use this skill when asked for a release announcement, a release image or card, or post copy for a version — phrases like "image for an X post about the release", "announce 0.x", "release card".
+Use this skill when asked for a release announcement, a release image or card, or post copy for a version — phrases like "image for an X post about the release", "announce the release", "release card".
 
 Two principles govern everything below: **facts come from the repo, never from memory** (the tag, the commits, the token CSS), and **the card is drawn in the system's own visual language** — it should look like a screen from the site, not a generic promo graphic.
 

@@ -511,7 +511,7 @@
       "name": "legend-tile",
       "type": "registry:ui",
       "title": "Legend tile",
-      "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill."
+      "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on a soft neutral fill."
     },
     {
       "name": "lightbox",

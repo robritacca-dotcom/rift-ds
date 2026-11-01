@@ -417,7 +417,7 @@ A radial dial for a single bounded reading, recoloured through the status roles 
 
 ### Legend tile
 
-The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.
+The labelled value tile under a chart: a series dot, the series name, and its reading, on a soft neutral fill.
 
 - Import: `import { LegendTile } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')

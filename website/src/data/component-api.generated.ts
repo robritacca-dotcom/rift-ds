@@ -8594,7 +8594,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Legend tile",
     "slug": "legend-tile",
     "category": "charts",
-    "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.",
+    "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on a soft neutral fill.",
     "client": false,
     "importPath": "rift-ds/components/LegendTile/LegendTile",
     "barrel": "main",

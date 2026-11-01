@@ -162,9 +162,9 @@
   --color-action-neutral-bg-active: var(--primitive-neutral-04);
   --color-action-neutral-text: var(--primitive-neutral-10);
   /* The outlined neutral button's edge (secondary emphasis, neutral tone):
-     a mid grey that reads as a control edge on the page without the
-     action colour. */
-  --color-action-neutral-border: var(--primitive-neutral-05);
+     the container border's step, so it matches a SegmentedControl beside
+     it without the action colour. */
+  --color-action-neutral-border: var(--primitive-neutral-02);
 
   /* Action - Destructive (dangerous or irreversible actions). Keyed to the
      red ramp the error status uses, never to an accent, so danger reads as
@@ -220,33 +220,33 @@
   --color-file-presentation: var(--primitive-file-presentation);
 
   /* Status - Positive */
-  --color-status-positive-bg: var(--primitive-green-01);
+  --color-status-positive-bg: var(--primitive-green-02);
   --color-status-positive-border: var(--primitive-green-07);
-  --color-status-positive-text: var(--primitive-green-10);
+  --color-status-positive-text: var(--primitive-green-09);
   --color-status-positive-icon: var(--primitive-green-08);
 
   /* Status - Warning */
-  --color-status-warning-bg: var(--primitive-orange-01);
+  --color-status-warning-bg: var(--primitive-orange-02);
   --color-status-warning-border: var(--primitive-orange-07);
-  --color-status-warning-text: var(--primitive-orange-10);
+  --color-status-warning-text: var(--primitive-orange-09);
   --color-status-warning-icon: var(--primitive-orange-08);
 
   /* Status - Error */
-  --color-status-error-bg: var(--primitive-red-01);
+  --color-status-error-bg: var(--primitive-red-02);
   --color-status-error-border: var(--primitive-red-07);
-  --color-status-error-text: var(--primitive-red-10);
+  --color-status-error-text: var(--primitive-red-09);
   --color-status-error-icon: var(--primitive-red-08);
 
   /* Status - Info */
-  --color-status-info-bg: var(--primitive-blue-01);
+  --color-status-info-bg: var(--primitive-blue-02);
   --color-status-info-border: var(--primitive-blue-07);
-  --color-status-info-text: var(--primitive-blue-10);
+  --color-status-info-text: var(--primitive-blue-08);
   --color-status-info-icon: var(--primitive-blue-06);
 
   /* Status - Neutral */
-  --color-status-neutral-bg: var(--primitive-neutral-02);
+  --color-status-neutral-bg: var(--primitive-neutral-01);
   --color-status-neutral-border: var(--primitive-neutral-07);
-  --color-status-neutral-text: var(--primitive-neutral-08);
+  --color-status-neutral-text: var(--primitive-neutral-07);
   --color-status-neutral-icon: var(--primitive-neutral-06);
 
   /* The -icon step is the status glyph colour for plain surfaces (a step
@@ -276,7 +276,8 @@
 
   /* Chart - Ordered series ramp for multi-series charts. Series 1 follows
      the action teal (theme-split with it); 2-7 alias the core accents, so
-     re-theming an accent re-themes every chart that uses its slot. */
+     re-theming an accent re-themes every chart that uses its slot. A theme
+     may re-point any of them in its extras. */
   --color-chart-series-1: var(--color-action-primary-bg);
   --color-chart-series-2: var(--color-core-accent-mint);
   --color-chart-series-3: var(--color-core-accent-gold);

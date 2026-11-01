@@ -519,8 +519,8 @@ const actionNeutralColours: SwatchData[] = [
   },
   {
     label: "Border", cssVar: "--color-action-neutral-border",
-    dark: { primitive: "--neutral--06--", hex: "#6D6D6D", rgb: "109 / 109 / 109" },
-    light: { primitive: "--neutral--05--", hex: "#888888", rgb: "136 / 136 / 136" },
+    dark: { primitive: "--neutral--08--", hex: "#232323", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02--", hex: "#D6D6D6", rgb: "214 / 214 / 214" },
   },
 ];
 
@@ -622,27 +622,27 @@ const statusColours: StatusSwatchData[] = [
   {
     label: "Positive", bgVar: "--color-status-positive-bg", borderVar: "--color-status-positive-border",
     dark: { primitive: "--green--10--", hex: "#024336", rgb: "2 / 67 / 54" },
-    light: { primitive: "--green--01--", hex: "#ECFCF7", rgb: "236 / 252 / 247" },
+    light: { primitive: "--green--02--", hex: "#CEF6E8", rgb: "206 / 246 / 232" },
   },
   {
     label: "Warning", bgVar: "--color-status-warning-bg", borderVar: "--color-status-warning-border",
     dark: { primitive: "--orange--10--", hex: "#552716", rgb: "85 / 39 / 22" },
-    light: { primitive: "--orange--01--", hex: "#FFF3EC", rgb: "255 / 243 / 236" },
+    light: { primitive: "--orange--02--", hex: "#FBD9C5", rgb: "251 / 217 / 197" },
   },
   {
     label: "Error", bgVar: "--color-status-error-bg", borderVar: "--color-status-error-border",
     dark: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
-    light: { primitive: "--red--01--", hex: "#FDEFF3", rgb: "253 / 239 / 243" },
+    light: { primitive: "--red--02--", hex: "#FAD3DD", rgb: "250 / 211 / 221" },
   },
   {
     label: "Info", bgVar: "--color-status-info-bg", borderVar: "--color-status-info-border",
     dark: { primitive: "--blue--10--", hex: "#081633", rgb: "8 / 22 / 51" },
-    light: { primitive: "--blue--01--", hex: "#EEF3FD", rgb: "238 / 243 / 253" },
+    light: { primitive: "--blue--02--", hex: "#D3DDF8", rgb: "211 / 221 / 248" },
   },
   {
     label: "Neutral", bgVar: "--color-status-neutral-bg", borderVar: "--color-status-neutral-border",
     dark: { primitive: "--neutral--08--", hex: "#232323", rgb: "35 / 35 / 35" },
-    light: { primitive: "--neutral--02--", hex: "#D6D6D6", rgb: "214 / 214 / 214" },
+    light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
 ];
 
@@ -651,27 +651,27 @@ const statusTextColours: SwatchData[] = [
   {
     label: "Positive text", cssVar: "--color-status-positive-text",
     dark: { primitive: "--green--01--", hex: "#ECFCF7", rgb: "236 / 252 / 247" },
-    light: { primitive: "--green--10--", hex: "#024336", rgb: "2 / 67 / 54" },
+    light: { primitive: "--green--09--", hex: "#03765A", rgb: "3 / 118 / 90" },
   },
   {
     label: "Warning text", cssVar: "--color-status-warning-text",
     dark: { primitive: "--orange--01--", hex: "#FFF3EC", rgb: "255 / 243 / 236" },
-    light: { primitive: "--orange--10--", hex: "#552716", rgb: "85 / 39 / 22" },
+    light: { primitive: "--orange--09--", hex: "#8F4324", rgb: "143 / 67 / 36" },
   },
   {
     label: "Error text", cssVar: "--color-status-error-text",
     dark: { primitive: "--red--01--", hex: "#FDEFF3", rgb: "253 / 239 / 243" },
-    light: { primitive: "--red--10--", hex: "#571727", rgb: "87 / 23 / 39" },
+    light: { primitive: "--red--09--", hex: "#8E2641", rgb: "142 / 38 / 65" },
   },
   {
     label: "Info text", cssVar: "--color-status-info-text",
     dark: { primitive: "--blue--01--", hex: "#EEF3FD", rgb: "238 / 243 / 253" },
-    light: { primitive: "--blue--10--", hex: "#081633", rgb: "8 / 22 / 51" },
+    light: { primitive: "--blue--08--", hex: "#163789", rgb: "22 / 55 / 137" },
   },
   {
     label: "Neutral text", cssVar: "--color-status-neutral-text",
     dark: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
-    light: { primitive: "--neutral--08--", hex: "#232323", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--07--", hex: "#303030", rgb: "48 / 48 / 48" },
   },
 ];
 

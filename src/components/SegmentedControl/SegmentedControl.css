@@ -272,6 +272,12 @@
     transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* The tip sits on the page surface, not the selected segment's fill, so it
+   keeps its own ink when the active-label rules above would recolour it. */
+.ds-segmented-control .ds-segmented-control__segment .ds-segmented-control__label--tip {
+  color: var(--color-text-primary);
+}
+
 /* --motion-duration-slow matches MOTION_HOVER_SHOW_DELAY_MS, the hover-intent
    delay Tooltip uses in JS, so the label does not flash while the pointer
    passes through. Hiding takes no delay, like a tooltip leaving. */

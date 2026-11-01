@@ -30,7 +30,8 @@ The live implementations under `website/src/components/templates/` are the sourc
 
 - A data view (table or board as the stage) — merchant sales
 - A timeline or scheduling stage — the roadmap planner or team calendar
-- An analytics screen on `TemplateShell` — the marketing dashboard
+- A dashboard of tiles on `TemplateShell` — the marketing dashboard
+- A stage behind a scrolling grid (a map under the first screen, no KPI band, a Describe interpreter that bills no model) — the analytics template
 - An assistant home (the real chat as the page, a board of tiles under the composer) — the chat home
 - An instrument with one subject in two projections (a map or globe stage, a stage-mounted toolbar, full-width content) — the relay console
 - A phone-only app screen (platform chrome, drawn as a framed device on the dotted stage at wider widths) — the mobile dashboard

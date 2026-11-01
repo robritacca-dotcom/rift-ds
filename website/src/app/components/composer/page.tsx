@@ -207,7 +207,9 @@ export default function ComposerPage() {
             <p className={styles.sectionBody}>
               <code>size</code> is the density, the same default and compact pair
               a table uses. <code>inline</code> puts everything on one row at that
-              density&apos;s control height, for a popover or a tight bar.
+              density&apos;s control height, for a popover or a tight bar. It stays
+              on one row unless <code>maxRows</code> lets it grow, with send held
+              in the bottom corner.
               TableToolbar&apos;s AI command opens one at the table&apos;s density.
             </p>
             <div className={styles.stack}>
@@ -296,7 +298,7 @@ export default function ComposerPage() {
             <SectionTitle title="Growth" />
             <p className={styles.demoText}>
               The textarea starts at one row and grows with its content up to
-              maxRows, eight by default, then scrolls internally. This one is
+              maxRows, eight by default or one when inline, then scrolls internally. This one is
               capped at four rows; add lines to feel the cap.
             </p>
             <div className={styles.stack}>

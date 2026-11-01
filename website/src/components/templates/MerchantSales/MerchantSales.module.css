@@ -120,6 +120,16 @@
   min-width: 0;
 }
 
+.statusCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.statusPayment {
+  color: var(--color-text-secondary);
+}
+
 /* ---------------------------------------------------------- responsive */
 
 @media (max-width: 1080px) {

@@ -67,6 +67,8 @@ const nextConfig: NextConfig = {
       { source: "/chat", destination: "/docs/chat", permanent: true },
       // The sales pipeline template became merchant sales; shared links keep resolving.
       { source: "/templates/sales-pipeline", destination: "/templates/merchant-sales", permanent: true },
+      // The agent workbench template was retired; shared links land on the index.
+      { source: "/templates/agent-workbench", destination: "/templates", permanent: true },
       { source: "/blueprints", destination: "/docs", permanent: true },
       // The porting guide was unpublished from /blueprints in August 2026 and
       // its source deleted from the repo soon after. The URL was public, so

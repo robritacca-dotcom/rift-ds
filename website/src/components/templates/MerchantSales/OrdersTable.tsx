@@ -1,18 +1,21 @@
 "use client";
 
 /**
- * The merchant sales table, in its own module because it is browser only: the
- * server would build all the rows just to draw a first page. It opens on the
+ * The merchant sales table. The rows are built in the browser, because the server
+ * would build all of them just to draw a first page, so the static HTML and the
+ * moment before the effect runs draw the table's own skeleton rows. It opens on the
  * month the KPI band reports, as a date filter the reader can change, and shows a
  * merchant's columns of the ledger's many. The rest wait in the Columns panel, and
  * Describe reaches all of them through the same model route as the labs bench.
  */
 
-import { useMemo } from "react";
-import { DataTable, type DataTableColumn } from "rift-ds/components/DataTable/DataTable";
+import { useEffect, useState } from "react";
+import { Badge } from "rift-ds/components/Badge/Badge";
+import { DataTable, type DataTableColumn, type DataTableRow } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { COLUMN_KEYS, LEDGER_COLUMNS, ledgerRows } from "@/data/order-ledger";
 import { askOrderLedger } from "@/lib/order-ledger-command";
+import styles from "./MerchantSales.module.css";
 
 const SHOWN = [
   "orderId",
@@ -22,7 +25,6 @@ const SHOWN = [
   "customer",
   "channel",
   "status",
-  "payment",
   "units",
   "netRevenue",
   "marginPct",
@@ -30,18 +32,40 @@ const SHOWN = [
   "daysLate",
 ];
 const HIDDEN = COLUMN_KEYS.filter((key) => !SHOWN.includes(key));
+
+/* One column for where an order stands: its status as the badge, its payment in words beside it. Payment stays in the Columns panel and in reach of Describe. */
+const withPayment = (col: DataTableColumn): DataTableColumn => ({
+  ...col,
+  width: "210px",
+  render: (row: DataTableRow) => {
+    const status = String(row.values.status);
+    return (
+      <span className={styles.statusCell}>
+        <Badge label={status} variant={col.options?.find((option) => option.value === status)?.status} />
+        <span className={styles.statusPayment}>{String(row.values.payment)}</span>
+      </span>
+    );
+  },
+});
+
 /* A column's own defaultHidden would hide it whatever the table is told, so this screen's choice replaces the ledger's. */
 const COLUMNS = (LEDGER_COLUMNS as unknown as DataTableColumn[]).map((col) => ({
-  ...col,
+  ...(col.key === "status" ? withPayment(col) : col),
   defaultHidden: HIDDEN.includes(col.key),
 }));
 
 export default function OrdersTable() {
-  const rows = useMemo(() => ledgerRows(), []);
+  const [rows, setRows] = useState<ReturnType<typeof ledgerRows> | null>(null);
+  useEffect(() => {
+    /* A task of its own, so the skeleton paints before the build holds the thread. */
+    const task = setTimeout(() => setRows(ledgerRows()));
+    return () => clearTimeout(task);
+  }, []);
   return (
     <DataTable
       columns={COLUMNS}
-      rows={rows}
+      rows={rows ?? []}
+      loading={rows === null}
       caption="Orders"
       defaultColumnOrder={[...SHOWN, ...HIDDEN]}
       defaultHiddenColumns={HIDDEN}

@@ -475,11 +475,6 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A month view with the sprint's to-dos on a rail beside it",
   },
   {
-    href: "/templates/agent-workbench",
-    label: "Agent workbench",
-    description: "A coding agent mid-task, its session beside the staged diff",
-  },
-  {
     href: "/templates/roadmap-planner",
     label: "Roadmap planner",
     description: "A planning tool around the Gantt timeline and its detail rail",

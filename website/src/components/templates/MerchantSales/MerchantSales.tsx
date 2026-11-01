@@ -20,7 +20,6 @@
  */
 
 import React from "react";
-import dynamic from "next/dynamic";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
@@ -35,8 +34,7 @@ import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
 import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
-
-const OrdersTable = dynamic(() => import("./OrdersTable"), { ssr: false });
+import OrdersTable from "./OrdersTable";
 
 /* ---------------------------------------------------------------- data */
 

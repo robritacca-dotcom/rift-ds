@@ -125,8 +125,8 @@ function ChatHomeShell() {
           logoText: product,
           defaultExpanded: true,
           profile: { name: "Jordan Reyes", meta: "Pro" },
-          /* The templates' shared footer, as the agent workbench carries
-             it: the way back to the index above the theme controls. */
+          /* The templates' shared footer: the way back to the index above
+             the theme controls. */
           footerSlot: <SidebarSwitchers backLink />,
         }}
         agent={{

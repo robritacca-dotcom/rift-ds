@@ -6,8 +6,7 @@
  * the design system alone. Every colour, radius, space, and type style is a
  * semantic token; every control is a library component. The one sanctioned
  * departure is content, not chrome: the campaign table's publisher marks wear
- * their real brand colours, the way the case-study cover redraws carry the
- * products they depict.
+ * their real brand colours.
  *
  * Two routes render it: /templates/marketing-dashboard (the public template)
  * and /labs/marketing (where it began, as a fidelity pressure test against a
@@ -210,15 +209,13 @@ const CHAT_REPLIES: Record<string, string> = {
 const CHAT_FALLBACK =
   "This assistant is a mock — in the real product this answer would come from your campaign data. Try one of the suggested questions for a canned tour.";
 
-const OBJECTIVE_VARIANT: Record<
-  string,
-  "info" | "positive" | "warning" | "error" | "neutral"
-> = {
-  Awareness: "info",
-  Traffic: "neutral",
-  Conversions: "positive",
-  Leads: "warning",
-  Retargeting: "error",
+/* An objective is a category, not a state, so it takes an icon and plain text and leaves the status colours to Delivery. */
+const OBJECTIVE_ICON: Record<string, string> = {
+  Awareness: "visibility",
+  Traffic: "ads_click",
+  Conversions: "shopping_cart",
+  Leads: "person_add",
+  Retargeting: "replay",
 };
 
 type Campaign = {
@@ -357,9 +354,16 @@ export default function MarketingDashboard() {
     {
       key: "objective",
       header: "Objective",
-      type: "status",
       sortable: true,
-      options: Object.entries(OBJECTIVE_VARIANT).map(([value, status]) => ({ value, label: value, status })),
+      options: Object.keys(OBJECTIVE_ICON).map((value) => ({ value, label: value })),
+      render: (row: DataTableRow) => (
+        <span className={styles.objectiveCell}>
+          <span className="material-symbols-rounded" aria-hidden="true">
+            {OBJECTIVE_ICON[String(row.values.objective)]}
+          </span>
+          {row.values.objective}
+        </span>
+      ),
     },
     {
       key: "channel",

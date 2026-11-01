@@ -385,6 +385,7 @@ type TableToolbarOwnProps = {
    * text your handler turns into a whole table setup. It reaches everything a
    * view holds (filters, sorts, search, columns, pinning, grouping, density),
    * so it can do in a sentence what the bar's other controls do one at a time.
+   * A long request grows the composer to three rows, pushing the table down.
    * The library calls no model; your handler does. A change or an error lands in
    * a toast, in the surrounding ToastProvider's stack if there is one, else in the
    * bar's own at the bottom-right. Shows only inside a DataTable.
@@ -516,6 +517,9 @@ function ToolbarPanel({
  * its Undo; an error stays until dismissed; a message with no change leaves on
  * the usual timer; no change and no message shows nothing.
  */
+/** The command composer's height cap: its own line and two more for a long request. */
+const COMMAND_MAX_ROWS = 3;
+
 type ToolbarCommandState = 'idle' | 'working' | 'done' | 'error';
 
 type ToolbarCommandProps = {
@@ -641,6 +645,7 @@ function CommandRow({ command, table, labels, size, open, onClose, state, onStat
       />
       <Composer
         inline
+        maxRows={COMMAND_MAX_ROWS}
         size={size}
         value={text}
         onValueChange={setText}

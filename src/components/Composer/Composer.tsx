@@ -53,7 +53,7 @@ type ComposerOwnProps = {
   onStop?: () => void;
   /** The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons. */
   size?: 'default' | 'compact';
-  /** One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1. */
+  /** One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1; above it, typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis. */
   inline?: boolean;
   /** Growth cap in text rows before the textarea scrolls internally. Defaults to 8, or 1 when `inline`. */
   maxRows?: number;
@@ -781,6 +781,11 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
             onBlur={handleBlur}
             onScroll={handleScroll}
           />
+          {inline && rest.placeholder && currentValue === '' && (
+            <span className={`${baseClass}__placeholder`} aria-hidden="true">
+              {rest.placeholder}
+            </span>
+          )}
           {mentionsArmed && (
             /* The words a person sees. The textarea beneath keeps the caret,
                the selection and every keystroke, with its own text

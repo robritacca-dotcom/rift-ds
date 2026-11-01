@@ -663,7 +663,8 @@
 }
 
 /* ============================================
-   INLINE: one row at the control height, the send button on the text's line.
+   INLINE: one row at the control height until `maxRows` lets it grow, the send
+   button on the text's line.
    The shell is an input here, so it does not float, and the button sits
    inside the height, concentric on a thinner ring.
    ============================================ */
@@ -675,8 +676,47 @@
     min(var(--radius-pill), var(--ds-composer-send-size) / 2) + var(--padding-050) + var(--border-025)
   );
   flex-direction: row;
-  align-items: center;
+  /* Level at one row; a maxRows above 1 grows the shell and the send button stays in the bottom corner. */
+  align-items: flex-end;
   box-shadow: none;
+}
+
+/* Only typing grows the shell: a placeholder too long for the line ends in an
+   ellipsis. A browser will not ellipsize a textarea's own placeholder, so it
+   keeps the attribute, unpainted and on one line, and a copy draws the words. */
+.ds-composer--inline .ds-composer__textarea:placeholder-shown {
+  max-height: var(--ds-composer-line);
+  overflow: hidden;
+}
+
+.ds-composer--inline .ds-composer__textarea::placeholder {
+  color: transparent;
+  white-space: nowrap;
+}
+
+.ds-composer--inline .ds-composer__content {
+  position: relative;
+}
+
+.ds-composer__placeholder {
+  position: absolute;
+  inset-block-start: var(--ds-composer-text-block);
+  inset-inline: var(--ds-composer-text-inset) var(--padding-100);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--ds-composer-line);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-input-text-placeholder);
+  pointer-events: none;
+}
+
+.ds-composer--compact .ds-composer__placeholder {
+  font-size: var(--font-paragraph-sm-size);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
 }
 
 .ds-composer--inline.ds-composer--compact {

@@ -2,6 +2,7 @@
    TABLE TOOLBAR
    The control bar over a table: search, filter chips, the More panel's columns,
    the density switch, the count, the actions and the AI command, in one line.
+   A long AI command grows its own row.
    ============================================ */
 
 .ds-table-toolbar {
@@ -380,12 +381,18 @@
    it stays in view). */
 .ds-table-toolbar__row {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   min-width: 0;
 }
 
+.ds-table-toolbar__row > .ds-table-toolbar__main {
+  grid-area: 1 / 1;
+}
+
 /* A row that takes over the bar: the bar's controls fade out, then the row
-   comes in. Coming back is the reverse. The bar stays laid out throughout, so the
-   row never changes height. */
+   comes in. Coming back is the reverse. The bar stays laid out throughout, so taking
+   over never changes the row's height; only a long AI command grows it (below). */
 .ds-table-toolbar__start > *,
 .ds-table-toolbar__end {
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard) var(--motion-duration-fast);
@@ -580,14 +587,17 @@
   inset: 0;
   z-index: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: var(--gap-200);
   visibility: hidden;
   pointer-events: none;
   transition: visibility 0s linear var(--motion-duration-fast);
 }
 
+/* Open, it shares the bar's grid cell in flow, so a long request grows the row and pushes the table down. */
 .ds-table-toolbar__command-row[data-open] {
+  position: relative;
+  grid-area: 1 / 1;
   visibility: visible;
   pointer-events: auto;
   transition: visibility 0s;

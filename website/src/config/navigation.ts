@@ -447,6 +447,11 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "An analytics app shell built from the system alone",
   },
   {
+    href: "/templates/analytics",
+    label: "Analytics",
+    description: "Realtime web analytics over a world map of live visitors",
+  },
+  {
     href: "/templates/chat-home",
     label: "Chat home",
     description: "An assistant's home screen: a prompt over a board of live tiles",

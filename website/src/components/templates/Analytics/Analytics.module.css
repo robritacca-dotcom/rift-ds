@@ -1,0 +1,350 @@
+/* The analytics template. The panels and top bar are the marketing
+   dashboard's; what is its own is the map behind the first screen. Every
+   colour, space, radius and type style is a semantic token; the only raw
+   values are structural sizes (grid tracks, the stage's height). */
+
+/* The stage is the content (design.md's Template screens rule 5), so the
+   column runs full width in both layouts. */
+.content {
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1500);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------------- map */
+
+/* Behind everything, bleeding to the column's edges, and dissolving into the
+   page at the bottom, so the panels below rise out of it. */
+.map {
+  position: absolute;
+  inset: 0 0 auto;
+  /* The map window's own shape (MAP_BOUNDS is about 1.8 wide to 1 tall), so
+     cover crops nothing at any column width; a floor for narrow columns. */
+  height: max(440px, 55cqw);
+  mask-image: linear-gradient(to bottom, black 90%, transparent);
+}
+
+/* A city is alive: StatusDot's ring on WorldMap's dot, on the same shimmer
+   loop as every live indicator in the system, and staggered so the map
+   twinkles rather than beats. */
+.map :global(.ds-world-map__dot) {
+  position: relative;
+}
+
+.map :global(.ds-world-map__dot)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background-color: currentColor;
+  animation: cityPulse var(--motion-duration-loop-shimmer) var(--motion-ease-standard) infinite;
+}
+
+.map :global(.ds-world-map__marker-slot):nth-child(3n + 1) :global(.ds-world-map__dot)::after {
+  animation-delay: calc(var(--motion-duration-loop-shimmer) * -0.33);
+}
+
+.map :global(.ds-world-map__marker-slot):nth-child(3n + 2) :global(.ds-world-map__dot)::after {
+  animation-delay: calc(var(--motion-duration-loop-shimmer) * -0.66);
+}
+
+@keyframes cityPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70%,
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* ds-allow(motion): parks a looping animation, which the collapsed duration would strobe rather than stop (StatusDot's treatment). */
+@media (prefers-reduced-motion: reduce) {
+  .map :global(.ds-world-map__dot)::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* The city card inside the marker's HoverCard. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+}
+
+.cardName {
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+.cardMeta {
+  color: var(--color-text-secondary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+/* -------------------------------------------------------------- stage */
+
+/* Holds the panels clear of the map's cities (its height, less the top bar
+   above this stage), and is transparent to the pointer in its gaps. */
+.stage {
+  position: relative;
+  min-height: max(320px, calc(55cqw - 120px));
+  pointer-events: none;
+}
+
+.stage > * > * {
+  pointer-events: auto;
+}
+
+/* The title and the key take the top corners; Siberia and the Arctic under
+   the key carry no cities. */
+.pageHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-500);
+}
+
+.title {
+  margin: var(--gap-100) 0 0;
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+.liveStats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-400);
+}
+
+.legend {
+  flex-shrink: 0;
+  padding: var(--padding-400);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary-semi);
+  backdrop-filter: blur(24px);
+  border: var(--border-025) solid
+    color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
+}
+
+/* --------------------------------------------------------------- flow */
+
+.flow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  margin-top: var(--gap-500);
+  min-width: 0;
+}
+
+.panel {
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid
+    color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
+  border-radius: var(--radius-600);
+  padding: var(--padding-500);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 0;
+}
+
+.panelHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+/* Fixed-width furniture, not a form field. The doubled class outranks
+   .ds-dropdown whichever order the build loads the two stylesheets in. */
+.rangeSelect.rangeSelect {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+/* The headline numbers as one tile: a row per stat, ruled apart, spread to
+   match the height of the live chart beside it. */
+.statList {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  padding-block: var(--padding-200);
+  border-block-end: var(--border-025) solid var(--color-divider);
+}
+
+.statRow:last-child {
+  border-block-end: none;
+}
+
+.statIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-bg);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-500);
+}
+
+.halvesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+.legendRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--gap-200);
+  margin-top: auto;
+}
+
+.pageList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.pageRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+}
+
+.pageMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-100);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.pagePath {
+  color: var(--color-text-primary);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+.pagePct {
+  color: var(--color-text-secondary);
+}
+
+.tableSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 0;
+  margin-top: var(--gap-500);
+}
+
+.sourceCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+/* The map marker's 10px geometry, so the column reads as the map's key. */
+.sourceSwatch {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+}
+
+/* ------------------------------------------------------------ top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  right: var(--padding-200);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-050);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.searchIconMobile {
+  display: none;
+}
+
+/* ---------------------------------------------------------- responsive */
+
+/* The grid restacks by the room the column has, as the marketing dashboard's
+   does: an open chat or an expanded rail narrows it with the viewport still. */
+@container template-content (max-width: 800px) {
+  .content .halvesGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The narrow map has no corner to spare; the table's Lead source column
+     still reads the colours. */
+  .content .legend {
+    display: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  .content {
+    padding: var(--padding-400);
+  }
+}
+
+/* Mobile: AppSidebar's fixed hamburger overlays this row's left end, so the
+   search folds to its icon and the actions keep the right. */
+@media (max-width: 768px) {
+  .search {
+    display: none;
+  }
+
+  .searchIconMobile {
+    display: inline-flex;
+  }
+
+  .topBar {
+    justify-content: flex-end;
+    min-height: 40px;
+  }
+}

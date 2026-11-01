@@ -752,6 +752,8 @@ const EXCLUDED_ROUTES = new Map([
     'a noindex test page for feature banners that open into an overlay — a surface experiment whose prose restates facts the covered pages already carry'],
   ['/templates/marketing-dashboard',
     'the marketing dashboard template rendered full viewport (the same app shell as /labs/marketing, its origin) — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
+  ['/templates/analytics',
+    'the analytics template rendered full viewport — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/chat-home',
     'the chat home template rendered full viewport, an assistant product whose welcome screen is a board of tiles — its prose is fictional demo data and scripted replies; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/mobile-dashboard',

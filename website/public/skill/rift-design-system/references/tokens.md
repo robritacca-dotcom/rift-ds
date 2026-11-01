@@ -28,7 +28,7 @@ Prefix: `--color-*`.
 | `--color-action-neutral-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-action-neutral-bg-active` | `#A2A2A2` (`--primitive-neutral-04`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-action-neutral-bg-hover` | `#BCBCBC` (`--primitive-neutral-03`) | `#303030` (`--primitive-neutral-07`) |
-| `--color-action-neutral-border` | `#888888` (`--primitive-neutral-05`) | `#6D6D6D` (`--primitive-neutral-06`) |
+| `--color-action-neutral-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-action-neutral-text` | `#050505` (`--primitive-neutral-10`) | `#FFFFFF` (`--primitive-neutral-00`) |
 | `--color-action-passive-bg` | `rgba(241, 241, 241, 0.01)` (`--primitive-neutral-01-a01`) | `rgba(14, 14, 14, 0.01)` (`--primitive-neutral-09-a01`) |
 | `--color-action-passive-bg-active` | `rgba(188, 188, 188, 0.8)` (`--primitive-neutral-03-a80`) | `rgba(48, 48, 48, 0.8)` (`--primitive-neutral-07-a80`) |
@@ -139,26 +139,26 @@ Prefix: `--color-*`.
 | `--color-pixel-ink-6` | `#7434B3` (`--primitive-purple-08`) | `#A86AE8` (`--primitive-purple-05`) |
 | `--color-product-mark` | `#0E6E8F` (`--primitive-teal-08`) | `#3CA5C6` (`--primitive-teal-05`) |
 | `--color-scrim` | `rgba(0, 0, 0, 0.5)` (`--primitive-true-black-semi`) | `rgba(0, 0, 0, 0.7)` (`--primitive-true-black-strong`) |
-| `--color-status-error-bg` | `#FDEFF3` (`--primitive-red-01`) | `#571727` (`--primitive-red-10`) |
+| `--color-status-error-bg` | `#FAD3DD` (`--primitive-red-02`) | `#571727` (`--primitive-red-10`) |
 | `--color-status-error-border` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
 | `--color-status-error-icon` | `#C93A5C` (`--primitive-red-08`) | `#F16385` (`--primitive-red-06`) |
-| `--color-status-error-text` | `#571727` (`--primitive-red-10`) | `#FDEFF3` (`--primitive-red-01`) |
-| `--color-status-info-bg` | `#EEF3FD` (`--primitive-blue-01`) | `#081633` (`--primitive-blue-10`) |
+| `--color-status-error-text` | `#8E2641` (`--primitive-red-09`) | `#FDEFF3` (`--primitive-red-01`) |
+| `--color-status-info-bg` | `#D3DDF8` (`--primitive-blue-02`) | `#081633` (`--primitive-blue-10`) |
 | `--color-status-info-border` | `#1E47B0` (`--primitive-blue-07`) | `#1E47B0` (`--primitive-blue-07`) |
 | `--color-status-info-icon` | `#345AC4` (`--primitive-blue-06`) | `#5475D4` (`--primitive-blue-05`) |
-| `--color-status-info-text` | `#081633` (`--primitive-blue-10`) | `#EEF3FD` (`--primitive-blue-01`) |
-| `--color-status-neutral-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
+| `--color-status-info-text` | `#163789` (`--primitive-blue-08`) | `#EEF3FD` (`--primitive-blue-01`) |
+| `--color-status-neutral-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-status-neutral-border` | `#303030` (`--primitive-neutral-07`) | `#6D6D6D` (`--primitive-neutral-06`) |
 | `--color-status-neutral-icon` | `#6D6D6D` (`--primitive-neutral-06`) | `#A2A2A2` (`--primitive-neutral-04`) |
-| `--color-status-neutral-text` | `#232323` (`--primitive-neutral-08`) | `#F1F1F1` (`--primitive-neutral-01`) |
-| `--color-status-positive-bg` | `#ECFCF7` (`--primitive-green-01`) | `#024336` (`--primitive-green-10`) |
+| `--color-status-neutral-text` | `#303030` (`--primitive-neutral-07`) | `#F1F1F1` (`--primitive-neutral-01`) |
+| `--color-status-positive-bg` | `#CEF6E8` (`--primitive-green-02`) | `#024336` (`--primitive-green-10`) |
 | `--color-status-positive-border` | `#06D6A0` (`--primitive-green-07`) | `#06D6A0` (`--primitive-green-07`) |
 | `--color-status-positive-icon` | `#05A67C` (`--primitive-green-08`) | `#06D6A0` (`--primitive-green-07`) |
-| `--color-status-positive-text` | `#024336` (`--primitive-green-10`) | `#ECFCF7` (`--primitive-green-01`) |
-| `--color-status-warning-bg` | `#FFF3EC` (`--primitive-orange-01`) | `#552716` (`--primitive-orange-10`) |
+| `--color-status-positive-text` | `#03765A` (`--primitive-green-09`) | `#ECFCF7` (`--primitive-green-01`) |
+| `--color-status-warning-bg` | `#FBD9C5` (`--primitive-orange-02`) | `#552716` (`--primitive-orange-10`) |
 | `--color-status-warning-border` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
 | `--color-status-warning-icon` | `#C65E33` (`--primitive-orange-08`) | `#EF8247` (`--primitive-orange-07`) |
-| `--color-status-warning-text` | `#552716` (`--primitive-orange-10`) | `#FFF3EC` (`--primitive-orange-01`) |
+| `--color-status-warning-text` | `#8F4324` (`--primitive-orange-09`) | `#FFF3EC` (`--primitive-orange-01`) |
 | `--color-table-body-bg` | `#FFFFFF` (`--primitive-neutral-00`) | `#050505` (`--primitive-neutral-10`) |
 | `--color-table-border` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
 | `--color-table-divider` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |

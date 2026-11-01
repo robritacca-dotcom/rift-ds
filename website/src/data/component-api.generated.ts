@@ -4736,7 +4736,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "inline",
             "type": "boolean",
             "required": false,
-            "description": "One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1.",
+            "description": "One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1; above it, typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis.",
             "defaultValue": "false"
           },
           {
@@ -13450,7 +13450,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "command",
             "type": "TableToolbarCommand",
             "required": false,
-            "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable."
+            "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nA long request grows the composer to three rows, pushing the table down.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable."
           },
           {
             "name": "labels",

@@ -243,3 +243,8 @@
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-tertiary);
 }
+
+/* A staged reasoning step, in the trace's own quiet voice. */
+.reasoningStep {
+  margin: 0;
+}

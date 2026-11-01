@@ -8,6 +8,11 @@
  * passes its own suggestions and replies over its own page data; the panel
  * owns the conversation state and the focus contract.
  *
+ * An answer plays the way a live model's does, on the library's Reasoning and
+ * StreamingText: the reasoning arrives a step at a time, folds away to its
+ * duration, then the answer streams in chunks. Under reduced motion it is
+ * simply there.
+ *
  * Suggestion labels follow the site-wide chip budget (SUGGESTION_MAX_CHARS,
  * 40): a chip never wraps, so a longer question runs off the panel's edge.
  *
@@ -40,6 +45,9 @@ import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
+import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
+import { StreamingText } from "rift-ds/components/StreamingText/StreamingText";
+import { MOTION_AUTOPLAY_INTERVAL_MS } from "rift-ds/tokens/motion";
 import { TemplateShellContext } from "../TemplateShell/context";
 import styles from "./TemplateAssistant.module.css";
 
@@ -54,6 +62,74 @@ const readDocked = () => window.matchMedia(DOCK_QUERY).matches;
 
 const FOCUSABLE =
   'button:not([disabled]), a[href], textarea:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/* The staged model's pace: how long a reasoning step takes to arrive, and how
+   often a chunk of the answer lands. */
+const REASONING_STEP_MS = MOTION_AUTOPLAY_INTERVAL_MS / 5;
+const STREAM_CHUNK_MS = MOTION_AUTOPLAY_INTERVAL_MS / 100;
+const STREAM_CHUNK_WORDS = 2;
+
+const DEFAULT_REASONING = [
+  "Reading the question",
+  "Checking the numbers on this page",
+  "Drafting the answer",
+];
+
+/** One staged answer: its reasoning, a step at a time, then its text. */
+function AssistantReply({ text, steps }: { text: string; steps: string[] }) {
+  /* A reply only mounts after a press, in the browser, so this is safe to read here. */
+  const [still] = React.useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const words = React.useMemo(() => text.split(/(?<= )/), [text]);
+  const [shownSteps, setShownSteps] = React.useState(still ? steps.length + 1 : 1);
+  const [shownWords, setShownWords] = React.useState(still ? words.length : 0);
+  const [open, setOpen] = React.useState(!still);
+  const thinking = shownSteps <= steps.length;
+  const streaming = !thinking && shownWords < words.length;
+
+  React.useEffect(() => {
+    if (still) return;
+    let timer: number;
+    const stream = () => {
+      setShownWords((count) => {
+        const next = count + STREAM_CHUNK_WORDS;
+        if (next < words.length) timer = window.setTimeout(stream, STREAM_CHUNK_MS);
+        return Math.min(next, words.length);
+      });
+    };
+    const think = (step: number) => {
+      timer = window.setTimeout(() => {
+        setShownSteps(step + 1);
+        if (step < steps.length) think(step + 1);
+        else {
+          setOpen(false);
+          stream();
+        }
+      }, REASONING_STEP_MS);
+    };
+    think(1);
+    return () => window.clearTimeout(timer);
+  }, [still, steps, words]);
+
+  return (
+    <ChatMessage role="assistant">
+      <Reasoning
+        streaming={thinking}
+        duration={Math.round((steps.length * REASONING_STEP_MS) / 1000)}
+        open={open}
+        onOpenChange={setOpen}
+      >
+        {steps.slice(0, shownSteps).map((step) => (
+          <p key={step} className={styles.reasoningStep}>
+            {step}
+          </p>
+        ))}
+      </Reasoning>
+      {!thinking && (
+        <StreamingText text={words.slice(0, shownWords).join("")} streaming={streaming} cursor={streaming} />
+      )}
+    </ChatMessage>
+  );
+}
 
 export interface TemplateAssistantProps {
   /** Whether the panel renders; the host owns the open state. */
@@ -70,6 +146,8 @@ export interface TemplateAssistantProps {
   replies: Record<string, string>;
   /** The answer for anything typed rather than tapped. */
   fallback: string;
+  /** The reasoning steps an answer shows first, by suggestion id; a general three otherwise. */
+  reasoning?: Record<string, string[]>;
   /** One caption line under the composer. */
   disclaimer: string;
   /**
@@ -103,6 +181,7 @@ export default function TemplateAssistant({
   suggestions,
   replies,
   fallback,
+  reasoning,
   disclaimer,
   className,
   placement = "viewport",
@@ -112,7 +191,7 @@ export default function TemplateAssistant({
   const surface = surfaceProp ?? (shellLayout === "inset" ? "inset" : "raised");
   const [value, setValue] = React.useState("");
   const [turns, setTurns] = React.useState<
-    { id: number; role: "user" | "assistant"; text: string }[]
+    { id: number; role: "user" | "assistant"; text: string; steps?: string[] }[]
   >([]);
 
   const greeting = React.useSyncExternalStore(
@@ -135,7 +214,12 @@ export default function TemplateAssistant({
     setTurns((current) => [
       ...current,
       { id: current.length, role: "user", text },
-      { id: current.length + 1, role: "assistant", text: reply },
+      {
+        id: current.length + 1,
+        role: "assistant",
+        text: reply,
+        steps: (replyId && reasoning?.[replyId]) || DEFAULT_REASONING,
+      },
     ]);
     focusComposer();
   };
@@ -271,11 +355,15 @@ export default function TemplateAssistant({
           />
           <div className={styles.chatBody}>
             <ChatThread className={styles.chatThread}>
-              {turns.map((turn) => (
-                <ChatMessage key={turn.id} role={turn.role}>
-                  {turn.text}
-                </ChatMessage>
-              ))}
+              {turns.map((turn) =>
+                turn.role === "assistant" ? (
+                  <AssistantReply key={turn.id} text={turn.text} steps={turn.steps ?? DEFAULT_REASONING} />
+                ) : (
+                  <ChatMessage key={turn.id} role={turn.role}>
+                    {turn.text}
+                  </ChatMessage>
+                )
+              )}
             </ChatThread>
             {empty && (
               <div className={styles.chatWelcomeTop}>

@@ -14,6 +14,11 @@
  * markers. Map colours are the source each city's traffic leads with, the
  * same series slots as the source chart, so the one key reads for both.
  *
+ * Describe, in the table's toolbar, changes the table for real, but through
+ * describeCities below, a small interpreter over this page's own data rather
+ * than the model route merchant sales uses: the home page plays this screen on
+ * a loop, and a loop must never bill a model.
+ *
  * Every figure ties out: the cities sum to the 1,284 active users, by lead
  * source to the source chart, and the last five minutes of the bars to the
  * 212. All data is fictional, so the route is excluded from the chat corpus
@@ -29,6 +34,7 @@ import {
   DataTable,
   type DataTableColumn,
   type DataTableRow,
+  type DataTableView,
 } from "rift-ds/components/DataTable/DataTable";
 import {
   Dropdown,
@@ -43,7 +49,11 @@ import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Stat } from "rift-ds/components/Stat/Stat";
 import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
-import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
+import {
+  TableToolbar,
+  type TableToolbarCommandRequest,
+  type TableToolbarCommandResult,
+} from "rift-ds/components/TableToolbar/TableToolbar";
 import {
   WorldMap,
   type WorldMapBounds,
@@ -55,6 +65,7 @@ import {
   ComboChart,
   PieChart,
 } from "rift-ds/charts";
+import { MOTION_AUTOPLAY_INTERVAL_MS } from "rift-ds/tokens/motion";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import { ProductMark } from "../ProductMark/ProductMark";
@@ -246,6 +257,12 @@ const CHAT_REPLIES: Record<string, string> = {
   funnel: "The biggest drop is the first step: 32% of users see pricing. After that, more than half of those people sign up, and 5K of the 12K who sign up go on to buy.",
 };
 
+const CHAT_REASONING: Record<string, string[]> = {
+  who: ["Reading active users for the last 30 minutes", "Grouping them by city", "Ranking the cities and their sources"],
+  week: ["Pulling this week's users and sessions", "Comparing them with last week", "Finding the busiest day"],
+  funnel: ["Loading the conversion funnel", "Measuring the drop at each step", "Picking out the biggest one"],
+};
+
 const CHAT_FALLBACK =
   "This assistant is a mock. In the real product this answer would come from your analytics. Try one of the suggested questions for a canned tour.";
 
@@ -288,6 +305,7 @@ const CITY_COLUMNS: DataTableColumn[] = [
     key: "source",
     header: "Lead source",
     sortable: true,
+    options: SOURCES.map((source) => ({ value: source.key, label: source.label })),
     render: (row: DataTableRow) => (
       <span className={styles.sourceCell}>
         <span
@@ -313,6 +331,62 @@ const CITY_ROWS: DataTableRow[] = CITIES.map((city) => ({
     views: city.views,
   },
 }));
+
+/* The pause while Describe "thinks", so its working state shows. */
+const DESCRIBE_THINK_MS = MOTION_AUTOPLAY_INTERVAL_MS / 4;
+
+const DESCRIBE_PLACEHOLDER = "Organic cities over 60 users, most views first";
+
+const DESCRIBE_FALLBACK =
+  "This demo understands sources, a number of users or views, and an order. Try the sentence in the field.";
+
+/** Reads one sentence into a table setup: which sources, how many users or
+    views, and what order. Everything it does not recognise, it leaves alone. */
+async function describeCities({
+  text,
+  signal,
+}: TableToolbarCommandRequest): Promise<TableToolbarCommandResult> {
+  await new Promise((resolve) => setTimeout(resolve, DESCRIBE_THINK_MS));
+  signal.throwIfAborted();
+  const asked = text.toLowerCase();
+
+  const sources = SOURCES.filter((source) => asked.includes(source.key)).map((source) => source.key);
+  const threshold = asked.match(/\b(over|above|more than|under|below|fewer than|less than)\s+(\d+)/);
+  const measure = (phrase: string) => (asked.includes(`${phrase} views`) ? "views" : "users");
+
+  const filters: NonNullable<DataTableView["filters"]> = [];
+  if (sources.length > 0) {
+    filters.push({ id: "source-1", column: "source", operator: "isAnyOf", value: sources });
+  }
+  const limit = threshold ? Number(threshold[2]) : 0;
+  const lower = threshold ? /under|below|fewer|less/.test(threshold[1]) : false;
+  if (threshold) {
+    filters.push({
+      id: "measure-1",
+      column: measure(`${threshold[1]} ${threshold[2]}`),
+      operator: lower ? "lt" : "gt",
+      value: limit,
+    });
+  }
+
+  const order = asked.match(/\b(most|fewest|least|top|bottom)\s+(views|users)\b|\bby\s+(views|users)\b/);
+  const sorts: NonNullable<DataTableView["sorts"]> = order
+    ? [{ key: order[2] ?? order[3], direction: /fewest|least|bottom/.test(order[1] ?? "") ? "asc" : "desc" }]
+    : [{ key: "users", direction: "desc" }];
+
+  if (filters.length === 0 && !order) return { message: DESCRIBE_FALLBACK };
+
+  const found = CITIES.filter((city) => {
+    if (sources.length > 0 && !sources.includes(city.source)) return false;
+    if (!threshold) return true;
+    const value = filters[filters.length - 1].column === "views" ? city.views : city.users;
+    return lower ? value < limit : value > limit;
+  }).length;
+  return {
+    view: { version: 1, filters, sorts },
+    message: `Showing ${found} of ${CITIES.length} cities.`,
+  };
+}
 
 /* ---------------------------------------------------------------- page */
 
@@ -352,13 +426,14 @@ export default function Analytics() {
           suggestions={CHAT_SUGGESTIONS}
           replies={CHAT_REPLIES}
           fallback={CHAT_FALLBACK}
+          reasoning={CHAT_REASONING}
           disclaimer="A mock assistant with canned answers over this page's numbers."
         />
       }
     >
       {/* The backdrop: it sits behind the whole first screen and dissolves
           into the page as the panels take over. */}
-      <div className={styles.map}>
+      <div className={`${styles.map} ${appFrame ? styles.mapApp : ""}`}>
         <WorldMap
           points={MAP_POINTS}
           bounds={MAP_BOUNDS}
@@ -404,11 +479,12 @@ export default function Analytics() {
       )}
 
       {/* The stage passes the pointer through its gaps, so the markers
-          around the title and the key stay hoverable. */}
-      <div className={styles.stage}>
+          around the title and the key stay hoverable; the key sits on the open ocean
+          at the lower left, where no city's card opens. */}
+      <div className={`${styles.stage} ${appFrame ? styles.stageApp : ""}`}>
         {!appFrame && (
           <header className={styles.pageHead}>
-            <div>
+            <div className={styles.pageName}>
               <Breadcrumb
                 items={[
                   { label: productName, href: "#" },
@@ -418,6 +494,10 @@ export default function Analytics() {
               />
               <h1 className={styles.title}>Realtime</h1>
             </div>
+          </header>
+        )}
+
+        {!appFrame && (
           <MapLegend
             className={styles.legend}
             title="Lead source"
@@ -432,7 +512,6 @@ export default function Analytics() {
               label: source.label,
             }))}
           />
-          </header>
         )}
 
       </div>
@@ -495,7 +574,7 @@ export default function Analytics() {
               showLegend={false}
               bare
             />
-            <div className={styles.legendRow}>
+            <div className={`${styles.legendRow} ${styles.sourceLegend}`}>
               {SOURCES.map((source, i) => (
                 <LegendTile
                   key={source.key}
@@ -549,7 +628,7 @@ export default function Analytics() {
             />
             <div className={styles.legendRow}>
               <LegendTile swatch={seriesSwatch(1)} label="Sessions, total" value="84.2K" />
-              <LegendTile swatch={seriesSwatch(2)} label="Engagement, average" value="2.9 min" />
+              <LegendTile swatch={seriesSwatch(2)} label="Engagement" value="2.9 min avg" />
             </div>
           </section>
 
@@ -624,7 +703,12 @@ export default function Analytics() {
             defaultPageSize={8}
             pageSizeOptions={[8, 16]}
             defaultSort={{ key: "users", direction: "desc" }}
-            toolbar={<TableToolbar />}
+            toolbar={
+              <TableToolbar
+                command={{ onSubmit: describeCities }}
+                labels={{ commandPlaceholder: DESCRIBE_PLACEHOLDER }}
+              />
+            }
           />
         </section>
       </div>

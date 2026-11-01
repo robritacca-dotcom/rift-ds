@@ -23,6 +23,24 @@
   z-index: 25;
 }
 
+/* The bar's scroll edge, firmer than the library's: this bar carries a
+   subtitle, which the library's fade has thinned out by the time it reaches
+   that line, so content read straight through it. The fill holds solid past
+   the subtitle, then fades. The doubled class outranks the library's rule
+   whichever order the build loads the two stylesheets in. */
+.header.header:global(.ds-top-app-bar--ios)::before {
+  inset-block-end: -24px;
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg-page-primary) 72%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, var(--color-text-primary) 72%, transparent);
+  mask-image: linear-gradient(to bottom, var(--color-text-primary) 72%, transparent);
+}
+
 /* The tab bar rides the viewport's bottom edge, over the content. */
 .tabBar {
   position: fixed;

@@ -24,6 +24,12 @@
   mask-image: linear-gradient(to bottom, black 90%, transparent);
 }
 
+/* In the app dressing the map starts under the large title, not at the
+   surface's edge, so it fades in at the top as well. */
+.mapApp {
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 90%, transparent);
+}
+
 /* A city is alive: StatusDot's ring on WorldMap's dot, on the same shimmer
    loop as every live indicator in the system, and staggered so the map
    twinkles rather than beats. */
@@ -92,6 +98,8 @@
    above this stage), and is transparent to the pointer in its gaps. */
 .stage {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: max(320px, calc(55cqw - 120px));
   pointer-events: none;
 }
@@ -100,13 +108,10 @@
   pointer-events: auto;
 }
 
-/* The title and the key take the top corners; Siberia and the Arctic under
-   the key carry no cities. */
-.pageHead {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--gap-500);
+/* No top bar or page head above the map here, so the stage is the map's
+   whole height. */
+.stageApp {
+  min-height: max(440px, 55cqw);
 }
 
 .title {
@@ -127,6 +132,8 @@
 
 .legend {
   flex-shrink: 0;
+  align-self: flex-start;
+  margin-block-start: auto;
   padding: var(--padding-400);
   border-radius: var(--radius-600);
   background: var(--color-bg-container-primary-semi);
@@ -222,9 +229,18 @@
   margin-top: auto;
 }
 
+/* Five sources hold one row while the panel has room, rather than leaving
+   the last alone on a second. Measured against the longest label's tile. */
+.sourceLegend.sourceLegend {
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+}
+
+/* Spread to the height of the chart beside it, as the stats list is. */
 .pageList {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
   gap: var(--gap-300);
 }
 
@@ -347,4 +363,37 @@
     justify-content: flex-end;
     min-height: 40px;
   }
+}
+
+/* ---------------------------------------------------------- city cards */
+
+/* The map and the stage over it are separate stacking contexts (the map's
+   mask makes it one), so a city's card clears the stage by lifting the whole
+   map. The page's name and the key hold a layer above it, clear of any card;
+   the top bar's layer stays above both. */
+.content:has(:global(.ds-hover-card__panel--visible)) .map {
+  z-index: 1;
+}
+
+.pageName,
+.legend {
+  position: relative;
+  z-index: 2;
+}
+
+/* The panels stay above a lifted map's fading edge; cards open upward, so
+   none reaches them. */
+.flow {
+  z-index: 2;
+}
+
+/* Only as wide as its words, so the row's empty end is never over a card. */
+.pageName {
+  width: fit-content;
+}
+
+/* The marker with the open card rises above its neighbours, as a hovered one
+   does: the home page's staged pointer sets no real :hover. */
+.map :global(.ds-world-map__marker-slot):has(:global(.ds-hover-card__panel--visible)) {
+  z-index: 4;
 }

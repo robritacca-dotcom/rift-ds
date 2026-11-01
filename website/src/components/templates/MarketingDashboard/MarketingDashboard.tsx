@@ -452,6 +452,7 @@ export default function MarketingDashboard() {
               <CircularButton
                 icon="search"
                 variant="secondary"
+                tone="neutral"
                 ariaLabel="Search campaigns"
                 className={styles.searchIconMobile}
               />
@@ -462,6 +463,7 @@ export default function MarketingDashboard() {
               <CircularButton
                 icon="notifications"
                 variant="secondary"
+                tone="neutral"
                 ariaLabel="Notifications"
               />
             </div>
@@ -485,6 +487,7 @@ export default function MarketingDashboard() {
           <div className={styles.headActions}>
             <Button
               variant="secondary"
+              tone="neutral"
               size="compact"
               label="Filters"
               iconLeft="filter_list"

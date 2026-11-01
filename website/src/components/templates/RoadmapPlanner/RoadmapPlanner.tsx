@@ -550,6 +550,7 @@ export default function RoadmapPlanner() {
                 <CircularButton
                   icon="search"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Search initiatives"
                   className={styles.searchIconMobile}
                 />
@@ -560,6 +561,7 @@ export default function RoadmapPlanner() {
                 <CircularButton
                   icon="notifications"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Notifications"
                 />
               </div>

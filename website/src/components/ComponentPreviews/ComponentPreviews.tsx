@@ -769,7 +769,7 @@ const previews: Record<string, () => ReactNode> = {
   "circular-button": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "12px" }}>
-        <CircularButton icon="search" ariaLabel="Search" variant="secondary" />
+        <CircularButton icon="search" ariaLabel="Search" variant="secondary" tone="neutral" />
         <CircularButton icon="settings" ariaLabel="Settings" variant="tertiary" />
       </div>
     </>

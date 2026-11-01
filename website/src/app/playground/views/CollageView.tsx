@@ -193,7 +193,7 @@ export function CollageView({ brand }: { brand: string }) {
         </div>
         <div className={styles.row}>
           <CircularButton icon="add" variant="primary" ariaLabel="Add" />
-          <CircularButton icon="edit" variant="secondary" ariaLabel="Edit" />
+          <CircularButton icon="edit" variant="secondary" tone="neutral" ariaLabel="Edit" />
           <CircularButton icon="favorite" variant="tertiary" ariaLabel="Favourite" />
           <SplitButton label="Publish" iconLeft="send" items={PUBLISH_ITEMS} />
         </div>

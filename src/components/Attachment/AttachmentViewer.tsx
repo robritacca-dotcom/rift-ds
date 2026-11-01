@@ -281,6 +281,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
               <CircularButton
                 icon="chevron_left"
                 variant="secondary"
+                tone="neutral"
                 size="compact"
                 ariaLabel={previousLabel}
                 tooltip={false}
@@ -292,6 +293,7 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
               <CircularButton
                 icon="chevron_right"
                 variant="secondary"
+                tone="neutral"
                 size="compact"
                 ariaLabel={nextLabel}
                 tooltip={false}

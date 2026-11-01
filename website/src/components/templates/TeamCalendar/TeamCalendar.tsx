@@ -277,6 +277,7 @@ export default function TeamCalendar() {
                 <CircularButton
                   icon="search"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Search events"
                   className={styles.searchIconMobile}
                 />
@@ -287,6 +288,7 @@ export default function TeamCalendar() {
                 <CircularButton
                   icon="notifications"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Notifications"
                 />
               </div>

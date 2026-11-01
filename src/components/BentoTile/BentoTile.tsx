@@ -330,6 +330,7 @@ export const BentoTile = React.forwardRef<HTMLElement, BentoTileProps>(
                 ref={triggerRef}
                 icon="open_in_full"
                 variant={awake ? 'primary' : 'secondary'}
+                tone={awake ? undefined : 'neutral'}
                 size="compact"
                 ariaLabel={label}
                 tooltip={false}
@@ -434,6 +435,7 @@ function BentoTileOverlay({ title, titleId, panelName, toggleName, closeLabel, o
             ref={closeRef}
             icon="close_fullscreen"
             variant="secondary"
+            tone="neutral"
             size="compact"
             ariaLabel={closeLabel}
             tooltip={false}

@@ -62,16 +62,16 @@ export default function TooltipPage() {
             <SectionTitle title="On icon buttons" />
             <div className={styles.variantRow} style={{ gap: "20px", padding: "20px 0" }}>
               <Tooltip content="Search" position="bottom">
-                <CircularButton icon="search" ariaLabel="Search" variant="secondary" tooltip={false} />
+                <CircularButton icon="search" ariaLabel="Search" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
               <Tooltip content="Settings" position="bottom">
-                <CircularButton icon="settings" ariaLabel="Settings" variant="secondary" tooltip={false} />
+                <CircularButton icon="settings" ariaLabel="Settings" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
               <Tooltip content="Notifications" position="bottom">
-                <CircularButton icon="notifications" ariaLabel="Notifications" variant="secondary" tooltip={false} />
+                <CircularButton icon="notifications" ariaLabel="Notifications" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
               <Tooltip content="Profile" position="bottom">
-                <CircularButton icon="person" ariaLabel="Profile" variant="secondary" tooltip={false} />
+                <CircularButton icon="person" ariaLabel="Profile" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
             </div>
           </section>

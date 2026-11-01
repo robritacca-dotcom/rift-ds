@@ -961,11 +961,11 @@ export default function DesignSystemLanding() {
           <span className={styles.quickActionLabel}>Send</span>
         </div>
         <div className={styles.quickAction}>
-          <CircularButton icon="arrow_downward" variant="secondary" ariaLabel="Request money" />
+          <CircularButton icon="arrow_downward" variant="secondary" tone="neutral" ariaLabel="Request money" />
           <span className={styles.quickActionLabel}>Request</span>
         </div>
         <div className={styles.quickAction}>
-          <CircularButton icon="add" variant="secondary" ariaLabel="Top up balance" />
+          <CircularButton icon="add" variant="secondary" tone="neutral" ariaLabel="Top up balance" />
           <span className={styles.quickActionLabel}>Top up</span>
         </div>
         <div className={styles.quickAction}>

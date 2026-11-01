@@ -75,7 +75,7 @@ const ITEMS: Item[] = [
   { name: 'Button', selector: '.ds-button', render: (size) => <Button size={size} label="New campaign" iconLeft="add" /> },
   { name: 'Button secondary', selector: '.ds-button', render: (size) => <Button size={size} variant="secondary" label="Filters" /> },
   { name: 'SplitButton', selector: '.ds-split-button', render: (size) => <SplitButton size={size} label="Export" items={[{ label: 'CSV' }]} /> },
-  { name: 'CircularButton', selector: '.ds-circular-button', render: (size) => <CircularButton size={size} icon="notifications" variant="secondary" ariaLabel="Notifications" /> },
+  { name: 'CircularButton', selector: '.ds-circular-button', render: (size) => <CircularButton size={size} icon="notifications" variant="secondary" tone="neutral" ariaLabel="Notifications" /> },
   { name: 'AiButton', selector: '.ds-ai-button', render: (size) => <AiButton size={size} label="Ask AI" /> },
   {
     name: 'SegmentedControl',

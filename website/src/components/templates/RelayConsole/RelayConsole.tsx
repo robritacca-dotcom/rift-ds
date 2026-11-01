@@ -501,6 +501,7 @@ export default function RelayConsole() {
                 <CircularButton
                   icon="search"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Search stations"
                   className={styles.searchIconMobile}
                 />
@@ -511,6 +512,7 @@ export default function RelayConsole() {
                 <CircularButton
                   icon="notifications"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Notifications"
                 />
               </div>

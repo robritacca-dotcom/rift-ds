@@ -151,6 +151,7 @@ export default function MerchantSales() {
                 <CircularButton
                   icon="search"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Search Larkspur"
                   className={styles.searchIconMobile}
                 />
@@ -161,6 +162,7 @@ export default function MerchantSales() {
                 <CircularButton
                   icon="notifications"
                   variant="secondary"
+                  tone="neutral"
                   ariaLabel="Notifications"
                 />
               </div>

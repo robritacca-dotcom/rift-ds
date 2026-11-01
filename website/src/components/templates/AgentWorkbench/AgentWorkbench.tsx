@@ -483,6 +483,7 @@ export default function AgentWorkbench() {
                 <CircularButton
                   icon="code"
                   variant={workspaceOpen ? "secondary" : "tertiary"}
+                  tone="neutral"
                   ariaLabel={
                     workspaceOpen
                       ? "Hide the coding panel"
@@ -633,6 +634,7 @@ export default function AgentWorkbench() {
             <CircularButton
               icon={railOpen ? "right_panel_close" : "right_panel_open"}
               variant={railOpen ? "secondary" : "tertiary"}
+              tone="neutral"
               ariaLabel={
                 railOpen ? "Hide the change details" : "Show the change details"
               }

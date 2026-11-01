@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * The playground: the immersive re-theming tool. Five views (DESIGN.md,
- * Components, Type, Chat, Templates) over one set of levers, chromeless, its
+ * The playground: the immersive re-theming tool. Four views over one set
+ * of levers (Components, Type, Chat, Templates), chromeless, its
  * rails built from the library's Inspector family. The theme rail sits on the
  * left and every view seats a panel of its own on the right, so each stage
- * centres under the toolbar's view switch: the DESIGN.md view's specimen
- * switches, the Components view's layout, section switches and surface, the
+ * centres under the toolbar's view switch:
+ * the Components view's layout, section switches and surface, the
  * Type view's specimen text and tier switches
  * (viewing choices that never reach the theme or its export), the chat
  * director (views/ChatView.tsx, ChatDirector.tsx) and the templates rail
@@ -98,8 +98,6 @@ import { ImageThemeCard, ImageThemeDropZone } from "./ImageThemeDrop";
 import { themeFromFile, type ImageThemeSource } from "@/lib/theme/image-palette";
 import { DesignMdCard } from "./DesignMdCard";
 import { ThemeSourceInvite } from "./ThemeSourceInvite";
-import DesignRail from "./DesignRail";
-import { DesignView } from "./views/DesignView";
 import { CollageView } from "./views/CollageView";
 import {
   DESIGN_MD_MAX_BYTES,
@@ -169,9 +167,8 @@ import FeedbackSection from "./sections/FeedbackSection";
 
 /* The tool's lenses on the same theme state. One page, one set of levers —
    switching views never resets what you've styled. */
-type View = "design" | "components" | "type" | "chat" | "templates";
+type View = "components" | "type" | "chat" | "templates";
 const VIEWS = [
-  { value: "design", label: "DESIGN.md" },
   { value: "components", label: "Components" },
   { value: "type", label: "Typography" },
   { value: "chat", label: "AI Chat" },
@@ -277,14 +274,14 @@ export default function PlaygroundPage() {
      so a specific view can be linked. Read once on mount rather than via
      useSearchParams, which would force a Suspense boundary on a fully
      client-rendered page. */
-  const [view, setView] = useState<View>("design");
+  const [view, setView] = useState<View>("components");
   useEffect(() => {
     // The setState here is intentional — a once-on-mount sync from the
     // URL, which the server prerender can't see (same pattern as
     // MegaNav's navigation effect).
     const q = new URLSearchParams(window.location.search).get("view");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (q === "components" || q === "chat" || q === "type" || q === "templates") setView(q);
+    if (q === "chat" || q === "type" || q === "templates") setView(q);
     /* The Templates view was the Dashboard view, and links to it remain. */
     else if (q === "dashboard") setView("templates");
   }, []);
@@ -296,7 +293,7 @@ export default function PlaygroundPage() {
     if (value !== view) setEnterAlt((alt) => !alt);
     setView(value as View);
     const url = new URL(window.location.href);
-    if (value === "design") url.searchParams.delete("view");
+    if (value === "components") url.searchParams.delete("view");
     else url.searchParams.set("view", value);
     window.history.replaceState(null, "", url);
   };
@@ -395,7 +392,6 @@ export default function PlaygroundPage() {
     surface: "page",
     layout: "collage",
   });
-  const [designHidden, setDesignHidden] = useState<ReadonlySet<string>>(new Set());
   const [typeView, setTypeView] = useState<TypeRailState>({
     sample: DEFAULT_TYPE_SAMPLE.value,
     heading: DEFAULT_TYPE_SAMPLE.heading,
@@ -403,7 +399,7 @@ export default function PlaygroundPage() {
     hiddenTiers: new Set(),
   });
 
-  /* The staged shader banner's levers (DESIGN.md view). They tune the
+  /* The staged shader banner's levers (the collage). They tune the
      banner only, never the site background, and no theme preset owns them,
      so picking a preset leaves them where they are; their own reset puts
      them back on the site's config. */
@@ -640,9 +636,9 @@ export default function PlaygroundPage() {
     setTintStrength(source.theme.tintStrength);
     setAccents(source.theme.accents);
 
-    /* The source card heads the DESIGN.md view, so a drop from any other view
-       lands somewhere it can be seen. */
-    pickView("design");
+    /* The source card sits in the collage, so a drop from anywhere else lands
+       somewhere it can be seen. */
+    showSource();
   };
 
   /** A matched face's picker entry, loaded and selectable. A face outside
@@ -659,6 +655,12 @@ export default function PlaygroundPage() {
       document.head.appendChild(link);
     }
     return option.label;
+  };
+
+  /** Brings the collage up, where the theme's source card sits. */
+  const showSource = () => {
+    pickView("components");
+    setComponentsView((state) => ({ ...state, layout: "collage" }));
   };
 
   /** Reads a local DESIGN.md and fits every lever it has an opinion about:
@@ -724,7 +726,7 @@ export default function PlaygroundPage() {
     /* The Product name stays as the visitor left it: a file is the look to
        be inspired by, not the product being built, so its brand never
        becomes the app's name. Typing it in is the visitor's call. */
-    pickView("design");
+    showSource();
   };
 
   /** The one entry point for a dropped or chosen file: a DESIGN.md (.md,
@@ -1218,9 +1220,9 @@ export default function PlaygroundPage() {
     </InspectorSection>
   );
 
-  /* The DESIGN.md view's shader levers, slotted under the shared ones
-     because the banner is the only thing on any stage they move. */
-  const shaderLevers = view === "design" && (
+  /* The collage's shader levers, slotted under the shared ones because the
+     banner is the only thing on any stage they move. */
+  const shaderLevers = view === "components" && componentsView.layout === "collage" && (
     <InspectorSection title="Shader banner">
       {SHADER_PARAM_CONTROLS.map((c) => (
         <InspectorSlider
@@ -1345,17 +1347,14 @@ export default function PlaygroundPage() {
                   /* And the type rail's specimen and tiers. */
                   <TypeRail variant="drawer" state={typeView} onChange={setTypeView} />
                 ) : view === "components" && compact ? (
-                  /* And the components rail's. */
-                  <ComponentsRail
-                    variant="drawer"
-                    state={componentsView}
-                    onChange={setComponentsView}
-                  />
-                ) : view === "design" && compact ? (
-                  /* And the specimen's, after the shader's levers. */
+                  /* And the components rail's, after the shader's levers. */
                   <>
                     {shaderLevers}
-                    <DesignRail variant="drawer" hidden={designHidden} onChange={setDesignHidden} />
+                    <ComponentsRail
+                      variant="drawer"
+                      state={componentsView}
+                      onChange={setComponentsView}
+                    />
                   </>
                 ) : (
                   shaderLevers || undefined
@@ -1399,8 +1398,8 @@ export default function PlaygroundPage() {
   return (
     <>
       {/* The stage ground is the dotted working canvas, not the ambient
-          field — the shader stands down here (and is staged as a banner in
-          the DESIGN.md view instead). */}
+          field — the shader stands down here (and is staged as a tile in
+          the collage instead). */}
       <HiddenBackground />
       <DotBackground dots={showDots} />
       {/* The stage has no visible title; this names the page for screen
@@ -1470,7 +1469,7 @@ export default function PlaygroundPage() {
       <div
         className={[
           styles.dsLayout,
-          view === "design" || view === "components" || view === "type" ? styles.dsLayoutDocument : "",
+          view === "components" || view === "type" ? styles.dsLayoutDocument : "",
           view === "chat" && !compact ? styles.dsLayoutChat : "",
           view === "templates" ? styles.dsLayoutTemplates : "",
         ]
@@ -1625,61 +1624,45 @@ export default function PlaygroundPage() {
           {/* The phone rules the narrowed column can't trigger, derived
               from the loaded stylesheets and scoped to the stage. */}
           {stageCss && <style>{stageCss}</style>}
-          {view === "design" && (
-            <DesignView
-              overrides={overrides}
-              hidden={designHidden}
-              narrow={compact || stageMobile}
-            >
-              {/* The ambient shader, demoted from stage backdrop to staged
-                  component: the stage's opening banner, on the site's own field
-                  config, re-theming live with the levers like everything
-                  else, and tuned by its own shader levers in the rail. */}
-              <div className={styles.shaderBanner} aria-hidden="true">
-                <ShaderField
-                  params={shaderParams}
-                  blobs={shaderBackground.blobs}
-                />
-                {/* The product's name over the field in the display style,
-                    so the display face, weight and colour levers show at
-                    the size they are made for. Decorative here: the mock
-                    nav below names the product to assistive tech. */}
-                <span className={styles.shaderBannerName}>{productName.trim() || "Acme Corp"}</span>
-              </div>
-              <div className={styles.navStage}>
-                {/* The theme's source sits under the banner, pushing
-                    everything below it down, all of it re-themed. */}
-                {imageSource && (
+          {view === "components" && componentsView.layout === "collage" && (
+            <CollageView
+              brand={effectiveBrand}
+              banner={
+                /* The ambient shader as a staged component: the site's own
+                   field config, re-theming live with the levers, tuned by
+                   its own shader levers in the rail. */
+                <div className={styles.shaderBanner} aria-hidden="true">
+                  <ShaderField params={shaderParams} blobs={shaderBackground.blobs} />
+                  {/* The product's name over the field in the display style,
+                      so the display face, weight and colour levers show at
+                      the size they are made for. */}
+                  <span className={styles.shaderBannerName}>{productName.trim() || "Acme Corp"}</span>
+                </div>
+              }
+              source={
+                imageSource ? (
                   <ImageThemeCard
                     source={imageSource}
                     onExport={openExport}
                     onReplace={() => imageInputRef.current?.click()}
                     onReset={resetTheme}
                   />
-                )}
-                {/* With no source yet, the stage opens on the invitation to
-                    bring one, with a working dropzone. */}
-                {!imageSource && !designSource && (
-                  <ThemeSourceInvite
-                    onFile={applySourceFile}
-                    busy={imageBusy}
-                    error={imageError}
-                  />
-                )}
-                {designSource && (
+                ) : designSource ? (
                   <DesignMdCard
                     source={designSource}
                     onExport={openExport}
                     onReplace={() => imageInputRef.current?.click()}
                     onReset={resetTheme}
                   />
-                )}
-              </div>
-            </DesignView>
-          )}
-
-          {view === "components" && componentsView.layout === "collage" && (
-            <CollageView brand={effectiveBrand} />
+                ) : (
+                  <ThemeSourceInvite
+                    onFile={applySourceFile}
+                    busy={imageBusy}
+                    error={imageError}
+                  />
+                )
+              }
+            />
           )}
 
           {/* In the components rail's order, less the sections it has
@@ -1775,16 +1758,6 @@ export default function PlaygroundPage() {
             variant="panel"
             state={typeView}
             onChange={setTypeView}
-            collapsed={rightRailCollapsed}
-            onCollapsedChange={setRightRailCollapsed}
-          />
-        )}
-
-        {view === "design" && !compact && (
-          <DesignRail
-            variant="panel"
-            hidden={designHidden}
-            onChange={setDesignHidden}
             collapsed={rightRailCollapsed}
             onCollapsedChange={setRightRailCollapsed}
           />

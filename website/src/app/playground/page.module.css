@@ -53,9 +53,10 @@
   /* The same on the right, where every view seats a panel of its own, so
      the column centres between the two and under the toolbar's switch. */
   padding-right: calc(var(--rail-right) + var(--rail-inset));
-  /* Clear the floating toolbar pill, then the immersive page still starts
-     lower than a doc page would — the title gets air, not a viewport edge. */
-  padding-top: calc(var(--layout-stage-clearance) + var(--primitive-gap-1000));
+  /* Clear the floating toolbar pill, on the same line the fixed rails start
+     on: the clearance less the body's own top padding, which the layout
+     already sits under, so every view's stage begins level with its panels. */
+  padding-top: calc(var(--layout-stage-clearance) - var(--padding-500));
   /* And the safe area above the bottom control bar, so the end of the
      scroll is never parked behind it. */
   padding-bottom: var(--layout-stage-bottom-clearance);
@@ -98,13 +99,8 @@
      the layout hands it the zone panel-to-panel on both sides. */
   padding-left: var(--rail-left);
   padding-right: var(--rail-right);
-  /* The chat stage carries no page heading, so the components view's
-     extra title air goes — the widget's top gap matches its bottom one. */
-  padding-top: var(--layout-stage-clearance);
 }
 
-/* The Templates view stages a full app with no page heading: the title air
-   goes, as in the Chat view. */
 .dsLayoutTemplates {
   /* The templates rail mirrors the theme panel on the right, so the bar
      centres between the two, as in the Chat view. */
@@ -113,7 +109,6 @@
      the layout hands it the zone panel to panel. */
   padding-left: var(--rail-left);
   padding-right: var(--rail-right);
-  padding-top: var(--layout-stage-clearance);
 }
 
 /* The chat stage's safe area is the browser's, not a document's: the
@@ -546,11 +541,11 @@
   /* The clip falls on the line box, which a tight display leading sets
      inside the glyphs' descenders; this room keeps them whole. */
   padding-block: 0.15em;
-  font-family: var(--font-display-1-family);
-  font-size: var(--font-display-1-size);
-  font-weight: var(--font-display-1-weight);
-  line-height: var(--font-display-1-line-height);
-  letter-spacing: var(--font-display-1-letter-spacing);
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
   color: var(--color-text-display);
   text-align: center;
   overflow-wrap: anywhere;
@@ -954,15 +949,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* The head of the components stage: the image theming card, when there is
-   one, then the mock nav it pushes down. Their own gap, not the showcase's
-   section rhythm, because they read as one block. */
-.navStage {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-1000);
 }
 
 /* The AI section's artifact pair: the panel is surface-less and fills its

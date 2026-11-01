@@ -19,15 +19,15 @@
   --stage-max-width: 2148px;
   /* Everything vertical the page stacks around the widget: the toolbar
      pill's clearance, the bottom control bar's safe area, and the body's
-     padding pair — so the widget fits and centres in the zone between the
-     two floating bars (the chat layout drops the components view's extra
-     title air, see .dsLayoutChat). */
+     bottom padding (the layout takes its top one back) — so the widget fits in the zone between the two floating
+     bars. */
   --chat-clearance: calc(
     var(--layout-stage-clearance) + var(--layout-stage-bottom-clearance) +
-      var(--padding-500) * 2
+      var(--padding-500)
   );
   display: flex;
-  align-items: center;
+  /* From the top, so the widget starts level with the rails beside it. */
+  align-items: flex-start;
   justify-content: center;
   min-height: calc(100dvh - var(--chat-clearance));
   /* The ring's sides — the resting fit fills the stage's content box, so

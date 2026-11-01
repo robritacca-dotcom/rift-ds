@@ -17,12 +17,12 @@ import styles from "./HomeBento.module.css";
 export default function HomeBento() {
   return (
     <section className={styles.section} aria-labelledby="home-bento-title">
-      {/* One statement, in two weights: the claim, then what it covers. */}
+      {/* One statement, in two weights: the claim, then the look it leads with. */}
       <h2 id="home-bento-title" className={styles.statement}>
-        Skip the blank page.{" "}
+        Make it entirely yours.{" "}
         <span>
-          Change the whole look with one line, and let your coding agent
-          build with the real API instead of guessing.
+          Retune every colour, typeface, corner and control height, or start
+          from an image or a DESIGN.md, and every component follows.
         </span>
       </h2>
 

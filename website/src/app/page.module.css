@@ -563,6 +563,11 @@
 
 
 
+/* The screens header opens a new section under the escalator columns. */
+.screensHeader {
+  margin-block-start: var(--gap-3000);
+}
+
 /* The collage's one call to action, a step under its header, with room
    before the escalator columns, whose fade opens the next band. */
 .statsCta {

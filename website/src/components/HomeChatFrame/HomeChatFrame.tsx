@@ -69,8 +69,8 @@ const ARTIFACT_RENDERERS = {
 
 /* The review footprint for the stage, not a layout token, and the strip of
    ground it keeps clear above the chat for the header, in footprint pixels. */
-const FOOTPRINT = { w: 1440, h: 1040 };
-const HEADER_ROOM = 88;
+export const FOOTPRINT = { w: 1440, h: 1040 };
+export const HEADER_ROOM = 88;
 
 /* Where the header points: the chat's component page, its install guide,
    and the playground's Chat view the whole frame opens. */
@@ -79,8 +79,8 @@ const HEADER_ROOM = 88;
    header stands down altogether, the chat plays on the desktop alone and
    takes back the strip. Measured against the three buttons with their
    labels and the title, not layout tokens. */
-const HEADER_TOGGLE_LABELS_MIN = 1100;
-const HEADER_MIN = 900;
+export const HEADER_TOGGLE_LABELS_MIN = 1100;
+export const HEADER_MIN = 900;
 
 const HEADER_LINKS = [
   { href: "/components/ai-chat", label: "Component", icon: "category" },
@@ -90,11 +90,11 @@ const HEADER_LINKS = [
 
 /* The phone the mobile preview stands on its ground: the playground's
    mobile preset, a 390 by 844 screen. */
-const PHONE = { w: 390, h: 844 };
+export const PHONE = { w: 390, h: 844 };
 
 type Device = "desktop" | "mobile";
 
-const DEVICE_SEGMENTS = [
+export const DEVICE_SEGMENTS = [
   { value: "desktop", label: "Desktop", icon: "desktop_windows" },
   { value: "mobile", label: "Mobile", icon: "smartphone" },
 ];
@@ -323,7 +323,7 @@ export default function HomeChatFrame() {
               <AttachmentTile name={REEL_COPY.file} kind="pdf" meta="248 KB" />
             </div>
           )}
-          <Cursor key={`cursor-${device}`} ref={cursorRef} touch={phone} />
+          <Cursor key={`cursor-${device}`} ref={cursorRef} touch={phone} name={CURSOR_NAME} />
         </div>
       )}
       <Link href={TARGET_HREF} className={styles.hit} aria-label="Open the AI chat playground" />
@@ -391,7 +391,7 @@ function Phone({ children }: { children: React.ReactNode }) {
     a name tag trailing it and a ring that pulses on a click. On the phone
     it is a fingertip instead, a soft disc with the same ring on a tap.
     Positioned by the reel, never by React state. */
-function Cursor({ ref, touch }: { ref: React.Ref<HTMLDivElement>; touch: boolean }) {
+export function Cursor({ ref, touch, name }: { ref: React.Ref<HTMLDivElement>; touch: boolean; name: string }) {
   return (
     <div ref={ref} className={styles.cursor} data-mode="pointer" data-touch={touch || undefined}>
       <span className={styles.ring} />
@@ -402,7 +402,7 @@ function Cursor({ ref, touch }: { ref: React.Ref<HTMLDivElement>; touch: boolean
       <svg className={styles.beam} viewBox="0 0 16 28" width="16" height="28">
         <path d="M3 2h4l1 1 1-1h4v2.5h-3V23.5h3V26H9l-1-1-1 1H3v-2.5h3V4.5H3z" />
       </svg>
-      <span className={styles.tag}>{CURSOR_NAME}</span>
+      <span className={styles.tag}>{name}</span>
     </div>
   );
 }
@@ -441,14 +441,16 @@ function Reel({
   }, []);
 
   /* The reel starts when the frame is first seen, so a visitor arrives at
-     the welcome rather than halfway through an answer. */
+     the welcome rather than halfway through an answer, and holds at its next
+     beat whenever the frame is out of view, so it never runs for nobody or
+     alongside the page's other reel. */
+  const visible = useRef(false);
   useEffect(() => {
     const el = frameRef.current;
     if (!el) return;
     const observer = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      setInView(true);
-      observer.disconnect();
+      visible.current = entries.some((entry) => entry.isIntersecting);
+      if (visible.current) setInView(true);
     }, { threshold: 0.3 });
     observer.observe(el);
     return () => observer.disconnect();
@@ -472,13 +474,18 @@ function Reel({
     const live = () => {
       if (!alive) throw CANCELLED;
     };
+    /** A beat, then held for as long as the frame is out of view. */
     const sleep = (ms: number) =>
       new Promise<void>((resolve) => {
-        const id = window.setTimeout(() => {
-          timers.delete(id);
-          resolve();
-        }, ms);
-        timers.add(id);
+        const hold = () => {
+          const id = window.setTimeout(() => {
+            timers.delete(id);
+            if (visible.current || !alive) resolve();
+            else hold();
+          }, ms);
+          timers.add(id);
+        };
+        hold();
       }).then(live);
 
     /** Resolves with the check's first truthy value, tried each frame. The
@@ -495,7 +502,7 @@ function Reel({
           const found = check();
           if (found) return resolve(found);
           const now = performance.now();
-          waited += Math.min(now - last, FRAME_GAP_MS);
+          if (visible.current) waited += Math.min(now - last, FRAME_GAP_MS);
           last = now;
           if (waited > GIVE_UP_MS) return reject(new Error("reel: gave up waiting"));
           requestAnimationFrame(tick);

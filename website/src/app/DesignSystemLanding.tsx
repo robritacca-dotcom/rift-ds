@@ -10,6 +10,7 @@ import styles from "./page.module.css";
 import HomeBento from "@/components/HomeBento/HomeBento";
 import HomeFaq from "@/components/HomeFaq/HomeFaq";
 import HomeChatFrame from "@/components/HomeChatFrame/HomeChatFrame";
+import HomeDashboardFrame from "@/components/HomeDashboardFrame/HomeDashboardFrame";
 import { AUTHOR_NAME, AUTHOR_URL, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -1463,6 +1464,28 @@ export default function DesignSystemLanding() {
               <EscalatorColumn direction="down" duration="340s" render={() => renderRight()} />
             </>
           )}
+        </section>
+
+        {/* ---------- those components assembled: a whole template, framed
+             and playing a scripted session; the frame opens the template ---------- */}
+        <header className={`${styles.collageHeader} ${styles.screensHeader}`}>
+          <h2 className={styles.collageTitle}>Skip the blank page</h2>
+          <p className={styles.collageSub}>
+            Start from a template: a whole product screen, made from the same components, in your theme.
+          </p>
+        </header>
+        <div className={styles.statsCta}>
+          <Button
+            label="Templates"
+            variant="secondary"
+            tone="neutral"
+            href="/templates"
+            iconLeft="dashboard"
+            iconRight="arrow_forward"
+          />
+        </div>
+        <section className={styles.chatFrame} aria-label="The analytics template">
+          <HomeDashboardFrame />
         </section>
 
         {/* ---------- three tiles: the look, the agent, the install ---------- */}

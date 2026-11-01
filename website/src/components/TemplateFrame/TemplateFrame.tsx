@@ -36,6 +36,40 @@ export type DeviceKey = keyof typeof DEVICES;
    a carousel and vertically on a page. */
 const LIVE_MARGIN = "25%";
 
+/**
+ * The page inside follows the site's theme, live: same-origin, so the board's
+ * applyTheme pattern reaches straight into the document. The preview is a
+ * snapshot, not a scroll container, so its own scrollbar is hidden too (the
+ * frame is inert either way).
+ */
+export function syncTemplateFrame(doc: Document, designH: number, mobile: boolean) {
+  const theme = document.documentElement.getAttribute("data-theme") ?? "dark";
+  doc.documentElement.setAttribute("data-theme", theme);
+  /* The theme preset rides along the same way: mirror data-brand into the
+     frame (and its absence — "default" is the attribute removed), so a
+     pick from the header or the hero re-themes every live preview too. */
+  const brand = document.documentElement.getAttribute("data-brand");
+  if (brand) doc.documentElement.setAttribute("data-brand", brand);
+  else doc.documentElement.removeAttribute("data-brand");
+  doc.documentElement.style.setProperty("--layout-viewport-height", `${designH}px`);
+  doc.documentElement.style.overflow = "hidden";
+  /* In the phone, the template previews as an app: its top app bar and
+     tab bar in place of the web top bar and sidebar (AppFrame owns the
+     dressing; the full template page never carries the flag). */
+  if (mobile) doc.documentElement.setAttribute(APP_FRAME_ATTR, "");
+  else doc.documentElement.removeAttribute(APP_FRAME_ATTR);
+  /* The preview is a picture, not a scroll surface: inner scroll
+     areas (a DataTable's wrapper, the Gantt's track) keep working in
+     the real page but their bars are noise at postage-stamp scale —
+     hide every scrollbar inside the frame. */
+  if (!doc.getElementById("preview-scrollbars")) {
+    const style = doc.createElement("style");
+    style.id = "preview-scrollbars";
+    style.textContent = "*{scrollbar-width:none}*::-webkit-scrollbar{display:none}";
+    doc.head.appendChild(style);
+  }
+}
+
 export function TemplateFrame({
   href,
   title,
@@ -81,42 +115,10 @@ export function TemplateFrame({
     return () => observer.disconnect();
   }, [rootRef]);
 
-  /* The page inside follows the site's theme, live: same-origin, so the
-     board's applyTheme pattern reaches straight into the document. The
-     preview is a snapshot, not a scroll container, so its own scrollbar is
-     hidden too (the frame is inert either way). */
   const sync = useCallback(() => {
     const doc = frameRef.current?.contentDocument;
     if (!doc) return;
-    const theme = document.documentElement.getAttribute("data-theme") ?? "dark";
-    doc.documentElement.setAttribute("data-theme", theme);
-    /* The theme preset rides along the same way: mirror data-brand into the
-       frame (and its absence — "default" is the attribute removed), so a
-       pick from the header or the hero re-themes every live preview too. */
-    const brand = document.documentElement.getAttribute("data-brand");
-    if (brand) doc.documentElement.setAttribute("data-brand", brand);
-    else doc.documentElement.removeAttribute("data-brand");
-    doc.documentElement.style.setProperty(
-      "--layout-viewport-height",
-      `${designH}px`
-    );
-    doc.documentElement.style.overflow = "hidden";
-    /* In the phone, the template previews as an app: its top app bar and
-       tab bar in place of the web top bar and sidebar (AppFrame owns the
-       dressing; the full template page never carries the flag). */
-    if (device === "mobile") doc.documentElement.setAttribute(APP_FRAME_ATTR, "");
-    else doc.documentElement.removeAttribute(APP_FRAME_ATTR);
-    /* The preview is a picture, not a scroll surface: inner scroll
-       areas (a DataTable's wrapper, the Gantt's track) keep working in
-       the real page but their bars are noise at postage-stamp scale —
-       hide every scrollbar inside the frame. */
-    if (!doc.getElementById("preview-scrollbars")) {
-      const style = doc.createElement("style");
-      style.id = "preview-scrollbars";
-      style.textContent =
-        "*{scrollbar-width:none}*::-webkit-scrollbar{display:none}";
-      doc.head.appendChild(style);
-    }
+    syncTemplateFrame(doc, designH, device === "mobile");
   }, [designH, device]);
 
   useEffect(() => {

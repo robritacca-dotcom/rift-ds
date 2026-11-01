@@ -70,3 +70,9 @@ notes/
 website/AGENTS.md
 website/CLAUDE.md
 .vercel-storybook
+
+# Local labs: private work in progress, never tracked and never deployed.
+# Validators that map routes skip these two folders, source scanners still
+# read them, and tracked code may not import from them (scripts/local-labs.mjs owns the contract).
+website/src/app/labs/local/
+website/src/app/api/local/

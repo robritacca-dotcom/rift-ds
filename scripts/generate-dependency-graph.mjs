@@ -20,6 +20,7 @@
  *   npm run graph -- who-uses <name>   what depends on <name>, transitively
  */
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'node:fs';
+import { isLocalPath } from './local-labs.mjs';
 import { dirname, join, resolve, relative, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { PACKAGE_NAME } from './brand.mjs';
@@ -233,6 +234,8 @@ export function buildGraph() {
   const appDir = join(root, 'website/src/app');
   const routeDirs = [];
   (function walkRoutes(dir, route) {
+    // Local labs exist only on the owner's machine (scripts/local-labs.mjs).
+    if (isLocalPath(dir)) return;
     const entries = ls(dir);
     if (entries.includes('page.tsx')) routeDirs.push({ route: route === '' ? '/' : route, dir });
     for (const entry of entries) {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { AnchorNavItem } from "rift-ds/components/AnchorNav/AnchorNav";
-import { CHROMELESS_ROUTES } from "@/config/chromeless";
+import { isChromeless } from "@/config/chromeless";
 import {
   ANCHOR_NAV_EXCLUDED_ROUTES,
   ANCHOR_NAV_SELF_MANAGED_ROUTES,
@@ -45,7 +45,7 @@ export default function SiteAnchorRail() {
 
   useEffect(() => {
     const gated =
-      CHROMELESS_ROUTES.has(pathname) ||
+      isChromeless(pathname) ||
       ANCHOR_NAV_EXCLUDED_ROUTES.has(pathname) ||
       ANCHOR_NAV_SELF_MANAGED_ROUTES.has(pathname);
     const main = gated ? null : document.getElementById("main-content");

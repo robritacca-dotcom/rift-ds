@@ -361,9 +361,7 @@ export default function ThreadPanelPage() {
               brand, a new-thread action with its shortcut hint, standing
               controls, the grouped history, and the profile footer. It is
               fully controlled and surface-less, so the host owns the active
-              thread, the navigation, and the band colour it sits on. It
-              began as the agent workbench template&apos;s threads panel and
-              graduated into the library once the shape proved out.
+              thread, the navigation, and the band colour it sits on.
             </p>
           </div>
 

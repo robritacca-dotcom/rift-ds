@@ -709,7 +709,7 @@ Designed and built by ${AUTHOR_NAME} (${AUTHOR_URL}), who writes the specs Claud
    The page list is the filesystem (scripts/site-routes.mjs), the same
    authority the sitemap uses, so a new page's prose reaches the corpus on
    the next build with no registration step. Routes covered by a dedicated
-   section (About, Case studies, Blueprints…) are mapped to it; routes that
+   section (About, Blueprints…) are mapped to it; routes that
    must NOT be included are excluded here with a written reason.
    validate-chat-coverage.mjs holds this map honest against the disk.
    ============================================================ */
@@ -760,8 +760,6 @@ const EXCLUDED_ROUTES = new Map([
     'the relay console template rendered full viewport — its prose is fictional network telemetry; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/team-calendar',
     'the team calendar template rendered full viewport — its prose is fictional schedule data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
-  ['/templates/agent-workbench',
-    'the agent workbench template rendered full viewport — its prose is a fictional coding session; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/roadmap-planner',
     'the roadmap planner template rendered full viewport — its prose is a fictional product plan; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/merchant-sales',

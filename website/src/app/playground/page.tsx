@@ -217,26 +217,31 @@ function ResetOnTransportChange({ mode }: { mode: TransportMode }) {
  * A preset's extras with anything that would repaint the action colour taken
  * out. An image supplies that colour, so an inherited pointer at a preset's
  * own fill has to go; the display-type weight and letter-spacing that ride in
- * the same object have nothing to do with colour and stay.
+ * the same object have nothing to do with colour and stay. A chart series 1
+ * pinned apart from the fill goes with it, so series 1 follows the new colour.
  */
 const withoutActionColours = (extras?: Overrides): Overrides | undefined => {
   if (!extras) return extras;
   const kept = Object.fromEntries(
-    Object.entries(extras).filter(([name]) => !name.startsWith("--color-action-"))
+    Object.entries(extras).filter(
+      ([name]) => !name.startsWith("--color-action-") && name !== "--color-chart-series-1"
+    )
   );
   return Object.keys(kept).length > 0 ? kept : undefined;
 };
 
 /**
- * Extras with the ambient blob colours removed. A preset may tune its
- * background field apart from its accents; once the accents are picked by
- * hand or sampled from an image, the blobs go back to following them, or
- * the accent lever would stop moving the background it is shown beside.
+ * Extras with the ambient blob colours and chart series 2-7 removed. A preset
+ * may tune its background field or its charts apart from its accents; once the
+ * accents are picked by hand or sampled from an image, both go back to
+ * following them, or the accent lever would stop moving what it is shown beside.
  */
 const withoutAmbient = (extras?: Overrides): Overrides | undefined => {
   if (!extras) return extras;
   const kept = Object.fromEntries(
-    Object.entries(extras).filter(([name]) => !name.startsWith("--color-ambient-"))
+    Object.entries(extras).filter(
+      ([name]) => !name.startsWith("--color-ambient-") && !/^--color-chart-series-[2-7]$/.test(name)
+    )
   );
   return Object.keys(kept).length > 0 ? kept : undefined;
 };
@@ -561,13 +566,18 @@ export default function PlaygroundPage() {
     setPresetExtras((e) => ({
       ...e,
       brandDark: darkValue,
-      ...(designSource && {
-        extraOverrides: withoutPrefixes(e.extraOverrides, [
-          "--color-action-",
-          ...(ramp && ramp !== "neutral" ? [`--primitive-${ramp}-`] : []),
-        ]),
-        extraOverridesDark: withoutPrefixes(e.extraOverridesDark, ["--color-action-"]),
-      }),
+      /* Chart series 1 follows the picked colour, even under a preset that
+         pinned it apart from its own fill. */
+      extraOverrides: withoutPrefixes(e.extraOverrides, [
+        "--color-chart-series-1",
+        ...(designSource
+          ? ["--color-action-", ...(ramp && ramp !== "neutral" ? [`--primitive-${ramp}-`] : [])]
+          : []),
+      ]),
+      extraOverridesDark: withoutPrefixes(e.extraOverridesDark, [
+        "--color-chart-series-1",
+        ...(designSource ? ["--color-action-"] : []),
+      ]),
     }));
     setBrand(value);
   };

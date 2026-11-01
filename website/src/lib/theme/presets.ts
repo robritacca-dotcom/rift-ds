@@ -97,8 +97,8 @@ export interface ThemePreset {
       role follows the body typeface (the shipped single-face system). */
   headingFontLabel?: string;
   /** The ambient accent sextet — the six `--color-core-accent-*` roles as
-      hexes. They feed chart series 2–7 and are what the background blobs
-      follow unless `ambient` says otherwise, so every theme must say what
+      hexes. They feed chart series 2–7 unless the extras re-point them, and are
+      what the background blobs follow unless `ambient` says otherwise, so every theme must say what
       its ambient colours are. */
   accents: AccentSextet;
   /** The background shader's six blob colours (`--color-ambient-1` to
@@ -233,9 +233,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       blue: "#2F4F9F",
       purple: "#9D5BDB",
     }),
-    // Greyed accents: the background glow blobs and chart series go
-    // monochrome with the rest of the look. Status colours follow the
-    // ink-wash ramps above, so they desaturate too.
+    // Greyed accents: the background glow blobs go monochrome with the rest
+    // of the look. Status colours follow the ink-wash ramps above, so they
+    // desaturate too, and the chart series draw from the same ramps (in the
+    // extras below) so a chart carries the colour a badge does.
     aiGradient: "tonal",
     accents: {
       coral: "#A3A3A3",
@@ -256,9 +257,18 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // since dozens of components ride this token.
     extraOverrides: {
       "--color-divider": "var(--primitive-neutral-03)",
+      "--color-chart-series-1": "var(--primitive-blue-06)",
+      "--color-chart-series-2": "var(--primitive-green-07)",
+      "--color-chart-series-3": "var(--primitive-yellow-07)",
+      "--color-chart-series-4": "var(--primitive-red-07)",
+      "--color-chart-series-5": "var(--primitive-purple-07)",
+      "--color-chart-series-6": "var(--primitive-orange-07)",
+      "--color-chart-series-7": "var(--primitive-teal-07)",
     },
     extraOverridesDark: {
       "--color-divider": "var(--primitive-neutral-07)",
+      // The deep blue sinks on a dark ground, so series 1 lifts a step.
+      "--color-chart-series-1": "var(--primitive-blue-05)",
       // Smoke's key flips to near-white in dark mode, so the two blobs that
       // carry its lighter tones flip with it.
       "--color-ambient-5": "#F6F6F6",
@@ -497,6 +507,12 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // stand in for the brand's own display grotesque over Inter text.
     fontLabel: "Inter",
     headingFontLabel: "Inter Tight",
+    // The lime ramp's step 09 stops short of AA on its own pale tint, so the
+    // positive status text steps one deeper in light mode (set in the
+    // extras below, restored here because extras apply to both themes).
+    extraOverridesDark: {
+      "--color-status-positive-text": "var(--primitive-green-01)",
+    },
     // Bright sextet: the reference's candy-bright secondaries brought up
     // to chart strength around the lime, which doubles as mint.
     aiGradient: "tonal",
@@ -523,6 +539,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // derives (Volt and Bubblegum make the same repair).
     extraOverrides: {
       "--color-action-primary-text-active": "var(--primitive-green-11)",
+      "--color-status-positive-text": "var(--primitive-green-10)",
       "--font-sub-display-weight": "700",
       "--font-mega-1-letter-spacing": "-0.03em",
       "--font-mega-2-letter-spacing": "-0.03em",
@@ -893,7 +910,7 @@ export const DEFAULT_THEME_LABEL = "Tide";
 export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   [BASE_THEME_ID]: "The base look: a calm teal on quiet surfaces, set in one friendly face.",
   warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
-  mono: "Black, white and nothing else, with flat surfaces and tight corners.",
+  mono: "Black and white on flat surfaces with tight corners, keeping colour for status and charts.",
   marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",

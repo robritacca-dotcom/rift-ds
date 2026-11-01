@@ -72,6 +72,7 @@ html[data-brand="zest"] {
   --color-core-ui-secondary: var(--primitive-green-10);
   --color-input-border-hover: var(--primitive-green-08);
   --color-input-border-selected: var(--primitive-green-07);
+  --color-status-positive-text: var(--primitive-green-10);
   --font-display-1-letter-spacing: -0.025em;
   --font-display-1-weight: 800;
   --font-display-2-letter-spacing: -0.02em;
@@ -240,6 +241,7 @@ html[data-brand="zest"][data-theme="dark"] {
   --color-core-ui-secondary: var(--primitive-green-09);
   --color-input-border-hover: var(--primitive-green-08);
   --color-input-border-selected: var(--primitive-green-08);
+  --color-status-positive-text: var(--primitive-green-01);
   --font-display-1-letter-spacing: -0.025em;
   --font-display-1-weight: 800;
   --font-display-2-letter-spacing: -0.02em;

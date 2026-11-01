@@ -38,12 +38,12 @@ colors:
   accent-gold: "#c9c9c9"
   accent-mint: "#adadad"
   accent-violet: "#8f8f8f"
-  chart-1: "#232323"
-  chart-2: "#adadad"
-  chart-3: "#c9c9c9"
-  chart-4: "#a3a3a3"
-  chart-5: "#8f8f8f"
-  chart-6: "#b8b8b8"
+  chart-1: "#4e6aae"
+  chart-2: "#1ebe94"
+  chart-3: "#edca78"
+  chart-4: "#db5b79"
+  chart-5: "#9d5bdb"
+  chart-6: "#db895b"
 
 typography:
   display-lg:

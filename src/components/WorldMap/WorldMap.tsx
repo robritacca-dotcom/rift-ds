@@ -86,7 +86,7 @@ type WorldMapOwnProps = {
    * content — the floating-panel alternative to `renderCallout`'s bare
    * readout, opening on hover or focus with the system's delays and Escape
    * dismissal. Content must be phrasing-level (spans), the panel's own
-   * rule. Opens upward, or downward for a marker near the frame's top.
+   * rule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower.
    * Needs `interactive`; when both renderers are given, this one wins.
    */
   renderHoverCard?: (point: WorldMapPoint) => React.ReactNode;
@@ -609,8 +609,8 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
             if (!renderHoverCard) return React.cloneElement(marker, { key: point.id });
 
             /* The slot owns the marker's position, so the HoverCard keeps
-               its own layout contract; near the frame's top the card opens
-               downward instead. */
+               its own layout contract; the card opens toward the map's centre,
+               downward from the upper half. */
             return (
               <span
                 key={point.id}
@@ -619,7 +619,7 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
               >
                 <HoverCard
                   content={renderHoverCard(point)}
-                  position={py < 25 ? 'bottom' : 'top'}
+                  position={py < 50 ? 'bottom' : 'top'}
                 >
                   {marker}
                 </HoverCard>

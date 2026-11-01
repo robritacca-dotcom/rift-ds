@@ -15685,7 +15685,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "renderHoverCard",
             "type": "((point: WorldMapPoint) => ReactNode)",
             "required": false,
-            "description": "Wraps each marker in the library's HoverCard, with this as the card's\ncontent — the floating-panel alternative to `renderCallout`'s bare\nreadout, opening on hover or focus with the system's delays and Escape\ndismissal. Content must be phrasing-level (spans), the panel's own\nrule. Opens upward, or downward for a marker near the frame's top.\nNeeds `interactive`; when both renderers are given, this one wins."
+            "description": "Wraps each marker in the library's HoverCard, with this as the card's\ncontent — the floating-panel alternative to `renderCallout`'s bare\nreadout, opening on hover or focus with the system's delays and Escape\ndismissal. Content must be phrasing-level (spans), the panel's own\nrule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower.\nNeeds `interactive`; when both renderers are given, this one wins."
           },
           {
             "name": "label",

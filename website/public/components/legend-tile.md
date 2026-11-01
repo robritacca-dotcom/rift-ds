@@ -1,6 +1,6 @@
 # Legend tile
 
-The labelled value tile under a chart: a series dot, the series name, and its reading, on an inset fill.
+The labelled value tile under a chart: a series dot, the series name, and its reading, on a soft neutral fill.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

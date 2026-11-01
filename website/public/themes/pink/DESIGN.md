@@ -7,13 +7,13 @@ colors:
   primary: "#d0117e"
   primary-hover: "#ac0e68"
   primary-active: "#770a48"
-  on-primary: "#fef8fb"
+  on-primary: "#fefbfd"
   primary-dark: "#d0117e"
-  canvas-light: "#f0eaee"
+  canvas-light: "#f1eeef"
   canvas-dark: "#11060c"
-  surface: "#fef8fb"
+  surface: "#fefbfd"
   surface-dark: "rgba(26, 14, 21, 0.8)"
-  surface-soft: "#f0eaee"
+  surface-soft: "#f1eeef"
   ink: "#11060c"
   ink-dark: "#efe4ea"
   display: "#11060c"
@@ -27,7 +27,7 @@ colors:
   text-secondary: "#3a2e35"
   text-tertiary: "#73676e"
   border: "#d6cad1"
-  input: "#fef8fb"
+  input: "#fefbfd"
   error: "#ac0e68"
   success: "#24a86b"
   warning: "#c15c2e"
@@ -172,10 +172,10 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary` | `#d0117e` | `#d0117e` | `--color-action-primary-bg` |
 | `primary-hover` | `#ac0e68` | `#ac0e68` | `--color-action-primary-bg-hover` |
 | `primary-active` | `#770a48` | `#770a48` | `--color-action-primary-bg-active` |
-| `on-primary` | `#fef8fb` | `#fcf1f7` | `--color-action-primary-text` |
-| `canvas-light` | `#f0eaee` | `#11060c` | `--color-bg-page-primary` |
-| `surface` | `#fef8fb` | `rgba(26, 14, 21, 0.8)` | `--color-bg-container-primary` |
-| `surface-soft` | `#f0eaee` | `#3a2e35` | `--color-bg-container-secondary` |
+| `on-primary` | `#fefbfd` | `#fcf1f7` | `--color-action-primary-text` |
+| `canvas-light` | `#f1eeef` | `#11060c` | `--color-bg-page-primary` |
+| `surface` | `#fefbfd` | `rgba(26, 14, 21, 0.8)` | `--color-bg-container-primary` |
+| `surface-soft` | `#f1eeef` | `#3a2e35` | `--color-bg-container-secondary` |
 | `ink` | `#11060c` | `#efe4ea` | `--color-text-primary` |
 | `display` | `#11060c` | `#efe4ea` | `--color-text-display` |
 | `heading` | `#11060c` | `#efe4ea` | `--color-text-heading` |
@@ -184,7 +184,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `text-secondary` | `#3a2e35` | `#bdb2b8` | `--color-text-secondary` |
 | `text-tertiary` | `#73676e` | `#a599a0` | `--color-text-tertiary` |
 | `border` | `#d6cad1` | `#2d2228` | `--color-bg-container-border` |
-| `input` | `#fef8fb` | `#11060c` | `--color-input-bg-primary` |
+| `input` | `#fefbfd` | `#11060c` | `--color-input-bg-primary` |
 | `error` | `#ac0e68` | `#d73390` | `--color-status-error-icon` |
 | `success` | `#24a86b` | `#2ed98a` | `--color-status-positive-icon` |
 | `warning` | `#c15c2e` | `#ff7a3d` | `--color-status-warning-icon` |

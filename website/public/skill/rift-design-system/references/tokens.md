@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (158)
+## Colour (160)
 
 Prefix: `--color-*`.
 
@@ -118,6 +118,7 @@ Prefix: `--color-*`.
 | `--color-file-pdf` | `#FF2116` (`--primitive-file-pdf`) | `#FF2116` (`--primitive-file-pdf`) |
 | `--color-file-presentation` | `#FFBA00` (`--primitive-file-presentation`) | `#FFBA00` (`--primitive-file-presentation`) |
 | `--color-file-spreadsheet` | `#00AC47` (`--primitive-file-spreadsheet`) | `#00AC47` (`--primitive-file-spreadsheet`) |
+| `--color-icon-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-icon-primary` | `#6D6D6D` (`--primitive-neutral-06`) | `#D6D6D6` (`--primitive-neutral-02`) |
 | `--color-icon-secondary` | `#A2A2A2` (`--primitive-neutral-04`) | `#A2A2A2` (`--primitive-neutral-04`) |
 | `--color-input-bg-disabled` | `#D6D6D6` (`--primitive-neutral-02`) | `#0E0E0E` (`--primitive-neutral-09`) |
@@ -131,6 +132,7 @@ Prefix: `--color-*`.
 | `--color-input-text-inverse` | `#A2A2A2` (`--primitive-neutral-04`) | `#303030` (`--primitive-neutral-07`) |
 | `--color-input-text-placeholder` | `#6D6D6D` (`--primitive-neutral-06`) | `#A2A2A2` (`--primitive-neutral-04`) |
 | `--color-input-text-primary` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
+| `--color-label-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-pixel-ink-1` | `#C93A5C` (`--primitive-red-08`) | `#F37F9B` (`--primitive-red-05`) |
 | `--color-pixel-ink-2` | `#C65E33` (`--primitive-orange-08`) | `#F09263` (`--primitive-orange-05`) |
 | `--color-pixel-ink-3` | `#8A6B2A` (`--primitive-yellow-09`) | `#FFD677` (`--primitive-yellow-05`) |
@@ -173,8 +175,8 @@ Prefix: `--color-*`.
 | `--color-text-primary` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-text-secondary` | `#303030` (`--primitive-neutral-07`) | `#BCBCBC` (`--primitive-neutral-03`) |
 | `--color-text-tertiary` | `#6D6D6D` (`--primitive-neutral-06`) | `#A2A2A2` (`--primitive-neutral-04`) |
-| `--color-trend-down` | `#571727` (`--primitive-red-10`) | `#EF476F` (`--primitive-red-07`) |
-| `--color-trend-up` | `#024336` (`--primitive-green-10`) | `#06D6A0` (`--primitive-green-07`) |
+| `--color-trend-down` | `#C93A5C` (`--primitive-red-08`) | `#EF476F` (`--primitive-red-07`) |
+| `--color-trend-up` | `#03765A` (`--primitive-green-09`) | `#06D6A0` (`--primitive-green-07`) |
 
 ## Typography (100)
 

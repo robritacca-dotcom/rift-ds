@@ -9,11 +9,11 @@ colors:
   primary-active: "#0f0d09"
   on-primary: "#ffd166"
   primary-dark: "#ffd166"
-  canvas-light: "#f1f0ee"
+  canvas-light: "#f1f1f0"
   canvas-dark: "#0f0d09"
-  surface: "#fffefc"
+  surface: "#fffffd"
   surface-dark: "rgba(24, 22, 18, 0.8)"
-  surface-soft: "#f1f0ee"
+  surface-soft: "#f1f1f0"
   ink: "#0f0d09"
   ink-dark: "#f2f0eb"
   display: "#0f0d09"
@@ -27,7 +27,7 @@ colors:
   text-secondary: "#383632"
   text-tertiary: "#73716d"
   border: "#d8d6d2"
-  input: "#fffefc"
+  input: "#fffffd"
   error: "#c7414e"
   success: "#24946f"
   warning: "#c1752e"
@@ -38,9 +38,9 @@ colors:
   accent-gold: "#ffd166"
   accent-mint: "#7fc9a0"
   accent-violet: "#b78ad9"
-  chart-1: "#2c2a26"
+  chart-1: "#ffd166"
   chart-2: "#7fc9a0"
-  chart-3: "#ffd166"
+  chart-3: "#3355d8"
   chart-4: "#f58b5b"
   chart-5: "#b78ad9"
   chart-6: "#ffae4f"
@@ -176,9 +176,9 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary-hover` | `#181612` | `#ffd97f` | `--color-action-primary-bg-hover` |
 | `primary-active` | `#0f0d09` | `#ffe5a3` | `--color-action-primary-bg-active` |
 | `on-primary` | `#ffd166` | `#42320f` | `--color-action-primary-text` |
-| `canvas-light` | `#f1f0ee` | `#0f0d09` | `--color-bg-page-primary` |
-| `surface` | `#fffefc` | `rgba(24, 22, 18, 0.8)` | `--color-bg-container-primary` |
-| `surface-soft` | `#f1f0ee` | `#383632` | `--color-bg-container-secondary` |
+| `canvas-light` | `#f1f1f0` | `#0f0d09` | `--color-bg-page-primary` |
+| `surface` | `#fffffd` | `rgba(24, 22, 18, 0.8)` | `--color-bg-container-primary` |
+| `surface-soft` | `#f1f1f0` | `#383632` | `--color-bg-container-secondary` |
 | `ink` | `#0f0d09` | `#f2f0eb` | `--color-text-primary` |
 | `display` | `#0f0d09` | `#f2f0eb` | `--color-text-display` |
 | `heading` | `#0f0d09` | `#f2f0eb` | `--color-text-heading` |
@@ -187,7 +187,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `text-secondary` | `#383632` | `#bfbdb9` | `--color-text-secondary` |
 | `text-tertiary` | `#73716d` | `#a6a4a0` | `--color-text-tertiary` |
 | `border` | `#d8d6d2` | `#2c2a26` | `--color-bg-container-border` |
-| `input` | `#fffefc` | `#0f0d09` | `--color-input-bg-primary` |
+| `input` | `#fffffd` | `#0f0d09` | `--color-input-bg-primary` |
 | `error` | `#c7414e` | `#f26775` | `--color-status-error-icon` |
 | `success` | `#24946f` | `#2fbf8f` | `--color-status-positive-icon` |
 | `warning` | `#c1752e` | `#ff9a3d` | `--color-status-warning-icon` |

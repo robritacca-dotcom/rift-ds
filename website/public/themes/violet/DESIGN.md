@@ -9,11 +9,11 @@ colors:
   primary-active: "#31164a"
   on-primary: "#e6d2fb"
   primary-dark: "#7434b3"
-  canvas-light: "#efedf1"
+  canvas-light: "#f0eff1"
   canvas-dark: "#0d0811"
-  surface: "#fdfaff"
+  surface: "#fefdff"
   surface-dark: "rgba(21, 17, 25, 0.8)"
-  surface-soft: "#efedf1"
+  surface-soft: "#f0eff1"
   ink: "#0d0811"
   ink-dark: "#ede9f1"
   display: "#0d0811"
@@ -27,7 +27,7 @@ colors:
   text-secondary: "#36313a"
   text-tertiary: "#6f6b74"
   border: "#d3cfd7"
-  input: "#fdfaff"
+  input: "#fefdff"
   error: "#ba4777"
   success: "#318874"
   warning: "#a45d4a"
@@ -173,9 +173,9 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary-hover` | `#52247d` | `#52247d` | `--color-action-primary-bg-hover` |
 | `primary-active` | `#31164a` | `#31164a` | `--color-action-primary-bg-active` |
 | `on-primary` | `#e6d2fb` | `#e6d2fb` | `--color-action-primary-text` |
-| `canvas-light` | `#efedf1` | `#0d0811` | `--color-bg-page-primary` |
-| `surface` | `#fdfaff` | `rgba(21, 17, 25, 0.8)` | `--color-bg-container-primary` |
-| `surface-soft` | `#efedf1` | `#36313a` | `--color-bg-container-secondary` |
+| `canvas-light` | `#f0eff1` | `#0d0811` | `--color-bg-page-primary` |
+| `surface` | `#fefdff` | `rgba(21, 17, 25, 0.8)` | `--color-bg-container-primary` |
+| `surface-soft` | `#f0eff1` | `#36313a` | `--color-bg-container-secondary` |
 | `ink` | `#0d0811` | `#ede9f1` | `--color-text-primary` |
 | `display` | `#0d0811` | `#ede9f1` | `--color-text-display` |
 | `heading` | `#0d0811` | `#ede9f1` | `--color-text-heading` |
@@ -184,7 +184,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `text-secondary` | `#36313a` | `#bbb6bf` | `--color-text-secondary` |
 | `text-tertiary` | `#6f6b74` | `#a29da6` | `--color-text-tertiary` |
 | `border` | `#d3cfd7` | `#29252d` | `--color-bg-container-border` |
-| `input` | `#fdfaff` | `#0d0811` | `--color-input-bg-primary` |
+| `input` | `#fefdff` | `#0d0811` | `--color-input-bg-primary` |
 | `error` | `#ba4777` | `#e46e9f` | `--color-status-error-icon` |
 | `success` | `#318874` | `#3faf95` | `--color-status-positive-icon` |
 | `warning` | `#a45d4a` | `#d97b62` | `--color-status-warning-icon` |

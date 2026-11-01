@@ -62,6 +62,8 @@ html[data-brand="gold"] {
   --color-ambient-4: #6E7FD9;
   --color-ambient-5: #FFE19C;
   --color-ambient-6: #FFEDC2;
+  --color-chart-series-1: var(--primitive-yellow-07);
+  --color-chart-series-3: var(--primitive-blue-07);
   --color-core-accent-amber: #FFAE4F;
   --color-core-accent-cobalt: #6E7FD9;
   --color-core-accent-coral: #F58B5B;
@@ -98,7 +100,6 @@ html[data-brand="gold"] {
   --font-sub-display-weight: 500;
   --font-title-body-letter-spacing: -0.02em;
   --font-title-body-weight: 700;
-  --material-symbols-weight: 500;
   --motion-duration-base: 180ms;
   --motion-duration-deliberate: 360ms;
   --motion-duration-fast: 135ms;
@@ -141,14 +142,14 @@ html[data-brand="gold"] {
   --primitive-green-09: #1A6A50;
   --primitive-green-10: #0F3E2F;
   --primitive-green-11: #0C3024;
-  --primitive-neutral-00: #FFFEFC;
-  --primitive-neutral-00-a01: rgba(255, 254, 252, 0.01);
-  --primitive-neutral-00-a60: rgba(255, 254, 252, 0.6);
-  --primitive-neutral-00-a90: rgba(255, 254, 252, 0.9);
-  --primitive-neutral-01: #F1F0EE;
-  --primitive-neutral-01-a01: rgba(241, 240, 238, 0.01);
-  --primitive-neutral-01-a60: rgba(241, 240, 238, 0.6);
-  --primitive-neutral-01-a82: rgba(241, 240, 238, 0.82);
+  --primitive-neutral-00: #FFFFFD;
+  --primitive-neutral-00-a01: rgba(255, 255, 253, 0.01);
+  --primitive-neutral-00-a60: rgba(255, 255, 253, 0.6);
+  --primitive-neutral-00-a90: rgba(255, 255, 253, 0.9);
+  --primitive-neutral-01: #F1F1F0;
+  --primitive-neutral-01-a01: rgba(241, 241, 240, 0.01);
+  --primitive-neutral-01-a60: rgba(241, 241, 240, 0.6);
+  --primitive-neutral-01-a82: rgba(241, 241, 240, 0.82);
   --primitive-neutral-02: #D8D6D2;
   --primitive-neutral-02-a50: rgba(216, 214, 210, 0.5);
   --primitive-neutral-02-a80: rgba(216, 214, 210, 0.8);
@@ -258,6 +259,8 @@ html[data-brand="gold"][data-theme="dark"] {
   --color-ambient-4: #6E7FD9;
   --color-ambient-5: #FFE19C;
   --color-ambient-6: #FFEDC2;
+  --color-chart-series-1: var(--primitive-yellow-07);
+  --color-chart-series-3: var(--primitive-blue-07);
   --color-core-accent-amber: #FFAE4F;
   --color-core-accent-cobalt: #6E7FD9;
   --color-core-accent-coral: #F58B5B;
@@ -294,7 +297,6 @@ html[data-brand="gold"][data-theme="dark"] {
   --font-sub-display-weight: 500;
   --font-title-body-letter-spacing: -0.02em;
   --font-title-body-weight: 700;
-  --material-symbols-weight: 500;
   --motion-duration-base: 180ms;
   --motion-duration-deliberate: 360ms;
   --motion-duration-fast: 135ms;

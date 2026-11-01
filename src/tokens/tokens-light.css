@@ -34,6 +34,10 @@
   /* Icon */
   --color-icon-primary: var(--primitive-neutral-06);
   --color-icon-secondary: var(--primitive-neutral-04);
+  --color-icon-bg: var(--primitive-neutral-01);
+
+  /* Label */
+  --color-label-bg: var(--primitive-neutral-01);
 
   /* Background - Page */
   --color-bg-page-primary: var(--primitive-neutral-01);
@@ -202,10 +206,10 @@
   --color-ambient-6: var(--color-core-accent-amber);
 
   /* Trend: the "number went up / went down" role (Stat deltas, table
-     movers). Theme-split for contrast: deep status inks on light
-     surfaces, the mint/coral accents on dark ones. */
-  --color-trend-up: var(--primitive-green-10);
-  --color-trend-down: var(--primitive-red-10);
+     movers). Theme-split for contrast: the brightest ramp steps that hold
+     AA on the primary container, the mint/coral accents on dark ones. */
+  --color-trend-up: var(--primitive-green-09);
+  --color-trend-down: var(--primitive-red-08);
 
   /* File type: "what kind of document is this" on an attachment's type
      mark. One role per well-known format; every other file wears the

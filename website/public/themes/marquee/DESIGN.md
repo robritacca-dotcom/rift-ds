@@ -9,14 +9,14 @@ colors:
   primary-active: "#cfca55"
   on-primary: "#2b2a0e"
   primary-dark: "#c9c340"
-  canvas-light: "#e6e9e9"
+  canvas-light: "#eceded"
   canvas-dark: "#080c0d"
-  surface: "#f4f6f6"
+  surface: "#f9fafb"
   surface-dark: "rgba(16, 20, 21, 0.8)"
-  surface-soft: "#e6e9e9"
+  surface-soft: "#eceded"
   ink: "#080c0d"
   ink-dark: "#dce0e1"
-  display: "#625f1f"
+  display: "#8e892d"
   display-dark: "#c9c340"
   heading: "#080c0d"
   heading-dark: "#dce0e1"
@@ -27,7 +27,7 @@ colors:
   text-secondary: "#2e3333"
   text-tertiary: "#656a6a"
   border: "#c4c8c9"
-  input: "#f4f6f6"
+  input: "#f9fafb"
   error: "#c93a5c"
   success: "#05a67c"
   warning: "#c65e33"
@@ -173,18 +173,18 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary-hover` | `#ccc74c` | `#ccc74c` | `--color-action-primary-bg-hover` |
 | `primary-active` | `#cfca55` | `#cfca55` | `--color-action-primary-bg-active` |
 | `on-primary` | `#2b2a0e` | `#2b2a0e` | `--color-action-primary-text` |
-| `canvas-light` | `#e6e9e9` | `#080c0d` | `--color-bg-page-primary` |
-| `surface` | `#f4f6f6` | `rgba(16, 20, 21, 0.8)` | `--color-bg-container-primary` |
-| `surface-soft` | `#e6e9e9` | `#2e3333` | `--color-bg-container-secondary` |
+| `canvas-light` | `#eceded` | `#080c0d` | `--color-bg-page-primary` |
+| `surface` | `#f9fafb` | `rgba(16, 20, 21, 0.8)` | `--color-bg-container-primary` |
+| `surface-soft` | `#eceded` | `#2e3333` | `--color-bg-container-secondary` |
 | `ink` | `#080c0d` | `#dce0e1` | `--color-text-primary` |
-| `display` | `#625f1f` | `#c9c340` | `--color-text-display` |
+| `display` | `#8e892d` | `#c9c340` | `--color-text-display` |
 | `heading` | `#080c0d` | `#dce0e1` | `--color-text-heading` |
 | `logo` | `#080c0d` | `#dce0e1` | `--color-brand-mark` |
 | `logo-end` | `#080c0d` | `#dce0e1` | `--color-brand-mark-end` |
 | `text-secondary` | `#2e3333` | `#acb1b1` | `--color-text-secondary` |
 | `text-tertiary` | `#656a6a` | `#95999a` | `--color-text-tertiary` |
 | `border` | `#c4c8c9` | `#232728` | `--color-bg-container-border` |
-| `input` | `#f4f6f6` | `#080c0d` | `--color-input-bg-primary` |
+| `input` | `#f9fafb` | `#080c0d` | `--color-input-bg-primary` |
 | `error` | `#c93a5c` | `#f16385` | `--color-status-error-icon` |
 | `success` | `#05a67c` | `#06d6a0` | `--color-status-positive-icon` |
 | `warning` | `#c65e33` | `#ef8247` | `--color-status-warning-icon` |

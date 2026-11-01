@@ -32,7 +32,7 @@ export interface LegendTileProps
 
 /**
  * LegendTile — the labelled value tile that sits under a chart and ties a
- * series to its number. An inset tile one surface step below its panel, with
+ * series to its number. A tile on a soft neutral fill inside its panel, with
  * an optional series dot matching the chart's palette. Pure JSX and CSS: no
  * charting library, no hooks, so it renders from a Server Component and a row
  * of them costs nothing under a dense dashboard.

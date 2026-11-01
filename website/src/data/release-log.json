@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.19.1",
+      "date": "2026-10-31",
+      "title": "Clearer status colours and a lighter neutral outline",
+      "body": [
+        "Status colours read more clearly in light mode: Badge, Alert, Banner, Toast and the other status surfaces use a stronger fill and more colourful text, and the neutral role moves to a lighter fill so it no longer outweighs the coloured ones. The outlined neutral button takes a lighter edge in both modes, matching a SegmentedControl beside it.",
+        "TableToolbar's icon buttons are now outlined neutral instead of filled grey, and AttachmentViewer and BentoTile use the same outline. The Smoke theme charts in colour from the same muted ramps as its badges, while its accents and background stay grey.",
+        "A selected SegmentedControl icon's tooltip no longer turns nearly invisible, and the Zest theme's positive text holds AA on the stronger fill. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.19.0",
       "date": "2026-10-31",
       "title": "Describe a table and it changes",

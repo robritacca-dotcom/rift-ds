@@ -259,6 +259,13 @@
   --icon-size: var(--icon-size-500);
 }
 
+.objectiveCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  --icon-size: var(--icon-size-500);
+}
+
 .campaignText {
   display: flex;
   flex-direction: column;

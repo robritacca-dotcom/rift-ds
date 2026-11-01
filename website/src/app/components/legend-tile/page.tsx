@@ -43,7 +43,7 @@ export default function LegendTilePage() {
             <p className={styles.introBody}>
               A labelled value tile for the row under a chart: a series dot
               matching the palette, the series name, and its reading. The tile
-              sits one surface step below its panel so it reads as an inset,
+              takes a soft neutral fill that holds it apart from its panel,
               and it is pure JSX and CSS, so a row of them costs nothing under
               a dense dashboard.
             </p>

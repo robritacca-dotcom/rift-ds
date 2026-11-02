@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "1.21.0",
+      "date": "2026-11-02",
+      "title": "Search keeps up on large tables",
+      "body": [
+        "Search on a large DataTable no longer holds up typing. The field takes each key at once and the rows follow a moment later, under a thin progress line. Each row's text is read once per `rows` array, so an app that changes a row's values in place should pass a new array when its rows change. An inline `columns` array no longer costs a scan on every render, and selecting many rows no longer slows down with the square of the row count.",
+        "When a TableToolbar AI command changes the view, the table now draws skeleton rows, then the new rows, then the toast. `MOTION_TABLE_COMMAND_SKELETON_MS` in `rift-ds/tokens/motion` sets how long the skeleton rows stay. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.20.0",
       "date": "2026-11-02",
       "title": "Form controls submit, and every component has a schema",

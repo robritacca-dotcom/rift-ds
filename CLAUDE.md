@@ -6,7 +6,7 @@ A React component library, design system and documentation website, in three con
 
 1. **Component Library** (`/src`): React components built with Vite and TypeScript, published to npm as **`rift-ds`**. The website consumes it by name through the same `exports` subpaths any consumer would (in-repo they point at `./src`, so it is live source). The component list and count live in `src/components/registry.json`; never hardcode a count.
 2. **Documentation Website** (`/website`): a Next.js app with a live page per component under `website/src/app/components/[component-name]/`.
-3. **AI Layer** (spans both): the site answering questions about itself. The chat widget (`rift-ds/chat`, registry `src/chat/registry.json`) is the package's fourth kind of thing, between the components and the templates: `ChatWidget`, `ChatProvider` and `ChatLauncher` over the `useChat` engine, with `rift-ds/chat/server`, `rift-ds/chat/upstash` (guardrails) and `rift-ds/chat/demo`. The site chat (`website/src/components/SiteChat/`) is a thin configuration of it; `/api/chat` is `createChatHandler` configured in `website/src/lib/chat-model.ts`, beside `/api/chat/followups` and `/api/chat/feedback`, all rate-limited and disclosed on /privacy. The deterministic lookups in `website/src/lib/site-tools.ts` serve both the chat and `/api/mcp`, a public, auth-free, unmetered MCP endpoint that calls no model and reads only generated, published data. Agents also get the per-component markdown, the agent starter (`/AGENTS.md`) and the consumer skills, installed by `npx rift-ds init` (whose `app`, `chat` and `block <name>` subcommands scaffold from `src/cli/templates/`, never overwriting a file). Each route's and module's doc block owns its details.
+3. **AI Layer** (spans both): the site answering questions about itself. The chat widget (`rift-ds/chat`, registry `src/chat/registry.json`) is the package's fourth kind of thing, between the components and the templates: `ChatWidget`, `ChatProvider` and `ChatLauncher` over the `useChat` engine, with `rift-ds/chat/server`, `rift-ds/chat/upstash` (guardrails) and `rift-ds/chat/demo`. The site chat (`website/src/components/SiteChat/`) is a thin configuration of it; `/api/chat` is `createChatHandler` configured in `website/src/lib/chat-model.ts`, beside `/api/chat/followups` and `/api/chat/feedback`, all rate-limited and disclosed on /privacy. The deterministic lookups in `website/src/lib/site-tools.ts` serve both the chat and `/api/mcp`, a public, auth-free, unmetered MCP endpoint that calls no model and reads only generated, published data. Agents also get the per-component markdown and JSON schema (`website/public/schema/`, with the tokens resolved per theme in `rift-ds/tokens/values` and as DTCG files), the agent starter (`/AGENTS.md`) and the consumer skills, installed by `npx rift-ds init` (whose `app`, `chat` and `block <name>` subcommands scaffold from `src/cli/templates/`, never overwriting a file). Each route's and module's doc block owns its details.
 
 **Every chat suggestion is one chip, and a chip never wraps.** Starters, follow-ups, the FAB summary chips and a `QuestionCard`'s options share one length budget, `SUGGESTION_MAX_CHARS` in `src/chat/suggestions.ts`. A suggestion that will not fit is dropped, never truncated. A suggestion asks about roles, never theme values ("the action colour", not the colour a theme gives it). `scripts/validate-chat-starters.mjs` and `scripts/validate-page-summaries.mjs` hold written copy to both rules.
 
@@ -34,6 +34,8 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Dependency graph | `website/src/data/dependency-graph.generated.ts` | `website/src/data/dependency-graph.ts` | `scripts/validate-dependency-graph.mjs` |
 | Site chat corpus | `website/src/data/site-corpus.generated.ts` | same file | `scripts/validate-site-corpus.mjs`, `scripts/validate-chat-coverage.mjs`, `scripts/validate-corpus-coverage.mjs` |
 | Component prop API | `website/src/data/component-api.generated.ts` | same file | `scripts/validate-component-api.mjs` |
+| Component schemas | `website/public/schema/components/` + `components.json` (generated); the hand-written meta-schemas `component.schema.json` and `components-index.schema.json` beside them | (served as-is) | `scripts/validate-component-schema.mjs`, `scripts/validate-json-schemas.mjs` |
+| Token values | `src/tokens/values.json` (generated; resolved per theme and mode; the hand-written meta-schema `website/public/schema/token-values.schema.json`) + the DTCG files in `website/public/schema/tokens/` | `src/tokens/values.ts` (`rift-ds/tokens/values`) | `scripts/validate-token-values.mjs`, `scripts/validate-json-schemas.mjs` |
 | Consumer agent skills | `AGENT_SKILLS` in `scripts/brand.mjs` + `website/public/skill/manifest.json` (generated) | `website/src/data/agent-skills.ts` | `scripts/validate-agent-skill.mjs` |
 | Chat widget | `src/chat/registry.json` | `src/chat/registry.ts` | `scripts/validate-chat-widget.mjs` |
 | Blocks | `src/cli/templates/blocks/registry.json` | `website/src/data/blocks.ts` | `scripts/validate-blocks.mjs` |
@@ -61,7 +63,8 @@ Never hand-edit these; edit the source, and commit what a build regenerates. Eac
 - **README.md regions** (component count and list, npm badge, banner link, author credit) by `scripts/generate-readme-content.mjs`, which also holds the Tech section's major versions and both install surfaces (README and `src/stories/Configure.mdx`). README ships in the npm tarball, so its prose is production copy.
 - **The author credit**: `AUTHOR_NAME` and `AUTHOR_URL` in `scripts/brand.mjs` are its only home.
 - **Screenshot surfaces with no generator**: re-shoot the README banner (`scripts/capture-readme-banner.mjs`) and the playground's template stills (`scripts/capture-template-thumbnails.mjs`) by hand whenever what they show changes.
-- **Website files**: the /blueprints spec copies (`scripts/sync-blueprints.mjs`, whose `FILES` array is the list), per-component markdown (`scripts/generate-component-md.mjs`), the shadcn registry in `website/public/r/` (`scripts/generate-shadcn-registry.mjs`; fetches counted by `website/src/proxy.ts`), per-theme DESIGN.md files (`scripts/generate-theme-design-md.mjs`), the consumer skills and `AGENTS.md` (`scripts/generate-agent-skill.mjs`; its manifest is the one home of the file list the init bin installs), and the /skills page data (`scripts/generate-skills-content.mjs`; never hand-add a card).
+- **Website files**: the /blueprints spec copies (`scripts/sync-blueprints.mjs`, whose `FILES` array is the list), per-component markdown (`scripts/generate-component-md.mjs`), the per-component JSON schemas and their index (`scripts/generate-component-schema.mjs`, validated against the hand-written meta-schema beside them), the token values and DTCG files (`scripts/generate-token-values.mjs`), the shadcn registry in `website/public/r/` (`scripts/generate-shadcn-registry.mjs`; fetches counted by `website/src/proxy.ts`), per-theme DESIGN.md files (`scripts/generate-theme-design-md.mjs`), the consumer skills and `AGENTS.md` (`scripts/generate-agent-skill.mjs`; its manifest is the one home of the file list the init bin installs), and the /skills page data (`scripts/generate-skills-content.mjs`; never hand-add a card).
+- **Schemas are generated twins, never a second source.** A component's schema is written from its props interface and the token files from the token CSS; a schema is never hand-edited to say something the source does not. The meta-schemas (the `*.schema.json` files at the top of `website/public/schema/`) are the only hand-written files there; `component.schema.json` holds the Component Anatomy vocabulary as data (`tone` values, `disabled`, `locale`, `linkComponent`, `*Label`), and `scripts/validate-json-schemas.mjs` proves every generated file against it and holds its tone list to `scripts/validate-prop-vocabulary.mjs`. A new sanctioned tone is a row there and a member here, in the same change. `/docs/schemas` is the public reference.
 
 ### The chat corpus security boundary
 
@@ -117,13 +120,13 @@ npm run graph           # regenerate the /graph data; `-- tree <name>` / `-- who
 `npm run verify` is the **single local mirror of CI**. **When CI gains a check, add it to `verify` in the same change**; skills and docs reference `verify`, never individual commands. Three deliberate exceptions stay CI-only:
 - **Chromatic** (`.github/workflows/chromatic.yml`): bills cloud snapshots, so it is dispatch-only and never proof the pixels are unchanged.
 - **The dependency audit** (`npm audit --audit-level=high --omit=dev`): news from outside, not something a local run could catch; dev-only tooling is outside it by a decision the workflow comment records.
-- **The drift guard** (`git diff --exit-code` after the generators run): a local tree is dirty with work in progress.
+- **The drift guard** (`git diff --exit-code` and an untracked-file check after the generators run): a local tree is dirty with work in progress.
 
 **Story tests** run every story as a render test, with axe in `'error'` mode. One rule, `color-contrast`, is switched off by the owner's settled decision: the comment beside that override in `.storybook/preview.ts` is its only record. Never re-enable it, restyle what it covers, or raise it as a finding without asking the owner first. Everything else in AA is enforced.
 
 **The served-site checks** exist because a green build and an HTTP 200 have both held while the live site was blank: `scripts/smoke-hydration.mjs` (also the `ship` skill's post-deploy check, and run against production every four hours by `.github/workflows/uptime.yml`), `scripts/validate-gestures.mjs` (every grip in `scripts/gestures.json` under a throttled pointer flood), and `scripts/validate-website-a11y.mjs` (axe on the served pages in both themes, plus forced colors). Each doc block owns its details.
 
-**The published API only grows.** `scripts/validate-api-compat.mjs` compares the working tree with the latest `v*` tag: no prop, export, wildcard file or bin may vanish or narrow. A deliberate break is a row in its `SANCTIONED_BREAKS` table. It runs in `verify` and CI, never in `validate-registry`.
+**The published API only grows.** `scripts/validate-api-compat.mjs` compares the working tree with the latest `v*` tag: no prop, export, wildcard file or bin may vanish or narrow, and no file under `website/public/schema/` or property of a meta-schema there may disappear. A deliberate break is a row in its `SANCTIONED_BREAKS` table. It runs in `verify` and CI, never in `validate-registry`.
 
 ### Releases
 
@@ -159,7 +162,7 @@ If asked to "merge and push" (a retired skill name), confirm the intended end st
 - `src/components/`: one folder per component, plus `registry.json`. `src/index.ts` and `src/charts.ts` are GENERATED barrels.
 - `src/chat/`: the chat widget over its engine, with its own registry and hand-written barrels. `src/cli/`: the init bin and its scaffold templates.
 - `src/behaviors/`: the internal behaviour layer (layer stack, focus scope, scroll lock, anchored position, top layer, link provider, locale provider, keyboard shortcuts, reading direction, `ScrollRegion`, `warnOnce`, the visually-hidden class). Not a published subpath, except the scroll lock, the link provider, the locale provider and the shortcut listener (`scripts/package-manifest.mjs` is the list); each module's doc block owns its contract.
-- `src/tokens/`: the token CSS, the GENERATED `presets/` and `registry.json`, and `motion.ts` and `breakpoints.ts`. `src/fonts/`: Material Symbols and the presets' faces. `src/stories/`: Storybook foundation docs and the props-contract story.
+- `src/tokens/`: the token CSS, the GENERATED `presets/`, `registry.json` and `values.json` (every theme resolved, published as `rift-ds/tokens/values` through `values.ts`), and `motion.ts` and `breakpoints.ts`. `src/fonts/`: Material Symbols and the presets' faces. `src/stories/`: Storybook foundation docs and the props-contract story.
 - `website/` (npm workspace): `website/src/app/` pages; `website/src/config/` (`navigation.ts` is the nav source of truth, `chromeless.ts` the routes without shared chrome); `website/src/data/` registries and accessors; `website/src/lib/` non-UI modules (chat model, site tools, the theme levers, analytics); `website/src/components/` site UI (header, sidebar, footer, SiteChat, the Cmd+K palette, the anchor rail, the backgrounds, the error fallback, the template screens).
 
 Before working in an area:
@@ -236,10 +239,12 @@ CSS class naming: `ds-{component}` base class, `ds-{component}--{modifier}` for 
 - **Layout follows the reading direction**: logical properties, inline motion multiplied by `--ds-inline-sign`, arrow keys through `logicalArrowKey`, popups asked for `start`/`end`, and directional glyphs mirrored; a side that belongs to the screen carries `ds-allow(physical)` (`scripts/validate-logical-properties.mjs`; design.md's "Layout follows the reading direction").
 - **Deprecate, never remove** (`scripts/validate-api-compat.mjs`). Document intentional native-name collisions (`size`, `title`) in the prop's JSDoc.
 
-**Every own prop needs a JSDoc description**: it feeds Storybook's props tables, the shipped `.d.ts` and the MCP surface (`scripts/validate-prop-docs.mjs`, whose doc block and `scripts/component-docgen.mjs` own the parser settings). Three rules follow:
+**Every own prop needs a JSDoc description**: it feeds Storybook's props tables, the shipped `.d.ts`, the published component schema and the MCP surface (`scripts/validate-prop-docs.mjs`, whose doc block and `scripts/component-docgen.mjs` own the parser settings). Three rules follow:
 - **Never put a prop description in a story's `argTypes`**: it shadows the JSDoc. Stories set `control` and `options` only.
 - **A re-export in a component file goes below the component**, or the parser names it after the component and empties the props table.
 - **On a deprecated prop, put a sentence before the `@deprecated` tag**, or the description renders blank.
+
+**The props interface is also the published schema.** `website/public/schema/components/<slug>.json` is written from it by `scripts/generate-component-schema.mjs` on every build and validated against `website/public/schema/component.schema.json`, which holds the vocabulary rules above as data; a new prop that breaks one of them (a `tone` value outside the sanctioned sets, a non-boolean `disabled`, a `*Label` whose default is not text) fails the build. Nothing in a schema is hand-typed, and a component's page gets its For agents dialog, with the markdown and the schema as tabs, from `PageLinks` with no page work.
 
 ---
 
@@ -268,6 +273,7 @@ Checklist before shipping a component:
 - [ ] Interactive elements have ARIA roles and keyboard navigation
 - [ ] At least one Storybook story per variant
 - [ ] Steps 5 to 7 done, with `client` in the registry matching the `'use client'` directive
+- [ ] `node scripts/validate-json-schemas.mjs` passes: the component's generated schema validates against the meta-schema
 
 ---
 
@@ -292,7 +298,7 @@ A token that exists only in CSS is incomplete. The `new-token` skill has the ope
    - Motion: `website/src/app/foundations/motion/page.tsx`
    - Stacking (`--layer-*`): nothing to add; write the trailing comment `scripts/validate-stacking.mjs` requires
 4. **Update the Storybook token docs**: `src/stories/Tokens.stories.tsx`, in the matching story.
-5. **Counts take care of themselves**: `src/tokens/registry.json` regenerates on every build. A new prefix fails generation until it is added to `CATEGORY_PREFIXES`.
+5. **Counts and values take care of themselves**: `src/tokens/registry.json`, `src/tokens/values.json` (every theme, both modes, resolved) and the DTCG files under `website/public/schema/tokens/` regenerate on every build. A new prefix fails generation until it is added to `CATEGORY_PREFIXES`; a token whose name `familyOf` in `scripts/generate-token-values.mjs` cannot place in a family, or whose value has no mapper in `TYPE_MAPPERS` for that family, fails it until both exist.
 
 ---
 
@@ -334,5 +340,5 @@ Stated at the level of **token roles**: which colour, radius, typeface or shadow
 
 ## Known Gaps
 
-- **Figma parity**: the system originates in a Figma file that lags the coded system, so every Figma link is hidden behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts` (its doc comment lists the guarded surfaces). Keeping Figma and the tokens in sync is manual.
+- **Figma parity**: the system originates in a Figma file that lags the coded system, so every Figma link is hidden behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts` (its doc comment lists the guarded surfaces). The DTCG files under `website/public/schema/tokens/` are an export a Figma plugin can import, but nothing pushes them into the file, so keeping Figma and the tokens in sync is manual.
 - **Visual regression**: Chromatic runs dispatch-only, but this repo has no Chromatic project yet (the `first-deploy` skill owns that step). axe catches roughly a third of WCAG issues, so keyboard order outside the asserted overlay stories and meaningful alt text still need human review.

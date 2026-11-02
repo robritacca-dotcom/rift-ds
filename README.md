@@ -9,7 +9,7 @@
 <!-- npm-badge:end -->
 [![license: MIT](https://img.shields.io/badge/license-MIT-4c1)](LICENSE)
 
-An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts, installable agent skills) so your coding agent knows the library as well as you do.
+An open source React design system built for AI products and coding agents: components on a three-tier token architecture, complete theme presets that restyle everything with one attribute, and machine surfaces (an MCP endpoint, per-component contracts as markdown and JSON schema, the tokens as DTCG files, installable agent skills) so your coding agent knows the library as well as you do.
 
 ## Why Rift DS
 
@@ -81,13 +81,13 @@ For the full setup, one command teaches a coding agent the system: it installs t
 npx rift-ds init
 ```
 
-The MCP endpoint serves the component catalogue, per-component prop APIs, the token registry, install setup, and docs search to any client. No key, no account, no model calls: every tool reads only published, generated data, built from the same JSDoc that produces the shipped `.d.ts`, so an agent reads the exact contract npm ships.
+The MCP endpoint serves the component catalogue, per-component prop APIs, the token registry with its values resolved per theme, install setup, and docs search to any client. No key, no account, no model calls: every tool reads only published, generated data, built from the same JSDoc that produces the shipped `.d.ts`, so an agent reads the exact contract npm ships.
 
 ```bash
 claude mcp add --transport http rift-ds https://rift-ds.com/api/mcp
 ```
 
-Every component's prop contract is also plain markdown (append `.md` to its docs URL), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. A theme made in the [playground](https://rift-ds.com/playground) exports as one AGENTS.md that carries the setup, your theme in words and its CSS, so the agent can read the look as well as the code. Then just ask: "Build a settings page with Rift components."
+Every component's prop contract is also plain markdown (append `.md` to its docs URL) and a JSON schema at `/schema/components/<slug>.json`, the tokens are published in the DTCG format and as `rift-ds/tokens/values` ([schemas](https://rift-ds.com/docs/schemas)), and [llms.txt](https://rift-ds.com/llms.txt) indexes every machine surface. A theme made in the [playground](https://rift-ds.com/playground) exports as one AGENTS.md that carries the setup, your theme in words and its CSS, so the agent can read the look as well as the code. Then just ask: "Build a settings page with Rift components."
 
 ## Theming
 

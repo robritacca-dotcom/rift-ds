@@ -47,6 +47,8 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - Should follow `is*`/`has*` convention OR plain adjective — not both (e.g. `isDisabled` on one component, `disabled` on another doing the same thing)
    - Flag: mixed usage within the same component family
 
+   The machine-held half of this vocabulary is `website/public/schema/component.schema.json`: its `allOf` rules are the list of what it locks, every generated component schema is proven against it on each build, and CLAUDE.md's **Schemas are generated twins** bullet owns the rule that a new sanctioned tone changes that file and `SANCTIONED_TONES` together. A finding that changes a locked vocabulary is also an edit there. The decisions in HISTORY.md's 2026-11-01 schemas entry are accepted findings: do not re-raise them.
+
    **Event handler naming:**
    - Must be `on*` (e.g. `onClick`, `onChange`, `onDismiss`)
    - Flag: `handleClick`, `clickHandler`, `onClickHandler`, or similar
@@ -72,7 +74,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - All components rendering clickable/interactive elements should have `className?: string`
    - All components with visual disabled states should have `disabled?: boolean`
    - All form-like components should have `id?: string`
-   - `name` only belongs on a component that renders a **native** form control. Several controls here render a `div` with an ARIA role (Checkbox, RadioButton, Dropdown), where `name` cannot participate in form submission — on those it is a documented no-op, not a missing prop. Flag an *undocumented* `name`, not its absence.
+   - A form control's `name` must reach `FormData`, whatever element it renders: on the native input, or through a hidden input when the control is a `div` or `button` with an ARIA role (design.md, "A control reaches a form through `name`"). Flag a `name` that a form never reads, including one spread onto a `button` or a `div`. The controls design.md lists as taking no `name` are not missing one.
 
    **Family consistency:**
    - Components in the same family (e.g. Button / CircularButton / ButtonGroup) should share `size` enum values

@@ -1,6 +1,7 @@
 /**
  * The site's guardrails: the package's Upstash implementation, configured
- * from the deploy environment and shared by the three chat routes.
+ * from the deploy environment and shared by every model route: the chat's and
+ * the merchant sales template's, whose assistant turns the exchange log off.
  *
  * Four layers, outermost last: the stateless caps in the chat handler
  * (message length, turn count), per-visitor rate limits so one visitor

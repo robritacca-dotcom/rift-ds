@@ -249,6 +249,18 @@
           "description": "The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`."
         },
         {
+          "name": "contextPlacement",
+          "type": "\"inside\" | \"above\"",
+          "typeKind": "enum",
+          "values": [
+            "above",
+            "inside"
+          ],
+          "required": false,
+          "description": "Where the context note sits: `above` the composer, or `inside` it, at the top of the shell, which brings the two-row composer.",
+          "default": "above"
+        },
+        {
           "name": "contextNote",
           "type": "((title: string) => string)",
           "typeKind": "function",

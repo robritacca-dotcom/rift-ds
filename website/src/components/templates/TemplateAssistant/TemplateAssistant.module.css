@@ -1,4 +1,4 @@
-/* The template screens' shared mock assistant: the site chat's panel
+/* The template screens' shared assistant panel, a mock unless given a live `chat`: the site chat's panel
    geometry and responsive modes, restated. A floating glass card pinned to
    the right edge, inset like the templates' floating sidebars, over the
    SiteChat internals: one
@@ -43,15 +43,60 @@
   max-width: calc(100vw - var(--layout-shell-inset) * 2);
 }
 
+/* A live chat's motion (.ds-chat-launcher__panel, restated). Opening, the card
+   fades in with a small rise; it plays on mount, so the view toggle, which keeps
+   the node, never replays it. Between views the same card grows to fill the
+   viewport, so everything that differs between the two glides together. */
+.live {
+  animation: livePanelIn var(--motion-duration-slow) var(--motion-ease-entrance);
+  transition:
+    top var(--motion-duration-slow) var(--motion-ease-emphasized),
+    right var(--motion-duration-slow) var(--motion-ease-emphasized),
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    height var(--motion-duration-slow) var(--motion-ease-emphasized),
+    max-width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-radius var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-color var(--motion-duration-slow) var(--motion-ease-emphasized),
+    backdrop-filter var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.closing {
+  animation: livePanelOut var(--motion-duration-base) var(--motion-ease-standard) forwards;
+  pointer-events: none;
+}
+
+@keyframes livePanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes livePanelOut {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+:global(html[data-chat-resizing]) .live {
+  transition: none;
+}
+
 .full {
   top: 0;
   right: 0;
   width: 100vw;
   height: 100dvh;
-  max-width: none;
-  border: none;
+  max-width: 100vw;
+  border-color: transparent;
   border-radius: 0;
-  box-shadow: none;
+  backdrop-filter: blur(40px);
 }
 
 .flat {

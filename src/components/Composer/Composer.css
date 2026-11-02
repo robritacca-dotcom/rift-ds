@@ -465,7 +465,7 @@
   color: var(--color-input-text-primary);
   /* Growth cap: the shell owns the block padding, so the cap is rows × line-height.
      --ds-composer-max-rows is set inline from the maxRows prop. */
-  max-height: calc(var(--ds-composer-max-rows, 8) * var(--font-paragraph-line-height));
+  max-height: calc(var(--ds-composer-max-rows, 12) * var(--font-paragraph-line-height));
   overflow-y: auto;
 }
 
@@ -635,35 +635,22 @@
 }
 
 /* ============================================
-   COMPACT: the same shell at the compact density
+   COMPACT: the mini composer's smaller text. Its height and button are in the
+   INLINE section below; no other composer takes this density.
    ============================================ */
 .ds-composer--compact {
-  --ds-composer-send-size: var(--control-height-compact);
   --ds-composer-text-inset: var(--padding-300);
-  /* Concentric on this density's tighter ring. */
-  --ds-composer-radius: calc(
-    min(var(--radius-pill), var(--ds-composer-send-size) / 2) + var(--padding-100) + var(--border-025)
-  );
-}
-
-.ds-composer--compact .ds-composer__content {
-  padding-block: var(--padding-200) var(--padding-100);
-  height: calc(var(--ds-composer-text-height, var(--font-paragraph-sm-line-height)) + var(--padding-200) + var(--padding-100));
 }
 
 .ds-composer--compact .ds-composer__textarea {
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
-  max-height: calc(var(--ds-composer-max-rows, 8) * var(--font-paragraph-sm-line-height));
-}
-
-.ds-composer--compact .ds-composer__footer {
-  padding: var(--padding-100);
+  max-height: calc(var(--ds-composer-max-rows, 12) * var(--font-paragraph-sm-line-height));
 }
 
 /* ============================================
-   INLINE: one row at the control height until `maxRows` lets it grow, the send
+   INLINE: one row at the control height, growing up to `maxRows`, the send
    button on the text's line.
    The shell is an input here, so it does not float, and the button sits
    inside the height, concentric on a thinner ring.
@@ -744,4 +731,20 @@
 .ds-composer--inline .ds-composer__footer .ds-circular-button {
   width: var(--ds-composer-send-size);
   height: var(--ds-composer-send-size);
+}
+
+/* INLINE IN A CHAT: the same one row, built out from a full-size send button
+   rather than down from a control height, because this is the page's main
+   input and not a field lined up with others. */
+.ds-composer--inline-chat {
+  --ds-composer-ring: var(--padding-150);
+  --ds-composer-send-size: var(--control-height-default);
+  --ds-composer-control: calc(var(--ds-composer-send-size) + var(--ds-composer-ring) * 2 + var(--border-025) * 2);
+  --ds-composer-radius: calc(
+    min(var(--radius-pill), var(--ds-composer-send-size) / 2) + var(--ds-composer-ring) + var(--border-025)
+  );
+}
+
+.ds-composer--inline-chat .ds-composer__footer {
+  padding: var(--ds-composer-ring);
 }

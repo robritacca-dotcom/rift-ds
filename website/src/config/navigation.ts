@@ -484,7 +484,7 @@ export const templatesSidebarLinks: NavLink[] = [
   {
     href: "/templates/merchant-sales",
     label: "Merchant sales",
-    description: "A merchant's month and orders, in a table you change by describing it",
+    description: "A merchant's month and orders, with a live assistant that reads them and changes the table",
   },
   {
     href: "/templates/sign-in",

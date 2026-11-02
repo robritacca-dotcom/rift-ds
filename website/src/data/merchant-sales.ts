@@ -31,3 +31,6 @@ export const MERCHANT_SHOWN_COLUMNS = [
 
 /** What the table opens on: the month the KPI band reports. */
 export const MERCHANT_OPENING_FILTER = { id: "placedOn-1", column: "placedOn", operator: "after", value: "2026-09-30" } as const;
+
+/** The sort the table opens with. */
+export const MERCHANT_OPENING_SORT = { key: "placedOn", direction: "desc" } as const;

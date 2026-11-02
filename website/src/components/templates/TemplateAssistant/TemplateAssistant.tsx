@@ -8,6 +8,10 @@
  * passes its own suggestions and replies over its own page data; the panel
  * owns the conversation state and the focus contract.
  *
+ * A screen demonstrating a live assistant passes a real ChatWidget as `chat`
+ * instead: the panel keeps its modes and grip, gains the launcher's open, close
+ * and full-screen motion, and the mock's props go unused.
+ *
  * An answer plays the way a live model's does, on the library's Reasoning and
  * StreamingText: the reasoning arrives a step at a time, folds away to its
  * duration, then the answer streams in chunks. Under reduced motion it is
@@ -146,6 +150,8 @@ export interface TemplateAssistantProps {
   chat?: React.ReactNode;
   /** With `chat`: `full` fills the viewport and is modal, the widget's expand control's view. */
   view?: "panel" | "full";
+  /** With `chat`: the exit beat after a close, for which the panel stays on screen to leave. */
+  closing?: boolean;
   /** The welcome invitation under the greeting, naming what to ask about. */
   askLine?: string;
   /** Conversation starters; each id keys into `replies`. */
@@ -187,6 +193,7 @@ export default function TemplateAssistant({
   title,
   chat,
   view = "panel",
+  closing = false,
   askLine,
   suggestions = [],
   replies = {},
@@ -308,7 +315,7 @@ export default function TemplateAssistant({
     }
   };
 
-  if (!open) return null;
+  if (!open && !closing) return null;
 
   return (
     <>
@@ -324,6 +331,8 @@ export default function TemplateAssistant({
         // the dock goes flat, since the overlay still covers the page.
         viewport && !full && surface === "inset" && styles.inset,
         viewport && !modal && surface === "inset" && styles.flat,
+        chat && styles.live,
+        closing && styles.closing,
         full && styles.full,
         className,
       ]
@@ -432,7 +441,7 @@ export default function TemplateAssistant({
       </div>
       )}
     </aside>
-    {viewport && docked && !full && (
+    {viewport && docked && !full && !closing && (
       // A fixed sibling on the panel's inner edge: the panel clips its own
       // overflow, so a straddling child would be cut in half.
       <div

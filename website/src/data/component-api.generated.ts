@@ -5121,7 +5121,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons.",
+            "description": "The mini composer's density (`inline` as `true`), matching a table's or a bar's: `compact` takes the smaller text, height and button. Every other composer has the one size, so it ignores this.",
             "values": [
               "compact",
               "default"
@@ -5130,17 +5130,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "inline",
-            "type": "boolean",
+            "type": "boolean | \"chat\"",
             "required": false,
-            "description": "One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1; above it, typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis.",
+            "description": "One row with the send button on the text's line. `true` makes the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar: the mini composer, for AI input inside other content such as a table, never for a chat. `chat` gives the button a full-size control and room around it: for a chat with nothing to seat in a footer. Above one row (`maxRows`), typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis.",
             "defaultValue": "false"
           },
           {
             "name": "maxRows",
             "type": "number",
             "required": false,
-            "description": "Growth cap in text rows before the textarea scrolls internally. Defaults to 8, or 1 when `inline`.",
-            "defaultValue": "inline ? 1 : 8"
+            "description": "Growth cap in text rows before the textarea scrolls internally. Defaults to 12 in a chat composer, or 3 in the mini composer.",
+            "defaultValue": "inline === true ? 3 : 12"
           },
           {
             "name": "aiGlow",
@@ -17055,6 +17055,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | null",
             "required": false,
             "description": "The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`."
+          },
+          {
+            "name": "contextPlacement",
+            "type": "\"inside\" | \"above\"",
+            "required": false,
+            "description": "Where the context note sits: `above` the composer, or `inside` it, at the top of the shell, which brings the two-row composer.",
+            "values": [
+              "above",
+              "inside"
+            ],
+            "defaultValue": "above"
           },
           {
             "name": "contextNote",

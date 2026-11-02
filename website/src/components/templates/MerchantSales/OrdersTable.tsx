@@ -10,12 +10,12 @@
  * screen's chat drives the table too, through the bridge below.
  */
 
-import { useEffect, useState, type RefObject } from "react";
+import { memo, useEffect, useState, type RefObject } from "react";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { DataTable, type DataTableColumn, type DataTableRow } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { COLUMN_KEYS, LEDGER_COLUMNS, ledgerRows } from "@/data/order-ledger";
-import { MERCHANT_OPENING_FILTER, MERCHANT_SHOWN_COLUMNS } from "@/data/merchant-sales";
+import { MERCHANT_OPENING_FILTER, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS } from "@/data/merchant-sales";
 import { askOrderLedger } from "@/lib/order-ledger-command";
 import { useTableContext } from "../../../../../src/components/DataTable/tableContext";
 import type { TableBridge } from "./MerchantChat";
@@ -54,7 +54,7 @@ function TableBridgeSeat({ bridge: bridgeRef }: { bridge: RefObject<TableBridge 
   return null;
 }
 
-export default function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
+function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
   const [rows, setRows] = useState<ReturnType<typeof ledgerRows> | null>(null);
   useEffect(() => {
     /* A task of its own, so the skeleton paints before the build holds the thread. */
@@ -71,7 +71,7 @@ export default function OrdersTable({ bridge }: { bridge: RefObject<TableBridge 
       defaultHiddenColumns={HIDDEN}
       defaultPageSize={25}
       defaultFilters={[MERCHANT_OPENING_FILTER]}
-      defaultSort={{ key: "placedOn", direction: "desc" }}
+      defaultSort={MERCHANT_OPENING_SORT}
       selectable
       multiSort
       columnMenu
@@ -101,3 +101,6 @@ export default function OrdersTable({ bridge }: { bridge: RefObject<TableBridge 
     />
   );
 }
+
+/* Memoised because the screen around it re-renders with the chat, on every streamed word, and 20,000 rows must not follow. */
+export default memo(OrdersTable);

@@ -51,11 +51,11 @@ type ComposerOwnProps = {
   streaming?: boolean;
   /** Fires when the stop button is pressed while `streaming`. */
   onStop?: () => void;
-  /** The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons. */
+  /** The mini composer's density (`inline` as `true`), matching a table's or a bar's: `compact` takes the smaller text, height and button. Every other composer has the one size, so it ignores this. */
   size?: 'default' | 'compact';
-  /** One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1; above it, typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis. */
-  inline?: boolean;
-  /** Growth cap in text rows before the textarea scrolls internally. Defaults to 8, or 1 when `inline`. */
+  /** One row with the send button on the text's line. `true` makes the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar: the mini composer, for AI input inside other content such as a table, never for a chat. `chat` gives the button a full-size control and room around it: for a chat with nothing to seat in a footer. Above one row (`maxRows`), typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis. */
+  inline?: boolean | 'chat';
+  /** Growth cap in text rows before the textarea scrolls internally. Defaults to 12 in a chat composer, or 3 in the mini composer. */
   maxRows?: number;
   /**
    * While focused, the shell wears AiButton's slowly rotating gradient ring
@@ -250,7 +250,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       onStop,
       size = 'default',
       inline = false,
-      maxRows = inline ? 1 : 8,
+      maxRows = inline === true ? 3 : 12,
       aiGlow = false,
       context,
       contextIcon,
@@ -674,8 +674,9 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     const classes = [
       baseClass,
       aiGlow ? `${baseClass}--ai-glow` : '',
-      size === 'compact' ? `${baseClass}--compact` : '',
+      inline === true && size === 'compact' ? `${baseClass}--compact` : '',
       inline ? `${baseClass}--inline` : '',
+      inline === 'chat' ? `${baseClass}--inline-chat` : '',
       streaming ? `${baseClass}--streaming` : '',
       disabled ? `${baseClass}--disabled` : '',
       dragging ? `${baseClass}--dragging` : '',

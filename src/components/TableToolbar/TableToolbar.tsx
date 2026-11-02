@@ -517,9 +517,6 @@ function ToolbarPanel({
  * its Undo; an error stays until dismissed; a message with no change leaves on
  * the usual timer; no change and no message shows nothing.
  */
-/** The command composer's height cap: its own line and two more for a long request. */
-const COMMAND_MAX_ROWS = 3;
-
 type ToolbarCommandState = 'idle' | 'working' | 'done' | 'error';
 
 type ToolbarCommandProps = {
@@ -650,7 +647,6 @@ function CommandRow({ command, table, labels, size, open, onClose, state, onStat
       />
       <Composer
         inline
-        maxRows={COMMAND_MAX_ROWS}
         size={size}
         value={text}
         onValueChange={setText}

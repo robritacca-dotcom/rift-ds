@@ -190,6 +190,8 @@ export interface ChatWidgetProps {
   artifacts?: boolean;
   /** The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`. */
   contextLabel?: string | null;
+  /** Where the context note sits: `above` the composer, or `inside` it, at the top of the shell, which brings the two-row composer. */
+  contextPlacement?: 'above' | 'inside';
   /** The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. */
   contextNote?: (title: string) => string;
   /** The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`. */
@@ -362,6 +364,7 @@ export function ChatWidget({
   artifacts = false,
   contextLabel,
   contextNote = defaultContextNote,
+  contextPlacement = 'above',
   attachHint: attachHintText = defaultAttachHint,
   greetings,
   placementLabels,
@@ -479,6 +482,12 @@ export function ChatWidget({
   const lockedValues = modelPolicy?.locked ?? [];
   const pick = chosenModel && !lockedValues.includes(chosenModel) ? chosenModel : null;
   const pickerValue = pick ?? modelPolicy?.default ?? defaultModel ?? models?.[0]?.value;
+  /* The composer's size follows what it holds: anything for the footer brings the footer. */
+  const composerHasActions =
+    fileAttachments ||
+    Boolean(composerActions) ||
+    (models?.length ?? 0) > 0 ||
+    (Boolean(contextLabel) && contextPlacement === 'inside');
   const pickerModels = (models ?? []).map((option) => ({
     value: option.value,
     label: option.label,
@@ -1122,6 +1131,8 @@ export function ChatWidget({
             placeholder={questionsOpen ? questionsPlaceholder : placeholder}
             disabled={questionsOpen}
             sendLabel={sendLabel}
+            /* Nothing to seat in the footer, no footer: the one-row composer. */
+            inline={composerHasActions ? false : 'chat'}
             aiGlow
             value={draft}
             onValueChange={setDraft}
@@ -1130,7 +1141,7 @@ export function ChatWidget({
             onStop={stop}
             context={contextLabel ? contextNote(contextLabel) : undefined}
             contextIcon="description"
-            contextPlacement="above"
+            contextPlacement={contextPlacement}
             mentions={mentions}
             {...(fileAttachments
               ? {

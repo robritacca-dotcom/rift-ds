@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { Composer } from "rift-ds/components/Composer/Composer";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { Composer, type ComposerProps } from "rift-ds/components/Composer/Composer";
+import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
 import type { MentionSource } from "rift-ds/components/Mention/Mention";
 import { useAttachments } from "rift-ds/components/Attachment/useAttachments";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
@@ -36,6 +36,36 @@ const MENTION_SOURCES: MentionSource[] = [
 ];
 
 
+const MODELS = [
+  { value: "quick", label: "Quick", description: "Fast answers" },
+  { value: "deep", label: "Deep", description: "More thought on harder questions" },
+];
+
+/**
+ * The two-row composer as it really appears: its footer exists to hold these, so
+ * every example of it holds them. A composer with neither is the one-row
+ * `inline="chat"` instead, shown in its own section.
+ */
+function ChatComposer({ onSubmit, ...props }: ComposerProps) {
+  const [model, setModel] = useState(MODELS[0].value);
+  const queue = useAttachments({ maxCount: 10 });
+  return (
+    <Composer
+      {...props}
+      files={queue.items}
+      onFilesSelected={queue.add}
+      onFileRemove={queue.remove}
+      pasteThreshold={1200}
+      onPasteAsAttachment={(text) => queue.addText(text)}
+      actions={<ModelPicker models={MODELS} value={model} onValueChange={setModel} />}
+      onSubmit={(submitted) => {
+        queue.clear();
+        onSubmit?.(submitted);
+      }}
+    />
+  );
+}
+
 /** Send flips into a short fake stream, with stop cutting it off early. */
 function StreamingDemo() {
   const [value, setValue] = useState("");
@@ -61,7 +91,7 @@ function StreamingDemo() {
 
   return (
     <div className={styles.demoColumn}>
-      <Composer
+      <ChatComposer
         placeholder="Send something to start a fake stream"
         value={value}
         onValueChange={setValue}
@@ -82,23 +112,13 @@ function StreamingDemo() {
 /** Real files: pick, paste or drop them. `useAttachments` owns the list. */
 function AttachmentsDemo() {
   const [value, setValue] = useState("");
-  const queue = useAttachments({ maxCount: 10 });
-
   return (
     <div className={styles.demoColumn}>
-      <Composer
+      <ChatComposer
         placeholder="Attach a file, or paste one"
         value={value}
         onValueChange={setValue}
-        files={queue.items}
-        onFilesSelected={queue.add}
-        onFileRemove={queue.remove}
-        pasteThreshold={1200}
-        onPasteAsAttachment={(text) => queue.addText(text)}
-        onSubmit={() => {
-          queue.clear();
-          setValue("");
-        }}
+        onSubmit={() => setValue("")}
       />
     </div>
   );
@@ -123,7 +143,7 @@ function FullFooterDemo() {
           setValue(suggestions.find((s) => s.id === id)?.label ?? "")
         }
       />
-      <Composer
+      <ChatComposer
         placeholder="Message the agent"
         value={value}
         onValueChange={setValue}
@@ -131,9 +151,6 @@ function FullFooterDemo() {
           setSent(submitted);
           setValue("");
         }}
-        actions={
-          <CircularButton icon="tune" variant="tertiary" ariaLabel="Options" />
-        }
       />
       <p className={styles.demoNote} aria-live="polite">
         {sent ? `Sent: "${sent}"` : "Nothing sent yet."}
@@ -183,7 +200,7 @@ export default function ComposerPage() {
               successful send.
             </p>
             <div className={styles.stack}>
-              <Composer placeholder="Message the agent" />
+              <ChatComposer placeholder="Message the agent" />
             </div>
           </section>
 
@@ -201,21 +218,19 @@ export default function ComposerPage() {
             <StreamingDemo />
           </section>
 
-          {/* Compact */}
+          {/* One row in a chat */}
           <section className={styles.section}>
-            <SectionTitle title="Compact and inline" />
+            <SectionTitle title="One row in a chat" />
             <p className={styles.sectionBody}>
-              <code>size</code> is the density, the same default and compact pair
-              a table uses. <code>inline</code> puts everything on one row at that
-              density&apos;s control height, for a popover or a tight bar. It stays
-              on one row unless <code>maxRows</code> lets it grow, with send held
-              in the bottom corner.
-              TableToolbar&apos;s AI command opens one at the table&apos;s density.
+              A composer with nothing to hold in its footer drops the footer:{" "}
+              <code>inline=&quot;chat&quot;</code> puts a full-size send button on the
+              text&apos;s line, with room around it. ChatWidget chooses for you. It takes
+              this row when there is no model picker, attachments, composer actions or
+              context note inside the composer, and the two-row composer when there is
+              any of them.
             </p>
             <div className={styles.stack}>
-              <Composer inline placeholder="Inline, default" attachButton={false} />
-              <Composer inline size="compact" placeholder="Inline, compact" attachButton={false} />
-              <Composer size="compact" placeholder="Compact" attachButton={false} />
+              <Composer inline="chat" placeholder="Ask anything" />
             </div>
           </section>
 
@@ -231,7 +246,7 @@ export default function ComposerPage() {
               the field to see it.
             </p>
             <div className={styles.stack}>
-              <Composer placeholder="Ask the model something" aiGlow />
+              <ChatComposer placeholder="Ask the model something" aiGlow />
             </div>
           </section>
 
@@ -254,12 +269,12 @@ export default function ComposerPage() {
               The site chat uses this placement.
             </p>
             <div className={styles.stack}>
-              <Composer
+              <ChatComposer
                 placeholder="Ask about this page"
                 context={<>Looking at &ldquo;Release notes&rdquo;</>}
                 contextIcon="description"
               />
-              <Composer
+              <ChatComposer
                 placeholder="Ask about this page"
                 context={
                   <>
@@ -269,7 +284,7 @@ export default function ComposerPage() {
                 }
                 contextIcon="description"
               />
-              <Composer
+              <ChatComposer
                 placeholder="Ask about this page"
                 context={<>Looking at &ldquo;Release notes&rdquo;</>}
                 contextIcon="description"
@@ -298,13 +313,13 @@ export default function ComposerPage() {
             <SectionTitle title="Growth" />
             <p className={styles.demoText}>
               The textarea starts at one row and grows with its content up to
-              maxRows, eight by default or one when inline, then scrolls internally. This one is
-              capped at four rows; add lines to feel the cap.
+              twelve rows, on the two-row composer and the one-row chat composer
+              alike, then scrolls internally. <code>maxRows</code> sets a different
+              cap. Add lines to feel it.
             </p>
             <div className={styles.stack}>
-              <Composer
+              <ChatComposer
                 placeholder="Add a few lines"
-                maxRows={4}
                 defaultValue={
                   "Draft the release notes for 2.4.\nCover the new alignment options,\nthe keyboard shortcuts,\nand the fixed focus trap.\nKeep it under 200 words."
                 }
@@ -323,7 +338,7 @@ export default function ComposerPage() {
               menu and the sent message.
             </p>
             <div className={styles.stack}>
-              <Composer
+              <ChatComposer
                 placeholder="Type @ to mention, / for skills"
                 mentions={MENTION_SOURCES}
                 mentionPlacement="bottom"
@@ -336,10 +351,27 @@ export default function ComposerPage() {
             <SectionTitle title="The full footer" />
             <p className={styles.demoText}>
               The intended stack: a PromptSuggestions row above the composer,
-              with a leading action for attachments. Tapping a suggestion
-              fills the input; sending clears it.
+              with attachments and a model picker in its footer. Tapping a
+              suggestion fills the input; sending clears it.
             </p>
             <FullFooterDemo />
+          </section>
+
+          {/* The mini composer */}
+          <section className={styles.section}>
+            <SectionTitle title="The mini composer" />
+            <p className={styles.sectionBody}>
+              Everything above is for a chat. The mini composer is for AI input inside
+              other content, such as TableToolbar&apos;s AI command, and is never a
+              chat&apos;s composer. <code>inline</code> sets it at exactly the control
+              height of an Input or toolbar beside it, and <code>size</code> matches the
+              table&apos;s default or compact density. It grows to three rows as a long
+              request wraps, with send held in the bottom corner.
+            </p>
+            <div className={styles.stack}>
+              <Composer inline placeholder="Mini, default" />
+              <Composer inline size="compact" placeholder="Mini, compact" />
+            </div>
           </section>
 
           <ComponentInstallStrip slug="composer" />

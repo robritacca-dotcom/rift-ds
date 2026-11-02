@@ -53,18 +53,20 @@ export const AiGlow: Story = {
   },
 };
 
-/** The compact density: the tighter padding, with the smaller text and buttons. */
-export const Compact: Story = {
-  args: {
-    size: 'compact',
-  },
-};
-
-/** One row at the control height, for a popover, a sheet or a tight bar. */
+/** The mini composer: one row at the control height, for AI input inside other content such as a table. Never a chat's composer. */
 export const Inline: Story = {
   args: {
     inline: true,
     attachButton: false,
+  },
+};
+
+/** Inline for a chat: one row with a full-size send button and room around it, for a chat with nothing to seat in a footer. */
+export const InlineChat: Story = {
+  args: {
+    inline: 'chat',
+    attachButton: false,
+    placeholder: 'Ask anything',
   },
 };
 

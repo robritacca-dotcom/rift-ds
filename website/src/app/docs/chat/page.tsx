@@ -502,6 +502,11 @@ export default function ChatInstallPage() {
               turn. A staged turn never reaches the model.
             </p>
             <CodeBlock code={DIRECTOR_SNIPPET} language="ts" showCopy />
+            <p className={s.sectionNote}>
+              A button of your own can open the chat and report on it too. Pass{" "}
+              <code>useChatAgentState()</code> to an AiButton&apos;s <code>state</code>, and a reply
+              keeps showing its progress on the button after the panel is closed.
+            </p>
           </section>
 
           {/* -------------------------------------------------- packages */}

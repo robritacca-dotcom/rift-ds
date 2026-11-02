@@ -220,6 +220,33 @@ export const LiveContent: Story = {
   },
 };
 
+/** With nothing to seat in the footer the composer is one row, growing as a long question wraps. */
+export const ComposerOneRow: Story = {
+  play: async ({ canvasElement }) => {
+    const composer = canvasElement.querySelector('.ds-composer') as HTMLElement;
+    await expect(composer.className).toContain('ds-composer--inline-chat');
+    const resting = composer.getBoundingClientRect().height;
+    await userEvent.type(within(canvasElement).getByRole('textbox'), 'One{Shift>}{Enter}{/Shift}Two{Shift>}{Enter}{/Shift}Three');
+    await waitFor(() => expect(composer.getBoundingClientRect().height).toBeGreaterThan(resting));
+  },
+};
+
+/** A context note inside the composer brings the two-row composer too; one above it does not. */
+export const ComposerContextInside: Story = {
+  args: { contextLabel: 'Sales', contextPlacement: 'inside' },
+  play: async ({ canvasElement }) => {
+    await expect((canvasElement.querySelector('.ds-composer') as HTMLElement).className).not.toContain('ds-composer--inline');
+  },
+};
+
+/** A model picker or attachments need the footer, so either one brings the two-row composer. */
+export const ComposerWithFooter: Story = {
+  args: { fileAttachments: true },
+  play: async ({ canvasElement }) => {
+    await expect((canvasElement.querySelector('.ds-composer') as HTMLElement).className).not.toContain('ds-composer--inline');
+  },
+};
+
 const NOTE_RENDERERS = {
   note: (data: unknown) => <div data-testid="note-card">{String(data)}</div>,
 };

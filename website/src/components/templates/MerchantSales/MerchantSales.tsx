@@ -31,7 +31,7 @@ import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Stat } from "rift-ds/components/Stat/Stat";
 import styles from "./MerchantSales.module.css";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
-import { MerchantChatProvider, MerchantChatWidget, type TableBridge } from "./MerchantChat";
+import { MerchantChatProvider, MerchantChatWidget, useToastsClearOfPanel, type TableBridge } from "./MerchantChat";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
 import StickyTopBar from "../TemplateShell/StickyTopBar";
@@ -69,6 +69,30 @@ const NAV_SECTIONS: AppSidebarSection[] = [
   },
 ];
 
+/* The assistant's welcome chips: a few drawn at random from here on each new chat. */
+const CHAT_STARTERS = [
+  { id: "best", label: "What sold best in October?" },
+  { id: "late", label: "Which carrier runs latest?" },
+  { id: "overdue", label: "How much is overdue?" },
+  { id: "largest", label: "Who placed the largest order?" },
+  { id: "customer", label: "Which customer orders the most?" },
+  { id: "margin", label: "What is the margin this month?" },
+  { id: "cancelled", label: "How many orders were cancelled?" },
+  { id: "region", label: "Which region earns the most?" },
+  { id: "channel", label: "Which channel sells the most?" },
+  { id: "rep", label: "Which sales rep leads on revenue?" },
+  { id: "product-margin", label: "Which product has the best margin?" },
+  { id: "september", label: "How does October compare to September?" },
+  { id: "sort", label: "Sort by net revenue, largest first" },
+  { id: "show-overdue", label: "Show only overdue orders" },
+  { id: "group", label: "Group the table by carrier" },
+  { id: "large", label: "Show orders over $50,000" },
+  { id: "show-late", label: "Show late orders, worst first" },
+  { id: "delayed", label: "Show the delayed orders" },
+  { id: "meridian", label: "Show Meridian's late orders" },
+  { id: "hide", label: "Hide the margin column" },
+];
+
 /* ---------------------------------------------------------------- page */
 
 export default function MerchantSales() {
@@ -81,8 +105,9 @@ export default function MerchantSales() {
 }
 
 function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge | null> }) {
-  const { open, setOpen, toggleOpen, view, setView, returnFocusRef } = useChatWidget();
+  const { open, setOpen, toggleOpen, view, panelPhase, returnFocusRef } = useChatWidget();
   const agentState = useChatAgentState();
+  useToastsClearOfPanel();
   /* Closing hands focus back to whatever opened it, as the launcher does. */
   useEffect(() => {
     if (!open) returnFocusRef.current?.focus();
@@ -114,13 +139,11 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
       assistant={
         <TemplateAssistant
           open={open}
-          onClose={() => {
-            setOpen(false);
-            setView("panel");
-          }}
+          onClose={() => setOpen(false)}
           title="Larkspur AI"
-          chat={<MerchantChatWidget />}
+          chat={<MerchantChatWidget starters={CHAT_STARTERS} />}
           view={view}
+          closing={panelPhase === "closing"}
         />
       }
     >

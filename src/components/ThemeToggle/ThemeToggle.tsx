@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
-import { CircularButton } from '../CircularButton/CircularButton';
 import { DEFAULT_COLOR_MODE_STORAGE_KEY, type ColorModeSetting } from './colorMode';
 import { useColorMode } from './useColorMode';
 import './ThemeToggle.css';
@@ -103,29 +102,22 @@ export const ThemeToggle = React.forwardRef<HTMLDivElement, ThemeToggleProps>(
       onValueChange?.(next);
     };
 
+    // The cycle form is SegmentedControl's: one circle stepping through the
+    // settings, named by `cycleLabel`.
     if (cycle) {
-      const index = Math.max(
-        segments.findIndex((segment) => segment.value === setting),
-        0,
-      );
-      const current = segments[index];
-      const next = segments[(index + 1) % segments.length];
       return (
-        <div
+        <SegmentedControl
+          aria-label={ariaLabel}
           {...rest}
           ref={ref}
           className={['ds-theme-toggle', 'ds-theme-toggle--cycle', className].filter(Boolean).join(' ')}
-        >
-          <CircularButton
-            icon={current.icon}
-            size={size}
-            variant="secondary"
-            tone="neutral"
-            ariaLabel={cycleLabel(current.label, next.label)}
-            tooltip={current.label}
-            onClick={() => pick(next.value as ColorModeSetting)}
-          />
-        </div>
+          segments={segments}
+          value={setting}
+          onValueChange={(next) => pick(next as ColorModeSetting)}
+          size={size}
+          cycle
+          cycleLabel={cycleLabel}
+        />
       );
     }
 

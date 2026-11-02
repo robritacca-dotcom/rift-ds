@@ -7,6 +7,7 @@ import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useTopLayer } from '../../behaviors/useTopLayer';
+import { CircularButton } from '../CircularButton/CircularButton';
 
 export interface Segment {
   /** Unique value for this segment */
@@ -17,6 +18,8 @@ export interface Segment {
   icon?: string | React.ReactNode;
   /** Whether disabled */
   disabled?: boolean;
+  /** The id of the `role="tabpanel"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */
+  panelId?: string;
 }
 
 /** Props owned by SegmentedControl itself — everything else falls through to the strip. */
@@ -87,6 +90,17 @@ type SegmentedControlOwnProps = {
    * @deprecated Pass the native `aria-label` attribute instead.
    */
   ariaLabel?: string;
+  /**
+   * Draw one circle in place of the strip, for a seat with room for a single
+   * control (a collapsed rail's foot, a condensed header's actions): it shows
+   * the current segment's glyph (a segment without an icon shows its label's
+   * first character), each press steps to the next enabled segment, round
+   * again, and the current label is its tooltip. Its accessible name comes
+   * from `cycleLabel`. ThemeToggle's `cycle` is this form.
+   */
+  cycle?: boolean;
+  /** The cycle circle's accessible name, from the current segment's label and the next one's. Default: the control's `aria-label`, then both, as in "View: List. Switch to Grid". */
+  cycleLabel?: (current: string, next: string) => string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -100,8 +114,9 @@ export interface SegmentedControlProps
  * A horizontal set of mutually exclusive options with a
  * pill-shaped active indicator. Supports icons and keyboard navigation.
  *
- * Forwards a ref to the `role="tablist"` strip, the component's only wrapper,
- * and spreads unrecognised props onto it.
+ * Forwards a ref to the `role="tablist"` strip, the component's only wrapper
+ * (in the `cycle` form, the circle's wrapper), and spreads unrecognised props
+ * onto it.
  */
 export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedControlProps>(
   (
@@ -119,11 +134,16 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       collapse = false,
       showLabels = true,
       ariaLabel,
+      cycle = false,
+      cycleLabel,
       className = '',
+      'aria-label': nativeAriaLabel,
       ...rest
     },
     ref,
   ) => {
+    // The strip's name: the native attribute, or the deprecated prop.
+    const name = nativeAriaLabel ?? ariaLabel;
     // `activeSegment` is the deprecated spelling of `value`.
     const controlledValue = value ?? legacyActiveSegment;
     const isControlled = controlledValue !== undefined;
@@ -445,9 +465,54 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       }
     };
 
+    /* The cycle form: one circle, the current segment's glyph, stepping
+       through the enabled segments. After every hook, so the two forms
+       share one hook order; the pill and tooltip effects find no segment
+       and stand down. */
+    if (cycle) {
+      const enabled = segments.filter((segment) => !segment.disabled);
+      // The active segment shows even while disabled, as the strip shows it;
+      // the next press still lands on an enabled one, walking on from there.
+      const current = segments.find((segment) => segment.value === activeSegment) ?? enabled[0] ?? segments[0];
+      const currentIndex = segments.indexOf(current);
+      const next =
+        [...segments.slice(currentIndex + 1), ...segments.slice(0, currentIndex + 1)].find(
+          (segment) => !segment.disabled,
+        ) ?? current;
+      const label = current && (cycleLabel
+        ? cycleLabel(current.label, next.label)
+        : `${name ? `${name}: ` : ''}${current.label}. Switch to ${next.label}`);
+      return (
+        <div
+          {...rest}
+          ref={setRef}
+          className={[baseClass, sizeClass, variantClass, `${baseClass}--cycle`, className]
+            .filter(Boolean)
+            .join(' ')}
+        >
+          {current && (
+            <CircularButton
+              icon={
+                current.icon ?? (
+                  <span aria-hidden="true">{current.label.charAt(0)}</span>
+                )
+              }
+              size={size}
+              variant="secondary"
+              tone="neutral"
+              ariaLabel={label}
+              tooltip={current.label}
+              disabled={next === current}
+              onClick={() => select(next.value)}
+            />
+          )}
+        </div>
+      );
+    }
+
     return (
       <div
-        aria-label={ariaLabel}
+        aria-label={name}
         {...rest}
         ref={setRef}
         className={classes}
@@ -480,6 +545,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
               className={btnClasses}
               aria-selected={isActive}
               aria-disabled={segment.disabled || undefined}
+              aria-controls={segment.panelId}
               disabled={segment.disabled}
               tabIndex={isActive ? 0 : -1}
               data-segment-value={segment.value}

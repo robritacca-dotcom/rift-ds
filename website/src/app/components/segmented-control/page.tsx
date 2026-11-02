@@ -167,6 +167,28 @@ export default function SegmentedControlPage() {
             </div>
           </section>
 
+          {/* Cycle */}
+          <section className={styles.section}>
+            <SectionTitle title="Cycle" />
+            <p className={styles.introBody}>
+              <code>cycle</code> draws one circle in place of the strip, for a seat with room for a
+              single control, such as a collapsed rail&apos;s foot. Each press steps to the next
+              enabled segment, and the current label is its tooltip.
+            </p>
+            <div className={styles.variantStack}>
+              <SegmentedControl
+                cycle
+                aria-label="View"
+                segments={[
+                  { label: "Grid", value: "grid", icon: "grid_view" },
+                  { label: "List", value: "list", icon: "view_list" },
+                  { label: "Board", value: "board", icon: "view_column" },
+                ]}
+                defaultValue="grid"
+              />
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="segmented-control" />
         </main>
       </div>

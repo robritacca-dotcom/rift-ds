@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, waitFor } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { SegmentedControl } from './SegmentedControl';
 
 const meta = {
@@ -261,5 +261,56 @@ export const CollapseInPaddedHost: Story = {
     const strip = canvasElement.querySelector<HTMLElement>('.ds-segmented-control')!;
     const contentEnd = host.getBoundingClientRect().right - 40;
     await waitFor(() => expect(strip.getBoundingClientRect().right).toBeLessThanOrEqual(contentEnd + 1));
+  },
+};
+
+/** The cycle form: one circle showing the current segment's glyph, each
+    press stepping to the next segment, round again; the current label is
+    its tooltip. For a seat with room for one control, such as a collapsed
+    rail's foot or a condensed header. */
+export const Cycle: Story = {
+  args: {
+    cycle: true,
+    defaultValue: 'list',
+    'aria-label': 'View',
+    segments: [
+      { value: 'list', label: 'List', icon: 'view_list' },
+      { value: 'grid', label: 'Grid', icon: 'grid_view' },
+      { value: 'map', label: 'Map', icon: 'map' },
+    ],
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const circle = canvas.getByRole('button', { name: 'View: List. Switch to Grid' });
+    await userEvent.click(circle);
+    await expect(args.onValueChange).toHaveBeenCalledWith('grid');
+    await expect(canvas.getByRole('button', { name: 'View: Grid. Switch to Map' })).toBeInTheDocument();
+  },
+};
+
+/** The cycle form's edges: a disabled current segment still shows, and the
+    press lands on the next enabled one. With no segments it draws no circle
+    and does not throw. */
+export const CycleEdges: Story = {
+  args: { segments: [] },
+  render: () => (
+    <div data-testid="edges">
+      <SegmentedControl cycle aria-label="Empty" segments={[]} />
+      <SegmentedControl
+        cycle
+        aria-label="View"
+        defaultValue="grid"
+        segments={[
+          { value: 'list', label: 'List', icon: 'view_list' },
+          { value: 'grid', label: 'Grid', icon: 'grid_view', disabled: true },
+          { value: 'map', label: 'Map', icon: 'map' },
+        ]}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('button')).toHaveLength(1);
+    await expect(canvas.getByRole('button', { name: 'View: Grid. Switch to Map' })).toBeInTheDocument();
   },
 };

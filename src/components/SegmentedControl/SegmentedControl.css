@@ -305,3 +305,40 @@
     transition: none;
   }
 }
+
+/* ============================================
+   CYCLE FORM
+   One circle in place of the strip (`cycle`):
+   the current segment's glyph, stepping to the
+   next on each press. It wears the track recipe
+   the strip, the CommandPaletteTrigger and the
+   ThemePicker's trigger wear (container fill,
+   hairline border, the track's curve), so it
+   reads as one of that family in a row, and
+   hovers like the picker's trigger, the fill
+   stepping up. ThemeToggle's `cycle` is this.
+   ============================================ */
+.ds-segmented-control--cycle {
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.ds-segmented-control--cycle .ds-circular-button {
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
+}
+
+.ds-segmented-control--cycle .ds-circular-button:not(.ds-circular-button--disabled):hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* The glyph holds the icon colour in every state, as the family's glyphs
+   do: only the fill steps on hover. */
+.ds-segmented-control--cycle .ds-circular-button .ds-circular-button__icon,
+.ds-segmented-control--cycle .ds-circular-button:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
+.ds-segmented-control--cycle .ds-circular-button:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+  color: var(--color-action-icon-default);
+}

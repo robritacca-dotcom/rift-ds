@@ -636,8 +636,8 @@ export default function PlaygroundPage() {
     setTintStrength(source.theme.tintStrength);
     setAccents(source.theme.accents);
 
-    /* The source card sits in the collage, so a drop from anywhere else lands
-       somewhere it can be seen. */
+    /* The source card opens the Components view, so a drop from anywhere else
+       lands somewhere it can be seen. */
     showSource();
   };
 
@@ -657,10 +657,11 @@ export default function PlaygroundPage() {
     return option.label;
   };
 
-  /** Brings the collage up, where the theme's source card sits. */
+  /** Brings the top of the Components view up, where the theme's source card
+      sits in either layout. */
   const showSource = () => {
     pickView("components");
-    setComponentsView((state) => ({ ...state, layout: "collage" }));
+    window.scrollTo({ top: 0 });
   };
 
   /** Reads a local DESIGN.md and fits every lever it has an opinion about:
@@ -1220,9 +1221,42 @@ export default function PlaygroundPage() {
     </InspectorSection>
   );
 
-  /* The collage's shader levers, slotted under the shared ones because the
-     banner is the only thing on any stage they move. */
-  const shaderLevers = view === "components" && componentsView.layout === "collage" && (
+  /* The ambient shader as a staged component: the site's own field config,
+     re-theming live with the levers, tuned by its own shader levers in the
+     rail. It opens both Components layouts. */
+  const shaderBanner = (
+    <div className={styles.shaderBanner} aria-hidden="true">
+      <ShaderField params={shaderParams} blobs={shaderBackground.blobs} />
+      {/* The product's name over the field in the display style, so the
+          display face, weight and colour levers show at the size they are
+          made for. */}
+      <span className={styles.shaderBannerName}>{productName.trim() || "Acme Corp"}</span>
+    </div>
+  );
+
+  /* Beside the banner in both layouts: the dropzone, or the source a file
+     became. */
+  const themeSource = imageSource ? (
+    <ImageThemeCard
+      source={imageSource}
+      onExport={openExport}
+      onReplace={() => imageInputRef.current?.click()}
+      onReset={resetTheme}
+    />
+  ) : designSource ? (
+    <DesignMdCard
+      source={designSource}
+      onExport={openExport}
+      onReplace={() => imageInputRef.current?.click()}
+      onReset={resetTheme}
+    />
+  ) : (
+    <ThemeSourceInvite onFile={applySourceFile} busy={imageBusy} error={imageError} />
+  );
+
+  /* The shader's levers, slotted under the shared ones because the banner is
+     the only thing on any stage they move. */
+  const shaderLevers = view === "components" && (
     <InspectorSection title="Shader banner">
       {SHADER_PARAM_CONTROLS.map((c) => (
         <InspectorSlider
@@ -1398,8 +1432,8 @@ export default function PlaygroundPage() {
   return (
     <>
       {/* The stage ground is the dotted working canvas, not the ambient
-          field — the shader stands down here (and is staged as a tile in
-          the collage instead). */}
+          field — the shader stands down here (and is staged as a banner
+          in the Components view instead). */}
       <HiddenBackground />
       <DotBackground dots={showDots} />
       {/* The stage has no visible title; this names the page for screen
@@ -1627,41 +1661,8 @@ export default function PlaygroundPage() {
           {view === "components" && componentsView.layout === "collage" && (
             <CollageView
               brand={effectiveBrand}
-              banner={
-                /* The ambient shader as a staged component: the site's own
-                   field config, re-theming live with the levers, tuned by
-                   its own shader levers in the rail. */
-                <div className={styles.shaderBanner} aria-hidden="true">
-                  <ShaderField params={shaderParams} blobs={shaderBackground.blobs} />
-                  {/* The product's name over the field in the display style,
-                      so the display face, weight and colour levers show at
-                      the size they are made for. */}
-                  <span className={styles.shaderBannerName}>{productName.trim() || "Acme Corp"}</span>
-                </div>
-              }
-              source={
-                imageSource ? (
-                  <ImageThemeCard
-                    source={imageSource}
-                    onExport={openExport}
-                    onReplace={() => imageInputRef.current?.click()}
-                    onReset={resetTheme}
-                  />
-                ) : designSource ? (
-                  <DesignMdCard
-                    source={designSource}
-                    onExport={openExport}
-                    onReplace={() => imageInputRef.current?.click()}
-                    onReset={resetTheme}
-                  />
-                ) : (
-                  <ThemeSourceInvite
-                    onFile={applySourceFile}
-                    busy={imageBusy}
-                    error={imageError}
-                  />
-                )
-              }
+              banner={shaderBanner}
+              source={themeSource}
             />
           )}
 
@@ -1669,7 +1670,14 @@ export default function PlaygroundPage() {
               switched off. No animate-in on the sections: the class creates
               a stacking context per section, which would let later sections
               paint over an open Dropdown/Popover in an earlier one. Each
-              sits in a wrapper the rail can scroll to. */}
+              sits in a wrapper the rail can scroll to. The shader and the
+              theme's source open the list as they open the collage. */}
+          {view === "components" && componentsView.layout === "list" && (
+            <div className={styles.listLeads}>
+              {shaderBanner}
+              {themeSource}
+            </div>
+          )}
           {view === "components" &&
             componentsView.layout === "list" &&
             COMPONENT_SECTIONS.filter(({ id }) => !componentsView.hidden.has(id)).map(({ id }) => (

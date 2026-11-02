@@ -565,6 +565,22 @@
 
 /* A showcase section's wrapper, which the components rail scrolls to:
    it lands clear of the toolbar pill. */
+/* The full list's opening pair, stacked, in the air the collage gives them. */
+.listLeads {
+  display: grid;
+  gap: var(--layout-chat-inset);
+}
+
+.listLeads > * {
+  min-width: 0;
+}
+
+/* The same height the dropzone takes in the collage, which sizes it by its
+   content rather than its full-width 16:9. */
+.listLeads > section {
+  aspect-ratio: auto;
+}
+
 .sectionAnchor {
   scroll-margin-top: var(--layout-stage-clearance);
 }

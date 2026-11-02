@@ -1,6 +1,17 @@
 {
   "releases": [
     {
+      "version": "1.20.0",
+      "date": "2026-11-02",
+      "title": "Form controls submit, and every component has a schema",
+      "body": [
+        "Ten form controls now reach an enclosing form under `name`: Checkbox, RadioButton, RadioGroup, ToggleSwitch, PinInput, Dropdown, RichDropdown, TagInput, TimePicker and SelectionCard. A form using them will start receiving values it used to leave out, so check anything that rejects unknown fields. They submit through hidden inputs, which browsers leave out of validation, so `required` does not block a native submit on them; validate these fields in your app or on your server.",
+        "Every component now has a JSON schema at `/schema/components/<slug>.json`, generated from its props interface. `rift-ds/tokens/values` gives every token's value in every theme and mode, and the same values are published as DTCG files.",
+        "SegmentedControl takes `cycle`, one circle that steps through the segments. AppSidebar takes `collapsedFooterSlot`, and a click on the collapsed rail's empty space expands it. A tab's `panelId` writes its `aria-controls`, an inline Composer can grow, and `--color-icon-bg` and `--color-label-bg` are new. Light surfaces take a softer tint, and Forest and Volt are retuned.",
+        "TableToolbar folds whenever search and Filter no longer fit, long labels end in an ellipsis instead of being cut, and rows in several components wrap on a phone. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.19.1",
       "date": "2026-10-31",
       "title": "Clearer status colours and a lighter neutral outline",

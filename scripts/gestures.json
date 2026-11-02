@@ -94,7 +94,7 @@
     },
     {
       "label": "template shell: assistant widen grip",
-      "route": "/templates/merchant-sales",
+      "route": "/templates/analytics",
       "ready": "main .ds-ai-button",
       "setup": [
         { "click": "main .ds-ai-button" },

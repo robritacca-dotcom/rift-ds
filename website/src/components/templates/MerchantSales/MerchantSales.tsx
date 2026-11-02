@@ -3,15 +3,15 @@
 /**
  * The merchant sales template: the sales view of Larkspur, a fictional commerce
  * back office, built from the design system alone. The shell is the template
- * family's (TemplateShell's switchable rail and surface, slim top bar, docked mock
- * assistant); the page is a breadcrumbed head, the month's numbers as a KPI band,
+ * family's (TemplateShell's switchable rail and surface, slim top bar), with no
+ * assistant: Describe is this screen's AI. The page is a breadcrumbed head, the month's numbers as a KPI band,
  * then the wired DataTable, which sits directly on the page because it brings its
  * own bordered chrome (design.md's Composition rule 2). Its control bar is the
  * library's TableToolbar, with the AI command live: Describe sends the sentence to
  * the same model route as the labs bench, over the same seeded orders.
  * On a phone the rows stack as cards.
  *
- * The KPI band and the assistant's answers are pinned strings, read off the seeded
+ * The KPI band is pinned strings, read off the seeded
  * ledger (website/src/data/order-ledger.ts) for Oct 1 to 30, 2026 against September,
  * leaving out cancelled orders from the money, so the statically built HTML draws
  * them with no rows to hand. Change the ledger's seed or its row count and they need reading again.
@@ -19,8 +19,6 @@
  * (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
 
-import React from "react";
-import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
@@ -28,7 +26,6 @@ import { CircularButton } from "rift-ds/components/CircularButton/CircularButton
 import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Stat } from "rift-ds/components/Stat/Stat";
-import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import styles from "./MerchantSales.module.css";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
@@ -73,26 +70,9 @@ const KPIS = [
   { icon: "percent", label: "Margin", value: "34.6%", delta: "+0.1 pts", trend: "up" },
 ] as const;
 
-const CHAT_SUGGESTIONS = [
-  { id: "best", label: "What sold best in October?" },
-  { id: "late", label: "Which carrier runs latest?" },
-  { id: "overdue", label: "How much is overdue?" },
-];
-
-const CHAT_REPLIES: Record<string, string> = {
-  best: "Industrial leads October at $19.6M from 325 orders, ahead of Software at $13.2M and Furniture at $10.3M. The best-selling product is the air compressor at $5.5M.",
-  late: "Meridian runs latest, averaging 1.98 days late across 321 October orders, then Atlas Freight at 1.69. Northline is the quickest at 0.58.",
-  overdue:
-    "114 October orders have overdue payments, worth $3.1M in net revenue. To see them, press Describe above the table and ask for overdue orders, largest first.",
-};
-
-const CHAT_FALLBACK =
-  "This assistant is a mock, so only the suggested questions have real answers. Describe, above the table, is live: tell it what to show and the table changes.";
-
 /* ---------------------------------------------------------------- page */
 
 export default function MerchantSales() {
-  const [chatOpen, setChatOpen] = React.useState(false);
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
 
@@ -105,7 +85,7 @@ export default function MerchantSales() {
         logo: <ProductMark />,
         logoText: "Larkspur",
       }}
-      chatOpen={chatOpen}
+      chatOpen={false}
       frame={{ title: "Sales", subtitle: "Larkspur · Merchant" }}
       contentClassName={styles.content}
       tabBar={
@@ -113,19 +93,6 @@ export default function MerchantSales() {
           sections={NAV_SECTIONS}
           activeKey="sales"
           productName="Larkspur"
-          onAsk={() => setChatOpen(true)}
-        />
-      }
-      assistant={
-        <TemplateAssistant
-          open={chatOpen}
-          onClose={() => setChatOpen(false)}
-          title="Larkspur AI"
-          askLine="Ask about best sellers, carriers or overdue payments"
-          suggestions={CHAT_SUGGESTIONS}
-          replies={CHAT_REPLIES}
-          fallback={CHAT_FALLBACK}
-          disclaimer="A mock assistant with canned answers over this month's sales."
         />
       }
     >
@@ -152,10 +119,6 @@ export default function MerchantSales() {
                   tone="neutral"
                   ariaLabel="Search Larkspur"
                   className={styles.searchIconMobile}
-                />
-                <AiButton
-                  label="Ask AI"
-                  onClick={() => setChatOpen(true)}
                 />
                 <CircularButton
                   icon="notifications"

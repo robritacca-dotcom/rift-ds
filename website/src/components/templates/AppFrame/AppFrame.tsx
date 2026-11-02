@@ -122,7 +122,7 @@ export function AppFrameScreen({
   );
 }
 
-/** The floating tab bar: the sidebar's destinations, the assistant beside them. */
+/** The floating tab bar: the sidebar's destinations, the assistant beside them on a screen that has one. */
 export function AppFrameTabBar({
   sections,
   activeKey,
@@ -132,7 +132,7 @@ export function AppFrameTabBar({
   sections: AppSidebarSection[];
   activeKey: string;
   productName: string;
-  onAsk: () => void;
+  onAsk?: () => void;
 }) {
   return (
     <div className={styles.tabBar}>
@@ -140,11 +140,13 @@ export function AppFrameTabBar({
         platform="ios"
         items={tabsFrom(sections, activeKey)}
         activeKey={activeKey}
-        search={{
-          label: `Ask ${productName} AI`,
-          icon: "auto_awesome",
-          onClick: onAsk,
-        }}
+        search={
+          onAsk && {
+            label: `Ask ${productName} AI`,
+            icon: "auto_awesome",
+            onClick: onAsk,
+          }
+        }
         aria-label={productName}
       />
     </div>

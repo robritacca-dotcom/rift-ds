@@ -14,6 +14,8 @@ export interface Tab {
   icon?: string | React.ReactNode;
   /** Whether this tab is disabled */
   disabled?: boolean;
+  /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */
+  panelId?: string;
 }
 
 /** Props owned by Tabs itself — everything else falls through to the tablist. */
@@ -170,6 +172,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
               role="tab"
               aria-selected={isActive}
               aria-disabled={tab.disabled}
+              aria-controls={tab.panelId}
               tabIndex={isActive ? 0 : -1}
               data-tab-value={tab.value}
               onClick={() => !tab.disabled && select(tab.value)}

@@ -10,6 +10,29 @@ import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
+function PanelsDemo() {
+  const [value, setValue] = React.useState("overview");
+  return (
+    <div className={styles.variantStack}>
+      <Tabs
+        aria-label="Project sections"
+        value={value}
+        onValueChange={setValue}
+        tabs={[
+          { value: "overview", label: "Overview", panelId: "tabs-demo-overview" },
+          { value: "activity", label: "Activity", panelId: "tabs-demo-activity" },
+        ]}
+      />
+      <p id="tabs-demo-overview" role="tabpanel" aria-label="Overview" hidden={value !== "overview"} className={styles.introBody}>
+        The project at a glance.
+      </p>
+      <p id="tabs-demo-activity" role="tabpanel" aria-label="Activity" hidden={value !== "activity"} className={styles.introBody}>
+        What changed, most recent first.
+      </p>
+    </div>
+  );
+}
+
 export default function TabsPage() {
   return (
     <>
@@ -116,6 +139,16 @@ export default function TabsPage() {
                 onValueChange={() => {}}
               />
             </div>
+          </section>
+
+          {/* With panels */}
+          <section className={styles.section}>
+            <SectionTitle title="With panels" />
+            <p className={styles.introBody}>
+              Tabs draws the tab list and you render the panels. Give a tab a <code>panelId</code>{" "}
+              and it points at its panel for assistive technology.
+            </p>
+            <PanelsDemo />
           </section>
 
           <ComponentInstallStrip slug="tabs" />

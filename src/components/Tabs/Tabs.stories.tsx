@@ -247,3 +247,32 @@ export const KeyboardNavigation: Story = {
     await expect(tab('Year')).toHaveAttribute('aria-selected', 'true');
   },
 };
+
+/** The consumer renders the panels; `panelId` ties each tab to its panel through `aria-controls`. */
+export const WithPanels: Story = {
+  args: { tabs: [] },
+  render: () => {
+    const [value, setValue] = useState('one');
+    return (
+      <div>
+        <Tabs
+          aria-label="Sections"
+          value={value}
+          onValueChange={setValue}
+          tabs={[
+            { value: 'one', label: 'One', panelId: 'tabs-story-one' },
+            { value: 'two', label: 'Two', panelId: 'tabs-story-two' },
+          ]}
+        />
+        <div id="tabs-story-one" role="tabpanel" aria-label="One" hidden={value !== 'one'}>First panel</div>
+        <div id="tabs-story-two" role="tabpanel" aria-label="Two" hidden={value !== 'two'}>Second panel</div>
+      </div>
+    );
+  },
+  play: async ({ canvas, userEvent }) => {
+    const two = canvas.getByRole('tab', { name: 'Two' });
+    await expect(two).toHaveAttribute('aria-controls', 'tabs-story-two');
+    await userEvent.click(two);
+    await expect(canvas.getByRole('tabpanel', { name: 'Two' })).toBeVisible();
+  },
+};

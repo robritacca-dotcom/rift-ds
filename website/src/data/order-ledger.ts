@@ -10,7 +10,7 @@ import type { DataTableColumn, DataTableOption, DataTableRow } from 'rift-ds/com
 
 type StatusRole = NonNullable<DataTableOption['status']>;
 
-export const ROW_COUNT = 100_000;
+export const ROW_COUNT = 20_000;
 /** The ledger's "today": dates are generated back from here, and the model is told it. */
 export const LEDGER_TODAY = '2026-10-30';
 

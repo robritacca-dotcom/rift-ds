@@ -8,13 +8,13 @@
  * then the wired DataTable, which sits directly on the page because it brings its
  * own bordered chrome (design.md's Composition rule 2). Its control bar is the
  * library's TableToolbar, with the AI command live: Describe sends the sentence to
- * the same model route as the labs bench, over the same seeded 100,000 orders.
+ * the same model route as the labs bench, over the same seeded orders.
  * On a phone the rows stack as cards.
  *
  * The KPI band and the assistant's answers are pinned strings, read off the seeded
  * ledger (website/src/data/order-ledger.ts) for Oct 1 to 30, 2026 against September,
  * leaving out cancelled orders from the money, so the statically built HTML draws
- * them with no rows to hand. Change the ledger's seed and they need reading again.
+ * them with no rows to hand. Change the ledger's seed or its row count and they need reading again.
  * All of it is fictional, so the route is excluded from the chat corpus
  * (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
@@ -67,10 +67,10 @@ const NAV_SECTIONS: AppSidebarSection[] = [
 ];
 
 const KPIS = [
-  { icon: "payments", label: "Net revenue", value: "$249.6M", delta: "+62.7%", trend: "up" },
-  { icon: "shopping_cart", label: "Orders", value: "10,346", delta: "+56.2%", trend: "up" },
-  { icon: "receipt_long", label: "Average order", value: "$24,764", delta: "+4.0%", trend: "up" },
-  { icon: "percent", label: "Margin", value: "35.9%", delta: "+0.1 pts", trend: "up" },
+  { icon: "payments", label: "Net revenue", value: "$51.7M", delta: "+59.0%", trend: "up" },
+  { icon: "shopping_cart", label: "Orders", value: "2,072", delta: "+55.9%", trend: "up" },
+  { icon: "receipt_long", label: "Average order", value: "$25,494", delta: "+1.2%", trend: "up" },
+  { icon: "percent", label: "Margin", value: "34.6%", delta: "+0.1 pts", trend: "up" },
 ] as const;
 
 const CHAT_SUGGESTIONS = [
@@ -80,10 +80,10 @@ const CHAT_SUGGESTIONS = [
 ];
 
 const CHAT_REPLIES: Record<string, string> = {
-  best: "Industrial leads October at $90.4M from 1,459 orders, ahead of Software at $70.8M and Furniture at $48.2M. The best-selling product is the air compressor at $26.1M.",
-  late: "Meridian runs latest, averaging 2.02 days late across 1,674 October orders, then Atlas Freight at 1.52. Swiftway is the quickest at 0.70.",
+  best: "Industrial leads October at $19.6M from 325 orders, ahead of Software at $13.2M and Furniture at $10.3M. The best-selling product is the air compressor at $5.5M.",
+  late: "Meridian runs latest, averaging 1.98 days late across 321 October orders, then Atlas Freight at 1.69. Northline is the quickest at 0.58.",
   overdue:
-    "581 October orders have overdue payments, worth $15.9M in net revenue. To see them, press Describe above the table and ask for overdue orders, largest first.",
+    "114 October orders have overdue payments, worth $3.1M in net revenue. To see them, press Describe above the table and ask for overdue orders, largest first.",
 };
 
 const CHAT_FALLBACK =

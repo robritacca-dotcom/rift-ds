@@ -3,23 +3,26 @@
 /**
  * The merchant sales template: the sales view of Larkspur, a fictional commerce
  * back office, built from the design system alone. The shell is the template
- * family's (TemplateShell's switchable rail and surface, slim top bar), with no
- * assistant: Describe is this screen's AI. The page is a breadcrumbed head, the month's numbers as a KPI band,
+ * family's (TemplateShell's switchable rail and surface, slim top bar) and the
+ * assistant is live, not the family's mock (MerchantChat.tsx, seated in
+ * TemplateAssistant). The page is a breadcrumbed head, the month's numbers as a KPI band,
  * then the wired DataTable, which sits directly on the page because it brings its
  * own bordered chrome (design.md's Composition rule 2). Its control bar is the
  * library's TableToolbar, with the AI command live: Describe sends the sentence to
  * the same model route as the labs bench, over the same seeded orders.
  * On a phone the rows stack as cards.
  *
- * The KPI band is pinned strings, read off the seeded
- * ledger (website/src/data/order-ledger.ts) for Oct 1 to 30, 2026 against September,
- * leaving out cancelled orders from the money, so the statically built HTML draws
- * them with no rows to hand. Change the ledger's seed or its row count and they need reading again.
+ * The KPI band is pinned strings (website/src/data/merchant-sales.ts), read off the
+ * seeded ledger for Oct 1 to 30, 2026 against September, leaving out cancelled orders
+ * from the money, so the statically built HTML draws them with no rows to hand.
  * All of it is fictional, so the route is excluded from the chat corpus
  * (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
 
+import React, { useEffect, useRef } from "react";
+import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
+import { useChatAgentState, useChatWidget } from "rift-ds/chat";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
@@ -27,10 +30,13 @@ import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { Stat } from "rift-ds/components/Stat/Stat";
 import styles from "./MerchantSales.module.css";
+import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
+import { MerchantChatProvider, MerchantChatWidget, type TableBridge } from "./MerchantChat";
 import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
 import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
+import { MERCHANT_KPIS } from "@/data/merchant-sales";
 import OrdersTable from "./OrdersTable";
 
 /* ---------------------------------------------------------------- data */
@@ -63,16 +69,25 @@ const NAV_SECTIONS: AppSidebarSection[] = [
   },
 ];
 
-const KPIS = [
-  { icon: "payments", label: "Net revenue", value: "$51.7M", delta: "+59.0%", trend: "up" },
-  { icon: "shopping_cart", label: "Orders", value: "2,072", delta: "+55.9%", trend: "up" },
-  { icon: "receipt_long", label: "Average order", value: "$25,494", delta: "+1.2%", trend: "up" },
-  { icon: "percent", label: "Margin", value: "34.6%", delta: "+0.1 pts", trend: "up" },
-] as const;
-
 /* ---------------------------------------------------------------- page */
 
 export default function MerchantSales() {
+  const bridge = useRef<TableBridge | null>(null);
+  return (
+    <MerchantChatProvider bridge={bridge}>
+      <MerchantSalesScreen bridge={bridge} />
+    </MerchantChatProvider>
+  );
+}
+
+function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge | null> }) {
+  const { open, setOpen, toggleOpen, view, setView, returnFocusRef } = useChatWidget();
+  const agentState = useChatAgentState();
+  /* Closing hands focus back to whatever opened it, as the launcher does. */
+  useEffect(() => {
+    if (!open) returnFocusRef.current?.focus();
+  }, [open, returnFocusRef]);
+
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
 
@@ -85,7 +100,7 @@ export default function MerchantSales() {
         logo: <ProductMark />,
         logoText: "Larkspur",
       }}
-      chatOpen={false}
+      chatOpen={open && view !== "full"}
       frame={{ title: "Sales", subtitle: "Larkspur · Merchant" }}
       contentClassName={styles.content}
       tabBar={
@@ -93,6 +108,19 @@ export default function MerchantSales() {
           sections={NAV_SECTIONS}
           activeKey="sales"
           productName="Larkspur"
+          onAsk={toggleOpen}
+        />
+      }
+      assistant={
+        <TemplateAssistant
+          open={open}
+          onClose={() => {
+            setOpen(false);
+            setView("panel");
+          }}
+          title="Larkspur AI"
+          chat={<MerchantChatWidget />}
+          view={view}
         />
       }
     >
@@ -119,6 +147,15 @@ export default function MerchantSales() {
                   tone="neutral"
                   ariaLabel="Search Larkspur"
                   className={styles.searchIconMobile}
+                />
+                <AiButton
+                  label="Ask AI"
+                  state={agentState}
+                  aria-expanded={open}
+                  onClick={(event) => {
+                    returnFocusRef.current = event.currentTarget;
+                    toggleOpen();
+                  }}
                 />
                 <CircularButton
                   icon="notifications"
@@ -162,7 +199,7 @@ export default function MerchantSales() {
 
           {/* -------------------------------------------- the month */}
           <section className={styles.kpiGrid} aria-label="October against September">
-            {KPIS.map((kpi) => (
+            {MERCHANT_KPIS.map((kpi) => (
               <div key={kpi.label} className={styles.kpi}>
                 <span className={styles.kpiIcon} aria-hidden="true">
                   <span className="material-symbols-rounded">{kpi.icon}</span>
@@ -182,7 +219,7 @@ export default function MerchantSales() {
           {/* The table sits directly on the page: the DataTable brings its own
               bordered chrome, so a panel around it would double-box it. */}
           <section className={styles.tableSection} aria-label="Orders">
-            <OrdersTable />
+            <OrdersTable bridge={bridge} />
           </section>
     </TemplateShell>
   );

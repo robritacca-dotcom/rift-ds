@@ -138,18 +138,26 @@ export interface TemplateAssistantProps {
   onClose: () => void;
   /** The conversation's name in the panel header, e.g. "Boardline AI". */
   title: string;
+  /**
+   * A live chat to seat instead of the mock thread (a ChatWidget): the panel
+   * keeps its modes and its grip and the mock's props go unused. A screen with a
+   * live chat is the exception; the family's assistant is the mock.
+   */
+  chat?: React.ReactNode;
+  /** With `chat`: `full` fills the viewport and is modal, the widget's expand control's view. */
+  view?: "panel" | "full";
   /** The welcome invitation under the greeting, naming what to ask about. */
-  askLine: string;
+  askLine?: string;
   /** Conversation starters; each id keys into `replies`. */
-  suggestions: TemplateAssistantSuggestion[];
+  suggestions?: TemplateAssistantSuggestion[];
   /** Canned answers by suggestion id. */
-  replies: Record<string, string>;
+  replies?: Record<string, string>;
   /** The answer for anything typed rather than tapped. */
-  fallback: string;
+  fallback?: string;
   /** The reasoning steps an answer shows first, by suggestion id; a general three otherwise. */
   reasoning?: Record<string, string[]>;
   /** One caption line under the composer. */
-  disclaimer: string;
+  disclaimer?: string;
   /**
    * Extra class on the panel, for a host that places it somewhere other
    * than the right edge of the viewport (the mobile dashboard hosts it as a
@@ -177,10 +185,12 @@ export default function TemplateAssistant({
   open,
   onClose,
   title,
+  chat,
+  view = "panel",
   askLine,
-  suggestions,
-  replies,
-  fallback,
+  suggestions = [],
+  replies = {},
+  fallback = "",
   reasoning,
   disclaimer,
   className,
@@ -235,7 +245,8 @@ export default function TemplateAssistant({
     () => false
   );
   const viewport = placement === "viewport";
-  const modal = open && viewport && !docked;
+  const full = viewport && view === "full";
+  const modal = open && viewport && (!docked || full);
 
   /* Modal mode owns the page behind it, the site panel's rule. */
   React.useEffect(() => {
@@ -275,7 +286,8 @@ export default function TemplateAssistant({
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === "Escape") {
-      onClose();
+      /* A menu or picker inside a live chat that handled it closed itself. */
+      if (!event.defaultPrevented) onClose();
       return;
     }
     /* Tab wraps inside the panel only while it is modal; docked, focus
@@ -300,7 +312,7 @@ export default function TemplateAssistant({
 
   return (
     <>
-    {modal && (
+    {modal && !full && (
       <div className={styles.scrim} onClick={onClose} aria-hidden="true" />
     )}
     <aside
@@ -310,8 +322,9 @@ export default function TemplateAssistant({
         viewport && styles.viewport,
         // Inset: the dock and the overlay both sit at the shell's gap; only
         // the dock goes flat, since the overlay still covers the page.
-        viewport && surface === "inset" && styles.inset,
+        viewport && !full && surface === "inset" && styles.inset,
         viewport && !modal && surface === "inset" && styles.flat,
+        full && styles.full,
         className,
       ]
         .filter(Boolean)
@@ -326,6 +339,7 @@ export default function TemplateAssistant({
           while the thread is empty, centring the composer; the first
           utterance collapses the bottom region and the transcript takes
           over. */}
+      {chat ?? (
       <div className={styles.chat}>
         <div className={styles.chatTopRegion}>
           <ChatHeader
@@ -416,8 +430,9 @@ export default function TemplateAssistant({
           </div>
         </div>
       </div>
+      )}
     </aside>
-    {viewport && docked && (
+    {viewport && docked && !full && (
       // A fixed sibling on the panel's inner edge: the panel clips its own
       // overflow, so a straddling child would be cut in half.
       <div

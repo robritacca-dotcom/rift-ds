@@ -43,6 +43,17 @@
   max-width: calc(100vw - var(--layout-shell-inset) * 2);
 }
 
+.full {
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
 .flat {
   background: var(--color-bg-app-surface);
   border-color: transparent;

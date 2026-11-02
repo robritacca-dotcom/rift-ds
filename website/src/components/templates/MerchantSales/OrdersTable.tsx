@@ -6,31 +6,22 @@
  * moment before the effect runs draw the table's own skeleton rows. It opens on the
  * month the KPI band reports, as a date filter the reader can change, and shows a
  * merchant's columns of the ledger's many. The rest wait in the Columns panel, and
- * Describe reaches all of them through the same model route as the labs bench.
+ * Describe reaches all of them through the same model route as the labs bench. The
+ * screen's chat drives the table too, through the bridge below.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { DataTable, type DataTableColumn, type DataTableRow } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { COLUMN_KEYS, LEDGER_COLUMNS, ledgerRows } from "@/data/order-ledger";
+import { MERCHANT_OPENING_FILTER, MERCHANT_SHOWN_COLUMNS } from "@/data/merchant-sales";
 import { askOrderLedger } from "@/lib/order-ledger-command";
+import { useTableContext } from "../../../../../src/components/DataTable/tableContext";
+import type { TableBridge } from "./MerchantChat";
 import styles from "./MerchantSales.module.css";
 
-const SHOWN = [
-  "orderId",
-  "placedOn",
-  "product",
-  "category",
-  "customer",
-  "channel",
-  "status",
-  "units",
-  "netRevenue",
-  "marginPct",
-  "carrier",
-  "daysLate",
-];
+const SHOWN = MERCHANT_SHOWN_COLUMNS;
 const HIDDEN = COLUMN_KEYS.filter((key) => !SHOWN.includes(key));
 
 /* One column for where an order stands: its status as the badge, its payment in words beside it. Payment stays in the Columns panel and in reach of Describe. */
@@ -54,7 +45,16 @@ const COLUMNS = (LEDGER_COLUMNS as unknown as DataTableColumn[]).map((col) => ({
   defaultHidden: HIDDEN.includes(col.key),
 }));
 
-export default function OrdersTable() {
+/* Keeps the chat's hold on the table current. It renders nothing, and sits in the toolbar slot because that is inside the table's context. */
+function TableBridgeSeat({ bridge: bridgeRef }: { bridge: RefObject<TableBridge | null> }) {
+  const table = useTableContext();
+  useEffect(() => {
+    bridgeRef.current = table;
+  });
+  return null;
+}
+
+export default function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
   const [rows, setRows] = useState<ReturnType<typeof ledgerRows> | null>(null);
   useEffect(() => {
     /* A task of its own, so the skeleton paints before the build holds the thread. */
@@ -70,7 +70,7 @@ export default function OrdersTable() {
       defaultColumnOrder={[...SHOWN, ...HIDDEN]}
       defaultHiddenColumns={HIDDEN}
       defaultPageSize={25}
-      defaultFilters={[{ id: "placedOn-1", column: "placedOn", operator: "after", value: "2026-09-30" }]}
+      defaultFilters={[MERCHANT_OPENING_FILTER]}
       defaultSort={{ key: "placedOn", direction: "desc" }}
       selectable
       multiSort
@@ -79,6 +79,8 @@ export default function OrdersTable() {
       reorderableColumns
       phoneLayout="stack"
       toolbar={
+        <>
+        <TableBridgeSeat bridge={bridge} />
         <TableToolbar
           command={{
             onSubmit: async (request) => {
@@ -94,6 +96,7 @@ export default function OrdersTable() {
             { id: "refund", label: "Refund", icon: "undo", destructive: true, onSelect: () => {} },
           ]}
         />
+        </>
       }
     />
   );

@@ -184,3 +184,31 @@
     align-items: center;
   }
 }
+
+/* A table change in the chat's thread: what it did, and the way back. */
+.receipt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+}
+
+.receiptText {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  color: var(--color-text-secondary);
+}
+
+.receiptText :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-500);
+}
+
+.receiptActions {
+  display: inline-flex;
+  gap: var(--gap-200);
+}

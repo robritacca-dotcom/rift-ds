@@ -48,7 +48,9 @@ export default function PrivacyPage() {
             kept: what you type and the table&apos;s current setup go to
             Anthropic, whose model picks the new setup. Its rate limit and
             budget share the chat&apos;s, and the commands themselves are not
-            stored.
+            stored. The assistant on the merchant sales template is the same: your
+            messages in that conversation and the table&apos;s setup go to
+            Anthropic, and none of it is stored.
           </p>
         </div>
 

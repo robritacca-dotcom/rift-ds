@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -139,7 +140,9 @@
   .splitSide { display: none; }
 }
 
-@media (max-width: 959px) {
+/* Three tiles beside the doc sidebar need more than 960px: below 1152 their
+   titles and code descriptions ran out of the tiles. */
+@media (max-width: 1151px) {
   .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 

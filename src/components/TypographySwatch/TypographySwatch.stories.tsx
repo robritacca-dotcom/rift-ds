@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { TypographySwatch } from './TypographySwatch';
 
 const meta = {
@@ -106,5 +107,32 @@ export const Paragraph: Story = {
       lineHeight: '24px',
       letterSpacing: '0',
     },
+  },
+};
+
+/** At a phone's width the values wrap onto a second row instead of drawing over each other. */
+export const Narrow: Story = {
+  args: {
+    name: 'Paragraph',
+    weight: 'SemiBold',
+    size: '16',
+    lineHeight: '150%',
+    letterSpacing: '0%',
+    previewStyle: { fontFamily: "'Nunito Sans', sans-serif", fontSize: '16px', fontWeight: 600 },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '240px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const items = [...canvasElement.querySelectorAll<HTMLElement>('.ds-typography-swatch__value-item')];
+    for (const item of items) {
+      for (const text of item.children) {
+        await expect(text.scrollWidth).toBeLessThanOrEqual(item.clientWidth + 1);
+      }
+    }
   },
 };

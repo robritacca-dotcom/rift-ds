@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -96,13 +97,15 @@
 /* ============================================
    NAV PREVIEW — container for desktop nav
    ============================================ */
+/* The desktop nav keeps its width, so a narrower column scrolls to it
+   (safe centring keeps its start reachable) instead of cutting it off. */
 .navPreview {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: safe center;
   justify-content: center;
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 /* ============================================

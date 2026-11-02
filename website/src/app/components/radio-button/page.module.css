@@ -22,6 +22,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -97,7 +98,6 @@
   color: var(--color-text-tertiary);
   text-align: right;
   padding-right: var(--primitive-padding-200);
-  white-space: nowrap;
 }
 
 .gridCell {

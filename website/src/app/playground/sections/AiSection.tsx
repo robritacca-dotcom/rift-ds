@@ -29,7 +29,7 @@ const AGENT_STATES = ["thinking", "working", "waiting", "done", "error"] as cons
 const SUGGESTIONS = [
   { id: "retheme", label: "How does re-theming work?", icon: "palette" },
   { id: "tokens", label: "Explain the token architecture", icon: "account_tree" },
-  { id: "install", label: "How do I install the design system?", icon: "download" },
+  { id: "install", label: "How do I install the package?", icon: "download" },
 ];
 
 /* A question the agent might ask about the theme being built: the option

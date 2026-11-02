@@ -98,6 +98,7 @@ export default function TemplateShowcase() {
           value={device}
           onValueChange={(value) => setDevice(value as DeviceKey)}
           size="compact"
+          collapse
           aria-label="Preview device size"
         />
       </div>

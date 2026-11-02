@@ -953,17 +953,22 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     /* Narrower than a phone, the bar folds to icons: search and
        the filters each become one icon, the filters' chips moving into the
        Filter icon's panel. The bar's own width decides, not the viewport's,
-       so a bar in a narrow panel folds too. */
+       so a bar in a narrow panel folds too. It also folds above that width
+       when the start cluster cannot hold search at its floor beside the
+       Filter button (the fit pass below finds it), and unfolds once the bar
+       is wider than it was when it folded. */
     const rootRef = useRef<HTMLDivElement | null>(null);
     const [narrow, setNarrow] = useState(false);
     const [crowded, setCrowded] = useState(false);
+    const foldedAt = useRef(0);
     useEffect(() => {
       const node = rootRef.current;
       if (!node) return;
       const observer = new ResizeObserver(([entry]) => {
-        setNarrow(entry.contentRect.width < BREAKPOINT_PHONE_PX);
+        const width = entry.contentRect.width;
+        setNarrow(width < BREAKPOINT_PHONE_PX || width <= foldedAt.current);
         // Seven controls at their height need more room than this to keep their gaps.
-        setCrowded(entry.contentRect.width < BREAKPOINT_SHEET_PX);
+        setCrowded(width < BREAKPOINT_SHEET_PX);
       });
       observer.observe(node);
       return () => observer.disconnect();
@@ -993,6 +998,13 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           used += width + gap;
         }
         const moreWidth = (more?.getBoundingClientRect().width ?? 0) + gap;
+        // The cluster's own controls do not fit even with every chip folded
+        // away: fold the bar, or they draw over the end cluster.
+        if (used - gap + (chipEls.length ? moreWidth : 0) > start.clientWidth + 1) {
+          foldedAt.current = rootRef.current?.getBoundingClientRect().width ?? 0;
+          setNarrow(true);
+          return;
+        }
         let n = 0;
         for (let i = 0; i < chipEls.length; i += 1) {
           const width = chipEls[i].getBoundingClientRect().width + gap;

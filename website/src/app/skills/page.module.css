@@ -155,6 +155,13 @@
   gap: var(--primitive-gap-200);
 }
 
+/* An invoke phrase is a sentence, not a status word: a long one wraps
+   inside its badge rather than running past the card on a phone. */
+.skillInvoke > :global(.ds-badge) {
+  max-width: 100%;
+  white-space: normal;
+}
+
 .skillInvokeLabel {
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, waitFor } from 'storybook/test';
 import { SegmentedControl } from './SegmentedControl';
 
 const meta = {
@@ -235,5 +235,31 @@ export const KeyboardNavigation: Story = {
 
     await expect(args.onValueChange).not.toHaveBeenCalledWith('month');
     await expect(tab('Month')).toHaveAttribute('aria-selected', 'false');
+  },
+};
+
+/** `collapse` measures its host's content box: inside a padded host just too narrow for the full strip, it sheds the icons and stays inside the padding. */
+export const CollapseInPaddedHost: Story = {
+  args: {
+    size: 'compact',
+    collapse: true,
+    'aria-label': 'Preview width',
+    segments: [
+      { value: 'desktop', label: 'Desktop', icon: 'desktop_windows' },
+      { value: 'tablet', label: 'Tablet', icon: 'tablet' },
+      { value: 'phone', label: 'Phone', icon: 'smartphone' },
+    ],
+    defaultValue: 'desktop',
+  },
+  render: (args) => (
+    <div style={{ width: 340, paddingInline: 40, boxSizing: 'border-box' }}>
+      <SegmentedControl {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const host = canvasElement.firstElementChild as HTMLElement;
+    const strip = canvasElement.querySelector<HTMLElement>('.ds-segmented-control')!;
+    const contentEnd = host.getBoundingClientRect().right - 40;
+    await waitFor(() => expect(strip.getBoundingClientRect().right).toBeLessThanOrEqual(contentEnd + 1));
   },
 };

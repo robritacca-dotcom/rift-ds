@@ -55,9 +55,11 @@
   width: 100%;
 }
 
+/* Equal columns while each value fits; never narrower than its own words,
+   so on a phone the row wraps instead of drawing values over each other. */
 .ds-typography-swatch__value-item {
   flex: 1;
-  min-width: 0;
+  min-width: min-content;
   display: flex;
   flex-direction: column;
   gap: 0;

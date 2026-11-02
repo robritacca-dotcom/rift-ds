@@ -54,7 +54,7 @@ export const LegendTile = React.forwardRef<HTMLDivElement, LegendTileProps>(
       <div {...rest} ref={ref} className={classes} style={mergedStyle}>
         <span className={`${baseClass}__label`}>
           {swatch && <span className={`${baseClass}__dot`} aria-hidden="true" />}
-          {label}
+          <span className={`${baseClass}__label-text`}>{label}</span>
         </span>
         <span className={`${baseClass}__value`}>
           {typeof value === 'number' ? formatNumber(value, locale) : value}

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { LegendTile } from './LegendTile';
 
 const meta = {
@@ -59,5 +60,26 @@ export const NumericValue: Story = {
     label: 'Total events',
     value: 1284093,
     swatch: 'var(--color-chart-series-5)',
+  },
+};
+
+// A tile narrower than its caption, as in a phone-width chart footer: the
+// caption ends in an ellipsis rather than being cut mid-letter.
+export const LongLabel: Story = {
+  args: {
+    label: 'Returning visitors from paid search',
+    value: '38,500',
+    swatch: 'var(--color-chart-series-2)',
+  },
+  render: (args) => (
+    <div style={{ width: '140px' }}>
+      <LegendTile {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const text = canvasElement.querySelector<HTMLElement>('.ds-legend-tile__label-text');
+    await expect(text).not.toBeNull();
+    await expect(text!.scrollWidth).toBeGreaterThan(text!.clientWidth);
+    await expect(getComputedStyle(text!).textOverflow).toBe('ellipsis');
   },
 };

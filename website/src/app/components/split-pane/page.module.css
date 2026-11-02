@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -146,6 +147,14 @@
   color: var(--color-text-secondary);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
+}
+
+/* A pane dragged narrow ends its items in an ellipsis rather than drawing
+   them over the divider. */
+.paneList:not(.paneScroll) > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .paneScroll {

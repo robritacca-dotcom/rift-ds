@@ -83,17 +83,25 @@
 }
 
 /* The tool name is an identifier, so it takes the code stack —
-   the one place the system leaves Nunito Sans */
+   the one place the system leaves Nunito Sans. It yields to the status
+   when the row is short of room, ending in an ellipsis, so a long name
+   never pushes the status out of the card. */
 .ds-tool-call__name {
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-family-code);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-primary);
 }
 
+/* A zero basis, so the summary yields all its room before the name gives
+   up any of its own. */
 .ds-tool-call__summary {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -88,7 +89,7 @@
   width: 100%;
 }
 
-/* Loading grid: one column per variant (five), not the four icon columns */
+/* Loading grid: one column per variant (seven), not the four icon columns */
 .loadingGrid {
   grid-template-columns: auto repeat(7, 1fr);
 }
@@ -148,14 +149,15 @@
 
 }
 
-@media (max-width: 600px) {
-  /* On very small screens the 5-column grid scrolls inside its block:
-     the scrollport is the parent, the min-width is on the grid —
-     putting both on one element would overflow the page instead. */
-  .variantBlock {
-    overflow-x: auto;
-  }
+/* A grid wider than the column scrolls inside its block at any width (the
+   loading grid's seven columns outgrow the column up to wide desktops):
+   the scrollport is the parent, the min-width is on the grid; putting
+   both on one element would overflow the page instead. */
+.variantBlock {
+  overflow-x: auto;
+}
 
+@media (max-width: 600px) {
   .buttonGrid {
     min-width: 480px;
   }

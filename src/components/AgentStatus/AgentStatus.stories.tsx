@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { AgentStatus } from './AgentStatus';
 import { agentStatusPatterns } from './AgentStatusPatterns';
 import { agentRingProps } from './AgentRing';
@@ -66,6 +67,20 @@ export const Pill: Story = {
       <AgentStatus variant="pill" size="compact" state="error" label="Stopped at step 2" />
     </div>
   ),
+};
+
+/** A pill narrower than its label, as on a phone: the label ends in an ellipsis rather than being cut mid-letter. */
+export const PillNarrow: Story = {
+  render: () => (
+    <div style={{ width: 150 }}>
+      <AgentStatus variant="pill" size="compact" state="waiting" label="Waiting for your approval" action={<a href="#run">Review</a>} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const text = canvasElement.querySelector<HTMLElement>('.ds-agent-status__label-text')!;
+    await expect(getComputedStyle(text).textOverflow).toBe('ellipsis');
+    await expect(text.scrollWidth).toBeGreaterThan(text.clientWidth);
+  },
 };
 
 /** The agent ring on surfaces of different shapes, one per state. */

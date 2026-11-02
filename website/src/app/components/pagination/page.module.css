@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -78,20 +79,33 @@
 /* ============================================
    DEMOS
    ============================================ */
+/* Default-size pagination is a fixed row of pills wider than a phone, so
+   the demo scrolls sideways rather than pushing the page wider. */
 .demoStack {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--primitive-gap-500);
+  max-width: 100%;
+  overflow-x: auto;
 }
 
+/* The table stretches to the column, so its bordered wrapper is the
+   scrollport; aligned to the end it took its full width and ran off the
+   start edge. The pagination alone sits at the end. */
 .tableDemo {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
   gap: var(--primitive-gap-400);
   max-width: 640px;
   width: 100%;
+}
+
+.tableDemo > nav {
+  align-self: flex-end;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* ============================================

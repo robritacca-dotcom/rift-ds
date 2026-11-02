@@ -25,6 +25,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--primitive-gap-500);
   width: 100%;
 }
@@ -87,6 +88,8 @@
 
 .variantItem {
   flex-shrink: 0;
+  /* Never wider than the row, so a horizontal group wraps on a phone. */
+  max-width: 100%;
 }
 
 /* ============================================

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { EventCalendar, type EventCalendarEvent } from './EventCalendar';
 import { Button } from '../Button/Button';
 
@@ -78,5 +79,24 @@ export const EmptyMonth: Story = {
   args: {
     events: [],
     defaultMonth: '2026-09',
+  },
+};
+
+/** At a small phone's width, with actions beside it, the month name stays whole. */
+export const NarrowWithActions: Story = {
+  args: {
+    actions: <Button variant="secondary" size="compact" label="New event" iconLeft="add" />,
+    defaultMonth: '2026-09',
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 220 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const month = canvasElement.querySelector<HTMLElement>('.ds-event-calendar__month')!;
+    await expect(month.scrollWidth).toBeLessThanOrEqual(month.clientWidth + 1);
   },
 };

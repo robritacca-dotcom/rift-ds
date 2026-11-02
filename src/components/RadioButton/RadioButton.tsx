@@ -20,7 +20,7 @@ type RadioButtonOwnProps = {
   checked?: boolean;
   /** Whether the radio is disabled */
   disabled?: boolean;
-  /** Value for this radio option */
+  /** Value for this radio option, passed to the callbacks and submitted under `name`. A form reads "on", the native radio's, when it is omitted. */
   value?: string;
   /** Called with this radio's value when selected */
   onValueChange?: (value: string) => void;
@@ -39,12 +39,11 @@ type RadioButtonOwnProps = {
    */
   ariaLabel?: string;
   /**
-   * Legacy form-field name.
-   *
-   * @deprecated No-op. This component renders a `<div role="radio">`, not a
-   * native `<input type="radio">`, so it does not group by name or participate
-   * in native form submission — `RadioGroup` handles grouping in React state.
-   * Declared only so the attribute is not forwarded to an element that rejects it.
+   * Form field name. When set, the radio submits its `value` with an
+   * enclosing form through a hidden input while checked, nothing otherwise
+   * or while disabled, as a native radio does. Grouping stays React state
+   * (`RadioGroup` passes its own `name` to every option, so exactly one
+   * entry submits).
    */
   name?: string;
 };
@@ -61,12 +60,12 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
       error = false,
       checked = false,
       disabled = false,
-      value = '',
+      value,
       onValueChange,
       onChange,
       className = '',
       ariaLabel,
-      name: _name,
+      name,
       onClick,
       onKeyDown,
       ...rest
@@ -92,8 +91,8 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
 
     const select = () => {
       if (disabled) return;
-      onValueChange?.(value);
-      onChange?.(value);
+      onValueChange?.(value ?? '');
+      onChange?.(value ?? '');
     };
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -137,6 +136,10 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
         ) : (
           label && <span className={`${baseClass}__label`}>{label}</span>
         )}
+        {/* The checked state, not the indicator, is what a form submits. */}
+        {name && checked && (
+          <input type="hidden" name={name} value={value ?? 'on'} disabled={disabled} />
+        )}
       </div>
     );
   },
@@ -165,11 +168,10 @@ type RadioGroupOwnProps = {
   /** Selected value on first render when uncontrolled (`value` undefined). */
   defaultValue?: string;
   /**
-   * Legacy grouping name, never used.
-   *
-   * @deprecated No-op. Grouping is React state (`value`/`onValueChange`), not
-   * native `name` semantics — the group renders `role="radiogroup"` over
-   * `<div role="radio">`s, so there is nothing for a name to group.
+   * Form field name. When set, the checked option's `value` submits with an
+   * enclosing form through one hidden input, as a native radio set does; a
+   * disabled option submits nothing.
+   * Grouping itself stays React state (`value`/`onValueChange`).
    */
   name?: string;
   /** Radio options */
@@ -201,7 +203,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       required = false,
       value: valueProp,
       defaultValue,
-      name: _name,
+      name,
       options,
       direction = 'vertical',
       onValueChange,
@@ -254,6 +256,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
           {options.map((option) => (
             <RadioButton
               key={option.value}
+              name={name}
               label={option.label}
               value={option.value}
               checked={value === option.value}

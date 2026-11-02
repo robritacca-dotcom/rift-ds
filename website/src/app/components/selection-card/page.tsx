@@ -43,7 +43,8 @@ export default function SelectionCardPage() {
             <div className={styles.demoContainer}>
               <SelectionCard
                 mode="radio"
-                name="Compute Environment"
+                aria-label="Compute Environment"
+                name="compute_environment"
                 value="kubernetes"
                 options={[
                   {
@@ -67,7 +68,8 @@ export default function SelectionCardPage() {
             <div className={styles.demoContainer}>
               <SelectionCard
                 mode="toggle"
-                name="Settings"
+                aria-label="Settings"
+                name="settings"
                 value={["notifications", "analytics"]}
                 options={[
                   {
@@ -96,7 +98,8 @@ export default function SelectionCardPage() {
             <div className={styles.demoContainer}>
               <SelectionCard
                 mode="checkbox"
-                name="Features"
+                aria-label="Features"
+                name="features"
                 value={["monitoring", "backups"]}
                 options={[
                   {
@@ -125,7 +128,8 @@ export default function SelectionCardPage() {
             <div className={styles.demoContainer}>
               <SelectionCard
                 mode="radio"
-                name="Plan"
+                aria-label="Plan"
+                name="plan"
                 value="pro"
                 options={[
                   {
@@ -150,7 +154,8 @@ export default function SelectionCardPage() {
             <div className={styles.demoContainer}>
               <SelectionCard
                 mode="radio"
-                name="Theme"
+                aria-label="Theme"
+                name="theme"
                 value="dark"
                 options={[
                   { value: "light", label: "Light" },

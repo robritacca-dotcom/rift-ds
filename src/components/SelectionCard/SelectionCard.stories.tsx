@@ -29,7 +29,8 @@ type Story = StoryObj<typeof SelectionCard>;
 export const Radio: Story = {
   args: {
     mode: 'radio',
-    name: 'Compute Environment',
+    'aria-label': 'Compute Environment',
+    name: 'compute_environment',
     value: 'kubernetes',
     options: [
       {
@@ -53,7 +54,8 @@ export const Radio: Story = {
 export const Checkbox: Story = {
   args: {
     mode: 'checkbox',
-    name: 'Features',
+    'aria-label': 'Features',
+    name: 'features',
     value: ['monitoring'],
     options: [
       {
@@ -82,7 +84,8 @@ export const Checkbox: Story = {
 export const WithDisabled: Story = {
   args: {
     mode: 'radio',
-    name: 'Plan',
+    'aria-label': 'Plan',
+    name: 'plan',
     value: 'pro',
     options: [
       {
@@ -107,7 +110,8 @@ export const WithDisabled: Story = {
 export const NoDescription: Story = {
   args: {
     mode: 'radio',
-    name: 'Theme',
+    'aria-label': 'Theme',
+    name: 'theme',
     value: 'dark',
     options: [
       { value: 'light', label: 'Light' },
@@ -124,7 +128,8 @@ export const NoDescription: Story = {
 export const ManyOptions: Story = {
   args: {
     mode: 'checkbox',
-    name: 'Notifications',
+    'aria-label': 'Notifications',
+    name: 'notifications',
     value: ['email', 'push'],
     options: [
       { value: 'email', label: 'Email', description: 'Receive notifications via email.' },
@@ -142,7 +147,8 @@ export const ManyOptions: Story = {
 export const Toggle: Story = {
   args: {
     mode: 'toggle',
-    name: 'Settings',
+    'aria-label': 'Settings',
+    name: 'settings',
     value: ['notifications', 'analytics'],
     options: [
       {
@@ -172,7 +178,8 @@ export const Toggle: Story = {
 export const Uncontrolled: Story = {
   args: {
     mode: 'checkbox',
-    name: 'Notifications',
+    'aria-label': 'Notifications',
+    name: 'notifications',
     defaultValue: ['email'],
     options: [
       { value: 'email', label: 'Email', description: 'A digest once a day.' },

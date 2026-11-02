@@ -88,10 +88,10 @@ type DropdownOwnProps = {
    */
   ariaLabel?: string;
   /**
-   * Used only as a fallback for deriving the element id (`id || name || label`).
-   *
-   * Note: Dropdown renders a `<div role="combobox">`, not a native `<select>`,
-   * so `name` does **not** make it participate in native form submission.
+   * Form field name. When set, the selected option's `value` submits with an
+   * enclosing form through a hidden input (nothing while no value is set,
+   * nothing while disabled), as Combobox does. Also the fallback for the
+   * element id (`id || name || label`).
    */
   name?: string;
 };
@@ -376,6 +376,10 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             expand_more
           </span>
         </div>
+        {/* The selection, not the trigger text, is what a form submits. */}
+        {name && value !== undefined && (
+          <input type="hidden" name={name} value={value} disabled={disabled} />
+        )}
         {isOpen && (
           <ul
             className={[`${baseClass}__menu`, isGrouped ? `${baseClass}__menu--grouped` : '']

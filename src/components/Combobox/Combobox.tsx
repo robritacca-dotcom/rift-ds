@@ -101,7 +101,7 @@ type ComboboxOwnProps = {
   /**
    * Form field name. When set, the selection submits with an enclosing form
    * under this name through hidden inputs: the selected option's `value` in
-   * single mode (nothing until one is chosen), one entry per selected value in
+   * single mode (nothing while no value is set), one entry per selected value in
    * `multiple` mode, nothing while disabled. The search text the user types
    * is never submitted. Also the fallback for the element id (`id || name || generated`).
    */

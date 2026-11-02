@@ -40,6 +40,14 @@ type ToggleSwitchOwnProps = {
    * @deprecated Pass the native `aria-label` attribute instead.
    */
   ariaLabel?: string;
+  /**
+   * Form field name. When set, the switch submits with an enclosing form
+   * through a hidden input: `value` while on, nothing while off or disabled,
+   * as a native checkbox does.
+   */
+  name?: string;
+  /** The value submitted under `name` while on. Defaults to "on", the native checkbox's. */
+  value?: React.ComponentPropsWithoutRef<'button'>['value'];
 };
 
 export interface ToggleSwitchProps
@@ -69,6 +77,9 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
       onClick,
       className = '',
       ariaLabel,
+      name,
+      value = 'on',
+      form,
       ...rest
     },
     ref,
@@ -107,6 +118,7 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
         type="button"
         className={classes}
         onClick={handleClick}
+        form={form}
         disabled={disabled}
         role="switch"
         aria-checked={checked}
@@ -127,6 +139,10 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
           </span>
         ) : (
           showLabel && <span className={`${baseClass}__label`}>{label}</span>
+        )}
+        {/* The on state, not the track, is what a form submits. */}
+        {name && checked && (
+          <input type="hidden" name={name} value={value} form={form} disabled={disabled} />
         )}
       </button>
     );

@@ -37,7 +37,13 @@ type SelectionCardOwnProps = {
   defaultValue?: string | string[];
   /** Called with the next selection — a string in radio mode, an array otherwise */
   onValueChange?: (value: string | string[]) => void;
-  /** Group name (used for aria-label on the group) */
+  /**
+   * Form field name, also the group's aria-label when none is given. When set,
+   * each selected option's `value` submits with an enclosing form through a
+   * hidden input, repeated in checkbox and toggle modes as a set of native
+   * checkboxes does; a disabled option submits nothing. In a form, name the group
+   * with `aria-label` too, so a field key is never what a screen reader announces.
+   */
   name?: string;
   /** Additional CSS classes */
   className?: string;
@@ -160,6 +166,10 @@ export const SelectionCard = React.forwardRef<HTMLDivElement, SelectionCardProps
                   <CheckboxIndicator checked={selected} />
                 )}
               </div>
+              {/* The selection, not the indicator, is what a form submits. */}
+              {name && selected && (
+                <input type="hidden" name={name} value={option.value} disabled={option.disabled} />
+              )}
             </div>
           );
         })}

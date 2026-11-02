@@ -47,6 +47,12 @@ type TimePickerOwnProps = {
    * `en-US`.
    */
   locale?: string;
+  /**
+   * Form field name. When set, the selected 24-hour "HH:MM" value submits with
+   * an enclosing form through a hidden input (nothing while no value is set,
+   * nothing while disabled), as Dropdown does.
+   */
+  name?: string;
   /** Component size */
   size?: 'default' | 'compact';
   /** Whether the picker is disabled */
@@ -139,6 +145,8 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       stepMinutes = 30,
       hourFormat: hourFormatProp,
       locale: localeProp,
+      name,
+      form,
       size = 'default',
       disabled = false,
       required = false,
@@ -340,6 +348,7 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
         <button
           {...rest}
           type="button"
+          form={form}
           id={inputId}
           ref={setTriggerRef}
           className={`${baseClass}__trigger`}
@@ -368,6 +377,10 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
             expand_more
           </span>
         </button>
+        {/* The 24-hour value, not the trigger text, is what a form submits. */}
+        {name && selectedValue !== undefined && (
+          <input type="hidden" name={name} value={selectedValue} form={form} disabled={disabled} />
+        )}
         {isOpen && (
           <ul
             className={`${baseClass}__menu`}

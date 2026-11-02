@@ -174,6 +174,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
       error = false,
       helperText,
       name,
+      form,
       panelLabel,
       saturationLabel = 'Saturation and brightness',
       saturationValueText = (saturation: number, brightness: number) =>
@@ -372,6 +373,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
       >
         <button
           {...rest}
+          form={form}
           ref={setTriggerRef}
           type="button"
           id={inputId}
@@ -398,7 +400,7 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
           )}
         </button>
 
-        {name && <input type="hidden" name={name} value={displayHex} disabled={disabled} />}
+        {name && <input type="hidden" name={name} value={displayHex} form={form} disabled={disabled} />}
 
         {isOpen && (
           <div

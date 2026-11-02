@@ -38,6 +38,12 @@ type PinInputOwnProps = {
   /** Whether the whole control is disabled */
   disabled?: boolean;
   /**
+   * Form field name. When set, the joined code submits with an enclosing form
+   * through a hidden input, nothing while disabled. The cells themselves
+   * carry no name.
+   */
+  name?: string;
+  /**
    * Accessible name of each cell, given its 1-based position and the cell count.
    * Defaults to "Digit <position> of <count>" for the numeric format and
    * "Character <position> of <count>" for alphanumeric.
@@ -75,6 +81,7 @@ export const PinInput = React.forwardRef<HTMLInputElement, PinInputProps>(
       helperText,
       error = false,
       disabled = false,
+      name,
       cellLabel,
       className = '',
       id,
@@ -235,6 +242,8 @@ export const PinInput = React.forwardRef<HTMLInputElement, PinInputProps>(
             />
           ))}
         </div>
+        {/* The joined code, not a cell, is what a form submits. */}
+        {name && <input type="hidden" name={name} value={chars.join('')} disabled={disabled} />}
       </Field>
     );
   },

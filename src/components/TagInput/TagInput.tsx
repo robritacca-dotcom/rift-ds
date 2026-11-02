@@ -36,6 +36,13 @@ type TagInputOwnProps = {
   removeLabel?: (tag: string) => string;
   /** Additional CSS classes — applied to the wrapper, not the <input> */
   className?: string;
+  /**
+   * Form field name. When set, the committed tags submit with an enclosing
+   * form through hidden inputs, one entry per tag, nothing while disabled.
+   * The draft text being typed is never submitted. Also the fallback for the
+   * element id (`id || name || label`).
+   */
+  name?: string;
 };
 
 export interface TagInputProps
@@ -72,6 +79,7 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
       onChange,
       onKeyDown,
       name,
+      form,
       id,
       ...rest
     },
@@ -188,20 +196,25 @@ export const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
           ))}
           <input
             {...rest}
+            form={form}
             ref={setRef}
             className={`${baseClass}__input`}
             type="text"
             id={inputId}
-            name={name}
             value={draft}
             placeholder={atLimit ? '' : placeholder}
             disabled={disabled}
-            required={required}
+            aria-required={required || undefined}
             aria-invalid={error}
             aria-describedby={describedBy}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
+          {/* The committed tags, not the draft, are what a form submits. */}
+          {name &&
+            tags.map((tag) => (
+              <input key={tag} type="hidden" name={name} value={tag} form={form} disabled={disabled} />
+            ))}
         </div>
       </Field>
     );

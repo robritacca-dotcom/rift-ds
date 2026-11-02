@@ -42,13 +42,13 @@ type CheckboxOwnProps = {
    */
   ariaLabel?: string;
   /**
-   * Legacy form-field name.
-   *
-   * @deprecated No-op. This component renders a `<div role="checkbox">`, not a
-   * native `<input>`, so it cannot participate in native form submission.
-   * Declared only so the attribute is not forwarded to an element that rejects it.
+   * Form field name. When set, the checkbox submits with an enclosing form
+   * through a hidden input: `value` while checked, nothing while unchecked
+   * or disabled, as a native checkbox does.
    */
   name?: string;
+  /** The value submitted under `name` while checked. Defaults to "on", the native checkbox's. */
+  value?: string;
 };
 
 export interface CheckboxProps
@@ -70,7 +70,8 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
       onChange,
       className = '',
       ariaLabel,
-      name: _name,
+      name,
+      value = 'on',
       onClick,
       onKeyDown,
       ...rest
@@ -149,6 +150,10 @@ export const Checkbox = React.forwardRef<HTMLDivElement, CheckboxProps>(
         ) : (
           label && <span className={`${baseClass}__label`}>{label}</span>
         )}
+        {/* The checked state, not the indicator, is what a form submits. */}
+        {name && checked && (
+          <input type="hidden" name={name} value={value} disabled={disabled} />
+        )}
       </div>
     );
   },
@@ -169,6 +174,13 @@ type CheckboxGroupOwnProps = {
   error?: boolean;
   /** Marks the group required and renders the required marker on its label */
   required?: boolean;
+  /**
+   * Form field name shared by every item. When set, each checked item submits
+   * its `value` under this name through a hidden input, so a form reads the
+   * selection as repeated entries, as a set of native checkboxes does; a disabled
+   * item submits nothing.
+   */
+  name?: string;
   /** Checkbox options */
   items: { label: string; value: string; disabled?: boolean }[];
   /**
@@ -205,6 +217,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
       helperText,
       error = false,
       required = false,
+      name,
       items,
       values: valuesProp,
       defaultValues = [],
@@ -266,6 +279,8 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
           {items.map((item) => (
             <Checkbox
               key={item.value}
+              name={name}
+              value={item.value}
               label={item.label}
               checked={values.includes(item.value)}
               disabled={item.disabled}

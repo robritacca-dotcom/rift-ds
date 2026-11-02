@@ -17,6 +17,10 @@ const isArtifact = (data: unknown): data is ChatArtifact => {
 export const cardArtifact = (card: ChatCard | undefined): ChatArtifact | null =>
   card?.kind === ARTIFACT_CARD_KIND && isArtifact(card.data) ? card.data : null;
 
+/** The cards a turn draws: all it carried, or the one set by hand. */
+export const turnCards = (turn: { card?: ChatCard; cards?: ChatCard[] }): ChatCard[] =>
+  turn.cards ?? (turn.card ? [turn.card] : []);
+
 /** Wraps an artifact as the card a transport sends. */
 export const artifactCard = (artifact: ChatArtifact): ChatCard => ({
   kind: ARTIFACT_CARD_KIND,

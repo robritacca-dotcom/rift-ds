@@ -7,9 +7,9 @@ import { ArtifactSeatContext, useChatWidget } from './context';
 import type { ChatCard } from './types';
 
 /**
- * A turn's `card`, drawn through the provider's renderers. A kind with no
- * renderer draws nothing: a card is an enrichment of an answer that already
- * stands in text, so an unknown kind degrades to the words alone. The one
+ * One of a turn's cards, drawn through the provider's renderers. A kind with
+ * no renderer draws nothing, so an unknown kind degrades to the words alone,
+ * or to nothing on a reply that is only a card. The one
  * built-in kind is the artifact, drawn as its tile unless the host has
  * taken the kind over with a renderer of its own.
  */

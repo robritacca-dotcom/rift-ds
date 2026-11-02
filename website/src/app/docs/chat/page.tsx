@@ -193,7 +193,7 @@ const EVENT_LINES: Record<ChatEvent["type"], string> = {
   exchange: "The server's log id for the reply. Its presence shows the thumbs.",
   followups: "Questions to offer under the finished reply.",
   content: "Rich content as a React node. Only a transport in the browser can send one.",
-  card: "Rich content as data, drawn by your renderers by kind. What a server sends.",
+  card: "Rich content as data, drawn by your renderers by kind. What a server sends. A reply can carry several, or be one with no text.",
   question: "Questions the agent asks with answers to pick, drawn in place of the follow-ups.",
   notice: "A limit's reply, shown as an ordinary message.",
   error: "A failure the person should see. Only before the first delta.",

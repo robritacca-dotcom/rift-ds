@@ -217,9 +217,15 @@ export interface ChatTurn {
   content?: ReactNode;
   /**
    * Rich content rendered with the turn through the provider's `renderers`,
-   * carried from a transport's `card` event. Drawn where `content` is.
+   * carried from a transport's `card` event. Drawn where `content` is, and
+   * enough on its own: a reply may be a card with no text. With several, this
+   * is the latest.
    */
   card?: ChatCard;
+  /** Every card the reply carried, in arrival order. Absent on a turn set by hand with `card`, which draws that one. */
+  cards?: ChatCard[];
+  /** How the reply ended, when it did not simply finish: `failed` for a failure the visitor was shown, `stopped` when they stopped it. */
+  outcome?: 'failed' | 'stopped';
   /**
    * Questions this assistant turn asks, drawn under it as a QuestionCard in
    * place of follow-ups. Carried from a transport's `question` event.
@@ -270,8 +276,12 @@ export interface LiveResponse {
   followups?: string[];
   /** The transport's `content` event, drawn on the live reply and carried into the committed turn. */
   content?: ReactNode;
-  /** The transport's `card` event, drawn on the live reply and carried into the committed turn. */
+  /** The transport's latest `card` event, drawn on the live reply and carried into the committed turn. */
   card?: ChatCard;
+  /** Every `card` event so far, in arrival order, carried into the committed turn. */
+  cards?: ChatCard[];
+  /** How the reply ended, when it did not simply finish, carried into the committed turn. */
+  outcome?: 'failed' | 'stopped';
   /** Carried from the transport's `question` event into the committed turn. */
   question?: ChatQuestionSet;
 }

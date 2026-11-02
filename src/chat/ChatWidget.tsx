@@ -34,7 +34,7 @@ import {
 import type { QuestionCardLabels, QuestionSummaryProps } from '../components/QuestionCard/QuestionCard';
 import { MOTION_SCROLL_SETTLE_MS, MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
 import { AssistantTurn, type AssistantTurnLabels } from './AssistantTurn';
-import { cardArtifact } from './artifacts';
+import { cardArtifact, turnCards } from './artifacts';
 import { ChatAgentPane } from './ChatAgentPane';
 import { ChatArtifactPane } from './ChatArtifactPane';
 import { ChatTabs, type ChatTabsProps } from './ChatTabs';
@@ -699,8 +699,11 @@ export function ChatWidget({
   /* The header button reopens the conversation's newest artifact. */
   const latestArtifact = useMemo(() => {
     for (let index = turns.length - 1; index >= 0; index -= 1) {
-      const found = cardArtifact(turns[index].card);
-      if (found) return found;
+      const cards = turnCards(turns[index]);
+      for (let card = cards.length - 1; card >= 0; card -= 1) {
+        const found = cardArtifact(cards[card]);
+        if (found) return found;
+      }
     }
     return null;
   }, [turns]);
@@ -716,7 +719,7 @@ export function ChatWidget({
   }, [asideWide]);
   useEffect(() => {
     if (!artifacts) return;
-    const carrying = turns.filter((turn) => cardArtifact(turn.card));
+    const carrying = turns.filter((turn) => turnCards(turn).some((card) => cardArtifact(card)));
     if (seenArtifactTurns.current === null) {
       seenArtifactTurns.current = new Set(carrying.map((turn) => turn.id));
       return;
@@ -724,7 +727,7 @@ export function ChatWidget({
     for (const turn of carrying) {
       if (seenArtifactTurns.current.has(turn.id)) continue;
       seenArtifactTurns.current.add(turn.id);
-      const arrived = cardArtifact(turn.card);
+      const arrived = turnCards(turn).map((card) => cardArtifact(card)).filter(Boolean).pop();
       if (arrived && asideWideRef.current) openArtifact(arrived);
     }
   }, [artifacts, turns, openArtifact]);
@@ -1063,7 +1066,9 @@ export function ChatWidget({
                       ) : (
                         <>
                           {turn.content}
-                          {turn.card && <TurnCard card={turn.card} />}
+                          {turnCards(turn).map((card, index) => (
+                            <TurnCard key={index} card={card} />
+                          ))}
                         </>
                       )
                     }

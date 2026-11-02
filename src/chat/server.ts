@@ -555,6 +555,7 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
 
           for (let call = 0; ; call += 1) {
             const lastCall = call === maxModelCalls - 1;
+            let passWroteText = false;
             const stream = client.messages.stream(
               {
                 model: serving.id,
@@ -583,7 +584,13 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
                   reasoning.close();
                   streamedText = true;
                   firstTextMs = Date.now() - startedAt;
+                } else if (!passWroteText && answerText !== '') {
+                  // Each pass writes on its own: without a break, the words
+                  // around a tool round run together on one line.
+                  answerText += '\n\n';
+                  send({ type: 'delta', text: '\n\n' });
                 }
+                passWroteText = true;
                 answerText += event.delta.text;
                 send({ type: 'delta', text: event.delta.text });
               } else if (event.delta.type === 'thinking_delta') {

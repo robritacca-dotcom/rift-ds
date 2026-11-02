@@ -14,6 +14,7 @@ import { useChatWidget } from './context';
 import { DOCK_QUERY } from './queries';
 import { FollowupSuggestions } from './FollowupSuggestions';
 import { ResponseActions } from './ResponseActions';
+import { turnCards } from './artifacts';
 import { TurnCard } from './TurnContent';
 import { TurnQuestion } from './TurnQuestion';
 import type { ChatTurn, LiveResponse } from './types';
@@ -132,7 +133,8 @@ export function AssistantTurn({
   /* A reply's rich content and card draw as soon as the transport sends
      them, so a tool's result shows while the prose still streams. */
   const content = live ? live.content : turn?.content;
-  const card = live ? live.card : turn?.card;
+  const source = live ?? turn;
+  const cards = source ? turnCards(source) : [];
 
   /* Whether this turn's follow-up questions are still being generated: the
      request fires when a backend answer commits (see ChatProvider) and lands
@@ -213,7 +215,9 @@ export function AssistantTurn({
             structured output belongs: after the reasoning, before the prose
             that reads off what it shows. */}
         {content}
-        {card && <TurnCard card={card} />}
+        {cards.map((card, index) => (
+          <TurnCard key={index} card={card} />
+        ))}
         {text !== '' && (
           <CodeBlockLabelsContext.Provider value={labels?.codeBlock}>
           <Prose>

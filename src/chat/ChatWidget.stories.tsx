@@ -220,6 +220,47 @@ export const LiveContent: Story = {
   },
 };
 
+const NOTE_RENDERERS = {
+  note: (data: unknown) => <div data-testid="note-card">{String(data)}</div>,
+};
+
+/* A reply of two cards and no words, and a turn of nothing at all, picked by
+   what the visitor asked. */
+const cardTransport: ChatTransport = async function* (messages) {
+  yield { type: 'status', label: 'Working' };
+  if (messages[messages.length - 1].content === 'Two cards') {
+    yield { type: 'card', card: { kind: 'note', data: 'First card' } };
+    yield { type: 'card', card: { kind: 'note', data: 'Second card' } };
+  }
+  yield { type: 'done' };
+};
+
+/** A card is a reply on its own: several draw in order, with no failure line. A turn with nothing at all still gets one. */
+export const CardsWithoutText: Story = {
+  render: (args) => (
+    <ChatProvider transport={cardTransport} renderers={NOTE_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Two cards{Enter}');
+    await waitFor(() => expect(canvas.getAllByTestId('note-card')).toHaveLength(2), { timeout: 4000 });
+    await waitFor(() => expect(canvas.getByRole('textbox')).not.toBeDisabled(), { timeout: 4000 });
+    const cards = canvas.getAllByTestId('note-card');
+    await expect(cards[0]).toHaveTextContent('First card');
+    await expect(cards[1]).toHaveTextContent('Second card');
+    await expect(canvas.queryByText(/came back empty/)).toBeNull();
+
+    await userEvent.type(canvas.getByRole('textbox'), 'Nothing{Enter}');
+    await waitFor(() => expect(canvas.getByText(/came back empty/)).toBeInTheDocument(), { timeout: 4000 });
+  },
+};
+
 /** A reply carrying a card: the plan renders inside the turn through the provider's renderers. */
 export const RichContent: Story = {
   render: (args) => (
@@ -975,3 +1016,74 @@ export const Launcher: Story = {
   },
 };
 
+/* Holds each reply at a point the play function releases, so it can read the
+   button at every stage with the panel closed. */
+let releaseAgent: (() => void) | undefined;
+const hold = () =>
+  new Promise<void>((resolve) => {
+    releaseAgent = resolve;
+  });
+const agentTransport: ChatTransport = async function* (messages) {
+  yield { type: 'status', label: 'Working' };
+  await hold();
+  if (messages[messages.length - 1].content === 'Fail') {
+    yield { type: 'error', message: 'That failed.' };
+  } else {
+    yield { type: 'delta', text: 'First words.' };
+    await hold();
+  }
+  yield { type: 'done' };
+};
+
+/* The button says its state aloud, through the status region inside the launcher. */
+const spoken = (root: HTMLElement) => root.querySelector('.ds-chat-launcher__fab [role="status"]')?.textContent;
+
+/** Closing the panel mid-reply keeps the reply's progress on the button, through to its ending. */
+export const LauncherAgentState: Story = {
+  render: (args) => (
+    <ChatProvider transport={agentTransport} followups={false} feedback={false}>
+      <ChatLauncher label="Ask Acme" widget={{ ...args, closeEnabled: true }} />
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const says = (words: string) =>
+      waitFor(() => expect(spoken(canvasElement)).toBe(words), { timeout: 4000 });
+    const ask = async (text: string) => {
+      await userEvent.click(await canvas.findByRole('button', { name: /^Ask Acme/ }));
+      await userEvent.type(await canvas.findByRole('textbox'), `${text}{Enter}`);
+      await userEvent.click(canvas.getByRole('button', { name: 'Close chat' }));
+    };
+
+    await ask('Hello');
+    await says('Thinking');
+    releaseAgent?.();
+    await says('Working');
+    releaseAgent?.();
+    await says('Done');
+    // The ending is reported once, then the button rests.
+    await waitFor(() => expect(spoken(canvasElement)).toBeFalsy(), { timeout: 6000 });
+
+    await ask('Fail');
+    await says('Thinking');
+    releaseAgent?.();
+    await says('Failed');
+  },
+};
+
+/** A question left unanswered behind a closed panel holds the button at waiting. */
+export const LauncherWaiting: Story = {
+  render: (args) => (
+    <ChatProvider transport={createDemoTransport(FAST)} renderers={DEMO_RENDERERS} followups={false} feedback={false}>
+      <ChatLauncher label="Ask Acme" widget={{ ...args, closeEnabled: true }} />
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(await canvas.findByRole('button', { name: /^Ask Acme/ }));
+    await userEvent.type(await canvas.findByRole('textbox'), 'Help me pick a plan{Enter}');
+    await canvas.findByRole('button', { name: 'Just me' }, { timeout: 15000 });
+    await userEvent.click(canvas.getByRole('button', { name: 'Close chat' }));
+    await waitFor(() => expect(spoken(canvasElement)).toBe('Waiting for you'), { timeout: 4000 });
+  },
+};

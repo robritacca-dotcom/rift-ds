@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, typ
 import { useScrollLock } from '../behaviors/useScrollLock';
 import { AiButton, type AiButtonProps, type AiButtonSummary } from '../components/AiButton/AiButton';
 import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
+import { useChatAgentState } from './agentState';
 import { useChatWidget } from './context';
 import {
   FLOAT_EDGE_GAP,
@@ -133,6 +134,10 @@ export function ChatLauncher({
 }: ChatLauncherProps) {
   const { open, setOpen, panelPhase, view, side, floating, returnFocusRef, send } =
     useChatWidget();
+
+  /* Read up here, where it outlives the button: the button unmounts while the
+     panel is open, and a reply that ended back then is not news on its return. */
+  const agentState = useChatAgentState();
 
   const launchSuggestion = (id: string) => {
     const chip = summary?.chips?.find((c) => c.id === id);
@@ -440,6 +445,7 @@ export function ChatLauncher({
           {...aiButtonLabels}
           label={label}
           icon={icon}
+          state={agentState}
           aria-expanded={false}
           aria-controls={panelId}
           summary={

@@ -193,6 +193,8 @@ export function useChat(
           followups: finished.followups,
           content: finished.content,
           card: finished.card,
+          cards: finished.cards,
+          outcome: finished.outcome,
           question: finished.question,
           durationSeconds:
             finished.durationSeconds ??
@@ -293,7 +295,7 @@ export function useChat(
                 update({ ...current, content: event.node });
                 break;
               case 'card':
-                update({ ...current, card: event.card });
+                update({ ...current, card: event.card, cards: [...(current.cards ?? []), event.card] });
                 break;
               case 'question': {
                 /* Checked again here, whatever the transport did: the set is
@@ -333,6 +335,7 @@ export function useChat(
                   ...current,
                   phase: 'streaming',
                   durationSeconds: current.durationSeconds ?? 1,
+                  outcome: event.type === 'error' ? 'failed' : current.outcome,
                 };
                 reveal.showWhole(event.type === 'notice' ? event.text : event.message);
                 break;
@@ -352,11 +355,19 @@ export function useChat(
           }
           reveal.cancel();
           if (generation !== generationRef.current) return;
-          if (current.text === '') {
-            // A completion that never produced text is a failure, not a reply.
-            commit({ ...current, text: placeholders.empty }, startedAt, null);
-          } else {
+          const stopped = controller.signal.aborted;
+          if (stopped) current = { ...current, outcome: 'stopped' };
+          if (current.text !== '') {
             commit(current, startedAt, current.text);
+          } else if (current.content || current.cards?.length || current.question) {
+            // The rich content is the reply: there is nothing to apologise for,
+            // and no words to record in the history.
+            commit(current, startedAt, null);
+          } else if (stopped) {
+            commit({ ...current, text: placeholders.stopped }, startedAt, null);
+          } else {
+            // A completion that produced nothing at all is a failure, not a reply.
+            commit({ ...current, text: placeholders.empty, outcome: 'failed' }, startedAt, null);
           }
         } catch (err) {
           reveal.flush();
@@ -365,12 +376,14 @@ export function useChat(
           } else if (controller.signal.aborted) {
             // Stopped by the reader: keep whatever streamed in; the partial
             // is real assistant speech, so it belongs in the history too.
+            current = { ...current, outcome: 'stopped' };
             if (current.text === '') {
               commit({ ...current, text: placeholders.stopped }, startedAt, null);
             } else {
               commit(current, startedAt, current.text);
             }
           } else {
+            current = { ...current, outcome: 'failed' };
             // Keep any partial (it is real); placeholder only when empty.
             if (current.text === '') {
               commit({ ...current, text: placeholders.failed }, startedAt, null);

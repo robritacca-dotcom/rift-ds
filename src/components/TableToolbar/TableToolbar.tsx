@@ -1128,9 +1128,10 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
     const commandTrigger = narrow ? <Tooltip content={labels.command}>{commandButtonDrawn}</Tooltip> : commandButtonDrawn;
     const matching = table?.matchingIds ?? [];
     const matchingCount = table?.matchingCount ?? matching.length;
+    const selectedSet = new Set(table?.selectedIds);
     const allMatching =
       table?.allMatching ??
-      (matching.length > 0 && matching.every((id) => table!.selectedIds.includes(id)));
+      (matching.length > 0 && matching.every((id) => selectedSet.has(id)));
     const selection: TableToolbarSelection = {
       ids: table?.selectedIds ?? [],
       allMatching,

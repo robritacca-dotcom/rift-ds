@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useDeferredValue, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   columnFilteringFeature,
   columnOrderingFeature,
@@ -510,6 +510,25 @@ const valueComparator =
  * within the same render (a filter that leaves fewer pages shows the last
  * one at once), which the engine's model cannot do from its state alone.
  */
+/* Each row's searchable text, built the first time a search reaches it and
+   kept for that array of rows: a keystroke then looks through text, not
+   through every value of every row. */
+const SEARCH_TEXT = new WeakMap<object, WeakMap<object, string>>();
+const searchTextOf = (rows: readonly DataTableRow[], row: DataTableRow) => {
+  let texts = SEARCH_TEXT.get(rows);
+  if (!texts) SEARCH_TEXT.set(rows, (texts = new WeakMap()));
+  let text = texts.get(row);
+  if (text === undefined) {
+    text = Object.values(row.values)
+      .filter((cell) => cell != null)
+      .map(String)
+      .join('\u0000')
+      .toLowerCase();
+    texts.set(row, text);
+  }
+  return text;
+};
+
 const ENGINE_FEATURES = tableFeatures({
   rowSortingFeature,
   sortedRowModel: createSortedRowModel(),
@@ -1275,7 +1294,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     [columnKeys, compareValues],
   );
 
-  const needle = search.trim().toLowerCase();
+  /* Deferred, so the field takes each key at once and the rows follow when
+     the thread is free: a fast typist never waits on a filter they have
+     already typed past. */
+  const needle = useDeferredValue(search.trim().toLowerCase());
   /* The engine memoises its row models on its state's identity, so each
      piece is rebuilt only when what it says changes: rebuilt every render,
      a table of thousands would re-sort and re-filter on every hover. Each
@@ -1322,20 +1344,24 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       rowSelection: engineSelection,
     },
     /* The search matches any raw value on the row, displayed or not, case
-         insensitively, as it always has: so every column is eligible and the
-         test reads the whole row rather than the one column. */
-    getColumnCanGlobalFilter: () => true,
-    globalFilterFn: (row: { original: R }, _columnId: string, value: unknown) => {
-      const term = String(value ?? '');
-      return Object.values(row.original.values).some(
-        (cell) => cell != null && String(cell).toLowerCase().includes(term),
-      );
+         insensitively, as it always has: the test reads the whole row, so it
+         runs once, from one column. The engine asks once per eligible column
+         until one passes, so with every column eligible a row that does not
+         match reads all its values once per column. */
+    getColumnCanGlobalFilter: (column: { id: string }) => column.id === columns[0]?.key,
+    globalFilterFn: (row: { original: R; columnFilters?: Record<string, boolean> }, _columnId: string, value: unknown) => {
+      // The engine runs the column filters first: a row one of them has ruled out needs no reading.
+      if (row.columnFilters && Object.values(row.columnFilters).includes(false)) return false;
+      return searchTextOf(rows, row.original).includes(String(value ?? ''));
     },
   });
 
   /* In manual mode the rows arrive sorted, filtered and paged. */
   const engineRows = table.getSortedRowModel().rows;
-  const sortedRows = manual ? orderedRows : engineRows.map((row) => row.original);
+  const sortedRows = useMemo(
+    () => (manual ? orderedRows : engineRows.map((row) => row.original)),
+    [manual, orderedRows, engineRows],
+  );
   /* Every row that matches: the server's count in manual mode. */
   const matchCount = manual ? Math.max(rowCountProp ?? rows.length, rows.length) : sortedRows.length;
 
@@ -1405,9 +1431,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       return;
     }
     announce(resultsLabel(matchCount), true);
-    // Announce on a new search term only; the count is read at that moment.
+    // Announce on a new search term only, once the rows have caught up with it; the count is read at that moment.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [needle]);
 
   /* The match count after the filters change. Skipped on the first render. */
   const filtered = useRef(false);
@@ -1431,7 +1457,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
 
   const visibleIds = visibleRows.map((row) => row.id);
-  const selectedVisible = visibleIds.filter((id) => currentSelection.includes(id));
+  const selectedSet = new Set(currentSelection);
+  const selectedVisible = visibleIds.filter((id) => selectedSet.has(id));
   const allVisibleSelected = visibleIds.length > 0 && selectedVisible.length === visibleIds.length;
   const someVisibleSelected = selectedVisible.length > 0 && !allVisibleSelected;
 
@@ -1904,24 +1931,43 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        The columns as a control bar sees them, and the header filters. A
        header's Filter… opens its filter in place (adding one when the column
        has none); a filter left without a value when its editor closes is
-       dropped, so an abandoned filter never lingers as a chip. */
+       dropped, so an abandoned filter never lingers as a chip. Reading a
+       column's kind and choices walks every row, so it waits for new rows or
+       a column whose reading changes, and an inline `columns` array does not
+       walk them on every render. */
+  const columnScanKey = columns
+    .map((col) => [col.key, col.type ?? '', col.options ? '1' : ''].join('\u0001'))
+    .join('\u0000');
+  const columnScans = useMemo(() => {
+    const scans = new Map<string, { kind: ToolbarColumn['kind']; choices: { value: string; label: string }[] }>();
+    for (const spec of columnScanKey.split('\u0000')) {
+      const [key, type, hasOptions] = spec.split('\u0001');
+      const typedKind = type ? TYPE_DEFAULTS[type as ColumnType].filter : undefined;
+      if (typedKind && (hasOptions || (typedKind !== 'enum' && typedKind !== 'tags'))) {
+        scans.set(key, { kind: typedKind, choices: [] });
+        continue;
+      }
+      const values = rows.map((row) => row.values[key]);
+      const kind = typedKind ?? filterKindOf(values, Boolean(hasOptions));
+      const choices =
+        !hasOptions && (kind === 'enum' || kind === 'tags')
+          ? [
+              ...new Set(
+                values
+                  .flat()
+                  .filter((value) => value != null && value !== '')
+                  .map(String),
+              ),
+            ]
+              .sort((a, b) => collator.compare(a, b))
+              .map((value) => ({ value, label: value }))
+          : [];
+      scans.set(key, { kind, choices });
+    }
+    return scans;
+  }, [columnScanKey, rows, collator]);
   const toolbarColumns: ToolbarColumn[] = columns.map((col) => {
-    const values = rows.map((row) => row.values[col.key]);
-    const kind = col.type ? TYPE_DEFAULTS[col.type].filter : filterKindOf(values, Boolean(col.options));
-    const choices =
-      col.options ??
-      (kind === 'enum' || kind === 'tags'
-        ? [
-            ...new Set(
-              values
-                .flat()
-                .filter((value) => value != null && value !== '')
-                .map(String),
-            ),
-          ]
-            .sort((a, b) => collator.compare(a, b))
-            .map((value) => ({ value, label: value }))
-        : []);
+    const { kind, choices } = columnScans.get(col.key)!;
     return {
       key: col.key,
       label: headerText(col),
@@ -1932,7 +1978,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
       sortable: Boolean(col.sortable),
       groupable: Boolean(col.groupable),
       kind,
-      options: choices,
+      options: col.options ?? choices,
     };
   });
   const [headerFilter, setHeaderFilter] = useState<string | null>(null);
@@ -2036,6 +2082,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- the key stands for the view
   }, [currentKey]);
 
+  const matchingIds = useMemo(() => sortedRows.map((row) => row.id), [sortedRows]);
   const tableContext: TableContextValue = {
     columns: toolbarColumns,
     filters,
@@ -2049,7 +2096,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     selectable,
     selectedIds: currentSelection,
     setSelectedIds: setSelection,
-    matchingIds: sortedRows.map((row) => row.id),
+    matchingIds,
     size,
     setSize,
     shown: matchCount,
@@ -2816,6 +2863,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     loadMore.current = onLoadMore;
   });
   const rowCount = visibleRows.length;
+  const pageRowSet = new Set(pageRows);
   const scrollsInFrame = virtual || maxHeight !== undefined;
   useEffect(() => {
     const node = loadingRef.current;
@@ -2848,7 +2896,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const expanded = !collapsedGroups.includes(group.key);
     const label = groupLabel(group.key);
     const ids = group.rows.map((row) => row.id);
-    const chosen = ids.filter((id) => currentSelection.includes(id)).length;
+    const chosen = ids.filter((id) => selectedSet.has(id)).length;
     const raw = group.rows[0]?.values[groupKey!] ?? null;
     return (
       <tr className={`ds-table__row ${baseClass}__group-row`} data-group-row="">
@@ -2966,7 +3014,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         {visibleKeys.map((key) => {
           const col = byKey.get(key)!;
           const pick = totalPick(col);
-          const values = sortedRows.map((row) => row.values[key]);
+          const values = pick === 'none' ? [] : sortedRows.map((row) => row.values[key]);
           const text =
             pick === 'none'
               ? ''
@@ -3031,7 +3079,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
 
   type Slot = { index: number; measure: (node: Element | null) => void };
   const bodyRow = (row: R, slot?: Slot, part: 'both' | 'record' | 'detail' = 'both') => {
-    const isSelected = selectable && currentSelection.includes(row.id);
+    const isSelected = selectable && selectedSet.has(row.id);
     const name = rowName(row);
     const expandedHere = Boolean(renderDetail) && expandedState.includes(row.id);
     const detailId = `${tableId}-detail-${row.id}`;
@@ -3435,6 +3483,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
      body, and one over rows already shown is a Banner above them. */
   const firstLoad = ((loading && rows.length === 0) || commandLanding) && !error;
   const refreshing = loading && rows.length > 0;
+  /* The rows are still catching up with what was typed: the line says so,
+     without the dimming, which would flicker on a table that filters at once. */
+  const searching = !manual && rows.length > 0 && search.trim().toLowerCase() !== needle;
   const retryButton = onRetry && (
     <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label={loadWords.retry} onClick={onRetry} />
   );
@@ -3517,10 +3568,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         )}
         {visibleRows.length > 0 || firstLoad ? (
           <ScrollRegion className={`ds-table__wrapper ${baseClass}__frame`} style={frameStyle} onNode={setFrameEl}>
-            {refreshing && <div className={`${baseClass}__progress`} role="progressbar" aria-label={loadWords.loading} />}
+            {(refreshing || searching) && (
+              <div className={`${baseClass}__progress`} role="progressbar" aria-label={loadWords.loading} />
+            )}
             <table
               ref={setTableEl}
-              aria-busy={loading || commandLanding || undefined}
+              aria-busy={loading || commandLanding || searching || undefined}
               className={tableClasses}
               // A card layout changes how the table displays, which strips its semantics in some browsers, so it states them.
               role={gridMode ? 'grid' : stacked ? 'table' : undefined}
@@ -3563,7 +3616,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 <tbody className="ds-table__body">{skeletonRows}</tbody>
               ) : groups ? (
                 groups
-                  .map((group) => ({ group, onPage: group.rows.filter((row) => pageRows.includes(row)) }))
+                  .map((group) => ({ group, onPage: group.rows.filter((row) => pageRowSet.has(row)) }))
                   .filter(({ onPage }) => onPage.length > 0)
                   .map(({ group, onPage }) => (
                     <tbody

@@ -798,6 +798,19 @@ const manyRows: DataTableRow[] = Array.from({ length: 1000 }, (_, i) => ({
 }));
 
 /** A thousand rows: past 200 an unpaged table draws only the rows in view, inside its frame, and says how many rows there are. */
+const rowReads = { count: 0 };
+/* Rows that count every read of their values. */
+const countedRows: DataTableRow[] = Array.from({ length: 2000 }, (_, index) => {
+  const values = { name: `Customer ${index}`, status: 'Shipped', updated: '2 hours ago', price: '$10.00' };
+  return {
+    id: `counted-${index}`,
+    get values() {
+      rowReads.count += 1;
+      return values;
+    },
+  };
+});
+
 export const Virtualized: Story = {
   args: {
     columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
@@ -814,6 +827,39 @@ export const Virtualized: Story = {
     const frame = canvasElement.querySelector<HTMLElement>('.ds-data-table__frame')!;
     frame.scrollTop = frame.scrollHeight;
     await waitFor(() => expect(drawn()[drawn().length - 1]).toHaveAttribute('aria-rowindex', '1001'));
+  },
+};
+
+/** A keystroke does not walk the rows again: the search reads text it has already built, and a host's inline `columns` array costs no scan. */
+export const SearchStaysCheap: Story = {
+  render: () => {
+    const Demo = () => {
+      const [search, setSearch] = useState('');
+      return (
+        <DataTable
+          columns={[...columns]}
+          rows={countedRows}
+          caption="Customers"
+          defaultPageSize={10}
+          searchable
+          search={search}
+          onSearchChange={setSearch}
+        />
+      );
+    };
+    return <Demo />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole('textbox', { name: 'Search' });
+    const settled = () =>
+      waitFor(() => expect(canvasElement.querySelector('table')).not.toHaveAttribute('aria-busy'));
+    await userEvent.type(field, 'c');
+    await settled();
+    rowReads.count = 0;
+    await userEvent.type(field, 'u');
+    await settled();
+    await expect(rowReads.count).toBeLessThan(countedRows.length);
   },
 };
 

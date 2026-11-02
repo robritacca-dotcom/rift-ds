@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "kind": "component",
   "name": "QuestionCard",
   "label": "Question card",

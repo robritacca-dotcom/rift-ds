@@ -4,7 +4,8 @@
  * A stateless Streamable HTTP server (mcp-handler on the MCP SDK v2) that
  * any MCP client can connect to with just this URL. The tools are
  * deterministic reads over generated registry data: the component prop API,
- * the component and token registries, and the site corpus. No model is
+ * the component and token registries, the token values resolved per theme,
+ * and the site corpus. No model is
  * called, so there is no model spend to guard and no persona to defend; the
  * chat's guardrails deliberately do not apply here. Bandwidth and function
  * invocations are unmetered by choice — the tools are cheap in-memory reads,
@@ -76,7 +77,7 @@ const handler = createMcpHandler(
         title: "List components",
         description:
           `List the ${COMPONENT_COUNT} public components in rift-ds, ` +
-          `with category, description and docs URL. Filter with the optional ` +
+          `with category, description, docs URL and the URL of its published JSON schema. Filter with the optional ` +
           `category argument. Use get_component for a component's full prop API.`,
         inputSchema: z.object({
           category: z
@@ -97,12 +98,14 @@ const handler = createMcpHandler(
             category: entry.category,
             description: entry.description,
             docsUrl: `${SITE_URL}/components/${entry.slug}`,
+            schemaUrl: `${SITE_URL}/schema/components/${entry.slug}.json`,
           }));
         return json({
           package: pkg.name,
           version: pkg.version,
           categories: componentCategoryMetadata,
           count: components.length,
+          schemaIndexUrl: `${SITE_URL}/schema/components.json`,
           components,
         });
       }
@@ -115,9 +118,9 @@ const handler = createMcpHandler(
         description:
           "The full contract for one component: import paths, whether it needs " +
           "'use client', every exported component in its module, and every own " +
-          "prop with its type, default, requiredness and JSDoc description. The " +
-          "data is generated from the same source as the published .d.ts, so it " +
-          "matches what npm ships.",
+          "prop with its type, allowed values, default, requiredness and JSDoc description, " +
+          "plus its docs, markdown and JSON schema URLs. The data is generated from the " +
+          "same source as the published .d.ts, so it matches what npm ships.",
         inputSchema: z.object({
           name: z
             .string()
@@ -135,16 +138,26 @@ const handler = createMcpHandler(
         description:
           `List the ${TOKEN_COUNT} semantic design tokens by category ` +
           `(${Object.keys(TOKEN_COUNTS).join(", ")}). Components consume these as ` +
-          `CSS custom properties; consumers re-theme by overriding them. Values ` +
-          `and guidance live on ${SITE_URL}/foundations.`,
+          `CSS custom properties; consumers re-theme by overriding them. With a theme, ` +
+          `every name comes back resolved to that theme's value in light or dark mode. ` +
+          `The response also names the DTCG files per theme and the values module. ` +
+          `Guidance lives on ${SITE_URL}/foundations.`,
         inputSchema: z.object({
           category: z
             .string()
             .optional()
             .describe("A token category to filter by, e.g. colour or motion"),
+          theme: z
+            .string()
+            .optional()
+            .describe("A theme id to resolve the tokens in; the response without one lists the ids"),
+          mode: z
+            .enum(["light", "dark"])
+            .optional()
+            .describe("light (the default) or dark, with a theme"),
         }),
       },
-      async ({ category }) => json(lookupTokens(category))
+      async ({ category, theme, mode }) => json(lookupTokens(category, theme, mode))
     );
 
     server.registerTool(
@@ -239,6 +252,11 @@ const handler = createMcpHandler(
             "",
             `Full guide: ${SITE_URL}/docs/get-started. Live docs: ${SITE_URL}/components. ` +
               `Design spec: ${SITE_URL}/design.md.`,
+            "",
+            `Schemas: every component's prop contract is published as JSON at ${SITE_URL}/schema/components/<slug>.json ` +
+              `(index: ${SITE_URL}/schema/components.json; the meta-schema they validate against: ${SITE_URL}/schema/component.schema.json). ` +
+              `The design tokens are published resolved per theme in '${pkg.name}/tokens/values' and in the DTCG format, one file per theme and mode at ${SITE_URL}/schema/tokens/<theme>.<mode>.tokens.json (list_tokens returns every URL). ` +
+              `All of it is generated from the TypeScript and the token CSS; the reference is ${SITE_URL}/docs/schemas.`,
             "",
             `Agent skills: run \`npx ${pkg.name} init\` to fetch them into the project's ` +
               `.claude/skills/ (add --skill <name> for one), or save the files by hand. ` +

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Swatch",
+  "label": "Swatch",
+  "slug": "swatch",
+  "category": "forms",
+  "description": "Clickable colour tile for preset palettes and picker triggers, with a theme-aware selection ring.",
+  "client": false,
+  "importPath": "rift-ds/components/Swatch/Swatch",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/swatch",
+  "markdownUrl": "https://rift-ds.com/components/swatch.md",
+  "exports": [
+    {
+      "component": "Swatch",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The colour this swatch shows — any valid CSS colour, typically a hex value"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the swatch. Defaults to the colour value, which is\nmeaningful but terse — prefer a human name (\"Teal 07\") when you have one."
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected state — renders the selection ring and sets aria-pressed",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Swatch size",
+          "default": "default"
+        },
+        {
+          "name": "shape",
+          "type": "\"circle\" | \"square\"",
+          "typeKind": "enum",
+          "values": [
+            "circle",
+            "square"
+          ],
+          "required": false,
+          "description": "Corner treatment — circle matches the site's preset grids; square suits picker triggers",
+          "default": "circle"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the swatch is disabled",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

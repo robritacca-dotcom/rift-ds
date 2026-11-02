@@ -558,7 +558,7 @@ export default function AiChatPage() {
           <section id="props" className={`${styles.section} animate-in animate-delay-3`}>
             <SectionTitle title="Props" />
             <p className={styles.sectionNote}>
-              Read from the same JSDoc that ships in the package&apos;s types. Copy for agents hands
+              Read from the same JSDoc that ships in the package&apos;s types. The For agents button hands
               your coding agent the same contract.
             </p>
             {widgetApi?.exports.map((exported) => (

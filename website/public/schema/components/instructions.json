@@ -1,0 +1,76 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Instructions",
+  "label": "Instructions",
+  "slug": "instructions",
+  "category": "data-display",
+  "description": "Step-by-step guidance with numbered badges, connecting lines, and horizontal layout.",
+  "client": false,
+  "importPath": "rift-ds/components/Instructions/Instructions",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/instructions",
+  "markdownUrl": "https://rift-ds.com/components/instructions.md",
+  "exports": [
+    {
+      "component": "Instructions",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Instructions title, rendered as a heading above the steps.\nNote: this shadows the native `title` tooltip attribute, which Instructions does not expose."
+        },
+        {
+          "name": "steps",
+          "type": "InstructionStep[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of instruction steps"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "direction",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Layout direction",
+          "default": "vertical"
+        },
+        {
+          "name": "numbered",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What a step without an `icon` shows in its badge: its number when true\n(the default), a small dot when false. A step's own `icon` always wins.",
+          "default": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

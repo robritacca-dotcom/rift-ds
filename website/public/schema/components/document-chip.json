@@ -1,0 +1,127 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "DocumentChip",
+  "label": "Document chip",
+  "slug": "document-chip",
+  "category": "ai",
+  "description": "A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers.",
+  "client": false,
+  "importPath": "rift-ds/components/DocumentChip/DocumentChip",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/document-chip",
+  "markdownUrl": "https://rift-ds.com/components/document-chip.md",
+  "deprecated": "Use `AttachmentTile` instead.",
+  "exports": [
+    {
+      "component": "DocumentChip",
+      "deprecated": "Use `AttachmentTile` instead.",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "File name, truncated with an ellipsis when it outgrows the tile."
+        },
+        {
+          "name": "fileType",
+          "type": "DocumentChipFileType",
+          "typeKind": "enum",
+          "values": [
+            "archive",
+            "code",
+            "doc",
+            "generic",
+            "image",
+            "pdf",
+            "sheet",
+            "slide"
+          ],
+          "required": false,
+          "description": "Document type — picks the leading Material Symbol.",
+          "default": "generic"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Override the type icon — a Material Symbol name, or any custom element."
+        },
+        {
+          "name": "meta",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Free-text metadata line, e.g. \"1.2 MB\" or \"12 pages\" — callers keep their own formatting."
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Upload progress, 0–100. While set, replaces the metadata line with a progress bar."
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error message — replaces the metadata line and colours the tile with the error pair."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Tile size. Compact drops the metadata line — name only — for dense composer rows.",
+          "default": "default"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Click handler — presence makes the chip body (icon + text) an interactive button."
+        },
+        {
+          "name": "onRemove",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Remove handler — renders a trailing close button."
+        },
+        {
+          "name": "removeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the remove button.",
+          "default": "Remove file"
+        },
+        {
+          "name": "progressLabel",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of the upload progress bar, given the file name. Defaults to \"Uploading <name>\".",
+          "defaultExpression": "(fileName: string) => `Uploading ${fileName}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

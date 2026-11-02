@@ -1,0 +1,117 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Input",
+  "label": "Input",
+  "slug": "input",
+  "category": "forms",
+  "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
+  "client": true,
+  "importPath": "rift-ds/components/Input/Input",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/input",
+  "markdownUrl": "https://rift-ds.com/components/input.md",
+  "exports": [
+    {
+      "component": "Input",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Input label text"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current value"
+        },
+        {
+          "name": "type",
+          "type": "\"number\" | \"search\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"password\"",
+          "typeKind": "enum",
+          "values": [
+            "email",
+            "number",
+            "password",
+            "search",
+            "tel",
+            "text",
+            "url"
+          ],
+          "required": false,
+          "description": "Input type — curated subset; use a dedicated component for checkbox/radio/file",
+          "default": "text"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute)",
+          "default": "default"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — shows error styling and message",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below the input"
+        },
+        {
+          "name": "iconLeft",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "iconRight",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trailing icon — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries (react-hook-form, Formik, TanStack Form) work unmodified."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

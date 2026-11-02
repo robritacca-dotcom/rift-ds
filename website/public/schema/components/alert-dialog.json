@@ -1,0 +1,111 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AlertDialog",
+  "label": "Alert dialog",
+  "slug": "alert-dialog",
+  "category": "overlays",
+  "description": "Modal confirmation overlay with title, description, and confirm / cancel actions.",
+  "client": true,
+  "importPath": "rift-ds/components/AlertDialog/AlertDialog",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/alert-dialog",
+  "markdownUrl": "https://rift-ds.com/components/alert-dialog.md",
+  "exports": [
+    {
+      "component": "AlertDialog",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Whether the dialog is open"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "typeKind": "function",
+          "required": true,
+          "description": "Callback when dialog requests to close"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Dialog title, rendered as the heading that names the dialog. Replaces the\nnative `title` tooltip attribute."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Dialog description / body text"
+        },
+        {
+          "name": "confirmLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Confirm button label",
+          "default": "Confirm"
+        },
+        {
+          "name": "cancelLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "name": "onConfirm",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when confirm is clicked"
+        },
+        {
+          "name": "onCancel",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when cancel is clicked"
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive"
+          ],
+          "required": false,
+          "description": "Colour of the dialog's icon, title and confirm action: `destructive`\nfor dangerous or irreversible actions."
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive"
+          ],
+          "required": false,
+          "description": "Legacy name for `tone`, from before colour moved onto its own prop.",
+          "deprecated": "Use `tone` instead."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the overlay container (the ref and native attributes go on the panel)",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

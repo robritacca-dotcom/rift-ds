@@ -1,0 +1,126 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Lightbox",
+  "label": "Lightbox",
+  "slug": "lightbox",
+  "category": "overlays",
+  "description": "Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, gallery stepping, trapped and restored focus.",
+  "client": true,
+  "importPath": "rift-ds/components/Lightbox/Lightbox",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/lightbox",
+  "markdownUrl": "https://rift-ds.com/components/lightbox.md",
+  "exports": [
+    {
+      "component": "Lightbox",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Whether the lightbox is open"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "typeKind": "function",
+          "required": true,
+          "description": "Callback when the lightbox requests to close"
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The image to show. Omit it when `children` supplies the media."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Image alt text — also the panel's accessible name. Required whenever `src` is set."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional caption shown in a chip under the media"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Custom media instead of `src` — a framework image component, a video, a\nlive embed. Sized by the same viewport bounds the plain image gets."
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether ESC, backdrop click, and the close button can dismiss",
+          "default": true
+        },
+        {
+          "name": "onPrev",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Steps to the previous item. Providing it renders the previous chevron and\narms the Left arrow key — the consumer owns the collection and the index."
+        },
+        {
+          "name": "onNext",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Steps to the next item — the next chevron and the Right arrow key."
+        },
+        {
+          "name": "viewerLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The panel's accessible name when neither `alt` nor `caption` is set.",
+          "default": "Media viewer"
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the close button.",
+          "default": "Close viewer"
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous button, shown with `onPrev`.",
+          "default": "Previous"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next button, shown with `onNext`.",
+          "default": "Next"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the portal container, not the panel",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

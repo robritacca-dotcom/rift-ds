@@ -1,0 +1,52 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "MessageActions",
+  "label": "Message actions",
+  "slug": "message-actions",
+  "category": "ai",
+  "description": "An icon-button row for message-level actions like copy, retry, and feedback.",
+  "client": false,
+  "importPath": "rift-ds/components/MessageActions/MessageActions",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/message-actions",
+  "markdownUrl": "https://rift-ds.com/components/message-actions.md",
+  "exports": [
+    {
+      "component": "MessageActions",
+      "props": [
+        {
+          "name": "items",
+          "type": "MessageAction[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The actions, rendered left to right."
+        },
+        {
+          "name": "onActionClick",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the pressed action's id."
+        },
+        {
+          "name": "showTooltips",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Wrap each button in a Tooltip showing its label. The label stays as `aria-label` either way.",
+          "default": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Accordion",
+  "label": "Accordion",
+  "slug": "accordion",
+  "category": "data-display",
+  "description": "Collapsible content sections for organising related information.",
+  "client": true,
+  "importPath": "rift-ds/components/Accordion/Accordion",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/accordion",
+  "markdownUrl": "https://rift-ds.com/components/accordion.md",
+  "exports": [
+    {
+      "component": "Accordion",
+      "props": [
+        {
+          "name": "items",
+          "type": "AccordionItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "List of accordion items"
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Allow multiple items open at once",
+          "default": false
+        },
+        {
+          "name": "expanded",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "IDs of the expanded items, for a controlled accordion. Leave it undefined\nto let the component keep its own open state, seeded from\n`defaultExpanded`."
+        },
+        {
+          "name": "defaultExpanded",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "IDs of initially expanded items when the accordion is uncontrolled",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "onExpandedChange",
+          "type": "((expanded: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the IDs of the expanded items after the user opens or closes one"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

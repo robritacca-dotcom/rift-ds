@@ -1,0 +1,163 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "EventCalendar",
+  "label": "Event calendar",
+  "slug": "event-calendar",
+  "category": "data-display",
+  "description": "A month grid with event pills, overflow counts, and month navigation.",
+  "client": true,
+  "importPath": "rift-ds/components/EventCalendar/EventCalendar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/event-calendar",
+  "markdownUrl": "https://rift-ds.com/components/event-calendar.md",
+  "exports": [
+    {
+      "component": "EventCalendar",
+      "props": [
+        {
+          "name": "events",
+          "type": "EventCalendarEvent[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The events to place on the grid, including any that fall on the visible leading and trailing days of the neighbouring months.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "month",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shown month (YYYY-MM) for controlled use. Pair with `onMonthChange`."
+        },
+        {
+          "name": "defaultMonth",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initially shown month (YYYY-MM) for uncontrolled use. Defaults to the current month."
+        },
+        {
+          "name": "onMonthChange",
+          "type": "((month: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the newly shown month (YYYY-MM) after prev/next navigation."
+        },
+        {
+          "name": "maxEventsPerDay",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Event pills shown per day before the rest collapse into \"+N more\".",
+          "default": 3
+        },
+        {
+          "name": "onEventClick",
+          "type": "((event: EventCalendarEvent) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the clicked event. Pills only render as buttons when this is set."
+        },
+        {
+          "name": "onDateClick",
+          "type": "((date: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the clicked day (YYYY-MM-DD) — from anywhere on the cell, the\nday number, and the \"+N more\" overflow row. The number and overflow row\nonly become buttons when this is set, and cells only take their pointer\ncursor and hover feedback with it."
+        },
+        {
+          "name": "selectedDate",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip\non its number, taking precedence over the today chip. Controlled by the\nconsumer; pair with `onDateClick` to move it."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trailing header slot, e.g. a \"New event\" Button."
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-month button.",
+          "default": "Previous month"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-month button.",
+          "default": "Next month"
+        },
+        {
+          "name": "monthLabel",
+          "type": "((month: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`)."
+        },
+        {
+          "name": "overflowLabel",
+          "type": "((count: number, date: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a day's \"+N more\" overflow button, given the number of\nhidden events and the day. Defaults to \"N more events\" followed by the\nfull date in `locale`."
+        },
+        {
+          "name": "moreLabel",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The visible text of a day's overflow row, given the number of hidden\nevents. Defaults to \"+N more\". The row's accessible name is\n`overflowLabel` when it is a button.",
+          "defaultExpression": "(count: number): string => `+${count} more`"
+        },
+        {
+          "name": "weekdayLabels",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The weekday headers above the grid: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the short weekday names in `locale`\n(\"Sun\" to \"Sat\" in `en-US`); a list of any other length falls back to\nthe default."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the calendar is written and laid out in, such as\n`de-DE`: the month heading, the weekday names, the spoken dates and the\nfirst day of the week. Defaults to the nearest LocaleProvider's, else\n`en-US`."
+        },
+        {
+          "name": "weekStartsOn",
+          "type": "Weekday",
+          "typeKind": "enum",
+          "values": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

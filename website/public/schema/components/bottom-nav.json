@@ -1,0 +1,110 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "BottomNav",
+  "label": "Bottom nav",
+  "slug": "bottom-nav",
+  "category": "navigation",
+  "description": "Mobile tab bar for three to five destinations, in the Rift style or as iOS Liquid Glass or Material 3 Expressive.",
+  "client": true,
+  "importPath": "rift-ds/components/BottomNav/BottomNav",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/bottom-nav",
+  "markdownUrl": "https://rift-ds.com/components/bottom-nav.md",
+  "exports": [
+    {
+      "component": "BottomNav",
+      "props": [
+        {
+          "name": "items",
+          "type": "BottomNavItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Destinations, three to five of them"
+        },
+        {
+          "name": "activeKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Key of the destination for the current page"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((key: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with a destination's key when it is pressed"
+        },
+        {
+          "name": "platform",
+          "type": "\"default\" | \"ios\" | \"android\"",
+          "typeKind": "enum",
+          "values": [
+            "android",
+            "default",
+            "ios"
+          ],
+          "required": false,
+          "description": "Which platform's tab bar to draw. `default` is the Rift bar; `ios` is the\niOS 26 Liquid Glass capsule floating over content with a sliding lens\nbehind the selection; `android` is the Material 3 Expressive navigation\nbar with a pill indicator behind the selected icon.",
+          "default": "default"
+        },
+        {
+          "name": "search",
+          "type": "BottomNavSearch",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A destination set apart from the rest, search unless its `icon` says\notherwise. On iOS it is its own glass circle beside the bar; elsewhere it\njoins the bar as the last destination."
+        },
+        {
+          "name": "minimized",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "iOS only: shrinks the bar to the selected destination alone, the way the\nsystem bar minimises while the page scrolls down. Ignored on other platforms.",
+          "default": false
+        },
+        {
+          "name": "fixed",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Pins the bar to the bottom of the viewport, above the home-indicator safe area",
+          "default": false
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom Nav's \"Main\", so a screen carrying both announces two different navs",
+          "default": "Tabs"
+        },
+        {
+          "name": "badgeLabel",
+          "type": "((badge: string | number | true) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Visually hidden text read after a destination's label when it carries a\nbadge, given the item's `badge`. Defaults to \", new\" for a dot (`true`)\nand \", 3 new\" for a count; the leading comma and space are part of the text.",
+          "defaultExpression": "(badge: number | string | true) =>\n  badge === true ? ', new' : `, ${badge} new`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+        }
+      ]
+    }
+  ]
+}

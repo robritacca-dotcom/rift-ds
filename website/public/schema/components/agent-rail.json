@@ -1,0 +1,124 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AgentRail",
+  "label": "Agent rail",
+  "slug": "agent-rail",
+  "category": "ai",
+  "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.",
+  "client": false,
+  "importPath": "rift-ds/components/AgentRail/AgentRail",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/agent-rail",
+  "markdownUrl": "https://rift-ds.com/components/agent-rail.md",
+  "exports": [
+    {
+      "component": "AgentRail",
+      "props": [
+        {
+          "name": "profile",
+          "type": "AgentRailProfile",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The agent this rail belongs to, rendered as the header's portrait block."
+        },
+        {
+          "name": "tabs",
+          "type": "AgentRailTab[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The rail's tabs, in display order. Each carries its own pane."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Id of the tab on stage. The rail is fully controlled by design, so the\nhost owns the state: it holds no hooks and renders from a Server Component.\nFalls back to the first tab."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the chosen tab's id."
+        },
+        {
+          "name": "activeTab",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy name for `value`.",
+          "deprecated": "Use `value` instead."
+        },
+        {
+          "name": "onTabChange",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change callback; fires alongside `onValueChange`.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "tabsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the tab strip.",
+          "default": "Agent views"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop for the rail.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "onCollapse",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the rail's collapse affordance is pressed. The button renders\nonly when this is given, pinned to the rail's top trailing corner. It is\na chevron rather than a cross on purpose: the host's own close control\nis usually a cross a few pixels away, and two of them side by side read\nas two ways to dismiss the same thing."
+        },
+        {
+          "name": "collapseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the collapse affordance.",
+          "default": "Collapse the agent panel"
+        },
+        {
+          "name": "collapseVariant",
+          "type": "\"chevron\" | \"close\"",
+          "typeKind": "enum",
+          "values": [
+            "chevron",
+            "close"
+          ],
+          "required": false,
+          "description": "How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is.",
+          "default": "chevron"
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Rendered under the pane, outside its scroll — a sign-out row, a quiet hint."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

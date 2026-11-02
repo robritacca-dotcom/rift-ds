@@ -1,0 +1,194 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Widget",
+  "label": "Widget",
+  "slug": "widget",
+  "category": "data-display",
+  "description": "A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.",
+  "client": false,
+  "importPath": "rift-ds/components/Widget/Widget",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/widget",
+  "markdownUrl": "https://rift-ds.com/components/widget.md",
+  "exports": [
+    {
+      "component": "Widget",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The tile's heading. Also the section's accessible name, unless an `aria-label` is passed. Note: this shadows the native `title` tooltip attribute, which Widget does not expose."
+        },
+        {
+          "name": "count",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A quiet figure after the title: how many rows the tile holds, how many are open."
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trailing header slot, opposite the title — a compact button, a link, a period label."
+        },
+        {
+          "name": "titleAs",
+          "type": "\"h2\" | \"h3\" | \"h4\"",
+          "typeKind": "enum",
+          "values": [
+            "h2",
+            "h3",
+            "h4"
+          ],
+          "required": false,
+          "description": "Heading element for the title, so the tile takes its place in the page's outline.",
+          "default": "h3"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "WidgetGrid",
+      "props": [
+        {
+          "name": "columns",
+          "type": "1 | 2 | 3",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "required": false,
+          "description": "The most columns the board runs to. It folds to fewer as its own width narrows.",
+          "default": 2
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The Widgets on the board, in reading order: they fill the first column, then the next."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "WidgetGroup",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The run's quiet label, e.g. \"Waiting on you\"."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The rows in this run."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "WidgetRow",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The row's main line. Note: this shadows the native `title` tooltip attribute, which WidgetRow does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A quiet second line under the title: who, where, or how much."
+        },
+        {
+          "name": "leading",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading mark — a StatusDot, a PixelAvatar, an Avatar, a Spinner, an icon. Decorative unless the element names itself."
+        },
+        {
+          "name": "meta",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trailing fact in the caption face: a date, an amount, a state."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Renders the row as a link to this URL."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+        }
+      ]
+    }
+  ]
+}

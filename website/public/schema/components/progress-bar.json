@@ -1,0 +1,73 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ProgressBar",
+  "label": "Progress bar",
+  "slug": "progress-bar",
+  "category": "feedback",
+  "description": "Horizontal bar indicating completion progress, with an optional percentage label.",
+  "client": false,
+  "importPath": "rift-ds/components/ProgressBar/ProgressBar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/progress-bar",
+  "markdownUrl": "https://rift-ds.com/components/progress-bar.md",
+  "exports": [
+    {
+      "component": "ProgressBar",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current progress value (0–100)",
+          "default": 0
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Size of the bar",
+          "default": "default"
+        },
+        {
+          "name": "showLabel",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show percentage label",
+          "default": false
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label describing what is loading. Defaults to \"Progress\"; a passed native `aria-label` works too."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the percentage label is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

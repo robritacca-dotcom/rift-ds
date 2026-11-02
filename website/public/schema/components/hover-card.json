@@ -1,0 +1,76 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "HoverCard",
+  "label": "Hover card",
+  "slug": "hover-card",
+  "category": "overlays",
+  "description": "Rich preview panel that opens from hover or focus, with interactive content and position options.",
+  "client": true,
+  "importPath": "rift-ds/components/HoverCard/HoverCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/hover-card",
+  "markdownUrl": "https://rift-ds.com/components/hover-card.md",
+  "exports": [
+    {
+      "component": "HoverCard",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trigger element"
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Panel content — arbitrary elements, unlike Tooltip's plain text. In running text inside a `<p>`, keep it phrasing-level (spans): a block element would end the paragraph mid-parse.\nNote: this shadows the native `content` attribute, which HoverCard does not expose."
+        },
+        {
+          "name": "position",
+          "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "end",
+            "left",
+            "right",
+            "start",
+            "top"
+          ],
+          "required": false,
+          "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
+          "default": "bottom"
+        },
+        {
+          "name": "showDelay",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Delay before showing (in ms)",
+          "default": 300
+        },
+        {
+          "name": "hideDelay",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Delay before hiding (in ms)",
+          "default": 150
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

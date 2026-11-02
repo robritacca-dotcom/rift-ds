@@ -1,0 +1,99 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "InspectorDropdown",
+  "label": "Inspector dropdown",
+  "slug": "inspector-dropdown",
+  "category": "inspector",
+  "description": "One-row select for inspector panels, with the name inside the bar and the library Dropdown's menu and font previews.",
+  "client": true,
+  "importPath": "rift-ds/components/Inspector/InspectorDropdown",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/inspector-dropdown",
+  "markdownUrl": "https://rift-ds.com/components/inspector-dropdown.md",
+  "exports": [
+    {
+      "component": "InspectorDropdown",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The setting's name, drawn inside the bar on the left. Also the dropdown's accessible name."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Currently selected value, controlled. Leave undefined to let the\ndropdown keep its own selection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected value on first render when uncontrolled (`value` undefined)."
+        },
+        {
+          "name": "options",
+          "type": "DropdownOption[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Available options (flat list). Each option's `font` previews the face, as in Dropdown."
+        },
+        {
+          "name": "groups",
+          "type": "DropdownOptionGroup[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Optional grouped options. When provided, renders groups with labels and separators."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shown on the right when nothing is selected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the dropdown is disabled.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+          "default": "default"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the newly selected value."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the wrapper.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

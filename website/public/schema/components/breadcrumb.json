@@ -1,0 +1,59 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Breadcrumb",
+  "label": "Breadcrumb",
+  "slug": "breadcrumb",
+  "category": "navigation",
+  "description": "Hierarchical navigation trail showing the user's location within the site.",
+  "client": false,
+  "importPath": "rift-ds/components/Breadcrumb/Breadcrumb",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/breadcrumb",
+  "markdownUrl": "https://rift-ds.com/components/breadcrumb.md",
+  "exports": [
+    {
+      "component": "Breadcrumb",
+      "props": [
+        {
+          "name": "items",
+          "type": "BreadcrumbItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Ordered list of breadcrumb items"
+        },
+        {
+          "name": "maxItems",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum visible items before collapsing (min 2: first + last)"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop for the nav landmark.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+        }
+      ]
+    }
+  ]
+}

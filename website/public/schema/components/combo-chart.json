@@ -1,0 +1,139 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ComboChart",
+  "label": "Combo chart",
+  "slug": "combo-chart",
+  "category": "charts",
+  "description": "Bar and line series in one chart, with an optional second y-axis for pairs in different units, like spend and ROAS.",
+  "client": true,
+  "importPath": "rift-ds/components/Chart/ComboChart",
+  "barrel": "charts",
+  "docsUrl": "https://rift-ds.com/components/combo-chart",
+  "markdownUrl": "https://rift-ds.com/components/combo-chart.md",
+  "exports": [
+    {
+      "component": "ComboChart",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "data",
+          "type": "Record<string, unknown>[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of data objects"
+        },
+        {
+          "name": "xKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Key in data for x-axis values",
+          "default": "label"
+        },
+        {
+          "name": "barKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Key in data for the bar series"
+        },
+        {
+          "name": "barLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Display name for the bar series, shown in the tooltip; defaults to the key"
+        },
+        {
+          "name": "lineKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Key in data for the line series"
+        },
+        {
+          "name": "lineLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Display name for the line series, shown in the tooltip; defaults to the key"
+        },
+        {
+          "name": "barColor",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Bar fill colour (CSS value or token reference)"
+        },
+        {
+          "name": "lineColor",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Line stroke colour (CSS value or token reference)"
+        },
+        {
+          "name": "secondaryAxis",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Plot the line on its own right-hand y-axis, for series in different units",
+          "default": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title"
+        },
+        {
+          "name": "summaryItems",
+          "type": "ChartSummaryItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Summary stats displayed in the header"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart area height in pixels",
+          "default": 350
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the wrapper",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -62,7 +62,8 @@ export default function AboutDsPage() {
               <Link href="/blueprints/design" className={styles.inlineLink}>design.md</Link>,{" "}
               <Link href="/blueprints/content-design" className={styles.inlineLink}>content-design.md</Link>), the{" "}
               <Link href="/skills" className={styles.inlineLink}>skills</Link>, and the{" "}
-              <Link href="/loops" className={styles.inlineLink}>loops</Link> drop into your own codebase or AI tooling. Agents connect to the same docs through the MCP endpoint at <code>/api/mcp</code>: one URL for the component list, exact prop contracts, and the token registry.
+              <Link href="/loops" className={styles.inlineLink}>loops</Link> drop into your own codebase or AI tooling. Agents connect to the same docs through the MCP endpoint at <code>/api/mcp</code>: one URL for the component list, exact prop contracts, and the token registry with its values resolved per theme. The same contracts are published as files a tool can check, one JSON{" "}
+              <Link href="/docs/schemas" className={styles.inlineLink}>schema</Link> per component and the tokens in the DTCG format.
             </p>
             {/* The authorship line. The footer credits the author on every
                 page, but the footer sits outside app/, so the chat corpus
@@ -135,7 +136,7 @@ export default function AboutDsPage() {
                 </ul>
                 <ArchitectureMap
                   map={systemOverviewMap}
-                  caption="One repo, one gate, two destinations. The other four maps magnify the lanes."
+                  caption="One repo, one gate, two destinations. The maps below magnify the lanes."
                 />
               </section>
 
@@ -212,8 +213,10 @@ export default function AboutDsPage() {
                   <li>
                     <code>/api/mcp</code> serves agents five tools with no
                     key, no account, and no model behind them: the component
-                    list, per-component prop APIs, the token registry, install
-                    setup, and site search.
+                    list, per-component prop APIs, the token registry resolved
+                    to any theme&apos;s values on request, install setup, and
+                    site search. The component and token answers name the
+                    published file behind them.
                   </li>
                 </ul>
                 <ArchitectureMap
@@ -229,7 +232,8 @@ export default function AboutDsPage() {
                   carries everything published as prose, cached for an hour,
                   so most questions are answered from context alone. The
                   generated contracts stay out of it: for a prop&apos;s type
-                  or default, or a token count, the model calls two lookup
+                  or default, a token count, or a token&apos;s value in a
+                  theme, the model calls two lookup
                   tools that read the same in-memory data{" "}
                   <code>/api/mcp</code> serves to agents, and the lookup
                   surfaces in the widget as a trace point. The corpus makes

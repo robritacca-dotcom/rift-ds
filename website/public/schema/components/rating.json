@@ -1,0 +1,120 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Rating",
+  "label": "Rating",
+  "slug": "rating",
+  "category": "forms",
+  "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
+  "client": true,
+  "importPath": "rift-ds/components/Rating/Rating",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/rating",
+  "markdownUrl": "https://rift-ds.com/components/rating.md",
+  "exports": [
+    {
+      "component": "Rating",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current rating (controlled). 0 means no rating."
+        },
+        {
+          "name": "defaultValue",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial rating for uncontrolled use. 0 means no rating.",
+          "default": 0
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Number of steps on the scale",
+          "default": 5
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the new rating directly.\nFires on every selection, including a clear back to 0 via `allowClear`."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Display-only mode — renders the current rating with no interaction",
+          "default": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the control is disabled",
+          "default": false
+        },
+        {
+          "name": "allowClear",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selecting the already-selected step clears the rating back to 0",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads.",
+          "defaultExpression": "star"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the group, and the base of each step's label",
+          "default": "Rating"
+        },
+        {
+          "name": "valueLabel",
+          "type": "((value: number, max: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The spoken value, given a step (or, in `readOnly` mode, the current\nrating) and `max`. Defaults to \"3 out of 5\". It follows `label` and a\ncolon, as in \"Rating: 3 out of 5\".",
+          "defaultExpression": "(value: number, max: number) => `${value} out of ${max}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Spinner",
+  "label": "Spinner",
+  "slug": "spinner",
+  "category": "feedback",
+  "description": "Animated circular loading indicator in three sizes and a default, neutral or inherit tone.",
+  "client": false,
+  "importPath": "rift-ds/components/Spinner/Spinner",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/spinner",
+  "markdownUrl": "https://rift-ds.com/components/spinner.md",
+  "exports": [
+    {
+      "component": "Spinner",
+      "props": [
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm"
+          ],
+          "required": false,
+          "description": "Size of the spinner",
+          "default": "md"
+        },
+        {
+          "name": "tone",
+          "type": "\"inherit\" | \"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "inherit",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour of the arc: `default` in the primary text colour, `neutral` in\nthe secondary one, `inherit` in `currentColor`, for use inside coloured\ncontrols."
+        },
+        {
+          "name": "variant",
+          "type": "\"inherit\" | \"neutral\" | \"primary\"",
+          "typeKind": "enum",
+          "values": [
+            "inherit",
+            "neutral",
+            "primary"
+          ],
+          "required": false,
+          "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+          "deprecated": "Use `tone` instead."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label, announced as the spinner's name. A passed `aria-label` takes precedence.",
+          "default": "Loading"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Prose",
+  "label": "Prose",
+  "slug": "prose",
+  "category": "ai",
+  "description": "Token-styled typography for rendered markdown and rich agent output.",
+  "client": false,
+  "importPath": "rift-ds/components/Prose/Prose",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/prose",
+  "markdownUrl": "https://rift-ds.com/components/prose.md",
+  "exports": [
+    {
+      "component": "Prose",
+      "props": [
+        {
+          "name": "size",
+          "type": "\"default\" | \"sm\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "sm"
+          ],
+          "required": false,
+          "description": "Body scale. `sm` maps paragraphs, lists and code to the small paragraph tokens for dense chat contexts.",
+          "default": "default"
+        },
+        {
+          "name": "tableSize",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables.",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The rendered markup to style — the output of whatever markdown renderer the consumer uses."
+        }
+      ]
+    }
+  ]
+}

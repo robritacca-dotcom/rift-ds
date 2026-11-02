@@ -1,0 +1,75 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AttachmentDropZone",
+  "label": "Attachment drop zone",
+  "slug": "attachment-drop-zone",
+  "category": "ai",
+  "description": "A wrapper that makes a whole surface a file drop target, with an outlined overlay while files hover over it.",
+  "client": true,
+  "importPath": "rift-ds/components/Attachment/AttachmentDropZone",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/attachment-drop-zone",
+  "markdownUrl": "https://rift-ds.com/components/attachment-drop-zone.md",
+  "exports": [
+    {
+      "component": "AttachmentDropZone",
+      "props": [
+        {
+          "name": "onFilesSelected",
+          "type": "((files: File[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the files dropped anywhere on the zone."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Stops the zone reacting to drags; its children behave as if it were not there.",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon above the overlay's headline: a Material Symbol name, or any\ncustom element. Pass `null` for none.",
+          "defaultExpression": "upload_file"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Headline of the overlay shown while files are dragged over the zone.",
+          "default": "Drop files to attach"
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Second line of the overlay: what may be dropped, e.g. accepted types and limits."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The surface that accepts drops: a chat panel, a thread and its composer."
+        }
+      ]
+    }
+  ]
+}

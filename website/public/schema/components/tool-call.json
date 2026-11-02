@@ -1,0 +1,108 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ToolCall",
+  "label": "Tool call",
+  "slug": "tool-call",
+  "category": "ai",
+  "description": "The record of one tool invocation, with its arguments and result behind a disclosure.",
+  "client": true,
+  "importPath": "rift-ds/components/ToolCall/ToolCall",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/tool-call",
+  "markdownUrl": "https://rift-ds.com/components/tool-call.md",
+  "exports": [
+    {
+      "component": "ToolCall",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The tool that was invoked, shown in monospace."
+        },
+        {
+          "name": "status",
+          "type": "ToolCallStatus",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "pending",
+            "running",
+            "success"
+          ],
+          "required": false,
+          "description": "Where the call has got to. Drives the colour, the indicator, and the default status text.",
+          "default": "success"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "One line describing this particular call, e.g. the target path or query."
+        },
+        {
+          "name": "duration",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How long the call took, e.g. \"1.2s\". Free text, so callers keep their own formatting."
+        },
+        {
+          "name": "statusLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Override the status text shown beside the indicator."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Open state for controlled use. Pair with `onOpenChange`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Open state for uncontrolled use.",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires whenever the panel opens or closes."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controls for a call awaiting a decision — allow, deny, always allow.\nRendered outside the collapsible panel, so approving never requires\nexpanding the call first."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The call's arguments and result."
+        }
+      ]
+    }
+  ]
+}

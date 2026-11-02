@@ -1,0 +1,51 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Figure",
+  "label": "Figure",
+  "slug": "figure",
+  "category": "data-display",
+  "description": "Images with captions, in the case-study frame.",
+  "client": false,
+  "importPath": "rift-ds/components/Figure/Figure",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/figure",
+  "markdownUrl": "https://rift-ds.com/components/figure.md",
+  "exports": [
+    {
+      "component": "Figure",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The image element — a plain <img> or a framework image component"
+        },
+        {
+          "name": "caption",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Caption rendered below the image"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support.\nIt is attached to the zoom button wrapping the image, not to the\n`<figure>`, so it replaces the native `onClick` on the root."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

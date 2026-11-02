@@ -1,0 +1,107 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "TagInput",
+  "label": "Tag input",
+  "slug": "tag-input",
+  "category": "forms",
+  "description": "Multi-value text input with entries held as removable tags.",
+  "client": true,
+  "importPath": "rift-ds/components/TagInput/TagInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/tag-input",
+  "markdownUrl": "https://rift-ds.com/components/tag-input.md",
+  "exports": [
+    {
+      "component": "TagInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Field label text"
+        },
+        {
+          "name": "values",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Committed tags (controlled) — pair with `onValuesChange`"
+        },
+        {
+          "name": "defaultValues",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Initial tags when uncontrolled"
+        },
+        {
+          "name": "onValuesChange",
+          "type": "((values: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the full tag array whenever a tag is added\nor removed. The native `onChange` still fires for draft-text edits, which\nkeeps the standard React event signature for form libraries."
+        },
+        {
+          "name": "maxTags",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum number of tags — at the limit the input stops accepting new ones"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute)",
+          "default": "default"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — shows error styling and message",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below the control"
+        },
+        {
+          "name": "removeLabel",
+          "type": "((tag: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a tag's remove button, given the tag. Defaults to \"Remove <tag>\".",
+          "defaultExpression": "(tag) => `Remove ${tag}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+          "default": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the committed tags submit with an enclosing\nform through hidden inputs, one entry per tag, nothing while disabled.\nThe draft text being typed is never submitted. Also the fallback for the\nelement id (`id || name || label`)."
+        }
+      ]
+    }
+  ]
+}

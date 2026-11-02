@@ -41,7 +41,8 @@ jobs:
       - run: npm run lint
       - run: npm run build
       # Deprecate, never remove: nothing the latest release published may
-      # vanish or narrow (props, export names, subpaths, deep-import files).
+      # vanish or narrow (props, export names, subpaths, deep-import files,
+      # the published schema files and their meta-schema properties).
       - run: node scripts/validate-api-compat.mjs
       - run: npm run build:lib
       # publint + arethetypeswrong against dist/: the manifest must match the
@@ -53,7 +54,11 @@ jobs:
       # CI-only: a local tree is dirty with the change in progress, so verify
       # cannot run this guard.
       - name: Check generated content is committed
-        run: git diff --exit-code
+        # `git diff` alone misses a generated file that is new (a component's
+        # first schema, a preset's DTCG pair), so untracked files fail too.
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
 
   test:
     name: Story tests

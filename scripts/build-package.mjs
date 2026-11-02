@@ -20,6 +20,7 @@ import { execSync } from 'node:child_process';
 import {
   chmodSync,
   copyFileSync,
+  rmSync,
   mkdirSync,
   readdirSync,
   readFileSync,
@@ -62,6 +63,10 @@ for (const asset of assets) {
   copyFileSync(asset, target);
 }
 console.log(`▸ Copied ${assets.length} runtime assets (css, fonts, registries).`);
+
+// values.d.ts declares its types inline, so the plugin's type file for the
+// JSON behind it is unreachable weight.
+rmSync(join(distDir, 'tokens', 'values.json.d.ts'), { force: true });
 
 // Vite's react plugin drops "use client" directives during the lib
 // build, so restore them in dist from what the source declares — a

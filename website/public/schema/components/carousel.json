@@ -1,0 +1,147 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Carousel",
+  "label": "Carousel",
+  "slug": "carousel",
+  "category": "data-display",
+  "description": "Sliding content viewer with navigation arrows, dot indicators, auto-play, and keyboard support.",
+  "client": true,
+  "importPath": "rift-ds/components/Carousel/Carousel",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/carousel",
+  "markdownUrl": "https://rift-ds.com/components/carousel.md",
+  "exports": [
+    {
+      "component": "Carousel",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Carousel slides"
+        },
+        {
+          "name": "showDots",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show dot indicators",
+          "default": true
+        },
+        {
+          "name": "showArrows",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show previous/next navigation arrows",
+          "default": true
+        },
+        {
+          "name": "autoPlay",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Auto-play slides",
+          "default": false
+        },
+        {
+          "name": "autoPlayInterval",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Auto-play interval in milliseconds",
+          "default": 5000
+        },
+        {
+          "name": "loop",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether navigation should loop",
+          "default": false
+        },
+        {
+          "name": "slide",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Index of the active slide (zero-based), for a controlled carousel. Leave\nit undefined to let the component keep its own position, seeded from\n`defaultSlide`."
+        },
+        {
+          "name": "defaultSlide",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Index of the slide shown on first render when the carousel is uncontrolled (zero-based)",
+          "default": 0
+        },
+        {
+          "name": "onSlideChange",
+          "type": "((index: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the index of the slide being moved to"
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-slide arrow",
+          "default": "Previous slide"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-slide arrow",
+          "default": "Next slide"
+        },
+        {
+          "name": "slideLabel",
+          "type": "((position: number, count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of each slide, given its 1-based position and the slide count",
+          "defaultExpression": "(position: number, count: number) => `Slide ${position} of ${count}`"
+        },
+        {
+          "name": "slideRoleDescription",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Role description announced for each slide",
+          "default": "slide"
+        },
+        {
+          "name": "dotsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the dot indicators' tab list",
+          "default": "Slide indicators"
+        },
+        {
+          "name": "dotLabel",
+          "type": "((position: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of each dot indicator, given its slide's 1-based position",
+          "defaultExpression": "(position: number) => `Go to slide ${position}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

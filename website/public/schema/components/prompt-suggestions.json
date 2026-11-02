@@ -1,0 +1,126 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "PromptSuggestions",
+  "label": "Prompt suggestions",
+  "slug": "prompt-suggestions",
+  "category": "ai",
+  "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.",
+  "client": true,
+  "importPath": "rift-ds/components/PromptSuggestions/PromptSuggestions",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/prompt-suggestions",
+  "markdownUrl": "https://rift-ds.com/components/prompt-suggestions.md",
+  "exports": [
+    {
+      "component": "PromptSuggestions",
+      "props": [
+        {
+          "name": "suggestions",
+          "type": "PromptSuggestion[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The suggestions to render, in order."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the tapped suggestion's `id`, one acknowledgment beat after the tap — the chosen chip pulses and its siblings dim first, so the choice is seen even when selection unmounts the row."
+        },
+        {
+          "name": "layout",
+          "type": "\"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
+          "typeKind": "enum",
+          "values": [
+            "cards",
+            "scroll",
+            "stack",
+            "tiles",
+            "wrap"
+          ],
+          "required": false,
+          "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows."
+        },
+        {
+          "name": "wrap",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy alias for `layout=\"wrap\"`; ignored when `layout` is set.",
+          "default": false,
+          "deprecated": "Use `layout` instead, which also covers `stack`."
+        },
+        {
+          "name": "pending",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The suggestions are still being generated: shimmer placeholder pills\nhold their place, matching the current size's chip geometry so nothing\nshifts when the real chips land. While pending the given `suggestions`\nare not rendered, the placeholders are hidden from assistive technology,\nand the row reports `aria-busy` instead.",
+          "default": false
+        },
+        {
+          "name": "pendingCount",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How many placeholder pills the pending state holds space with.",
+          "default": 3
+        },
+        {
+          "name": "entrance",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Play the staggered pop-in when the items mount. On by default; a host\nre-showing a set that has already landed (reopening a panel over the\nsame suggestions) turns it off, so the chips stand where they were\ninstead of arriving twice.",
+          "default": true
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Row scale. `default` sits at the body-paragraph scale, so a suggestion\nreads at the same weight as the messages it will become; `compact` is\nthe quieter row for placements alongside a live conversation.",
+          "default": "default"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The `id` of the suggestion already taken. Set, the row becomes the\nrecord of that choice: the taken suggestion outlined solid in the\nstrongest ink, the rest faded behind a dashed line, and none of them\ntappable any more. The same treatment QuestionCard gives a pick. For a row that stays\non screen after use, such as the follow-ups under an earlier answer."
+        },
+        {
+          "name": "chosenLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visually hidden text read after the taken suggestion once `value` is set. Defaults to \"(chosen)\".",
+          "defaultExpression": "(chosen)"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the list.",
+          "default": "Suggested prompts"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

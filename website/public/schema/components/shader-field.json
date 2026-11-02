@@ -1,0 +1,60 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ShaderField",
+  "label": "Shader field",
+  "slug": "shader-field",
+  "category": "effects",
+  "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status.",
+  "client": true,
+  "importPath": "rift-ds/components/ShaderField/ShaderField",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/shader-field",
+  "markdownUrl": "https://rift-ds.com/components/shader-field.md",
+  "exports": [
+    {
+      "component": "ShaderField",
+      "props": [
+        {
+          "name": "params",
+          "type": "Partial<ShaderParams>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Field parameters, merged over the shipped defaults, so passing one\nproperty changes one thing. Changing them never rebuilds the GL state."
+        },
+        {
+          "name": "blobs",
+          "type": "readonly ShaderBlob[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The light sources. Defaults to an eight-source composition: six on the\nambient tokens (`--color-ambient-*`, which follow the core accents unless a\ntheme re-points them) and two on surface tokens. Fewer than `BLOB_COUNT` entries is fine — unused slots park\noff-field; more are ignored, because the shader's uniform arrays are\nfixed-size.",
+          "defaultExpression": "[\n  { token: \"--color-ambient-1\", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },\n  { token: \"--color-ambient-2\", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },\n  { token: \"--color-ambient-3\", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },\n  { token: \"--color-bg-container-secondary\", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },\n  { token: \"--color-ambient-4\", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },\n  { token: \"--color-ambient-5\", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },\n  { token: \"--color-ambient-6\", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },\n  { token: \"--color-core-ui-secondary\", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },\n]"
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "False keeps WebGL entirely unmounted and reports `unavailable`, so the\ncaller's fallback is the whole background. This is the kill switch: a\nconfig lever, or an A/B against the fallback.",
+          "default": true
+        },
+        {
+          "name": "onStatusChange",
+          "type": "((status: ShaderFieldStatus) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called whenever the renderer's status changes. Drive the fallback layer's\nvisibility from this — the component deliberately does not own one, since\nwhat to paint instead is a design decision, not a rendering one."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

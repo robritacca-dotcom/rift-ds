@@ -1,0 +1,101 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Dialog",
+  "label": "Dialog",
+  "slug": "dialog",
+  "category": "overlays",
+  "description": "A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management.",
+  "client": true,
+  "importPath": "rift-ds/components/Dialog/Dialog",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/dialog",
+  "markdownUrl": "https://rift-ds.com/components/dialog.md",
+  "exports": [
+    {
+      "component": "Dialog",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Whether the dialog is open"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "typeKind": "function",
+          "required": true,
+          "description": "Callback when dialog requests to close"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Dialog title.\nNote: this shadows the native `title` tooltip attribute, which Dialog does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional subtitle under the title"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Dialog body content"
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Optional footer slot — typically a row of Buttons"
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm"
+          ],
+          "required": false,
+          "description": "Panel width",
+          "default": "md"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether ESC, backdrop click, and the close button can dismiss",
+          "default": true
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the close button.",
+          "default": "Close dialog"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the portal container, not the panel",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

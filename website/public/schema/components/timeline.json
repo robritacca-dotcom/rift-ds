@@ -1,0 +1,84 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Timeline",
+  "label": "Timeline",
+  "slug": "timeline",
+  "category": "data-display",
+  "description": "Ordered sequences: histories and steppers.",
+  "client": false,
+  "importPath": "rift-ds/components/Timeline/Timeline",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/timeline",
+  "markdownUrl": "https://rift-ds.com/components/timeline.md",
+  "exports": [
+    {
+      "component": "Timeline",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"default\" | \"company\"",
+          "typeKind": "enum",
+          "values": [
+            "company",
+            "default"
+          ],
+          "required": false,
+          "description": "Which layout the timeline draws. Omitted or `default`: a flat sequence of steps or events with dot, number or icon markers.\n`company`: roles grouped under a company logo, for résumé and pipeline histories."
+        },
+        {
+          "name": "items",
+          "type": "TimelineItem[] | TimelineCompany[]",
+          "typeKind": "other",
+          "required": true,
+          "description": "The entries, in order. Their shape follows `variant`: in the default layout, steps or events (`TimelineItem`).\nIn the `company` layout, companies with their roles (`TimelineCompany`)."
+        },
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "`vertical` timeline (default) or `horizontal` stepper",
+          "default": "vertical"
+        },
+        {
+          "name": "numbered",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Number the markers 1..n instead of dots",
+          "default": false
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the marker numbers are written in, such as `ar-EG`. Defaults to `en-US`. Timeline can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "presentLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text shown in place of the end date for a role marked `present`",
+          "default": "Present"
+        }
+      ]
+    }
+  ]
+}

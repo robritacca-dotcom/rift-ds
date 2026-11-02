@@ -87,6 +87,18 @@ export function assembleComponentApi() {
         required: Boolean(prop.required),
         description: lf((prop.description ?? '').trim()),
       };
+      // Docgen lists a literal union's members even when the prop is typed
+      // through a named alias (`state: AgentStatusState`), where `raw` is
+      // only the alias name. Keep the members beside the type so a schema
+      // reader gets the allowed values without resolving the alias. String
+      // literals arrive double-quoted; numeric ones bare. The checker orders
+      // union members by type id, not by declaration, so the list is sorted
+      // to keep the generated file deterministic across machines.
+      if (Array.isArray(prop.type?.value) && prop.type.value.length > 0) {
+        entry.values = prop.type.value
+          .map((member) => String(member.value).replace(/^"(.*)"$/s, '$1'))
+          .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+      }
       if (prop.defaultValue?.value != null) {
         entry.defaultValue = lf(String(prop.defaultValue.value));
       }
@@ -195,6 +207,8 @@ export interface ComponentPropApi {
   name: string;
   /** The resolved TypeScript type, literal unions expanded. */
   type: string;
+  /** The members of a literal union, quotes stripped and sorted: set whenever docgen reports one, a named alias (\`AgentStatusState\`, whose \`type\` is only the alias name) included. */
+  values?: string[];
   required: boolean;
   /** The prop's JSDoc description — present on every own prop, build-enforced. */
   description: string;

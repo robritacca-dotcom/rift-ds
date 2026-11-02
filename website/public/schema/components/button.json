@@ -1,0 +1,191 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Button",
+  "label": "Button",
+  "slug": "button",
+  "category": "actions",
+  "description": "Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes.",
+  "client": true,
+  "importPath": "rift-ds/components/Button/Button",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/button",
+  "markdownUrl": "https://rift-ds.com/components/button.md",
+  "exports": [
+    {
+      "component": "Button",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Button text content. When it is absent, plain-text `children` stand in\nfor it (with a development warning), and failing both the button reads\n\"Button\".",
+          "default": "Button"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Plain text to use as the label when `label` is absent. Anything richer than text is ignored; prefer `label`."
+        },
+        {
+          "name": "iconLeft",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon for left side — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "iconRight",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon for right side — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "variant",
+          "type": "\"neutral\" | \"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
+          "typeKind": "enum",
+          "values": [
+            "destructive",
+            "neutral",
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "required": false,
+          "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` and `destructive` are\nlegacy values from before the split: `neutral` renders as\n`variant=\"primary\" tone=\"neutral\"` and `destructive` as\n`variant=\"secondary\" tone=\"destructive\"`."
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Button size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the button is disabled"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows a spinner in the left icon slot and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\n`disabled`) and sets `aria-busy` on the rendered element."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional href — renders as <a> instead of <button>"
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional target attribute for links"
+        },
+        {
+          "name": "rel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional rel attribute for links"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+        },
+        {
+          "name": "ariaCurrent",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks this link as the current page (adds aria-current=\"page\")"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "priority",
+          "type": "\"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
+          "typeKind": "enum",
+          "values": [
+            "destructive",
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "required": false,
+          "description": "Legacy alias for `variant`.",
+          "deprecated": "Use `variant` instead."
+        },
+        {
+          "name": "state",
+          "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
+          "typeKind": "enum",
+          "values": [
+            "active",
+            "default",
+            "disabled",
+            "hover"
+          ],
+          "required": false,
+          "description": "Documentation-only interaction state.",
+          "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer `className=\"ds-button--hover\"`."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode).",
+          "deprecated": "Use `iconLeft` instead."
+        },
+        {
+          "name": "text",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy toggle for showing the text label.",
+          "default": true,
+          "deprecated": "Will be removed once `label` loses its default in the next major;\nan icon-only button will simply omit `label`."
+        }
+      ]
+    }
+  ]
+}

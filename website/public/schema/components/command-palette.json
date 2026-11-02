@@ -1,0 +1,151 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "CommandPalette",
+  "label": "Command palette",
+  "slug": "command-palette",
+  "category": "overlays",
+  "description": "A modal Cmd+K launcher that searches a grouped command list, with keyboard navigation and shortcut hints.",
+  "client": true,
+  "importPath": "rift-ds/components/CommandPalette/CommandPalette",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/command-palette",
+  "markdownUrl": "https://rift-ds.com/components/command-palette.md",
+  "exports": [
+    {
+      "component": "CommandPalette",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Whether the palette is open"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "typeKind": "function",
+          "required": true,
+          "description": "Callback when the palette requests to open or close"
+        },
+        {
+          "name": "groups",
+          "type": "CommandPaletteGroup[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Commands, grouped under headings"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Placeholder for the search field",
+          "default": "Type a command or search…"
+        },
+        {
+          "name": "emptyMessage",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Message shown when the query matches nothing",
+          "default": "No matching commands"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show a loading affordance in place of results",
+          "default": false
+        },
+        {
+          "name": "loadingMessage",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status text shown in place of results while `loading` is set. Defaults to \"Loading…\".",
+          "default": "Loading…"
+        },
+        {
+          "name": "hotkey",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Bind Cmd+K / Ctrl+K globally to toggle the palette. Set to false when the\nhost app owns the shortcut.",
+          "default": true
+        },
+        {
+          "name": "hotkeyKeys",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "The shortcuts that toggle the palette when `hotkey` is on, in the\nshortcut grammar. Defaults to `['meta+k', 'ctrl+k']`, so both answer on\nevery platform. They go through the shared shortcut listener, so they\nfire from a text field and over an open dialog.",
+          "defaultExpression": "['meta+k', 'ctrl+k']"
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+        },
+        {
+          "name": "onSelect",
+          "type": "((command: CommandPaletteCommand) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the chosen command, after its own `onSelect`. Replaces the\nnative `onSelect` (text-selection) handler on the panel."
+        },
+        {
+          "name": "onSearchChange",
+          "type": "((query: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called as the user types, for async/server-side search"
+        },
+        {
+          "name": "manualFiltering",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Skip built-in filtering — use when commands are filtered upstream",
+          "default": false
+        },
+        {
+          "name": "hideFooter",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Hide the hint row at the bottom of the panel",
+          "default": false
+        },
+        {
+          "name": "hintLabels",
+          "type": "{ navigate?: string; select?: string; close?: string | undefined; escapeKey?: string | undefined; } | undefined",
+          "typeKind": "other",
+          "required": false,
+          "description": "The words in the hint row, merged over the English defaults: the text\nbeside each key (\"to navigate\", \"to select\", \"to close\") and `escapeKey`,\nthe visible name on the Escape key cap (\"esc\")."
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the close button",
+          "default": "Close command palette"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the overlay container (the ref and native attributes go on the panel)",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

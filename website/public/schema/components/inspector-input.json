@@ -1,0 +1,78 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "InspectorInput",
+  "label": "Inspector input",
+  "slug": "inspector-input",
+  "category": "inspector",
+  "description": "One-row text field for inspector panels, with the name on the left and the value right-aligned in the bar.",
+  "client": true,
+  "importPath": "rift-ds/components/Inspector/InspectorInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/inspector-input",
+  "markdownUrl": "https://rift-ds.com/components/inspector-input.md",
+  "exports": [
+    {
+      "component": "InspectorInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The setting's name, drawn inside the bar on the left, as the field's real <label>."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current value."
+        },
+        {
+          "name": "type",
+          "type": "\"search\" | \"text\" | \"tel\" | \"url\" | \"email\"",
+          "typeKind": "enum",
+          "values": [
+            "email",
+            "search",
+            "tel",
+            "text",
+            "url"
+          ],
+          "required": false,
+          "description": "Input type: a curated subset of the single-line text types.",
+          "default": "text"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+          "default": "default"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries work unmodified."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the bar rather than the <input>.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

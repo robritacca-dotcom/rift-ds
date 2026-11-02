@@ -1,0 +1,109 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Field",
+  "label": "Field",
+  "slug": "field",
+  "category": "forms",
+  "description": "The shared scaffolding for labelled form controls: label, required marker, helper and error text, and the ARIA wiring that ties them together.",
+  "client": true,
+  "importPath": "rift-ds/components/Field/Field",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/field",
+  "markdownUrl": "https://rift-ds.com/components/field.md",
+  "exports": [
+    {
+      "component": "Field",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text rendered above the control"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The form control this field labels"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered below the control"
+        },
+        {
+          "name": "aside",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Optional content rendered opposite the helper text — a character counter,\na unit, a \"0/280\". Present only when supplied; without it the helper sits\ndirectly in the field's column and no extra wrapper is introduced."
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text and marks the control invalid",
+          "default": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the field required and renders the required marker",
+          "default": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the control is disabled — dims the label",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "group",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Group mode: renders the label as a `<span id>` instead of a\n`<label htmlFor>`, for scaffolding a set of controls (a checkbox or\nradio group) where no single labelable element exists — the group node\npoints `aria-labelledby` at the span via `labelId`.",
+          "default": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "id for the control. Generated when omitted, so the label/control/helper\nassociation works with no configuration."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

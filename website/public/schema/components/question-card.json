@@ -1,0 +1,113 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "QuestionCard",
+  "label": "Question card",
+  "slug": "question-card",
+  "category": "ai",
+  "description": "An agent's question with answers to pick: one or several, a set asked a step at a time, kept as a record once answered.",
+  "client": true,
+  "importPath": "rift-ds/components/QuestionCard/QuestionCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/question-card",
+  "markdownUrl": "https://rift-ds.com/components/question-card.md",
+  "exports": [
+    {
+      "component": "QuestionCard",
+      "props": [
+        {
+          "name": "questions",
+          "type": "QuestionCardQuestion[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The questions, asked one at a time when there is more than one."
+        },
+        {
+          "name": "values",
+          "type": "QuestionCardAnswer[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The answers already given. When set, the card renders its answered\nstate and stops taking input: the options stay where they were, the\npicked ones marked and the rest dimmed, so the record of the choice\nstays in place. An empty array records a skip."
+        },
+        {
+          "name": "onValuesChange",
+          "type": "((answers: QuestionCardAnswer[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every question's answer once the last one is given."
+        },
+        {
+          "name": "onSkip",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the person declines to answer. Its presence is what shows the Skip button."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The moment to answer has passed: the options stay on screen, dimmed and inert, under a line saying so.",
+          "default": false
+        },
+        {
+          "name": "labels",
+          "type": "Partial<QuestionCardLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replacement copy for the words the card draws itself."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "QuestionSummary",
+      "props": [
+        {
+          "name": "items",
+          "type": "QuestionSummaryItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The questions and their answers, in the order they were asked."
+        },
+        {
+          "name": "missingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What stands in the answer's place for a question left without one.",
+          "default": "No answer"
+        },
+        {
+          "name": "variant",
+          "type": "\"plain\" | \"card\"",
+          "typeKind": "enum",
+          "values": [
+            "card",
+            "plain"
+          ],
+          "required": false,
+          "description": "`card` draws the summary in its own hairline frame, as a set's record\nunder the reply that asked it. `plain` drops the frame, for a surface\nthat brings its own, such as the message bubble that sent the answers.",
+          "default": "card"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

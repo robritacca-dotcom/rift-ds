@@ -1,0 +1,78 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Stepper",
+  "label": "Stepper",
+  "slug": "stepper",
+  "category": "navigation",
+  "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
+  "client": true,
+  "importPath": "rift-ds/components/Stepper/Stepper",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/stepper",
+  "markdownUrl": "https://rift-ds.com/components/stepper.md",
+  "exports": [
+    {
+      "component": "Stepper",
+      "props": [
+        {
+          "name": "steps",
+          "type": "StepperStep[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Ordered list of steps in the flow"
+        },
+        {
+          "name": "activeStep",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Index of the active step. Steps before it render as complete (check\nicon), steps after it as upcoming (step number). Pass `steps.length`\nto mark the whole flow complete."
+        },
+        {
+          "name": "onStepClick",
+          "type": "((index: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback with the clicked step's index. When provided, completed steps\nand the active step become buttons so the reader can revisit an earlier\nstage; upcoming steps stay non-interactive either way."
+        },
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Layout direction",
+          "default": "horizontal"
+        },
+        {
+          "name": "completeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status read after a completed step's label. The check mark that draws the\nstate is decorative, so this visually hidden text is what tells a screen\nreader a done step from an upcoming one. Defaults to \"Completed\".",
+          "default": "Completed"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the step numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

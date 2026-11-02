@@ -1,0 +1,808 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "DataTable",
+  "label": "Data table",
+  "slug": "data-table",
+  "category": "data-display",
+  "description": "The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.",
+  "client": true,
+  "importPath": "rift-ds/components/DataTable/DataTable",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/data-table",
+  "markdownUrl": "https://rift-ds.com/components/data-table.md",
+  "exports": [
+    {
+      "component": "DataTable",
+      "props": [
+        {
+          "name": "columns",
+          "type": "DataTableColumn<R>[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Column definitions."
+        },
+        {
+          "name": "rows",
+          "type": "R[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Row data, as raw values the table can sort and search."
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Rows per page, for controlled use (or as a fixed setting). Setting this or `defaultPageSize` turns on the built-in pagination."
+        },
+        {
+          "name": "defaultPageSize",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Rows per page to start with, for uncontrolled use; `pageSizeOptions` then lets the reader change it."
+        },
+        {
+          "name": "onPageSizeChange",
+          "type": "((pageSize: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new page size when the reader picks one from `pageSizeOptions`."
+        },
+        {
+          "name": "pageSizeOptions",
+          "type": "number[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The page sizes the footer offers in a Rows per page picker. Leave unset for no picker."
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The current page, counting from 1, for controlled use. Pair with `onPageChange`. A page past the last shows the last."
+        },
+        {
+          "name": "defaultPage",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The page to start on, counting from 1, for uncontrolled use."
+        },
+        {
+          "name": "onPageChange",
+          "type": "((page: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new page, counting from 1: from the pager, and back to 1 when a search, filter, sort or page size change starts over."
+        },
+        {
+          "name": "pageSizeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The page size picker's label. Defaults to \"Rows per page\".",
+          "default": "Rows per page"
+        },
+        {
+          "name": "phoneLayout",
+          "type": "\"scroll\" | \"stack\"",
+          "typeKind": "enum",
+          "values": [
+            "scroll",
+            "stack"
+          ],
+          "required": false,
+          "description": "How the table reads when it is narrower than a phone (its own width,\nunder `BREAKPOINT_PHONE_PX`, so a table in a narrow panel counts):\n`scroll` keeps the rows and scrolls sideways with the row header\npinned; `stack` draws each row as a card, its row header as the title\nand every other column as a label and value pair. Defaults to `scroll`.",
+          "default": "scroll"
+        },
+        {
+          "name": "selectable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Adds a checkbox column with a select-all header.",
+          "default": false
+        },
+        {
+          "name": "selectedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Selected row ids for controlled use. Pair with `onSelectionChange`."
+        },
+        {
+          "name": "defaultSelectedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Initially selected row ids for uncontrolled use."
+        },
+        {
+          "name": "onSelectionChange",
+          "type": "((ids: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full list of selected row ids after every change."
+        },
+        {
+          "name": "sort",
+          "type": "DataTableSort | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "Sort state for controlled use. Pair with `onSortChange`; `null` means unsorted."
+        },
+        {
+          "name": "defaultSort",
+          "type": "DataTableSort",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Initial sort state for uncontrolled use."
+        },
+        {
+          "name": "onSortChange",
+          "type": "((sort: DataTableSort | null) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new sort state — `null` when a third click clears the sort."
+        },
+        {
+          "name": "sorts",
+          "type": "DataTableSort[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`."
+        },
+        {
+          "name": "defaultSorts",
+          "type": "DataTableSort[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Initial sorts for uncontrolled use."
+        },
+        {
+          "name": "onSortsChange",
+          "type": "((sorts: DataTableSort[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`."
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
+        },
+        {
+          "name": "virtualize",
+          "type": "boolean | \"auto\"",
+          "typeKind": "other",
+          "required": false,
+          "description": "Draws only the rows in view, so a table of thousands scrolls as\nsmoothly as one of ten. `auto` (the default) does it for an unpaged,\nungrouped table of more than 200 rows; `true` always; `false` never.\nA virtualised table scrolls inside its frame (`maxHeight`, 640px when\nunset), keeps its header in view, and still sends its first screen of\nrows in the server's HTML.",
+          "defaultExpression": "auto"
+        },
+        {
+          "name": "onLoadMore",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again."
+        },
+        {
+          "name": "hasMore",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view.",
+          "default": false
+        },
+        {
+          "name": "manual",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Hands sorting, filtering, search and paging to the host, for a table\nwhose rows live on a server. The table stops doing them itself and\nreports every change through its pairs (`onSortsChange`,\n`onFiltersChange`, `onSearchChange`, `onPageChange`,\n`onPageSizeChange`); pass back `rows` already sorted, filtered and\npaged. Totals, grouping and Select all work over the rows given, and\nSelect all N from a TableToolbar selects every match as a query.",
+          "default": false
+        },
+        {
+          "name": "rowCount",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Every row that matches on the server, in `manual` mode: drives the pager, the result count and Select all N. Defaults to the rows given."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether rows are being fetched. With no rows yet the body shows skeleton rows; with rows on screen they stay, dimmed and inert, under a thin progress line, so the table never blanks.",
+          "default": false
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A failed load's message. With no rows it replaces the body with an error state; over rows already on screen it shows as a Banner above them. Pair with `onRetry`."
+        },
+        {
+          "name": "onRetry",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called by the error state's Try again button. Without it the error shows with no button."
+        },
+        {
+          "name": "loadLabels",
+          "type": "Partial<DataTableLoadLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button."
+        },
+        {
+          "name": "renderDetail",
+          "type": "((row: R) => ReactNode)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Renders a row's details: adds a chevron column, and an opened row shows this beneath it, across the table's width. Rendered only once opened."
+        },
+        {
+          "name": "expandedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The ids of the rows whose details are open, for controlled use. Pair with `onExpandedIdsChange`."
+        },
+        {
+          "name": "defaultExpandedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The rows open to begin with, for uncontrolled use."
+        },
+        {
+          "name": "onExpandedIdsChange",
+          "type": "((ids: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the open rows' ids after one opens or closes."
+        },
+        {
+          "name": "expandMode",
+          "type": "\"multiple\" | \"single\"",
+          "typeKind": "enum",
+          "values": [
+            "multiple",
+            "single"
+          ],
+          "required": false,
+          "description": "Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`).",
+          "default": "multiple"
+        },
+        {
+          "name": "onViewChange",
+          "type": "((view: TableView) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view."
+        },
+        {
+          "name": "grouping",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`."
+        },
+        {
+          "name": "defaultGrouping",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The grouping to start with, for uncontrolled use."
+        },
+        {
+          "name": "onGroupingChange",
+          "type": "((grouping: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new grouping, from a header menu or a TableToolbar."
+        },
+        {
+          "name": "totalsRow",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Adds a totals row to the table's foot, sticky at its bottom edge: each cell a menu picking its calculation over every matching row.",
+          "default": false
+        },
+        {
+          "name": "totals",
+          "type": "Record<string, Total>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`."
+        },
+        {
+          "name": "defaultTotals",
+          "type": "Record<string, Total>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The footer calculations to start with, for uncontrolled use."
+        },
+        {
+          "name": "onTotalsChange",
+          "type": "((totals: Record<string, Total>) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every footer calculation after one is picked."
+        },
+        {
+          "name": "multiSort",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lets the table sort by several columns: Shift-click a header, or pick Add to sort from its menu, to add the column after the current sorts. Each sorted header shows its rank while more than one sorts.",
+          "default": false
+        },
+        {
+          "name": "searchable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the built-in search field, matching against every column's raw value.",
+          "default": false
+        },
+        {
+          "name": "searchPlaceholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Placeholder for the search field.",
+          "default": "Search"
+        },
+        {
+          "name": "toolbar",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Slot beside the search field for consumer-owned filter controls."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's. Defaults to `default`. Unlike a static size, it is\nstate the reader can change from a TableToolbar's density switch: passing\nit controls that state, paired with `defaultSize` and `onSizeChange`."
+        },
+        {
+          "name": "striped",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alternating row backgrounds, passed through to the underlying Table.",
+          "default": false
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible caption for the underlying table (visually hidden)."
+        },
+        {
+          "name": "emptyState",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "What to render when no rows match — defaults to a built-in empty state."
+        },
+        {
+          "name": "selectAllLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the select-all checkbox in the header, shown with `selectable`.",
+          "default": "Select all rows on this page"
+        },
+        {
+          "name": "selectRowLabel",
+          "type": "((row: R) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a row's checkbox, given the row. Defaults to \"Select\"\nfollowed by the value of the `rowHeader` column (else the first column),\nand to \"Select row\" with the id only when that value is empty.",
+          "defaultExpression": "(row: R) => {\n    const nameKey = (columnsProp.find((col) => col.rowHeader) ?? columnsProp[0])?.key;\n    const name = nameKey === undefined ? undefined : row.values[nameKey];\n    return name == null || name === '' ? `Select row ${row.id}` : `Select ${name}`;\n  }"
+        },
+        {
+          "name": "sortLabel",
+          "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a sortable header's button, given the column's header\ntext (its `key` when the header is not a string) and its current sort\ndirection, `null` when unsorted. Defaults to the header text alone: the\nsort state is the header's `aria-sort`, so naming it here too would read\nit twice.",
+          "defaultExpression": "(header: string) => header"
+        },
+        {
+          "name": "sortAnnouncement",
+          "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to \"Sorted by Name, ascending\" or \"Sort cleared\".",
+          "defaultExpression": "(header: string, direction: DataTableSort['direction'] | null) =>\n    direction === null ? 'Sort cleared' : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+        },
+        {
+          "name": "sortRankLabel",
+          "type": "((name: string, rank: number, direction: \"desc\" | \"asc\") => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "With several sorts, names a header's sort button after the first: given the `sortLabel` name, its rank and its direction. Defaults to \"Owner, sort 2, ascending\". The first sort's header carries `aria-sort` instead.",
+          "defaultExpression": "(name: string, rank: number, direction: DataTableSort['direction']) =>\n    `${name}, sort ${rank}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+        },
+        {
+          "name": "pageAnnouncement",
+          "type": "((page: number, pageCount: number, first: number, last: number, total: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Announced when the page changes, given the page, the page count, the first and last row shown and the total. Defaults to \"Page 2 of 7, rows 21 to 40 of 140\".",
+          "defaultExpression": "(page: number, pageCount: number, first: number, last: number, total: number) =>\n    `Page ${page} of ${pageCount}, rows ${first} to ${last} of ${total}`"
+        },
+        {
+          "name": "resultsLabel",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Footer count of the rows that match, given the count. Defaults to \"1 result\" or \"N results\".",
+          "defaultExpression": "(count: number) => `${count} result${count === 1 ? '' : 's'}`"
+        },
+        {
+          "name": "selectedLabel",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Footer count shown instead of the results while rows are selected, given the count. Defaults to \"N selected\".",
+          "defaultExpression": "(count: number) => `${count} selected`"
+        },
+        {
+          "name": "paginationLabels",
+          "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"pageLabel\" | \"readoutLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`)."
+        },
+        {
+          "name": "emptyStateLabels",
+          "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node."
+        },
+        {
+          "name": "resizableColumns",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lets every column be resized by dragging its header's edge, double-clicking it to fit, or Alt+Left and Alt+Right on a focused header. A column's own `resizable` wins.",
+          "default": false
+        },
+        {
+          "name": "reorderableColumns",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lets every column be moved by dragging its header, from its menu, or Ctrl+Shift+Left and Ctrl+Shift+Right on a focused header. A column's own `reorderable` wins.",
+          "default": false
+        },
+        {
+          "name": "columnMenu",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Adds a menu to every header: sort, pin, move, hide, fit and reset, as each column allows. Opened from the header's options button, Alt+Down, Shift+F10 or a right-click.",
+          "default": false
+        },
+        {
+          "name": "reorderableRows",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Adds a grip at each row's start to drag it up or down, or move it with Alt+Up and Alt+Down. Off while a sort is active, since the sort owns the order.",
+          "default": false
+        },
+        {
+          "name": "stickyHeader",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Keeps the header in view while the body scrolls. Takes effect with `maxHeight`, inside the table's own scroll frame.",
+          "default": false
+        },
+        {
+          "name": "maxHeight",
+          "type": "string | number",
+          "typeKind": "other",
+          "required": false,
+          "description": "The table's tallest height before its body scrolls inside its frame (any CSS length, or pixels)."
+        },
+        {
+          "name": "navigation",
+          "type": "\"table\" | \"grid\"",
+          "typeKind": "enum",
+          "values": [
+            "grid",
+            "table"
+          ],
+          "required": false,
+          "description": "How the keyboard moves through the table. `table` keeps every control in\nthe Tab order, as a reading table does; `grid` makes the table one Tab\nstop with arrow-key focus across its cells. Defaults to `grid` when any\ncolumn or row control is on, else `table`."
+        },
+        {
+          "name": "columnWidths",
+          "type": "Record<string, number>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Column widths in pixels, by key, for controlled use. Fires `onColumnWidthsChange` once per resize, on release."
+        },
+        {
+          "name": "defaultColumnWidths",
+          "type": "Record<string, number>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Starting column widths in pixels, by key, for uncontrolled use. Columns not listed take their natural width."
+        },
+        {
+          "name": "onColumnWidthsChange",
+          "type": "((widths: Record<string, number>) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every column's width after a resize, a fit or a reset."
+        },
+        {
+          "name": "columnOrder",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Column keys in display order, for controlled use. Keys left out keep their declared order after the listed ones."
+        },
+        {
+          "name": "defaultColumnOrder",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Starting column order, for uncontrolled use."
+        },
+        {
+          "name": "onColumnOrderChange",
+          "type": "((order: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full column order after a move."
+        },
+        {
+          "name": "columnPinning",
+          "type": "DataTableColumnPinning",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Columns pinned to each edge, for controlled use."
+        },
+        {
+          "name": "defaultColumnPinning",
+          "type": "DataTableColumnPinning",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`."
+        },
+        {
+          "name": "onColumnPinningChange",
+          "type": "((pinning: DataTableColumnPinning) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the pins after a column is pinned or unpinned."
+        },
+        {
+          "name": "hiddenColumns",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Hidden column keys, for controlled use."
+        },
+        {
+          "name": "defaultHiddenColumns",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Starting hidden keys, for uncontrolled use; merged with each column's `defaultHidden`."
+        },
+        {
+          "name": "onHiddenColumnsChange",
+          "type": "((hidden: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every hidden key after a column is hidden or shown."
+        },
+        {
+          "name": "rowOrder",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Row ids in display order, for controlled use, applied while no sort is active. Rows left out keep their given order after the listed ones."
+        },
+        {
+          "name": "defaultRowOrder",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Starting row order, for uncontrolled use."
+        },
+        {
+          "name": "onRowOrderChange",
+          "type": "((order: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full row order after a row moves."
+        },
+        {
+          "name": "columnLabels",
+          "type": "Partial<DataTableColumnLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The column and row controls' words, merged over their English defaults."
+        },
+        {
+          "name": "columnDividers",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws a vertical line between columns, as well as the lines between rows.",
+          "default": false
+        },
+        {
+          "name": "cellText",
+          "type": "DataTableCellText",
+          "typeKind": "enum",
+          "values": [
+            "lines-2",
+            "nowrap",
+            "truncate",
+            "wrap"
+          ],
+          "required": false,
+          "description": "How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`.",
+          "default": "wrap"
+        },
+        {
+          "name": "rowActions",
+          "type": "((row: R) => DataTableRowAction[])",
+          "typeKind": "array",
+          "required": false,
+          "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu."
+        },
+        {
+          "name": "editMode",
+          "type": "\"cell\" | \"row\"",
+          "typeKind": "enum",
+          "values": [
+            "cell",
+            "row"
+          ],
+          "required": false,
+          "description": "How editable cells edit: `cell` (the default) edits one cell at a time,\nstarted with Enter, F2, a typed character or a double click; `row` adds an\nEdit button to each row that opens every editable cell of the row at\nonce, with Save and Cancel.",
+          "default": "cell"
+        },
+        {
+          "name": "onCellEdit",
+          "type": "((edit: DataTableCellEdit<R>) => void | Promise<unknown>)",
+          "typeKind": "other",
+          "required": false,
+          "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure."
+        },
+        {
+          "name": "onRowEdit",
+          "type": "((edit: DataTableRowEdit<R>) => void | Promise<unknown>)",
+          "typeKind": "other",
+          "required": false,
+          "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`."
+        },
+        {
+          "name": "filters",
+          "type": "Filter[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar."
+        },
+        {
+          "name": "defaultFilters",
+          "type": "Filter[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Starting filters, for uncontrolled use."
+        },
+        {
+          "name": "onFiltersChange",
+          "type": "((filters: Filter[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every filter after one is added, changed or removed."
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The search text, for controlled use; the built-in search field and a TableToolbar's both set it."
+        },
+        {
+          "name": "defaultSearch",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Starting search text, for uncontrolled use."
+        },
+        {
+          "name": "onSearchChange",
+          "type": "((search: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the search text as it changes."
+        },
+        {
+          "name": "defaultSize",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it."
+        },
+        {
+          "name": "onSizeChange",
+          "type": "((size: \"default\" | \"compact\") => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when a TableToolbar's density switch changes the density."
+        },
+        {
+          "name": "filterLabels",
+          "type": "Partial<FilterLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The filters' words, merged over their English defaults."
+        },
+        {
+          "name": "rowActionsVisibility",
+          "type": "\"hover\" | \"always\"",
+          "typeKind": "enum",
+          "values": [
+            "always",
+            "hover"
+          ],
+          "required": false,
+          "description": "When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty.",
+          "default": "hover"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the table formats and sorts in, such as `de-DE`: every\ntyped column without a `format.locale` of its own, and the order text\nsorts in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

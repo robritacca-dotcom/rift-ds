@@ -1,0 +1,180 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AgentStatus",
+  "label": "Agent status",
+  "slug": "agent-status",
+  "category": "ai",
+  "description": "What an agent is doing right now, as a dot matrix and status line, a floating pill, a square mark for icon slots, or a ring around any element.",
+  "client": true,
+  "importPath": "rift-ds/components/AgentStatus/AgentStatus",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/agent-status",
+  "markdownUrl": "https://rift-ds.com/components/agent-status.md",
+  "exports": [
+    {
+      "component": "AgentStatus",
+      "props": [
+        {
+          "name": "state",
+          "type": "AgentStatusState",
+          "typeKind": "enum",
+          "values": [
+            "done",
+            "error",
+            "idle",
+            "thinking",
+            "waiting",
+            "working"
+          ],
+          "required": false,
+          "description": "What the agent is doing. Drives the colour, the default label, and whether the matrix animates.",
+          "default": "thinking"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status text. Falls back to a default for the state. Ignored when `children` are given."
+        },
+        {
+          "name": "pattern",
+          "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
+          "typeKind": "enum",
+          "values": [
+            "braille",
+            "breathe",
+            "cascade",
+            "checkerboard",
+            "columns",
+            "diagonal-swipe",
+            "fill-sweep",
+            "helix",
+            "orbit",
+            "pulse",
+            "rain",
+            "scan",
+            "snake",
+            "sparkle",
+            "twinkle",
+            "wave-rows"
+          ],
+          "required": false,
+          "description": "Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise."
+        },
+        {
+          "name": "shimmer",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Sweep a highlight across the label while the agent is active. Defaults to\non for `thinking`, `working` and `waiting`, off for the resting states."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\" | \"sm\" | \"md\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default",
+            "md",
+            "sm"
+          ],
+          "required": false,
+          "description": "Indicator and text scale, paired with ChatMessage's sizes: `default`\nmatches default message text, `compact` matches compact message text.\n`sm` and `md` are legacy aliases for `compact` and `default`.",
+          "default": "default"
+        },
+        {
+          "name": "variant",
+          "type": "\"inline\" | \"bar\" | \"pill\"",
+          "typeKind": "enum",
+          "values": [
+            "bar",
+            "inline",
+            "pill"
+          ],
+          "required": false,
+          "description": "`inline` sits in a line of content; `bar` is a full-width row for the\ntop of a panel; `pill` is a glass pill for a status that floats over\nthe page while a run goes on; once it ends the dots fill solid in the\nstatus colour, as in every variant. The pill does not position itself.",
+          "default": "inline"
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A trailing control after the status text, such as a link that opens the run. Meant for the `pill` and `bar` variants."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Status text, when it needs markup the `label` string cannot express."
+        }
+      ]
+    },
+    {
+      "component": "AgentStatusMark",
+      "props": [
+        {
+          "name": "state",
+          "type": "AgentStatusState",
+          "typeKind": "enum",
+          "values": [
+            "done",
+            "error",
+            "idle",
+            "thinking",
+            "waiting",
+            "working"
+          ],
+          "required": false,
+          "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply.",
+          "default": "working"
+        },
+        {
+          "name": "pattern",
+          "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
+          "typeKind": "enum",
+          "values": [
+            "braille",
+            "breathe",
+            "cascade",
+            "checkerboard",
+            "columns",
+            "diagonal-swipe",
+            "fill-sweep",
+            "helix",
+            "orbit",
+            "pulse",
+            "rain",
+            "scan",
+            "snake",
+            "sparkle",
+            "twinkle",
+            "wave-rows"
+          ],
+          "required": false,
+          "description": "Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

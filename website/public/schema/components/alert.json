@@ -1,0 +1,101 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Alert",
+  "label": "Alert",
+  "slug": "alert",
+  "category": "feedback",
+  "description": "Contextual feedback with status variants, optional dismiss, and compact sizing.",
+  "client": false,
+  "importPath": "rift-ds/components/Alert/Alert",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/alert",
+  "markdownUrl": "https://rift-ds.com/components/alert.md",
+  "exports": [
+    {
+      "component": "Alert",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alert title text.\nNote: this shadows the native `title` tooltip attribute, which Alert does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alert description / body text"
+        },
+        {
+          "name": "variant",
+          "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "info",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Alert variant determines colour and icon",
+          "default": "info"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the alert can be dismissed",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "onDismiss",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when dismiss button is clicked"
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the dismiss button",
+          "default": "Dismiss alert"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

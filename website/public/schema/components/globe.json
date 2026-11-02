@@ -1,0 +1,168 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Globe",
+  "label": "Globe",
+  "slug": "globe",
+  "category": "maps",
+  "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin.",
+  "client": true,
+  "importPath": "rift-ds/components/Globe/Globe",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/globe",
+  "markdownUrl": "https://rift-ds.com/components/globe.md",
+  "exports": [
+    {
+      "component": "Globe",
+      "props": [
+        {
+          "name": "points",
+          "type": "GlobePoint[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The places to mark.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "arcs",
+          "type": "GlobeArc[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The arcs to draw between them. An arc whose endpoint is not in `points` is skipped.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "rotation",
+          "type": "GlobeRotation",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controlled view: `[longitude, latitude]` of the centre, in degrees.\nPair with `onRotationChange`. Omit to let the globe own its rotation."
+        },
+        {
+          "name": "defaultRotation",
+          "type": "GlobeRotation",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Initial view when uncontrolled.",
+          "defaultExpression": "[-20, 20]"
+        },
+        {
+          "name": "onRotationChange",
+          "type": "((rotation: GlobeRotation) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires whenever the view changes — drag, keys, or the auto-rotation."
+        },
+        {
+          "name": "autoRotate",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Spin slowly on its own, in degrees per second at the shipped motion\ntempo. The speed follows `--motion-duration-orbit`, so a theme that\nstretches or shortens its durations slows or quickens the spin with\nthem. Pauses while the pointer is over the globe or it has focus, and\nnever runs under `prefers-reduced-motion`. `0` switches it off.",
+          "default": 3
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Drag to rotate, and rotate with the arrow keys (or W, A, S, D) when focused.",
+          "default": true
+        },
+        {
+          "name": "graticuleStep",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Degrees between graticule lines. `0` removes the graticule.",
+          "default": 30
+        },
+        {
+          "name": "showLabels",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draw each point's `label` beside its marker.",
+          "default": true
+        },
+        {
+          "name": "activePointId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The point to single out: its marker enlarges and its callout renders."
+        },
+        {
+          "name": "onPointHover",
+          "type": "((point: GlobePoint | null) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves."
+        },
+        {
+          "name": "onPointClick",
+          "type": "((point: GlobePoint) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when a marker is clicked, or activated with Enter or Space while\nfocused. Setting it makes the markers real buttons on a non-interactive\nglobe too."
+        },
+        {
+          "name": "renderCallout",
+          "type": "((point: GlobePoint) => ReactNode)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Renders the annotation for the active (or hovered) point. It is placed\nbeside the marker in an HTML overlay, so any markup works; MapCallout is\nthe intended filling. The overlay carries `data-side=\"left\"|\"right\"` for\nwhich side of the marker it sits on."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the globe, e.g. \"Listening points across the\nnetwork\". The point and arc counts are appended for screen readers.",
+          "default": "Globe"
+        },
+        {
+          "name": "pointsLabel",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The point count appended to the globe's accessible name, given the count. Defaults to \"<count> point\" or \"<count> points\".",
+          "defaultExpression": "(count: number) => `${count} ${count === 1 ? 'point' : 'points'}`"
+        },
+        {
+          "name": "arcsLabel",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The arc count appended to the globe's accessible name, given the count. Defaults to \"<count> arc\" or \"<count> arcs\".",
+          "defaultExpression": "(count: number) => `${count} ${count === 1 ? 'arc' : 'arcs'}`"
+        },
+        {
+          "name": "rotateHintLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The pointer and keyboard instructions appended to the accessible name while `interactive`.",
+          "default": "Drag to rotate, or use the arrow keys when focused."
+        },
+        {
+          "name": "roleDescription",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What assistive technology calls the globe in place of its role, applied\nwhichever role it takes: `application` while `interactive`, `group` when\nonly `onPointClick` makes the markers buttons, and `img` otherwise.\nDefaults to \"globe\".",
+          "default": "globe"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

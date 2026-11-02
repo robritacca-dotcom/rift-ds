@@ -1,0 +1,76 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Tooltip",
+  "label": "Tooltip",
+  "slug": "tooltip",
+  "category": "overlays",
+  "description": "Contextual text label that appears on hover or focus with position and delay options.",
+  "client": true,
+  "importPath": "rift-ds/components/Tooltip/Tooltip",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/tooltip",
+  "markdownUrl": "https://rift-ds.com/components/tooltip.md",
+  "exports": [
+    {
+      "component": "Tooltip",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trigger element"
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Tooltip text content. Replaces the native `content` attribute, which only\nmeans something on a `<meta>` element."
+        },
+        {
+          "name": "position",
+          "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "end",
+            "left",
+            "right",
+            "start",
+            "top"
+          ],
+          "required": false,
+          "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
+          "default": "top"
+        },
+        {
+          "name": "showDelay",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Delay before showing (in ms)",
+          "default": 300
+        },
+        {
+          "name": "hideDelay",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Delay before hiding (in ms)",
+          "default": 150
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

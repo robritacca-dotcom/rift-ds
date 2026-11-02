@@ -1,0 +1,128 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Card",
+  "label": "Card",
+  "slug": "card",
+  "category": "data-display",
+  "description": "A titled preview tile for index grids, with a case-study variant carrying a cover, company logo and dek.",
+  "client": true,
+  "importPath": "rift-ds/components/Card/Card",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/card",
+  "markdownUrl": "https://rift-ds.com/components/card.md",
+  "exports": [
+    {
+      "component": "Card",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"default\" | \"case-study\"",
+          "typeKind": "enum",
+          "values": [
+            "case-study",
+            "default"
+          ],
+          "required": false,
+          "description": "Card variant",
+          "default": "default"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Card title displayed below the preview.\nNote: this shadows the native `title` tooltip attribute, which Card does not expose."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Preview content rendered inside the card (default variant only)"
+        },
+        {
+          "name": "interactive",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the card is interactive (hoverable)",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Navigation href — renders the card as an <a> tag"
+        },
+        {
+          "name": "coverSrc",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Cover image src"
+        },
+        {
+          "name": "cover",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Cover content rendered in place of the image — for a cover that is drawn\nrather than photographed (an SVG, a chart, a live preview). Takes\nprecedence over `coverSrc`, and fills the same fixed-ratio slot."
+        },
+        {
+          "name": "coverAlt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Cover image alt text"
+        },
+        {
+          "name": "companyLogo",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Path to the company logo shown in the eyebrow"
+        },
+        {
+          "name": "companyName",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Company name shown in the eyebrow"
+        },
+        {
+          "name": "dek",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Subtitle / dek line below the title"
+        },
+        {
+          "name": "placeholder",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Render as a disabled placeholder (no href, dimmed, not interactive)",
+          "default": false
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+        }
+      ]
+    }
+  ]
+}

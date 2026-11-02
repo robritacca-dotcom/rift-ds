@@ -56,6 +56,7 @@ export default defineConfig({
         'chat/upstash': 'src/chat/upstash.ts',
         'chat/demo': 'src/chat/demo.ts',
         'tokens/registry': 'src/tokens/registry.ts',
+        'tokens/values': 'src/tokens/values.ts',
         'tokens/motion': 'src/tokens/motion.ts',
         'tokens/breakpoints': 'src/tokens/breakpoints.ts',
         // Doc-only helpers: not in the barrel, but reachable via the

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "MegaMenu",
+  "label": "Mega menu",
+  "slug": "mega-menu",
+  "category": "navigation",
+  "description": "A wide navigation panel of icon rows with descriptions, beside an optional featured card.",
+  "client": false,
+  "importPath": "rift-ds/components/MegaMenu/MegaMenu",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/mega-menu",
+  "markdownUrl": "https://rift-ds.com/components/mega-menu.md",
+  "exports": [
+    {
+      "component": "MegaMenu",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Whether the panel shows. Controlled by design: the host owns the\ntriggers that open it, so it owns this state too. A closed panel fades\nout and is `inert`, so its links leave the tab order."
+        },
+        {
+          "name": "items",
+          "type": "MegaMenuItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The link rows, laid out four to a column and wrapping into further columns."
+        },
+        {
+          "name": "showcase",
+          "type": "MegaMenuShowcase",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A featured card in its own column beside the link grid."
+        },
+        {
+          "name": "currentHref",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The path of the page being viewed. A row whose `href` is this path, or a\nparent of it, is marked as the current page."
+        },
+        {
+          "name": "onNavigate",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when any link in the panel is followed, so a host can close it."
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. The panel is server-renderable, so it\ncannot read a `LinkProvider`; a client host resolves one and passes it\nhere. Defaults to `<a>`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the panel.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

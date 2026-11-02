@@ -1,0 +1,75 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Divider",
+  "label": "Divider",
+  "slug": "divider",
+  "category": "layout",
+  "description": "A thin rule separating stacked content, with optional inline label and vertical orientation.",
+  "client": false,
+  "importPath": "rift-ds/components/Divider/Divider",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/divider",
+  "markdownUrl": "https://rift-ds.com/components/divider.md",
+  "exports": [
+    {
+      "component": "Divider",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Divider direction",
+          "default": "horizontal"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional label rendered inline in the line (horizontal only)"
+        },
+        {
+          "name": "labelPosition",
+          "type": "\"center\" | \"start\"",
+          "typeKind": "enum",
+          "values": [
+            "center",
+            "start"
+          ],
+          "required": false,
+          "description": "Label placement along the line",
+          "default": "center"
+        },
+        {
+          "name": "spacing",
+          "type": "\"none\" | \"sm\" | \"md\" | \"lg\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "none",
+            "sm"
+          ],
+          "required": false,
+          "description": "Margin around the divider (block for horizontal, inline for vertical)",
+          "default": "md"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

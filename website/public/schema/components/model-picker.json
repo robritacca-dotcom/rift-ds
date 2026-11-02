@@ -1,0 +1,143 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ModelPicker",
+  "label": "Model picker",
+  "slug": "model-picker",
+  "category": "ai",
+  "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row.",
+  "client": true,
+  "importPath": "rift-ds/components/ModelPicker/ModelPicker",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/model-picker",
+  "markdownUrl": "https://rift-ds.com/components/model-picker.md",
+  "exports": [
+    {
+      "component": "ModelPicker",
+      "props": [
+        {
+          "name": "models",
+          "type": "ModelPickerModel[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The models on offer, in display order."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected model value for controlled use. Pair with `onValueChange`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initially selected model value for uncontrolled use. Defaults to the first model."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the newly selected model's value."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text the trigger shows when no model is selected, and the trigger's\naccessible name when no `aria-label` is passed. Defaults to \"Choose a model\".",
+          "default": "Choose a model"
+        },
+        {
+          "name": "effort",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected effort level for controlled use. Setting this (or `defaultEffort`)\nis what makes the effort row appear at all."
+        },
+        {
+          "name": "defaultEffort",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initially selected effort level for uncontrolled use."
+        },
+        {
+          "name": "onEffortChange",
+          "type": "((effort: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the newly selected effort value."
+        },
+        {
+          "name": "effortOptions",
+          "type": "ModelPickerEffortOption[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The effort levels on offer. Defaults to low, medium and high.",
+          "defaultExpression": "[\n  { label: 'Low', value: 'low' },\n  { label: 'Medium', value: 'medium' },\n  { label: 'High', value: 'high' },\n]"
+        },
+        {
+          "name": "listLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the model list in the open panel.",
+          "default": "Model"
+        },
+        {
+          "name": "effortLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Heading of the effort row, which is also the accessible name of its radio group.",
+          "default": "Effort"
+        },
+        {
+          "name": "placement",
+          "type": "\"top\" | \"bottom\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "top"
+          ],
+          "required": false,
+          "description": "Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`.",
+          "default": "bottom"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it.",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the whole control is disabled.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

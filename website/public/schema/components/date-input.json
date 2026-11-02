@@ -1,0 +1,100 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "DateInput",
+  "label": "Date input",
+  "slug": "date-input",
+  "category": "forms",
+  "description": "Date input with native picker, calendar icon, label, and validation states.",
+  "client": true,
+  "importPath": "rift-ds/components/DateInput/DateInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/date-input",
+  "markdownUrl": "https://rift-ds.com/components/date-input.md",
+  "exports": [
+    {
+      "component": "DateInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Input label text"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current value (YYYY-MM-DD format)"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute)",
+          "default": "default"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message"
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Minimum selectable date (YYYY-MM-DD)"
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum selectable date (YYYY-MM-DD)"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries work unmodified."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

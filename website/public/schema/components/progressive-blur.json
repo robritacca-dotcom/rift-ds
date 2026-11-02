@@ -1,0 +1,50 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ProgressiveBlur",
+  "label": "Progressive blur",
+  "slug": "progressive-blur",
+  "category": "effects",
+  "description": "A backdrop blur that dissolves along one edge, with an optional page tint that fades in.",
+  "client": false,
+  "importPath": "rift-ds/components/ProgressiveBlur/ProgressiveBlur",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/progressive-blur",
+  "markdownUrl": "https://rift-ds.com/components/progressive-blur.md",
+  "exports": [
+    {
+      "component": "ProgressiveBlur",
+      "props": [
+        {
+          "name": "side",
+          "type": "\"top\" | \"bottom\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "top"
+          ],
+          "required": false,
+          "description": "The side the blur is anchored to, as Drawer names its edge: fully\nfrosted there, dissolving to clear toward the opposite side. `top` sits\nbehind a header, `bottom` behind a toolbar or a footer bar.",
+          "default": "top"
+        },
+        {
+          "name": "tinted",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the page-surface tint shows over the blur. It fades on change,\nso a header can bring it in once the page has scrolled; the blur\nitself never fades.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the root.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

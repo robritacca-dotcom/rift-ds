@@ -1,0 +1,106 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Chip",
+  "label": "Chip",
+  "slug": "chip",
+  "category": "data-display",
+  "description": "Compact pills for attributes, filters, and inline metadata.",
+  "client": false,
+  "importPath": "rift-ds/components/Chip/Chip",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/chip",
+  "markdownUrl": "https://rift-ds.com/components/chip.md",
+  "exports": [
+    {
+      "component": "Chip",
+      "props": [
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Chip label — string for plain text, ReactNode for richer content (e.g. a numbered prefix)"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected state (filter-style chips): renders the active fill, coloured by `tone`"
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour of the selected fill: `default` takes the action colour, `neutral`\nfills it grey, for filter rows whose selection should read quietly.",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Disabled state",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\" | \"large\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default",
+            "large"
+          ],
+          "required": false,
+          "description": "Chip size — `large` matches the default Button and paragraph body scale, for pills that are a primary tap target rather than metadata",
+          "default": "default"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Click handler — presence makes the chip an interactive <button>. On a\nremovable chip it is attached to the main region's button rather than\nthe root span."
+        },
+        {
+          "name": "onRemove",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Remove handler — renders a trailing close button (input-style chips)"
+        },
+        {
+          "name": "removeLabel",
+          "type": "string | ((label: string) => string)",
+          "typeKind": "other",
+          "required": false,
+          "description": "Accessible label for the remove button. Defaults to \"Remove\". Pass a\nfunction to name each chip's button after its own label, so a row of\nchips does not announce one name for every button: it is given the\nlabel's text (a rich label's text content), e.g.\n`(label) => \\`Remove ${label}\\``. A plain string is used as given.",
+          "defaultExpression": "Remove"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

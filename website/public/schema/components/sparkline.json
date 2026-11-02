@@ -1,0 +1,103 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Sparkline",
+  "label": "Sparkline",
+  "slug": "sparkline",
+  "category": "charts",
+  "description": "Inline trend line for stats and table cells, drawn without axes or chrome.",
+  "client": false,
+  "importPath": "rift-ds/components/Sparkline/Sparkline",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/sparkline",
+  "markdownUrl": "https://rift-ds.com/components/sparkline.md",
+  "exports": [
+    {
+      "component": "Sparkline",
+      "props": [
+        {
+          "name": "data",
+          "type": "number[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The series to plot, in order. Values are normalised into the viewBox."
+        },
+        {
+          "name": "variant",
+          "type": "\"area\" | \"line\"",
+          "typeKind": "enum",
+          "values": [
+            "area",
+            "line"
+          ],
+          "required": false,
+          "description": "Rendering treatment — a bare line, or a line with a soft fill underneath.",
+          "default": "line"
+        },
+        {
+          "name": "tone",
+          "type": "\"error\" | \"positive\" | \"neutral\" | \"accent\" | \"negative\"",
+          "typeKind": "enum",
+          "values": [
+            "accent",
+            "error",
+            "negative",
+            "neutral",
+            "positive"
+          ],
+          "required": false,
+          "description": "Colour role for the line and end dot. `accent` follows the chart palette's\nlead colour; `positive`/`error` map to the trend pair (up and down), named\nlike the status roles Gauge and the status components use; `neutral`\nrecedes to secondary text. `negative` is the legacy name for `error`.",
+          "default": "accent"
+        },
+        {
+          "name": "showDot",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the final point with a small dot.",
+          "default": true
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Line thickness in viewBox units — an SVG geometry attribute, not a token.",
+          "default": 2
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "ViewBox width. Also the default rendered width; the SVG scales to its\ncontainer when sized externally via CSS. Intentionally shadows the native\nSVG `width` attribute, which it sets.",
+          "default": 120
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "ViewBox height. Also the default rendered height; the SVG scales to its\ncontainer when sized externally via CSS. Intentionally shadows the native\nSVG `height` attribute, which it sets.",
+          "default": 32
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible description of the trend, e.g. \"Revenue, trending up\". When\nomitted the SVG is decorative and hidden from assistive technology."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "UsageCard",
+  "label": "Usage card",
+  "slug": "usage-card",
+  "category": "ai",
+  "description": "An agent's budgets at a glance: context window and plan limits as meter rows with reset captions.",
+  "client": false,
+  "importPath": "rift-ds/components/UsageCard/UsageCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/usage-card",
+  "markdownUrl": "https://rift-ds.com/components/usage-card.md",
+  "exports": [
+    {
+      "component": "UsageCard",
+      "props": [
+        {
+          "name": "items",
+          "type": "UsageItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The budgets to show, one meter row each"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Card title in the shared chart-chrome header.\nNote: this shadows the native `title` tooltip attribute, which UsageCard does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Supporting line under the title"
+        },
+        {
+          "name": "thresholds",
+          "type": "{ warning?: number; error?: number; } | undefined",
+          "typeKind": "other",
+          "required": false,
+          "description": "Fractions of an item's max where its fill recolours to warning and then error"
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chrome off (no border, padding, or fill) for use inside a panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale each meter's readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "CodeDiff",
+  "label": "Code diff",
+  "slug": "code-diff",
+  "category": "ai",
+  "description": "Unified diff view for code changes, with added, removed, and context lines.",
+  "client": false,
+  "importPath": "rift-ds/components/CodeDiff/CodeDiff",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/code-diff",
+  "markdownUrl": "https://rift-ds.com/components/code-diff.md",
+  "exports": [
+    {
+      "component": "CodeDiff",
+      "props": [
+        {
+          "name": "diff",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "A unified-format diff body. Lines starting with `+` render as additions,\n`-` as removals, `@@ …"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Filename shown in a header bar above the diff, with an additions/deletions summary"
+        },
+        {
+          "name": "showLineNumbers",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the old and new line number gutters",
+          "default": true
+        },
+        {
+          "name": "diffLabel",
+          "type": "((filename?: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name for the scrolling diff region, given the `filename` when\nthere is one. Defaults to \"Code diff: <filename>\", or \"Code diff\" without one.",
+          "defaultExpression": "(filename: string | undefined) =>\n  filename ? `Code diff: ${filename}` : 'Code diff'"
+        },
+        {
+          "name": "changeLabels",
+          "type": "Partial<CodeDiffChangeLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Visually hidden text announced before each changed line, so the change\ntype is not carried by colour and the marker alone. Merged over the\nEnglish defaults: `added` \"Added line:\", `removed` \"Removed line:\"."
+        },
+        {
+          "name": "statsLabel",
+          "type": "((additions: number, deletions: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The header's additions and deletions summary as a screen reader hears it,\ngiven both counts; the visible `+3 -1` is hidden from assistive technology.\nDefaults to \"3 added, 1 removed\".",
+          "defaultExpression": "(additions: number, deletions: number) =>\n  `${additions} added, ${deletions} removed`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

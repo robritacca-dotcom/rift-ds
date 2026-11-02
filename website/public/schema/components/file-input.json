@@ -1,0 +1,133 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "FileInput",
+  "label": "File input",
+  "slug": "file-input",
+  "category": "forms",
+  "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
+  "client": true,
+  "importPath": "rift-ds/components/FileInput/FileInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/file-input",
+  "markdownUrl": "https://rift-ds.com/components/file-input.md",
+  "exports": [
+    {
+      "component": "FileInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Field label above the dropzone"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Instructional copy inside the dropzone",
+          "default": "Drag and drop, or click to browse"
+        },
+        {
+          "name": "files",
+          "type": "FileInputFile[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Files to list under the dropzone",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute)",
+          "default": "default"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — shows error styling and message",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below the field"
+        },
+        {
+          "name": "acceptHint",
+          "type": "((accept: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Hint shown under the placeholder when `accept` is set, given the `accept` value. Defaults to \"Accepts\" followed by the value.",
+          "defaultExpression": "(acceptValue: string) => `Accepts ${acceptValue}`"
+        },
+        {
+          "name": "onFilesSelected",
+          "type": "((files: File[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the newly selected files"
+        },
+        {
+          "name": "onFileRemove",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the id of a file whose remove button was pressed"
+        },
+        {
+          "name": "progressLabel",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a listed file's progress bar, given the file name. Defaults to \"Uploading\" followed by the name.",
+          "defaultExpression": "(fileName: string) => `Uploading ${fileName}`"
+        },
+        {
+          "name": "removeLabel",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a listed file's remove button, given the file name. Defaults to \"Remove\" followed by the name.",
+          "defaultExpression": "(fileName: string) => `Remove ${fileName}`"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AnchorNav",
+  "label": "Anchor nav",
+  "slug": "anchor-nav",
+  "category": "navigation",
+  "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
+  "client": true,
+  "importPath": "rift-ds/components/AnchorNav/AnchorNav",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/anchor-nav",
+  "markdownUrl": "https://rift-ds.com/components/anchor-nav.md",
+  "exports": [
+    {
+      "component": "AnchorNav",
+      "props": [
+        {
+          "name": "items",
+          "type": "AnchorNavItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The on-page sections to list, in document order"
+        },
+        {
+          "name": "variant",
+          "type": "\"list\" | \"floating\"",
+          "typeKind": "enum",
+          "values": [
+            "floating",
+            "list"
+          ],
+          "required": false,
+          "description": "Visual form: `list` renders the inline \"On this page\" rail; `floating` collapses to a stack of short lines that expands into a panel on hover, keyboard focus, or tap, so it can ride a page edge without taking column width",
+          "default": "list"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Header text above the list; pass an empty string to render no header.\nNote: this shadows the native `title` tooltip attribute, which AnchorNav does not expose.",
+          "default": "On this page"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none",
+          "defaultExpression": "toc"
+        },
+        {
+          "name": "activeId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Controlled active item id — set it to drive the highlight yourself and skip scroll tracking"
+        },
+        {
+          "name": "onActiveChange",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the tracked (or clicked) active item changes"
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height",
+          "default": 96
+        }
+      ]
+    }
+  ]
+}

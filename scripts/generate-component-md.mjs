@@ -11,8 +11,8 @@
  * get_component tool. No hand-written facts live here, so the files cannot
  * drift from the source: validate-component-md.mjs regenerates in memory
  * and byte-compares on every build. Two consumers point at these files:
- * the "Copy for agents" button on component pages
- * (website/src/components/PageLinks/CopyPageMarkdown.tsx) and the MCP
+ * the "For agents" dialog on component pages
+ * (website/src/components/PageLinks/PageAgentDocs.tsx) and the MCP
  * get_component response's markdownUrl.
  *
  * Deterministic and public-only, like every generated surface: no network,
@@ -87,7 +87,11 @@ export function buildComponentMarkdown(entry, origin) {
   } else {
     lines.push(`- Deep import: \`import { ${entry.name} } from '${entry.importPath}';\``);
   }
-  lines.push(`- Rendering: ${rendering}`, `- Live docs: ${origin}${docsPath}`);
+  lines.push(
+    `- Rendering: ${rendering}`,
+    `- Live docs: ${origin}${docsPath}`,
+    `- Schema: ${origin}/schema/components/${entry.slug}.json (JSON, validates against ${origin}/schema/component.schema.json)`
+  );
 
   for (const exported of entry.exports) {
     lines.push('', `## ${exported.component} props`, '');

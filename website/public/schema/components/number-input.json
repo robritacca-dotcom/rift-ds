@@ -1,0 +1,123 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "NumberInput",
+  "label": "Number input",
+  "slug": "number-input",
+  "category": "forms",
+  "description": "Numeric field with increment and decrement steppers and min/max clamping.",
+  "client": true,
+  "importPath": "rift-ds/components/NumberInput/NumberInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/number-input",
+  "markdownUrl": "https://rift-ds.com/components/number-input.md",
+  "exports": [
+    {
+      "component": "NumberInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Input label text"
+        },
+        {
+          "name": "value",
+          "type": "number | \"\"",
+          "typeKind": "other",
+          "required": false,
+          "description": "Current value (controlled). Pass an empty string for an empty field"
+        },
+        {
+          "name": "defaultValue",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial value (uncontrolled)"
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Minimum allowed value — steppers stop here, and typed values clamp to it on blur"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum allowed value — steppers stop here, and typed values clamp to it on blur"
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Amount each stepper click (or arrow key) changes the value by",
+          "default": 1
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute)",
+          "default": "default"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — shows error styling and message",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below the input"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: number | null) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the numeric value directly — `null` when\nthe field is empty or unparseable. Fires on typing alongside `onChange`\n(which keeps the standard React event signature so form libraries work\nunmodified) and also on stepper clicks, where no native change event exists."
+        },
+        {
+          "name": "decreaseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the decrement stepper button. Defaults to \"Decrease value\".",
+          "default": "Decrease value"
+        },
+        {
+          "name": "increaseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the increment stepper button. Defaults to \"Increase value\".",
+          "default": "Increase value"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

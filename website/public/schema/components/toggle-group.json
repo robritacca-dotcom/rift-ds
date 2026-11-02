@@ -1,0 +1,126 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ToggleGroup",
+  "label": "Toggle group",
+  "slug": "toggle-group",
+  "category": "actions",
+  "description": "A set of two-state buttons that can be toggled on or off, supporting text and icon items.",
+  "client": true,
+  "importPath": "rift-ds/components/ToggleGroup/ToggleGroup",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/toggle-group",
+  "markdownUrl": "https://rift-ds.com/components/toggle-group.md",
+  "exports": [
+    {
+      "component": "ToggleGroup",
+      "props": [
+        {
+          "name": "items",
+          "type": "ToggleGroupItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Available items"
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "Currently active value(s), controlled. Leave undefined to let the group\nkeep its own selection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "Active value(s) on first render when uncontrolled (`value` undefined).",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Allow multiple selection, where each item toggles on or off. Without it\nexactly one item is active once chosen, and pressing it again keeps it.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour of active items: `default` takes the action colour, `neutral`\nfills them grey, for a set whose selection should not carry the action\ncolour's weight."
+        },
+        {
+          "name": "variant",
+          "type": "\"neutral\" | \"primary\"",
+          "typeKind": "enum",
+          "values": [
+            "neutral",
+            "primary"
+          ],
+          "required": false,
+          "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+          "deprecated": "Use `tone` instead."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the whole group is disabled",
+          "default": false
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string | string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the next selection — a string when single, an array when `multiple`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((value: string | string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

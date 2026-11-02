@@ -1,0 +1,95 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Table",
+  "label": "Table",
+  "slug": "table",
+  "category": "data-display",
+  "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
+  "client": false,
+  "importPath": "rift-ds/components/Table/Table",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/table",
+  "markdownUrl": "https://rift-ds.com/components/table.md",
+  "exports": [
+    {
+      "component": "Table",
+      "props": [
+        {
+          "name": "columns",
+          "type": "TableColumn[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Column definitions"
+        },
+        {
+          "name": "rows",
+          "type": "TableRow[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Row data"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Visual size",
+          "default": "default"
+        },
+        {
+          "name": "striped",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alternating row background colours",
+          "default": false
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Adds an outer border + border-radius container, a tinted thead background,\nand `--color-divider` row lines — matching the bordered table style used on\nmarkdown content pages.",
+          "default": false
+        },
+        {
+          "name": "columnDividers",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws a vertical line between columns, as well as the lines between rows.",
+          "default": false
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible caption for the table"
+        },
+        {
+          "name": "captionHidden",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether to visually hide the caption (still available to screen readers)",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

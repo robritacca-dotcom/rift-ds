@@ -1,7 +1,7 @@
 /**
  * The MCP tool roster as data: one entry per tool the /api/mcp route
  * registers. The route's browser landing page and the get-started page's
- * agent-docs section both render from this array, so the tool list and its
+ * "With an agent" tab both render from this array, so the tool list and its
  * example prompts have one home. Held to the actual `server.registerTool`
  * calls in both directions by scripts/validate-mcp-tools.mjs, which also
  * requires every entry to carry a prompt: a new tool cannot ship without an
@@ -24,7 +24,7 @@ export interface McpTool {
 export const MCP_TOOLS: McpTool[] = [
   {
     name: "list_components",
-    blurb: "every component in the library, with category, description and docs URL",
+    blurb: "every component in the library, with category, description, docs URL and schema URL",
     prompt: "Which components are in the ai category?",
   },
   {
@@ -34,7 +34,7 @@ export const MCP_TOOLS: McpTool[] = [
   },
   {
     name: "list_tokens",
-    blurb: "the semantic design tokens by category",
+    blurb: "the semantic design tokens by category, resolved to any theme's light or dark values on request, with the DTCG file URLs",
     prompt: "Which semantic tokens control motion?",
   },
   {

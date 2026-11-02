@@ -74,8 +74,9 @@ const CHAT_TOOLS: ChatTool[] = [
       description:
         "The semantic design-token registry: every token name grouped by category, " +
         "with per-category counts. Use it to enumerate or count tokens, or to check " +
-        "whether a token exists. Values and usage guidance stay on the foundations " +
-        "pages; link those for the numbers behind a token.",
+        "whether a token exists. With a theme id it returns every name resolved to that " +
+        "theme's value in light or dark mode; the response also names the DTCG files and " +
+        "the values module. Usage guidance stays on the foundations pages.",
       input_schema: {
         type: "object",
         properties: {
@@ -83,11 +84,26 @@ const CHAT_TOOLS: ChatTool[] = [
             type: "string",
             description: "A token category to filter by, e.g. colour or motion",
           },
+          theme: {
+            type: "string",
+            description: "A theme id to resolve the tokens in; the response without one lists the ids",
+          },
+          mode: {
+            type: "string",
+            enum: ["light", "dark"],
+            description: "light (the default) or dark, with a theme",
+          },
         },
       },
     },
     execute: (args) =>
-      JSON.stringify(lookupTokens(typeof args.category === "string" ? args.category : undefined)),
+      JSON.stringify(
+        lookupTokens(
+          typeof args.category === "string" ? args.category : undefined,
+          typeof args.theme === "string" ? args.theme : undefined,
+          typeof args.mode === "string" ? args.mode : undefined
+        )
+      ),
     tracePoint: (args) =>
       typeof args.category === "string" && args.category.trim()
         ? `Read the ${args.category.trim()} token registry`

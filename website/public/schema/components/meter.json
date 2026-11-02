@@ -1,0 +1,111 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Meter",
+  "label": "Meter",
+  "slug": "meter",
+  "category": "feedback",
+  "description": "Level indicator for a known quantity, with a status-coloured fill and an optional value readout.",
+  "client": false,
+  "importPath": "rift-ds/components/Meter/Meter",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/meter",
+  "markdownUrl": "https://rift-ds.com/components/meter.md",
+  "exports": [
+    {
+      "component": "Meter",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current level",
+          "default": 0
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lower bound of the range",
+          "default": 0
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Upper bound of the range",
+          "default": 100
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visible label naming what is measured, doubling as the meter's accessible\nname. A native `aria-label` takes precedence, and with neither the meter\nis announced as \"Level\"."
+        },
+        {
+          "name": "showValue",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the value readout on the trailing edge of the label row",
+          "default": false
+        },
+        {
+          "name": "valueText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Readout override — replaces the default percentage, spoken via aria-valuetext"
+        },
+        {
+          "name": "variant",
+          "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "info",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Status role colouring the fill",
+          "default": "info"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (bar height)",
+          "default": "default"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

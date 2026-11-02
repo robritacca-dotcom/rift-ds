@@ -1,0 +1,85 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "PixelAvatar",
+  "label": "Pixel avatar",
+  "slug": "pixel-avatar",
+  "category": "data-display",
+  "description": "A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink.",
+  "client": false,
+  "importPath": "rift-ds/components/PixelAvatar/PixelAvatar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/pixel-avatar",
+  "markdownUrl": "https://rift-ds.com/components/pixel-avatar.md",
+  "exports": [
+    {
+      "component": "PixelAvatar",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The seed. The same name always draws the same character in the same\nink, so a project, workspace or thread has its mark the moment it has a\nname, with nothing designed or stored for it."
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm",
+            "xl"
+          ],
+          "required": false,
+          "description": "Rendered size, on the icon scale (`--icon-size-500/600/800/1200` — 20, 24, 32 and 48px), so the character seats wherever an icon does.",
+          "default": "md"
+        },
+        {
+          "name": "ink",
+          "type": "PixelInk",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "Overrides the ink the name picks (1 to 6, the `--color-pixel-ink-*`\ntokens). A name's own ink is one of six, so two neighbours can land on\nthe same one; a host drawing a list passes each row's entry from\n`distinctPixelInks` here to keep them apart. The character's shape still\ncomes from the name."
+        },
+        {
+          "name": "variant",
+          "type": "\"plain\" | \"tile\"",
+          "typeKind": "enum",
+          "values": [
+            "plain",
+            "tile"
+          ],
+          "required": false,
+          "description": "`plain` draws the character alone; `tile` seats it on a rounded wash of its own ink, for a larger standalone mark.",
+          "default": "plain"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name. Omit it when the mark sits beside the name it was\ndrawn from, which is the usual case: the character is then decorative\nand hidden from assistive technology. Given, the root becomes an image\nwith this label."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

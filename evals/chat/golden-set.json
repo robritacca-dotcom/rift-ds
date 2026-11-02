@@ -570,5 +570,27 @@
       "seat": "designer",
       "requiredFacts": []
     }
+  },
+  {
+    "description": "developer: component schema (the published JSON contracts under /schema/)",
+    "vars": {
+      "question": "Does rift have a component schema?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "schema"
+      },
+      {
+        "type": "contains",
+        "value": "/schema/"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "requiredFacts": [
+        "component schema"
+      ]
+    }
   }
 ]

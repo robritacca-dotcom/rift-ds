@@ -1,0 +1,57 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ButtonGroup",
+  "label": "Button group",
+  "slug": "button-group",
+  "category": "actions",
+  "description": "Horizontal and vertical button group layouts for related actions and navigation patterns.",
+  "client": false,
+  "importPath": "rift-ds/components/ButtonGroup/ButtonGroup",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/button-group",
+  "markdownUrl": "https://rift-ds.com/components/button-group.md",
+  "exports": [
+    {
+      "component": "ButtonGroup",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Orientation of the button group",
+          "default": "horizontal"
+        },
+        {
+          "name": "buttons",
+          "type": "ButtonProps[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of button configurations"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop for the group.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS class",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

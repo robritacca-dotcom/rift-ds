@@ -1,0 +1,44 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "LinkList",
+  "label": "Link list",
+  "slug": "link-list",
+  "category": "data-display",
+  "description": "Linked items with logo, label, and subtitle.",
+  "client": false,
+  "importPath": "rift-ds/components/LinkList/LinkList",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/link-list",
+  "markdownUrl": "https://rift-ds.com/components/link-list.md",
+  "exports": [
+    {
+      "component": "LinkList",
+      "props": [
+        {
+          "name": "items",
+          "type": "LinkListItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Links to render, in display order"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+        }
+      ]
+    }
+  ]
+}

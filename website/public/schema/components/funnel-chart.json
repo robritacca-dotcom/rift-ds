@@ -1,0 +1,105 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "FunnelChart",
+  "label": "Funnel chart",
+  "slug": "funnel-chart",
+  "category": "charts",
+  "description": "Ordered funnel stages as centred trapezoid bands, each sized by its share of the first stage.",
+  "client": true,
+  "importPath": "rift-ds/components/FunnelChart/FunnelChart",
+  "barrel": "charts",
+  "docsUrl": "https://rift-ds.com/components/funnel-chart",
+  "markdownUrl": "https://rift-ds.com/components/funnel-chart.md",
+  "exports": [
+    {
+      "component": "FunnelChart",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "data",
+          "type": "FunnelStage[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Ordered stages, first stage widest. Each later stage's width is its share of the first."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header.\nNote: this shadows the native `title` tooltip attribute, which FunnelChart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title."
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart area height in pixels.",
+          "default": 190
+        },
+        {
+          "name": "showLabels",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows each stage's name beside its band. Turn off when a legend under the chart already carries the names.",
+          "default": true
+        },
+        {
+          "name": "summaryLabel",
+          "type": "((data: FunnelStage[]) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\"."
+        },
+        {
+          "name": "emptyLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The chart's accessible name when `data` is empty. Defaults to \"Funnel, no data\".",
+          "default": "Funnel, no data"
+        },
+        {
+          "name": "minStageShare",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Floor percentage from the stepped-bar rendering this chart used to have.",
+          "deprecated": "The funnel now draws true trapezoids sized by value, so a\nheight floor no longer applies; the prop is ignored."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

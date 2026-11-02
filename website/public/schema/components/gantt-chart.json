@@ -1,0 +1,151 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "GanttChart",
+  "label": "Gantt chart",
+  "slug": "gantt-chart",
+  "category": "charts",
+  "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.",
+  "client": false,
+  "importPath": "rift-ds/components/GanttChart/GanttChart",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/gantt-chart",
+  "markdownUrl": "https://rift-ds.com/components/gantt-chart.md",
+  "exports": [
+    {
+      "component": "GanttChart",
+      "props": [
+        {
+          "name": "items",
+          "type": "GanttChartItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Task bars, in display order."
+        },
+        {
+          "name": "milestones",
+          "type": "GanttChartMilestone[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Point-in-time markers, each rendered as its own diamond row at the end of its group.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "range",
+          "type": "{ start: string; end: string; }",
+          "typeKind": "other",
+          "required": false,
+          "description": "Explicit timeline window (YYYY-MM-DD both ends). Without it the range fits the data. Either way the window snaps outward to whole months, so an explicit range starts on the first of its start month and runs to the end of its end month."
+        },
+        {
+          "name": "showToday",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the vertical today rule when today falls inside the range.",
+          "default": true
+        },
+        {
+          "name": "today",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Pins the today rule to a given day (YYYY-MM-DD) instead of the render-time clock, so a statically built page and its hydrating client can never disagree about where the rule sits."
+        },
+        {
+          "name": "showGrid",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the faint vertical gridline at each month boundary behind the bars.",
+          "default": true
+        },
+        {
+          "name": "selectedId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Id of the highlighted item. Selection is controlled; pair it with `onItemClick`."
+        },
+        {
+          "name": "onItemClick",
+          "type": "((item: GanttChartItem) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the item when a bar is clicked. Bars render as buttons only when this is set; without it the chart is inert and renders from a Server Component."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header.\nNote: this shadows the native `title` tooltip attribute, which GanttChart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title."
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "todayLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The visible label on the today rule. Defaults to \"Today\".",
+          "default": "Today"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the dates are written in: the month names on the axis\n(\"Jan 2026\", then \"Feb\"), and the days in each bar's and milestone's\ntooltip and accessible text (\"Mar 9, 2026\"). Defaults to `en-US`.",
+          "default": "en-US"
+        },
+        {
+          "name": "rangeLabel",
+          "type": "((start: string, end: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The span in a bar's tooltip and accessible text, given its first and last day already formatted in `locale`. Defaults to \"<start> to <end>\".",
+          "defaultExpression": "(start: string, end: string) => `${start} to ${end}`"
+        },
+        {
+          "name": "progressLabel",
+          "type": "((percent: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The completion in a bar's tooltip and accessible text, given the rounded percentage. Defaults to \"<percent>% complete\".",
+          "defaultExpression": "(percent: number) => `${percent}% complete`"
+        },
+        {
+          "name": "projectedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The word a `projected` bar's tooltip and accessible text carries. Defaults to \"projected\".",
+          "default": "projected"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -71,7 +71,7 @@ export const HOME_TILES: HomeTile[] = [
     title: "Your agent knows the API",
     description: "Real props and tokens over MCP, no key needed.",
     Scene: AgentsTileScene,
-    lede: "A public MCP endpoint serves every component's props, the token registry and the install steps, so your coding agent reads the real contract instead of guessing it. The agent skills teach it the library every session.",
+    lede: "A public MCP endpoint serves every component's props, the token registry with its per-theme values and the install steps, so your coding agent reads the real contract instead of guessing it. The agent skills teach it the library every session.",
     points: [
       "No account and no key, just one URL",
       "Props generated from the shipped types",
@@ -85,7 +85,7 @@ export const HOME_TILES: HomeTile[] = [
     features: [
       { icon: "lan", text: "Streamable HTTP and stateless, for any MCP client." },
       { icon: "school", text: "Skills cover the library, applying a theme to existing screens, and a style audit." },
-      { icon: "description", text: "Every component's props also ship as a markdown page." },
+      { icon: "description", text: "Every component's props also ship as a markdown page and a JSON schema." },
     ],
   },
   {

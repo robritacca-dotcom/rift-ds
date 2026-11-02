@@ -1,0 +1,73 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Skeleton",
+  "label": "Skeleton",
+  "slug": "skeleton",
+  "category": "feedback",
+  "description": "Placeholder loading indicators with text, circular, and rectangular variants.",
+  "client": false,
+  "importPath": "rift-ds/components/Skeleton/Skeleton",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/skeleton",
+  "markdownUrl": "https://rift-ds.com/components/skeleton.md",
+  "exports": [
+    {
+      "component": "Skeleton",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"text\" | \"circular\" | \"rectangular\"",
+          "typeKind": "enum",
+          "values": [
+            "circular",
+            "rectangular",
+            "text"
+          ],
+          "required": false,
+          "description": "Shape of the skeleton",
+          "default": "text"
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Width (CSS value, e.g. '100%', '200px')"
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Height (CSS value, e.g. '20px', '100px')"
+        },
+        {
+          "name": "lines",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Number of text lines to render (only for text variant)",
+          "default": 1
+        },
+        {
+          "name": "loadingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence.",
+          "default": "Loading"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

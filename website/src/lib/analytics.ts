@@ -7,10 +7,10 @@ import { GA_ID } from "@/config/brand.generated";
  * clicks, downloads). What it cannot see is the moment a visitor stops
  * reading about the system and takes it, and after the first launch post
  * (2026-10-23) that was the one question the report could not answer: a
- * four-times day with no way to tell a reader from an installer. These four
+ * four-times day with no way to tell a reader from an installer. These
  * events are that moment: an install snippet copied, the agent starter copied
- * or downloaded, a component's markdown copied for an agent, and the chat
- * opened. Which of them count as key events is set in GA's admin by hand;
+ * or downloaded, a component's markdown copied for an agent, a component's
+ * schema opened, and the chat opened. Which of them count as key events is set in GA's admin by hand;
  * nothing here decides that.
  *
  * Rules, held by scripts/validate-analytics-events.mjs:
@@ -26,10 +26,12 @@ import { GA_ID } from "@/config/brand.generated";
 export const SITE_EVENTS = {
   /** An install path copied: the npm line, the init bin, the shadcn command, the clone, or a component page's strip. */
   copyInstall: "copy_install",
-  /** The agent starter taken: copied from the hero or get-started, saved by curl, or exported themed from the playground. */
+  /** The agent starter taken: copied from the header's Get started button or the get-started page, saved by curl, or exported themed from the playground. */
   copyAgentStarter: "copy_agent_starter",
-  /** A component's prop contract copied for an agent from its docs page. */
+  /** A component's prop contract copied from the For agents dialog on its docs page. */
   copyComponentMarkdown: "copy_component_markdown",
+  /** A component's JSON schema opened in the For agents dialog on its docs page. */
+  openComponentSchema: "open_component_schema",
   /** The site chat opened, whatever opened it. */
   openChat: "open_chat",
 } as const;

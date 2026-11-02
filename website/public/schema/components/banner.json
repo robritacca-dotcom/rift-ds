@@ -1,0 +1,108 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Banner",
+  "label": "Banner",
+  "slug": "banner",
+  "category": "feedback",
+  "description": "Full-width status strip for page-level announcements, with an action slot and optional dismissal.",
+  "client": false,
+  "importPath": "rift-ds/components/Banner/Banner",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/banner",
+  "markdownUrl": "https://rift-ds.com/components/banner.md",
+  "exports": [
+    {
+      "component": "Banner",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "info",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Status variant determines colour and default icon",
+          "default": "info"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Short leading emphasis before the body text. Deliberately shadows the native `title` attribute — a banner never needs a hover tooltip."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Banner body content — a single line of text, rendered inside the banner's paragraph"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Action slot on the trailing edge, for a compact Button or link"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the banner shows a dismiss button",
+          "default": false
+        },
+        {
+          "name": "onDismiss",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when the dismiss button is clicked"
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the dismiss button.",
+          "default": "Dismiss banner"
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"start\"",
+          "typeKind": "enum",
+          "values": [
+            "center",
+            "start"
+          ],
+          "required": false,
+          "description": "Horizontal alignment of the banner content",
+          "default": "start"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

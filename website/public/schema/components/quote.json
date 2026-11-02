@@ -1,0 +1,63 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Quote",
+  "label": "Quote",
+  "slug": "quote",
+  "category": "data-display",
+  "description": "Blockquotes and pull-quotes with attribution.",
+  "client": false,
+  "importPath": "rift-ds/components/Quote/Quote",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/quote",
+  "markdownUrl": "https://rift-ds.com/components/quote.md",
+  "exports": [
+    {
+      "component": "Quote",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The quote text"
+        },
+        {
+          "name": "attribution",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Who said it, e.g. \"Jordan Reyes\""
+        },
+        {
+          "name": "detail",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Context under the attribution, e.g. \"Design Lead, Northlight\""
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"pull\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "pull"
+          ],
+          "required": false,
+          "description": "`default` is an inline blockquote; `pull` is a large display pull-quote",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

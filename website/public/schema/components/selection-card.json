@@ -1,0 +1,86 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "SelectionCard",
+  "label": "Selection card",
+  "slug": "selection-card",
+  "category": "data-display",
+  "description": "Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.",
+  "client": true,
+  "importPath": "rift-ds/components/SelectionCard/SelectionCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/selection-card",
+  "markdownUrl": "https://rift-ds.com/components/selection-card.md",
+  "exports": [
+    {
+      "component": "SelectionCard",
+      "props": [
+        {
+          "name": "mode",
+          "type": "\"checkbox\" | \"radio\" | \"toggle\"",
+          "typeKind": "enum",
+          "values": [
+            "checkbox",
+            "radio",
+            "toggle"
+          ],
+          "required": false,
+          "description": "Selection mode — radio (single), checkbox (multi), or toggle (each card is an on/off switch)",
+          "default": "radio"
+        },
+        {
+          "name": "options",
+          "type": "SelectionCardOption[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Available options"
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "Currently selected value(s), controlled: a string for radio, a string[]\notherwise. Leave undefined to let the group keep its own selection,\nseeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "Selected value(s) on first render when uncontrolled (`value` undefined)."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string | string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the next selection — a string in radio mode, an array otherwise"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name, also the group's aria-label when none is given. When set,\neach selected option's `value` submits with an enclosing form through a\nhidden input, repeated in checkbox and toggle modes as a set of native\ncheckboxes does; a disabled option submits nothing. In a form, name the group\nwith `aria-label` too, so a field key is never what a screen reader announces."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((value: string | string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValueChange` instead."
+        }
+      ]
+    }
+  ]
+}

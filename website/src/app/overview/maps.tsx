@@ -28,7 +28,7 @@ export const consumerMap: ArchMap = {
   nodes: [
     { id: "z-pkg", x: 60, y: 80, w: 460, h: 560, kind: "zone", title: "The package", sub: "rift-ds · ESM · React 19 peer", },
     { id: "pkg-components", x: 100, y: 150, w: 380, h: 76, title: "Components", sub: "one barrel + deep subpaths", icon: "widgets", chip: "info" },
-    { id: "pkg-tokens", x: 100, y: 260, w: 380, h: 76, title: "Tokens", sub: "tokens.css · primitives → semantic → components", icon: "palette", chip: "info" },
+    { id: "pkg-tokens", x: 100, y: 260, w: 380, h: 76, title: "Tokens", sub: "tokens.css · tokens/values · primitives → semantic → components", icon: "palette", chip: "info" },
     { id: "pkg-presets", x: 100, y: 370, w: 380, h: 90, title: "Theme presets", sub: "presets.css · one generated stylesheet per look", icon: "style", chip: "info" },
     { id: "pkg-chat", x: 100, y: 500, w: 380, h: 90, title: "Chat widget", sub: "rift-ds/chat · npx rift-ds init chat scaffolds the routes", icon: "forum", chip: "info" },
 
@@ -37,7 +37,7 @@ export const consumerMap: ArchMap = {
     { id: "you-root", x: 1080, y: 310, w: 380, h: 76, title: "Root element", sub: 'data-theme="dark" · data-brand="<look>"', icon: "toggle_on", chip: "positive" },
     { id: "you-agent", x: 1080, y: 450, w: 380, h: 90, title: "Your coding agent", sub: "builds with exact prop and token contracts", icon: "smart_toy", chip: "positive" },
 
-    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · agent skills · .md pages · shadcn registry", kind: "external", icon: "hub" },
+    { id: "docs-site", x: 560, y: 620, w: 400, h: 90, title: "This site", sub: "/api/mcp · JSON schemas · agent skills · .md pages · shadcn registry", kind: "external", icon: "hub" },
   ],
   edges: [
     { id: "components-app", from: "pkg-components", to: "you-app", label: "npm install, then import" },
@@ -91,8 +91,8 @@ export const pipelineMap: ArchMap = {
 
     /* Stage 2 */
     { id: "z-chain", x: 880, y: 240, w: 430, h: 340, kind: "zone", title: "2 · Generate + validate", sub: "no build starts before this passes" },
-    { id: "generators", x: 920, y: 330, w: 350, h: 76, title: "Generators", sub: "barrels · corpus · prop API · README · agent skills", icon: "auto_awesome", chip: "warning" },
-    { id: "validators", x: 920, y: 450, w: 350, h: 76, title: "Validators", sub: "byte-compare + cross-check every claim", icon: "rule", chip: "warning" },
+    { id: "generators", x: 920, y: 330, w: 350, h: 76, title: "Generators", sub: "barrels · corpus · prop API · schemas · token values · README · agent skills", icon: "auto_awesome", chip: "warning" },
+    { id: "validators", x: 920, y: 450, w: 350, h: 76, title: "Validators", sub: "byte-compare · JSON Schema · cross-check every claim", icon: "rule", chip: "warning" },
 
     /* Stage 3 */
     { id: "z-build", x: 1430, y: 80, w: 430, h: 660, kind: "zone", title: "3 · Build", sub: "three artifacts" },
@@ -175,7 +175,7 @@ export const chatExchangeMap: ArchMap = {
     { id: "chat-guardrails", x: 480, y: 160, w: 420, h: 76, title: "Guardrails", sub: "per-visitor rate + daily budget · pick the model tier", icon: "verified_user", chip: "warning" },
     { id: "chat-context", x: 480, y: 300, w: 420, h: 90, title: "System context", sub: "persona + the whole site corpus · cached 1h", icon: "menu_book", chip: "info" },
     { id: "chat-tools", x: 480, y: 450, w: 420, h: 90, title: "Lookup tools", sub: "get_component · get_design_tokens", icon: "search", chip: "info" },
-    { id: "chat-contracts", x: 480, y: 610, w: 420, h: 76, title: "Generated contracts", sub: "prop API + token registry, read from memory", icon: "storage", chip: "neutral" },
+    { id: "chat-contracts", x: 480, y: 610, w: 420, h: 76, title: "Generated contracts", sub: "prop API + token registry and values, read from memory", icon: "storage", chip: "neutral" },
 
     { id: "chat-anthropic", x: 1220, y: 300, w: 340, h: 100, title: "Anthropic API", sub: "Claude answers from the corpus, and asks for a lookup when contracts matter", kind: "external", logo: "/logos/Claude.svg" },
     { id: "chat-mcp", x: 1220, y: 600, w: 340, h: 76, title: "/api/mcp", sub: "the same lookups, served to agents", icon: "hub", chip: "info" },
@@ -208,7 +208,7 @@ export const runtimeMap: ArchMap = {
     { id: "cron", x: 240, y: 720, w: 320, h: 76, title: "GitHub Actions cron", sub: "the uptime workflow", kind: "external", logo: "/logos/Git.svg" },
 
     { id: "z-vercel", x: 800, y: 60, w: 460, h: 780, kind: "zone", title: "Vercel", sub: "static edge + serverless routes" },
-    { id: "pages", x: 840, y: 150, w: 380, h: 76, title: "Static + ISR pages", sub: "fonts and corpus baked in · the /r/ registry", ...NEXTJS_LOGO },
+    { id: "pages", x: 840, y: 150, w: 380, h: 76, title: "Static + ISR pages", sub: "fonts and corpus baked in · the /r/ registry · the /schema/ files", ...NEXTJS_LOGO },
     { id: "api-chat", x: 840, y: 290, w: 380, h: 76, title: "/api/chat", sub: "followups · feedback · guardrails", icon: "forum", chip: "info" },
     { id: "api-mcp", x: 840, y: 430, w: 380, h: 90, title: "/api/mcp", sub: "generated data from memory · no model, no auth", icon: "hub", chip: "info" },
     { id: "api-github", x: 840, y: 590, w: 380, h: 76, title: "/api/github-contributions", sub: "the contribution graph", icon: "grid_view", chip: "info" },

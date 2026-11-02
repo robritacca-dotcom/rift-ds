@@ -1,0 +1,60 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Nav",
+  "label": "Nav",
+  "slug": "nav",
+  "category": "navigation",
+  "description": "A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.",
+  "client": false,
+  "importPath": "rift-ds/components/Nav/Nav",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/nav",
+  "markdownUrl": "https://rift-ds.com/components/nav.md",
+  "deprecated": "Use `SiteHeader` instead.",
+  "exports": [
+    {
+      "component": "Nav",
+      "deprecated": "Use `SiteHeader` instead.",
+      "props": [
+        {
+          "name": "brandText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Brand/logo text"
+        },
+        {
+          "name": "brandIcon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Brand icon element (img, svg, etc.)"
+        },
+        {
+          "name": "buttons",
+          "type": "ButtonProps[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Navigation buttons config — passed directly to ButtonGroup"
+        },
+        {
+          "name": "trailing",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Additional elements rendered after the button group (e.g. ToggleSwitch)"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

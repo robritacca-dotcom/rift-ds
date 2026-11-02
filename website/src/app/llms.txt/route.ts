@@ -11,6 +11,7 @@ import {
   AUTHOR_NAME,
   AUTHOR_URL,
   NPM_URL,
+  PACKAGE_NAME,
   REPOSITORY_URL,
   STORYBOOK_URL,
 } from "@/config/brand.generated";
@@ -101,6 +102,8 @@ export function GET() {
     `- [Storybook](${STORYBOOK_URL}): the rendered API reference. Every component has a props table with types, defaults, and deprecations`,
     `- [npm package](${NPM_URL}): \`npm install rift-ds\` ships complete .d.ts type declarations for every component`,
     `- [shadcn registry](${SITE_URL}/r/registry.json): a shadcn-compatible registry serving every component as installable source. \`npx shadcn@latest add ${SITE_URL}/r/<slug>.json\` copies the component, its dependencies, and the shared base (tokens, presets, icon font, behaviors) into your project`,
+    `- [Component schemas](${SITE_URL}/schema/components.json): one JSON file per component with every prop, its allowed values and default, generated from the TypeScript. Each sits at ${SITE_URL}/schema/components/<slug>.json and validates against the meta-schema at ${SITE_URL}/schema/component.schema.json`,
+    `- [Design tokens (DTCG)](${SITE_URL}/docs/schemas#design-tokens): the tokens in the Design Tokens Community Group format, one file per theme and mode at ${SITE_URL}/schema/tokens/<theme>.<mode>.tokens.json (the MCP list_tokens tool returns every URL), with the primitive-to-semantic aliases intact; the same values resolved per theme ship in the package as \`${PACKAGE_NAME}/tokens/values\``,
     `- [CLAUDE.md](${SITE_URL}/CLAUDE.md): how this repository is *maintained* (architecture, registries, workflows). Written for contributors to the system itself, not for people using the package: for that, read design.md below and the README`,
     `- [GitHub source](${REPOSITORY_URL}): the full source, if you want to read the implementation`,
     `- [design.md](${SITE_URL}/design.md): the full design specification (tokens, colours, typography, component rules)`,

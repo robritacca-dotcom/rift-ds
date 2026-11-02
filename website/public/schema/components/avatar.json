@@ -1,0 +1,100 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Avatar",
+  "label": "Avatar",
+  "slug": "avatar",
+  "category": "data-display",
+  "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+  "client": true,
+  "importPath": "rift-ds/components/Avatar/Avatar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/avatar",
+  "markdownUrl": "https://rift-ds.com/components/avatar.md",
+  "exports": [
+    {
+      "component": "Avatar",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Image source URL"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "User's name — used for initials fallback"
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm"
+          ],
+          "required": false,
+          "description": "Avatar size",
+          "default": "md"
+        },
+        {
+          "name": "fill",
+          "type": "\"neutral\" | AvatarFill",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ."
+        },
+        {
+          "name": "status",
+          "type": "\"online\" | \"away\" | \"offline\" | \"busy\"",
+          "typeKind": "enum",
+          "values": [
+            "away",
+            "busy",
+            "offline",
+            "online"
+          ],
+          "required": false,
+          "description": "Online status indicator"
+        },
+        {
+          "name": "statusLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the status dot. Defaults to the `status` value itself (e.g. \"online\")."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

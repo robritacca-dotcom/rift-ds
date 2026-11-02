@@ -1,0 +1,72 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Toolbar",
+  "label": "Toolbar",
+  "slug": "toolbar",
+  "category": "layout",
+  "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant.",
+  "client": true,
+  "importPath": "rift-ds/components/Toolbar/Toolbar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/toolbar",
+  "markdownUrl": "https://rift-ds.com/components/toolbar.md",
+  "exports": [
+    {
+      "component": "Toolbar",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Accessible name for the toolbar — what a screen reader calls the group."
+        },
+        {
+          "name": "orientation",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Which way the controls run.",
+          "default": "horizontal"
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"floating\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "floating"
+          ],
+          "required": false,
+          "description": "`default` is an attached bar on the container fill; `floating` is the\nglass pill for controls hovering over content — position it with your own\nlayout (the component never fixes itself to the viewport).",
+          "default": "default"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The toolbar's controls — group unrelated clusters with `ToolbarSeparator`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "ToolbarSeparator",
+      "props": []
+    }
+  ]
+}

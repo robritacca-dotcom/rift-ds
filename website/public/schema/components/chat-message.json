@@ -1,0 +1,158 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ChatMessage",
+  "label": "Chat message",
+  "slug": "chat-message",
+  "category": "ai",
+  "description": "A single chat turn with avatar, author, timestamp, and bubble or plain content aligned by role.",
+  "client": false,
+  "importPath": "rift-ds/components/ChatMessage/ChatMessage",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/chat-message",
+  "markdownUrl": "https://rift-ds.com/components/chat-message.md",
+  "exports": [
+    {
+      "component": "ChatMessage",
+      "props": [
+        {
+          "name": "role",
+          "type": "\"user\" | \"assistant\"",
+          "typeKind": "enum",
+          "values": [
+            "assistant",
+            "user"
+          ],
+          "required": false,
+          "description": "Which side of the conversation this turn belongs to. Drives alignment\nand the default surface: user turns are right-aligned bubbles,\nassistant turns are surface-less full-width text. Shadows the ARIA\nrole attribute; the root renders no ARIA role.",
+          "default": "assistant"
+        },
+        {
+          "name": "avatar",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Avatar slot, e.g. an `<Avatar>`. Omit for no gutter at all."
+        },
+        {
+          "name": "showAvatar",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the passed avatar. When false the avatar is hidden but its gutter\nspace is kept, so consecutive rows in a run stay aligned.",
+          "default": true
+        },
+        {
+          "name": "author",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Display name shown above the content."
+        },
+        {
+          "name": "timestamp",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Time shown beside the author, e.g. \"2:41 PM\". Free text, so callers keep their own formatting."
+        },
+        {
+          "name": "grouped",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Consecutive-message mode: hides the avatar (keeping its gutter), drops\nthe author and timestamp, and tightens the spacing to the row above.",
+          "default": false
+        },
+        {
+          "name": "bubble",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Override the role's default surface. Explicit true on an assistant turn\nrenders a received bubble; explicit false on a user turn renders plain text."
+        },
+        {
+          "name": "tail",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Square the speaker-side bottom corner of the bubble — bottom-right on a\nsent bubble, bottom-left on a received one. Only meaningful when a\nbubble renders.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Compact drops the type one size step and tightens the bubble padding.",
+          "default": "default"
+        },
+        {
+          "name": "pending",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Waiting for the first content: renders a three-dot pulse in place of children.",
+          "default": false
+        },
+        {
+          "name": "pendingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible text announced for the pending state.",
+          "default": "Waiting for a reply"
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Action row under the content, revealed on hover and keyboard focus (always visible on touch) — `showActions` pins it on."
+        },
+        {
+          "name": "showActions",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Always show the action row instead of revealing it on hover and focus.\nFor surfaces where the actions are part of the response — a copy or\nfeedback row — rather than a secondary affordance.",
+          "default": false
+        },
+        {
+          "name": "attachments",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Files sent with this turn, drawn outside the bubble on the speaker's\nside, above the text. Pass an AttachmentGroup. A turn that carries\nfiles and no text draws no bubble at all."
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Footer slot under the content — a sources row, an edited note."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The message content. The package ships no markdown renderer; render\nmarkdown yourself, ideally wrapped in Prose, and pass the result."
+        }
+      ]
+    }
+  ]
+}

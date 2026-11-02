@@ -47,8 +47,8 @@ export default function DocsPage() {
               themes ship in the package as generated stylesheets. Every fact
               on this site derives from a registry the build enforces, so the
               docs cannot quietly drift from the code. And every contract is
-              published for agents as well as people, from the MCP endpoint to
-              the per-component markdown. Start with Get started to install
+              published for agents as well as people, from the MCP endpoint and
+              the JSON schemas to the per-component markdown. Start with Get started to install
               and theme the package, read Overview for how the system is built
               and verified, or take the spec files it is built from. The
               release log records what each published version shipped.
@@ -95,6 +95,14 @@ export default function DocsPage() {
               <div className={`${styles.circlePreview} ${styles.circleDashed}`}>
                 <span className="material-symbols-rounded" aria-hidden="true" style={{ color: "var(--color-text-secondary)" }}>
                   view_quilt
+                </span>
+              </div>
+            </TocCard>
+
+            <TocCard href="/docs/schemas" title="Schemas">
+              <div className={`${styles.circlePreview} ${styles.circleDashed}`}>
+                <span className="material-symbols-rounded" aria-hidden="true" style={{ color: "var(--color-text-secondary)" }}>
+                  data_object
                 </span>
               </div>
             </TocCard>

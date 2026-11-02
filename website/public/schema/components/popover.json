@@ -1,0 +1,137 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Popover",
+  "label": "Popover",
+  "slug": "popover",
+  "category": "overlays",
+  "description": "Contextual overlay panel with click and hover triggers, positioned relative to its anchor.",
+  "client": true,
+  "importPath": "rift-ds/components/Popover/Popover",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/popover",
+  "markdownUrl": "https://rift-ds.com/components/popover.md",
+  "exports": [
+    {
+      "component": "Popover",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Trigger element"
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Popover content. Replaces the native `content` attribute, which only\nmeans something on a `<meta>` element."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "surface",
+          "type": "\"menu\" | \"panel\"",
+          "typeKind": "enum",
+          "values": [
+            "menu",
+            "panel"
+          ],
+          "required": false,
+          "description": "The panel's surface. `panel` (the default) is the content panel: a\n16px inset and the container border. `menu` is DropdownMenu's own\nsurface (its 4px inset, input border and corner), for a popover that\nsits among menus and should read as one of them, such as a table\ntoolbar's sort or column panel.",
+          "default": "panel"
+        },
+        {
+          "name": "position",
+          "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "end",
+            "left",
+            "right",
+            "start",
+            "top"
+          ],
+          "required": false,
+          "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
+          "default": "bottom"
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Which edge of the trigger the panel lines up with, on the top and bottom sides. `start` and `end` follow the reading direction. Defaults to `start`.",
+          "default": "start"
+        },
+        {
+          "name": "trigger",
+          "type": "\"hover\" | \"click\"",
+          "typeKind": "enum",
+          "values": [
+            "click",
+            "hover"
+          ],
+          "required": false,
+          "description": "Trigger mode",
+          "default": "click"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the popover is open (controlled mode)"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the popover starts open when uncontrolled",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when open state changes"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the trigger and the panel; the panel is named \"Popover\" when it is omitted"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes for the popover's root wrapper, which holds the trigger and the panel",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

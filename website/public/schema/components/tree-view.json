@@ -1,0 +1,80 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "TreeView",
+  "label": "Tree view",
+  "slug": "tree-view",
+  "category": "data-display",
+  "description": "Collapsible hierarchy for files, folders, and nested structures.",
+  "client": true,
+  "importPath": "rift-ds/components/TreeView/TreeView",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/tree-view",
+  "markdownUrl": "https://rift-ds.com/components/tree-view.md",
+  "exports": [
+    {
+      "component": "TreeView",
+      "props": [
+        {
+          "name": "nodes",
+          "type": "TreeViewNode[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Tree data to render"
+        },
+        {
+          "name": "defaultExpandedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "IDs of initially expanded branches (uncontrolled)",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "expandedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Expanded branch IDs (controlled) — pair with `onExpandedChange`"
+        },
+        {
+          "name": "onExpandedChange",
+          "type": "((ids: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the full list of expanded branch IDs whenever a branch toggles"
+        },
+        {
+          "name": "selectedId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected node ID (controlled) — pair with `onSelect`"
+        },
+        {
+          "name": "defaultSelectedId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "ID of the initially selected node (uncontrolled)"
+        },
+        {
+          "name": "onSelect",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the node's ID when a row is selected via click, Enter, or\nSpace. Intentionally shadows the native `select` event handler, which\nhas no meaning on a tree widget."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

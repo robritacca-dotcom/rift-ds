@@ -1,0 +1,143 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ContributionGraph",
+  "label": "Contribution graph",
+  "slug": "contribution-graph",
+  "category": "charts",
+  "description": "A year of activity, one cell per day.",
+  "client": false,
+  "importPath": "rift-ds/components/ContributionGraph/ContributionGraph",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/contribution-graph",
+  "markdownUrl": "https://rift-ds.com/components/contribution-graph.md",
+  "exports": [
+    {
+      "component": "ContributionGraph",
+      "props": [
+        {
+          "name": "days",
+          "type": "ContributionDay[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "One entry per day, ordered oldest to newest"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header.\nNote: this replaces the native `title` tooltip attribute, which the graph does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title."
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Summary line shown under the grid, e.g. \"496 contributions in the last year\""
+        },
+        {
+          "name": "showMonthLabels",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show month labels above the grid",
+          "default": true
+        },
+        {
+          "name": "showLegend",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the Less → More legend under the grid",
+          "default": true
+        },
+        {
+          "name": "gridLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the grid of day cells, which renders as one image. Falls back to `caption`, then to \"Contribution activity\"."
+        },
+        {
+          "name": "lessLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The legend's low-end word. Defaults to \"Less\".",
+          "default": "Less"
+        },
+        {
+          "name": "moreLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The legend's high-end word. Defaults to \"More\".",
+          "default": "More"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the dates are written in: the default month labels\nabove the grid (\"Jan\" to \"Dec\" in `en-US`) and the date in each cell's\ndefault tooltip (\"Jul 8, 2026\"), and the weekday each column starts on. Defaults to `en-US`.",
+          "default": "en-US"
+        },
+        {
+          "name": "weekStartsOn",
+          "type": "Weekday",
+          "typeKind": "enum",
+          "values": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`."
+        },
+        {
+          "name": "monthLabels",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The month labels above the grid: twelve entries, January first.\nDefaults to the short month names in `locale` (\"Jan\" to \"Dec\" in\n`en-US`); a list of any other length falls back to the default."
+        },
+        {
+          "name": "cellLabel",
+          "type": "((count: number, date: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "A day cell's tooltip, given its count and date. Defaults to \"No\ncontributions\", \"1 contribution\" or \"N contributions\", then \"on\" and the\ndate in `locale`'s short form (e.g. \"Jul 8, 2026\")."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

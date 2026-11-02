@@ -230,10 +230,6 @@ const starterUrl = `${SITE_URL}/${AGENT_STARTER_FILE}`;
 if (!read(join(repoRoot, 'README.md')).includes(starterUrl)) {
   errors.push(`README.md no longer offers the agent starter at ${starterUrl}: its "Set up your agent" section links and curls that URL.`);
 }
-const accessorSource = existsSync(accessorPath) ? read(accessorPath) : '';
-if (!/AGENT_STARTER_PAGE\s*=\s*"\/docs\/get-started#agent-quickstart"/.test(accessorSource)) {
-  errors.push(`AGENT_STARTER_PAGE in ${ACCESSOR} must point at get-started's #agent-quickstart section, where the copy frame is.`);
-}
 
 if (errors.length > 0) {
   console.error('\n✗ Agent skill validation failed:\n');

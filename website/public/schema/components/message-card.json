@@ -1,0 +1,79 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "MessageCard",
+  "label": "Message card",
+  "slug": "message-card",
+  "category": "ai",
+  "description": "A structured rich-content card embedded in a chat message, with media, title, body, and actions.",
+  "client": false,
+  "importPath": "rift-ds/components/MessageCard/MessageCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/message-card",
+  "markdownUrl": "https://rift-ds.com/components/message-card.md",
+  "exports": [
+    {
+      "component": "MessageCard",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Card heading.\nNote: this shadows the native `title` tooltip attribute, which MessageCard does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "One or two lines under the title."
+        },
+        {
+          "name": "media",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Top media slot — an image or chart, inset from the card edges with its own rounded corners."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Small leading icon beside the title — a Material Symbol name, or any custom element."
+        },
+        {
+          "name": "meta",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Free-text metadata line, e.g. a domain or date, so callers keep their own formatting."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Action row rendered in a footer outside the body — small secondary or\ntertiary Buttons, mirroring ToolCall's actions footer."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Body content between the description and the footer — rich content, a Prose block, an AttachmentGroup."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "MapLegend",
+  "label": "Map legend",
+  "slug": "map-legend",
+  "category": "maps",
+  "description": "The corner block of a map: its name, what it shows, and the key to its markers.",
+  "client": false,
+  "importPath": "rift-ds/components/MapLegend/MapLegend",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/map-legend",
+  "markdownUrl": "https://rift-ds.com/components/map-legend.md",
+  "exports": [
+    {
+      "component": "MapLegend",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The map's name, set above the key. Intentionally shadows the native\n`title` tooltip attribute, which MapLegend does not expose."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "One or two lines saying what the map shows."
+        },
+        {
+          "name": "items",
+          "type": "MapLegendItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The key itself: one row per marker kind.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

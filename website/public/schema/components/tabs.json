@@ -1,0 +1,102 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Tabs",
+  "label": "Tabs",
+  "slug": "tabs",
+  "category": "navigation",
+  "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
+  "client": true,
+  "importPath": "rift-ds/components/Tabs/Tabs",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/tabs",
+  "markdownUrl": "https://rift-ds.com/components/tabs.md",
+  "exports": [
+    {
+      "component": "Tabs",
+      "props": [
+        {
+          "name": "tabs",
+          "type": "Tab[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of tab definitions"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Value of the selected tab, for a controlled set. Leave it undefined to let\nthe component keep its own selection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Value of the tab selected on first render when the set is uncontrolled.\nFalls back to the first enabled tab."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the value of the tab the user selects"
+        },
+        {
+          "name": "activeTab",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy name for `value`.",
+          "deprecated": "Use `value` instead."
+        },
+        {
+          "name": "onTabChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change callback; fires alongside `onValueChange`.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Visual size",
+          "default": "default"
+        },
+        {
+          "name": "fullWidth",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether tabs fill the available width",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop for the tab list.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

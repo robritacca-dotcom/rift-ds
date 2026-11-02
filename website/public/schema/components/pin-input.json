@@ -1,0 +1,130 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "PinInput",
+  "label": "Pin input",
+  "slug": "pin-input",
+  "category": "forms",
+  "description": "Segmented one-time-code input with auto-advance, paste support, and completion callback.",
+  "client": true,
+  "importPath": "rift-ds/components/PinInput/PinInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/pin-input",
+  "markdownUrl": "https://rift-ds.com/components/pin-input.md",
+  "exports": [
+    {
+      "component": "PinInput",
+      "props": [
+        {
+          "name": "length",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Number of cells, one character each",
+          "default": 6
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current code (controlled) — character at index n renders in cell n"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial code (uncontrolled)"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the joined code whenever any cell changes.\nThere is no single native `onChange` here: the control is a group of\none-character inputs, so the value callback is the primary API."
+        },
+        {
+          "name": "onComplete",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires once when every cell is filled, with the complete code"
+        },
+        {
+          "name": "mask",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Render cells as password fields, hiding the entered characters",
+          "default": false
+        },
+        {
+          "name": "format",
+          "type": "\"numeric\" | \"alphanumeric\"",
+          "typeKind": "enum",
+          "values": [
+            "alphanumeric",
+            "numeric"
+          ],
+          "required": false,
+          "description": "Accepted characters — `numeric` rejects non-digits and sets a numeric keyboard",
+          "default": "numeric"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text rendered above the cells; also names the group for screen readers"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below the cells"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours cell borders and the helper text",
+          "default": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the whole control is disabled",
+          "default": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the joined code submits with an enclosing form\nthrough a hidden input, nothing while disabled. The cells themselves\ncarry no name."
+        },
+        {
+          "name": "cellLabel",
+          "type": "((position: number, count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of each cell, given its 1-based position and the cell count.\nDefaults to \"Digit <position> of <count>\" for the numeric format and\n\"Character <position> of <count>\" for alphanumeric."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the cells",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "InspectorSegmentedControl",
+  "label": "Inspector segments",
+  "slug": "inspector-segmented-control",
+  "category": "inspector",
+  "description": "One-row choice between a few options for inspector panels, as native radios under a sliding selection pill.",
+  "client": true,
+  "importPath": "rift-ds/components/Inspector/InspectorSegmentedControl",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/inspector-segmented-control",
+  "markdownUrl": "https://rift-ds.com/components/inspector-segmented-control.md",
+  "exports": [
+    {
+      "component": "InspectorSegmentedControl",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The setting's name, drawn inside the bar on the left. Names the radiogroup."
+        },
+        {
+          "name": "options",
+          "type": "InspectorSegment[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The choices, drawn left to right in the bar's end."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The selected value (controlled). Leave unset and use `defaultValue` for an uncontrolled set."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The starting selection for an uncontrolled set."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The radios' shared `name`, for native form submission. Generated when unset."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Takes the whole set out of use.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+          "default": "default"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the newly chosen value."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the bar.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

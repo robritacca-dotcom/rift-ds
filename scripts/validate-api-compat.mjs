@@ -25,6 +25,15 @@
  *      exported (values and types, read from the module's syntax at both
  *      revisions, following `export *`), a file a wildcard subpath served
  *      as a deep import, or a bin.
+ *   6. A published schema that vanished or narrowed: every file under
+ *      website/public/schema at the baseline must still exist (a consumer
+ *      or an editor fetches them by URL), and every property a hand-written
+ *      meta-schema there declared must still be declared, since a schema
+ *      reader built against a field breaks when the field goes. The
+ *      generated documents are not diffed field by field: their content is
+ *      held to the TypeScript and the CSS by their own validators, and a
+ *      removed prop is check 2's. A tag that predates the folder has
+ *      nothing to compare, so the check passes vacuously there.
  *
  * Widening is fine: new components, new optional props, new union members,
  * a prop gaining @deprecated. A default that moves is not checked, because
@@ -77,7 +86,8 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  *   { since: '2.0.0', component: 'Widget', prop: 'size', change: 'removed', reason: '…' }
  * The keys match the record() calls below: `component` + `prop` for a prop,
  * `subpath` + `export` for a name, `subpath` + `file` for a deep import,
- * `bin` for a binary.
+ * `bin` for a binary, `schema` for a published schema file and
+ * `schema` + `property` (a JSON pointer) for a meta-schema property.
  */
 const SANCTIONED_BREAKS = [
 ];
@@ -401,9 +411,71 @@ for (const bin of binNames(baselinePackage)) {
   if (!currentBins.has(bin)) record({ bin, change: 'removed' }, `The bin "${bin}" was removed; \`npx ${bin}\` stops working.`);
 }
 
+/* ── Check 6: the published schemas ────────────────────────────────────── */
+
+const SCHEMA_DIR = 'website/public/schema';
+let baselineSchemaFiles = [];
+try {
+  baselineSchemaFiles = git('ls-tree', '-r', '--name-only', baseline, '--', SCHEMA_DIR)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+} catch {
+  // The folder did not exist at the baseline: nothing to compare.
+}
+for (const path of baselineSchemaFiles) {
+  if (!existsSync(join(repoRoot, path))) {
+    record({ schema: path, change: 'removed' }, `${path} was removed; anything that fetched it by URL at ${baseline} now gets a 404.`);
+  }
+}
+
+/** Every property a schema declares, as JSON pointers, through the keywords that nest schemas. */
+const propertyPointers = (schema, pointer = '', out = []) => {
+  if (!schema || typeof schema !== 'object') return out;
+  for (const keyword of ['properties', '$defs']) {
+    for (const key of Object.keys(schema[keyword] ?? {})) {
+      const here = `${pointer}/${keyword}/${key}`;
+      out.push(here);
+      propertyPointers(schema[keyword][key], here, out);
+    }
+  }
+  for (const keyword of ['items', 'additionalProperties', 'if', 'then', 'else', 'not']) {
+    if (schema[keyword] && typeof schema[keyword] === 'object') {
+      propertyPointers(schema[keyword], `${pointer}/${keyword}`, out);
+    }
+  }
+  for (const keyword of ['allOf', 'anyOf', 'oneOf']) {
+    (schema[keyword] ?? []).forEach((sub, i) => propertyPointers(sub, `${pointer}/${keyword}/${i}`, out));
+  }
+  return out;
+};
+let schemaPropertiesCompared = 0;
+for (const path of baselineSchemaFiles.filter((p) => p.endsWith('.schema.json'))) {
+  const baselineText = readBaseline(path);
+  if (baselineText === null || !existsSync(join(repoRoot, path))) continue;
+  let before;
+  let after;
+  try {
+    before = JSON.parse(baselineText);
+    after = JSON.parse(readCurrent(path));
+  } catch {
+    continue; // an unparseable schema is validate-json-schemas.mjs's failure
+  }
+  const now = new Set(propertyPointers(after));
+  for (const pointer of propertyPointers(before)) {
+    schemaPropertiesCompared += 1;
+    if (!now.has(pointer)) {
+      record(
+        { schema: path, property: pointer, change: 'removed' },
+        `${path} no longer declares ${pointer}; a reader built against ${baseline}'s schema expects it. Keep the property (deprecate it in its description) instead.`
+      );
+    }
+  }
+}
+
 /* ── Sanctions and report ──────────────────────────────────────────────── */
 
-const sameKey = (a, b) => ['component', 'prop', 'subpath', 'export', 'file', 'bin', 'change'].every((k) => (a[k] ?? null) === (b[k] ?? null));
+const sameKey = (a, b) => ['component', 'prop', 'subpath', 'export', 'file', 'bin', 'schema', 'property', 'change'].every((k) => (a[k] ?? null) === (b[k] ?? null));
 const errors = [];
 for (const b of breaks) {
   if (!SANCTIONED_BREAKS.some((s) => sameKey(s, b.key))) errors.push(b.message);
@@ -422,6 +494,6 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✓ API compatible with ${baseline} — ${before.length} entries, ${propsCompared} props and ${namesCompared} exported names compared, nothing removed or narrowed` +
+  `✓ API compatible with ${baseline} — ${before.length} entries, ${propsCompared} props, ${namesCompared} exported names, ${baselineSchemaFiles.length} schema files and ${schemaPropertiesCompared} schema properties compared, nothing removed or narrowed` +
     (SANCTIONED_BREAKS.length ? ` (${SANCTIONED_BREAKS.length} sanctioned break${SANCTIONED_BREAKS.length === 1 ? '' : 's'})` : '')
 );

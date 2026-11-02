@@ -1,0 +1,224 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "RadioButton",
+  "label": "Radio button",
+  "slug": "radio-button",
+  "category": "forms",
+  "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator.",
+  "client": true,
+  "importPath": "rift-ds/components/RadioButton/RadioButton",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/radio-button",
+  "markdownUrl": "https://rift-ds.com/components/radio-button.md",
+  "exports": [
+    {
+      "component": "RadioButton",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered under the label text"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text. Deliberately no `aria-invalid`:\nARIA does not allow it on `role=\"radio\"`; group-level errors carry it on\nthe radiogroup via RadioGroup's `error`.",
+          "default": false
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether this radio is selected",
+          "default": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the radio is disabled",
+          "default": false
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Value for this radio option, passed to the callbacks and submitted under `name`. A form reads \"on\", the native radio's, when it is omitted."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with this radio's value when selected"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the radio submits its `value` with an\nenclosing form through a hidden input while checked, nothing otherwise\nor while disabled, as a native radio does. Grouping stays React state\n(`RadioGroup` passes its own `name` to every option, so exactly one\nentry submits)."
+        }
+      ]
+    },
+    {
+      "component": "RadioGroup",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Group label"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered below the group"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text and marks the group invalid",
+          "default": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the group required and renders the required marker on its label",
+          "default": false
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Currently selected value, controlled. Leave undefined to let the group\nkeep its own selection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected value on first render when uncontrolled (`value` undefined)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the checked option's `value` submits with an\nenclosing form through one hidden input, as a native radio set does; a\ndisabled option submits nothing.\nGrouping itself stays React state (`value`/`onValueChange`)."
+        },
+        {
+          "name": "options",
+          "type": "{ label: string; value: string; disabled?: boolean | undefined; }[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Radio options"
+        },
+        {
+          "name": "direction",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Layout direction",
+          "default": "vertical"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the newly selected value"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValueChange` instead."
+        }
+      ]
+    },
+    {
+      "component": "RadioIndicator",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the circle shows its dot.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

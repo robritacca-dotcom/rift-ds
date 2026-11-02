@@ -1,0 +1,97 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Treemap",
+  "label": "Treemap",
+  "slug": "treemap",
+  "category": "charts",
+  "description": "Nested rectangles sized by value for part-to-whole breakdowns.",
+  "client": true,
+  "importPath": "rift-ds/components/Chart/Treemap",
+  "barrel": "charts",
+  "docsUrl": "https://rift-ds.com/components/treemap",
+  "markdownUrl": "https://rift-ds.com/components/treemap.md",
+  "exports": [
+    {
+      "component": "Treemap",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "data",
+          "type": "TreemapDataItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Hierarchical data — each item needs `name` and `size` (or `children`)"
+        },
+        {
+          "name": "dataKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Key used for sizing rectangles",
+          "default": "size"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title"
+        },
+        {
+          "name": "summaryItems",
+          "type": "ChartSummaryItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Summary stats displayed in the header"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart area height in pixels",
+          "default": 350
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "sizeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The tooltip's name for a tile's value. Defaults to \"Size\".",
+          "default": "Size"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the wrapper",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

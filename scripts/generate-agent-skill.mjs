@@ -297,7 +297,7 @@ The token stylesheet defines custom properties and styles no element, so paint t
 
 ## Theming
 
-Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry. Never write a token name from memory: look it up there, or read the names from \`tokenRegistry\` in \`${PACKAGE_NAME}/tokens/registry\`, since a misspelt \`var()\` resolves to nothing and fails silently.
+Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry. Never write a token name from memory: look it up there, or read the names from \`tokenRegistry\` in \`${PACKAGE_NAME}/tokens/registry\`, since a misspelt \`var()\` resolves to nothing and fails silently. For the resolved values of every theme in code, read \`${PACKAGE_NAME}/tokens/values\`; the same values are served as DTCG files under \`${origin}/schema/tokens/\`.
 
 ## Charts
 
@@ -342,10 +342,11 @@ ${categoryLines.join('\n')}
 
 ## Exact prop contracts
 
-Do not guess props. Three equivalent sources, all generated from the same JSDoc that ships in the package:
+Do not guess props. Equivalent sources, all generated from the same JSDoc that ships in the package:
 
 - The \`.d.ts\` files in \`node_modules/${PACKAGE_NAME}\` once installed.
 - \`${origin}/components/<slug>.md\`: one markdown contract per component, next to its live docs page.
+- \`${origin}/schema/components/<slug>.json\`: the same contract as JSON, indexed at \`${origin}/schema/components.json\`.
 - The MCP endpoint at \`${origin}/api/mcp\`: the \`get_component\` tool returns the full contract for one component.
 
 ## Related skills
@@ -704,6 +705,8 @@ Do not build a chat UI by hand. \`npx ${BIN_NAME} ${widget.command}\` scaffolds 
 
 - Every component, with its import and a link to its prop contract: ${refUrl('components.md')}
 - Every token, with its value in light and dark: ${refUrl('tokens.md')}
+- Every component's contract as JSON: ${origin}/schema/components/<slug>.json
+- Every token resolved per theme, in code: \`${PACKAGE_NAME}/tokens/values\`
 - MCP endpoint, no key needed: ${origin}/api/mcp
 - If the project uses \`.claude/skills/\`, \`npx ${BIN_NAME} init\` installs the full skills there.
 `;

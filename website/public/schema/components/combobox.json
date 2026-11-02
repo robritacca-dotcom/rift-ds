@@ -1,0 +1,217 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Combobox",
+  "label": "Combobox",
+  "slug": "combobox",
+  "category": "forms",
+  "description": "A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading.",
+  "client": true,
+  "importPath": "rift-ds/components/Combobox/Combobox",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/combobox",
+  "markdownUrl": "https://rift-ds.com/components/combobox.md",
+  "exports": [
+    {
+      "component": "Combobox",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Combobox label text"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Placeholder shown in the text field when nothing is selected",
+          "default": "Search…"
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "Selected value, controlled — a `string` in single mode, `string[]` when\n`multiple` is set. Leave undefined to let the combobox keep its own\nselection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "Selection on first render when uncontrolled (`value` undefined) — a\n`string` in single mode, `string[]` when `multiple` is set. Omitted, the\nselection starts empty."
+        },
+        {
+          "name": "options",
+          "type": "ComboboxOption[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Available options (flat list)"
+        },
+        {
+          "name": "groups",
+          "type": "ComboboxOptionGroup[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Optional grouped options — when provided, `options` is ignored"
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Allow selecting more than one option; selections render as removable chips",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the combobox is disabled",
+          "default": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the combobox is required",
+          "default": false
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — shows error styling and message",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below the field"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show a loading affordance in the menu — for async option fetching",
+          "default": false
+        },
+        {
+          "name": "emptyMessage",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Message shown when the filter matches no options",
+          "default": "No results found"
+        },
+        {
+          "name": "loadingMessage",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status text shown in the menu while `loading` is set. Defaults to \"Loading…\".",
+          "default": "Loading…"
+        },
+        {
+          "name": "clearable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show a clear button once something is selected",
+          "default": false
+        },
+        {
+          "name": "clearLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the clear button. Defaults to \"Clear selection\".",
+          "default": "Clear selection"
+        },
+        {
+          "name": "removeLabel",
+          "type": "((label: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a chip's remove button in `multiple` mode, given the\noption's label. Defaults to \"Remove <label>\".",
+          "defaultExpression": "(optionLabel) => `Remove ${optionLabel}`"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string | string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the new selection — a `string` in single mode,\n`string[]` when `multiple` is set."
+        },
+        {
+          "name": "onSearchChange",
+          "type": "((query: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called as the user types, for async/server-side filtering"
+        },
+        {
+          "name": "manualFiltering",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Skip built-in filtering — use when options are filtered upstream",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((value: string | string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the selection submits with an enclosing form\nunder this name through hidden inputs: the selected option's `value` in\nsingle mode (nothing while no value is set), one entry per selected value in\n`multiple` mode, nothing while disabled. The search text the user types\nis never submitted. Also the fallback for the element id (`id || name || generated`)."
+        }
+      ]
+    }
+  ]
+}

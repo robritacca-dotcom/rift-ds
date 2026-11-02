@@ -1,0 +1,148 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Toast",
+  "label": "Toast",
+  "slug": "toast",
+  "category": "feedback",
+  "description": "Temporary notification with status variants, auto-dismiss, and stacking via ToastProvider.",
+  "client": true,
+  "importPath": "rift-ds/components/Toast/Toast",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/toast",
+  "markdownUrl": "https://rift-ds.com/components/toast.md",
+  "exports": [
+    {
+      "component": "Toast",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Toast title text.\nNote: this shadows the native `title` tooltip attribute, which Toast does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Toast description / body text"
+        },
+        {
+          "name": "variant",
+          "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "info",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Toast variant",
+          "default": "info"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the toast can be manually dismissed. The dismiss button renders only when `onDismiss` is also given",
+          "default": true
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A control under the text, such as an Undo."
+        },
+        {
+          "name": "onDismiss",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the dismiss button is pressed. The button renders only when this is given (and `dismissible` is not false); the host owns removing the toast"
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the dismiss button",
+          "default": "Dismiss notification"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "ToastProvider",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Children that can access the toast context"
+        },
+        {
+          "name": "position",
+          "type": "\"top-right\" | \"top-left\" | \"bottom-right\" | \"bottom-left\" | \"top-center\" | \"bottom-center\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom-center",
+            "bottom-left",
+            "bottom-right",
+            "top-center",
+            "top-left",
+            "top-right"
+          ],
+          "required": false,
+          "description": "Position of the toast stack",
+          "default": "bottom-right"
+        },
+        {
+          "name": "maxToasts",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum number of visible toasts",
+          "default": 5
+        },
+        {
+          "name": "regionLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the toast stack's region landmark",
+          "default": "Notifications"
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of every toast's dismiss button",
+          "default": "Dismiss notification"
+        }
+      ]
+    }
+  ]
+}

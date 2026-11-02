@@ -1,0 +1,181 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Dropdown",
+  "label": "Dropdown",
+  "slug": "dropdown",
+  "category": "forms",
+  "description": "Custom select dropdown with keyboard navigation, disabled options, and error states.",
+  "client": true,
+  "importPath": "rift-ds/components/Dropdown/Dropdown",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/dropdown",
+  "markdownUrl": "https://rift-ds.com/components/dropdown.md",
+  "exports": [
+    {
+      "component": "Dropdown",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Dropdown label text"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Placeholder when no value selected",
+          "default": "Select an option"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Currently selected value, controlled. Leave undefined to let the\ndropdown keep its own selection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Selected value on first render when uncontrolled (`value` undefined)."
+        },
+        {
+          "name": "options",
+          "type": "DropdownOption[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Available options (flat list)"
+        },
+        {
+          "name": "groups",
+          "type": "DropdownOptionGroup[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Optional grouped options — when provided, renders groups with labels and separators"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the dropdown is disabled",
+          "default": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the dropdown is required",
+          "default": false
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the newly selected value"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the list starts open when uncontrolled (`open` undefined).",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the list opens or closes, with the new state."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the selected option's `value` submits with an\nenclosing form through a hidden input (nothing while no value is set,\nnothing while disabled), as Combobox does. Also the fallback for the\nelement id (`id || name || label`)."
+        }
+      ]
+    },
+    {
+      "component": "ChosenMark",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

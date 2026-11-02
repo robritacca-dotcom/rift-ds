@@ -1,0 +1,105 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "PieChart",
+  "label": "Pie chart",
+  "slug": "pie-chart",
+  "category": "charts",
+  "description": "Proportional share of a whole as a pie or donut, with per-slice colours.",
+  "client": true,
+  "importPath": "rift-ds/components/Chart/PieChart",
+  "barrel": "charts",
+  "docsUrl": "https://rift-ds.com/components/pie-chart",
+  "markdownUrl": "https://rift-ds.com/components/pie-chart.md",
+  "exports": [
+    {
+      "component": "PieChart",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "data",
+          "type": "PieSlice[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of slices"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title"
+        },
+        {
+          "name": "summaryItems",
+          "type": "ChartSummaryItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Summary stats displayed in the header"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart area height in pixels",
+          "default": 350
+        },
+        {
+          "name": "innerRadius",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Inner radius for donut style (0 = solid pie)",
+          "default": 0
+        },
+        {
+          "name": "outerRadius",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Outer radius",
+          "default": 140
+        },
+        {
+          "name": "showLegend",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show legend",
+          "default": true
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the wrapper",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

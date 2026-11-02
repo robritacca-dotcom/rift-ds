@@ -1,0 +1,45 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "BentoTileArt",
+  "label": "Bento tile art",
+  "slug": "bento-tile-art",
+  "category": "effects",
+  "description": "The texture half of a bento tile's shader pair: six fine patterns in one vocabulary, fading in from a corner.",
+  "client": false,
+  "importPath": "rift-ds/components/BentoTile/BentoTileArt",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/bento-tile-art",
+  "markdownUrl": "https://rift-ds.com/components/bento-tile-art.md",
+  "exports": [
+    {
+      "component": "BentoTileArt",
+      "props": [
+        {
+          "name": "pattern",
+          "type": "BentoTileArtPattern",
+          "typeKind": "enum",
+          "values": [
+            "dots",
+            "grid",
+            "lines",
+            "rays",
+            "rings",
+            "waves"
+          ],
+          "required": false,
+          "description": "Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the layer.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

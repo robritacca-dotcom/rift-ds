@@ -1,0 +1,134 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Slider",
+  "label": "Slider",
+  "slug": "slider",
+  "category": "forms",
+  "description": "Range input for selecting a value between a minimum and maximum, in default and compact sizes.",
+  "client": true,
+  "importPath": "rift-ds/components/Slider/Slider",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/slider",
+  "markdownUrl": "https://rift-ds.com/components/slider.md",
+  "exports": [
+    {
+      "component": "Slider",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text rendered above the slider, which names it. Without one the\nslider is named by the native `aria-label`, then the deprecated\n`ariaLabel`, and defaults to \"Slider\" so it is never nameless."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered below the slider"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text and marks the slider invalid",
+          "default": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the slider required and renders the required marker on its label",
+          "default": false
+        },
+        {
+          "name": "showValue",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the current value opposite the helper line",
+          "default": false
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current value (controlled). Leave it undefined for an uncontrolled\nslider, which keeps its own state seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial value when uncontrolled (`value` undefined). Defaults to 50.",
+          "default": 50
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Minimum value",
+          "default": 0
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum value",
+          "default": 100
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Step increment",
+          "default": 1
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute)",
+          "default": "default"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the numeric value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries work unmodified."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

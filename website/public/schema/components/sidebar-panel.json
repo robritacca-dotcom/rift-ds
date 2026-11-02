@@ -1,0 +1,94 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "SidebarPanel",
+  "label": "Sidebar panel",
+  "slug": "sidebar-panel",
+  "category": "layout",
+  "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
+  "client": true,
+  "importPath": "rift-ds/components/SidebarPanel/SidebarPanel",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/sidebar-panel",
+  "markdownUrl": "https://rift-ds.com/components/sidebar-panel.md",
+  "exports": [
+    {
+      "component": "SidebarPanel",
+      "props": [
+        {
+          "name": "items",
+          "type": "SidebarPanelItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Items to list, optionally grouped with `group` and nested one level with `children`"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named \"Section navigation\".\nNote: this shadows the native `title` tooltip attribute, which SidebarPanel does not expose."
+        },
+        {
+          "name": "activeKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Key of the item for the current page. Its accordion parent starts open"
+        },
+        {
+          "name": "defaultOpenKeys",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Keys of the accordion rows open on first render, in addition to the active item's parent"
+        },
+        {
+          "name": "onCollapse",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Renders a collapse button beside the heading and calls this when it is pressed"
+        },
+        {
+          "name": "collapseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the collapse button. Defaults to \"Collapse <title>\", or \"Collapse panel\" when there is no title"
+        },
+        {
+          "name": "onBack",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens"
+        },
+        {
+          "name": "backLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label of the back row",
+          "default": "Back"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+        }
+      ]
+    }
+  ]
+}

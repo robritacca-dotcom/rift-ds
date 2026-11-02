@@ -1,0 +1,110 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ContactCard",
+  "label": "Contact card",
+  "slug": "contact-card",
+  "category": "data-display",
+  "description": "Linked contact method with icon, label, and value.",
+  "client": true,
+  "importPath": "rift-ds/components/ContactCard/ContactCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/contact-card",
+  "markdownUrl": "https://rift-ds.com/components/contact-card.md",
+  "exports": [
+    {
+      "component": "ContactCard",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Primary label — e.g. \"Email\""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Visible value or description — e.g. \"hello@example.com\""
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Link destination"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon used when no logo is set — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "logo",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Path to a logo image — preferred over icon when both are provided"
+        },
+        {
+          "name": "external",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Opens link in a new tab and shows open_in_new indicator",
+          "default": false
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Renders a copy button beside the trailing icon. Pressing it calls\n`onCopy(value)`; ContactCard never writes to the clipboard itself.",
+          "default": false
+        },
+        {
+          "name": "onCopy",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the card's value when the copy control is pressed: the copy\nbutton, or the whole card when `copyOnClick` is set. ContactCard does not\ntouch the clipboard, so write the value there in this handler.\nNote: this replaces the native `onCopy` clipboard-event handler, which\nContactCard does not expose."
+        },
+        {
+          "name": "copyOnClick",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Renders the whole card as a button that calls `onCopy(value)` on click,\nwith no navigation. The copying itself is the `onCopy` handler's job.",
+          "default": false
+        },
+        {
+          "name": "copyLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the copy control: the copy button, or the whole card\nwhen `copyOnClick` is set. Defaults to \"Copy <value>\", and to\n\"Copy <value> to clipboard\" on a `copyOnClick` card; both defaults assume\nyour `onCopy` writes the value to the clipboard."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+        }
+      ]
+    }
+  ]
+}

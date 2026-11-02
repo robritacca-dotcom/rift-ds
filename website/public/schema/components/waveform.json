@@ -1,0 +1,77 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Waveform",
+  "label": "Waveform",
+  "slug": "waveform",
+  "category": "ai",
+  "description": "Voice made visible: a row of bars dancing on the shared twelve-slot cycle, or tracking a live analyser level by level.",
+  "client": false,
+  "importPath": "rift-ds/components/Waveform/Waveform",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/waveform",
+  "markdownUrl": "https://rift-ds.com/components/waveform.md",
+  "exports": [
+    {
+      "component": "Waveform",
+      "props": [
+        {
+          "name": "state",
+          "type": "\"idle\" | \"listening\" | \"speaking\"",
+          "typeKind": "enum",
+          "values": [
+            "idle",
+            "listening",
+            "speaking"
+          ],
+          "required": false,
+          "description": "What the audio channel is doing: `idle` parks the bars low and still,\n`listening` runs a gentle half-height wave, `speaking` runs the full one.\nIgnored while `levels` drives the bars.",
+          "default": "idle"
+        },
+        {
+          "name": "bars",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How many bars the wave has.",
+          "default": 5
+        },
+        {
+          "name": "levels",
+          "type": "number[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Live amplitudes from a real audio analyser, one 0–1 value per bar.\nProviding them switches the component to controlled mode: the CSS wave\nstops and each bar tracks its level, easing between updates."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Bar height scale — `default` sits on `--icon-size-600`, `compact` on `--icon-size-500`.",
+          "default": "default"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What a screen reader hears the indicator say. Defaults per state\n(\"Listening\", \"Speaking\", \"Microphone idle\")."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

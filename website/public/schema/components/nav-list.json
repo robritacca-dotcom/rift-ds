@@ -1,0 +1,103 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "NavList",
+  "label": "Nav list",
+  "slug": "nav-list",
+  "category": "navigation",
+  "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
+  "client": true,
+  "importPath": "rift-ds/components/NavList/NavList",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/nav-list",
+  "markdownUrl": "https://rift-ds.com/components/nav-list.md",
+  "exports": [
+    {
+      "component": "NavList",
+      "props": [
+        {
+          "name": "items",
+          "type": "NavListItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Navigation tree to render."
+        },
+        {
+          "name": "currentHref",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "href of the current page — the exactly matching row gets `aria-current=\"page\"` and the active treatment."
+        },
+        {
+          "name": "expandedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Controlled list of expanded item ids."
+        },
+        {
+          "name": "defaultExpandedIds",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Initially expanded item ids (uncontrolled)."
+        },
+        {
+          "name": "onExpandedChange",
+          "type": "((expandedIds: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Allow several sections expanded at once. Default false — expanding one collapses the rest.",
+          "default": false
+        },
+        {
+          "name": "onNavigate",
+          "type": "((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list."
+        },
+        {
+          "name": "expandLabel",
+          "type": "((label: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to \"Expand <label>\".",
+          "defaultExpression": "(label) => `Expand ${label}`"
+        },
+        {
+          "name": "collapseLabel",
+          "type": "((label: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to \"Collapse <label>\".",
+          "defaultExpression": "(label) => `Collapse ${label}`"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

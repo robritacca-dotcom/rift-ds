@@ -896,7 +896,7 @@ function sectionBlueprints() {
 
 These published markdown documents are how the site and design system get built. Each is readable on its own page: /blueprints/claude, /blueprints/design, and /blueprints/content-design. There is no /blueprints index page, so always link the specific document.
 
-A fourth file, ${AGENT_STARTER_FILE}, is for people building with the package rather than the system itself: a short starter to save at a project root or paste into a coding agent. Its full text is shown with a copy button at the top of /docs/get-started (the "Build with a coding agent" section), the home page copies it in one click, and the raw file is at /${AGENT_STARTER_FILE}.
+A fourth file, ${AGENT_STARTER_FILE}, is for people building with the package rather than the system itself: a short starter to save at a project root or paste into a coding agent. Its full text is shown with a copy button at the top of /docs/get-started (the "With an agent" tab), the header's Get started button copies it in one click, and the raw file is at /${AGENT_STARTER_FILE}.
 
 ### ${AGENT_STARTER_FILE}: the starter for a coding agent
 

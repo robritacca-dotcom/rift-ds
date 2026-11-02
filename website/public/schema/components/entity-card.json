@@ -1,0 +1,58 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "EntityCard",
+  "label": "Entity card",
+  "slug": "entity-card",
+  "category": "data-display",
+  "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries.",
+  "client": false,
+  "importPath": "rift-ds/components/EntityCard/EntityCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/entity-card",
+  "markdownUrl": "https://rift-ds.com/components/entity-card.md",
+  "exports": [
+    {
+      "component": "EntityCard",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Display label beneath the icon / image"
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon — Material Symbol name (string, e.g. \"home\") rendered via the rounded font, or custom element (ReactNode)"
+        },
+        {
+          "name": "imageSrc",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Path to an image asset — used instead of icon when provided"
+        },
+        {
+          "name": "imageAlt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alt text for the image"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

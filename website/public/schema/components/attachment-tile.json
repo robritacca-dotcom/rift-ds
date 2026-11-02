@@ -1,0 +1,194 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AttachmentTile",
+  "label": "Attachment tile",
+  "slug": "attachment-tile",
+  "category": "ai",
+  "description": "One file as a square: a picture, a coloured mark for well-known formats, or a neutral badge, with upload states.",
+  "client": false,
+  "importPath": "rift-ds/components/Attachment/AttachmentTile",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/attachment-tile",
+  "markdownUrl": "https://rift-ds.com/components/attachment-tile.md",
+  "exports": [
+    {
+      "component": "AttachmentTile",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "File name, extension included. Truncates in the middle so the extension stays visible."
+        },
+        {
+          "name": "kind",
+          "type": "FileKind",
+          "typeKind": "enum",
+          "values": [
+            "archive",
+            "audio",
+            "code",
+            "document",
+            "generic",
+            "image",
+            "pasted",
+            "pdf",
+            "presentation",
+            "spreadsheet",
+            "text",
+            "video"
+          ],
+          "required": false,
+          "description": "What kind of file it is, which picks the type mark: a coloured lettered\nglyph for the well-known formats, a neutral extension badge for the\nrest. Derive it with `getFileKind`.",
+          "default": "generic"
+        },
+        {
+          "name": "typeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Short uppercase label on the type mark. Defaults from the kind and the extension."
+        },
+        {
+          "name": "status",
+          "type": "AttachmentStatus",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "ready",
+            "unavailable",
+            "uploading"
+          ],
+          "required": false,
+          "description": "Where the file is in its life. Anything but `ready` shows the name with a status line.",
+          "default": "ready"
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Upload progress, 0 to 100, reported to assistive technology while `uploading`."
+        },
+        {
+          "name": "previewSrc",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Image that fills the tile while `ready`: an object URL for a picture, or\na first page the host rendered for a document. A non-image kind keeps\nits type mark over the corner."
+        },
+        {
+          "name": "previewAlt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Alt text for the preview. Defaults to the file name."
+        },
+        {
+          "name": "previewMark",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the type mark sits over the corner of a preview. Defaults to on\nfor a document's first page, which still has to say what format it is,\nand off for a picture, which is its own description. A sent message\nturns it on for pictures too."
+        },
+        {
+          "name": "excerpt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`."
+        },
+        {
+          "name": "meta",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Secondary line under the name while `ready`, e.g. \"1.2 MB\". Callers keep their own formatting."
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Why the file failed. Replaces `errorLabel` on the status line."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Tile size. Compact shrinks the square and drops the secondary line of a\nready file. Unrelated to any native `size` attribute: the root is a div.",
+          "default": "default"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Click handler. Its presence makes the tile body a button."
+        },
+        {
+          "name": "onRemove",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Remove handler. Its presence renders the corner remove button."
+        },
+        {
+          "name": "uploadingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status line while `uploading`.",
+          "default": "Uploading…"
+        },
+        {
+          "name": "errorLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status line while `error`, when no `error` message is given.",
+          "default": "Upload failed"
+        },
+        {
+          "name": "unavailableLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Status line while `unavailable`.",
+          "default": "Unavailable"
+        },
+        {
+          "name": "removeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the remove button. Defaults to \"Remove\" and the file name."
+        },
+        {
+          "name": "progressLabel",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to \"Uploading\" followed by the name.",
+          "defaultExpression": "(fileName: string) => `Uploading ${fileName}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

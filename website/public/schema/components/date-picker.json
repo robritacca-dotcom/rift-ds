@@ -1,0 +1,145 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "DatePicker",
+  "label": "Date picker",
+  "slug": "date-picker",
+  "category": "forms",
+  "description": "Inline calendar with month navigation, day selection, and today indicator.",
+  "client": true,
+  "importPath": "rift-ds/components/DatePicker/DatePicker",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/date-picker",
+  "markdownUrl": "https://rift-ds.com/components/date-picker.md",
+  "exports": [
+    {
+      "component": "DatePicker",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Currently selected date (YYYY-MM-DD)"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the picker is disabled",
+          "default": false
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Minimum selectable date (YYYY-MM-DD)"
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Maximum selectable date (YYYY-MM-DD)"
+        },
+        {
+          "name": "onDateSelect",
+          "type": "((date: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when a date is selected"
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-month button.",
+          "default": "Previous month"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-month button.",
+          "default": "Next month"
+        },
+        {
+          "name": "monthLabel",
+          "type": "((month: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The month heading, given the first day of the month in view: the visible\ntitle, the name of the day grid, and the text announced on navigation.\nDefaults to the month name and the year in `locale` (\"January 2026\" in\n`en-US`)."
+        },
+        {
+          "name": "dayLabel",
+          "type": "((date: Date, selected: boolean) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a day button, given its date and whether it is selected. Defaults to the full date in `locale`, with \", selected\" appended when selected."
+        },
+        {
+          "name": "weekdayLabels",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The visible weekday column headers: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the two-letter abbreviations (\"Su\"\nto \"Sa\") in English and the short weekday names in `locale` otherwise; a\nlist of any other length falls back to the default."
+        },
+        {
+          "name": "weekdayNames",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The weekday column headers' accessible names, read in full where the\nvisible header is abbreviated: seven entries, Sunday first. Defaults to\nthe weekday names in `locale` (\"Sunday\" to \"Saturday\" in `en-US`); a\nlist of any other length falls back to the default."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the calendar is written and laid out in, such as\n`de-DE`: the month heading, the weekday names, the spoken dates and the\nfirst day of the week. Defaults to the nearest LocaleProvider's, else\n`en-US`."
+        },
+        {
+          "name": "weekStartsOn",
+          "type": "Weekday",
+          "typeKind": "enum",
+          "values": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "InspectorSection",
+  "label": "Inspector section",
+  "slug": "inspector-section",
+  "category": "inspector",
+  "description": "Collapsible, titled run of inspector controls whose open body lets a dropdown menu open past its edge.",
+  "client": true,
+  "importPath": "rift-ds/components/Inspector/InspectorSection",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/inspector-section",
+  "markdownUrl": "https://rift-ds.com/components/inspector-section.md",
+  "exports": [
+    {
+      "component": "InspectorSection",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The section's heading, shown on its header row. Not the native tooltip `title` attribute."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the section is expanded (controlled). Pair with `onOpenChange`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether an uncontrolled section starts expanded.",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the next expanded state when the header is pressed."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The section's controls, stacked one rhythm apart."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the <section>.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

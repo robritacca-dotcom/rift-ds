@@ -1,0 +1,63 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Kbd",
+  "label": "Kbd",
+  "slug": "kbd",
+  "category": "data-display",
+  "description": "A keyboard key rendered as a keycap, for shortcut hints in menus and prose.",
+  "client": true,
+  "importPath": "rift-ds/components/Kbd/Kbd",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/kbd",
+  "markdownUrl": "https://rift-ds.com/components/kbd.md",
+  "exports": [
+    {
+      "component": "Kbd",
+      "props": [
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Key size",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The key legend — e.g. ⌘, K, Esc, Shift. Ignored when `keys` is set."
+        },
+        {
+          "name": "keys",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A whole shortcut in the shortcut grammar (`mod+k`, `shift+?`, `g i`),\ndrawn as one keycap per key in the platform's legends: ⌘ K on a Mac,\nCtrl K elsewhere. The server draws the non-Apple legends and the browser\nsettles on its own after hydration."
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. Merged over the platform's defaults."
+        }
+      ]
+    }
+  ]
+}

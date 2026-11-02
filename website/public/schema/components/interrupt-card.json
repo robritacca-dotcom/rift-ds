@@ -1,0 +1,102 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "InterruptCard",
+  "label": "Interrupt card",
+  "slug": "interrupt-card",
+  "category": "ai",
+  "description": "A human-in-the-loop checkpoint with a question from the agent and option buttons to decide.",
+  "client": false,
+  "importPath": "rift-ds/components/InterruptCard/InterruptCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/interrupt-card",
+  "markdownUrl": "https://rift-ds.com/components/interrupt-card.md",
+  "exports": [
+    {
+      "component": "InterruptCard",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The question, e.g. \"Allow file edit?\".\nNote: this shadows the native `title` tooltip attribute, which InterruptCard does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "One line of context under the title."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading Material Symbol name, or any custom element. No icon by default."
+        },
+        {
+          "name": "options",
+          "type": "InterruptCardOption[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The choices, rendered as buttons left to right."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the chosen option's value."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The already-chosen value. When set, the card renders its answered state:\nthe options are replaced by a quiet echo of the chosen label."
+        },
+        {
+          "name": "answeredLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Override the echoed text in the answered state (default: the chosen option's label)."
+        },
+        {
+          "name": "waitingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visually hidden status announced while the card waits for a decision. Defaults to \"Waiting for your decision\".",
+          "default": "Waiting for your decision"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Detail slot between the description and the options — typically a\n`<ToolCall status=\"pending\">` showing what wants to run."
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (fill, border, radius) when the card sits inside another panel that supplies the surface, such as AiButton's request panel.",
+          "default": false
+        }
+      ]
+    }
+  ]
+}

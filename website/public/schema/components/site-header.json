@@ -1,0 +1,169 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "SiteHeader",
+  "label": "Site header",
+  "slug": "site-header",
+  "category": "navigation",
+  "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.",
+  "client": true,
+  "importPath": "rift-ds/components/SiteHeader/SiteHeader",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/site-header",
+  "markdownUrl": "https://rift-ds.com/components/site-header.md",
+  "exports": [
+    {
+      "component": "SiteHeader",
+      "props": [
+        {
+          "name": "brand",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The brand at the bar's start, usually a logo linking home. Rendered as\ngiven, so it carries its own link."
+        },
+        {
+          "name": "sections",
+          "type": "SiteHeaderSection[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The site's top-level sections, in order."
+        },
+        {
+          "name": "currentHref",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The path of the page being viewed, used to mark the current section, row and drawer item."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controls at the bar's end that stay at every width, such as a search button; `condensedActions`, when given, stand in for them on the condensed step."
+        },
+        {
+          "name": "condensedActions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The same controls drawn narrower, such as an icon-only CommandPaletteTrigger and a\n`cycle` ThemeToggle. When the full row stops fitting, these take the place of\n`actions` (the header adds `ds-site-header--condensed`), and the pills fold to the\nmenu button only when the condensed row does not fit either. Without it the\nheader folds as soon as the full row stops fitting."
+        },
+        {
+          "name": "wideActions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controls at the bar's end that show only while the pills fit, such as a\nGet started button. Once the bar folds to its menu button they leave it; put\ntheir drawer twin in `drawerFooter`."
+        },
+        {
+          "name": "drawerFooter",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Content for the drawer's footer, such as the controls `wideActions` holds in the bar."
+        },
+        {
+          "name": "drawerOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`."
+        },
+        {
+          "name": "defaultDrawerOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the drawer starts open, when the header owns its state.",
+          "default": false
+        },
+        {
+          "name": "onDrawerOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the drawer opens or closes, controlled or not."
+        },
+        {
+          "name": "initialFold",
+          "type": "\"tablet\" | \"mid\" | \"never\"",
+          "typeKind": "enum",
+          "values": [
+            "mid",
+            "never",
+            "tablet"
+          ],
+          "required": false,
+          "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width.",
+          "default": "tablet"
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the header sticks to the top of the viewport over a progressive\nblur. Off, it scrolls away with the page and draws no blur.",
+          "default": true
+        },
+        {
+          "name": "tintAfter",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How far, in pixels, the page scrolls before the page-surface tint fades\nin over the sticky header's blur.",
+          "default": 48
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. Falls back to the nearest\n`LinkProvider`, then `<a>`."
+        },
+        {
+          "name": "navLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The accessible name of the section links' `<nav>` landmark.",
+          "default": "Primary"
+        },
+        {
+          "name": "drawerOpenLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The accessible name of the menu button that opens the drawer.",
+          "default": "Open menu"
+        },
+        {
+          "name": "drawerTitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The drawer's title, naming the dialog. Shown at its top when there is no\n`brand`; with one, the brand takes its place and the title is read only\nby assistive tech.",
+          "default": "Menu"
+        },
+        {
+          "name": "drawerCloseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The accessible name of the drawer's close button.",
+          "default": "Close menu"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the `<header>`.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -42,9 +42,6 @@ export function skillFileUrl(skill: AgentSkill, file: string): string {
 export { AGENT_STARTER_FILE };
 export const AGENT_STARTER_URL = `${SITE_URL}/${AGENT_STARTER_FILE}`;
 
-/** Where the site shows the starter, in a copy frame at the top of get-started. On-site links go here. */
-export const AGENT_STARTER_PAGE = "/docs/get-started#agent-quickstart";
-
 /** The starter's full text, for the copy frame. */
 export { AGENT_STARTER } from "./agent-starter.generated";
 

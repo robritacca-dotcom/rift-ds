@@ -98,7 +98,7 @@
     },
     "/docs": {
       "title": "Docs",
-      "text": "The hub for using the system: getting started, the AI chat, the specs, and the release log.",
+      "text": "The hub for using the system: getting started, the AI chat, blocks, the schemas, the specs, skills, loops and the release log.",
       "chips": [
         {
           "id": "start",
@@ -271,6 +271,52 @@
         {
           "id": "overwrite",
           "label": "Will a block overwrite my files?"
+        }
+      ]
+    },
+    "/docs/schemas": {
+      "title": "Schemas",
+      "text": "The component contracts and the design tokens as JSON a tool can check, generated from the source on every build.",
+      "chips": [
+        {
+          "id": "what",
+          "label": "What is in a component schema?",
+          "prompt": "What does a component schema file contain, and where do I fetch one?"
+        },
+        {
+          "id": "tokens",
+          "label": "What format are the tokens in?",
+          "prompt": "What format are the design tokens published in, and where are the files?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "what",
+          "label": "What is in a component schema?"
+        },
+        {
+          "id": "where",
+          "label": "Where do I fetch a schema?"
+        },
+        {
+          "id": "tokens",
+          "label": "What format are the tokens in?"
+        },
+        {
+          "id": "made",
+          "label": "How are the schemas generated?"
+        },
+        {
+          "id": "typekind",
+          "label": "What does typeKind mean?"
+        },
+        {
+          "id": "index",
+          "label": "Is there a schema index?"
+        },
+        {
+          "id": "meta",
+          "label": "What is the meta-schema for?"
         }
       ]
     },

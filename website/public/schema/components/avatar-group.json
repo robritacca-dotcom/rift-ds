@@ -1,0 +1,65 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AvatarGroup",
+  "label": "Avatar group",
+  "slug": "avatar-group",
+  "category": "data-display",
+  "description": "Overlapping avatar stack with a +N counter for the overflow.",
+  "client": false,
+  "importPath": "rift-ds/components/AvatarGroup/AvatarGroup",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/avatar-group",
+  "markdownUrl": "https://rift-ds.com/components/avatar-group.md",
+  "exports": [
+    {
+      "component": "AvatarGroup",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The avatars to stack, in display order — normally `Avatar` elements."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Avatars shown before the rest collapse into a \"+N\" counter.",
+          "default": 5
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm"
+          ],
+          "required": false,
+          "description": "Size applied to every avatar in the stack and to the overflow counter.\nCloned onto the children so the group cannot render mixed sizes.",
+          "default": "md"
+        },
+        {
+          "name": "overflowLabel",
+          "type": "string | ((count: number) => string)",
+          "typeKind": "other",
+          "required": false,
+          "description": "Accessible label for the overflow counter. Defaults to \"N more\" (for\nexample \"4 more\"), with N the number of hidden avatars. Pass a function\ngiven that count to localise or add context, e.g.\n`(count) => \\`${count} more reviewers\\``; a plain string replaces the\nlabel outright, whatever the count."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -22,8 +22,9 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
 const registryPath = join(tokensDir, 'registry.json');
 
-/** The files that define the semantic layer (primitives are excluded). */
-const SEMANTIC_FILES = ['tokens-light.css', 'tokens-typography.css', 'tokens-motion.css'];
+/** The files that define the semantic layer (primitives are excluded).
+    Exported so generate-token-values.mjs reads the same set of files. */
+export const SEMANTIC_FILES = ['tokens-light.css', 'tokens-typography.css', 'tokens-motion.css'];
 
 /** Prefix → category mapping. Order is the display order on the site.
     Exported so validate-theme-mirrors.mjs can hold hardcoded prefix

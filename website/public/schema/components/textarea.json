@@ -1,0 +1,114 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Textarea",
+  "label": "Textarea",
+  "slug": "textarea",
+  "category": "forms",
+  "description": "Multi-line text input with character counter, resize control, helper text, and error states.",
+  "client": true,
+  "importPath": "rift-ds/components/Textarea/Textarea",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/textarea",
+  "markdownUrl": "https://rift-ds.com/components/textarea.md",
+  "exports": [
+    {
+      "component": "Textarea",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Textarea label text"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current value (controlled). Leave it undefined for an uncontrolled\ntextarea, which keeps its own state seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial value when uncontrolled (`value` undefined)."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — shows error styling and message",
+          "default": false
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message displayed below"
+        },
+        {
+          "name": "resize",
+          "type": "\"none\" | \"both\" | \"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "both",
+            "horizontal",
+            "none",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Whether the textarea is resizable",
+          "default": "vertical"
+        },
+        {
+          "name": "maxLength",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Max character count — shows counter when set"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries work unmodified."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the wrapper, not the <textarea>",
+          "default": ""
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        }
+      ]
+    }
+  ]
+}

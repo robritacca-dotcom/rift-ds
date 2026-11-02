@@ -1,0 +1,97 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Stat",
+  "label": "Stat",
+  "slug": "stat",
+  "category": "data-display",
+  "description": "Headline metrics with labels and trend deltas.",
+  "client": false,
+  "importPath": "rift-ds/components/Stat/Stat",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/stat",
+  "markdownUrl": "https://rift-ds.com/components/stat.md",
+  "exports": [
+    {
+      "component": "Stat",
+      "props": [
+        {
+          "name": "value",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The headline number, e.g. \"~900%\" or \"3.8M\" — or a node, such as an AnimatedNumber, for figures that move"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "What the number measures"
+        },
+        {
+          "name": "delta",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional change annotation, e.g. \"+42% vs last quarter\""
+        },
+        {
+          "name": "trend",
+          "type": "\"neutral\" | \"up\" | \"down\"",
+          "typeKind": "enum",
+          "values": [
+            "down",
+            "neutral",
+            "up"
+          ],
+          "required": false,
+          "description": "Direction of the delta — colours it and adds an arrow",
+          "default": "neutral"
+        },
+        {
+          "name": "deltaPlacement",
+          "type": "\"auto\" | \"inline\" | \"stacked\"",
+          "typeKind": "enum",
+          "values": [
+            "auto",
+            "inline",
+            "stacked"
+          ],
+          "required": false,
+          "description": "Where the delta sits: stacked below the label, inline to the right of the\nvalue (bottom-aligned), or `auto`: inline while the stat has room and\nstacked once it is narrow, such as a KPI tile in a two-up phone grid.\n`auto` fills its parent's width and reads its own, so it restacks\nwherever it sits, whatever the viewport.",
+          "default": "stacked"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"large\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "large"
+          ],
+          "required": false,
+          "description": "Stat size",
+          "default": "default"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

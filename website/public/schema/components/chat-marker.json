@@ -1,0 +1,52 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ChatMarker",
+  "label": "Chat marker",
+  "slug": "chat-marker",
+  "category": "ai",
+  "description": "An inline conversation separator for date breaks and system notes.",
+  "client": false,
+  "importPath": "rift-ds/components/ChatMarker/ChatMarker",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/chat-marker",
+  "markdownUrl": "https://rift-ds.com/components/chat-marker.md",
+  "exports": [
+    {
+      "component": "ChatMarker",
+      "props": [
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading icon — a Material Symbol name, or any custom element."
+        },
+        {
+          "name": "line",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draw the flanking divider lines. Turn off for a bare centred note.",
+          "default": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The marker text, e.g. \"Today\" or \"Chat renamed\"."
+        }
+      ]
+    }
+  ]
+}

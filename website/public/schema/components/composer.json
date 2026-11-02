@@ -1,0 +1,318 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Composer",
+  "label": "Composer",
+  "slug": "composer",
+  "category": "ai",
+  "description": "An auto-growing message input with send and stop states, a page-context note, a file tray fed by picker, paste and drop, and Enter-to-send.",
+  "client": true,
+  "importPath": "rift-ds/components/Composer/Composer",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/composer",
+  "markdownUrl": "https://rift-ds.com/components/composer.md",
+  "exports": [
+    {
+      "component": "Composer",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current value for controlled use. Pair with `onValueChange`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial value for uncontrolled use."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the value directly.\nFires alongside `onChange`, which keeps the standard React event signature\nso form libraries work unmodified."
+        },
+        {
+          "name": "onSubmit",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the current value on Enter (without Shift) and on the send\nbutton — never while `streaming`, never while a file in `files` is\nstill uploading, and never when there is nothing to send. Text is\nenough, and so is a ready file on its own, in which case the value is\nan empty string. Composer does not clear the value: the consumer owns\nit and clears it after a successful submit. Shadows the native\n`onSubmit` attribute, which never fires on a textarea anyway."
+        },
+        {
+          "name": "streaming",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A response is streaming: the send button becomes a stop button, submit\nis blocked, and Enter is inert. On a glowing composer (`aiGlow`) the\ngradient ring also stays lit and keeps turning while this is true.",
+          "default": false
+        },
+        {
+          "name": "onStop",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the stop button is pressed while `streaming`."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons.",
+          "default": "default"
+        },
+        {
+          "name": "inline",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "One row with the send button on the text's line, the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar. For a popover, a sheet or a tight bar. `maxRows` defaults to 1; above it, typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis.",
+          "default": false
+        },
+        {
+          "name": "maxRows",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Growth cap in text rows before the textarea scrolls internally. Defaults to 8, or 1 when `inline`.",
+          "defaultExpression": "inline ? 1 : 8"
+        },
+        {
+          "name": "aiGlow",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "While focused, the shell wears AiButton's slowly rotating gradient ring\nand glow in place of the plain selected border — the system's \"a model\nanswers here\" signal, for composers whose messages are answered by one.\nWhile `streaming`, the ring stays lit and turning whether or not the\nfield holds focus. Off by default.",
+          "default": false
+        },
+        {
+          "name": "context",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Contextual note rendered as a full-width, non-interactive chip — the\n\"what the model is looking at\" line a chat host pins over the message\n(\"Looking at “Page name”\"). `contextPlacement` decides where it sits.\nOne line: a note too long for the shell truncates with an ellipsis.\nComposer owns the chip's chrome; the caller passes the text."
+        },
+        {
+          "name": "contextPlacement",
+          "type": "\"inside\" | \"above\"",
+          "typeKind": "enum",
+          "values": [
+            "above",
+            "inside"
+          ],
+          "required": false,
+          "description": "Where the `context` chip sits. `inside` (the default) pins it at the very\ntop of the shell, above any attachments. `above` lifts it out of the\nshell into its own bar a small gap above it, so it reads as what the\nmodel can see rather than part of the message being typed. Either way\nits icon starts on the shell's text rail, and a click on it focuses the\ntextarea.",
+          "default": "inside"
+        },
+        {
+          "name": "contextIcon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
+        },
+        {
+          "name": "files",
+          "type": "AttachmentItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The files queued on this message, drawn as a scrolling row of square\ntiles above the textarea. Controlled by the caller: Composer draws the\nlist and reports what was added or removed, and never stores a file.\n`useAttachments` is the usual owner."
+        },
+        {
+          "name": "onFilesSelected",
+          "type": "((files: File[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the files a person picked, pasted or dropped. Providing it\narms all three: the attach button and its picker, file paste in the\ntextarea, and drop on the shell."
+        },
+        {
+          "name": "onFileRemove",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the id of the file whose remove button was pressed. Its presence renders the buttons."
+        },
+        {
+          "name": "onFileClick",
+          "type": "((item: AttachmentItem) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons."
+        },
+        {
+          "name": "accept",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "File types the picker offers, in the native `accept` syntax."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the picker allows several files at once.",
+          "default": true
+        },
+        {
+          "name": "attachButton",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the built-in attach button shows when `onFilesSelected` is set.",
+          "default": true
+        },
+        {
+          "name": "pasteThreshold",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Pasted text at least this many characters long becomes an attachment\ninstead of landing in the textarea. Off unless set, and inert without\n`onPasteAsAttachment`."
+        },
+        {
+          "name": "onPasteAsAttachment",
+          "type": "((text: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Receives pasted text that met `pasteThreshold`."
+        },
+        {
+          "name": "attachLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the attach button.",
+          "default": "Attach files"
+        },
+        {
+          "name": "dropLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text shown on the shell while files are dragged over it.",
+          "default": "Drop files to attach"
+        },
+        {
+          "name": "filesLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the list of queued files.",
+          "default": "Attachments"
+        },
+        {
+          "name": "attachmentTileLabels",
+          "type": "(Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\"> & { removeLabel?: ((name: string) => string); })",
+          "typeKind": "function",
+          "required": false,
+          "description": "The words each queued file's tile writes, merged over the tile's English\ndefaults: its status lines (\"Uploading…\", \"Upload failed\", \"Unavailable\"),\nits progress spinner's name, and its remove button's name, which is given\nthe file name and defaults to \"Remove\" followed by it."
+        },
+        {
+          "name": "formatFileAnnouncement",
+          "type": "((change: { type: \"failed\" | \"added\" | \"removed\"; names: string[]; }) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Builds the sentence announced to assistive technology when files join\nthe queue, leave it, or fail.",
+          "defaultExpression": "({\n  type,\n  names,\n}: {\n  type: 'added' | 'removed' | 'failed';\n  names: string[];\n}) => {\n  const list = names.join(', ');\n  if (type === 'added') return `Attached ${list}`;\n  if (type === 'removed') return `Removed ${list}`;\n  return `Could not attach ${list}`;\n}"
+        },
+        {
+          "name": "attachments",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Free-form row rendered above the textarea, after any `files`.",
+          "deprecated": "Use `files` with `onFilesSelected` and `onFileRemove`, which draw the queue as tiles."
+        },
+        {
+          "name": "mentions",
+          "type": "MentionSource[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "What a person can reference while typing, one source per trigger\ncharacter: `@` for entities, `/` for skills. Typing a trigger at the\nstart of a word opens a menu of that source's items, filtered as the\nword grows. Arrows move through it, Enter or Tab writes the choice into\nthe text, Escape closes it. A mention is drawn in the tag colour\nwherever its exact name stands in the text; the value stays a plain\nstring."
+        },
+        {
+          "name": "onMentionSelect",
+          "type": "((item: MentionItem, trigger: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the item a person chose from the mention menu, and the trigger that opened it."
+        },
+        {
+          "name": "mentionPlacement",
+          "type": "\"top\" | \"bottom\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "top"
+          ],
+          "required": false,
+          "description": "Which side of the trigger's line the mention menu opens on: `top` lays\nit over the text above, `bottom` over the text below. `top` suits a\ncomposer at the foot of a view.",
+          "default": "top"
+        },
+        {
+          "name": "formatMentionAnnouncement",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Builds the sentence announced to assistive technology when the mention menu opens or its matches change.",
+          "defaultExpression": "(count: number) =>\n  count === 1 ? '1 suggestion' : `${count} suggestions`"
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading actions on the left of the action bar, after the attach button (a model picker)."
+        },
+        {
+          "name": "trailingActions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trailing actions on the right of the action bar, just before the send\nbutton (dictation, voice mode)."
+        },
+        {
+          "name": "sendLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the send button.",
+          "default": "Send message"
+        },
+        {
+          "name": "stopLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the stop button.",
+          "default": "Stop generating"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes — applied to the shell, not the <textarea>.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

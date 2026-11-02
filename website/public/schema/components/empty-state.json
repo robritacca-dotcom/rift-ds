@@ -1,0 +1,82 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "EmptyState",
+  "label": "Empty state",
+  "slug": "empty-state",
+  "category": "feedback",
+  "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+  "client": false,
+  "importPath": "rift-ds/components/EmptyState/EmptyState",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/empty-state",
+  "markdownUrl": "https://rift-ds.com/components/empty-state.md",
+  "exports": [
+    {
+      "component": "EmptyState",
+      "props": [
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Material Symbol icon name, or a custom element (e.g. an illustration)"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Short headline describing the empty condition.\nNote: this shadows the native `title` tooltip attribute, which EmptyState does not expose."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Supporting copy — say what to do next, not just what is missing"
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Action slot — typically one primary Button, optionally a secondary"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "variant",
+          "type": "\"plain\" | \"bordered\"",
+          "typeKind": "enum",
+          "values": [
+            "bordered",
+            "plain"
+          ],
+          "required": false,
+          "description": "Visual treatment. `plain` sits directly on the page; `bordered` draws a\ndashed container, which reads better inside a card, table, or panel.",
+          "default": "plain"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

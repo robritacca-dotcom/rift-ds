@@ -1,0 +1,219 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "NotificationCenter",
+  "label": "Notification centre",
+  "slug": "notification-center",
+  "category": "feedback",
+  "description": "A persistent notification inbox with unread count, filter tabs, and per-item actions.",
+  "client": true,
+  "importPath": "rift-ds/components/NotificationCenter/NotificationCenter",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/notification-center",
+  "markdownUrl": "https://rift-ds.com/components/notification-center.md",
+  "exports": [
+    {
+      "component": "NotificationCenter",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Heading shown in the header.\nNote: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose.",
+          "default": "Notifications"
+        },
+        {
+          "name": "unreadCount",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How many notifications are unread, shown under the heading. Omit to hide the line."
+        },
+        {
+          "name": "unreadCountLabel",
+          "type": "((count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Text of the unread line under the heading, given the count. Defaults to \"<count> unread\".",
+          "defaultExpression": "(count) => `${count} unread`"
+        },
+        {
+          "name": "tabsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the filter tablist. Defaults to \"<title> filters\"."
+        },
+        {
+          "name": "onMarkAllRead",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when \"Mark all read\" is pressed; the control only renders when this is set."
+        },
+        {
+          "name": "markAllLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text of the mark-all-read control.",
+          "default": "Mark all read"
+        },
+        {
+          "name": "tabs",
+          "type": "NotificationCenterTab[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Filter tabs under the header, each with an optional count."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Value of the active filter tab, for controlled use. Leave it undefined to\nlet the component keep its own selection, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Value of the tab active on first render when the tabs are uncontrolled.\nFalls back to the first tab."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the newly selected tab's value."
+        },
+        {
+          "name": "activeTab",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy name for `value`; `value` wins when both are set.",
+          "deprecated": "Use `value` instead."
+        },
+        {
+          "name": "defaultTab",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy name for `defaultValue`; `defaultValue` wins when both are set.",
+          "deprecated": "Use `defaultValue` instead."
+        },
+        {
+          "name": "onTabChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change callback; fires alongside `onValueChange`.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "emptyState",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "What to render when there are no children — defaults to a built-in empty state."
+        },
+        {
+          "name": "emptyStateLabels",
+          "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The notifications, newest first — typically NotificationItems."
+        }
+      ]
+    },
+    {
+      "component": "NotificationItem",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "One-line headline, e.g. who did what.\nNote: this shadows the native `title` tooltip attribute, which NotificationItem does not expose."
+        },
+        {
+          "name": "time",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "When it happened, as already-formatted text like \"2m\" or \"Mon\"."
+        },
+        {
+          "name": "unread",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the notification as not yet read: a dot beside the time and emphasised title.",
+          "default": false
+        },
+        {
+          "name": "unreadLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visually hidden text announcing the unread dot. Defaults to \"Unread\".",
+          "default": "Unread"
+        },
+        {
+          "name": "media",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading visual — a Material Symbol name (string) or a custom element (e.g. an Avatar)."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Action row under the body — typically compact Buttons like \"Reply\" or \"Retry\"."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Supporting copy under the title."
+        }
+      ]
+    }
+  ]
+}

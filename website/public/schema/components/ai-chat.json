@@ -1,0 +1,1090 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "widget",
+  "name": "ChatWidget",
+  "label": "AI chat",
+  "slug": "ai-chat",
+  "category": "widget",
+  "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
+  "client": true,
+  "importPath": "rift-ds/chat",
+  "barrel": "chat",
+  "docsUrl": "https://rift-ds.com/components/ai-chat",
+  "markdownUrl": "https://rift-ds.com/components/ai-chat.md",
+  "exports": [
+    {
+      "component": "ChatWidget",
+      "props": [
+        {
+          "name": "fullscreenEnabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the expand toggle. A host whose stage is always a takeover hides it.",
+          "default": true
+        },
+        {
+          "name": "closeEnabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the header's close button. A host that seats the chat as the page\nitself rather than as a panel over one has nothing to close back to,\nso it turns this off.",
+          "default": true
+        },
+        {
+          "name": "placementEnabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the header's Chat position menu (dock right, dock left, floating). Off by default: a host turns it on only when it implements the seats the menu offers, as ChatLauncher does.",
+          "default": false
+        },
+        {
+          "name": "compact",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Narrow insets for phone-width hosts.",
+          "default": false
+        },
+        {
+          "name": "phone",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The host is a phone viewport, where the soft keyboard will claim the\nlower half of the screen the moment the composer is focused. The\nwelcome screen stacks instead of centring the composer: greeting in\nthe middle of the empty thread, starters directly above the composer,\ncomposer pinned to the bottom from the first paint.",
+          "default": false
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The header brand name, which also seeds the agent's PixelAvatar.\nNote: not the native `title` tooltip attribute; ChatWidget spreads no native attributes.",
+          "default": "Assistant"
+        },
+        {
+          "name": "flow",
+          "type": "\"top-down\" | \"bottom-up\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom-up",
+            "top-down"
+          ],
+          "required": false,
+          "description": "Which way the conversation reads. `top-down` (the default) floats each\nnew turn to the top of the thread and streams the answer in below it.\n`bottom-up` is the classic message thread: turns stack from the bottom,\nthe newest just above the composer, and the view follows the answer.",
+          "default": "top-down"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The composer's placeholder text.",
+          "default": "Ask anything"
+        },
+        {
+          "name": "questionsPlaceholder",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The composer's placeholder while a set of questions holds it: the answer goes in the card, or the card is skipped.",
+          "default": "Answer the questions above, or skip them"
+        },
+        {
+          "name": "showStarters",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the conversation starters on the welcome screen.",
+          "default": true
+        },
+        {
+          "name": "logo",
+          "type": "string | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "The header mark's image src; null (the default) shows the name alone.",
+          "default": null
+        },
+        {
+          "name": "tagline",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The welcome screen's line under the greeting.",
+          "default": "How can I help you today?"
+        },
+        {
+          "name": "starters",
+          "type": "Starter[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped."
+        },
+        {
+          "name": "startersKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Keys the starters' staged reveal: a new key replays the generation beat, the same key shows the set standing. A host whose starters follow the page passes the pathname.",
+          "default": ""
+        },
+        {
+          "name": "composerActions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces the composer's leading actions (the model picker)."
+        },
+        {
+          "name": "models",
+          "type": "ChatModelOption[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker."
+        },
+        {
+          "name": "defaultModel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The picker's selection before the server has reported its default. Defaults to the first model."
+        },
+        {
+          "name": "lockedModelDescription",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The one line a locked model shows in place of its description.",
+          "default": "Paused for today to stay in budget."
+        },
+        {
+          "name": "fileAttachments",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Let the visitor attach files: an attach button, paste, drop anywhere\non the chat, and long pastes folded into a tile. Files are read in the\nbrowser for previews; what reaches the transport is names and kinds.",
+          "default": false
+        },
+        {
+          "name": "maxAttachments",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Most files the visitor may queue on one message.",
+          "default": 10
+        },
+        {
+          "name": "maxAttachmentBytes",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Largest file the visitor may queue, in bytes.",
+          "defaultExpression": "50 * 1024 * 1024"
+        },
+        {
+          "name": "mentions",
+          "type": "MentionSource[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "What the visitor can reference while typing: one source per trigger\ncharacter, drawn as tags in the composer and in the sent bubble."
+        },
+        {
+          "name": "threads",
+          "type": "RailSlot",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A session-history rail. `true` seats the built-in ChatThreads over the\nprovider's thread lifecycle; a render prop seats your own. Wide hosts\nseat it as an inline left rail, narrow ones summon it from a header\nhamburger as a slide-over sheet behind a scrim."
+        },
+        {
+          "name": "threadsProps",
+          "type": "Omit<ChatThreadsProps, \"close\" | \"overlay\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Props for the built-in threads rail when `threads` is `true`."
+        },
+        {
+          "name": "tabs",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own."
+        },
+        {
+          "name": "tabsProps",
+          "type": "ChatTabsProps",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Props for the built-in tab strip when `tabs` is `true`: its name, its close buttons' names and its spoken statuses."
+        },
+        {
+          "name": "aside",
+          "type": "((ctx: { overlay: boolean; close: () => void; }) => ReactNode)",
+          "typeKind": "function",
+          "required": false,
+          "description": "A companion rail on the trailing edge, the mirror of `threads`: a render prop for your own pane, seated inline on a wide host and raised as a bottom sheet from a header button on a narrow one. For the built-in pane pass `agent` instead."
+        },
+        {
+          "name": "agent",
+          "type": "ChatAgentOptions",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`."
+        },
+        {
+          "name": "artifacts",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel.",
+          "default": false
+        },
+        {
+          "name": "contextLabel",
+          "type": "string | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`."
+        },
+        {
+          "name": "contextNote",
+          "type": "((title: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`.",
+          "defaultExpression": "(title: string) => `Looking at “${title}”`"
+        },
+        {
+          "name": "attachHint",
+          "type": "((maxSize: string, maxFiles: number, maxBytes: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The second line of the drop overlay with attachments on, written from the limits: the largest file as text (\"50 MB\"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`.",
+          "defaultExpression": "(maxSize: string, maxFiles: number) =>\n  `Up to ${maxSize} each · ${maxFiles} files max`"
+        },
+        {
+          "name": "greetings",
+          "type": "Partial<GreetingCopy>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to \"Good morning\", \"Good afternoon\" and \"Good evening\"."
+        },
+        {
+          "name": "placementLabels",
+          "type": "Partial<Record<ChatPlacement, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The Chat position menu's rows, one per seat; a key left out keeps its English. Defaults to \"Dock right\", \"Dock left\" and \"Floating\"."
+        },
+        {
+          "name": "agentStatus",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The status line under the agent's name in the agent pane, where `agent` brings no `profile` of its own. Defaults to \"Connected\".",
+          "default": "Connected"
+        },
+        {
+          "name": "artifactPanelTitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The artifact panel's title while nothing is on stage. Defaults to \"Artifacts\".",
+          "default": "Artifacts"
+        },
+        {
+          "name": "artifactEmptyTitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The artifact panel's empty-state heading. Defaults to \"Nothing here yet\".",
+          "default": "Nothing here yet"
+        },
+        {
+          "name": "artifactEmptyDescription",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The artifact panel's empty-state description. Defaults to \"What the chat makes for you, like a dashboard or a page, opens in this panel.\"",
+          "default": "What the chat makes for you, like a dashboard or a page, opens in this panel."
+        },
+        {
+          "name": "widgets",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A widget slot on the welcome screen, under the composer and its\nstarters. It takes any content and keeps its natural height, so the\ncomposer rides up by half of it instead of holding dead centre: the\nempty chat reads as a home page rather than a blank prompt. It leaves\nwith the first message, like the rest of the welcome dressing."
+        },
+        {
+          "name": "widgetsLayout",
+          "type": "\"scroll\" | \"fit\"",
+          "typeKind": "enum",
+          "values": [
+            "fit",
+            "scroll"
+          ],
+          "required": false,
+          "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the widgets hold their height and the composer rides up\nto make room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
+          "default": "fit"
+        },
+        {
+          "name": "widgetsWidth",
+          "type": "\"column\" | \"wide\"",
+          "typeKind": "enum",
+          "values": [
+            "column",
+            "wide"
+          ],
+          "required": false,
+          "description": "How wide the widget slot runs. `column` holds it to the composer's\nbounding box; `wide` lets it run past them, for a dashboard.",
+          "default": "column"
+        },
+        {
+          "name": "disclaimer",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The quiet line pinned to the widget's floor: what the chat is and where its policy lives.",
+          "defaultExpression": "Answers may be wrong."
+        },
+        {
+          "name": "startersLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the welcome screen's conversation starters. Defaults to \"Conversation starters\".",
+          "default": "Conversation starters"
+        },
+        {
+          "name": "newChatLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the header's new-chat button. Defaults to \"New chat\".",
+          "default": "New chat"
+        },
+        {
+          "name": "showAgentLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the agent-pane toggle while the pane is closed. Defaults to \"Show the agent panel\".",
+          "default": "Show the agent panel"
+        },
+        {
+          "name": "hideAgentLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the agent-pane toggle while the pane is open. Defaults to \"Hide the agent panel\".",
+          "default": "Hide the agent panel"
+        },
+        {
+          "name": "closeAgentLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the agent pane's own close button, and of the scrim that closes the pane's bottom sheet. Defaults to \"Close the agent panel\".",
+          "default": "Close the agent panel"
+        },
+        {
+          "name": "showArtifactLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the artifact-panel toggle while the panel is closed. Defaults to \"Show the artifact panel\".",
+          "default": "Show the artifact panel"
+        },
+        {
+          "name": "hideArtifactLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the artifact-panel toggle while the panel is open. Defaults to \"Hide the artifact panel\".",
+          "default": "Hide the artifact panel"
+        },
+        {
+          "name": "closeArtifactLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the scrim that closes the artifact panel's bottom sheet. Defaults to \"Close the artifact panel\".",
+          "default": "Close the artifact panel"
+        },
+        {
+          "name": "placementLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the Chat position menu's button, and the heading of its group. Defaults to \"Chat position\".",
+          "default": "Chat position"
+        },
+        {
+          "name": "enterFullscreenLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the expand toggle in panel view. Defaults to \"Enter full screen\".",
+          "default": "Enter full screen"
+        },
+        {
+          "name": "exitFullscreenLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the expand toggle in full-screen view. Defaults to \"Exit full screen\".",
+          "default": "Exit full screen"
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the header's close button. Defaults to \"Close chat\".",
+          "default": "Close chat"
+        },
+        {
+          "name": "openThreadsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the header button that opens the chat-history sheet on a narrow host. Defaults to \"Open the chat history\".",
+          "default": "Open the chat history"
+        },
+        {
+          "name": "closeThreadsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the scrim that closes the chat-history sheet. Defaults to \"Close the chat history\".",
+          "default": "Close the chat history"
+        },
+        {
+          "name": "modelPickerLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the composer's model picker. Defaults to \"Choose a model\".",
+          "default": "Choose a model"
+        },
+        {
+          "name": "sendLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the composer's send button. Defaults to \"Send\".",
+          "default": "Send"
+        },
+        {
+          "name": "copyResponseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of a reply's copy button. Defaults to \"Copy response\".",
+          "default": "Copy response"
+        },
+        {
+          "name": "copiedResponseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of a reply's copy button once the copy has landed. Defaults to \"Copied\".",
+          "default": "Copied"
+        },
+        {
+          "name": "copiedAnnouncementLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What screen readers hear once a reply has been copied. Defaults to \"Copied to clipboard\".",
+          "default": "Copied to clipboard"
+        },
+        {
+          "name": "goodResponseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of a reply's thumbs-up button. Defaults to \"Good response\".",
+          "default": "Good response"
+        },
+        {
+          "name": "badResponseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of a reply's thumbs-down button. Defaults to \"Bad response\".",
+          "default": "Bad response"
+        },
+        {
+          "name": "followupsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the follow-up question row under a finished answer. Defaults to \"Follow-up questions\".",
+          "default": "Follow-up questions"
+        },
+        {
+          "name": "pastedTextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The name a long paste's tile wears in the composer and the sent message. Defaults to \"Pasted text\"."
+        },
+        {
+          "name": "reasoningLabel",
+          "type": "((durationSeconds: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to \"Thought for <n>s\", or \"Thought process\" with no duration."
+        },
+        {
+          "name": "composerLabels",
+          "type": "Pick<ComposerProps, \"aria-label\" | \"attachmentTileLabels\" | \"attachLabel\" | \"dropLabel\" | \"filesLabel\" | \"formatFileAnnouncement\" | \"formatMentionAnnouncement\" | \"stopLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The composer's words, over Composer's English defaults: the attach button (\"Attach files\"), the drop overlay on the shell (\"Drop files to attach\"), the queued files' list (\"Attachments\") and their tiles (`attachmentTileLabels`), the stop button (\"Stop generating\"), the text field's name (\"Message\"), and the sentences announced when files or mention matches change. The send button's name is `sendLabel`."
+        },
+        {
+          "name": "attachmentDropZoneLabels",
+          "type": "Pick<AttachmentDropZoneProps, \"label\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's \"Drop files to attach\". Its second line is `attachHint`."
+        },
+        {
+          "name": "attachmentGroupLabels",
+          "type": "Pick<AttachmentGroupProps, \"label\" | \"showMoreLabel\" | \"showLessLabel\" | \"attachmentTileLabels\" | \"attachmentViewerLabels\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words of the files on a sent message, over AttachmentGroup's English defaults: the list's name (\"Attachments\"), the overflow buttons (\"Show 3 more\", \"Show fewer\"), the tiles' status lines (`attachmentTileLabels`) and the viewer a pressed file opens in (`attachmentViewerLabels`)."
+        },
+        {
+          "name": "chatThreadLabels",
+          "type": "Pick<ChatThreadProps, \"ariaLabel\" | \"jumpLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\") and the scroll-to-latest control (\"Scroll to the latest message\")."
+        },
+        {
+          "name": "modelPickerLabels",
+          "type": "Pick<ModelPickerProps, \"placeholder\" | \"listLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The model picker's words, over ModelPicker's English defaults: the open list's name (\"Model\") and the trigger's text when nothing is selected (\"Choose a model\"). The trigger's own name is `modelPickerLabel`."
+        },
+        {
+          "name": "artifactPanelLabels",
+          "type": "Pick<ArtifactPanelProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"previewLabel\" | \"codeLabel\" | \"viewLabel\" | \"codeBlockLabels\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The artifact panel's words, over ArtifactPanel's English defaults: the view switch (\"Preview\", \"Code\", \"Artifact view\"), the expand and close buttons (\"Expand the artifact\", \"Collapse the artifact\", \"Close the artifact\") and the code view's CodeBlock (`codeBlockLabels`)."
+        },
+        {
+          "name": "agentRailLabels",
+          "type": "Pick<AgentRailProps, \"tabsLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The agent pane's words, over AgentRail's English defaults: the tab strip's name (\"Agent views\"). The pane's close is `closeAgentLabel`."
+        },
+        {
+          "name": "questionCardLabels",
+          "type": "Partial<QuestionCardLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words of a question card a reply ends in, over QuestionCard's English defaults: the step count (\"1 of 3\"), the buttons (\"Back\", \"Next\", \"Send\", \"Skip\"), the records (\"Skipped\", \"Not answered\", \"(chosen)\"), the pick lines (\"Choose one\") and the \"Something else\" row."
+        },
+        {
+          "name": "questionSummaryLabels",
+          "type": "Pick<QuestionSummaryProps, \"missingLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words of a sent set of answers, over QuestionSummary's English default: what stands in for a question left without an answer (\"No answer\")."
+        },
+        {
+          "name": "codeBlockLabels",
+          "type": "(Pick<CodeBlockProps, \"copyLabel\" | \"copyText\" | \"copiedLabel\"> & { codeLabel?: ((language: string) => string); }) | undefined",
+          "typeKind": "function",
+          "required": false,
+          "description": "The words of a reply's fenced code, over CodeBlock's English defaults: the copy button (\"Copy code\", \"Copy\", \"Copied\"), and the code region's name, given the fence's language (\"Code: bash\", or \"Code\" with none)."
+        },
+        {
+          "name": "promptSuggestionsLabels",
+          "type": "Pick<PromptSuggestionsProps, \"chosenLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The follow-up row's words, over PromptSuggestions' English default: the hidden text read after the sent suggestion (\"(chosen)\"). The row's name is `followupsLabel`."
+        }
+      ]
+    },
+    {
+      "component": "ChatProvider",
+      "props": [
+        {
+          "name": "transport",
+          "type": "ChatTransport",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Where the conversation goes. Defaults to the fetch transport against\n`endpoint`, carrying the visitor's model pick. A script from\n`scriptChat()` runs the widget with no backend at all."
+        },
+        {
+          "name": "endpoint",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The endpoint the default transport posts to.",
+          "default": "/api/chat"
+        },
+        {
+          "name": "defaultPlacement",
+          "type": "ChatPlacement",
+          "typeKind": "enum",
+          "values": [
+            "floating",
+            "left",
+            "right"
+          ],
+          "required": false,
+          "description": "The seat the panel opens in.",
+          "default": "right"
+        },
+        {
+          "name": "followups",
+          "type": "string | false | FollowupsSource",
+          "typeKind": "other",
+          "required": false,
+          "description": "Where follow-up questions come from after an answer commits: a source\nfunction, an endpoint for the built-in fetcher, or `false` for none:\nwith `false` no chips show under an answer at all, not even the written\n`fallbackFollowups`. Defaults to the fetcher against `/api/chat/followups`.",
+          "defaultExpression": "/api/chat/followups"
+        },
+        {
+          "name": "fallbackFollowups",
+          "type": "readonly string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The written questions offered when the source returns none or fails. Unused when `followups` is `false`.",
+          "defaultExpression": "[\n  'Can you say more about that?',\n  'What should I do next?',\n  'Where can I read more?',\n  'Can you give an example?',\n  'What are the alternatives?',\n]"
+        },
+        {
+          "name": "feedback",
+          "type": "string | false | FeedbackSink",
+          "typeKind": "other",
+          "required": false,
+          "description": "Where a thumbs verdict goes: a sink function, an endpoint for the\nbuilt-in poster, or `false` to hide the thumbs. Defaults to the poster\nagainst `/api/chat/feedback`. Thumbs only ever show on a turn the\nserver logged (one with an exchange id).",
+          "defaultExpression": "/api/chat/feedback"
+        },
+        {
+          "name": "renderers",
+          "type": "ChatCardRenderers",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Draws `card` events by kind."
+        },
+        {
+          "name": "artifactRenderers",
+          "type": "ChatArtifactRenderers",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL."
+        },
+        {
+          "name": "renderLink",
+          "type": "ChatLinkRenderer",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Renders a same-site link in an answer. The default renders through the\nnearest LinkProvider's link component, else a plain anchor; passing\nthis wins over both.",
+          "defaultExpression": "(props) => <DefaultChatLink {...props} />"
+        },
+        {
+          "name": "isInternalHref",
+          "type": "((href: string) => boolean)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Which hrefs in an answer become links. Everything else renders as text.",
+          "defaultExpression": "(href: string) => INTERNAL_PATH.test(href)"
+        },
+        {
+          "name": "threads",
+          "type": "ThreadsOptions",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Seeds the thread lifecycle behind the `threads` and `tabs` slots."
+        },
+        {
+          "name": "placeholders",
+          "type": "Partial<ChatPlaceholderCopy>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replacement copy for the words the hook writes itself, merged over the English defaults: the status line of a reply that has not started (\"Thinking\") and the placeholder replies for an empty, stopped or failed turn."
+        }
+      ]
+    },
+    {
+      "component": "ChatLauncher",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The floating button's text.",
+          "default": "Ask"
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The button's icon.",
+          "default": "forum"
+        },
+        {
+          "name": "summary",
+          "type": "(AiButtonSummary & { chips?: { id: string; label: string; prompt: string; }[]; })",
+          "typeKind": "other",
+          "required": false,
+          "description": "A TLDR panel the button summons on hover: a pre-written summary and\nprompt chips. A tapped chip opens the chat and sends the chip's\n`prompt`. The launcher hands it to the closed button's AiButton, which\nopens the panel on pointer hover; it does no device or hydration gating\nof its own, so a host that wants the panel on hover-capable devices only,\nor kept out of server HTML, passes `summary` only there."
+        },
+        {
+          "name": "hidden",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Render nothing at all: for routes that carry no chrome.\nNote: not the native `hidden` attribute, which keeps an element mounted and only hides it; the launcher unmounts its button and panel, and spreads no native attributes.",
+          "default": false
+        },
+        {
+          "name": "panelId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The panel's DOM id, for a host control's `aria-controls`.",
+          "default": "ds-chat-panel"
+        },
+        {
+          "name": "hostAttribute",
+          "type": "string | false",
+          "typeKind": "other",
+          "required": false,
+          "description": "The attribute the launcher writes on `<html>` to say how the panel sits\n(`docked`, `docked-left`, `takeover`), so the host's stylesheet can pad\nthe page or hide it. `false` writes none.",
+          "defaultExpression": "data-chat"
+        },
+        {
+          "name": "panelLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the panel.",
+          "default": "Chat"
+        },
+        {
+          "name": "aiButtonLabels",
+          "type": "Pick<AiButtonProps, \"summaryRegionLabel\" | \"dismissLabel\" | \"suggestionsLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title (\"Summary: <title>\"), its dismiss button (\"Dismiss summary\") and its chips' group (\"Suggested prompts\")."
+        },
+        {
+          "name": "widget",
+          "type": "Omit<ChatWidgetProps, \"compact\" | \"fullscreenEnabled\" | \"placementEnabled\" | \"phone\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Everything the widget takes. The launcher sets the responsive ones itself."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Rendered inside the panel after the widget: for a host's extra chrome."
+        },
+        {
+          "name": "surface",
+          "type": "\"inset\" | \"raised\"",
+          "typeKind": "enum",
+          "values": [
+            "inset",
+            "raised"
+          ],
+          "required": false,
+          "description": "How the docked panel sits on the page. `raised` (the default) is a glass\ncard with the floating shadow, inset by `--ds-chat-inset`. `inset` is\nflat: the app surface colour, no shadow, border or blur, and the\n`--ds-shell-inset` gap, so it matches AppLayout's `inset` content\nsurface beside it. The overlay below the dock threshold takes the same\ngap but keeps its shadow, since it still covers the page; the floating\ncard and the takeover keep their own look.",
+          "default": "raised"
+        }
+      ]
+    },
+    {
+      "component": "ChatThreads",
+      "props": [
+        {
+          "name": "overlay",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The widget seated the rail as a sheet over the conversation rather than beside it."
+        },
+        {
+          "name": "close",
+          "type": "() => void",
+          "typeKind": "function",
+          "required": true,
+          "description": "Closes the sheet; a no-op on the inline rail."
+        },
+        {
+          "name": "logo",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The brand row's mark, in both seats."
+        },
+        {
+          "name": "logoText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The brand row's text. Shown only on the sheet, where the chat header is hidden behind it; the inline rail leaves it out."
+        },
+        {
+          "name": "profile",
+          "type": "ThreadPanelProfile",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The signed-in person, shown on the inline rail."
+        },
+        {
+          "name": "footerSlot",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the inline rail can collapse to its icon strip.",
+          "default": true
+        },
+        {
+          "name": "defaultExpanded",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the inline rail starts expanded. Defaults to `false`: it starts\ncollapsed to its icon strip. The sheet, and a rail that is not\n`collapsible`, always show expanded.",
+          "default": false
+        },
+        {
+          "name": "historyLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible heading over the history.",
+          "default": "Chat history"
+        },
+        {
+          "name": "threadPanelLabels",
+          "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words the ThreadPanel writes, merged over its English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects header and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`."
+        },
+        {
+          "name": "actionLabels",
+          "type": "Partial<Record<\"pin\" | \"unpin\" | \"rename\" | \"delete\", string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The rows of each thread's menu, by action; a key left out keeps its English. Defaults to \"Pin\", \"Unpin\", \"Rename\" and \"Delete\"."
+        }
+      ]
+    },
+    {
+      "component": "ChatTabs",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the tab strip.",
+          "default": "Open chats"
+        },
+        {
+          "name": "closeLabel",
+          "type": "string | ((title: string) => string)",
+          "typeKind": "other",
+          "required": false,
+          "description": "Accessible name of each tab's close button. A string is followed by a colon and the tab's title; a function is given the title and returns the whole name. Defaults to \"Close chat\".",
+          "defaultExpression": "Close chat"
+        },
+        {
+          "name": "statusLabels",
+          "type": "Partial<Record<ThreadTabStatus, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Spoken text for each tab's status, merged over ThreadTabs' English defaults (Working, Unread, Needs input, Failed)."
+        }
+      ]
+    },
+    {
+      "component": "ChatAgentPane",
+      "props": [
+        {
+          "name": "profile",
+          "type": "AgentRailProfile",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The agent this pane belongs to: the portrait block at the top."
+        },
+        {
+          "name": "tabs",
+          "type": "AgentRailTab[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The panes, in display order: activity, approvals, automations, personalisation, or whatever the agent has."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The tab on stage, when the host owns the state; otherwise the pane keeps its own, seeded from `defaultValue`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The tab on stage first when the pane keeps its own state. Defaults to the first tab."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the chosen tab's id."
+        },
+        {
+          "name": "activeTab",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy name for `value`.",
+          "deprecated": "Use `value` instead."
+        },
+        {
+          "name": "onTabChange",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change callback; fires alongside `onValueChange`.",
+          "deprecated": "Use `onValueChange` instead."
+        },
+        {
+          "name": "overlay",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The widget seated the pane as a bottom sheet, where it fills the width instead of holding its own column."
+        },
+        {
+          "name": "onClose",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires from the pane's own close button, a cross in its top trailing corner. Omit for a pane with no close of its own."
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the pane's own close button. Defaults to \"Close the agent panel\".",
+          "default": "Close the agent panel"
+        },
+        {
+          "name": "agentRailLabels",
+          "type": "Pick<AgentRailProps, \"tabsLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words the AgentRail writes, merged over its English defaults: the tab strip's name (\"Agent views\")."
+        }
+      ]
+    },
+    {
+      "component": "ChatArtifactPane",
+      "props": [
+        {
+          "name": "artifact",
+          "type": "ChatArtifact | null",
+          "typeKind": "other",
+          "required": true,
+          "description": "The artifact on stage, or null for the empty state: the panel opened before the conversation has made anything."
+        },
+        {
+          "name": "expanded",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the widget is showing the pane at its expanded size."
+        },
+        {
+          "name": "onExpandedChange",
+          "type": "((expanded: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the next state from the expand toggle; omit where the seat has one size."
+        },
+        {
+          "name": "onClose",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires from the pane's close button; omit where another control closes the seat."
+        },
+        {
+          "name": "emptyPanelTitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The panel's title while nothing is on stage. Defaults to \"Artifacts\".",
+          "default": "Artifacts"
+        },
+        {
+          "name": "emptyTitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The empty state's heading. Defaults to \"Nothing here yet\".",
+          "default": "Nothing here yet"
+        },
+        {
+          "name": "emptyDescription",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The empty state's description. Defaults to \"What the chat makes for you, like a dashboard or a page, opens in this panel.\"",
+          "default": "What the chat makes for you, like a dashboard or a page, opens in this panel."
+        },
+        {
+          "name": "artifactPanelLabels",
+          "type": "Pick<ArtifactPanelProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"previewLabel\" | \"codeLabel\" | \"viewLabel\" | \"codeBlockLabels\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words the ArtifactPanel writes, merged over its English defaults:\nthe view switch's segments and name (\"Preview\", \"Code\", \"Artifact\nview\"), the expand toggle and close button's names (\"Expand the\nartifact\", \"Collapse the artifact\", \"Close the artifact\"), and the code\nview's copy button and region (`codeBlockLabels`)."
+        }
+      ]
+    },
+    {
+      "component": "ChatArtifactCard",
+      "props": [
+        {
+          "name": "artifact",
+          "type": "ChatArtifact",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The artifact this tile stands for."
+        }
+      ]
+    }
+  ]
+}

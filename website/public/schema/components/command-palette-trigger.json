@@ -1,0 +1,88 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "CommandPaletteTrigger",
+  "label": "Command palette trigger",
+  "slug": "command-palette-trigger",
+  "category": "actions",
+  "description": "The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height.",
+  "client": false,
+  "importPath": "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/command-palette-trigger",
+  "markdownUrl": "https://rift-ds.com/components/command-palette-trigger.md",
+  "exports": [
+    {
+      "component": "CommandPaletteTrigger",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The prompt the field shows, which is also the button's accessible name.",
+          "default": "Search or ask anything"
+        },
+        {
+          "name": "shortcut",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The keyboard shortcut drawn as literal keycaps at the end, one key per entry, in place of `keys`. Pass an empty array for none."
+        },
+        {
+          "name": "keys",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The keyboard shortcut drawn at the end, in the shortcut grammar, in the\nreader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K\nelsewhere, announced as both, since CommandPalette answers to either.\n`shortcut` wins when it is given.",
+          "default": "mod+k"
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode).",
+          "defaultExpression": "search"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Control size, on the row-control scale: `default` is 40px, `compact` 32px.",
+          "default": "default"
+        },
+        {
+          "name": "iconOnly",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

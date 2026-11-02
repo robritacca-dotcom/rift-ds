@@ -1,0 +1,126 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ImageCompare",
+  "label": "Image compare",
+  "slug": "image-compare",
+  "category": "data-display",
+  "description": "Before-and-after image comparison with a draggable divider, keyboard control, and corner labels.",
+  "client": true,
+  "importPath": "rift-ds/components/ImageCompare/ImageCompare",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/image-compare",
+  "markdownUrl": "https://rift-ds.com/components/image-compare.md",
+  "exports": [
+    {
+      "component": "ImageCompare",
+      "props": [
+        {
+          "name": "beforeSrc",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Source of the image revealed on the left of the divider"
+        },
+        {
+          "name": "afterSrc",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Source of the image revealed on the right of the divider"
+        },
+        {
+          "name": "beforeAlt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Alt text for the before image"
+        },
+        {
+          "name": "afterAlt",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Alt text for the after image"
+        },
+        {
+          "name": "beforeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Corner label over the before side",
+          "default": "Before"
+        },
+        {
+          "name": "afterLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Corner label over the after side",
+          "default": "After"
+        },
+        {
+          "name": "showLabels",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the corner labels render",
+          "default": true
+        },
+        {
+          "name": "handleLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the divider handle. Defaults to the two corner labels joined as \"Before and After comparison\"."
+        },
+        {
+          "name": "handleValueText",
+          "type": "((position: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Spoken value of the divider handle, given its whole-percent position. Defaults to the percentage followed by the before label in lower case."
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Divider position as a percentage from the left (controlled)"
+        },
+        {
+          "name": "defaultPosition",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial divider position for uncontrolled use",
+          "default": 50
+        },
+        {
+          "name": "onPositionChange",
+          "type": "((position: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Convenience callback receiving the divider position on every change"
+        },
+        {
+          "name": "aspectRatio",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "CSS aspect-ratio of the frame (both images are sized to cover it)",
+          "default": "16 / 10"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

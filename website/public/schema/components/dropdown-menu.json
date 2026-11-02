@@ -1,0 +1,97 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "DropdownMenu",
+  "label": "Dropdown menu",
+  "slug": "dropdown-menu",
+  "category": "overlays",
+  "description": "Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.",
+  "client": true,
+  "importPath": "rift-ds/components/DropdownMenu/DropdownMenu",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/dropdown-menu",
+  "markdownUrl": "https://rift-ds.com/components/dropdown-menu.md",
+  "exports": [
+    {
+      "component": "DropdownMenu",
+      "props": [
+        {
+          "name": "trigger",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Trigger element that opens the menu"
+        },
+        {
+          "name": "items",
+          "type": "DropdownMenuEntry[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Menu entries (items, groups, separators)"
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Horizontal alignment of the panel",
+          "default": "start"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the menu is open (controlled mode)"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the menu starts open when uncontrolled",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Callback when the menu opens or closes"
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the root wrapper, which holds the trigger and the panel",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

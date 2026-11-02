@@ -110,11 +110,12 @@ try {
 import '${PACKAGE_NAME}/tokens/tokens.css';
 import { Button, Badge, COMPONENT_COUNT } from '${PACKAGE_NAME}';
 import { Alert } from '${PACKAGE_NAME}/components/Alert/Alert';
+import { THEME_IDS, tokenValue } from '${PACKAGE_NAME}/tokens/values';
 
 createRoot(document.getElementById('root')!).render(
   <main>
     <Button label={\`\${COMPONENT_COUNT} components\`} variant="primary" />
-    <Badge label="smoke" variant="positive" />
+    <Badge label={tokenValue('--color-action-primary-bg', THEME_IDS[0], 'light') ?? 'smoke'} variant="positive" />
     <Alert variant="info" title="Deep import" description="works" />
   </main>
 );

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Reasoning",
+  "label": "Reasoning",
+  "slug": "reasoning",
+  "category": "ai",
+  "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes.",
+  "client": true,
+  "importPath": "rift-ds/components/Reasoning/Reasoning",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/reasoning",
+  "markdownUrl": "https://rift-ds.com/components/reasoning.md",
+  "exports": [
+    {
+      "component": "Reasoning",
+      "props": [
+        {
+          "name": "streaming",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The model is still producing the trace. Opens the panel and shimmers the summary.",
+          "default": false
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Seconds spent reasoning, shown in the summary once complete."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Override the summary line in every state. By default it reports the streaming state and the duration through the three labels below."
+        },
+        {
+          "name": "thinkingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The summary while reasoning streams. Defaults to \"Thinking\".",
+          "default": "Thinking"
+        },
+        {
+          "name": "durationLabel",
+          "type": "((seconds: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The summary once complete with a duration, given the seconds. Defaults to \"Thought for <n>s\".",
+          "defaultExpression": "(seconds: number) => `Thought for ${seconds}s`"
+        },
+        {
+          "name": "doneLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The summary once complete with no duration. Defaults to \"Thought process\".",
+          "default": "Thought process"
+        },
+        {
+          "name": "summary",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replace the summary text with custom content — typically an AgentStatus,\npairing the live indicator with the trace disclosure. The node owns its\nown appearance and announcement, so Reasoning's shimmer and live region\nstand down."
+        },
+        {
+          "name": "summaryOnly",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Render the summary line alone, with no chevron, no trigger, and no\npanel — for a model that reports what it is doing but produces no trace\nto read. A disclosure that opens onto nothing is a promise the component\ncannot keep, so it stops being one.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Text scale, paired with ChatMessage's sizes: `default` matches default\nmessage text, `compact` matches compact message text.",
+          "default": "default"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Open state for controlled use. Pair with `onOpenChange`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Open state for uncontrolled use. Defaults to open while `streaming`."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires whenever the panel opens or closes, from a click or from the stream ending."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The reasoning trace."
+        }
+      ]
+    }
+  ]
+}

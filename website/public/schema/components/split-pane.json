@@ -1,0 +1,95 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "SplitPane",
+  "label": "Split pane",
+  "slug": "split-pane",
+  "category": "layout",
+  "description": "Two resizable regions with a draggable, keyboard-operable divider between them.",
+  "client": true,
+  "importPath": "rift-ds/components/SplitPane/SplitPane",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/split-pane",
+  "markdownUrl": "https://rift-ds.com/components/split-pane.md",
+  "exports": [
+    {
+      "component": "SplitPane",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The two panes, in order. Children beyond the first two are ignored."
+        },
+        {
+          "name": "direction",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Which way the panes sit: side by side, or stacked.",
+          "default": "horizontal"
+        },
+        {
+          "name": "split",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "First pane's share as a percentage (controlled). Pair with `onSplitChange`."
+        },
+        {
+          "name": "defaultSplit",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "First pane's share as a percentage (uncontrolled initial value).",
+          "default": 50
+        },
+        {
+          "name": "minSplit",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Smallest share the first pane can be dragged to, as a percentage.",
+          "default": 10
+        },
+        {
+          "name": "maxSplit",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Largest share the first pane can be dragged to, as a percentage.",
+          "default": 90
+        },
+        {
+          "name": "onSplitChange",
+          "type": "((split: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new percentage on every drag step or keyboard resize."
+        },
+        {
+          "name": "separatorLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the resize handle.",
+          "default": "Resize panes"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

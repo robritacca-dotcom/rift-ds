@@ -1,0 +1,44 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ChatHeader",
+  "label": "Chat header",
+  "slug": "chat-header",
+  "category": "ai",
+  "description": "The top row of a chat surface, with the conversation title and its controls.",
+  "client": false,
+  "importPath": "rift-ds/components/ChatHeader/ChatHeader",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/chat-header",
+  "markdownUrl": "https://rift-ds.com/components/chat-header.md",
+  "exports": [
+    {
+      "component": "ChatHeader",
+      "props": [
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The chat or assistant name. Deliberately shadows the native `title`\ntooltip attribute — a header's title is content, not a tooltip. Pass a\nstring for the default treatment, or your own heading element."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Trailing controls: a new-chat CircularButton, a view switcher, a close\nbutton. The slot only lays them out — each control owns its behaviour."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

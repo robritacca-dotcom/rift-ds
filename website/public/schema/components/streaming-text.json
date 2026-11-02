@@ -1,0 +1,82 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "StreamingText",
+  "label": "Streaming text",
+  "slug": "streaming-text",
+  "category": "ai",
+  "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming.",
+  "client": true,
+  "importPath": "rift-ds/components/StreamingText/StreamingText",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/streaming-text",
+  "markdownUrl": "https://rift-ds.com/components/streaming-text.md",
+  "exports": [
+    {
+      "component": "StreamingText",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The text received so far. Grow it across renders as chunks arrive; the\nreveal animates through the appended part. A value that does not extend\nthe previous one is treated as a new message and reveals from the start."
+        },
+        {
+          "name": "streaming",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the source is still producing text. Keeps the cursor visible\nbetween chunks, when the reveal has caught up but more may arrive.",
+          "default": false
+        },
+        {
+          "name": "floorCps",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Slowest the reveal ever runs, in characters per second — the pace a\nthin trickle of chunks types at. Defaults to MOTION_STREAM_FLOOR_CPS."
+        },
+        {
+          "name": "drainMs",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "However much text is waiting, it is fully on screen within this long,\nin milliseconds — the rate rises with the backlog. Defaults to\nMOTION_STREAM_DRAIN_MS."
+        },
+        {
+          "name": "charIntervalMs",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The retired interval between reveal steps; when set and `floorCps` is\nnot, its equivalent rate becomes the reveal's floor.",
+          "deprecated": "The reveal is frame-driven now — pace it with `floorCps`\nand `drainMs` instead."
+        },
+        {
+          "name": "cursor",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the blinking cursor while streaming or revealing.",
+          "default": true
+        },
+        {
+          "name": "onRevealComplete",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires once when the reveal catches up with `text` after `streaming` has\nended — the moment the message is fully on screen."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

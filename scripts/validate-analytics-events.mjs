@@ -8,7 +8,7 @@
  * call site passes a member of the table, so a rename reaches every caller or
  * fails here; a member nobody calls is a chart in GA that will never move;
  * and a second path to `gtag` would be a second vocabulary nothing checks.
- * /privacy discloses what is counted, so it must name the four actions too.
+ * /privacy discloses what is counted, so it must name every action too.
  *
  * Checks:
  *  - `gtag(` and `dataLayer` appear under website/src only in the root
@@ -16,7 +16,7 @@
  *  - every `trackEvent(` call outside the module passes `SITE_EVENTS.<key>`
  *    as its first argument, with `<key>` a member of the table
  *  - every member of the table has at least one call site
- *  - the privacy page's analytics section names each of the four actions
+ *  - the privacy page's analytics section names each action in PRIVACY_PHRASES
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
@@ -91,9 +91,14 @@ for (const [key, callers] of uses) {
   }
 }
 
-/* ── 5. The privacy page names the four actions ─────────────────────────── */
+/* ── 5. The privacy page names every action ─────────────────────────────── */
+/* One phrase per SITE_EVENTS member, in the words the page uses. */
+const PRIVACY_PHRASES = ['install snippet', 'agent starter', "component's markdown", "component's schema", 'opening the chat'];
+if (PRIVACY_PHRASES.length !== keys.length) {
+  errors.push(`scripts/validate-analytics-events.mjs — PRIVACY_PHRASES has ${PRIVACY_PHRASES.length} phrases for ${keys.length} SITE_EVENTS members; each event needs one`);
+}
 const privacy = read(privacyRel).replace(/&apos;/g, "'").replace(/\s+/g, ' ');
-for (const phrase of ['install snippet', 'agent starter', "component's markdown", 'opening the chat']) {
+for (const phrase of PRIVACY_PHRASES) {
   if (!privacy.includes(phrase)) {
     errors.push(`${privacyRel} — the Analytics section no longer says "${phrase}"; /privacy discloses every event the site sends`);
   }

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ContextMenu",
+  "label": "Context menu",
+  "slug": "context-menu",
+  "category": "overlays",
+  "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints.",
+  "client": true,
+  "importPath": "rift-ds/components/ContextMenu/ContextMenu",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/context-menu",
+  "markdownUrl": "https://rift-ds.com/components/context-menu.md",
+  "exports": [
+    {
+      "component": "ContextMenu",
+      "props": [
+        {
+          "name": "items",
+          "type": "DropdownMenuEntry[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Menu entries — the same model as DropdownMenu (items, groups, separators)"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the menu"
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The right-clickable area the menu is attached to"
+        }
+      ]
+    }
+  ]
+}

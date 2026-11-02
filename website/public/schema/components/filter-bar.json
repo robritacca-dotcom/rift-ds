@@ -1,0 +1,86 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "FilterBar",
+  "label": "Filter bar",
+  "slug": "filter-bar",
+  "category": "forms",
+  "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets.",
+  "client": true,
+  "importPath": "rift-ds/components/FilterBar/FilterBar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/filter-bar",
+  "markdownUrl": "https://rift-ds.com/components/filter-bar.md",
+  "exports": [
+    {
+      "component": "FilterBar",
+      "props": [
+        {
+          "name": "filters",
+          "type": "FilterBarFilter[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The filters on the bar, in display order."
+        },
+        {
+          "name": "values",
+          "type": "Record<string, string[]>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Active options per filter id (controlled). Pair with `onValuesChange`."
+        },
+        {
+          "name": "defaultValues",
+          "type": "Record<string, string[]>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Active options per filter id (uncontrolled initial state)."
+        },
+        {
+          "name": "onValuesChange",
+          "type": "((values: Record<string, string[]>) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the full active-filter map on every change. Filters with\nnothing active are absent from the map, so an empty object means\nunfiltered."
+        },
+        {
+          "name": "clearLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label for the button that clears every filter at once.",
+          "default": "Clear all"
+        },
+        {
+          "name": "clearFilterLabel",
+          "type": "((filterLabel: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of an active filter's own clear button, given the filter's label. Defaults to \"Clear\" followed by the label.",
+          "defaultExpression": "(filterLabel: string) => `Clear ${filterLabel}`"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "MapCallout",
+  "label": "Map callout",
+  "slug": "map-callout",
+  "category": "maps",
+  "description": "The annotation beside a map point: a name in capitals over monospace readout lines.",
+  "client": false,
+  "importPath": "rift-ds/components/MapCallout/MapCallout",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/map-callout",
+  "markdownUrl": "https://rift-ds.com/components/map-callout.md",
+  "exports": [
+    {
+      "component": "MapCallout",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The place's name, set in capitals: \"Santiago, CL\". Intentionally shadows\nthe native `title` tooltip attribute, which MapCallout does not expose."
+        },
+        {
+          "name": "lines",
+          "type": "ReactNode[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Readout lines under the title, in order: a status, a reading, a route.",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Which way the text ranges. A callout sitting left of its marker ranges\nright so it hangs off the point; `start` is the ordinary reading order.",
+          "default": "start"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

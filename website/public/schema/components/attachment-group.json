@@ -1,0 +1,172 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AttachmentGroup",
+  "label": "Attachment group",
+  "slug": "attachment-group",
+  "category": "ai",
+  "description": "The files on a sent message: one picture at its own shape, or a grid of tiles that collapses behind a count.",
+  "client": true,
+  "importPath": "rift-ds/components/Attachment/AttachmentGroup",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/attachment-group",
+  "markdownUrl": "https://rift-ds.com/components/attachment-group.md",
+  "exports": [
+    {
+      "component": "AttachmentGroup",
+      "props": [
+        {
+          "name": "items",
+          "type": "AttachmentItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The files on the message, in order."
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Which edge the layout hugs: `end` for the sender's own turns.",
+          "default": "start"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Most cells shown before the rest collapse. Over the limit, the last\ncell becomes a \"+N\" button standing for the hidden files.",
+          "default": 4
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the overflow is expanded, for controlled use. Pair with `onOpenChange`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the overflow starts expanded, for uncontrolled use.",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the overflow expands or collapses."
+        },
+        {
+          "name": "viewer",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Open a pressed file in the built-in AttachmentViewer, which steps\nthrough the rest of the group. Turn it off to handle presses yourself\nthrough `onItemClick`.",
+          "default": true
+        },
+        {
+          "name": "onItemClick",
+          "type": "((item: AttachmentItem) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when a file is pressed, whether or not the viewer opens."
+        },
+        {
+          "name": "renderPreview",
+          "type": "((item: AttachmentItem) => ReactNode)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Passed to the viewer: draws a file it cannot, such as the pages of a PDF."
+        },
+        {
+          "name": "onDownload",
+          "type": "((item: AttachmentItem) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Passed to the viewer: fires when Download is pressed, and renders the buttons."
+        },
+        {
+          "name": "onRetry",
+          "type": "((item: AttachmentItem) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Passed to the viewer: fires when \"Try again\" is pressed on a file that failed to load."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Tile size, passed to every tile.",
+          "default": "default"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible label for the list.",
+          "default": "Attachments"
+        },
+        {
+          "name": "showMoreLabel",
+          "type": "((hidden: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Builds the accessible label of the \"+N\" button from the hidden count.",
+          "defaultExpression": "(hidden) => `Show ${hidden} more`"
+        },
+        {
+          "name": "showLessLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text of the collapse button under an expanded group.",
+          "default": "Show fewer"
+        },
+        {
+          "name": "attachmentTileLabels",
+          "type": "Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The status lines and progress name every tile writes, merged over the tile's English defaults (\"Uploading…\", \"Upload failed\", \"Unavailable\")."
+        },
+        {
+          "name": "attachmentViewerLabels",
+          "type": "Pick<AttachmentViewerProps, \"closeLabel\" | \"downloadLabel\" | \"previousLabel\" | \"nextLabel\" | \"retryLabel\" | \"noPreviewLabel\" | \"failedLabel\" | \"failedDescription\" | \"formatPosition\">",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\")."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

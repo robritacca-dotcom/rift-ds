@@ -1,0 +1,112 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AreaChart",
+  "label": "Area chart",
+  "slug": "area-chart",
+  "category": "charts",
+  "description": "Filled area chart for showing volume over time, with stacked and single-series variants.",
+  "client": true,
+  "importPath": "rift-ds/components/Chart/AreaChart",
+  "barrel": "charts",
+  "docsUrl": "https://rift-ds.com/components/area-chart",
+  "markdownUrl": "https://rift-ds.com/components/area-chart.md",
+  "exports": [
+    {
+      "component": "AreaChart",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "data",
+          "type": "Record<string, unknown>[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of data objects"
+        },
+        {
+          "name": "xKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Key in data for x-axis values",
+          "default": "label"
+        },
+        {
+          "name": "series",
+          "type": "AreaSeriesConfig[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "One or more area series to render"
+        },
+        {
+          "name": "stacked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether areas stack on top of each other",
+          "default": false
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title"
+        },
+        {
+          "name": "summaryItems",
+          "type": "ChartSummaryItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Summary stats displayed in the header"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart area height in pixels",
+          "default": 350
+        },
+        {
+          "name": "showLegend",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the legend under a multi-series chart",
+          "default": true
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the wrapper",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

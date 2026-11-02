@@ -1,0 +1,311 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Checkbox",
+  "label": "Checkbox",
+  "slug": "checkbox",
+  "category": "forms",
+  "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions.",
+  "client": true,
+  "importPath": "rift-ds/components/Checkbox/Checkbox",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/checkbox",
+  "markdownUrl": "https://rift-ds.com/components/checkbox.md",
+  "exports": [
+    {
+      "component": "Checkbox",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered under the label text"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text and marks the checkbox invalid",
+          "default": false
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the checkbox is checked, controlled. Leave undefined to let the\ncheckbox keep its own state, seeded from `defaultChecked`."
+        },
+        {
+          "name": "defaultChecked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the checkbox starts checked when uncontrolled (`checked` undefined).",
+          "default": false
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the checkbox is in an indeterminate state",
+          "default": false
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the checkbox is disabled",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "((checked: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the next checked state when toggled"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((checked: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onCheckedChange` instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the checkbox submits with an enclosing form\nthrough a hidden input: `value` while checked, nothing while unchecked\nor disabled, as a native checkbox does."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The value submitted under `name` while checked. Defaults to \"on\", the native checkbox's.",
+          "default": "on"
+        }
+      ]
+    },
+    {
+      "component": "CheckboxGroup",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Group label"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered below the group"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text and marks the group invalid",
+          "default": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the group required and renders the required marker on its label",
+          "default": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name shared by every item. When set, each checked item submits\nits `value` under this name through a hidden input, so a form reads the\nselection as repeated entries, as a set of native checkboxes does; a disabled\nitem submits nothing."
+        },
+        {
+          "name": "items",
+          "type": "{ label: string; value: string; disabled?: boolean | undefined; }[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Checkbox options"
+        },
+        {
+          "name": "values",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Currently selected values, controlled. Leave undefined to let the group\nkeep its own selection, seeded from `defaultValues`."
+        },
+        {
+          "name": "defaultValues",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Selected values on first render when uncontrolled (`values` undefined).",
+          "defaultExpression": "[]"
+        },
+        {
+          "name": "direction",
+          "type": "\"horizontal\" | \"vertical\"",
+          "typeKind": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "required": false,
+          "description": "Layout direction",
+          "default": "vertical"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "onValuesChange",
+          "type": "((values: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the next selected values"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((values: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onValuesChange` instead."
+        }
+      ]
+    },
+    {
+      "component": "CheckboxIndicator",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the box shows its check.",
+          "default": false
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the box shows the minus of an indeterminate state (ignored when `checked`).",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Box size: `default` is 24px, `compact` 20px.",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "CheckIcon",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes; the default is the checkbox icon's, which sizes and colours it.",
+          "default": "ds-checkbox__icon"
+        }
+      ]
+    },
+    {
+      "component": "MinusIcon",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes; the default is the checkbox icon's, which sizes and colours it.",
+          "default": "ds-checkbox__icon"
+        }
+      ]
+    }
+  ]
+}

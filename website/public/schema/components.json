@@ -1,0 +1,1638 @@
+{
+  "$schema": "https://rift-ds.com/schema/components-index.schema.json",
+  "version": "1.19.1",
+  "package": "rift-ds",
+  "count": 163,
+  "components": [
+    {
+      "name": "Accordion",
+      "label": "Accordion",
+      "slug": "accordion",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/accordion.json",
+      "docsUrl": "https://rift-ds.com/components/accordion",
+      "markdownUrl": "https://rift-ds.com/components/accordion.md"
+    },
+    {
+      "name": "AgentPlan",
+      "label": "Agent plan",
+      "slug": "agent-plan",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-plan.json",
+      "docsUrl": "https://rift-ds.com/components/agent-plan",
+      "markdownUrl": "https://rift-ds.com/components/agent-plan.md"
+    },
+    {
+      "name": "AgentRail",
+      "label": "Agent rail",
+      "slug": "agent-rail",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-rail.json",
+      "docsUrl": "https://rift-ds.com/components/agent-rail",
+      "markdownUrl": "https://rift-ds.com/components/agent-rail.md"
+    },
+    {
+      "name": "AgentStatus",
+      "label": "Agent status",
+      "slug": "agent-status",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-status.json",
+      "docsUrl": "https://rift-ds.com/components/agent-status",
+      "markdownUrl": "https://rift-ds.com/components/agent-status.md"
+    },
+    {
+      "name": "AiButton",
+      "label": "AI button",
+      "slug": "ai-button",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/ai-button.json",
+      "docsUrl": "https://rift-ds.com/components/ai-button",
+      "markdownUrl": "https://rift-ds.com/components/ai-button.md"
+    },
+    {
+      "name": "Alert",
+      "label": "Alert",
+      "slug": "alert",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/alert.json",
+      "docsUrl": "https://rift-ds.com/components/alert",
+      "markdownUrl": "https://rift-ds.com/components/alert.md"
+    },
+    {
+      "name": "AlertDialog",
+      "label": "Alert dialog",
+      "slug": "alert-dialog",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/alert-dialog.json",
+      "docsUrl": "https://rift-ds.com/components/alert-dialog",
+      "markdownUrl": "https://rift-ds.com/components/alert-dialog.md"
+    },
+    {
+      "name": "AnchorNav",
+      "label": "Anchor nav",
+      "slug": "anchor-nav",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/anchor-nav.json",
+      "docsUrl": "https://rift-ds.com/components/anchor-nav",
+      "markdownUrl": "https://rift-ds.com/components/anchor-nav.md"
+    },
+    {
+      "name": "AnimatedNumber",
+      "label": "Animated number",
+      "slug": "animated-number",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/animated-number.json",
+      "docsUrl": "https://rift-ds.com/components/animated-number",
+      "markdownUrl": "https://rift-ds.com/components/animated-number.md"
+    },
+    {
+      "name": "AppLayout",
+      "label": "App layout",
+      "slug": "app-layout",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/app-layout.json",
+      "docsUrl": "https://rift-ds.com/components/app-layout",
+      "markdownUrl": "https://rift-ds.com/components/app-layout.md"
+    },
+    {
+      "name": "AppSidebar",
+      "label": "App sidebar",
+      "slug": "app-sidebar",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/app-sidebar.json",
+      "docsUrl": "https://rift-ds.com/components/app-sidebar",
+      "markdownUrl": "https://rift-ds.com/components/app-sidebar.md"
+    },
+    {
+      "name": "AreaChart",
+      "label": "Area chart",
+      "slug": "area-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/area-chart.json",
+      "docsUrl": "https://rift-ds.com/components/area-chart",
+      "markdownUrl": "https://rift-ds.com/components/area-chart.md"
+    },
+    {
+      "name": "ArtifactCard",
+      "label": "Artifact card",
+      "slug": "artifact-card",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/artifact-card.json",
+      "docsUrl": "https://rift-ds.com/components/artifact-card",
+      "markdownUrl": "https://rift-ds.com/components/artifact-card.md"
+    },
+    {
+      "name": "ArtifactPanel",
+      "label": "Artifact panel",
+      "slug": "artifact-panel",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/artifact-panel.json",
+      "docsUrl": "https://rift-ds.com/components/artifact-panel",
+      "markdownUrl": "https://rift-ds.com/components/artifact-panel.md"
+    },
+    {
+      "name": "AttachmentDropZone",
+      "label": "Attachment drop zone",
+      "slug": "attachment-drop-zone",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/attachment-drop-zone.json",
+      "docsUrl": "https://rift-ds.com/components/attachment-drop-zone",
+      "markdownUrl": "https://rift-ds.com/components/attachment-drop-zone.md"
+    },
+    {
+      "name": "AttachmentGroup",
+      "label": "Attachment group",
+      "slug": "attachment-group",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/attachment-group.json",
+      "docsUrl": "https://rift-ds.com/components/attachment-group",
+      "markdownUrl": "https://rift-ds.com/components/attachment-group.md"
+    },
+    {
+      "name": "AttachmentTile",
+      "label": "Attachment tile",
+      "slug": "attachment-tile",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/attachment-tile.json",
+      "docsUrl": "https://rift-ds.com/components/attachment-tile",
+      "markdownUrl": "https://rift-ds.com/components/attachment-tile.md"
+    },
+    {
+      "name": "AttachmentViewer",
+      "label": "Attachment viewer",
+      "slug": "attachment-viewer",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/attachment-viewer.json",
+      "docsUrl": "https://rift-ds.com/components/attachment-viewer",
+      "markdownUrl": "https://rift-ds.com/components/attachment-viewer.md"
+    },
+    {
+      "name": "Avatar",
+      "label": "Avatar",
+      "slug": "avatar",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/avatar.json",
+      "docsUrl": "https://rift-ds.com/components/avatar",
+      "markdownUrl": "https://rift-ds.com/components/avatar.md"
+    },
+    {
+      "name": "AvatarGroup",
+      "label": "Avatar group",
+      "slug": "avatar-group",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/avatar-group.json",
+      "docsUrl": "https://rift-ds.com/components/avatar-group",
+      "markdownUrl": "https://rift-ds.com/components/avatar-group.md"
+    },
+    {
+      "name": "Badge",
+      "label": "Badge",
+      "slug": "badge",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/badge.json",
+      "docsUrl": "https://rift-ds.com/components/badge",
+      "markdownUrl": "https://rift-ds.com/components/badge.md"
+    },
+    {
+      "name": "Banner",
+      "label": "Banner",
+      "slug": "banner",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/banner.json",
+      "docsUrl": "https://rift-ds.com/components/banner",
+      "markdownUrl": "https://rift-ds.com/components/banner.md"
+    },
+    {
+      "name": "BarChart",
+      "label": "Bar chart",
+      "slug": "bar-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/bar-chart.json",
+      "docsUrl": "https://rift-ds.com/components/bar-chart",
+      "markdownUrl": "https://rift-ds.com/components/bar-chart.md"
+    },
+    {
+      "name": "BentoTile",
+      "label": "Bento tile",
+      "slug": "bento-tile",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/bento-tile.json",
+      "docsUrl": "https://rift-ds.com/components/bento-tile",
+      "markdownUrl": "https://rift-ds.com/components/bento-tile.md"
+    },
+    {
+      "name": "BentoTileArt",
+      "label": "Bento tile art",
+      "slug": "bento-tile-art",
+      "category": "effects",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/bento-tile-art.json",
+      "docsUrl": "https://rift-ds.com/components/bento-tile-art",
+      "markdownUrl": "https://rift-ds.com/components/bento-tile-art.md"
+    },
+    {
+      "name": "BottomNav",
+      "label": "Bottom nav",
+      "slug": "bottom-nav",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/bottom-nav.json",
+      "docsUrl": "https://rift-ds.com/components/bottom-nav",
+      "markdownUrl": "https://rift-ds.com/components/bottom-nav.md"
+    },
+    {
+      "name": "Breadcrumb",
+      "label": "Breadcrumb",
+      "slug": "breadcrumb",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/breadcrumb.json",
+      "docsUrl": "https://rift-ds.com/components/breadcrumb",
+      "markdownUrl": "https://rift-ds.com/components/breadcrumb.md"
+    },
+    {
+      "name": "Button",
+      "label": "Button",
+      "slug": "button",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/button.json",
+      "docsUrl": "https://rift-ds.com/components/button",
+      "markdownUrl": "https://rift-ds.com/components/button.md"
+    },
+    {
+      "name": "ButtonGroup",
+      "label": "Button group",
+      "slug": "button-group",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/button-group.json",
+      "docsUrl": "https://rift-ds.com/components/button-group",
+      "markdownUrl": "https://rift-ds.com/components/button-group.md"
+    },
+    {
+      "name": "Card",
+      "label": "Card",
+      "slug": "card",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/card.json",
+      "docsUrl": "https://rift-ds.com/components/card",
+      "markdownUrl": "https://rift-ds.com/components/card.md"
+    },
+    {
+      "name": "CardStack",
+      "label": "Card stack",
+      "slug": "card-stack",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/card-stack.json",
+      "docsUrl": "https://rift-ds.com/components/card-stack",
+      "markdownUrl": "https://rift-ds.com/components/card-stack.md"
+    },
+    {
+      "name": "Carousel",
+      "label": "Carousel",
+      "slug": "carousel",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/carousel.json",
+      "docsUrl": "https://rift-ds.com/components/carousel",
+      "markdownUrl": "https://rift-ds.com/components/carousel.md"
+    },
+    {
+      "name": "ChatHeader",
+      "label": "Chat header",
+      "slug": "chat-header",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/chat-header.json",
+      "docsUrl": "https://rift-ds.com/components/chat-header",
+      "markdownUrl": "https://rift-ds.com/components/chat-header.md"
+    },
+    {
+      "name": "ChatMarker",
+      "label": "Chat marker",
+      "slug": "chat-marker",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/chat-marker.json",
+      "docsUrl": "https://rift-ds.com/components/chat-marker",
+      "markdownUrl": "https://rift-ds.com/components/chat-marker.md"
+    },
+    {
+      "name": "ChatMessage",
+      "label": "Chat message",
+      "slug": "chat-message",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/chat-message.json",
+      "docsUrl": "https://rift-ds.com/components/chat-message",
+      "markdownUrl": "https://rift-ds.com/components/chat-message.md"
+    },
+    {
+      "name": "ChatThread",
+      "label": "Chat thread",
+      "slug": "chat-thread",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/chat-thread.json",
+      "docsUrl": "https://rift-ds.com/components/chat-thread",
+      "markdownUrl": "https://rift-ds.com/components/chat-thread.md"
+    },
+    {
+      "name": "Checkbox",
+      "label": "Checkbox",
+      "slug": "checkbox",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/checkbox.json",
+      "docsUrl": "https://rift-ds.com/components/checkbox",
+      "markdownUrl": "https://rift-ds.com/components/checkbox.md"
+    },
+    {
+      "name": "Chip",
+      "label": "Chip",
+      "slug": "chip",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/chip.json",
+      "docsUrl": "https://rift-ds.com/components/chip",
+      "markdownUrl": "https://rift-ds.com/components/chip.md"
+    },
+    {
+      "name": "CircularButton",
+      "label": "Circular button",
+      "slug": "circular-button",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/circular-button.json",
+      "docsUrl": "https://rift-ds.com/components/circular-button",
+      "markdownUrl": "https://rift-ds.com/components/circular-button.md"
+    },
+    {
+      "name": "CodeBlock",
+      "label": "Code block",
+      "slug": "code-block",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/code-block.json",
+      "docsUrl": "https://rift-ds.com/components/code-block",
+      "markdownUrl": "https://rift-ds.com/components/code-block.md"
+    },
+    {
+      "name": "CodeDiff",
+      "label": "Code diff",
+      "slug": "code-diff",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/code-diff.json",
+      "docsUrl": "https://rift-ds.com/components/code-diff",
+      "markdownUrl": "https://rift-ds.com/components/code-diff.md"
+    },
+    {
+      "name": "ColorPicker",
+      "label": "Colour picker",
+      "slug": "color-picker",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/color-picker.json",
+      "docsUrl": "https://rift-ds.com/components/color-picker",
+      "markdownUrl": "https://rift-ds.com/components/color-picker.md"
+    },
+    {
+      "name": "ComboChart",
+      "label": "Combo chart",
+      "slug": "combo-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/combo-chart.json",
+      "docsUrl": "https://rift-ds.com/components/combo-chart",
+      "markdownUrl": "https://rift-ds.com/components/combo-chart.md"
+    },
+    {
+      "name": "Combobox",
+      "label": "Combobox",
+      "slug": "combobox",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/combobox.json",
+      "docsUrl": "https://rift-ds.com/components/combobox",
+      "markdownUrl": "https://rift-ds.com/components/combobox.md"
+    },
+    {
+      "name": "CommandPalette",
+      "label": "Command palette",
+      "slug": "command-palette",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/command-palette.json",
+      "docsUrl": "https://rift-ds.com/components/command-palette",
+      "markdownUrl": "https://rift-ds.com/components/command-palette.md"
+    },
+    {
+      "name": "CommandPaletteTrigger",
+      "label": "Command palette trigger",
+      "slug": "command-palette-trigger",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/command-palette-trigger.json",
+      "docsUrl": "https://rift-ds.com/components/command-palette-trigger",
+      "markdownUrl": "https://rift-ds.com/components/command-palette-trigger.md"
+    },
+    {
+      "name": "Composer",
+      "label": "Composer",
+      "slug": "composer",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/composer.json",
+      "docsUrl": "https://rift-ds.com/components/composer",
+      "markdownUrl": "https://rift-ds.com/components/composer.md"
+    },
+    {
+      "name": "ContactCard",
+      "label": "Contact card",
+      "slug": "contact-card",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/contact-card.json",
+      "docsUrl": "https://rift-ds.com/components/contact-card",
+      "markdownUrl": "https://rift-ds.com/components/contact-card.md"
+    },
+    {
+      "name": "ContextMenu",
+      "label": "Context menu",
+      "slug": "context-menu",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/context-menu.json",
+      "docsUrl": "https://rift-ds.com/components/context-menu",
+      "markdownUrl": "https://rift-ds.com/components/context-menu.md"
+    },
+    {
+      "name": "ContributionGraph",
+      "label": "Contribution graph",
+      "slug": "contribution-graph",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/contribution-graph.json",
+      "docsUrl": "https://rift-ds.com/components/contribution-graph",
+      "markdownUrl": "https://rift-ds.com/components/contribution-graph.md"
+    },
+    {
+      "name": "DataTable",
+      "label": "Data table",
+      "slug": "data-table",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/data-table.json",
+      "docsUrl": "https://rift-ds.com/components/data-table",
+      "markdownUrl": "https://rift-ds.com/components/data-table.md"
+    },
+    {
+      "name": "DateInput",
+      "label": "Date input",
+      "slug": "date-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/date-input.json",
+      "docsUrl": "https://rift-ds.com/components/date-input",
+      "markdownUrl": "https://rift-ds.com/components/date-input.md"
+    },
+    {
+      "name": "DatePicker",
+      "label": "Date picker",
+      "slug": "date-picker",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/date-picker.json",
+      "docsUrl": "https://rift-ds.com/components/date-picker",
+      "markdownUrl": "https://rift-ds.com/components/date-picker.md"
+    },
+    {
+      "name": "Dialog",
+      "label": "Dialog",
+      "slug": "dialog",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/dialog.json",
+      "docsUrl": "https://rift-ds.com/components/dialog",
+      "markdownUrl": "https://rift-ds.com/components/dialog.md"
+    },
+    {
+      "name": "Divider",
+      "label": "Divider",
+      "slug": "divider",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/divider.json",
+      "docsUrl": "https://rift-ds.com/components/divider",
+      "markdownUrl": "https://rift-ds.com/components/divider.md"
+    },
+    {
+      "name": "DocumentChip",
+      "label": "Document chip",
+      "slug": "document-chip",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/document-chip.json",
+      "docsUrl": "https://rift-ds.com/components/document-chip",
+      "markdownUrl": "https://rift-ds.com/components/document-chip.md"
+    },
+    {
+      "name": "Drawer",
+      "label": "Drawer",
+      "slug": "drawer",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/drawer.json",
+      "docsUrl": "https://rift-ds.com/components/drawer",
+      "markdownUrl": "https://rift-ds.com/components/drawer.md"
+    },
+    {
+      "name": "Dropdown",
+      "label": "Dropdown",
+      "slug": "dropdown",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown.json",
+      "docsUrl": "https://rift-ds.com/components/dropdown",
+      "markdownUrl": "https://rift-ds.com/components/dropdown.md"
+    },
+    {
+      "name": "DropdownMenu",
+      "label": "Dropdown menu",
+      "slug": "dropdown-menu",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown-menu.json",
+      "docsUrl": "https://rift-ds.com/components/dropdown-menu",
+      "markdownUrl": "https://rift-ds.com/components/dropdown-menu.md"
+    },
+    {
+      "name": "EmptyState",
+      "label": "Empty state",
+      "slug": "empty-state",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/empty-state.json",
+      "docsUrl": "https://rift-ds.com/components/empty-state",
+      "markdownUrl": "https://rift-ds.com/components/empty-state.md"
+    },
+    {
+      "name": "EntityCard",
+      "label": "Entity card",
+      "slug": "entity-card",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/entity-card.json",
+      "docsUrl": "https://rift-ds.com/components/entity-card",
+      "markdownUrl": "https://rift-ds.com/components/entity-card.md"
+    },
+    {
+      "name": "EventCalendar",
+      "label": "Event calendar",
+      "slug": "event-calendar",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/event-calendar.json",
+      "docsUrl": "https://rift-ds.com/components/event-calendar",
+      "markdownUrl": "https://rift-ds.com/components/event-calendar.md"
+    },
+    {
+      "name": "Field",
+      "label": "Field",
+      "slug": "field",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/field.json",
+      "docsUrl": "https://rift-ds.com/components/field",
+      "markdownUrl": "https://rift-ds.com/components/field.md"
+    },
+    {
+      "name": "Figure",
+      "label": "Figure",
+      "slug": "figure",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/figure.json",
+      "docsUrl": "https://rift-ds.com/components/figure",
+      "markdownUrl": "https://rift-ds.com/components/figure.md"
+    },
+    {
+      "name": "FileInput",
+      "label": "File input",
+      "slug": "file-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/file-input.json",
+      "docsUrl": "https://rift-ds.com/components/file-input",
+      "markdownUrl": "https://rift-ds.com/components/file-input.md"
+    },
+    {
+      "name": "FilterBar",
+      "label": "Filter bar",
+      "slug": "filter-bar",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/filter-bar.json",
+      "docsUrl": "https://rift-ds.com/components/filter-bar",
+      "markdownUrl": "https://rift-ds.com/components/filter-bar.md"
+    },
+    {
+      "name": "FunnelChart",
+      "label": "Funnel chart",
+      "slug": "funnel-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/funnel-chart.json",
+      "docsUrl": "https://rift-ds.com/components/funnel-chart",
+      "markdownUrl": "https://rift-ds.com/components/funnel-chart.md"
+    },
+    {
+      "name": "GanttChart",
+      "label": "Gantt chart",
+      "slug": "gantt-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/gantt-chart.json",
+      "docsUrl": "https://rift-ds.com/components/gantt-chart",
+      "markdownUrl": "https://rift-ds.com/components/gantt-chart.md"
+    },
+    {
+      "name": "Gauge",
+      "label": "Gauge",
+      "slug": "gauge",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/gauge.json",
+      "docsUrl": "https://rift-ds.com/components/gauge",
+      "markdownUrl": "https://rift-ds.com/components/gauge.md"
+    },
+    {
+      "name": "Globe",
+      "label": "Globe",
+      "slug": "globe",
+      "category": "maps",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/globe.json",
+      "docsUrl": "https://rift-ds.com/components/globe",
+      "markdownUrl": "https://rift-ds.com/components/globe.md"
+    },
+    {
+      "name": "HoverCard",
+      "label": "Hover card",
+      "slug": "hover-card",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/hover-card.json",
+      "docsUrl": "https://rift-ds.com/components/hover-card",
+      "markdownUrl": "https://rift-ds.com/components/hover-card.md"
+    },
+    {
+      "name": "ImageCompare",
+      "label": "Image compare",
+      "slug": "image-compare",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/image-compare.json",
+      "docsUrl": "https://rift-ds.com/components/image-compare",
+      "markdownUrl": "https://rift-ds.com/components/image-compare.md"
+    },
+    {
+      "name": "Input",
+      "label": "Input",
+      "slug": "input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/input.json",
+      "docsUrl": "https://rift-ds.com/components/input",
+      "markdownUrl": "https://rift-ds.com/components/input.md"
+    },
+    {
+      "name": "InspectorColorPicker",
+      "label": "Inspector colour picker",
+      "slug": "inspector-color-picker",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-color-picker.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-color-picker",
+      "markdownUrl": "https://rift-ds.com/components/inspector-color-picker.md"
+    },
+    {
+      "name": "InspectorDropdown",
+      "label": "Inspector dropdown",
+      "slug": "inspector-dropdown",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-dropdown.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-dropdown",
+      "markdownUrl": "https://rift-ds.com/components/inspector-dropdown.md"
+    },
+    {
+      "name": "InspectorInput",
+      "label": "Inspector input",
+      "slug": "inspector-input",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-input.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-input",
+      "markdownUrl": "https://rift-ds.com/components/inspector-input.md"
+    },
+    {
+      "name": "InspectorSection",
+      "label": "Inspector section",
+      "slug": "inspector-section",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-section.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-section",
+      "markdownUrl": "https://rift-ds.com/components/inspector-section.md"
+    },
+    {
+      "name": "InspectorSegmentedControl",
+      "label": "Inspector segments",
+      "slug": "inspector-segmented-control",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-segmented-control.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-segmented-control",
+      "markdownUrl": "https://rift-ds.com/components/inspector-segmented-control.md"
+    },
+    {
+      "name": "InspectorSlider",
+      "label": "Inspector slider",
+      "slug": "inspector-slider",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-slider.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-slider",
+      "markdownUrl": "https://rift-ds.com/components/inspector-slider.md"
+    },
+    {
+      "name": "InspectorToggleSwitch",
+      "label": "Inspector toggle switch",
+      "slug": "inspector-toggle-switch",
+      "category": "inspector",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/inspector-toggle-switch.json",
+      "docsUrl": "https://rift-ds.com/components/inspector-toggle-switch",
+      "markdownUrl": "https://rift-ds.com/components/inspector-toggle-switch.md"
+    },
+    {
+      "name": "Instructions",
+      "label": "Instructions",
+      "slug": "instructions",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/instructions.json",
+      "docsUrl": "https://rift-ds.com/components/instructions",
+      "markdownUrl": "https://rift-ds.com/components/instructions.md"
+    },
+    {
+      "name": "InterruptCard",
+      "label": "Interrupt card",
+      "slug": "interrupt-card",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/interrupt-card.json",
+      "docsUrl": "https://rift-ds.com/components/interrupt-card",
+      "markdownUrl": "https://rift-ds.com/components/interrupt-card.md"
+    },
+    {
+      "name": "Kbd",
+      "label": "Kbd",
+      "slug": "kbd",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/kbd.json",
+      "docsUrl": "https://rift-ds.com/components/kbd",
+      "markdownUrl": "https://rift-ds.com/components/kbd.md"
+    },
+    {
+      "name": "LegendTile",
+      "label": "Legend tile",
+      "slug": "legend-tile",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/legend-tile.json",
+      "docsUrl": "https://rift-ds.com/components/legend-tile",
+      "markdownUrl": "https://rift-ds.com/components/legend-tile.md"
+    },
+    {
+      "name": "Lightbox",
+      "label": "Lightbox",
+      "slug": "lightbox",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/lightbox.json",
+      "docsUrl": "https://rift-ds.com/components/lightbox",
+      "markdownUrl": "https://rift-ds.com/components/lightbox.md"
+    },
+    {
+      "name": "LineChart",
+      "label": "Line chart",
+      "slug": "line-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/line-chart.json",
+      "docsUrl": "https://rift-ds.com/components/line-chart",
+      "markdownUrl": "https://rift-ds.com/components/line-chart.md"
+    },
+    {
+      "name": "LinkList",
+      "label": "Link list",
+      "slug": "link-list",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/link-list.json",
+      "docsUrl": "https://rift-ds.com/components/link-list",
+      "markdownUrl": "https://rift-ds.com/components/link-list.md"
+    },
+    {
+      "name": "MapCallout",
+      "label": "Map callout",
+      "slug": "map-callout",
+      "category": "maps",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/map-callout.json",
+      "docsUrl": "https://rift-ds.com/components/map-callout",
+      "markdownUrl": "https://rift-ds.com/components/map-callout.md"
+    },
+    {
+      "name": "MapLegend",
+      "label": "Map legend",
+      "slug": "map-legend",
+      "category": "maps",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/map-legend.json",
+      "docsUrl": "https://rift-ds.com/components/map-legend",
+      "markdownUrl": "https://rift-ds.com/components/map-legend.md"
+    },
+    {
+      "name": "MegaMenu",
+      "label": "Mega menu",
+      "slug": "mega-menu",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/mega-menu.json",
+      "docsUrl": "https://rift-ds.com/components/mega-menu",
+      "markdownUrl": "https://rift-ds.com/components/mega-menu.md"
+    },
+    {
+      "name": "Mention",
+      "label": "Mention",
+      "slug": "mention",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/mention.json",
+      "docsUrl": "https://rift-ds.com/components/mention",
+      "markdownUrl": "https://rift-ds.com/components/mention.md"
+    },
+    {
+      "name": "MessageActions",
+      "label": "Message actions",
+      "slug": "message-actions",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/message-actions.json",
+      "docsUrl": "https://rift-ds.com/components/message-actions",
+      "markdownUrl": "https://rift-ds.com/components/message-actions.md"
+    },
+    {
+      "name": "MessageCard",
+      "label": "Message card",
+      "slug": "message-card",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/message-card.json",
+      "docsUrl": "https://rift-ds.com/components/message-card",
+      "markdownUrl": "https://rift-ds.com/components/message-card.md"
+    },
+    {
+      "name": "Meter",
+      "label": "Meter",
+      "slug": "meter",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/meter.json",
+      "docsUrl": "https://rift-ds.com/components/meter",
+      "markdownUrl": "https://rift-ds.com/components/meter.md"
+    },
+    {
+      "name": "ModelPicker",
+      "label": "Model picker",
+      "slug": "model-picker",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/model-picker.json",
+      "docsUrl": "https://rift-ds.com/components/model-picker",
+      "markdownUrl": "https://rift-ds.com/components/model-picker.md"
+    },
+    {
+      "name": "Nav",
+      "label": "Nav",
+      "slug": "nav",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/nav.json",
+      "docsUrl": "https://rift-ds.com/components/nav",
+      "markdownUrl": "https://rift-ds.com/components/nav.md"
+    },
+    {
+      "name": "NavList",
+      "label": "Nav list",
+      "slug": "nav-list",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/nav-list.json",
+      "docsUrl": "https://rift-ds.com/components/nav-list",
+      "markdownUrl": "https://rift-ds.com/components/nav-list.md"
+    },
+    {
+      "name": "NotificationCenter",
+      "label": "Notification centre",
+      "slug": "notification-center",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/notification-center.json",
+      "docsUrl": "https://rift-ds.com/components/notification-center",
+      "markdownUrl": "https://rift-ds.com/components/notification-center.md"
+    },
+    {
+      "name": "NumberInput",
+      "label": "Number input",
+      "slug": "number-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/number-input.json",
+      "docsUrl": "https://rift-ds.com/components/number-input",
+      "markdownUrl": "https://rift-ds.com/components/number-input.md"
+    },
+    {
+      "name": "Pagination",
+      "label": "Pagination",
+      "slug": "pagination",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/pagination.json",
+      "docsUrl": "https://rift-ds.com/components/pagination",
+      "markdownUrl": "https://rift-ds.com/components/pagination.md"
+    },
+    {
+      "name": "Panel",
+      "label": "Panel",
+      "slug": "panel",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/panel.json",
+      "docsUrl": "https://rift-ds.com/components/panel",
+      "markdownUrl": "https://rift-ds.com/components/panel.md"
+    },
+    {
+      "name": "PieChart",
+      "label": "Pie chart",
+      "slug": "pie-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/pie-chart.json",
+      "docsUrl": "https://rift-ds.com/components/pie-chart",
+      "markdownUrl": "https://rift-ds.com/components/pie-chart.md"
+    },
+    {
+      "name": "PinInput",
+      "label": "Pin input",
+      "slug": "pin-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/pin-input.json",
+      "docsUrl": "https://rift-ds.com/components/pin-input",
+      "markdownUrl": "https://rift-ds.com/components/pin-input.md"
+    },
+    {
+      "name": "PixelAvatar",
+      "label": "Pixel avatar",
+      "slug": "pixel-avatar",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/pixel-avatar.json",
+      "docsUrl": "https://rift-ds.com/components/pixel-avatar",
+      "markdownUrl": "https://rift-ds.com/components/pixel-avatar.md"
+    },
+    {
+      "name": "Popover",
+      "label": "Popover",
+      "slug": "popover",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/popover.json",
+      "docsUrl": "https://rift-ds.com/components/popover",
+      "markdownUrl": "https://rift-ds.com/components/popover.md"
+    },
+    {
+      "name": "ProgressBar",
+      "label": "Progress bar",
+      "slug": "progress-bar",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/progress-bar.json",
+      "docsUrl": "https://rift-ds.com/components/progress-bar",
+      "markdownUrl": "https://rift-ds.com/components/progress-bar.md"
+    },
+    {
+      "name": "ProgressiveBlur",
+      "label": "Progressive blur",
+      "slug": "progressive-blur",
+      "category": "effects",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/progressive-blur.json",
+      "docsUrl": "https://rift-ds.com/components/progressive-blur",
+      "markdownUrl": "https://rift-ds.com/components/progressive-blur.md"
+    },
+    {
+      "name": "PromptSuggestions",
+      "label": "Prompt suggestions",
+      "slug": "prompt-suggestions",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/prompt-suggestions.json",
+      "docsUrl": "https://rift-ds.com/components/prompt-suggestions",
+      "markdownUrl": "https://rift-ds.com/components/prompt-suggestions.md"
+    },
+    {
+      "name": "Prose",
+      "label": "Prose",
+      "slug": "prose",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/prose.json",
+      "docsUrl": "https://rift-ds.com/components/prose",
+      "markdownUrl": "https://rift-ds.com/components/prose.md"
+    },
+    {
+      "name": "QuestionCard",
+      "label": "Question card",
+      "slug": "question-card",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/question-card.json",
+      "docsUrl": "https://rift-ds.com/components/question-card",
+      "markdownUrl": "https://rift-ds.com/components/question-card.md"
+    },
+    {
+      "name": "Quote",
+      "label": "Quote",
+      "slug": "quote",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/quote.json",
+      "docsUrl": "https://rift-ds.com/components/quote",
+      "markdownUrl": "https://rift-ds.com/components/quote.md"
+    },
+    {
+      "name": "RadarChart",
+      "label": "Radar chart",
+      "slug": "radar-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/radar-chart.json",
+      "docsUrl": "https://rift-ds.com/components/radar-chart",
+      "markdownUrl": "https://rift-ds.com/components/radar-chart.md"
+    },
+    {
+      "name": "RadialChart",
+      "label": "Radial chart",
+      "slug": "radial-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/radial-chart.json",
+      "docsUrl": "https://rift-ds.com/components/radial-chart",
+      "markdownUrl": "https://rift-ds.com/components/radial-chart.md"
+    },
+    {
+      "name": "RadioButton",
+      "label": "Radio button",
+      "slug": "radio-button",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/radio-button.json",
+      "docsUrl": "https://rift-ds.com/components/radio-button",
+      "markdownUrl": "https://rift-ds.com/components/radio-button.md"
+    },
+    {
+      "name": "Rating",
+      "label": "Rating",
+      "slug": "rating",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/rating.json",
+      "docsUrl": "https://rift-ds.com/components/rating",
+      "markdownUrl": "https://rift-ds.com/components/rating.md"
+    },
+    {
+      "name": "Reasoning",
+      "label": "Reasoning",
+      "slug": "reasoning",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/reasoning.json",
+      "docsUrl": "https://rift-ds.com/components/reasoning",
+      "markdownUrl": "https://rift-ds.com/components/reasoning.md"
+    },
+    {
+      "name": "RichDropdown",
+      "label": "Rich dropdown",
+      "slug": "rich-dropdown",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/rich-dropdown.json",
+      "docsUrl": "https://rift-ds.com/components/rich-dropdown",
+      "markdownUrl": "https://rift-ds.com/components/rich-dropdown.md"
+    },
+    {
+      "name": "ScatterChart",
+      "label": "Scatter chart",
+      "slug": "scatter-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/scatter-chart.json",
+      "docsUrl": "https://rift-ds.com/components/scatter-chart",
+      "markdownUrl": "https://rift-ds.com/components/scatter-chart.md"
+    },
+    {
+      "name": "SectionTitle",
+      "label": "Section title",
+      "slug": "section-title",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/section-title.json",
+      "docsUrl": "https://rift-ds.com/components/section-title",
+      "markdownUrl": "https://rift-ds.com/components/section-title.md"
+    },
+    {
+      "name": "SegmentedControl",
+      "label": "Segmented control",
+      "slug": "segmented-control",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/segmented-control.json",
+      "docsUrl": "https://rift-ds.com/components/segmented-control",
+      "markdownUrl": "https://rift-ds.com/components/segmented-control.md"
+    },
+    {
+      "name": "SelectionCard",
+      "label": "Selection card",
+      "slug": "selection-card",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/selection-card.json",
+      "docsUrl": "https://rift-ds.com/components/selection-card",
+      "markdownUrl": "https://rift-ds.com/components/selection-card.md"
+    },
+    {
+      "name": "ShaderField",
+      "label": "Shader field",
+      "slug": "shader-field",
+      "category": "effects",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/shader-field.json",
+      "docsUrl": "https://rift-ds.com/components/shader-field",
+      "markdownUrl": "https://rift-ds.com/components/shader-field.md"
+    },
+    {
+      "name": "SidebarPanel",
+      "label": "Sidebar panel",
+      "slug": "sidebar-panel",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/sidebar-panel.json",
+      "docsUrl": "https://rift-ds.com/components/sidebar-panel",
+      "markdownUrl": "https://rift-ds.com/components/sidebar-panel.md"
+    },
+    {
+      "name": "SiteHeader",
+      "label": "Site header",
+      "slug": "site-header",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/site-header.json",
+      "docsUrl": "https://rift-ds.com/components/site-header",
+      "markdownUrl": "https://rift-ds.com/components/site-header.md"
+    },
+    {
+      "name": "Skeleton",
+      "label": "Skeleton",
+      "slug": "skeleton",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/skeleton.json",
+      "docsUrl": "https://rift-ds.com/components/skeleton",
+      "markdownUrl": "https://rift-ds.com/components/skeleton.md"
+    },
+    {
+      "name": "Slider",
+      "label": "Slider",
+      "slug": "slider",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/slider.json",
+      "docsUrl": "https://rift-ds.com/components/slider",
+      "markdownUrl": "https://rift-ds.com/components/slider.md"
+    },
+    {
+      "name": "SourceChip",
+      "label": "Source chip",
+      "slug": "source-chip",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/source-chip.json",
+      "docsUrl": "https://rift-ds.com/components/source-chip",
+      "markdownUrl": "https://rift-ds.com/components/source-chip.md"
+    },
+    {
+      "name": "SourceTrail",
+      "label": "Source trail",
+      "slug": "source-trail",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/source-trail.json",
+      "docsUrl": "https://rift-ds.com/components/source-trail",
+      "markdownUrl": "https://rift-ds.com/components/source-trail.md"
+    },
+    {
+      "name": "Sparkline",
+      "label": "Sparkline",
+      "slug": "sparkline",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/sparkline.json",
+      "docsUrl": "https://rift-ds.com/components/sparkline",
+      "markdownUrl": "https://rift-ds.com/components/sparkline.md"
+    },
+    {
+      "name": "Spinner",
+      "label": "Spinner",
+      "slug": "spinner",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/spinner.json",
+      "docsUrl": "https://rift-ds.com/components/spinner",
+      "markdownUrl": "https://rift-ds.com/components/spinner.md"
+    },
+    {
+      "name": "SplitButton",
+      "label": "Split button",
+      "slug": "split-button",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/split-button.json",
+      "docsUrl": "https://rift-ds.com/components/split-button",
+      "markdownUrl": "https://rift-ds.com/components/split-button.md"
+    },
+    {
+      "name": "SplitPane",
+      "label": "Split pane",
+      "slug": "split-pane",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/split-pane.json",
+      "docsUrl": "https://rift-ds.com/components/split-pane",
+      "markdownUrl": "https://rift-ds.com/components/split-pane.md"
+    },
+    {
+      "name": "StackedBarChart",
+      "label": "Stacked bar chart",
+      "slug": "stacked-bar-chart",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/stacked-bar-chart.json",
+      "docsUrl": "https://rift-ds.com/components/stacked-bar-chart",
+      "markdownUrl": "https://rift-ds.com/components/stacked-bar-chart.md"
+    },
+    {
+      "name": "Stat",
+      "label": "Stat",
+      "slug": "stat",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/stat.json",
+      "docsUrl": "https://rift-ds.com/components/stat",
+      "markdownUrl": "https://rift-ds.com/components/stat.md"
+    },
+    {
+      "name": "StatusDot",
+      "label": "Status dot",
+      "slug": "status-dot",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/status-dot.json",
+      "docsUrl": "https://rift-ds.com/components/status-dot",
+      "markdownUrl": "https://rift-ds.com/components/status-dot.md"
+    },
+    {
+      "name": "Stepper",
+      "label": "Stepper",
+      "slug": "stepper",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/stepper.json",
+      "docsUrl": "https://rift-ds.com/components/stepper",
+      "markdownUrl": "https://rift-ds.com/components/stepper.md"
+    },
+    {
+      "name": "StreamingText",
+      "label": "Streaming text",
+      "slug": "streaming-text",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/streaming-text.json",
+      "docsUrl": "https://rift-ds.com/components/streaming-text",
+      "markdownUrl": "https://rift-ds.com/components/streaming-text.md"
+    },
+    {
+      "name": "Swatch",
+      "label": "Swatch",
+      "slug": "swatch",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/swatch.json",
+      "docsUrl": "https://rift-ds.com/components/swatch",
+      "markdownUrl": "https://rift-ds.com/components/swatch.md"
+    },
+    {
+      "name": "Table",
+      "label": "Table",
+      "slug": "table",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/table.json",
+      "docsUrl": "https://rift-ds.com/components/table",
+      "markdownUrl": "https://rift-ds.com/components/table.md"
+    },
+    {
+      "name": "TableToolbar",
+      "label": "Table toolbar",
+      "slug": "table-toolbar",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/table-toolbar.json",
+      "docsUrl": "https://rift-ds.com/components/table-toolbar",
+      "markdownUrl": "https://rift-ds.com/components/table-toolbar.md"
+    },
+    {
+      "name": "Tabs",
+      "label": "Tabs",
+      "slug": "tabs",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/tabs.json",
+      "docsUrl": "https://rift-ds.com/components/tabs",
+      "markdownUrl": "https://rift-ds.com/components/tabs.md"
+    },
+    {
+      "name": "TagInput",
+      "label": "Tag input",
+      "slug": "tag-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/tag-input.json",
+      "docsUrl": "https://rift-ds.com/components/tag-input",
+      "markdownUrl": "https://rift-ds.com/components/tag-input.md"
+    },
+    {
+      "name": "Textarea",
+      "label": "Textarea",
+      "slug": "textarea",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/textarea.json",
+      "docsUrl": "https://rift-ds.com/components/textarea",
+      "markdownUrl": "https://rift-ds.com/components/textarea.md"
+    },
+    {
+      "name": "ThemePicker",
+      "label": "Theme picker",
+      "slug": "theme-picker",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/theme-picker.json",
+      "docsUrl": "https://rift-ds.com/components/theme-picker",
+      "markdownUrl": "https://rift-ds.com/components/theme-picker.md"
+    },
+    {
+      "name": "ThemeToggle",
+      "label": "Theme toggle",
+      "slug": "theme-toggle",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/theme-toggle.json",
+      "docsUrl": "https://rift-ds.com/components/theme-toggle",
+      "markdownUrl": "https://rift-ds.com/components/theme-toggle.md"
+    },
+    {
+      "name": "ThreadPanel",
+      "label": "Thread panel",
+      "slug": "thread-panel",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/thread-panel.json",
+      "docsUrl": "https://rift-ds.com/components/thread-panel",
+      "markdownUrl": "https://rift-ds.com/components/thread-panel.md"
+    },
+    {
+      "name": "ThreadTabs",
+      "label": "Thread tabs",
+      "slug": "thread-tabs",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/thread-tabs.json",
+      "docsUrl": "https://rift-ds.com/components/thread-tabs",
+      "markdownUrl": "https://rift-ds.com/components/thread-tabs.md"
+    },
+    {
+      "name": "TimePicker",
+      "label": "Time picker",
+      "slug": "time-picker",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/time-picker.json",
+      "docsUrl": "https://rift-ds.com/components/time-picker",
+      "markdownUrl": "https://rift-ds.com/components/time-picker.md"
+    },
+    {
+      "name": "Timeline",
+      "label": "Timeline",
+      "slug": "timeline",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/timeline.json",
+      "docsUrl": "https://rift-ds.com/components/timeline",
+      "markdownUrl": "https://rift-ds.com/components/timeline.md"
+    },
+    {
+      "name": "Toast",
+      "label": "Toast",
+      "slug": "toast",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/toast.json",
+      "docsUrl": "https://rift-ds.com/components/toast",
+      "markdownUrl": "https://rift-ds.com/components/toast.md"
+    },
+    {
+      "name": "ToggleGroup",
+      "label": "Toggle group",
+      "slug": "toggle-group",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/toggle-group.json",
+      "docsUrl": "https://rift-ds.com/components/toggle-group",
+      "markdownUrl": "https://rift-ds.com/components/toggle-group.md"
+    },
+    {
+      "name": "ToggleSwitch",
+      "label": "Toggle switch",
+      "slug": "toggle-switch",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/toggle-switch.json",
+      "docsUrl": "https://rift-ds.com/components/toggle-switch",
+      "markdownUrl": "https://rift-ds.com/components/toggle-switch.md"
+    },
+    {
+      "name": "ToolCall",
+      "label": "Tool call",
+      "slug": "tool-call",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/tool-call.json",
+      "docsUrl": "https://rift-ds.com/components/tool-call",
+      "markdownUrl": "https://rift-ds.com/components/tool-call.md"
+    },
+    {
+      "name": "Toolbar",
+      "label": "Toolbar",
+      "slug": "toolbar",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/toolbar.json",
+      "docsUrl": "https://rift-ds.com/components/toolbar",
+      "markdownUrl": "https://rift-ds.com/components/toolbar.md"
+    },
+    {
+      "name": "Tooltip",
+      "label": "Tooltip",
+      "slug": "tooltip",
+      "category": "overlays",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/tooltip.json",
+      "docsUrl": "https://rift-ds.com/components/tooltip",
+      "markdownUrl": "https://rift-ds.com/components/tooltip.md"
+    },
+    {
+      "name": "TopAppBar",
+      "label": "Top app bar",
+      "slug": "top-app-bar",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/top-app-bar.json",
+      "docsUrl": "https://rift-ds.com/components/top-app-bar",
+      "markdownUrl": "https://rift-ds.com/components/top-app-bar.md"
+    },
+    {
+      "name": "TreeView",
+      "label": "Tree view",
+      "slug": "tree-view",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/tree-view.json",
+      "docsUrl": "https://rift-ds.com/components/tree-view",
+      "markdownUrl": "https://rift-ds.com/components/tree-view.md"
+    },
+    {
+      "name": "Treemap",
+      "label": "Treemap",
+      "slug": "treemap",
+      "category": "charts",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/treemap.json",
+      "docsUrl": "https://rift-ds.com/components/treemap",
+      "markdownUrl": "https://rift-ds.com/components/treemap.md"
+    },
+    {
+      "name": "UsageCard",
+      "label": "Usage card",
+      "slug": "usage-card",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/usage-card.json",
+      "docsUrl": "https://rift-ds.com/components/usage-card",
+      "markdownUrl": "https://rift-ds.com/components/usage-card.md"
+    },
+    {
+      "name": "Waveform",
+      "label": "Waveform",
+      "slug": "waveform",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/waveform.json",
+      "docsUrl": "https://rift-ds.com/components/waveform",
+      "markdownUrl": "https://rift-ds.com/components/waveform.md"
+    },
+    {
+      "name": "Widget",
+      "label": "Widget",
+      "slug": "widget",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/widget.json",
+      "docsUrl": "https://rift-ds.com/components/widget",
+      "markdownUrl": "https://rift-ds.com/components/widget.md"
+    },
+    {
+      "name": "WorldMap",
+      "label": "World map",
+      "slug": "world-map",
+      "category": "maps",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/world-map.json",
+      "docsUrl": "https://rift-ds.com/components/world-map",
+      "markdownUrl": "https://rift-ds.com/components/world-map.md"
+    },
+    {
+      "name": "ChatWidget",
+      "label": "AI chat",
+      "slug": "ai-chat",
+      "category": "widget",
+      "kind": "widget",
+      "schemaUrl": "https://rift-ds.com/schema/components/ai-chat.json",
+      "docsUrl": "https://rift-ds.com/components/ai-chat",
+      "markdownUrl": "https://rift-ds.com/components/ai-chat.md"
+    }
+  ]
+}

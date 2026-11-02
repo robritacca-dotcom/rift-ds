@@ -1,0 +1,50 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Panel",
+  "label": "Panel",
+  "slug": "panel",
+  "category": "layout",
+  "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+  "client": false,
+  "importPath": "rift-ds/components/Panel/Panel",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/panel",
+  "markdownUrl": "https://rift-ds.com/components/panel.md",
+  "exports": [
+    {
+      "component": "Panel",
+      "props": [
+        {
+          "name": "padding",
+          "type": "\"none\" | \"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default",
+            "none"
+          ],
+          "required": false,
+          "description": "Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Panel content"
+        }
+      ]
+    }
+  ]
+}

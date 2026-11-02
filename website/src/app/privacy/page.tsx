@@ -18,9 +18,10 @@ export default function PrivacyPage() {
           <p className={styles.body}>
             This site uses Google Analytics. It counts visits, pages read,
             a few interactions such as scrolling, outbound link clicks and
-            file downloads, and four actions of the site&apos;s own: copying
+            file downloads, and these actions of the site&apos;s own: copying
             an install snippet, copying the agent starter, copying a
-            component&apos;s markdown, and opening the chat. All of it sits
+            component&apos;s markdown, opening a component&apos;s schema, and
+            opening the chat. All of it sits
             under a random identifier, not your name. It sets cookies to
             tell one visit from the next. To opt out, install
             Google&apos;s opt-out add-on. Blocking cookies in your browser

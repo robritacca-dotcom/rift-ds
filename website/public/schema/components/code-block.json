@@ -1,0 +1,136 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "CodeBlock",
+  "label": "Code block",
+  "slug": "code-block",
+  "category": "data-display",
+  "description": "Monospace code with a header and one-click copy.",
+  "client": true,
+  "importPath": "rift-ds/components/CodeBlock/CodeBlock",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/code-block",
+  "markdownUrl": "https://rift-ds.com/components/code-block.md",
+  "exports": [
+    {
+      "component": "CodeBlock",
+      "props": [
+        {
+          "name": "code",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The code to display, as a plain string"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Language tag shown in the header, e.g. \"tsx\", \"css\""
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Filename shown in the header, e.g. \"tokens-light.css\""
+        },
+        {
+          "name": "showCopy",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the copy-to-clipboard button",
+          "default": true
+        },
+        {
+          "name": "onCopied",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
+        },
+        {
+          "name": "maxHeight",
+          "type": "string | number",
+          "typeKind": "other",
+          "required": false,
+          "description": "Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show a chevron beside the filename that collapses/expands the code area",
+          "default": false
+        },
+        {
+          "name": "defaultCollapsed",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Start collapsed (only applies when collapsible)",
+          "default": false
+        },
+        {
+          "name": "copyLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the copy button before it is pressed",
+          "default": "Copy code"
+        },
+        {
+          "name": "copyText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visible text on the copy button before it is pressed",
+          "default": "Copy"
+        },
+        {
+          "name": "copiedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text and accessible name the copy button shows once the code is copied",
+          "default": "Copied"
+        },
+        {
+          "name": "expandLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the collapse toggle while the code is collapsed",
+          "default": "Expand code"
+        },
+        {
+          "name": "collapseLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the collapse toggle while the code is showing",
+          "default": "Collapse code"
+        },
+        {
+          "name": "codeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the scrollable code region. Defaults to\n\"Code: <filename>\", then \"Code: <language>\", then \"Code\"."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

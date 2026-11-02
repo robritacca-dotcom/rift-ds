@@ -1,0 +1,159 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ToggleSwitch",
+  "label": "Toggle switch",
+  "slug": "toggle-switch",
+  "category": "forms",
+  "description": "Binary on/off toggle control with sliding thumb and check indicator, for settings that take effect immediately.",
+  "client": true,
+  "importPath": "rift-ds/components/ToggleSwitch/ToggleSwitch",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/toggle-switch",
+  "markdownUrl": "https://rift-ds.com/components/toggle-switch.md",
+  "exports": [
+    {
+      "component": "ToggleSwitch",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the toggle is on, controlled. Leave undefined to let the switch\nkeep its own state, seeded from `defaultChecked`."
+        },
+        {
+          "name": "defaultChecked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false.",
+          "default": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text displayed next to the toggle",
+          "default": "Toggle"
+        },
+        {
+          "name": "showLabel",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether to show the label",
+          "default": true
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper or error message rendered under the label text"
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state — recolours the helper text and marks the switch invalid",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "((checked: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the next checked state when toggled"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "onChange",
+          "type": "((checked: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Legacy change handler, kept for backwards compatibility.",
+          "deprecated": "Use `onCheckedChange` instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Form field name. When set, the switch submits with an enclosing form\nthrough a hidden input: `value` while on, nothing while off or disabled,\nas a native checkbox does."
+        },
+        {
+          "name": "value",
+          "type": "string | number | readonly string[]",
+          "typeKind": "other",
+          "required": false,
+          "description": "The value submitted under `name` while on. Defaults to \"on\", the native checkbox's.",
+          "defaultExpression": "on"
+        }
+      ]
+    },
+    {
+      "component": "SwitchIndicator",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the switch is on.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Track size: `default` is 42×24px, `compact` 34×20px.",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

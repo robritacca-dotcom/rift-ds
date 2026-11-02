@@ -1,0 +1,126 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Pagination",
+  "label": "Pagination",
+  "slug": "pagination",
+  "category": "navigation",
+  "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
+  "client": true,
+  "importPath": "rift-ds/components/Pagination/Pagination",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/pagination",
+  "markdownUrl": "https://rift-ds.com/components/pagination.md",
+  "exports": [
+    {
+      "component": "Pagination",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Current page (1-based), for a controlled pager. Leave it undefined to let\nthe component keep its own page, seeded from `defaultPage`."
+        },
+        {
+          "name": "defaultPage",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Page shown on first render when the pager is uncontrolled (1-based)",
+          "default": 1
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Total number of pages"
+        },
+        {
+          "name": "onPageChange",
+          "type": "((page: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the page the user requests"
+        },
+        {
+          "name": "siblingCount",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Pages shown on each side of the current page",
+          "default": 1
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size — compact swaps the numbers for a \"Page X of Y\" readout",
+          "default": "default"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Legacy accessible-name prop for the nav landmark.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-page arrow",
+          "default": "Previous page"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-page arrow",
+          "default": "Next page"
+        },
+        {
+          "name": "pageLabel",
+          "type": "((page: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of a numbered page button, given its page number",
+          "defaultExpression": "(page: number) => `Page ${page}`"
+        },
+        {
+          "name": "readoutLabel",
+          "type": "((page: number, pageCount: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Text of the compact size's readout, given the current page and the page count",
+          "defaultExpression": "(page: number, pageCount: number) => `Page ${page} of ${pageCount}`"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "CardStack",
+  "label": "Card stack",
+  "slug": "card-stack",
+  "category": "data-display",
+  "description": "A deck of cards showing one at a time, flipped through with a lift-and-settle animation.",
+  "client": true,
+  "importPath": "rift-ds/components/CardStack/CardStack",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/card-stack",
+  "markdownUrl": "https://rift-ds.com/components/card-stack.md",
+  "exports": [
+    {
+      "component": "CardStack",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The cards, in order. The first child starts on top."
+        },
+        {
+          "name": "index",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Controlled top card, as an index into `children`. Pair with\n`onIndexChange`. Omit to let the stack own its position."
+        },
+        {
+          "name": "defaultIndex",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Initial top card when uncontrolled.",
+          "default": 0
+        },
+        {
+          "name": "onIndexChange",
+          "type": "((index: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the top card changes, with the new index."
+        },
+        {
+          "name": "peek",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How many card edges peek out behind the top card.",
+          "default": 2
+        },
+        {
+          "name": "loop",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Wrap from the last card back to the first. Off, the stack stops at both ends.",
+          "default": true
+        },
+        {
+          "name": "advanceOnClick",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Clicking the top card flips to the next. Clicks that land on a link or\ncontrol inside the card are left alone, so a card can still carry its\nown actions.",
+          "default": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the stack, e.g. \"Open roles\"."
+        },
+        {
+          "name": "positionLabel",
+          "type": "((position: number, count: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Visually hidden status announcing the top card's place in the deck, given\nits 1-based position and the card count. Defaults to \"Card 2 of 5\".",
+          "defaultExpression": "(position: number, total: number) => `Card ${position} of ${total}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

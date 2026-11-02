@@ -1,0 +1,52 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Badge",
+  "label": "Badge",
+  "slug": "badge",
+  "category": "data-display",
+  "description": "Small inline status labels with info, positive, warning, error, and neutral variants.",
+  "client": false,
+  "importPath": "rift-ds/components/Badge/Badge",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/badge",
+  "markdownUrl": "https://rift-ds.com/components/badge.md",
+  "exports": [
+    {
+      "component": "Badge",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Badge label text"
+        },
+        {
+          "name": "variant",
+          "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "info",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Badge variant determines colour",
+          "default": "neutral"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

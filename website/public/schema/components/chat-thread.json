@@ -1,0 +1,73 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "ChatThread",
+  "label": "Chat thread",
+  "slug": "chat-thread",
+  "category": "ai",
+  "description": "A scrollable conversation column with edge fades, send anchoring, and a subtle scrollbar.",
+  "client": true,
+  "importPath": "rift-ds/components/ChatThread/ChatThread",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/chat-thread",
+  "markdownUrl": "https://rift-ds.com/components/chat-thread.md",
+  "exports": [
+    {
+      "component": "ChatThread",
+      "props": [
+        {
+          "name": "anchor",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Scroll a newly appended turn to the top of the viewport, pushing the\nprior conversation upward. When a user turn and the agent's pending\nturn are appended in the same update, the first new child is the one\nanchored — the response streams in below it. Detection diffs the DOM\nchild count, so replacing turns in place (a future regenerate or\nedit-last-turn) neither re-anchors nor resizes the spacer.",
+          "default": true
+        },
+        {
+          "name": "flow",
+          "type": "\"top-down\" | \"bottom-up\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom-up",
+            "top-down"
+          ],
+          "required": false,
+          "description": "Which way the conversation reads. `top-down` (the default) is the send\nchoreography above: each new turn floats to the top of the viewport and\nthe answer streams in below it. `bottom-up` is the classic message\nthread: turns stack from the bottom edge, the newest always just above\nthe composer, and the view follows a streaming answer down for as long\nas the reader stays at the bottom. Scrolling up to reread lets go;\nreturning to the bottom, or the next send, takes hold again.",
+          "default": "top-down"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the scrollable conversation region.",
+          "default": "Conversation"
+        },
+        {
+          "name": "jumpLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the scroll-to-bottom control.",
+          "default": "Scroll to the latest message"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The conversation, in order: ChatMessages, ChatMarkers."
+        }
+      ]
+    }
+  ]
+}

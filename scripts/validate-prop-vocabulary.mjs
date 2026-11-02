@@ -70,7 +70,7 @@
  * reads source through the shared docgen parse (scripts/component-docgen.mjs)
  * and nothing a build produces.
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
@@ -302,7 +302,8 @@ for (let grew = true; grew; ) {
 
 const tracked = execFileSync('git', ['ls-files', 'src', 'website/src'], { cwd: repoRoot, encoding: 'utf8' })
   .split('\n')
-  .filter((f) => /\.tsx?$/.test(f) && !f.endsWith('.d.ts') && !f.includes('.generated.'));
+  // A tracked file deleted in the working tree has nothing left to read.
+  .filter((f) => /\.tsx?$/.test(f) && !f.endsWith('.d.ts') && !f.includes('.generated.') && existsSync(join(repoRoot, f)));
 
 /** Strip the wrappers that do not change a value: parentheses, `as`, `satisfies`, `!`. */
 const unwrap = (node) => {

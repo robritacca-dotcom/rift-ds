@@ -1,0 +1,90 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "StatusDot",
+  "label": "Status dot",
+  "slug": "status-dot",
+  "category": "feedback",
+  "description": "The bare status mark: a dot in the five status roles, with an optional label and a live pulse for recording and online-now states.",
+  "client": false,
+  "importPath": "rift-ds/components/StatusDot/StatusDot",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/status-dot",
+  "markdownUrl": "https://rift-ds.com/components/status-dot.md",
+  "exports": [
+    {
+      "component": "StatusDot",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "error",
+            "info",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Status role the dot carries — coloured through the plain-surface `--color-status-*-icon` steps.",
+          "default": "neutral"
+        },
+        {
+          "name": "size",
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
+          "typeKind": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm",
+            "xs"
+          ],
+          "required": false,
+          "description": "Dot diameter, derived from the icon scale (half of `--icon-size-500/600/800`); `xs` is the 8px list-row mark, sized on the gap scale.",
+          "default": "md"
+        },
+        {
+          "name": "outline",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the dot hollow: a ring in the role's colour around an empty\ncentre, for a settled or empty state that still holds its seat beside\nfilled dots.",
+          "default": false
+        },
+        {
+          "name": "pulse",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Radiates a repeating ring from the dot for a live state — recording,\nonline now, deploy in flight. The ring stills under reduced motion.",
+          "default": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visible text beside the dot. Omit it for a bare dot only when the meaning\nhas another home — a row label, or an `aria-label` passed through — since\na colour alone announces nothing."
+        },
+        {
+          "name": "decorative",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Renders the dot as decoration: no `role=\"status\"`, hidden from assistive\ntechnology. For a dot repeated down a list, where the host announces the\nstate in the row's own text and a live region per row would be noise.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

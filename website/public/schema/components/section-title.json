@@ -1,0 +1,51 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "SectionTitle",
+  "label": "Section title",
+  "slug": "section-title",
+  "category": "layout",
+  "description": "Heading with a divider line and optional trailing content for organising page sections.",
+  "client": false,
+  "importPath": "rift-ds/components/SectionTitle/SectionTitle",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/section-title",
+  "markdownUrl": "https://rift-ds.com/components/section-title.md",
+  "exports": [
+    {
+      "component": "SectionTitle",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Section heading text.\nNote: this shadows the native `title` tooltip attribute, which SectionTitle does not expose."
+        },
+        {
+          "name": "trailing",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Optional trailing content (count, badge, metadata)"
+        },
+        {
+          "name": "divider",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone.",
+          "default": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes"
+        }
+      ]
+    }
+  ]
+}

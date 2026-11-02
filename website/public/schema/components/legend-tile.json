@@ -1,0 +1,59 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "LegendTile",
+  "label": "Legend tile",
+  "slug": "legend-tile",
+  "category": "charts",
+  "description": "The labelled value tile under a chart: a series dot, the series name, and its reading, on a soft neutral fill.",
+  "client": false,
+  "importPath": "rift-ds/components/LegendTile/LegendTile",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/legend-tile",
+  "markdownUrl": "https://rift-ds.com/components/legend-tile.md",
+  "exports": [
+    {
+      "component": "LegendTile",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The series name shown above the value. Truncates with an ellipsis rather than wrapping."
+        },
+        {
+          "name": "value",
+          "type": "string | number",
+          "typeKind": "other",
+          "required": true,
+          "description": "The reading for this series. A number is written in `locale`;\npass a string when the value carries its own formatting or a unit."
+        },
+        {
+          "name": "swatch",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Any CSS colour for the series dot — consumers typically pass a chart\npalette token, e.g. `var(--color-chart-series-1)`. When omitted, no dot\nrenders."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale a number `value` is written in, such as `de-DE`. Defaults to `en-US`.\nLegendTile can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

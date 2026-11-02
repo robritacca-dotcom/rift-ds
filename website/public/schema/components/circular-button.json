@@ -1,0 +1,173 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "CircularButton",
+  "label": "Circular button",
+  "slug": "circular-button",
+  "category": "actions",
+  "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
+  "client": false,
+  "importPath": "rift-ds/components/CircularButton/CircularButton",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/circular-button",
+  "markdownUrl": "https://rift-ds.com/components/circular-button.md",
+  "exports": [
+    {
+      "component": "CircularButton",
+      "props": [
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The icon — Material Symbol name (string) or custom element (ReactNode)"
+        },
+        {
+          "name": "variant",
+          "type": "\"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
+          "typeKind": "enum",
+          "values": [
+            "neutral",
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "required": false,
+          "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` is the legacy value from\nbefore the split and renders as `variant=\"primary\" tone=\"neutral\"`."
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge."
+        },
+        {
+          "name": "priority",
+          "type": "\"primary\" | \"secondary\" | \"tertiary\"",
+          "typeKind": "enum",
+          "values": [
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "required": false,
+          "description": "Legacy alias for `variant`.",
+          "deprecated": "Use `variant` instead."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the button is disabled"
+        },
+        {
+          "name": "state",
+          "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
+          "typeKind": "enum",
+          "values": [
+            "active",
+            "default",
+            "disabled",
+            "hover"
+          ],
+          "required": false,
+          "description": "Documentation-only interaction state.",
+          "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer\n`className=\"ds-circular-button--hover\"`."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Button size",
+          "default": "default"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows a spinner in place of the icon and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\nthe disabled state) and sets `aria-busy` on the rendered element."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Accessible label — required, because the button has no visible text"
+        },
+        {
+          "name": "tooltip",
+          "type": "string | false",
+          "typeKind": "other",
+          "required": false,
+          "description": "The hover/focus tooltip. An icon-only control names itself: by default\nthe button wears a Tooltip carrying `ariaLabel`. Pass a string to show\ndifferent wording, or `false` to opt out — for a host that labels the\ncontrol another way, or one that owns the button's box directly\n(SplitButton's trigger stretches to its sibling segment, which the\ntooltip wrapper would block)."
+        },
+        {
+          "name": "tooltipPosition",
+          "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "end",
+            "left",
+            "right",
+            "start",
+            "top"
+          ],
+          "required": false,
+          "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
+          "default": "top"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional href — renders as <a> instead of <button>"
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional target attribute for links"
+        },
+        {
+          "name": "rel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Optional rel attribute for links"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "AppLayout",
+  "label": "App layout",
+  "slug": "app-layout",
+  "category": "layout",
+  "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.",
+  "client": true,
+  "importPath": "rift-ds/components/AppLayout/AppLayout",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/app-layout",
+  "markdownUrl": "https://rift-ds.com/components/app-layout.md",
+  "exports": [
+    {
+      "component": "AppLayout",
+      "props": [
+        {
+          "name": "sections",
+          "type": "AppSidebarSection[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Sidebar navigation sections"
+        },
+        {
+          "name": "profile",
+          "type": "AppSidebarProfile",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Sidebar profile"
+        },
+        {
+          "name": "activeKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Active nav item key"
+        },
+        {
+          "name": "activeSubKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Active sub-item key"
+        },
+        {
+          "name": "activeTertiaryKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Active third-level item key, listed in the sidebar's side panel"
+        },
+        {
+          "name": "subNav",
+          "type": "\"accordion\" | \"panel\"",
+          "typeKind": "enum",
+          "values": [
+            "accordion",
+            "panel"
+          ],
+          "required": false,
+          "description": "Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar)"
+        },
+        {
+          "name": "defaultExpanded",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether sidebar starts expanded",
+          "default": true
+        },
+        {
+          "name": "logoText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Logo text next to icon"
+        },
+        {
+          "name": "logo",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Custom logo element"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "Page content — centred in the main area"
+        },
+        {
+          "name": "layout",
+          "type": "AppSidebarLayout",
+          "typeKind": "enum",
+          "values": [
+            "floating",
+            "flush",
+            "inset"
+          ],
+          "required": false,
+          "description": "How the rail and the content meet the page. `flush` (the default) runs\nthe rail edge to edge with the content centred beside it. `floating`\nfloats the rail as a glass card, the content still centred. `inset` runs\nthe rail flush on the app shell colour and sets the content full width\nin a surface inset from the other edges, which scrolls inside itself.",
+          "default": "flush"
+        },
+        {
+          "name": "theme",
+          "type": "\"inherit\" | \"dark\"",
+          "typeKind": "enum",
+          "values": [
+            "dark",
+            "inherit"
+          ],
+          "required": false,
+          "description": "Colour scheme: 'dark' pins the layout to the dark theme (the historical\nbehaviour and the default); 'inherit' drops the pin so the layout\nfollows the surrounding data-theme like any other component.",
+          "default": "dark"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to the AppSidebar rail. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on outer wrapper",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

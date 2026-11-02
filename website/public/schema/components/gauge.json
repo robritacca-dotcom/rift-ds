@@ -1,0 +1,143 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "Gauge",
+  "label": "Gauge",
+  "slug": "gauge",
+  "category": "charts",
+  "description": "A radial dial for a single bounded reading, recoloured through the status roles as it crosses thresholds.",
+  "client": false,
+  "importPath": "rift-ds/components/Gauge/Gauge",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/gauge",
+  "markdownUrl": "https://rift-ds.com/components/gauge.md",
+  "exports": [
+    {
+      "component": "Gauge",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Current reading. Clamped into the `min`–`max` range for drawing."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lower bound of the dial.",
+          "default": 0
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Upper bound of the dial.",
+          "default": 100
+        },
+        {
+          "name": "tone",
+          "type": "\"error\" | \"positive\" | \"warning\" | \"neutral\" | \"accent\"",
+          "typeKind": "enum",
+          "values": [
+            "accent",
+            "error",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "Colour role for the value arc. `accent` (the default) follows the chart\npalette's lead colour. Ignored while a threshold matches — thresholds\nexist so the dial recolours itself as the reading crosses them.",
+          "default": "accent"
+        },
+        {
+          "name": "thresholds",
+          "type": "GaugeThreshold[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Colour switch points, e.g. warning at 70 and error at 90. The highest\nthreshold at or below the current reading wins; below them all, the\n`tone` prop applies."
+        },
+        {
+          "name": "showValue",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the reading in the centre of the dial.",
+          "default": true
+        },
+        {
+          "name": "formatValue",
+          "type": "((value: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Formats the centre reading — for units, precision, or locale."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What the reading measures, shown as a caption under it and used as the\naccessible name, e.g. \"CPU usage\"."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header.\nNote: this shadows the native `title` tooltip attribute, which Gauge does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title."
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Rendered dial diameter in pixels. The arc geometry scales with it.",
+          "default": 120
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Arc thickness in pixels.",
+          "default": 12
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

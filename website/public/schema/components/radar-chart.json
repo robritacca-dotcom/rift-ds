@@ -1,0 +1,96 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "RadarChart",
+  "label": "Radar chart",
+  "slug": "radar-chart",
+  "category": "charts",
+  "description": "Multi-axis comparison of series across categories on a radial grid.",
+  "client": true,
+  "importPath": "rift-ds/components/Chart/RadarChart",
+  "barrel": "charts",
+  "docsUrl": "https://rift-ds.com/components/radar-chart",
+  "markdownUrl": "https://rift-ds.com/components/radar-chart.md",
+  "exports": [
+    {
+      "component": "RadarChart",
+      "props": [
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "data",
+          "type": "Record<string, unknown>[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Array of data objects — each should have a category key and one or more value keys"
+        },
+        {
+          "name": "categoryKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Key in data for the category labels on each axis",
+          "default": "subject"
+        },
+        {
+          "name": "series",
+          "type": "RadarSeriesConfig[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "One or more radar series to render"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart title, in the shared chart header; it also names the figure.\nNote: this replaces the native `title` tooltip attribute, which the chart does not expose."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Description text below the title"
+        },
+        {
+          "name": "summaryItems",
+          "type": "ChartSummaryItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Summary stats displayed in the header"
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Chart area height in pixels",
+          "default": 350
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the wrapper",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

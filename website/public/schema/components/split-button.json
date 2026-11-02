@@ -1,0 +1,131 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.19.1",
+  "kind": "component",
+  "name": "SplitButton",
+  "label": "Split button",
+  "slug": "split-button",
+  "category": "actions",
+  "description": "Primary action with an attached menu of alternatives, composing Button and DropdownMenu in one pill, in primary or secondary emphasis and any tone.",
+  "client": false,
+  "importPath": "rift-ds/components/SplitButton/SplitButton",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/split-button",
+  "markdownUrl": "https://rift-ds.com/components/split-button.md",
+  "exports": [
+    {
+      "component": "SplitButton",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Label of the primary action"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<HTMLButtonElement>",
+          "typeKind": "function",
+          "required": false,
+          "description": "Click handler for the primary action"
+        },
+        {
+          "name": "items",
+          "type": "DropdownMenuEntry[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "Menu entries for the alternative actions"
+        },
+        {
+          "name": "variant",
+          "type": "\"neutral\" | \"primary\" | \"secondary\"",
+          "typeKind": "enum",
+          "values": [
+            "neutral",
+            "primary",
+            "secondary"
+          ],
+          "required": false,
+          "description": "Emphasis, shared by both segments: `primary` (filled) or `secondary`\n(outlined). The colour is `tone`'s job. `neutral` is the legacy value\nfrom before the split and renders as `variant=\"primary\" tone=\"neutral\"`.",
+          "default": "primary"
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Disables both segments",
+          "default": false
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows a spinner on the primary segment and blocks interaction while an async action runs",
+          "default": false
+        },
+        {
+          "name": "iconLeft",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Icon for the primary segment — Material Symbol name or custom element"
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Horizontal alignment of the menu panel relative to the control",
+          "default": "end"
+        },
+        {
+          "name": "menuLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the menu trigger segment",
+          "default": "More actions"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the wrapper around both segments, not the primary button",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

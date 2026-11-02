@@ -6,6 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { AppSidebar } from "rift-ds/components/AppSidebar/AppSidebar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -94,6 +95,11 @@ const demoProfile = {
   email: "avery@example.com",
 };
 
+const footerViews = [
+  { label: "List", value: "list", icon: "view_list" },
+  { label: "Grid", value: "grid", icon: "grid_view" },
+];
+
 export default function AppSidebarPage() {
   return (
     <>
@@ -116,7 +122,7 @@ export default function AppSidebarPage() {
               Collapsible navigation for app layouts
             </p>
             <p className={styles.introBody}>
-              A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed; and the layout prop sets how the rail meets the page: flush, floating as a glass card inset from the viewport edges, or inset, flush on the app shell colour beside an inset content surface.
+              A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed, collapsedFooterSlot stands in for the footer while it is, and a click on the empty space of the collapsed rail expands it; and the layout prop sets how the rail meets the page: flush, floating as a glass card inset from the viewport edges, or inset, flush on the app shell colour beside an inset content surface.
             </p>
             <p className={styles.introBody}>
               Navigation runs three levels deep, and subNav picks the shape once per sidebar. In the default accordion mode the second level is the accordion under a row, and a sub-item with children of its own opens them as the third level in a SidebarPanel beside the rail. In panel mode a top-level row opens its sub-items straight into the panel, whose own accordion carries the third level, and the collapsed rail widens to 80px to put a label under every icon. On small screens neither shows a panel: the drawer drills in to a second screen with a back row.
@@ -145,6 +151,41 @@ export default function AppSidebarPage() {
                 profile={demoProfile}
                 activeKey="dashboard"
                 defaultExpanded={false}
+              />
+            </div>
+          </section>
+
+          {/* Collapsed footer */}
+          <section className={styles.section}>
+            <SectionTitle title="Collapsed footer" />
+            <p className={styles.introBody}>
+              <code>collapsedFooterSlot</code> takes the footer&apos;s place while the rail is
+              collapsed: the same controls at their smallest, stacked on the rail&apos;s axis. Click
+              the rail&apos;s empty space to expand it and see the footer it stands in for.
+            </p>
+            <div className={styles.sidebarDemo}>
+              <AppSidebar
+                sections={demoSections}
+                profile={demoProfile}
+                activeKey="dashboard"
+                defaultExpanded={false}
+                footerSlot={
+                  <SegmentedControl
+                    aria-label="View"
+                    size="compact"
+                    segments={footerViews}
+                    defaultValue="list"
+                  />
+                }
+                collapsedFooterSlot={
+                  <SegmentedControl
+                    aria-label="View"
+                    size="compact"
+                    segments={footerViews}
+                    defaultValue="list"
+                    cycle
+                  />
+                }
               />
             </div>
           </section>

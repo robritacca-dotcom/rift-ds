@@ -143,6 +143,8 @@ type AppSidebarOwnProps = {
   topSlot?: React.ReactNode;
   /** Rendered above the profile block; fades out while collapsed */
   footerSlot?: React.ReactNode;
+  /** Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert */
+  collapsedFooterSlot?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -248,6 +250,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   floating: floatingProp = false,
   topSlot,
   footerSlot,
+  collapsedFooterSlot,
   className = '',
   logo,
   logoText = 'Rift',
@@ -478,6 +481,28 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     [mobileOpen, panelSourceKey, isPanelOpen, setPanelOpen],
   );
 
+  /* Collapsed, the whole rail is an expand target (ThreadPanel's rule): a
+     click on its dead space opens it, while the rows, the logo, the slots'
+     controls and an open menu inside the rail keep their own jobs. Only
+     attached while it can fire, so the host's own handler runs alone the
+     rest of the time. */
+  const showExpanded = isExpanded || mobileOpen;
+  const expandOnClick = !showExpanded
+    ? (event: React.MouseEvent<HTMLElement>) => {
+        rest.onClick?.(event);
+        if (event.defaultPrevented) return;
+        // A portalled overlay's press bubbles here through React without being
+        // inside the rail, and a control only counts when it is inside it too:
+        // a tabindex on the rail or an ancestor must not stop every click.
+        const rail = event.currentTarget;
+        const target = event.target as Element;
+        if (!rail.contains(target)) return;
+        const control = target.closest('button, a, input, select, textarea, label, [tabindex], [role="button"], [role="menu"], [role="listbox"], [role="dialog"], [role="alertdialog"]');
+        if (control && control !== rail && rail.contains(control)) return;
+        toggleExpanded();
+      }
+    : undefined;
+
   const classes = [
     baseClass,
     // The drawer always shows the expanded layout: an icon rail inside
@@ -511,7 +536,14 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       {mobileOpen && (
         <div className={`${baseClass}__scrim`} onClick={() => layer.ownsPress() && closeMobile()} aria-hidden="true" />
       )}
-    <nav aria-label="App navigation" {...rest} ref={setDrawerRef} id={drawerId} className={classes}>
+    <nav
+      aria-label="App navigation"
+      {...rest}
+      ref={setDrawerRef}
+      id={drawerId}
+      className={classes}
+      onClick={expandOnClick ?? rest.onClick}
+    >
       {/* ---- TOP ---- */}
       <div className={`${baseClass}__top`}>
         {/* Logo */}
@@ -800,8 +832,26 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
 
       {/* ---- BOTTOM — consumer slot + profile ---- */}
       <div className={`${baseClass}__bottom`}>
-        {footerSlot && (
-          <div className={`${baseClass}__footer-slot`}>{footerSlot}</div>
+        {/* The footer's two forms share one cell (SiteHeader's actions /
+            condensedActions rule): the expanded slot fades out as the
+            collapsed one fades in, and the hidden form is inert, so no
+            invisible control stays in the tab order. */}
+        {(footerSlot || collapsedFooterSlot) && (
+          <div className={`${baseClass}__footer`}>
+            {footerSlot && (
+              <div className={`${baseClass}__footer-slot`} inert={!showExpanded}>
+                {footerSlot}
+              </div>
+            )}
+            {collapsedFooterSlot && (
+              <div
+                className={`${baseClass}__footer-slot ${baseClass}__footer-slot--collapsed`}
+                inert={showExpanded}
+              >
+                {collapsedFooterSlot}
+              </div>
+            )}
+          </div>
         )}
         {profile && (
         <div className={`${baseClass}__profile`}>

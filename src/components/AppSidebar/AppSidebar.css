@@ -33,6 +33,13 @@
   width: 280px;
 }
 
+/* Collapsed, the rail's dead space is an expand target (ThreadPanel's
+   rule: a click anywhere that is not a control reopens it); the cursor
+   says so. */
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) {
+  cursor: pointer;
+}
+
 /* ============================================
    FLOATING VARIANT — the rail as a glass card
    inset from the viewport edges (the same
@@ -504,6 +511,36 @@
 .ds-app-sidebar--expanded .ds-app-sidebar__footer-slot {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* The footer's two forms share one cell, so the slot keeps one height in
+   both states and the rail's layout never snaps: the expanded form fades
+   out as the collapsed form fades in, the inverse of the rules above. The
+   collapsed form stacks its controls (the same ones at their smallest)
+   and centres them on the rail's axis, floored with the expanded form. */
+.ds-app-sidebar__footer {
+  display: grid;
+  min-width: 0;
+}
+
+.ds-app-sidebar__footer > .ds-app-sidebar__footer-slot {
+  grid-area: 1 / 1;
+}
+
+.ds-app-sidebar__footer-slot--collapsed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-200);
+  padding: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__footer-slot--collapsed {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ============================================

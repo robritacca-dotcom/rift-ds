@@ -59,6 +59,36 @@ export default function SidebarSwitchers({
 }
 
 /**
+ * The footer row's collapsed form, for AppSidebar's `collapsedFooterSlot`:
+ * the same controls in the same order, each at its smallest, the way the
+ * site header seats them in its condensed bar (SiteHeader's
+ * `condensedActions`): the compact theme trigger, then the colour mode
+ * toggle and the layout switch as `cycle` circles, SegmentedControl's
+ * one-circle form that steps through the set. The rail stacks and centres
+ * them. `showLayout` follows the row's: the layout circle shows only where
+ * the strip would.
+ */
+export function CollapsedSidebarSwitchers({ showLayout = false }: { showLayout?: boolean }) {
+  const layout = useTemplateLayout();
+  return (
+    <>
+      <BrandSwitcher placement="up" align="left" size="compact" />
+      <ThemeToggle size="compact" cycle />
+      {showLayout && (
+        <SegmentedControl
+          segments={[...TEMPLATE_LAYOUTS]}
+          value={layout}
+          onValueChange={(value) => setTemplateLayout(value as TemplateLayout)}
+          aria-label="Layout"
+          size="compact"
+          cycle
+        />
+      )}
+    </>
+  );
+}
+
+/**
  * The way back to the templates index from a template at its own route.
  * Staged in the playground, the screen is a stranger's product in a frame,
  * so the link is not drawn.

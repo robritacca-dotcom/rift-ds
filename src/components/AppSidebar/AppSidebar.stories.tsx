@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { AppSidebar } from './AppSidebar';
+import { Checkbox } from '../Checkbox/Checkbox';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 
 const sampleSections = [
   {
@@ -211,20 +213,59 @@ export const PanelModeCollapsedWithBadges: Story = {
   },
 };
 
-/** Consumer slots: a search field under the logo row and custom content
-    above the profile block, both fading out while collapsed. */
+const slotArgs = {
+  topSlot: (
+    <input
+      type="search"
+      placeholder="Quick search"
+      aria-label="Quick search"
+      style={{ width: '100%' }}
+    />
+  ),
+  footerSlot: <ThemeToggle size="compact" showLabels={false} />,
+  collapsedFooterSlot: <ThemeToggle size="compact" cycle />,
+};
+
+/** Consumer slots: a search field under the logo row and the colour mode
+    strip above the profile block, both fading out while collapsed; the
+    strip's collapsed form, the one-circle toggle, takes its place then. */
 export const WithSlots: Story = {
   args: {
     defaultExpanded: true,
-    topSlot: (
-      <input
-        type="search"
-        placeholder="Quick search"
-        aria-label="Quick search"
-        style={{ width: '100%' }}
-      />
-    ),
-    footerSlot: <span>Workspace switcher</span>,
+    ...slotArgs,
+  },
+};
+
+/** The same slots on the collapsed rail: the footer shows its collapsed
+    form, and a click on the rail's dead space expands it. */
+export const WithSlotsCollapsed: Story = {
+  args: {
+    defaultExpanded: false,
+    ...slotArgs,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const nav = canvas.getByRole('navigation', { name: 'App navigation' });
+    await expect(nav).not.toHaveClass('ds-app-sidebar--expanded');
+    await userEvent.click(nav);
+    await expect(nav).toHaveClass('ds-app-sidebar--expanded');
+  },
+};
+
+/** A control in the collapsed rail's foot keeps its own press: a role-bearing
+    div such as Checkbox toggles without expanding the rail. */
+export const CollapsedFooterControl: Story = {
+  args: {
+    defaultExpanded: false,
+    collapsedFooterSlot: <Checkbox label="Pin" />,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const nav = canvas.getByRole('navigation', { name: 'App navigation' });
+    const box = canvas.getByRole('checkbox', { name: 'Pin' });
+    await userEvent.click(box);
+    await expect(box).toHaveAttribute('aria-checked', 'true');
+    await expect(nav).not.toHaveClass('ds-app-sidebar--expanded');
   },
 };
 

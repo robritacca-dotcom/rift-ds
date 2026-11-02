@@ -25,7 +25,7 @@ import React from "react";
 import { AppSidebar, type AppSidebarProps } from "rift-ds/components/AppSidebar/AppSidebar";
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import type { TemplateLayout } from "@/lib/templateLayout";
-import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
+import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
 import { TemplateShellContext } from "./context";
 import { useTemplateLayout } from "./useTemplateLayout";
@@ -33,7 +33,7 @@ import styles from "./TemplateShell.module.css";
 
 
 export interface TemplateShellProps {
-  /** The rail's own props; the shell sets its layout, sub-nav mode, expanded state and footer. */
+  /** The rail's own props; the shell sets its layout, sub-nav mode, expanded state and both footer forms. */
   sidebar: Omit<
     AppSidebarProps,
     | "layout"
@@ -44,6 +44,7 @@ export interface TemplateShellProps {
     | "defaultExpanded"
     | "onExpandedChange"
     | "footerSlot"
+    | "collapsedFooterSlot"
   >;
   /** Whether the docked assistant is open, so the content makes room for it. */
   chatOpen: boolean;
@@ -133,6 +134,7 @@ export default function TemplateShell({
               expanded={expanded}
               onExpandedChange={setExpanded}
               footerSlot={<SidebarSwitchers showLayout backLink />}
+              collapsedFooterSlot={<CollapsedSidebarSwitchers showLayout />}
             />
           </div>
         )}

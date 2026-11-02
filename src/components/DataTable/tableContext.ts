@@ -78,6 +78,8 @@ export interface TableContextValue {
   view: TableView;
   applyView: (view: TableView) => void;
   viewMatches: (view: TableView) => boolean;
+  /** Draws skeleton rows in the body while a toolbar command's answer lands. */
+  setCommandLanding: (landing: boolean) => void;
 }
 
 export const TableContext = createContext<TableContextValue | null>(null);

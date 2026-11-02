@@ -1940,6 +1940,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
        say it twice; the footer keeps the selection count. */
   const [countClaimed, setCountClaimed] = useState(false);
   const [selectionClaimed, setSelectionClaimed] = useState(false);
+  const [commandLanding, setCommandLanding] = useState(false);
   const openHeaderFilter = (key: string) => {
     const existing = filters.find((filter) => filter.column === key);
     if (existing) {
@@ -2069,6 +2070,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     view: currentView,
     applyView,
     viewMatches: (view: DataTableView) => viewKey(fullView(view)) === currentKey,
+    setCommandLanding,
   };
 
   const [menuKey, setMenuKey] = useState<string | null>(null);
@@ -3431,7 +3433,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
      real header; a refetch keeps the rows on screen, dimmed and inert,
      under a thin progress line; a failure with nothing on screen takes the
      body, and one over rows already shown is a Banner above them. */
-  const firstLoad = loading && rows.length === 0 && !error;
+  const firstLoad = ((loading && rows.length === 0) || commandLanding) && !error;
   const refreshing = loading && rows.length > 0;
   const retryButton = onRetry && (
     <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label={loadWords.retry} onClick={onRetry} />
@@ -3518,7 +3520,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             {refreshing && <div className={`${baseClass}__progress`} role="progressbar" aria-label={loadWords.loading} />}
             <table
               ref={setTableEl}
-              aria-busy={loading || undefined}
+              aria-busy={loading || commandLanding || undefined}
               className={tableClasses}
               // A card layout changes how the table displays, which strips its semantics in some browsers, so it states them.
               role={gridMode ? 'grid' : stacked ? 'table' : undefined}

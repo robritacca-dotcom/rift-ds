@@ -39,7 +39,7 @@ import type {
 } from '../DataTable/DataTable';
 import { useTableContext, type TableContextValue, type ToolbarColumn } from '../DataTable/tableContext';
 import type { TableView } from '../DataTable/views';
-import { MOTION_ACTION_DISMISS_MS } from '../../tokens/motion';
+import { MOTION_ACTION_DISMISS_MS, MOTION_TABLE_COMMAND_SKELETON_MS } from '../../tokens/motion';
 import { BREAKPOINT_PHONE_PX, BREAKPOINT_SHEET_PX, mediaBelow } from '../../tokens/breakpoints';
 import './TableToolbar.css';
 import { mirrorClass } from '../../behaviors/direction';
@@ -582,7 +582,12 @@ function CommandRow({ command, table, labels, size, open, onClose, state, onStat
         if (running.signal.aborted) return;
         const changed = Boolean(result.view) && JSON.stringify(result.view) !== JSON.stringify(before);
         if (changed) {
+          // The answer lands in order: skeleton rows while the setup changes, the new rows, then the toast.
+          latestTable.current.setCommandLanding(true);
           latestTable.current.applyView(result.view!);
+          await new Promise((resolve) => setTimeout(resolve, MOTION_TABLE_COMMAND_SKELETON_MS));
+          latestTable.current.setCommandLanding(false);
+          if (running.signal.aborted) return;
           const id = `table-command-${Date.now()}`;
           report({
             id,

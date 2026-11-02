@@ -200,9 +200,44 @@ a.toolItem:hover {
   color: var(--color-text-primary);
 }
 
-.ctaLink {
-  align-self: flex-start;
-  text-decoration: none;
+/* The tab strip scrolls inside its own line on a narrow screen, so the
+   page itself never does. */
+.installTabs {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  min-width: 0;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.subsection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  min-width: 0;
+  margin-bottom: var(--gap-1000);
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+.subsection:last-child {
+  margin-bottom: 0;
+}
+
+.subheading {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-secondary);
 }
 
 .promptList {

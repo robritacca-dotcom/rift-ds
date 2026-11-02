@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Instructions } from 'rift-ds/components/Instructions/Instructions';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/instructions
+- Schema: https://rift-ds.com/schema/components/instructions.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Instructions props
 

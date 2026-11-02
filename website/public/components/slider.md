@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Slider } from 'rift-ds/components/Slider/Slider';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/slider
+- Schema: https://rift-ds.com/schema/components/slider.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Slider props
 

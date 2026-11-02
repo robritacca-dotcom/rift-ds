@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { MapLegend } from 'rift-ds/components/MapLegend/MapLegend';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/map-legend
+- Schema: https://rift-ds.com/schema/components/map-legend.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## MapLegend props
 

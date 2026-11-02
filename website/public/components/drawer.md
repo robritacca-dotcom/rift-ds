@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Drawer } from 'rift-ds/components/Drawer/Drawer';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/drawer
+- Schema: https://rift-ds.com/schema/components/drawer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Drawer props
 

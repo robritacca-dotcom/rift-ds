@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { DatePicker } from 'rift-ds/components/DatePicker/DatePicker';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/date-picker
+- Schema: https://rift-ds.com/schema/components/date-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## DatePicker props
 

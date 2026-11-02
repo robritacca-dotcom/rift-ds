@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { InspectorToggleSwitch } from 'rift-ds/components/Inspector/InspectorToggleSwitch';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/inspector-toggle-switch
+- Schema: https://rift-ds.com/schema/components/inspector-toggle-switch.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## InspectorToggleSwitch props
 

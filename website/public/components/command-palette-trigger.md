@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/command-palette-trigger
+- Schema: https://rift-ds.com/schema/components/command-palette-trigger.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## CommandPaletteTrigger props
 

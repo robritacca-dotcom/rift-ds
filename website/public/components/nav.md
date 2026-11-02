@@ -11,6 +11,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Nav } from 'rift-ds/components/Nav/Nav';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/nav
+- Schema: https://rift-ds.com/schema/components/nav.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Nav props
 

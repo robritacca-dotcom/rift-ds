@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { CodeBlock } from 'rift-ds/components/CodeBlock/CodeBlock';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/code-block
+- Schema: https://rift-ds.com/schema/components/code-block.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## CodeBlock props
 

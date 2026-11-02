@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { NavList } from 'rift-ds/components/NavList/NavList';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/nav-list
+- Schema: https://rift-ds.com/schema/components/nav-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## NavList props
 

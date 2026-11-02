@@ -66,5 +66,7 @@ Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's 
 
 - Every component, with its import and a link to its prop contract: https://rift-ds.com/skill/rift-design-system/references/components.md
 - Every token, with its value in light and dark: https://rift-ds.com/skill/rift-design-system/references/tokens.md
+- Every component's contract as JSON: https://rift-ds.com/schema/components/<slug>.json
+- Every token resolved per theme, in code: `rift-ds/tokens/values`
 - MCP endpoint, no key needed: https://rift-ds.com/api/mcp
 - If the project uses `.claude/skills/`, `npx rift-ds init` installs the full skills there.

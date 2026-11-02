@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { TimePicker } from 'rift-ds/components/TimePicker/TimePicker';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/time-picker
+- Schema: https://rift-ds.com/schema/components/time-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## TimePicker props
 
@@ -23,6 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | stepMinutes | `number` | no | `30` | Minutes between generated options |
 | hourFormat | `"12" \| "24"` | no |  | Display format for the trigger and options — the value stays a 24-hour "HH:MM" string either way. Defaults to the clock `locale` uses: `'12'` in `en-US`, `'24'` in `en-GB` and `de-DE`. |
 | locale | `string` | no |  | The BCP 47 locale the times are written in, such as `de-DE`: the clock `hourFormat` defaults to, and the period words and their place when no `periodLabels` are given. Defaults to the nearest LocaleProvider's, else `en-US`. |
+| name | `string` | no |  | Form field name. When set, the selected 24-hour "HH:MM" value submits with an enclosing form through a hidden input (nothing while no value is set, nothing while disabled), as Dropdown does. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | disabled | `boolean` | no | `false` | Whether the picker is disabled |
 | required | `boolean` | no | `false` | Whether the field is required |

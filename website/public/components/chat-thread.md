@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ChatThread } from 'rift-ds/components/ChatThread/ChatThread';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/chat-thread
+- Schema: https://rift-ds.com/schema/components/chat-thread.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ChatThread props
 

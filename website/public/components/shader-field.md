@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ShaderField } from 'rift-ds/components/ShaderField/ShaderField';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/shader-field
+- Schema: https://rift-ds.com/schema/components/shader-field.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ShaderField props
 

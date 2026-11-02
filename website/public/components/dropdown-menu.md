@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { DropdownMenu } from 'rift-ds/components/DropdownMenu/DropdownMenu';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/dropdown-menu
+- Schema: https://rift-ds.com/schema/components/dropdown-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## DropdownMenu props
 

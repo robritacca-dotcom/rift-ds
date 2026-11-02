@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { QuestionCard } from 'rift-ds/components/QuestionCard/QuestionCard';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/question-card
+- Schema: https://rift-ds.com/schema/components/question-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## QuestionCard props
 

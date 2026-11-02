@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ToggleSwitch } from 'rift-ds/components/ToggleSwitch/ToggleSwitch';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/toggle-switch
+- Schema: https://rift-ds.com/schema/components/toggle-switch.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ToggleSwitch props
 
@@ -25,6 +26,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((checked: boolean) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onCheckedChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+| name | `string` | no |  | Form field name. When set, the switch submits with an enclosing form through a hidden input: `value` while on, nothing while off or disabled, as a native checkbox does. |
+| value | `string \| number \| readonly string[]` | no | `on` | The value submitted under `name` while on. Defaults to "on", the native checkbox's. |
 
 ## SwitchIndicator props
 

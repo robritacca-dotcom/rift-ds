@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Swatch } from 'rift-ds/components/Swatch/Swatch';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/swatch
+- Schema: https://rift-ds.com/schema/components/swatch.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Swatch props
 

@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { NotificationCenter } from 'rift-ds/components/NotificationCenter/NotificationCenter';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/notification-center
+- Schema: https://rift-ds.com/schema/components/notification-center.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## NotificationCenter props
 

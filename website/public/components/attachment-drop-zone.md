@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { AttachmentDropZone } from 'rift-ds/components/Attachment/AttachmentDropZone';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/attachment-drop-zone
+- Schema: https://rift-ds.com/schema/components/attachment-drop-zone.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## AttachmentDropZone props
 

@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { SegmentedControl } from 'rift-ds/components/SegmentedControl/SegmentedControl';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/segmented-control
+- Schema: https://rift-ds.com/schema/components/segmented-control.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## SegmentedControl props
 
@@ -27,4 +28,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | collapse | `boolean` | no | `false` | Shed parts rather than overflow when the container is too narrow for the strip. The control measures its own natural widths and drops to labels alone, then to icons alone, in that order — the label carries the meaning, so the icon goes first. It only falls to icons when every segment has one, and hidden labels stay in the accessibility tree, so nothing loses its name. Off by default; the control overflows as before. |
 | showLabels | `boolean` | no | `true` | Show each segment's label beside its icon. Set it to `false` for an icon-only strip: each label becomes its segment's tooltip on hover and keyboard focus and stays the segment's name in the accessibility tree, and a segment without an icon keeps its label on screen. Defaults to `true`. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the strip. Deprecated: Pass the native `aria-label` attribute instead. |
+| cycle | `boolean` | no | `false` | Draw one circle in place of the strip, for a seat with room for a single control (a collapsed rail's foot, a condensed header's actions): it shows the current segment's glyph (a segment without an icon shows its label's first character), each press steps to the next enabled segment, round again, and the current label is its tooltip. Its accessible name comes from `cycleLabel`. ThemeToggle's `cycle` is this form. |
+| cycleLabel | `((current: string, next: string) => string)` | no |  | The cycle circle's accessible name, from the current segment's label and the next one's. Default: the control's `aria-label`, then both, as in "View: List. Switch to Grid". |
 | className | `string` | no | `` | Additional CSS classes |

@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Checkbox } from 'rift-ds/components/Checkbox/Checkbox';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/checkbox
+- Schema: https://rift-ds.com/schema/components/checkbox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Checkbox props
 
@@ -26,7 +27,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((checked: boolean) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onCheckedChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
-| name | `string` | no |  | Legacy form-field name. Deprecated: No-op. This component renders a `<div role="checkbox">`, not a native `<input>`, so it cannot participate in native form submission. Declared only so the attribute is not forwarded to an element that rejects it. |
+| name | `string` | no |  | Form field name. When set, the checkbox submits with an enclosing form through a hidden input: `value` while checked, nothing while unchecked or disabled, as a native checkbox does. |
+| value | `string` | no | `on` | The value submitted under `name` while checked. Defaults to "on", the native checkbox's. |
 
 ## CheckboxGroup props
 
@@ -36,6 +38,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | helperText | `string` | no |  | Helper or error message rendered below the group |
 | error | `boolean` | no | `false` | Error state — recolours the helper text and marks the group invalid |
 | required | `boolean` | no | `false` | Marks the group required and renders the required marker on its label |
+| name | `string` | no |  | Form field name shared by every item. When set, each checked item submits its `value` under this name through a hidden input, so a form reads the selection as repeated entries, as a set of native checkboxes does; a disabled item submits nothing. |
 | items | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Checkbox options |
 | values | `string[]` | no |  | Currently selected values, controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValues`. |
 | defaultValues | `string[]` | no | `[]` | Selected values on first render when uncontrolled (`values` undefined). |

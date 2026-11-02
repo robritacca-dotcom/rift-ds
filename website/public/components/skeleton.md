@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Skeleton } from 'rift-ds/components/Skeleton/Skeleton';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/skeleton
+- Schema: https://rift-ds.com/schema/components/skeleton.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Skeleton props
 

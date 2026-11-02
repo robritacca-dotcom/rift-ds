@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { LinkList } from 'rift-ds/components/LinkList/LinkList';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/link-list
+- Schema: https://rift-ds.com/schema/components/link-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## LinkList props
 

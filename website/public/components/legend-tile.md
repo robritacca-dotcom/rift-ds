@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { LegendTile } from 'rift-ds/components/LegendTile/LegendTile';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/legend-tile
+- Schema: https://rift-ds.com/schema/components/legend-tile.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## LegendTile props
 

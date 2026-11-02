@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { NumberInput } from 'rift-ds/components/NumberInput/NumberInput';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/number-input
+- Schema: https://rift-ds.com/schema/components/number-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## NumberInput props
 

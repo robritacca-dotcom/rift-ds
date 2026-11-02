@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Combobox } from 'rift-ds/components/Combobox/Combobox';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/combobox
+- Schema: https://rift-ds.com/schema/components/combobox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Combobox props
 
@@ -38,4 +39,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((value: string \| string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
-| name | `string` | no |  | Form field name. When set, the selection submits with an enclosing form under this name through hidden inputs: the selected option's `value` in single mode (nothing until one is chosen), one entry per selected value in `multiple` mode, nothing while disabled. The search text the user types is never submitted. Also the fallback for the element id (`id \|\| name \|\| generated`). |
+| name | `string` | no |  | Form field name. When set, the selection submits with an enclosing form under this name through hidden inputs: the selected option's `value` in single mode (nothing while no value is set), one entry per selected value in `multiple` mode, nothing while disabled. The search text the user types is never submitted. Also the fallback for the element id (`id \|\| name \|\| generated`). |

@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, QuestionCard, Reasoning, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/ai-chat
+- Schema: https://rift-ds.com/schema/components/ai-chat.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ChatWidget props
 

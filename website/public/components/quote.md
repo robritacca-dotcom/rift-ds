@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Quote } from 'rift-ds/components/Quote/Quote';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/quote
+- Schema: https://rift-ds.com/schema/components/quote.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Quote props
 

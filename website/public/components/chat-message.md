@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ChatMessage } from 'rift-ds/components/ChatMessage/ChatMessage';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/chat-message
+- Schema: https://rift-ds.com/schema/components/chat-message.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ChatMessage props
 

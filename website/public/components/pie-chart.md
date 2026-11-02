@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { PieChart } from 'rift-ds/components/Chart/PieChart';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/pie-chart
+- Schema: https://rift-ds.com/schema/components/pie-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## PieChart props
 

@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { RichDropdown } from 'rift-ds/components/RichDropdown/RichDropdown';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/rich-dropdown
+- Schema: https://rift-ds.com/schema/components/rich-dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## RichDropdown props
 
@@ -25,4 +26,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | helperText | `string` | no |  | Helper or error message |
 | onValueChange | `((value: string) => void)` | no |  | Fires with the newly selected option's value. |
 | className | `string` | no | `` | Additional CSS classes |
-| name | `string` | no |  | Used only as a fallback for deriving the element id (`id \|\| name \|\| label`).  Note: RichDropdown renders a `<div role="combobox">`, not a native `<select>`, so `name` does **not** make it participate in native form submission. |
+| name | `string` | no |  | Form field name. When set, the selected option's `value` submits with an enclosing form through a hidden input (nothing while no value is set, nothing while disabled), as Combobox does. Also the fallback for the element id (`id \|\| name \|\| label`). |

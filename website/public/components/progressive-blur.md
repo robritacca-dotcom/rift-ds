@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ProgressiveBlur } from 'rift-ds/components/ProgressiveBlur/ProgressiveBlur';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/progressive-blur
+- Schema: https://rift-ds.com/schema/components/progressive-blur.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ProgressiveBlur props
 

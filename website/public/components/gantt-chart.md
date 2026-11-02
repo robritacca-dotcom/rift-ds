@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { GanttChart } from 'rift-ds/components/GanttChart/GanttChart';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/gantt-chart
+- Schema: https://rift-ds.com/schema/components/gantt-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## GanttChart props
 

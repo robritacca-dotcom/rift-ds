@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { AreaChart } from 'rift-ds/components/Chart/AreaChart';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/area-chart
+- Schema: https://rift-ds.com/schema/components/area-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## AreaChart props
 

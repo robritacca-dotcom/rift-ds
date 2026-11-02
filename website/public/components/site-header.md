@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { SiteHeader } from 'rift-ds/components/SiteHeader/SiteHeader';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/site-header
+- Schema: https://rift-ds.com/schema/components/site-header.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## SiteHeader props
 

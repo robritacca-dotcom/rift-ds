@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ArtifactCard } from 'rift-ds/components/ArtifactCard/ArtifactCard';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/artifact-card
+- Schema: https://rift-ds.com/schema/components/artifact-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ArtifactCard props
 

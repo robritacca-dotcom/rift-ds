@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { InterruptCard } from 'rift-ds/components/InterruptCard/InterruptCard';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/interrupt-card
+- Schema: https://rift-ds.com/schema/components/interrupt-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## InterruptCard props
 

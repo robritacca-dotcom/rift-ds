@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { AgentPlan } from 'rift-ds/components/AgentPlan/AgentPlan';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/agent-plan
+- Schema: https://rift-ds.com/schema/components/agent-plan.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## AgentPlan props
 

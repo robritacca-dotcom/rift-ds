@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Textarea } from 'rift-ds/components/Textarea/Textarea';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/textarea
+- Schema: https://rift-ds.com/schema/components/textarea.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Textarea props
 

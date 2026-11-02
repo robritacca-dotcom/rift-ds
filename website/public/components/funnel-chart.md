@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { FunnelChart } from 'rift-ds/components/FunnelChart/FunnelChart';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/funnel-chart
+- Schema: https://rift-ds.com/schema/components/funnel-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## FunnelChart props
 

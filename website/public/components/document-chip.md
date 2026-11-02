@@ -11,6 +11,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { DocumentChip } from 'rift-ds/components/DocumentChip/DocumentChip';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/document-chip
+- Schema: https://rift-ds.com/schema/components/document-chip.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## DocumentChip props
 

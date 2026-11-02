@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Lightbox } from 'rift-ds/components/Lightbox/Lightbox';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/lightbox
+- Schema: https://rift-ds.com/schema/components/lightbox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Lightbox props
 

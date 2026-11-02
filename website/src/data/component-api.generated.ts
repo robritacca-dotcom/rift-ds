@@ -10,6 +10,8 @@ export interface ComponentPropApi {
   name: string;
   /** The resolved TypeScript type, literal unions expanded. */
   type: string;
+  /** The members of a literal union, quotes stripped and sorted: set whenever docgen reports one, a named alias (`AgentStatusState`, whose `type` is only the alias name) included. */
+  values?: string[];
   required: boolean;
   /** The prop's JSDoc description — present on every own prop, build-enforced. */
   description: string;
@@ -266,6 +268,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"chevron\" | \"close\"",
             "required": false,
             "description": "How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is.",
+            "values": [
+              "chevron",
+              "close"
+            ],
             "defaultValue": "chevron"
           },
           {
@@ -304,6 +310,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "AgentStatusState",
             "required": false,
             "description": "What the agent is doing. Drives the colour, the default label, and whether the matrix animates.",
+            "values": [
+              "done",
+              "error",
+              "idle",
+              "thinking",
+              "waiting",
+              "working"
+            ],
             "defaultValue": "thinking"
           },
           {
@@ -316,7 +330,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pattern",
             "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
             "required": false,
-            "description": "Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise."
+            "description": "Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise.",
+            "values": [
+              "braille",
+              "breathe",
+              "cascade",
+              "checkerboard",
+              "columns",
+              "diagonal-swipe",
+              "fill-sweep",
+              "helix",
+              "orbit",
+              "pulse",
+              "rain",
+              "scan",
+              "snake",
+              "sparkle",
+              "twinkle",
+              "wave-rows"
+            ]
           },
           {
             "name": "shimmer",
@@ -329,6 +361,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\" | \"sm\" | \"md\"",
             "required": false,
             "description": "Indicator and text scale, paired with ChatMessage's sizes: `default`\nmatches default message text, `compact` matches compact message text.\n`sm` and `md` are legacy aliases for `compact` and `default`.",
+            "values": [
+              "compact",
+              "default",
+              "md",
+              "sm"
+            ],
             "defaultValue": "default"
           },
           {
@@ -336,6 +374,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"inline\" | \"bar\" | \"pill\"",
             "required": false,
             "description": "`inline` sits in a line of content; `bar` is a full-width row for the\ntop of a panel; `pill` is a glass pill for a status that floats over\nthe page while a run goes on; once it ends the dots fill solid in the\nstatus colour, as in every variant. The pill does not position itself.",
+            "values": [
+              "bar",
+              "inline",
+              "pill"
+            ],
             "defaultValue": "inline"
           },
           {
@@ -367,13 +410,39 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "AgentStatusState",
             "required": false,
             "description": "What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply.",
+            "values": [
+              "done",
+              "error",
+              "idle",
+              "thinking",
+              "waiting",
+              "working"
+            ],
             "defaultValue": "working"
           },
           {
             "name": "pattern",
             "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
             "required": false,
-            "description": "Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise."
+            "description": "Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise.",
+            "values": [
+              "braille",
+              "breathe",
+              "cascade",
+              "checkerboard",
+              "columns",
+              "diagonal-swipe",
+              "fill-sweep",
+              "helix",
+              "orbit",
+              "pulse",
+              "rain",
+              "scan",
+              "snake",
+              "sparkle",
+              "twinkle",
+              "wave-rows"
+            ]
           },
           {
             "name": "className",
@@ -426,6 +495,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Button size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -438,7 +511,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "state",
             "type": "AgentStatusState",
             "required": false,
-            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
+            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work.",
+            "values": [
+              "done",
+              "error",
+              "idle",
+              "thinking",
+              "waiting",
+              "working"
+            ]
           },
           {
             "name": "statusLabels",
@@ -475,6 +556,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\"",
             "required": false,
             "description": "Which side of the button the summary panel opens on.",
+            "values": [
+              "bottom",
+              "top"
+            ],
             "defaultValue": "top"
           },
           {
@@ -507,6 +592,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\"",
             "required": false,
             "description": "Which side of the button the request panel opens on.",
+            "values": [
+              "bottom",
+              "top"
+            ],
             "defaultValue": "top"
           },
           {
@@ -604,6 +693,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
             "required": false,
             "description": "Alert variant determines colour and icon",
+            "values": [
+              "error",
+              "info",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "info"
           },
           {
@@ -611,6 +707,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -718,13 +818,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tone",
             "type": "\"default\" | \"destructive\"",
             "required": false,
-            "description": "Colour of the dialog's icon, title and confirm action: `destructive`\nfor dangerous or irreversible actions."
+            "description": "Colour of the dialog's icon, title and confirm action: `destructive`\nfor dangerous or irreversible actions.",
+            "values": [
+              "default",
+              "destructive"
+            ]
           },
           {
             "name": "variant",
             "type": "\"default\" | \"destructive\"",
             "required": false,
             "description": "Legacy name for `tone`, from before colour moved onto its own prop.",
+            "values": [
+              "default",
+              "destructive"
+            ],
             "deprecated": "Use `tone` instead."
           },
           {
@@ -763,6 +871,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"list\" | \"floating\"",
             "required": false,
             "description": "Visual form: `list` renders the inline \"On this page\" rail; `floating` collapses to a stack of short lines that expands into a panel on hover, keyboard focus, or tap, so it can ride a page edge without taking column width",
+            "values": [
+              "floating",
+              "list"
+            ],
             "defaultValue": "list"
           },
           {
@@ -914,7 +1026,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "subNav",
             "type": "\"accordion\" | \"panel\"",
             "required": false,
-            "description": "Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar)"
+            "description": "Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar)",
+            "values": [
+              "accordion",
+              "panel"
+            ]
           },
           {
             "name": "defaultExpanded",
@@ -946,6 +1062,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "AppSidebarLayout",
             "required": false,
             "description": "How the rail and the content meet the page. `flush` (the default) runs\nthe rail edge to edge with the content centred beside it. `floating`\nfloats the rail as a glass card, the content still centred. `inset` runs\nthe rail flush on the app shell colour and sets the content full width\nin a surface inset from the other edges, which scrolls inside itself.",
+            "values": [
+              "floating",
+              "flush",
+              "inset"
+            ],
             "defaultValue": "flush"
           },
           {
@@ -953,6 +1074,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"inherit\" | \"dark\"",
             "required": false,
             "description": "Colour scheme: 'dark' pins the layout to the dark theme (the historical\nbehaviour and the default); 'inherit' drops the pin so the layout\nfollows the surrounding data-theme like any other component.",
+            "values": [
+              "dark",
+              "inherit"
+            ],
             "defaultValue": "dark"
           },
           {
@@ -1021,6 +1146,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"accordion\" | \"panel\"",
             "required": false,
             "description": "Where an item's sub-items show. `accordion` (the default) opens them under\nthe row, and a sub-item's own children open in a side panel as level 3.\n`panel` skips the accordion: a top-level item opens its sub-items straight\ninto the side panel, with their children as the panel's accordion, and the\ncollapsed rail shows each label under its icon. On small screens both\nmodes drill in inside the drawer instead.",
+            "values": [
+              "accordion",
+              "panel"
+            ],
             "defaultValue": "accordion"
           },
           {
@@ -1071,7 +1200,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail meets the page. `flush` runs it edge to edge on the page\ncolour. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a content surface inset\nfrom the edges, as AppLayout's `inset` layout draws it. Defaults to\n`flush` (or `floating` while the deprecated `floating` is set)."
+            "description": "How the rail meets the page. `flush` runs it edge to edge on the page\ncolour. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a content surface inset\nfrom the edges, as AppLayout's `inset` layout draws it. Defaults to\n`flush` (or `floating` while the deprecated `floating` is set).",
+            "values": [
+              "floating",
+              "flush",
+              "inset"
+            ]
           },
           {
             "name": "floating",
@@ -1092,6 +1226,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Rendered above the profile block; fades out while collapsed"
+          },
+          {
+            "name": "collapsedFooterSlot",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert"
           },
           {
             "name": "className",
@@ -1398,13 +1538,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "view",
             "type": "ArtifactPanelView",
             "required": false,
-            "description": "The view on stage, when the host owns the state."
+            "description": "The view on stage, when the host owns the state.",
+            "values": [
+              "code",
+              "preview"
+            ]
           },
           {
             "name": "defaultView",
             "type": "ArtifactPanelView",
             "required": false,
-            "description": "The view the panel opens on when it keeps its own state."
+            "description": "The view the panel opens on when it keeps its own state.",
+            "values": [
+              "code",
+              "preview"
+            ]
           },
           {
             "name": "onViewChange",
@@ -1585,6 +1733,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"start\" | \"end\"",
             "required": false,
             "description": "Which edge the layout hugs: `end` for the sender's own turns.",
+            "values": [
+              "end",
+              "start"
+            ],
             "defaultValue": "start"
           },
           {
@@ -1649,6 +1801,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Tile size, passed to every tile.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -1726,6 +1882,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "FileKind",
             "required": false,
             "description": "What kind of file it is, which picks the type mark: a coloured lettered\nglyph for the well-known formats, a neutral extension badge for the\nrest. Derive it with `getFileKind`.",
+            "values": [
+              "archive",
+              "audio",
+              "code",
+              "document",
+              "generic",
+              "image",
+              "pasted",
+              "pdf",
+              "presentation",
+              "spreadsheet",
+              "text",
+              "video"
+            ],
             "defaultValue": "generic"
           },
           {
@@ -1739,6 +1909,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "AttachmentStatus",
             "required": false,
             "description": "Where the file is in its life. Anything but `ready` shows the name with a status line.",
+            "values": [
+              "error",
+              "ready",
+              "unavailable",
+              "uploading"
+            ],
             "defaultValue": "ready"
           },
           {
@@ -1788,6 +1964,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Tile size. Compact shrinks the square and drops the secondary line of a\nready file. Unrelated to any native `size` attribute: the root is a div.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -2039,19 +2219,39 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\"",
             "required": false,
             "description": "Avatar size",
+            "values": [
+              "lg",
+              "md",
+              "sm"
+            ],
             "defaultValue": "md"
           },
           {
             "name": "fill",
             "type": "\"neutral\" | AvatarFill",
             "required": false,
-            "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ."
+            "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "neutral"
+            ]
           },
           {
             "name": "status",
             "type": "\"online\" | \"away\" | \"offline\" | \"busy\"",
             "required": false,
-            "description": "Online status indicator"
+            "description": "Online status indicator",
+            "values": [
+              "away",
+              "busy",
+              "offline",
+              "online"
+            ]
           },
           {
             "name": "statusLabel",
@@ -2102,6 +2302,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\"",
             "required": false,
             "description": "Size applied to every avatar in the stack and to the overflow counter.\nCloned onto the children so the group cannot render mixed sizes.",
+            "values": [
+              "lg",
+              "md",
+              "sm"
+            ],
             "defaultValue": "md"
           },
           {
@@ -2146,6 +2351,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
             "required": false,
             "description": "Badge variant determines colour",
+            "values": [
+              "error",
+              "info",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "neutral"
           },
           {
@@ -2178,6 +2390,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
             "required": false,
             "description": "Status variant determines colour and default icon",
+            "values": [
+              "error",
+              "info",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "info"
           },
           {
@@ -2229,6 +2448,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"center\" | \"start\"",
             "required": false,
             "description": "Horizontal alignment of the banner content",
+            "values": [
+              "center",
+              "start"
+            ],
             "defaultValue": "start"
           },
           {
@@ -2369,6 +2592,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "The heading level the title renders at, to fit the page's outline. Never `1`: a tile is never the page's top heading.",
+            "values": [
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
             "defaultValue": "3"
           },
           {
@@ -2376,19 +2606,37 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"solid\" | \"shader\" | \"transparent\"",
             "required": false,
             "description": "What sits behind the content: the container surface with a shader pair\nover it (a wash of light in the bottom-left corner with a line texture\nlaid over it, the default), the plain surface, or nothing.",
+            "values": [
+              "shader",
+              "solid",
+              "transparent"
+            ],
             "defaultValue": "shader"
           },
           {
             "name": "highlight",
             "type": "1 | 2 | 4 | 3 | 5 | 6",
             "required": false,
-            "description": "Which of the six shader pairs the tile wears: pair N is ambient colour N\nwith texture N. Unset, tiles rotate through the set by their position\namong their siblings, so a grid of shader tiles comes out told apart."
+            "description": "Which of the six shader pairs the tile wears: pair N is ambient colour N\nwith texture N. Unset, tiles rotate through the set by their position\namong their siblings, so a grid of shader tiles comes out told apart.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
           },
           {
             "name": "align",
             "type": "\"center\" | \"start\" | \"end\"",
             "required": false,
             "description": "Where the content sits in the space under the heading. Content that does not fit fades out at the edge it overflows.",
+            "values": [
+              "center",
+              "end",
+              "start"
+            ],
             "defaultValue": "center"
           },
           {
@@ -2464,7 +2712,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pattern",
             "type": "BentoTileArtPattern",
             "required": false,
-            "description": "Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`."
+            "description": "Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`.",
+            "values": [
+              "dots",
+              "grid",
+              "lines",
+              "rays",
+              "rings",
+              "waves"
+            ]
           },
           {
             "name": "className",
@@ -2514,6 +2770,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"ios\" | \"android\"",
             "required": false,
             "description": "Which platform's tab bar to draw. `default` is the Rift bar; `ios` is the\niOS 26 Liquid Glass capsule floating over content with a sliding lens\nbehind the selection; `android` is the Material 3 Expressive navigation\nbar with a pill indicator behind the selected icon.",
+            "values": [
+              "android",
+              "default",
+              "ios"
+            ],
             "defaultValue": "default"
           },
           {
@@ -2660,19 +2921,35 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"neutral\" | \"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
-            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` and `destructive` are\nlegacy values from before the split: `neutral` renders as\n`variant=\"primary\" tone=\"neutral\"` and `destructive` as\n`variant=\"secondary\" tone=\"destructive\"`."
+            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` and `destructive` are\nlegacy values from before the split: `neutral` renders as\n`variant=\"primary\" tone=\"neutral\"` and `destructive` as\n`variant=\"secondary\" tone=\"destructive\"`.",
+            "values": [
+              "destructive",
+              "neutral",
+              "primary",
+              "secondary",
+              "tertiary"
+            ]
           },
           {
             "name": "tone",
             "type": "\"default\" | \"neutral\" | \"destructive\"",
             "required": false,
-            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge."
+            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
+            "values": [
+              "default",
+              "destructive",
+              "neutral"
+            ]
           },
           {
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Button size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -2729,6 +3006,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
             "description": "Legacy alias for `variant`.",
+            "values": [
+              "destructive",
+              "primary",
+              "secondary",
+              "tertiary"
+            ],
             "deprecated": "Use `variant` instead."
           },
           {
@@ -2736,6 +3019,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
             "required": false,
             "description": "Documentation-only interaction state.",
+            "values": [
+              "active",
+              "default",
+              "disabled",
+              "hover"
+            ],
             "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer `className=\"ds-button--hover\"`."
           },
           {
@@ -2776,6 +3065,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Orientation of the button group",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "horizontal"
           },
           {
@@ -2821,6 +3114,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"case-study\"",
             "required": false,
             "description": "Card variant",
+            "values": [
+              "case-study",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3219,6 +3516,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"user\" | \"assistant\"",
             "required": false,
             "description": "Which side of the conversation this turn belongs to. Drives alignment\nand the default surface: user turns are right-aligned bubbles,\nassistant turns are surface-less full-width text. Shadows the ARIA\nrole attribute; the root renders no ARIA role.",
+            "values": [
+              "assistant",
+              "user"
+            ],
             "defaultValue": "assistant"
           },
           {
@@ -3271,6 +3572,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Compact drops the type one size step and tightens the bubble padding.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3355,6 +3660,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top-down\" | \"bottom-up\"",
             "required": false,
             "description": "Which way the conversation reads. `top-down` (the default) is the send\nchoreography above: each new turn floats to the top of the viewport and\nthe answer streams in below it. `bottom-up` is the classic message\nthread: turns stack from the bottom edge, the newest always just above\nthe composer, and the view follows a streaming answer down for as long\nas the reader stays at the bottom. Scrolling up to reread lets go;\nreturning to the bottom, or the next send, takes hold again.",
+            "values": [
+              "bottom-up",
+              "top-down"
+            ],
             "defaultValue": "top-down"
           },
           {
@@ -3453,6 +3762,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3486,8 +3799,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Legacy form-field name.",
-            "deprecated": "No-op. This component renders a `<div role=\"checkbox\">`, not a\nnative `<input>`, so it cannot participate in native form submission.\nDeclared only so the attribute is not forwarded to an element that rejects it."
+            "description": "Form field name. When set, the checkbox submits with an enclosing form\nthrough a hidden input: `value` while checked, nothing while unchecked\nor disabled, as a native checkbox does."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The value submitted under `name` while checked. Defaults to \"on\", the native checkbox's.",
+            "defaultValue": "on"
           }
         ]
       },
@@ -3521,6 +3840,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "Form field name shared by every item. When set, each checked item submits\nits `value` under this name through a hidden input, so a form reads the\nselection as repeated entries, as a set of native checkboxes does; a disabled\nitem submits nothing."
+          },
+          {
             "name": "items",
             "type": "{ label: string; value: string; disabled?: boolean | undefined; }[]",
             "required": true,
@@ -3544,6 +3869,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Layout direction",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "vertical"
           },
           {
@@ -3551,6 +3880,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3597,6 +3930,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Box size: `default` is 24px, `compact` 20px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3671,6 +4008,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"neutral\"",
             "required": false,
             "description": "Colour of the selected fill: `default` takes the action colour, `neutral`\nfills it grey, for filter rows whose selection should read quietly.",
+            "values": [
+              "default",
+              "neutral"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3685,6 +4026,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\" | \"large\"",
             "required": false,
             "description": "Chip size — `large` matches the default Button and paragraph body scale, for pills that are a primary tap target rather than metadata",
+            "values": [
+              "compact",
+              "default",
+              "large"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3741,19 +4087,35 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
-            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` is the legacy value from\nbefore the split and renders as `variant=\"primary\" tone=\"neutral\"`."
+            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` is the legacy value from\nbefore the split and renders as `variant=\"primary\" tone=\"neutral\"`.",
+            "values": [
+              "neutral",
+              "primary",
+              "secondary",
+              "tertiary"
+            ]
           },
           {
             "name": "tone",
             "type": "\"default\" | \"neutral\" | \"destructive\"",
             "required": false,
-            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge."
+            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
+            "values": [
+              "default",
+              "destructive",
+              "neutral"
+            ]
           },
           {
             "name": "priority",
             "type": "\"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
             "description": "Legacy alias for `variant`.",
+            "values": [
+              "primary",
+              "secondary",
+              "tertiary"
+            ],
             "deprecated": "Use `variant` instead."
           },
           {
@@ -3767,6 +4129,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
             "required": false,
             "description": "Documentation-only interaction state.",
+            "values": [
+              "active",
+              "default",
+              "disabled",
+              "hover"
+            ],
             "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer\n`className=\"ds-circular-button--hover\"`."
           },
           {
@@ -3774,6 +4142,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Button size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -3799,6 +4171,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
             "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
             "defaultValue": "top"
           },
           {
@@ -4075,6 +4455,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -4351,6 +4735,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -4466,7 +4854,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Form field name. When set, the selection submits with an enclosing form\nunder this name through hidden inputs: the selected option's `value` in\nsingle mode (nothing until one is chosen), one entry per selected value in\n`multiple` mode, nothing while disabled. The search text the user types\nis never submitted. Also the fallback for the element id (`id || name || generated`)."
+            "description": "Form field name. When set, the selection submits with an enclosing form\nunder this name through hidden inputs: the selected option's `value` in\nsingle mode (nothing while no value is set), one entry per selected value in\n`multiple` mode, nothing while disabled. The search text the user types\nis never submitted. Also the fallback for the element id (`id || name || generated`)."
           }
         ]
       }
@@ -4654,6 +5042,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Control size, on the row-control scale: `default` is 40px, `compact` 32px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -4730,6 +5122,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "The density, matching a table's or a bar's: `compact` tightens the padding and takes the smaller text and buttons.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -4764,6 +5160,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"inside\" | \"above\"",
             "required": false,
             "description": "Where the `context` chip sits. `inside` (the default) pins it at the very\ntop of the shell, above any attachments. `above` lifts it out of the\nshell into its own bar a small gap above it, so it reads as what the\nmodel can see rather than part of the message being typed. Either way\nits icon starts on the shell's text rail, and a click on it focuses the\ntextarea.",
+            "values": [
+              "above",
+              "inside"
+            ],
             "defaultValue": "inside"
           },
           {
@@ -4886,6 +5286,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\"",
             "required": false,
             "description": "Which side of the trigger's line the mention menu opens on: `top` lays\nit over the text above, `bottom` over the text below. `top` suits a\ncomposer at the foot of a view.",
+            "values": [
+              "bottom",
+              "top"
+            ],
             "defaultValue": "top"
           },
           {
@@ -5057,6 +5461,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -5178,7 +5586,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "weekStartsOn",
             "type": "Weekday",
             "required": false,
-            "description": "The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`."
+            "description": "The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`.",
+            "values": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
           },
           {
             "name": "monthLabels",
@@ -5283,6 +5700,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"scroll\" | \"stack\"",
             "required": false,
             "description": "How the table reads when it is narrower than a phone (its own width,\nunder `BREAKPOINT_PHONE_PX`, so a table in a narrow panel counts):\n`scroll` keeps the rows and scrolls sideways with the row header\npinned; `stack` draws each row as a card, its row header as the title\nand every other column as a label and value pair. Defaults to `scroll`.",
+            "values": [
+              "scroll",
+              "stack"
+            ],
             "defaultValue": "scroll"
           },
           {
@@ -5439,6 +5860,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"multiple\" | \"single\"",
             "required": false,
             "description": "Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`).",
+            "values": [
+              "multiple",
+              "single"
+            ],
             "defaultValue": "multiple"
           },
           {
@@ -5521,7 +5946,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's. Defaults to `default`. Unlike a static size, it is\nstate the reader can change from a TableToolbar's density switch: passing\nit controls that state, paired with `defaultSize` and `onSizeChange`."
+            "description": "The table's density, and the controls' with it: `default` rows with the\nsearch field and pager at the default row-control height, `compact` rows\nwith both at the compact one. Controls inside the rows (checkboxes, grips,\nmenu and action buttons) stay compact at either density, so a row's\nheight is its text's. Defaults to `default`. Unlike a static size, it is\nstate the reader can change from a TableToolbar's density switch: passing\nit controls that state, paired with `defaultSize` and `onSizeChange`.",
+            "values": [
+              "compact",
+              "default"
+            ]
           },
           {
             "name": "striped",
@@ -5655,7 +6084,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "navigation",
             "type": "\"table\" | \"grid\"",
             "required": false,
-            "description": "How the keyboard moves through the table. `table` keeps every control in\nthe Tab order, as a reading table does; `grid` makes the table one Tab\nstop with arrow-key focus across its cells. Defaults to `grid` when any\ncolumn or row control is on, else `table`."
+            "description": "How the keyboard moves through the table. `table` keeps every control in\nthe Tab order, as a reading table does; `grid` makes the table one Tab\nstop with arrow-key focus across its cells. Defaults to `grid` when any\ncolumn or row control is on, else `table`.",
+            "values": [
+              "grid",
+              "table"
+            ]
           },
           {
             "name": "columnWidths",
@@ -5765,6 +6198,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "DataTableCellText",
             "required": false,
             "description": "How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`.",
+            "values": [
+              "lines-2",
+              "nowrap",
+              "truncate",
+              "wrap"
+            ],
             "defaultValue": "wrap"
           },
           {
@@ -5778,6 +6217,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"cell\" | \"row\"",
             "required": false,
             "description": "How editable cells edit: `cell` (the default) edits one cell at a time,\nstarted with Enter, F2, a typed character or a double click; `row` adds an\nEdit button to each row that opens every editable cell of the row at\nonce, with Save and Cancel.",
+            "values": [
+              "cell",
+              "row"
+            ],
             "defaultValue": "cell"
           },
           {
@@ -5832,7 +6275,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "defaultSize",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it."
+            "description": "Starting density, for uncontrolled use when a TableToolbar's density switch sets it; `size` controls it.",
+            "values": [
+              "compact",
+              "default"
+            ]
           },
           {
             "name": "onSizeChange",
@@ -5851,6 +6298,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"hover\" | \"always\"",
             "required": false,
             "description": "When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty.",
+            "values": [
+              "always",
+              "hover"
+            ],
             "defaultValue": "hover"
           },
           {
@@ -5901,6 +6352,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (not the native character-width `size` attribute)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -5977,6 +6432,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -6052,7 +6511,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "weekStartsOn",
             "type": "Weekday",
             "required": false,
-            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
+            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`.",
+            "values": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
           },
           {
             "name": "className",
@@ -6120,6 +6588,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\"",
             "required": false,
             "description": "Panel width",
+            "values": [
+              "lg",
+              "md",
+              "sm"
+            ],
             "defaultValue": "md"
           },
           {
@@ -6166,6 +6639,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Divider direction",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "horizontal"
           },
           {
@@ -6179,6 +6656,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"center\" | \"start\"",
             "required": false,
             "description": "Label placement along the line",
+            "values": [
+              "center",
+              "start"
+            ],
             "defaultValue": "center"
           },
           {
@@ -6186,6 +6667,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"none\" | \"sm\" | \"md\" | \"lg\"",
             "required": false,
             "description": "Margin around the divider (block for horizontal, inline for vertical)",
+            "values": [
+              "lg",
+              "md",
+              "none",
+              "sm"
+            ],
             "defaultValue": "md"
           },
           {
@@ -6225,6 +6712,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "DocumentChipFileType",
             "required": false,
             "description": "Document type — picks the leading Material Symbol.",
+            "values": [
+              "archive",
+              "code",
+              "doc",
+              "generic",
+              "image",
+              "pdf",
+              "sheet",
+              "slide"
+            ],
             "defaultValue": "generic"
           },
           {
@@ -6256,6 +6753,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Tile size. Compact drops the metadata line — name only — for dense composer rows.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -6357,6 +6858,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
             "description": "Edge the panel slides in from. `left` and `right` are the screen's\nedges in any reading direction; `start` and `end` follow it, so a\n`start` drawer opens on the left in English and on the right in Arabic.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
             "defaultValue": "right"
           },
           {
@@ -6364,6 +6873,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\"",
             "required": false,
             "description": "Panel size along the axis it slides on",
+            "values": [
+              "lg",
+              "md",
+              "sm"
+            ],
             "defaultValue": "md"
           },
           {
@@ -6447,6 +6961,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -6526,7 +7044,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Used only as a fallback for deriving the element id (`id || name || label`).\n\nNote: Dropdown renders a `<div role=\"combobox\">`, not a native `<select>`,\nso `name` does **not** make it participate in native form submission."
+            "description": "Form field name. When set, the selected option's `value` submits with an\nenclosing form through a hidden input (nothing while no value is set,\nnothing while disabled), as Combobox does. Also the fallback for the\nelement id (`id || name || label`)."
           }
         ]
       },
@@ -6575,6 +7093,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"start\" | \"end\"",
             "required": false,
             "description": "Horizontal alignment of the panel",
+            "values": [
+              "end",
+              "start"
+            ],
             "defaultValue": "start"
           },
           {
@@ -6582,6 +7104,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -6663,6 +7189,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -6670,6 +7200,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"plain\" | \"bordered\"",
             "required": false,
             "description": "Visual treatment. `plain` sits directly on the page; `bordered` draws a\ndashed container, which reads better inside a card, table, or panel.",
+            "values": [
+              "bordered",
+              "plain"
+            ],
             "defaultValue": "plain"
           },
           {
@@ -6851,7 +7385,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "weekStartsOn",
             "type": "Weekday",
             "required": false,
-            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
+            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`.",
+            "values": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
           },
           {
             "name": "className",
@@ -6928,6 +7471,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -7036,6 +7583,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (not the native character-width `size` attribute)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -7165,6 +7716,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -7437,6 +7992,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"positive\" | \"warning\" | \"neutral\" | \"accent\"",
             "required": false,
             "description": "Colour role for the value arc. `accent` (the default) follows the chart\npalette's lead colour. Ignored while a threshold matches — thresholds\nexist so the dial recolours itself as the reading crosses them.",
+            "values": [
+              "accent",
+              "error",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "accent"
           },
           {
@@ -7691,6 +8253,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
             "defaultValue": "bottom"
           },
           {
@@ -7857,6 +8427,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"number\" | \"search\" | \"text\" | \"tel\" | \"url\" | \"email\" | \"password\"",
             "required": false,
             "description": "Input type — curated subset; use a dedicated component for checkbox/radio/file",
+            "values": [
+              "email",
+              "number",
+              "password",
+              "search",
+              "tel",
+              "text",
+              "url"
+            ],
             "defaultValue": "text"
           },
           {
@@ -7864,6 +8443,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (not the native character-width `size` attribute)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -7978,6 +8561,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8053,6 +8640,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8103,6 +8694,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"search\" | \"text\" | \"tel\" | \"url\" | \"email\"",
             "required": false,
             "description": "Input type: a curated subset of the single-line text types.",
+            "values": [
+              "email",
+              "search",
+              "tel",
+              "text",
+              "url"
+            ],
             "defaultValue": "text"
           },
           {
@@ -8110,6 +8708,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8241,6 +8843,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8324,6 +8930,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8374,6 +8984,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute).",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8424,6 +9038,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8431,6 +9049,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Layout direction",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "vertical"
           },
           {
@@ -8557,6 +9179,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Key size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -8897,6 +9523,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"start\" | \"end\"",
             "required": false,
             "description": "Which way the text ranges. A callout sitting left of its marker ranges\nright so it hangs off the point; `start` is the ordinary reading order.",
+            "values": [
+              "end",
+              "start"
+            ],
             "defaultValue": "start"
           },
           {
@@ -9303,6 +9933,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
             "required": false,
             "description": "Status role colouring the fill",
+            "values": [
+              "error",
+              "info",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "info"
           },
           {
@@ -9310,6 +9947,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (bar height)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -9419,6 +10060,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\"",
             "required": false,
             "description": "Which side of the trigger the panel opens on. In a composer pinned to the bottom of the screen, use `top`.",
+            "values": [
+              "bottom",
+              "top"
+            ],
             "defaultValue": "bottom"
           },
           {
@@ -9426,6 +10071,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px, so it lines up with the fields and buttons beside it.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -9830,6 +10479,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (not the native character-width `size` attribute)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -9927,6 +10580,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size — compact swaps the numbers for a \"Page X of Y\" readout",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10000,6 +10657,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"none\" | \"default\" | \"compact\"",
             "required": false,
             "description": "Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it",
+            "values": [
+              "compact",
+              "default",
+              "none"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10166,6 +10828,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"numeric\" | \"alphanumeric\"",
             "required": false,
             "description": "Accepted characters — `numeric` rejects non-digits and sets a numeric keyboard",
+            "values": [
+              "alphanumeric",
+              "numeric"
+            ],
             "defaultValue": "numeric"
           },
           {
@@ -10193,6 +10859,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether the whole control is disabled",
             "defaultValue": "false"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "Form field name. When set, the joined code submits with an enclosing form\nthrough a hidden input, nothing while disabled. The cells themselves\ncarry no name."
           },
           {
             "name": "cellLabel",
@@ -10236,19 +10908,37 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
             "required": false,
             "description": "Rendered size, on the icon scale (`--icon-size-500/600/800/1200` — 20, 24, 32 and 48px), so the character seats wherever an icon does.",
+            "values": [
+              "lg",
+              "md",
+              "sm",
+              "xl"
+            ],
             "defaultValue": "md"
           },
           {
             "name": "ink",
             "type": "PixelInk",
             "required": false,
-            "description": "Overrides the ink the name picks (1 to 6, the `--color-pixel-ink-*`\ntokens). A name's own ink is one of six, so two neighbours can land on\nthe same one; a host drawing a list passes each row's entry from\n`distinctPixelInks` here to keep them apart. The character's shape still\ncomes from the name."
+            "description": "Overrides the ink the name picks (1 to 6, the `--color-pixel-ink-*`\ntokens). A name's own ink is one of six, so two neighbours can land on\nthe same one; a host drawing a list passes each row's entry from\n`distinctPixelInks` here to keep them apart. The character's shape still\ncomes from the name.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
           },
           {
             "name": "variant",
             "type": "\"plain\" | \"tile\"",
             "required": false,
             "description": "`plain` draws the character alone; `tile` seats it on a rounded wash of its own ink, for a larger standalone mark.",
+            "values": [
+              "plain",
+              "tile"
+            ],
             "defaultValue": "plain"
           },
           {
@@ -10299,6 +10989,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10306,6 +11000,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"menu\" | \"panel\"",
             "required": false,
             "description": "The panel's surface. `panel` (the default) is the content panel: a\n16px inset and the container border. `menu` is DropdownMenu's own\nsurface (its 4px inset, input border and corner), for a popover that\nsits among menus and should read as one of them, such as a table\ntoolbar's sort or column panel.",
+            "values": [
+              "menu",
+              "panel"
+            ],
             "defaultValue": "panel"
           },
           {
@@ -10313,6 +11011,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
             "defaultValue": "bottom"
           },
           {
@@ -10320,6 +11026,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"start\" | \"end\"",
             "required": false,
             "description": "Which edge of the trigger the panel lines up with, on the top and bottom sides. `start` and `end` follow the reading direction. Defaults to `start`.",
+            "values": [
+              "end",
+              "start"
+            ],
             "defaultValue": "start"
           },
           {
@@ -10327,6 +11037,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"hover\" | \"click\"",
             "required": false,
             "description": "Trigger mode",
+            "values": [
+              "click",
+              "hover"
+            ],
             "defaultValue": "click"
           },
           {
@@ -10391,6 +11105,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Size of the bar",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10443,6 +11161,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\"",
             "required": false,
             "description": "The side the blur is anchored to, as Drawer names its edge: fully\nfrosted there, dissolving to clear toward the opposite side. `top` sits\nbehind a header, `bottom` behind a toolbar or a footer bar.",
+            "values": [
+              "bottom",
+              "top"
+            ],
             "defaultValue": "top"
           },
           {
@@ -10493,7 +11215,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "\"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
             "required": false,
-            "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows."
+            "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows.",
+            "values": [
+              "cards",
+              "scroll",
+              "stack",
+              "tiles",
+              "wrap"
+            ]
           },
           {
             "name": "wrap",
@@ -10529,6 +11258,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Row scale. `default` sits at the body-paragraph scale, so a suggestion\nreads at the same weight as the messages it will become; `compact` is\nthe quieter row for placements alongside a live conversation.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10581,6 +11314,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"sm\"",
             "required": false,
             "description": "Body scale. `sm` maps paragraphs, lists and code to the small paragraph tokens for dense chat contexts.",
+            "values": [
+              "default",
+              "sm"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10588,6 +11325,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10688,6 +11429,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"plain\" | \"card\"",
             "required": false,
             "description": "`card` draws the summary in its own hairline frame, as a set's record\nunder the reply that asked it. `plain` drops the frame, for a surface\nthat brings its own, such as the message bubble that sent the answers.",
+            "values": [
+              "card",
+              "plain"
+            ],
             "defaultValue": "card"
           },
           {
@@ -10738,6 +11483,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"pull\"",
             "required": false,
             "description": "`default` is an inline blockquote; `pull` is a large display pull-quote",
+            "values": [
+              "default",
+              "pull"
+            ],
             "defaultValue": "default"
           },
           {
@@ -10993,8 +11742,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string",
             "required": false,
-            "description": "Value for this radio option",
-            "defaultValue": ""
+            "description": "Value for this radio option, passed to the callbacks and submitted under `name`. A form reads \"on\", the native radio's, when it is omitted."
           },
           {
             "name": "onValueChange",
@@ -11027,8 +11775,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Legacy form-field name.",
-            "deprecated": "No-op. This component renders a `<div role=\"radio\">`, not a\nnative `<input type=\"radio\">`, so it does not group by name or participate\nin native form submission — `RadioGroup` handles grouping in React state.\nDeclared only so the attribute is not forwarded to an element that rejects it."
+            "description": "Form field name. When set, the radio submits its `value` with an\nenclosing form through a hidden input while checked, nothing otherwise\nor while disabled, as a native radio does. Grouping stays React state\n(`RadioGroup` passes its own `name` to every option, so exactly one\nentry submits)."
           }
         ]
       },
@@ -11077,8 +11824,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Legacy grouping name, never used.",
-            "deprecated": "No-op. Grouping is React state (`value`/`onValueChange`), not\nnative `name` semantics — the group renders `role=\"radiogroup\"` over\n`<div role=\"radio\">`s, so there is nothing for a name to group."
+            "description": "Form field name. When set, the checked option's `value` submits with an\nenclosing form through one hidden input, as a native radio set does; a\ndisabled option submits nothing.\nGrouping itself stays React state (`value`/`onValueChange`)."
           },
           {
             "name": "options",
@@ -11091,6 +11837,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Layout direction",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "vertical"
           },
           {
@@ -11209,6 +11959,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -11308,6 +12062,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Text scale, paired with ChatMessage's sizes: `default` matches default\nmessage text, `compact` matches compact message text.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -11434,7 +12192,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Used only as a fallback for deriving the element id (`id || name || label`).\n\nNote: RichDropdown renders a `<div role=\"combobox\">`, not a native\n`<select>`, so `name` does **not** make it participate in native form\nsubmission."
+            "description": "Form field name. When set, the selected option's `value` submits with an\nenclosing form through a hidden input (nothing while no value is set,\nnothing while disabled), as Combobox does. Also the fallback for the\nelement id (`id || name || label`)."
           }
         ]
       }
@@ -11637,19 +12395,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
             "name": "tone",
             "type": "\"default\" | \"neutral\"",
             "required": false,
-            "description": "Colour of the active segment: `default` takes the action colour, `neutral`\nfills it grey, for a set whose selection should not carry the action\ncolour's weight."
+            "description": "Colour of the active segment: `default` takes the action colour, `neutral`\nfills it grey, for a set whose selection should not carry the action\ncolour's weight.",
+            "values": [
+              "default",
+              "neutral"
+            ]
           },
           {
             "name": "variant",
             "type": "\"neutral\" | \"primary\"",
             "required": false,
             "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+            "values": [
+              "neutral",
+              "primary"
+            ],
             "deprecated": "Use `tone` instead."
           },
           {
@@ -11681,6 +12451,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
+            "name": "cycle",
+            "type": "boolean",
+            "required": false,
+            "description": "Draw one circle in place of the strip, for a seat with room for a single\ncontrol (a collapsed rail's foot, a condensed header's actions): it shows\nthe current segment's glyph (a segment without an icon shows its label's\nfirst character), each press steps to the next enabled segment, round\nagain, and the current label is its tooltip. Its accessible name comes\nfrom `cycleLabel`. ThemeToggle's `cycle` is this form.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "cycleLabel",
+            "type": "((current: string, next: string) => string)",
+            "required": false,
+            "description": "The cycle circle's accessible name, from the current segment's label and the next one's. Default: the control's `aria-label`, then both, as in \"View: List. Switch to Grid\"."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -11710,6 +12493,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"checkbox\" | \"radio\" | \"toggle\"",
             "required": false,
             "description": "Selection mode — radio (single), checkbox (multi), or toggle (each card is an on/off switch)",
+            "values": [
+              "checkbox",
+              "radio",
+              "toggle"
+            ],
             "defaultValue": "radio"
           },
           {
@@ -11740,7 +12528,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "name",
             "type": "string",
             "required": false,
-            "description": "Group name (used for aria-label on the group)"
+            "description": "Form field name, also the group's aria-label when none is given. When set,\neach selected option's `value` submits with an enclosing form through a\nhidden input, repeated in checkbox and toggle modes as a set of native\ncheckboxes does; a disabled option submits nothing. In a form, name the group\nwith `aria-label` too, so a field key is never what a screen reader announces."
           },
           {
             "name": "className",
@@ -11971,6 +12759,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"tablet\" | \"mid\" | \"never\"",
             "required": false,
             "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width.",
+            "values": [
+              "mid",
+              "never",
+              "tablet"
+            ],
             "defaultValue": "tablet"
           },
           {
@@ -12051,6 +12844,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"text\" | \"circular\" | \"rectangular\"",
             "required": false,
             "description": "Shape of the skeleton",
+            "values": [
+              "circular",
+              "rectangular",
+              "text"
+            ],
             "defaultValue": "text"
           },
           {
@@ -12176,6 +12974,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (not the native character-width `size` attribute)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -12402,6 +13204,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"area\" | \"line\"",
             "required": false,
             "description": "Rendering treatment — a bare line, or a line with a soft fill underneath.",
+            "values": [
+              "area",
+              "line"
+            ],
             "defaultValue": "line"
           },
           {
@@ -12409,6 +13215,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"positive\" | \"neutral\" | \"accent\" | \"negative\"",
             "required": false,
             "description": "Colour role for the line and end dot. `accent` follows the chart palette's\nlead colour; `positive`/`error` map to the trend pair (up and down), named\nlike the status roles Gauge and the status components use; `neutral`\nrecedes to secondary text. `negative` is the legacy name for `error`.",
+            "values": [
+              "accent",
+              "error",
+              "negative",
+              "neutral",
+              "positive"
+            ],
             "defaultValue": "accent"
           },
           {
@@ -12475,19 +13288,34 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\"",
             "required": false,
             "description": "Size of the spinner",
+            "values": [
+              "lg",
+              "md",
+              "sm"
+            ],
             "defaultValue": "md"
           },
           {
             "name": "tone",
             "type": "\"inherit\" | \"default\" | \"neutral\"",
             "required": false,
-            "description": "Colour of the arc: `default` in the primary text colour, `neutral` in\nthe secondary one, `inherit` in `currentColor`, for use inside coloured\ncontrols."
+            "description": "Colour of the arc: `default` in the primary text colour, `neutral` in\nthe secondary one, `inherit` in `currentColor`, for use inside coloured\ncontrols.",
+            "values": [
+              "default",
+              "inherit",
+              "neutral"
+            ]
           },
           {
             "name": "variant",
             "type": "\"inherit\" | \"neutral\" | \"primary\"",
             "required": false,
             "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+            "values": [
+              "inherit",
+              "neutral",
+              "primary"
+            ],
             "deprecated": "Use `tone` instead."
           },
           {
@@ -12545,19 +13373,33 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"neutral\" | \"primary\" | \"secondary\"",
             "required": false,
             "description": "Emphasis, shared by both segments: `primary` (filled) or `secondary`\n(outlined). The colour is `tone`'s job. `neutral` is the legacy value\nfrom before the split and renders as `variant=\"primary\" tone=\"neutral\"`.",
+            "values": [
+              "neutral",
+              "primary",
+              "secondary"
+            ],
             "defaultValue": "primary"
           },
           {
             "name": "tone",
             "type": "\"default\" | \"neutral\" | \"destructive\"",
             "required": false,
-            "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour."
+            "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour.",
+            "values": [
+              "default",
+              "destructive",
+              "neutral"
+            ]
           },
           {
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -12585,6 +13427,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"start\" | \"end\"",
             "required": false,
             "description": "Horizontal alignment of the menu panel relative to the control",
+            "values": [
+              "end",
+              "start"
+            ],
             "defaultValue": "end"
           },
           {
@@ -12630,6 +13476,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Which way the panes sit: side by side, or stacked.",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "horizontal"
           },
           {
@@ -12808,6 +13658,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"neutral\" | \"up\" | \"down\"",
             "required": false,
             "description": "Direction of the delta — colours it and adds an arrow",
+            "values": [
+              "down",
+              "neutral",
+              "up"
+            ],
             "defaultValue": "neutral"
           },
           {
@@ -12815,6 +13670,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"auto\" | \"inline\" | \"stacked\"",
             "required": false,
             "description": "Where the delta sits: stacked below the label, inline to the right of the\nvalue (bottom-aligned), or `auto`: inline while the stat has room and\nstacked once it is narrow, such as a KPI tile in a two-up phone grid.\n`auto` fills its parent's width and reads its own, so it restacks\nwherever it sits, whatever the viewport.",
+            "values": [
+              "auto",
+              "inline",
+              "stacked"
+            ],
             "defaultValue": "stacked"
           },
           {
@@ -12822,6 +13682,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"large\"",
             "required": false,
             "description": "Stat size",
+            "values": [
+              "default",
+              "large"
+            ],
             "defaultValue": "default"
           },
           {
@@ -12861,6 +13725,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
             "required": false,
             "description": "Status role the dot carries — coloured through the plain-surface `--color-status-*-icon` steps.",
+            "values": [
+              "error",
+              "info",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "neutral"
           },
           {
@@ -12868,6 +13739,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
             "required": false,
             "description": "Dot diameter, derived from the icon scale (half of `--icon-size-500/600/800`); `xs` is the 8px list-row mark, sized on the gap scale.",
+            "values": [
+              "lg",
+              "md",
+              "sm",
+              "xs"
+            ],
             "defaultValue": "md"
           },
           {
@@ -12945,6 +13822,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Layout direction",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "horizontal"
           },
           {
@@ -13079,6 +13960,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Swatch size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -13086,6 +13971,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"circle\" | \"square\"",
             "required": false,
             "description": "Corner treatment — circle matches the site's preset grids; square suits picker triggers",
+            "values": [
+              "circle",
+              "square"
+            ],
             "defaultValue": "circle"
           },
           {
@@ -13137,6 +14026,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Visual size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -13262,13 +14155,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set."
+            "description": "The density the bar's controls take and its switch sets, for controlled use. Inside a DataTable the table's density is used unless this is set.",
+            "values": [
+              "compact",
+              "default"
+            ]
           },
           {
             "name": "defaultSize",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Starting density, for uncontrolled use outside a DataTable."
+            "description": "Starting density, for uncontrolled use outside a DataTable.",
+            "values": [
+              "compact",
+              "default"
+            ]
           },
           {
             "name": "onSizeChange",
@@ -13532,6 +14433,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Visual size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -13608,6 +14513,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size (not the native character-width `size` attribute)",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -13636,6 +14545,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
             "defaultValue": ""
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "Form field name. When set, the committed tags submit with an enclosing\nform through hidden inputs, one entry per tag, nothing while disabled.\nThe draft text being typed is never submitted. Also the fallback for the\nelement id (`id || name || label`)."
           }
         ]
       }
@@ -13678,6 +14593,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -13698,6 +14617,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"none\" | \"both\" | \"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Whether the textarea is resizable",
+            "values": [
+              "both",
+              "horizontal",
+              "none",
+              "vertical"
+            ],
             "defaultValue": "vertical"
           },
           {
@@ -13799,6 +14724,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Trigger size, on the row-control scale: `default` is 40px, `compact` 32px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -13806,6 +14735,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\"",
             "required": false,
             "description": "Which side of the trigger the menu prefers; it flips when that side has no room.",
+            "values": [
+              "bottom",
+              "top"
+            ],
             "defaultValue": "bottom"
           },
           {
@@ -13813,6 +14746,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"start\" | \"end\"",
             "required": false,
             "description": "Which trigger edge the menu lines up with.",
+            "values": [
+              "end",
+              "start"
+            ],
             "defaultValue": "end"
           },
           {
@@ -13864,13 +14801,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "\"dark\" | \"system\" | \"light\"",
             "required": false,
-            "description": "The setting shown, for a host that owns colour mode (its own settings\nstore, or a library such as next-themes). A pick then only calls\n`onValueChange`, and the host applies it. Leave undefined to let the\ntoggle keep the setting in its own store, `useColorMode`."
+            "description": "The setting shown, for a host that owns colour mode (its own settings\nstore, or a library such as next-themes). A pick then only calls\n`onValueChange`, and the host applies it. Leave undefined to let the\ntoggle keep the setting in its own store, `useColorMode`.",
+            "values": [
+              "dark",
+              "light",
+              "system"
+            ]
           },
           {
             "name": "defaultValue",
             "type": "\"dark\" | \"system\" | \"light\"",
             "required": false,
-            "description": "The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system."
+            "description": "The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system.",
+            "values": [
+              "dark",
+              "light",
+              "system"
+            ]
           },
           {
             "name": "onValueChange",
@@ -13883,6 +14830,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Control size, on SegmentedControl's scale: `default` (the default), the height of the CommandPaletteTrigger and AiButton beside it in a top bar, or `compact`.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -14359,7 +15310,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "hourFormat",
             "type": "\"12\" | \"24\"",
             "required": false,
-            "description": "Display format for the trigger and options — the value stays a 24-hour\n\"HH:MM\" string either way. Defaults to the clock `locale` uses: `'12'` in\n`en-US`, `'24'` in `en-GB` and `de-DE`."
+            "description": "Display format for the trigger and options — the value stays a 24-hour\n\"HH:MM\" string either way. Defaults to the clock `locale` uses: `'12'` in\n`en-US`, `'24'` in `en-GB` and `de-DE`.",
+            "values": [
+              "12",
+              "24"
+            ]
           },
           {
             "name": "locale",
@@ -14368,10 +15323,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The BCP 47 locale the times are written in, such as `de-DE`: the clock\n`hourFormat` defaults to, and the period words and their place when no\n`periodLabels` are given. Defaults to the nearest LocaleProvider's, else\n`en-US`."
           },
           {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "Form field name. When set, the selected 24-hour \"HH:MM\" value submits with\nan enclosing form through a hidden input (nothing while no value is set,\nnothing while disabled), as Dropdown does."
+          },
+          {
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -14442,19 +15407,27 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"default\" | \"company\"",
             "required": false,
-            "description": "Selects the flat step/event layout — the default when omitted\nSelects the grouped layout: roles nested under a company logo"
+            "description": "Which layout the timeline draws. Omitted or `default`: a flat sequence of steps or events with dot, number or icon markers.\n`company`: roles grouped under a company logo, for résumé and pipeline histories.",
+            "values": [
+              "company",
+              "default"
+            ]
           },
           {
             "name": "items",
             "type": "TimelineItem[] | TimelineCompany[]",
             "required": true,
-            "description": "Ordered list of steps/events\nOrdered list of company/tool entries"
+            "description": "The entries, in order. Their shape follows `variant`: in the default layout, steps or events (`TimelineItem`).\nIn the `company` layout, companies with their roles (`TimelineCompany`)."
           },
           {
             "name": "orientation",
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "`vertical` timeline (default) or `horizontal` stepper",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "vertical"
           },
           {
@@ -14520,6 +15493,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"error\" | \"info\" | \"positive\" | \"warning\" | \"neutral\"",
             "required": false,
             "description": "Toast variant",
+            "values": [
+              "error",
+              "info",
+              "neutral",
+              "positive",
+              "warning"
+            ],
             "defaultValue": "info"
           },
           {
@@ -14577,6 +15557,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top-right\" | \"top-left\" | \"bottom-right\" | \"bottom-left\" | \"top-center\" | \"bottom-center\"",
             "required": false,
             "description": "Position of the toast stack",
+            "values": [
+              "bottom-center",
+              "bottom-left",
+              "bottom-right",
+              "top-center",
+              "top-left",
+              "top-right"
+            ],
             "defaultValue": "bottom-right"
           },
           {
@@ -14649,19 +15637,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
             "name": "tone",
             "type": "\"default\" | \"neutral\"",
             "required": false,
-            "description": "Colour of active items: `default` takes the action colour, `neutral`\nfills them grey, for a set whose selection should not carry the action\ncolour's weight."
+            "description": "Colour of active items: `default` takes the action colour, `neutral`\nfills them grey, for a set whose selection should not carry the action\ncolour's weight.",
+            "values": [
+              "default",
+              "neutral"
+            ]
           },
           {
             "name": "variant",
             "type": "\"neutral\" | \"primary\"",
             "required": false,
             "description": "Legacy name for `tone`, from before colour moved onto its own prop:\n`primary` is `tone=\"default\"`.",
+            "values": [
+              "neutral",
+              "primary"
+            ],
             "deprecated": "Use `tone` instead."
           },
           {
@@ -14761,6 +15761,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -14789,6 +15793,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy accessible-name prop.",
             "deprecated": "Pass the native `aria-label` attribute instead."
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "Form field name. When set, the switch submits with an enclosing form\nthrough a hidden input: `value` while on, nothing while off or disabled,\nas a native checkbox does."
+          },
+          {
+            "name": "value",
+            "type": "string | number | readonly string[]",
+            "required": false,
+            "description": "The value submitted under `name` while on. Defaults to \"on\", the native checkbox's.",
+            "defaultValue": "on"
           }
         ]
       },
@@ -14807,6 +15824,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Track size: `default` is 42×24px, `compact` 34×20px.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -14845,6 +15866,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ToolCallStatus",
             "required": false,
             "description": "Where the call has got to. Drives the colour, the indicator, and the default status text.",
+            "values": [
+              "error",
+              "pending",
+              "running",
+              "success"
+            ],
             "defaultValue": "success"
           },
           {
@@ -14932,6 +15959,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"horizontal\" | \"vertical\"",
             "required": false,
             "description": "Which way the controls run.",
+            "values": [
+              "horizontal",
+              "vertical"
+            ],
             "defaultValue": "horizontal"
           },
           {
@@ -14939,6 +15970,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"floating\"",
             "required": false,
             "description": "`default` is an attached bar on the container fill; `floating` is the\nglass pill for controls hovering over content — position it with your own\nlayout (the component never fixes itself to the viewport).",
+            "values": [
+              "default",
+              "floating"
+            ],
             "defaultValue": "default"
           },
           {
@@ -14993,6 +16028,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
             "defaultValue": "top"
           },
           {
@@ -15051,6 +16094,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"ios\" | \"android\"",
             "required": false,
             "description": "Which platform's bar to draw. `default` is the Rift bar; `ios` is the iOS\n26 navigation bar, with glass circle buttons over content and a soft\nblurred edge; `android` is the Material 3 Expressive top app bar.",
+            "values": [
+              "android",
+              "default",
+              "ios"
+            ],
             "defaultValue": "default"
           },
           {
@@ -15058,19 +16106,33 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"small\" | \"large\" | \"medium\"",
             "required": false,
             "description": "`small` puts the title in the bar. `medium` and `large` add an expanded\ntitle under it that collapses into the bar as the page scrolls; on iOS\nboth are the large title.",
+            "values": [
+              "large",
+              "medium",
+              "small"
+            ],
             "defaultValue": "small"
           },
           {
             "name": "align",
             "type": "\"center\" | \"start\"",
             "required": false,
-            "description": "Title alignment in the bar. Defaults to centred on iOS and to the start edge elsewhere"
+            "description": "Title alignment in the bar. Defaults to centred on iOS and to the start edge elsewhere",
+            "values": [
+              "center",
+              "start"
+            ]
           },
           {
             "name": "navigation",
             "type": "\"menu\" | \"close\" | \"back\"",
             "required": false,
-            "description": "The leading control: a menu button, a back button, or a close button"
+            "description": "The leading control: a menu button, a back button, or a close button",
+            "values": [
+              "back",
+              "close",
+              "menu"
+            ]
           },
           {
             "name": "onNavigate",
@@ -15129,6 +16191,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "1 | 2 | 4 | 3 | 5 | 6",
             "required": false,
             "description": "Level of the title's heading element",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
             "defaultValue": "1"
           },
           {
@@ -15388,6 +16458,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"idle\" | \"listening\" | \"speaking\"",
             "required": false,
             "description": "What the audio channel is doing: `idle` parks the bars low and still,\n`listening` runs a gentle half-height wave, `speaking` runs the full one.\nIgnored while `levels` drives the bars.",
+            "values": [
+              "idle",
+              "listening",
+              "speaking"
+            ],
             "defaultValue": "idle"
           },
           {
@@ -15408,6 +16483,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"default\" | \"compact\"",
             "required": false,
             "description": "Bar height scale — `default` sits on `--icon-size-600`, `compact` on `--icon-size-500`.",
+            "values": [
+              "compact",
+              "default"
+            ],
             "defaultValue": "default"
           },
           {
@@ -15464,6 +16543,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"h2\" | \"h3\" | \"h4\"",
             "required": false,
             "description": "Heading element for the title, so the tile takes its place in the page's outline.",
+            "values": [
+              "h2",
+              "h3",
+              "h4"
+            ],
             "defaultValue": "h3"
           },
           {
@@ -15496,6 +16580,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "1 | 2 | 3",
             "required": false,
             "description": "The most columns the board runs to. It folds to fewer as its own width narrows.",
+            "values": [
+              "1",
+              "2",
+              "3"
+            ],
             "defaultValue": "2"
           },
           {
@@ -15620,6 +16709,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"cover\" | \"contain\"",
             "required": false,
             "description": "How the framed window meets the container: `contain` letterboxes so the\nwhole window is visible, `cover` fills the container and crops the\nwindow's edges — the full-bleed stage look.",
+            "values": [
+              "contain",
+              "cover"
+            ],
             "defaultValue": "contain"
           },
           {
@@ -15808,6 +16901,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"top-down\" | \"bottom-up\"",
             "required": false,
             "description": "Which way the conversation reads. `top-down` (the default) floats each\nnew turn to the top of the thread and streams the answer in below it.\n`bottom-up` is the classic message thread: turns stack from the bottom,\nthe newest just above the composer, and the view follows the answer.",
+            "values": [
+              "bottom-up",
+              "top-down"
+            ],
             "defaultValue": "top-down"
           },
           {
@@ -16024,6 +17121,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"scroll\" | \"fit\"",
             "required": false,
             "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the widgets hold their height and the composer rides up\nto make room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
+            "values": [
+              "fit",
+              "scroll"
+            ],
             "defaultValue": "fit"
           },
           {
@@ -16031,6 +17132,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"column\" | \"wide\"",
             "required": false,
             "description": "How wide the widget slot runs. `column` holds it to the composer's\nbounding box; `wide` lets it run past them, for a dashboard.",
+            "values": [
+              "column",
+              "wide"
+            ],
             "defaultValue": "column"
           },
           {
@@ -16295,6 +17400,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ChatPlacement",
             "required": false,
             "description": "The seat the panel opens in.",
+            "values": [
+              "floating",
+              "left",
+              "right"
+            ],
             "defaultValue": "right"
           },
           {
@@ -16432,6 +17542,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "\"inset\" | \"raised\"",
             "required": false,
             "description": "How the docked panel sits on the page. `raised` (the default) is a glass\ncard with the floating shadow, inset by `--ds-chat-inset`. `inset` is\nflat: the app surface colour, no shadow, border or blur, and the\n`--ds-shell-inset` gap, so it matches AppLayout's `inset` content\nsurface beside it. The overlay below the dock threshold takes the same\ngap but keeps its shadow, since it still covers the page; the floating\ncard and the takeover keep their own look.",
+            "values": [
+              "inset",
+              "raised"
+            ],
             "defaultValue": "raised"
           }
         ]

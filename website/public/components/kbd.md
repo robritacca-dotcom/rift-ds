@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Kbd } from 'rift-ds/components/Kbd/Kbd';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/kbd
+- Schema: https://rift-ds.com/schema/components/kbd.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Kbd props
 

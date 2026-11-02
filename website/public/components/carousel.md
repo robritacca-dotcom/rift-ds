@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Carousel } from 'rift-ds/components/Carousel/Carousel';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/carousel
+- Schema: https://rift-ds.com/schema/components/carousel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Carousel props
 

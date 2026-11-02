@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { RadioButton } from 'rift-ds/components/RadioButton/RadioButton';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/radio-button
+- Schema: https://rift-ds.com/schema/components/radio-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## RadioButton props
 
@@ -19,12 +20,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | error | `boolean` | no | `false` | Error state — recolours the helper text. Deliberately no `aria-invalid`: ARIA does not allow it on `role="radio"`; group-level errors carry it on the radiogroup via RadioGroup's `error`. |
 | checked | `boolean` | no | `false` | Whether this radio is selected |
 | disabled | `boolean` | no | `false` | Whether the radio is disabled |
-| value | `string` | no | `` | Value for this radio option |
+| value | `string` | no |  | Value for this radio option, passed to the callbacks and submitted under `name`. A form reads "on", the native radio's, when it is omitted. |
 | onValueChange | `((value: string) => void)` | no |  | Called with this radio's value when selected |
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
-| name | `string` | no |  | Legacy form-field name. Deprecated: No-op. This component renders a `<div role="radio">`, not a native `<input type="radio">`, so it does not group by name or participate in native form submission — `RadioGroup` handles grouping in React state. Declared only so the attribute is not forwarded to an element that rejects it. |
+| name | `string` | no |  | Form field name. When set, the radio submits its `value` with an enclosing form through a hidden input while checked, nothing otherwise or while disabled, as a native radio does. Grouping stays React state (`RadioGroup` passes its own `name` to every option, so exactly one entry submits). |
 
 ## RadioGroup props
 
@@ -36,7 +37,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | required | `boolean` | no | `false` | Marks the group required and renders the required marker on its label |
 | value | `string` | no |  | Currently selected value, controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValue`. |
 | defaultValue | `string` | no |  | Selected value on first render when uncontrolled (`value` undefined). |
-| name | `string` | no |  | Legacy grouping name, never used. Deprecated: No-op. Grouping is React state (`value`/`onValueChange`), not native `name` semantics — the group renders `role="radiogroup"` over `<div role="radio">`s, so there is nothing for a name to group. |
+| name | `string` | no |  | Form field name. When set, the checked option's `value` submits with an enclosing form through one hidden input, as a native radio set does; a disabled option submits nothing. Grouping itself stays React state (`value`/`onValueChange`). |
 | options | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Radio options |
 | direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |

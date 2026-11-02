@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Popover } from 'rift-ds/components/Popover/Popover';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/popover
+- Schema: https://rift-ds.com/schema/components/popover.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Popover props
 

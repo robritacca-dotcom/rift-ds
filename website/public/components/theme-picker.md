@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ThemePicker } from 'rift-ds/components/ThemePicker/ThemePicker';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/theme-picker
+- Schema: https://rift-ds.com/schema/components/theme-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ThemePicker props
 

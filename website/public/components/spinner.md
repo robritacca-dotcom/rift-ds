@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Spinner } from 'rift-ds/components/Spinner/Spinner';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/spinner
+- Schema: https://rift-ds.com/schema/components/spinner.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Spinner props
 

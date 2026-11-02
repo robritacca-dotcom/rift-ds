@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { AppSidebar } from 'rift-ds/components/AppSidebar/AppSidebar';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/app-sidebar
+- Schema: https://rift-ds.com/schema/components/app-sidebar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## AppSidebar props
 
@@ -31,6 +32,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | floating | `boolean` | no | `false` | Floats the rail as a glass card, the same as `layout="floating"`. Deprecated: Use `layout="floating"`. |
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
+| collapsedFooterSlot | `ReactNode` | no |  | Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert |
 | className | `string` | no | `` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | logo | `ReactNode` | no |  | Logo element — defaults to the built-in brand mark |

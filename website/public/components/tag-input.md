@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { TagInput } from 'rift-ds/components/TagInput/TagInput';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/tag-input
+- Schema: https://rift-ds.com/schema/components/tag-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## TagInput props
 
@@ -24,3 +25,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | helperText | `string` | no |  | Helper or error message displayed below the control |
 | removeLabel | `((tag: string) => string)` | no | `(tag) => `Remove ${tag}`` | Accessible name of a tag's remove button, given the tag. Defaults to "Remove <tag>". |
 | className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
+| name | `string` | no |  | Form field name. When set, the committed tags submit with an enclosing form through hidden inputs, one entry per tag, nothing while disabled. The draft text being typed is never submitted. Also the fallback for the element id (`id \|\| name \|\| label`). |

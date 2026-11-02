@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ThreadPanel } from 'rift-ds/components/ThreadPanel/ThreadPanel';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/thread-panel
+- Schema: https://rift-ds.com/schema/components/thread-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ThreadPanel props
 

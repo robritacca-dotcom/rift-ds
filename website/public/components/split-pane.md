@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { SplitPane } from 'rift-ds/components/SplitPane/SplitPane';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/split-pane
+- Schema: https://rift-ds.com/schema/components/split-pane.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## SplitPane props
 

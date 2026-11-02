@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Card } from 'rift-ds/components/Card/Card';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/card
+- Schema: https://rift-ds.com/schema/components/card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Card props
 

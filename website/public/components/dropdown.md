@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Dropdown } from 'rift-ds/components/Dropdown/Dropdown';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/dropdown
+- Schema: https://rift-ds.com/schema/components/dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Dropdown props
 
@@ -32,7 +33,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 | className | `string` | no | `` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
-| name | `string` | no |  | Used only as a fallback for deriving the element id (`id \|\| name \|\| label`).  Note: Dropdown renders a `<div role="combobox">`, not a native `<select>`, so `name` does **not** make it participate in native form submission. |
+| name | `string` | no |  | Form field name. When set, the selected option's `value` submits with an enclosing form through a hidden input (nothing while no value is set, nothing while disabled), as Combobox does. Also the fallback for the element id (`id \|\| name \|\| label`). |
 
 ## ChosenMark props
 

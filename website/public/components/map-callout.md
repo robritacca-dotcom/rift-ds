@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { MapCallout } from 'rift-ds/components/MapCallout/MapCallout';`
 - Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/map-callout
+- Schema: https://rift-ds.com/schema/components/map-callout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## MapCallout props
 

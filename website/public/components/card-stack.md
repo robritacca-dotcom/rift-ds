@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { CardStack } from 'rift-ds/components/CardStack/CardStack';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/card-stack
+- Schema: https://rift-ds.com/schema/components/card-stack.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## CardStack props
 

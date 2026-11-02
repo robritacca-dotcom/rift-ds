@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { Input } from 'rift-ds/components/Input/Input';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/input
+- Schema: https://rift-ds.com/schema/components/input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Input props
 

@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ComboChart } from 'rift-ds/components/Chart/ComboChart';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/combo-chart
+- Schema: https://rift-ds.com/schema/components/combo-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ComboChart props
 

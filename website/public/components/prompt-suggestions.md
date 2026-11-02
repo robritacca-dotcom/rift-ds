@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { PromptSuggestions } from 'rift-ds/components/PromptSuggestions/PromptSuggestions';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/prompt-suggestions
+- Schema: https://rift-ds.com/schema/components/prompt-suggestions.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## PromptSuggestions props
 

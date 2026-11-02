@@ -9,6 +9,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.19.1. The same dat
 - Deep import: `import { ThreadTabs } from 'rift-ds/components/ThreadTabs/ThreadTabs';`
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/thread-tabs
+- Schema: https://rift-ds.com/schema/components/thread-tabs.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## ThreadTabs props
 

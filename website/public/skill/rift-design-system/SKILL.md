@@ -34,7 +34,7 @@ The token stylesheet defines custom properties and styles no element, so paint t
 
 ## Theming
 
-Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry. Never write a token name from memory: look it up there, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`, since a misspelt `var()` resolves to nothing and fails silently.
+Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry. Never write a token name from memory: look it up there, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`, since a misspelt `var()` resolves to nothing and fails silently. For the resolved values of every theme in code, read `rift-ds/tokens/values`; the same values are served as DTCG files under `https://rift-ds.com/schema/tokens/`.
 
 ## Charts
 
@@ -89,10 +89,11 @@ references/components.md lists every component with its import line and descript
 
 ## Exact prop contracts
 
-Do not guess props. Three equivalent sources, all generated from the same JSDoc that ships in the package:
+Do not guess props. Equivalent sources, all generated from the same JSDoc that ships in the package:
 
 - The `.d.ts` files in `node_modules/rift-ds` once installed.
 - `https://rift-ds.com/components/<slug>.md`: one markdown contract per component, next to its live docs page.
+- `https://rift-ds.com/schema/components/<slug>.json`: the same contract as JSON, indexed at `https://rift-ds.com/schema/components.json`.
 - The MCP endpoint at `https://rift-ds.com/api/mcp`: the `get_component` tool returns the full contract for one component.
 
 ## Related skills

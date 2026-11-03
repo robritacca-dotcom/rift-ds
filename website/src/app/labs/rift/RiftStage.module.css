@@ -1,0 +1,90 @@
+/* Labs: the rift. Everything is a semantic token except the experiment's own
+   dials: the blur radii, the tint strengths and the pane sizes. */
+
+.stage {
+  --glass-blur: 14px;
+  --rail-blur: 5px;
+
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  height: var(--layout-viewport-height, 100vh);
+  /* Edge to edge across the body's padding, the templates' shell pattern. */
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-1000));
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Absolute, never a grid or flex item: the chat is a size container, and a
+   track-sizing pass measures it at a provisional size, which flips its height
+   queries, hides the starters mid-layout and restarts their entrance forever. */
+.window {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  z-index: 1;
+  width: min(1120px, 84vw, calc(100% - var(--padding-500) * 2));
+  height: min(800px, 84%);
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-modal);
+  color: var(--color-text-primary);
+}
+
+.frost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+  background-color: color-mix(in srgb, var(--color-bg-page-primary) 56%, transparent);
+  transition: background-color var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+/* A transcript needs a heavier coat than a welcome screen. */
+.window[data-active] .frost {
+  background-color: color-mix(in srgb, var(--color-bg-page-primary) 74%, transparent);
+}
+
+.chat {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+}
+
+.rail {
+  background-color: color-mix(in srgb, var(--color-bg-page-primary) 72%, transparent);
+  -webkit-backdrop-filter: blur(var(--rail-blur));
+  backdrop-filter: blur(var(--rail-blur));
+}
+
+/* The starters sit on their own glass, so what moves behind them cannot read
+   as the chips flickering. */
+.window :global(.ds-prompt-suggestions .ds-chip) {
+  background-color: color-mix(in srgb, var(--color-bg-container-primary) 78%, transparent);
+  -webkit-backdrop-filter: blur(var(--rail-blur));
+  backdrop-filter: blur(var(--rail-blur));
+}
+
+@media (max-width: 959px) {
+  .stage {
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
+  }
+}
+
+@media (max-width: 600px) {
+  .stage {
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-400));
+  }
+}

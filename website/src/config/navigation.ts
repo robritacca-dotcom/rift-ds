@@ -761,6 +761,18 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   if (docsLink) {
     return [{ label: "Docs", href: "/docs" }, { label: docsLink.label }];
   }
+  // A page beneath a docs page (e.g. /skills/new-component) keeps its parent
+  // in the trail, the way a section sub-page does below.
+  const docsParent = docsSidebarLinks.find(
+    (l) => l.href !== "/docs" && path.startsWith(l.href + "/")
+  );
+  if (docsParent) {
+    return [
+      { label: "Docs", href: "/docs" },
+      { label: docsParent.label, href: docsParent.href },
+      { label: path.slice(docsParent.href.length + 1) },
+    ];
+  }
 
   for (const section of breadcrumbSections) {
     // Section landing (e.g. /components) — top-level, no trail.

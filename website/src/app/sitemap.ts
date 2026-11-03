@@ -8,6 +8,7 @@ import {
   templatesSidebarLinks,
 } from "@/config/navigation";
 import { SITE_URL } from "@/lib/structuredData";
+import { SKILL_GUIDE_HREFS } from "@/data/skill-guides";
 
 const baseUrl = SITE_URL;
 const appDir = path.join(process.cwd(), "src", "app");
@@ -71,6 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/playground",
     "/graph",
     ...docsSidebarLinks.map((l) => l.href),
+    ...SKILL_GUIDE_HREFS,
     ...foundationsSidebarLinks.map((l) => l.href),
     ...templatesSidebarLinks.map((l) => l.href),
     ...componentsSidebarLinks.map((l) => l.href),

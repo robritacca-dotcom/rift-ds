@@ -6,10 +6,12 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import FloatingAnchorNav from "@/components/FloatingAnchorNav/FloatingAnchorNav";
 import { Badge } from "rift-ds/components/Badge/Badge";
+import { Button } from "rift-ds/components/Button/Button";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { SKILL_COUNT } from "@/data/skills-registry";
 import { skillsContent } from "@/data/skills-content.generated";
+import { SKILL_GUIDES, SKILL_GUIDE_LINK_LABEL } from "@/data/skill-guides";
 import styles from "./page.module.css";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/skills");
@@ -69,6 +71,16 @@ export default function SkillsPage() {
                     </span>
                     <code className={styles.skillName}>{skill.name}</code>
                   </div>
+                  {SKILL_GUIDES[skill.slug] && (
+                    <Button
+                      href={SKILL_GUIDES[skill.slug].href}
+                      linkComponent={Link}
+                      variant="secondary"
+                      size="compact"
+                      iconRight="arrow_forward"
+                      label={SKILL_GUIDE_LINK_LABEL}
+                    />
+                  )}
                 </div>
 
                 <p className={styles.skillDescription}>{skill.description}</p>

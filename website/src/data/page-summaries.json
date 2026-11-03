@@ -361,6 +361,348 @@
         }
       ]
     },
+    "/skills/new-component": {
+      "title": "How new-component works",
+      "text": "The new-component skill step by step, then Button traced from its folder to every place it shows up.",
+      "chips": [
+        {
+          "id": "where",
+          "label": "Where does a component live?",
+          "prompt": "Where does a component's code actually live, and how do Storybook and the site get it?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-component do?",
+          "prompt": "Walk me through what the new-component skill does, step by step."
+        }
+      ],
+      "starters": [
+        {
+          "id": "where",
+          "label": "Where does a component live?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-component do?"
+        },
+        {
+          "id": "live",
+          "label": "Which surfaces read it live?"
+        },
+        {
+          "id": "generated",
+          "label": "What gets generated from it?"
+        },
+        {
+          "id": "blocked",
+          "label": "What stops a half-built component?"
+        }
+      ]
+    },
+    "/skills/new-token": {
+      "title": "How new-token works",
+      "text": "The new-token skill step by step, then the action colour traced from its primitive to every home it reaches.",
+      "chips": [
+        {
+          "id": "homes",
+          "label": "Where does a token have to go?",
+          "prompt": "When I add a design token, which files and pages does it have to reach?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-token do?",
+          "prompt": "Walk me through what the new-token skill does, step by step."
+        }
+      ],
+      "starters": [
+        {
+          "id": "homes",
+          "label": "Where does a token have to go?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-token do?"
+        },
+        {
+          "id": "tiers",
+          "label": "What are the three token tiers?"
+        },
+        {
+          "id": "generated",
+          "label": "What gets generated from the CSS?"
+        },
+        {
+          "id": "checked",
+          "label": "Which homes does the build check?"
+        }
+      ]
+    },
+    "/skills/new-preset": {
+      "title": "How new-preset works",
+      "text": "The new-preset skill step by step, then Forest traced from its entry to every place a theme is picked.",
+      "chips": [
+        {
+          "id": "gate",
+          "label": "What does the preset gate check?",
+          "prompt": "What does the completeness gate check before a theme preset ships, and what happens when a pairing fails?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-preset do?",
+          "prompt": "Walk me through what the new-preset skill does, step by step."
+        }
+      ],
+      "starters": [
+        {
+          "id": "steps",
+          "label": "What does new-preset do?"
+        },
+        {
+          "id": "gate",
+          "label": "What does the preset gate check?"
+        },
+        {
+          "id": "generated",
+          "label": "Which preset files are generated?"
+        },
+        {
+          "id": "pickers",
+          "label": "Where can a visitor pick a theme?"
+        },
+        {
+          "id": "served",
+          "label": "How does a preset become the default?"
+        }
+      ]
+    },
+    "/skills/new-validator": {
+      "title": "How new-validator works",
+      "text": "The new-validator skill step by step, then a hex code traced from its one home to the build a stray one stops.",
+      "chips": [
+        {
+          "id": "hex",
+          "label": "Where may a hex code live?",
+          "prompt": "Where is a hex code allowed in this system, and which validators fail the build when one turns up anywhere else?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-validator do?",
+          "prompt": "Walk me through what the new-validator skill does, step by step."
+        }
+      ],
+      "starters": [
+        {
+          "id": "hex",
+          "label": "Where may a hex code live?"
+        },
+        {
+          "id": "steps",
+          "label": "What does new-validator do?"
+        },
+        {
+          "id": "fail",
+          "label": "What happens when a check fails?"
+        },
+        {
+          "id": "allow",
+          "label": "When is a raw value allowed?"
+        },
+        {
+          "id": "ci",
+          "label": "Does a validator run in CI?"
+        }
+      ]
+    },
+    "/skills/design-qa": {
+      "title": "How design-qa works",
+      "text": "The design-qa skill step by step, then one pass over Button traced from its stories to the report.",
+      "chips": [
+        {
+          "id": "outcomes",
+          "label": "What are the three outcomes?",
+          "prompt": "What are the defect, polish and direction outcomes in design-qa, and what happens to each?"
+        },
+        {
+          "id": "steps",
+          "label": "What does design-qa do?",
+          "prompt": "Walk me through what the design-qa skill does, step by step."
+        }
+      ],
+      "starters": [
+        {
+          "id": "outcomes",
+          "label": "What are the three outcomes?"
+        },
+        {
+          "id": "steps",
+          "label": "What does design-qa do?"
+        },
+        {
+          "id": "siblings",
+          "label": "How are the siblings chosen?"
+        },
+        {
+          "id": "loop",
+          "label": "When does the polish loop stop?"
+        },
+        {
+          "id": "render",
+          "label": "Why judge the render, not code?"
+        }
+      ]
+    },
+    "/skills/responsive-sweep": {
+      "title": "How responsive-sweep works",
+      "text": "The responsive-sweep skill step by step, then one sweep traced from the build to where each finding lands.",
+      "chips": [
+        {
+          "id": "steps",
+          "label": "What does responsive-sweep do?",
+          "prompt": "Walk me through what the responsive-sweep skill does, step by step."
+        },
+        {
+          "id": "verdicts",
+          "label": "How is a finding judged?",
+          "prompt": "How does the responsive sweep decide whether a finding is a real defect, by design, or an instrument error?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "steps",
+          "label": "What does responsive-sweep do?"
+        },
+        {
+          "id": "verdicts",
+          "label": "How is a finding judged?"
+        },
+        {
+          "id": "widths",
+          "label": "Which widths does the sweep check?"
+        },
+        {
+          "id": "accepted",
+          "label": "What goes in the ACCEPTED list?"
+        },
+        {
+          "id": "fix",
+          "label": "Where does a fix land?"
+        }
+      ]
+    },
+    "/skills/drift-audit": {
+      "title": "How drift-audit works",
+      "text": "The drift-audit skill step by step, then one renamed route traced from the change to the report.",
+      "chips": [
+        {
+          "id": "classes",
+          "label": "What are the finding classes?",
+          "prompt": "What do broken, stale, gap and verified mean in a drift-audit report, and what happens to each?"
+        },
+        {
+          "id": "steps",
+          "label": "What does drift-audit do?",
+          "prompt": "Walk me through what the drift-audit skill does, step by step."
+        }
+      ],
+      "starters": [
+        {
+          "id": "classes",
+          "label": "What are the finding classes?"
+        },
+        {
+          "id": "steps",
+          "label": "What does drift-audit do?"
+        },
+        {
+          "id": "route",
+          "label": "What does a route change touch?"
+        },
+        {
+          "id": "fixes",
+          "label": "Does the audit fix things itself?"
+        },
+        {
+          "id": "validators",
+          "label": "Why not just trust the validators?"
+        }
+      ]
+    },
+    "/skills/super-ship": {
+      "title": "How super-ship works",
+      "text": "The super-ship skill step by step, then one structural change traced from its branch to the live site.",
+      "chips": [
+        {
+          "id": "steps",
+          "label": "What does super-ship do?",
+          "prompt": "Walk me through what the super-ship skill does, step by step."
+        },
+        {
+          "id": "asks",
+          "label": "When does super-ship stop to ask?",
+          "prompt": "Which findings does super-ship fix on its own, and which make it stop and ask the owner?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "steps",
+          "label": "What does super-ship do?"
+        },
+        {
+          "id": "asks",
+          "label": "When does super-ship stop to ask?"
+        },
+        {
+          "id": "plain",
+          "label": "When is plain ship enough?"
+        },
+        {
+          "id": "together",
+          "label": "Why do the fixes ship with the work?"
+        },
+        {
+          "id": "live",
+          "label": "How is the live site proven?"
+        }
+      ]
+    },
+    "/skills/chat-quality": {
+      "title": "How chat-quality works",
+      "text": "How the chat quality loop turns disliked answers into eval cases and fixes.",
+      "chips": [
+        {
+          "id": "chat-quality-steps",
+          "label": "Walk me through the loop",
+          "prompt": "Walk me through the steps of the chat-quality loop, from the thumbs verdicts to the branch."
+        },
+        {
+          "id": "chat-quality-privacy",
+          "label": "How are visitor words kept private?",
+          "prompt": "How does the chat-quality loop keep visitors' own words out of the repo?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "cq-before-fix",
+          "label": "Why write the case before the fix?"
+        },
+        {
+          "id": "cq-eval-once",
+          "label": "Why does the eval run only once?"
+        },
+        {
+          "id": "cq-read-only",
+          "label": "Does the loop write to the live data?"
+        },
+        {
+          "id": "cq-may-touch",
+          "label": "What files may the loop change?"
+        },
+        {
+          "id": "cq-approve",
+          "label": "Who approves a run?"
+        }
+      ]
+    },
     "/loops": {
       "title": "Agent loops",
       "text": "The recurring automations on this project: chat quality and link checks.",

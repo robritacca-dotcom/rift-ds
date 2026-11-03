@@ -95,7 +95,9 @@ export default function ThemeTogglePage() {
             <p className={styles.demoText}>
               colorModeScript returns the script that applies the stored
               choice before anything paints. Render it in the document head,
-              and let React leave the attributes it sets alone. In a Next.js
+              and let React leave the attributes it sets alone. If a hydration
+              failure makes React rebuild the html element, which strips its
+              attributes, the script notices and applies the choice again. In a Next.js
               app, npx rift-ds init app scaffolds it as a component. A
               storageKey option, on the script and the toggle alike, keeps the
               choice under a key of your own.

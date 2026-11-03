@@ -45,21 +45,45 @@ export type ColorModeOptions = {
  * is `system`, keeps `data-theme` following the operating system. Render it
  * inline in the document head, before anything paints. Storage being
  * unavailable (a private window) leaves the page on `system`.
+ *
+ * It also puts the choice back when React wipes it. A hydration failure that
+ * reaches the root (a browser extension editing the page before hydration
+ * is enough) makes React client-render `<html>`, and taking that element
+ * over removes every attribute on it before setting the ones the layout
+ * renders. Without a repair the visitor's mode falls back to whatever the
+ * layout wrote, or to light. The script watches for its own
+ * `data-theme-setting` going missing, or coming back from nothing, and
+ * applies the stored choice again. A ThemeToggle change only ever replaces
+ * the value, so it never trips the repair.
  */
 export function colorModeScript({ storageKey = DEFAULT_COLOR_MODE_STORAGE_KEY }: ColorModeOptions = {}): string {
   const key = JSON.stringify(storageKey);
   return `(function () {
   var root = document.documentElement;
-  var saved = null;
-  try { saved = localStorage.getItem(${key}); } catch (e) {}
-  var setting = saved === 'light' || saved === 'dark' ? saved : 'system';
   var media = window.matchMedia('(prefers-color-scheme: dark)');
-  root.setAttribute('data-theme-setting', setting);
-  root.setAttribute('data-theme', setting === 'system' ? (media.matches ? 'dark' : 'light') : setting);
+  function apply() {
+    var saved = null;
+    try { saved = localStorage.getItem(${key}); } catch (e) {}
+    var setting = saved === 'light' || saved === 'dark' ? saved : 'system';
+    root.setAttribute('data-theme-setting', setting);
+    root.setAttribute('data-theme', setting === 'system' ? (media.matches ? 'dark' : 'light') : setting);
+  }
+  apply();
   media.addEventListener('change', function (event) {
     if (root.getAttribute('data-theme-setting') === 'system') {
       root.setAttribute('data-theme', event.matches ? 'dark' : 'light');
     }
   });
+  if (typeof MutationObserver === 'undefined') return;
+  var observer = new MutationObserver(function (records) {
+    var wiped = !root.hasAttribute('data-theme-setting');
+    for (var i = 0; !wiped && i < records.length; i++) {
+      if (records[i].attributeName === 'data-theme-setting' && records[i].oldValue === null) wiped = true;
+    }
+    if (!wiped) return;
+    apply();
+    observer.takeRecords();
+  });
+  observer.observe(root, { attributes: true, attributeOldValue: true, attributeFilter: ['data-theme-setting'] });
 })();`;
 }

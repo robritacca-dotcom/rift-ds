@@ -260,6 +260,9 @@ export function buildGraph() {
     const collect = (d) => {
       for (const entry of ls(d)) {
         const p = join(d, entry);
+        // walkRoutes never lists a local lab as a route, so without this the
+        // root route's collector walked into one and claimed its imports.
+        if (isLocalPath(p)) continue;
         if (isDir(p)) {
           if (!routeSet.has(p)) collect(p); // co-located folders belong to the route; subroutes own themselves
         } else if (isSource(p)) {
@@ -269,6 +272,7 @@ export function buildGraph() {
     };
     for (const entry of ls(dir)) {
       const p = join(dir, entry);
+      if (isLocalPath(p)) continue;
       if (isDir(p)) { if (!routeSet.has(p)) collect(p); }
       else if (isSource(p)) harvestSiteFile(p, ownerId);
     }

@@ -28,6 +28,18 @@
  * chat takeover render differently per pointer capability, and a mismatch
  * gated on either would only show on one of the two.
  *
+ * And it loads each route once more with hydration made to fail, the way a
+ * browser extension that edits the page before React arrives makes it fail:
+ * an init script rewrites the skip link's text as the parser lays it down,
+ * so React finds a mismatch at the root and client-renders <html>, which
+ * strips every attribute on it. On 2026-11-03 two visitors (a Pixel 7 and a
+ * MacBook, both Chrome) saw the home page go black with one line of hero
+ * copy showing, because that strip took the ready mark with it; the clean
+ * passes above could never see it, since nothing in a clean browser breaks
+ * hydration. This pass asserts the page comes back visible, with the ready
+ * mark and the visitor's stored colour mode, after a fallback it proves
+ * really happened.
+ *
  * It also fails a page that lays out wider than its viewport. On a phone,
  * Chrome widens the layout viewport to fit the overflow and every fixed
  * element stretches with it: on 2026-10-25 a Pixel 7 user reported the home
@@ -36,7 +48,7 @@
  * 54px past a 412px screen. Nothing errored and every other check here
  * passed, so the width is checked directly.
  */
-/* global document, window -- page.evaluate() callbacks execute in the browser */
+/* global document, window, MutationObserver -- page.evaluate() callbacks and the init script execute in the browser */
 import { chromium } from 'playwright';
 import { SMOKE_ROUTES as ROUTES, startServer } from './served-site.mjs';
 
@@ -70,12 +82,46 @@ const MIN_MAIN_TEXT = 80;
 /** How many overflowing elements a width failure names. */
 const OVERFLOW_REPORT_LIMIT = 3;
 
+/** The forced-fallback pass: the visitor's stored mode, chosen to differ
+ *  from what the layout renders (dark) under a dark system preference, so a
+ *  page that lost the stored choice shows it. Desktop only: the fallback does
+ *  not depend on the viewport. */
+const FALLBACK_STORED_MODE = 'light';
+const FALLBACK_PROFILE = {
+  name: 'forced hydration fallback',
+  viewport: { width: 1440, height: 900 },
+  isMobile: false,
+  hasTouch: false,
+  colorScheme: 'dark',
+  forceFallback: true,
+};
+
+/** Runs before any page script. Stores the visitor's mode, then rewrites the
+ *  skip link's text the moment the parser adds it, before the hydration
+ *  scripts (async, later in the document) can run. */
+function forceFallbackInit(storedMode) {
+  try {
+    localStorage.setItem('theme', storedMode);
+  } catch {
+    /* no storage: the mode assertion below will say so */
+  }
+  const observer = new MutationObserver(() => {
+    const link = document.querySelector('a.skip-link');
+    if (!link || !link.firstChild) return;
+    link.firstChild.textContent = 'Skip to content (edited before hydration)';
+    observer.disconnect();
+  });
+  observer.observe(document, { childList: true, subtree: true });
+}
+
 async function checkPage(browser, origin, route, profile) {
   const context = await browser.newContext({
     viewport: profile.viewport,
     isMobile: profile.isMobile,
     hasTouch: profile.hasTouch,
+    ...(profile.colorScheme ? { colorScheme: profile.colorScheme } : {}),
   });
+  if (profile.forceFallback) await context.addInitScript(forceFallbackInit, FALLBACK_STORED_MODE);
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (err) => errors.push(String(err?.message ?? err)));
@@ -98,6 +144,7 @@ async function checkPage(browser, origin, route, profile) {
         rootVisibility: window.getComputedStyle(document.documentElement).visibility,
         mainVisibility: main ? window.getComputedStyle(main).visibility : 'missing',
         mainTextLength: main ? main.innerText.trim().length : 0,
+        mode: document.documentElement.getAttribute('data-theme'),
       };
     });
 
@@ -151,7 +198,17 @@ async function checkPage(browser, origin, route, profile) {
     }
 
     const hydrationErrors = errors.filter((e) => HYDRATION_PATTERNS.some((p) => p.test(e)));
-    for (const e of hydrationErrors) failures.push(`hydration error: ${e.slice(0, 200)}`);
+    if (profile.forceFallback) {
+      // Here the mismatch is the point: without it the pass proves nothing.
+      if (hydrationErrors.length === 0) {
+        failures.push('the forced mismatch never reached React, so no fallback was tested (has the skip link moved?)');
+      }
+      if (state.mode !== FALLBACK_STORED_MODE) {
+        failures.push(`the stored colour mode did not survive the fallback: data-theme is ${state.mode}, stored ${FALLBACK_STORED_MODE}`);
+      }
+    } else {
+      for (const e of hydrationErrors) failures.push(`hydration error: ${e.slice(0, 200)}`);
+    }
     const pageErrors = errors.filter(
       (e) =>
         !hydrationErrors.includes(e) &&
@@ -180,7 +237,7 @@ async function main() {
   const problems = [];
   try {
     for (const route of ROUTES) {
-      for (const profile of VIEWPORTS) {
+      for (const profile of [...VIEWPORTS, FALLBACK_PROFILE]) {
         const failures = await checkPage(browser, origin, route, profile);
         const label = `${route} [${profile.name}]`;
         if (failures.length > 0) {
@@ -198,11 +255,11 @@ async function main() {
 
   if (problems.length > 0) {
     console.error(
-      `\nsmoke-hydration: ${problems.length} of ${ROUTES.length * VIEWPORTS.length} page loads failed on ${origin}:\n\n${problems.join('\n')}\n`,
+      `\nsmoke-hydration: ${problems.length} of ${ROUTES.length * (VIEWPORTS.length + 1)} page loads failed on ${origin}:\n\n${problems.join('\n')}\n`,
     );
     process.exit(1);
   }
-  console.log(`smoke-hydration: all ${ROUTES.length * VIEWPORTS.length} page loads render on ${origin}`);
+  console.log(`smoke-hydration: all ${ROUTES.length * (VIEWPORTS.length + 1)} page loads render on ${origin}`);
 }
 
 main().catch((err) => {

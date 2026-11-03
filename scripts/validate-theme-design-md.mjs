@@ -33,6 +33,10 @@ const errors = [];
 
 /** theme id -> lever -> why the file reads back differently. */
 const SANCTIONED_DRIFT = {
+  plum: {
+    tracking:
+      'Aubergine tightens its display tier through its own extras, not the tracking lever; the file states the tightened display, which the importer fits as a lever.',
+  },
   zest: {
     tracking:
       'Zest tightens its display tier through its own extras, not the tracking lever; the file states the tightened display, which the importer fits as a lever.',

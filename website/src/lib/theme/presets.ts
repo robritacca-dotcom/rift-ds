@@ -383,6 +383,116 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-text": "var(--primitive-neutral-00)",
     },
   },
+  plum: {
+    label: "Aubergine",
+    // A dual-tone HR-software look: saffron buttons on a warm cream page,
+    // with a magenta-to-aubergine second tone. The saffron is the key, so
+    // buttons, focus and the selected state come from it; it lands in the
+    // yellow family, light enough that the lever derives near-black labels
+    // over it in both themes, with hover and pressed fills brightening away
+    // from them. The second tone is the purple ramp, re-keyed below to a
+    // magenta whose deep steps are aubergine: it carries the mark and the
+    // headlines, over purple-cast blacks in dark mode.
+    brand: "#FFA81D",
+    // A warm clay seed: the page floor lands on a cream with white cards
+    // above it, and the hairlines and secondary text pick up a taupe cast.
+    tintOn: true,
+    tintSeed: "#B5652E",
+    tintStrength: 12,
+    // Enterprise-crisp: 4px buttons and inputs, tight cards, no pill.
+    radiusScale: 30,
+    pill: false,
+    density: 100,
+    typeScale: 100,
+    motionScale: 100,
+    // Flat: surfaces separate by tone and hairline, never by shadow.
+    elevation: "flat",
+    // One medium weight for every headline tier and regular text, with a
+    // whisper of open tracking on the text (the display tiers are pulled
+    // tight in the extras below).
+    displayWeight: 500,
+    headingWeight: 500,
+    bodyWeight: SHIPPED_BODY_WEIGHT,
+    tracking: 1,
+    iconWeight: 300,
+    iconFill: false,
+    // The two tones split the page: magenta for the mark and the
+    // headlines, saffron for the click, and the headings in plain ink.
+    logoTone: "purple",
+    logoEndTone: "matched",
+    displayTone: "purple",
+    headingTone: "ink",
+    textTone: "ink",
+    // A neutral grotesk pairing: Inter Tight's medium headlines over Inter.
+    fontLabel: "Inter",
+    headingFontLabel: "Inter Tight",
+    // Dual-tone sextet: the magenta family (magenta, lilac) beside the
+    // saffron family (amber, marigold), with a cool blue and a mint so a
+    // chart still reads categorically.
+    accents: {
+      coral: "#E0605A",
+      violet: "#9A1F8C",
+      cobalt: "#4F6BD8",
+      amber: "#FFA81D",
+      gold: "#FFCB5C",
+      mint: "#3FA889",
+    },
+    // The field is the two tones alone: aubergine, magenta and lilac
+    // moving through saffron and marigold.
+    ambient: ["#FFA81D", "#9A1F8C", "#4A0039", "#EAB8F2", "#7A005D", "#FFCB5C"],
+    // Warm neighbours, with purple re-keyed from violet to magenta so the
+    // second tone has a full ramp of its own. Yellow is the action family,
+    // left alone.
+    advanced: bases({
+      purple: "#9A1F8C",
+      red: "#D93B4A",
+      orange: "#F07A2E",
+      green: "#2E9E6E",
+      teal: "#1F8A9A",
+      blue: "#3F5BC8",
+    }),
+    extraOverrides: {
+      // The AI gradient crosses the two tones: aubergine, magenta, saffron.
+      "--color-ai-gradient-start": "var(--primitive-purple-09)",
+      "--color-ai-gradient-mid": "var(--primitive-purple-07)",
+      "--color-ai-gradient-end": "var(--primitive-yellow-07)",
+      // Tight headlines: the display tiers ship with open tracking, these
+      // close it the way a medium-weight grotesk wants.
+      "--font-mega-1-letter-spacing": "-0.025em",
+      "--font-mega-2-letter-spacing": "-0.025em",
+      "--font-display-1-letter-spacing": "-0.022em",
+      "--font-display-2-letter-spacing": "-0.018em",
+      "--font-sub-display-letter-spacing": "-0.012em",
+      // The page floor and the app shell sit on step 01, which light mode
+      // tints at only a quarter strength, so it reads grey; it is pinned to
+      // the warmer cream instead (dark mode re-tints the step below).
+      "--primitive-neutral-01": "#F2EEEB",
+      "--primitive-neutral-01-a01": "rgba(242, 238, 235, 0.01)",
+      "--primitive-neutral-01-a60": "rgba(242, 238, 235, 0.6)",
+      "--primitive-neutral-01-a82": "rgba(242, 238, 235, 0.82)",
+      // The finance-report palette, each a step lighter than the reference:
+      // plum, lilac pink, royal blue, sky blue and green lead, the saffron
+      // key and the coral follow. The pink and the sky sit outside every
+      // ramp's steps (the nearest are a dusky mauve and a periwinkle), so
+      // they are stated as hexes.
+      "--color-chart-series-1": "var(--primitive-purple-07)",
+      "--color-chart-series-2": "#E6A9EE",
+      "--color-chart-series-3": "var(--primitive-blue-06)",
+      "--color-chart-series-4": "#8EC3F2",
+      "--color-chart-series-5": "var(--primitive-green-06)",
+      "--color-chart-series-6": "var(--primitive-yellow-07)",
+      "--color-chart-series-7": "var(--color-core-accent-coral)",
+    },
+    // Dark mode keeps standard near-blacks, re-tinted from the clay seed
+    // toward the magenta so every grey (surfaces, hairlines, the
+    // translucent fills and the text greys alike) carries a faint purple
+    // cast, and the saffron and magenta stay the accents.
+    extraOverridesDark: {
+      ...neutralOverrides("#9A1F8C", 0.07, "dark"),
+      // The plum series sinks into the near-black page, so it lifts a step.
+      "--color-chart-series-1": "var(--primitive-purple-04)",
+    },
+  },
   gold: {
     label: "Volt",
     // The yellow key is a light colour, so the action lever derives dark
@@ -891,6 +1001,7 @@ const HUE_ORDER: ReadonlyArray<string> = [
   "mono",
   "coral",
   "warm",
+  "plum",
   "gold",
   "marquee",
   "zest",
@@ -926,6 +1037,7 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
+  plum: "Confident and businesslike, saffron buttons and magenta headlines on warm cream, over purple-tinged blacks in the dark.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",
   zest: "Fresh and confident, a bright lime on clean white under heavy, tight headlines.",
   forest: "Grounded and calm, a deep woods green with organic softness throughout.",

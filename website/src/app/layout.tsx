@@ -25,6 +25,7 @@ import { SiteFooterMount } from "@/components/SiteFooter/SiteFooterMount";
 import SiteAnchorRail from "@/components/FloatingAnchorNav/SiteAnchorRail";
 import { ClientNav } from "@/components/ClientNav/ClientNav";
 import BlurBackground from "@/components/BlurBackground/BlurBackground";
+import { DocumentThemeGuard } from "@/components/DocumentThemeGuard/DocumentThemeGuard";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -125,11 +126,11 @@ ${colorModeScript()}
     if (brand === '${BASE_THEME_ID}' || brand === '${LEGACY_BASE_THEME_ID}') root.removeAttribute('data-brand');
     else if (brand) root.setAttribute('data-brand', brand);
   } catch (e) {}
-  /* An attribute, deliberately not a class: React owns <html>'s className
-     (the next/font variable class), so a hydration failure's client
-     re-render rewrites it — a ready *class* gets wiped and the site stays
-     visibility:hidden forever. React never touches attributes it does not
-     render, so the ready mark survives any hydration fallback. */
+  /* An attribute, not a class: React owns <html>'s className (the
+     next/font variable class). Neither survives a hydration failure that
+     reaches the root, though: React then strips every attribute on <html>
+     before setting the ones it renders, so DocumentThemeGuard puts the
+     mark, the mode and the theme pick back after that commit. */
   root.setAttribute('data-theme-ready', '');
 })();
 `;
@@ -217,6 +218,9 @@ export default async function RootLayout({
           hidden
           dangerouslySetInnerHTML={{ __html: `<script>${themeScript}</script>` }}
         />
+        {/* Restores what the script above wrote, if a client re-render of
+            the root strips it from <html>. */}
+        <DocumentThemeGuard />
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>

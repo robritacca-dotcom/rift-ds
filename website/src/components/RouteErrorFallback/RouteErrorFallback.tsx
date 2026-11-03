@@ -12,7 +12,7 @@ import {
 } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
 import { isChromeless } from "@/config/chromeless";
-import { BASE_THEME_ID, LEGACY_BASE_THEME_ID } from "@/lib/theme/brand";
+import { restoreDocumentTheme } from "@/lib/theme/restore-document-theme";
 import styles from "./RouteErrorFallback.module.css";
 
 /** The props Next hands an `error.tsx` boundary. */
@@ -58,27 +58,11 @@ export default function RouteErrorFallback({
      client, where its inline theme script (a React-rendered <script>) never
      runs: the visitor's theme is not applied and the ready mark that lifts
      the document's visibility:hidden never lands, so the card would be
-     caught and invisible. This resolves both the way themeScript in
-     app/layout.tsx does, and does nothing when that script already ran
-     (a throw after hydration, the common case). */
+     caught and invisible. The root layout's DocumentThemeGuard restores
+     both; this is the card's own fallback, and does nothing once either
+     has run. */
   useEffect(() => {
-    const root = document.documentElement;
-    if (root.hasAttribute("data-theme-ready")) return;
-    let saved: string | null = null;
-    let brand: string | null = null;
-    try {
-      saved = localStorage.getItem("theme");
-      brand = localStorage.getItem("brand");
-    } catch {
-      /* Private mode: the served theme stands. */
-    }
-    const setting = saved === "light" || saved === "dark" ? saved : "system";
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    root.setAttribute("data-theme-setting", setting);
-    root.setAttribute("data-theme", setting === "system" ? (prefersDark ? "dark" : "light") : setting);
-    if (brand === BASE_THEME_ID || brand === LEGACY_BASE_THEME_ID) root.removeAttribute("data-brand");
-    else if (brand) root.setAttribute("data-brand", brand);
-    root.setAttribute("data-theme-ready", "");
+    restoreDocumentTheme();
   }, []);
 
   const card = (

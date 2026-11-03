@@ -16,7 +16,9 @@ import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
    panel mounts after hydration on pointer devices, which is also what keeps
    the FAB immune to the server's idea of the pathname: the root route's ISR
    regeneration can see a pathname the client never would, and a summary
-   rendered from it is a hydration mismatch that blanks the whole site. */
+   rendered from it is a hydration mismatch at the root, which makes React
+   client-render the whole document (the 2026-09-06 outage blanked the site
+   this way). */
 const HOVER_QUERY = "(hover: hover) and (pointer: fine)";
 const subscribeHover = (onChange: () => void) => {
   const media = window.matchMedia(HOVER_QUERY);

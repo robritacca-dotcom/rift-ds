@@ -11,10 +11,11 @@ html {
   scroll-behavior: smooth;
 }
 
-/* An attribute rather than a class on purpose: React owns <html>'s
-   className, and a hydration fallback re-render rewrites it — a ready class
-   would be wiped and the page would stay hidden. See themeScript in
-   layout.tsx, which sets the mark before first paint. */
+/* An attribute rather than a class, because React owns <html>'s
+   className. Neither survives a hydration failure that reaches the root:
+   React strips every attribute on <html> as it client-renders it, so
+   DocumentThemeGuard puts the mark back before the next paint. See
+   themeScript in layout.tsx, which sets the mark before first paint. */
 html:not([data-theme-ready]) {
   visibility: hidden;
 }

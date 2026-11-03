@@ -77,7 +77,7 @@ Use this skill when asked to make completed work live — phrases like "ship it"
    ```bash
    node scripts/smoke-hydration.mjs "$(node -e "import('./scripts/brand.mjs').then(b=>console.log(b.SITE_URL))")"
    ```
-   The script's doc block owns what it asserts (hydration succeeded, the theme guard's ready mark landed, the page is visible with content, at desktop and phone viewports). **A red result means the deploy may have taken the site down — treat it as an active outage, not a report line**: diagnose immediately, and if the cause isn't quickly fixable, revert the deploy (`git revert` the pushed commits and push again) rather than leaving the site dark while investigating. Never skip this step because verify and CI were green — they were green during the outage too.
+   The script's doc block owns what it asserts, and its passes are labelled in the output, so a red line names which one failed. **A red result means the deploy may have taken the site down — treat it as an active outage, not a report line**: diagnose immediately, and if the cause isn't quickly fixable, revert the deploy (`git revert` the pushed commits and push again) rather than leaving the site dark while investigating. Never skip this step because verify and CI were green — they were green during the outage too.
 
 9. **Report** in the final message:
    - Each pushed commit (hash + subject), confirmation `npm run verify` passed locally, the CI run result, and the live smoke result (step 8)

@@ -279,6 +279,16 @@
   margin-top: var(--gap-200);
 }
 
+/* On a phone the row would run edge to edge with a lone dot wrapped
+   beneath it. Capping it at seven dots (and their gaps) splits it into
+   two even rows that sit inside the hero's gutter. */
+@media (max-width: 600px) {
+  .accentRow {
+    max-width: calc(7 * 24px + 7 * var(--gap-200));
+    margin-inline: auto;
+  }
+}
+
 .swatchWrap {
   position: relative;
   display: inline-flex;

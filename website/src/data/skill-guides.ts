@@ -64,7 +64,7 @@ export const SKILL_GUIDES: Record<string, SkillGuide> = {
     href: "/skills/super-ship",
     title: "How super-ship works",
     description:
-      "The super-ship skill step by step, then one structural change traced through the audits, fixes and sweep to the live site.",
+      "The super-ship skill step by step, one structural change traced through the audits, fixes and sweep to the live site, then every check the ship runs.",
   },
   "chat-quality": {
     href: "/skills/chat-quality",

@@ -629,7 +629,7 @@
     },
     "/skills/super-ship": {
       "title": "How super-ship works",
-      "text": "The super-ship skill step by step, then one structural change traced from its branch to the live site.",
+      "text": "The super-ship skill step by step, one structural change traced from its branch to the live site, then every check the ship runs.",
       "chips": [
         {
           "id": "steps",

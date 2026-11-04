@@ -15,7 +15,8 @@ const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/skills");
 /**
  * The shell every /skills/<slug> walkthrough renders: the steps as a
  * numbered Timeline, one real run traced on an ArchitectureMap, and a
- * bordered Table that sums the run up. A page passes content only; the
+ * bordered Table that sums the run up, then any further GuideSection a
+ * page passes as children. A page passes content only; the
  * layout, section order and components live here.
  */
 export interface SkillGuideProps {

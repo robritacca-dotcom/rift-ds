@@ -41,6 +41,7 @@ export {
   ARTIFACT_MIN_COLUMN_WIDTH,
   ASIDE_WITH_THREADS_MIN_WIDTH,
   useTakeoverViewport,
+  useDockViewport,
 } from './queries';
 export {
   useChat,
@@ -112,6 +113,8 @@ export {
   chatPlacement,
   DOCK_MIN_WIDTH,
   DOCK_MAX_WIDTH,
+  DOCK_PAGE_MIN_WIDTH,
+  dockFits,
   FLOAT_MAX_SCALE,
   FLOAT_EDGE_GAP,
   dockWidthFromDrag,

@@ -23,6 +23,7 @@
 
 import React from "react";
 import { AppSidebar, type AppSidebarProps } from "rift-ds/components/AppSidebar/AppSidebar";
+import { useDockViewport } from "rift-ds/chat";
 import type { TemplateLayout } from "@/lib/templateLayout";
 import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
@@ -85,6 +86,7 @@ export default function TemplateShell({
   // always draws the floating layout's plain column.
   const layout: TemplateLayout = appFrame ? "floating" : (layoutProp ?? storedLayout);
   const inset = layout === "inset";
+  const chatDocks = useDockViewport();
   const [expanded, setExpanded] = React.useState(true);
 
   const content = (
@@ -128,7 +130,9 @@ export default function TemplateShell({
           <main
             className={[
               styles.main,
-              chatOpen ? styles.mainChatOpen : "",
+              /* Room for the panel only while it docks: widened past the
+                 page room the dock threshold promises, it overlays. */
+              chatOpen && chatDocks ? styles.mainChatOpen : "",
             ]
               .filter(Boolean)
               .join(" ")}

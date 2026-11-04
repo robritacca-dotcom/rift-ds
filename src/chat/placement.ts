@@ -9,6 +9,8 @@
  * ChatProvider: hosts deep in the tree read it without pulling the widget.
  */
 
+import { BREAKPOINT_CHAT_DOCK_PX } from '../tokens/breakpoints';
+
 /** The edge a docked panel takes, and the edge it overlays from below the dock threshold. */
 export type ChatSide = 'left' | 'right';
 
@@ -38,6 +40,19 @@ export const chatPlacement = (id: ChatPlacement) =>
    so a docked panel and a docked stage card stop at the same two walls. */
 export const DOCK_MIN_WIDTH = 420;
 export const DOCK_MAX_WIDTH = 655;
+
+/** The page room the dock threshold promises: the narrowest viewport that
+    docks (the step plus the one pixel `mediaAbove` adds) less the panel's
+    resting width. */
+export const DOCK_PAGE_MIN_WIDTH = BREAKPOINT_CHAT_DOCK_PX + 1 - DOCK_MIN_WIDTH;
+
+/** Whether a panel of this width docks in a viewport this wide: only while
+    the page keeps the room the dock threshold promises. A panel widened, or
+    a window narrowed, past it overlays instead, the rule below the dock
+    threshold. */
+export function dockFits(viewportWidth: number, panelWidth: number): boolean {
+  return viewportWidth - panelWidth >= DOCK_PAGE_MIN_WIDTH;
+}
 
 /** A docked panel's width after a grip drag: the inner edge is the one
     that moves, and it faces the other way on the left dock. */

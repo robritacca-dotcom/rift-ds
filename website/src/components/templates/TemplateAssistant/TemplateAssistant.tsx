@@ -23,8 +23,10 @@
  * The panel also owns the site chat's responsive contract (design.md's AI
  * chat responsive rule), so no host restates it:
  *
- * - Docked (DOCK_QUERY): a non-modal complementary region. The host reserves
- *   the width (TemplateShell does it for the family) on the same breakpoint.
+ * - Docked (DOCK_QUERY, while the page keeps DOCK_PAGE_MIN_WIDTH beside the
+ *   panel; widened past that it overlays): a non-modal complementary region.
+ *   The host reserves the width (TemplateShell does it for the family) on the
+ *   same rule, read through useDockViewport.
  *   Docked, the panel carries the site chat's widen grip, which writes
  *   --ds-chat-width per frame (registered in scripts/gestures.json).
  * - Overlay (below the dock threshold): modal over a scrim, with a focus
@@ -32,8 +34,10 @@
  * - Takeover (TAKEOVER_QUERY): the panel fills the viewport, still modal.
  *
  * Inside TemplateShell's inset layout (the `surface` prop, defaulted from the
- * shell's context) the dock goes flat at the shell's gap and the overlay takes
- * the same gap with its shadow kept: ChatLauncher's `surface="inset"`.
+ * shell's context) the dock sits at the shell's gap as a plane matching the
+ * inset surface beside it, hairline and floating shadow included, and the
+ * overlay takes the same gap: ChatLauncher's `surface="inset"`, except that
+ * the library's dock is flat and the shell's surface is not.
  *
  * A host that seats the panel inside its own frame (the mobile dashboard's
  * phone) passes `placement="contained"` and keeps none of that: the frame,
@@ -42,7 +46,7 @@
 
 import React from "react";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/scroll-lock";
-import { DOCK_QUERY, dockWidthFromDrag, readGreeting, serverGreeting, subscribeClock } from "rift-ds/chat";
+import { dockWidthFromDrag, readGreeting, serverGreeting, subscribeClock, useDockViewport } from "rift-ds/chat";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
@@ -57,12 +61,6 @@ import styles from "./TemplateAssistant.module.css";
 
 export type TemplateAssistantSuggestion = { id: string; label: string };
 
-const subscribeDock = (onChange: () => void) => {
-  const media = window.matchMedia(DOCK_QUERY);
-  media.addEventListener("change", onChange);
-  return () => media.removeEventListener("change", onChange);
-};
-const readDocked = () => window.matchMedia(DOCK_QUERY).matches;
 
 const FOCUSABLE =
   'button:not([disabled]), a[href], textarea:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -178,8 +176,9 @@ export interface TemplateAssistantProps {
   placement?: "viewport" | "contained";
   /**
    * How the docked panel sits on the page, ChatLauncher's `surface`:
-   * `raised` is the glass card with the floating shadow, `inset` the flat
-   * plane on the app surface colour at the shell's gap. Defaults to the
+   * `raised` is the glass card with the floating shadow, `inset` the
+   * plane on the app surface colour at the shell's gap, with the inset
+   * surface's hairline and shadow. Defaults to the
    * enclosing TemplateShell's layout (`inset` for its inset layout). The
    * overlay takes the same gap but keeps its shadow; the takeover is
    * unchanged.
@@ -245,12 +244,10 @@ export default function TemplateAssistant({
 
   /* The server snapshot is "not docked", matching the stylesheet's default
      geometry; the panel only renders once opened, which is always after
-     hydration, so the first paint already has the real answer. */
-  const docked = React.useSyncExternalStore(
-    subscribeDock,
-    readDocked,
-    () => false
-  );
+     hydration, so the first paint already has the real answer. It docks
+     only while the page keeps the room the dock threshold promises, so a
+     panel widened past that overlays instead (the package's rule). */
+  const docked = useDockViewport();
   const viewport = placement === "viewport";
   const full = viewport && view === "full";
   const modal = open && viewport && (!docked || full);
@@ -328,7 +325,8 @@ export default function TemplateAssistant({
         styles.chatPanel,
         viewport && styles.viewport,
         // Inset: the dock and the overlay both sit at the shell's gap; only
-        // the dock goes flat, since the overlay still covers the page.
+        // the dock becomes the surface's plane, since the overlay still
+        // covers the page.
         viewport && !full && surface === "inset" && styles.inset,
         viewport && !modal && surface === "inset" && styles.flat,
         chat && styles.live,

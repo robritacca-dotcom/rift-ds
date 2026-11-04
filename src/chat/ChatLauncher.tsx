@@ -13,7 +13,7 @@ import {
   dockWidthFromDrag,
   isFloatDragStart,
 } from './placement';
-import { DOCK_QUERY, TAKEOVER_QUERY } from './queries';
+import { TAKEOVER_QUERY, useDockViewport } from './queries';
 import './ChatWidget.css';
 
 /** The id the panel carries, for a host control's `aria-controls`. */
@@ -44,8 +44,6 @@ const subscribeQuery = (query: string) => (onChange: () => void) => {
   media.addEventListener('change', onChange);
   return () => media.removeEventListener('change', onChange);
 };
-const subscribeDock = subscribeQuery(DOCK_QUERY);
-const readDocked = () => window.matchMedia(DOCK_QUERY).matches;
 const subscribeTakeover = subscribeQuery(TAKEOVER_QUERY);
 const readTakeover = () => window.matchMedia(TAKEOVER_QUERY).matches;
 
@@ -145,7 +143,9 @@ export function ChatLauncher({
     setOpen(true);
     send(chip.prompt);
   };
-  const docked = useSyncExternalStore(subscribeDock, readDocked, () => false);
+  /* Docks above the threshold, and only while the page keeps the room it
+     promises: a panel widened past that overlays instead. */
+  const docked = useDockViewport();
   /* Phone widths: the panel fills the viewport, so it is a takeover whatever
      the view says; the expand toggle is hidden there rather than offering a
      switch from full screen to full screen. */

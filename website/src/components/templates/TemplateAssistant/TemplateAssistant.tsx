@@ -401,8 +401,11 @@ export default function TemplateAssistant({
 
         <footer className={styles.chatFooter}>
           <div className={styles.chatComposerColumn}>
+            {/* No context note, attachments or model picker, so the
+                one-row chat composer, as ChatWidget picks with none. */}
             <Composer
               ref={composerRef}
+              inline="chat"
               aiGlow
               sendLabel="Send"
               placeholder="Ask anything"

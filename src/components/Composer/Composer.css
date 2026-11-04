@@ -748,3 +748,16 @@
 .ds-composer--inline-chat .ds-composer__footer {
   padding: var(--ds-composer-ring);
 }
+
+/* A context note inside the chat row takes a line of its own over the text
+   and the send button, so a note alone never brings the footer's empty
+   row. The chip sits on the row's ring, and since it is the send button's
+   height the shell's corner stays concentric with both. */
+.ds-composer--inline-chat {
+  flex-wrap: wrap;
+}
+
+.ds-composer--inline-chat .ds-composer__context {
+  flex-basis: 100%;
+  margin: var(--ds-composer-ring) var(--ds-composer-ring) 0;
+}

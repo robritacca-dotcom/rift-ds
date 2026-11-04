@@ -231,11 +231,13 @@ export const ComposerOneRow: Story = {
   },
 };
 
-/** A context note inside the composer brings the two-row composer too; one above it does not. */
+/** A context note alone does not bring the footer: it takes a line of its own over the one-row composer. */
 export const ComposerContextInside: Story = {
   args: { contextLabel: 'Sales', contextPlacement: 'inside' },
   play: async ({ canvasElement }) => {
-    await expect((canvasElement.querySelector('.ds-composer') as HTMLElement).className).not.toContain('ds-composer--inline');
+    const composer = canvasElement.querySelector('.ds-composer') as HTMLElement;
+    await expect(composer.className).toContain('ds-composer--inline-chat');
+    await expect(composer.querySelector('.ds-composer__context')).not.toBeNull();
   },
 };
 

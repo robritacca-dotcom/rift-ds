@@ -190,7 +190,7 @@ export interface ChatWidgetProps {
   artifacts?: boolean;
   /** The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`. */
   contextLabel?: string | null;
-  /** Where the context note sits: `inside` the composer, at the top of the shell, which brings the two-row composer, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. */
+  /** Where the context note sits: `inside` the composer, at the top of the shell, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. A note alone never brings the composer's footer: with nothing else to seat there, it sits over the one-row composer. */
   contextPlacement?: 'above' | 'inside';
   /** The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. */
   contextNote?: (title: string) => string;
@@ -482,12 +482,10 @@ export function ChatWidget({
   const lockedValues = modelPolicy?.locked ?? [];
   const pick = chosenModel && !lockedValues.includes(chosenModel) ? chosenModel : null;
   const pickerValue = pick ?? modelPolicy?.default ?? defaultModel ?? models?.[0]?.value;
-  /* The composer's size follows what it holds: anything for the footer brings the footer. */
+  /* The composer's size follows what it holds: anything for the footer brings the footer. A
+     context note is not footer content: alone, it rides on a line of its own over the one row. */
   const composerHasActions =
-    fileAttachments ||
-    Boolean(composerActions) ||
-    (models?.length ?? 0) > 0 ||
-    (Boolean(contextLabel) && contextPlacement === 'inside');
+    fileAttachments || Boolean(composerActions) || (models?.length ?? 0) > 0;
   const pickerModels = (models ?? []).map((option) => ({
     value: option.value,
     label: option.label,

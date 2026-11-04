@@ -70,6 +70,17 @@ export const InlineChat: Story = {
   },
 };
 
+/** Inline for a chat with a context note: the note takes a line of its own over the one row, so a note alone never brings the footer's empty row. */
+export const InlineChatContext: Story = {
+  args: {
+    inline: 'chat',
+    attachButton: false,
+    placeholder: 'Ask anything',
+    context: 'Looking at “Sales”',
+    contextIcon: 'description',
+  },
+};
+
 /** Inline at the compact density, the height of a compact Input or table toolbar. */
 export const InlineCompact: Story = {
   args: {

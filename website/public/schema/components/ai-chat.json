@@ -257,7 +257,7 @@
             "inside"
           ],
           "required": false,
-          "description": "Where the context note sits: `inside` the composer, at the top of the shell, which brings the two-row composer, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default.",
+          "description": "Where the context note sits: `inside` the composer, at the top of the shell, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. A note alone never brings the composer's footer: with nothing else to seat there, it sits over the one-row composer.",
           "default": "inside"
         },
         {

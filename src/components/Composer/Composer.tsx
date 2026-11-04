@@ -53,7 +53,7 @@ type ComposerOwnProps = {
   onStop?: () => void;
   /** The mini composer's density (`inline` as `true`), matching a table's or a bar's: `compact` takes the smaller text, height and button. Every other composer has the one size, so it ignores this. */
   size?: 'default' | 'compact';
-  /** One row with the send button on the text's line. `true` makes the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar: the mini composer, for AI input inside other content such as a table, never for a chat. `chat` gives the button a full-size control and room around it: for a chat with nothing to seat in a footer. Above one row (`maxRows`), typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis. */
+  /** One row with the send button on the text's line. `true` makes the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar: the mini composer, for AI input inside other content such as a table, never for a chat. `chat` gives the button a full-size control and room around it: for a chat with nothing to seat in a footer, where a `context` note inside takes a line of its own over the row. Above one row (`maxRows`), typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis. */
   inline?: boolean | 'chat';
   /** Growth cap in text rows before the textarea scrolls internally. Defaults to 12 in a chat composer, or 3 in the mini composer. */
   maxRows?: number;

@@ -5132,7 +5132,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "inline",
             "type": "boolean | \"chat\"",
             "required": false,
-            "description": "One row with the send button on the text's line. `true` makes the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar: the mini composer, for AI input inside other content such as a table, never for a chat. `chat` gives the button a full-size control and room around it: for a chat with nothing to seat in a footer. Above one row (`maxRows`), typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis.",
+            "description": "One row with the send button on the text's line. `true` makes the shell exactly `size`'s control height, so it lines up with an Input or a table's toolbar: the mini composer, for AI input inside other content such as a table, never for a chat. `chat` gives the button a full-size control and room around it: for a chat with nothing to seat in a footer, where a `context` note inside takes a line of its own over the row. Above one row (`maxRows`), typing grows the shell with the send button held in the bottom corner. A placeholder stays on one line and ends in an ellipsis.",
             "defaultValue": "false"
           },
           {
@@ -17060,7 +17060,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "contextPlacement",
             "type": "\"inside\" | \"above\"",
             "required": false,
-            "description": "Where the context note sits: `inside` the composer, at the top of the shell, which brings the two-row composer, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default.",
+            "description": "Where the context note sits: `inside` the composer, at the top of the shell, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. A note alone never brings the composer's footer: with nothing else to seat there, it sits over the one-row composer.",
             "values": [
               "above",
               "inside"

@@ -250,7 +250,7 @@ export function ChatLauncher({
     wasOpen.current = open;
   }, [open, returnFocusRef]);
 
-  /* Drag-to-widen, docked view only. Pointer capture, primary button,
+  /* Drag-to-widen, docked or overlaying. Pointer capture, primary button,
      cancel-safe; the panel's outer edge is fixed, so the width delta is the
      inverted pointer delta. A mouse affordance: the panel stays fully usable
      at its resting width without it. */
@@ -572,10 +572,12 @@ export function ChatLauncher({
             />
           ))}
       </div>
-      {/* The widen grip, docked form only. It rides the panel's inner edge
-          as a fixed sibling (the panel clips its own overflow, so a
-          straddling child would be cut in half). */}
-      {showPanel && isDocked && (
+      {/* The widen grip, docked and as the overlay (not full screen, not
+          floating), within the same range either way: narrowed back inside
+          the page's room, an overlay docks again as the grip lets go. It
+          rides the panel's inner edge as a fixed sibling (the panel clips
+          its own overflow, so a straddling child would be cut in half). */}
+      {showPanel && !isFull && !isFloating && (
         <div
           className={[
             'ds-chat-launcher__dock-handle',

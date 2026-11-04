@@ -93,12 +93,38 @@
       "axis": "x"
     },
     {
+      "label": "site chat: overlay widen grip",
+      "route": "/overview",
+      "ready": ".ds-chat-launcher__fab button",
+      "setup": [
+        { "click": ".ds-chat-launcher__fab button" },
+        { "waitFor": ".ds-chat-launcher__dock-handle" },
+        { "drag": [".ds-chat-launcher__dock-handle", -300, 0] },
+        { "waitFor": ".ds-chat-launcher__panel[role=\"dialog\"]" }
+      ],
+      "grip": ".ds-chat-launcher__dock-handle",
+      "axis": "x"
+    },
+    {
       "label": "template shell: assistant widen grip",
       "route": "/templates/analytics",
       "ready": "main .ds-ai-button",
       "setup": [
         { "click": "main .ds-ai-button" },
         { "waitFor": "[data-chat-grip]" }
+      ],
+      "grip": "[data-chat-grip]",
+      "axis": "x"
+    },
+    {
+      "label": "template shell: assistant overlay widen grip",
+      "route": "/templates/analytics",
+      "ready": "main .ds-ai-button",
+      "setup": [
+        { "click": "main .ds-ai-button" },
+        { "waitFor": "[data-chat-grip]" },
+        { "drag": ["[data-chat-grip]", -300, 0] },
+        { "waitFor": "[role=\"dialog\"][aria-modal=\"true\"]" }
       ],
       "grip": "[data-chat-grip]",
       "axis": "x"

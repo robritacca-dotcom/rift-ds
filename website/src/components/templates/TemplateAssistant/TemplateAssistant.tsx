@@ -261,7 +261,7 @@ export default function TemplateAssistant({
 
   const panelRef = React.useRef<HTMLElement | null>(null);
 
-  /* The widen grip, docked only: the site chat's (ChatLauncher's dock
+  /* The widen grip, docked or overlaying: the site chat's (ChatLauncher's dock
      handle, restated). A drag writes --ds-chat-width onto <html> frame by
      frame, so the panel and the room TemplateShell reserves for it (both
      sized from --layout-chat-width) follow the edge without a re-render;
@@ -442,8 +442,10 @@ export default function TemplateAssistant({
       </div>
       )}
     </aside>
-    {viewport && docked && !full && !closing && (
-      // A fixed sibling on the panel's inner edge: the panel clips its own
+    {viewport && !full && !closing && (
+      // Docked and as the overlay, in the same range: narrowed back inside
+      // the page's room, the overlay docks again as the grip lets go. A
+      // fixed sibling on the panel's inner edge: the panel clips its own
       // overflow, so a straddling child would be cut in half.
       <div
         className={[

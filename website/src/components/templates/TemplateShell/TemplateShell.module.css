@@ -202,15 +202,18 @@
   display: flex;
   overflow: hidden;
   background-color: var(--color-bg-app-surface);
+  /* The floating rail's edge, turned around: the same hairline and shadow
+     on the surface, with the rail flush. */
+  border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
 }
 
 /* Full width in the surface, its side padding matching its top padding
    (the templates' 20px, stepping to 16px with theirs below 1080px), and
-   the scroller: its scrollbar stays
-   invisible until it scrolls (data-scrolling, set by the scroll handler and
-   cleared once it settles). The doubled class outranks a template's own
-   max width whatever order the stylesheets load in. */
+    the scroller, its thin scrollbar always showing. The doubled class
+   outranks a template's own max width whatever order the stylesheets load
+   in. */
 .surface .content.content {
   max-width: none;
   padding-left: var(--padding-500);
@@ -219,12 +222,45 @@
      clip masks them to its rounded corners. */
   --sticky-bleed: var(--padding-500);
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
+  /* The chat thread's bottom fade: a mask on the scroller, so the content
+     dissolves into the surface as it scrolls out through the floor.
+     ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - var(--gap-1000)), transparent);
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--gap-1000)), transparent);
 }
 
-.surface .content[data-scrolling] {
-  scrollbar-color: var(--color-bg-container-border) transparent;
+/* The scrollbar always shows. macOS overlay scrollbars hide until a scroll
+   whatever scrollbar-color says, so WebKit and Blink draw a styled one of
+   their own, which also stays put; Blink ignores these pseudo-elements once
+   the standard properties are set, so those are Firefox's alone. */
+.surface .content.content::-webkit-scrollbar {
+  width: var(--padding-300);
+}
+
+/* The track stops short of the surface's rounded corners. */
+.surface .content.content::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: var(--padding-300);
+}
+
+/* A transparent border clipped out of the fill holds the thumb off the
+   surface's edge, so it floats inside the gutter as a scrollbar rather
+   than reading as a second border. */
+.surface .content.content::-webkit-scrollbar-thumb {
+  background-color: var(--color-bg-container-border);
+  background-clip: padding-box;
+  border: solid transparent;
+  border-block-width: var(--padding-050);
+  border-inline-start-width: var(--padding-050);
+  border-inline-end-width: var(--padding-100);
+  border-radius: var(--radius-pill);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .surface .content.content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-bg-container-border) transparent;
+  }
 }
 
 /* ------------------------------------------------------------ responsive */
@@ -286,11 +322,15 @@
 
   .surface {
     overflow: visible;
+    border: none;
     border-radius: 0;
+    box-shadow: none;
   }
 
   .surface .content.content {
     overflow-y: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   /* The page scrolls now, not the surface, so the bar keeps the floating

@@ -23,7 +23,6 @@
 
 import React from "react";
 import { AppSidebar, type AppSidebarProps } from "rift-ds/components/AppSidebar/AppSidebar";
-import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import type { TemplateLayout } from "@/lib/templateLayout";
 import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
@@ -88,23 +87,9 @@ export default function TemplateShell({
   const inset = layout === "inset";
   const [expanded, setExpanded] = React.useState(true);
 
-  // The inset surface's scrollbar shows only while it scrolls, flagged
-  // straight on the DOM so a scroll never re-renders the page.
-  const scrollTimer = React.useRef<number | undefined>(undefined);
-  React.useEffect(() => () => window.clearTimeout(scrollTimer.current), []);
-  const flagScrolling = (event: React.UIEvent<HTMLDivElement>) => {
-    const scroller = event.currentTarget;
-    scroller.dataset.scrolling = "";
-    window.clearTimeout(scrollTimer.current);
-    scrollTimer.current = window.setTimeout(() => {
-      delete scroller.dataset.scrolling;
-    }, MOTION_SCROLL_SETTLE_MS);
-  };
-
   const content = (
     <div
       className={[styles.content, contentClassName].filter(Boolean).join(" ")}
-      onScroll={inset ? flagScrolling : undefined}
     >
       {children}
     </div>

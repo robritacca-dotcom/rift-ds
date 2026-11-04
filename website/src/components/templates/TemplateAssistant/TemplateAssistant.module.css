@@ -33,9 +33,9 @@
 
 /* The inset surface (ChatLauncher's surface="inset", restated). Docked
    and as an overlay the panel sits at the shell's gap, lined up with
-   TemplateShell's inset content surface; docked it is also flat, a plane on
-   the app surface colour with no shadow, border or blur. The overlay keeps
-   its shadow over the page. */
+   TemplateShell's inset content surface; docked it is a plane on the app
+   surface colour with the surface's hairline and floating shadow and no
+   blur. The overlay keeps its shadow over the page. */
 .inset {
   top: var(--layout-shell-inset);
   right: var(--layout-shell-inset);
@@ -101,8 +101,10 @@
 
 .flat {
   background: var(--color-bg-app-surface);
-  border-color: transparent;
-  box-shadow: none;
+  /* TemplateShell's inset surface, matched: the docked panel is the same
+     plane beside it, so it wears the same hairline and floating shadow. */
+  border-color: var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
   backdrop-filter: none;
 }
 

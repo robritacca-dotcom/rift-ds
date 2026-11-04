@@ -190,7 +190,7 @@ export interface ChatWidgetProps {
   artifacts?: boolean;
   /** The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`. */
   contextLabel?: string | null;
-  /** Where the context note sits: `above` the composer, or `inside` it, at the top of the shell, which brings the two-row composer. */
+  /** Where the context note sits: `inside` the composer, at the top of the shell, which brings the two-row composer, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. */
   contextPlacement?: 'above' | 'inside';
   /** The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. */
   contextNote?: (title: string) => string;
@@ -364,7 +364,7 @@ export function ChatWidget({
   artifacts = false,
   contextLabel,
   contextNote = defaultContextNote,
-  contextPlacement = 'above',
+  contextPlacement = 'inside',
   attachHint: attachHintText = defaultAttachHint,
   greetings,
   placementLabels,

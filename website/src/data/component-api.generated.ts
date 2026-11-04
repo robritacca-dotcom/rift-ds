@@ -17060,12 +17060,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "contextPlacement",
             "type": "\"inside\" | \"above\"",
             "required": false,
-            "description": "Where the context note sits: `above` the composer, or `inside` it, at the top of the shell, which brings the two-row composer.",
+            "description": "Where the context note sits: `inside` the composer, at the top of the shell, which brings the two-row composer, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default.",
             "values": [
               "above",
               "inside"
             ],
-            "defaultValue": "above"
+            "defaultValue": "inside"
           },
           {
             "name": "contextNote",

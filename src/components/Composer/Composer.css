@@ -42,7 +42,9 @@
   border: var(--border-025) solid var(--color-input-border-primary);
   border-radius: var(--ds-composer-radius);
   /* Where the typed text starts and ends. One value, because the mention
-     overlay has to sit on exactly the rail the textarea does. */
+     overlay has to sit on exactly the rail the textarea does. The mini
+     composer keeps this; the two-row composer and the chat row set the
+     optical rail below. */
   --ds-composer-text-inset: var(--padding-500);
   box-shadow: var(--shadow-floating);
   transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -226,6 +228,13 @@
   }
 }
 
+/* The two-row composer's optical rail: the footer's --padding-200 ring plus
+   the --padding-400 pill inset, where a ModelPicker trigger's label and the
+   context chip's icon ink also start, so the three read as one column. */
+.ds-composer:not(.ds-composer--inline) {
+  --ds-composer-text-inset: calc(var(--padding-200) + var(--padding-400));
+}
+
 /* ============================================
    CONTEXT CHIP
    A full-width, non-interactive note — what the model is currently looking
@@ -277,8 +286,8 @@
    of the shell's top edge, and the layout aligns on one optical rail: the
    bar's --padding-200 ring plus the --padding-400 pill inset (24px). The
    typed text, the attachments, the chip's icon ink and a ModelPicker
-   trigger's label all start on it. The inside placement keeps its own
-   geometry above, untouched. */
+   trigger's label all start on it, the same rail the inside placement
+   keeps. */
 
 /* The bar and the shell travel as one block, so a host's gap never lands
    between them */
@@ -299,17 +308,13 @@
     calc(var(--padding-200) + var(--padding-400) + var(--border-025));
 }
 
-/* Optical alignment: a glyph's ink starts inside its box, so the box is
-   pulled back by that side bearing to land the ink on the rail. The
-   default fits the portrait document glyphs a context note usually
-   carries (ink starts 4/24 into the box); the fallback is a consumer hook
-   for a glyph with a different bearing. */
-.ds-composer__context--above .ds-composer__context-icon {
+/* Optical alignment, in either placement: a glyph's ink starts inside its
+   box, so the box is pulled back by that side bearing to land the ink on
+   the text rail. The default fits the portrait document glyphs a context
+   note usually carries (ink starts 4/24 into the box); the fallback is a
+   consumer hook for a glyph with a different bearing. */
+.ds-composer__context-icon {
   margin-inline-start: calc(-1 * var(--ds-composer-context-icon-bearing, var(--icon-size-500) * 4 / 24));
-}
-
-.ds-composer--context-above {
-  --ds-composer-text-inset: calc(var(--padding-200) + var(--padding-400));
 }
 
 .ds-composer--context-above .ds-composer__attachments {
@@ -747,6 +752,12 @@
 
 .ds-composer--inline-chat .ds-composer__footer {
   padding: var(--ds-composer-ring);
+}
+
+/* The chat row's rail: its own ring plus the chip's pill inset, so the
+   typed text and the chip's icon ink start together here too. */
+.ds-composer--inline-chat {
+  --ds-composer-text-inset: calc(var(--ds-composer-ring) + var(--padding-400));
 }
 
 /* A context note inside the chat row takes a line of its own over the text

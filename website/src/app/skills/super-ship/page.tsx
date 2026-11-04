@@ -1,6 +1,8 @@
 import { Badge } from "rift-ds/components/Badge/Badge";
 import type { TimelineItem } from "rift-ds/components/Timeline/Timeline";
-import { SkillGuide, GuideCode } from "@/components/SkillGuide/SkillGuide";
+import { Table, type TableColumn } from "rift-ds/components/Table/Table";
+import { SkillGuide, GuideCode, GuideGroup, GuideSection } from "@/components/SkillGuide/SkillGuide";
+import { QUALITY_GATE } from "@/data/quality-gate.generated";
 import { superShipMap } from "./maps";
 
 const STEPS: TimelineItem[] = [
@@ -65,6 +67,11 @@ const STEPS: TimelineItem[] = [
   },
 ];
 
+const GATE_COLUMNS: TableColumn[] = [
+  { key: "check", header: "Check", rowHeader: true },
+  { key: "text", header: "What it holds" },
+];
+
 const fixed = <Badge variant="positive" label="Fixed" />;
 const asks = <Badge variant="warning" label="Asks" />;
 const reported = <Badge variant="neutral" label="Reported" />;
@@ -82,7 +89,7 @@ export default function SuperShipSkillPage() {
           <GuideCode>responsive-sweep</GuideCode> and <GuideCode>ship</GuideCode>. It owns only
           the rules for how they connect. Asking for it is the owner’s yes to fix drift and
           deploy, but not to change the published contract. Below are the steps, then one
-          structural change traced from its branch to the live site.
+          structural change traced from its branch to the live site, then every check the ship runs.
         </>
       }
       steps={STEPS}
@@ -118,6 +125,35 @@ export default function SuperShipSkillPage() {
           { id: "chain", cells: { finding: "The validator chain itself broken", handling: "Ends the whole flow with a report", result: stops } },
         ],
       }}
-    />
+    >
+      <GuideSection
+        title="Every check a ship runs"
+        body={
+          <>
+            This is the whole gate, in the order it runs: the{" "}
+            <GuideCode>validate-registry</GuideCode> chain, the rest of{" "}
+            <GuideCode>npm run verify</GuideCode>, then what CI adds. The list is built from{" "}
+            <GuideCode>package.json</GuideCode> and the CI workflow on every build, so a new
+            validator cannot join the chain without a line here. After the push, the hydration
+            smoke runs once more against the live site.
+          </>
+        }
+      >
+        {QUALITY_GATE.map((group) => (
+          <GuideGroup key={group.id} title={group.title} body={group.body}>
+            <Table
+              columns={GATE_COLUMNS}
+              rows={group.checks.map((check) => ({
+                id: check.name,
+                cells: { check: <GuideCode>{check.name}</GuideCode>, text: check.text },
+              }))}
+              bordered
+              caption={group.title}
+              captionHidden
+            />
+          </GuideGroup>
+        ))}
+      </GuideSection>
+    </SkillGuide>
   );
 }

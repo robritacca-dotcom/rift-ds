@@ -42,9 +42,11 @@ export interface SkillGuideProps {
     rows: TableRow[];
     caption: string;
   };
+  /** Further sections after the summary, each a `GuideSection`. */
+  children?: React.ReactNode;
 }
 
-export function SkillGuide({ slug, tagline, intro, steps, example, summary }: SkillGuideProps) {
+export function SkillGuide({ slug, tagline, intro, steps, example, summary, children }: SkillGuideProps) {
   return (
     <>
       <MegaNav />
@@ -88,6 +90,8 @@ export function SkillGuide({ slug, tagline, intro, steps, example, summary }: Sk
               captionHidden
             />
           </section>
+
+          {children}
         </main>
       </div>
     </>
@@ -97,4 +101,42 @@ export function SkillGuide({ slug, tagline, intro, steps, example, summary }: Sk
 /** Inline code inside a walkthrough's prose, styled like the rest of the shell. */
 export function GuideCode({ children }: { children: React.ReactNode }) {
   return <code className={styles.inlineCode}>{children}</code>;
+}
+
+/** A further section after the summary: a title, a lead paragraph, then its content. */
+export function GuideSection({
+  title,
+  body,
+  children,
+}: {
+  title: string;
+  body: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className={`${styles.section} animate-in animate-delay-2`}>
+      <SectionTitle title={title} />
+      <p className={styles.sectionBody}>{body}</p>
+      {children}
+    </section>
+  );
+}
+
+/** A titled group inside a `GuideSection`: a sub-heading, a line, then its content. */
+export function GuideGroup({
+  title,
+  body,
+  children,
+}: {
+  title: string;
+  body: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={styles.group}>
+      <h3 className={styles.groupTitle}>{title}</h3>
+      <p className={styles.sectionBody}>{body}</p>
+      {children}
+    </div>
+  );
 }

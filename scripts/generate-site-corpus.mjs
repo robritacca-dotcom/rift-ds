@@ -58,6 +58,7 @@ import ts from 'typescript';
 import { siteRoutes, isDynamicSegment } from './site-routes.mjs';
 import { navLinks } from './nav-links.mjs';
 import { readBreakpoints } from './breakpoint-source.mjs';
+import { buildQualityGate } from './generate-quality-gate.mjs';
 import { assembleAgentStarter } from './generate-agent-skill.mjs';
 import {
   AGENT_STARTER_FILE,
@@ -819,6 +820,11 @@ export function routeCoverage() {
  * when a page needs one.
  */
 const ROUTE_DATA = new Map([
+  ['/skills/super-ship', () =>
+    'Every check a ship runs, in order (from the validate-registry and verify entries in package.json and the CI workflow; the page renders the same list):\n\n' +
+    buildQualityGate()
+      .map((group) => `${group.title}. ${group.body}\n` + group.checks.map((c) => `- ${c.name}: ${c.text}`).join('\n'))
+      .join('\n\n')],
   ['/foundations/layout', () =>
     'Breakpoints, from the library (src/tokens/breakpoints.ts, published as rift-ds/tokens/breakpoints) and the site (website/src/config/breakpoints.ts):\n\n' +
     readBreakpoints(repoRoot)

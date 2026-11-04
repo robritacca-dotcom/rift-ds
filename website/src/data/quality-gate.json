@@ -1,0 +1,155 @@
+{
+  "groups": [
+    {
+      "id": "generators",
+      "title": "Generators",
+      "body": "The chain opens by rewriting every generated file from its source, so each validator after it reads fresh data. These write files and check nothing themselves."
+    },
+    {
+      "id": "freshness",
+      "title": "Generated files match their source",
+      "body": "Each of these regenerates a file in memory and compares it byte for byte with the copy on disk, so a hand edit or a skipped generator fails the build."
+    },
+    {
+      "id": "registries",
+      "title": "Registries match the repo",
+      "body": "Each registry is the one home of a list. These hold it to the folders, pages and files it describes, in both directions."
+    },
+    {
+      "id": "contract",
+      "title": "The component contract",
+      "body": "The mechanical half of the props contract every published component follows."
+    },
+    {
+      "id": "tokens",
+      "title": "Tokens and CSS",
+      "body": "The token tiers, the themes, and the rules component and site CSS follow."
+    },
+    {
+      "id": "site",
+      "title": "The site, the chat and the prose",
+      "body": "What the chat answers from, the chips it draws, and the rules shipped copy keeps."
+    },
+    {
+      "id": "verify",
+      "title": "Verify, after the chain",
+      "body": "The rest of verify, in the order it runs. The two builds each run the whole chain again first, and the website build runs its own subset of it."
+    },
+    {
+      "id": "ci",
+      "title": "In CI only",
+      "body": "CI runs every step of verify across its four jobs, plus these two, which a local run cannot do."
+    }
+  ],
+  "checks": {
+    "generate-skills-content": { "group": "generators", "text": "Writes the /skills page data from every registered SKILL.md." },
+    "generate-brand-module": { "group": "generators", "text": "Writes the typed mirror of scripts/brand.mjs that site code reads." },
+    "generate-readme-content": { "group": "generators", "text": "Rewrites the README's component count and list, badge, banner link and author credit." },
+    "generate-token-registry": { "group": "generators", "text": "Writes the semantic token registry from the token CSS." },
+    "generate-preset-stylesheets": { "group": "generators", "text": "Writes one shippable stylesheet per theme preset, plus the aggregate." },
+    "generate-token-values": { "group": "generators", "text": "Resolves every token per theme and mode into values.json and the DTCG files." },
+    "generate-theme-design-md": { "group": "generators", "text": "Writes a DESIGN.md file for every shipped theme." },
+    "generate-library-barrel": { "group": "generators", "text": "Writes src/index.ts and src/charts.ts from the component registry." },
+    "sync-blueprints": { "group": "generators", "text": "Copies the root specs into the website for the /blueprints pages." },
+    "generate-site-corpus": { "group": "generators", "text": "Builds the one document the site chat answers from." },
+    "generate-component-api": { "group": "generators", "text": "Writes the prop reference the MCP endpoint serves." },
+    "generate-component-md": { "group": "generators", "text": "Writes a markdown page per component, served beside its docs page." },
+    "generate-component-schema": { "group": "generators", "text": "Writes a JSON schema per component from its props interface, plus the index." },
+    "generate-shadcn-registry": { "group": "generators", "text": "Writes the shadcn registry, the third way to install a component." },
+    "generate-agent-skill": { "group": "generators", "text": "Builds the consumer agent skills and AGENTS.md that init installs." },
+    "generate-dependency-graph": { "group": "generators", "text": "Writes the /graph data from primitives through to pages." },
+    "generate-google-font-index": { "group": "generators", "text": "Writes the Google Fonts index the playground's importer reads." },
+    "generate-brand-marks": { "group": "generators", "text": "Writes the brand marks the DESIGN.md importer can show." },
+    "generate-a11y-coverage": { "group": "generators", "text": "Writes the figures on the accessibility foundations page." },
+    "generate-quality-gate": { "group": "generators", "text": "Writes this page's list from package.json and the CI workflow." },
+
+    "validate-google-font-index": { "group": "freshness", "text": "The playground's font index matches its generator." },
+    "validate-brand-marks": { "group": "freshness", "text": "The importer's brand marks match their generator." },
+    "validate-brand-module": { "group": "freshness", "text": "The typed brand module matches scripts/brand.mjs." },
+    "validate-site-corpus": { "group": "freshness", "text": "The chat corpus is fresh, carries no leaked contact details and fits its token budget." },
+    "validate-component-api": { "group": "freshness", "text": "The prop reference the MCP endpoint serves is fresh." },
+    "validate-component-md": { "group": "freshness", "text": "Every component's markdown page matches its source, with no orphans." },
+    "validate-component-schema": { "group": "freshness", "text": "Every component's schema and the schema index match their source." },
+    "validate-shadcn-registry": { "group": "freshness", "text": "The shadcn registry matches its sources, with no stale, missing or orphan files." },
+    "validate-agent-skill": { "group": "freshness", "text": "The consumer skills and their manifest match their source." },
+    "validate-dependency-graph": { "group": "freshness", "text": "The /graph data is fresh." },
+    "validate-a11y-coverage": { "group": "freshness", "text": "The accessibility page's figures are fresh." },
+    "validate-token-registry": { "group": "freshness", "text": "The token registry matches the token CSS." },
+    "validate-token-values": { "group": "freshness", "text": "values.json and the DTCG files match the token CSS and the preset composer." },
+    "validate-preset-stylesheets": { "group": "freshness", "text": "Every preset stylesheet and the aggregate match the composer." },
+    "validate-theme-design-md": { "group": "freshness", "text": "The per-theme DESIGN.md files regenerate exactly and still read back through the importer." },
+
+    "validate-component-registry": { "group": "registries", "text": "Every component folder is in exactly one registry list, and every entry has a folder." },
+    "validate-website-surfaces": { "group": "registries", "text": "Every component has its site page, preview, design.md spec and nav entries." },
+    "validate-page-titles": { "group": "registries", "text": "Every component page has a layout with a real browser tab title." },
+    "validate-skills-registry": { "group": "registries", "text": "Every skill folder is registered, and the /skills data agrees." },
+    "validate-release-log": { "group": "registries", "text": "One entry per npm version, newest first, with valid versions and dates." },
+    "validate-loops": { "group": "registries", "text": "The loops registry is complete and names only skills that exist." },
+    "validate-template-thumbnails": { "group": "registries", "text": "Every template has a still in every mode, and no still is left over." },
+    "validate-nav-panels": { "group": "registries", "text": "The mega panels' icon tables match the sidebar lists they are built from." },
+    "validate-mcp-tools": { "group": "registries", "text": "Every stated MCP tool count matches the tools the route registers." },
+    "validate-chat-widget": { "group": "registries", "text": "The chat widget's registry matches the widget it describes." },
+    "validate-blocks": { "group": "registries", "text": "The blocks registry matches the block templates on disk." },
+    "validate-package-exports": { "group": "registries", "text": "package.json's name, version, exports and bin match the manifest, and the lockfile agrees." },
+    "validate-local-labs": { "group": "registries", "text": "No tracked file imports from a gitignored local folder." },
+
+    "validate-prop-docs": { "group": "contract", "text": "Every own prop has a JSDoc description." },
+    "validate-component-contract": { "group": "contract", "text": "The ref, the rest spread, the client directive and the other mechanical rules of the props contract." },
+    "validate-overlay-listeners": { "group": "contract", "text": "Only the layer stack listens for Escape and outside presses, and key bindings go through useShortcut." },
+    "validate-accessible-names": { "group": "contract", "text": "No literal English accessible name; each one is a prop." },
+    "validate-visible-text": { "group": "contract", "text": "No literal English text on screen; each string is a prop." },
+    "validate-locale-formatting": { "group": "contract", "text": "Nothing formats a number or a date in the runtime's default locale." },
+    "validate-prop-vocabulary": { "group": "contract", "text": "The variant, tone and size vocabulary, the controlled and uncontrolled pairs, and internal callers on current spellings." },
+    "validate-json-schemas": { "group": "contract", "text": "Every generated schema validates against its hand-written meta-schema." },
+    "validate-class-names": { "group": "contract", "text": "Base classes are ds- plus the name in kebab case, with --modifier and __part." },
+    "validate-shared-primitives": { "group": "contract", "text": "Shared marks and controls are composed, never redrawn." },
+
+    "validate-shader-background": { "group": "tokens", "text": "The background config sits inside the tuner's ranges, and its blob colours exist." },
+    "validate-single-background-mount": { "group": "tokens", "text": "BlurBackground is mounted exactly once, in the root layout." },
+    "validate-token-references": { "group": "tokens", "text": "Semantic colours point at primitives through var(), never a hex value." },
+    "validate-theme-mirrors": { "group": "tokens", "text": "Hand mirrors of token data in the site and design.md match the CSS." },
+    "validate-foundation-mirrors": { "group": "tokens", "text": "The values the foundations pages print match the CSS." },
+    "validate-theme-export": { "group": "tokens", "text": "The playground's exported AGENTS.md, CSS and THEME.md describe the system correctly." },
+    "validate-design-md-import": { "group": "tokens", "text": "The DESIGN.md importer still reads files by its rules." },
+    "validate-theme-presets": { "group": "tokens", "text": "Every preset sets every lever and passes the contrast gate." },
+    "validate-token-usage": { "group": "tokens", "text": "Every var(--…) a stylesheet references resolves." },
+    "validate-action-colour": { "group": "tokens", "text": "The action colour appears only in the roles design.md reserves it for." },
+    "validate-css-directives": { "group": "tokens", "text": "Every ds-allow directive follows the grammar and names a known category." },
+    "validate-raw-values": { "group": "tokens", "text": "No literal colour, timing, type or off-scale value in the package's CSS." },
+    "validate-logical-properties": { "group": "tokens", "text": "Package CSS uses logical properties, so layout follows the reading direction." },
+    "validate-design-counts": { "group": "tokens", "text": "The family sizes design.md states in words match the token CSS." },
+    "validate-js-timings": { "group": "tokens", "text": "Timer delays come from motion.ts, never a literal." },
+    "validate-breakpoints": { "group": "tokens", "text": "Every media query width is one of the breakpoint set." },
+    "validate-stacking": { "group": "tokens", "text": "Every z-index of 10 or more names a layer token." },
+    "validate-tier-colours": { "group": "tokens", "text": "Display and heading text take their tier's colour role." },
+    "validate-table-styles": { "group": "tokens", "text": "Every table draws from the one table token family." },
+
+    "validate-analytics-events": { "group": "site", "text": "Events go out only through SITE_EVENTS and trackEvent." },
+    "validate-chat-coverage": { "group": "site", "text": "Every golden-set fact is in the corpus, and every route is covered or excluded with a reason." },
+    "validate-chat-starters": { "group": "site", "text": "Every written chat suggestion fits on one chip." },
+    "validate-page-summaries": { "group": "site", "text": "Every static page has a summary and starters, or is chromeless." },
+    "validate-shipped-prose": { "group": "site", "text": "No em dash in shipped copy." },
+    "validate-page-prose-width": { "group": "site", "text": "No width cap on a component page's prose." },
+    "validate-doc-refs": { "group": "site", "text": "Every repo path, npm script and API symbol a doc or skill names exists." },
+    "validate-quality-gate": { "group": "site", "text": "This page's list matches package.json and the CI workflow." },
+
+    "npm run lint": { "group": "verify", "text": "ESLint over the library." },
+    "npm run build": { "group": "verify", "text": "Runs the whole chain above, then type-checks the library." },
+    "validate-api-compat": { "group": "verify", "text": "Against the latest release tag, no prop, export, subpath, file, bin or schema property vanished or narrowed." },
+    "npm run build:lib": { "group": "verify", "text": "Builds the publishable package into dist/." },
+    "validate-package-publish": { "group": "verify", "text": "publint and arethetypeswrong against dist/, so every subpath resolves for every kind of consumer." },
+    "npm run test": { "group": "verify", "text": "Every Storybook story as a render, axe and interaction test in headless Chromium." },
+    "npm run build-storybook": { "group": "verify", "text": "Runs the chain again, then builds the static Storybook." },
+    "npm --prefix website run lint": { "group": "verify", "text": "ESLint over the website." },
+    "npm --prefix website run build": { "group": "verify", "text": "Runs the website's subset of the chain, then the Next build." },
+    "validate-rendered-spacing": { "group": "verify", "text": "No space lost after an inline closing tag in the prerendered HTML." },
+    "validate-corpus-coverage": { "group": "verify", "text": "Each covered page's rendered prose actually reached the chat corpus." },
+    "validate-internal-links": { "group": "verify", "text": "Every internal link leads to a page, a route handler, a public file or a redirect." },
+    "smoke-hydration": { "group": "verify", "text": "Serves the build in a real browser: hydration succeeds and every sampled page shows real content." },
+    "validate-gestures": { "group": "verify", "text": "Drives every drag grip with a fast pointer flood under CPU throttling, and fails if the page breaks." },
+    "validate-website-a11y": { "group": "verify", "text": "axe over the served pages in light, dark and forced colours." },
+
+    "npm audit --audit-level=high --omit=dev": { "group": "ci", "text": "Fails on a high-severity advisory in a production dependency." },
+    "Check generated content is committed": { "group": "ci", "text": "After the generators run, the tree has no diff and no untracked file, so nothing regenerated was left uncommitted." }
+  }
+}

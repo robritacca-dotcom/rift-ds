@@ -41,6 +41,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Blocks | `src/cli/templates/blocks/registry.json` | `website/src/data/blocks.ts` | `scripts/validate-blocks.mjs` |
 | Accessibility coverage | `website/src/data/a11y-coverage.generated.ts` | `website/src/data/a11y-coverage.ts` | `scripts/validate-a11y-coverage.mjs` |
 | Gestures | `scripts/gestures.json` (every drag grip a visitor can press) | (read by the script) | `scripts/validate-gestures.mjs` |
+| Quality gate list (/skills/super-ship) | order from `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-quality-gate.mjs` |
 
 Notes an agent needs while editing them:
 

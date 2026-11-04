@@ -2560,7 +2560,7 @@
     },
     "text-display": {
       "$type": "color",
-      "$value": "{primitive.purple-04}"
+      "$value": "{primitive.purple-01}"
     },
     "text-heading": {
       "$type": "color",

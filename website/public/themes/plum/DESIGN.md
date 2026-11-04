@@ -11,23 +11,23 @@ colors:
   primary-dark: "#ffa81d"
   canvas-light: "#f2eeeb"
   canvas-dark: "#0f070e"
-  surface: "#fdfaf9"
+  surface: "#ffffff"
   surface-dark: "rgba(24, 15, 23, 0.8)"
   surface-soft: "#f2eeeb"
-  ink: "#1a110a"
+  ink: "#130d08"
   ink-dark: "#ebe2ea"
-  display: "#9a1f8c"
-  display-dark: "#b050a5"
-  heading: "#1a110a"
+  display: "#721767"
+  display-dark: "#f7eef6"
+  heading: "#130d08"
   heading-dark: "#ebe2ea"
   logo: "#9a1f8c"
   logo-dark: "#b050a5"
   logo-end: "#721767"
   logo-end-dark: "#ce93c7"
-  text-secondary: "#403630"
-  text-tertiary: "#766c65"
-  border: "#d2c8c2"
-  input: "#fdfaf9"
+  text-secondary: "#3b3430"
+  text-tertiary: "#736c68"
+  border: "#d3cdc9"
+  input: "#ffffff"
   error: "#b4313d"
   success: "#247b55"
   warning: "#b65c23"
@@ -174,17 +174,17 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary-active` | `#ffb236` | `#ffb236` | `--color-action-primary-bg-active` |
 | `on-primary` | `#372406` | `#372406` | `--color-action-primary-text` |
 | `canvas-light` | `#f2eeeb` | `#0f070e` | `--color-bg-page-primary` |
-| `surface` | `#fdfaf9` | `rgba(24, 15, 23, 0.8)` | `--color-bg-container-primary` |
+| `surface` | `#ffffff` | `rgba(24, 15, 23, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f2eeeb` | `#372f36` | `--color-bg-container-secondary` |
-| `ink` | `#1a110a` | `#ebe2ea` | `--color-text-primary` |
-| `display` | `#9a1f8c` | `#b050a5` | `--color-text-display` |
-| `heading` | `#1a110a` | `#ebe2ea` | `--color-text-heading` |
+| `ink` | `#130d08` | `#ebe2ea` | `--color-text-primary` |
+| `display` | `#721767` | `#f7eef6` | `--color-text-display` |
+| `heading` | `#130d08` | `#ebe2ea` | `--color-text-heading` |
 | `logo` | `#9a1f8c` | `#b050a5` | `--color-brand-mark` |
 | `logo-end` | `#721767` | `#ce93c7` | `--color-brand-mark-end` |
-| `text-secondary` | `#403630` | `#bab1b9` | `--color-text-secondary` |
-| `text-tertiary` | `#766c65` | `#a199a0` | `--color-text-tertiary` |
-| `border` | `#d2c8c2` | `#2b232a` | `--color-bg-container-border` |
-| `input` | `#fdfaf9` | `#0f070e` | `--color-input-bg-primary` |
+| `text-secondary` | `#3b3430` | `#bab1b9` | `--color-text-secondary` |
+| `text-tertiary` | `#736c68` | `#a199a0` | `--color-text-tertiary` |
+| `border` | `#d3cdc9` | `#2b232a` | `--color-bg-container-border` |
+| `input` | `#ffffff` | `#0f070e` | `--color-input-bg-primary` |
 | `error` | `#b4313d` | `#de5764` | `--color-status-error-icon` |
 | `success` | `#247b55` | `#2e9e6e` | `--color-status-positive-icon` |
 | `warning` | `#b65c23` | `#f07a2e` | `--color-status-warning-icon` |

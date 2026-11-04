@@ -121,7 +121,9 @@ export interface ThemePreset {
       in the theme (the action colour's own family is left to the action
       lever). Loads into the Advanced colours state. */
   advanced?: AdvancedColorState;
-  /** Preset-specific extras beyond the levers (e.g. greyscale accents). */
+  /** Preset-specific extras beyond the levers (e.g. greyscale accents). A
+      tier-tone role named here (`--color-text-display`, say) pins its step,
+      and the tone lever's derived step gives way to it. */
   extraOverrides?: Overrides;
   /**
    * Extras that only apply in dark mode, layered over `extraOverrides`.
@@ -398,7 +400,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // above it, and the hairlines and secondary text pick up a taupe cast.
     tintOn: true,
     tintSeed: "#B5652E",
-    tintStrength: 12,
+    tintStrength: 8,
     // Enterprise-crisp: 4px buttons and inputs, tight cards, no pill.
     radiusScale: 30,
     pill: false,
@@ -463,9 +465,18 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--font-display-1-letter-spacing": "-0.022em",
       "--font-display-2-letter-spacing": "-0.018em",
       "--font-sub-display-letter-spacing": "-0.012em",
+      // The headlines sit a step deeper than the mark, a richer magenta
+      // against the cream.
+      "--color-text-display": "var(--primitive-purple-08)",
       // The page floor and the app shell sit on step 01, which light mode
       // tints at only a quarter strength, so it reads grey; it is pinned to
-      // the warmer cream instead (dark mode re-tints the step below).
+      // the warmer cream instead. The cards and the inset surface sit on
+      // step 00, pinned to pure white, so the content reads as white paper
+      // on the cream (dark mode re-tints both steps below).
+      "--primitive-neutral-00": "#FFFFFF",
+      "--primitive-neutral-00-a01": "rgba(255, 255, 255, 0.01)",
+      "--primitive-neutral-00-a60": "rgba(255, 255, 255, 0.6)",
+      "--primitive-neutral-00-a90": "rgba(255, 255, 255, 0.9)",
       "--primitive-neutral-01": "#F2EEEB",
       "--primitive-neutral-01-a01": "rgba(242, 238, 235, 0.01)",
       "--primitive-neutral-01-a60": "rgba(242, 238, 235, 0.6)",
@@ -491,6 +502,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       ...neutralOverrides("#9A1F8C", 0.07, "dark"),
       // The plum series sinks into the near-black page, so it lifts a step.
       "--color-chart-series-1": "var(--primitive-purple-04)",
+      // The headlines go to the palest magenta, nearly white over the
+      // near-black page, and the mark keeps the saturated step.
+      "--color-text-display": "var(--primitive-purple-01)",
     },
   },
   gold: {
@@ -1263,14 +1277,16 @@ export function presetOverrides(
     Object.assign(merged, advancedColorOverrides(preset.advanced, merged));
   }
   /* The tier tones read the ramps and greys as everything above leaves
-     them, so they come last. */
-  Object.assign(
+     them, so they come last. A role the extras name pins its step, so the
+     tone's derived step never overwrites it. */
+  const pinned = { ...preset.extraOverrides, ...(theme === "dark" ? preset.extraOverridesDark : undefined) };
+  const tones = tierToneOverrides(
+    { logo: preset.logoTone, logoEnd: preset.logoEndTone, display: preset.displayTone, heading: preset.headingTone, text: preset.textTone },
     merged,
-    tierToneOverrides(
-      { logo: preset.logoTone, logoEnd: preset.logoEndTone, display: preset.displayTone, heading: preset.headingTone, text: preset.textTone },
-      merged,
-      theme
-    )
+    theme
   );
+  for (const [key, value] of Object.entries(tones)) {
+    if (!(key in pinned)) merged[key] = value;
+  }
   return merged;
 }

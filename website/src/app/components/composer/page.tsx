@@ -225,9 +225,9 @@ export default function ComposerPage() {
               A composer with nothing to hold in its footer drops the footer:{" "}
               <code>inline=&quot;chat&quot;</code> puts a full-size send button on the
               text&apos;s line, with room around it. ChatWidget chooses for you. It takes
-              this row when there is no model picker, attachments, composer actions or
-              context note inside the composer, and the two-row composer when there is
-              any of them.
+              this row when there is no model picker, attachments or composer actions,
+              and the two-row composer when there is any of them. A context note is not
+              footer content: on its own, it takes a line over the row.
             </p>
             <div className={styles.stack}>
               <Composer inline="chat" placeholder="Ask anything" />
@@ -266,7 +266,6 @@ export default function ComposerPage() {
               its own bar, a small gap above it, so it reads as what the model
               can see rather than part of the message. The icon, the typed
               text and the model picker&apos;s label then start on one line.
-              The site chat uses this placement.
             </p>
             <div className={styles.stack}>
               <ChatComposer

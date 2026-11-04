@@ -1837,6 +1837,7 @@ export const FONT_OPTIONS: FontOption[] = [
   { label: "Source Sans 3", family: "'Source Sans 3', sans-serif", googleParam: "Source+Sans+3:wght@300;400;500;600;700;800" },
   { label: "IBM Plex Sans", family: "'IBM Plex Sans', sans-serif", googleParam: "IBM+Plex+Sans:wght@300;400;500;600;700" },
   { label: "Space Grotesk", family: "'Space Grotesk', sans-serif", googleParam: "Space+Grotesk:wght@300;400;500;600;700" },
+  { label: "Figtree", family: "'Figtree', sans-serif", googleParam: "Figtree:wght@300;400;500;600;700;800" },
   /* The rounded faces: soft terminals are a property of the typeface, so
      no lever can supply them. */
   { label: "Nunito (rounded)", family: "'Nunito', sans-serif", googleParam: "Nunito:wght@300;400;500;600;700;800" },
@@ -1871,6 +1872,10 @@ export const HEADING_FONT_OPTIONS: FontOption[] = [
      posters. One weight only, so a theme that takes it sets both heading
      tiers to 400 and lets the face carry the weight. */
   { label: "Anton (condensed)", family: "'Anton', sans-serif", googleParam: "Anton" },
+  /* Heading-only face: a warm, quirky grotesque with an optical-size axis,
+     so large display type draws tighter and more characterful than its
+     small sizes. */
+  { label: "Bricolage Grotesque", family: "'Bricolage Grotesque', sans-serif", googleParam: "Bricolage+Grotesque:opsz,wght@12..96,300..800" },
 ];
 
 /**

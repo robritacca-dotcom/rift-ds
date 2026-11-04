@@ -51,7 +51,9 @@ const outputDir = join(repoRoot, 'src', 'fonts', 'presets');
 /** family name -> css2 axis param (variable range, or static weight list). */
 const FAMILIES = {
   Anton: 'Anton',
+  'Bricolage Grotesque': 'Bricolage+Grotesque:opsz,wght@12..96,300..800',
   'DM Sans': 'DM+Sans:wght@300..700',
+  Figtree: 'Figtree:wght@300..800',
   Fredoka: 'Fredoka:wght@300..700',
   'IBM Plex Mono': 'IBM+Plex+Mono:wght@300;400;500;600;700',
   'IBM Plex Sans': 'IBM+Plex+Sans:wght@300..700',

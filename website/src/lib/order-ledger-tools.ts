@@ -5,10 +5,12 @@
  * columns and return only what the rows hold. Nothing here writes anything.
  */
 
+import { AsyncLocalStorage } from "node:async_hooks";
 import type Anthropic from "@anthropic-ai/sdk";
 import type { DataTableRow } from "rift-ds/components/DataTable/DataTable";
 import { COLUMN_KEYS, LEDGER_COLUMNS, ledgerRows } from "@/data/order-ledger";
 import type { LedgerViewChange } from "./order-ledger-view";
+import { withEdit, type OrderEdits } from "./order-actions";
 import { TYPE_DEFAULTS, type ColumnType } from "../../../src/components/DataTable/columnTypes";
 import { OPERATORS, VALUELESS, matches, type Filter, type FilterKind, type FilterOperator } from "../../../src/components/DataTable/filterModel";
 
@@ -16,10 +18,28 @@ type LooseColumn = { key: string; header: string; type?: ColumnType; options?: {
 const COLUMNS = LEDGER_COLUMNS as readonly LooseColumn[];
 const BY_KEY = new Map(COLUMNS.map((col) => [col.key, col]));
 
+/* A request's page edits (lib/order-actions.ts): the merchant chat runs its tools inside
+   withLedgerEdits, so its answers count what the reader changed; everything else reads
+   the seeded ledger. */
+const ledgerEdits = new AsyncLocalStorage<OrderEdits>();
+
+/** Runs `fn` with the ledger read through these edits. */
+export const withLedgerEdits = <T,>(edits: OrderEdits, fn: () => T): T => ledgerEdits.run(edits, fn);
+
+/** The edits the current request reads the ledger through. */
+export const currentLedgerEdits = (): OrderEdits => ledgerEdits.getStore() ?? {};
+
+/** The ledger as the current request sees it. */
+export function currentRows(): DataTableRow[] {
+  const edits = currentLedgerEdits();
+  return Object.keys(edits).length ? ledgerRows().map((row) => (edits[row.id] ? { ...row, values: withEdit(row.values, edits[row.id]) } : row)) : ledgerRows();
+}
+
 const kindOf = (col: LooseColumn): FilterKind => (col.type ? TYPE_DEFAULTS[col.type].filter : col.options ? "enum" : "text");
-/* The two free-text columns also take a list, which is how a top-N becomes a filter. */
+/* Free-text columns also take a list: it is how a top-N becomes a filter, and how
+   the orders a reader ticked (orderId isAnyOf their ids) become one. */
 const operatorsFor = (col: LooseColumn): FilterOperator[] =>
-  col.type || col.options ? OPERATORS[kindOf(col)] : [...OPERATORS.text, "isAnyOf", "isNoneOf"];
+  kindOf(col) === "text" && !col.options ? [...OPERATORS.text, "isAnyOf", "isNoneOf"] : OPERATORS[kindOf(col)];
 
 const ALL_OPERATORS = [...new Set(Object.values(OPERATORS).flat()), "isAnyOf", "isNoneOf"] as FilterOperator[];
 
@@ -124,7 +144,7 @@ const filterRows = (rows: DataTableRow[], filters: Omit<Filter, "id">[]) =>
       );
 
 /** The rows a set of filters and a search leave. */
-export const matchingRows = (filters: Omit<Filter, "id">[], search?: string | null) => searchRows(filterRows(ledgerRows(), filters), search);
+export const matchingRows = (filters: Omit<Filter, "id">[], search?: string | null) => searchRows(filterRows(currentRows(), filters), search);
 
 const calculate = (metric: string, values: number[]) => {
   if (metric === "count") return values.length;
@@ -177,7 +197,7 @@ export type ColumnValuesInput = { column: string; contains: string | null; limit
 export function columnValues(input: ColumnValuesInput) {
   const counts = new Map<string, number>();
   const needle = input.contains?.toLowerCase();
-  for (const row of ledgerRows()) {
+  for (const row of currentRows()) {
     const raw = row.values[input.column];
     for (const value of Array.isArray(raw) ? raw : [raw]) {
       if (value == null || value === "") continue;

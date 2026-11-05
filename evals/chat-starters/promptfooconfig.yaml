@@ -1,0 +1,39 @@
+# Starter-chip eval for the merchant sales assistant. Runs against the real
+# route (/api/merchant-chat/starters), never the raw Anthropic API: the thing
+# under test is the prompt, the focus rebuilt from the ledger, and the chip
+# parser together. See README.md in this directory for how to run and read it.
+description: merchant sales starters through /api/merchant-chat/starters
+
+prompts:
+  - '{{description}}'
+
+providers:
+  - id: file://provider.mjs
+    label: starters-route
+
+# Three runs per focus: the chips are sampled, so report a rate, not a pass.
+evaluateOptions:
+  repeat: 3
+  maxConcurrency: 2
+
+defaultTest:
+  assert:
+    # The mechanical half of "neutral and broad": a full row, each chip fitting,
+    # no judging or directional words, no ids, at the focus's grain.
+    - type: javascript
+      value: file://assert-starters.mjs
+    # The half a word list cannot see: a question that leans, or reads awkwardly.
+    - type: llm-rubric
+      provider: anthropic:messages:claude-sonnet-5-5
+      value: >-
+        These are starter questions shown on chips when a reader points an
+        assistant at something on a page. Pass only if every question is
+        neutral and broad: it asks without characterising the thing (nothing
+        implies it is good, bad, big, small, rising, falling or unusual), reads
+        as natural plain English a person would tap, and the questions take
+        different angles rather than one question phrased several ways. Asking
+        how something has changed or compares is neutral: "How has this
+        changed?" passes. Only words that assume an answer fail, such as
+        "What drove this jump?" or "Is this unusually large?".
+
+tests: file://cases.json

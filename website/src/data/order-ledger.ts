@@ -77,7 +77,9 @@ const withLabels = (values: readonly { value: string; status: StatusRole }[]) =>
   values.map((option) => ({ ...option, label: option.value }));
 
 export const LEDGER_COLUMNS = [
-  { key: 'orderId', header: 'Order', type: 'text', rowHeader: true, sortable: true, width: '130px', pin: 'start' },
+  /* No declared type, like the other free-text columns: the table then takes a list filter on it
+     (orderId isAnyOf), which is how ticked or changed orders become the table's view. */
+  { key: 'orderId', header: 'Order', rowHeader: true, sortable: true, width: '130px', pin: 'start' },
   { key: 'placedOn', header: 'Placed', type: 'date', sortable: true, width: '130px' },
   { key: 'customer', header: 'Customer', sortable: true, groupable: true, width: '220px' },
   { key: 'segment', header: 'Segment', sortable: true, groupable: true, width: '150px', options: asOptions(SEGMENTS) },

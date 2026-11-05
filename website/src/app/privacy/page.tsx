@@ -49,8 +49,12 @@ export default function PrivacyPage() {
             Anthropic, whose model picks the new setup. Its rate limit and
             budget share the chat&apos;s, and the commands themselves are not
             stored. The assistant on the merchant sales template is the same: your
-            messages in that conversation and the table&apos;s setup go to
-            Anthropic, and none of it is stored.
+            messages in that conversation, the table&apos;s setup, the changes
+            you make to its demo orders, and the text you highlight or the
+            orders you tick on that page go to Anthropic, and none of it is
+            stored. Those changes live in the page until you reload it. While the assistant is open, a highlight or
+            a tick is sent as you make it, before you type anything, so it can
+            suggest questions about it.
           </p>
         </div>
 

@@ -7,10 +7,11 @@
  * month the KPI band reports, as a date filter the reader can change, and shows a
  * merchant's columns of the ledger's many. The rest wait in the Columns panel, and
  * Describe reaches all of them through the same model route as the labs bench. The
- * screen's chat drives the table too, through the bridge below.
+ * screen's chat drives the table too, through the bridge below, and follows the
+ * ticked rows through onSelectionChange and how far the table is narrowed.
  */
 
-import { memo, useEffect, useState, type RefObject } from "react";
+import { memo, useEffect, useMemo, useState, type RefObject } from "react";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { DataTable, type DataTableColumn, type DataTableRow } from "rift-ds/components/DataTable/DataTable";
 import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
@@ -19,6 +20,9 @@ import { MERCHANT_OPENING_FILTER, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS 
 import { askOrderLedger } from "@/lib/order-ledger-command";
 import { useTableContext } from "../../../../../src/components/DataTable/tableContext";
 import type { TableBridge } from "./MerchantChat";
+import type { PageView } from "./chatFocus";
+import { ORDER_ACTIONS, withEdit, type OrderActionId, type OrderEdits } from "@/lib/order-actions";
+import type { TableToolbarSelection } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./MerchantSales.module.css";
 
 const SHOWN = MERCHANT_SHOWN_COLUMNS;
@@ -45,26 +49,63 @@ const COLUMNS = (LEDGER_COLUMNS as unknown as DataTableColumn[]).map((col) => ({
   defaultHidden: HIDDEN.includes(col.key),
 }));
 
-/* Keeps the chat's hold on the table current. It renders nothing, and sits in the toolbar slot because that is inside the table's context. */
-function TableBridgeSeat({ bridge: bridgeRef }: { bridge: RefObject<TableBridge | null> }) {
+/* The table as it opens: a search or any other filter narrows it from there. */
+const OPENING_FILTERS = JSON.stringify([MERCHANT_OPENING_FILTER].map(({ column, operator, value }) => ({ column, operator, value })));
+const narrowed = (view: TableBridge["view"]) =>
+  (view.search ?? "").trim() !== "" || JSON.stringify((view.filters ?? []).map(({ column, operator, value }) => ({ column, operator, value }))) !== OPENING_FILTERS;
+
+/* Keeps the chat's hold on the table current, and tells it how far the table is narrowed. It renders nothing, and sits in the toolbar slot because that is inside the table's context. */
+function TableBridgeSeat({ bridge: bridgeRef, onPageView }: { bridge: RefObject<TableBridge | null>; onPageView: (view: PageView) => void }) {
   const table = useTableContext();
   useEffect(() => {
     bridgeRef.current = table;
   });
+  const filtered = table ? narrowed(table.view) : false;
+  const count = table?.matchingCount ?? 0;
+  useEffect(() => {
+    onPageView({ filtered, count });
+  }, [onPageView, filtered, count]);
   return null;
 }
 
-function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
+function OrdersTable({
+  bridge,
+  onSelectionChange,
+  onPageView,
+  onAsk,
+  edits,
+  onAction,
+}: {
+  bridge: RefObject<TableBridge | null>;
+  onSelectionChange: (ids: string[]) => void;
+  onPageView: (view: PageView) => void;
+  /** Opens the assistant on the ticked rows, from the selection bar. */
+  onAsk: () => void;
+  /** The page's edits, drawn over the seeded rows. */
+  edits: OrderEdits;
+  /** Runs an order action on the selection, from the bar. */
+  onAction: (action: OrderActionId, selection: TableToolbarSelection) => void;
+}) {
   const [rows, setRows] = useState<ReturnType<typeof ledgerRows> | null>(null);
   useEffect(() => {
     /* A task of its own, so the skeleton paints before the build holds the thread. */
     const task = setTimeout(() => setRows(ledgerRows()));
     return () => clearTimeout(task);
   }, []);
+  /* The order actions come from their one definition, the chat's too. */
+  const barAction = (id: OrderActionId) => {
+    const action = ORDER_ACTIONS[id];
+    return { id, label: action.label, icon: action.icon, destructive: action.destructive, onSelect: (selection: TableToolbarSelection) => onAction(id, selection) };
+  };
+  /* Only the edited orders are copied; the rest keep their identity, so the table re-renders what changed. */
+  const shown = useMemo(
+    () => rows?.map((row) => (edits[row.id] ? { ...row, values: withEdit(row.values, edits[row.id]) } : row)) ?? [],
+    [rows, edits],
+  );
   return (
     <DataTable
       columns={COLUMNS}
-      rows={rows ?? []}
+      rows={shown}
       loading={rows === null}
       caption="Orders"
       defaultColumnOrder={[...SHOWN, ...HIDDEN]}
@@ -73,6 +114,7 @@ function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
       defaultFilters={[MERCHANT_OPENING_FILTER]}
       defaultSort={MERCHANT_OPENING_SORT}
       selectable
+      onSelectionChange={onSelectionChange}
       multiSort
       columnMenu
       resizableColumns
@@ -80,7 +122,7 @@ function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
       phoneLayout="stack"
       toolbar={
         <>
-        <TableBridgeSeat bridge={bridge} />
+        <TableBridgeSeat bridge={bridge} onPageView={onPageView} />
         <TableToolbar
           command={{
             onSubmit: async (request) => {
@@ -90,10 +132,12 @@ function OrdersTable({ bridge }: { bridge: RefObject<TableBridge | null> }) {
           }}
           labels={{ commandPlaceholder: "Overdue orders over $50,000, largest first" }}
           bulkActions={[
-            { id: "fulfil", label: "Mark fulfilled", icon: "local_shipping", onSelect: () => {} },
+            { id: "ask", label: "Ask AI", icon: "auto_awesome", onSelect: onAsk },
+            barAction("fulfil"),
             { id: "labels", label: "Print labels", icon: "print", onSelect: () => {} },
             { id: "export", label: "Export", icon: "download", onSelect: () => {} },
-            { id: "refund", label: "Refund", icon: "undo", destructive: true, onSelect: () => {} },
+            barAction("cancel"),
+            barAction("refund"),
           ]}
         />
         </>

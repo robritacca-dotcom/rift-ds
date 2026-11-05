@@ -1,0 +1,294 @@
+[
+  {
+    "description": "figure: Net revenue, highlighted value",
+    "vars": {
+      "description": "figure: Net revenue, highlighted value",
+      "focus": {
+        "kind": "text",
+        "text": "$51.7M",
+        "kpi": "Net revenue",
+        "orderId": null,
+        "column": null,
+        "section": null
+      },
+      "grain": "figure",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "figure"
+    }
+  },
+  {
+    "description": "figure: Orders, highlighted value",
+    "vars": {
+      "description": "figure: Orders, highlighted value",
+      "focus": {
+        "kind": "text",
+        "text": "2,072",
+        "kpi": "Orders",
+        "orderId": null,
+        "column": null,
+        "section": null
+      },
+      "grain": "figure",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "figure"
+    }
+  },
+  {
+    "description": "figure: Average order, part of the value",
+    "vars": {
+      "description": "figure: Average order, part of the value",
+      "focus": {
+        "kind": "text",
+        "text": "25,494",
+        "kpi": "Average order",
+        "orderId": null,
+        "column": null,
+        "section": null
+      },
+      "grain": "figure",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "figure"
+    }
+  },
+  {
+    "description": "figure: Margin, highlighted with its change",
+    "vars": {
+      "description": "figure: Margin, highlighted with its change",
+      "focus": {
+        "kind": "text",
+        "text": "34.6% Margin +0.1 pts",
+        "kpi": "Margin",
+        "orderId": null,
+        "column": null,
+        "section": null
+      },
+      "grain": "figure",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "figure"
+    }
+  },
+  {
+    "description": "cell: a customer name",
+    "vars": {
+      "description": "cell: a customer name",
+      "focus": {
+        "kind": "text",
+        "text": "Sterling Systems Co",
+        "kpi": null,
+        "orderId": "ORD-1000116",
+        "column": "customer",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "carrier,carriers,date,margin,placed,product,products,revenue,status",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "cell: a negative margin",
+    "vars": {
+      "description": "cell: a negative margin",
+      "focus": {
+        "kind": "text",
+        "text": "-0.5",
+        "kpi": null,
+        "orderId": "ORD-1000116",
+        "column": "marginPct",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "carrier,carriers,customer,customers,date,placed,product,products,revenue,status",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "cell: a product",
+    "vars": {
+      "description": "cell: a product",
+      "focus": {
+        "kind": "text",
+        "text": "Noise-cancelling headset",
+        "kpi": null,
+        "orderId": "ORD-1000116",
+        "column": "product",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "carrier,carriers,customer,customers,date,margin,placed,revenue,status",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "cell: a carrier",
+    "vars": {
+      "description": "cell: a carrier",
+      "focus": {
+        "kind": "text",
+        "text": "Swiftway",
+        "kpi": null,
+        "orderId": "ORD-1000116",
+        "column": "carrier",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "customer,customers,date,margin,placed,product,products,revenue,status",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "cell: a status",
+    "vars": {
+      "description": "cell: a status",
+      "focus": {
+        "kind": "text",
+        "text": "Placed",
+        "kpi": null,
+        "orderId": "ORD-1000116",
+        "column": "status",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "carrier,carriers,customer,customers,date,margin,placed,product,products,revenue",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "cell: a date",
+    "vars": {
+      "description": "cell: a date",
+      "focus": {
+        "kind": "text",
+        "text": "Oct 30, 2026",
+        "kpi": null,
+        "orderId": "ORD-1000013",
+        "column": "placedOn",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "carrier,carriers,customer,customers,margin,product,products,revenue,status",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "cell: a net revenue amount",
+    "vars": {
+      "description": "cell: a net revenue amount",
+      "focus": {
+        "kind": "text",
+        "text": "$70,649",
+        "kpi": null,
+        "orderId": "ORD-1000392",
+        "column": "netRevenue",
+        "section": "Orders"
+      },
+      "grain": "one",
+      "offTopic": "carrier,carriers,customer,customers,date,margin,placed,product,products,status",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "record: one ticked order",
+    "vars": {
+      "description": "record: one ticked order",
+      "focus": {
+        "kind": "orders",
+        "count": 1,
+        "all": false,
+        "ids": [
+          "ORD-1000392"
+        ]
+      },
+      "grain": "one",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "one"
+    }
+  },
+  {
+    "description": "records: three ticked orders",
+    "vars": {
+      "description": "records: three ticked orders",
+      "focus": {
+        "kind": "orders",
+        "count": 3,
+        "all": false,
+        "ids": [
+          "ORD-1000116",
+          "ORD-1000201",
+          "ORD-1000392"
+        ]
+      },
+      "grain": "set",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "set"
+    }
+  },
+  {
+    "description": "records: every matching order ticked",
+    "vars": {
+      "description": "records: every matching order ticked",
+      "focus": {
+        "kind": "orders",
+        "count": 2072,
+        "all": true,
+        "ids": []
+      },
+      "grain": "set",
+      "measurable": "no"
+    },
+    "metadata": {
+      "grain": "set"
+    }
+  },
+  {
+    "description": "passage: text across the KPI band, no single source",
+    "vars": {
+      "description": "passage: text across the KPI band, no single source",
+      "focus": {
+        "kind": "text",
+        "text": "2,072 Orders +55.9% $25,494 Average order",
+        "kpi": null,
+        "orderId": null,
+        "column": null,
+        "section": "October against September"
+      },
+      "grain": "figure",
+      "measurable": "yes"
+    },
+    "metadata": {
+      "grain": "figure"
+    }
+  }
+]

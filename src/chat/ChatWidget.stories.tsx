@@ -262,6 +262,53 @@ export const ContextFollowsTheReader: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Clear context' }));
     await waitFor(() => expect(canvasElement.querySelector('.ds-composer__context')?.textContent).toContain('Looking at “Sales”'));
     await expect(canvas.queryByRole('button', { name: 'Clear context' })).toBeNull();
+    // The change is spoken once it settles, without moving focus.
+    await waitFor(() => expect(canvasElement.querySelector('.ds-chat-widget [aria-live="polite"]')?.textContent).toBe('Looking at “Sales”'), { timeout: 2000 });
+  },
+};
+
+/* A transport whose first reply fails, recording the history each request carries. */
+const SEEN_HISTORIES: string[][] = [];
+function failingOnceTransport(seen: string[][]): ChatTransport {
+  let calls = 0;
+  return async function* failingOnce(messages) {
+    calls += 1;
+    seen.push(messages.map((message) => `${message.role}: ${message.content}`));
+    if (calls === 1) {
+      yield { type: 'error', message: 'Something went wrong reaching the model.' };
+      yield { type: 'done' };
+      return;
+    }
+    yield { type: 'delta', text: 'Here is the answer.' };
+    yield { type: 'done' };
+  };
+}
+
+/** A failure message is the host speaking, never the model: the next request's history leaves it out, so the model is never told it said it. */
+export const FailedReplyStaysOutOfHistory: Story = {
+  render: function Render(args) {
+    const [transport] = useState(() => {
+      SEEN_HISTORIES.length = 0;
+      return failingOnceTransport(SEEN_HISTORIES);
+    });
+    return (
+      <ChatProvider transport={transport} followups={false} feedback={false}>
+        <OpenOnMount>
+          <Stage>
+            <ChatWidget {...args} />
+          </Stage>
+        </OpenOnMount>
+      </ChatProvider>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = await canvas.findByRole('textbox');
+    await userEvent.type(field, 'First question{Enter}');
+    await waitFor(() => expect(canvas.getByText('Something went wrong reaching the model.')).toBeInTheDocument(), { timeout: 4000 });
+    await userEvent.type(field, 'Second question{Enter}');
+    await waitFor(() => expect(canvas.getByText('Here is the answer.')).toBeInTheDocument(), { timeout: 4000 });
+    await expect(SEEN_HISTORIES[1]).toEqual(['user: First question', 'user: Second question']);
   },
 };
 

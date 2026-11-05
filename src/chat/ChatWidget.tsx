@@ -33,7 +33,8 @@ import {
   type PromptSuggestionsProps,
 } from '../components/PromptSuggestions/PromptSuggestions';
 import type { QuestionCardLabels, QuestionSummaryProps } from '../components/QuestionCard/QuestionCard';
-import { MOTION_SCROLL_SETTLE_MS, MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
+import { MOTION_ANNOUNCE_DEBOUNCE_MS, MOTION_SCROLL_SETTLE_MS, MOTION_SUGGESTIONS_THINK_MS } from '../tokens/motion';
+import '../behaviors/visually-hidden.css';
 import { AssistantTurn, type AssistantTurnLabels } from './AssistantTurn';
 import { cardArtifact, turnCards } from './artifacts';
 import { ChatAgentPane } from './ChatAgentPane';
@@ -556,6 +557,18 @@ export function ChatWidget({
   /* The deprecated label props build the same object, so one path draws the note. */
   const context: ChatContext | null = contextProp ?? (contextLabel ? { label: contextLabel, note: contextNote(contextLabel) } : null);
   const contextIcon = context?.icon ?? 'description';
+  /* A context that follows the reader changes without moving focus, so the new
+     note is spoken once it settles: a drag across text speaks once. Mounted
+     empty, and silent for the note the widget opens with. */
+  const contextNoteText = context ? (context.note ?? defaultContextNote(context.label)) : '';
+  const [announcedContext, setAnnouncedContext] = useState('');
+  const openingContext = useRef(contextNoteText);
+  useEffect(() => {
+    if (contextNoteText === openingContext.current) return;
+    openingContext.current = '';
+    const timer = setTimeout(() => setAnnouncedContext(contextNoteText), MOTION_ANNOUNCE_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [contextNoteText]);
 
   /* What the message was asked about, drawn above its bubble as an attachment would be. */
   const sentContext = (): ReactNode => {
@@ -1105,6 +1118,9 @@ export function ChatWidget({
           <ArtifactSeatContext.Provider value={artifacts}>
           <ResponseActionsLabelsContext.Provider value={responseActionsLabels}>
           <FollowupSuggestionsLabelContext.Provider value={followupsLabel}>
+          <span className="ds-visually-hidden" aria-live="polite">
+            {open ? announcedContext : ''}
+          </span>
           <ChatThread {...chatThreadLabels} className="ds-chat-widget__thread" flow={flow}>
             {/* One array, so the live turn and its committed form match by
                 key: split expressions are separate children slots and React

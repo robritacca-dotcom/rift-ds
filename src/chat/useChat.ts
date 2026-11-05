@@ -250,6 +250,10 @@ export function useChat(
         text: '',
       };
       setLive(current);
+      /* What the model said, for the history: its deltas, never a guardrail
+         notice or a failure message, which are the host speaking. A failed or
+         stopped reply keeps the words that did arrive. */
+      let spoken = '';
 
       const update = (next: LiveResponse) => {
         current = next;
@@ -325,6 +329,7 @@ export function useChat(
                     current.durationSeconds ??
                     Math.max(1, Math.round((Date.now() - startedAt) / 1000)),
                 };
+                spoken += event.text;
                 reveal.append(event.text);
                 break;
               /* A guardrail line and a failure are not the model speaking, so
@@ -358,7 +363,7 @@ export function useChat(
           const stopped = controller.signal.aborted;
           if (stopped) current = { ...current, outcome: 'stopped' };
           if (current.text !== '') {
-            commit(current, startedAt, current.text);
+            commit(current, startedAt, spoken);
           } else if (current.content || current.cards?.length || current.question) {
             // The rich content is the reply: there is nothing to apologise for,
             // and no words to record in the history.
@@ -380,7 +385,7 @@ export function useChat(
             if (current.text === '') {
               commit({ ...current, text: placeholders.stopped }, startedAt, null);
             } else {
-              commit(current, startedAt, current.text);
+              commit(current, startedAt, spoken);
             }
           } else {
             current = { ...current, outcome: 'failed' };
@@ -388,7 +393,7 @@ export function useChat(
             if (current.text === '') {
               commit({ ...current, text: placeholders.failed }, startedAt, null);
             } else {
-              commit(current, startedAt, current.text);
+              commit(current, startedAt, spoken);
             }
             // Surface the real cause for the person building, not the visitor.
             console.error(err);

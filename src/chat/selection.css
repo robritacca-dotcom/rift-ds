@@ -1,0 +1,8 @@
+/* The highlight a chat holds on the page while it is the chat's context
+   (useHeldHighlight in selection.ts): the context note's own fill, so the
+   passage and the note that names it read as one thing, and quieter than a
+   live selection, so it reads as held rather than active. */
+::highlight(ds-chat-focus) {
+  background-color: var(--color-chat-context-bg);
+  color: var(--color-text-primary);
+}

@@ -15,6 +15,9 @@
  */
 export { ChatProvider, type ChatProviderProps } from './ChatProvider';
 export { ChatWidget, type ChatWidgetProps, type ChatAgentOptions, type ChatContext, type RailSlot } from './ChatWidget';
+export { useSelectionFocus, useHeldHighlight, readSelection, CHAT_SOURCE_ATTRIBUTE, HELD_HIGHLIGHT_NAME, type SelectedText } from './selection';
+export { useGeneratedStarters, type GeneratedStarters, type GeneratedStartersOptions } from './generatedStarters';
+export { defineAction, planAction, skippedText, type ChatAction, type ActionPlan } from './actions';
 export { ChatLauncher, CHAT_PANEL_ID, type ChatLauncherProps } from './ChatLauncher';
 export { useChatAgentState } from './agentState';
 export { ChatThreads, type ChatThreadsProps } from './ChatThreads';

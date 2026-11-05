@@ -4,6 +4,8 @@
  * (validate-registry chain). recharts-backed modules live in charts.ts, not here — recharts is an optional peer.
  */
 export * from './components/Accordion/Accordion';
+export * from './components/ActionCard/ActionCard';
+export * from './components/ActionReadout/ActionReadout';
 export * from './components/AgentPlan/AgentPlan';
 export * from './components/AgentRail/AgentRail';
 export * from './components/AgentStatus/AgentRing';

@@ -1,0 +1,66 @@
+/* ============================================
+   ACTION READOUT COMPONENT
+   What a confirmed change did: a headline over
+   a two-column list of facts, label beside
+   value. A content card of the chat furniture,
+   on ActionCard's surface, so a proposal and
+   its readout read as one family.
+   ============================================ */
+
+.ds-action-readout {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+  min-width: 0;
+  padding: var(--padding-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-action-readout__headline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-action-readout__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-action-readout__facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--gap-400);
+  row-gap: var(--gap-100);
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-action-readout__facts dt {
+  color: var(--color-text-secondary);
+}
+
+.ds-action-readout__facts dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.ds-action-readout .material-symbols-rounded {
+  color: inherit;
+}

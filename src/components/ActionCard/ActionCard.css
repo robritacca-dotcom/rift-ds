@@ -1,0 +1,90 @@
+/* ============================================
+   ACTION CARD COMPONENT
+   A change an assistant proposes and the reader
+   confirms: the title and what it leaves alone
+   over Confirm and Dismiss, then one row that
+   records what happened, with Undo.
+
+   A content card of the chat furniture: the
+   container fill behind its border, at the
+   ArtifactCard's radius and padding, so the
+   tiles a reply leaves in the thread read as
+   one family.
+   ============================================ */
+
+.ds-action-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-200);
+  width: 100%;
+  min-width: 0;
+  padding: var(--padding-300);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary);
+}
+
+/* The record is one row: what happened, and Undo at its end. */
+.ds-action-card--confirmed,
+.ds-action-card--dismissed,
+.ds-action-card--undone {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-action-card__title,
+.ds-action-card__record {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.ds-action-card__title {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-action-card__record,
+.ds-action-card__detail {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-action-card__record-text {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--gap-100);
+}
+
+.ds-action-card__record-note {
+  color: var(--color-text-tertiary);
+}
+
+.ds-action-card__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-action-card__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+.ds-action-card .material-symbols-rounded {
+  color: inherit;
+}

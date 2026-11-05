@@ -236,7 +236,8 @@ const handler = createMcpHandler(
             `Charts: components from '${pkg.name}/charts' need the optional recharts peer dependency.`,
             "",
             `AI chat: the whole conversation ships as one widget under '${pkg.name}/chat' (the panel, the launcher and the engine), ` +
-              `with the server handlers under '${pkg.name}/chat/server' and the guardrails under '${pkg.name}/chat/upstash'; each subpath has optional peers. ` +
+              `with the server handlers under '${pkg.name}/chat/server', the guardrails under '${pkg.name}/chat/upstash', and the action definitions a page and its route share under '${pkg.name}/chat/actions'; ` +
+              `every subpath but '${pkg.name}/chat/actions' has optional peers. ` +
               `In a Next.js app router project, 'npx ${pkg.name} init chat' scaffolds the routes, the mount and an env example, never overwriting a file. ` +
               `Props: get_component with the name ChatWidget. Guide: ${SITE_URL}/docs/chat.`,
             "",

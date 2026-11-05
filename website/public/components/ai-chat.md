@@ -6,8 +6,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 
 - Category: widget
 - Import: `import { ChatWidget, ChatProvider, ChatLauncher, ChatThreads, ChatTabs, ChatAgentPane, ChatArtifactPane, ChatArtifactCard } from 'rift-ds/chat';`
-- Subpath `rift-ds/chat`: The widget, the provider, the launcher and the engine under them. Optional peers: react-markdown, remark-gfm.
-- Subpath `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups and feedback siblings, for any web-standard route. Optional peers: @anthropic-ai/sdk.
+- Subpath `rift-ds/chat`: The widget, the provider, the launcher and the engine under them, with the hooks that let it follow the reader and write starters for what they picked. Optional peers: react-markdown, remark-gfm.
+- Subpath `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups, starters and feedback siblings, for any web-standard route. Optional peers: @anthropic-ai/sdk.
 - Subpath `rift-ds/chat/actions`: The action definitions a page and its route share, and their dry run, with no dependencies.
 - Subpath `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Optional peers: @upstash/ratelimit, @upstash/redis.
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.

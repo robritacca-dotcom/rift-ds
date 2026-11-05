@@ -17,7 +17,7 @@ const meta = {
     ),
   ],
   args: {
-    headline: '12 projects archived',
+    title: '12 projects archived',
     facts: [
       { label: 'Status', value: 'Active 9 · Paused 3 → Archived 12' },
       { label: 'Owners', value: '7' },
@@ -39,7 +39,7 @@ export const Default: Story = {
   },
 };
 
-/** With the action's mark beside the headline. */
+/** With the action's mark beside the title. */
 export const WithIcon: Story = {
   args: { icon: 'inventory_2' },
 };

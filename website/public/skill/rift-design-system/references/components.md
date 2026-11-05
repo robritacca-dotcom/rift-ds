@@ -87,12 +87,12 @@ Chat, agent, and model surfaces for building AI products, from the composer to t
 A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.
 
 - Import: `import { ActionCard } from 'rift-ds';`
-- Rendering: client component (declares 'use client')
+- Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/action-card.md
 
 ### Action readout
 
-What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.
+What a confirmed change did: a title over a list of facts, worked out from the records as they were just before it.
 
 - Import: `import { ActionReadout } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')

@@ -6,7 +6,7 @@
   "label": "Action readout",
   "slug": "action-readout",
   "category": "ai",
-  "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.",
+  "description": "What a confirmed change did: a title over a list of facts, worked out from the records as they were just before it.",
   "client": false,
   "importPath": "rift-ds/components/ActionReadout/ActionReadout",
   "barrel": "main",
@@ -17,11 +17,11 @@
       "component": "ActionReadout",
       "props": [
         {
-          "name": "headline",
+          "name": "title",
           "type": "ReactNode",
           "typeKind": "reference",
           "required": true,
-          "description": "What was done, with how much: \"69 orders cancelled\"."
+          "description": "What was done, with how much: \"69 orders cancelled\". Collides with the native `title` tooltip attribute on purpose: the readout shows it."
         },
         {
           "name": "facts",
@@ -35,7 +35,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "A leading mark beside the headline: a Material Symbol name, or your own element."
+          "description": "A leading mark beside the title: a Material Symbol name, or your own element."
         },
         {
           "name": "className",

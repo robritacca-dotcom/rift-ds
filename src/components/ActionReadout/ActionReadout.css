@@ -1,6 +1,6 @@
 /* ============================================
    ACTION READOUT COMPONENT
-   What a confirmed change did: a headline over
+   What a confirmed change did: a title over
    a two-column list of facts, label beside
    value. A content card of the chat furniture,
    on ActionCard's surface, so a proposal and
@@ -20,7 +20,7 @@
   background-color: var(--color-bg-container-primary);
 }
 
-.ds-action-readout__headline {
+.ds-action-readout__title {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-200);

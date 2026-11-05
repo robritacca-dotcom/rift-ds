@@ -150,6 +150,22 @@ const MANY_FILES: AttachmentItem[] = [
 
 /* What each example stages at mount. Injected turns are stage dressing:
    they never reach a transport. */
+/* A context that follows the reader: three orders ticked, with the way back to the page. Fictional. */
+function ContextStage({ phone, height }: { phone: boolean; height: number }) {
+  const [focused, setFocused] = useState(true);
+  return (
+    <ChatStage
+      phone={phone}
+      height={height}
+      widget={{
+        context: focused
+          ? { label: "3 orders", note: "Looking at 3 orders", icon: "table_rows", onClear: () => setFocused(false), sent: true }
+          : { label: "Sales" },
+      }}
+    />
+  );
+}
+
 const stageQuickReplies: ChatStageSetup = (chat) => {
   chat.injectTurn({ role: "user", text: "How do I get started?" });
   chat.injectTurn({
@@ -389,6 +405,24 @@ export default function AiChatPage() {
             </div>
           </section>
 
+          <section id="context" className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="Context" />
+            <p className={styles.sectionNote}>
+              The note over the composer says what the chat is looking at, from one{" "}
+              <code>context</code> object. For a page it is the page&apos;s name. When the reader
+              puts something in front of the chat, a few ticked rows or a highlighted figure, the
+              host updates the <code>label</code>, the <code>note</code> and the <code>icon</code>
+              together, and the note is read out once it settles. <code>onClear</code> ends the
+              note in a clear button that goes back to the page, named by{" "}
+              <code>contextClearLabel</code>, and <code>sent</code> repeats the context above each
+              message sent over it, so the thread keeps what each question was about. Here three
+              orders are in front of the chat: send a starter, then clear the note.{" "}
+              <Link href="/docs/chat#context-and-actions">Context and actions</Link> covers the
+              hooks that follow a highlight.
+            </p>
+            <ContextStage key={`context-${viewport}`} phone={phone} height={stageHeight} />
+          </section>
+
           <section id="threads" className={`${styles.section} animate-in animate-delay-3`}>
             <SectionTitle title="Threads and tabs" />
             <p className={styles.sectionNote}>
@@ -462,7 +496,9 @@ export default function AiChatPage() {
               fresh set is drawn. The provider&apos;s <code>followups</code> option names the
               endpoint or function that writes follow-up questions from each answer, shown under
               it with a shimmer while they are on their way; <code>fallbackFollowups</code> covers
-              a miss. A chip holds {SUGGESTION_MAX_CHARS} characters; a longer one is dropped rather
+              a miss. Starters a model writes for the reader&apos;s focus hold the same shimmer
+              through <code>startersPending</code> until they arrive. A chip holds{" "}
+              {SUGGESTION_MAX_CHARS} characters; a longer one is dropped rather
               than cut. Once a chip is sent, its row stays as the record: the sent chip outlined,
               the rest faded, none of them tappable.
             </p>

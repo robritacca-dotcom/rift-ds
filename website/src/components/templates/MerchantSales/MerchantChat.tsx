@@ -146,7 +146,7 @@ function TableReceipt({ id, before }: { id: string; before: TableView }) {
 
 /** What a confirmed change did, as the library's readout card: the opening of the reply its confirmation gets. */
 const ReadoutBlock = ({ readout }: { readout: ActionReadout }) => (
-  <ActionReadoutCard headline={readout.headline} facts={readout.facts.map(([label, value]) => ({ label, value }))} />
+  <ActionReadoutCard title={readout.title} facts={readout.facts.map(([label, value]) => ({ label, value }))} />
 );
 
 /**
@@ -168,9 +168,10 @@ function OrderActionCard({ id, action, ids, skipped }: ActionPlan & { id: string
   return (
     <ActionCard
       title={`${definition.label}: ${count(ids.length)}`}
-      detail={leftAlone ? `Left as they are: ${leftAlone}` : undefined}
+      /* What the change does and what it leaves alone, in the action's own words: the bar's confirm says the same. */
+      detail={[definition.effect?.(ids.length), leftAlone ? `Left as they are: ${leftAlone}.` : ""].filter(Boolean).join(" ") || undefined}
       icon={definition.icon}
-      destructive={definition.destructive}
+      tone={definition.destructive ? "destructive" : "default"}
       status={status}
       receipt={`${count(ids.length)} ${definition.done}`}
       onConfirm={() => {

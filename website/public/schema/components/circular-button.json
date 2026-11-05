@@ -38,7 +38,7 @@
         },
         {
           "name": "tone",
-          "type": "\"destructive\" | \"default\" | \"neutral\"",
+          "type": "\"default\" | \"destructive\" | \"neutral\"",
           "typeKind": "enum",
           "values": [
             "default",
@@ -70,7 +70,7 @@
         },
         {
           "name": "state",
-          "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
+          "type": "\"default\" | \"active\" | \"disabled\" | \"hover\"",
           "typeKind": "enum",
           "values": [
             "active",

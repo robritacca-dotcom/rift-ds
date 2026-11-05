@@ -25,7 +25,7 @@
       "name": "action-readout",
       "type": "registry:ui",
       "title": "Action readout",
-      "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it."
+      "description": "What a confirmed change did: a title over a list of facts, worked out from the records as they were just before it."
     },
     {
       "name": "agent-plan",

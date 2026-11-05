@@ -4,14 +4,16 @@
  * An action says which records it applies to (`skip` gives the reason it
  * leaves one alone, or null), what it writes to each (`apply`), and the words
  * around it: its button and card title (`label`), what a receipt says was
- * done (`done`), and the reader's words when they confirm it in the chat
- * (`confirm`). The same definition drives a selection bar's button and the
- * chat's proposal, so the two can never do different things to the same
- * records. `planAction` is the dry run both show before anything changes.
+ * done (`done`), the reader's words when they confirm it in the chat
+ * (`confirm`), and how a page's own confirmation asks (`verb`, `effect`). The
+ * same definition drives a selection bar's button and the chat's proposal, so
+ * the two can never do different things to the same records. `planAction` is
+ * the dry run both show before anything changes.
  *
- * Pure and framework-free: exported from rift-ds/chat for the page and from
- * rift-ds/chat/server for the route that proposes, which plans the same
- * action over the same records. The flow it serves (propose on a card, the
+ * Pure and framework-free: published on its own as rift-ds/chat/actions, so a
+ * shared definitions module pulls in no peer, and re-exported from
+ * rift-ds/chat for the page and rift-ds/chat/server for the route that
+ * proposes, which plans the same action over the same records. The flow it serves (propose on a card, the
  * reader's Confirm sent as their message, the reply opening with a readout)
  * is design.md's "A chat proposes, the reader confirms".
  */
@@ -27,6 +29,10 @@ export interface ChatAction<Values, Edit = Partial<Values>> {
   done: string;
   /** The reader's words when they confirm it in the chat, given "this order" or "these 23 orders". */
   confirm: (these: string) => string;
+  /** The verb a confirmation asks with: "Cancel" in "Cancel 3 orders?", and on its confirm button. Defaults to the label. */
+  verb?: string;
+  /** What the change does to the records, for a confirmation's body, given how many it changes: "Any that were paid are refunded." Worded for the count, so one record reads as one. */
+  effect?: (count: number) => string;
   /** A Material Symbol for the card and the button. */
   icon: string;
   /** Drawn as destructive on the card and the bar. */

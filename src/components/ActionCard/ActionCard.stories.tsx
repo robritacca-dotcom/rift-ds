@@ -42,9 +42,9 @@ export const Default: Story = {
   },
 };
 
-/** A change that takes something away draws Confirm in the destructive tone. */
+/** A change that takes something away draws Confirm in the destructive `tone`. */
 export const Destructive: Story = {
-  args: { title: 'Delete drafts: 4 drafts', detail: undefined, icon: 'delete', destructive: true },
+  args: { title: 'Delete drafts: 4 drafts', detail: undefined, icon: 'delete', tone: 'destructive' },
 };
 
 /** Confirmed: the record of what happened, announced as a status, with Undo while it can be reversed. */

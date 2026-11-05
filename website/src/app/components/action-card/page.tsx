@@ -76,13 +76,13 @@ export default function ActionCardPage() {
           <section className={styles.section}>
             <SectionTitle title="A change that takes something away" />
             <p className={styles.demoText}>
-              Set destructive and Confirm takes the destructive tone, for a
+              Set tone to destructive and Confirm takes the destructive colour, for a
               cancellation or a refund. The other button reads Dismiss, never
               Cancel, which beside a cancellation would read as the action
               itself.
             </p>
             <div className={styles.cardStage}>
-              <ActionCard title="Cancel bookings: 14 bookings" detail="Left as they are: 3 already cancelled" icon="cancel" destructive />
+              <ActionCard title="Cancel bookings: 14 bookings" detail="Left as they are: 3 already cancelled" icon="cancel" tone="destructive" />
             </div>
           </section>
 

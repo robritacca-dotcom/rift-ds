@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Button } from '../Button/Button';
 import './ActionCard.css';
@@ -21,8 +19,8 @@ type ActionCardOwnProps = {
   status?: ActionCardStatus;
   /** What the confirmed card says was done: "69 orders cancelled". Defaults to the title. */
   receipt?: React.ReactNode;
-  /** Draws Confirm in the destructive tone, for a change that takes something away (a cancellation, a refund). */
-  destructive?: boolean;
+  /** The colour of Confirm: `destructive` for a change that takes something away (a cancellation, a refund). Defaults to `default`. */
+  tone?: 'default' | 'destructive';
   /** Called by Confirm. The host makes the change, then sets `status` to `confirmed`. */
   onConfirm?: () => void;
   /** Called by Dismiss. The host sets `status` to `dismissed`; nothing changed. */
@@ -55,6 +53,8 @@ const baseClass = 'ds-action-card';
  * with Undo while it can be reversed. The card never makes the change itself:
  * the host does, from `onConfirm`, through the same action its own buttons use.
  * The record is announced as a status, so a confirmation is heard as well as seen.
+ * Hook-free, so its records render from a Server Component; its buttons are
+ * Button's own client islands.
  */
 export function ActionCard({
   ref,
@@ -63,7 +63,7 @@ export function ActionCard({
   icon,
   status = 'proposed',
   receipt,
-  destructive = false,
+  tone = 'default',
   onConfirm,
   onDismiss,
   onUndo,
@@ -108,7 +108,7 @@ export function ActionCard({
       </span>
       {detail && <span className={`${baseClass}__detail`}>{detail}</span>}
       <span className={`${baseClass}__actions`}>
-        <Button variant="primary" tone={destructive ? 'destructive' : 'default'} size="compact" label={confirmLabel} onClick={onConfirm} />
+        <Button variant="primary" tone={tone} size="compact" label={confirmLabel} onClick={onConfirm} />
         <Button variant="secondary" tone="neutral" size="compact" label={dismissLabel} onClick={onDismiss} />
       </span>
     </div>

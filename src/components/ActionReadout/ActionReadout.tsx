@@ -13,11 +13,11 @@ export interface ActionReadoutFact {
 
 /** Props owned by ActionReadout itself — everything else falls through to the root `<div>`. */
 type ActionReadoutOwnProps = {
-  /** What was done, with how much: "69 orders cancelled". */
-  headline: React.ReactNode;
+  /** What was done, with how much: "69 orders cancelled". Collides with the native `title` tooltip attribute on purpose: the readout shows it. */
+  title: React.ReactNode;
   /** What it did, a line each: the status it moved, the money it touched, who it reached. */
   facts: ActionReadoutFact[];
-  /** A leading mark beside the headline: a Material Symbol name, or your own element. */
+  /** A leading mark beside the title: a Material Symbol name, or your own element. */
   icon?: string | React.ReactNode;
   /** Additional CSS classes */
   className?: string;
@@ -31,20 +31,20 @@ const baseClass = 'ds-action-readout';
 
 /**
  * What a confirmed change did, as the opening of the reply its confirmation
- * gets: a headline over a list of facts, worked out by the host from the
+ * gets: a title over a list of facts, worked out by the host from the
  * records as they were just before the change, so it is exact without a model.
  * The facts are a description list, so each label is read with its value.
  */
-export function ActionReadout({ ref, headline, facts, icon, className = '', ...rest }: ActionReadoutProps) {
+export function ActionReadout({ ref, title, facts, icon, className = '', ...rest }: ActionReadoutProps) {
   return (
     <div {...rest} ref={ref} className={[baseClass, className].filter(Boolean).join(' ')}>
-      <span className={`${baseClass}__headline`}>
+      <span className={`${baseClass}__title`}>
         {icon && (
           <span className={`${baseClass}__icon`} aria-hidden="true">
             {typeof icon === 'string' ? <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span> : icon}
           </span>
         )}
-        {headline}
+        {title}
       </span>
       <dl className={`${baseClass}__facts`}>
         {facts.map((fact) => (

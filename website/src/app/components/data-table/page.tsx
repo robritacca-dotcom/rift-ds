@@ -140,6 +140,14 @@ export default function DataTablePage() {
               takes its setup; change anything and the tab shows a dot, and
               its menu saves, resets, renames or deletes it.
             </p>
+            <p className={styles.demoText}>
+              A view can also hold a list on a text column, which no filter
+              menu offers: an id that is any of the rows a reader ticked, or
+              the ten customers a model picked. It is how a host shows these
+              rows, and how the merchant sales template turns the table to the
+              orders a confirmed change touched. Its chip opens to the values
+              it holds, each one a tick that can be let go and taken back.
+            </p>
             <ViewsDemo />
           </section>
 

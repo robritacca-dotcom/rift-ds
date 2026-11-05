@@ -256,6 +256,80 @@ injectTurn({ role: 'assistant', text: 'A turn the model never said.' });`;
 
 const SHADCN_SNIPPET = `npx shadcn@latest add ${SITE_URL}/r/${chatWidget.slug}.json`;
 
+/* Fernway Trails, the fictional walking club the docs use, and its walks. */
+const FOCUS_SNIPPET = `import { useRef, useState } from 'react';
+import { ChatWidget, CHAT_SOURCE_ATTRIBUTE, useHeldHighlight, useSelectionFocus, type SelectedText } from '${PACKAGE_NAME}/chat';
+
+function Bookings() {
+  const page = useRef<HTMLElement>(null);
+  const [focus, setFocus] = useState<SelectedText | null>(null);
+  useSelectionFocus(page, setFocus);
+  useHeldHighlight(focus?.range ?? null);
+  const source = focus?.holder.closest(\`[\${CHAT_SOURCE_ATTRIBUTE}]\`)?.getAttribute(CHAT_SOURCE_ATTRIBUTE);
+
+  return (
+    <>
+      <main ref={page}>
+        <div data-chat-source="Walks booked">143</div>
+      </main>
+      <ChatWidget
+        context={
+          focus
+            ? { label: focus.text, note: \`Looking at “\${focus.text}”\${source ? \` · \${source}\` : ''}\`, icon: 'format_quote', onClear: () => setFocus(null), sent: true }
+            : { label: 'Bookings' }
+        }
+      />
+    </>
+  );
+}`;
+
+const STARTERS_SNIPPET = `// app/api/chat/starters/route.ts, trimmed: describeWalkFocus and focusForServer are your app's own
+import { createStartersHandler } from '${PACKAGE_NAME}/chat/server';
+
+export const POST = createStartersHandler({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  model: 'claude-haiku-5-5',
+  // Look the focus up on the server: never pass the browser's words through.
+  describe: (context) => describeWalkFocus(context),
+});
+
+// In the page, beside the widget:
+import { useGeneratedStarters } from '${PACKAGE_NAME}/chat';
+
+const generated = useGeneratedStarters(focus ? JSON.stringify(focusForServer(focus)) : null, {
+  endpoint: '/api/chat/starters',
+  active: open && turns.length === 0,
+  fallback: [{ id: 'mean', label: 'What does this mean?' }],
+});
+
+<ChatWidget starters={generated.starters ?? pageStarters} startersKey={generated.key ?? 'page'} startersPending={generated.pending} />`;
+
+const ACTIONS_SNIPPET = `// lib/walk-actions.ts, imported by the page and the route alike; trimmed: Walk and walksFor are your app's own
+import { defineAction, planAction } from '${PACKAGE_NAME}/chat/actions';
+import type { ChatTool } from '${PACKAGE_NAME}/chat/server';
+
+export const closeBookings = defineAction<Walk, Partial<Walk>>({
+  id: 'close',
+  label: 'Close bookings',
+  done: 'closed to bookings',
+  verb: 'Close',
+  confirm: (these) => \`Yes, close \${these}\`,
+  effect: (count) => (count === 1 ? 'Its waitlist is kept.' : 'Their waitlists are kept.'),
+  icon: 'event_busy',
+  destructive: true,
+  skip: (walk) => (walk.status === 'Full' ? 'already full' : null),
+  apply: () => ({ status: 'Closed' }),
+});
+
+// The route's tool proposes and never acts: the dry run, as a card.
+const proposeClose: ChatTool = {
+  definition: { name: 'propose_close', description: 'Proposes closing walks to bookings.', input_schema: walkIdsSchema },
+  execute: (input, { context, request }) => {
+    const plan = planAction(closeBookings, walksFor(input, context, request));
+    return { text: JSON.stringify({ proposed: plan.ids.length }), card: { kind: 'proposal', data: plan } };
+  },
+};`;
+
 export default function ChatInstallPage() {
   return (
     <>
@@ -507,6 +581,60 @@ export default function ChatInstallPage() {
               <code>useChatAgentState()</code> to an AiButton&apos;s <code>state</code>, and a reply
               keeps showing its progress on the button after the panel is closed.
             </p>
+          </section>
+
+          {/* ------------------------------------- context and actions */}
+          <section id="context-and-actions" className={`${s.section} animate-in animate-delay-3`}>
+            <SectionTitle title="Context and actions" />
+            <p className={s.sectionNote}>
+              The chat can follow what the reader puts in front of it and propose changes they
+              confirm. The merchant sales template is the working example: tick rows or
+              highlight a figure, ask about it, then ask the assistant to change some orders.
+            </p>
+
+            <h3 className={s.propsHeading}>Follow the reader</h3>
+            <p className={s.sectionNote}>
+              <code>context</code> is one object: the <code>label</code> the note names, its{" "}
+              <code>note</code> and <code>icon</code>, <code>onClear</code> for the way back to
+              the page, and <code>sent</code> to repeat it on each message as a chip.{" "}
+              <code>useSelectionFocus</code> reports each highlight inside one root, the page and
+              never the chat&apos;s panel, with the element that holds it, where a{" "}
+              <code>data-chat-source</code> says what it came from. Typing moves the browser&apos;s
+              selection into the composer, so <code>useHeldHighlight</code> keeps the passage
+              painted in the note&apos;s own fill. Send the focus with every request and look its
+              source up on the server, so &ldquo;$51.7M&rdquo; reaches the model as the figure it
+              belongs to, not as a bare number. Highlighted text is data from the page, and a page
+              that carries other people&apos;s words needs that decision made first.
+            </p>
+            <CodeBlock code={FOCUS_SNIPPET} language="tsx" showCopy />
+
+            <h3 className={s.propsHeading}>Starters a model writes</h3>
+            <p className={s.sectionNote}>
+              For a focus, a small model can write the welcome chips. The handler&apos;s prompt
+              names nothing about your product: it asks what the thing is, how it has changed,
+              what makes it up, how it compares, what sits behind it and what shares something
+              with it, from what your <code>describe</code> says, and keeps every chip neutral. The
+              hook asks once the selection settles, keeps each answer for the page&apos;s life and
+              holds the widget&apos;s shimmer with <code>startersPending</code> while it writes.
+            </p>
+            <CodeBlock code={STARTERS_SNIPPET} language="tsx" showCopy />
+
+            <h3 className={s.propsHeading}>Propose, then confirm</h3>
+            <p className={s.sectionNote}>
+              Define each change once with <code>defineAction</code>, from{" "}
+              <code>{PACKAGE_NAME}/chat/actions</code>, which needs neither React nor the SDK, so
+              the page&apos;s own buttons and the chat&apos;s tool do the same thing to the same
+              records. The tool only proposes: <code>planAction</code> is its dry run, sent as a
+              card. Draw it with an <Link href="/components/action-card">Action card</Link>, and on
+              Confirm run the action on the page, mark that request as confirmed and send the
+              reader&apos;s words (<code>confirm</code>) as their message. A typed &ldquo;yes&rdquo;
+              carries no mark, so it never makes a change. Open the reply with an{" "}
+              <Link href="/components/action-readout">Action readout</Link> worked out from the
+              records as they were, then the model&apos;s sentence. A tool handed{" "}
+              <code>{"{ context, request }"}</code> shares <code>request</code> with every call in
+              the reply, so a filter one tool sets is the one a later tool acts on.
+            </p>
+            <CodeBlock code={ACTIONS_SNIPPET} language="ts" showCopy />
           </section>
 
           {/* -------------------------------------------------- packages */}

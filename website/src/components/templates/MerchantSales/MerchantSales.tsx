@@ -256,8 +256,10 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
       }),
     );
   }, [reset, setFocus, bridge]);
-  const pendingAction = pending && ORDER_ACTIONS[pending.action];
-  const pendingCount = pending ? `${pending.ids.length.toLocaleString("en-US")} ${pending.ids.length === 1 ? "order" : "orders"}` : "";
+  /* The dialog asks the question the reader would, in the action's own words (its verb and effect, beside its label): "Cancel 3 orders?", with what it does and what it leaves alone. */
+  const pendingAction = pending ? ORDER_ACTIONS[pending.action] : null;
+  const pendingVerb = pendingAction ? (pendingAction.verb ?? pendingAction.label) : "";
+  const pendingNoun = pending?.ids.length === 1 ? "order" : "orders";
   const pendingSkipped = pending ? skippedText(pending.skipped) : "";
   /* Closing hands focus back to whatever opened it, as the launcher does. */
   useEffect(() => {
@@ -405,9 +407,9 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
           <AlertDialog
             open={pending !== null}
             onOpenChange={(open) => !open && setPending(null)}
-            title={pendingAction ? `${pendingAction.label}: ${pendingCount}?` : ""}
-            description={`${pendingSkipped ? `Left as they are: ${pendingSkipped}. ` : ""}You can undo this from the notice that follows.`}
-            confirmLabel={pendingAction?.label}
+            title={pending ? `${pendingVerb} ${pending.ids.length.toLocaleString("en-US")} ${pendingNoun}?` : ""}
+            description={[pending && pendingAction?.effect?.(pending.ids.length), pendingSkipped ? `Left as they are: ${pendingSkipped}.` : "", "You can undo this from the notice that follows."].filter(Boolean).join(" ")}
+            confirmLabel={pending ? `${pendingVerb} ${pendingNoun}` : undefined}
             cancelLabel="Keep them"
             tone="destructive"
             onConfirm={() => {

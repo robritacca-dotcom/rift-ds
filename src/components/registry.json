@@ -77,13 +77,13 @@
       "slug": "action-card",
       "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.",
       "category": "ai",
-      "client": true
+      "client": false
     },
     {
       "name": "ActionReadout",
       "label": "Action readout",
       "slug": "action-readout",
-      "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.",
+      "description": "What a confirmed change did: a title over a list of facts, worked out from the records as they were just before it.",
       "category": "ai",
       "client": false
     },

@@ -37,7 +37,7 @@ export default function ActionReadoutPage() {
           </div>
 
           <section className={styles.section}>
-            <SectionTitle title="A headline over its facts" />
+            <SectionTitle title="A title over its facts" />
             <p className={styles.demoText}>
               The facts are a description list, so a screen reader reads each
               label with its value. A long value wraps inside its column and
@@ -45,7 +45,7 @@ export default function ActionReadoutPage() {
             </p>
             <div className={styles.cardStage}>
               <ActionReadout
-                headline="8 walks closed to bookings"
+                title="8 walks closed to bookings"
                 icon="event_busy"
                 facts={[
                   { label: "Status", value: "Open 6 · Waitlist 2 → Closed 8" },

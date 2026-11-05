@@ -76,7 +76,7 @@
         },
         {
           "name": "tone",
-          "type": "\"destructive\" | \"default\"",
+          "type": "\"default\" | \"destructive\"",
           "typeKind": "enum",
           "values": [
             "default",
@@ -87,7 +87,7 @@
         },
         {
           "name": "variant",
-          "type": "\"destructive\" | \"default\"",
+          "type": "\"default\" | \"destructive\"",
           "typeKind": "enum",
           "values": [
             "default",

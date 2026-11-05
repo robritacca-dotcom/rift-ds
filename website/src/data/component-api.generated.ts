@@ -115,7 +115,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "action-card",
     "category": "ai",
     "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.",
-    "client": true,
+    "client": false,
     "importPath": "rift-ds/components/ActionCard/ActionCard",
     "barrel": "main",
     "exports": [
@@ -160,11 +160,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "What the confirmed card says was done: \"69 orders cancelled\". Defaults to the title."
           },
           {
-            "name": "destructive",
-            "type": "boolean",
+            "name": "tone",
+            "type": "\"default\" | \"destructive\"",
             "required": false,
-            "description": "Draws Confirm in the destructive tone, for a change that takes something away (a cancellation, a refund).",
-            "defaultValue": "false"
+            "description": "The colour of Confirm: `destructive` for a change that takes something away (a cancellation, a refund). Defaults to `default`.",
+            "values": [
+              "default",
+              "destructive"
+            ],
+            "defaultValue": "default"
           },
           {
             "name": "onConfirm",
@@ -236,7 +240,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Action readout",
     "slug": "action-readout",
     "category": "ai",
-    "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.",
+    "description": "What a confirmed change did: a title over a list of facts, worked out from the records as they were just before it.",
     "client": false,
     "importPath": "rift-ds/components/ActionReadout/ActionReadout",
     "barrel": "main",
@@ -245,10 +249,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "component": "ActionReadout",
         "props": [
           {
-            "name": "headline",
+            "name": "title",
             "type": "ReactNode",
             "required": true,
-            "description": "What was done, with how much: \"69 orders cancelled\"."
+            "description": "What was done, with how much: \"69 orders cancelled\". Collides with the native `title` tooltip attribute on purpose: the readout shows it."
           },
           {
             "name": "facts",
@@ -260,7 +264,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "A leading mark beside the headline: a Material Symbol name, or your own element."
+            "description": "A leading mark beside the title: a Material Symbol name, or your own element."
           },
           {
             "name": "className",
@@ -981,7 +985,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"destructive\" | \"default\"",
+            "type": "\"default\" | \"destructive\"",
             "required": false,
             "description": "Colour of the dialog's icon, title and confirm action: `destructive`\nfor dangerous or irreversible actions.",
             "values": [
@@ -991,7 +995,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "variant",
-            "type": "\"destructive\" | \"default\"",
+            "type": "\"default\" | \"destructive\"",
             "required": false,
             "description": "Legacy name for `tone`, from before colour moved onto its own prop.",
             "values": [
@@ -3104,7 +3108,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"destructive\" | \"default\" | \"neutral\"",
+            "type": "\"default\" | \"destructive\" | \"neutral\"",
             "required": false,
             "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
             "values": [
@@ -3188,7 +3192,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "state",
-            "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
+            "type": "\"default\" | \"active\" | \"disabled\" | \"hover\"",
             "required": false,
             "description": "Documentation-only interaction state.",
             "values": [
@@ -4269,7 +4273,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"destructive\" | \"default\" | \"neutral\"",
+            "type": "\"default\" | \"destructive\" | \"neutral\"",
             "required": false,
             "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
             "values": [
@@ -4298,7 +4302,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "state",
-            "type": "\"active\" | \"default\" | \"disabled\" | \"hover\"",
+            "type": "\"default\" | \"active\" | \"disabled\" | \"hover\"",
             "required": false,
             "description": "Documentation-only interaction state.",
             "values": [
@@ -13690,7 +13694,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"destructive\" | \"default\" | \"neutral\"",
+            "type": "\"default\" | \"destructive\" | \"neutral\"",
             "required": false,
             "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour.",
             "values": [

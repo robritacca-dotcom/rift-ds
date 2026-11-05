@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 - Category: ai
 - Import: `import { ActionCard } from 'rift-ds';`
 - Deep import: `import { ActionCard } from 'rift-ds/components/ActionCard/ActionCard';`
-- Rendering: client component (declares 'use client')
+- Rendering: server-renderable (no 'use client')
 - Live docs: https://rift-ds.com/components/action-card
 - Schema: https://rift-ds.com/schema/components/action-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,7 +20,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 | icon | `ReactNode` | no |  | The leading mark: a Material Symbol name, or your own element. |
 | status | `ActionCardStatus` | no | `proposed` | Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`. |
 | receipt | `ReactNode` | no |  | What the confirmed card says was done: "69 orders cancelled". Defaults to the title. |
-| destructive | `boolean` | no | `false` | Draws Confirm in the destructive tone, for a change that takes something away (a cancellation, a refund). |
+| tone | `"default" \| "destructive"` | no | `default` | The colour of Confirm: `destructive` for a change that takes something away (a cancellation, a refund). Defaults to `default`. |
 | onConfirm | `(() => void)` | no |  | Called by Confirm. The host makes the change, then sets `status` to `confirmed`. |
 | onDismiss | `(() => void)` | no |  | Called by Dismiss. The host sets `status` to `dismissed`; nothing changed. |
 | onUndo | `(() => void)` | no |  | Called by Undo on a confirmed card, shown only when this is set. The host reverses the change and sets `status` to `undone`. |

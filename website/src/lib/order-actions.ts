@@ -33,6 +33,8 @@ export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
     label: "Mark fulfilled",
     done: "marked fulfilled",
     confirm: (these) => `Yes, mark ${these} fulfilled`,
+    verb: "Mark fulfilled",
+    effect: (count) => (count === 1 ? "It moves to Shipped today." : "They move to Shipped today."),
     icon: "local_shipping",
     destructive: false,
     skip: (values) =>
@@ -44,6 +46,8 @@ export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
     label: "Cancel orders",
     done: "cancelled",
     confirm: (these) => `Yes, cancel ${these}`,
+    verb: "Cancel",
+    effect: (count) => (count === 1 ? "If it was paid, it is refunded." : "Any that were paid are refunded."),
     icon: "cancel",
     destructive: true,
     skip: (values) =>
@@ -55,6 +59,8 @@ export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
     label: "Refund",
     done: "refunded",
     confirm: (these) => `Yes, refund ${these}`,
+    verb: "Refund",
+    effect: (count) => (count === 1 ? "Its payment is marked refunded, for the order's full amount." : "Each payment is marked refunded, for the order's full amount."),
     icon: "undo",
     destructive: true,
     skip: (values) => (values.payment === "Refunded" ? "already refunded" : values.payment === "Paid" ? null : "not paid"),
@@ -115,7 +121,7 @@ export function sanitiseEdits(value: unknown, isOrder: (id: string) => boolean):
 
 /** What a change did, read from the orders as they were just before it: the readout the chat posts once it lands. */
 export interface ActionReadout {
-  headline: string;
+  title: string;
   facts: [label: string, value: string][];
 }
 
@@ -139,7 +145,7 @@ export function readoutFor(plan: ActionPlan, before: Values[]): ActionReadout {
   const statusChanged = after.some((values, index) => values.status !== before[index].status);
   const skipped = skippedText(plan.skipped);
   return {
-    headline: `${count.toLocaleString("en-US")} ${count === 1 ? "order" : "orders"} ${action.done}`,
+    title: `${count.toLocaleString("en-US")} ${count === 1 ? "order" : "orders"} ${action.done}`,
     facts: [
       ...(statusChanged ? ([["Status", `${tally(before, "status")} → ${tally(after, "status")}`]] as [string, string][]) : []),
       ...(refundedOrders ? ([["Refunded", `${money(refunded)} across ${refundedOrders.toLocaleString("en-US")} ${refundedOrders === 1 ? "order" : "orders"}`]] as [string, string][]) : []),

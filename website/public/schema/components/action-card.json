@@ -7,7 +7,7 @@
   "slug": "action-card",
   "category": "ai",
   "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.",
-  "client": true,
+  "client": false,
   "importPath": "rift-ds/components/ActionCard/ActionCard",
   "barrel": "main",
   "docsUrl": "https://rift-ds.com/components/action-card",
@@ -59,12 +59,16 @@
           "description": "What the confirmed card says was done: \"69 orders cancelled\". Defaults to the title."
         },
         {
-          "name": "destructive",
-          "type": "boolean",
-          "typeKind": "primitive",
+          "name": "tone",
+          "type": "\"default\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive"
+          ],
           "required": false,
-          "description": "Draws Confirm in the destructive tone, for a change that takes something away (a cancellation, a refund).",
-          "default": false
+          "description": "The colour of Confirm: `destructive` for a change that takes something away (a cancellation, a refund). Defaults to `default`.",
+          "default": "default"
         },
         {
           "name": "onConfirm",

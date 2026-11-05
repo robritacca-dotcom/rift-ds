@@ -241,6 +241,23 @@ export function EntitySwitcher({
     }
   };
 
+  // A roving tab stop: one row is reachable by Tab (the selected one when
+  // it is on screen, else the first that can be picked or opened), and the
+  // arrow keys move from there. Without it the list, which can scroll,
+  // would have nothing focusable inside it.
+  const shownIds = [
+    ...(!term && level ? [`lead-${level.id}`] : []),
+    ...rows.map((l) => l.item.id),
+  ];
+  const enabledShown = shownIds.filter((key) => {
+    const id = key.replace(/^lead-/, '');
+    return !byId.get(id)?.item.disabled;
+  });
+  const tabStop =
+    enabledShown.find((key) => key.replace(/^lead-/, '') === selected?.item.id) ??
+    enabledShown[0] ??
+    (!term && level ? 'back' : undefined);
+
   const row = ({ item, path }: Located, lead = false) => {
     const opens = !lead && !term && !!item.children?.length;
     const isSelected = item.id === selected?.item.id;
@@ -263,7 +280,7 @@ export function EntitySwitcher({
         aria-checked={opens ? undefined : isSelected}
         aria-haspopup={opens ? 'menu' : undefined}
         aria-disabled={item.disabled || undefined}
-        tabIndex={-1}
+        tabIndex={tabStop === (lead ? 'lead-' : '') + item.id ? 0 : -1}
         data-row=""
         data-drill={opens && !item.disabled ? item.id : undefined}
         className={rowClass}
@@ -325,7 +342,7 @@ export function EntitySwitcher({
             <button
               type="button"
               role="menuitem"
-              tabIndex={-1}
+              tabIndex={tabStop === 'back' ? 0 : -1}
               data-row=""
               className="ds-entity-switcher__row ds-entity-switcher__row--back"
               onClick={() => drill(trail.slice(0, -1))}

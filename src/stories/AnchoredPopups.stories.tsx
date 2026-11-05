@@ -11,6 +11,7 @@ import { HoverCard } from '../components/HoverCard/HoverCard';
 import { InterruptCard } from '../components/InterruptCard/InterruptCard';
 import { ModelPicker } from '../components/ModelPicker/ModelPicker';
 import { Popover } from '../components/Popover/Popover';
+import { EntitySwitcher } from '../components/EntitySwitcher/EntitySwitcher';
 import { RichDropdown } from '../components/RichDropdown/RichDropdown';
 import { SourceChip } from '../components/SourceChip/SourceChip';
 import { ThemeToggle } from '../components/ThemeToggle/ThemeToggle';
@@ -182,6 +183,36 @@ export const PopoverPanel: Story = {
     </ClipBox>
   ),
   play: ({ canvasElement }) => expectEscapes(canvasElement, '.ds-popover__panel'),
+};
+
+const ENTITIES = [
+  { id: 'north', name: 'North region', description: 'Ad account' },
+  { id: 'south', name: 'South region', description: 'Ad account' },
+  { id: 'online', name: 'Online store', description: 'Ad account' },
+];
+
+export const EntitySwitcherPanel: Story = {
+  render: () => (
+    <ClipBox>
+      <div style={{ width: 240 }}>
+        <EntitySwitcher items={ENTITIES} defaultValue="north" defaultOpen />
+      </div>
+    </ClipBox>
+  ),
+  play: ({ canvasElement }) => expectEscapes(canvasElement, '.ds-entity-switcher > .ds-popover__panel'),
+};
+
+/** Collapsed, the panel opens beside the mark, out of a rail that clips it. */
+export const EntitySwitcherCollapsedPanel: Story = {
+  render: () => (
+    <ClipBox>
+      <EntitySwitcher items={ENTITIES} defaultValue="north" collapsed />
+    </ClipBox>
+  ),
+  play: async ({ canvasElement, userEvent }) => {
+    await userEvent.click(canvasElement.querySelector('.ds-entity-switcher__trigger')!);
+    await expectEscapes(canvasElement, '.ds-entity-switcher > .ds-popover__panel');
+  },
 };
 
 export const ColorPickerPanel: Story = {

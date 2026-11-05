@@ -15,6 +15,9 @@
  *   runs full width in a surface inset from the other edges, scrolling
  *   inside it; a docked assistant takes the same inset treatment.
  *
+ * An `entitySwitcher` puts an EntitySwitcher under the brand row, in the
+ * rail's persistent top slot, so its mark holds still as the rail collapses.
+ *
  * The layout comes from the visitor's stored choice (useTemplateLayout)
  * unless a `layout` is passed. The assistant reads it from this shell's
  * context, so it never has to be wired twice. In the app frame (a template

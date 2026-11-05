@@ -84,7 +84,8 @@
   position: relative;
   /* The rail's z-index stays inside the box, never over the page header. */
   isolation: isolate;
-  height: 680px;
+  /* Tall enough that no demo rail scrolls, collapsed or expanded. */
+  height: 800px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--color-bg-container-border);
@@ -93,6 +94,21 @@
 /* A tinted ground, so the floating glass cards read as cards. */
 .sidebarDemoTinted {
   background-color: var(--color-bg-container-secondary);
+}
+
+/* The layout switch and the note that follows it. */
+.layoutSwitch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+}
+
+.layoutNote {
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
 }
 
 .sectionBody {
@@ -113,6 +129,154 @@
 .sidebarDemo :global(.ds-app-sidebar--floating),
 .sidebarDemo :global(.ds-app-sidebar__panel--floating) {
   height: calc(100% - var(--ds-sidebar-float-inset, 20px) * 2);
+}
+
+/* ============================================
+   MOCK APP CONTENT
+   Placeholder blocks behind the rail, offset by the rail's current width
+   (and its side panel's, while open) so they reflow as the rail moves.
+   Every gap is the rail's own 12px item inset: the content starts at the
+   rail's edge, so the active pill sits as far from the content as from the
+   stage's edge, and the other three sides take the same step.
+   ============================================ */
+.sidebarDemo {
+  --mock-rail: 64px;
+  --mock-panel: 0px;
+  --mock-float: 0px;
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar--panel-mode)) {
+  --mock-rail: 80px;
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar--expanded)) {
+  --mock-rail: 280px;
+}
+
+/* An open panel carries no inset on its far side, so the content takes the
+   step after it that the rail's own inset gives it after the rail. */
+.sidebarDemo:has(:global(.ds-app-sidebar__panel--visible)) {
+  --mock-panel: calc(240px + var(--padding-300));
+}
+
+/* Floating, the cards inset by their own step, so the content takes that
+   step on every side, and an open panel is a second card a --gap-300 along. */
+.sidebarDemo:has(:global(.ds-app-sidebar--floating)) {
+  --mock-float: calc(var(--ds-sidebar-float-inset, 20px) * 2);
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar__panel--floating.ds-app-sidebar__panel--visible)) {
+  --mock-panel: calc(240px + var(--gap-300));
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar--floating)) .mockContent {
+  padding-block: var(--ds-sidebar-float-inset, 20px);
+  padding-inline-end: var(--ds-sidebar-float-inset, 20px);
+}
+
+.mockContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  padding: var(--padding-300);
+  padding-inline-start: calc(var(--mock-rail) + var(--mock-panel) + var(--mock-float));
+  transition: padding-inline-start var(--motion-duration-slow) var(--motion-ease-emphasized);
+  pointer-events: none;
+}
+
+/* Outside the inset layout the surface is only a column. */
+.mockSurface {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+/* The inset layout, as the templates draw it (TemplateShell's .inset and
+   .surface): the stage is the app shell, and the content sits in a surface
+   on the app surface colour, wearing the floating rail's edge turned around
+   and held off the top, far side and floor by the shell inset. The rail's
+   own item inset is the gap on its side, so the surface starts at the edge
+   of the rail and the panel that continues it. */
+.sidebarDemo:has(:global(.ds-app-sidebar--inset)) {
+  background-color: var(--color-bg-app-shell);
+  --mock-panel: 0px;
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar__panel--inset.ds-app-sidebar__panel--visible)) {
+  --mock-panel: 240px;
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar--inset)) .mockContent {
+  padding: var(--layout-shell-inset);
+  padding-inline-start: calc(var(--mock-rail) + var(--mock-panel));
+}
+
+.sidebarDemo:has(:global(.ds-app-sidebar--inset)) .mockSurface {
+  gap: var(--gap-400);
+  padding: var(--padding-500);
+  overflow: hidden;
+  background-color: var(--color-bg-app-surface);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  box-shadow: var(--shadow-floating);
+}
+
+.mockHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-400);
+}
+
+.mockTitle {
+  width: 40%;
+  height: var(--gap-500);
+  border-radius: var(--radius-200);
+  background-color: var(--color-bg-container-secondary);
+}
+
+.mockAction {
+  flex-shrink: 0;
+  width: calc(var(--control-height-default) * 3);
+  height: var(--control-height-default);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-secondary);
+}
+
+.mockStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-300);
+}
+
+.mockBlock {
+  display: block;
+  height: calc(var(--control-height-default) * 2.5);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-primary);
+}
+
+.mockChart {
+  flex: 1;
+  min-height: 0;
+}
+
+.mockList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.mockRow {
+  display: block;
+  height: var(--control-height-default);
+  border-radius: var(--radius-200);
+  background-color: var(--color-bg-container-primary);
 }
 
 @media (max-width: 959px) {

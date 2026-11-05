@@ -7,9 +7,62 @@ import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { AppSidebar } from "rift-ds/components/AppSidebar/AppSidebar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import {
+  EntitySwitcher,
+  type EntitySwitcherItem,
+} from "rift-ds/components/EntitySwitcher/EntitySwitcher";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+
+/** A placeholder app screen behind each demo rail, so the rail reads beside content. */
+function MockAppContent() {
+  return (
+    <div className={styles.mockContent} aria-hidden="true">
+      <div className={styles.mockSurface}>
+        <div className={styles.mockHeader}>
+          <span className={styles.mockTitle} />
+          <span className={styles.mockAction} />
+        </div>
+        <div className={styles.mockStats}>
+          <span className={styles.mockBlock} />
+          <span className={styles.mockBlock} />
+          <span className={styles.mockBlock} />
+        </div>
+        <span className={`${styles.mockBlock} ${styles.mockChart}`} />
+        <div className={styles.mockList}>
+          <span className={styles.mockRow} />
+          <span className={styles.mockRow} />
+          <span className={styles.mockRow} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const demoEntities: EntitySwitcherItem[] = [
+  {
+    id: "northwind",
+    name: "Northwind Group",
+    description: "Company",
+    children: [
+      { id: "consumer", name: "Consumer", description: "Business unit" },
+      { id: "enterprise", name: "Enterprise", description: "Business unit" },
+    ],
+  },
+  { id: "halcyon", name: "Halcyon Studio", description: "Agency client" },
+];
+
+const switcherSections = [
+  {
+    items: [
+      { key: "dashboard", icon: "dashboard", label: "Dashboard" },
+      { key: "analytics", icon: "analytics", label: "Analytics" },
+      { key: "projects", icon: "folder", label: "Projects" },
+      { key: "calendar", icon: "calendar_today", label: "Calendar" },
+    ],
+  },
+];
 
 const demoSections = [
   {
@@ -100,7 +153,27 @@ const footerViews = [
   { label: "Grid", value: "grid", icon: "grid_view" },
 ];
 
+type DemoLayout = "flush" | "floating" | "inset";
+
+const layoutOptions: { label: string; value: DemoLayout }[] = [
+  { label: "Flush", value: "flush" },
+  { label: "Floating", value: "floating" },
+  { label: "Inset", value: "inset" },
+];
+
+/** What each layout does, shown under the switch for the one picked. */
+const layoutNotes: Record<DemoLayout, string> = {
+  flush:
+    "Flush, the default, runs the rail edge to edge on the page colour, and the panel opens beside it on the same ground.",
+  floating:
+    "Floating sets the rail as a glass card inset from the edges, and the panel joins it as a second card, one gap along from the first.",
+  inset:
+    "Inset runs the rail flush on the app shell colour, the panel continues it with a divider between them, and the content sits in an inset surface beyond both, as the templates draw it.",
+};
+
 export default function AppSidebarPage() {
+  const [demoLayout, setDemoLayout] = React.useState<DemoLayout>("flush");
+
   return (
     <>
       <MegaNav />
@@ -122,7 +195,7 @@ export default function AppSidebarPage() {
               Collapsible navigation for app layouts
             </p>
             <p className={styles.introBody}>
-              A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed, collapsedFooterSlot stands in for the footer while it is, and a click on the empty space of the collapsed rail expands it; and the layout prop sets how the rail meets the page: flush, floating as a glass card inset from the viewport edges, or inset, flush on the app shell colour beside an inset content surface.
+              A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed, persistentTopSlot keeps the top slot for content with a collapsed form of its own, collapsedFooterSlot stands in for the footer while it is, and a click on the empty space of the collapsed rail expands it; and the layout prop sets how the rail meets the page: flush, floating as a glass card inset from the viewport edges, or inset, flush on the app shell colour beside an inset content surface.
             </p>
             <p className={styles.introBody}>
               Navigation runs three levels deep, and subNav picks the shape once per sidebar. In the default accordion mode the second level is the accordion under a row, and a sub-item with children of its own opens them as the third level in a SidebarPanel beside the rail. In panel mode a top-level row opens its sub-items straight into the panel, whose own accordion carries the third level, and the collapsed rail widens to 80px to put a label under every icon. On small screens neither shows a panel: the drawer drills in to a second screen with a back row.
@@ -133,6 +206,7 @@ export default function AppSidebarPage() {
           <section className={styles.section}>
             <SectionTitle title="Expanded" />
             <div className={styles.sidebarDemo}>
+              <MockAppContent />
               <AppSidebar
                 sections={demoSections}
                 profile={demoProfile}
@@ -146,6 +220,7 @@ export default function AppSidebarPage() {
           <section className={styles.section}>
             <SectionTitle title="Collapsed" />
             <div className={styles.sidebarDemo}>
+              <MockAppContent />
               <AppSidebar
                 sections={demoSections}
                 profile={demoProfile}
@@ -164,6 +239,7 @@ export default function AppSidebarPage() {
               the rail&apos;s empty space to expand it and see the footer it stands in for.
             </p>
             <div className={styles.sidebarDemo}>
+              <MockAppContent />
               <AppSidebar
                 sections={demoSections}
                 profile={demoProfile}
@@ -190,6 +266,33 @@ export default function AppSidebarPage() {
             </div>
           </section>
 
+          {/* Entity switcher in the top slot */}
+          <section className={styles.section}>
+            <SectionTitle title="Entity switcher" />
+            <p className={styles.sectionBody}>
+              The top slot under the logo is where an EntitySwitcher sits, the company, team or account the app is scoped to. With persistentTopSlot the slot stays through the collapse: the switcher keeps its mark on the rail&apos;s axis and fades the rest, so nothing moves as the rail sweeps, and its panel opens beside the collapsed rail. Collapse the rail to see it.
+            </p>
+            <div className={styles.sidebarDemo} data-anchor-ignore>
+              <MockAppContent />
+              <AppSidebar
+                sections={switcherSections}
+                profile={demoProfile}
+                activeKey="dashboard"
+                subNav="panel"
+                defaultExpanded={true}
+                showMobileTrigger={false}
+                persistentTopSlot
+                topSlot={
+                  <EntitySwitcher
+                    items={demoEntities}
+                    defaultValue="consumer"
+                    switcherLabel="Switch workspace"
+                  />
+                }
+              />
+            </div>
+          </section>
+
           {/* Third level, accordion mode */}
           <section className={styles.section}>
             <SectionTitle title="Third level" />
@@ -197,6 +300,7 @@ export default function AppSidebarPage() {
               Reports holds the second level as its accordion. Financial planning has children of its own, so it carries a trailing chevron and opens them in the panel beside the rail. The accordion and the panel holding the current page both start open. Press Financial planning again, or the panel’s collapse control, to close it.
             </p>
             <div className={styles.sidebarDemo} data-anchor-ignore>
+              <MockAppContent />
               <AppSidebar
                 sections={threeLevelSections}
                 profile={demoProfile}
@@ -209,59 +313,41 @@ export default function AppSidebarPage() {
             </div>
           </section>
 
-          {/* Panel mode */}
+          {/* Panel mode, in each layout */}
           <section className={styles.section}>
             <SectionTitle title="Panel mode" />
             <p className={styles.sectionBody}>
-              With subNav set to panel, the collapsed rail is the whole first level, so it widens to 80px and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel carries the selection fill.
+              With subNav set to panel, the collapsed rail is the whole first level, so it widens to 80px and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel carries the selection fill. The layout prop sets how the rail and its panel meet the page.
             </p>
-            <div className={styles.sidebarDemo} data-anchor-ignore>
+            <div className={styles.layoutSwitch}>
+              <SegmentedControl
+                aria-label="Layout"
+                size="compact"
+                segments={layoutOptions}
+                value={demoLayout}
+                onValueChange={(value) => setDemoLayout(value as DemoLayout)}
+              />
+              <p className={styles.layoutNote} aria-live="polite">
+                {layoutNotes[demoLayout]}
+              </p>
+            </div>
+            <div
+              className={[
+                styles.sidebarDemo,
+                demoLayout === "floating" ? styles.sidebarDemoTinted : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              data-anchor-ignore
+            >
+              <MockAppContent />
               <AppSidebar
                 sections={threeLevelSections}
                 profile={demoProfile}
                 activeKey="reports"
                 activeSubKey="standard"
                 subNav="panel"
-                defaultExpanded={false}
-                showMobileTrigger={false}
-              />
-            </div>
-          </section>
-
-          {/* Panel mode, floating */}
-          <section className={styles.section}>
-            <SectionTitle title="Panel mode, floating" />
-            <p className={styles.sectionBody}>
-              In the floating layout, the panel joins the rail as a second glass card, one gap along from the first.
-            </p>
-            <div className={`${styles.sidebarDemo} ${styles.sidebarDemoTinted}`} data-anchor-ignore>
-              <AppSidebar
-                sections={threeLevelSections}
-                profile={demoProfile}
-                activeKey="reports"
-                activeSubKey="kpis"
-                subNav="panel"
-                layout="floating"
-                defaultExpanded={false}
-                showMobileTrigger={false}
-              />
-            </div>
-          </section>
-
-          {/* Panel mode, inset */}
-          <section className={styles.section}>
-            <SectionTitle title="Panel mode, inset" />
-            <p className={styles.sectionBody}>
-              In the inset layout, the panel continues the rail on the shell colour with a divider between them, and the content surface starts beyond both.
-            </p>
-            <div className={`${styles.sidebarDemo} ${styles.sidebarDemoTinted}`} data-anchor-ignore>
-              <AppSidebar
-                sections={threeLevelSections}
-                profile={demoProfile}
-                activeKey="reports"
-                activeSubKey="kpis"
-                subNav="panel"
-                layout="inset"
+                layout={demoLayout}
                 defaultExpanded={false}
                 showMobileTrigger={false}
               />

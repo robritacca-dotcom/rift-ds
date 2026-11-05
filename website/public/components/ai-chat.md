@@ -12,7 +12,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.
 - Subpath `rift-ds/chat/chat.css`: The widget's stylesheet.
 - Scaffold: `npx rift-ds init chat`
-- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, QuestionCard, Reasoning, ThreadPanel, ThreadTabs
+- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DocumentChip, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, QuestionCard, Reasoning, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/ai-chat
 - Schema: https://rift-ds.com/schema/components/ai-chat.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
@@ -35,6 +35,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 | tagline | `string` | no | `How can I help you today?` | The welcome screen's line under the greeting. |
 | starters | `Starter[]` | no |  | The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped. |
 | startersKey | `string` | no | `` | Keys the starters' staged reveal: a new key replays the generation beat, the same key shows the set standing. A host whose starters follow the page passes the pathname. |
+| startersPending | `boolean` | no | `false` | Holds the starters' shimmer while the host is still writing them, for starters a model generates: the set reveals the moment this turns false, without the staged beat. Off by default. |
 | composerActions | `ReactNode` | no |  | Replaces the composer's leading actions (the model picker). |
 | models | `ChatModelOption[]` | no |  | The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker. |
 | defaultModel | `string` | no |  | The picker's selection before the server has reported its default. Defaults to the first model. |
@@ -50,9 +51,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 | aside | `((ctx: { overlay: boolean; close: () => void; }) => ReactNode)` | no |  | A companion rail on the trailing edge, the mirror of `threads`: a render prop for your own pane, seated inline on a wide host and raised as a bottom sheet from a header button on a narrow one. For the built-in pane pass `agent` instead. |
 | agent | `ChatAgentOptions` | no |  | The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`. |
 | artifacts | `boolean` | no | `false` | Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel. |
-| contextLabel | `string \| null` | no |  | The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`. |
+| context | `ChatContext \| null` | no |  | What the chat is looking at, named on the composer's context note: a page, a selection, a passage. Omit for none. A host whose context follows the reader (rows they ticked, text they highlighted) updates it as they go, and can offer a way back and repeat it on each message sent. |
+| contextClearLabel | `string` | no | `Clear context` | The accessible name of the context note's clear button, shown when `context.onClear` is set. Defaults to "Clear context". |
+| contextLabel | `string \| null` | no |  | The composer's context note, naming what the chat is looking at. Deprecated: Use `context` with its `label`. |
 | contextPlacement | `"inside" \| "above"` | no | `inside` | Where the context note sits: `inside` the composer, at the top of the shell, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. A note alone never brings the composer's footer: with nothing else to seat there, it sits over the one-row composer. |
-| contextNote | `((title: string) => string)` | no | `(title: string) => `Looking at “${title}”`` | The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. |
+| contextNote | `((title: string) => string)` | no | `(title: string) => `Looking at “${title}”`` | The composer's context note, written from `contextLabel`, for a host still on the label prop; `context` takes its `note` as a line. Deprecated: Use `context` with its `note`. |
 | attachHint | `((maxSize: string, maxFiles: number, maxBytes: number) => string)` | no | `(maxSize: string, maxFiles: number) =>   `Up to ${maxSize} each · ${maxFiles} files max`` | The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`. |
 | greetings | `Partial<GreetingCopy>` | no |  | The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to "Good morning", "Good afternoon" and "Good evening". |
 | placementLabels | `Partial<Record<ChatPlacement, string>>` | no |  | The Chat position menu's rows, one per seat; a key left out keeps its English. Defaults to "Dock right", "Dock left" and "Floating". |

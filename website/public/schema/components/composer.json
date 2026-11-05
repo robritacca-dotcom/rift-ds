@@ -122,6 +122,21 @@
           "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
         },
         {
+          "name": "onContextClear",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called by the context chip's clear button, which appears only when this\nis set: for a host whose note follows something the reader focused (a\nselection, a highlighted passage) and can go back to the page as a whole."
+        },
+        {
+          "name": "contextClearLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The accessible name of the context chip's clear button. Defaults to \"Clear context\".",
+          "default": "Clear context"
+        },
+        {
           "name": "files",
           "type": "AttachmentItem[]",
           "typeKind": "array",

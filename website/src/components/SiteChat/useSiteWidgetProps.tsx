@@ -33,7 +33,7 @@ export function useSiteWidgetProps(): Pick<
   | "tagline"
   | "starters"
   | "startersKey"
-  | "contextLabel"
+  | "context"
   | "models"
   | "defaultModel"
   | "disclaimer"
@@ -55,7 +55,7 @@ export function useSiteWidgetProps(): Pick<
     tagline: "Ask about the system, the tokens, design, or AI",
     starters: startersForPath(pathname, label, starterSeed),
     startersKey: pathname ?? "",
-    contextLabel,
+    context: contextLabel ? { label: contextLabel } : null,
     models: CHAT_MODELS,
     defaultModel: DEFAULT_CHAT_MODEL.value,
     disclaimer: (

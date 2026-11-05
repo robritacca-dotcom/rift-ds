@@ -5180,6 +5180,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
           },
           {
+            "name": "onContextClear",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called by the context chip's clear button, which appears only when this\nis set: for a host whose note follows something the reader focused (a\nselection, a highlighted passage) and can go back to the page as a whole."
+          },
+          {
+            "name": "contextClearLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the context chip's clear button. Defaults to \"Clear context\".",
+            "defaultValue": "Clear context"
+          },
+          {
             "name": "files",
             "type": "AttachmentItem[]",
             "required": false,
@@ -17086,6 +17099,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": ""
           },
           {
+            "name": "startersPending",
+            "type": "boolean",
+            "required": false,
+            "description": "Holds the starters' shimmer while the host is still writing them, for starters a model generates: the set reveals the moment this turns false, without the staged beat. Off by default.",
+            "defaultValue": "false"
+          },
+          {
             "name": "composerActions",
             "type": "ReactNode",
             "required": false,
@@ -17181,10 +17201,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "context",
+            "type": "ChatContext | null",
+            "required": false,
+            "description": "What the chat is looking at, named on the composer's context note: a page, a selection, a passage. Omit for none. A host whose context follows the reader (rows they ticked, text they highlighted) updates it as they go, and can offer a way back and repeat it on each message sent."
+          },
+          {
+            "name": "contextClearLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the context note's clear button, shown when `context.onClear` is set. Defaults to \"Clear context\".",
+            "defaultValue": "Clear context"
+          },
+          {
             "name": "contextLabel",
             "type": "string | null",
             "required": false,
-            "description": "The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`."
+            "description": "The composer's context note, naming what the chat is looking at.",
+            "deprecated": "Use `context` with its `label`."
           },
           {
             "name": "contextPlacement",
@@ -17201,8 +17235,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "contextNote",
             "type": "((title: string) => string)",
             "required": false,
-            "description": "The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`.",
-            "defaultValue": "(title: string) => `Looking at “${title}”`"
+            "description": "The composer's context note, written from `contextLabel`, for a host still on the label prop; `context` takes its `note` as a line.",
+            "defaultValue": "(title: string) => `Looking at “${title}”`",
+            "deprecated": "Use `context` with its `note`."
           },
           {
             "name": "attachHint",

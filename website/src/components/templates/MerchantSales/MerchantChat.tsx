@@ -385,11 +385,13 @@ export function MerchantChatWidget({ starters }: { starters: Starter[] }) {
       starters={shownStarters}
       startersKey={generated.key ? `merchant-sales-${generated.key}` : `merchant-sales-${starterSeed}`}
       startersPending={generated.pending}
-      contextLabel={label}
-      contextNote={() => note}
-      contextIcon={icon}
-      contextOnSend={focus ? () => <SentFocusChip focus={focus} /> : false}
-      onContextClear={focus ? () => setFocus(null) : undefined}
+      context={{
+        label,
+        note,
+        icon,
+        onClear: focus ? () => setFocus(null) : undefined,
+        sent: focus ? () => <SentFocusChip focus={focus} /> : false,
+      }}
       contextClearLabel="Back to the whole page"
       disclaimer="Answers only from this page's fictional orders. Check anything important."
       fullscreenEnabled={!takeover}

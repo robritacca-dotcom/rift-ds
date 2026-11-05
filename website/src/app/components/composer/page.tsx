@@ -46,6 +46,19 @@ const MODELS = [
  * every example of it holds them. A composer with neither is the one-row
  * `inline="chat"` instead, shown in its own section.
  */
+/* A note that follows a selection: three orders in front of the model, cleared back to the page. */
+function ClearableContext() {
+  const [focused, setFocused] = useState(true);
+  return (
+    <ChatComposer
+      placeholder="Ask about these orders"
+      context={focused ? "Looking at 3 orders" : <>Looking at &ldquo;Sales&rdquo;</>}
+      contextIcon={focused ? "table_rows" : "description"}
+      onContextClear={focused ? () => setFocused(false) : undefined}
+    />
+  );
+}
+
 function ChatComposer({ onSubmit, ...props }: ComposerProps) {
   const [model, setModel] = useState(MODELS[0].value);
   const queue = useAttachments({ maxCount: 10 });
@@ -267,6 +280,12 @@ export default function ComposerPage() {
               can see rather than part of the message. The icon, the typed
               text and the model picker&apos;s label then start on one line.
             </p>
+            <p className={styles.demoText}>
+              A note that follows what the reader picked, such as rows they
+              ticked, can offer the way back. Pass onContextClear and the chip
+              ends in a clear button, named by contextClearLabel; here it
+              returns the note to the page.
+            </p>
             <div className={styles.stack}>
               <ChatComposer
                 placeholder="Ask about this page"
@@ -289,6 +308,7 @@ export default function ComposerPage() {
                 contextIcon="description"
                 contextPlacement="above"
               />
+              <ClearableContext />
             </div>
           </section>
 

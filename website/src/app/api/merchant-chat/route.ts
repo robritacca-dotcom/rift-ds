@@ -15,13 +15,12 @@
  * exchange log: nothing typed here is stored. The ledger is seeded and fictional.
  */
 
-import { createChatHandler, type ChatTool } from "rift-ds/chat/server";
+import { createChatHandler, type ChatTool, type ChatToolContext } from "rift-ds/chat/server";
 import { BRAND_NAME } from "@/config/brand.generated";
 import { COLUMN_KEYS, LEDGER_COLUMNS, LEDGER_TODAY, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
 import { MERCHANT_KPIS, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS } from "@/data/merchant-sales";
 import { LEDGER_COLUMNS_TEXT, LEDGER_TOOLS, VIEW_SCHEMA, columnValues, describeQuery, matchingRows, queryData, viewProblems, withLedgerEdits, type ColumnValuesInput, type QueryInput } from "@/lib/order-ledger-tools";
 import type { LedgerViewChange } from "@/lib/order-ledger-view";
-import { AsyncLocalStorage } from "node:async_hooks";
 import { randomUUID } from "node:crypto";
 import { currentOrder, focusLine, isRealOrder, sanitiseTableContext } from "@/lib/merchant-chat-context";
 import { ORDER_ACTIONS, ORDER_ACTION_IDS, planAction, sanitiseEdits, skippedText, type OrderActionId } from "@/lib/order-actions";
@@ -82,11 +81,28 @@ Changing orders:
 - Words alone never confirm a change. If the reader says yes, go ahead or confirm in a message without that line in the context, nothing has changed: say so, and ask them to press Confirm on the card. If no card is waiting, call propose_order_action again so there is one.
 - The context says how many orders the reader has already changed on this page. Your tools and the rows you are given already show those changes.`;
 
-/* What the request is about, set by POST below for the tools that act on it. The table's
-   filters and search follow set_table and reset_table within the reply, so a change aimed
-   at "every order the table shows" after the table was just filtered acts on the filtered
-   orders, not the ones the table showed when the message was sent. */
-const requestFocus = new AsyncLocalStorage<{ focusIds: string[]; filters: Parameters<typeof matchingRows>[0]; search: string }>();
+type Filters = Parameters<typeof matchingRows>[0];
+type RequestTable = { filters?: Filters; search?: string };
+
+/* The request's context, as sanitiseTableContext rebuilt it. */
+const contextOf = (tool: ChatToolContext) =>
+  JSON.parse(tool.context ?? "{}") as { focus?: { kind?: string; ids?: string[]; allMatching?: boolean; orderId?: string } | null; filters?: Filters; search?: string };
+
+/* The table as the reply has left it. set_table and reset_table write it to the request's
+   scratch object, so a change aimed at "every order the table shows" after the table was
+   just filtered acts on the filtered orders, not the ones it showed when the message was sent. */
+function tableOf(tool: ChatToolContext): { filters: Filters; search: string } {
+  const sent = contextOf(tool);
+  const changed = tool.request as RequestTable;
+  return { filters: changed.filters ?? sent.filters ?? [], search: changed.search ?? sent.search ?? "" };
+}
+
+/* The orders "these" means: the ticked ones, every match when all are ticked (at the table as sent), or a highlight's order. */
+function focusIdsOf(tool: ChatToolContext): string[] {
+  const { focus, filters, search } = contextOf(tool);
+  if (focus?.kind === "orders") return focus.allMatching ? matchingRows(filters ?? [], search ?? "").map((row) => row.id) : focus.ids ?? [];
+  return focus?.kind === "text" && focus.orderId ? [focus.orderId] : [];
+}
 
 const SET_TABLE: ChatTool = {
   definition: {
@@ -95,21 +111,17 @@ const SET_TABLE: ChatTool = {
     strict: true,
     input_schema: VIEW_SCHEMA as never,
   },
-  execute: (args) => {
+  execute: (args, tool) => {
     const asked = args as unknown as LedgerViewChange;
     /* A cleared search can arrive as a pair of quotes, which would search for them and match nothing. */
     const view = { ...asked, search: asked.search === null ? null : asked.search.trim().replace(/^["']+|["']+$/g, "") };
     const problems = viewProblems(view);
     if (problems.length) return `That can't be applied: ${problems.join(" ")} Try again.`;
-    const request = requestFocus.getStore();
-    if (request) {
-      if (view.filters) request.filters = view.filters;
-      if (view.search !== null) request.search = view.search;
-    }
-    const matching =
-      view.filters || view.search !== null
-        ? { matching_orders: matchingRows(request?.filters ?? view.filters ?? [], request?.search ?? view.search).length }
-        : {};
+    const changed = tool.request as RequestTable;
+    if (view.filters) changed.filters = view.filters;
+    if (view.search !== null) changed.search = view.search;
+    const table = tableOf(tool);
+    const matching = view.filters || view.search !== null ? { matching_orders: matchingRows(table.filters, table.search).length } : {};
     return {
       text: JSON.stringify({ applied: true, ...matching, next: "Say in a sentence what the table now shows." }),
       card: { kind: "table-view", data: view },
@@ -136,12 +148,8 @@ const RESET_TABLE: ChatTool = {
     strict: true,
     input_schema: { type: "object", additionalProperties: false, properties: {}, required: [] },
   },
-  execute: () => {
-    const request = requestFocus.getStore();
-    if (request) {
-      request.filters = [];
-      request.search = "";
-    }
+  execute: (_args, tool) => {
+    Object.assign(tool.request as RequestTable, { filters: [], search: "" });
     return {
       text: JSON.stringify({ applied: true, matching_orders: ROW_COUNT, next: "Say in a sentence that the table is reset with no filters, showing every order." }),
       card: { kind: "table-view", data: RESET_VIEW },
@@ -205,13 +213,13 @@ const PROPOSE_ORDER_ACTION: ChatTool = {
       },
     } as never,
   },
-  execute: (args) => {
+  execute: (args, tool) => {
     const { action, target, order_ids } = args as { action: OrderActionId; target: "focus" | "table" | "orders"; order_ids: string[] };
     if (!ORDER_ACTION_IDS.includes(action)) return "That action does not exist. Use fulfil, cancel or refund.";
-    const request = requestFocus.getStore();
+    const table = tableOf(tool);
     const ids =
-      target === "focus" ? request?.focusIds ?? []
-      : target === "table" ? matchingRows(request?.filters ?? [], request?.search ?? "").map((row) => row.id)
+      target === "focus" ? focusIdsOf(tool)
+      : target === "table" ? matchingRows(table.filters, table.search).map((row) => row.id)
       : (order_ids ?? []).filter(isRealOrder);
     if (!ids.length) return JSON.stringify({ proposed: 0, next: target === "focus" ? "No orders are ticked. Ask which orders the reader means." : "No orders matched. Say so in a sentence." });
     const plan = planAction(action, ids.flatMap((id) => {
@@ -293,9 +301,9 @@ const handler = createChatHandler({
 });
 
 /**
- * The page's edits and the reader's focus are read from the request before the
- * chat runs, so every tool in it sees the ledger as the page does and knows
- * which orders "these" are. The body is read from a copy; the handler reads its own.
+ * The page's edits are read from the request before the chat runs, so every tool
+ * in it, the shared ledger tools included, sees the ledger as the page does. The
+ * body is read from a copy; the handler reads its own.
  */
 export async function POST(request: Request): Promise<Response> {
   let context: Record<string, unknown> = {};
@@ -306,19 +314,5 @@ export async function POST(request: Request): Promise<Response> {
     /* A body the handler will refuse on its own. */
   }
   const edits = sanitiseEdits(context.edits, isRealOrder);
-  return withLedgerEdits(edits, () => {
-    const view = JSON.parse(sanitiseTableContext(JSON.stringify(context)) ?? "{}") as {
-      focus?: { kind?: string; ids?: string[]; allMatching?: boolean; orderId?: string } | null;
-      filters?: Parameters<typeof matchingRows>[0];
-      search?: string;
-    };
-    const filters = view.filters ?? [];
-    const search = view.search ?? "";
-    const focus = view.focus;
-    const focusIds =
-      focus?.kind === "orders" ? (focus.allMatching ? matchingRows(filters, search).map((row) => row.id) : focus.ids ?? [])
-      : focus?.kind === "text" && focus.orderId ? [focus.orderId]
-      : [];
-    return requestFocus.run({ focusIds, filters, search }, () => handler(request));
-  });
+  return withLedgerEdits(edits, () => handler(request));
 }

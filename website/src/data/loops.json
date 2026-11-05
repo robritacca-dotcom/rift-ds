@@ -9,8 +9,8 @@
       "trigger": "Runs on demand for now",
       "stages": [
         "Read the thumbs verdicts",
-        "Join them to the exchange log",
-        "Encode failures as eval cases",
+        "Join verdicts to the log",
+        "Turn failures into evals",
         "Run the eval",
         "Fix on a branch",
         "Verify the build",

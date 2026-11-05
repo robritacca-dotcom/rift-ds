@@ -95,7 +95,7 @@ export const Stacked: Story = {
     suggestions: [
       { id: 'philosophy', label: "Describe the team's design philosophy" },
       { id: 'recent', label: 'What has the team shipped recently?' },
-      { id: 'system', label: 'How does this design system work?' },
+      { id: 'system', label: 'How does it work?' },
     ],
   },
   decorators: [

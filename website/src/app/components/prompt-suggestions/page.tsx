@@ -158,9 +158,9 @@ export default function PromptSuggestionsPage() {
               <PromptSuggestions
                 layout="stack"
                 suggestions={[
-                  { id: "philosophy", label: "Describe the system's design philosophy" },
-                  { id: "recent", label: "What shipped in the latest release?" },
-                  { id: "system", label: "How does this design system work?" },
+                  { id: "philosophy", label: "Explain the design ideas" },
+                  { id: "recent", label: "What shipped last?" },
+                  { id: "system", label: "How does it work?" },
                 ]}
               />
             </div>

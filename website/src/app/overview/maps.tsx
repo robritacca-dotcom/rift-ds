@@ -181,7 +181,7 @@ export const chatExchangeMap: ArchMap = {
     { id: "chat-mcp", x: 1220, y: 600, w: 340, h: 76, title: "/api/mcp", sub: "the same lookups, served to agents", icon: "hub", chip: "info" },
   ],
   edges: [
-    { id: "visitor-guardrails", from: "visitor", to: "chat-guardrails", label: "question + the last 10 turns" },
+    { id: "visitor-guardrails", from: "visitor", to: "chat-guardrails", label: "question, the last 10 turns, what's highlighted" },
     { id: "guardrails-context", from: "chat-guardrails", to: "chat-context" },
     { id: "context-anthropic", from: "chat-context", to: "chat-anthropic", label: "one streamed model call" },
     { id: "anthropic-tools", from: "chat-anthropic", to: "chat-tools", label: "a prop or token question triggers a lookup", kind: "accent", bend: -50 },

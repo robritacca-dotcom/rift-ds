@@ -8,7 +8,14 @@
  * whether the focus is a number, the only kind of thing that "measures" (promptfoo expands an array
  * var into one test per item), which its chips must not drift to.
  */
-const MAX_CHARS = 40; // SUGGESTION_MAX_CHARS in src/chat/suggestions.ts
+import { readFileSync } from 'node:fs';
+
+/* The chip budget, read from its one home rather than restated. */
+const MAX_CHARS = Number(
+  readFileSync(new URL('../../src/chat/suggestions.ts', import.meta.url), 'utf8').match(/SUGGESTION_MAX_CHARS = (\d+)/)[1],
+);
+/* A chip writes a month or weekday short (validate-chat-starters.mjs holds the written ones to it). */
+const LONG_DATE_NAME = /\b(January|February|March|April|June|July|August|September|October|November|December|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/;
 const WANTED = 3;
 
 /* Words that judge or read the value. */
@@ -34,6 +41,7 @@ export default function assertStarters(output, context) {
   for (const chip of chips) {
     if (chip.length > MAX_CHARS) problems.push(`over ${MAX_CHARS} characters: "${chip}"`);
     if (!chip.endsWith('?')) problems.push(`not a question: "${chip}"`);
+    if (LONG_DATE_NAME.test(chip)) problems.push(`spells out a date name: "${chip}"`);
     const found = words(chip).filter((word) => JUDGING.includes(word) || DIRECTIONAL.includes(word));
     if (found.length) problems.push(`characterises (${found.join(', ')}): "${chip}"`);
     if (/ORD-\d+|\d/.test(chip)) problems.push(`names a value or id: "${chip}"`);

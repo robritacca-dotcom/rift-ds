@@ -418,7 +418,8 @@ export default function AiChatPage() {
               message sent over it, so the thread keeps what each question was about. Here three
               orders are in front of the chat: send a starter, then clear the note.{" "}
               <Link href="/docs/chat#context-and-actions">Context and actions</Link> covers the
-              hooks that follow a highlight.
+              hooks that follow a highlight. This site&apos;s chat uses them: highlight a row of the
+              props table below, then open the chat.
             </p>
             <ContextStage key={`context-${viewport}`} phone={phone} height={stageHeight} />
           </section>

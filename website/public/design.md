@@ -666,6 +666,8 @@ Loading state: `loading` puts a `tone="inherit"` Spinner in the left icon slot (
 
 Three sizes, matching the Button ladder one rung down: `compact` (24px tall), `default` (32px), and `large` (40px). `large` is the exception to "tighter than a Button" — it takes the default Button's `--padding-200`/`--padding-500` box, `--font-paragraph-emphasis-*` (16px/500) text, and 24px icons, so a pill that is a primary tap target rather than metadata reads at the same weight as the body text around it. PromptSuggestions is its intended consumer.
 
+A chip never wraps and is never wider than its container: a label too long for the room ends in an ellipsis (`.ds-chip__label`), giving way before the icon or the remove button, and its full words stay its accessible name. Suggestion chips are held to a budget that fits a phone, so the ellipsis is the net, not the plan.
+
 Distinct from Badge: a Badge communicates *status* through the five status colours and is never interactive; a Chip is neutral and optionally interactive.
 
 A `selected` chip takes the action selection fill (`--color-action-primary-bg` under `--color-action-primary-text`); `tone="neutral"` moves it to the `--color-action-neutral-*` greys (`ds-chip--selected-neutral`), for filter rows whose selection should read quietly, the call SegmentedControl's neutral tone makes. Renders as a `<span>` when non-clickable, a `<button>` when given `onClick` (with `aria-pressed` when `selected` is set). `onRemove` adds a trailing close button (Material Symbol `close`) with its own accessible label; when a chip is both clickable and removable the container stays a `<span>` and the main region becomes an inner button so buttons never nest.

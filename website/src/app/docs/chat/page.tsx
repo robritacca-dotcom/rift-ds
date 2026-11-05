@@ -617,8 +617,10 @@ export default function ChatInstallPage() {
             <SectionTitle title="Context and actions" />
             <p className={s.sectionNote}>
               The chat can follow what the reader puts in front of it and propose changes they
-              confirm. The merchant sales template is the working example: tick rows or
-              highlight a figure, ask about it, then ask the assistant to change some orders.
+              confirm. This site&apos;s own chat follows the reader on every page: highlight a
+              heading, a row of a props table or a line of code, then ask about it. The merchant
+              sales template shows the rest: tick rows or highlight a figure, ask about it, then
+              ask the assistant to change some orders.
             </p>
 
             <h3 className={s.propsHeading}>Follow the reader</h3>

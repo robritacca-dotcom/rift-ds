@@ -147,7 +147,7 @@ const DOT_CLASS: Record<EventCalendarColor, string> = {
 const CHAT_SUGGESTIONS = [
   { id: "week", label: "What's on this week?" },
   { id: "offsite", label: "When is the offsite?" },
-  { id: "month", label: "How full is September?" },
+  { id: "month", label: "How full is Sep?" },
 ];
 
 const CHAT_REPLIES: Record<string, string> = {

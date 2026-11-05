@@ -187,7 +187,7 @@ export const ASK_USER_INPUT_SCHEMA = {
               properties: {
                 label: {
                   type: 'string',
-                  description: `The answer as the person would say it, at most ${SUGGESTION_MAX_CHARS} characters.`,
+                  description: `The answer as the person would say it, at most ${SUGGESTION_MAX_CHARS} characters, a month or weekday written short ("Oct").`,
                 },
                 description: {
                   type: 'string',

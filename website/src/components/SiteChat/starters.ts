@@ -37,7 +37,7 @@ const DEFAULT_STARTERS: Starter[] = [
   { id: "recent", label: "What shipped recently?" },
   { id: "system", label: "How does this system work?" },
   { id: "site", label: "What is this site?" },
-  { id: "claude", label: "How was this built with Claude?" },
+  { id: "claude", label: "How was Claude used here?" },
   { id: "start", label: "Where should I start?" },
   { id: "install", label: "How do I install it?" },
   { id: "tokens", label: "How do tokens drive theming?" },

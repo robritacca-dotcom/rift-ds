@@ -10,10 +10,10 @@
  * The machinery lives in the package; this file holds the site's words.
  */
 export const FALLBACK_FOLLOWUPS = [
-  "How does this design system work?",
+  "How does this system work?",
   "How do I install the package?",
   "How do the theme presets work?",
   "What can the MCP endpoint do?",
-  "Why is the action colour reserved?",
+  "Why is action colour reserved?",
   "How is the site kept accurate?",
 ];

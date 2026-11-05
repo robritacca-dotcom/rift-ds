@@ -302,6 +302,9 @@
 .ds-prompt-suggestions__item {
   display: flex;
   flex-shrink: 0;
+  /* Never wider than the list, so a chip's own max-width has an edge to stop
+     at and a label too long for the room ends in an ellipsis (Chip.css). */
+  max-width: 100%;
   /* Pills pop in one after another — a small rise-and-settle with the
      spring's overshoot, quiet enough to read as arrival rather than
      performance. `backwards` keeps a delayed pill invisible until its

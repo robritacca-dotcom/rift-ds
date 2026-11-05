@@ -19,7 +19,7 @@ import type { DemoWelcomeVariant } from './demo-fixtures';
 const LINKS: PromptSuggestion[] = [
   { id: 'How do I get started?', icon: 'rocket_launch', label: 'Get started', description: 'Set up a workspace' },
   { id: 'What do the plans include?', icon: 'sell', label: 'Plans', description: 'What each one includes' },
-  { id: 'Invite my team to a workspace', icon: 'group_add', label: 'Team', description: 'Invite the others' },
+  { id: 'Invite my team', icon: 'group_add', label: 'Team', description: 'Invite the others' },
   { id: 'How is the trial going?', icon: 'monitoring', label: 'Trial', description: 'Signups so far' },
 ];
 
@@ -93,7 +93,7 @@ export function DemoBoard({ onAsk }: { onAsk: (prompt: string) => void }) {
             title="Invite the other three"
             description="2 of 5 seats filled"
             meta="Today"
-            onClick={() => onAsk('Invite my team to a workspace')}
+            onClick={() => onAsk('Invite my team')}
           />
           <WidgetRow
             leading={<StatusDot variant="info" size="sm" aria-hidden="true" />}

@@ -15,7 +15,8 @@ import styles from "./SiteChatMount.module.css";
  * name and mark, the welcome copy, the route-aware starters (drawn with the
  * provider's seed, keyed by the pathname so a page's set reveals once), the
  * composer's context note naming the page the visitor is reading, or what
- * they highlighted on it with a way back to the page, the model
+ * they highlighted on it with a way back to the page, the composer's
+ * placeholder inviting a highlight until there is one, the model
  * allowlist, and the disclaimer with its link to /privacy, which carries the
  * AI-use and 30-day logging disclosure.
  *
@@ -37,6 +38,7 @@ export function useSiteWidgetProps(): Pick<
   | "startersKey"
   | "context"
   | "contextClearLabel"
+  | "placeholder"
   | "models"
   | "defaultModel"
   | "disclaimer"
@@ -65,6 +67,8 @@ export function useSiteWidgetProps(): Pick<
         ? { label: contextLabel }
         : null,
     contextClearLabel: "Back to the whole page",
+    /* The one line every visitor reads before typing, so it is where they learn a highlight is a question's subject. One line at a 320px phone. */
+    placeholder: focus ? "Ask about it" : "Ask, or highlight the page first",
     models: CHAT_MODELS,
     defaultModel: DEFAULT_CHAT_MODEL.value,
     disclaimer: (

@@ -23,6 +23,10 @@
  * face --font-family-primary names. Scoped to sources flagged `themed`,
  * so the demo script's fictional product keeps its own vocabulary.
  *
+ * Dates are written short on a chip: a month or a weekday takes its short
+ * form ("Oct", "Mon"), so a chip spends its room on the question. May is
+ * left alone, since the word is also a verb and is already short.
+ *
  * Labels built from runtime data are checked as their static skeleton only —
  * a name substituted into one can be any length, which is why starters.ts
  * falls back to the unnamed wording when the named one does not fit.
@@ -154,6 +158,10 @@ const themeWordPattern = new RegExp(`\\b(${[...themeWords].join('|')})\\b`, 'i')
 
 let checked = 0;
 
+/* Month and weekday names longer than their short form; May is a verb too and already short. */
+const LONG_DATE_NAME =
+  /\b(January|February|March|April|June|July|August|September|October|November|December|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/;
+
 for (const { path: relative, scope, pattern = LABELLED, optional = false, themed = false, budget = true } of SOURCES) {
   let source;
   try {
@@ -187,6 +195,10 @@ for (const { path: relative, scope, pattern = LABELLED, optional = false, themed
           `${relative}: "${label}" names "${hit[1]}", a value the theme owns. Ask about the role instead (the action colour, the heading face).`
         );
       }
+    }
+    const date = written.match(LONG_DATE_NAME);
+    if (date) {
+      errors.push(`${relative}: "${label}" spells out "${date[1]}". Write it short on a chip ("${date[1].slice(0, 3)}").`);
     }
     if (!budget) continue;
     checked += 1;

@@ -66,17 +66,22 @@ export function siteContextString(path: string | null, focus: SiteFocus | null) 
 const propOf = (focus: SiteFocus) =>
   focus.kind === "cell" && focus.source?.startsWith("props:") && focus.row ? `${focus.source.slice("props:".length)}.${focus.row.replace(/\*$/, "")}` : null;
 
-/** What the composer's note calls a highlight: the prop it names, the section, or its first words. */
+/* The highlight's first words, for a note or a chip. */
+const wordsOf = (focus: SiteFocus) => (focus.text.length > 48 ? `${focus.text.slice(0, 47).trimEnd()}…` : focus.text);
+
+/** What the sent chip calls a highlight: the prop it names, the section, or its first words (the chip's icon says which kind). */
 export function focusLabel(focus: SiteFocus): string {
   const prop = propOf(focus) ?? (focus.kind === "cell" && focus.source?.startsWith("props:") ? `${focus.source.slice("props:".length)}.${focus.text}` : null);
   if (prop) return prop;
-  if (focus.kind === "heading") return `${focus.text} section`;
-  const words = focus.text.length > 48 ? `${focus.text.slice(0, 47).trimEnd()}…` : focus.text;
-  return focus.kind === "code" ? `the code ${words}` : words;
+  return focus.kind === "heading" ? `${focus.text} section` : wordsOf(focus);
 }
 
-/** The note's line: a heading reads as its section, everything else as the default `Looking at “…”`. */
-export const focusNote = (focus: SiteFocus) => (focus.kind === "heading" ? `Looking at the ${focus.text} section` : undefined);
+/** The note's line, the highlighted words alone in quotes: a heading reads as its section, code as code, everything else as the default `Looking at “…”`. */
+export function focusNote(focus: SiteFocus): string | undefined {
+  if (focus.kind === "heading") return `Looking at the “${focus.text}” section`;
+  if (focus.kind === "code") return `Looking at the code “${wordsOf(focus)}”`;
+  return undefined;
+}
 
 export const focusIcon = (focus: SiteFocus) =>
   focus.kind === "code" ? "code" : focus.kind === "heading" ? "segment" : focus.source?.startsWith("props:") ? "tune" : focus.kind === "cell" ? "table_rows" : "format_quote";

@@ -42,7 +42,7 @@
         },
         {
           "id": "claude",
-          "label": "How was this built with Claude?"
+          "label": "How was Claude used here?"
         },
         {
           "id": "storybook",
@@ -72,7 +72,7 @@
         },
         {
           "id": "registries",
-          "label": "What do the registries prevent?"
+          "label": "What do registries prevent?"
         },
         {
           "id": "ci",
@@ -84,15 +84,15 @@
         },
         {
           "id": "push",
-          "label": "What happens on a push to main?"
+          "label": "What does a push to main do?"
         },
         {
           "id": "mcp",
-          "label": "How does the MCP endpoint work?"
+          "label": "How does the MCP server work?"
         },
         {
           "id": "claude",
-          "label": "How was this built with Claude?"
+          "label": "How was Claude used here?"
         }
       ]
     },
@@ -125,11 +125,11 @@
         },
         {
           "id": "spec",
-          "label": "Which spec should I read first?"
+          "label": "Which spec do I read first?"
         },
         {
           "id": "latest",
-          "label": "What shipped in the latest release?"
+          "label": "What's in the latest release?"
         }
       ]
     },
@@ -158,11 +158,11 @@
         },
         {
           "id": "init",
-          "label": "What does npx rift-ds init install?"
+          "label": "What does init install?"
         },
         {
           "id": "mcp",
-          "label": "How do I connect the MCP endpoint?"
+          "label": "How do I connect to MCP?"
         },
         {
           "id": "shadcn",
@@ -170,7 +170,7 @@
         },
         {
           "id": "charts",
-          "label": "Which import serves the charts?"
+          "label": "How do I import the charts?"
         }
       ]
     },
@@ -185,7 +185,7 @@
         },
         {
           "id": "events",
-          "label": "What events must my endpoint send?",
+          "label": "What must my endpoint send?",
           "prompt": "What events does the chat widget expect from a transport?"
         }
       ],
@@ -200,7 +200,7 @@
         },
         {
           "id": "server",
-          "label": "What does the server handler do?"
+          "label": "What does the handler do?"
         },
         {
           "id": "transport",
@@ -212,7 +212,7 @@
         },
         {
           "id": "cards",
-          "label": "How do cards render in a reply?"
+          "label": "How do cards show in a reply?"
         },
         {
           "id": "threads",
@@ -254,7 +254,7 @@
         },
         {
           "id": "dashboard",
-          "label": "What does the dashboard block hold?"
+          "label": "What's in the dashboard block?"
         },
         {
           "id": "mobile",
@@ -262,15 +262,15 @@
         },
         {
           "id": "own",
-          "label": "Can I change a block after adding it?"
+          "label": "Can I edit a block I added?"
         },
         {
           "id": "setup",
-          "label": "What should I run before a block?"
+          "label": "What do I run before a block?"
         },
         {
           "id": "overwrite",
-          "label": "Will a block overwrite my files?"
+          "label": "Can a block overwrite files?"
         }
       ]
     },
@@ -341,7 +341,7 @@
         },
         {
           "id": "vs-loops",
-          "label": "How do skills differ from loops?"
+          "label": "How is a skill not a loop?"
         },
         {
           "id": "copy",
@@ -353,11 +353,11 @@
         },
         {
           "id": "honest",
-          "label": "How do skills keep the site honest?"
+          "label": "How do skills keep it honest?"
         },
         {
           "id": "claude",
-          "label": "How was this built with Claude?"
+          "label": "How was Claude used here?"
         }
       ]
     },
@@ -395,7 +395,7 @@
         },
         {
           "id": "blocked",
-          "label": "What stops a half-built component?"
+          "label": "What stops a half-built one?"
         }
       ]
     },
@@ -425,15 +425,15 @@
         },
         {
           "id": "tiers",
-          "label": "What are the three token tiers?"
+          "label": "What are the token tiers?"
         },
         {
           "id": "generated",
-          "label": "What gets generated from the CSS?"
+          "label": "What comes from the CSS?"
         },
         {
           "id": "checked",
-          "label": "Which homes does the build check?"
+          "label": "Which homes get checked?"
         }
       ]
     },
@@ -443,7 +443,7 @@
       "chips": [
         {
           "id": "gate",
-          "label": "What does the preset gate check?",
+          "label": "What does the preset gate do?",
           "prompt": "What does the completeness gate check before a theme preset ships, and what happens when a pairing fails?"
         },
         {
@@ -459,19 +459,19 @@
         },
         {
           "id": "gate",
-          "label": "What does the preset gate check?"
+          "label": "What does the preset gate do?"
         },
         {
           "id": "generated",
-          "label": "Which preset files are generated?"
+          "label": "Which preset files are built?"
         },
         {
           "id": "pickers",
-          "label": "Where can a visitor pick a theme?"
+          "label": "Where do visitors pick themes?"
         },
         {
           "id": "served",
-          "label": "How does a preset become the default?"
+          "label": "How is a preset made default?"
         }
       ]
     },
@@ -501,7 +501,7 @@
         },
         {
           "id": "fail",
-          "label": "What happens when a check fails?"
+          "label": "What if a check fails?"
         },
         {
           "id": "allow",
@@ -543,11 +543,11 @@
         },
         {
           "id": "loop",
-          "label": "When does the polish loop stop?"
+          "label": "When does polishing stop?"
         },
         {
           "id": "render",
-          "label": "Why judge the render, not code?"
+          "label": "Why judge render over code?"
         }
       ]
     },
@@ -577,11 +577,11 @@
         },
         {
           "id": "widths",
-          "label": "Which widths does the sweep check?"
+          "label": "Which widths get swept?"
         },
         {
           "id": "accepted",
-          "label": "What goes in the ACCEPTED list?"
+          "label": "What belongs in ACCEPTED?"
         },
         {
           "id": "fix",
@@ -615,15 +615,15 @@
         },
         {
           "id": "route",
-          "label": "What does a route change touch?"
+          "label": "What does a route change hit?"
         },
         {
           "id": "fixes",
-          "label": "Does the audit fix things itself?"
+          "label": "Does the audit fix things?"
         },
         {
           "id": "validators",
-          "label": "Why not just trust the validators?"
+          "label": "Why not trust the validators?"
         }
       ]
     },
@@ -638,7 +638,7 @@
         },
         {
           "id": "asks",
-          "label": "When does super-ship stop to ask?",
+          "label": "When does super-ship ask?",
           "prompt": "Which findings does super-ship fix on its own, and which make it stop and ask the owner?"
         }
       ],
@@ -649,7 +649,7 @@
         },
         {
           "id": "asks",
-          "label": "When does super-ship stop to ask?"
+          "label": "When does super-ship ask?"
         },
         {
           "id": "plain",
@@ -657,7 +657,7 @@
         },
         {
           "id": "together",
-          "label": "Why do the fixes ship with the work?"
+          "label": "Why ship fixes with the work?"
         },
         {
           "id": "live",
@@ -676,26 +676,26 @@
         },
         {
           "id": "chat-quality-privacy",
-          "label": "How are visitor words kept private?",
+          "label": "How is visitor text protected?",
           "prompt": "How does the chat-quality loop keep visitors' own words out of the repo?"
         }
       ],
       "starters": [
         {
           "id": "cq-before-fix",
-          "label": "Why write the case before the fix?"
+          "label": "Why write the case first?"
         },
         {
           "id": "cq-eval-once",
-          "label": "Why does the eval run only once?"
+          "label": "Why does the eval run once?"
         },
         {
           "id": "cq-read-only",
-          "label": "Does the loop write to the live data?"
+          "label": "Does the loop touch live data?"
         },
         {
           "id": "cq-may-touch",
-          "label": "What files may the loop change?"
+          "label": "Which files can the loop edit?"
         },
         {
           "id": "cq-approve",
@@ -720,11 +720,11 @@
         },
         {
           "id": "chat-quality",
-          "label": "What does the chat quality loop do?"
+          "label": "What does the quality loop do?"
         },
         {
           "id": "link-rot",
-          "label": "How does the link rot check work?"
+          "label": "How does link rot get caught?"
         },
         {
           "id": "guardrails",
@@ -757,11 +757,11 @@
         },
         {
           "id": "which",
-          "label": "Which template should I look at?"
+          "label": "Which template should I open?"
         },
         {
           "id": "package",
-          "label": "Are templates in the npm package?"
+          "label": "Do templates ship in npm?"
         },
         {
           "id": "built",
@@ -803,7 +803,7 @@
         },
         {
           "id": "ai-set",
-          "label": "Which components are AI-specific?"
+          "label": "Which components are for AI?"
         },
         {
           "id": "charts",
@@ -811,7 +811,7 @@
         },
         {
           "id": "server",
-          "label": "Do these work in Server Components?"
+          "label": "Do these run on the server?"
         },
         {
           "id": "pick",
@@ -881,7 +881,7 @@
         },
         {
           "id": "action",
-          "label": "Why is the action colour reserved?"
+          "label": "Why is action colour reserved?"
         },
         {
           "id": "override",
@@ -903,7 +903,7 @@
       "chips": [
         {
           "id": "a11y-enforced",
-          "label": "What a11y does the build check?",
+          "label": "What a11y gets checked?",
           "prompt": "What accessibility checks does the build enforce on every change?"
         }
       ],
@@ -918,7 +918,7 @@
         },
         {
           "id": "contrast",
-          "label": "How is button contrast checked?"
+          "label": "How is contrast checked?"
         },
         {
           "id": "human",
@@ -951,11 +951,11 @@
         },
         {
           "id": "semantic",
-          "label": "What are semantic colour tokens?"
+          "label": "What are colour roles?"
         },
         {
           "id": "action",
-          "label": "Why is the action colour reserved?"
+          "label": "Why is action colour reserved?"
         },
         {
           "id": "status",
@@ -963,11 +963,11 @@
         },
         {
           "id": "ai",
-          "label": "What are the AI colour tokens for?"
+          "label": "What are AI colours for?"
         },
         {
           "id": "themes",
-          "label": "How do themes re-point colours?"
+          "label": "How do themes swap colours?"
         }
       ]
     },
@@ -1000,7 +1000,7 @@
         },
         {
           "id": "vs-semantic",
-          "label": "How do primitives differ from roles?"
+          "label": "Why primitives and roles?"
         }
       ]
     },
@@ -1017,19 +1017,19 @@
       "starters": [
         {
           "id": "flat",
-          "label": "Why do most surfaces have no shadow?"
+          "label": "Why are shadows so rare?"
         },
         {
           "id": "when",
-          "label": "When does a surface get a shadow?"
+          "label": "When is a shadow used?"
         },
         {
           "id": "ramp",
-          "label": "How does the container ramp work?"
+          "label": "What is the container ramp?"
         },
         {
           "id": "dark",
-          "label": "Why are dark mode shadows stronger?"
+          "label": "Why are dark shadows stronger?"
         },
         {
           "id": "off",
@@ -1062,11 +1062,11 @@
         },
         {
           "id": "floor",
-          "label": "Why does the scale start at 20px?"
+          "label": "Why start the scale at 20px?"
         },
         {
           "id": "grade",
-          "label": "Why do icons change in dark mode?"
+          "label": "Why do icons change in dark?"
         }
       ]
     },
@@ -1128,7 +1128,7 @@
         },
         {
           "id": "js",
-          "label": "Where do JavaScript timings live?"
+          "label": "Where do JS timings live?"
         },
         {
           "id": "background",
@@ -1154,15 +1154,15 @@
       "starters": [
         {
           "id": "breakpoints",
-          "label": "Which breakpoints ship in the package?"
+          "label": "Which breakpoints ship?"
         },
         {
           "id": "js-query",
-          "label": "How do I build a media query in JS?"
+          "label": "How do I query widths in JS?"
         },
         {
           "id": "css-number",
-          "label": "Why can’t CSS use a breakpoint token?"
+          "label": "Why are breakpoints literal?"
         },
         {
           "id": "shell",
@@ -1170,15 +1170,15 @@
         },
         {
           "id": "stacking",
-          "label": "How do the stacking layers work?"
+          "label": "How does stacking work?"
         },
         {
           "id": "new-overlay",
-          "label": "Which layer should a new overlay use?"
+          "label": "Which layer suits an overlay?"
         },
         {
           "id": "tablet",
-          "label": "What changes at the tablet step?"
+          "label": "What changes on tablets?"
         }
       ]
     },
@@ -1195,7 +1195,7 @@
       "starters": [
         {
           "id": "scale",
-          "label": "How does the spacing scale work?"
+          "label": "How does spacing scale?"
         },
         {
           "id": "gap-padding",
@@ -1244,7 +1244,7 @@
         },
         {
           "id": "mobile",
-          "label": "What happens to type on mobile?"
+          "label": "What does type do on phones?"
         },
         {
           "id": "weights",
@@ -1269,11 +1269,11 @@
         },
         {
           "id": "maintain",
-          "label": "How does the system maintain itself?"
+          "label": "How does it maintain itself?"
         },
         {
           "id": "validators",
-          "label": "What do the validators enforce?"
+          "label": "What do validators enforce?"
         },
         {
           "id": "why-publish",
@@ -1285,7 +1285,7 @@
         },
         {
           "id": "claude",
-          "label": "How was this built with Claude?"
+          "label": "How was Claude used here?"
         }
       ]
     },
@@ -1322,7 +1322,7 @@
         },
         {
           "id": "split",
-          "label": "How do the specs divide the work?"
+          "label": "How do the specs split work?"
         }
       ]
     },
@@ -1355,7 +1355,7 @@
         },
         {
           "id": "register",
-          "label": "How does register change by surface?"
+          "label": "How does register vary?"
         },
         {
           "id": "detector",
@@ -1369,18 +1369,18 @@
       "chips": [
         {
           "id": "latest",
-          "label": "What shipped in the latest release?",
+          "label": "What's in the latest release?",
           "prompt": "What shipped in the latest release of the design system?"
         }
       ],
       "starters": [
         {
           "id": "latest",
-          "label": "What shipped in the latest release?"
+          "label": "What's in the latest release?"
         },
         {
           "id": "install",
-          "label": "How do I install the latest version?"
+          "label": "How do I get the latest?"
         },
         {
           "id": "accurate",
@@ -1429,7 +1429,7 @@
         },
         {
           "id": "dark",
-          "label": "How do themes handle dark mode?"
+          "label": "How do themes do dark mode?"
         },
         {
           "id": "fonts",
@@ -1443,7 +1443,7 @@
       "chips": [
         {
           "id": "theme-specimen-design-md",
-          "label": "What is in a theme's DESIGN.md?",
+          "label": "What's in a theme's DESIGN.md?",
           "prompt": "What does a theme's DESIGN.md contain, and how would I use it with a coding agent or another tool?"
         }
       ],
@@ -1458,7 +1458,7 @@
         },
         {
           "id": "action",
-          "label": "Where does the action colour go?"
+          "label": "Where does action colour go?"
         },
         {
           "id": "dark",
@@ -1470,7 +1470,7 @@
         },
         {
           "id": "import",
-          "label": "Can the playground read it back?"
+          "label": "Can the playground read it?"
         }
       ]
     }

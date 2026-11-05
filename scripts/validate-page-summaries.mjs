@@ -191,9 +191,11 @@ for (const route of Object.keys(summaries.routes)) {
     errors.push(`routes["${route}"]: no such page on the site — remove or rename the entry`);
 }
 
-/* The derived component chip label must fit the budget for every label. */
+/* The derived component chip label must fit the budget for every label: the
+   name when it fits, else the fallback (componentChipLabel in page-summaries.ts). */
 for (const c of componentPages) {
-  const label = `How do I use ${c.label}?`;
+  const named = `How do I use ${c.label}?`;
+  const label = named.length <= maxChipChars ? named : 'How do I use it?';
   if (label.length > maxChipChars)
     errors.push(
       `component "${c.name}": derived chip label "${label}" is ${label.length} chars (budget ${maxChipChars})`

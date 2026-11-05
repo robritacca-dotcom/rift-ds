@@ -30,7 +30,7 @@ import { useChatWidget } from "rift-ds/chat";
 const VISITOR_QUESTIONS = [
   "How do I get started?",
   "What do the plans include?",
-  "Invite my team to a workspace",
+  "Invite my team",
 ];
 
 /* Each instant reply is a whole agent message: trace points behind the

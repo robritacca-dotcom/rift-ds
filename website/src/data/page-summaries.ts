@@ -1,4 +1,4 @@
-import type { Starter } from "rift-ds/chat";
+import { namedStarter, type Starter } from "rift-ds/chat";
 import { componentPages } from "./component-pages";
 import registry from "./page-summaries.json";
 
@@ -46,10 +46,11 @@ const staticSummaries = registry.routes as Record<string, PageSummary>;
 const normalise = (pathname: string) =>
   pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
 
-/* The derived chip label for a component page. The validator re-derives
-   this template to hold every label inside the suggestion chip budget, so
-   a change here needs the matching change there. */
-export const componentChipLabel = (label: string) => `How do I use ${label}?`;
+/* The derived chip label for a component page: the component's name when it
+   fits the suggestion chip budget, "it" when it does not (the page names the
+   component already). The validator re-derives this template, so a change
+   here needs the matching change there. */
+export const componentChipLabel = (label: string) => namedStarter(`How do I use ${label}?`, "How do I use it?");
 
 function componentSummary(slug: string): PageSummary | null {
   const meta = componentPages.find((c) => c.slug === slug);

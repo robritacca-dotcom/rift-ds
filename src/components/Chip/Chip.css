@@ -27,6 +27,11 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   color: var(--color-text-secondary);
   white-space: nowrap;
+  /* Never wider than its container: a label too long for the room ends in an
+     ellipsis rather than running past the edge. Suggestion copy is held to a
+     budget that fits a phone (SUGGESTION_MAX_CHARS), so this is the net, not
+     the plan. */
+  max-width: 100%;
 
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard),
     color var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
@@ -99,7 +104,10 @@
    ============================================ */
 
 .ds-chip__label {
-  flex-shrink: 0;
+  /* The label gives way before the icon or the remove button does. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ============================================

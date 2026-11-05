@@ -60,7 +60,7 @@ function planFor(answer: string): ScriptedReply {
   return {
     steps: [{ status: 'Matching the plan', point: 'Team size decides the plan; nothing else differs.' }],
     text: `For ${answer.trim().replace(/[.!?]$/, '')}, ${plan}.`,
-    followups: ['What do the plans include?', 'Invite my team to a workspace', 'Set up notifications for me'],
+    followups: ['What do the plans include?', 'Invite my team', 'Set up notifications for me'],
   };
 }
 
@@ -88,14 +88,14 @@ const PLANS_COMPARED: ScriptedReply = {
     { status: 'Drafting the answer', point: 'Name what the Team plan adds over the base.' },
   ],
   text: 'Every plan includes unlimited projects. The Team plan adds shared workspaces, guest seats, and a 90 day version history.',
-  followups: ['Which plan fits a team of five?', 'Help me pick a plan', 'Where is that written down?'],
+  followups: ['Which plan fits five people?', 'Help me pick a plan', 'Where is that written down?'],
 };
 
 /** The three starters the demo welcome screen offers. */
 export const DEMO_STARTERS: Starter[] = [
   { id: 'start', label: 'How do I get started?' },
   { id: 'plans', label: 'What do the plans include?' },
-  { id: 'invite', label: 'Invite my team to a workspace' },
+  { id: 'invite', label: 'Invite my team' },
 ];
 
 /** The scripted conversation, for `createSimTransport` or inspection. */
@@ -124,7 +124,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
   })
   .user('What do the plans include?')
   .assistant(PLANS_COMPARED.text, PLANS_COMPARED)
-  .user('Which plan fits a team of five?')
+  .user('Which plan fits five people?')
   .assistant('The Team plan fits what you described: shared workspaces for the whole team, and guest seats stay free. Shall we go with it?', {
     steps: [
       { status: 'Matching plans to the team', point: 'The visitor needs shared workspaces and guest seats.' },
@@ -154,7 +154,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
         : {
             steps: [{ status: 'Switching the plan', point: 'Move the workspace to Team from today.' }],
             text: 'Done. The workspace is on the Team plan from today, billed monthly, and you can step back down any time.',
-            followups: ['Invite my team to a workspace', 'Where is that written down?', 'How is the trial going?'],
+            followups: ['Invite my team', 'Where is that written down?', 'How is the trial going?'],
           },
   })
   .user('Where is that written down?')
@@ -191,7 +191,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
         },
       ],
     }),
-    followups: ['Which plan fits a team of five?', 'How do I get started?', 'How is the trial going?'],
+    followups: ['Which plan fits five people?', 'How do I get started?', 'How is the trial going?'],
   })
   .user('How is the trial going?')
   .assistant('Signups have climbed for five of the six weeks since the trial opened, and last week was the strongest yet.', {
@@ -208,9 +208,9 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
       yKey: 'signups',
       label: 'Signups',
     }),
-    followups: ['Which plan fits a team of five?', 'Invite my team to a workspace', 'Where is that written down?'],
+    followups: ['Which plan fits five people?', 'Invite my team', 'Where is that written down?'],
   })
-  .user('Invite my team to a workspace')
+  .user('Invite my team')
   .assistant('Happy to. Shall I send invites to the three teammates on your account, all as editors?', {
     steps: [
       { status: 'Checking the account', point: 'Three teammates sit on the account, none invited yet.' },
@@ -238,7 +238,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
           }
         : INVITES_SENT,
   })
-  .user('Go ahead and invite the other three')
+  .user('Invite the other three')
   .assistant(INVITES_SENT.text, INVITES_SENT)
   .user('Take us up to twelve seats')
   .assistant('Only the seat count moves, from five to twelve. Everything else in the config stays as it was. Apply it?', {
@@ -269,7 +269,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
         ? {
             steps: [{ status: 'Leaving the config', point: 'The diff stays a proposal.' }],
             text: 'Left as it is. The workspace stays at five seats until you say otherwise.',
-            followups: ['What do the plans include?', 'Invite my team to a workspace', 'How is the trial going?'],
+            followups: ['What do the plans include?', 'Invite my team', 'How is the trial going?'],
           }
         : {
             steps: [{ status: 'Applying the change', point: 'One line in workspace.config.ts.' }],
@@ -280,7 +280,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
               status: 'success',
               duration: '0.4s',
             }),
-            followups: ['Invite my team to a workspace', 'Find a time we can all meet', 'How is the trial going?'],
+            followups: ['Invite my team', 'Find a time we can all meet', 'How is the trial going?'],
           },
   })
   .user('Here is the launch plan we are working from.')
@@ -340,7 +340,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
         ? {
             steps: [{ status: 'Leaving the sync', point: 'Nothing to retry until asked.' }],
             text: 'Left for now. Nothing else depends on it, and it can run again whenever you like.',
-            followups: ['Find a time we can all meet', 'Invite my team to a workspace', 'How is the trial going?'],
+            followups: ['Find a time we can all meet', 'Invite my team', 'How is the trial going?'],
           }
         : {
             steps: [{ status: 'Retrying the sync', point: 'Second attempt against the provider.' }],
@@ -382,7 +382,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
         ? {
             steps: [{ status: 'Leaving the calendar alone', point: 'No access; offer the manual route.' }],
             text: 'No problem, nothing is connected. You can share a few times that suit you and I will send them round.',
-            followups: ['Go ahead and invite the other three', 'How is the trial going?', 'How do I get started?'],
+            followups: ['Invite the other three', 'How is the trial going?', 'How do I get started?'],
           }
         : {
             steps: [
@@ -392,7 +392,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
             text: answer.toLowerCase().includes('always')
               ? 'Connected for good. Thursday at 2pm is the first slot everyone has free, and I will keep an eye out when plans change.'
               : 'Read once and disconnected. Thursday at 2pm is the first slot everyone has free.',
-            followups: ['Plan our launch kickoff', 'Go ahead and invite the other three', 'How is the trial going?'],
+            followups: ['Plan our launch kickoff', 'Invite the other three', 'How is the trial going?'],
           },
   })
   .user('Build me a launch dashboard')
@@ -404,7 +404,7 @@ export const DEMO_SCRIPT: ChatScript = scriptChat()
         { status: 'Laying out the dashboard', point: 'Too much for a card; build it as an artifact.' },
       ],
       card: artifactCard(DEMO_DASHBOARD_ARTIFACT),
-      followups: ['Draft the launch page', 'How is the trial going?', 'Which plan fits a team of five?'],
+      followups: ['Draft the launch page', 'How is the trial going?', 'Which plan fits five people?'],
     }
   )
   .user('Draft the launch page')

@@ -85,6 +85,11 @@
      which has no padding, so the bar keeps a padding step off the top
      there (the .floating rule below). */
   top: 0;
+  /* The strip a stuck bar holds off the top of the page: a padding step,
+     the phone gutter's on a phone (below), so the bar's row lines up with
+     AppSidebar's menu trigger there. The offset, the fill over the strip
+     and the blur all read it, so they move together. */
+  --sticky-gap: var(--padding-500);
   z-index: var(--layer-sticky);
   /* The room the rule under the bar used to take, so the page's first row
      keeps its distance now that the blur marks the edge instead. */
@@ -97,13 +102,13 @@
 .stickyTopBar::before {
   content: "";
   position: absolute;
-  top: calc(-1 * var(--padding-500));
+  top: calc(-1 * var(--sticky-gap));
   bottom: 0;
   inset-inline: calc(-1 * var(--sticky-bleed));
   z-index: -1;
   background: linear-gradient(
     to bottom,
-    var(--sticky-fill) var(--padding-500),
+    var(--sticky-fill) var(--sticky-gap),
     transparent
   );
   pointer-events: none;
@@ -116,12 +121,12 @@
 }
 
 .floating .stickyTopBar {
-  top: var(--padding-500);
+  top: var(--sticky-gap);
 }
 
 .topBarBlur:global(.ds-progressive-blur) {
   position: absolute;
-  top: calc(-1 * var(--padding-500));
+  top: calc(-1 * var(--sticky-gap));
   bottom: calc(-1 * var(--gap-1000));
   inset-inline: calc(-1 * var(--sticky-bleed));
   height: auto;
@@ -333,9 +338,15 @@
     mask-image: none;
   }
 
-  /* The page scrolls now, not the surface, so the bar keeps the floating
-     layout's padding step off the top, and its fill covers that strip. */
+  /* The page scrolls now, not the surface, so the bar keeps a step off the
+     top as the floating layout does, and its fill covers that strip. On a
+     phone the step is the page's 16px gutter, the one AppSidebar's menu
+     trigger sits at, so the two share a row. */
+  .stickyTopBar {
+    --sticky-gap: var(--padding-400);
+  }
+
   .inset .stickyTopBar {
-    top: var(--padding-500);
+    top: var(--sticky-gap);
   }
 }

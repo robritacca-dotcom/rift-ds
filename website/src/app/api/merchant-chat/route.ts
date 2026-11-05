@@ -15,7 +15,7 @@
  * exchange log: nothing typed here is stored. The ledger is seeded and fictional.
  */
 
-import { createChatHandler, type ChatTool, type ChatToolContext } from "rift-ds/chat/server";
+import { confirmationLine, createChatHandler, type ChatTool, type ChatToolContext } from "rift-ds/chat/server";
 import { BRAND_NAME } from "@/config/brand.generated";
 import { COLUMN_KEYS, LEDGER_COLUMNS, LEDGER_TODAY, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
 import { MERCHANT_KPIS, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS } from "@/data/merchant-sales";
@@ -285,9 +285,7 @@ const handler = createChatHandler({
       `Orders the reader has changed on this page: ${editedOrders}.`,
       ...(kpis ? [`The KPI band as it now reads, with those changes: ${kpis.map((kpi) => `${kpi.label} ${kpi.value} (${kpi.delta} on September)`).join("; ")}.`] : []),
       `Changes made on this page, oldest first. A card you proposed that appears here was confirmed, so never say it is still waiting:\n${log.length ? log.join("\n") : "None."}`,
-      confirmation
-        ? `This message was confirmed on its card: ${confirmation.count} ${confirmation.count === 1 ? "order" : "orders"} ${ORDER_ACTIONS[confirmation.action].done}. The change is made.`
-        : "This message was not confirmed on a card. Nothing it says has changed any order.",
+      confirmationLine(confirmation, { actions: ORDER_ACTIONS, noun: (count) => (count === 1 ? "order" : "orders") }),
       ...nextSteps(confirmation?.ids.length ? confirmation.ids : focusOrderIds(focus)),
     ].join("\n\n");
   },

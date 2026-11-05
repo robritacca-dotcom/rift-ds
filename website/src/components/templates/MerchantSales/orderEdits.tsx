@@ -13,13 +13,14 @@
  */
 
 import React from "react";
+import { createConfirmationMark, type ActionConfirmation } from "rift-ds/chat/actions";
 import { ledgerRows } from "@/data/order-ledger";
 import { editsFor, planAction, withEdit, type ActionPlan, type ChangeLogEntry, type OrderActionId, type OrderEdits } from "@/lib/order-actions";
 
 let byId: Map<string, Record<string, unknown>> | null = null;
 const baseValues = (id: string) => (byId ??= new Map(ledgerRows().map((row) => [row.id, row.values]))).get(id);
 
-export type Confirmation = { action: OrderActionId; count: number; ids: string[] };
+export type Confirmation = ActionConfirmation<OrderActionId>;
 
 export type CardState = { status: "confirmed"; undo: () => void } | { status: "cancelled" } | { status: "undone" };
 
@@ -62,15 +63,8 @@ export function OrderEditsProvider({ children }: { children: React.ReactNode }) 
   const getEdits = React.useCallback(() => editsRef.current, []);
   const logRef = React.useRef<ChangeLogEntry[]>([]);
   const getLog = React.useCallback(() => logRef.current, []);
-  const confirmationRef = React.useRef<Confirmation | null>(null);
-  const markConfirmation = React.useCallback((confirmation: Confirmation) => {
-    confirmationRef.current = confirmation;
-  }, []);
-  const takeConfirmation = React.useCallback(() => {
-    const confirmation = confirmationRef.current;
-    confirmationRef.current = null;
-    return confirmation;
-  }, []);
+  /* The package's one-shot mark: set by a card's Confirm, taken by the request it sends, so a typed "yes" never counts. */
+  const [{ mark: markConfirmation, take: takeConfirmation }] = React.useState(createConfirmationMark<OrderActionId>);
   const valuesOf = React.useCallback((id: string) => {
     const values = baseValues(id);
     return values && withEdit(values, editsRef.current[id]);

@@ -11,7 +11,7 @@
  * so the two always read the focus the same way.
  */
 
-import { sanitiseSelection, selectionLines, type ChatSelection } from "rift-ds/chat/server";
+import { sanitiseConfirmation as checkConfirmation, sanitiseSelection, selectionLines, type ChatSelection } from "rift-ds/chat/server";
 import { COLUMN_KEYS, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
 import { MERCHANT_KPIS, computeKpis } from "@/data/merchant-sales";
 import { ORDER_ACTIONS, ORDER_ACTION_IDS, planAction, skippedText, withEdit, type OrderActionId } from "./order-actions";
@@ -143,11 +143,8 @@ function sanitiseChanges(value: unknown) {
 }
 
 /* Set only on the message a card's Confirm sends; a typed "yes" has none. */
-function sanitiseConfirmation(value: unknown) {
-  const { action, count, ids } = (value ?? {}) as Record<string, unknown>;
-  if (!ORDER_ACTION_IDS.includes(action as OrderActionId) || typeof count !== "number" || count < 1 || count > ROW_COUNT) return null;
-  return { action, count: Math.floor(count), ids: Array.isArray(ids) ? [...new Set(ids.slice(0, MAX_FOCUS_IDS).filter(isOrderId))] : [] };
-}
+const sanitiseConfirmation = (value: unknown) =>
+  checkConfirmation(value, { actions: ORDER_ACTION_IDS, isId: isOrderId, maxCount: ROW_COUNT, maxIds: MAX_FOCUS_IDS });
 
 /**
  * What each action would do to these orders now, edits included: the dry run

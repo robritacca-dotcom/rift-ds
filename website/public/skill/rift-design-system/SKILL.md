@@ -56,7 +56,7 @@ Its subpaths, each with the optional peers it needs:
 
 - `rift-ds/chat`: The widget, the provider, the launcher and the engine under them, with the hooks that let it follow the reader and write starters for what they picked. Peers: react-markdown, remark-gfm.
 - `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, its follow-ups, starters and feedback siblings, and the checks for what a reader highlighted, for any web-standard route. Peers: @anthropic-ai/sdk.
-- `rift-ds/chat/actions`: The action definitions a page and its route share, and their dry run, with no dependencies.
+- `rift-ds/chat/actions`: The action definitions a page and its route share, their dry run and the mark that says a change was confirmed on its card, with no dependencies.
 - `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Peers: @upstash/ratelimit, @upstash/redis.
 - `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Peers: recharts.
 - `rift-ds/chat/chat.css`: The widget's stylesheet.

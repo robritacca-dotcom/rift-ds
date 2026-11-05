@@ -333,8 +333,8 @@ const generated = useGeneratedStarters(focus ? JSON.stringify(focusForServer(foc
 
 <ChatWidget starters={generated.starters ?? pageStarters} startersKey={generated.key ?? 'page'} startersPending={generated.pending} />`;
 
-const ACTIONS_SNIPPET = `// lib/walk-actions.ts, imported by the page and the route alike; trimmed: Walk and walksFor are your app's own
-import { defineAction, planAction } from '${PACKAGE_NAME}/chat/actions';
+const ACTIONS_SNIPPET = `// lib/walk-actions.ts, imported by the page and the route alike; trimmed: Walk, walksFor and isWalkId are your app's own
+import { confirmationLine, createConfirmationMark, defineAction, planAction, sanitiseConfirmation } from '${PACKAGE_NAME}/chat/actions';
 import type { ChatTool } from '${PACKAGE_NAME}/chat/server';
 
 export const closeBookings = defineAction<Walk, Partial<Walk>>({
@@ -357,7 +357,16 @@ const proposeClose: ChatTool = {
     const plan = planAction(closeBookings, walksFor(input, context, request));
     return { text: JSON.stringify({ proposed: plan.ids.length }), card: { kind: 'proposal', data: plan } };
   },
-};`;
+};
+
+// The page: Confirm marks the one request it sends, and getContext takes the mark.
+export const confirmed = createConfirmationMark();
+// onConfirm: run the action, then confirmed.mark({ action: 'close', count: plan.ids.length, ids: plan.ids }) and send confirm(these)
+// getContext: JSON.stringify({ ..., confirmation: confirmed.take() })
+
+// The route: rebuild the mark, and tell the model whether this message was confirmed.
+const confirmation = sanitiseConfirmation(raw.confirmation, { actions: ['close'], isId: isWalkId, maxCount: 500 });
+const line = confirmationLine(confirmation, { actions: { close: closeBookings }, noun: (count) => (count === 1 ? 'walk' : 'walks') });`;
 
 export default function ChatInstallPage() {
   return (
@@ -662,9 +671,12 @@ export default function ChatInstallPage() {
               the page&apos;s own buttons and the chat&apos;s tool do the same thing to the same
               records. The tool only proposes: <code>planAction</code> is its dry run, sent as a
               card. Draw it with an <Link href="/components/action-card">Action card</Link>, and on
-              Confirm run the action on the page, mark that request as confirmed and send the
-              reader&apos;s words (<code>confirm</code>) as their message. A typed &ldquo;yes&rdquo;
-              carries no mark, so it never makes a change. Open the reply with an{" "}
+              Confirm run the action on the page, mark that request with{" "}
+              <code>createConfirmationMark</code> and send the reader&apos;s words (
+              <code>confirm</code>) as their message. The route rebuilds the mark with{" "}
+              <code>sanitiseConfirmation</code> and tells the model with{" "}
+              <code>confirmationLine</code>. A typed &ldquo;yes&rdquo; carries no mark, so it never
+              makes a change. Open the reply with an{" "}
               <Link href="/components/action-readout">Action readout</Link> worked out from the
               records as they were, then the model&apos;s sentence. A tool handed{" "}
               <code>{"{ context, request }"}</code> shares <code>request</code> with every call in

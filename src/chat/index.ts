@@ -18,7 +18,20 @@ export { ChatWidget, type ChatWidgetProps, type ChatAgentOptions, type ChatConte
 export { useSelectionFocus, useHeldHighlight, readSelection, describeSelection, CHAT_SOURCE_ATTRIBUTE, HELD_HIGHLIGHT_NAME, type SelectedText, type DescribeSelectionOptions } from './selection';
 export { sanitiseSelection, selectionLines, DEFAULT_SELECTION_LIMITS, type ChatSelection, type SelectionKind, type SelectionLimits, type SelectionLinesOptions } from './selectionContext';
 export { useGeneratedStarters, type GeneratedStarters, type GeneratedStartersOptions } from './generatedStarters';
-export { defineAction, planAction, skippedText, type ChatAction, type ActionPlan } from './actions';
+export {
+  defineAction,
+  planAction,
+  skippedText,
+  createConfirmationMark,
+  sanitiseConfirmation,
+  confirmationLine,
+  type ChatAction,
+  type ActionPlan,
+  type ActionConfirmation,
+  type ConfirmationMark,
+  type SanitiseConfirmationOptions,
+  type ConfirmationLineOptions,
+} from './actions';
 export { ChatLauncher, CHAT_PANEL_ID, type ChatLauncherProps } from './ChatLauncher';
 export { useChatAgentState } from './agentState';
 export { ChatThreads, type ChatThreadsProps } from './ChatThreads';

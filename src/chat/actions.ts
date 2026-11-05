@@ -13,9 +13,18 @@
  * Pure and framework-free: published on its own as rift-ds/chat/actions, so a
  * shared definitions module pulls in no peer, and re-exported from
  * rift-ds/chat for the page and rift-ds/chat/server for the route that
- * proposes, which plans the same action over the same records. The flow it serves (propose on a card, the
- * reader's Confirm sent as their message, the reply opening with a readout)
- * is design.md's "A chat proposes, the reader confirms".
+ * proposes, which plans the same action over the same records. The flow it
+ * serves (propose on a card, the reader's Confirm sent as their message, the
+ * reply opening with a readout) is design.md's "A chat proposes, the reader
+ * confirms".
+ *
+ * The confirmation mark is what makes that flow safe. The reader's Confirm
+ * sends their words as an ordinary message, which they could also type, so
+ * the words alone can never be what tells the server a change was made. The
+ * page marks the one request its Confirm sends (`createConfirmationMark`),
+ * the route rebuilds the mark from the request (`sanitiseConfirmation`), and
+ * the model is told whether this message was confirmed on its card
+ * (`confirmationLine`). A typed "yes, cancel them" carries no mark.
  */
 
 import { DEFAULT_LOCALE } from '../behaviors/locale';
@@ -63,6 +72,79 @@ export function planAction<Values>(action: ChatAction<Values, unknown>, records:
     else ids.push(record.id);
   }
   return { action: action.id, ids, skipped };
+}
+
+/** A change the reader confirmed on its card: which action, how many records it changed, and their ids. */
+export interface ActionConfirmation<Id extends string = string> {
+  action: Id;
+  count: number;
+  ids: string[];
+}
+
+/** The page's one-shot mark: set on Confirm, read once by the next request, then gone. */
+export interface ConfirmationMark<Id extends string = string> {
+  /** Marks the request about to carry the reader's confirmation. */
+  mark: (confirmation: ActionConfirmation<Id>) => void;
+  /** The mark for this request, cleared as it is read, or null when the message was not a card's Confirm. */
+  take: () => ActionConfirmation<Id> | null;
+}
+
+/** A holder for the confirmation mark. Keep one per chat (a ref or a module value); the transport calls `take` in `getContext`. */
+export function createConfirmationMark<Id extends string = string>(): ConfirmationMark<Id> {
+  let pending: ActionConfirmation<Id> | null = null;
+  return {
+    mark: (confirmation) => {
+      pending = confirmation;
+    },
+    take: () => {
+      const confirmation = pending;
+      pending = null;
+      return confirmation;
+    },
+  };
+}
+
+export interface SanitiseConfirmationOptions {
+  /** The actions a confirmation may name, by id. */
+  actions: Record<string, ChatAction<never, unknown>> | readonly string[];
+  /** Whether an id is a real record. Ids that are not are dropped. */
+  isId: (id: string) => boolean;
+  /** The most records one confirmation can change. */
+  maxCount: number;
+  /** The most ids kept. Defaults to 50. */
+  maxIds?: number;
+}
+
+/** The confirmation a request claims, rebuilt as untrusted input: a known action, a count in range, real ids only. Null for none. */
+export function sanitiseConfirmation(value: unknown, { actions, isId, maxCount, maxIds = 50 }: SanitiseConfirmationOptions): ActionConfirmation | null {
+  const { action, count, ids } = (value ?? {}) as Record<string, unknown>;
+  const known = Array.isArray(actions) ? actions : Object.keys(actions);
+  if (typeof action !== 'string' || !known.includes(action)) return null;
+  if (typeof count !== 'number' || !Number.isFinite(count) || count < 1 || count > maxCount) return null;
+  const kept = Array.isArray(ids) ? ids.filter((id): id is string => typeof id === 'string' && isId(id)) : [];
+  return { action, count: Math.floor(count), ids: [...new Set(kept)].slice(0, maxIds) };
+}
+
+export interface ConfirmationLineOptions {
+  /** The actions a confirmation may name, by id, for the words that say what was done. */
+  actions: Record<string, Pick<ChatAction<never, unknown>, 'done'>>;
+  /** The records' noun for a count: "order" for one, "orders" for more. */
+  noun: (count: number) => string;
+  /** The locale the count is written in. */
+  locale?: string;
+}
+
+/**
+ * The line that tells the model whether this message was a card's Confirm, so
+ * it says a change is made only when it was.
+ */
+export function confirmationLine(
+  confirmation: ActionConfirmation | null,
+  { actions, noun, locale = DEFAULT_LOCALE }: ConfirmationLineOptions
+): string {
+  const action = confirmation ? actions[confirmation.action] : undefined;
+  if (!confirmation || !action) return 'This message was not confirmed on a card. Nothing it says has changed anything.';
+  return `This message was confirmed on its card: ${confirmation.count.toLocaleString(locale)} ${noun(confirmation.count)} ${action.done}. The change is made.`;
 }
 
 /** "2 already shipped, 1 cancelled": the records a plan leaves alone, in words, its counts in `locale`. */

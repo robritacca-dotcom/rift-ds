@@ -41,6 +41,9 @@ import { useOrderEdits } from "./orderEdits";
 import { ORDER_ACTIONS, readoutFor, skippedText, theseOrders, type ActionPlan, type ActionReadout } from "@/lib/order-actions";
 import styles from "./MerchantSales.module.css";
 
+/* As many of a confirmed change's ids as its request carries, for the server to say what could be done next. */
+const MAX_CONFIRMED_IDS = 500;
+
 /* The latest changes the chat is told about; older ones are already in the edits it is sent. */
 const MAX_LOGGED = 10;
 
@@ -180,7 +183,7 @@ function OrderActionCard({ id, action, ids, skipped }: ActionPlan & { id: string
         /* The confirmation is the reader's own message, so the reply answers it, opening with the readout. */
         changes?.stageReadout(readout);
         /* The request says this message was confirmed on its card; a typed "yes" never is. */
-        markConfirmation({ action, count: now.ids.length });
+        markConfirmation({ action, count: now.ids.length, ids: now.ids.slice(0, MAX_CONFIRMED_IDS) });
         send(definition.confirm(theseOrders(now.ids.length)));
       }}
       onDismiss={() => setCard(id, { status: "cancelled" })}

@@ -9,9 +9,9 @@
  */
 
 import { COLUMN_KEYS, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
-import { MERCHANT_KPIS } from "@/data/merchant-sales";
-import { ORDER_ACTION_IDS, withEdit, type OrderActionId } from "./order-actions";
-import { currentLedgerEdits } from "./order-ledger-tools";
+import { MERCHANT_KPIS, computeKpis } from "@/data/merchant-sales";
+import { ORDER_ACTIONS, ORDER_ACTION_IDS, planAction, skippedText, withEdit, type OrderActionId } from "./order-actions";
+import { currentLedgerEdits, currentRows } from "./order-ledger-tools";
 
 /* Sized for the page's edits, which ride the same string: every other field is cut to length on its own below. */
 const MAX_CONTEXT_CHARS = 2_000_000;
@@ -82,7 +82,9 @@ export function sanitiseFocus(value: unknown): Record<string, unknown> | null {
   }
   if (focus.kind === "text" && typeof focus.text === "string" && focus.text.trim()) {
     /* The source is looked up here, never taken from the browser's words: a KPI by its label, a cell by its order and column. */
-    const kpi = MERCHANT_KPIS.find((item) => item.label === focus.kpi);
+    /* The figure as the band now shows it, edits included. */
+    const band = Object.keys(currentLedgerEdits()).length ? computeKpis(currentRows()) : MERCHANT_KPIS;
+    const kpi = band.find((item) => item.label === focus.kpi);
     const orderId = !kpi && isOrderId(focus.orderId) ? focus.orderId : null;
     const row = orderId ? orderById(orderId)!.values : null;
     const column = row && isKey(focus.column) ? focus.column : null;
@@ -128,9 +130,27 @@ function sanitiseChanges(value: unknown) {
 
 /* Set only on the message a card's Confirm sends; a typed "yes" has none. */
 function sanitiseConfirmation(value: unknown) {
-  const { action, count } = (value ?? {}) as Record<string, unknown>;
+  const { action, count, ids } = (value ?? {}) as Record<string, unknown>;
   if (!ORDER_ACTION_IDS.includes(action as OrderActionId) || typeof count !== "number" || count < 1 || count > ROW_COUNT) return null;
-  return { action, count: Math.floor(count) };
+  return { action, count: Math.floor(count), ids: Array.isArray(ids) ? [...new Set(ids.slice(0, MAX_FOCUS_IDS).filter(isOrderId))] : [] };
+}
+
+/**
+ * What each action would do to these orders now, edits included: the dry run
+ * for every one, so the model offers a next change only when it would change
+ * something, never a refund of orders a cancellation already refunded.
+ */
+export function nextStepsLine(ids: string[]): string | null {
+  const orders = ids.flatMap((id) => {
+    const order = orderById(id);
+    return order ? [{ id, values: order.values }] : [];
+  });
+  if (!orders.length) return null;
+  return ORDER_ACTION_IDS.map((action) => {
+    const plan = planAction(action, orders);
+    const skipped = skippedText(plan.skipped);
+    return `${ORDER_ACTIONS[action].label}: would change ${plan.ids.length}${skipped ? `, leaving alone ${skipped}` : ""}`;
+  }).join("; ");
 }
 
 /** The table's setup and the reader's focus as the browser sent them, rebuilt from known fields: they land in the prompt. */
@@ -164,6 +184,8 @@ export function sanitiseTableContext(value: unknown): string | null {
     density: view.size === "compact" ? "compact" : "default",
     focus: sanitiseFocus(view.focus),
     editedOrders: Object.keys(currentLedgerEdits()).length,
+    /* The band as it now reads on the page, once the reader has changed anything: the same function draws it there. */
+    kpis: Object.keys(currentLedgerEdits()).length ? computeKpis(currentRows()).map(({ label, value, delta }) => ({ label, value, delta })) : null,
     changes: sanitiseChanges(view.changes),
     confirmation: sanitiseConfirmation(view.confirmation),
   });

@@ -20,7 +20,7 @@
  * (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { CHAT_SOURCE_ATTRIBUTE, useChatAgentState, useChatWidget, useSelectionFocus } from "rift-ds/chat";
@@ -35,7 +35,8 @@ import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import { MerchantChatProvider, MerchantChatWidget, useToastsClearOfPanel, type TableBridge } from "./MerchantChat";
 import { highlightRanges, useChatFocus, type ChatFocus } from "./chatFocus";
 import { OrderEditsProvider, useOrderEdits } from "./orderEdits";
-import { ORDER_ACTIONS, skippedText, type OrderActionId } from "@/lib/order-actions";
+import { ORDER_ACTIONS, skippedText, withEdit, type ActionPlan, type OrderActionId } from "@/lib/order-actions";
+import { AlertDialog } from "rift-ds/components/AlertDialog/AlertDialog";
 import { useToast } from "rift-ds/components/Toast/Toast";
 import type { TableToolbarSelection } from "rift-ds/components/TableToolbar/TableToolbar";
 import { MOTION_ACTION_DISMISS_MS } from "rift-ds/tokens/motion";
@@ -43,8 +44,9 @@ import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
 import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
-import { MERCHANT_KPIS } from "@/data/merchant-sales";
-import { COLUMN_KEYS } from "@/data/order-ledger";
+import { MERCHANT_KPIS, MERCHANT_OPENING_FILTER, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS, computeKpis } from "@/data/merchant-sales";
+import { nextView } from "@/lib/order-ledger-view";
+import { COLUMN_KEYS, ledgerRows } from "@/data/order-ledger";
 import OrdersTable from "./OrdersTable";
 
 /* ---------------------------------------------------------------- data */
@@ -159,6 +161,9 @@ function usePageFocus(bridge: React.RefObject<TableBridge | null>) {
   );
 }
 
+/* The table's bridge, read at the moment of an event: a ref, so never during render. */
+const tableOf = (bridge: React.RefObject<TableBridge | null>) => bridge.current;
+
 /* ---------------------------------------------------------------- page */
 
 export default function MerchantSales() {
@@ -177,24 +182,23 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
   const agentState = useChatAgentState();
   useToastsClearOfPanel();
   const onRowSelection = usePageFocus(bridge);
-  const { setPageView } = useChatFocus();
+  const { setPageView, setFocus } = useChatFocus();
   /* Opening is all the ask takes: the focus is already the chat's. */
   const ask = useCallback(() => setOpen(true), [setOpen]);
 
-  /* The bar's order actions: a click is the reader's own instruction, so it applies at once, with the toast's Undo as the way back. */
+  /* The bar's order actions: a click is the reader's own instruction, so fulfilling applies at once with the toast's Undo as the way back; a change that takes something away (a cancellation, a refund) confirms first. */
   const { edits, plan, run, reset } = useOrderEdits();
+  /* The band as the reader has made it: worked out from the edited ledger once anything is changed, the pinned figures before (computeKpis gives them exactly). */
+  const kpis = useMemo(() => {
+    if (!Object.keys(edits).length) return MERCHANT_KPIS;
+    return computeKpis(ledgerRows().map((row) => (edits[row.id] ? { ...row, values: withEdit(row.values, edits[row.id]) } : row)));
+  }, [edits]);
   const { toast, dismiss } = useToast();
-  const onAction = useCallback(
-    (id: OrderActionId, selection: TableToolbarSelection) => {
-      const except = new Set(selection.except);
-      const ids = selection.allMatching ? (bridge.current?.matchingIds ?? []).filter((orderId) => !except.has(orderId)) : selection.ids;
-      const action = ORDER_ACTIONS[id];
-      const next = plan(id, ids);
+  const [pending, setPending] = useState<ActionPlan | null>(null);
+  const apply = useCallback(
+    (next: ActionPlan) => {
+      const action = ORDER_ACTIONS[next.action];
       const skipped = skippedText(next.skipped);
-      if (!next.ids.length) {
-        toast({ variant: "info", description: `None of these can be ${action.done}: ${skipped}.`, duration: MOTION_ACTION_DISMISS_MS });
-        return;
-      }
       const undo = run(next, "bar");
       const count = next.ids.length.toLocaleString("en-US");
       const toastId = toast({
@@ -216,8 +220,45 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
         ),
       });
     },
-    [bridge, plan, run, toast, dismiss],
+    [run, toast, dismiss],
   );
+  const onAction = useCallback(
+    (id: OrderActionId, selection: TableToolbarSelection) => {
+      const except = new Set(selection.except);
+      const ids = selection.allMatching ? (tableOf(bridge)?.matchingIds ?? []).filter((orderId) => !except.has(orderId)) : selection.ids;
+      const action = ORDER_ACTIONS[id];
+      const next = plan(id, ids);
+      if (!next.ids.length) {
+        toast({ variant: "info", description: `None of these can be ${action.done}: ${skippedText(next.skipped)}.`, duration: MOTION_ACTION_DISMISS_MS });
+        return;
+      }
+      if (action.destructive) setPending(next);
+      else apply(next);
+    },
+    [bridge, plan, apply, toast],
+  );
+  /* Reset starts the demo over: the edits, and the table, selection and focus they left behind (a filter to the changed orders, say). */
+  const resetDemo = useCallback(() => {
+    reset();
+    setFocus(null);
+    const table = tableOf(bridge);
+    if (!table) return;
+    table.setSelectedIds([]);
+    table.applyView(
+      nextView(table.view, {
+        search: "",
+        filters: [MERCHANT_OPENING_FILTER],
+        sorts: [MERCHANT_OPENING_SORT],
+        visibleColumns: MERCHANT_SHOWN_COLUMNS,
+        pinnedColumns: ["orderId"],
+        grouping: [],
+        density: "default",
+      }),
+    );
+  }, [reset, setFocus, bridge]);
+  const pendingAction = pending && ORDER_ACTIONS[pending.action];
+  const pendingCount = pending ? `${pending.ids.length.toLocaleString("en-US")} ${pending.ids.length === 1 ? "order" : "orders"}` : "";
+  const pendingSkipped = pending ? skippedText(pending.skipped) : "";
   /* Closing hands focus back to whatever opened it, as the launcher does. */
   useEffect(() => {
     if (!open) returnFocusRef.current?.focus();
@@ -317,7 +358,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
             <div className={styles.headActions}>
               {/* The demo's edits live for the visit; this starts it over without a reload. */}
               {Object.keys(edits).length > 0 && (
-                <Button variant="tertiary" size="compact" label="Reset demo data" iconLeft="restart_alt" onClick={reset} />
+                <Button variant="tertiary" size="compact" label="Reset demo data" iconLeft="restart_alt" onClick={resetDemo} />
               )}
               <Button
                 variant="secondary"
@@ -336,7 +377,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
 
           {/* -------------------------------------------- the month */}
           <section className={styles.kpiGrid} aria-label="October against September">
-            {MERCHANT_KPIS.map((kpi) => (
+            {kpis.map((kpi) => (
               /* data-chat-source (CHAT_SOURCE_ATTRIBUTE) names the figure a highlight inside the card is about. */
               <div key={kpi.label} className={styles.kpi} data-chat-source={kpi.label}>
                 <span className={styles.kpiIcon} aria-hidden="true">
@@ -359,6 +400,21 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
           <section className={styles.tableSection} aria-label="Orders">
             <OrdersTable bridge={bridge} onSelectionChange={onRowSelection} onPageView={setPageView} onAsk={ask} edits={edits} onAction={onAction} />
           </section>
+
+          {/* A cancellation or a refund from the bar confirms first, naming what changes and what it leaves alone. */}
+          <AlertDialog
+            open={pending !== null}
+            onOpenChange={(open) => !open && setPending(null)}
+            title={pendingAction ? `${pendingAction.label}: ${pendingCount}?` : ""}
+            description={`${pendingSkipped ? `Left as they are: ${pendingSkipped}. ` : ""}You can undo this from the notice that follows.`}
+            confirmLabel={pendingAction?.label}
+            cancelLabel="Keep them"
+            tone="destructive"
+            onConfirm={() => {
+              if (pending) apply(pending);
+              setPending(null);
+            }}
+          />
     </TemplateShell>
   );
 }

@@ -55,6 +55,7 @@ storybook-static
 # Chat eval transcripts — evidence, not source
 evals/chat/runs/
 evals/chat-starters/runs/
+evals/merchant-chat/runs/
 # Chat-quality loop local reports (never committed — they quote visitor questions)
 evals/chat/loop-reports/
 

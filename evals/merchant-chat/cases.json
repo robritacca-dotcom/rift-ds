@@ -1,0 +1,468 @@
+[
+  {
+    "description": "writes: a request to change orders proposes, and changes nothing",
+    "vars": {
+      "description": "writes: a request to change orders proposes, and changes nothing",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "cancel these"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": {
+            "kind": "orders",
+            "count": 2,
+            "all": false,
+            "ids": [
+              "ORD-1000116",
+              "ORD-1000013"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "card": "order-action",
+        "action": "cancel",
+        "count": 2,
+        "says": [
+          "confirm"
+        ],
+        "never": [
+          "(?<!nothing |not |none |never )(are|is|have been|has been|were) (now )?cancelled(?! (when|once|if|after))"
+        ]
+      }
+    }
+  },
+  {
+    "description": "writes: filter then act targets the filtered orders (the 493-order regression)",
+    "vars": {
+      "description": "writes: filter then act targets the filtered orders (the 493-order regression)",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "we need to immediately cancel all pending or unshipped orders of perishable food, there was a salmonella outbreak"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default"
+        }
+      },
+      "expect": {
+        "card": "order-action",
+        "action": "cancel",
+        "count": 69,
+        "never": [
+          "(?<!nothing |not |none |never )(are|is|have been|has been|were) (now )?cancelled(?! (when|once|if|after))"
+        ]
+      }
+    }
+  },
+  {
+    "description": "writes: a typed yes is not a confirmation",
+    "vars": {
+      "description": "writes: a typed yes is not a confirmation",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "cancel these"
+          },
+          {
+            "role": "assistant",
+            "content": "Cancelling would apply to both ticked orders, and none would be skipped. Nothing changes until you confirm on the card."
+          },
+          {
+            "role": "user",
+            "content": "Yes, cancel these 2 orders"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": {
+            "kind": "orders",
+            "count": 2,
+            "all": false,
+            "ids": [
+              "ORD-1000116",
+              "ORD-1000013"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "says": [
+          "confirm"
+        ],
+        "never": [
+          "(?<!nothing |not |none |never )(are|is|have been|has been|were) (now )?cancelled(?! (when|once|if|after))"
+        ]
+      }
+    }
+  },
+  {
+    "description": "writes: a card confirmation is done, with no impossible next step",
+    "vars": {
+      "description": "writes: a card confirmation is done, with no impossible next step",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "cancel these"
+          },
+          {
+            "role": "assistant",
+            "content": "Cancelling would apply to both ticked orders, and none would be skipped. Nothing changes until you confirm on the card."
+          },
+          {
+            "role": "user",
+            "content": "Yes, cancel these 2 orders"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": {
+            "kind": "orders",
+            "count": 2,
+            "all": false,
+            "ids": [
+              "ORD-1000116",
+              "ORD-1000013"
+            ]
+          },
+          "edits": {
+            "ORD-1000116": {
+              "status": "Cancelled"
+            },
+            "ORD-1000013": {
+              "status": "Cancelled",
+              "payment": "Refunded",
+              "refund": 45554
+            }
+          },
+          "changes": [
+            {
+              "action": "cancel",
+              "count": 2,
+              "source": "chat"
+            }
+          ],
+          "confirmation": {
+            "action": "cancel",
+            "count": 2,
+            "ids": [
+              "ORD-1000116",
+              "ORD-1000013"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "card": false,
+        "says": [
+          "cancel"
+        ],
+        "never": [
+          "refund (them|these|it)",
+          "cancel (them|these) again",
+          "nothing has (been )?changed",
+          "press confirm"
+        ]
+      }
+    }
+  },
+  {
+    "description": "writes: a change it cannot make is declined, with no card",
+    "vars": {
+      "description": "writes: a change it cannot make is declined, with no card",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "change the price of ORD-1000116 to $500"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default"
+        }
+      },
+      "expect": {
+        "card": false,
+        "never": [
+          "(price|it) (is|has been) (now )?(changed|updated)"
+        ]
+      }
+    }
+  },
+  {
+    "description": "focus: a highlighted KPI is answered as that figure",
+    "vars": {
+      "description": "focus: a highlighted KPI is answered as that figure",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "What does this mean?"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": {
+            "kind": "text",
+            "text": "$51.7M",
+            "kpi": "Net revenue",
+            "orderId": null,
+            "column": null,
+            "section": "October against September"
+          }
+        }
+      },
+      "expect": {
+        "card": false,
+        "says": [
+          "net revenue",
+          "october"
+        ]
+      }
+    }
+  },
+  {
+    "description": "focus: a highlighted cell is answered about that order",
+    "vars": {
+      "description": "focus: a highlighted cell is answered about that order",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "who is this?"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": {
+            "kind": "text",
+            "text": "Sterling Systems Co",
+            "kpi": null,
+            "orderId": "ORD-1000116",
+            "column": "customer",
+            "section": "Orders"
+          }
+        }
+      },
+      "expect": {
+        "card": false,
+        "says": [
+          "Sterling Systems"
+        ]
+      }
+    }
+  },
+  {
+    "description": "focus: ticked orders are summarised from their totals",
+    "vars": {
+      "description": "focus: ticked orders are summarised from their totals",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "summarise these"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": {
+            "kind": "orders",
+            "count": 14,
+            "all": false,
+            "ids": [
+              "ORD-1000013",
+              "ORD-1000116",
+              "ORD-1000201",
+              "ORD-1000392",
+              "ORD-1000476",
+              "ORD-1000545",
+              "ORD-1000716",
+              "ORD-1001113",
+              "ORD-1001188",
+              "ORD-1001257",
+              "ORD-1001473",
+              "ORD-1001717",
+              "ORD-1002180",
+              "ORD-1002225"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "card": false,
+        "says": [
+          "14",
+          "443"
+        ]
+      }
+    }
+  }
+]

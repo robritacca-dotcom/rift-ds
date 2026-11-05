@@ -108,6 +108,8 @@ npm run build-storybook # export static Storybook
 npm run test            # every Storybook story as a render, axe and interaction test (headless Chromium)
 npm run verify          # the full local quality gate, mirroring CI
 npm run eval:chat       # site-chat answer-quality eval against a running dev server (real API calls, never in CI)
+npm run eval:starters   # the generated starter chips held neutral and broad, against a running dev server (real API calls, never in CI)
+npm run eval:merchant   # the merchant assistant's focus and write tools, against a running dev server (real API calls, never in CI)
 npm run registry-downloads # print the shadcn registry's download tally (read-only; needs KV credentials)
 npm run graph           # regenerate the /graph data; `-- tree <name>` / `-- who-uses <name>` trace dependencies
 ```

@@ -1,0 +1,23 @@
+# The merchant sales assistant's focus and write-tool behaviour, through the
+# real route (/api/merchant-chat): the prompt, the tools, the focus and edits
+# rebuilt from the ledger, together. See README.md for how to run and read it.
+description: merchant sales assistant through /api/merchant-chat
+
+prompts:
+  - '{{description}}'
+
+providers:
+  - id: file://provider.mjs
+    label: merchant-chat-route
+
+# Three runs per case: the replies are sampled, so report a rate, not a pass.
+evaluateOptions:
+  repeat: 3
+  maxConcurrency: 2
+
+defaultTest:
+  assert:
+    - type: javascript
+      value: file://assert-merchant.mjs
+
+tests: file://cases.json

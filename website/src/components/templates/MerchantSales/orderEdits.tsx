@@ -19,7 +19,7 @@ import { editsFor, planAction, withEdit, type ActionPlan, type ChangeLogEntry, t
 let byId: Map<string, Record<string, unknown>> | null = null;
 const baseValues = (id: string) => (byId ??= new Map(ledgerRows().map((row) => [row.id, row.values]))).get(id);
 
-export type Confirmation = { action: OrderActionId; count: number };
+export type Confirmation = { action: OrderActionId; count: number; ids: string[] };
 
 export type CardState = { status: "confirmed"; undo: () => void } | { status: "cancelled" } | { status: "undone" };
 
@@ -92,11 +92,15 @@ export function OrderEditsProvider({ children }: { children: React.ReactNode }) 
     (next: ActionPlan, source: ChangeLogEntry["source"]) => {
       const before = editsRef.current;
       logRef.current = [...logRef.current, { action: next.action, count: next.ids.length, source }];
-      setEdits({ ...before, ...editsFor(next, (id) => withEdit(baseValues(id) ?? {}, before[id]), before) });
-      /* Undo puts back exactly the orders this change touched, leaving later changes to other orders alone. */
+      const written = editsFor(next, (id) => withEdit(baseValues(id) ?? {}, before[id]), before);
+      setEdits({ ...before, ...written });
+      /* Undo puts back the orders this change touched that still hold what it wrote. One a later
+         change has changed again belongs to that change now, so undoing this one leaves it be,
+         rather than quietly reverting the later change too. */
       return () => {
         const current = { ...editsRef.current };
         for (const id of next.ids) {
+          if (JSON.stringify(current[id]) !== JSON.stringify(written[id])) continue;
           if (before[id]) current[id] = before[id];
           else delete current[id];
         }

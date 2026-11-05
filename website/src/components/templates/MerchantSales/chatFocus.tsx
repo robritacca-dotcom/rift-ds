@@ -16,9 +16,8 @@
  */
 
 import React from "react";
-import type { Starter } from "rift-ds/chat";
+import { useGeneratedStarters, useHeldHighlight, type Starter } from "rift-ds/chat";
 import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
-import { MOTION_SELECTION_SETTLE_MS } from "rift-ds/tokens/motion";
 import { LEDGER_COLUMNS } from "@/data/order-ledger";
 import { MERCHANT_KPIS } from "@/data/merchant-sales";
 import type { TableContextValue } from "../../../../../src/components/DataTable/tableContext";
@@ -44,21 +43,12 @@ const headerOf = (key: string) => HEADERS.get(key) ?? key;
 /**
  * The page range each highlight focus was read from. Typing moves the browser's
  * selection into the composer and the page's highlight goes with it, so the chat
- * repaints the range itself, through the CSS Custom Highlight API, for as long as
- * it is the focus: the reader keeps seeing what they asked about, in the quieter
- * colour of `::highlight(chat-focus)`. Keyed by the focus, so a sent chip that
+ * repaints the range itself (the library's useHeldHighlight), for as long as it is
+ * the focus: the reader keeps seeing what they asked about, in the context note's
+ * own fill. Keyed by the focus, so a sent chip that
  * brings a highlight back repaints it too, while the page still holds that text.
  */
 export const highlightRanges = new WeakMap<ChatFocus, Range>();
-
-const HIGHLIGHT = "chat-focus";
-
-function paintHighlight(focus: ChatFocus | null) {
-  if (typeof CSS === "undefined" || !("highlights" in CSS)) return;
-  const range = focus ? highlightRanges.get(focus) : undefined;
-  if (range && range.startContainer.isConnected) CSS.highlights.set(HIGHLIGHT, new Highlight(range));
-  else CSS.highlights.delete(HIGHLIGHT);
-}
 
 /* ------------------------------------------------------------- state */
 
@@ -116,10 +106,7 @@ export function ChatFocusProvider({
     },
     [bridge, setFocus],
   );
-  React.useEffect(() => {
-    paintHighlight(focus);
-    return () => paintHighlight(null);
-  }, [focus]);
+  useHeldHighlight(focus ? (highlightRanges.get(focus) ?? null) : null);
   const value = React.useMemo(
     () => ({ focus, getFocus, setFocus, pageView, setPageView, restore }),
     [focus, getFocus, setFocus, pageView, setPageView, restore],
@@ -234,59 +221,15 @@ export function focusForRequest(focus: ChatFocus | null) {
 
 /* ----------------------------------------------- generated starters */
 
-/* Per focus, for the session: pointing back at something shows its chips at once, and asks nothing twice. */
-const writtenStarters = new Map<string, Starter[]>();
-
 /**
- * The welcome chips for the focus, written by /api/merchant-chat/starters from
- * the focus's own data. Asked only while the welcome screen shows (`active`),
- * once the selection settles, so a drag across text asks once; a newer focus
- * cancels the older ask. `pending` holds the widget's shimmer meanwhile, and the
- * written chips stand in when nothing comes back.
+ * The welcome chips for the focus, written by /api/merchant-chat/starters
+ * through the library's useGeneratedStarters: asked while the welcome screen
+ * shows, once the selection settles, with the written chips standing in.
  */
-export function useFocusStarters(focus: ChatFocus | null, active: boolean): { starters: Starter[] | null; pending: boolean; key: string | null } {
+export function useFocusStarters(focus: ChatFocus | null, active: boolean) {
   const request = focus ? JSON.stringify({ focus: focusForRequest(focus) }) : null;
-  const [settled, setSettled] = React.useState<{ request: string; starters: Starter[] } | null>(null);
-  const cached = request ? writtenStarters.get(request) : undefined;
-
-  React.useEffect(() => {
-    if (!active || !request || !focus || writtenStarters.has(request)) return;
-    const controller = new AbortController();
-    const timer = setTimeout(async () => {
-      let suggestions: string[] = [];
-      try {
-        const response = await fetch("/api/merchant-chat/starters", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ context: request }),
-          signal: controller.signal,
-        });
-        suggestions = response.ok ? ((await response.json()) as { suggestions?: string[] }).suggestions ?? [] : [];
-      } catch {
-        if (controller.signal.aborted) return;
-      }
-      const starters = suggestions.length
-        ? suggestions.map((label, index) => ({ id: `generated-${index}`, label }))
-        : focusStarters(focus);
-      writtenStarters.set(request, starters);
-      setSettled({ request, starters });
-    }, MOTION_SELECTION_SETTLE_MS);
-    return () => {
-      clearTimeout(timer);
-      controller.abort();
-    };
-  }, [active, request, focus]);
-
-  if (!focus || !request) return { starters: null, pending: false, key: null };
-  const starters = cached ?? (settled?.request === request ? settled.starters : null);
-  return { starters: starters ?? focusStarters(focus), pending: active && !starters, key: `focus-${hashOf(request)}` };
-}
-
-/* A short, stable key for a focus, for the widget's reveal memory. */
-function hashOf(text: string) {
-  let hash = 0;
-  for (let index = 0; index < text.length; index += 1) hash = (hash * 31 + text.charCodeAt(index)) | 0;
-  return (hash >>> 0).toString(36);
+  const fallback = React.useMemo(() => (focus ? focusStarters(focus) : []), [focus]);
+  return useGeneratedStarters(request, { endpoint: "/api/merchant-chat/starters", active, fallback });
 }
 
 /* ---------------------------------------------------------- the chip */

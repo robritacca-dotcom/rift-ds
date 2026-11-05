@@ -92,15 +92,17 @@ const SUBPATHS = [
   // never stealing Escape from an open overlay). Consumers bind keys with
   // it, so it is published; design.md's Components intro owns the contract.
   { key: './behaviors/shortcuts', srcJs: './src/behaviors/shortcuts.ts', dist: './behaviors/shortcuts' },
-  // The chat widget: the composed chat as one installable thing, in four
+  // The chat widget: the composed chat as one installable thing, in five
   // subpaths so the main barrel never pulls a peer a consumer did not ask
   // for. `./chat` needs react-markdown and remark-gfm, `./chat/server` the
-  // Anthropic SDK, `./chat/upstash` the two Upstash packages, and
+  // Anthropic SDK, `./chat/actions` nothing (the action definitions a page and its
+  // route share, so neither drags in the other's dependencies), `./chat/upstash` the two Upstash packages, and
   // `./chat/demo` recharts (every one an optional peer). The stylesheet is
   // an asset like the token files. src/chat/registry.json names the same
   // subpaths, and scripts/validate-chat-widget.mjs holds the two together.
   { key: './chat', srcJs: './src/chat/index.ts', dist: './chat/index' },
   { key: './chat/server', srcJs: './src/chat/server.ts', dist: './chat/server' },
+  { key: './chat/actions', srcJs: './src/chat/actions.ts', dist: './chat/actions' },
   { key: './chat/upstash', srcJs: './src/chat/upstash.ts', dist: './chat/upstash' },
   { key: './chat/demo', srcJs: './src/chat/demo.ts', dist: './chat/demo' },
   { key: './chat/chat.css', asset: './src/chat/ChatWidget.css', dist: './chat/ChatWidget.css' },

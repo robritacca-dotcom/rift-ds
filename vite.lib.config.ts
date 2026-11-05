@@ -53,6 +53,7 @@ export default defineConfig({
         // the list; each carries its own optional peers, externalised below).
         'chat/index': 'src/chat/index.ts',
         'chat/server': 'src/chat/server.ts',
+        'chat/actions': 'src/chat/actions.ts',
         'chat/upstash': 'src/chat/upstash.ts',
         'chat/demo': 'src/chat/demo.ts',
         'tokens/registry': 'src/tokens/registry.ts',

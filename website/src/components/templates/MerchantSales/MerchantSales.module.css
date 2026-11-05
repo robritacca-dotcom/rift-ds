@@ -223,76 +223,7 @@
   gap: var(--gap-200);
 }
 
-/* A change the assistant proposed, waiting on the reader: the receipt's
-   chrome, with what it leaves alone under its title. */
-.actionCard {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--gap-200);
-  padding: var(--padding-300);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-400);
-}
-
-.actionTitle {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-200);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  color: var(--color-text-primary);
-}
-
-.actionTitle :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-500);
-}
-
-.actionSkipped {
-  color: var(--color-text-secondary);
-}
-
-/* What a confirmed change did: the headline over a two-column list of facts. */
-.readout {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-200);
-  padding: var(--padding-300);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-400);
-}
-
-.readoutFacts {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  column-gap: var(--gap-400);
-  row-gap: var(--gap-100);
-  margin: 0;
-  font-family: var(--font-paragraph-sm-family);
-  font-size: var(--font-paragraph-sm-size);
-  line-height: var(--font-paragraph-sm-line-height);
-}
-
-.readoutFacts dt {
-  color: var(--color-text-secondary);
-}
-
-.readoutFacts dd {
-  margin: 0;
-  color: var(--color-text-primary);
-}
-
 /* ------------------------------------------------------ the chat's focus */
-
-/* The highlight the chat is looking at, repainted by chatFocus.tsx once
-   typing in the composer takes the browser's selection away: quieter than a
-   live selection, so it reads as held rather than active. */
-.content :global(::highlight(chat-focus)) {
-  background-color: var(--color-table-row-selected-bg);
-  color: var(--color-text-primary);
-}
 
 /* A row an answer named, or a sent chip pointed back at: one pulse of the
    selected fill, removed when it ends. */

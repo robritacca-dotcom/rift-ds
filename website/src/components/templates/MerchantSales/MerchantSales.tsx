@@ -23,7 +23,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
-import { useChatAgentState, useChatWidget } from "rift-ds/chat";
+import { CHAT_SOURCE_ATTRIBUTE, useChatAgentState, useChatWidget, useSelectionFocus } from "rift-ds/chat";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
@@ -106,12 +106,10 @@ const CHAT_STARTERS = [
 /* Highlighted text past this is a passage, not a phrase; the note and the request carry its start. */
 const MAX_HIGHLIGHT = 300;
 
-const elementOf = (node: Node | null) => (node instanceof Element ? node : node?.parentElement ?? null);
-
 /**
  * Hands the chat whatever the reader last put in front of it on the page: ticked
  * rows, or a highlighted passage. A highlight is read for where it came from, the
- * smallest thing that holds all of it: a KPI card (data-kpi), a cell (the table's
+ * smallest thing that holds all of it: a KPI card (data-chat-source), a cell (the table's
  * data-row and data-col), a row, or else the section around it. The server looks
  * that source up, so "$51.7M" arrives as the Net revenue figure and its
  * definition, not as a bare number. A selection anywhere else, the chat's own
@@ -121,39 +119,32 @@ const elementOf = (node: Node | null) => (node instanceof Element ? node : node?
 function usePageFocus(bridge: React.RefObject<TableBridge | null>) {
   const { getFocus, setFocus } = useChatFocus();
 
+  /* The page, never the chat's panel: TemplateShell draws it, so it is found once mounted. */
+  const page = useRef<Element | null>(null);
   useEffect(() => {
-    const pageOf = (node: Node | null) => elementOf(node)?.closest(`.${CSS.escape(styles.content)}`) ?? null;
-    const onSelectionChange = () => {
-      const selection = document.getSelection();
-      const page = selection && pageOf(selection.anchorNode);
-      if (!selection || !page) return;
-      const range = selection.rangeCount ? selection.getRangeAt(0) : null;
-      /* An icon's ligature name ("payments") is text to the selection but never words on the page. */
-      const icons = range ? [...page.querySelectorAll(".material-symbols-rounded")].filter((icon) => range.intersectsNode(icon)) : [];
-      const words = icons.reduce((rest, icon) => rest.replace(icon.textContent ?? "", " "), selection.toString());
-      const text = words.replace(/\s+/g, " ").trim();
-      if (!range || selection.isCollapsed || !text) {
-        if (getFocus()?.kind === "text") setFocus(null);
-        return;
-      }
-      const holder = elementOf(range.commonAncestorContainer);
-      const row = holder?.closest<HTMLElement>("tbody tr[data-row]");
-      const column = holder?.closest<HTMLElement>("[data-col]")?.dataset.col;
-      const focus: ChatFocus = {
-        kind: "text",
-        text: text.slice(0, MAX_HIGHLIGHT),
-        kpi: holder?.closest<HTMLElement>("[data-kpi]")?.dataset.kpi ?? null,
-        orderId: row?.dataset.row ?? null,
-        column: row && column && COLUMN_KEYS.includes(column) ? column : null,
-        section: holder?.closest("[aria-label]")?.getAttribute("aria-label") ?? null,
-      };
-      /* Kept so the chat can repaint the highlight once typing takes the selection away. */
-      highlightRanges.set(focus, range.cloneRange());
-      setFocus(focus);
+    page.current = document.querySelector(`.${CSS.escape(styles.content)}`);
+  }, []);
+
+  useSelectionFocus(page, (selected) => {
+    if (!selected) {
+      if (getFocus()?.kind === "text") setFocus(null);
+      return;
+    }
+    const { holder } = selected;
+    const row = holder.closest<HTMLElement>("tbody tr[data-row]");
+    const column = holder.closest<HTMLElement>("[data-col]")?.dataset.col;
+    const focus: ChatFocus = {
+      kind: "text",
+      text: selected.text.slice(0, MAX_HIGHLIGHT),
+      kpi: holder.closest(`[${CHAT_SOURCE_ATTRIBUTE}]`)?.getAttribute(CHAT_SOURCE_ATTRIBUTE) ?? null,
+      orderId: row?.dataset.row ?? null,
+      column: row && column && COLUMN_KEYS.includes(column) ? column : null,
+      section: holder.closest("[aria-label]")?.getAttribute("aria-label") ?? null,
     };
-    document.addEventListener("selectionchange", onSelectionChange);
-    return () => document.removeEventListener("selectionchange", onSelectionChange);
-  }, [getFocus, setFocus]);
+    /* Kept so the chat can repaint the highlight once typing takes the selection away. */
+    highlightRanges.set(focus, selected.range);
+    setFocus(focus);
+  });
 
   return useCallback(
     (ids: string[]) => {
@@ -346,8 +337,8 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
           {/* -------------------------------------------- the month */}
           <section className={styles.kpiGrid} aria-label="October against September">
             {MERCHANT_KPIS.map((kpi) => (
-              /* data-kpi names the figure a highlight inside the card is about. */
-              <div key={kpi.label} className={styles.kpi} data-kpi={kpi.label}>
+              /* data-chat-source (CHAT_SOURCE_ATTRIBUTE) names the figure a highlight inside the card is about. */
+              <div key={kpi.label} className={styles.kpi} data-chat-source={kpi.label}>
                 <span className={styles.kpiIcon} aria-hidden="true">
                   <span className="material-symbols-rounded">{kpi.icon}</span>
                 </span>

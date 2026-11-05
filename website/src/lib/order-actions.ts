@@ -11,6 +11,7 @@
  * ledger through them. A reload starts the demo over.
  */
 
+import { defineAction, planAction as planChatAction, skippedText, type ActionPlan as ChatActionPlan, type ChatAction } from "rift-ds/chat/actions";
 import { LEDGER_TODAY } from "@/data/order-ledger";
 
 /** The fields an action may write, and only these. */
@@ -21,27 +22,13 @@ type Values = Record<string, unknown>;
 
 export type OrderActionId = "fulfil" | "cancel" | "refund";
 
-export interface OrderAction {
-  id: OrderActionId;
-  /** The button's words, and the card's title. */
-  label: string;
-  /** What a receipt says was done, as in "23 orders marked fulfilled". */
-  done: string;
-  /** The reader's words when they confirm it in the chat, as in "Yes, cancel these 23 orders". */
-  confirm: (these: string) => string;
-  icon: string;
-  /** Styled as destructive on the card and the bar. */
-  destructive: boolean;
-  /** Why an order is left alone, or null when the action applies to it. */
-  skip: (values: Values) => string | null;
-  /** What the action writes to an order it applies to. */
-  apply: (values: Values) => OrderEdit;
-}
+/** An order action: the library's action (rift-ds/chat/actions), over an order's values, writing an OrderEdit. */
+export type OrderAction = ChatAction<Values, OrderEdit> & { id: OrderActionId };
 
 const NOT_YET_SHIPPED = new Set(["Placed", "Picking"]);
 
 export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
-  fulfil: {
+  fulfil: defineAction<Values, OrderEdit>({
     id: "fulfil",
     label: "Mark fulfilled",
     done: "marked fulfilled",
@@ -51,8 +38,8 @@ export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
     skip: (values) =>
       values.status === "Cancelled" ? "cancelled" : NOT_YET_SHIPPED.has(String(values.status)) ? null : "already shipped",
     apply: () => ({ status: "Shipped", shippedOn: LEDGER_TODAY }),
-  },
-  cancel: {
+  }) as OrderAction,
+  cancel: defineAction<Values, OrderEdit>({
     id: "cancel",
     label: "Cancel orders",
     done: "cancelled",
@@ -62,8 +49,8 @@ export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
     skip: (values) =>
       values.status === "Cancelled" ? "already cancelled" : NOT_YET_SHIPPED.has(String(values.status)) ? null : "already shipped",
     apply: (values) => ({ status: "Cancelled", ...(values.payment === "Paid" ? { payment: "Refunded", refund: Number(values.netRevenue) || 0 } : {}) }),
-  },
-  refund: {
+  }) as OrderAction,
+  refund: defineAction<Values, OrderEdit>({
     id: "refund",
     label: "Refund",
     done: "refunded",
@@ -72,7 +59,7 @@ export const ORDER_ACTIONS: Record<OrderActionId, OrderAction> = {
     destructive: true,
     skip: (values) => (values.payment === "Refunded" ? "already refunded" : values.payment === "Paid" ? null : "not paid"),
     apply: (values) => ({ payment: "Refunded", refund: Number(values.netRevenue) || 0 }),
-  },
+  }) as OrderAction,
 };
 
 export const ORDER_ACTION_IDS = Object.keys(ORDER_ACTIONS) as OrderActionId[];
@@ -80,23 +67,12 @@ export const ORDER_ACTION_IDS = Object.keys(ORDER_ACTIONS) as OrderActionId[];
 /** An order's values with its edit laid over them. */
 export const withEdit = <V extends Values>(values: V, edit: OrderEdit | undefined): V => (edit ? ({ ...values, ...edit } as V) : values);
 
-/** What an action would do to some orders: the ones it changes, and how many it skips for each reason. */
-export interface ActionPlan {
-  action: OrderActionId;
-  ids: string[];
-  skipped: Record<string, number>;
-}
+/** The library's dry run (rift-ds/chat/actions), keyed by an order action's id. */
+export type ActionPlan = Omit<ChatActionPlan, "action"> & { action: OrderActionId };
 
-export function planAction(action: OrderActionId, orders: { id: string; values: Values }[]): ActionPlan {
-  const ids: string[] = [];
-  const skipped: Record<string, number> = {};
-  for (const order of orders) {
-    const reason = ORDER_ACTIONS[action].skip(order.values);
-    if (reason) skipped[reason] = (skipped[reason] ?? 0) + 1;
-    else ids.push(order.id);
-  }
-  return { action, ids, skipped };
-}
+/** What an action would do to some orders: the ones it changes, and how many it skips for each reason. Changes nothing. */
+export const planAction = (action: OrderActionId, orders: { id: string; values: Values }[]): ActionPlan =>
+  planChatAction(ORDER_ACTIONS[action], orders) as ActionPlan;
 
 /** The edits a plan makes, over the edits already made. */
 export function editsFor(plan: ActionPlan, valuesOf: (id: string) => Values | undefined, current: OrderEdits): OrderEdits {
@@ -111,11 +87,8 @@ export function editsFor(plan: ActionPlan, valuesOf: (id: string) => Values | un
 /** "this order" or "these 23 orders", for a confirmation in the reader's words. */
 export const theseOrders = (count: number) => (count === 1 ? "this order" : `these ${count.toLocaleString("en-US")} orders`);
 
-/** "2 already shipped, 1 cancelled": the skipped orders in words. */
-export const skippedText = (skipped: Record<string, number>) =>
-  Object.entries(skipped)
-    .map(([reason, count]) => `${count.toLocaleString("en-US")} ${reason}`)
-    .join(", ");
+/* The skipped orders in words: the library's, so the bar, the card and the route all say it one way. */
+export { skippedText };
 
 const STATUSES = new Set(["Placed", "Picking", "Shipped", "Delivered", "Delayed", "Returned", "Cancelled"]);
 const PAYMENTS = new Set(["Paid", "Pending", "Overdue", "Refunded", "Failed"]);

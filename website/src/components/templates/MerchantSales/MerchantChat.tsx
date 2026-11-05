@@ -28,6 +28,8 @@ import {
   type ChatTransport,
   type Starter,
 } from "rift-ds/chat";
+import { ActionCard } from "rift-ds/components/ActionCard/ActionCard";
+import { ActionReadout as ActionReadoutCard } from "rift-ds/components/ActionReadout/ActionReadout";
 import { Button } from "rift-ds/components/Button/Button";
 import { ToastProvider, useToast } from "rift-ds/components/Toast/Toast";
 import { MOTION_ACTION_DISMISS_MS, MOTION_TABLE_COMMAND_SKELETON_MS } from "rift-ds/tokens/motion";
@@ -139,29 +141,17 @@ function TableReceipt({ id, before }: { id: string; before: TableView }) {
   );
 }
 
-/**
- * A change the assistant proposed: what it does and what it leaves alone, held
- * until the reader confirms. Confirming plans it again against the page as it
- * is now, so a change made in between is counted, then runs it through the same
- * action the selection bar uses; the card then offers its Undo.
- */
-/** What a confirmed change did, posted to the thread as the assistant's turn once it lands. */
-function ActionReadoutBlock({ readout }: { readout: ActionReadout }) {
-  return (
-    <div className={styles.readout}>
-      <span className={styles.actionTitle}>{readout.headline}</span>
-      <dl className={styles.readoutFacts}>
-        {readout.facts.map(([label, value]) => (
-          <React.Fragment key={label}>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </React.Fragment>
-        ))}
-      </dl>
-    </div>
-  );
-}
+/** What a confirmed change did, as the library's readout card: the opening of the reply its confirmation gets. */
+const ReadoutBlock = ({ readout }: { readout: ActionReadout }) => (
+  <ActionReadoutCard headline={readout.headline} facts={readout.facts.map(([label, value]) => ({ label, value }))} />
+);
 
+/**
+ * A change the assistant proposed, as the library's ActionCard. Confirming plans
+ * it again against the page as it is now, so a change made in between is counted,
+ * runs it through the same action the selection bar uses, and sends the reader's
+ * confirmation as their message; the card then keeps the record, with Undo.
+ */
 function OrderActionCard({ id, action, ids, skipped }: ActionPlan & { id: string }) {
   const { plan, run, valuesOf, cards, setCard, markConfirmation } = useOrderEdits();
   const { injectTurn, send } = useChatWidget();
@@ -170,74 +160,40 @@ function OrderActionCard({ id, action, ids, skipped }: ActionPlan & { id: string
   const definition = ORDER_ACTIONS[action];
   const count = (n: number) => `${n.toLocaleString("en-US")} ${n === 1 ? "order" : "orders"}`;
   const leftAlone = skippedText(skipped);
+  const status = state?.status === "cancelled" ? "dismissed" : (state?.status ?? "proposed");
 
-  if (state?.status === "confirmed" || state?.status === "undone") {
-    return (
-      <div className={styles.receipt}>
-        <span className={styles.receiptText}>
-          <span className="material-symbols-rounded" aria-hidden="true">{definition.icon}</span>
-          {state.status === "undone" ? `${definition.label} undone` : `${count(ids.length)} ${definition.done}`}
-        </span>
-        {state.status === "confirmed" && (
-          <span className={styles.receiptActions}>
-            <Button
-              variant="secondary"
-              tone="neutral"
-              size="compact"
-              label="Undo"
-              iconLeft="refresh"
-              onClick={() => {
-                state.undo();
-                setCard(id, { status: "undone" });
-                injectTurn({ role: "assistant", text: `Undone: those ${count(ids.length)} are back as they were.` });
-              }}
-            />
-          </span>
-        )}
-      </div>
-    );
-  }
-  if (state?.status === "cancelled") {
-    return (
-      <div className={styles.receipt}>
-        <span className={styles.receiptText}>
-          <span className="material-symbols-rounded" aria-hidden="true">{definition.icon}</span>
-          {definition.label}: not changed
-        </span>
-      </div>
-    );
-  }
   return (
-    <div className={styles.actionCard}>
-      <span className={styles.actionTitle}>
-        <span className="material-symbols-rounded" aria-hidden="true">{definition.icon}</span>
-        {definition.label}: {count(ids.length)}
-      </span>
-      {leftAlone && <span className={styles.actionSkipped}>Left as they are: {leftAlone}</span>}
-      <span className={styles.receiptActions}>
-        <Button
-          variant="primary"
-          tone={definition.destructive ? "destructive" : "default"}
-          size="compact"
-          label="Confirm"
-          onClick={() => {
-            const now = plan(action, ids);
-            /* Read before the change lands: the readout says what the orders were and what they became. */
-            const readout = readoutFor(now, now.ids.map((orderId) => valuesOf(orderId) ?? {}));
-            const undo = run(now, "chat");
-            setCard(id, { status: "confirmed", undo });
-            changes?.showOrders(now.ids);
-            /* The confirmation is the reader's own message, so the reply answers it, opening with the readout. */
-            changes?.stageReadout(readout);
-            /* The request says this message was confirmed on its card; a typed "yes" never is. */
-            markConfirmation({ action, count: now.ids.length });
-            send(definition.confirm(theseOrders(now.ids.length)));
-          }}
-        />
-        {/* Not "Cancel": beside "Cancel orders" it would read as the action itself. */}
-        <Button variant="secondary" tone="neutral" size="compact" label="Dismiss" onClick={() => setCard(id, { status: "cancelled" })} />
-      </span>
-    </div>
+    <ActionCard
+      title={`${definition.label}: ${count(ids.length)}`}
+      detail={leftAlone ? `Left as they are: ${leftAlone}` : undefined}
+      icon={definition.icon}
+      destructive={definition.destructive}
+      status={status}
+      receipt={`${count(ids.length)} ${definition.done}`}
+      onConfirm={() => {
+        const now = plan(action, ids);
+        /* Read before the change lands: the readout says what the orders were and what they became. */
+        const readout = readoutFor(now, now.ids.map((orderId) => valuesOf(orderId) ?? {}));
+        const undo = run(now, "chat");
+        setCard(id, { status: "confirmed", undo });
+        changes?.showOrders(now.ids);
+        /* The confirmation is the reader's own message, so the reply answers it, opening with the readout. */
+        changes?.stageReadout(readout);
+        /* The request says this message was confirmed on its card; a typed "yes" never is. */
+        markConfirmation({ action, count: now.ids.length });
+        send(definition.confirm(theseOrders(now.ids.length)));
+      }}
+      onDismiss={() => setCard(id, { status: "cancelled" })}
+      onUndo={
+        state?.status === "confirmed"
+          ? () => {
+              state.undo();
+              setCard(id, { status: "undone" });
+              injectTurn({ role: "assistant", text: `Undone: those ${count(ids.length)} are back as they were.` });
+            }
+          : undefined
+      }
+    />
   );
 }
 
@@ -247,7 +203,7 @@ const RENDERERS = {
     return <TableReceipt id={id} before={before} />;
   },
   "order-action": (data: unknown) => <OrderActionCard {...(data as ActionPlan & { id: string })} />,
-  "action-readout": (data: unknown) => <ActionReadoutBlock readout={data as ActionReadout} />,
+  "action-readout": (data: unknown) => <ReadoutBlock readout={data as ActionReadout} />,
 };
 
 function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: React.ReactNode }) {

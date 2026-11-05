@@ -11,6 +11,7 @@
       "subpaths": {
         "./chat": "The widget, the provider, the launcher and the engine under them.",
         "./chat/server": "The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups and feedback siblings, for any web-standard route.",
+        "./chat/actions": "The action definitions a page and its route share, and their dry run, with no dependencies.",
         "./chat/upstash": "Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails.",
         "./chat/demo": "A scripted conversation with rich cards and fixtures, for a preview that needs no key.",
         "./chat/chat.css": "The widget's stylesheet."

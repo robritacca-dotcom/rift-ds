@@ -48,6 +48,7 @@
     "./behaviors/shortcuts": "./src/behaviors/shortcuts.ts",
     "./chat": "./src/chat/index.ts",
     "./chat/server": "./src/chat/server.ts",
+    "./chat/actions": "./src/chat/actions.ts",
     "./chat/upstash": "./src/chat/upstash.ts",
     "./chat/demo": "./src/chat/demo.ts",
     "./chat/chat.css": "./src/chat/ChatWidget.css",

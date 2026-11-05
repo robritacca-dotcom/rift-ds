@@ -411,7 +411,7 @@ export default function AiChatPage() {
               The note over the composer says what the chat is looking at, from one{" "}
               <code>context</code> object. For a page it is the page&apos;s name. When the reader
               puts something in front of the chat, a few ticked rows or a highlighted figure, the
-              host updates the <code>label</code>, the <code>note</code> and the <code>icon</code>
+              host updates the <code>label</code>, the <code>note</code> and the <code>icon</code>{" "}
               together, and the note is read out once it settles. <code>onClear</code> ends the
               note in a clear button that goes back to the page, named by{" "}
               <code>contextClearLabel</code>, and <code>sent</code> repeats the context above each

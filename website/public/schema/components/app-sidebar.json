@@ -143,6 +143,14 @@
           "description": "Rendered under the logo row, above the nav; fades out while collapsed"
         },
         {
+          "name": "persistentTopSlot",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state",
+          "default": false
+        },
+        {
           "name": "footerSlot",
           "type": "ReactNode",
           "typeKind": "reference",

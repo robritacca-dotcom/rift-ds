@@ -68,6 +68,7 @@ export * from './components/DropdownMenu/DropdownMenu';
 export * from './components/DropdownMenu/ShortcutHint';
 export * from './components/EmptyState/EmptyState';
 export * from './components/EntityCard/EntityCard';
+export * from './components/EntitySwitcher/EntitySwitcher';
 export * from './components/EventCalendar/EventCalendar';
 export * from './components/Field/Field';
 export * from './components/Field/FieldContext';

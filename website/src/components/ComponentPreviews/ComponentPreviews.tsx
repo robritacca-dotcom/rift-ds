@@ -1040,6 +1040,28 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "entity-switcher": () => (
+    <>
+      <div aria-hidden="true" style={{ width: "170px", display: "flex", flexDirection: "column", gap: "4px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 6px 6px 8px", borderRadius: "10px", background: "var(--color-bg-container-primary)", boxShadow: "inset 0 0 0 1px var(--color-bg-container-border)" }}>
+          <span style={{ display: "grid", placeItems: "center", width: "22px", height: "22px", borderRadius: "6px", background: "var(--color-bg-container-secondary)", fontSize: "8px", fontWeight: 600, color: "var(--color-text-secondary)" }}>GM</span>
+          <span style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+            <span style={{ fontSize: "10px", fontWeight: 500, color: "var(--color-text-primary)" }}>Growth marketing</span>
+            <span style={{ fontSize: "8px", color: "var(--color-text-secondary)" }}>Department</span>
+          </span>
+          <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "12px", color: "var(--color-text-secondary)" }}>unfold_more</span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px", padding: "4px", borderRadius: "10px", background: "var(--color-bg-page-primary)", boxShadow: "inset 0 0 0 1px var(--color-bg-container-border)" }}>
+          {[["LC", "Larkspur Coffee"], ["TC", "Tidewater Cycles"]].map(([initials, name], i) => (
+            <span key={name} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "3px 4px", borderRadius: "6px", background: i === 0 ? "var(--color-action-passive-bg-hover)" : "transparent" }}>
+              <span style={{ display: "grid", placeItems: "center", width: "16px", height: "16px", borderRadius: "4px", background: "var(--color-bg-container-secondary)", fontSize: "6px", fontWeight: 600, color: "var(--color-text-secondary)" }}>{initials}</span>
+              <span style={{ fontSize: "9px", color: "var(--color-text-primary)" }}>{name}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </>
+  ),
   "event-calendar": () => (
     <>
       <div aria-hidden="true" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "3px", width: "140px" }}>

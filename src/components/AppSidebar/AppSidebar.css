@@ -513,6 +513,15 @@
   pointer-events: auto;
 }
 
+/* A persistent top slot never fades: it holds the nav rows' inset, so a
+   mark at its start stays on the rail's axis through the sweep, and its
+   content fades whatever it hides itself. */
+.ds-app-sidebar__top-slot--persistent {
+  padding: 0 var(--padding-300);
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* The footer's two forms share one cell, so the slot keeps one height in
    both states and the rail's layout never snaps: the expanded form fades
    out as the collapsed form fades in, the inverse of the rules above. The
@@ -747,12 +756,9 @@
   padding-inline-start: calc(var(--padding-500) + var(--padding-200));
 }
 
+/* The rows keep the expanded rail's gap while collapsed too, so a
+   selected indicator never sits flush under the caption above it. */
 .ds-app-sidebar--panel-mode .ds-app-sidebar__nav {
-  gap: 0;
-  transition: gap var(--motion-duration-slow) var(--motion-ease-emphasized);
-}
-
-.ds-app-sidebar--panel-mode.ds-app-sidebar--expanded .ds-app-sidebar__nav {
   gap: var(--gap-100);
 }
 

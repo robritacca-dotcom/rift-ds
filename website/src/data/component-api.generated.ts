@@ -1222,6 +1222,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Rendered under the logo row, above the nav; fades out while collapsed"
           },
           {
+            "name": "persistentTopSlot",
+            "type": "boolean",
+            "required": false,
+            "description": "Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state",
+            "defaultValue": "false"
+          },
+          {
             "name": "footerSlot",
             "type": "ReactNode",
             "required": false,
@@ -7260,6 +7267,129 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "EntitySwitcher",
+    "label": "Entity switcher",
+    "slug": "entity-switcher",
+    "category": "navigation",
+    "description": "Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in.",
+    "client": true,
+    "importPath": "rift-ds/components/EntitySwitcher/EntitySwitcher",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "EntitySwitcher",
+        "props": [
+          {
+            "name": "items",
+            "type": "EntitySwitcherItem[]",
+            "required": true,
+            "description": "The top level of the tree. Its shape decides the list: all leaves is one flat list, any children make it drill in."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The selected entity's id (controlled)."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The entity selected at first (uncontrolled). The first entity when omitted."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((id: string, item: EntitySwitcherItem) => void)",
+            "required": false,
+            "description": "Called with the id and the entity when one is picked."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the panel is open (controlled)."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the panel starts open (uncontrolled).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called when the panel opens or closes."
+          },
+          {
+            "name": "collapsed",
+            "type": "boolean",
+            "required": false,
+            "description": "The mark alone, the rest of the trigger faded out, and the panel opening\nbeside it rather than below: the form for a collapsed rail. The mark\nnever moves between the two forms. Left unset, it follows a host rail\nthat marks itself `data-expanded=\"false\"` (AppSidebar's\n`persistentTopSlot`)."
+          },
+          {
+            "name": "searchThreshold",
+            "type": "number",
+            "required": false,
+            "description": "How many entities, across every level, before the search field appears.",
+            "defaultValue": "8"
+          },
+          {
+            "name": "switcherLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the trigger and the panel; the selected entity's name follows it on the trigger.",
+            "defaultValue": "Switch entity"
+          },
+          {
+            "name": "searchLabel",
+            "type": "string",
+            "required": false,
+            "description": "Placeholder and accessible name of the search field.",
+            "defaultValue": "Search"
+          },
+          {
+            "name": "backLabel",
+            "type": "string",
+            "required": false,
+            "description": "The row that climbs out of a level. `{name}` is the level above.",
+            "defaultValue": "Back to {name}"
+          },
+          {
+            "name": "topLevelLabel",
+            "type": "string",
+            "required": false,
+            "description": "Stands in for `{name}` in `backLabel` when the level above is the top.",
+            "defaultValue": "all"
+          },
+          {
+            "name": "wholeBranchLabel",
+            "type": "string",
+            "required": false,
+            "description": "The description of the row that picks a whole branch, leading its level. `{name}` is the branch.",
+            "defaultValue": "All of {name}"
+          },
+          {
+            "name": "emptyLabel",
+            "type": "string",
+            "required": false,
+            "description": "Shown when a search finds nothing.",
+            "defaultValue": "Nothing matches"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the root.",
             "defaultValue": ""
           }
         ]

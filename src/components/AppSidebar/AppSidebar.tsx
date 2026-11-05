@@ -141,6 +141,8 @@ type AppSidebarOwnProps = {
   floating?: boolean;
   /** Rendered under the logo row, above the nav; fades out while collapsed */
   topSlot?: React.ReactNode;
+  /** Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state */
+  persistentTopSlot?: boolean;
   /** Rendered above the profile block; fades out while collapsed */
   footerSlot?: React.ReactNode;
   /** Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert */
@@ -249,6 +251,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   layout: layoutProp,
   floating: floatingProp = false,
   topSlot,
+  persistentTopSlot = false,
   footerSlot,
   collapsedFooterSlot,
   className = '',
@@ -583,8 +586,22 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           </button>
         </div>
 
-        {/* Consumer slot under the logo row */}
-        {topSlot && <div className={`${baseClass}__top-slot`}>{topSlot}</div>}
+        {/* Consumer slot under the logo row; hidden while collapsed, it is
+            inert, unless it persists and draws its own collapsed form */}
+        {topSlot && (
+          <div
+            className={[
+              `${baseClass}__top-slot`,
+              persistentTopSlot ? `${baseClass}__top-slot--persistent` : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            data-expanded={showExpanded}
+            inert={!showExpanded && !persistentTopSlot}
+          >
+            {topSlot}
+          </div>
+        )}
 
         {/* Drawer drill-in: the panel's level as a second screen */}
         {mobileOpen && drilled && panelSource ? (

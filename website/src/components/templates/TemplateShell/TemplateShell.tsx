@@ -27,6 +27,7 @@ import { useDockViewport } from "rift-ds/chat";
 import type { TemplateLayout } from "@/lib/templateLayout";
 import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
+import { EntitySwitcher, type EntitySwitcherProps } from "rift-ds/components/EntitySwitcher/EntitySwitcher";
 import { TemplateShellContext } from "./context";
 import { useTemplateLayout } from "./useTemplateLayout";
 import styles from "./TemplateShell.module.css";
@@ -45,7 +46,11 @@ export interface TemplateShellProps {
     | "onExpandedChange"
     | "footerSlot"
     | "collapsedFooterSlot"
+    | "topSlot"
+    | "persistentTopSlot"
   >;
+  /** The entity switcher under the brand row, following the rail as it collapses; left out, the rail has none. */
+  entitySwitcher?: EntitySwitcherProps;
   /** Whether the docked assistant is open, so the content makes room for it. */
   chatOpen: boolean;
   /** The app frame's header, shown when the template is hosted as a phone screen. */
@@ -71,6 +76,7 @@ export interface TemplateShellProps {
 
 export default function TemplateShell({
   sidebar,
+  entitySwitcher,
   chatOpen,
   frame,
   tabBar,
@@ -120,6 +126,12 @@ export default function TemplateShell({
               defaultPanelOpen={false}
               expanded={expanded}
               onExpandedChange={setExpanded}
+              topSlot={
+                entitySwitcher && (
+                  <EntitySwitcher key={entitySwitcher.defaultValue} {...entitySwitcher} />
+                )
+              }
+              persistentTopSlot={!!entitySwitcher}
               footerSlot={<SidebarSwitchers showLayout backLink />}
               collapsedFooterSlot={<CollapsedSidebarSwitchers showLayout />}
             />

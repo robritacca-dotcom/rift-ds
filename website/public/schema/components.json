@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.22.0",
   "package": "rift-ds",
-  "count": 163,
+  "count": 164,
   "components": [
     {
       "name": "Accordion",
@@ -613,6 +613,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/entity-card.json",
       "docsUrl": "https://rift-ds.com/components/entity-card",
       "markdownUrl": "https://rift-ds.com/components/entity-card.md"
+    },
+    {
+      "name": "EntitySwitcher",
+      "label": "Entity switcher",
+      "slug": "entity-switcher",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/entity-switcher.json",
+      "docsUrl": "https://rift-ds.com/components/entity-switcher",
+      "markdownUrl": "https://rift-ds.com/components/entity-switcher.md"
     },
     {
       "name": "EventCalendar",

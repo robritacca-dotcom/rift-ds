@@ -1171,7 +1171,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (11)
+## Navigation (12)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -1198,6 +1198,14 @@ Hierarchical navigation trail showing the user's location within the site.
 - Import: `import { Breadcrumb } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/breadcrumb.md
+
+### Entity switcher
+
+Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in.
+
+- Import: `import { EntitySwitcher } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/entity-switcher.md
 
 ### Mega menu
 

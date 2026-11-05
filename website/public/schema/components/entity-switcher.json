@@ -1,0 +1,143 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.22.0",
+  "kind": "component",
+  "name": "EntitySwitcher",
+  "label": "Entity switcher",
+  "slug": "entity-switcher",
+  "category": "navigation",
+  "description": "Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in.",
+  "client": true,
+  "importPath": "rift-ds/components/EntitySwitcher/EntitySwitcher",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/entity-switcher",
+  "markdownUrl": "https://rift-ds.com/components/entity-switcher.md",
+  "exports": [
+    {
+      "component": "EntitySwitcher",
+      "props": [
+        {
+          "name": "items",
+          "type": "EntitySwitcherItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The top level of the tree. Its shape decides the list: all leaves is one flat list, any children make it drill in."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The selected entity's id (controlled)."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The entity selected at first (uncontrolled). The first entity when omitted."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((id: string, item: EntitySwitcherItem) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the id and the entity when one is picked."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the panel is open (controlled)."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the panel starts open (uncontrolled).",
+          "default": false
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the panel opens or closes."
+        },
+        {
+          "name": "collapsed",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The mark alone, the rest of the trigger faded out, and the panel opening\nbeside it rather than below: the form for a collapsed rail. The mark\nnever moves between the two forms. Left unset, it follows a host rail\nthat marks itself `data-expanded=\"false\"` (AppSidebar's\n`persistentTopSlot`)."
+        },
+        {
+          "name": "searchThreshold",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How many entities, across every level, before the search field appears.",
+          "default": 8
+        },
+        {
+          "name": "switcherLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the trigger and the panel; the selected entity's name follows it on the trigger.",
+          "default": "Switch entity"
+        },
+        {
+          "name": "searchLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Placeholder and accessible name of the search field.",
+          "default": "Search"
+        },
+        {
+          "name": "backLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The row that climbs out of a level. `{name}` is the level above.",
+          "defaultExpression": "Back to {name}"
+        },
+        {
+          "name": "topLevelLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Stands in for `{name}` in `backLabel` when the level above is the top.",
+          "default": "all"
+        },
+        {
+          "name": "wholeBranchLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The description of the row that picks a whole branch, leading its level. `{name}` is the branch.",
+          "defaultExpression": "All of {name}"
+        },
+        {
+          "name": "emptyLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shown when a search finds nothing.",
+          "default": "Nothing matches"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the root.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -563,6 +563,14 @@
       "client": false
     },
     {
+      "name": "EntitySwitcher",
+      "label": "Entity switcher",
+      "slug": "entity-switcher",
+      "description": "Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in.",
+      "category": "navigation",
+      "client": true
+    },
+    {
       "name": "EventCalendar",
       "label": "Event calendar",
       "slug": "event-calendar",

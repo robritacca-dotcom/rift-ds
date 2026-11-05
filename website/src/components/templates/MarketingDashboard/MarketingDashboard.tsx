@@ -49,6 +49,7 @@ import TemplateShell from "../TemplateShell/TemplateShell";
 import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { PUBLISHER_MARKS, PublisherMark } from "../PublisherMarks/PublisherMarks";
 import { ProductMark } from "../ProductMark/ProductMark";
+import { useSampleEntities } from "../sampleEntities";
 
 /* ---------------------------------------------------------------- data */
 
@@ -317,6 +318,7 @@ export default function MarketingDashboard() {
   const appFrame = useAppFrame();
   const [channelTab, setChannelTab] = React.useState("channels");
   const [chatOpen, setChatOpen] = React.useState(false);
+  const sampleEntities = useSampleEntities();
 
   const [delivery, setDelivery] = React.useState<Record<string, string>>(() =>
     Object.fromEntries(CAMPAIGNS.map((c) => [c.id, c.delivery]))
@@ -411,6 +413,7 @@ export default function MarketingDashboard() {
         logo: <ProductMark />,
         logoText: productName,
       }}
+      entitySwitcher={sampleEntities && { ...sampleEntities, switcherLabel: "Switch workspace" }}
       chatOpen={chatOpen}
       frame={{ title: "Marketing", subtitle: `${productName} · Team space` }}
       contentClassName={styles.content}

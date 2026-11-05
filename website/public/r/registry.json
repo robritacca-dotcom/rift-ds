@@ -376,6 +376,12 @@
       "description": "Compact display-only card with a centred icon or image and a label, used in the Icons and Logos galleries."
     },
     {
+      "name": "entity-switcher",
+      "type": "registry:ui",
+      "title": "Entity switcher",
+      "description": "Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in."
+    },
+    {
       "name": "event-calendar",
       "type": "registry:ui",
       "title": "Event calendar",

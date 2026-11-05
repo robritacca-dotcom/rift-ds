@@ -1,0 +1,302 @@
+/* ============================================
+   ENTITY SWITCHER
+   An entity's mark, name and description over a panel to switch it. The
+   panel rides Popover's menu surface; its rows are overlay rows (no fill
+   at rest, the passive wash on hover and focus at --radius-200).
+   ============================================ */
+
+.ds-entity-switcher {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-entity-switcher > .ds-popover__trigger {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+/* The panel takes the trigger's width, measured on open, so it hangs square
+   under it. */
+.ds-entity-switcher > .ds-popover__panel {
+  box-sizing: border-box;
+  width: var(--ds-entity-switcher-width, auto);
+  min-width: 0;
+}
+
+/* ============================================
+   TRIGGER
+   A card that is a control: the container fill and hairline, the passive
+   wash on hover. The edge is an inset shadow rather than a border so it
+   takes no room, and the mark starts one --padding-300 in: inside a rail
+   held at the nav rows' inset, that seats it on the collapsed rail's axis.
+   ============================================ */
+
+.ds-entity-switcher__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  min-width: 0;
+  padding: var(--padding-200) var(--padding-200) var(--padding-200) var(--padding-300);
+  border: 0;
+  border-radius: var(--radius-300);
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-bg-container-border);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-entity-switcher__trigger:hover,
+.ds-entity-switcher__trigger[aria-expanded='true'] {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-entity-switcher__trigger:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+.ds-entity-switcher__trigger .ds-entity-switcher__text,
+.ds-entity-switcher__chevron {
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-entity-switcher__chevron {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+}
+
+/* ============================================
+   COLLAPSED
+   The mark alone: the box and the words fade while the mark holds its
+   seat. Set by `collapsed`, or by a host rail marked
+   data-expanded="false" unless `collapsed={false}` opts out.
+   ============================================ */
+
+.ds-entity-switcher--collapsed .ds-entity-switcher__trigger,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.ds-entity-switcher--collapsed .ds-entity-switcher__trigger .ds-entity-switcher__text,
+.ds-entity-switcher--collapsed .ds-entity-switcher__chevron,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger .ds-entity-switcher__text,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__chevron {
+  opacity: 0;
+}
+
+/* Collapsed, the mark's own tile carries hover and the focus ring. */
+.ds-entity-switcher--collapsed .ds-entity-switcher__trigger:hover .ds-entity-switcher__mark,
+.ds-entity-switcher--collapsed .ds-entity-switcher__trigger[aria-expanded='true'] .ds-entity-switcher__mark,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger:hover .ds-entity-switcher__mark,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger[aria-expanded='true'] .ds-entity-switcher__mark {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-entity-switcher--collapsed .ds-entity-switcher__trigger:focus-visible,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger:focus-visible {
+  outline: none;
+}
+
+.ds-entity-switcher--collapsed .ds-entity-switcher__trigger:focus-visible .ds-entity-switcher__mark,
+:where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger:focus-visible .ds-entity-switcher__mark {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+/* Opened beside the mark, the panel takes an expanded rail's width. */
+.ds-entity-switcher--beside > .ds-popover__panel {
+  width: calc(var(--control-height-default) * 6.4);
+}
+
+/* ============================================
+   MARK
+   A tile, the inner step of the trigger's corner. A logo fills it, an
+   icon or an inline mark sits inside it, initials stand in for both.
+   ============================================ */
+
+.ds-entity-switcher__mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  overflow: hidden;
+  border-radius: var(--radius-200);
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-secondary);
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-entity-switcher__mark--large {
+  width: var(--icon-size-800);
+  height: var(--icon-size-800);
+}
+
+.ds-entity-switcher__mark-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ds-entity-switcher__mark-icon {
+  --icon-size: var(--icon-size-500);
+}
+
+/* An inline mark (an SVG logo) sits at most the icon step inside the tile. */
+.ds-entity-switcher__mark-node {
+  display: grid;
+  place-items: center;
+  width: 62%;
+  height: 62%;
+}
+
+.ds-entity-switcher__mark-node > svg,
+.ds-entity-switcher__mark-node > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ds-entity-switcher__mark-initials {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: 1;
+}
+
+/* ============================================
+   TEXT
+   One line each, truncated, never wrapped.
+   ============================================ */
+
+.ds-entity-switcher__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ds-entity-switcher__title,
+.ds-entity-switcher__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+}
+
+.ds-entity-switcher__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+/* ============================================
+   PANEL
+   ============================================ */
+
+.ds-entity-switcher__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-entity-switcher__search {
+  min-width: 0;
+  padding: var(--padding-100);
+}
+
+/* About eight rows before the list scrolls. */
+.ds-entity-switcher__list {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(var(--control-height-default) * 9);
+  overflow-y: auto;
+}
+
+.ds-entity-switcher__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  min-width: 0;
+  padding: var(--padding-150) var(--padding-200);
+  border: 0;
+  border-radius: var(--radius-200);
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-entity-switcher__row:hover,
+.ds-entity-switcher__row:focus-visible {
+  outline: none;
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-entity-switcher__row--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-entity-switcher__row--disabled:hover {
+  background-color: transparent;
+}
+
+.ds-entity-switcher__trailing {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-entity-switcher__row--back {
+  color: var(--color-text-secondary);
+}
+
+.ds-entity-switcher__row--back .ds-entity-switcher__name {
+  font-weight: var(--font-paragraph-sm-weight);
+}
+
+.ds-entity-switcher__back-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--icon-size-600);
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-entity-switcher__separator {
+  height: var(--border-025);
+  margin: var(--padding-100) var(--padding-200);
+  background-color: var(--color-bg-container-border);
+}
+
+.ds-entity-switcher__empty {
+  margin: 0;
+  padding: var(--padding-300) var(--padding-200);
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}

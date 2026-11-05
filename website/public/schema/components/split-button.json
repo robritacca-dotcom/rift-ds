@@ -52,7 +52,7 @@
         },
         {
           "name": "tone",
-          "type": "\"default\" | \"neutral\" | \"destructive\"",
+          "type": "\"destructive\" | \"default\" | \"neutral\"",
           "typeKind": "enum",
           "values": [
             "default",

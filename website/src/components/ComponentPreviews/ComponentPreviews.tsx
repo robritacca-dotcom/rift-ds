@@ -141,6 +141,31 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "action-card": () => (
+    <>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", width: "150px", padding: "8px", borderRadius: "10px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
+        <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)" }}>Close bookings: 8 walks</span>
+        <span style={{ fontSize: "8px", color: "var(--color-text-secondary)" }}>Left as they are: 2 full</span>
+        <span style={{ display: "flex", gap: "4px" }}>
+          <span style={{ padding: "3px 8px", borderRadius: "999px", fontSize: "8px", color: "var(--color-action-primary-text)", background: "var(--color-action-primary-bg)" }}>Confirm</span>
+          <span style={{ padding: "3px 8px", borderRadius: "999px", fontSize: "8px", color: "var(--color-text-primary)", border: "1px solid var(--color-bg-container-border)" }}>Dismiss</span>
+        </span>
+      </div>
+    </>
+  ),
+  "action-readout": () => (
+    <>
+      <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "5px", width: "150px", padding: "8px", borderRadius: "10px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>
+        <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--color-text-primary)" }}>8 walks closed</span>
+        {[["Status", "Open → Closed"], ["Bookings", "143"], ["Left alone", "2 full"]].map(([label, value]) => (
+          <span key={label} style={{ display: "flex", gap: "8px", fontSize: "8px" }}>
+            <span style={{ width: "44px", color: "var(--color-text-secondary)" }}>{label}</span>
+            <span style={{ color: "var(--color-text-primary)" }}>{value}</span>
+          </span>
+        ))}
+      </div>
+    </>
+  ),
   "agent-plan": () => (
     <>
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", whiteSpace: "nowrap" }}>

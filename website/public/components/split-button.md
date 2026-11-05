@@ -19,7 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler for the primary action |
 | items | `DropdownMenuEntry[]` | yes |  | Menu entries for the alternative actions |
 | variant | `"neutral" \| "primary" \| "secondary"` | no | `primary` | Emphasis, shared by both segments: `primary` (filled) or `secondary` (outlined). The colour is `tone`'s job. `neutral` is the legacy value from before the split and renders as `variant="primary" tone="neutral"`. |
-| tone | `"default" \| "neutral" \| "destructive"` | no |  | Colour, shared by both segments: `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. |
+| tone | `"destructive" \| "default" \| "neutral"` | no |  | Colour, shared by both segments: `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | disabled | `boolean` | no | `false` | Disables both segments |
 | loading | `boolean` | no | `false` | Shows a spinner on the primary segment and blocks interaction while an async action runs |

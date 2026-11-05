@@ -1,0 +1,51 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.22.0",
+  "kind": "component",
+  "name": "ActionReadout",
+  "label": "Action readout",
+  "slug": "action-readout",
+  "category": "ai",
+  "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.",
+  "client": false,
+  "importPath": "rift-ds/components/ActionReadout/ActionReadout",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/action-readout",
+  "markdownUrl": "https://rift-ds.com/components/action-readout.md",
+  "exports": [
+    {
+      "component": "ActionReadout",
+      "props": [
+        {
+          "name": "headline",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "What was done, with how much: \"69 orders cancelled\"."
+        },
+        {
+          "name": "facts",
+          "type": "ActionReadoutFact[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "What it did, a line each: the status it moved, the money it touched, who it reached."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A leading mark beside the headline: a Material Symbol name, or your own element."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

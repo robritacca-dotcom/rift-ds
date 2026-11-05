@@ -110,6 +110,171 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "ActionCard",
+    "label": "Action card",
+    "slug": "action-card",
+    "category": "ai",
+    "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.",
+    "client": true,
+    "importPath": "rift-ds/components/ActionCard/ActionCard",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ActionCard",
+        "props": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "What the change is, with how much it touches: \"Cancel orders: 69 orders\". Collides with the native `title` tooltip attribute on purpose: the card shows it."
+          },
+          {
+            "name": "detail",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A quiet line under the title: what the change leaves alone, and why (\"Left as they are: 2 already shipped\")."
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The leading mark: a Material Symbol name, or your own element."
+          },
+          {
+            "name": "status",
+            "type": "ActionCardStatus",
+            "required": false,
+            "description": "Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`.",
+            "values": [
+              "confirmed",
+              "dismissed",
+              "proposed",
+              "undone"
+            ],
+            "defaultValue": "proposed"
+          },
+          {
+            "name": "receipt",
+            "type": "ReactNode",
+            "required": false,
+            "description": "What the confirmed card says was done: \"69 orders cancelled\". Defaults to the title."
+          },
+          {
+            "name": "destructive",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws Confirm in the destructive tone, for a change that takes something away (a cancellation, a refund).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onConfirm",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called by Confirm. The host makes the change, then sets `status` to `confirmed`."
+          },
+          {
+            "name": "onDismiss",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called by Dismiss. The host sets `status` to `dismissed`; nothing changed."
+          },
+          {
+            "name": "onUndo",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called by Undo on a confirmed card, shown only when this is set. The host reverses the change and sets `status` to `undone`."
+          },
+          {
+            "name": "confirmLabel",
+            "type": "string",
+            "required": false,
+            "description": "The Confirm button's words. Defaults to \"Confirm\".",
+            "defaultValue": "Confirm"
+          },
+          {
+            "name": "dismissLabel",
+            "type": "string",
+            "required": false,
+            "description": "The Dismiss button's words. Not \"Cancel\", which beside a cancellation reads as the action itself. Defaults to \"Dismiss\".",
+            "defaultValue": "Dismiss"
+          },
+          {
+            "name": "undoLabel",
+            "type": "string",
+            "required": false,
+            "description": "The Undo button's words. Defaults to \"Undo\".",
+            "defaultValue": "Undo"
+          },
+          {
+            "name": "dismissedLabel",
+            "type": "string",
+            "required": false,
+            "description": "What a dismissed card says after its title. Defaults to \"Not changed\".",
+            "defaultValue": "Not changed"
+          },
+          {
+            "name": "undoneLabel",
+            "type": "string",
+            "required": false,
+            "description": "What an undone card says after its title. Defaults to \"Undone\".",
+            "defaultValue": "Undone"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ActionReadout",
+    "label": "Action readout",
+    "slug": "action-readout",
+    "category": "ai",
+    "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.",
+    "client": false,
+    "importPath": "rift-ds/components/ActionReadout/ActionReadout",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ActionReadout",
+        "props": [
+          {
+            "name": "headline",
+            "type": "ReactNode",
+            "required": true,
+            "description": "What was done, with how much: \"69 orders cancelled\"."
+          },
+          {
+            "name": "facts",
+            "type": "ActionReadoutFact[]",
+            "required": true,
+            "description": "What it did, a line each: the status it moved, the money it touched, who it reached."
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A leading mark beside the headline: a Material Symbol name, or your own element."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "AgentPlan",
     "label": "Agent plan",
     "slug": "agent-plan",
@@ -816,7 +981,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"default\" | \"destructive\"",
+            "type": "\"destructive\" | \"default\"",
             "required": false,
             "description": "Colour of the dialog's icon, title and confirm action: `destructive`\nfor dangerous or irreversible actions.",
             "values": [
@@ -826,7 +991,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "variant",
-            "type": "\"default\" | \"destructive\"",
+            "type": "\"destructive\" | \"default\"",
             "required": false,
             "description": "Legacy name for `tone`, from before colour moved onto its own prop.",
             "values": [
@@ -2926,7 +3091,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "variant",
-            "type": "\"neutral\" | \"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
+            "type": "\"destructive\" | \"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "required": false,
             "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` and `destructive` are\nlegacy values from before the split: `neutral` renders as\n`variant=\"primary\" tone=\"neutral\"` and `destructive` as\n`variant=\"secondary\" tone=\"destructive\"`.",
             "values": [
@@ -2939,7 +3104,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"default\" | \"neutral\" | \"destructive\"",
+            "type": "\"destructive\" | \"default\" | \"neutral\"",
             "required": false,
             "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
             "values": [
@@ -4104,7 +4269,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"default\" | \"neutral\" | \"destructive\"",
+            "type": "\"destructive\" | \"default\" | \"neutral\"",
             "required": false,
             "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
             "values": [
@@ -13525,7 +13690,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tone",
-            "type": "\"default\" | \"neutral\" | \"destructive\"",
+            "type": "\"destructive\" | \"default\" | \"neutral\"",
             "required": false,
             "description": "Colour, shared by both segments: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour.",
             "values": [
@@ -17697,7 +17862,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "aiButtonLabels",
-            "type": "Pick<AiButtonProps, \"summaryRegionLabel\" | \"dismissLabel\" | \"suggestionsLabel\">",
+            "type": "Pick<AiButtonProps, \"dismissLabel\" | \"summaryRegionLabel\" | \"suggestionsLabel\">",
             "required": false,
             "description": "The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title (\"Summary: <title>\"), its dismiss button (\"Dismiss summary\") and its chips' group (\"Suggested prompts\")."
           },

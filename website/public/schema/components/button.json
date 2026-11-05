@@ -47,7 +47,7 @@
         },
         {
           "name": "variant",
-          "type": "\"neutral\" | \"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
+          "type": "\"destructive\" | \"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
           "typeKind": "enum",
           "values": [
             "destructive",
@@ -61,7 +61,7 @@
         },
         {
           "name": "tone",
-          "type": "\"default\" | \"neutral\" | \"destructive\"",
+          "type": "\"destructive\" | \"default\" | \"neutral\"",
           "typeKind": "enum",
           "values": [
             "default",

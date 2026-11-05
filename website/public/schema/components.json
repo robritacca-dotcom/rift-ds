@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.22.0",
   "package": "rift-ds",
-  "count": 164,
+  "count": 166,
   "components": [
     {
       "name": "Accordion",
@@ -13,6 +13,26 @@
       "schemaUrl": "https://rift-ds.com/schema/components/accordion.json",
       "docsUrl": "https://rift-ds.com/components/accordion",
       "markdownUrl": "https://rift-ds.com/components/accordion.md"
+    },
+    {
+      "name": "ActionCard",
+      "label": "Action card",
+      "slug": "action-card",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/action-card.json",
+      "docsUrl": "https://rift-ds.com/components/action-card",
+      "markdownUrl": "https://rift-ds.com/components/action-card.md"
+    },
+    {
+      "name": "ActionReadout",
+      "label": "Action readout",
+      "slug": "action-readout",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/action-readout.json",
+      "docsUrl": "https://rift-ds.com/components/action-readout",
+      "markdownUrl": "https://rift-ds.com/components/action-readout.md"
     },
     {
       "name": "AgentPlan",

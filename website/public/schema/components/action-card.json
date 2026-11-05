@@ -1,0 +1,141 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.22.0",
+  "kind": "component",
+  "name": "ActionCard",
+  "label": "Action card",
+  "slug": "action-card",
+  "category": "ai",
+  "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.",
+  "client": true,
+  "importPath": "rift-ds/components/ActionCard/ActionCard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/action-card",
+  "markdownUrl": "https://rift-ds.com/components/action-card.md",
+  "exports": [
+    {
+      "component": "ActionCard",
+      "props": [
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "What the change is, with how much it touches: \"Cancel orders: 69 orders\". Collides with the native `title` tooltip attribute on purpose: the card shows it."
+        },
+        {
+          "name": "detail",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A quiet line under the title: what the change leaves alone, and why (\"Left as they are: 2 already shipped\")."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The leading mark: a Material Symbol name, or your own element."
+        },
+        {
+          "name": "status",
+          "type": "ActionCardStatus",
+          "typeKind": "enum",
+          "values": [
+            "confirmed",
+            "dismissed",
+            "proposed",
+            "undone"
+          ],
+          "required": false,
+          "description": "Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`.",
+          "default": "proposed"
+        },
+        {
+          "name": "receipt",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "What the confirmed card says was done: \"69 orders cancelled\". Defaults to the title."
+        },
+        {
+          "name": "destructive",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws Confirm in the destructive tone, for a change that takes something away (a cancellation, a refund).",
+          "default": false
+        },
+        {
+          "name": "onConfirm",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called by Confirm. The host makes the change, then sets `status` to `confirmed`."
+        },
+        {
+          "name": "onDismiss",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called by Dismiss. The host sets `status` to `dismissed`; nothing changed."
+        },
+        {
+          "name": "onUndo",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called by Undo on a confirmed card, shown only when this is set. The host reverses the change and sets `status` to `undone`."
+        },
+        {
+          "name": "confirmLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The Confirm button's words. Defaults to \"Confirm\".",
+          "default": "Confirm"
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The Dismiss button's words. Not \"Cancel\", which beside a cancellation reads as the action itself. Defaults to \"Dismiss\".",
+          "default": "Dismiss"
+        },
+        {
+          "name": "undoLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The Undo button's words. Defaults to \"Undo\".",
+          "default": "Undo"
+        },
+        {
+          "name": "dismissedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What a dismissed card says after its title. Defaults to \"Not changed\".",
+          "default": "Not changed"
+        },
+        {
+          "name": "undoneLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What an undone card says after its title. Defaults to \"Undone\".",
+          "default": "Undone"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

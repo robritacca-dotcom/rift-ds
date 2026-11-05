@@ -16,6 +16,18 @@
       "description": "Collapsible content sections for organising related information."
     },
     {
+      "name": "action-card",
+      "type": "registry:ui",
+      "title": "Action card",
+      "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed."
+    },
+    {
+      "name": "action-readout",
+      "type": "registry:ui",
+      "title": "Action readout",
+      "description": "What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it."
+    },
+    {
       "name": "agent-plan",
       "type": "registry:ui",
       "title": "Agent plan",

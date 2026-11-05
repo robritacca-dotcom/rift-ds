@@ -78,9 +78,25 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (34)
+## AI (36)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
+
+### Action card
+
+A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.
+
+- Import: `import { ActionCard } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/action-card.md
+
+### Action readout
+
+What a confirmed change did: a headline over a list of facts, worked out from the records as they were just before it.
+
+- Import: `import { ActionReadout } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/action-readout.md
 
 ### Agent plan
 

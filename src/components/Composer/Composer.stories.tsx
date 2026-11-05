@@ -124,6 +124,46 @@ export const WithContext: Story = {
   },
 };
 
+/** With `onContextClear` the chip ends in a clear button, for a note that follows a selection and can go back to the page. Its name is `contextClearLabel`. */
+export const WithContextClear: Story = {
+  args: {
+    inline: 'chat',
+    attachButton: false,
+    placeholder: 'Ask anything',
+    context: 'Looking at ORD-1000116',
+    contextIcon: 'table_rows',
+    onContextClear: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Clear context' }));
+    await expect(args.onContextClear).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** A note longer than the shell ends in an ellipsis inside it, clear button included, rather than widening the chip past the shell. */
+export const WithLongContext: Story = {
+  args: {
+    inline: 'chat',
+    attachButton: false,
+    placeholder: 'Ask anything',
+    context: 'Looking at “$51.7M Net revenue +59.0% 2,072 Orders +55.9% $25,494 Average order +1.2%” · Net revenue',
+    contextIcon: 'format_quote',
+    onContextClear: fn(),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 360 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const shell = canvasElement.querySelector('.ds-composer') as HTMLElement;
+    const chip = canvasElement.querySelector('.ds-composer__context') as HTMLElement;
+    await expect(chip.getBoundingClientRect().right).toBeLessThanOrEqual(shell.getBoundingClientRect().right);
+  },
+};
+
 /** The context chip lifted out of the shell into its own bar above it. */
 export const WithContextAbove: Story = {
   args: {

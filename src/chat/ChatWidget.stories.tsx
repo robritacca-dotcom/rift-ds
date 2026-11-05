@@ -1,8 +1,8 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
 import { ChatProvider } from './ChatProvider';
-import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
+import { ChatWidget, type ChatContext, type ChatWidgetProps } from './ChatWidget';
 import { ChatLauncher } from './ChatLauncher';
 import { useChatWidget } from './context';
 import { scriptChat } from './sim';
@@ -231,9 +231,63 @@ export const ComposerOneRow: Story = {
   },
 };
 
+/* A host whose context follows the reader: ticked rows in front of the chat, with a way back to the page. */
+function FocusedContextStage(args: ChatWidgetProps) {
+  const [focused, setFocused] = useState(true);
+  const context: ChatContext = focused
+    ? { label: 'ORD-1000116', note: 'Looking at ORD-1000116', icon: 'table_rows', onClear: () => setFocused(false), sent: true }
+    : { label: 'Sales' };
+  return (
+    <ChatProvider transport={createDemoTransport(FAST)} renderers={DEMO_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} context={context} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  );
+}
+
+/** The context follows what the reader put in front of the chat: a message sent over it carries it as a chip above the bubble, and the note's clear button goes back to the page. */
+export const ContextFollowsTheReader: Story = {
+  render: (args) => <FocusedContextStage {...args} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(canvasElement.querySelector('.ds-composer__context')?.textContent).toContain('Looking at ORD-1000116'));
+    await userEvent.click(await canvas.findByRole('button', { name: 'How do I get started?' }, { timeout: 4000 }));
+    await waitFor(
+      () => expect(canvasElement.querySelector('.ds-chat-widget__sent-context')?.textContent).toContain('ORD-1000116'),
+      { timeout: 4000 }
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear context' }));
+    await waitFor(() => expect(canvasElement.querySelector('.ds-composer__context')?.textContent).toContain('Looking at “Sales”'));
+    await expect(canvas.queryByRole('button', { name: 'Clear context' })).toBeNull();
+  },
+};
+
+/** Starters a host is still writing hold the shimmer, for as long as `startersPending` is on. */
+export const StartersPending: Story = {
+  args: { startersPending: true, startersKey: 'held' },
+  render: (args) => (
+    <ChatProvider transport={createDemoTransport(FAST)} renderers={DEMO_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Past the staged beat, a held set still shows no chips.
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await expect(canvas.queryByRole('button', { name: 'How do I get started?' })).toBeNull();
+  },
+};
+
 /** A context note alone does not bring the footer: it takes a line of its own over the one-row composer. */
 export const ComposerContextInside: Story = {
-  args: { contextLabel: 'Sales', contextPlacement: 'inside' },
+  args: { context: { label: 'Sales' }, contextPlacement: 'inside' },
   play: async ({ canvasElement }) => {
     const composer = canvasElement.querySelector('.ds-composer') as HTMLElement;
     await expect(composer.className).toContain('ds-composer--inline-chat');
@@ -489,7 +543,7 @@ function CopyStage(args: ChatWidgetProps) {
             artifacts
             fileAttachments
             placementEnabled
-            contextLabel="Pricing"
+            context={args.context ?? { label: 'Pricing' }}
             agent={{ tabs: demoAgentTabs(args.title ?? 'Assistant') }}
           />
         </Stage>
@@ -567,7 +621,7 @@ export const LocalisedCopy: Story = {
     placeholder: 'Pregunta lo que quieras',
     disclaimer: 'Las respuestas pueden contener errores.',
     greetings: { morning: 'Buenos días', afternoon: 'Buenas tardes', evening: 'Buenas noches' },
-    contextNote: (title: string) => `Viendo «${title}»`,
+    context: { label: 'Pricing', note: 'Viendo «Pricing»' },
     attachHint: (maxSize: string, maxFiles: number) => `Hasta ${maxSize} cada uno · ${maxFiles} archivos como máximo`,
     agentStatus: 'Conectado',
     placementLabels: { right: 'Acoplar a la derecha', left: 'Acoplar a la izquierda', floating: 'Flotante' },

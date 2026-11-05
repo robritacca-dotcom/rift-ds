@@ -14,7 +14,7 @@
  * documentation, and validate-chat-widget.mjs holds the two together).
  */
 export { ChatProvider, type ChatProviderProps } from './ChatProvider';
-export { ChatWidget, type ChatWidgetProps, type ChatAgentOptions, type RailSlot } from './ChatWidget';
+export { ChatWidget, type ChatWidgetProps, type ChatAgentOptions, type ChatContext, type RailSlot } from './ChatWidget';
 export { ChatLauncher, CHAT_PANEL_ID, type ChatLauncherProps } from './ChatLauncher';
 export { useChatAgentState } from './agentState';
 export { ChatThreads, type ChatThreadsProps } from './ChatThreads';

@@ -86,6 +86,24 @@ const defaultAttachHint = (maxSize: string, maxFiles: number) =>
 const defaultContextNote = (title: string) => `Looking at “${title}”`;
 
 /**
+ * What the chat is looking at, as the composer's context note shows it. One
+ * object, so a host whose context follows the reader changes the label, the
+ * line, the icon, the way back and what each sent message carries together.
+ */
+export interface ChatContext {
+  /** What it is called: a page title, "ORD-1000116", "3 orders", a passage. The note says it, and a sent message's chip names it. */
+  label: string;
+  /** The note's whole line, for a host that words it itself. Defaults to `Looking at “<label>”`. */
+  note?: string;
+  /** The note's icon: a Material Symbol name, or your own element. Defaults to `description`. */
+  icon?: string | ReactNode;
+  /** Called by the note's clear button, which appears only when this is set: for a context that follows a selection and can go back to the page as a whole. Its name is `contextClearLabel`. */
+  onClear?: () => void;
+  /** Repeat the context above each message sent while it is set, so the thread keeps what each question was about. `true` draws `label` as a compact DocumentChip wearing `icon`; a function draws what it returns, called at the send, for a chip that does more, such as bringing its context back. A message sent with files keeps its files there instead. */
+  sent?: boolean | (() => ReactNode);
+}
+
+/**
  * The agent's mark on a profile that brings none of its own: a PixelAvatar
  * seeded by the widget's title, the same mark the header toggle wears, so
  * the control and the pane it opens read as one character. A host's own
@@ -191,20 +209,16 @@ export interface ChatWidgetProps {
   agent?: ChatAgentOptions;
   /** Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel. */
   artifacts?: boolean;
-  /** The composer's context note, naming what the chat is looking at. Omit for none. The note's wording comes from `contextNote`. */
+  /** What the chat is looking at, named on the composer's context note: a page, a selection, a passage. Omit for none. A host whose context follows the reader (rows they ticked, text they highlighted) updates it as they go, and can offer a way back and repeat it on each message sent. */
+  context?: ChatContext | null;
+  /** The accessible name of the context note's clear button, shown when `context.onClear` is set. Defaults to "Clear context". */
+  contextClearLabel?: string;
+  /** The composer's context note, naming what the chat is looking at. @deprecated Use `context` with its `label`. */
   contextLabel?: string | null;
   /** Where the context note sits: `inside` the composer, at the top of the shell, or `above` it as a bar of its own. Defaults to `inside`, the Composer's own default. A note alone never brings the composer's footer: with nothing else to seat there, it sits over the one-row composer. */
   contextPlacement?: 'above' | 'inside';
-  /** The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. */
+  /** The composer's context note, written from `contextLabel`, for a host still on the label prop; `context` takes its `note` as a line. @deprecated Use `context` with its `note`. */
   contextNote?: (title: string) => string;
-  /** The context note's icon: a Material Symbol name, or your own element. A host whose note follows what the reader focused can change it with the kind of thing in view. Defaults to `description`. */
-  contextIcon?: string | ReactNode;
-  /** Called by the context note's clear button, which appears only when this is set: for a note that follows a selection and can go back to the page as a whole. */
-  onContextClear?: () => void;
-  /** The accessible name of the context note's clear button. Defaults to "Clear context". */
-  contextClearLabel?: string;
-  /** Repeat the context above each message sent while it is on, so the thread keeps what each question was asked about: `true` draws `contextLabel` as a compact DocumentChip wearing `contextIcon`, and a function draws what it returns, called at the send with the label, for a host whose chip does more (brings its context back, say). A message sent with files keeps its files there instead. Off by default. */
-  contextOnSend?: boolean | ((label: string) => ReactNode);
   /** The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`. */
   attachHint?: (maxSize: string, maxFiles: number, maxBytes: number) => string;
   /** The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to "Good morning", "Good afternoon" and "Good evening". */
@@ -374,12 +388,10 @@ export function ChatWidget({
   aside,
   agent,
   artifacts = false,
+  context: contextProp,
+  contextClearLabel = 'Clear context',
   contextLabel,
   contextNote = defaultContextNote,
-  contextIcon = 'description',
-  onContextClear,
-  contextClearLabel = 'Clear context',
-  contextOnSend = false,
   contextPlacement = 'inside',
   attachHint: attachHintText = defaultAttachHint,
   greetings,
@@ -541,13 +553,17 @@ export function ChatWidget({
   const queue = useAttachments({ maxCount: maxAttachments, maxSize: maxAttachmentBytes });
   const attachHint = attachHintText(formatBytes(maxAttachmentBytes), maxAttachments, maxAttachmentBytes);
 
+  /* The deprecated label props build the same object, so one path draws the note. */
+  const context: ChatContext | null = contextProp ?? (contextLabel ? { label: contextLabel, note: contextNote(contextLabel) } : null);
+  const contextIcon = context?.icon ?? 'description';
+
   /* What the message was asked about, drawn above its bubble as an attachment would be. */
   const sentContext = (): ReactNode => {
-    if (!contextOnSend || !contextLabel) return undefined;
-    if (typeof contextOnSend === 'function') return contextOnSend(contextLabel);
+    if (!context?.sent) return undefined;
+    if (typeof context.sent === 'function') return context.sent();
     return (
       <div className="ds-chat-widget__sent-context">
-        <DocumentChip size="compact" name={contextLabel} icon={contextIcon} />
+        <DocumentChip size="compact" name={context.label} icon={contextIcon} />
       </div>
     );
   };
@@ -1175,10 +1191,10 @@ export function ChatWidget({
             onSubmit={handleSubmit}
             streaming={streaming}
             onStop={stop}
-            context={contextLabel ? contextNote(contextLabel) : undefined}
+            context={context ? (context.note ?? defaultContextNote(context.label)) : undefined}
             contextIcon={contextIcon}
             contextPlacement={contextPlacement}
-            onContextClear={onContextClear}
+            onContextClear={context?.onClear}
             contextClearLabel={contextClearLabel}
             mentions={mentions}
             {...(fileAttachments

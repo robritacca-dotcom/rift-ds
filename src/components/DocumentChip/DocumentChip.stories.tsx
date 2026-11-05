@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent } from 'storybook/test';
 import { DocumentChip, type DocumentChipFileType } from './DocumentChip';
 
 const FILE_TYPES: { fileType: DocumentChipFileType; name: string; meta: string }[] = [
@@ -84,11 +85,21 @@ export const Removable: Story = {
   },
 };
 
-/** Click and remove coexist: the body becomes a button beside the close button. */
+/** Click and remove coexist: the whole tile is the body's target, with the close button a target of its own above it. */
 export const Clickable: Story = {
   args: {
-    onClick: () => {},
-    onRemove: () => {},
+    onClick: fn(),
+    onRemove: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    // The tile's own padding, outside the icon and the name, is the body button's hit area.
+    const tile = canvasElement.querySelector('.ds-document-chip') as HTMLElement;
+    const box = tile.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.left + 3, box.top + 3) as HTMLElement;
+    await expect(hit.closest('.ds-document-chip__main')).not.toBeNull();
+    await userEvent.click(hit);
+    await expect(args.onClick).toHaveBeenCalled();
+    await expect(args.onRemove).not.toHaveBeenCalled();
   },
 };
 

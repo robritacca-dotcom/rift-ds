@@ -69,6 +69,17 @@ export const OPERATORS: Record<FilterKind, FilterOperator[]> = {
   boolean: ['isChecked', 'isNotChecked'],
 };
 
+/**
+ * Operators a view may set on a column that its menu does not offer. A list on
+ * a text column is how a host shows these rows (an id isAnyOf the ones a reader
+ * ticked or changed) or turns a top-N into a filter; nobody types a list into a
+ * text field, so the menu leaves it out, and the editor lists the values the
+ * filter holds so each can be unticked.
+ */
+export const VIEW_OPERATORS: Partial<Record<FilterKind, readonly FilterOperator[]>> = {
+  text: ['isAnyOf', 'isNoneOf'],
+};
+
 /** Operators that take no value. */
 export const VALUELESS: ReadonlySet<FilterOperator> = new Set(['isEmpty', 'isNotEmpty', 'isChecked', 'isNotChecked']);
 

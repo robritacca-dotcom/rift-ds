@@ -38,12 +38,20 @@ export interface ChatToolResult {
   card?: ChatCard;
 }
 
+/** What a tool is told about the request it runs in. */
+export interface ChatToolContext {
+  /** The request's context, as `sanitiseContext` returned it: null for none. Never the browser's raw value. */
+  context: string | null;
+  /** A scratch object for this one request, shared by every tool call in it: for a tool whose effect a later call in the same reply must see, such as a filter set before an action on the filtered rows. */
+  request: Record<string, unknown>;
+}
+
 /** One deterministic tool the model may call. */
 export interface ChatTool {
   /** The Anthropic tool definition: name, description, input schema. */
   definition: Anthropic.Messages.Tool;
   /** Runs the tool. Return a string for the model, or a result with a card for the visitor too. Never throw for bad input: return an error string the model can recover from. */
-  execute: (input: Record<string, unknown>) => string | ChatToolResult | Promise<string | ChatToolResult>;
+  execute: (input: Record<string, unknown>, context: ChatToolContext) => string | ChatToolResult | Promise<string | ChatToolResult>;
   /** The trace point shown while the round runs, e.g. "Checked the Button prop contract". */
   tracePoint?: (input: Record<string, unknown>) => string;
 }
@@ -425,12 +433,12 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
     return tier === 'reduced' ? budgetModel : defaultModel;
   };
 
-  const runTool = async (name: string, input: unknown): Promise<ChatToolResult> => {
+  const runTool = async (name: string, input: unknown, toolContext: ChatToolContext): Promise<ChatToolResult> => {
     const args = (typeof input === 'object' && input !== null ? input : {}) as Record<string, unknown>;
     const tool = toolByName.get(name);
     if (!tool) return { text: JSON.stringify({ error: `Unknown tool ${JSON.stringify(name)}.` }) };
     try {
-      const result = await tool.execute(args);
+      const result = await tool.execute(args, toolContext);
       return typeof result === 'string' ? { text: result } : result;
     } catch (error) {
       return { text: JSON.stringify({ error: String((error as Error)?.message ?? error) }) };
@@ -510,6 +518,8 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
     const systemBase = toBlocks(
       typeof options.system === 'function' ? options.system({ path: parsed.path }) : options.system
     );
+    /* One per request: every tool call in the reply shares its scratch object. */
+    const toolContext: ChatToolContext = { context: parsed.path, request: {} };
     const trailing = parsed.path ? contextBlock(parsed.path) : null;
     const system: SystemBlocks = trailing
       ? [...systemBase, { type: 'text', text: trailing }]
@@ -654,7 +664,7 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
                 label: copy.lookingUp,
                 point: toolByName.get(block.name)?.tracePoint?.(args) ?? `Used ${block.name}`,
               });
-              const result = await runTool(block.name, block.input);
+              const result = await runTool(block.name, block.input, toolContext);
               if (result.card) send({ type: 'card', card: result.card });
               results.push({ type: 'tool_result', tool_use_id: block.id, content: result.text });
             }
@@ -696,6 +706,10 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
             upstream.signal.aborted || (error instanceof Error && error.name === 'AbortError');
           if (!aborted && !streamedText) {
             console.error('[chat] upstream failed before any text:', error);
+            /* Every request fails the same way until the tools change, so say what to change. */
+            if (/compiled grammar is too large/i.test(String((error as Error)?.message ?? error))) {
+              console.error("[chat] The tools' strict schemas compile to a grammar over the API's size limit, so every request will fail. Drop `strict` from the tools that need it least (their execute should check input anyway), or simplify their schemas.");
+            }
             send({ type: 'error', message: friendlyError(error, copy) });
           } else if (!aborted) {
             // Text is already on screen; an error event would erase it.

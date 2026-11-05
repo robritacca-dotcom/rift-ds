@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { DataTable, type DataTableColumn, type DataTableProps, type DataTableRow } from './DataTable';
 import { Badge } from '../Badge/Badge';
+import { TableToolbar } from '../TableToolbar/TableToolbar';
 
 const statusVariant = {
   Shipped: 'positive',
@@ -610,6 +611,30 @@ const typedRows: DataTableRow[] = [
     },
   },
 ];
+
+/** A view can hold a list on a text column, which no menu offers: how a host shows these rows (ids a reader ticked or changed). Its chip opens to the values it holds, each one untickable. */
+export const ListFilterOnTextColumn: Story = {
+  args: {
+    columns: typedColumns,
+    rows: typedRows,
+    caption: 'Accounts',
+    defaultFilters: [{ id: 'account-1', column: 'account', operator: 'isAnyOf', value: ['Northwind', 'Contoso'] }],
+    toolbar: <TableToolbar />,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
+    await waitFor(() => expect(names().sort()).toEqual(['Contoso', 'Northwind']));
+    await userEvent.click(canvasElement.querySelector('.ds-chip--clickable') as HTMLElement);
+    const contoso = await within(document.body).findByRole('checkbox', { name: 'Contoso' });
+    await expect(contoso).toBeChecked();
+    await userEvent.click(contoso);
+    await waitFor(() => expect(names()).toEqual(['Northwind']));
+    // Let go, it stays in the list to be ticked again.
+    await userEvent.click(within(document.body).getByRole('checkbox', { name: 'Contoso' }));
+    await waitFor(() => expect(names().sort()).toEqual(['Contoso', 'Northwind']));
+  },
+};
 
 /** Typed columns: each `type` draws, aligns and sorts its cells with no `render`, and an empty value draws nothing. */
 export const ColumnTypes: Story = {

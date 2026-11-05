@@ -56,7 +56,11 @@ export function FilterEditor({
   size?: 'default' | 'compact';
   onChange: (filter: Filter) => void;
 }) {
-  const operators = OPERATORS[column.kind];
+  /* A view can hold a list on a text column (VIEW_OPERATORS); its menu keeps that operator, and its list shows the values it holds. */
+  const operators = OPERATORS[column.kind].includes(filter.operator) || VALUELESS.has(filter.operator) ? OPERATORS[column.kind] : [...OPERATORS[column.kind], filter.operator];
+  /* The values the editor opened with, kept while it is open, so one let go can be ticked again. */
+  const [held] = useState(() => (Array.isArray(filter.value) ? (filter.value as string[]).map((value) => ({ value, label: value })) : []));
+  const choices = column.options?.length ? column.options : held;
   const setValue = (value: FilterValue) => onChange({ ...filter, value });
   const pair = (Array.isArray(filter.value) && filter.operator === 'between' ? filter.value : [null, null]) as [
     number | string | null,
@@ -69,7 +73,7 @@ export function FilterEditor({
     if (SET_OPERATORS.has(filter.operator))
       return (
         <ChoiceList
-          options={column.options}
+          options={choices}
           value={Array.isArray(filter.value) ? (filter.value as string[]) : []}
           onChange={setValue}
           size={size}

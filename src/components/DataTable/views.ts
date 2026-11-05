@@ -9,7 +9,7 @@
  */
 
 import type { Filter } from './filterModel';
-import { OPERATORS, VALUELESS, type FilterKind } from './filterModel';
+import { OPERATORS, VALUELESS, VIEW_OPERATORS, type FilterKind } from './filterModel';
 
 /** One saved setup of a table. Every field is optional: a view leaves out what it does not set. */
 export interface TableView {
@@ -87,7 +87,11 @@ export function reconcileView(view: TableView, columns: ViewColumn[]): TableView
       const col = byKey.get(filter.column);
       if (!col) return false;
       if (!col.filterKind) return true;
-      return OPERATORS[col.filterKind].includes(filter.operator) || VALUELESS.has(filter.operator);
+      return (
+        OPERATORS[col.filterKind].includes(filter.operator) ||
+        VALUELESS.has(filter.operator) ||
+        (Boolean(VIEW_OPERATORS[col.filterKind]?.includes(filter.operator)) && Array.isArray(filter.value))
+      );
     });
   if (view.search !== undefined) next.search = view.search;
   if (view.hiddenColumns) next.hiddenColumns = view.hiddenColumns.filter(known);

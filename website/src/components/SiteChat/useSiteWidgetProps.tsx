@@ -6,6 +6,7 @@ import { getNavLabel } from "@/config/navigation";
 import { getPageSummary } from "@/data/page-summaries";
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from "@/lib/chat-model";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
+import { focusIcon, focusLabel, focusNote, useSiteFocus } from "./siteFocus";
 import { startersForPath } from "./starters";
 import styles from "./SiteChatMount.module.css";
 
@@ -13,7 +14,8 @@ import styles from "./SiteChatMount.module.css";
  * What the site tells the package's ChatWidget about itself: the assistant's
  * name and mark, the welcome copy, the route-aware starters (drawn with the
  * provider's seed, keyed by the pathname so a page's set reveals once), the
- * composer's context note naming the page the visitor is reading, the model
+ * composer's context note naming the page the visitor is reading, or what
+ * they highlighted on it with a way back to the page, the model
  * allowlist, and the disclaimer with its link to /privacy, which carries the
  * AI-use and 30-day logging disclosure.
  *
@@ -34,6 +36,7 @@ export function useSiteWidgetProps(): Pick<
   | "starters"
   | "startersKey"
   | "context"
+  | "contextClearLabel"
   | "models"
   | "defaultModel"
   | "disclaimer"
@@ -45,6 +48,7 @@ export function useSiteWidgetProps(): Pick<
      resolved through the page-summaries data first (it covers every static
      route and the components) with the nav label as the fallback. A route
      neither knows (the labs) shows no chip. */
+  const { focus, clear } = useSiteFocus();
   const contextLabel = pathname ? (getPageSummary(pathname)?.title ?? label ?? undefined) : undefined;
 
   return {
@@ -55,7 +59,12 @@ export function useSiteWidgetProps(): Pick<
     tagline: "Ask about the system, the tokens, design, or AI",
     starters: startersForPath(pathname, label, starterSeed),
     startersKey: pathname ?? "",
-    context: contextLabel ? { label: contextLabel } : null,
+    context: focus
+      ? { label: focusLabel(focus), note: focusNote(focus), icon: focusIcon(focus), onClear: clear, sent: true }
+      : contextLabel
+        ? { label: contextLabel }
+        : null,
+    contextClearLabel: "Back to the whole page",
     models: CHAT_MODELS,
     defaultModel: DEFAULT_CHAT_MODEL.value,
     disclaimer: (

@@ -34,6 +34,7 @@ import type { ChatCard, ChatEvent, ChatFeedbackVerdict, ChatModelOption, ChatTra
 
 /* The action definitions the page uses, for the route that proposes them (rift-ds/chat/server stays React-free). */
 export { defineAction, planAction, skippedText, type ChatAction, type ActionPlan } from './actions';
+export { sanitiseSelection, selectionLines, DEFAULT_SELECTION_LIMITS, type ChatSelection, type SelectionKind, type SelectionLimits, type SelectionLinesOptions } from './selectionContext';
 export interface ChatToolResult {
   /** The tool result the model reads. */
   text: string;

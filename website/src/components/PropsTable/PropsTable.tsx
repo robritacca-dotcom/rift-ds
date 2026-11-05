@@ -7,7 +7,8 @@ import styles from "./PropsTable.module.css";
  * rows come from the generated component API, the same docgen pass that
  * fills Storybook's props tables, the shipped .d.ts, the .md contract pages
  * and the MCP get_component tool, so a table here can never say something
- * the package does not.
+ * the package does not. The table names its component for the site chat,
+ * so a highlight in a row reads as that prop (SiteChat/siteFocus.tsx).
  */
 /* A default that is a literal of several lines (a written pool, a render
    function) shows its first line here and the whole value on hover; the
@@ -23,6 +24,7 @@ export default function PropsTable({ exported }: { exported: ComponentExportApi 
   }
   return (
     <Table
+      data-chat-source={`props:${exported.component}`}
       bordered
       size="compact"
       caption={`${exported.component} props`}

@@ -329,6 +329,7 @@ export default function TemplateAssistant({
         // covers the page.
         viewport && !full && surface === "inset" && styles.inset,
         viewport && !modal && surface === "inset" && styles.flat,
+        modal && !full && styles.overScrim,
         chat && styles.live,
         closing && styles.closing,
         full && styles.full,

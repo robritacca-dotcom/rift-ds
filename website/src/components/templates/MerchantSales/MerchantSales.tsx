@@ -23,7 +23,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
-import { CHAT_SOURCE_ATTRIBUTE, useChatAgentState, useChatWidget, useSelectionFocus } from "rift-ds/chat";
+import { CHAT_SOURCE_ATTRIBUTE, describeSelection, useChatAgentState, useChatWidget, useSelectionFocus } from "rift-ds/chat";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
@@ -114,7 +114,8 @@ const MAX_HIGHLIGHT = 300;
  * smallest thing that holds all of it: a KPI card (data-chat-source), a cell (the table's
  * data-row and data-col), a row, or else the section around it. The server looks
  * that source up, so "$51.7M" arrives as the Net revenue figure and its
- * definition, not as a bare number. A selection anywhere else, the chat's own
+ * definition, not as a bare number; anything else travels with what it sits
+ * in (the package's describeSelection). A selection anywhere else, the chat's own
  * panel included, is not the page, so it leaves the focus alone; a click that
  * collapses a highlight on the page lets it go.
  */
@@ -142,6 +143,8 @@ function usePageFocus(bridge: React.RefObject<TableBridge | null>) {
       orderId: row?.dataset.row ?? null,
       column: row && column && COLUMN_KEYS.includes(column) ? column : null,
       section: holder.closest("[aria-label]")?.getAttribute("aria-label") ?? null,
+      /* What it sits in, for a highlight the ledger cannot name: a heading's section, a card's other lines, a chart's labels. */
+      selection: page.current ? describeSelection(selected, page.current) : undefined,
     };
     /* Kept so the chat can repaint the highlight once typing takes the selection away. */
     highlightRanges.set(focus, selected.range);

@@ -674,6 +674,13 @@
           "default": "/api/chat"
         },
         {
+          "name": "getContext",
+          "type": "(() => string | null)",
+          "typeKind": "other",
+          "required": false,
+          "description": "What the default transport sends as the request's context, read at each\nsend: the page by default (`window.location.pathname`). A host whose chat\nfollows more than the page (a highlight, a selection) returns its own\nstring, which its handler's `sanitiseContext` checks. Pass a stable\nfunction (one that reads the latest state itself), since a new one makes\na new transport. Ignored with a `transport`, which carries its own."
+        },
+        {
           "name": "defaultPlacement",
           "type": "ChatPlacement",
           "typeKind": "enum",

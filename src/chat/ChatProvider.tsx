@@ -54,6 +54,15 @@ export interface ChatProviderProps {
   transport?: ChatTransport;
   /** The endpoint the default transport posts to. */
   endpoint?: string;
+  /**
+   * What the default transport sends as the request's context, read at each
+   * send: the page by default (`window.location.pathname`). A host whose chat
+   * follows more than the page (a highlight, a selection) returns its own
+   * string, which its handler's `sanitiseContext` checks. Pass a stable
+   * function (one that reads the latest state itself), since a new one makes
+   * a new transport. Ignored with a `transport`, which carries its own.
+   */
+  getContext?: () => string | null;
   /** The seat the panel opens in. */
   defaultPlacement?: ChatPlacement;
   /**
@@ -101,6 +110,7 @@ export interface ChatProviderProps {
 export function ChatProvider({
   transport,
   endpoint = '/api/chat',
+  getContext,
   defaultPlacement = 'right',
   followups = '/api/chat/followups',
   fallbackFollowups = DEFAULT_FALLBACK_FOLLOWUPS,
@@ -123,8 +133,8 @@ export function ChatProvider({
   const [chosenModel, setChosenModel] = useState<string | null>(null);
 
   const fallbackTransport = useMemo(
-    () => createFetchTransport(endpoint, { getModel: () => chosenModel }),
-    [endpoint, chosenModel]
+    () => createFetchTransport(endpoint, { getModel: () => chosenModel, getContext }),
+    [endpoint, chosenModel, getContext]
   );
   const placeholderCopy = useMemo(
     () => ({ ...DEFAULT_PLACEHOLDER_COPY, ...placeholders }),

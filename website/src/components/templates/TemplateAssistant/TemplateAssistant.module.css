@@ -99,6 +99,15 @@
   backdrop-filter: blur(40px);
 }
 
+/* The overlay's glass sits over the scrim, so in light mode the blur draws a
+   page already dimmed and the frost lands on the sent bubble's own grey.
+   Lifting what shows through the glass gives back the docked plane's
+   lightness, so the bubble reads the same in every mode and the frost stays.
+   The dark glass already separates, so it is left alone. */
+:global(html:not([data-theme="dark"])) .overScrim {
+  backdrop-filter: blur(24px) brightness(1.7);
+}
+
 .flat {
   background: var(--color-bg-app-surface);
   /* TemplateShell's inset surface, matched: the docked panel is the same

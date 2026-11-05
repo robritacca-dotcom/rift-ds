@@ -26,6 +26,7 @@ import { siteCorpus } from "@/data/site-corpus.generated";
 import { BUDGET_CHAT_MODEL, CHAT_MODELS, DEFAULT_CHAT_MODEL } from "@/lib/chat-model";
 import { lookupComponent, lookupTokens } from "@/lib/site-tools";
 
+import { sanitiseSiteContext, siteContextBlock } from "@/lib/site-chat-context";
 import { guardrails } from "./guardrails";
 import { PERSONA } from "./persona";
 
@@ -131,9 +132,10 @@ const handler = createChatHandler({
     { type: "text", text: siteCorpus, cache_control: { type: "ephemeral", ttl: "1h" } },
   ],
   // Page context rides after the breakpoint as an uncached trailing block:
-  // it changes per request, and the handler has already sanitised the path
-  // to a slug charset.
-  contextBlock: (path) => `The visitor is currently on the page ${path} of the site.`,
+  // it changes per request. It is the page and what the visitor highlighted
+  // on it, checked against the published data (lib/site-chat-context.ts).
+  sanitiseContext: sanitiseSiteContext,
+  contextBlock: siteContextBlock,
   models: CHAT_MODELS,
   defaultModel: DEFAULT_CHAT_MODEL.value,
   budgetModel: BUDGET_CHAT_MODEL.value,

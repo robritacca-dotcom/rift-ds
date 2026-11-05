@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 - Category: widget
 - Import: `import { ChatWidget, ChatProvider, ChatLauncher, ChatThreads, ChatTabs, ChatAgentPane, ChatArtifactPane, ChatArtifactCard } from 'rift-ds/chat';`
 - Subpath `rift-ds/chat`: The widget, the provider, the launcher and the engine under them, with the hooks that let it follow the reader and write starters for what they picked. Optional peers: react-markdown, remark-gfm.
-- Subpath `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, and its follow-ups, starters and feedback siblings, for any web-standard route. Optional peers: @anthropic-ai/sdk.
+- Subpath `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, its follow-ups, starters and feedback siblings, and the checks for what a reader highlighted, for any web-standard route. Optional peers: @anthropic-ai/sdk.
 - Subpath `rift-ds/chat/actions`: The action definitions a page and its route share, and their dry run, with no dependencies.
 - Subpath `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Optional peers: @upstash/ratelimit, @upstash/redis.
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.
@@ -110,6 +110,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 | --- | --- | --- | --- | --- |
 | transport | `ChatTransport` | no |  | Where the conversation goes. Defaults to the fetch transport against `endpoint`, carrying the visitor's model pick. A script from `scriptChat()` runs the widget with no backend at all. |
 | endpoint | `string` | no | `/api/chat` | The endpoint the default transport posts to. |
+| getContext | `(() => string \| null)` | no |  | What the default transport sends as the request's context, read at each send: the page by default (`window.location.pathname`). A host whose chat follows more than the page (a highlight, a selection) returns its own string, which its handler's `sanitiseContext` checks. Pass a stable function (one that reads the latest state itself), since a new one makes a new transport. Ignored with a `transport`, which carries its own. |
 | defaultPlacement | `ChatPlacement` | no | `right` | The seat the panel opens in. |
 | followups | `string \| false \| FollowupsSource` | no | `/api/chat/followups` | Where follow-up questions come from after an answer commits: a source function, an endpoint for the built-in fetcher, or `false` for none: with `false` no chips show under an answer at all, not even the written `fallbackFollowups`. Defaults to the fetcher against `/api/chat/followups`. |
 | fallbackFollowups | `readonly string[]` | no | `[   'Can you say more about that?',   'What should I do next?',   'Where can I read more?',   'Can you give an example?',   'What are the alternatives?', ]` | The written questions offered when the source returns none or fails. Unused when `followups` is `false`. |

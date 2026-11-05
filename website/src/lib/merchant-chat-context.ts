@@ -3,11 +3,15 @@
  * the browser sends: the orders table's setup and the reader's focus (the
  * orders they ticked, or the text they highlighted and its source). Nothing the
  * browser says is taken as given: columns must be real, orders are looked up in
- * the seeded ledger, a KPI by its label, and text is cut to length. Shared by
+ * the seeded ledger, a KPI by its label, and text is cut to length. A highlight
+ * the ledger cannot name (a heading, a chart's labels) keeps what it sits in,
+ * checked as the package's selection shape (`sanitiseSelection`) and written
+ * for the model as quoted data (`selectionLines`). Shared by
  * the chat (app/api/merchant-chat) and its starters (app/api/merchant-chat/starters),
  * so the two always read the focus the same way.
  */
 
+import { sanitiseSelection, selectionLines, type ChatSelection } from "rift-ds/chat/server";
 import { COLUMN_KEYS, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
 import { MERCHANT_KPIS, computeKpis } from "@/data/merchant-sales";
 import { ORDER_ACTIONS, ORDER_ACTION_IDS, planAction, skippedText, withEdit, type OrderActionId } from "./order-actions";
@@ -95,9 +99,17 @@ export function sanitiseFocus(value: unknown): Record<string, unknown> | null {
       ...(orderId ? { orderId, row } : {}),
       ...(column ? { column, value: row![column] } : {}),
       ...(!kpi && !orderId && typeof focus.section === "string" ? { section: focus.section.slice(0, 60) } : {}),
+      /* What a highlight the ledger cannot name sits in: checked as the package's selection shape, never as a fact. */
+      ...(!kpi && !orderId ? withSelection(focus.selection) : {}),
     };
   }
   return null;
+}
+
+/* A selection the page read, kept only with what says more than the words alone: a heading, or what it sits in. */
+function withSelection(value: unknown): { selection?: ChatSelection } {
+  const selection = sanitiseSelection(value);
+  return selection && (selection.kind === "heading" || selection.around || selection.heading) ? { selection } : {};
 }
 
 /** The focus in a sentence the model reads before anything else in the request, with its data after it. */
@@ -115,6 +127,8 @@ export function focusLine(focus: Record<string, unknown> | null): string {
   }
   if (focus.column) return `The reader highlighted the ${focus.column} cell of order ${focus.orderId}. "This" and "this value" mean that cell; "this order" means its order.\n${JSON.stringify(focus)}`;
   if (focus.orderId) return `The reader highlighted text in the row of order ${focus.orderId}. "This" means what it says; "this order" means that order.\n${JSON.stringify(focus)}`;
+  const { selection, ...rest } = focus as { selection?: ChatSelection };
+  if (selection) return [...selectionLines(selection, { where: "the merchant sales page" }), JSON.stringify(rest)].join("\n");
   return `The reader highlighted this text on the page. "This" and "it" mean what it says, where it sits.\n${JSON.stringify(focus)}`;
 }
 

@@ -353,7 +353,7 @@ export function MerchantChatWidget({ starters }: { starters: Starter[] }) {
         sent: focus ? () => <SentFocusChip focus={focus} /> : false,
       }}
       contextClearLabel="Back to the whole page"
-      disclaimer="Answers only from this page's fictional orders. Check anything important."
+      disclaimer="Answers may be wrong. Fictional orders only."
       fullscreenEnabled={!takeover}
       placementEnabled={false}
       compact={takeover || view !== "full"}

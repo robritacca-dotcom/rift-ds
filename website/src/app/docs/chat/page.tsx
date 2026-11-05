@@ -257,31 +257,60 @@ injectTurn({ role: 'assistant', text: 'A turn the model never said.' });`;
 const SHADCN_SNIPPET = `npx shadcn@latest add ${SITE_URL}/r/${chatWidget.slug}.json`;
 
 /* Fernway Trails, the fictional walking club the docs use, and its walks. */
-const FOCUS_SNIPPET = `import { useRef, useState } from 'react';
-import { ChatWidget, CHAT_SOURCE_ATTRIBUTE, useHeldHighlight, useSelectionFocus, type SelectedText } from '${PACKAGE_NAME}/chat';
+const FOCUS_SNIPPET = `// app/bookings/page.tsx
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChatProvider, ChatWidget, describeSelection, useHeldHighlight, useSelectionFocus, type ChatSelection } from '${PACKAGE_NAME}/chat';
 
 function Bookings() {
   const page = useRef<HTMLElement>(null);
-  const [focus, setFocus] = useState<SelectedText | null>(null);
-  useSelectionFocus(page, setFocus);
+  const [focus, setFocus] = useState<(ChatSelection & { range: Range }) | null>(null);
+  useSelectionFocus(page, (selected) =>
+    setFocus(selected && page.current ? { ...describeSelection(selected, page.current), range: selected.range } : null)
+  );
   useHeldHighlight(focus?.range ?? null);
-  const source = focus?.holder.closest(\`[\${CHAT_SOURCE_ATTRIBUTE}]\`)?.getAttribute(CHAT_SOURCE_ATTRIBUTE);
+
+  /* Read at each send, so the request carries the highlight as it is now. */
+  const latest = useRef(focus);
+  useEffect(() => {
+    latest.current = focus;
+  }, [focus]);
+  const getContext = useCallback(() => {
+    const highlight = latest.current && { ...latest.current, range: undefined };
+    return JSON.stringify({ path: location.pathname, highlight });
+  }, []);
 
   return (
-    <>
+    <ChatProvider getContext={getContext}>
       <main ref={page}>
+        <h2>This week</h2>
         <div data-chat-source="Walks booked">143</div>
       </main>
       <ChatWidget
         context={
           focus
-            ? { label: focus.text, note: \`Looking at “\${focus.text}”\${source ? \` · \${source}\` : ''}\`, icon: 'format_quote', onClear: () => setFocus(null), sent: true }
+            ? { label: focus.text, icon: 'format_quote', onClear: () => setFocus(null), sent: true }
             : { label: 'Bookings' }
         }
       />
-    </>
+    </ChatProvider>
   );
-}`;
+}
+
+// app/api/chat/route.ts, trimmed: lookUpSource is your app's own
+import { createChatHandler, sanitisePath, sanitiseSelection, selectionLines } from '${PACKAGE_NAME}/chat/server';
+
+export const POST = createChatHandler({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  system: 'You answer questions about the bookings page.',
+  sanitiseContext: (value) => {
+    const raw = typeof value === 'string' ? JSON.parse(value) : null;
+    return JSON.stringify({ path: sanitisePath(raw?.path), highlight: sanitiseSelection(raw?.highlight) });
+  },
+  contextBlock: (context) => {
+    const { path, highlight } = JSON.parse(context);
+    return [\`The reader is on \${path}.\`, ...(highlight ? [...selectionLines(highlight), lookUpSource(highlight.source)] : [])].join('\\n');
+  },
+});`;
 
 const STARTERS_SNIPPET = `// app/api/chat/starters/route.ts, trimmed: describeWalkFocus and focusForServer are your app's own
 import { createStartersHandler } from '${PACKAGE_NAME}/chat/server';
@@ -599,11 +628,16 @@ export default function ChatInstallPage() {
               the page, and <code>sent</code> to repeat it on each message as a chip.{" "}
               <code>useSelectionFocus</code> reports each highlight inside one root, the page and
               never the chat&apos;s panel, with the element that holds it, where a{" "}
-              <code>data-chat-source</code> says what it came from. Typing moves the browser&apos;s
+              <code>data-chat-source</code> says what it came from. A word alone rarely says
+              enough, so <code>describeSelection</code> reads what it sits in from the page&apos;s
+              structure: a heading brings its section, words their paragraph, a piece of code the
+              whole example, a table cell its column and row. Typing moves the browser&apos;s
               selection into the composer, so <code>useHeldHighlight</code> keeps the passage
-              painted in the note&apos;s own fill. Send the focus with every request and look its
-              source up on the server, so &ldquo;$51.7M&rdquo; reaches the model as the figure it
-              belongs to, not as a bare number. Highlighted text is data from the page, and a page
+              painted in the note&apos;s own fill. <code>ChatProvider</code>&apos;s{" "}
+              <code>getContext</code> sends the focus with every request; on the server,{" "}
+              <code>sanitiseSelection</code> checks it and <code>selectionLines</code> writes it
+              for the model, and you look its source up, so &ldquo;$51.7M&rdquo; reaches the model
+              as the figure it belongs to, not as a bare number. Highlighted text is data from the page, and a page
               that carries other people&apos;s words needs that decision made first.
             </p>
             <CodeBlock code={FOCUS_SNIPPET} language="tsx" showCopy />

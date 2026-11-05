@@ -18,6 +18,7 @@
 import React from "react";
 import { useGeneratedStarters, useHeldHighlight, type Starter } from "rift-ds/chat";
 import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
+import type { ChatSelection } from "rift-ds/chat";
 import { LEDGER_COLUMNS } from "@/data/order-ledger";
 import { MERCHANT_KPIS } from "@/data/merchant-sales";
 import type { TableContextValue } from "../../../../../src/components/DataTable/tableContext";
@@ -25,8 +26,8 @@ import styles from "./MerchantSales.module.css";
 
 export type ChatFocus =
   | { kind: "orders"; ids: string[]; all: boolean }
-  /** A highlight and its source: the KPI card it sits in, or the order and column, and the section around it. */
-  | { kind: "text"; text: string; kpi: string | null; orderId: string | null; column: string | null; section: string | null };
+  /** A highlight and its source: the KPI card it sits in, or the order and column, the section around it, and what it sits in (`describeSelection`). */
+  | { kind: "text"; text: string; kpi: string | null; orderId: string | null; column: string | null; section: string | null; selection?: ChatSelection };
 
 /** The page when nothing is focused: whether the table is narrowed from its opening setup, and to how many orders. */
 export type PageView = { filtered: boolean; count: number };

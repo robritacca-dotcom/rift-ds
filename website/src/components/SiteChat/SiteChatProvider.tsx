@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useRef, type ComponentProps, type ReactNode } from "react";
 import {
   ChatProvider,
   type ChatArtifactRenderers,
@@ -10,6 +10,7 @@ import {
   type ThreadsOptions,
 } from "rift-ds/chat";
 import { FALLBACK_FOLLOWUPS } from "@/lib/chat-followups";
+import { SiteFocusProvider, siteContextString, useSiteFocus } from "./siteFocus";
 
 /**
  * The site's configuration of the package's ChatProvider: the three routes
@@ -25,6 +26,10 @@ import { FALLBACK_FOLLOWUPS } from "@/lib/chat-followups";
  * starts clean by design: no storage, no persistence. The staged chats (the
  * playground and the chat home template) mount their own with a
  * scripted transport.
+ *
+ * The live chat follows what the visitor highlights on the page
+ * (SiteFocusProvider in ./siteFocus), sent with each question beside the
+ * path; a staged chat, with its own transport, follows nothing.
  */
 export function SiteChatProvider({
   transport,
@@ -46,8 +51,8 @@ export function SiteChatProvider({
   threads?: ThreadsOptions;
   children: ReactNode;
 }) {
-  return (
-    <ChatProvider
+  const provider = (
+    <FocusedChatProvider
       transport={transport}
       endpoint="/api/chat"
       followups="/api/chat/followups"
@@ -59,6 +64,18 @@ export function SiteChatProvider({
       defaultPlacement={defaultPlacement}
     >
       {children}
-    </ChatProvider>
+    </FocusedChatProvider>
   );
+  return transport ? provider : <SiteFocusProvider>{provider}</SiteFocusProvider>;
+}
+
+/* The package's provider, sending the page and the highlight as the request's context. */
+function FocusedChatProvider(props: ComponentProps<typeof ChatProvider>) {
+  const { focus } = useSiteFocus();
+  const latest = useRef(focus);
+  useEffect(() => {
+    latest.current = focus;
+  }, [focus]);
+  const getContext = useCallback(() => siteContextString(window.location.pathname, latest.current), []);
+  return <ChatProvider {...props} getContext={getContext} />;
 }

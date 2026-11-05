@@ -75,97 +75,84 @@
 }
 
 /* ============================================
-   COLOUR WHEEL PREVIEWS
+   CARD PREVIEWS
+   Each card's mark sits in TocCard's shared disc (`disc`), which owns
+   the fill, size and icon size; the rules below draw only the marks.
    ============================================ */
-.colourWheel {
-  width: 184px;
-  height: 184px;
-  min-width: 184px;
-  min-height: 184px;
-  aspect-ratio: 1 / 1;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 180deg,
-    var(--primitive-teal-01) 0deg,
-    var(--primitive-teal-02) 36deg,
-    var(--primitive-teal-03) 72deg,
-    var(--primitive-teal-04) 108deg,
-    var(--primitive-teal-05) 144deg,
-    var(--primitive-teal-06) 162deg,
-    var(--primitive-teal-07) 180deg,
-    var(--primitive-teal-08) 216deg,
-    var(--primitive-teal-09) 252deg,
-    var(--primitive-teal-10) 288deg,
-    var(--primitive-teal-09) 306deg,
-    var(--primitive-teal-08) 324deg,
-    var(--primitive-teal-06) 342deg,
-    var(--primitive-teal-03) 354deg,
-    var(--primitive-teal-01) 360deg
-  );
+
+/* Primitive colours: the theme's ramps, one column per family */
+.primitiveGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 12px);
+  gap: var(--gap-050);
 }
 
-.colourWheelMode {
-  background: conic-gradient(
-    from 180deg,
-    var(--primitive-teal-07) 0deg,
-    var(--primitive-green-07) 60deg,
-    var(--primitive-yellow-07) 120deg,
-    var(--color-core-accent-amber) 180deg,
-    var(--primitive-red-07) 240deg,
-    var(--primitive-purple-07) 300deg,
-    var(--primitive-teal-07) 360deg
-  );
-  opacity: 0.85;
+.primitiveCell {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-050);
 }
 
-/* ============================================
-   CIRCLE PREVIEWS
-   ============================================ */
-/* Feature icons inside the round previews. Sizes live here rather than
-   inline so they read from the icon-size scale. */
-.circlePreview :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-1200);
-}
-
-.circlePreview {
-  width: 184px;
-  height: 184px;
-  min-width: 184px;
-  min-height: 184px;
-  aspect-ratio: 1 / 1;
-  flex-shrink: 0;
-  border-radius: 999px;
+/* Semantic colours: the action colour above the five status roles */
+.semanticPreview {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  gap: 10px;
-  padding: 0 24px;
-  box-sizing: border-box;
-}
-
-.circleDashed {
-  border: none;
-}
-
-.circleGreen {
-  background: var(--color-status-positive-bg);
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: var(--gap-300);
 }
 
-.circleBlue {
-  background: var(--color-status-info-bg);
-  flex-direction: row;
-  gap: 0;
-  padding: 0;
+.semanticAction {
+  width: 72px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  background: var(--color-action-primary-bg);
 }
 
-.circleNeutral {
-  background: var(--color-bg-container-secondary);
-  padding: 0;
+.semanticStatuses {
+  display: flex;
+  gap: var(--gap-100);
+}
+
+.semanticStatus {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  border: var(--border-050) solid;
+}
+
+/* Icons: one real glyph at three icon-size steps, each on a dashed
+   keyline tile that hugs it, standing on one baseline */
+.iconScale {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap-200);
+}
+
+.iconTile {
+  display: flex;
+  padding: var(--gap-050);
+  border: var(--border-025) dashed var(--color-text-tertiary);
+  border-radius: var(--radius-100);
+  color: var(--color-text-secondary);
+}
+
+/* Logos: the mark at two sizes on one baseline */
+.logoMarks {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap-200);
+}
+
+/* Semantic spacing: two blocks and the gap between them */
+.spatialPreview {
+  display: flex;
+  align-items: center;
+}
+
+/* Typography: the light and bold tiers side by side */
+.typographyPreview {
+  display: flex;
+  align-items: baseline;
 }
 
 /* Elevation preview — a mini UI with a popover floating above the base surface */
@@ -289,24 +276,20 @@
   height: 36px;
 }
 
-.spatialBox {
-  width: 60px;
-  height: 50px;
-  border-left: 1px solid var(--color-status-positive-border);
-  border-right: 1px solid var(--color-status-positive-border);
-  border-radius: 2px;
+.spatialBlock {
+  width: 40px;
+  height: 56px;
+  border-radius: var(--radius-100);
+  background: var(--color-bg-container-tertiary);
 }
 
-.spatialLabel {
-  font-size: var(--font-title-body-size);
-  font-weight: var(--font-title-body-weight);
-  color: var(--color-text-primary);
-}
-
-.spatialValue {
-  font-size: var(--font-paragraph-size);
-  font-weight: var(--font-paragraph-weight);
-  color: var(--color-text-tertiary);
+/* The gap between the blocks is a real token's width, tinted the way a
+   design tool marks spacing, with a hairline at each edge */
+.spatialGap {
+  align-self: stretch;
+  width: var(--gap-500);
+  background: var(--color-status-positive-bg);
+  border-inline: var(--border-025) solid var(--color-status-positive-border);
 }
 
 /* Typography preview */
@@ -346,40 +329,12 @@
   }
 
 
-  .circlePreview {
-    width: 150px;
-    height: 150px;
-    min-width: 150px;
-    min-height: 150px;
-  }
-
-  .colourWheel {
-    width: 150px;
-    height: 150px;
-    min-width: 150px;
-    min-height: 150px;
-  }
-
   .elevationScene {
     transform: scale(0.8);
   }
 }
 
 @media (max-width: 600px) {
-  .circlePreview {
-    width: 120px;
-    height: 120px;
-    min-width: 120px;
-    min-height: 120px;
-  }
-
-  .colourWheel {
-    width: 120px;
-    height: 120px;
-    min-width: 120px;
-    min-height: 120px;
-  }
-
   .elevationScene {
     transform: scale(0.62);
   }

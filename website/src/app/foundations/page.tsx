@@ -1,4 +1,4 @@
-import Image from "next/image";
+import BrandMark from "@/components/BrandMark/BrandMark";
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -6,9 +6,17 @@ import TocCard from "../../components/TocCard/TocCard";
 import PageLinks from "../../components/PageLinks/PageLinks";
 import { foundationsSidebarLinks, getSidebarLinks, sectionLandingMetadata } from "@/config/navigation";
 import styles from "./page.module.css";
-import { BRAND_SHORT, FIGMA_FILE_URL } from "@/config/brand.generated";
+import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations");
+
+/* The Primitive colours card draws the live ramps, so a preset that re-keys
+   a family re-colours its column. */
+const PRIMITIVE_FAMILIES = ["neutral", "teal", "blue", "purple", "red", "orange", "yellow", "green"] as const;
+const PRIMITIVE_STEPS = ["03", "05", "07", "09"] as const;
+
+/* The Semantic colours card draws the status roles, not the hues behind them. */
+const STATUS_ROLES = ["info", "positive", "warning", "error", "neutral"] as const;
 
 // Page-level, so it never cascades to the sub-pages (see sectionLandingMetadata).
 export const metadata = sectionLandingMetadata("/foundations");
@@ -42,96 +50,118 @@ export default function FoundationsPage() {
 
           <div className={`${styles.tocGrid} animate-in animate-delay-2`}>
             {/* Elevation */}
-            <TocCard href="/foundations/elevation" title="Elevation">
-              <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>
-                <div className={styles.elevationScene}>
-                  <div className={styles.elevationWindow}>
-                    <div className={styles.elevationBarWide} />
-                    <div className={styles.elevationBar} />
-                    <div className={styles.elevationBarShort} />
-                  </div>
-                  <div className={styles.elevationPopover}>
-                    <div className={styles.elevationPopoverBar} />
-                    <div className={styles.elevationPopoverBar} />
-                  </div>
+            <TocCard disc href="/foundations/elevation" title="Elevation">
+              <div className={styles.elevationScene}>
+                <div className={styles.elevationWindow}>
+                  <div className={styles.elevationBarWide} />
+                  <div className={styles.elevationBar} />
+                  <div className={styles.elevationBarShort} />
+                </div>
+                <div className={styles.elevationPopover}>
+                  <div className={styles.elevationPopoverBar} />
+                  <div className={styles.elevationPopoverBar} />
                 </div>
               </div>
             </TocCard>
 
             {/* Icons */}
-            <TocCard href="/foundations/icons" title="Icons">
-              <div className={`${styles.circlePreview} ${styles.circleDashed}`} style={{ gap: "10px" }}>
-                <span className="material-symbols-rounded" style={{ color: "var(--color-text-secondary)" }}>
-                  article
-                </span>
-                <span className="material-symbols-rounded" style={{ color: "var(--color-text-secondary)" }}>
-                  apps
-                </span>
+            <TocCard disc href="/foundations/icons" title="Icons">
+              {/* The icon-size scale: one glyph at three --icon-size steps, each on its keyline tile */}
+              <div className={styles.iconScale} aria-hidden="true">
+                {(["600", "800", "1200"] as const).map((step) => (
+                  <span key={step} className={styles.iconTile}>
+                    <span
+                      className="material-symbols-rounded"
+                      style={{ "--icon-size": `var(--icon-size-${step})` } as React.CSSProperties}
+                    >
+                      star
+                    </span>
+                  </span>
+                ))}
               </div>
             </TocCard>
 
             {/* Layout */}
-            <TocCard href="/foundations/layout" title="Layout">
-              <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>
-                <div className={styles.layoutFrames}>
-                  <span className={styles.layoutPhone} />
-                  <span className={styles.layoutTablet} />
-                  <span className={styles.layoutDesktop} />
-                </div>
+            <TocCard disc href="/foundations/layout" title="Layout">
+              <div className={styles.layoutFrames}>
+                <span className={styles.layoutPhone} />
+                <span className={styles.layoutTablet} />
+                <span className={styles.layoutDesktop} />
               </div>
             </TocCard>
 
             {/* Logos */}
-            <TocCard href="/foundations/logos" title="Logos">
-              <div className={`${styles.circlePreview} ${styles.circleDashed}`} style={{ gap: "10px" }}>
-                <Image src="/logos/mark.svg" alt={`${BRAND_SHORT} mark`} width={48} height={48} />
-                <Image src="/logos/mark.svg" alt={`${BRAND_SHORT} mark`} width={72} height={72} />
+            <TocCard disc href="/foundations/logos" title="Logos">
+              <div className={styles.logoMarks}>
+                <BrandMark size={32} />
+                <BrandMark size={56} />
               </div>
             </TocCard>
 
             {/* Motion */}
-            <TocCard href="/foundations/motion" title="Motion">
-              <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>
-                <div className={styles.motionTrack}>
-                  <div className={styles.motionDot} />
+            <TocCard disc href="/foundations/motion" title="Motion">
+              <div className={styles.motionTrack}>
+                <div className={styles.motionDot} />
+              </div>
+            </TocCard>
+
+            {/* Primitive colours: the theme's own ramps, one column per family */}
+            <TocCard disc href="/foundations/colour-primitives" title="Primitive colours">
+              <div className={styles.primitiveGrid} aria-hidden="true">
+                {PRIMITIVE_STEPS.map((step) =>
+                  PRIMITIVE_FAMILIES.map((family) => (
+                    <span
+                      key={`${family}-${step}`}
+                      className={styles.primitiveCell}
+                      style={{ background: `var(--primitive-${family}-${step})` }}
+                    />
+                  )),
+                )}
+              </div>
+            </TocCard>
+
+            {/* Semantic colours: roles, not hues (the action colour and the status set) */}
+            <TocCard disc href="/foundations/colour-mode" title="Semantic colours">
+              <div className={styles.semanticPreview} aria-hidden="true">
+                <span className={styles.semanticAction} />
+                <div className={styles.semanticStatuses}>
+                  {STATUS_ROLES.map((role) => (
+                    <span
+                      key={role}
+                      className={styles.semanticStatus}
+                      style={{
+                        background: `var(--color-status-${role}-bg)`,
+                        borderColor: `var(--color-status-${role}-border)`,
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
             </TocCard>
 
-            {/* Primitive Colours */}
-            <TocCard href="/foundations/colour-primitives" title="Primitive colours">
-              <div className={styles.colourWheel} />
-            </TocCard>
-
-            {/* Semantic Colours */}
-            <TocCard href="/foundations/colour-mode" title="Semantic colours">
-              <div className={`${styles.colourWheel} ${styles.colourWheelMode}`} />
-            </TocCard>
-
             {/* Semantic Spacing */}
-            <TocCard href="/foundations/spatial" title="Semantic spacing">
-              <div className={`${styles.circlePreview} ${styles.circleGreen}`}>
-                <div className={styles.spatialBox} />
-                <span className={styles.spatialLabel}>1500</span>
-                <span className={styles.spatialValue}>60px</span>
+            <TocCard disc href="/foundations/spatial" title="Semantic spacing">
+              {/* Two blocks held apart by a real gap token, the gap itself marked */}
+              <div className={styles.spatialPreview} aria-hidden="true">
+                <span className={styles.spatialBlock} />
+                <span className={styles.spatialGap} />
+                <span className={styles.spatialBlock} />
               </div>
             </TocCard>
 
             {/* Themes */}
-            <TocCard href="/foundations/themes" title="Themes">
-              <div className={`${styles.circlePreview} ${styles.circleNeutral}`}>
-                <div className={styles.themesDots}>
-                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-coral)" }} />
-                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-gold)" }} />
-                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-mint)" }} />
-                  <span className={styles.themesDot} style={{ background: "var(--color-core-accent-cobalt)" }} />
-                </div>
+            <TocCard disc href="/foundations/themes" title="Themes">
+              <div className={styles.themesDots}>
+                <span className={styles.themesDot} style={{ background: "var(--color-core-accent-coral)" }} />
+                <span className={styles.themesDot} style={{ background: "var(--color-core-accent-gold)" }} />
+                <span className={styles.themesDot} style={{ background: "var(--color-core-accent-mint)" }} />
+                <span className={styles.themesDot} style={{ background: "var(--color-core-accent-cobalt)" }} />
               </div>
             </TocCard>
 
             {/* Typography */}
-            <TocCard href="/foundations/typography" title="Typography">
-              <div className={`${styles.circlePreview} ${styles.circleBlue}`}>
+            <TocCard disc href="/foundations/typography" title="Typography">
+              <div className={styles.typographyPreview} aria-hidden="true">
                 <span className={styles.typographyLightA}>A</span>
                 <span className={styles.typographyBoldA}>A</span>
               </div>

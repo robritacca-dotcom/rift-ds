@@ -30,6 +30,26 @@
   min-height: 0;
 }
 
+/* The shared stage every section-index illustration sits on: one size, one
+   icon size and colour, and no fill or circle behind the mark, so no card
+   draws a backdrop of its own. */
+.tocCardDisc {
+  --toc-disc-size: 184px;
+  width: var(--toc-disc-size);
+  height: var(--toc-disc-size);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-200);
+  overflow: hidden;
+  color: var(--color-text-secondary);
+}
+
+.tocCardDisc > :global(.material-symbols-rounded) {
+  --icon-size: var(--icon-size-1200);
+}
+
 .tocCardTitle {
   font-family: var(--font-heading-3-family);
   font-size: var(--font-heading-3-size);
@@ -52,6 +72,10 @@
     height: auto;
     min-height: 150px;
   }
+
+  .tocCardDisc {
+    --toc-disc-size: 150px;
+  }
 }
 
 /* Responsive - small mobile */
@@ -65,5 +89,9 @@
   .tocCardPreview {
     height: auto;
     min-height: 120px;
+  }
+
+  .tocCardDisc {
+    --toc-disc-size: 120px;
   }
 }

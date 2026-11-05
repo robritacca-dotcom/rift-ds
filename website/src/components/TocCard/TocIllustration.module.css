@@ -1,0 +1,70 @@
+/* ============================================
+   TOC ILLUSTRATION KIT
+   The parts every section-index card (Foundations, Docs) draws its mini
+   illustration from, so the cards read as one set: a window frame, text
+   bars, dots and tiles, all on the theme's own tokens. A card draws a
+   picture of its page from these, never a lone icon glyph.
+   ============================================ */
+
+/* A small window: the frame most illustrations sit in */
+.frame {
+  width: 112px;
+  height: 76px;
+  box-sizing: border-box;
+  padding: var(--gap-200);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200);
+  background: var(--color-bg-page-primary);
+  overflow: hidden;
+}
+
+/* A text line: muted by default, `strong` for a heading or a key */
+.bar {
+  display: block;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-050);
+  background: var(--color-bg-container-tertiary);
+}
+
+.barStrong {
+  background: var(--color-text-secondary);
+}
+
+.barHeading {
+  height: 8px;
+}
+
+.dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-bg-container-tertiary);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+/* A filled tile: a block, a chip, a cell */
+.tile {
+  display: block;
+  border-radius: var(--radius-100);
+  background: var(--color-bg-container-tertiary);
+}
+
+/* Mono caption inside a frame (a command, a brace) */
+.code {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+}

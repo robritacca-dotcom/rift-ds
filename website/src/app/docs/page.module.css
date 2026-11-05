@@ -75,52 +75,10 @@
 }
 
 /* ============================================
-   CIRCLE PREVIEWS
+   CARD PREVIEWS
+   Each card's mark sits in TocCard's shared disc (`disc`), which owns
+   the fill, size, icon size and colour; the rules below draw only the marks.
    ============================================ */
-/* Feature icons inside the round previews. Sizes live here rather than
-   inline so they read from the icon-size scale. */
-.circlePreview > :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-1200);
-}
-
-.skillFile :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-800);
-}
-
-.circlePreview {
-  width: 184px;
-  height: 184px;
-  min-width: 184px;
-  min-height: 184px;
-  aspect-ratio: 1 / 1;
-  flex-shrink: 0;
-  border-radius: 999px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  gap: 10px;
-  padding: 0 24px;
-  box-sizing: border-box;
-}
-
-.circleDashed {
-  border: none;
-}
-
-.circleNeutral {
-  background: var(--color-bg-container-primary);
-}
-
-.circleGreen {
-  background: var(--color-status-positive-bg);
-}
-
-.circleBlue {
-  background: var(--color-status-info-bg);
-}
-
 /* Overview — mini pipeline */
 .pipelinePreview {
   display: flex;
@@ -151,12 +109,6 @@
   gap: var(--primitive-gap-100);
 }
 
-.docHeading {
-  width: 48px;
-  height: 10px;
-  border-radius: var(--primitive-radius-pill);
-  background: var(--color-text-secondary);
-}
 
 .docLine {
   height: 6px;
@@ -164,9 +116,63 @@
   background: var(--color-bg-container-tertiary);
 }
 
-.docSwatches {
+/* Design MD: a spec sheet, swatches above the button and input shapes,
+   each shape on its own radius token so a theme reshapes the sheet */
+.specSheet {
   display: flex;
-  gap: var(--primitive-gap-050);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.specRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+.specSwatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-100);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.specPill,
+.specInput {
+  height: 16px;
+  box-sizing: border-box;
+  border: var(--border-050) solid var(--color-text-tertiary);
+}
+
+.specPill {
+  width: 40px;
+  border-radius: var(--radius-pill);
+}
+
+.specInput {
+  width: 40px;
+  border-radius: var(--radius-300);
+}
+
+/* Claude MD rules: a checkbox, then its line */
+.ruleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+.ruleBox {
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  border: var(--border-050) solid var(--color-text-tertiary);
+  border-radius: var(--radius-050);
+}
+
+.ruleBoxDone {
+  border-color: var(--color-text-secondary);
+  background: var(--color-text-secondary);
 }
 
 /* Content MD — type specimen (weight contrast is the system's signature) */
@@ -182,9 +188,9 @@
 }
 
 .docSwatch {
-  width: 16px;
-  height: 16px;
-  border-radius: var(--primitive-radius-100);
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-050);
 }
 
 /* Skills — fanned skill files */
@@ -201,8 +207,12 @@
   background: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
+  gap: var(--gap-100);
+  padding: var(--gap-200);
+  box-sizing: border-box;
 }
 
 .skillFileBack {
@@ -261,40 +271,60 @@
     min-width: 0;
   }
 
-
-  .circlePreview {
-    width: 150px;
-    height: 150px;
-    min-width: 150px;
-    min-height: 150px;
-  }
-}
-
-@media (max-width: 600px) {
-  .circlePreview {
-    width: 120px;
-    height: 120px;
-    min-width: 120px;
-    min-height: 120px;
-  }
 }
 
 /* ============================================
-   GET STARTED CARD PREVIEW
+   ILLUSTRATIONS DRAWN FROM THE TOC KIT
+   (TocCard/TocIllustration.module.css owns the frame, bars, dots, tiles)
    ============================================ */
-.installPreview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--primitive-gap-100);
+
+/* Add AI chat: replies sit at the start, the visitor's own at the end */
+.chatBubble {
+  height: 10px;
+  flex-shrink: 0;
 }
 
-.installPreview > :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-800);
-  color: var(--color-text-secondary);
+.chatBubbleOwn {
+  align-self: flex-end;
+  background: var(--color-text-tertiary);
 }
 
-.previewInstall {
-  font-size: var(--font-paragraph-sm-size);
-  color: var(--color-text-secondary);
+.chatInput {
+  margin-top: auto;
+  height: 10px;
+  flex-shrink: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-100);
+}
+
+/* Blocks: a two-by-two grid of blocks under a heading */
+.blockGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-100);
+}
+
+/* Schemas: key/value rows indented under the opening brace */
+.schemaRow {
+  padding-inline-start: var(--gap-200);
+}
+
+/* Loops: a ring with a dot riding it */
+.loopRing {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: var(--border-050) solid var(--color-text-tertiary);
+}
+
+.loopDot {
+  position: absolute;
+  inset-block-start: -7px;
+  inset-inline-start: calc(50% - 6px);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-text-secondary);
 }

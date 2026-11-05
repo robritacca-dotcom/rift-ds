@@ -19,7 +19,9 @@
   border-radius: var(--radius-300);
   background-color: var(--color-bg-container-primary);
 
-  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+  transition:
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 /* ============================================
@@ -60,7 +62,25 @@
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.ds-document-chip__main:hover {
+/* A clickable chip is one target: the body button's hit area stretches over
+   the whole tile, and the tile itself takes the hover fill and the focus
+   ring. The remove button sits above the stretch, a target of its own. */
+.ds-document-chip--clickable {
+  position: relative;
+}
+
+.ds-document-chip--clickable .ds-document-chip__main::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-300);
+}
+
+.ds-document-chip--clickable .ds-document-chip__remove {
+  position: relative;
+}
+
+.ds-document-chip--clickable:has(.ds-document-chip__main:hover) {
   background-color: var(--color-bg-container-secondary);
 }
 
@@ -174,7 +194,11 @@
    FOCUS
    ============================================ */
 
-.ds-document-chip__main:focus-visible,
+.ds-document-chip__main:focus-visible {
+  outline: none;
+}
+
+.ds-document-chip--clickable:has(.ds-document-chip__main:focus-visible),
 .ds-document-chip__remove:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;

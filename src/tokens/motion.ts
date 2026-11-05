@@ -93,3 +93,6 @@ export const MOTION_ANNOUNCE_DEBOUNCE_MS = 500;
 
 /** How long a keyboard shortcut sequence waits for its next key ("g" then "i"): a key pressed later than this after the one before starts a new sequence. A schedule timing, so the reduced-motion guard leaves it alone. */
 export const MOTION_SHORTCUT_SEQUENCE_MS = 1000;
+
+/** How long a host waits after a reader's selection stops changing (a drag across text, Shift+arrow) before acting on it, such as asking a model about it, so a sweep acts once rather than on every step. A schedule timing. */
+export const MOTION_SELECTION_SETTLE_MS = 400;

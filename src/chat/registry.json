@@ -45,6 +45,7 @@
         "CircularButton",
         "CodeBlock",
         "Composer",
+        "DocumentChip",
         "DropdownMenu",
         "EmptyState",
         "Mention",

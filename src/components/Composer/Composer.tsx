@@ -91,6 +91,14 @@ type ComposerOwnProps = {
    */
   contextIcon?: string | React.ReactNode;
   /**
+   * Called by the context chip's clear button, which appears only when this
+   * is set: for a host whose note follows something the reader focused (a
+   * selection, a highlighted passage) and can go back to the page as a whole.
+   */
+  onContextClear?: () => void;
+  /** The accessible name of the context chip's clear button. Defaults to "Clear context". */
+  contextClearLabel?: string;
+  /**
    * The files queued on this message, drawn as a scrolling row of square
    * tiles above the textarea. Controlled by the caller: Composer draws the
    * list and reports what was added or removed, and never stores a file.
@@ -255,6 +263,8 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       context,
       contextIcon,
       contextPlacement = 'inside',
+      onContextClear,
+      contextClearLabel = 'Clear context',
       files,
       onFilesSelected,
       onFileRemove,
@@ -713,6 +723,22 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
           </span>
         )}
         <span className={`${baseClass}__context-text`}>{context}</span>
+        {onContextClear && (
+          <CircularButton
+            icon="close"
+            variant="tertiary"
+            tone="neutral"
+            size="compact"
+            ariaLabel={contextClearLabel}
+            tooltip={false}
+            className={`${baseClass}__context-clear`}
+            onClick={(event) => {
+              /* The chip's click focuses the textarea; clearing should not also do that twice over. */
+              event.stopPropagation();
+              onContextClear();
+            }}
+          />
+        )}
       </div>
     ) : null;
 

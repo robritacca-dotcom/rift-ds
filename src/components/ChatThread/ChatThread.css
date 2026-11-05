@@ -114,8 +114,11 @@
 }
 
 /* The passive ramp is a ghost family meant to paint over a surface, so
-   the floating pill supplies its own: container surface + border below,
-   the passive layer above stepping through rest, hover, and active. */
+   the floating pill supplies its own: the app surface + border below, the
+   passive layer above stepping through rest, hover, and active. Opaque, so
+   the text scrolling under it never shows through (the container surface
+   is translucent in dark mode), and never frosted: the thread's edge-fade
+   mask stops a backdrop blur inside the scroller from seeing that text. */
 .ds-chat-thread__jump {
   display: flex;
   align-items: center;
@@ -127,7 +130,7 @@
   padding: 0;
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-pill);
-  background-color: var(--color-bg-container-primary);
+  background-color: var(--color-bg-app-surface);
   background-image: linear-gradient(
     var(--color-action-passive-bg),
     var(--color-action-passive-bg)

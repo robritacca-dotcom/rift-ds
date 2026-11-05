@@ -250,6 +250,9 @@
   gap: var(--gap-100);
   /* The action bar's tight --padding-200 ring, open toward the text below */
   margin: var(--padding-200) var(--padding-200) 0;
+  /* A flex item in the one-row composer: without this, a long note widens
+     the chip to its text instead of ellipsizing inside the shell */
+  min-width: 0;
   /* ModelPicker's trigger geometry — the send button's height with the same
      0/padding-md inset — so the chip and the bar's pills read as one family */
   height: var(--ds-composer-send-size);
@@ -328,6 +331,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* The clear button ends the chip, pulled into the pill's end padding so its
+   circle sits concentric with the pill's end cap. */
+.ds-composer__context-clear {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  margin-inline-end: calc(var(--padding-400) * -1 + (var(--ds-composer-send-size) - var(--control-height-compact)) / 2);
+}
+
+.ds-composer__context--above .ds-composer__context-clear {
+  margin-inline-end: calc(var(--padding-400) * -1 + (var(--control-height-default) - var(--control-height-compact)) / 2);
 }
 
 /* ============================================

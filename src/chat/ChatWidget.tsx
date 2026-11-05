@@ -18,6 +18,7 @@ import {
 import { AttachmentGroup, type AttachmentGroupProps } from '../components/Attachment/AttachmentGroup';
 import { useAttachments } from '../components/Attachment/useAttachments';
 import { ChatHeader } from '../components/ChatHeader/ChatHeader';
+import { DocumentChip } from '../components/DocumentChip/DocumentChip';
 import { ChatMessage } from '../components/ChatMessage/ChatMessage';
 import { ChatThread, type ChatThreadProps } from '../components/ChatThread/ChatThread';
 import type { CodeBlockProps } from '../components/CodeBlock/CodeBlock';
@@ -152,6 +153,8 @@ export interface ChatWidgetProps {
   starters?: Starter[];
   /** Keys the starters' staged reveal: a new key replays the generation beat, the same key shows the set standing. A host whose starters follow the page passes the pathname. */
   startersKey?: string;
+  /** Holds the starters' shimmer while the host is still writing them, for starters a model generates: the set reveals the moment this turns false, without the staged beat. Off by default. */
+  startersPending?: boolean;
   /** Replaces the composer's leading actions (the model picker). */
   composerActions?: ReactNode;
   /** The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker. */
@@ -194,6 +197,14 @@ export interface ChatWidgetProps {
   contextPlacement?: 'above' | 'inside';
   /** The composer's context note, written from `contextLabel`. Defaults to `Looking at “<title>”`. */
   contextNote?: (title: string) => string;
+  /** The context note's icon: a Material Symbol name, or your own element. A host whose note follows what the reader focused can change it with the kind of thing in view. Defaults to `description`. */
+  contextIcon?: string | ReactNode;
+  /** Called by the context note's clear button, which appears only when this is set: for a note that follows a selection and can go back to the page as a whole. */
+  onContextClear?: () => void;
+  /** The accessible name of the context note's clear button. Defaults to "Clear context". */
+  contextClearLabel?: string;
+  /** Repeat the context above each message sent while it is on, so the thread keeps what each question was asked about: `true` draws `contextLabel` as a compact DocumentChip wearing `contextIcon`, and a function draws what it returns, called at the send with the label, for a host whose chip does more (brings its context back, say). A message sent with files keeps its files there instead. Off by default. */
+  contextOnSend?: boolean | ((label: string) => ReactNode);
   /** The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`. */
   attachHint?: (maxSize: string, maxFiles: number, maxBytes: number) => string;
   /** The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to "Good morning", "Good afternoon" and "Good evening". */
@@ -348,6 +359,7 @@ export function ChatWidget({
   tagline = 'How can I help you today?',
   starters: startersInput,
   startersKey = '',
+  startersPending = false,
   composerActions,
   models,
   defaultModel,
@@ -364,6 +376,10 @@ export function ChatWidget({
   artifacts = false,
   contextLabel,
   contextNote = defaultContextNote,
+  contextIcon = 'description',
+  onContextClear,
+  contextClearLabel = 'Clear context',
+  contextOnSend = false,
   contextPlacement = 'inside',
   attachHint: attachHintText = defaultAttachHint,
   greetings,
@@ -525,16 +541,27 @@ export function ChatWidget({
   const queue = useAttachments({ maxCount: maxAttachments, maxSize: maxAttachmentBytes });
   const attachHint = attachHintText(formatBytes(maxAttachmentBytes), maxAttachments, maxAttachmentBytes);
 
+  /* What the message was asked about, drawn above its bubble as an attachment would be. */
+  const sentContext = (): ReactNode => {
+    if (!contextOnSend || !contextLabel) return undefined;
+    if (typeof contextOnSend === 'function') return contextOnSend(contextLabel);
+    return (
+      <div className="ds-chat-widget__sent-context">
+        <DocumentChip size="compact" name={contextLabel} icon={contextIcon} />
+      </div>
+    );
+  };
+
   const handleSubmit = (value: string) => {
     // send() reports acceptance; an ignored submit keeps the draft and the queue.
     if (fileAttachments && queue.items.length > 0) {
       const ready = queue.items.filter((item) => item.status === 'ready');
-      if (send(value, { attachments: ready })) {
+      if (send(value, { attachments: ready, content: sentContext() })) {
         // Ownership of the previews moved to the turn; empty without revoking.
         queue.take();
         setDraft('');
       }
-    } else if (send(value)) setDraft('');
+    } else if (send(value, { content: sentContext() })) setDraft('');
     focusComposer();
   };
 
@@ -551,16 +578,27 @@ export function ChatWidget({
      is mount-local, so only a set that actually staged here plays the chips'
      entrance. */
   const [stagedKey, setStagedKey] = useState<string | null>(null);
-  const startersThinking = open && isEmpty && starterRevealKey !== startersKey;
+  /* A set the host held pending has had its beat already: it reveals at once. */
+  const heldKey = useRef<string | null>(null);
+  const startersThinking = open && isEmpty && (startersPending || starterRevealKey !== startersKey);
   const startersEntrance = startersThinking || stagedKey === startersKey;
   useEffect(() => {
     if (!(open && isEmpty && starterRevealKey !== startersKey)) return;
-    const timer = setTimeout(() => {
+    if (startersPending) {
+      heldKey.current = startersKey;
+      return;
+    }
+    const reveal = () => {
       setStagedKey(startersKey);
       setStarterRevealKey(startersKey);
-    }, MOTION_SUGGESTIONS_THINK_MS);
+    };
+    if (heldKey.current === startersKey) {
+      reveal();
+      return;
+    }
+    const timer = setTimeout(reveal, MOTION_SUGGESTIONS_THINK_MS);
     return () => clearTimeout(timer);
-  }, [open, isEmpty, starterRevealKey, setStarterRevealKey, startersKey]);
+  }, [open, isEmpty, starterRevealKey, setStarterRevealKey, startersKey, startersPending]);
 
   /* ---------- the side rails (only when the host asks for one) ----------
      The widget measures its own width, so each mode follows the actual
@@ -799,7 +837,7 @@ export function ChatWidget({
         suggestions={starters}
         onValueChange={(id) => {
           const starter = starters.find((s) => s.id === id);
-          if (starter && send(starter.label)) focusComposer();
+          if (starter && send(starter.label, { content: sentContext() })) focusComposer();
         }}
       />
     </div>
@@ -1138,8 +1176,10 @@ export function ChatWidget({
             streaming={streaming}
             onStop={stop}
             context={contextLabel ? contextNote(contextLabel) : undefined}
-            contextIcon="description"
+            contextIcon={contextIcon}
             contextPlacement={contextPlacement}
+            onContextClear={onContextClear}
+            contextClearLabel={contextClearLabel}
             mentions={mentions}
             {...(fileAttachments
               ? {

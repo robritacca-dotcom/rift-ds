@@ -1248,3 +1248,15 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-floating);
 }
+
+/* A sent message's context: the note's subject as a compact DocumentChip on the
+   sender's side, over the bubble, where files ride. */
+.ds-chat-widget__sent-context {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.ds-chat-widget__sent-context .ds-document-chip {
+  max-width: 100%;
+}

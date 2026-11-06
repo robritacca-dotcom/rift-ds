@@ -193,7 +193,7 @@ const EVENT_LINES: Record<ChatEvent["type"], string> = {
   exchange: "The server's log id for the reply. Its presence shows the thumbs.",
   followups: "Questions to offer under the finished reply.",
   content: "Rich content as a React node. Only a transport in the browser can send one.",
-  card: "Rich content as data, drawn by your renderers by kind. What a server sends. A reply can carry several, or be one with no text.",
+  card: "Rich content as data, drawn by your renderers by kind. What a server sends. A reply can carry several, or be one with no text. Set lead on the host's own opening and it draws first, under a status line that keeps running.",
   question: "Questions the agent asks with answers to pick, drawn in place of the follow-ups.",
   notice: "A limit's reply, shown as an ordinary message.",
   error: "A failure the person should see. Only before the first delta.",
@@ -363,6 +363,7 @@ const proposeClose: ChatTool = {
 export const confirmed = createConfirmationMark();
 // onConfirm: run the action, then confirmed.mark({ action: 'close', count: plan.ids.length, ids: plan.ids }) and send confirm(these)
 // getContext: JSON.stringify({ ..., confirmation: confirmed.take() })
+// The reply opens with the record, as a lead card: yield { type: 'card', card: { kind: 'record', data, lead: true } }
 
 // The route: rebuild the mark, and tell the model whether this message was confirmed.
 const confirmation = sanitiseConfirmation(raw.confirmation, { actions: ['close'], isId: isWalkId, maxCount: 500 });
@@ -676,9 +677,12 @@ export default function ChatInstallPage() {
               <code>confirm</code>) as their message. The route rebuilds the mark with{" "}
               <code>sanitiseConfirmation</code> and tells the model with{" "}
               <code>confirmationLine</code>. A typed &ldquo;yes&rdquo; carries no mark, so it never
-              makes a change. Open the reply with an{" "}
-              <Link href="/components/action-readout">Action readout</Link> worked out from the
-              records as they were, then the model&apos;s sentence. A tool handed{" "}
+              makes a change. Open the reply with the record of what was done, worked out from the
+              records as they were: an{" "}
+              <Link href="/components/action-readout">Action readout</Link>, or an{" "}
+              <Link href="/components/action-card">Action card</Link> confirmed with its facts. Send
+              it as a card with <code>lead</code> set, so it holds still under the thinking line,
+              then the model&apos;s sentence. A tool handed{" "}
               <code>{"{ context, request }"}</code> shares <code>request</code> with every call in
               the reply, so a filter one tool sets is the one a later tool acts on.
             </p>

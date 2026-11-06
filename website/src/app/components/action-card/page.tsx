@@ -66,7 +66,8 @@ export default function ActionCardPage() {
             <SectionTitle title="Propose, confirm, undo" />
             <p className={styles.demoText}>
               Confirm and the card turns into one row that says what was
-              done, announced to a screen reader as a status. Dismiss and it
+              done, announced to a screen reader as a status, unless it lists
+              its facts, which it keeps under the receipt. Dismiss and it
               says nothing changed. The host owns the status: onConfirm makes
               the change and sets it to confirmed, onUndo reverses it.
             </p>
@@ -97,6 +98,40 @@ export default function ActionCardPage() {
               <ActionCard title="Close bookings: 8 walks" receipt="8 walks closed to bookings" icon="event_busy" status="confirmed" onUndo={() => {}} />
               <ActionCard title="Close bookings: 8 walks" icon="event_busy" status="dismissed" />
               <ActionCard title="Close bookings: 8 walks" icon="event_busy" status="undone" />
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="With its facts" />
+            <p className={styles.demoText}>
+              Give the card facts and the reader confirms with the numbers in
+              front of them: a line each, label beside value. Confirmed, the
+              card keeps them under the receipt, and a Confirmed read-out
+              stands where Confirm was, so the proposal and its record share
+              one shape. Write the facts for the state the card is in.
+            </p>
+            <div className={styles.cardStage}>
+              <ActionCard
+                title="Close bookings: 8 walks"
+                detail="Their waitlists are kept."
+                icon="event_busy"
+                tone="destructive"
+                facts={[
+                  { label: "Status", value: "Open 6 · Nearly full 2 → Closed 8" },
+                  { label: "Booked", value: "41 walkers" },
+                  { label: "Left alone", value: "3 already full" },
+                ]}
+              />
+              <ActionCard
+                title="Close bookings: 8 walks"
+                receipt="8 walks closed to bookings"
+                status="confirmed"
+                onUndo={() => {}}
+                facts={[
+                  { label: "Status", value: "Open 6 · Nearly full 2 → Closed 8" },
+                  { label: "Booked", value: "41 walkers" },
+                ]}
+              />
             </div>
           </section>
 

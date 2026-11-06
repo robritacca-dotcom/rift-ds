@@ -119,7 +119,7 @@ export function sanitiseEdits(value: unknown, isOrder: (id: string) => boolean):
   return clean;
 }
 
-/** What a change did, read from the orders as they were just before it: the readout the chat posts once it lands. */
+/** What a change will do or did, read from the orders as they are before it: a proposal's facts (`will`) and its confirmed record's (`did`). */
 export interface ActionReadout {
   title: string;
   facts: [label: string, value: string][];

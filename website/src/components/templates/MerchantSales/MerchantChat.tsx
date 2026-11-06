@@ -113,7 +113,6 @@ function TableReceipt({ id, before }: { id: string; before: TableView }) {
   return (
     <div className={styles.receipt}>
       <span className={styles.receiptText}>
-        <span className="material-symbols-rounded" aria-hidden="true">table_chart</span>
         {undone ? "Table change undone" : "Table updated"}
       </span>
       <span className={styles.receiptActions}>

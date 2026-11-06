@@ -251,27 +251,33 @@
   }
 }
 
-/* A table change in the chat's thread: what it did, and the way back. */
+/* A table change in the chat's thread: what it did, and the way back. Drawn
+   as ActionCard's confirmed record, so a table receipt and an order receipt
+   stacked in one reply are one card: these are the values the chat card
+   recipe (src/behaviors/chat-card.css) gives .ds-action-card--confirmed,
+   restated because the recipe's properties live on the library's classes. */
 .receipt {
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-200);
-  padding: var(--padding-200) var(--padding-300);
+  min-height: calc(var(--control-height-compact) + 2 * var(--padding-100) + 2 * var(--border-025));
+  padding: var(--padding-100) var(--padding-500);
   border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-400);
+  border-radius: var(--radius-600);
+  background-color: var(--color-chat-card-bg);
 }
 
+/* Set like the record's label; the icon steps aside for Undo, as there. */
 .receiptText {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-200);
-  color: var(--color-text-secondary);
-}
-
-.receiptText :global(.material-symbols-rounded) {
-  --icon-size: var(--icon-size-500);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
 }
 
 .receiptActions {

@@ -85,6 +85,10 @@
   --color-chat-bubble-received-text: var(--color-text-primary);
   /* The composer's context note — one step off the #050505 shell */
   --color-chat-context-bg: var(--primitive-neutral-09);
+  /* The fill every chat card sits on: the crisp end of the neutral ramp,
+     white in light and black in dark, so the cards read sharp against
+     the reply and the bubbles. */
+  --color-chat-card-bg: var(--primitive-neutral-10);
 
   /* Calendar surfaces — the dark values are the reason this family exists:
      the container ramp's second step (#303030) glares at calendar density, so

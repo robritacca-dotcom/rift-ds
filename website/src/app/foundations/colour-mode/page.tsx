@@ -250,6 +250,11 @@ const chatSurfaceColours: SwatchData[] = [
     dark: { primitive: "--neutral--09--", hex: "#0E0E0E", rgb: "14 / 14 / 14" },
     light: { primitive: "--neutral--01--", hex: "#F1F1F1", rgb: "241 / 241 / 241" },
   },
+  {
+    label: "Card bg", cssVar: "--color-chat-card-bg",
+    dark: { primitive: "--neutral--10--", hex: "#050505", rgb: "5 / 5 / 5" },
+    light: { primitive: "--neutral--00--", hex: "#FFFFFF", rgb: "255 / 255 / 255" },
+  },
 ];
 
 /* --- Calendar surfaces --- */

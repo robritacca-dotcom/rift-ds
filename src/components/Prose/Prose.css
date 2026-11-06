@@ -146,6 +146,7 @@
 
 .ds-prose code {
   font-family: var(--font-family-code);
+  font-size-adjust: var(--font-code-aspect);
   font-size: var(--font-paragraph-sm-size);
   background-color: var(--color-bg-container-secondary);
   border-radius: var(--radius-050);
@@ -160,6 +161,7 @@
 
 .ds-prose pre {
   font-family: var(--font-family-code);
+  font-size-adjust: var(--font-code-aspect);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   background-color: var(--color-bg-container-primary);

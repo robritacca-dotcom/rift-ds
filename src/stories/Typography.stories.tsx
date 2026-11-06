@@ -375,14 +375,15 @@ export const CodeStyle: Story = {
         }}
       >
         The system mono stack, codified as <code>--font-family-code</code>.
-        Used by CodeBlock, ToolCall names, and Prose inline code — the primary
-        family everywhere else. Sizing rides the Paragraph SM scale; only the family
-        changes.
+        Used by CodeBlock, CodeDiff and Prose code, the primary family everywhere
+        else. Sizing rides the Paragraph SM scale, and <code>--font-code-aspect</code>{' '}
+        scales the face so its lowercase stands level with the body face's.
       </p>
 
       <div
         style={{
           fontFamily: 'var(--font-family-code)',
+          fontSizeAdjust: 'var(--font-code-aspect)',
           fontSize: 'var(--font-paragraph-sm-size)',
           fontWeight: 'var(--font-paragraph-sm-weight)',
           lineHeight: 'var(--font-paragraph-sm-line-height)',

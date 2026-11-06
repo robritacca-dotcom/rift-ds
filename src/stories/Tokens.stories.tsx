@@ -478,6 +478,7 @@ export const SemanticColors: Story = {
           value="--color-chat-bubble-received-text"
         />
         <ColorToken name="Context Background" value="--color-chat-context-bg" />
+        <ColorToken name="Card Background" value="--color-chat-card-bg" />
       </TokenSection>
 
       <TokenSection title="Calendar Surfaces">

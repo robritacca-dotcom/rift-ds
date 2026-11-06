@@ -21,10 +21,16 @@
   --font-family-heading: var(--font-family-primary);
   --font-family-body: var(--font-family-primary);
 
-  /* The one sanctioned monospace stack — CodeBlock, ToolCall names, and
-     Prose inline code. Anything monospace references this token. */
+  /* The one sanctioned monospace stack — CodeBlock, CodeDiff and Prose
+     code. Anything monospace references this token. */
   --font-family-code: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas,
     monospace;
+  /* Code's optical size, as a font-size-adjust aspect: a monospace face
+     draws its lowercase taller and wider than the body face at the same
+     size, so code set at the paragraph's size is scaled to the body face's
+     lowercase height (about half the font size for the faces the themes
+     ship) and reads level with the text around it. */
+  --font-code-aspect: 0.5;
 
   /* ============================================
      TYPE SCALE LADDERS

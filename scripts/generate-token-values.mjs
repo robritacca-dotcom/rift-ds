@@ -303,6 +303,7 @@ function familyOf(css) {
       if (/(^|-)line-height(-|$)/.test(name)) return 'lineHeight';
       if (/(^|-)letter-spacing$/.test(name)) return 'letterSpacing';
       if (/(^|-)size(-|$)/.test(name)) return 'dimension';
+      if (/(^|-)aspect$/.test(name)) return 'number';
       break;
   }
   throw new Error(`${css}: no family in TYPE_MAPPERS covers it; add one to familyOf in ${SCRIPT}`);

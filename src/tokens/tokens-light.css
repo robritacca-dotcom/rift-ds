@@ -98,6 +98,10 @@
      neutral to each shell that still separates from it. Its own role, not a
      container alias, because it deliberately sits off the container ramp. */
   --color-chat-context-bg: var(--primitive-neutral-01);
+  /* The fill every chat card sits on: the crisp end of the neutral ramp,
+     white in light and black in dark, so the cards read sharp against
+     the reply and the bubbles. */
+  --color-chat-card-bg: var(--primitive-neutral-00);
 
   /* Calendar surfaces — EventCalendar's day cells and event pills. Their own
      roles (the chat-surfaces pattern) because the container ramp's dark steps

@@ -17,6 +17,11 @@
    for an ai component that draws a card shell of
    its own outside it. design.md's "The chat cards
    are one family" owns the rules these encode.
+
+   Below the properties, the two marks more than
+   one card shows, drawn once here and composed
+   by each card that shows one: the fact list and
+   the decision's read-out.
    ============================================ */
 
 :where(
@@ -60,4 +65,71 @@
 
   /* Every icon in a card, spinners in the same box. */
   --ds-chat-card-icon: var(--icon-size-500);
+}
+
+/* The fact list: a label beside its value, a line each, as ActionReadout
+   and ActionCard list what a change will do or did. A card sets only where
+   the list sits. */
+.ds-chat-card-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--gap-400);
+  row-gap: var(--gap-100);
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-chat-card-facts dt {
+  color: var(--color-text-secondary);
+}
+
+.ds-chat-card-facts dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* The read-out: a decision as a record where its buttons stood. A compact
+   Button's height, pill, padding, gap, type and icon size, so it sits where
+   the buttons were without a jump, filled in the status the decision records
+   instead of the action colour, so it reads as done rather than pressable. */
+.ds-chat-card-readout {
+  --ds-chat-card-readout-bg: var(--color-status-neutral-bg);
+  --ds-chat-card-readout-text: var(--color-status-neutral-text);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-300);
+  border-radius: var(--radius-pill);
+  background-color: var(--ds-chat-card-readout-bg);
+  color: var(--ds-chat-card-readout-text);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  white-space: nowrap;
+}
+
+.ds-chat-card-readout--positive {
+  --ds-chat-card-readout-bg: var(--color-status-positive-bg);
+  --ds-chat-card-readout-text: var(--color-status-positive-text);
+}
+
+.ds-chat-card-readout--error {
+  --ds-chat-card-readout-bg: var(--color-status-error-bg);
+  --ds-chat-card-readout-text: var(--color-status-error-text);
+}
+
+.ds-chat-card-readout__icon {
+  --icon-size: var(--icon-size-500);
+
+  color: inherit;
 }

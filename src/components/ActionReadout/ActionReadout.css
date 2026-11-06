@@ -42,29 +42,6 @@
   --icon-size: var(--icon-size-500);
 }
 
-.ds-action-readout__facts {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  column-gap: var(--gap-400);
-  row-gap: var(--gap-100);
-  margin: 0;
-  font-family: var(--font-paragraph-sm-family);
-  font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-weight);
-  line-height: var(--font-paragraph-sm-line-height);
-  letter-spacing: var(--font-paragraph-sm-letter-spacing);
-}
-
-.ds-action-readout__facts dt {
-  color: var(--color-text-secondary);
-}
-
-.ds-action-readout__facts dd {
-  margin: 0;
-  color: var(--color-text-primary);
-  overflow-wrap: anywhere;
-}
-
 .ds-action-readout .material-symbols-rounded {
   color: inherit;
 }

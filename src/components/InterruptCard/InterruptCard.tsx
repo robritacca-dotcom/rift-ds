@@ -178,8 +178,9 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
              read-out, a compact button's size and shape in the status that
              choice records, behind a check (a cross for a refusal). */
           <div className={`${baseClass}__answer`}>
-            <span className={`${baseClass}__readout ${baseClass}__readout--${answeredVariantOf(chosen)}`}>
-              <span className={`${baseClass}__readout-icon material-symbols-rounded`} aria-hidden="true">
+            {/* The recipe's read-out, in the status the choice records. */}
+            <span className={`ds-chat-card-readout ds-chat-card-readout--${answeredVariantOf(chosen)} ${baseClass}__readout ${baseClass}__readout--${answeredVariantOf(chosen)}`}>
+              <span className={`ds-chat-card-readout__icon ${baseClass}__readout-icon material-symbols-rounded`} aria-hidden="true">
                 {answeredVariantOf(chosen) === 'error' ? 'close' : 'check'}
               </span>
               {echoedLabel}

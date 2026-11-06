@@ -206,47 +206,6 @@
   padding: var(--padding-200) var(--ds-chat-card-inset) var(--ds-chat-card-edge);
 }
 
-/* The read-out: the chosen button as a record. A compact Button's height,
-   pill, padding, gap, type and icon size, so it sits where the buttons were
-   without a jump, filled in the status the choice records instead of the
-   action colour, so it reads as done rather than pressable. */
-.ds-interrupt-card__readout {
-  --ds-interrupt-card-readout-bg: var(--color-status-neutral-bg);
-  --ds-interrupt-card-readout-text: var(--color-status-neutral-text);
-
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-200);
-  height: var(--control-height-compact);
-  padding: 0 var(--padding-300);
-  border-radius: var(--radius-pill);
-  background-color: var(--ds-interrupt-card-readout-bg);
-  color: var(--ds-interrupt-card-readout-text);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
-  white-space: nowrap;
-}
-
-.ds-interrupt-card__readout--positive {
-  --ds-interrupt-card-readout-bg: var(--color-status-positive-bg);
-  --ds-interrupt-card-readout-text: var(--color-status-positive-text);
-}
-
-.ds-interrupt-card__readout--error {
-  --ds-interrupt-card-readout-bg: var(--color-status-error-bg);
-  --ds-interrupt-card-readout-text: var(--color-status-error-text);
-}
-
-.ds-interrupt-card__readout-icon {
-  --icon-size: var(--icon-size-500);
-
-  color: inherit;
-}
-
 /* ============================================
    VISUALLY HIDDEN
    The waiting announcement is for screen

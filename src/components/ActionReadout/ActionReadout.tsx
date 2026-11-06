@@ -47,9 +47,9 @@ export function ActionReadout({ ref, title, facts, icon, className = '', ...rest
         )}
         {title}
       </span>
-      <dl className={`${baseClass}__facts`}>
-        {facts.map((fact) => (
-          <React.Fragment key={fact.label}>
+      <dl className={`ds-chat-card-facts ${baseClass}__facts`}>
+        {facts.map((fact, index) => (
+          <React.Fragment key={`${index}-${fact.label}`}>
             <dt>{fact.label}</dt>
             <dd>{fact.value}</dd>
           </React.Fragment>

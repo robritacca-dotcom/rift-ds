@@ -15,7 +15,7 @@ type ActionCardOwnProps = {
   title: React.ReactNode;
   /** A quiet line under the title: what the change leaves alone, and why ("Left as they are: 2 already shipped"). */
   detail?: React.ReactNode;
-  /** What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. Write them for the state the card is in. */
+  /** What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in. */
   facts?: ActionReadoutFact[];
   /** The leading mark: a Material Symbol name, or your own element. */
   icon?: string | React.ReactNode;
@@ -90,9 +90,9 @@ export function ActionCard({
   ) : null;
 
   const factList = facts?.length ? (
-    <dl className={`${baseClass}__facts`}>
-      {facts.map((fact) => (
-        <React.Fragment key={fact.label}>
+    <dl className={`ds-chat-card-facts ${baseClass}__facts`}>
+      {facts.map((fact, index) => (
+        <React.Fragment key={`${index}-${fact.label}`}>
           <dt>{fact.label}</dt>
           <dd>{fact.value}</dd>
         </React.Fragment>
@@ -114,8 +114,9 @@ export function ActionCard({
         </span>
         {factList}
         <span className={`${baseClass}__actions`}>
-          <span className={`${baseClass}__readout`}>
-            <span className={`${baseClass}__readout-icon material-symbols-rounded`} aria-hidden="true">
+          {/* The recipe's read-out, in the positive status: where Confirm stood, the decision as a record. */}
+          <span className={`ds-chat-card-readout ds-chat-card-readout--positive ${baseClass}__readout`}>
+            <span className={`ds-chat-card-readout__icon ${baseClass}__readout-icon material-symbols-rounded`} aria-hidden="true">
               check
             </span>
             {confirmedLabel}

@@ -517,7 +517,10 @@
      would follow off screen. */
   inset-block-start: 100dvh;
   inset-block-end: auto;
-  translate: 0 calc(-100% - var(--padding-300) - env(safe-area-inset-bottom, 0px));
+  /* --ds-table-toolbar-floating-offset is the host's hook: an app with its
+     own bar at the foot of the screen (a bottom tab bar) sets it to that
+     bar's height, so the bulk bar floats above it rather than over it. */
+  translate: 0 calc(-100% - var(--padding-300) - var(--ds-table-toolbar-floating-offset, 0px) - env(safe-area-inset-bottom, 0px));
   z-index: var(--layer-sticky);
   padding: var(--padding-200);
   border-radius: var(--radius-600);

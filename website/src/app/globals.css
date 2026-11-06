@@ -637,3 +637,12 @@ html[data-app-frame],
 html[data-app-frame] * {
   scrollbar-width: none;
 }
+
+/* The same preview draws a tab bar at the phone's foot (AppFrame), so a
+   table's selection bar, portalled to the body, floats above it rather than
+   over it: the iOS capsule's 62px and its 13px seat off the screen's foot,
+   less the selection bar's own inset, plus a step of air. */
+html[data-app-frame] {
+  /* ds-allow(spacing): the tab bar's geometry, BottomNav's iOS height and seat, which live on the nav itself and do not reach the root. */
+  --ds-table-toolbar-floating-offset: calc(62px + 13px - var(--padding-300) + var(--gap-200));
+}

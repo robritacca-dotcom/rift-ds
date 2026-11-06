@@ -15,14 +15,14 @@
 import React from "react";
 import { createConfirmationMark, type ActionConfirmation } from "rift-ds/chat/actions";
 import { ledgerRows } from "@/data/order-ledger";
-import { editsFor, planAction, withEdit, type ActionPlan, type ChangeLogEntry, type OrderActionId, type OrderEdits } from "@/lib/order-actions";
+import { editsFor, planAction, withEdit, type ActionPlan, type ActionReadout, type ChangeLogEntry, type OrderActionId, type OrderEdits } from "@/lib/order-actions";
 
 let byId: Map<string, Record<string, unknown>> | null = null;
 const baseValues = (id: string) => (byId ??= new Map(ledgerRows().map((row) => [row.id, row.values]))).get(id);
 
 export type Confirmation = ActionConfirmation<OrderActionId>;
 
-export type CardState = { status: "confirmed"; undo: () => void } | { status: "cancelled" } | { status: "undone" };
+export type CardState = { status: "confirmed"; undo: () => void; readout: ActionReadout } | { status: "cancelled" } | { status: "undone" };
 
 type EditsValue = {
   edits: OrderEdits;

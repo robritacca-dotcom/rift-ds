@@ -136,7 +136,8 @@ function tally(values: Values[], key: string, limit = 3) {
   return sorted.length > limit ? `${shown.join(" · ")} · ${sorted.length - limit} more` : shown.join(" · ");
 }
 
-export function readoutFor(plan: ActionPlan, before: Values[]): ActionReadout {
+/** `will` words the facts for a proposal not yet confirmed, `did` for the record of one that was. */
+export function readoutFor(plan: ActionPlan, before: Values[], tense: "will" | "did" = "did"): ActionReadout {
   const action = ORDER_ACTIONS[plan.action];
   const after = before.map((values) => withEdit(values, action.apply(values)));
   const count = plan.ids.length;
@@ -148,7 +149,7 @@ export function readoutFor(plan: ActionPlan, before: Values[]): ActionReadout {
     title: `${count.toLocaleString("en-US")} ${count === 1 ? "order" : "orders"} ${action.done}`,
     facts: [
       ...(statusChanged ? ([["Status", `${tally(before, "status")} → ${tally(after, "status")}`]] as [string, string][]) : []),
-      ...(refundedOrders ? ([["Refunded", `${money(refunded)} across ${refundedOrders.toLocaleString("en-US")} ${refundedOrders === 1 ? "order" : "orders"}`]] as [string, string][]) : []),
+      ...(refundedOrders ? ([[tense === "did" ? "Refunded" : "Refund", `${money(refunded)} across ${refundedOrders.toLocaleString("en-US")} ${refundedOrders === 1 ? "order" : "orders"}`]] as [string, string][]) : []),
       ["Order value", money(before.reduce((total, values) => total + (Number(values.netRevenue) || 0), 0))],
       ["Categories", tally(before, "category")],
       ["Customers", new Set(before.map((values) => values.customer)).size.toLocaleString("en-US")],

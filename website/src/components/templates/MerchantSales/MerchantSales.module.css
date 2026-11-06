@@ -280,6 +280,12 @@
   color: var(--color-text-primary);
 }
 
+/* A proposal its reply has taken over, set as ActionCard's own record notes are. */
+.recordNote {
+  font-weight: var(--font-paragraph-sm-weight);
+  color: var(--color-text-tertiary);
+}
+
 .receiptActions {
   display: inline-flex;
   gap: var(--gap-200);

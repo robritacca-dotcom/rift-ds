@@ -38,7 +38,7 @@ import type { TableContextValue } from "../../../../../src/components/DataTable/
 import type { TableView } from "../../../../../src/components/DataTable/views";
 import { ChatFocusProvider, SentFocusChip, flashRows, focusForRequest, focusLabel, useFocusStarters, namedOrders, useChatFocus } from "./chatFocus";
 import { useOrderEdits } from "./orderEdits";
-import { ORDER_ACTIONS, readoutFor, skippedText, theseOrders, type ActionPlan, type ActionReadout } from "@/lib/order-actions";
+import { ORDER_ACTIONS, readoutFor, theseOrders, type ActionPlan, type ActionReadout } from "@/lib/order-actions";
 import styles from "./MerchantSales.module.css";
 
 /* As many of a confirmed change's ids as its request carries, for the server to say what could be done next. */
@@ -56,8 +56,8 @@ const ChangesContext = React.createContext<{
   reportCovered: (covered: boolean) => void;
   undone: ReadonlySet<string>;
   undo: (id: string, before: TableView) => void;
-  /** Holds a confirmed change's readout for the reply its confirmation message is about to get. */
-  stageReadout: (readout: ActionReadout) => void;
+  /** Holds a confirmed change's record for the reply its confirmation message is about to get. */
+  stageRecord: (data: OrderCardData) => void;
   /** Turns the table to these orders alone, so a change shows its result rather than a filter it emptied. */
   showOrders: (ids: string[]) => void;
 } | null>(null);
@@ -142,54 +142,77 @@ function TableReceipt({ id, before }: { id: string; before: TableView }) {
   );
 }
 
-/** What a confirmed change did, as the library's readout card: the opening of the reply its confirmation gets. */
+/** A readout card from a thread written before the proposal carried its own facts. */
 const ReadoutBlock = ({ readout }: { readout: ActionReadout }) => (
   <ActionReadoutCard title={readout.title} facts={readout.facts.map(([label, value]) => ({ label, value }))} />
 );
 
+const factsOf = (readout: ActionReadout) => readout.facts.map(([label, value]) => ({ label, value }));
+
+type OrderCardData = ActionPlan & { id: string };
+
 /**
- * A change the assistant proposed, as the library's ActionCard. Confirming plans
- * it again against the page as it is now, so a change made in between is counted,
- * runs it through the same action the selection bar uses, and sends the reader's
- * confirmation as their message; the card then keeps the record, with Undo.
+ * A change the assistant proposed, as the library's ActionCard, carrying the
+ * readout of what it will do over Confirm, planned against the page as it is
+ * now, so a change made in between is counted. Confirming runs it through the
+ * same action the selection bar uses, sends the reader's confirmation as their
+ * message, and stages the record for the reply it gets: this card settles to
+ * one row, and the reply opens with the same card as the readout of what was
+ * done (`record`), a lead card standing under the thinking line, so nothing
+ * moves it while the model works out its sentence. Undo is the record's, and waits for that sentence,
+ * which describes the change it would reverse.
  */
-function OrderActionCard({ id, action, ids, skipped }: ActionPlan & { id: string }) {
+function OrderActionCard({ id, action, ids, skipped, record = false }: OrderCardData & { record?: boolean }) {
   const { plan, run, valuesOf, cards, setCard, markConfirmation } = useOrderEdits();
-  const { injectTurn, send } = useChatWidget();
+  const { injectTurn, send, streaming } = useChatWidget();
   const changes = React.useContext(ChangesContext);
-  const state = cards[id];
+  const state = cards[id] as (typeof cards)[string] | undefined;
   const definition = ORDER_ACTIONS[action];
   const count = (n: number) => `${n.toLocaleString("en-US")} ${n === 1 ? "order" : "orders"}`;
-  const leftAlone = skippedText(skipped);
+  const title = `${definition.label}: ${count(ids.length)}`;
   const status = state?.status === "cancelled" ? "dismissed" : (state?.status ?? "proposed");
+  const proposed = status === "proposed" ? plan(action, ids) : null;
+  const preview = proposed ? readoutFor(proposed, proposed.ids.map((orderId) => valuesOf(orderId) ?? {}), "will") : null;
+  const confirmed = state?.status === "confirmed" ? state : null;
+  const facts = preview ? factsOf(preview) : record && confirmed ? factsOf(confirmed.readout) : undefined;
 
   return (
     <ActionCard
-      title={`${definition.label}: ${count(ids.length)}`}
-      /* What the change does and what it leaves alone, in the action's own words: the bar's confirm says the same. */
-      detail={[definition.effect?.(ids.length), leftAlone ? `Left as they are: ${leftAlone}.` : ""].filter(Boolean).join(" ") || undefined}
+      title={title}
+      /* What the change does, in the action's own words: the bar's confirm says the same. What it leaves alone is a fact. */
+      detail={definition.effect?.(ids.length)}
+      facts={facts}
       icon={definition.icon}
       tone={definition.destructive ? "destructive" : "default"}
       status={status}
-      receipt={`${count(ids.length)} ${definition.done}`}
+      receipt={
+        record && confirmed ? (
+          confirmed.readout.title
+        ) : (
+          <>
+            {title}
+            <span className={styles.recordNote}>Confirmed</span>
+          </>
+        )
+      }
       onConfirm={() => {
         const now = plan(action, ids);
         /* Read before the change lands: the readout says what the orders were and what they became. */
         const readout = readoutFor(now, now.ids.map((orderId) => valuesOf(orderId) ?? {}));
         const undo = run(now, "chat");
-        setCard(id, { status: "confirmed", undo });
+        setCard(id, { status: "confirmed", undo, readout });
         changes?.showOrders(now.ids);
-        /* The confirmation is the reader's own message, so the reply answers it, opening with the readout. */
-        changes?.stageReadout(readout);
+        /* The confirmation is the reader's own message, so the reply answers it, opening with the record. */
+        changes?.stageRecord({ id, action, ids, skipped });
         /* The request says this message was confirmed on its card; a typed "yes" never is. */
         markConfirmation({ action, count: now.ids.length, ids: now.ids.slice(0, MAX_CONFIRMED_IDS) });
         send(definition.confirm(theseOrders(now.ids.length)));
       }}
       onDismiss={() => setCard(id, { status: "cancelled" })}
       onUndo={
-        state?.status === "confirmed"
+        record && confirmed && !streaming
           ? () => {
-              state.undo();
+              confirmed.undo();
               setCard(id, { status: "undone" });
               injectTurn({ role: "assistant", text: `Undone: those ${count(ids.length)} are back as they were.` });
             }
@@ -204,7 +227,8 @@ const RENDERERS = {
     const { id, before } = data as { id: string; before: TableView };
     return <TableReceipt id={id} before={before} />;
   },
-  "order-action": (data: unknown) => <OrderActionCard {...(data as ActionPlan & { id: string })} />,
+  "order-action": (data: unknown) => <OrderActionCard {...(data as OrderCardData)} />,
+  "order-record": (data: unknown) => <OrderActionCard {...(data as OrderCardData)} record />,
   "action-readout": (data: unknown) => <ReadoutBlock readout={data as ActionReadout} />,
 };
 
@@ -215,8 +239,7 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
   const [undone, setUndone] = React.useState<ReadonlySet<string>>(new Set());
   const lastToast = React.useRef<string | null>(null);
   const tableCoveredRef = React.useRef(false);
-  const stagedReadout = React.useRef<ActionReadout | null>(null);
-
+  const stagedRecord = React.useRef<OrderCardData | null>(null);
 
   const undo = React.useCallback(
     (id: string, before: TableView) => {
@@ -237,10 +260,10 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
       },
     });
     return async function* merchantTransport(messages, signal) {
-      /* A confirmation's reply opens with the change's readout, worked out on the page, before the model's words. */
-      const readout = stagedReadout.current;
-      stagedReadout.current = null;
-      if (readout) yield { type: "card", card: { kind: "action-readout", data: readout } };
+      /* A confirmation's reply opens with the change's record, worked out on the page, as a lead card under the model's thinking line. */
+      const record = stagedRecord.current;
+      stagedRecord.current = null;
+      if (record) yield { type: "card", card: { kind: "order-record", data: record, lead: true } };
       let change: { id: string; before: TableView } | null = null;
       let landed = Promise.resolve();
       let words = "";
@@ -288,8 +311,8 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
       },
       undone,
       undo,
-      stageReadout: (readout: ActionReadout) => {
-        stagedReadout.current = readout;
+      stageRecord: (data: OrderCardData) => {
+        stagedRecord.current = data;
       },
       showOrders: (ids: string[]) => {
         if (!bridge.current) return;

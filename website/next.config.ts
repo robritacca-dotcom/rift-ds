@@ -67,6 +67,9 @@ const nextConfig: NextConfig = {
       { source: "/chat", destination: "/docs/chat", permanent: true },
       // The sales pipeline template became merchant sales; shared links keep resolving.
       { source: "/templates/sales-pipeline", destination: "/templates/merchant-sales", permanent: true },
+      // The marketing dashboard was folded into merchant sales, which took its
+      // charts, its switcher and its place at the head of the list.
+      { source: "/templates/marketing-dashboard", destination: "/templates/merchant-sales", permanent: true },
       // The agent workbench template was retired; shared links land on the index.
       { source: "/templates/agent-workbench", destination: "/templates", permanent: true },
       { source: "/blueprints", destination: "/docs", permanent: true },

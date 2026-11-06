@@ -137,6 +137,37 @@
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
+/* An entity's `fill`: one of Avatar's six, the same token pair, on the initials tile only. */
+.ds-entity-switcher__mark--fill-1 {
+  background-color: var(--color-avatar-bg-1);
+  color: var(--color-avatar-text-1);
+}
+
+.ds-entity-switcher__mark--fill-2 {
+  background-color: var(--color-avatar-bg-2);
+  color: var(--color-avatar-text-2);
+}
+
+.ds-entity-switcher__mark--fill-3 {
+  background-color: var(--color-avatar-bg-3);
+  color: var(--color-avatar-text-3);
+}
+
+.ds-entity-switcher__mark--fill-4 {
+  background-color: var(--color-avatar-bg-4);
+  color: var(--color-avatar-text-4);
+}
+
+.ds-entity-switcher__mark--fill-5 {
+  background-color: var(--color-avatar-bg-5);
+  color: var(--color-avatar-text-5);
+}
+
+.ds-entity-switcher__mark--fill-6 {
+  background-color: var(--color-avatar-bg-6);
+  color: var(--color-avatar-text-6);
+}
+
 .ds-entity-switcher__mark--large {
   width: var(--icon-size-800);
   height: var(--icon-size-800);

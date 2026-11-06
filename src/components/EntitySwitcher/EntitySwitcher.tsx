@@ -4,6 +4,7 @@ import React from 'react';
 import { Popover } from '../Popover/Popover';
 import { Input } from '../Input/Input';
 import { ChosenMark } from '../Dropdown/Dropdown';
+import type { AvatarFill } from '../Avatar/avatarFill';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 import './EntitySwitcher.css';
 import '../../behaviors/direction.css';
@@ -21,6 +22,8 @@ export interface EntitySwitcherItem {
   logo?: string;
   /** The mark when there is no `logo`: a Material Symbol name (string) or any element (ReactNode), such as an inline SVG logo. Initials stand in when both are omitted. */
   icon?: string | React.ReactNode;
+  /** Which of Avatar's six fills the initials tile takes, so entities read apart at a glance. Only initials take it; a logo or icon keeps the plain tile. Plain when omitted. */
+  fill?: AvatarFill;
   /** The entities under this one. Any child anywhere in the tree makes the list drill in. */
   children?: EntitySwitcherItem[];
   /** Whether the entity is shown but cannot be picked or opened. */
@@ -91,7 +94,12 @@ function initials(name: string) {
 
 /** The entity's tile: its logo, else its icon, else its initials. Decorative. */
 function Mark({ item, large = false }: { item: EntitySwitcherItem; large?: boolean }) {
-  const className = ['ds-entity-switcher__mark', large ? 'ds-entity-switcher__mark--large' : '']
+  const filled = item.fill && !item.logo && !item.icon;
+  const className = [
+    'ds-entity-switcher__mark',
+    large ? 'ds-entity-switcher__mark--large' : '',
+    filled ? `ds-entity-switcher__mark--fill-${item.fill}` : '',
+  ]
     .filter(Boolean)
     .join(' ');
   let face: React.ReactNode;

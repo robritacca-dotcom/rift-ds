@@ -1,8 +1,8 @@
 /* Templates: Larkspur's merchant sales. Every colour, space, radius, and
    type style is a semantic token; the only raw values are structural layout
    sizes (column widths, breakpoints), which pages own everywhere else on
-   the site. The shell is TemplateShell's; the page follows the
-   marketing dashboard's composition — page head, KPI band, then the table
+   the site. The shell is TemplateShell's; the page is the dashboard
+   composition — page head, KPI band, two chart panels, then the table
    section — on the dashboard rung set: gap-lg between regions and between
    Panels, gap-md inside a region, gap-sm inside a cluster. */
 
@@ -115,6 +115,39 @@
 @container template-content (max-width: 1020px) {
   .content .kpiGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* -------------------------------------------------------------- charts */
+
+/* The two charts take the KPI card's surface, one panel each. */
+.panel {
+  composes: kpi;
+  align-items: stretch;
+  gap: var(--gap-300);
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+/* Each series' total under its chart, in one row of equal tiles. */
+.legendRow {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--gap-200);
+  margin-top: auto;
+}
+
+
+/* The charts stack once the column is too narrow for two of them side by
+   side, by the column's room rather than the window's, as the band does. */
+@container template-content (max-width: 900px) {
+  .content .chartsGrid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

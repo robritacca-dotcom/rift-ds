@@ -647,7 +647,7 @@ export default function ChatInstallPage() {
               painted in the note&apos;s own fill. <code>ChatProvider</code>&apos;s{" "}
               <code>getContext</code> sends the focus with every request; on the server,{" "}
               <code>sanitiseSelection</code> checks it and <code>selectionLines</code> writes it
-              for the model, and you look its source up, so &ldquo;$51.7M&rdquo; reaches the model
+              for the model, and you look its source up, so &ldquo;$32.8M&rdquo; reaches the model
               as the figure it belongs to, not as a bare number. Highlighted text is data from the page, and a page
               that carries other people&apos;s words needs that decision made first.
             </p>

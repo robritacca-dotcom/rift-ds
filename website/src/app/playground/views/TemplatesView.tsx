@@ -4,11 +4,11 @@
  * The Templates view: one template screen, live, under the playground's
  * levers, staged the way the Chat view stages the widget. The templates
  * rail (TemplatesRail, beside this folder) picks which one; it opens on
- * the marketing dashboard, the list's first. Desktop fills the safe zone
+ * merchant sales, the list's first. Desktop fills the safe zone
  * between the two panels and carries the same edge grips, so a drag
  * reflows the template through its real breakpoints; Mobile puts the
  * template's phone version in the chat stage's bezel (a template with a
- * phone screen of its own, as the dashboard has, stages that instead).
+ * phone screen of its own stages that instead).
  * Only the picked template ever runs: the rail shows stills.
  *
  * The templates are full-viewport app shells (a fixed sidebar, a fixed phone
@@ -34,9 +34,7 @@ import styles from "./TemplatesView.module.css";
 /* A template whose phone version is a screen of its own: the Mobile stage
    (and a phone) shows that one. Every other template is responsive, so
    its own route at phone width is its phone version. */
-const PHONE_SCREENS: Record<string, string> = {
-  "/templates/marketing-dashboard": "/templates/mobile-dashboard",
-};
+const PHONE_SCREENS: Record<string, string> = {};
 
 const templateTitle = (href: string) =>
   `${templatesSidebarLinks.find((link) => link.href === href)?.label ?? "Template"} template`;

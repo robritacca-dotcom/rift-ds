@@ -5,7 +5,7 @@
       "description": "figure: Net revenue, highlighted value",
       "focus": {
         "kind": "text",
-        "text": "$51.7M",
+        "text": "$32.8M",
         "kpi": "Net revenue",
         "orderId": null,
         "column": null,
@@ -24,7 +24,7 @@
       "description": "figure: Orders, highlighted value",
       "focus": {
         "kind": "text",
-        "text": "2,072",
+        "text": "1,355",
         "kpi": "Orders",
         "orderId": null,
         "column": null,
@@ -43,7 +43,7 @@
       "description": "figure: Average order, part of the value",
       "focus": {
         "kind": "text",
-        "text": "25,494",
+        "text": "24,735",
         "kpi": "Average order",
         "orderId": null,
         "column": null,
@@ -62,7 +62,7 @@
       "description": "figure: Margin, highlighted with its change",
       "focus": {
         "kind": "text",
-        "text": "34.6% Margin +0.1 pts",
+        "text": "35.0% Margin +1.9 pts",
         "kpi": "Margin",
         "orderId": null,
         "column": null,
@@ -278,7 +278,7 @@
       "description": "passage: text across the KPI band, no single source",
       "focus": {
         "kind": "text",
-        "text": "2,072 Orders +55.9% $25,494 Average order",
+        "text": "1,355 Orders +8.7% $24,735 Average order",
         "kpi": null,
         "orderId": null,
         "column": null,

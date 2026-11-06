@@ -5,17 +5,19 @@
  * back office, built from the design system alone. The shell is the template
  * family's (TemplateShell's switchable rail and surface, slim top bar) and the
  * assistant is live, not the family's mock (MerchantChat.tsx, seated in
- * TemplateAssistant). The page is a breadcrumbed head, the month's numbers as a KPI band,
- * then the wired DataTable, which sits directly on the page because it brings its
+ * TemplateAssistant), and the rail carries the family's store switcher. The page is a
+ * breadcrumbed head, the month's numbers as a KPI band, the year as two charts (net
+ * revenue with its margin rate, and orders by channel group), then the wired DataTable, which sits directly on the page because it brings its
  * own bordered chrome (design.md's Composition rule 2). Its control bar is the
  * library's TableToolbar, with the AI command live: Describe sends the sentence to
  * the same model route as the labs bench, over the same seeded orders.
  * On a phone the rows stack as cards. What the reader ticks or highlights on the
  * page becomes the assistant's focus (usePageFocus below, chatFocus.tsx).
  *
- * The KPI band is pinned strings (website/src/data/merchant-sales.ts), read off the
- * seeded ledger for Oct 1 to 30, 2026 against September, leaving out cancelled orders
- * from the money, so the statically built HTML draws them with no rows to hand.
+ * The KPI band and the charts are pinned figures (website/src/data/merchant-sales.ts),
+ * read off the seeded ledger (the band for Oct 1 to 30, 2026 against September, the
+ * charts for the twelve months to it), leaving out cancelled orders from the money, so
+ * the statically built HTML draws them with no rows to hand.
  * All of it is fictional, so the route is excluded from the chat corpus
  * (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
  */
@@ -29,6 +31,8 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
+import { AreaChart, ComboChart } from "rift-ds/charts";
 import { Stat } from "rift-ds/components/Stat/Stat";
 import styles from "./MerchantSales.module.css";
 import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
@@ -44,7 +48,19 @@ import { AppFrameTabBar, useAppFrame } from "../AppFrame/AppFrame";
 import TemplateShell from "../TemplateShell/TemplateShell";
 import StickyTopBar from "../TemplateShell/StickyTopBar";
 import { ProductMark } from "../ProductMark/ProductMark";
-import { MERCHANT_KPIS, MERCHANT_OPENING_FILTER, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS, computeKpis } from "@/data/merchant-sales";
+import { useSampleEntities } from "../sampleEntities";
+import {
+  MERCHANT_CHANNELS,
+  MERCHANT_CHART_LABELS,
+  MERCHANT_CHARTS,
+  MERCHANT_KPIS,
+  MERCHANT_KPI_PERIOD,
+  MERCHANT_OPENING_FILTER,
+  MERCHANT_OPENING_SORT,
+  MERCHANT_SHOWN_COLUMNS,
+  computeCharts,
+  computeKpis,
+} from "@/data/merchant-sales";
 import { nextView } from "@/lib/order-ledger-view";
 import { COLUMN_KEYS, ledgerRows } from "@/data/order-ledger";
 import OrdersTable from "./OrdersTable";
@@ -93,6 +109,7 @@ const CHAT_STARTERS = [
   { id: "rep", label: "Which rep leads on revenue?" },
   { id: "product-margin", label: "Which product has top margin?" },
   { id: "september", label: "How does Oct compare to Sep?" },
+  { id: "year", label: "Which channel grew the most?" },
   { id: "sort", label: "Sort by revenue, largest first" },
   { id: "show-overdue", label: "Show only overdue orders" },
   { id: "group", label: "Group the table by carrier" },
@@ -102,6 +119,12 @@ const CHAT_STARTERS = [
   { id: "meridian", label: "Show Meridian's late orders" },
   { id: "hide", label: "Hide the margin column" },
 ];
+
+/* The charts' plot height: short enough that the band, both charts and the table's head share the first screen. */
+const CHART_HEIGHT = 160;
+
+/** The chart palette token for a 1-based series slot. */
+const seriesSwatch = (series: number) => `var(--color-chart-series-${series})`;
 
 /* ---------------------------------------------------------------- focus */
 
@@ -113,7 +136,7 @@ const MAX_HIGHLIGHT = 300;
  * rows, or a highlighted passage. A highlight is read for where it came from, the
  * smallest thing that holds all of it: a KPI card (data-chat-source), a cell (the table's
  * data-row and data-col), a row, or else the section around it. The server looks
- * that source up, so "$51.7M" arrives as the Net revenue figure and its
+ * that source up, so "$32.8M" arrives as the Net revenue figure and its
  * definition, not as a bare number; anything else travels with what it sits
  * in (the package's describeSelection). A selection anywhere else, the chat's own
  * panel included, is not the page, so it leaves the focus alone; a click that
@@ -191,11 +214,21 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
 
   /* The bar's order actions: a click is the reader's own instruction, so fulfilling applies at once with the toast's Undo as the way back; a change that takes something away (a cancellation, a refund) confirms first. */
   const { edits, plan, run, reset } = useOrderEdits();
-  /* The band as the reader has made it: worked out from the edited ledger once anything is changed, the pinned figures before (computeKpis gives them exactly). */
-  const kpis = useMemo(() => {
-    if (!Object.keys(edits).length) return MERCHANT_KPIS;
-    return computeKpis(ledgerRows().map((row) => (edits[row.id] ? { ...row, values: withEdit(row.values, edits[row.id]) } : row)));
+  /* The band and the charts as the reader has made them: worked out from the edited ledger once anything is changed, the pinned figures before (computeKpis and computeCharts give them exactly). */
+  const { kpis, charts } = useMemo(() => {
+    if (!Object.keys(edits).length) return { kpis: MERCHANT_KPIS, charts: MERCHANT_CHARTS };
+    const rows = ledgerRows().map((row) => (edits[row.id] ? { ...row, values: withEdit(row.values, edits[row.id]) } : row));
+    return { kpis: computeKpis(rows), charts: computeCharts(rows) };
   }, [edits]);
+  const revenueByMonth = useMemo(
+    () => MERCHANT_CHART_LABELS.map((month, at) => ({ month, revenue: charts.revenue.months[at], margin: charts.revenue.margins[at] })),
+    [charts],
+  );
+  const ordersByMonth = useMemo(
+    /* Keyed by series slot, not label: the chart names each series' gradient after its key, and a space in a key breaks that reference. */
+    () => MERCHANT_CHART_LABELS.map((month, at) => ({ month, ...Object.fromEntries(MERCHANT_CHANNELS.map((channel, slot) => [`series${slot + 1}`, charts.orders.channels[channel][at]])) })),
+    [charts],
+  );
   const { toast, dismiss } = useToast();
   const [pending, setPending] = useState<ActionPlan | null>(null);
   const apply = useCallback(
@@ -271,6 +304,8 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
 
   /* The templates carousel's Mobile mode: previewed as a phone app. */
   const appFrame = useAppFrame();
+  /* The store switcher under the brand row, its tree picked with ?entities=. */
+  const stores = useSampleEntities("merchant");
 
   return (
     <TemplateShell
@@ -281,6 +316,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
         logo: <ProductMark />,
         logoText: "Larkspur",
       }}
+      entitySwitcher={stores && { ...stores, switcherLabel: "Switch store" }}
       chatOpen={open && view !== "full"}
       frame={{ title: "Sales", subtitle: "Larkspur · Merchant" }}
       contentClassName={styles.content}
@@ -390,7 +426,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
                 </span>
                 <Stat
                   value={kpi.value}
-                  label={kpi.label}
+                  label={`${kpi.label}, ${MERCHANT_KPI_PERIOD}`}
                   delta={kpi.delta}
                   trend={kpi.trend}
                   deltaPlacement="auto"
@@ -398,6 +434,43 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
               </div>
             ))}
           </section>
+
+          {/* ------------------------------------------- the year */}
+          {/* The twelve months to October, against the twelve before: the same ledger as the band and the table. */}
+          <div className={styles.chartsGrid}>
+            <section className={styles.panel} aria-label="Net revenue by month">
+              <Stat value={charts.revenue.total} label="Net revenue, last 12 months" delta={charts.revenue.delta} trend={charts.revenue.trend} deltaPlacement="inline" />
+              <ComboChart data={revenueByMonth} xKey="month" barKey="revenue" barLabel="Net revenue ($M)" lineKey="margin" lineLabel="Margin (%)" height={CHART_HEIGHT} bare />
+              <div className={styles.legendRow}>
+                {/* The series' own measures, never the header's total again: an average month and the margin's spread. */}
+                <LegendTile swatch={seriesSwatch(1)} label="Net revenue, monthly average" value={charts.revenue.average} />
+                <LegendTile swatch={seriesSwatch(2)} label="Margin, monthly range" value={charts.revenue.marginRange} />
+              </div>
+            </section>
+
+            <section className={styles.panel} aria-label="Orders by channel">
+              <Stat value={charts.orders.total} label="Orders, last 12 months" delta={charts.orders.delta} trend={charts.orders.trend} deltaPlacement="inline" />
+              <AreaChart
+                data={ordersByMonth}
+                xKey="month"
+                stacked
+                series={MERCHANT_CHANNELS.map((channel, slot) => ({ dataKey: `series${slot + 1}`, label: channel }))}
+                height={CHART_HEIGHT}
+                showLegend={false}
+                bare
+              />
+              <div className={styles.legendRow}>
+                {MERCHANT_CHANNELS.map((group, at) => (
+                  <LegendTile
+                    key={group}
+                    swatch={seriesSwatch(at + 1)}
+                    label={group}
+                    value={charts.orders.channels[group].reduce((total, count) => total + count, 0).toLocaleString("en-US")}
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
 
           {/* ----------------------------------------- table section */}
           {/* The table sits directly on the page: the DataTable brings its own

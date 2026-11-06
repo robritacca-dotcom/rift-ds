@@ -753,8 +753,6 @@ const EXCLUDED_ROUTES = new Map([
     'the table bench\'s most complex table as a full page: the same fictional projects, a labs page outside the IA'],
   ['/labs/bento',
     'a noindex test page for feature banners that open into an overlay — a surface experiment whose prose restates facts the covered pages already carry'],
-  ['/templates/marketing-dashboard',
-    'the marketing dashboard template rendered full viewport (the same app shell as /labs/marketing, its origin) — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/analytics',
     'the analytics template rendered full viewport — its prose is fictional demo data; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/chat-home',

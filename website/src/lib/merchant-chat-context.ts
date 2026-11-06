@@ -13,7 +13,7 @@
 
 import { sanitiseConfirmation as checkConfirmation, sanitiseSelection, selectionLines, type ChatSelection } from "rift-ds/chat/server";
 import { COLUMN_KEYS, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
-import { MERCHANT_KPIS, computeKpis } from "@/data/merchant-sales";
+import { MERCHANT_KPIS, chartFacts, computeCharts, computeKpis } from "@/data/merchant-sales";
 import { ORDER_ACTIONS, ORDER_ACTION_IDS, planAction, skippedText, withEdit, type OrderActionId } from "./order-actions";
 import { currentLedgerEdits, currentRows } from "./order-ledger-tools";
 
@@ -197,6 +197,8 @@ export function sanitiseTableContext(value: unknown): string | null {
     editedOrders: Object.keys(currentLedgerEdits()).length,
     /* The band as it now reads on the page, once the reader has changed anything: the same function draws it there. */
     kpis: Object.keys(currentLedgerEdits()).length ? computeKpis(currentRows()).map(({ label, value, delta }) => ({ label, value, delta })) : null,
+    /* The charts as they now read, in the system prompt's own words. */
+    charts: Object.keys(currentLedgerEdits()).length ? chartFacts(computeCharts(currentRows())) : null,
     changes: sanitiseChanges(view.changes),
     confirmation: sanitiseConfirmation(view.confirmation),
   });

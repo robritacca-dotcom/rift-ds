@@ -18,7 +18,7 @@
 import { confirmationLine, createChatHandler, type ChatTool, type ChatToolContext } from "rift-ds/chat/server";
 import { BRAND_NAME } from "@/config/brand.generated";
 import { COLUMN_KEYS, LEDGER_COLUMNS, LEDGER_TODAY, ROW_COUNT, ledgerRows } from "@/data/order-ledger";
-import { MERCHANT_KPIS, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS } from "@/data/merchant-sales";
+import { MERCHANT_CHARTS, MERCHANT_KPIS, MERCHANT_OPENING_SORT, MERCHANT_SHOWN_COLUMNS, chartFacts } from "@/data/merchant-sales";
 import { LEDGER_COLUMNS_TEXT, LEDGER_TOOLS, VIEW_SCHEMA, columnValues, describeQuery, matchingRows, queryData, viewProblems, withLedgerEdits, type ColumnValuesInput, type QueryInput } from "@/lib/order-ledger-tools";
 import type { LedgerViewChange } from "@/lib/order-ledger-view";
 import { randomUUID } from "node:crypto";
@@ -48,8 +48,11 @@ Scope:
 The page:
 The Sales page reports October 2026 against September 2026. Today is ${LEDGER_TODAY}. Resolve relative dates against today into YYYY-MM-DD values.
 ${MERCHANT_KPIS.map((kpi) => `- ${kpi.label}: ${kpi.value} (${kpi.delta} on September)`).join("\n")}
-- Those are the figures as reported. Once the reader has changed orders on the page, the band recomputes, and the context gives it as it now reads: quote those, and say they include the reader's changes.
 - Those figures cover orders placed October 1 to 30. Orders counts every order placed, cancelled ones included. Net revenue, Average order and Margin leave out cancelled orders (status Cancelled).
+- Under the band, two charts cover the twelve months November 2025 to October 2026, by the same rules:
+${chartFacts(MERCHANT_CHARTS).map((line) => `  - ${line}`).join("\n")}
+- For a single month or channel on a chart, use query_data over that period.
+- Those are the figures as reported. Once the reader has changed orders on the page, the band and the charts recompute, and the context gives them as they now read: quote those, and say they include the reader's changes.
 - Margin is margin over net revenue: for any margin over more than one order use the margin_rate metric, never an average of marginPct.
 - The table holds ${ROW_COUNT.toLocaleString("en-US")} orders from November 2024 to October 2026, and opens filtered to placed after 2026-09-30. It opens showing these columns: ${MERCHANT_SHOWN_COLUMNS.join(", ")}. The others wait in its Columns panel, and you can reach them all.
 

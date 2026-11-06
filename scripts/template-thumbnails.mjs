@@ -6,8 +6,7 @@
  * each mode's file lives. The playground's Templates rail
  * (website/src/app/playground/TemplatesRail.tsx) builds the same paths from
  * the same list, templatesSidebarLinks less the phone-only screens, which
- * have no desktop picture to show (the mobile dashboard rides the Mobile
- * stage as the marketing dashboard's phone counterpart instead), and less
+ * have no desktop picture to show, and less
  * the screens flagged hideFromPlayground.
  */
 import { dirname, join } from 'node:path';

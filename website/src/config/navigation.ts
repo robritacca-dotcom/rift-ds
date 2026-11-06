@@ -444,9 +444,9 @@ export const docsSidebarLinks: NavLink[] = [
 export const templatesSidebarLinks: NavLink[] = [
   { href: "/templates", label: "Contents" },
   {
-    href: "/templates/marketing-dashboard",
-    label: "Marketing dashboard",
-    description: "An analytics app shell built from the system alone",
+    href: "/templates/merchant-sales",
+    label: "Merchant sales",
+    description: "A merchant's year, month and orders, with a live assistant that follows what you pick and proposes changes you confirm",
   },
   {
     href: "/templates/analytics",
@@ -480,11 +480,6 @@ export const templatesSidebarLinks: NavLink[] = [
     href: "/templates/roadmap-planner",
     label: "Roadmap planner",
     description: "A planning tool around the Gantt timeline and its detail rail",
-  },
-  {
-    href: "/templates/merchant-sales",
-    label: "Merchant sales",
-    description: "A merchant's month and orders, with a live assistant that follows what you pick and proposes changes you confirm",
   },
   {
     href: "/templates/sign-in",

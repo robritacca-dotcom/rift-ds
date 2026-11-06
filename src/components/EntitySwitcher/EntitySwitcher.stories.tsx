@@ -53,6 +53,14 @@ const marks: EntitySwitcherItem[] = [
   { id: 'harbor', name: 'Harbor Health', description: 'Material Symbol', icon: 'local_hospital' },
   { id: 'peak', name: 'Peak Analytics', description: 'Inline SVG', icon: <InlineMark /> },
   { id: 'quill', name: 'Quill & Co', description: 'Initials' },
+  { id: 'tidewater', name: 'Tidewater Supply', description: 'Initials on a fill', fill: 4 },
+];
+
+/** Initials on Avatar's fills, one each, so entities read apart in the list. */
+const filled: EntitySwitcherItem[] = [
+  { id: 'wholesale', name: 'Larch Wholesale', description: 'Trade accounts', fill: 1 },
+  { id: 'retail', name: 'Larch Retail', description: 'Online shop', fill: 3 },
+  { id: 'marketplace', name: 'Larch Marketplace', description: 'Third-party listings', fill: 5 },
 ];
 
 const meta = {
@@ -87,6 +95,11 @@ export const Default: Story = {};
 /** A flat list, one per mark kind: whatever the data carries draws the tile. */
 export const Marks: Story = {
   args: { items: marks, defaultValue: 'acme' },
+};
+
+/** Initials on a fill per entity: each takes one of Avatar's six colour pairs. */
+export const Fills: Story = {
+  args: { items: filled, defaultValue: 'wholesale' },
 };
 
 /** One entity: still says which one you are in. */

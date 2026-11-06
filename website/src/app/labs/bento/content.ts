@@ -76,7 +76,7 @@ export const BANNERS: Banner[] = [
       "Recharts stays an optional peer",
     ],
     primary: { label: "See the bar chart", href: "/components/bar-chart" },
-    secondary: { label: "Marketing dashboard", href: "/templates/marketing-dashboard" },
+    secondary: { label: "Merchant sales", href: "/templates/merchant-sales" },
     factsTitle: "From the same tokens",
     facts: [
       ["Series", "Chart palette tokens"],

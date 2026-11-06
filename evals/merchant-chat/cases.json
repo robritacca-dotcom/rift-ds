@@ -94,7 +94,7 @@
       "expect": {
         "card": "order-action",
         "action": "cancel",
-        "count": 69,
+        "count": 25,
         "never": [
           "(?<!nothing |not |none |never )(are|is|have been|has been|were) (now )?cancelled(?! (when|once|if|after))"
         ]
@@ -332,7 +332,7 @@
           "size": "default",
           "focus": {
             "kind": "text",
-            "text": "$51.7M",
+            "text": "$32.8M",
             "kpi": "Net revenue",
             "orderId": null,
             "column": null,

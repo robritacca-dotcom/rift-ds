@@ -3,7 +3,8 @@
  * the browser, so what the route counts is what the table shows. No JSX, so
  * the API route can import it. The numbers lean on each other on purpose
  * (carriers differ in lateness, categories in margin and returns), so a
- * question asked of the data has a real answer to find.
+ * question asked of the data has a real answer to find. Orders arrive at a
+ * steady growth, so no one month dwarfs the year the merchant sales charts draw.
  */
 
 import type { DataTableColumn, DataTableOption, DataTableRow } from 'rift-ds/components/DataTable/DataTable';
@@ -138,6 +139,11 @@ const seeded = (seed: number) => () => {
 
 const MS_PER_DAY = 86_400_000;
 const TODAY_MS = Date.parse(`${LEDGER_TODAY}T00:00:00Z`);
+/* Order dates run back DAYS from today, thinning by GROWTH a month the further back they go (a truncated exponential). */
+const DAYS = 720;
+const GROWTH = 0.045;
+const AGE_DECAY = Math.log(1 + GROWTH) / 30;
+const AGE_SPREAD = 1 - Math.exp(-AGE_DECAY * DAYS);
 const isoDay = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 const round2 = (value: number) => Math.round(value * 100) / 100;
 
@@ -166,7 +172,8 @@ function makeRows(): DataTableRow[] {
     const carrier = CARRIERS[carrierName];
     const service = pick(SERVICES);
 
-    const age = Math.floor(Math.pow(random(), 1.4) * 720);
+    /* Steady growth: each month takes about GROWTH more orders than the one before, so no month dwarfs its neighbours. */
+    const age = Math.floor(-Math.log(1 - random() * AGE_SPREAD) / AGE_DECAY);
     const placed = TODAY_MS - age * MS_PER_DAY;
     const daysToShip = Math.round(random() * 4 * 10) / 10;
     const transit = Math.max(1, Math.round(carrier.transit + (random() - 0.4) * 4));

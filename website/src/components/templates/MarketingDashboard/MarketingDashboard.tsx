@@ -8,11 +8,12 @@
  * departure is content, not chrome: the campaign table's publisher marks wear
  * their real brand colours.
  *
- * Two routes render it: /templates/marketing-dashboard (the public template)
- * and /labs/marketing (where it began, as a fidelity pressure test against a
- * reference product — a shortfall there is a finding about the system, not
- * this page). All data is fictional, so both routes are excluded from the
- * chat corpus (see EXCLUDED_ROUTES in generate-site-corpus.mjs).
+ * One route renders it: /labs/marketing, where it began, as a fidelity
+ * pressure test against a reference product (a shortfall there is a finding
+ * about the system, not this page). It was a public template until merchant
+ * sales took its charts and its place. All data is fictional, so the route
+ * is excluded from the chat corpus (see EXCLUDED_ROUTES in
+ * generate-site-corpus.mjs).
  */
 
 import React from "react";

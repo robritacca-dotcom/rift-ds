@@ -48,8 +48,7 @@ export function ExtendedBackground() {
 /**
  * Marker a page renders to hide the background entirely, leaving the flat page
  * colour — the dotted stages (the playground) render it
- * beside their DotBackground ground, and the marketing-dashboard template sets
- * the attribute itself.
+ * beside their DotBackground ground.
  *
  * It hides the layer rather than unmounting it, and that is the point: the
  * mount is hoisted to the root layout precisely so the WebGL context survives

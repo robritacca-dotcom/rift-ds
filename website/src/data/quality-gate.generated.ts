@@ -273,6 +273,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-shared-primitives",
         "text": "Shared marks and controls are composed, never redrawn."
+      },
+      {
+        "name": "validate-chat-cards",
+        "text": "Every card a chat reply carries reads one recipe for its fill, corner, inset, rhythm and row height, and an ai component drawing a card shell of its own fails until it joins."
       }
     ]
   },

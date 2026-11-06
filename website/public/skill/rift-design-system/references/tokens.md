@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (160)
+## Colour (161)
 
 Prefix: `--color-*`.
 
@@ -101,6 +101,7 @@ Prefix: `--color-*`.
 | `--color-chat-bubble-received-text` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-chat-bubble-sent-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `#303030` (`--primitive-neutral-07`) |
 | `--color-chat-bubble-sent-text` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
+| `--color-chat-card-bg` | `#FFFFFF` (`--primitive-neutral-00`) | `#050505` (`--primitive-neutral-10`) |
 | `--color-chat-context-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `#0E0E0E` (`--primitive-neutral-09`) |
 | `--color-control-thumb` | `#CFEAF3` (`--primitive-teal-02`) | `#052F3E` (`--primitive-teal-10`) |
 | `--color-core-accent-amber` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
@@ -178,7 +179,7 @@ Prefix: `--color-*`.
 | `--color-trend-down` | `#C93A5C` (`--primitive-red-08`) | `#EF476F` (`--primitive-red-07`) |
 | `--color-trend-up` | `#03765A` (`--primitive-green-09`) | `#06D6A0` (`--primitive-green-07`) |
 
-## Typography (100)
+## Typography (101)
 
 Prefix: `--font-*`.
 
@@ -189,6 +190,7 @@ Prefix: `--font-*`.
 | `--font-caption-line-height` | `16px` |  |
 | `--font-caption-size` | `12px` |  |
 | `--font-caption-weight` | `400` |  |
+| `--font-code-aspect` | `0.5` |  |
 | `--font-display-1-family` | `'Nunito Sans', sans-serif` |  |
 | `--font-display-1-letter-spacing` | `0.02em` |  |
 | `--font-display-1-line-height` | `1.05` |  |

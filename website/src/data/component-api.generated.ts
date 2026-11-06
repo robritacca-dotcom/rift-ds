@@ -9433,13 +9433,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string",
             "required": false,
-            "description": "The already-chosen value. When set, the card renders its answered state:\nthe options are replaced by a quiet echo of the chosen label."
+            "description": "The already-chosen value. When set, the card renders its answered state:\nthe options give way to the chosen one's read-out, worded as the\ndecision made, in the status that choice records."
           },
           {
             "name": "answeredLabel",
             "type": "string",
             "required": false,
-            "description": "Override the echoed text in the answered state (default: the chosen option's label)."
+            "description": "Override the answered read-out's text (default: the chosen option's `answeredLabel`, then its label)."
           },
           {
             "name": "waitingLabel",

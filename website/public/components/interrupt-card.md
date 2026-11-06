@@ -20,8 +20,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same dat
 | icon | `ReactNode` | no |  | Leading Material Symbol name, or any custom element. No icon by default. |
 | options | `InterruptCardOption[]` | no |  | The choices, rendered as buttons left to right. |
 | onValueChange | `((value: string) => void)` | no |  | Fires with the chosen option's value. |
-| value | `string` | no |  | The already-chosen value. When set, the card renders its answered state: the options are replaced by a quiet echo of the chosen label. |
-| answeredLabel | `string` | no |  | Override the echoed text in the answered state (default: the chosen option's label). |
+| value | `string` | no |  | The already-chosen value. When set, the card renders its answered state: the options give way to the chosen one's read-out, worded as the decision made, in the status that choice records. |
+| answeredLabel | `string` | no |  | Override the answered read-out's text (default: the chosen option's `answeredLabel`, then its label). |
 | waitingLabel | `string` | no | `Waiting for your decision` | Visually hidden status announced while the card waits for a decision. Defaults to "Waiting for your decision". |
 | className | `string` | no | `` | Additional CSS classes |
 | children | `ReactNode` | no |  | Detail slot between the description and the options — typically a `<ToolCall status="pending">` showing what wants to run. |

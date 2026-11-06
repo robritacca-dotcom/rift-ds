@@ -2218,6 +2218,10 @@
       "$type": "color",
       "$value": "{color.text-primary}"
     },
+    "chat-card-bg": {
+      "$type": "color",
+      "$value": "{primitive.neutral-00}"
+    },
     "chat-context-bg": {
       "$type": "color",
       "$value": "{primitive.neutral-01}"
@@ -2598,6 +2602,10 @@
     "caption-weight": {
       "$type": "fontWeight",
       "$value": 400
+    },
+    "code-aspect": {
+      "$type": "number",
+      "$value": 0.5
     },
     "display-1-family": {
       "$type": "fontFamily",

@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.23.0",
+      "date": "2026-11-06",
+      "title": "A chat that proposes changes, one recipe for chat cards, EntitySwitcher and Aubergine",
+      "body": [
+        "A chat can now propose a change and wait for the reader to confirm it. `rift-ds/chat/actions`, a new subpath with no dependencies, holds `defineAction`, `planAction` and the confirmation mark a page and its route share. ActionCard is the proposal, with Confirm and Dismiss, then the record of what happened, with Undo; given `facts`, it lists what the change will do over Confirm and keeps them once confirmed. ActionReadout is what a confirmed change did. A card sent with `lead` opens the reply under a status line that keeps running, so the thinking never moves it.",
+        "A chat can also follow what the reader is looking at: ChatWidget's `context` object, `useSelectionFocus`, `useHeldHighlight` and `describeSelection` for a highlight and what it sits in, `getContext` on ChatProvider, and starters a model writes for the focus with `createStartersHandler` and `useGeneratedStarters`. Every card a reply carries now reads one recipe, with the new `--color-chat-card-bg` fill.",
+        "EntitySwitcher is new, for the company, team or account a screen is scoped to, and so is the Aubergine preset. Two defaults moved: ChatWidget's `contextPlacement` is now `inside` (it was `above`), and a docked panel takes the overlay once the page loses the room the dock needs. `contextLabel` and `contextNote` are deprecated in favour of `context`. Nothing published was renamed or removed."
+      ]
+    },
+    {
       "version": "1.22.0",
       "date": "2026-11-03",
       "title": "Chat cards, composer sizes and a sturdier colour mode",

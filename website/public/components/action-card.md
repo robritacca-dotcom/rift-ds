@@ -2,7 +2,7 @@
 
 A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.22.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.23.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { ActionCard } from 'rift-ds';`

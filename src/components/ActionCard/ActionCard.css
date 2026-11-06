@@ -108,11 +108,88 @@
   --icon-size: var(--icon-size-500);
 }
 
+/* What the change will do, or did: ActionReadout's two columns, a text gap
+   off the title (and its detail) above them. */
+.ds-action-card__facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--gap-400);
+  row-gap: var(--gap-100);
+  align-self: stretch;
+  margin: var(--ds-chat-card-gap-text) 0 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-action-card__facts dt {
+  color: var(--color-text-secondary);
+}
+
+.ds-action-card__facts dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* A confirmed record that keeps its facts stays a card, not a row: the receipt
+   and Undo share the head, which holds a compact control's height so the
+   title does not move when Undo arrives. */
+.ds-action-card--detailed {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  min-height: 0;
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
+}
+
+.ds-action-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  min-width: 0;
+  min-height: var(--control-height-compact);
+}
+
+/* The head's control height already sets it off; the facts follow at the text gap. */
+.ds-action-card--detailed .ds-action-card__facts {
+  margin-block-start: var(--ds-chat-card-gap-text);
+}
+
 .ds-action-card__actions {
   margin-block-start: var(--ds-chat-card-gap-block);
   display: inline-flex;
   flex-wrap: wrap;
   gap: var(--gap-200);
+}
+
+/* The decision as a record where Confirm stood: InterruptCard's read-out, a
+   compact Button's height, pill, padding, type and icon, filled in the
+   positive status rather than the action colour, so it reads as done rather
+   than pressable. */
+.ds-action-card__readout {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-300);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-status-positive-bg);
+  color: var(--color-status-positive-text);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  white-space: nowrap;
+}
+
+.ds-action-card__readout-icon {
+  --icon-size: var(--icon-size-500);
 }
 
 .ds-action-card .material-symbols-rounded {

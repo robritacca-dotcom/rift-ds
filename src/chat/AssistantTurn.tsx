@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentStatus } from '../components/AgentStatus/AgentStatus';
@@ -134,12 +134,21 @@ export function AssistantTurn({
      them, so a tool's result shows while the prose still streams. */
   const content = live ? live.content : turn?.content;
   const source = live ?? turn;
-  const cards = source ? turnCards(source) : [];
+  const allCards = source ? turnCards(source) : [];
+  /* A lead card is the host's opening, drawn first under the status line.
+     So nothing above it moves, the line stays one row for the whole reply:
+     the trace opens only when the reader asks, and the line stays on as the
+     summary once the thinking is over, trace or none. */
+  const leadCards = allCards.filter((card) => card.lead);
+  const cards = allCards.filter((card) => !card.lead);
+  const led = leadCards.length > 0;
+  const [ledTraceOpen, setLedTraceOpen] = useState(false);
   /* A reply that opens with its answer has nothing to think about on
      screen: the live status gives way to the card, and only a real trace
-     point brings the disclosure back. */
+     point brings the disclosure back. A lead card is not the answer: the
+     model is still to think and speak under it. */
   const answered = !!content || cards.length > 0;
-  const showReasoning = tracePoints.length > 0 || (thinking && !answered);
+  const showReasoning = tracePoints.length > 0 || (thinking && !answered) || led;
 
   /* Whether this turn's follow-up questions are still being generated: the
      request fires when a backend answer commits (see ChatProvider) and lands
@@ -196,6 +205,8 @@ export function AssistantTurn({
         {showReasoning && (
           <Reasoning
             streaming={thinking}
+            open={led ? ledTraceOpen : undefined}
+            onOpenChange={led ? setLedTraceOpen : undefined}
             summaryOnly={tracePoints.length === 0}
             duration={durationSeconds}
             /* Thinking, the AgentStatus below owns the line; the label is
@@ -219,6 +230,9 @@ export function AssistantTurn({
         {/* Rich content (a tool call, a card) sits where an agent's
             structured output belongs: after the reasoning, before the prose
             that reads off what it shows. */}
+        {leadCards.map((card, index) => (
+          <TurnCard key={`lead-${index}`} card={card} />
+        ))}
         {content}
         {cards.map((card, index) => (
           <TurnCard key={index} card={card} />

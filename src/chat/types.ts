@@ -23,6 +23,8 @@ export interface ChatCard {
   kind: string;
   /** Whatever the renderer for `kind` expects. Must survive JSON. */
   data: unknown;
+  /** The opening of a reply the host worked out before the model began, such as the readout of a change just confirmed: drawn first under the status line, which stays one row for the whole reply (its trace opens only on request) so the thinking never moves the card. */
+  lead?: boolean;
 }
 
 /**

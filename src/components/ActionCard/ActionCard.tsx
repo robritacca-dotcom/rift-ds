@@ -4,6 +4,7 @@ import './ActionCard.css';
 import '../../behaviors/chat-card.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
+import type { ActionReadoutFact } from '../ActionReadout/ActionReadout';
 
 /** Where a proposed change stands. */
 export type ActionCardStatus = 'proposed' | 'confirmed' | 'dismissed' | 'undone';
@@ -14,6 +15,8 @@ type ActionCardOwnProps = {
   title: React.ReactNode;
   /** A quiet line under the title: what the change leaves alone, and why ("Left as they are: 2 already shipped"). */
   detail?: React.ReactNode;
+  /** What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. Write them for the state the card is in. */
+  facts?: ActionReadoutFact[];
   /** The leading mark: a Material Symbol name, or your own element. */
   icon?: string | React.ReactNode;
   /** Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`. */
@@ -34,6 +37,8 @@ type ActionCardOwnProps = {
   dismissLabel?: string;
   /** The Undo button's words. Defaults to "Undo". */
   undoLabel?: string;
+  /** The read-out where Confirm stood, on a confirmed card that keeps its `facts`. Defaults to "Confirmed". */
+  confirmedLabel?: string;
   /** What a dismissed card says after its title. Defaults to "Not changed". */
   dismissedLabel?: string;
   /** What an undone card says after its title. Defaults to "Undone". */
@@ -61,6 +66,7 @@ export function ActionCard({
   ref,
   title,
   detail,
+  facts,
   icon,
   status = 'proposed',
   receipt,
@@ -71,6 +77,7 @@ export function ActionCard({
   confirmLabel = 'Confirm',
   dismissLabel = 'Dismiss',
   undoLabel = 'Undo',
+  confirmedLabel = 'Confirmed',
   dismissedLabel = 'Not changed',
   undoneLabel = 'Undone',
   className = '',
@@ -81,6 +88,42 @@ export function ActionCard({
       {typeof icon === 'string' ? <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span> : icon}
     </span>
   ) : null;
+
+  const factList = facts?.length ? (
+    <dl className={`${baseClass}__facts`}>
+      {facts.map((fact) => (
+        <React.Fragment key={fact.label}>
+          <dt>{fact.label}</dt>
+          <dd>{fact.value}</dd>
+        </React.Fragment>
+      ))}
+    </dl>
+  ) : null;
+
+  /* A confirmed record with facts keeps the proposal's shape: the receipt and Undo in one row, the
+     facts under it, and where Confirm stood, a read-out of the decision in the positive status.
+     No icon: the row's end is Undo's, which a host may hold back for a while, and an icon there would be swapped out under it. */
+  if (status === 'confirmed' && factList) {
+    return (
+      <div {...rest} ref={ref} className={[baseClass, `${baseClass}--confirmed`, `${baseClass}--detailed`, className].filter(Boolean).join(' ')}>
+        <span className={`${baseClass}__head`}>
+          <span className={`${baseClass}__title`} role="status">
+            {receipt ?? title}
+          </span>
+          {onUndo && <Button variant="tertiary" size="compact" iconLeft="undo" label={undoLabel} onClick={onUndo} />}
+        </span>
+        {factList}
+        <span className={`${baseClass}__actions`}>
+          <span className={`${baseClass}__readout`}>
+            <span className={`${baseClass}__readout-icon material-symbols-rounded`} aria-hidden="true">
+              check
+            </span>
+            {confirmedLabel}
+          </span>
+        </span>
+      </div>
+    );
+  }
 
   if (status !== 'proposed') {
     return (
@@ -109,6 +152,7 @@ export function ActionCard({
         {title}
       </span>
       {detail && <span className={`${baseClass}__detail`}>{detail}</span>}
+      {factList}
       <span className={`${baseClass}__actions`}>
         <Button variant="primary" tone={tone} size="compact" label={confirmLabel} onClick={onConfirm} />
         <Button variant="secondary" tone="neutral" size="compact" label={dismissLabel} onClick={onDismiss} />

@@ -55,6 +55,34 @@ export const Confirmed: Story = {
   },
 };
 
+/** With `facts`: the proposal lists what the change will do over Confirm, as a readout would, so the reader confirms with the numbers in front of them. */
+export const WithFacts: Story = {
+  args: {
+    detail: undefined,
+    facts: [
+      { label: 'Status', value: 'Active 9 · Paused 3 → Archived 12' },
+      { label: 'Owners', value: '5' },
+      { label: 'Left alone', value: '3 already archived' },
+    ],
+  },
+};
+
+/** Confirmed with `facts`: the record keeps them under the receipt, so the card the reader confirmed becomes the readout of what it did. */
+export const ConfirmedWithFacts: Story = {
+  args: {
+    ...WithFacts.args,
+    status: 'confirmed',
+    facts: [
+      { label: 'Status', value: 'Active 9 · Paused 3 → Archived 12' },
+      { label: 'Owners', value: '5' },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('status')).toHaveTextContent('12 projects archived');
+    await expect(within(canvasElement).getByText('Owners')).toBeVisible();
+  },
+};
+
 /** Dismissed: nothing changed, and the card says so. */
 export const Dismissed: Story = {
   args: { status: 'dismissed' },

@@ -65,6 +65,7 @@ const marks: EntitySwitcherItem[] = [
   { id: "symbol", name: "Support desk", description: "A Material Symbol", icon: "support_agent" },
   { id: "element", name: "Peak Analytics", description: "An inline SVG", icon: <InlineMark /> },
   { id: "initials", name: "Quill and Co", description: "Initials" },
+  { id: "filled", name: "Tidewater Supply", description: "Initials on a fill", fill: 4 },
 ];
 
 export default function EntitySwitcherPage() {
@@ -139,7 +140,8 @@ export default function EntitySwitcherPage() {
             <p className={styles.demoText}>
               Each entity draws whatever it carries: a logo image fills the tile, an icon
               or any element sits inside it, and two initials stand in when there is
-              neither.
+              neither. Initials can take one of Avatar’s six fills, through an
+              entity’s <code>fill</code>, so entities read apart at a glance.
             </p>
             <div className={styles.demoStage}>
               <EntitySwitcher items={marks} defaultValue="logo" switcherLabel="Switch team" />

@@ -169,7 +169,7 @@ export function computeCharts(rows: readonly KpiRow[]): MerchantCharts {
 export function chartFacts(charts: MerchantCharts) {
   const channels = MERCHANT_CHANNELS.map((channel) => `${channel} ${charts.orders.channels[channel].reduce((total, count) => total + count, 0).toLocaleString("en-US")}`).join(", ");
   return [
-    `Net revenue, last 12 months: ${charts.revenue.total} (${charts.revenue.delta} on the twelve months before), drawn as a bar per month with the margin rate as a line. Under it: Net revenue, monthly average ${charts.revenue.average}; Margin, monthly range ${charts.revenue.marginRange}. Margin over the twelve months is ${charts.revenue.margin}.`,
+    `Net revenue, last 12 months: ${charts.revenue.total} (${charts.revenue.delta} on the twelve months before), drawn as a bar per month with the margin rate as a line. Under it: Monthly average ${charts.revenue.average}; Margin range ${charts.revenue.marginRange} across the months. Margin over the twelve months is ${charts.revenue.margin}.`,
     `Orders, last 12 months: ${charts.orders.total} (${charts.orders.delta} on the twelve months before), drawn per month stacked in three channel groups: ${channels}. ${MERCHANT_CHANNEL_GROUPS.map((group) => `${group.label} is ${group.channels.join(", ")}`).join("; ")}.`,
   ];
 }

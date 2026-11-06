@@ -443,8 +443,8 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
               <ComboChart data={revenueByMonth} xKey="month" barKey="revenue" barLabel="Net revenue ($M)" lineKey="margin" lineLabel="Margin (%)" height={CHART_HEIGHT} bare />
               <div className={styles.legendRow}>
                 {/* The series' own measures, never the header's total again: an average month and the margin's spread. */}
-                <LegendTile swatch={seriesSwatch(1)} label="Net revenue, monthly average" value={charts.revenue.average} />
-                <LegendTile swatch={seriesSwatch(2)} label="Margin, monthly range" value={charts.revenue.marginRange} />
+                <LegendTile swatch={seriesSwatch(1)} label="Monthly average" value={charts.revenue.average} />
+                <LegendTile swatch={seriesSwatch(2)} label="Margin range" value={charts.revenue.marginRange} />
               </div>
             </section>
 

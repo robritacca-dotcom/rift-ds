@@ -30,7 +30,7 @@
  *   the email path below the rule is the same Button at primary. The rule
  *   itself is the library Divider's inline label, not a hand-drawn line.
  * - The provider marks are the shared PublisherMarks (the table the
- *   marketing dashboard's channel column reads too): Google and Facebook in
+ *   marketing lab's channel column reads too): Google and Facebook in
  *   their brand colours, Apple in currentColor because its mark is monochrome
  *   by design. Material Symbols has no brand glyphs, and the library's icon
  *   props take a ReactNode for this case.

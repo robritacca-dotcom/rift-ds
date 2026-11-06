@@ -1,9 +1,10 @@
 "use client";
 
 /**
- * The app-shell template family's one shell: the marketing dashboard, the
- * merchant sales, the relay console, the roadmap planner and the team
- * calendar all lay out through it. It owns the AppSidebar (with the footer
+ * The app-shell template family's one shell: merchant sales, the analytics
+ * screen, the relay console, the roadmap planner and the team calendar all
+ * lay out through it (and the marketing dashboard, now a lab at
+ * /labs/marketing). It owns the AppSidebar (with the footer
  * switchers), the main column, the room a docked assistant takes, and the
  * two layouts the footer's layout switch flips between. The rail always
  * runs in panel mode, purely to demonstrate the secondary nav: a row with

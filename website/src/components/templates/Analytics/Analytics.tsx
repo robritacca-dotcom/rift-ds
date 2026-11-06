@@ -6,8 +6,8 @@
  * with who is on the site this minute, and the charts run on from under it.
  *
  * Composition calls, against design.md's Template screens rules: the shell,
- * top bar and panels are the marketing dashboard's (rule 9), so the two read
- * as siblings, but it has no KPI band: the map earns the top of the viewport
+ * top bar and panels are merchant sales' (rule 9), so the two read as
+ * siblings, but it has no KPI band: the map earns the top of the viewport
  * (rule 3), the column runs full width over it (rule 5's stage exception),
  * and the headline numbers are one list tile beside the live chart. WorldMap
  * has no pulse of its own, so the module sheet hangs StatusDot's ring on its

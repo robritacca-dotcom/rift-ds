@@ -1,7 +1,7 @@
 /* Templates: the Tessera sign-in screen. Every colour, space, radius, and
    type style is a semantic token; the only raw values are structural layout
    sizes (the form's measure, the pane split, breakpoints), which pages own
-   everywhere else on the site. The shell is not the marketing dashboard's —
+   everywhere else on the site. The shell is not the family's TemplateShell —
    this screen has no app shell at all — but it stretches across the body's
    inset the same way every template does, so it runs edge to edge. */
 

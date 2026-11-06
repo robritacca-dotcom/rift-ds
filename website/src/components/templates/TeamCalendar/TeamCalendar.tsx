@@ -3,7 +3,7 @@
 /**
  * The team calendar template: the planning screen for Cadence, a fictional
  * team planner, built from the design system alone. The shell is the
- * marketing dashboard's (TemplateShell's switchable rail and surface, slim top bar, docked mock
+ * family's (TemplateShell's switchable rail and surface, slim top bar, docked mock
  * assistant); the page is a two-pane spread. The EventCalendar holds the
  * stage, and a rail beside it carries the sprint's to-dos and the selected
  * day's schedule — clicking a day or an event pill on the grid moves the

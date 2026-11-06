@@ -110,8 +110,8 @@
 
 /* The band reflows with its column, not the window: a docked chat or an
    expanded rail narrows the column without the viewport changing, and four
-   cards clipped their values. 1020px is the marketing dashboard's step, where
-   four of the widest card fit. */
+   cards clipped their values. 1020px is the step where four of the widest
+   card fit. */
 @container template-content (max-width: 1020px) {
   .content .kpiGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -133,11 +133,12 @@
   gap: var(--gap-500);
 }
 
-/* Each series' total under its chart, in one row of equal tiles. */
+/* Each series' total under its chart, in equal tiles that wrap to another
+   row before a label would be cut: 120px holds the longest label and its
+   swatch. */
 .legendRow {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
   gap: var(--gap-200);
   margin-top: auto;
 }
@@ -148,6 +149,15 @@
 @container template-content (max-width: 900px) {
   .content .chartsGrid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Two cards to a row on a phone-width column: every KPI label keeps two
+   lines' room, since "Net revenue, October" wraps where "Orders, October"
+   does not, and the deltas under them then line up across the row. */
+@container template-content (max-width: 600px) {
+  .kpi :global(.ds-stat__label) {
+    min-block-size: calc(2lh);
   }
 }
 
@@ -182,6 +192,11 @@
 
   .kpiGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-300);
+  }
+
+  /* The charts take the band's tighter gap at the same width. */
+  .chartsGrid {
     gap: var(--gap-300);
   }
 }

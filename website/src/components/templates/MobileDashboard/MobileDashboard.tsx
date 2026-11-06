@@ -2,7 +2,8 @@
 
 /**
  * The mobile dashboard template: Boardline, the marketing dashboard's
- * fictional product, as an iOS app. The screen is the phone and nothing
+ * fictional product (the dashboard itself now a lab, /labs/marketing), as
+ * an iOS app. The screen is the phone and nothing
  * else: there is no tablet or desktop layout. At a phone's width the page
  * is the app, edge to edge; anything wider draws an iPhone Pro Max (440 x
  * 956) in a bezel with status bar and home indicator, the playground chat

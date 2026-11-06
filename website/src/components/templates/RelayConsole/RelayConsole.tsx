@@ -3,7 +3,7 @@
 /**
  * The relay console template: the network screen for Meridian, a fictional
  * relay network, built from the design system alone. The shell is the
- * marketing dashboard's (TemplateShell's switchable rail and surface, slim top bar, docked mock
+ * family's (TemplateShell's switchable rail and surface, slim top bar, docked mock
  * assistant); the page is one instrument with two projections of the same
  * network, flipped by the SegmentedControl floating on the stage's top-left:
  * the Globe for the geometry (stations, relays, and the links between them)

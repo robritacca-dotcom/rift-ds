@@ -328,7 +328,7 @@
 
 /* ---------------------------------------------------------- responsive */
 
-/* The grid restacks by the room the column has, as the marketing dashboard's
+/* The grid restacks by the room the column has, as merchant sales'
    does: an open chat or an expanded rail narrows it with the viewport still. */
 @container template-content (max-width: 800px) {
   .content .halvesGrid {

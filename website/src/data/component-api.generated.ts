@@ -138,7 +138,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "facts",
             "type": "ActionReadoutFact[]",
             "required": false,
-            "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. Write them for the state the card is in."
+            "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in."
           },
           {
             "name": "icon",

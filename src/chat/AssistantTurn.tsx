@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentStatus } from '../components/AgentStatus/AgentStatus';
@@ -142,7 +142,6 @@ export function AssistantTurn({
   const leadCards = allCards.filter((card) => card.lead);
   const cards = allCards.filter((card) => !card.lead);
   const led = leadCards.length > 0;
-  const [ledTraceOpen, setLedTraceOpen] = useState(false);
   /* A reply that opens with its answer has nothing to think about on
      screen: the live status gives way to the card, and only a real trace
      point brings the disclosure back. A lead card is not the answer: the
@@ -204,9 +203,10 @@ export function AssistantTurn({
             status: no chevron, nothing to open. */}
         {showReasoning && (
           <Reasoning
-            streaming={thinking}
-            open={led ? ledTraceOpen : undefined}
-            onOpenChange={led ? setLedTraceOpen : undefined}
+            /* Under a lead card the trace is never streaming, so it never
+               opens by itself: it opens only on the reader's toggle, while
+               the live AgentStatus below keeps the line moving. */
+            streaming={thinking && !led}
             summaryOnly={tracePoints.length === 0}
             duration={durationSeconds}
             /* Thinking, the AgentStatus below owns the line; the label is

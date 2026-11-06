@@ -391,6 +391,41 @@ export const CardsWithoutText: Story = {
   },
 };
 
+/* The host's own opening, sent before the model has thought anything, then
+   a trace point and the words: the shape of a confirmed change's reply. */
+const leadTransport: ChatTransport = async function* () {
+  yield { type: 'card', card: { kind: 'note', data: 'Lead card', lead: true } };
+  yield { type: 'status', label: 'Thinking', point: 'Checking what changed' };
+  yield { type: 'delta', text: 'Those orders are cancelled.' };
+  yield { type: 'done' };
+};
+
+/** A `lead` card opens the reply under the status line, which stays one row: the trace arriving after it never opens on its own, so nothing above the card moves. */
+export const LeadCard: Story = {
+  render: (args) => (
+    <ChatProvider transport={leadTransport} renderers={NOTE_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Yes, cancel them{Enter}');
+    await waitFor(() => expect(canvas.getByText('Those orders are cancelled.')).toBeInTheDocument(), { timeout: 4000 });
+    const card = canvas.getByTestId('note-card');
+    const response = card.closest('.ds-chat-widget__response') as HTMLElement;
+    const reasoning = response.querySelector('.ds-reasoning') as HTMLElement;
+    const prose = canvas.getByText('Those orders are cancelled.');
+    /* The line, then the card, then the words. */
+    await expect(reasoning.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    await expect(card.compareDocumentPosition(prose) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    await expect(reasoning.className).not.toContain('ds-reasoning--open');
+  },
+};
+
 /** A reply carrying a card: the plan renders inside the turn through the provider's renderers. */
 export const RichContent: Story = {
   render: (args) => (

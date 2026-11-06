@@ -627,3 +627,13 @@ main > div:first-child:has(> h1) {
     padding: var(--primitive-padding-500) var(--primitive-padding-400);
   }
 }
+
+/* A Mobile preview of a template (the templates carousel's and the
+   playground's, which set data-app-frame on the framed page's root) is a
+   phone screen, and a phone draws overlay scrollbars that take no room. A
+   classic scrollbar's gutter here pushed the content in from the right
+   edge only, so the app sat off-centre in the bezel. */
+html[data-app-frame],
+html[data-app-frame] * {
+  scrollbar-width: none;
+}

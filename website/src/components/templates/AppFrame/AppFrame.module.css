@@ -74,3 +74,37 @@
   -webkit-mask-image: linear-gradient(to top, var(--color-text-primary) 55%, transparent);
   mask-image: linear-gradient(to top, var(--color-text-primary) 55%, transparent);
 }
+
+/* The menu drawer: the entity switcher over the destinations, the profile
+   at the foot, as the rail lays them out. */
+.menuTop {
+  margin-block-end: var(--gap-400);
+}
+
+.menuProfile {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.menuProfileText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.menuProfileName {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+}
+
+.menuProfileEmail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
+}

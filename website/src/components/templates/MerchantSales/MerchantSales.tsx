@@ -421,12 +421,16 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
             {kpis.map((kpi) => (
               /* data-chat-source (CHAT_SOURCE_ATTRIBUTE) names the figure a highlight inside the card is about. */
               <div key={kpi.label} className={styles.kpi} data-chat-source={kpi.label}>
-                <span className={styles.kpiIcon} aria-hidden="true">
-                  <span className="material-symbols-rounded">{kpi.icon}</span>
-                </span>
+                {/* The period rides the card's top row, opposite the icon, so the label stays one short line at every width. */}
+                <div className={styles.kpiHead}>
+                  <span className={styles.kpiIcon} aria-hidden="true">
+                    <span className="material-symbols-rounded">{kpi.icon}</span>
+                  </span>
+                  <span className={styles.kpiPeriod}>{MERCHANT_KPI_PERIOD}</span>
+                </div>
                 <Stat
                   value={kpi.value}
-                  label={`${kpi.label}, ${MERCHANT_KPI_PERIOD}`}
+                  label={kpi.label}
                   delta={kpi.delta}
                   trend={kpi.trend}
                   deltaPlacement="auto"

@@ -96,6 +96,23 @@
   border-radius: var(--radius-600);
 }
 
+/* The card's top row: its icon, and the period it reports at the far end. */
+.kpiHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  align-self: stretch;
+}
+
+.kpiPeriod {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
 .kpiIcon {
   display: grid;
   place-items: center;
@@ -149,15 +166,6 @@
 @container template-content (max-width: 900px) {
   .content .chartsGrid {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Two cards to a row on a phone-width column: every KPI label keeps two
-   lines' room, since "Net revenue, October" wraps where "Orders, October"
-   does not, and the deltas under them then line up across the row. */
-@container template-content (max-width: 600px) {
-  .kpi :global(.ds-stat__label) {
-    min-block-size: calc(2lh);
   }
 }
 

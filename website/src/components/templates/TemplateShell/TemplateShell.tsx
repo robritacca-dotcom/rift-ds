@@ -142,7 +142,18 @@ export default function TemplateShell({
           </div>
         )}
 
-        <AppFrameScreen enabled={appFrame} title={frame.title} subtitle={frame.subtitle}>
+        <AppFrameScreen
+          enabled={appFrame}
+          title={frame.title}
+          subtitle={frame.subtitle}
+          menu={{
+            title: sidebar.logoText ?? frame.title,
+            sections: sidebar.sections,
+            activeKey: sidebar.activeKey ?? "",
+            profile: sidebar.profile,
+            top: entitySwitcher && <EntitySwitcher key={entitySwitcher.defaultValue} {...entitySwitcher} />,
+          }}
+        >
           <main
             className={[
               styles.main,

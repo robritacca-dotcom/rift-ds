@@ -4,8 +4,13 @@
  * The phone-app dressing a template wears in a Mobile preview (the
  * templates carousel's Mobile mode, or the playground's Mobile stage): an iOS large-title TopAppBar where the web top bar was, and
  * a floating glass BottomNav built from the template's own nav, with the
- * assistant on its search circle. It is the mobile dashboard's chrome, so
- * every template previews as an app rather than a narrow website.
+ * assistant on its search circle, and a menu button opening a left Drawer
+ * with the whole sidebar (its entity switcher, every destination, the
+ * profile), so nothing the rail carries is out of reach on the phone. It
+ * is the mobile dashboard's chrome, so every template previews as an app
+ * rather than a narrow website. The preview's frame is the phone's screen,
+ * so the Drawer's portal covers exactly the phone, with none of the mobile
+ * dashboard's scaling.
  *
  * Only a Mobile preview asks for it. The carousel and the playground mark
  * a Mobile preview's frame with `data-app-frame` on the root element
@@ -15,13 +20,16 @@
  * template page is untouched at every width.
  */
 
-import { useSyncExternalStore, type ReactNode } from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { Drawer } from "rift-ds/components/Drawer/Drawer";
+import { NavList, type NavListItem } from "rift-ds/components/NavList/NavList";
 import {
   BottomNav,
   type BottomNavItem,
 } from "rift-ds/components/BottomNav/BottomNav";
-import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
+import type { AppSidebarProfile, AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import styles from "./AppFrame.module.css";
 
 const ATTR = "data-app-frame";
@@ -70,20 +78,83 @@ function tabsFrom(
   }));
 }
 
-/** The screen's header in app form: the large iOS title over the content. */
+/** What the menu drawer holds: the rail's contents, in phone form. */
+export type AppFrameMenu = {
+  /** The drawer's title: the product's name. */
+  title: string;
+  sections: AppSidebarSection[];
+  activeKey: string;
+  profile?: AppSidebarProfile;
+  /** Drawn above the destinations, as the rail draws it under the brand: the entity switcher. */
+  top?: ReactNode;
+};
+
+/* The rail's items as the drawer's list: a demo destination is a hash, as the rail's are. */
+const navItems = (sections: AppSidebarSection[]): NavListItem[] =>
+  sections.flatMap((section) =>
+    section.items.map((item) => ({
+      id: item.key,
+      label: item.label,
+      href: `#${item.key}`,
+      items: item.children?.map((child) => ({ id: child.key, label: child.label, href: `#${child.key}` })),
+    })),
+  );
+
+/** The menu drawer: the entity switcher, every destination, and the profile at the foot. */
+function AppFrameMenuDrawer({ menu, open, onOpenChange }: { menu: AppFrameMenu; open: boolean; onOpenChange: (open: boolean) => void }) {
+  return (
+    <Drawer
+      open={open}
+      onOpenChange={onOpenChange}
+      title={menu.title}
+      side="left"
+      size="sm"
+      footer={
+        menu.profile && (
+          <div className={styles.menuProfile}>
+            <Avatar name={menu.profile.name} size="md" />
+            <span className={styles.menuProfileText}>
+              <span className={styles.menuProfileName}>{menu.profile.name}</span>
+              {menu.profile.email && <span className={styles.menuProfileEmail}>{menu.profile.email}</span>}
+            </span>
+          </div>
+        )
+      }
+    >
+      {menu.top && <div className={styles.menuTop}>{menu.top}</div>}
+      <NavList
+        items={navItems(menu.sections)}
+        currentHref={`#${menu.activeKey}`}
+        onNavigate={(item, event) => {
+          event.preventDefault();
+          /* A row with children opens them; a destination closes the menu, as the mobile dashboard's does. */
+          if (!item.items?.length) onOpenChange(false);
+        }}
+      />
+    </Drawer>
+  );
+}
+
+/** The screen's header in app form: the large iOS title over the content, with the menu button when there is a menu. */
 export function AppFrameHeader({
   title,
   subtitle,
+  menu,
 }: {
   title: string;
   subtitle?: string;
+  menu?: AppFrameMenu;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
+    <>
     <TopAppBar
       platform="ios"
       size="large"
       title={title}
       subtitle={subtitle}
+      navigation={menu ? "menu" : undefined}
+      onNavigate={menu ? () => setMenuOpen(true) : undefined}
       className={styles.header}
       actions={[
         {
@@ -94,6 +165,8 @@ export function AppFrameHeader({
         },
       ]}
     />
+    {menu && <AppFrameMenuDrawer menu={menu} open={menuOpen} onOpenChange={setMenuOpen} />}
+    </>
   );
 }
 
@@ -106,17 +179,19 @@ export function AppFrameScreen({
   enabled,
   title,
   subtitle,
+  menu,
   children,
 }: {
   enabled: boolean;
   title: string;
   subtitle?: string;
+  menu?: AppFrameMenu;
   children: ReactNode;
 }) {
   if (!enabled) return <>{children}</>;
   return (
     <div className={styles.screen}>
-      <AppFrameHeader title={title} subtitle={subtitle} />
+      <AppFrameHeader title={title} subtitle={subtitle} menu={menu} />
       {children}
     </div>
   );

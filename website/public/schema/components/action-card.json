@@ -31,6 +31,13 @@
           "description": "A quiet line under the title: what the change leaves alone, and why (\"Left as they are: 2 already shipped\")."
         },
         {
+          "name": "facts",
+          "type": "ActionReadoutFact[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. Write them for the state the card is in."
+        },
+        {
           "name": "icon",
           "type": "ReactNode",
           "typeKind": "reference",
@@ -114,6 +121,14 @@
           "required": false,
           "description": "The Undo button's words. Defaults to \"Undo\".",
           "default": "Undo"
+        },
+        {
+          "name": "confirmedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The read-out where Confirm stood, on a confirmed card that keeps its `facts`. Defaults to \"Confirmed\".",
+          "default": "Confirmed"
         },
         {
           "name": "dismissedLabel",

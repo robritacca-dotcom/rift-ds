@@ -135,6 +135,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "A quiet line under the title: what the change leaves alone, and why (\"Left as they are: 2 already shipped\")."
           },
           {
+            "name": "facts",
+            "type": "ActionReadoutFact[]",
+            "required": false,
+            "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. Write them for the state the card is in."
+          },
+          {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
@@ -208,6 +214,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The Undo button's words. Defaults to \"Undo\".",
             "defaultValue": "Undo"
+          },
+          {
+            "name": "confirmedLabel",
+            "type": "string",
+            "required": false,
+            "description": "The read-out where Confirm stood, on a confirmed card that keeps its `facts`. Defaults to \"Confirmed\".",
+            "defaultValue": "Confirmed"
           },
           {
             "name": "dismissedLabel",

@@ -135,6 +135,11 @@ export function AssistantTurn({
   const content = live ? live.content : turn?.content;
   const source = live ?? turn;
   const cards = source ? turnCards(source) : [];
+  /* A reply that opens with its answer has nothing to think about on
+     screen: the live status gives way to the card, and only a real trace
+     point brings the disclosure back. */
+  const answered = !!content || cards.length > 0;
+  const showReasoning = tracePoints.length > 0 || (thinking && !answered);
 
   /* Whether this turn's follow-up questions are still being generated: the
      request fires when a backend answer commits (see ChatProvider) and lands
@@ -188,7 +193,7 @@ export function AssistantTurn({
             empty collapsed panel is noise. Until a trace point arrives there
             is nothing behind the line either, so it renders as a plain
             status: no chevron, nothing to open. */}
-        {(thinking || tracePoints.length > 0) && (
+        {showReasoning && (
           <Reasoning
             streaming={thinking}
             summaryOnly={tracePoints.length === 0}

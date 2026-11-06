@@ -2,6 +2,7 @@ import React from 'react';
 import { Meter } from '../Meter/Meter';
 import '../Chart/Chart.css';
 import './UsageCard.css';
+import '../../behaviors/chat-card.css';
 import { DEFAULT_LOCALE } from '../../behaviors/locale';
 
 /** One budgeted quantity in the card — a meter row with an optional reset caption. */

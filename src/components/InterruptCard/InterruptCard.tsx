@@ -1,9 +1,13 @@
 import React from 'react';
 import { Button } from '../Button/Button';
 import './InterruptCard.css';
+import '../../behaviors/chat-card.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
+
+/** The status an answered card records: an approval, a refusal, or neither. */
+export type InterruptCardAnsweredVariant = 'positive' | 'error' | 'neutral';
 
 /** One choice the card offers, rendered as a Button in the options footer. */
 export interface InterruptCardOption {
@@ -19,14 +23,41 @@ export interface InterruptCardOption {
   variant?: 'primary' | 'secondary' | 'danger';
   /** Colour, passed to the option's Button: `destructive` for dangerous approvals. */
   tone?: 'default' | 'destructive';
+  /**
+   * The status the answered card's read-out takes once this option is chosen.
+   * Defaults to `positive` for a `primary` option, `error` for a destructive
+   * one and `neutral` for the rest; set `error` on a refusal such as "Deny".
+   */
+  answeredVariant?: InterruptCardAnsweredVariant;
+  /**
+   * What the answered card's read-out says once this option is chosen,
+   * written as the decision made rather than the button pressed, e.g.
+   * "Denied" for "Deny". Defaults to `label`.
+   */
+  answeredLabel?: string;
 }
 
-/** The Button emphasis and tone an option renders with, legacy `danger` included. */
-function optionButtonProps(option: InterruptCardOption) {
+/** The status an answered option records, from its own or its emphasis. */
+function answeredVariantOf(option: InterruptCardOption | undefined): InterruptCardAnsweredVariant {
+  if (!option) return 'neutral';
+  if (option.answeredVariant) return option.answeredVariant;
+  if (option.variant === 'danger' || option.tone === 'destructive') return 'error';
+  return option.variant === 'primary' ? 'positive' : 'neutral';
+}
+
+/**
+ * The Button emphasis and tone an option renders with, legacy `danger`
+ * included. In a row of three or more, the last option is the way out and
+ * takes ActionCard's Dismiss treatment, secondary in the neutral tone,
+ * unless it names a tone of its own.
+ */
+function optionButtonProps(option: InterruptCardOption, wayOut = false) {
   if (option.variant === 'danger') {
     return { variant: 'secondary', tone: option.tone ?? 'destructive' } as const;
   }
-  return { variant: option.variant ?? 'secondary', tone: option.tone ?? 'default' } as const;
+  const variant = option.variant ?? 'secondary';
+  const tone = option.tone ?? (wayOut && variant === 'secondary' ? 'neutral' : 'default');
+  return { variant, tone } as const;
 }
 
 /** Props owned by InterruptCard itself — everything else falls through to the root element. */
@@ -46,10 +77,11 @@ type InterruptCardOwnProps = {
   onValueChange?: (value: string) => void;
   /**
    * The already-chosen value. When set, the card renders its answered state:
-   * the options are replaced by a quiet echo of the chosen label.
+   * the options give way to the chosen one's read-out, worded as the
+   * decision made, in the status that choice records.
    */
   value?: string;
-  /** Override the echoed text in the answered state (default: the chosen option's label). */
+  /** Override the answered read-out's text (default: the chosen option's `answeredLabel`, then its label). */
   answeredLabel?: string;
   /** Visually hidden status announced while the card waits for a decision. Defaults to "Waiting for your decision". */
   waitingLabel?: string;
@@ -75,7 +107,9 @@ export interface InterruptCardProps
  *
  * The card stays quiet in both states: one tone, the standard container
  * border, options in a footer outside the content. Once `value` is set the
- * decision is made and the footer echoes the chosen label; a visually hidden
+ * decision is made: the buttons give way to the chosen one's read-out, a
+ * compact button's size and shape in the status the option records
+ * (`answeredVariant`); a visually hidden
  * status announcement carries the waiting state for screen readers.
  *
  * Fully controlled: the card never stores the answer itself — `onValueChange`
@@ -111,8 +145,8 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
       .filter(Boolean)
       .join(' ');
 
-    const echoedLabel =
-      answeredLabel ?? options?.find((option) => option.value === value)?.label ?? value;
+    const chosen = answered ? options?.find((option) => option.value === value) : undefined;
+    const echoedLabel = answeredLabel ?? chosen?.answeredLabel ?? chosen?.label ?? value;
 
     return (
       <div {...rest} ref={ref} role="group" aria-label={title} className={classes}>
@@ -140,20 +174,25 @@ export const InterruptCard = React.forwardRef<HTMLDivElement, InterruptCardProps
         {children && <div className={`${baseClass}__detail`}>{children}</div>}
 
         {answered ? (
+          /* The decision is made: the buttons give way to the chosen one's
+             read-out, a compact button's size and shape in the status that
+             choice records, behind a check (a cross for a refusal). */
           <div className={`${baseClass}__answer`}>
-            <span className={`${baseClass}__answer-icon material-symbols-rounded`} aria-hidden="true">
-              check
+            <span className={`${baseClass}__readout ${baseClass}__readout--${answeredVariantOf(chosen)}`}>
+              <span className={`${baseClass}__readout-icon material-symbols-rounded`} aria-hidden="true">
+                {answeredVariantOf(chosen) === 'error' ? 'close' : 'check'}
+              </span>
+              {echoedLabel}
             </span>
-            {echoedLabel}
           </div>
         ) : (
           options &&
           options.length > 0 && (
             <div className={`${baseClass}__options`}>
-              {options.map((option) => (
+              {options.map((option, index) => (
                 <Button
                   key={option.value}
-                  {...optionButtonProps(option)}
+                  {...optionButtonProps(option, index === options.length - 1 && options.length >= 3)}
                   size="compact"
                   label={option.label}
                   onClick={() => onValueChange?.(option.value)}

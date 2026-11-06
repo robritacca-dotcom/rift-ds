@@ -128,7 +128,9 @@
   width: 100%;
   min-width: 0;
   margin: 0;
-  padding: var(--padding-300) var(--padding-400);
+  /* 20px sides, the chat cards' text inset, so a row's label lines up
+     with the cards stacked around it. */
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
   border: var(--border-025) dashed var(--color-bg-container-border);
   border-radius: var(--radius-300);
   background-color: var(--color-input-bg-primary);
@@ -305,10 +307,12 @@ button.ds-question-card__option--chosen:hover {
 }
 
 .ds-question-summary--card {
-  padding: var(--padding-300) var(--padding-400);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-300);
-  background-color: var(--color-bg-container-primary);
+  /* A record in the thread, so it is one of the chat cards: their fill,
+     radius and padding. */
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
+  background-color: var(--ds-chat-card-bg);
   color: var(--color-text-primary);
 }
 

@@ -436,8 +436,8 @@ const EVERY_CARD = (() => {
         title: 'Connect the shared calendar?',
         description: 'The assistant wants read access to the team calendar to suggest meeting times.',
         options: [
-          { value: 'allow', label: 'Allow once', variant: 'primary' },
-          { value: 'deny', label: 'Not now', variant: 'secondary' },
+          { value: 'allow', label: 'Allow once', variant: 'primary', answeredLabel: 'Allowed once' },
+          { value: 'deny', label: 'Not now', variant: 'secondary', answeredLabel: 'Not now', answeredVariant: 'neutral' },
         ],
       },
     },

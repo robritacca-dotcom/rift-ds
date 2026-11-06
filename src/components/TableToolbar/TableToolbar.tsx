@@ -596,7 +596,7 @@ function CommandRow({ command, table, labels, size, open, onClose, state, onStat
                 variant="secondary"
                 tone="neutral"
                 size="compact"
-                iconLeft="refresh"
+                iconLeft="undo"
                 label={labels.commandUndo}
                 onClick={() => {
                   latestTable.current.applyView(before);

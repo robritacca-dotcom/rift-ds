@@ -3,6 +3,7 @@
 import React, { useCallback, useId, useState } from 'react';
 import { Spinner } from '../Spinner/Spinner';
 import './ToolCall.css';
+import '../../behaviors/chat-card.css';
 import '../../fonts/material-symbols.css';
 
 export type ToolCallStatus = 'pending' | 'running' | 'success' | 'error';
@@ -157,7 +158,11 @@ export const ToolCall = React.forwardRef<HTMLDivElement, ToolCallProps>(
             role="region"
             aria-labelledby={triggerId}
           >
-            <div className={`${baseClass}__content`}>{children}</div>
+            {/* The clip is what the row animates; the content inside it keeps its
+                padding and divider in both states, so only the height moves. */}
+            <div className={`${baseClass}__clip`}>
+              <div className={`${baseClass}__content`}>{children}</div>
+            </div>
           </div>
         )}
 

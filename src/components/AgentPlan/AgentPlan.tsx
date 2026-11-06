@@ -3,6 +3,7 @@
 import React, { useCallback, useId, useState } from 'react';
 import { Spinner } from '../Spinner/Spinner';
 import './AgentPlan.css';
+import '../../behaviors/chat-card.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 

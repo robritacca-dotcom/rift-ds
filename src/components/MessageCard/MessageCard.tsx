@@ -1,5 +1,6 @@
 import React from 'react';
 import './MessageCard.css';
+import '../../behaviors/chat-card.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
 

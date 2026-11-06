@@ -6,6 +6,7 @@ import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { RadioIndicator } from '../RadioButton/RadioButton';
 import './QuestionCard.css';
+import '../../behaviors/chat-card.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 

@@ -5,6 +5,7 @@ import { SourceChip } from '../SourceChip/SourceChip';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import { Spinner } from '../Spinner/Spinner';
 import './SourceTrail.css';
+import '../../behaviors/chat-card.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 
@@ -176,6 +177,9 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
           role="region"
           aria-labelledby={triggerId}
         >
+          {/* The clip is what the row animates; the list keeps its padding,
+              divider and gap in both states, so only the height moves. */}
+          <div className={`${baseClass}__clip`}>
           <ol className={`${baseClass}__list`}>
             {items.map((item, index) => {
               const status = item.status ?? 'done';
@@ -207,6 +211,7 @@ export const SourceTrail = React.forwardRef<HTMLDivElement, SourceTrailProps>(
               );
             })}
           </ol>
+          </div>
         </div>
       </div>
     );

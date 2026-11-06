@@ -11,30 +11,34 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-200);
+  /* The facts are the title's body. */
+  gap: var(--ds-chat-card-gap-text);
   width: 100%;
   min-width: 0;
-  padding: var(--padding-300);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  background-color: var(--color-bg-container-primary);
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
+  background-color: var(--ds-chat-card-bg);
 }
 
 .ds-action-readout__title {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--gap-200);
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
   color: var(--color-text-primary);
 }
 
 .ds-action-readout__icon {
   display: inline-flex;
   flex-shrink: 0;
+  /* A title's icon trails it, so the card's text starts on its inset edge. */
+  order: 1;
+  margin-inline-start: auto;
   --icon-size: var(--icon-size-500);
 }
 

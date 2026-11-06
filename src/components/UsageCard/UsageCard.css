@@ -4,12 +4,39 @@
    with reset captions, in the chart card chrome
    ============================================ */
 
-/* Base — the card chrome itself comes from ds-chart */
+/* Base — the card chrome itself comes from ds-chart. In a chat it is one
+   of the chat cards, so it takes their padding, title and rhythm: 12px
+   above and below inside 20px sides, a title-body title with its subtitle
+   8px under it, and 16px between blocks. */
+.ds-usage-card.ds-chart:not(.ds-chart--bare) {
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
+  background-color: var(--ds-chat-card-bg);
+}
+
+.ds-usage-card.ds-chart {
+  gap: var(--ds-chat-card-gap-block);
+}
+
+.ds-usage-card .ds-chart__header-text {
+  gap: var(--ds-chat-card-gap-subline);
+}
+
+.ds-usage-card .ds-chart__title {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
+}
+
 
 .ds-usage-card__items {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-500);
+  gap: var(--gap-400);
 }
 
 .ds-usage-card__item {

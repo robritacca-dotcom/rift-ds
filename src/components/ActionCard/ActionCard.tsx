@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../Button/Button';
 import './ActionCard.css';
+import '../../behaviors/chat-card.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
 
@@ -85,7 +86,8 @@ export function ActionCard({
     return (
       <div {...rest} ref={ref} className={[baseClass, `${baseClass}--${status}`, className].filter(Boolean).join(' ')}>
         <span className={`${baseClass}__record`} role="status">
-          {mark}
+          {/* Undo takes the trailing slot, so the icon steps aside for it. */}
+          {!(status === 'confirmed' && onUndo) && mark}
           <span className={`${baseClass}__record-text`}>
             {status === 'confirmed' ? (receipt ?? title) : title}
             {status !== 'confirmed' && (
@@ -94,7 +96,7 @@ export function ActionCard({
           </span>
         </span>
         {status === 'confirmed' && onUndo && (
-          <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label={undoLabel} onClick={onUndo} />
+          <Button variant="tertiary" size="compact" iconLeft="undo" label={undoLabel} onClick={onUndo} />
         )}
       </div>
     );

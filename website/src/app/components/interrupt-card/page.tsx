@@ -15,9 +15,9 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 
 
 const APPROVAL_OPTIONS = [
-  { value: "allow-once", label: "Allow once", variant: "primary" as const },
-  { value: "allow-always", label: "Always allow" },
-  { value: "deny", label: "Deny" },
+  { value: "allow-once", label: "Allow once", variant: "primary" as const, answeredLabel: "Allowed once" },
+  { value: "allow-always", label: "Always allow", answeredLabel: "Always allowed", answeredVariant: "positive" as const },
+  { value: "deny", label: "Deny", answeredLabel: "Denied", answeredVariant: "error" as const },
 ];
 
 const WRITE_ARGS = `{
@@ -73,8 +73,9 @@ export default function InterruptCardPage() {
               A human-in-the-loop checkpoint: a question, some context, and
               option buttons to decide. The card stays deliberately quiet
               while it waits, one tone behind a regular border, because the
-              question itself is the signal. Once answered, the footer echoes
-              the choice.
+              question itself is the signal. Once answered, the buttons give
+              way to a read-out of the decision, green for an approval and red
+              for a refusal.
             </p>
           </div>
 
@@ -126,8 +127,8 @@ export default function InterruptCardPage() {
             <p className={styles.demoText}>
               The card is fully controlled: it reports the choice and the
               consumer renders it back. Pick an option to see the answered
-              state, where the buttons give way to the chosen label echoed
-              in the footer.
+              state, where the buttons give way to the decision made, worded
+              in the past tense and coloured by what it records.
             </p>
             <DecisionDemo />
           </section>

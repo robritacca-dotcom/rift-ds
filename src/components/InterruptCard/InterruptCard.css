@@ -17,10 +17,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
+  background-color: var(--ds-chat-card-bg);
+  border: var(--ds-chat-card-border);
   /* The chat furniture's shared 24px shell — see ToolCall. */
-  border-radius: var(--radius-600);
+  border-radius: var(--ds-chat-card-radius);
   overflow: hidden;
 }
 
@@ -40,15 +40,27 @@
   display: flex;
   align-items: flex-start;
   gap: var(--gap-200);
-  padding: var(--padding-400) var(--padding-500);
+  /* 8px under the text: with the next section's 8px above, every seam in
+     the card is 16px, MessageCard's body-to-actions distance; 12px at
+     the card's top and bottom edges, every chat card's. */
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset) var(--padding-200);
+}
+
+/* A section that closes the card takes the full bottom padding back. */
+.ds-interrupt-card__header:last-child,
+.ds-interrupt-card__detail:last-child {
+  padding-bottom: var(--ds-chat-card-edge);
 }
 
 .ds-interrupt-card__icon {
   display: inline-flex;
   align-items: center;
   flex: none;
+  /* A title's icon trails it, so the card's text starts on its inset edge. */
+  order: 1;
+  margin-inline-start: auto;
   /* Centre the icon on the title's first line. */
-  margin-top: calc((var(--font-heading-3-line-height) - var(--icon-size-500)) / 2);
+  margin-top: calc((var(--font-title-body-line-height) - var(--icon-size-500)) / 2);
   color: var(--ds-interrupt-card-color);
 }
 
@@ -59,19 +71,20 @@
 .ds-interrupt-card__heading {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-100);
+  /* The description is the title's subline, set straight under it. */
+  gap: var(--ds-chat-card-gap-subline);
   min-width: 0;
 }
 
-/* The question is the card's one heading, so it takes the same heading
-   tier as MessageCard's title — the chat cards share one title scale. */
+/* The chat cards share one title tier, the scale's card-title role:
+   a heading tier inside a reply would outrank the reply's own text. */
 .ds-interrupt-card__title {
-  font-family: var(--font-heading-3-family);
-  font-size: var(--font-heading-3-size);
-  font-weight: var(--font-heading-3-weight);
-  line-height: var(--font-heading-3-line-height);
-  letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-heading);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
 }
 
 .ds-interrupt-card__description {
@@ -91,7 +104,9 @@
    ============================================ */
 
 .ds-interrupt-card__detail {
-  padding: 0 var(--padding-500) var(--padding-400);
+  /* Under the heading's 8px, so what the question covers sits 8px under
+     it like the description does; 8px below meets the footer's 8px. */
+  padding: 0 var(--ds-chat-card-inset) var(--padding-200);
 }
 
 .ds-interrupt-card__detail > :first-child {
@@ -100,6 +115,66 @@
 
 .ds-interrupt-card__detail > :last-child {
   margin-bottom: 0;
+}
+
+/* No card in a card: the ToolCall the question covers sheds its shell and
+   its rows sit on this card's inset, so the call reads as a line of the
+   question rather than a card inside it. */
+.ds-interrupt-card__detail > .ds-tool-call {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__content,
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__actions {
+  padding-inline: 0;
+}
+
+/* The call is a line of the question here, not a row of its own. */
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__header {
+  min-height: 0;
+  padding: 0;
+}
+
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__header:hover {
+  background-color: transparent;
+}
+
+/* The call's details, opened. A card has one footer and the decision owns
+   it, so the code does not bring a footer of its own: it sits in a quiet
+   well (the fill one step in from the card's, at MessageCard's media-slot
+   corner, no border, so a slot rather than a card) with Copy in the well's
+   corner, and the panel drops its divider, the card's only rule. */
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__content {
+  padding-block: var(--ds-chat-card-gap-text) 0;
+  border-top: none;
+}
+
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__content > .ds-code-block {
+  position: relative;
+  border-radius: var(--ds-chat-card-radius-edge);
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__content > .ds-code-block .ds-code-block__header {
+  position: absolute;
+  inset-block-start: var(--padding-200);
+  inset-inline-end: var(--padding-200);
+  margin: 0;
+}
+
+/* CodeBlock's own quiet copy, not the footer button a lone ToolCall
+   draws, since the well is not a footer. */
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__content > .ds-code-block .ds-code-block__copy {
+  height: auto;
+  padding: var(--padding-050) var(--padding-200);
+  border: none;
+  color: var(--color-text-secondary);
+}
+
+.ds-interrupt-card__detail > .ds-tool-call .ds-tool-call__content > .ds-code-block .ds-code-block__pre {
+  padding: var(--ds-chat-card-edge);
 }
 
 /* ============================================
@@ -114,34 +189,62 @@
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-200);
-  padding: var(--padding-200) var(--padding-500) var(--padding-400);
+  padding: var(--padding-200) var(--ds-chat-card-inset) var(--ds-chat-card-edge);
 }
 
 /* ============================================
-   ANSWERED ECHO
-   Same footer geometry, quiet text where the
-   buttons were.
+   ANSWERED
+   Same footer geometry, a status badge where
+   the buttons were.
    ============================================ */
 
 .ds-interrupt-card__answer {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--gap-100);
-  padding: var(--padding-200) var(--padding-500) var(--padding-400);
-  font-family: var(--font-paragraph-sm-family);
-  font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-weight);
-  line-height: var(--font-paragraph-sm-line-height);
-  letter-spacing: var(--font-paragraph-sm-letter-spacing);
-  color: var(--color-text-secondary);
+  /* The footer's geometry, with the badge where the buttons were. */
+  padding: var(--padding-200) var(--ds-chat-card-inset) var(--ds-chat-card-edge);
 }
 
-.ds-interrupt-card__answer-icon {
+/* The read-out: the chosen button as a record. A compact Button's height,
+   pill, padding, gap, type and icon size, so it sits where the buttons were
+   without a jump, filled in the status the choice records instead of the
+   action colour, so it reads as done rather than pressable. */
+.ds-interrupt-card__readout {
+  --ds-interrupt-card-readout-bg: var(--color-status-neutral-bg);
+  --ds-interrupt-card-readout-text: var(--color-status-neutral-text);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-300);
+  border-radius: var(--radius-pill);
+  background-color: var(--ds-interrupt-card-readout-bg);
+  color: var(--ds-interrupt-card-readout-text);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  white-space: nowrap;
+}
+
+.ds-interrupt-card__readout--positive {
+  --ds-interrupt-card-readout-bg: var(--color-status-positive-bg);
+  --ds-interrupt-card-readout-text: var(--color-status-positive-text);
+}
+
+.ds-interrupt-card__readout--error {
+  --ds-interrupt-card-readout-bg: var(--color-status-error-bg);
+  --ds-interrupt-card-readout-text: var(--color-status-error-text);
+}
+
+.ds-interrupt-card__readout-icon {
   --icon-size: var(--icon-size-500);
 
-  flex: none;
-  color: var(--ds-interrupt-card-color);
+  color: inherit;
 }
 
 /* ============================================

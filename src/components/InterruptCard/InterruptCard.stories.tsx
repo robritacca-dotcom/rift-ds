@@ -6,9 +6,9 @@ import { ToolCall } from '../ToolCall/ToolCall';
 import { CodeBlock } from '../CodeBlock/CodeBlock';
 
 const APPROVAL_OPTIONS: InterruptCardOption[] = [
-  { value: 'allow-once', label: 'Allow once', variant: 'primary' },
-  { value: 'allow-always', label: 'Always allow' },
-  { value: 'deny', label: 'Deny' },
+  { value: 'allow-once', label: 'Allow once', variant: 'primary', answeredLabel: 'Allowed once' },
+  { value: 'allow-always', label: 'Always allow', answeredVariant: 'positive', answeredLabel: 'Always allowed' },
+  { value: 'deny', label: 'Deny', answeredVariant: 'error', answeredLabel: 'Denied' },
 ];
 
 const WRITE_ARGS = `{
@@ -68,7 +68,7 @@ export const DangerOption: Story = {
   },
 };
 
-/** With `value` set the decision is made: monochrome, and the footer echoes the chosen label. */
+/** With `value` set the decision is made: the buttons give way to a badge in the status the choice records. */
 export const Answered: Story = {
   args: {
     value: 'allow-once',

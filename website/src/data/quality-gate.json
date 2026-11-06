@@ -103,6 +103,7 @@
     "validate-json-schemas": { "group": "contract", "text": "Every generated schema validates against its hand-written meta-schema." },
     "validate-class-names": { "group": "contract", "text": "Base classes are ds- plus the name in kebab case, with --modifier and __part." },
     "validate-shared-primitives": { "group": "contract", "text": "Shared marks and controls are composed, never redrawn." },
+    "validate-chat-cards": { "group": "contract", "text": "Every card a chat reply carries reads one recipe for its fill, corner, inset, rhythm and row height, and an ai component drawing a card shell of its own fails until it joins." },
 
     "validate-shader-background": { "group": "tokens", "text": "The background config sits inside the tuner's ranges, and its blob colours exist." },
     "validate-single-background-mount": { "group": "tokens", "text": "BlurBackground is mounted exactly once, in the root layout." },

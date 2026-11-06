@@ -7,9 +7,9 @@
 
    A content card of the chat furniture: the
    container fill behind its border, at the
-   ArtifactCard's radius and padding, so the
-   tiles a reply leaves in the thread read as
-   one family.
+   ArtifactCard's radius, with a bubble's
+   padding so its text starts where the
+   reply's own text does.
    ============================================ */
 
 .ds-action-card {
@@ -17,13 +17,15 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-200);
+  /* The detail is the title's subline, set straight under it; the buttons
+     stand a block's seam off them. */
+  gap: var(--ds-chat-card-gap-subline);
   width: 100%;
   min-width: 0;
-  padding: var(--padding-300);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  background-color: var(--color-bg-container-primary);
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
+  background-color: var(--ds-chat-card-bg);
 }
 
 /* The record is one row: what happened, and Undo at its end. */
@@ -34,26 +36,39 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: var(--gap-200);
+  /* One row, at the chat cards' one-row height (see ToolCall's header):
+     with Undo or without, a record is as tall as a closed ToolCall. */
+  min-height: calc(var(--ds-chat-card-row-height) + 2 * var(--border-025));
+  padding: var(--ds-chat-card-row-pad) var(--ds-chat-card-inset);
 }
 
 .ds-action-card__title,
 .ds-action-card__record {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--gap-200);
   min-width: 0;
 }
 
+/* Both span the card, so the trailing icon reaches its end. */
 .ds-action-card__title {
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  align-self: stretch;
+}
+
+.ds-action-card__record {
+  flex: 1 1 auto;
+}
+
+.ds-action-card__title {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
   color: var(--color-text-primary);
 }
 
-.ds-action-card__record,
 .ds-action-card__detail {
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -63,6 +78,16 @@
   color: var(--color-text-secondary);
 }
 
+/* A one-row label, set like every disclosure header's. */
+.ds-action-card__record {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
 .ds-action-card__record-text {
   display: inline-flex;
   flex-wrap: wrap;
@@ -70,16 +95,21 @@
 }
 
 .ds-action-card__record-note {
+  font-weight: var(--font-paragraph-sm-weight);
   color: var(--color-text-tertiary);
 }
 
 .ds-action-card__icon {
   display: inline-flex;
   flex-shrink: 0;
+  /* A title's icon trails it, so the card's text starts on its inset edge. */
+  order: 1;
+  margin-inline-start: auto;
   --icon-size: var(--icon-size-500);
 }
 
 .ds-action-card__actions {
+  margin-block-start: var(--ds-chat-card-gap-block);
   display: inline-flex;
   flex-wrap: wrap;
   gap: var(--gap-200);

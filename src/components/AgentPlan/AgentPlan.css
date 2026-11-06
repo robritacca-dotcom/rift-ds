@@ -14,10 +14,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
+  background-color: var(--ds-chat-card-bg);
+  border: var(--ds-chat-card-border);
   /* The chat furniture's shared 24px shell — see ToolCall. */
-  border-radius: var(--radius-600);
+  border-radius: var(--ds-chat-card-radius);
   overflow: hidden;
 }
 
@@ -30,8 +30,11 @@
   align-items: center;
   gap: var(--gap-200);
   width: 100%;
-  /* 20px sides — the card family's shared content inset. */
-  padding: var(--padding-200) var(--padding-500);
+  /* The chat cards' one-row height: a compact control and 4px above and
+     below, so a label row and a row holding a button are the same height. */
+  box-sizing: border-box;
+  min-height: var(--ds-chat-card-row-height);
+  padding: var(--ds-chat-card-row-pad) var(--ds-chat-card-inset);
   background: none;
   border: none;
   text-align: start;
@@ -111,7 +114,9 @@
   min-height: 0;
 }
 
-.ds-agent-plan--open .ds-agent-plan__content {
+/* The divider lives on the steps inside the clip, in both states, so it
+   travels with the opening row instead of snapping in on its first frame. */
+.ds-agent-plan__steps {
   border-top: var(--border-025) solid var(--color-divider);
 }
 
@@ -123,7 +128,9 @@
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: var(--padding-300) var(--padding-500);
+  /* With each step's own 4px, the first and last rows sit 12px off the
+     divider and the card's edge, every chat card's edge inset. */
+  padding: var(--padding-200) var(--ds-chat-card-inset);
   list-style: none;
 }
 
@@ -141,7 +148,7 @@
   position: absolute;
   top: calc(var(--padding-100) + var(--icon-size-500));
   bottom: calc(-1 * var(--padding-100));
-  inset-inline-start: calc(var(--icon-size-500) / 2);
+  inset-inline-start: calc(var(--icon-size-500) / 2 - var(--padding-050));
   width: var(--border-025);
   background-color: var(--color-divider);
 }
@@ -156,6 +163,9 @@
      off the connector's centre line. */
   width: var(--icon-size-500);
   height: var(--icon-size-500);
+  /* Optical: a status glyph draws its circle 2px inside its box, so the
+     marker steps back by that much to stand on the text's edge above. */
+  margin-inline-start: calc(-1 * var(--padding-050));
   color: var(--color-icon-secondary);
 }
 

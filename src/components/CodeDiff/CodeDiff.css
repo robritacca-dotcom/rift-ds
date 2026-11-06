@@ -10,9 +10,12 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-300);
-  background-color: var(--color-bg-container-primary);
+  border: var(--ds-chat-card-border);
+  /* A diff a reply carries is one of the chat cards, on their fill, but its
+     rows run to its edges, so it keeps the code family's 12px corner: a
+     24px curve would cut into the tinted lines and crowd the file row. */
+  border-radius: var(--ds-chat-card-radius-edge);
+  background-color: var(--ds-chat-card-bg);
   overflow: hidden;
 }
 
@@ -25,16 +28,22 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-200);
-  padding: var(--padding-150) var(--padding-400);
+  /* One row at the chat cards' one-row height, on their 20px inset. */
+  box-sizing: border-box;
+  min-height: var(--ds-chat-card-row-height);
+  padding: var(--ds-chat-card-row-pad) var(--ds-chat-card-inset);
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
   flex-shrink: 0;
 }
 
 .ds-codediff__filename {
-  font-family: var(--font-family-code);
-  font-size: var(--font-paragraph-sm-size);
-  line-height: var(--font-paragraph-sm-line-height);
-  color: var(--color-text-secondary);
+  /* The file row's label, set like every chat card's one-row label. */
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -89,6 +98,7 @@
   width: max-content;
   min-width: 100%;
   font-family: var(--font-family-code);
+  font-size-adjust: var(--font-code-aspect);
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-primary);

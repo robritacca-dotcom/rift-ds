@@ -53,7 +53,7 @@ export const WithAction: Story = {
   args: {
     variant: 'positive',
     description: 'The table now shows the blocked issues.',
-    action: <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label="Undo" />,
+    action: <Button variant="secondary" tone="neutral" size="compact" iconLeft="undo" label="Undo" />,
   },
 };
 

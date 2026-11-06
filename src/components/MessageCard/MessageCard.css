@@ -16,9 +16,9 @@
   flex-direction: column;
   width: 100%;
   max-width: var(--ds-message-card-max-width, 100%);
-  background-color: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
+  background-color: var(--ds-chat-card-bg);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
   overflow: hidden;
 }
 
@@ -37,10 +37,9 @@
   border-radius: var(--radius-300);
   overflow: hidden;
   /* The slot carries its own surface, so drawn media — a chart, an SVG —
-     reads as the same image-shaped panel a photo would. The page tone, not
-     the container ramp: lightest in light mode, darkest in dark, so the
-     slot recedes behind the drawing instead of tinting it. */
-  background-color: var(--color-bg-page-primary);
+     reads as the same image-shaped panel a photo would: one step in from
+     the card's crisp fill, so it shows as a slot in both themes. */
+  background-color: var(--color-bg-container-secondary);
 }
 
 .ds-message-card__media img {
@@ -71,14 +70,20 @@
 .ds-message-card__body {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-200);
-  padding: var(--padding-400) var(--padding-500) var(--padding-200);
+  /* Header, description and children are the card's body. */
+  gap: var(--ds-chat-card-gap-text);
+  padding: var(--padding-400) var(--ds-chat-card-inset) var(--padding-200);
+}
+
+/* Without media the body opens the card, at the chat cards' 12px edge. */
+.ds-message-card__body:first-child {
+  padding-top: var(--ds-chat-card-edge);
 }
 
 /* Without an actions footer the body closes the card, so it takes the full
    bottom padding back. */
 .ds-message-card__body:last-child {
-  padding-bottom: var(--padding-400);
+  padding-bottom: var(--ds-chat-card-edge);
 }
 
 /* Title and meta form one unit, tucked closer together than the body's
@@ -86,7 +91,8 @@
 .ds-message-card__header {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-100);
+  /* The meta line is the title's subline, set straight under it. */
+  gap: var(--ds-chat-card-gap-subline);
   min-width: 0;
 }
 
@@ -101,6 +107,9 @@
   display: inline-flex;
   align-items: center;
   flex: none;
+  /* A title's icon trails it, so the card's text starts on its inset edge. */
+  order: 1;
+  margin-inline-start: auto;
   color: var(--color-icon-primary);
 }
 
@@ -110,12 +119,12 @@
 
 .ds-message-card__title {
   min-width: 0;
-  font-family: var(--font-heading-3-family);
-  font-size: var(--font-heading-3-size);
-  font-weight: var(--font-heading-3-weight);
-  line-height: var(--font-heading-3-line-height);
-  letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-heading);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-primary);
 }
 
 .ds-message-card__meta {
@@ -150,7 +159,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: var(--gap-200);
-  padding: var(--padding-200) var(--padding-500) var(--padding-400);
+  padding: var(--padding-200) var(--ds-chat-card-inset) var(--ds-chat-card-edge);
 }
 
 /* Icons take the colour of the text around them. Explicit, not just

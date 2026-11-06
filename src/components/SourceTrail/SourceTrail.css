@@ -13,9 +13,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--color-bg-container-primary);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
+  background-color: var(--ds-chat-card-bg);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
   overflow: hidden;
 }
 
@@ -28,7 +28,11 @@
   align-items: center;
   gap: var(--gap-200);
   width: 100%;
-  padding: var(--padding-200) var(--padding-500);
+  /* The chat cards' one-row height: a compact control and 4px above and
+     below, so a label row and a row holding a button are the same height. */
+  box-sizing: border-box;
+  min-height: var(--ds-chat-card-row-height);
+  padding: var(--ds-chat-card-row-pad) var(--ds-chat-card-inset);
   background: none;
   border: none;
   /* Buttons default to the UA's buttontext, not the inherited colour, so
@@ -49,10 +53,18 @@
 }
 
 .ds-source-trail__indicator {
+  /* The header's glyph trails, before the chevron, so the count starts on
+     the card's inset edge; the rows' markers stay in front, on that edge. */
+  order: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
+  /* Fixed box: the running spinner (16px) is smaller than the status
+     icons (20px), so without it the text beside it shifts as the state
+     changes. AgentPlan's step indicator does the same. */
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
   color: var(--color-text-secondary);
 }
 
@@ -76,6 +88,7 @@
 
 .ds-source-trail__chevron {
   --icon-size: var(--icon-size-500);
+  order: 2;
 
   flex: none;
   color: var(--color-icon-secondary);
@@ -104,19 +117,21 @@
   visibility: visible;
 }
 
-.ds-source-trail__list {
+/* The grid row animates the clip (see ToolCall's): the list keeps its
+   padding, divider and gap in both states, so only the height moves. */
+.ds-source-trail__clip {
   overflow: hidden;
   min-height: 0;
+}
+
+.ds-source-trail__list {
   margin: 0;
-  padding: 0;
+  /* 12px above and below, every chat card's edge inset. */
+  padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
+  border-top: var(--border-025) solid var(--color-divider);
   list-style: none;
   display: flex;
   flex-direction: column;
-}
-
-.ds-source-trail--open .ds-source-trail__list {
-  padding: var(--padding-200) var(--padding-500) var(--padding-400);
-  border-top: var(--border-025) solid var(--color-divider);
   gap: var(--gap-200);
 }
 
@@ -149,6 +164,13 @@
   align-items: center;
   justify-content: center;
   flex: none;
+  /* Fixed box: the running spinner (16px) is smaller than the status
+     icons (20px), so without it the text beside it shifts as the state
+     changes. AgentPlan's step indicator does the same. */
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  /* Optical: see AgentPlan's step indicator. */
+  margin-inline-start: calc(-1 * var(--padding-050));
   color: var(--color-text-secondary);
 }
 

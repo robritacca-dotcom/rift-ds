@@ -12,12 +12,12 @@
   display: flex;
   align-items: center;
   gap: var(--gap-300);
+  /* The column's full width, like every chat card. */
   width: 100%;
-  max-width: 360px;
   padding: var(--padding-300);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  background-color: var(--color-bg-container-primary);
+  border: var(--ds-chat-card-border);
+  border-radius: var(--ds-chat-card-radius);
+  background-color: var(--ds-chat-card-bg);
   cursor: pointer;
   text-align: start;
   transition:
@@ -46,7 +46,7 @@
    on-stage one, so it stays a tile on the card instead of dissolving into
    a fill of nearly its own value. */
 .ds-artifact-card--open .ds-artifact-card__mark {
-  background-color: var(--color-bg-container-primary);
+  background-color: var(--ds-chat-card-bg);
 }
 
 .ds-artifact-card__mark {
@@ -60,7 +60,7 @@
   /* Concentric with the card: its radius less the padding between them,
      computed from the live tokens so the corner holds under any theme's
      radius scale, and squares off with a squared theme. */
-  border-radius: max(0px, calc(var(--radius-600) - var(--padding-300)));
+  border-radius: max(0px, calc(var(--ds-chat-card-radius) - var(--padding-300)));
   background-color: var(--color-bg-container-secondary);
   color: var(--color-icon-primary);
 }
@@ -76,10 +76,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
   color: var(--color-text-primary);
 }
 

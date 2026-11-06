@@ -11,7 +11,7 @@ import { Button } from '../components/Button/Button';
 import { AreaChart } from '../components/Chart/AreaChart';
 import { BarChart } from '../components/Chart/BarChart';
 import { CodeBlock } from '../components/CodeBlock/CodeBlock';
-import { InterruptCard } from '../components/InterruptCard/InterruptCard';
+import { InterruptCard, type InterruptCardOption } from '../components/InterruptCard/InterruptCard';
 import { MessageCard } from '../components/MessageCard/MessageCard';
 import { ToolCall } from '../components/ToolCall/ToolCall';
 import { useChatWidget, type ChatCardRenderers } from './context';
@@ -42,7 +42,9 @@ export interface DemoToolCallCard {
 export interface DemoInterruptCard {
   title: string;
   description: string;
-  options: { value: string; label: string; variant: 'primary' | 'secondary' }[];
+  options: (Pick<InterruptCardOption, 'value' | 'label' | 'answeredLabel' | 'answeredVariant'> & {
+    variant: 'primary' | 'secondary';
+  })[];
 }
 
 /** Several cards landing as one turn's stack. */

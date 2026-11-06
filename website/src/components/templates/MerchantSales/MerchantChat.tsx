@@ -131,11 +131,10 @@ function TableReceipt({ id, before }: { id: string; before: TableView }) {
         )}
         {!undone && (
           <Button
-            variant="secondary"
-            tone="neutral"
+            variant="tertiary"
             size="compact"
             label="Undo"
-            iconLeft="refresh"
+            iconLeft="undo"
             onClick={() => changes?.undo(id, before)}
           />
         )}
@@ -275,7 +274,7 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
               variant: "positive",
               description,
               duration: MOTION_ACTION_DISMISS_MS,
-              action: <Button variant="secondary" tone="neutral" size="compact" iconLeft="refresh" label="Undo" onClick={() => undo(id, before)} />,
+              action: <Button variant="secondary" tone="neutral" size="compact" iconLeft="undo" label="Undo" onClick={() => undo(id, before)} />,
             });
           });
         }

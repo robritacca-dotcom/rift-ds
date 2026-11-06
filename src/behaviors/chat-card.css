@@ -1,0 +1,63 @@
+/* ============================================
+   THE CHAT CARD RECIPE
+   The one home of the values every card a chat
+   reply can carry is drawn to, so the family is
+   one set: change a line here and every card
+   follows. Each card imports this file and reads
+   these properties instead of restating a token.
+
+   Declared on the cards themselves, not on :root,
+   so a theme scoped to part of a page (the
+   playground's stage) reaches them: a custom
+   property resolves where it is declared.
+
+   The selector list is the family. A new chat
+   card joins it here and reads the properties;
+   scripts/validate-chat-cards.mjs fails the build
+   for an ai component that draws a card shell of
+   its own outside it. design.md's "The chat cards
+   are one family" owns the rules these encode.
+   ============================================ */
+
+:where(
+  .ds-interrupt-card,
+  .ds-question-card,
+  .ds-question-summary,
+  .ds-action-card,
+  .ds-action-readout,
+  .ds-tool-call,
+  .ds-agent-plan,
+  .ds-source-trail,
+  .ds-message-card,
+  .ds-artifact-card,
+  .ds-usage-card,
+  .ds-codediff
+) {
+  /* The shell: the crisp fill behind a hairline, at the bubbles' corner. */
+  --ds-chat-card-bg: var(--color-chat-card-bg);
+  --ds-chat-card-border: var(--border-025) solid var(--color-bg-container-border);
+  --ds-chat-card-radius: var(--radius-600);
+  /* A card whose content runs to its edges takes the code family's corner. */
+  --ds-chat-card-radius-edge: var(--radius-300);
+
+  /* Insets: every row's first thing stands this far in; stacked cards and
+     opened panels hold their text this far off the top and bottom edges. */
+  --ds-chat-card-inset: var(--padding-500);
+  --ds-chat-card-edge: var(--padding-300);
+
+  /* Rhythm, three steps: a title's subline (a description, detail, meta or
+     subtitle line) sits straight under it, its leading the only space; a
+     body under that (a description under a meta line, a list of facts)
+     stands a text gap off; blocks (text to buttons) a block gap apart. */
+  --ds-chat-card-gap-subline: 0;
+  --ds-chat-card-gap-text: var(--gap-200);
+  --ds-chat-card-gap-block: var(--gap-400);
+
+  /* One-row cards: a compact control and this much above and below, so a
+     label row and a row holding a button are one height. */
+  --ds-chat-card-row-pad: var(--padding-100);
+  --ds-chat-card-row-height: calc(var(--control-height-compact) + 2 * var(--ds-chat-card-row-pad));
+
+  /* Every icon in a card, spinners in the same box. */
+  --ds-chat-card-icon: var(--icon-size-500);
+}

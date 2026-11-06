@@ -47,16 +47,6 @@
   outline-offset: var(--border-050);
 }
 
-/* A step under the card's own Heading 3 title: the rail is 300px wide, and
-   at Heading 3 a two-word name wraps. Title body is the next style down. */
-.card :global(.ds-message-card__title) {
-  font-family: var(--font-title-body-family);
-  font-size: var(--font-title-body-size);
-  font-weight: var(--font-title-body-weight);
-  line-height: var(--font-title-body-line-height);
-  letter-spacing: var(--font-title-body-letter-spacing);
-}
-
 /* The still wears the theme as a duotone: drained to greys, then its lights
    and darks are clamped between the page colour and the action colour, one
    blend layer each. The floor and the ceiling swap with the mode, because the

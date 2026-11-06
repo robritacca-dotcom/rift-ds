@@ -3,6 +3,7 @@
 
 import React from 'react';
 import './CodeDiff.css';
+import '../../behaviors/chat-card.css';
 import '../../behaviors/visually-hidden.css';
 
 /** The kind of line a parsed diff row represents. */

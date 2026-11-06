@@ -1,5 +1,6 @@
 import React from 'react';
 import './ArtifactCard.css';
+import '../../behaviors/chat-card.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
 
@@ -22,6 +23,9 @@ export interface ArtifactCardProps
     Omit<React.ComponentPropsWithoutRef<'button'>, keyof ArtifactCardOwnProps | 'type'> {}
 
 const baseClass = 'ds-artifact-card';
+
+/** The trailing cue: the panel's open or close mark. */
+const cueIcon = (open: boolean) => (open ? 'right_panel_close' : 'right_panel_open');
 
 /**
  * ArtifactCard is an artifact's place in a conversation: one row naming
@@ -52,8 +56,10 @@ export const ArtifactCard = React.forwardRef<HTMLButtonElement, ArtifactCardProp
         <span className={`${baseClass}__title`}>{title}</span>
         {meta && <span className={`${baseClass}__meta`}>{meta}</span>}
       </span>
-      <span className={`${baseClass}__cue material-symbols-rounded`} aria-hidden="true">
-        {open ? 'close' : 'open_in_new_down'}
+      {/* The chat widget's artifact toggle's glyphs, so the card and the
+          header control that open the same panel draw the same mark. */}
+      <span className={`${baseClass}__cue material-symbols-rounded ${mirrorClass(cueIcon(open))}`} aria-hidden="true">
+        {cueIcon(open)}
       </span>
     </button>
   )

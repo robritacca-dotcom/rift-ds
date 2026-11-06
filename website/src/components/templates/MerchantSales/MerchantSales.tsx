@@ -246,7 +246,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
             variant="secondary"
             tone="neutral"
             size="compact"
-            iconLeft="refresh"
+            iconLeft="undo"
             label="Undo"
             onClick={() => {
               undo();

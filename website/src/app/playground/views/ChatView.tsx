@@ -623,7 +623,7 @@ export default function ChatView({
       ref={stageRef}
       className={`${styles.stage} ${
         stageDocked ? (side === "left" ? styles.stageDockLeft : styles.stageDockRight) : ""
-      }`}
+      } ${isDevice ? styles.stageDevice : ""}`}
     >
       {open ? (
         <div

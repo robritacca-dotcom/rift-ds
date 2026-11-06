@@ -307,7 +307,7 @@ export default function TemplatesView({
   );
 
   return (
-    <div className={chatStyles.stage}>
+    <div className={`${chatStyles.stage} ${device ? chatStyles.stageDevice : ""}`}>
       <div
         className={[
           chatStyles.widgetFrame,

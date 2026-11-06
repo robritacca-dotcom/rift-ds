@@ -45,6 +45,13 @@
   justify-content: flex-end;
 }
 
+/* A phone sits in the middle of the stage, top to bottom as well as side to
+   side: it is shorter than the zone, so seated from the top it left all the
+   air below it. */
+.stageDevice {
+  align-items: center;
+}
+
 /* The frame shrink-wraps the widget and hosts the resize grips, which
    straddle the edges — outside the widget's own overflow clip. No width
    cap of its own once dragged: a dragged widget may outgrow the content
@@ -227,6 +234,17 @@
   max-height: calc(100dvh - var(--chat-clearance) - 24px);
   background: color-mix(in srgb, var(--color-bg-container-primary) 82%, transparent);
   backdrop-filter: blur(24px);
+}
+
+/* A phone draws overlay scrollbars that take no room; a desktop gutter here
+   pushed the app in from the right edge only (the templates' frames get the
+   same from html[data-app-frame] in the site's globals). */
+/* The doubled class outranks the widget's own thin, stable-gutter scroller
+   whichever order the build loads the two stylesheets in. */
+.deviceScreen.deviceScreen,
+.deviceScreen.deviceScreen * {
+  scrollbar-width: none;
+  scrollbar-gutter: auto;
 }
 
 /* Inside a device the screen owns size, chrome, and glass; the widget is

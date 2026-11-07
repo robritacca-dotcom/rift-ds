@@ -151,6 +151,23 @@ export interface ThemeExportContext {
       carries. The export writes a section from them, in rift's words; the
       file's own prose is never copied. */
   source?: ThemeSource;
+  /** The playground's shader pick, when it differs from the base field.
+      The export writes a Shader section from it. */
+  shader?: ThemeShader;
+}
+
+/**
+ * The shader the theme ships with. Field is the package's ShaderField, so
+ * its params apply as written; any other scene is the playground's own and
+ * not in the package yet, so its recipe rides along for when it ships.
+ */
+export interface ThemeShader {
+  sceneId: string;
+  label: string;
+  /** ShaderField's params, for Field. */
+  params?: Record<string, number>;
+  /** The scene's recipe, for any other scene. */
+  recipe?: unknown;
 }
 
 export interface ThemeSource {
@@ -443,6 +460,30 @@ Material Symbols Rounded at weight ${preset.iconWeight}, ${
   }${reading.length > 0 ? `\n\n${heading} Reading theme.css\n\n${reading.join("\n")}` : ""}`;
 }
 
+/** The shader section: how to apply the theme's shader, in either file. */
+function shaderSection(shader: ThemeShader, pkg: string, heading: "##" | "###"): string {
+  const field = `\`ShaderField\` from \`${pkg}/components/ShaderField/ShaderField\``;
+  if (shader.sceneId === "field") {
+    const params = Object.entries(shader.params ?? {})
+      .map(([key, value]) => `${key}: ${Number(value.toFixed(3))}`)
+      .join(", ");
+    return `${heading} Shader
+
+The theme's background shader is the field, tuned. Use ${field} wherever the product shows an ambient background, with these params. It reads the theme's \`--color-ambient-*\` roles, so it takes the theme's colours by itself.
+
+\`\`\`tsx
+<ShaderField params={{ ${params} }} />
+\`\`\``;
+  }
+  return `${heading} Shader
+
+The theme's shader is the ${shader.label} scene, made in the playground. It is not in ${pkg} yet, so there is nothing to import for it. Until it ships, use ${field} for an ambient background: it reads the theme's \`--color-ambient-*\` roles, the colours the ${shader.label} scene draws with too. The scene's recipe, for when it ships:
+
+\`\`\`json
+${JSON.stringify(shader.recipe, null, 2)}
+\`\`\``;
+}
+
 /** A design-language file for the theme: what the look is and how to keep to it. */
 export function buildThemeMarkdown(
   preset: ThemePreset,
@@ -458,7 +499,7 @@ A theme for ${pkg}, made in the playground at ${context.siteUrl}/playground. Rea
 ${describeTheme(preset)}
 
 ${themeLanguage(preset, "##", context.source)}
-
+${context.shader ? `\n${shaderSection(context.shader, pkg, "##")}\n` : ""}
 ## Rules
 
 1. Style with semantic tokens only. Never write a hex value, a pixel radius or a shadow that a token already carries.
@@ -551,7 +592,7 @@ This project uses a custom ${pkg} theme made at ${context.siteUrl}/playground. $
 ${apply}
 
 ${themeLanguage(preset, "###", context.source)}
-
+${context.shader ? `\n${shaderSection(context.shader, pkg, "###")}\n` : ""}
 ### Existing screens
 
 If the project already has screens, ${restyleInstruction(pkg, "them", "this theme")}

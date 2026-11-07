@@ -27,6 +27,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
+import { MOTION_ANNOUNCE_DEBOUNCE_MS } from "rift-ds/tokens/motion";
 import ShaderSurface from "@/components/ShaderSurface/ShaderSurface";
 import { PASSES as SHADER_PASSES } from "@/lib/shaders/passes";
 import {
@@ -473,6 +474,7 @@ export default function PlaygroundPage() {
       const values = seedShader(next);
       shaderValuesRef.current = structuredClone(values);
       setShaderSeed(values);
+      setShaderSnapshot(values);
       setShaderGeneration((g) => g + 1);
     }
     setShaderId(next ? id : DEFAULT_SHADER.id);
@@ -484,6 +486,21 @@ export default function PlaygroundPage() {
      the frame. Field untouched carries no params: the templates keep their
      own field. */
   const stagedRef = useRef<StagedShader>({ sceneId: DEFAULT_SHADER.sceneId });
+  /* The theme export carries the scene's values too, but a drag must render
+     nothing, so the export reads a snapshot in state: taken when a scene is
+     seeded, and again once the sliders' moves settle. */
+  const [shaderSnapshot, setShaderSnapshot] = useState<ShaderValues>(() => valuesOf(DEFAULT_SHADER));
+  const shaderTickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleShaderTick = () => {
+    if (shaderTickTimer.current) clearTimeout(shaderTickTimer.current);
+    shaderTickTimer.current = setTimeout(
+      () => setShaderSnapshot(structuredClone(shaderValuesRef.current)),
+      MOTION_ANNOUNCE_DEBOUNCE_MS
+    );
+  };
+  useEffect(() => () => {
+    if (shaderTickTimer.current) clearTimeout(shaderTickTimer.current);
+  }, []);
   const publishStaged = () => {
     const staged = stagedRef.current;
     const payload: StagedShader =
@@ -494,18 +511,22 @@ export default function PlaygroundPage() {
     scene: (key, value) => {
       shaderValuesRef.current.scene[key] = value;
       publishStaged();
+      scheduleShaderTick();
     },
     speed: (value) => {
       shaderValuesRef.current.speed = value;
       publishStaged();
+      scheduleShaderTick();
     },
     passOn: (id, on) => {
       shaderValuesRef.current.passes[id].on = on;
       publishStaged();
+      scheduleShaderTick();
     },
     passParam: (id, key, value) => {
       shaderValuesRef.current.passes[id].params[key] = value;
       publishStaged();
+      scheduleShaderTick();
     },
   };
   /* Field's recipe is the theme's own ShaderField settings; the other
@@ -1245,6 +1266,19 @@ export default function PlaygroundPage() {
       source: designSource
         ? { name: designSource.name, report: designSource.theme.report, traits: designSource.theme.traits }
         : undefined,
+      /* The shader, when the pick differs from the base field: Field's
+         params once its levers moved, or another scene's recipe. */
+      shader: !shaderTemplate
+        ? undefined
+        : shaderIsField
+          ? shaderPristine
+            ? undefined
+            : { sceneId: "field", label: shaderTemplate.label, params: { ...shaderParams } }
+          : {
+              sceneId: shaderTemplate.sceneId,
+              label: shaderTemplate.label,
+              recipe: { sceneId: shaderTemplate.sceneId, ...shaderSnapshot },
+            },
     };
     return {
       css: buildThemeCss(theme),
@@ -1252,7 +1286,7 @@ export default function PlaygroundPage() {
       markdown: buildThemeMarkdown(theme, context),
       prompt: buildAgentPrompt(theme, context),
     };
-  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, logoEndTone, displayTone, headingTone, textTone, fontLabel, headingFontLabel, accents, advColors, productName, designSource]);
+  }, [preset, brand, presetExtras, tintOn, tintSeed, tintStrength, radiusScale, pill, density, typeScale, motionScale, elevation, displayWeight, headingWeight, bodyWeight, tracking, iconWeight, iconFill, logoTone, logoEndTone, displayTone, headingTone, textTone, fontLabel, headingFontLabel, accents, advColors, productName, designSource, shaderTemplate, shaderIsField, shaderPristine, shaderParams, shaderSnapshot]);
 
   /** Export, from the rail or a source card: opens the dialog on the
       themed AGENTS.md, the one file a coding agent needs. */

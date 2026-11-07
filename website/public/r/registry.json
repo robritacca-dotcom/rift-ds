@@ -505,7 +505,7 @@
       "name": "input",
       "type": "registry:ui",
       "title": "Input",
-      "description": "Text input with label, placeholder, left and right icons, helper text, and error states."
+      "description": "Text input with label, placeholder, icons, a prefix or suffix, a clear button, helper text, and error states."
     },
     {
       "name": "inspector-color-picker",
@@ -1063,7 +1063,7 @@
       "name": "widget",
       "type": "registry:ui",
       "title": "Widget",
-      "description": "A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns."
+      "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns."
     },
     {
       "name": "world-map",

@@ -9718,7 +9718,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Input",
     "slug": "input",
     "category": "forms",
-    "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
+    "description": "Text input with label, placeholder, icons, a prefix or suffix, a clear button, helper text, and error states.",
     "client": true,
     "importPath": "rift-ds/components/Input/Input",
     "barrel": "main",
@@ -9788,7 +9788,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "prefix",
             "type": "ReactNode",
             "required": false,
-            "description": "Text or a node inside the field before the value, read by a screen reader\nas part of the field (a currency symbol, `https://`, a country code). Not\nthe decorative `iconLeft`."
+            "description": "Text or a node inside the field before the value, read by a screen reader\nas part of the field (a currency symbol, `https://`, a country code). Not\nthe decorative `iconLeft`. Note: this shadows the native `prefix`\nattribute (an RDFa vocabulary), which Input does not expose."
           },
           {
             "name": "suffix",
@@ -18550,7 +18550,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Widget",
     "slug": "widget",
     "category": "data-display",
-    "description": "A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.",
+    "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
     "client": false,
     "importPath": "rift-ds/components/Widget/Widget",
     "barrel": "main",

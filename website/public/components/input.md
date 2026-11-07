@@ -1,6 +1,6 @@
 # Input
 
-Text input with label, placeholder, left and right icons, helper text, and error states.
+Text input with label, placeholder, icons, a prefix or suffix, a clear button, helper text, and error states.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -22,7 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same dat
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper text displayed below the input. With the older `error` flag and no `errorText`, it doubles as the error message. |
 | errorText | `ReactNode` | no |  | The error message, shown under the input while the helper text keeps its place. Setting it marks the input invalid; Field's spec owns the wiring. |
-| prefix | `ReactNode` | no |  | Text or a node inside the field before the value, read by a screen reader as part of the field (a currency symbol, `https://`, a country code). Not the decorative `iconLeft`. |
+| prefix | `ReactNode` | no |  | Text or a node inside the field before the value, read by a screen reader as part of the field (a currency symbol, `https://`, a country code). Not the decorative `iconLeft`. Note: this shadows the native `prefix` attribute (an RDFa vocabulary), which Input does not expose. |
 | suffix | `ReactNode` | no |  | Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`. |
 | action | `ReactNode` | no |  | A control inside the field at its end, after the suffix: a show/hide button, a copy button. Unlike `suffix` it is not read as part of the field; it is a control of its own. |
 | clearable | `boolean` | no | `false` | Show a clear button while the field holds a value. It empties the field, fires `onChange` and `onValueChange` with an empty value, then `onClear`, and returns focus to the field. |

@@ -757,7 +757,7 @@ Collapsible hierarchy for files, folders, and nested structures.
 
 ### Widget
 
-A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.
+A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.
 
 - Import: `import { Widget } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -977,7 +977,7 @@ A row of filter chips for narrowing a collection, each opening a popover of opti
 
 ### Input
 
-Text input with label, placeholder, left and right icons, helper text, and error states.
+Text input with label, placeholder, icons, a prefix or suffix, a clear button, helper text, and error states.
 
 - Import: `import { Input } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

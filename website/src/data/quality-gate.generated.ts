@@ -433,7 +433,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "npm run test",
-        "text": "Every Storybook story as a render, axe and interaction test in headless Chromium."
+        "text": "Every Storybook story as a render, axe and interaction test in headless Chromium, plus the unit tests of the pure modules in Node."
       },
       {
         "name": "npm run build-storybook",

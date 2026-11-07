@@ -105,7 +105,7 @@ npm run build           # type-check the library
 npm run build:lib       # build the publishable package into dist/
 npm run lint            # ESLint
 npm run build-storybook # export static Storybook
-npm run test            # every Storybook story as a render, axe and interaction test (headless Chromium)
+npm run test            # every Storybook story as a render, axe and interaction test (headless Chromium), plus the unit tests (src/**/*.test.ts)
 npm run verify          # the full local quality gate, mirroring CI
 npm run eval:chat       # site-chat answer-quality eval against a running dev server (real API calls, never in CI)
 npm run eval:starters   # the generated starter chips held neutral and broad, against a running dev server (real API calls, never in CI)
@@ -164,6 +164,7 @@ If asked to "merge and push" (a retired skill name), confirm the intended end st
 - `scripts/`: generators and validators (the `validate-registry` chain) and release tooling. `evals/chat/`: the chat eval.
 - `src/components/`: one folder per component, plus `registry.json`. `src/index.ts` and `src/charts.ts` are GENERATED barrels.
 - `src/chat/`: the chat widget over its engine, with its own registry and hand-written barrels. `src/cli/`: the init bin and its scaffold templates.
+- `src/format/`: `rift-ds/format`, the pure money (decimal string) and relative or zoned date helpers, with no React and a hand-written barrel; its `*.test.ts` run in the `unit` Vitest project.
 - `src/behaviors/`: the internal behaviour layer (layer stack, focus scope, scroll lock, anchored position, top layer, link provider, locale provider, keyboard shortcuts, reading direction, `ScrollRegion`, `warnOnce`, the visually-hidden class, and `shell.css`, the app shell recipe). Not a published subpath, except the scroll lock, the link provider, the locale provider and the shortcut listener (`scripts/package-manifest.mjs` is the list); each module's doc block owns its contract.
 - `src/tokens/`: the token CSS, the GENERATED `presets/`, `registry.json` and `values.json` (every theme resolved, published as `rift-ds/tokens/values` through `values.ts`), and `motion.ts` and `breakpoints.ts`. `src/fonts/`: Material Symbols and the presets' faces. `src/stories/`: Storybook foundation docs and the props-contract story.
 - `website/` (npm workspace): `website/src/app/` pages; `website/src/config/` (`navigation.ts` is the nav source of truth, `chromeless.ts` the routes without shared chrome); `website/src/data/` registries and accessors; `website/src/lib/` non-UI modules (chat model, site tools, the theme levers, analytics); `website/src/components/` site UI (header, sidebar, footer, SiteChat, the Cmd+K palette, the anchor rail, the backgrounds, the error fallback, the template screens).

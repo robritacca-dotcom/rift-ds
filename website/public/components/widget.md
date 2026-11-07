@@ -1,6 +1,6 @@
 # Widget
 
-A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.
+A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

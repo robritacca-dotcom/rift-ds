@@ -2,7 +2,7 @@
 
 The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.23.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { AgentRail } from 'rift-ds';`

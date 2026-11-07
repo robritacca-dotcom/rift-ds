@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.23.0",
+  "version": "1.24.0",
   "kind": "component",
   "name": "CodeBlock",
   "label": "Code block",

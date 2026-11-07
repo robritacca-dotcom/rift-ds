@@ -132,6 +132,18 @@ function ladder() {
  */
 const ACCEPTED = [
   {
+    kind: 'truncated',
+    selector: 'h3.ds-heading.ds-heading--title-body',
+    routes: ['/components/heading'],
+    reason: 'The Heading page demonstrates `truncate`: the card title is meant to end in an ellipsis where it runs out of room (website/src/app/components/heading/page.tsx, "Tone and wrapping").',
+  },
+  {
+    kind: 'truncated',
+    selector: 'p.ds-text.ds-text--paragraph-sm',
+    routes: ['/components/text'],
+    reason: 'The Text page demonstrates `truncate` and `lines`: the address and the note are meant to end in an ellipsis (website/src/app/components/text/page.tsx, "Amounts and truncation").',
+  },
+  {
     kind: 'clipped',
     selector: 'section.collage > div.col',
     routes: ['/'],

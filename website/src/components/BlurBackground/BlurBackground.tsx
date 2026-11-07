@@ -13,6 +13,7 @@ import {
 } from "@/data/shader-background";
 import { SHADER_SCENES, ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
+import { HOME_HORIZON_PARAMS, useHomeShader } from "@/lib/shaders/home";
 
 /* Dev-only tuning panel, and the ternary is load-bearing: the bundler
    statically replaces process.env.NODE_ENV, so in a production build this
@@ -156,10 +157,14 @@ export default function BlurBackground() {
       ? SHADER_SCENES.find((scene) => scene.id === stagedSceneId)
       : undefined;
   const stagedField = embedded && stagedSceneId === "field" && stagedParams !== undefined;
+  /* The home page's switch (lib/shaders/home) can trade the field for the
+     Horizon scene, set low in the band, for the visit. Never inside a frame. */
+  const homeShader = useHomeShader();
+  const homeHorizon = !embedded && homeShader === "horizon";
   const live = !embedded || stagedField;
 
   const state =
-    stagedScene
+    stagedScene || homeHorizon
       ? "on"
       : mode === "css" || !live
       ? "off"
@@ -188,6 +193,8 @@ export default function BlurBackground() {
 
         {stagedScene ? (
           <ShaderScene scene={stagedScene.id as ShaderSceneId} liveRef={stagedValues} />
+        ) : homeHorizon ? (
+          <ShaderScene scene="horizon" params={HOME_HORIZON_PARAMS} />
         ) : (
           <ShaderField
             params={stagedField ? { ...params, ...stagedParams } : params}

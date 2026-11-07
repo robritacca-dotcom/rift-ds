@@ -51,13 +51,32 @@
    would hold it forever. Delay comes from the shared stagger class. */
 .heroThemes {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  column-gap: var(--gap-500);
+  row-gap: var(--gap-300);
   width: 100%;
   /* The row opens the hero, so it stands clear of the headline: the same
      step again on top of the hero's own gap. */
   margin-bottom: var(--gap-400);
   opacity: 0;
   animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) both;
+}
+
+/* The background switch rides the swatch row's line: the row sets its own
+   top margin, so the switch takes the same to sit level with the dots. */
+.backgroundSwitch {
+  margin-top: var(--gap-200);
+}
+
+/* Where the swatches and the switch no longer share one line, the switch
+   takes a line of its own, centred under the dots, instead of floating
+   beside a wrapped row. */
+@media (max-width: 768px) {
+  .heroThemes {
+    flex-direction: column;
+  }
 }
 
 @keyframes heroThemesIn {

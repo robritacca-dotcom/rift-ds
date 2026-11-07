@@ -82,14 +82,14 @@
       "axis": "both"
     },
     {
-      "label": "playground shaders rail: a scene slider over the live ground",
+      "label": "playground shaders rail: a horizon slider over the live stage",
       "route": "/playground?preset=contrast&view=shaders",
-      "ready": "button[aria-label=\"Field: open its settings\"]",
+      "ready": "button[aria-label=\"Horizon: open its settings\"]",
       "setup": [
-        { "click": "button[aria-label=\"Field: open its settings\"]" },
-        { "waitFor": "aside[aria-label=\"Field settings\"] .ds-inspector-slider" }
+        { "click": "button[aria-label=\"Horizon: open its settings\"]" },
+        { "waitFor": "aside[aria-label=\"Horizon settings\"] .ds-inspector-slider" }
       ],
-      "grip": "aside[aria-label=\"Field settings\"] .ds-inspector-slider",
+      "grip": "aside[aria-label=\"Horizon settings\"] .ds-inspector-slider",
       "axis": "x"
     },
     {

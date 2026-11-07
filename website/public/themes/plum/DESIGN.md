@@ -1,49 +1,49 @@
 ---
 version: alpha
-name: "Aubergine"
-description: "The Aubergine theme of rift-ds: its colours, type, shape, space and depth, as the theme resolves them."
+name: "Signal"
+description: "The Signal theme of rift-ds: its colours, type, shape, space and depth, as the theme resolves them."
 
 colors:
-  primary: "#efa640"
-  primary-hover: "#f0ac4c"
-  primary-active: "#f1b055"
-  on-primary: "#33240e"
-  primary-dark: "#efa640"
-  canvas-light: "#f2eeeb"
-  canvas-dark: "#110d09"
+  primary: "#ff5f1f"
+  primary-hover: "#ff7b46"
+  primary-active: "#ffa37f"
+  on-primary: "#060c17"
+  primary-dark: "#ff5f1f"
+  canvas-light: "#eef1f6"
+  canvas-dark: "#090b0e"
   surface: "#ffffff"
-  surface-dark: "rgba(25, 22, 18, 0.8)"
-  surface-soft: "#f2eeeb"
-  ink: "#130e0a"
-  ink-dark: "#ece9e5"
-  display: "#44261c"
-  display-dark: "#f2e8dc"
-  heading: "#130e0a"
-  heading-dark: "#ece9e5"
-  logo: "#5c3426"
-  logo-dark: "#e0a878"
-  logo-end: "#44261c"
-  logo-end-dark: "#e0a878"
-  text-secondary: "#3a3632"
-  text-tertiary: "#726e6a"
-  border: "#d3cfca"
+  surface-dark: "rgba(17, 19, 23, 0.8)"
+  surface-soft: "#eef1f6"
+  ink: "#090c10"
+  ink-dark: "#e4e6ea"
+  display: "#0f1e37"
+  display-dark: "#c9daf5"
+  heading: "#090c10"
+  heading-dark: "#e4e6ea"
+  logo: "#ff5f1f"
+  logo-dark: "#ff5f1f"
+  logo-end: "#ffa37f"
+  logo-end-dark: "#ffa37f"
+  text-secondary: "#313337"
+  text-tertiary: "#696b6f"
+  border: "#caccd0"
   input: "#ffffff"
   error: "#b4313d"
   success: "#247b55"
-  warning: "#b65c23"
-  info: "#5c74d0"
-  accent-amber: "#efa640"
-  accent-cobalt: "#4f6bd8"
-  accent-coral: "#e0605a"
-  accent-gold: "#8cc0e8"
-  accent-mint: "#3f78b5"
-  accent-violet: "#7a4a32"
-  chart-1: "#efa640"
-  chart-2: "#3f78b5"
-  chart-3: "#8cc0e8"
-  chart-4: "#e0605a"
-  chart-5: "#7a4a32"
-  chart-6: "#efa640"
+  warning: "#c14817"
+  info: "#4e85e3"
+  accent-amber: "#1e9e8a"
+  accent-cobalt: "#5cc8e8"
+  accent-coral: "#ffb37a"
+  accent-gold: "#8fb8f0"
+  accent-mint: "#2f6fde"
+  accent-violet: "#1f4fa0"
+  chart-1: "#ff5f1f"
+  chart-2: "#2f6fde"
+  chart-3: "#8fb8f0"
+  chart-4: "#ffb37a"
+  chart-5: "#1f4fa0"
+  chart-6: "#1e9e8a"
 
 typography:
   display-lg:
@@ -157,40 +157,40 @@ components:
     rounded: "{rounded.card}"
 ---
 
-# Aubergine theme
+# Signal theme
 
-Aubergine: Bricolage Grotesque headings over Figtree text, #efa640 for actions, buttons squared to 4px, 4px inputs and 7px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
+Signal: Bricolage Grotesque headings over Figtree text, #ff5f1f for actions, buttons squared to 4px, 4px inputs and 7px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="plum"` on `<html>`. See it at https://rift-ds.com/foundations/themes/plum.
 
 ## Colour
 
-One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo has a colour of its own (`logo`), apart from the action colour. Its mark is a gradient within that one colour (`logo-end`).
+One action colour, kept for primary buttons, focus rings, the checked state of a control and the selected item of a set. Everything else is the neutral scale and five status roles. The logo wears the action colour (`logo`). Its mark is a gradient within that one colour (`logo-end`).
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
-| `primary` | `#efa640` | `#efa640` | `--color-action-primary-bg` |
-| `primary-hover` | `#f0ac4c` | `#f0ac4c` | `--color-action-primary-bg-hover` |
-| `primary-active` | `#f1b055` | `#f1b055` | `--color-action-primary-bg-active` |
-| `on-primary` | `#33240e` | `#33240e` | `--color-action-primary-text` |
-| `canvas-light` | `#f2eeeb` | `#110d09` | `--color-bg-page-primary` |
-| `surface` | `#ffffff` | `rgba(25, 22, 18, 0.8)` | `--color-bg-container-primary` |
-| `surface-soft` | `#f2eeeb` | `#393531` | `--color-bg-container-secondary` |
-| `ink` | `#130e0a` | `#ece9e5` | `--color-text-primary` |
-| `display` | `#44261c` | `#f2e8dc` | `--color-text-display` |
-| `heading` | `#130e0a` | `#ece9e5` | `--color-text-heading` |
-| `logo` | `#5c3426` | `#e0a878` | `--color-brand-mark` |
-| `logo-end` | `#44261c` | `#e0a878` | `--color-brand-mark-end` |
-| `text-secondary` | `#3a3632` | `#bbb7b4` | `--color-text-secondary` |
-| `text-tertiary` | `#726e6a` | `#a39f9b` | `--color-text-tertiary` |
-| `border` | `#d3cfca` | `#2d2925` | `--color-bg-container-border` |
-| `input` | `#ffffff` | `#110d09` | `--color-input-bg-primary` |
+| `primary` | `#ff5f1f` | `#ff5f1f` | `--color-action-primary-bg` |
+| `primary-hover` | `#ff7b46` | `#ff7b46` | `--color-action-primary-bg-hover` |
+| `primary-active` | `#ffa37f` | `#ffa37f` | `--color-action-primary-bg-active` |
+| `on-primary` | `#060c17` | `#060c17` | `--color-action-primary-text` |
+| `canvas-light` | `#eef1f6` | `#090b0e` | `--color-bg-page-primary` |
+| `surface` | `#ffffff` | `rgba(17, 19, 23, 0.8)` | `--color-bg-container-primary` |
+| `surface-soft` | `#eef1f6` | `#313336` | `--color-bg-container-secondary` |
+| `ink` | `#090c10` | `#e4e6ea` | `--color-text-primary` |
+| `display` | `#0f1e37` | `#c9daf5` | `--color-text-display` |
+| `heading` | `#090c10` | `#e4e6ea` | `--color-text-heading` |
+| `logo` | `#ff5f1f` | `#ff5f1f` | `--color-brand-mark` |
+| `logo-end` | `#ffa37f` | `#ffa37f` | `--color-brand-mark-end` |
+| `text-secondary` | `#313337` | `#b3b5b9` | `--color-text-secondary` |
+| `text-tertiary` | `#696b6f` | `#9b9da0` | `--color-text-tertiary` |
+| `border` | `#caccd0` | `#25272a` | `--color-bg-container-border` |
+| `input` | `#ffffff` | `#090b0e` | `--color-input-bg-primary` |
 | `error` | `#b4313d` | `#de5764` | `--color-status-error-icon` |
 | `success` | `#247b55` | `#2e9e6e` | `--color-status-positive-icon` |
-| `warning` | `#b65c23` | `#f07a2e` | `--color-status-warning-icon` |
-| `info` | `#5c74d0` | `#7c8fd9` | `--color-status-info-icon` |
+| `warning` | `#c14817` | `#ff5f1f` | `--color-status-warning-icon` |
+| `info` | `#4e85e3` | `#719ce8` | `--color-status-info-icon` |
 
-Accents, for charts and the background field: amber `#efa640`, cobalt `#4f6bd8`, coral `#e0605a`, gold `#8cc0e8`, mint `#3f78b5`, violet `#7a4a32`.
+Accents, for charts and the background field: amber `#1e9e8a`, cobalt `#5cc8e8`, coral `#ffb37a`, gold `#8fb8f0`, mint `#2f6fde`, violet `#1f4fa0`.
 
 ## Typography
 

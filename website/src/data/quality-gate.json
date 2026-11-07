@@ -140,7 +140,7 @@
     "validate-api-compat": { "group": "verify", "text": "Against the latest release tag, no prop, export, subpath, file, bin or schema property vanished or narrowed." },
     "npm run build:lib": { "group": "verify", "text": "Builds the publishable package into dist/." },
     "validate-package-publish": { "group": "verify", "text": "publint and arethetypeswrong against dist/, so every subpath resolves for every kind of consumer." },
-    "npm run test": { "group": "verify", "text": "Every Storybook story as a render, axe and interaction test in headless Chromium." },
+    "npm run test": { "group": "verify", "text": "Every Storybook story as a render, axe and interaction test in headless Chromium, plus the unit tests of the pure modules in Node." },
     "npm run build-storybook": { "group": "verify", "text": "Runs the chain again, then builds the static Storybook." },
     "npm --prefix website run lint": { "group": "verify", "text": "ESLint over the website." },
     "npm --prefix website run build": { "group": "verify", "text": "Runs the website's subset of the chain, then the Next build." },

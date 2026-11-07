@@ -740,7 +740,7 @@
       "name": "Input",
       "label": "Input",
       "slug": "input",
-      "description": "Text input with label, placeholder, left and right icons, helper text, and error states.",
+      "description": "Text input with label, placeholder, icons, a prefix or suffix, a clear button, helper text, and error states.",
       "category": "forms",
       "client": true
     },
@@ -1505,7 +1505,7 @@
       "name": "Widget",
       "label": "Widget",
       "slug": "widget",
-      "description": "A titled tile for a dashboard or home screen, with rows, labelled groups, and a board that packs tiles into columns.",
+      "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
       "category": "data-display",
       "client": false
     },

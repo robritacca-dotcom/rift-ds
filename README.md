@@ -124,7 +124,7 @@ Accordion · Action card · Action readout · Agent plan · Agent rail · Agent 
 - **Vite 7**: dev server and library build
 - **Next.js 16**: the documentation site
 - **Storybook 10**: component explorer
-- **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each
+- **Vitest + Playwright + axe**: every Storybook story runs as a render test in headless Chromium, with an accessibility audit on each, and the pure helpers have unit tests in Node
 - **TanStack Table + TanStack Virtual**: the headless engine and the windowing under `DataTable`, the package's runtime dependencies
 - **CSS custom properties**: all theming via semantic tokens, no CSS-in-JS
 

@@ -7,7 +7,7 @@
  * Money is a decimal string, added and multiplied on integers (money.ts);
  * dates read against now or in a named zone come from relative.ts. Plain
  * numbers and calendar conventions stay with the locale helpers the
- * components already read (src/behaviors/locale.ts).
+ * components already read, behind LocaleProvider.
  */
 
 export {

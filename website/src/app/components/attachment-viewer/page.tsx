@@ -37,6 +37,11 @@ const PDF: AttachmentItem[] = [
 
 const EXPIRED: AttachmentItem[] = [{ ...PDF[0], status: "error" }];
 
+/* A real PDF from the site's own origin, which the page's security policy lets the browser embed. */
+const STATEMENT: AttachmentItem[] = [
+  { id: "statement", name: "statement.pdf", kind: "pdf", size: 1_400, status: "ready", fileUrl: "/documents/statement.pdf" },
+];
+
 /** One button that opens the viewer on a set of files. */
 function ViewerDemo({
   label,
@@ -94,7 +99,7 @@ export default function AttachmentViewerPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Open a file without leaving the conversation</p>
             <p className={styles.introBody}>
-              A dialog on a wide screen and a full-screen sheet on a narrow one. The header names the file, its size and its place in the set. The viewer shows pictures itself and lets the host draw anything else. When there is nothing to show, it says so plainly.
+              A dialog on a wide screen and a full-screen sheet on a narrow one. The header names the file, its size and its place in the set. The viewer shows pictures itself, and a PDF or a text file in place when it carries its own address. The host can draw anything else. When there is nothing to show, it says so plainly.
             </p>
           </div>
 
@@ -107,9 +112,17 @@ export default function AttachmentViewerPage() {
           </section>
 
           <section className={styles.section}>
+            <SectionTitle title="Documents in place" />
+            <p className={styles.demoText}>
+              A PDF or a text file with a <code>fileUrl</code> opens in place, in the browser’s own viewer, under the viewer’s header. Where a browser will not embed it, the viewer says so and offers the download.
+            </p>
+            <ViewerDemo label="Open a statement" items={STATEMENT} />
+          </section>
+
+          <section className={styles.section}>
             <SectionTitle title="Drawn by the host" />
             <p className={styles.demoText}>
-              The viewer carries no document renderer. Pass a function and the host draws what the viewer cannot, such as the pages of a PDF.
+              The viewer carries no document renderer of its own. Pass a function and the host draws what the viewer cannot, such as a document’s pages as pictures, or a spreadsheet.
             </p>
             <ViewerDemo label="Open a PDF" items={PDF} pages />
           </section>

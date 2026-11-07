@@ -43,6 +43,7 @@ const PAGE_SECTIONS = [
   { id: "fonts", label: "Fonts" },
   { id: "icons", label: "Icons" },
   { id: "locale", label: "Locale and direction" },
+  { id: "money", label: "Money and dates" },
   { id: "shortcuts", label: "Keyboard shortcuts" },
   { id: "forms", label: "Forms" },
   { id: "chat-agent-ui", label: "Chat" },

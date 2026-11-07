@@ -3,9 +3,9 @@
  * Gaussian sources at the home page's positions and sizes, coloured from
  * its tokens, blended in linear space, warped by fbm so the field flows,
  * and stretched along a diagonal into light streams. A compact
- * re-implementation for the playground's ground, not ShaderField itself: the cursor wake
- * and the CSS fallback are left out, and the field fills the stage rather
- * than a band.
+ * re-implementation in ShaderScene's scene format, not ShaderField itself: it
+ * bakes the Field card's still beside the library's scenes and gives Field its
+ * defaults in the rail. The live Field is always ShaderField.
  */
 import type { ShaderSceneDefinition as Scene } from "rift-ds/components/ShaderScene/ShaderScene";
 

@@ -214,6 +214,8 @@ for (const [key, target] of Object.entries(expected)) {
  * a consumer needs — belongs here with a reason rather than a subpath.
  */
 const INTERNAL_MODULES = new Map([
+  ['src/components/DatePicker/calendar.ts',
+    'the date helpers and grid keys DatePicker and DateRangePicker share; the pickers are the public surface'],
   ['src/components/Chart/palette.ts',
     'series-colour reader shared by the chart set; the --color-chart-series tokens it reads are the public surface'],
   ['src/components/Attachment/typeMark.ts',
@@ -250,7 +252,9 @@ const tsModules = [];
       else if (
         entry.name.endsWith('.ts') &&
         !entry.name.endsWith('.d.ts') &&
-        !entry.name.endsWith('.stories.ts')
+        !entry.name.endsWith('.stories.ts') &&
+        // Unit tests never ship (vite.lib.config.ts excludes them from the build).
+        !entry.name.endsWith('.test.ts')
       ) {
         tsModules.push(full);
       }

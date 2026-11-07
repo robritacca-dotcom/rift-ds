@@ -219,7 +219,22 @@
   white-space: nowrap;
 }
 
-/* The clear button sits a step in from the edge, its circle centred in the row. */
+/* The clear button and an action sit a step in from the edge, their circles centred in the row. */
+.ds-input__action {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  margin-inline-end: calc(-1 * var(--padding-200));
+}
+
+.ds-input--affixed.ds-input--compact .ds-input__action {
+  margin-inline-end: calc(-1 * var(--padding-300));
+}
+
+.ds-input__action + .ds-input__clear {
+  margin-inline-start: calc(-1 * var(--gap-200));
+}
+
 .ds-input__clear {
   flex-shrink: 0;
   margin-inline-end: calc(-1 * var(--padding-200));

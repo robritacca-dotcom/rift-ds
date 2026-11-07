@@ -1,0 +1,92 @@
+/* ============================================
+   DATE RANGE PICKER
+   A member of the DatePicker family: the root,
+   the header, the grid and the day cells are
+   DatePicker's own classes and stylesheet. This
+   sheet adds only what a range needs: months
+   side by side that wrap when the picker is
+   narrow, the band between the two chosen ends
+   in the passive selection wash, and the preset
+   chips above, which wrap.
+   ============================================ */
+
+/* Layout */
+.ds-date-range-picker {
+  max-inline-size: 100%;
+  box-sizing: border-box;
+}
+
+.ds-date-range-picker__months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-500);
+}
+
+.ds-date-range-picker__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.ds-date-range-picker--compact .ds-date-range-picker__month {
+  gap: var(--gap-050);
+}
+
+/* Holds the header's balance where a month has no turn button of its own. */
+.ds-date-range-picker__nav-space {
+  inline-size: var(--control-height-compact);
+  flex-shrink: 0;
+}
+
+.ds-date-range-picker--compact .ds-date-range-picker__nav-space {
+  inline-size: var(--icon-size-800);
+}
+
+.ds-date-range-picker__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-100);
+}
+
+/* The band: no gaps between days, so the span reads as one run */
+.ds-date-range-picker .ds-date-picker__grid,
+.ds-date-range-picker .ds-date-picker__row {
+  column-gap: 0;
+}
+
+.ds-date-range-picker__cell--in-range {
+  border-radius: 0;
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-date-range-picker__cell--in-range:hover:not(:disabled) {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+/* A preview while the end is being chosen: the same band, outlined rather than filled. */
+.ds-date-range-picker__cell--preview {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-date-range-picker__cell--preview-end {
+  border: var(--border-025) dashed var(--color-action-primary-border);
+}
+
+/* The band runs into each chosen end: half its cell, on the side facing the span. */
+.ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--start) {
+  background: linear-gradient(to right, transparent 50%, var(--color-action-passive-bg-active) 50%); /* ds-allow(physical): a gradient has no logical direction; the rule below turns it round right to left */
+}
+
+.ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--start):dir(rtl) {
+  background: linear-gradient(to left, transparent 50%, var(--color-action-passive-bg-active) 50%); /* ds-allow(physical): the right-to-left twin of the rule above */
+}
+
+.ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--end),
+.ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--preview-end) {
+  background: linear-gradient(to left, transparent 50%, var(--color-action-passive-bg-active) 50%); /* ds-allow(physical): a gradient has no logical direction; the rule below turns it round right to left */
+}
+
+.ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--end):dir(rtl),
+.ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--preview-end):dir(rtl) {
+  background: linear-gradient(to right, transparent 50%, var(--color-action-passive-bg-active) 50%); /* ds-allow(physical): the right-to-left twin of the rule above */
+}

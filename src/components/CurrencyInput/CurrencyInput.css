@@ -1,0 +1,12 @@
+/* ============================================
+   CURRENCY INPUT
+   An Input with the currency as its prefix or
+   suffix; the field itself, its affixes and its
+   states are Input's. The amount sets in tabular
+   figures, so the digits hold still as they are
+   grouped on blur.
+   ============================================ */
+
+.ds-currency-input .ds-input__field {
+  font-variant-numeric: tabular-nums;
+}

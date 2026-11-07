@@ -27,7 +27,7 @@ export default defineConfig({
       include: ['src'],
       // The scaffold templates are source a consumer copies, shipped beside the
       // bin by build-package.mjs, never types of the package.
-      exclude: ['src/**/*.stories.tsx', 'src/**/*.stories.ts', 'src/stories', 'src/cli'],
+      exclude: ['src/**/*.stories.tsx', 'src/**/*.stories.ts', 'src/**/*.test.ts', 'src/stories', 'src/cli'],
     }),
   ],
   build: {

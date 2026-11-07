@@ -1,0 +1,16 @@
+/* ============================================
+   MASKED INPUT
+   An Input whose text the mask writes; the field,
+   its states and its action slot are Input's.
+   Tabular figures keep the separators still as
+   digits arrive, and a hidden value's dots are
+   spaced so each stands for one character.
+   ============================================ */
+
+.ds-masked-input .ds-input__field {
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-masked-input--concealed .ds-input__field {
+  letter-spacing: var(--font-overline-letter-spacing);
+}

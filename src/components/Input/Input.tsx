@@ -31,6 +31,8 @@ type InputOwnProps = {
   prefix?: React.ReactNode;
   /** Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`. */
   suffix?: React.ReactNode;
+  /** A control inside the field at its end, after the suffix: a show/hide button, a copy button. Unlike `suffix` it is not read as part of the field; it is a control of its own. */
+  action?: React.ReactNode;
   /** Show a clear button while the field holds a value. It empties the field, fires `onChange` and `onValueChange` with an empty value, then `onClear`, and returns focus to the field. */
   clearable?: boolean;
   /** Accessible name of the clear button. Defaults to "Clear". */
@@ -83,6 +85,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       errorText,
       prefix,
       suffix,
+      action,
       clearable = false,
       clearLabel = 'Clear',
       onClear,
@@ -117,7 +120,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const invalid = error || hasErrorText;
     const hasPrefix = prefix != null && prefix !== false && prefix !== '';
     const hasSuffix = suffix != null && suffix !== false && suffix !== '';
-    const affixed = hasPrefix || hasSuffix || clearable;
+    const hasAction = action != null && action !== false;
+    const affixed = hasPrefix || hasSuffix || clearable || hasAction;
     const showClear = clearable && filled && !disabled && !readOnly;
 
     const classes = [
@@ -220,6 +224,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {suffix}
             </span>
           )}
+          {hasAction && <span className={`${baseClass}__action`}>{action}</span>}
           {showClear && (
             <CircularButton
               className={`${baseClass}__clear`}

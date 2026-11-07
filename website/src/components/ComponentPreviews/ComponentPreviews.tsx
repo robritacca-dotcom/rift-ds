@@ -33,6 +33,10 @@ import { Gauge } from "rift-ds/components/Gauge/Gauge";
 import { StreamingText } from "rift-ds/components/StreamingText/StreamingText";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { DescriptionList } from "rift-ds/components/DescriptionList/DescriptionList";
+import { Deadline } from "rift-ds/components/Deadline/Deadline";
+import { CurrencyInput } from "rift-ds/components/CurrencyInput/CurrencyInput";
+import { DateRangePicker } from "rift-ds/components/DateRangePicker/DateRangePicker";
+import { MASK_PRESETS, MaskedInput } from "rift-ds/components/MaskedInput/MaskedInput";
 import { Heading } from "rift-ds/components/Heading/Heading";
 import { List, ListItem } from "rift-ds/components/List/List";
 import { Text } from "rift-ds/components/Text/Text";
@@ -131,6 +135,29 @@ const contributionPreviewDays: ContributionDay[] = Array.from({ length: 10 * 7 }
 const PreviewRow: LinkComponent = ({ className, children }) => <span className={className}>{children}</span>;
 
 const previews: Record<string, () => ReactNode> = {
+  /* Form controls held inert, so the card link stays the only target. */
+  "currency-input": () => (
+    <div inert style={{ width: "200px" }}>
+      <CurrencyInput aria-label="Price" size="compact" defaultValue="1234.5" />
+    </div>
+  ),
+  "masked-input": () => (
+    <div inert style={{ width: "200px" }}>
+      <MaskedInput aria-label="Card number" size="compact" mask={MASK_PRESETS.card} defaultValue="4242424242424242" sensitive visibleTail={4} />
+    </div>
+  ),
+  "date-range-picker": () => (
+    <div inert style={{ transform: "scale(0.7)", transformOrigin: "center" }}>
+      <DateRangePicker months={1} size="compact" defaultValue={{ start: "2026-11-09", end: "2026-11-13" }} />
+    </div>
+  ),
+  "deadline": () => (
+    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center" }}>
+      <Deadline date="2026-11-11T17:00:00Z" now="2026-11-06T17:00:00Z" size="compact" />
+      <Deadline date="2026-11-08T17:00:00Z" now="2026-11-06T17:00:00Z" size="compact" />
+      <Deadline date="2026-11-04T17:00:00Z" now="2026-11-06T17:00:00Z" size="compact" />
+    </div>
+  ),
   "description-list": () => (
     <div style={{ width: "200px" }}>
       <DescriptionList

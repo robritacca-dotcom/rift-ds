@@ -4,15 +4,20 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './DatePicker.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
+import { isEnglish, rotateWeek, weekStartOf, weekdayNamesIn, type Weekday } from '../../behaviors/locale';
+import { MonthGrid } from './MonthGrid';
 import {
-  isEnglish,
-  rotateWeek,
-  weekStartOf,
-  weekdayNamesIn,
-  weekdayOffset,
-  type Weekday,
-} from '../../behaviors/locale';
-import { logicalArrowKey } from '../../behaviors/direction';
+  EN_DAYS,
+  dayLabelIn,
+  formatDate,
+  isSameDay,
+  keyMove,
+  monthLabelIn,
+  parseDate,
+  visuallyHidden,
+  weekdaysOr,
+  type MonthCell,
+} from './calendar';
 
 /** Props owned by DatePicker itself — everything else falls through to the wrapper. */
 type DatePickerOwnProps = {
@@ -28,6 +33,8 @@ type DatePickerOwnProps = {
   max?: string;
   /** Callback when a date is selected */
   onDateSelect?: (date: string) => void;
+  /** Mark further days unavailable, beyond `min` and `max`: weekends, holidays, booked days. Given each day as a `YYYY-MM-DD` string; focus skips past none of them, but none can be chosen. */
+  isDateDisabled?: (date: string) => boolean;
   /** Accessible name of the previous-month button. */
   previousLabel?: string;
   /** Accessible name of the next-month button. */
@@ -76,74 +83,6 @@ export interface DatePickerProps
   extends DatePickerOwnProps,
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof DatePickerOwnProps> {}
 
-/** The two-letter English headers, which Intl has no width for. */
-const EN_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-/** A consumer's weekday list when it has the seven entries the grid needs, else the default. */
-const weekdaysOr = (labels: string[] | undefined, fallback: string[]): string[] =>
-  labels && labels.length === 7 ? labels : fallback;
-function parseDate(str?: string): Date | null {
-  if (!str) return null;
-  const [y, m, d] = str.split('-').map(Number);
-  return new Date(y, m - 1, d);
-}
-
-function formatDate(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
-
-/**
- * Standard sr-only clip pattern, inline so no stylesheet change is needed.
- * position: absolute takes the element out of flow, so it cannot affect
- * layout; the 1px box + clip keep it invisible but still announced.
- */
-const visuallyHidden: React.CSSProperties = {
-  position: 'absolute',
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: 'hidden',
-  clip: 'rect(0 0 0 0)',
-  whiteSpace: 'nowrap',
-  border: 0,
-};
-
-const monthLabelIn = (locale: string) => {
-  const format = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' });
-  return (month: Date): string => format.format(month);
-};
-
-const dayLabelIn = (locale: string) => {
-  const format = new Intl.DateTimeFormat(locale, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  return (date: Date, selected: boolean): string =>
-    `${format.format(date)}${selected ? ', selected' : ''}`;
-};
-
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-const addDays = (date: Date, days: number): Date =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
-
-/** The same day of the month `months` away, pulled back to that month's last day when it is shorter. */
-const addMonths = (date: Date, months: number): Date => {
-  const lastDay = new Date(date.getFullYear(), date.getMonth() + months + 1, 0).getDate();
-  return new Date(date.getFullYear(), date.getMonth() + months, Math.min(date.getDate(), lastDay));
-};
-
 /**
  * Inline date picker calendar component.
  * Displays a full month grid with navigation,
@@ -166,6 +105,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       min,
       max,
       onDateSelect,
+      isDateDisabled: isDateDisabledProp,
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
       monthLabel: monthLabelProp,
@@ -232,29 +172,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       .filter(Boolean)
       .join(' ');
 
-    // Build grid of days
-    // Leading days from the previous month: as many as the month's first day
-    // sits after the week's first column.
-    const firstDay = weekdayOffset(new Date(viewYear, viewMonth, 1).getDay(), weekStart);
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-    const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
-
-    const cells: { day: number; inMonth: boolean; date: Date }[] = [];
-
-    // Leading days from previous month
-    for (let i = firstDay - 1; i >= 0; i--) {
-      const d = daysInPrevMonth - i;
-      cells.push({ day: d, inMonth: false, date: new Date(viewYear, viewMonth - 1, d) });
-    }
-    // Current month
-    for (let d = 1; d <= daysInMonth; d++) {
-      cells.push({ day: d, inMonth: true, date: new Date(viewYear, viewMonth, d) });
-    }
-    // Trailing days to fill grid (up to 42 cells = 6 rows)
-    const remaining = 42 - cells.length;
-    for (let d = 1; d <= remaining; d++) {
-      cells.push({ day: d, inMonth: false, date: new Date(viewYear, viewMonth + 1, d) });
-    }
 
     const goToPrevMonth = () => {
       if (viewMonth === 0) {
@@ -278,6 +196,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       if (disabled) return true;
       if (minDate && date < minDate) return true;
       if (maxDate && date > maxDate) return true;
+      if (isDateDisabledProp?.(formatDate(date))) return true;
       return false;
     };
 
@@ -294,7 +213,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       pendingFocus.current = true;
     };
 
-    const handleSelect = (cell: { date: Date; inMonth: boolean }) => {
+    const handleSelect = (cell: MonthCell) => {
       if (isDateDisabled(cell.date)) return;
       if (!cell.inMonth) {
         // Navigate to the month of the out-of-range day, and keep focus on
@@ -312,36 +231,9 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
     };
 
     const handleDayKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, date: Date) => {
-      let next: Date;
-      switch (logicalArrowKey(event.key, event.currentTarget)) {
-        case 'ArrowLeft':
-          next = addDays(date, -1);
-          break;
-        case 'ArrowRight':
-          next = addDays(date, 1);
-          break;
-        case 'ArrowUp':
-          next = addDays(date, -7);
-          break;
-        case 'ArrowDown':
-          next = addDays(date, 7);
-          break;
-        case 'Home':
-          next = addDays(date, -weekdayOffset(date.getDay(), weekStart));
-          break;
-        case 'End':
-          next = addDays(date, 6 - weekdayOffset(date.getDay(), weekStart));
-          break;
-        case 'PageUp':
-          next = addMonths(date, event.shiftKey ? -12 : -1);
-          break;
-        case 'PageDown':
-          next = addMonths(date, event.shiftKey ? 12 : 1);
-          break;
-        default:
-          // Enter and Space stay with the button's own click.
-          return;
-      }
+      let next = keyMove(event, date, weekStart);
+      // Enter and Space stay with the button's own click.
+      if (!next) return;
       event.preventDefault();
       next = clampToRange(next);
       // Held at a bound: focus is already where the move would leave it.
@@ -360,9 +252,6 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       const date = new Date(viewYear, viewMonth, d);
       if (!isDateDisabled(date)) tabStop = date;
     }
-
-    const weeks: (typeof cells)[] = [];
-    for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
 
     return (
       <div {...rest} ref={ref} className={classes}>
@@ -400,74 +289,42 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
           {monthTitle}
         </span>
 
-        {/*
-          A WAI-ARIA date grid: a header row of column headers, then one row
-          per week. The rows are subgrids of the one CSS grid, so the layout
-          is the same seven columns it always was. Each gridcell holds a real
-          button; only the roving tab stop is in the tab order, and the arrow,
-          Home/End and Page keys move it (handleDayKeyDown).
-        */}
-        <div ref={gridRef} className={`${baseClass}__grid`} role="grid" aria-label={monthTitle}>
-          <div className={`${baseClass}__row`} role="row">
-            {weekdays.map((day, index) => (
-              <div key={index} className={`${baseClass}__day-header`} role="columnheader">
-                {/* The abbreviation is what the eye reads; the full name is
-                    what a screen reader announces as the column's header. */}
-                <span aria-hidden="true">{day}</span>
-                <span style={visuallyHidden}>{weekdayFullNames[index]}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Day cells, a week to a row */}
-          {weeks.map((week, weekIndex) => (
-            <div key={weekIndex} className={`${baseClass}__row`} role="row">
-              {week.map((cell) => {
-                const isSelected = selectedDate && isSameDay(cell.date, selectedDate);
-                const isToday = isSameDay(cell.date, today);
-                const isCellDisabled = isDateDisabled(cell.date);
-                const isTabStop = tabStop !== null && isSameDay(cell.date, tabStop);
-
-                const cellClasses = [
-                  `${baseClass}__cell`,
-                  !cell.inMonth ? `${baseClass}__cell--outside` : '',
-                  isSelected ? `${baseClass}__cell--selected` : '',
-                  isToday && !isSelected ? `${baseClass}__cell--today` : '',
-                  isCellDisabled ? `${baseClass}__cell--disabled` : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ');
-
-                return (
-                  <div key={formatDate(cell.date)} className={`${baseClass}__gridcell`} role="gridcell">
-                    <button
-                      type="button"
-                      className={cellClasses}
-                      onClick={() => handleSelect(cell)}
-                      onKeyDown={(event) => handleDayKeyDown(event, cell.date)}
-                      onFocus={() => {
-                        if (!focusedDate || !isSameDay(focusedDate, cell.date)) {
-                          setFocusedDate(cell.date);
-                        }
-                      }}
-                      disabled={isCellDisabled}
-                      tabIndex={isTabStop ? 0 : -1}
-                      data-date={formatDate(cell.date)}
-                      // Selection is spoken as part of the name rather than via
-                      // aria-selected, which is not permitted on role="button".
-                      aria-label={dayLabel(cell.date, Boolean(isSelected))}
-                      // "the current date within a collection of dates" — this is
-                      // exactly what aria-current="date" is for.
-                      aria-current={isToday ? 'date' : undefined}
-                    >
-                      {dayNumber.format(cell.day)}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <MonthGrid
+          baseClass={baseClass}
+          gridRef={gridRef}
+          year={viewYear}
+          month={viewMonth}
+          weekStart={weekStart}
+          weekdays={weekdays}
+          weekdayFullNames={weekdayFullNames}
+          label={monthTitle}
+          dayNumber={dayNumber}
+          today={today}
+          dayState={(cell) => {
+            const isSelected = Boolean(selectedDate && isSameDay(cell.date, selectedDate));
+            const isToday = isSameDay(cell.date, today);
+            return {
+              className: [
+                !cell.inMonth ? `${baseClass}__cell--outside` : '',
+                isSelected ? `${baseClass}__cell--selected` : '',
+                isToday && !isSelected ? `${baseClass}__cell--today` : '',
+                isDateDisabled(cell.date) ? `${baseClass}__cell--disabled` : '',
+              ]
+                .filter(Boolean)
+                .join(' '),
+              disabled: isDateDisabled(cell.date),
+              // Selection is spoken as part of the name rather than via
+              // aria-selected, which is not permitted on role="button".
+              label: dayLabel(cell.date, isSelected),
+              tabStop: tabStop !== null && isSameDay(cell.date, tabStop),
+            };
+          }}
+          onSelect={handleSelect}
+          onDayKeyDown={handleDayKeyDown}
+          onDayFocus={(date) => {
+            if (!focusedDate || !isSameDay(focusedDate, date)) setFocusedDate(date);
+          }}
+        />
       </div>
     );
   },

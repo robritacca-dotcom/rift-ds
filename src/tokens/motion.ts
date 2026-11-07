@@ -96,3 +96,9 @@ export const MOTION_SHORTCUT_SEQUENCE_MS = 1000;
 
 /** How long a host waits after a reader's selection stops changing (a drag across text, Shift+arrow) before acting on it, such as asking a model about it, so a sweep acts once rather than on every step. A schedule timing. */
 export const MOTION_SELECTION_SETTLE_MS = 400;
+
+/** How long a revealed sensitive value (a tax ID, a card number in MaskedInput) stays readable before it is hidden again, when its `autoHideAfter` is `true`. A schedule timing, so the reduced-motion guard leaves it alone. */
+export const MOTION_SENSITIVE_HIDE_MS = 30000;
+
+/** How often a live countdown (Deadline) rewrites its distance from now. Coarse on purpose: the words change by the minute at the finest, and a hidden tab pauses it. A schedule timing. */
+export const MOTION_DEADLINE_TICK_MS = 30000;

@@ -1,0 +1,82 @@
+/* ============================================
+   DEADLINE
+   The Badge family's tinted pill (status fill and
+   text, the badge's radius and inset), or the
+   status text colour alone inline. The status is
+   the deadline's distance from now: neutral, then
+   warning, then error, and error once it passes.
+   ============================================ */
+
+/* Base */
+.ds-deadline {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-deadline time {
+  font: inherit;
+}
+
+/* Badge */
+.ds-deadline--badge {
+  box-sizing: border-box;
+  padding: var(--padding-050) var(--padding-200);
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-100);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-deadline--badge.ds-deadline--compact {
+  padding: 0 var(--padding-150);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+.ds-deadline--badge.ds-deadline--neutral {
+  background-color: var(--color-status-neutral-bg);
+  color: var(--color-status-neutral-text);
+}
+
+.ds-deadline--badge.ds-deadline--warning {
+  background-color: var(--color-status-warning-bg);
+  color: var(--color-status-warning-text);
+}
+
+.ds-deadline--badge.ds-deadline--error {
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-text);
+}
+
+/* Text: inline in a sentence or a cell */
+.ds-deadline--text {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.ds-deadline--text.ds-deadline--compact {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.ds-deadline--text.ds-deadline--neutral {
+  color: var(--color-text-secondary);
+}
+
+.ds-deadline--text.ds-deadline--warning {
+  color: var(--color-status-warning-text);
+}
+
+.ds-deadline--text.ds-deadline--error {
+  color: var(--color-status-error-text);
+}
+
+.ds-deadline--text.ds-deadline--overdue {
+  font-weight: var(--font-paragraph-emphasis-weight);
+}

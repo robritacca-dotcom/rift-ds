@@ -496,6 +496,14 @@
       "client": false
     },
     {
+      "name": "CurrencyInput",
+      "label": "Currency input",
+      "slug": "currency-input",
+      "description": "An amount of money as a decimal string, read in the locale's marks and grouped once the field is left.",
+      "category": "forms",
+      "client": true
+    },
+    {
       "name": "DataTable",
       "label": "Data table",
       "slug": "data-table",
@@ -517,6 +525,22 @@
       "slug": "date-picker",
       "description": "Inline calendar with month navigation, day selection, and today indicator.",
       "category": "forms",
+      "client": true
+    },
+    {
+      "name": "DateRangePicker",
+      "label": "Date range picker",
+      "slug": "date-range-picker",
+      "description": "An inline calendar for choosing a range of days, one or two months wide, with presets.",
+      "category": "forms",
+      "client": true
+    },
+    {
+      "name": "Deadline",
+      "label": "Deadline",
+      "slug": "deadline",
+      "description": "A due date against now that turns from neutral to warning to error as it nears.",
+      "category": "data-display",
       "client": true
     },
     {
@@ -864,6 +888,14 @@
       "description": "The corner block of a map: its name, what it shows, and the key to its markers.",
       "category": "maps",
       "client": false
+    },
+    {
+      "name": "MaskedInput",
+      "label": "Masked input",
+      "slug": "masked-input",
+      "description": "A field that writes its value into a shape as it is typed, with a sensitive mode that hides it.",
+      "category": "forms",
+      "client": true
     },
     {
       "name": "MegaMenu",

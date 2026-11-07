@@ -41,8 +41,8 @@ const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
 
 /** File (repo-relative) → check → why the hand-written form is right there. */
 const SANCTIONED = {
-  'src/components/DatePicker/DatePicker.tsx': {
-    names: 'the two-letter English weekday headers ("Su" to "Sa") have no Intl width; every other language reads Intl',
+  'src/components/DatePicker/calendar.ts': {
+    names: 'the two-letter English weekday headers DatePicker and DateRangePicker share ("Su" to "Sa") have no Intl width; every other language reads Intl',
   },
 };
 

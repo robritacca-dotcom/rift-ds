@@ -665,6 +665,7 @@ const SANCTIONED_FORM_VARIANTS = {
   AgentStatus: { values: ['inline', 'bar', 'pill'], reason: FORM },
   AnchorNav: { values: ['list', 'floating'], reason: FORM },
   Card: { values: ['default', 'case-study'], reason: FORM },
+  Deadline: { values: ['badge', 'text'], reason: 'its form, a tinted pill or inline text; the status colour comes from the distance to the deadline, never a prop' },
   EmptyState: { values: ['plain', 'bordered'], reason: FORM },
   Link: { values: ['inline', 'standalone'], reason: 'where the link sits, inside a sentence or on its own line, which it has instead of an emphasis' },
   List: { values: ['unordered', 'ordered', 'plain'], reason: 'the list\'s form (a `ul`, an `ol`, or a markerless stack), which it has instead of an emphasis' },

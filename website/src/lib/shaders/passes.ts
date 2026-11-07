@@ -1,6 +1,8 @@
 /**
  * The finishing passes, in the order they run. Light passes work on the
- * linear colour and pull it toward the page ground; srgb passes work on
+ * linear colour and pull it toward the page ground (`u_page`, the page's
+ * own colour, which a night scene on a light page does not share with its
+ * own `u_ground`); srgb passes work on
  * the encoded colour. Each is compiled into every shader and switched by
  * its `u_<id>_on` uniform, so toggling one never recompiles.
  */
@@ -15,7 +17,7 @@ export const PASSES: Pass[] = [
     params: [{ key: "amount", label: "Amount", min: 0, max: 0.9, step: 0.01, default: 0.35 }],
     glsl: /* glsl */ `
 vec3 pass_scrim(vec3 c, vec2 uv) {
-  return mix(c, u_ground, u_scrim_amount);
+  return mix(c, u_page, u_scrim_amount);
 }`,
   },
   {
@@ -31,7 +33,7 @@ vec3 pass_scrim(vec3 c, vec2 uv) {
 vec3 pass_vignette(vec3 c, vec2 uv) {
   vec2 q = (uv - 0.5) * vec2(u_size.x / u_size.y, 1.0);
   float v = smoothstep(u_vignette_size, u_vignette_size * 0.35, length(q));
-  return mix(u_ground, c, mix(1.0, v, u_vignette_amount));
+  return mix(u_page, c, mix(1.0, v, u_vignette_amount));
 }`,
   },
   {
@@ -46,7 +48,7 @@ vec3 pass_vignette(vec3 c, vec2 uv) {
     glsl: /* glsl */ `
 vec3 pass_fadeTop(vec3 c, vec2 uv) {
   float f = 1.0 - pow(smoothstep(u_fadeTop_start, 1.0, uv.y), u_fadeTop_softness);
-  return mix(u_ground, c, f);
+  return mix(u_page, c, f);
 }`,
   },
   {
@@ -61,7 +63,7 @@ vec3 pass_fadeTop(vec3 c, vec2 uv) {
     glsl: /* glsl */ `
 vec3 pass_fadeBottom(vec3 c, vec2 uv) {
   float f = smoothstep(u_fadeBottom_from, max(u_fadeBottom_to, u_fadeBottom_from + 0.01), uv.y);
-  return mix(u_ground, c, f);
+  return mix(u_page, c, f);
 }`,
   },
   {

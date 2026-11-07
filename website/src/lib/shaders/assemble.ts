@@ -1,8 +1,9 @@
 /**
  * Builds one fragment shader from a scene and the passes: the uniforms
  * both declare, the common GLSL, the scene's `scene()`, each pass's
- * function, and a `main` that runs the scene, then the light passes, then
- * the encode, then the srgb passes, each gated by its `u_<id>_on`.
+ * function, and a `main` that runs the scene, lays a night scene onto a
+ * light page when it must (u_lightMode), then runs the light passes, the
+ * encode and the srgb passes, each gated by its `u_<id>_on`.
  */
 import { COMMON_GLSL } from "./common";
 import type { Pass, Scene } from "./types";
@@ -41,7 +42,9 @@ precision highp float;
 
 uniform vec2 u_size;
 uniform float u_time;
-uniform vec3 u_ground;
+uniform vec3 u_ground;   // the scene's ground: the page's, or a night scene's own
+uniform vec3 u_page;     // the page's ground, which the passes fade to
+uniform float u_lightMode; // 1: a night scene laid onto a light page
 uniform vec3 u_col[${MAX_COLOURS}];
 ${floats}
 
@@ -56,6 +59,18 @@ ${passes.map((pass) => pass.glsl).join("\n")}
 void main() {
   vec2 uv = gl_FragCoord.xy / u_size;
   vec3 lin = scene(uv, u_time);
+  /* A night scene on a light page: the light it adds over its own dark
+     ground is laid onto the page as a pale tint, its hue washed most of
+     the way to white and never more than a light wash, so a horizon reads
+     as a soft dawn on paper rather than a dark block on it. */
+  if (u_lightMode > 0.5) {
+    vec3 light = max(lin - u_ground, vec3(0.0));
+    float peak = max(light.r, max(light.g, light.b));
+    vec3 hue = light / max(peak, 1e-4);
+    vec3 pastel = mix(hue, vec3(1.0), 0.3);
+    float strength = clamp(pow(dot(light, vec3(0.2126, 0.7152, 0.0722)) * 4.0, 0.7), 0.0, 0.85);
+    lin = mix(u_page, u_page * pastel, strength);
+  }
 ${call("light", "lin")}
   vec3 srgb = pow(max(lin, vec3(0.0)), vec3(1.0 / 2.2));
   /* A one-step dither under everything, so wide ramps never band. */

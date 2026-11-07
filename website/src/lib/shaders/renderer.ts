@@ -11,9 +11,17 @@ import { MAX_COLOURS } from "./types";
 
 export type Rgb = [number, number, number];
 
-/** A near-black ground in linear RGB, for a night-only scene on a light page. */
+/** A near-black ground in linear RGB, which a night-only scene computes its light against on a light page. */
 const NIGHT_GROUND: Rgb = [0.0015, 0.0018, 0.003];
-export type Colours = { ground: Rgb; colours: Rgb[] };
+export type Colours = {
+  /** The ground the scene is painted against. */
+  ground: Rgb;
+  /** The page's own ground, which the passes fade to. */
+  page: Rgb;
+  /** A night scene on a light page, laid on as a pale tint. */
+  lightMode: boolean;
+  colours: Rgb[];
+};
 
 /** Resolves the page ground and a scene's tokens to linear RGB at `host`. */
 export function readColours(host: HTMLElement, tokens: string[]): Colours {
@@ -37,18 +45,23 @@ export function readColours(host: HTMLElement, tokens: string[]): Colours {
   const ground = read("--color-bg-page-primary");
   const colours = tokens.slice(0, MAX_COLOURS).map(read);
   probe.remove();
-  return { ground, colours };
+  return { ground, page: ground, lightMode: false, colours };
 }
 
 /**
- * A scene's colours for a surface: read from the cascade, with a night-only
- * scene's ground held dark while the page is light, so a horizon or a rift
- * reads the way it is made to inside a light theme too.
+ * A scene's colours for a surface: read from the cascade. A night-only
+ * scene on a light page computes its light against a dark ground of its
+ * own, and the shader lays that light onto the page as a pale tint
+ * (u_lightMode), so its masks still fade to the page and the theme stays
+ * light.
  */
 export function coloursFor(host: HTMLElement, scene: Scene): Colours {
   const colours = readColours(host, scene.colours);
   const pageIsDark = document.documentElement.getAttribute("data-theme") === "dark";
-  if (scene.mode === "dark" && !pageIsDark) colours.ground = NIGHT_GROUND;
+  if (scene.mode === "dark" && !pageIsDark) {
+    colours.ground = NIGHT_GROUND;
+    colours.lightMode = true;
+  }
   return colours;
 }
 
@@ -94,12 +107,16 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
   const uSize = at("u_size");
   const uTime = at("u_time");
   const uGround = at("u_ground");
+  const uPage = at("u_page");
+  const uLightMode = at("u_lightMode");
   const uCols = at("u_col");
   const floats = uniformNames(scene, passes).map((name) => [name, at(name)] as const);
 
   return {
-    setColours({ ground, colours }: Colours) {
+    setColours({ ground, page, lightMode, colours }: Colours) {
       gl.uniform3fv(uGround, ground);
+      gl.uniform3fv(uPage, page);
+      gl.uniform1f(uLightMode, lightMode ? 1 : 0);
       const flat = new Float32Array(MAX_COLOURS * 3);
       colours.forEach((rgb, i) => flat.set(rgb, i * 3));
       gl.uniform3fv(uCols, flat);

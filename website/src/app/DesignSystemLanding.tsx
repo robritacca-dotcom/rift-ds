@@ -528,7 +528,7 @@ function BackgroundSwitch() {
       value={shader}
       onValueChange={(next) => setHomeShader(next as HomeShader)}
       size="compact"
-      ariaLabel="Background"
+      aria-label="Background"
     />
   );
 }

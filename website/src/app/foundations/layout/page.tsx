@@ -57,6 +57,51 @@ const shown = (v: LayoutValue) => {
 const sentence = (s: string) => `${s.charAt(0).toUpperCase()}${s.slice(1)}${/[.!?]$/.test(s) ? "" : "."}`;
 
 /* ============================================
+   APP SHELL DATA
+   The three app shell modes, as the shell recipe in the package
+   (src/behaviors/shell.css) defines them; design.md's "App shells"
+   section is the spec these sentences summarise.
+   ============================================ */
+
+const appShells = [
+  {
+    id: "flush",
+    title: "Flush",
+    plane: "The shell colour",
+    rail: "Edge to edge on the shell colour, a hairline divider at its end",
+    content: "Crisp on the app surface, beside the divider",
+    edge: "Nothing raised, no gap",
+    lever: "For a chat only, the backdrop: blur (the glass and a strong blur over what lies behind) or solid",
+  },
+  {
+    id: "floating",
+    title: "Floating",
+    plane: "The page colour",
+    rail: "A glass card held off the edges by the float gap",
+    content: "On the page, centred beside the card",
+    edge: "Raised: the hairline and the floating shadow on the card",
+    lever: "None",
+  },
+  {
+    id: "inset",
+    title: "Inset",
+    plane: "The shell colour",
+    rail: "Edge to edge on the shell colour",
+    content: "A raised surface held off the other edges by the inset gap, scrolling inside itself",
+    edge: "Raised: the hairline and the floating shadow on the surface",
+    lever: "None",
+  },
+] as const;
+
+const appShellHosts = [
+  { id: "app-layout", host: "AppLayout", how: "layout: a rail and a content area in any mode" },
+  { id: "app-sidebar", host: "AppSidebar", how: "layout: the rail's own treatment, read from the host's mode" },
+  { id: "chat-widget", host: "ChatWidget", how: "layout and backdrop: the chat as the page, its history rail and trailing panels in the mode, and in flush blur or solid" },
+  { id: "chat-launcher", host: "ChatLauncher", how: "surface=\"inset\": the docked chat as the inset surface's twin beside it" },
+  { id: "block", host: "The app shell block", how: "SHELL_LAYOUT at the top of the file npx rift-ds init block writes" },
+] as const;
+
+/* ============================================
    PAGE
    ============================================ */
 
@@ -123,7 +168,7 @@ export default function LayoutPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Where layouts switch, and what they are built from</p>
             <p className={styles.introBody}>
-              Breakpoints are the widths a layout changes at. The page shell is the frame every doc page sits in: a navigation rail, the content column and a details rail. Both are measured in values with one home each, so a page never invents its own.
+              Breakpoints are the widths a layout changes at. The page shell is the frame every doc page sits in: a navigation rail, the content column and a details rail. The app shells are the three ways an app built from the package meets the page. All are measured in values with one home each, so a page never invents its own.
             </p>
           </div>
 
@@ -198,6 +243,52 @@ export default function LayoutPage() {
                 );
               })}
             </div>
+          </section>
+
+          <section className={styles.group}>
+            <SectionTitle title="App shells" />
+            <p className={styles.groupNote}>
+              An app built from the package lays out in one of three shell modes: how the navigation rail and the content meet the page. The templates, the chat home and AppLayout all draw the same three from one recipe in the package, so a mode looks the same wherever it is used. The edge belongs to the mode, never a choice of its own: floating and inset are raised, flush never is. A chat in flush takes one lever more, the backdrop: blur says it rests above something, as the site chat rests over a page, and solid that it is its own page. An app layout or a template is always the floor, so it has no backdrop. The templates open inset; a chat that is the page opens flush with the blur backdrop.
+            </p>
+            <div className={styles.appShells}>
+              {appShells.map((shell) => (
+                <figure key={shell.id} className={styles.shell}>
+                  <div className={styles.appShellFrame} data-mode={shell.id} aria-hidden="true">
+                    <span className={styles.appShellRail} />
+                    <span className={styles.appShellContent} />
+                  </div>
+                  <figcaption className={styles.shellCaption}>
+                    <span className={styles.shellTitle}>{shell.title}</span>
+                    <span>{shell.edge}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            <Table
+              columns={[
+                { key: "mode", header: "Mode" },
+                { key: "plane", header: "Plane" },
+                { key: "rail", header: "Rail" },
+                { key: "content", header: "Content" },
+                { key: "lever", header: "Lever" },
+              ]}
+              rows={appShells.map((shell) => ({
+                id: shell.id,
+                cells: { mode: shell.title, plane: shell.plane, rail: shell.rail, content: shell.content, lever: shell.lever },
+              }))}
+              bordered
+            />
+            <p className={styles.groupNote}>
+              The rails share one geometry in every mode: the logo, the row icons, the group headings, the footer controls and the avatar sit on one leading line; the collapse toggle sits on one trailing line; a row&apos;s own trailing item, a count or a time, keeps a step more room inside its pill. The two gaps are <code className={styles.query}>--ds-shell-inset</code>, the inset surface&apos;s, and <code className={styles.query}>--ds-sidebar-float-inset</code>, the floating card&apos;s. Below the mobile breakpoint every mode gives way to the plain page, and the rail becomes a drawer. A chat too narrow for its inline rail gives way the same way, flush on the solid backdrop, whatever the screen.
+            </p>
+            <Table
+              columns={[
+                { key: "host", header: "Drawn by" },
+                { key: "how", header: "How it takes a mode" },
+              ]}
+              rows={appShellHosts.map((h) => ({ id: h.id, cells: { host: <code className={styles.query}>{h.host}</code>, how: h.how } }))}
+              bordered
+            />
           </section>
 
           <section className={styles.group}>

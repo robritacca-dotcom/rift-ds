@@ -462,7 +462,7 @@ export default function ThreadPanelPage() {
             <p className={styles.demoText}>
               Between the standing controls and the history, the panel can
               carry a projects section: rows with the controls&apos; anatomy
-              under their own overline header, with a quiet new-project
+              under their own group heading, with a quiet new-project
               button. The active project fills like an active thread, and
               collapsed the rows fold to icon circles while the header steps
               aside.

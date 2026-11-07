@@ -178,12 +178,13 @@ export interface TemplateAssistantProps {
    * How the docked panel sits on the page, ChatLauncher's `surface`:
    * `raised` is the glass card with the floating shadow, `inset` the
    * plane on the app surface colour at the shell's gap, with the inset
-   * surface's hairline and shadow. Defaults to the
-   * enclosing TemplateShell's layout (`inset` for its inset layout). The
-   * overlay takes the same gap but keeps its shadow; the takeover is
-   * unchanged.
+   * surface's hairline and shadow, and `flush` the flush shell's: edge to
+   * edge and full height behind a hairline divider, nothing raised.
+   * Defaults to the enclosing TemplateShell's layout (`flush` and `inset`
+   * for those, `raised` for floating). The overlay keeps its raised card
+   * over the page; the takeover is unchanged.
    */
-  surface?: "raised" | "inset";
+  surface?: "raised" | "inset" | "flush";
 }
 
 export default function TemplateAssistant({
@@ -204,7 +205,8 @@ export default function TemplateAssistant({
   surface: surfaceProp,
 }: TemplateAssistantProps) {
   const shellLayout = React.useContext(TemplateShellContext);
-  const surface = surfaceProp ?? (shellLayout === "inset" ? "inset" : "raised");
+  const surface =
+    surfaceProp ?? (shellLayout === "inset" ? "inset" : shellLayout === "flush" ? "flush" : "raised");
   const [value, setValue] = React.useState("");
   const [turns, setTurns] = React.useState<
     { id: number; role: "user" | "assistant"; text: string; steps?: string[] }[]
@@ -329,6 +331,9 @@ export default function TemplateAssistant({
         // covers the page.
         viewport && !full && surface === "inset" && styles.inset,
         viewport && !modal && surface === "inset" && styles.flat,
+        // Flush: the dock runs edge to edge behind a hairline; the overlay
+        // still covers the page, so it keeps the raised card.
+        viewport && !modal && !full && surface === "flush" && styles.flushDock,
         modal && !full && styles.overScrim,
         chat && styles.live,
         closing && styles.closing,
@@ -452,6 +457,7 @@ export default function TemplateAssistant({
         className={[
           styles.dockHandle,
           surface === "inset" && styles.dockHandleInset,
+          surface === "flush" && styles.dockHandleFlush,
           resizing && styles.dockHandleResizing,
         ]
           .filter(Boolean)

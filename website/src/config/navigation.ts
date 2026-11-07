@@ -405,7 +405,7 @@ export const foundationsSidebarLinks: NavLink[] = [
   { href: "/foundations/accessibility", label: "Accessibility", description: "What the build enforces" },
   { href: "/foundations/elevation", label: "Elevation", description: "The shadow and depth tokens" },
   { href: "/foundations/icons", label: "Icons", description: "The icon font and its size scale" },
-  { href: "/foundations/layout", label: "Layout", description: "The breakpoints and the page shell's values" },
+  { href: "/foundations/layout", label: "Layout", description: "The breakpoints, the page shell and the three app shell modes" },
   { href: "/foundations/logos", label: "Logos", description: "The brand marks and how they are used" },
   { href: "/foundations/motion", label: "Motion", description: "The duration and easing tokens" },
   { href: "/foundations/colour-primitives", label: "Primitive colours", description: "The raw values behind the colour tokens" },

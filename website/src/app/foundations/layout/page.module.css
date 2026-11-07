@@ -334,3 +334,68 @@
     overflow-wrap: anywhere;
   }
 }
+
+/* --------------------------------------------------------- app shells */
+
+/* Each mode drawn small in its own colour and edge tokens: the plane, the
+   rail and the content, the shell recipe's parts. */
+.appShells {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--gap-500);
+}
+
+.appShellFrame {
+  display: flex;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-app-shell);
+}
+
+.appShellRail {
+  flex: 0 0 22%;
+}
+
+.appShellContent {
+  flex: 1;
+  background: var(--color-bg-app-surface);
+}
+
+/* Flush: the rail on the shell colour behind a hairline, the content
+   crisp beside it. */
+.appShellFrame[data-mode="flush"] .appShellRail {
+  border-inline-end: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* Floating: the page plane, the rail a glass card off the edges. */
+.appShellFrame[data-mode="floating"] {
+  padding: var(--padding-200);
+  gap: var(--padding-200);
+  background: var(--color-bg-page-primary);
+}
+
+.appShellFrame[data-mode="floating"] .appShellRail {
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-glass);
+  box-shadow: var(--shadow-floating);
+}
+
+.appShellFrame[data-mode="floating"] .appShellContent {
+  background: var(--color-bg-page-primary);
+}
+
+/* Inset: the rail flush on the shell colour, the content a raised surface
+   off the other edges. */
+.appShellFrame[data-mode="inset"] {
+  padding: var(--padding-150);
+  padding-inline-start: 0;
+}
+
+.appShellFrame[data-mode="inset"] .appShellContent {
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  box-shadow: var(--shadow-floating);
+}

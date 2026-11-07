@@ -164,11 +164,11 @@ const layoutOptions: { label: string; value: DemoLayout }[] = [
 /** What each layout does, shown under the switch for the one picked. */
 const layoutNotes: Record<DemoLayout, string> = {
   flush:
-    "Flush, the default, runs the rail edge to edge on the page colour, and the panel opens beside it on the same ground.",
+    "Flush, the default, runs the rail edge to edge on the shell colour behind a hairline divider, and the panel continues it on the same ground, nothing raised.",
   floating:
     "Floating sets the rail as a glass card inset from the edges, and the panel joins it as a second card, one gap along from the first.",
   inset:
-    "Inset runs the rail flush on the app shell colour, the panel continues it with a divider between them, and the content sits in an inset surface beyond both, as the templates draw it.",
+    "Inset runs the rail flush on the app shell colour, the panel continues it with a divider between them, and the content sits in a raised inset surface beyond both, as the templates draw it.",
 };
 
 export default function AppSidebarPage() {

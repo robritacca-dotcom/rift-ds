@@ -109,11 +109,12 @@
 }
 
 .flat {
-  background: var(--color-bg-app-surface);
-  /* TemplateShell's inset surface, matched: the docked panel is the same
-     plane beside it, so it wears the same hairline and floating shadow. */
-  border-color: var(--color-bg-container-border);
-  box-shadow: var(--shadow-floating);
+  /* TemplateShell's inset surface, matched through the shell recipe: the
+     docked panel is the same raised surface beside it, the same hairline
+     and floating shadow. */
+  background: var(--ds-shell-surface, var(--color-bg-app-surface));
+  border-color: var(--ds-shell-edge-border, var(--color-bg-container-border));
+  box-shadow: var(--ds-shell-edge-shadow, var(--shadow-floating));
   backdrop-filter: none;
 }
 
@@ -314,4 +315,24 @@
 /* A staged reasoning step, in the trace's own quiet voice. */
 .reasoningStep {
   margin: 0;
+}
+
+/* The flush shell's dock: edge to edge and full height, crisp on the app
+   surface behind a hairline divider at its
+   leading edge, nothing raised, the flush rail's seam turned around. */
+.flushDock {
+  top: 0;
+  right: 0; /* ds-allow(physical): the dock is pinned to the screen's right edge, as .viewport places it */
+  height: 100dvh;
+  max-width: 100vw;
+  background: var(--ds-shell-surface, var(--color-bg-app-surface));
+  border: none;
+  border-inline-start: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.dockHandleFlush {
+  --dock-gap: 0px;
 }

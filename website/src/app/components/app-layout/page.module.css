@@ -67,10 +67,12 @@
 }
 
 /* Contain the full-page layout (and its fixed-position sidebar)
-   inside a framed demo box — same trick as the App sidebar page */
+   inside a framed demo box — same trick as the App sidebar page.
+   Tall enough that the floating rail, the shortest of the three after
+   its insets, shows every row and the profile without scrolling. */
 .layoutDemo {
   position: relative;
-  height: 560px;
+  height: 640px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--color-bg-container-border);

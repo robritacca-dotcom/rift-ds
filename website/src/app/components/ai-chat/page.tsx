@@ -314,7 +314,7 @@ export default function AiChatPage() {
               height={phone ? 800 : 820}
               widget={{
                 threads: !phone,
-                threadsProps: { defaultExpanded: false, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "Pro" } },
+                threadsProps: { defaultExpanded: false, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
                 tabs: !phone,
                 agent: { tabs: demoAgentTabs("Acme Assistant") },
                 artifacts: true,
@@ -369,6 +369,32 @@ export default function AiChatPage() {
                 { key: "what", header: "What it does" },
               ]}
               rows={PLACEMENTS.map((row) => ({ id: row.id, cells: { label: row.label, what: row.what } }))}
+            />
+          </section>
+
+          <section id="as-a-page" className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="As a page" />
+            <p className={styles.sectionNote}>
+              Where the chat is the page rather than a panel over one, as on a chat home,{" "}
+              <code>layout</code> seats it in one of the three app shell modes that AppLayout and
+              the templates draw. <code>flush</code> runs the history rail on the shell colour
+              behind a hairline with the conversation crisp beside it, and takes a{" "}
+              <code>backdrop</code> of solid or blur. <code>floating</code> lifts the rail into a
+              glass card. <code>inset</code>, below, seats the conversation and each trailing panel
+              in raised surfaces, with the header controls in the panel&apos;s top row. Left out,
+              the chat draws no shell and takes its host&apos;s ground. On a phone every mode gives
+              way to the plain full-screen chat.
+            </p>
+            <ChatStage
+              key={`page-${viewport}`}
+              phone={phone}
+              height={phone ? 780 : 720}
+              widget={{
+                layout: "inset",
+                threads: true,
+                threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
+                agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone },
+              }}
             />
           </section>
 
@@ -442,7 +468,7 @@ export default function AiChatPage() {
               height={phone ? 780 : 780}
               widget={{
                 threads: true,
-                threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "Pro" } },
+                threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
                 tabs: true,
               }}
               setup={stageThreads}
@@ -477,7 +503,9 @@ export default function AiChatPage() {
               conversation. An HTML document or a URL is drawn in a sandboxed frame, with the
               source behind the Code view; the provider&apos;s <code>artifactRenderers</code> draw
               a kind of your own as live components. Drag the panel&apos;s left edge to size it, or
-              expand it to fill the chat. The panel sits beside the conversation from{" "}
+              expand it to fill the chat. It opens at a resting width, or at the room the
+              conversation leaves it, and slides in and out as a drawer at that width. The panel
+              sits beside the conversation from{" "}
               {ASIDE_RAIL_MIN_WIDTH}px of chat width, and opens as a sheet below that and on a
               phone. It shares its seat with the agent panel, one at a time.
             </p>

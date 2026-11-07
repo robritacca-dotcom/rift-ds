@@ -135,9 +135,9 @@
    MOCK APP CONTENT
    Placeholder blocks behind the rail, offset by the rail's current width
    (and its side panel's, while open) so they reflow as the rail moves.
-   Every gap is the rail's own 12px item inset: the content starts at the
-   rail's edge, so the active pill sits as far from the content as from the
-   stage's edge, and the other three sides take the same step.
+   Every gap is the rail's own 12px item inset, taken on all four sides;
+   in flush the step follows the rail's hairline divider (the flush rule
+   below), and in inset the rail's own item inset is the gap on its side.
    ============================================ */
 .sidebarDemo {
   --mock-rail: 64px;
@@ -184,6 +184,19 @@
   padding-inline-start: calc(var(--mock-rail) + var(--mock-panel) + var(--mock-float));
   transition: padding-inline-start var(--motion-duration-slow) var(--motion-ease-emphasized);
   pointer-events: none;
+}
+
+/* Flush, the shell recipe's: the rail on the shell colour behind its
+   hairline divider, and the content crisp on the app surface beside it.
+   The divider is a seam of its own, so the content keeps the same step
+   after it that its other three sides take (with the panel open, the
+   panel's own offset above already carries that step). */
+.sidebarDemo:not(:has(:global(.ds-app-sidebar--floating), :global(.ds-app-sidebar--inset))) .mockContent {
+  background-color: var(--color-bg-app-surface);
+}
+
+.sidebarDemo:not(:has(:global(.ds-app-sidebar--floating), :global(.ds-app-sidebar--inset), :global(.ds-app-sidebar__panel--visible))) .mockContent {
+  padding-inline-start: calc(var(--mock-rail) + var(--padding-300));
 }
 
 /* Outside the inset layout the surface is only a column. */

@@ -93,11 +93,13 @@
 }
 
 /* The site panel's footprint, as a stage widget: glass card, sized inline
-   (resting or dragged). It never collapses below a usable chat. */
+   (resting or dragged). It never collapses below a usable chat: the
+   narrowest card is a common phone's width, so the header's controls and
+   the welcome keep their room. */
 .widget {
   display: flex;
   flex-direction: column;
-  min-width: 320px;
+  min-width: 375px;
   min-height: 480px;
   /* The wide wall is the safe area itself: the browser's width, minus the
      panels, minus the padding ring — so the whole geometry follows the

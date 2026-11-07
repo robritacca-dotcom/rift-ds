@@ -153,6 +153,32 @@
   height: 1px;
 }
 
+/* ----------------------------------------------------------------- flush */
+
+/* The rail runs edge to edge on the shell colour behind its hairline
+   (AppSidebar's flush rail reads the shell recipe from this root), and the
+   main column is the crisp surface from that divider to the far edge, the
+   content centred in it as floating centres it; the page scrolls. */
+.flush {
+  background-color: var(--ds-shell-plane);
+  --sticky-fill: var(--ds-shell-surface);
+}
+
+.flush .main {
+  padding-left: calc(var(--shell-rail) + var(--shell-panel));
+  background-color: var(--ds-shell-surface);
+}
+
+.flush .stickyTopBar {
+  top: var(--sticky-gap);
+}
+
+@media (min-width: 1440px) {
+  .flush .mainChatOpen {
+    padding-right: var(--layout-chat-width);
+  }
+}
+
 /* -------------------------------------------------------------- floating */
 
 /* One inset source for the floating shell: the rail floats off the edges
@@ -185,8 +211,10 @@
    edge and the surface. The shell holds the viewport; the surface scrolls. */
 .inset {
   height: calc(var(--layout-viewport-height, 100vh));
-  background-color: var(--color-bg-app-shell);
-  --sticky-fill: var(--color-bg-app-surface);
+  /* The plane and the surface from the shell recipe, which this root's
+     data-ds-shell marker sets. */
+  background-color: var(--ds-shell-plane);
+  --sticky-fill: var(--ds-shell-surface);
 }
 
 .inset .main {
@@ -206,12 +234,12 @@
   min-height: 0;
   display: flex;
   overflow: hidden;
-  background-color: var(--color-bg-app-surface);
-  /* The floating rail's edge, turned around: the same hairline and shadow
-     on the surface, with the rail flush. */
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  box-shadow: var(--shadow-floating);
+  background-color: var(--ds-shell-surface);
+  /* The floating rail's edge, turned around: the shell recipe's raised
+     surface, the same hairline and shadow, with the rail flush. */
+  border: var(--border-025) solid var(--ds-shell-surface-border);
+  border-radius: var(--ds-shell-surface-radius);
+  box-shadow: var(--ds-shell-surface-shadow);
 }
 
 /* Full width in the surface, its side padding matching its top padding
@@ -273,6 +301,7 @@
 /* A viewport-held floating screen trades the hold for page flow once its
    panes stack. */
 @media (max-width: 1080px) {
+  .flush.fillViewport,
   .floating.fillViewport {
     height: auto;
     min-height: 100vh;
@@ -315,6 +344,7 @@
     width: auto;
   }
 
+  .flush .main,
   .floating .main,
   .inset .main {
     padding: 0;

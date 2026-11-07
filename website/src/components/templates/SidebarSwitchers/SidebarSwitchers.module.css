@@ -4,11 +4,6 @@
   gap: var(--gap-200);
 }
 
-/* With the layout switch on the row, three controls share the rail's
-   width: the gap tightens a step. */
-.rowTight {
-  gap: var(--gap-100);
-}
 
 /* The back link stacked above the row (the `backLink` prop). */
 .stack {
@@ -16,4 +11,22 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--gap-300);
+}
+
+/* With the layout switch, one control per row: a three-way shell strip
+   beside the theme pair runs past the rail's width. */
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-200);
+}
+
+/* The shell switch only changes a screen wider than a phone: below the
+   mobile breakpoint (AppSidebar's drawer, the chat's sheet) every mode
+   gives way to the plain page. */
+@media (max-width: 768px) {
+  .shellSwitch {
+    display: none;
+  }
 }

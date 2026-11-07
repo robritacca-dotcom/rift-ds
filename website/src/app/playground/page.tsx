@@ -137,7 +137,7 @@ import ComponentsRail, {
 } from "./ComponentsRail";
 import TypeRail, { DEFAULT_TYPE_SAMPLE, type TypeRailState } from "./TypeRail";
 import { stageMobileCss } from "./stage-mobile-css";
-import { createFetchTransport, useChatWidget } from "rift-ds/chat";
+import { createFetchTransport, useChatWidget, type ChatBackdrop, type ChatLayout } from "rift-ds/chat";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ShaderField } from "rift-ds/components/ShaderField/ShaderField";
@@ -322,6 +322,11 @@ export default function PlaygroundPage() {
   /* Which way the conversation reads: the widget's top-down default, or the
      classic bottom-up thread. */
   const [chatFlow, setChatFlow] = useState<"top-down" | "bottom-up">("top-down");
+  /* The app shell the widget draws (design.md's App shells): flush, the
+     chat page's default, floating or inset; flush alone takes the backdrop
+     lever (a chat's only, blur by default). */
+  const [chatShell, setChatShell] = useState<ChatLayout>("flush");
+  const [chatBackdrop, setChatBackdrop] = useState<ChatBackdrop>("blur");
   /* The staged thread furniture, feature by feature. The stage opens with
      every extra on and the dashboard welcome, the fullest version of the
      widget; switching them off walks back to the simple rail the live site
@@ -343,6 +348,8 @@ export default function PlaygroundPage() {
     setChatPlaceholder("");
     setWelcome("dashboard");
     setChatFlow("top-down");
+    setChatShell("flush");
+    setChatBackdrop("blur");
     setRailProjects(true);
     setRailPins(true);
     setRailDetails(true);
@@ -1151,6 +1158,29 @@ export default function PlaygroundPage() {
           ]}
           onValueChange={(value) => setChatFlow(value as "top-down" | "bottom-up")}
         />
+        <InspectorSegmentedControl
+          size="compact"
+          label="Shell"
+          value={chatShell}
+          options={[
+            { value: "flush", label: "Flush" },
+            { value: "floating", label: "Floating" },
+            { value: "inset", label: "Inset" },
+          ]}
+          onValueChange={(value) => setChatShell(value as ChatLayout)}
+        />
+        {chatShell === "flush" && (
+          <InspectorSegmentedControl
+            size="compact"
+            label="Backdrop"
+            value={chatBackdrop}
+            options={[
+              { value: "blur", label: "Blur" },
+              { value: "solid", label: "Solid" },
+            ]}
+            onValueChange={(value) => setChatBackdrop(value as ChatBackdrop)}
+          />
+        )}
       </div>
 
       <div className={styles.controlGroup}>
@@ -1723,6 +1753,8 @@ export default function PlaygroundPage() {
               placeholder={chatPlaceholder}
               welcome={welcome}
               flow={chatFlow}
+              shell={chatShell}
+              backdrop={chatBackdrop}
               manual={chatManual}
               onManual={(next) => setChatManual((m) => ({ ...m, ...next }))}
               allowFullscreen={!compact}

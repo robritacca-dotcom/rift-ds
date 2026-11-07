@@ -9,6 +9,8 @@ import {
   isFloatDragStart,
   useChatWidget,
   useTakeoverViewport,
+  type ChatBackdrop,
+  type ChatLayout,
 } from "rift-ds/chat";
 import {
   DEMO_MENTIONS,
@@ -54,6 +56,10 @@ export interface ChatViewProps {
   welcome: DemoWelcomeVariant;
   /** Which way the conversation reads: top-down (the widget's default) or bottom-up. */
   flow: "top-down" | "bottom-up";
+  /** The app shell mode the widget draws (ChatWidget's `layout`). */
+  shell: ChatLayout;
+  /** The flush shell's backdrop (ChatWidget's `backdrop`). */
+  backdrop: ChatBackdrop;
   /** The dragged size, held by the page so it survives a switch to the
       Components view and back, and dies with the playground like every
       other lever. */
@@ -99,6 +105,8 @@ export default function ChatView({
   placeholder,
   welcome,
   flow,
+  shell,
+  backdrop,
   manual,
   onManual,
   allowFullscreen,
@@ -548,18 +556,19 @@ export default function ChatView({
           placeholder.trim() === "" ? defaultChatPlaceholder(simControls) : placeholder
         }
         flow={flow}
+        layout={shell}
+        backdrop={backdrop}
         showStarters={welcome === "starters"}
         /* The Welcome lever's other fillings ride the widget slot. The
-           dashboard runs long, so it always turns the welcome into a page;
-           the tiles and cards only fit beside the greeting on the
-           full-screen stage, so on the card and in the bezel they scroll
-           too, rather than being dropped for want of height. */
+           dashboard runs long, so it turns the welcome into a page; the
+           links and cards fit, hanging under a composer held at the same
+           dead centre the starters give it. */
         widgets={
           welcome === "links" || welcome === "cards" || welcome === "dashboard" ? (
             <DemoWelcome variant={welcome} onAsk={(prompt) => send(prompt)} />
           ) : undefined
         }
-        widgetsLayout={welcome === "dashboard" || !isFull ? "scroll" : "fit"}
+        widgetsLayout={welcome === "dashboard" ? "scroll" : "fit"}
         widgetsWidth={welcome === "dashboard" ? "wide" : "column"}
         tagline="How can we help you today?"
         /* The staged product's chat history: the widget's built-in rail over
@@ -574,7 +583,7 @@ export default function ChatView({
         threadsProps={{
           logo: <span className={styles.threadsLogoDot} />,
           logoText: title,
-          profile: { name: "Jordan Reyes", meta: "Pro" },
+          profile: { name: "Jordan Reyes", meta: "jordan@acme.example" },
         }}
         /* The artifact panel, staged like the agent pane and gated the same
            way: its artifacts come from the demo script. */

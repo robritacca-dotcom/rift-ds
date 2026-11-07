@@ -16,6 +16,12 @@
  *     TemplateAssistant. Here the chat is the page, not a panel beside one:
  *     it has no close and no full-screen toggle, and it fills the viewport
  *     at every width, which is the chat's takeover mode held permanently.
+ *   - The screen takes a shell choice like every app-shell template, its
+ *     own (the footer's shell switch writes it), flush with the blur
+ *     backdrop until the visitor picks, the live site chat's look:
+ *     ChatWidget's `layout` seats the chat flush, floating or inset from
+ *     the same shell recipe TemplateShell draws, and in flush its
+ *     `backdrop` sets blur or solid, a lever only a chat has.
  *   - The history rail is the widget's built-in threads rail over the
  *     provider's thread lifecycle, so it is an inline rail on a wide window
  *     and a sheet behind the header's menu on a narrow one, with no
@@ -61,6 +67,7 @@ import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
 import { ProductMark } from "../ProductMark/ProductMark";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
+import { useChatBackdrop, useTemplateLayout } from "../TemplateShell/useTemplateLayout";
 
 /* ------------------------------------------------------------- the page */
 
@@ -87,6 +94,14 @@ function ChatHomeShell() {
   const product = useStagedProductName("Acme Corp");
   const { setOpen, send } = useChatWidget();
   const takeover = useTakeoverViewport();
+  /* The chat home's own shell choice (its footer switch writes it), flush
+     with the blur backdrop until the visitor picks: the same three modes
+     TemplateShell draws, through ChatWidget's layout, and the backdrop,
+     which only a chat carries (it can rest over a page, as the site chat
+     does, or be its own; a template is always the floor). */
+  const layout = useTemplateLayout("chat");
+  const backdrop = useChatBackdrop();
+  const blur = layout === "flush" && backdrop === "blur";
 
   /* The chat's state machine reads `open` for everything a visible chat
      does (composer focus, the welcome's reveal). Here the chat is the page,
@@ -96,10 +111,14 @@ function ChatHomeShell() {
   }, [setOpen]);
 
   return (
-    /* data-bg-hidden is the layout's own switch for the ambient background:
-       the screen sits on the flat page colour, like the rest of the family. */
-    <div className={styles.shell} data-bg-hidden="">
+    /* The layout's own switch for the ambient background: the screen sits
+       on the flat page colour like the rest of the family, except under the
+       flush blur backdrop, which frosts the field run full bleed. */
+    <div className={styles.shell}>
+      {blur ? <div data-bg-full-bleed hidden /> : <div data-bg-hidden hidden />}
       <ChatWidget
+        layout={layout}
+        backdrop={backdrop}
         fullscreenEnabled={false}
         closeEnabled={false}
         compact={takeover}
@@ -124,10 +143,10 @@ function ChatHomeShell() {
           logo: <ProductMark />,
           logoText: product,
           defaultExpanded: true,
-          profile: { name: "Jordan Reyes", meta: "Pro" },
+          profile: { name: "Jordan Reyes", meta: "jordan@acme.example" },
           /* The templates' shared footer: the way back to the index above
              the theme controls. */
-          footerSlot: <SidebarSwitchers backLink />,
+          footerSlot: <SidebarSwitchers showLayout backLink scope="chat" />,
         }}
         agent={{
           /* Closed on arrival, so the home screen opens on the board and the

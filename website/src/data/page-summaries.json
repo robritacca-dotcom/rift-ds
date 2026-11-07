@@ -1138,7 +1138,7 @@
     },
     "/foundations/layout": {
       "title": "Layout",
-      "text": "Where layouts switch, the page shell's measurements, and the order surfaces stack in.",
+      "text": "Where layouts switch, the page shell's measurements, the three app shell modes, and the order surfaces stack in.",
       "chips": [
         {
           "id": "breakpoints",
@@ -1167,6 +1167,10 @@
         {
           "id": "shell",
           "label": "What is the page shell?"
+        },
+        {
+          "id": "app-shells",
+          "label": "What are the app shells?"
         },
         {
           "id": "stacking",

@@ -6,10 +6,17 @@
  * lay out through it (and the marketing dashboard, now a lab at
  * /labs/marketing). It owns the AppSidebar (with the footer
  * switchers), the main column, the room a docked assistant takes, and the
- * two layouts the footer's layout switch flips between. The rail always
+ * three layouts the footer's layout switch picks between. The rail always
  * runs in panel mode, purely to demonstrate the secondary nav: a row with
  * children opens them in the side panel, which starts closed.
  *
+ * The three app shell modes, from rift-ds's shell recipe (the root carries
+ * its data-ds-shell markers):
+ *
+ * - `flush`: the rail runs edge to edge on the shell colour behind a
+ *   hairline and the content column is centred on the crisp app surface;
+ *   the page scrolls. A template is always the floor of its page, so it
+ *   takes no backdrop: the blur is a chat's alone.
  * - `floating`: the rail floats as a glass card and the content column is
  *   centred at the template's own max width; the page scrolls.
  * - `inset`: the rail runs flush on the app shell colour and the content
@@ -109,17 +116,18 @@ export default function TemplateShell({
 
   return (
     <TemplateShellContext.Provider value={layout}>
-      {/* data-bg-hidden: the layout's own switch for the ambient background;
-          the family sits on the flat page colour, no gradient. */}
+      {/* The layout's own switch for the ambient background: the family
+          sits on the flat page colour, no gradient. */}
+      <div data-bg-hidden hidden />
       <div
         className={[
           styles.shell,
-          inset ? styles.inset : styles.floating,
+          styles[layout],
           fill === "viewport" ? styles.fillViewport : "",
         ]
           .filter(Boolean)
           .join(" ")}
-        data-bg-hidden=""
+        data-ds-shell={layout}
       >
         {!appFrame && (
           <div className={styles.sidebar}>

@@ -31,8 +31,8 @@ Prefix: `--color-*`.
 | `--color-action-neutral-border` | `#D6D6D6` (`--primitive-neutral-02`) | `#232323` (`--primitive-neutral-08`) |
 | `--color-action-neutral-text` | `#050505` (`--primitive-neutral-10`) | `#FFFFFF` (`--primitive-neutral-00`) |
 | `--color-action-passive-bg` | `rgba(241, 241, 241, 0.01)` (`--primitive-neutral-01-a01`) | `rgba(14, 14, 14, 0.01)` (`--primitive-neutral-09-a01`) |
-| `--color-action-passive-bg-active` | `rgba(188, 188, 188, 0.8)` (`--primitive-neutral-03-a80`) | `rgba(48, 48, 48, 0.8)` (`--primitive-neutral-07-a80`) |
-| `--color-action-passive-bg-hover` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-action-passive-bg-active` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-action-passive-bg-hover` | `rgba(214, 214, 214, 0.5)` (`--primitive-neutral-02-a50`) | `rgba(35, 35, 35, 0.5)` (`--primitive-neutral-08-a50`) |
 | `--color-action-passive-text` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-action-primary-bg` | `#0E6E8F` (`--primitive-teal-08`) | `#3CA5C6` (`--primitive-teal-05`) |
 | `--color-action-primary-bg-active` | `#052F3E` (`--primitive-teal-10`) | `#9ED4E5` (`--primitive-teal-03`) |
@@ -167,7 +167,7 @@ Prefix: `--color-*`.
 | `--color-table-divider` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
 | `--color-table-header-bg` | `rgba(214, 214, 214, 0.5)` (`--primitive-neutral-02-a50`) | `rgba(35, 35, 35, 0.5)` (`--primitive-neutral-08-a50`) |
 | `--color-table-row-hover-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |
-| `--color-table-row-selected-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-table-row-selected-bg` | `#D6D6D6` (`--primitive-neutral-02`) | `rgba(35, 35, 35, 0.5)` (`--primitive-neutral-08-a50`) |
 | `--color-table-row-stripe-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `rgba(14, 14, 14, 0.6)` (`--primitive-neutral-09-a60`) |
 | `--color-text-display` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-text-heading` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |

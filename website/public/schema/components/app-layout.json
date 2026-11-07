@@ -6,7 +6,7 @@
   "label": "App layout",
   "slug": "app-layout",
   "category": "layout",
-  "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.",
+  "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset.",
   "client": true,
   "importPath": "rift-ds/components/AppLayout/AppLayout",
   "barrel": "main",
@@ -101,7 +101,7 @@
             "inset"
           ],
           "required": false,
-          "description": "How the rail and the content meet the page. `flush` (the default) runs\nthe rail edge to edge with the content centred beside it. `floating`\nfloats the rail as a glass card, the content still centred. `inset` runs\nthe rail flush on the app shell colour and sets the content full width\nin a surface inset from the other edges, which scrolls inside itself.",
+          "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content full width in a raised surface (hairline\nand floating shadow) inset from the other edges, which scrolls inside\nitself.",
           "default": "flush"
         },
         {

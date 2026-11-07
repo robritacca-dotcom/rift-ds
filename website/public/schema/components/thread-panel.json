@@ -186,14 +186,14 @@
           "type": "ThreadPanelProject[]",
           "typeKind": "array",
           "required": false,
-          "description": "Project rows between the standing controls and the history, under their own overline header. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls."
+          "description": "Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls."
         },
         {
           "name": "projectsLabel",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "The projects section's overline header text.",
+          "description": "The projects section's group heading text.",
           "default": "Projects"
         },
         {

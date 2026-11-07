@@ -1166,7 +1166,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "App layout",
     "slug": "app-layout",
     "category": "layout",
-    "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.",
+    "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset.",
     "client": true,
     "importPath": "rift-ds/components/AppLayout/AppLayout",
     "barrel": "main",
@@ -1243,7 +1243,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail and the content meet the page. `flush` (the default) runs\nthe rail edge to edge with the content centred beside it. `floating`\nfloats the rail as a glass card, the content still centred. `inset` runs\nthe rail flush on the app shell colour and sets the content full width\nin a surface inset from the other edges, which scrolls inside itself.",
+            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content full width in a raised surface (hairline\nand floating shadow) inset from the other edges, which scrolls inside\nitself.",
             "values": [
               "floating",
               "flush",
@@ -1382,7 +1382,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail meets the page. `flush` runs it edge to edge on the page\ncolour. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a content surface inset\nfrom the edges, as AppLayout's `inset` layout draws it. Defaults to\n`flush` (or `floating` while the deprecated `floating` is set).",
+            "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`flush` (or `floating` while the deprecated `floating` is set).",
             "values": [
               "floating",
               "flush",
@@ -15380,13 +15380,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "projects",
             "type": "ThreadPanelProject[]",
             "required": false,
-            "description": "Project rows between the standing controls and the history, under their own overline header. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls."
+            "description": "Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls."
           },
           {
             "name": "projectsLabel",
             "type": "string",
             "required": false,
-            "description": "The projects section's overline header text.",
+            "description": "The projects section's group heading text.",
             "defaultValue": "Projects"
           },
           {
@@ -17171,7 +17171,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "AI chat",
     "slug": "ai-chat",
     "category": "widget",
-    "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
+    "description": "The whole AI chat: the panel, or the page itself in an app shell mode, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
     "client": true,
     "importPath": "rift-ds/chat",
     "barrel": "chat",
@@ -17206,6 +17206,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Narrow insets for phone-width hosts.",
             "defaultValue": "false"
+          },
+          {
+            "name": "layout",
+            "type": "ChatLayout",
+            "required": false,
+            "description": "Seat the widget as a page in one of the three app shell modes, the ones\nAppLayout draws, for a host where the chat is the page (a chat home)\nrather than a panel over one. `flush` runs the history rail on the\nshell colour behind a hairline with the conversation crisp beside it;\n`floating` lifts the rail into a glass card off the edges; `inset` runs\nthe rail flush on the shell colour and seats the conversation and each\ntrailing panel in raised surfaces. Left out, the widget draws no shell\nof its own and takes its host's ground, as a docked or floating panel\ndoes. A widget narrower than the inline rail's 720px threshold has no\nroom for a raised mode, so floating and inset lay out flush on the\nsolid backdrop there, and below the mobile breakpoint every mode gives\nway to the plain full-screen chat.",
+            "values": [
+              "floating",
+              "flush",
+              "inset"
+            ]
+          },
+          {
+            "name": "backdrop",
+            "type": "ChatBackdrop",
+            "required": false,
+            "description": "What the flush layout lies on, a chat's own lever: blur says the chat\nrests above something, solid that it is the floor of its own page.\n`blur` (the default, the site chat's takeover look) lays the glass and a\nstrong blur over whatever is behind the widget, the history rail and the\nconversation clear on it; `solid` sets the rail on the shell colour\nbeside a crisp conversation. App layouts and templates are always the\nfloor, so they have no backdrop. Ignored without `layout`, and by the\nother modes.",
+            "values": [
+              "blur",
+              "solid"
+            ],
+            "defaultValue": "blur"
           },
           {
             "name": "phone",
@@ -17472,13 +17494,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "widgets",
             "type": "ReactNode",
             "required": false,
-            "description": "A widget slot on the welcome screen, under the composer and its\nstarters. It takes any content and keeps its natural height, so the\ncomposer rides up by half of it instead of holding dead centre: the\nempty chat reads as a home page rather than a blank prompt. It leaves\nwith the first message, like the rest of the welcome dressing."
+            "description": "A widget slot on the welcome screen, under the composer and its\nstarters. It takes any content and keeps its natural height, laid out\nby `widgetsLayout`, so the empty chat reads as a home page rather than\na blank prompt. It leaves\nwith the first message, like the rest of the welcome dressing."
           },
           {
             "name": "widgetsLayout",
             "type": "\"scroll\" | \"fit\"",
             "required": false,
-            "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the widgets hold their height and the composer rides up\nto make room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
+            "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the composer holds dead centre as it does over the\nstarters, the widgets hanging below it, and rides up only when they\nneed more than half the room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
             "values": [
               "fit",
               "scroll"
@@ -17905,7 +17927,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "surface",
             "type": "\"inset\" | \"raised\"",
             "required": false,
-            "description": "How the docked panel sits on the page. `raised` (the default) is a glass\ncard with the floating shadow, inset by `--ds-chat-inset`. `inset` is\nflat: the app surface colour, no shadow, border or blur, and the\n`--ds-shell-inset` gap, so it matches AppLayout's `inset` content\nsurface beside it. The overlay below the dock threshold takes the same\ngap but keeps its shadow, since it still covers the page; the floating\ncard and the takeover keep their own look.",
+            "description": "How the docked panel sits on the page. `raised` (the default) is a glass\ncard with the floating shadow, inset by `--ds-chat-inset`. `inset` is\nAppLayout's `inset` content surface beside it, solid on the app surface\ncolour with the same raised edge (the hairline and the floating\nshadow), no blur, and the `--ds-shell-inset` gap. The overlay below the dock threshold takes the same\ngap but keeps its shadow, since it still covers the page; the floating\ncard and the takeover keep their own look.",
             "values": [
               "inset",
               "raised"

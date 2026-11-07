@@ -38,8 +38,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.23.0. The same dat
 | newThreadHref | `string` | no |  | Optional href — the new-thread row renders as an `<a>`. |
 | controls | `ThreadPanelControl[]` | no |  | Standing rows between the new-thread action and the history, e.g. Automations or Settings. |
 | onControlSelect | `((id: string) => void)` | no |  | Fires with the clicked control's id. Rows with an `href` navigate as well. |
-| projects | `ThreadPanelProject[]` | no |  | Project rows between the standing controls and the history, under their own overline header. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls. |
-| projectsLabel | `string` | no | `Projects` | The projects section's overline header text. |
+| projects | `ThreadPanelProject[]` | no |  | Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls. |
+| projectsLabel | `string` | no | `Projects` | The projects section's group heading text. |
 | activeProjectId | `string` | no |  | Id of the open project. Its row renders filled and carries `aria-current`. |
 | onProjectSelect | `((id: string) => void)` | no |  | Fires with the clicked project's id. Rows with an `href` navigate as well. |
 | onProjectCreate | `(() => void)` | no |  | Fires when the header's trailing new-project button is pressed. The button renders only when this is given. |

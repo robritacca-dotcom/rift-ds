@@ -277,6 +277,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-chat-cards",
         "text": "Every card a chat reply carries reads one recipe for its fill, corner, inset, rhythm and row height, and an ai component drawing a card shell of its own fails until it joins."
+      },
+      {
+        "name": "validate-shell-recipe",
+        "text": "Every app shell, in the library, the templates and the app-shell block, draws its mode from one recipe: a host that marks itself a shell reads the recipe's properties, every property it reads exists, and no host restates the recipe's colours or raised edge."
       }
     ]
   },

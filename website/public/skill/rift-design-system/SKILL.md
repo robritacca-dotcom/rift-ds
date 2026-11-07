@@ -46,7 +46,7 @@ The primary typeface is not bundled: set `--font-family-primary` to your own (th
 
 ## The chat widget
 
-The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
+The whole AI chat: the panel, or the page itself in an app shell mode, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props. It is the package's one widget, separate from the components: `ChatWidget`, `ChatProvider` and `ChatLauncher` over a `useChat` engine, with the server half as web-standard request handlers. Scaffold it into a Next.js app router project with one command, which writes the three routes, the mount and an env example and never overwrites a file:
 
 ```bash
 npx rift-ds init chat

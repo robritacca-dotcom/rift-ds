@@ -1886,11 +1886,11 @@
     },
     "action-passive-bg-active": {
       "$type": "color",
-      "$value": "{primitive.neutral-03-a80}"
+      "$value": "{primitive.neutral-02-a80}"
     },
     "action-passive-bg-hover": {
       "$type": "color",
-      "$value": "{primitive.neutral-02-a80}"
+      "$value": "{primitive.neutral-02-a50}"
     },
     "action-passive-text": {
       "$type": "color",

@@ -79,7 +79,7 @@
       "name": "app-layout",
       "type": "registry:ui",
       "title": "App layout",
-      "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface."
+      "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset."
     },
     {
       "name": "app-sidebar",
@@ -1003,7 +1003,7 @@
       "name": "ai-chat",
       "type": "registry:lib",
       "title": "Rift ai chat",
-      "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props."
+      "description": "The whole AI chat: the panel, or the page itself in an app shell mode, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props."
     }
   ]
 }

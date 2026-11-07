@@ -1,0 +1,111 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "Heading",
+  "label": "Heading",
+  "slug": "heading",
+  "category": "typography",
+  "description": "A heading whose outline level and type tier are chosen apart.",
+  "client": false,
+  "importPath": "rift-ds/components/Heading/Heading",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/heading",
+  "markdownUrl": "https://rift-ds.com/components/heading.md",
+  "exports": [
+    {
+      "component": "Heading",
+      "props": [
+        {
+          "name": "level",
+          "type": "1 | 2 | 4 | 3 | 5 | 6",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "The heading's place in the document outline, which sets the element (`h1` to `h6`). Choose it for the outline, never for the size.",
+          "default": 2
+        },
+        {
+          "name": "tier",
+          "type": "HeadingTier",
+          "typeKind": "enum",
+          "values": [
+            "display-1",
+            "display-2",
+            "heading-1",
+            "heading-2",
+            "heading-3",
+            "mega-1",
+            "mega-2",
+            "sub-display",
+            "title-body"
+          ],
+          "required": false,
+          "description": "The type style it wears, apart from `level`, so a card's `h3` can look like a small title and a page's `h1` like a display line. Defaults to the level's own: heading-1 to heading-3 for levels 1 to 3, title-body below."
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "neutral"
+          ],
+          "required": false,
+          "description": "The colour role: `default` takes the tier's own (the display or heading text colour a theme can tone), `neutral` the secondary text colour for a quieter title.",
+          "default": "default"
+        },
+        {
+          "name": "truncate",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Keep the heading on one line, ending in an ellipsis where it runs out of room. The full text stays in the accessible name.",
+          "default": false
+        },
+        {
+          "name": "balance",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Balance the lines of a heading that wraps, so the last line is never a lone word.",
+          "default": false
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "center",
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Where the text sits on the line, along the reading direction."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The heading's text."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

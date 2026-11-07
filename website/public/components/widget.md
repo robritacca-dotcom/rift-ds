@@ -19,7 +19,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same dat
 | count | `number` | no |  | A quiet figure after the title: how many rows the tile holds, how many are open. |
 | action | `ReactNode` | no |  | Trailing header slot, opposite the title — a compact button, a link, a period label. |
 | titleAs | `"h2" \| "h3" \| "h4"` | no | `h3` | Heading element for the title, so the tile takes its place in the page's outline. |
-| children | `ReactNode` | no |  | The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything. |
+| description | `ReactNode` | no |  | A line of quieter text under the title, saying what the section holds. It also describes the section to a screen reader. |
+| footer | `ReactNode` | no |  | A slot under the body, behind a divider: the section's actions (Save, Cancel), a total, a link to everything. |
+| padding | `"none" \| "default" \| "compact"` | no | `default` | The inset: `default` the tile's own, `compact` a step tighter for dense settings, `none` for a body that runs edge to edge (a table, a map) while the header and footer keep the default inset. |
+| collapsible | `boolean` | no | `false` | Let the reader fold the section away: the title becomes a button that shows and hides the body and footer, which leave the tab order and the accessibility tree while hidden. |
+| open | `boolean` | no |  | Whether a collapsible section is open (controlled). Pair with `onOpenChange`. |
+| defaultOpen | `boolean` | no | `true` | Whether a collapsible section starts open (uncontrolled). Defaults to true. |
+| onOpenChange | `((open: boolean) => void)` | no |  | Called with the new open state when the reader folds or unfolds a collapsible section. |
+| children | `ReactNode` | no |  | The tile's body: WidgetRows, WidgetGroups, a chart, a figure, a form, anything. |
 | locale | `string` | no | `en-US` | The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `` | Additional CSS classes |
 

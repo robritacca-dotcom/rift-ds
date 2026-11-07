@@ -6737,6 +6737,178 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "DescriptionList",
+    "label": "Description list",
+    "slug": "description-list",
+    "category": "data-display",
+    "description": "Terms and their values for review screens, receipts, and account details, stacked, in two columns, or in a grid.",
+    "client": false,
+    "importPath": "rift-ds/components/DescriptionList/DescriptionList",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "DescriptionList",
+        "props": [
+          {
+            "name": "items",
+            "type": "DescriptionListEntry[]",
+            "required": false,
+            "description": "The entries, in order. Or compose `DescriptionListItem` children instead."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "`DescriptionListItem` children, for a list written out by hand."
+          },
+          {
+            "name": "layout",
+            "type": "\"grid\" | \"inline\" | \"stacked\"",
+            "required": false,
+            "description": "`stacked` puts each term above its value; `inline` sets term and value in two columns and stacks them when the list is narrow; `grid` lays stacked entries out in `columns`.",
+            "values": [
+              "grid",
+              "inline",
+              "stacked"
+            ],
+            "defaultValue": "stacked"
+          },
+          {
+            "name": "columns",
+            "type": "1 | 2 | 4 | 3",
+            "required": false,
+            "description": "How many columns the `grid` layout uses at full width, 1 to 4. Fewer show as the list narrows.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "2"
+          },
+          {
+            "name": "dividers",
+            "type": "boolean",
+            "required": false,
+            "description": "Draw a divider between entries.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The type size: `default` the paragraph face, `compact` the small paragraph face for dense panels.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "termWidth",
+            "type": "\"default\" | \"narrow\" | \"wide\"",
+            "required": false,
+            "description": "How much of the row the term column takes in the `inline` layout: a quarter, a third or a half.",
+            "values": [
+              "default",
+              "narrow",
+              "wide"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"end\"",
+            "required": false,
+            "description": "Where values sit: `end` lines amounts up against the far edge.",
+            "values": [
+              "end",
+              "start"
+            ],
+            "defaultValue": "start"
+          },
+          {
+            "name": "emptyValue",
+            "type": "ReactNode",
+            "required": false,
+            "description": "What an empty value shows. Defaults to \"Not set\".",
+            "defaultValue": "Not set"
+          },
+          {
+            "name": "copyLabel",
+            "type": "((term: string) => string)",
+            "required": false,
+            "description": "The copy button's accessible name, given the entry's term when it is text and an empty string when it is not. Defaults to \"Copy <term>\", or \"Copy\".",
+            "defaultValue": "(term: string) => (term ? `Copy ${term}` : 'Copy')"
+          },
+          {
+            "name": "copiedLabel",
+            "type": "string",
+            "required": false,
+            "description": "The copy button's accessible name for a moment after a copy. Defaults to \"Copied\".",
+            "defaultValue": "Copied"
+          },
+          {
+            "name": "onValueCopy",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called after a value is put on the clipboard, so a host can confirm it or count it. Only reaches a list rendered from a client component."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "DescriptionListItem",
+        "props": [
+          {
+            "name": "details",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`."
+          },
+          {
+            "name": "term",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The term: what the value is (\"Account number\", \"Due date\")."
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A trailing control for this value: an Edit button, a link."
+          },
+          {
+            "name": "copyable",
+            "type": "string | boolean",
+            "required": false,
+            "description": "Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one)."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The value, as children. `details` wins when both are set."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Dialog",
     "label": "Dialog",
     "slug": "dialog",
@@ -7593,6 +7765,87 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "ErrorSummary",
+    "label": "Error summary",
+    "slug": "error-summary",
+    "category": "feedback",
+    "description": "Every error on a form at the top of it, each a link that moves focus to its field.",
+    "client": true,
+    "importPath": "rift-ds/components/ErrorSummary/ErrorSummary",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ErrorSummary",
+        "props": [
+          {
+            "name": "errors",
+            "type": "ErrorSummaryError<ReactNode>[]",
+            "required": true,
+            "description": "The errors, in the form's order: each the id of the control it belongs to and what is wrong. The summary renders nothing while the list is empty."
+          },
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The heading, in place of the one `titleLabel` writes. Note: this replaces the native `title` attribute, which ErrorSummary does not expose."
+          },
+          {
+            "name": "titleLabel",
+            "type": "((count: string, total: number) => string)",
+            "required": false,
+            "description": "The heading for a given number of errors, already written in the locale. Defaults to \"There is a problem\" for one and \"There are <count> problems\" for more.",
+            "defaultValue": "(count: string, total: number) =>\n  total === 1 ? 'There is a problem' : `There are ${count} problems`"
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A line under the heading, before the list."
+          },
+          {
+            "name": "focusOnMount",
+            "type": "boolean",
+            "required": false,
+            "description": "Move focus to the summary when the list goes from empty to holding errors (on a submit), so a screen reader reads it and a keyboard user starts from it. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "headingLevel",
+            "type": "2 | 4 | 3",
+            "required": false,
+            "description": "The heading's level, so the summary takes its place in the page's outline. Defaults to 2.",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "2"
+          },
+          {
+            "name": "onErrorClick",
+            "type": "((id: string) => void)",
+            "required": false,
+            "description": "Called with a control's id after its link moves focus to it."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the count is written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "EventCalendar",
     "label": "Event calendar",
     "slug": "event-calendar",
@@ -7762,7 +8015,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message rendered below the control"
+            "description": "Helper text rendered below the control. With `errorText` it stays as it is while an error shows; with the older `error` flag it is recoloured as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control in the error colour while the\nhelper text keeps its place, and announced politely when it changes.\nSetting it marks the field invalid, so `error` is not needed alongside\nit. The older form, `error` with the message in `helperText`, still\nworks."
           },
           {
             "name": "aside",
@@ -7774,7 +8033,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — recolours the helper text and marks the control invalid",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
@@ -8549,6 +8808,105 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Heading",
+    "label": "Heading",
+    "slug": "heading",
+    "category": "typography",
+    "description": "A heading whose outline level and type tier are chosen apart.",
+    "client": false,
+    "importPath": "rift-ds/components/Heading/Heading",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Heading",
+        "props": [
+          {
+            "name": "level",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
+            "required": false,
+            "description": "The heading's place in the document outline, which sets the element (`h1` to `h6`). Choose it for the outline, never for the size.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "defaultValue": "2"
+          },
+          {
+            "name": "tier",
+            "type": "HeadingTier",
+            "required": false,
+            "description": "The type style it wears, apart from `level`, so a card's `h3` can look like a small title and a page's `h1` like a display line. Defaults to the level's own: heading-1 to heading-3 for levels 1 to 3, title-body below.",
+            "values": [
+              "display-1",
+              "display-2",
+              "heading-1",
+              "heading-2",
+              "heading-3",
+              "mega-1",
+              "mega-2",
+              "sub-display",
+              "title-body"
+            ]
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\"",
+            "required": false,
+            "description": "The colour role: `default` takes the tier's own (the display or heading text colour a theme can tone), `neutral` the secondary text colour for a quieter title.",
+            "values": [
+              "default",
+              "neutral"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "truncate",
+            "type": "boolean",
+            "required": false,
+            "description": "Keep the heading on one line, ending in an ellipsis where it runs out of room. The full text stays in the accessible name.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "balance",
+            "type": "boolean",
+            "required": false,
+            "description": "Balance the lines of a heading that wraps, so the last line is never a lone word.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Where the text sits on the line, along the reading direction.",
+            "values": [
+              "center",
+              "end",
+              "start"
+            ]
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The heading's text."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "HoverCard",
     "label": "Hover card",
     "slug": "hover-card",
@@ -8785,7 +9143,45 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below the input"
+            "description": "Helper text displayed below the input. With the older `error` flag and no `errorText`, it doubles as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the input while the helper text keeps its place. Setting it marks the input invalid; Field's spec owns the wiring."
+          },
+          {
+            "name": "prefix",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Text or a node inside the field before the value, read by a screen reader\nas part of the field (a currency symbol, `https://`, a country code). Not\nthe decorative `iconLeft`."
+          },
+          {
+            "name": "suffix",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`."
+          },
+          {
+            "name": "clearable",
+            "type": "boolean",
+            "required": false,
+            "description": "Show a clear button while the field holds a value. It empties the field, fires `onChange` and `onValueChange` with an empty value, then `onClear`, and returns focus to the field.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "clearLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the clear button. Defaults to \"Clear\".",
+            "defaultValue": "Clear"
+          },
+          {
+            "name": "onClear",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called after the clear button empties the field."
           },
           {
             "name": "iconLeft",
@@ -9781,6 +10177,104 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Link",
+    "label": "Link",
+    "slug": "link",
+    "category": "typography",
+    "description": "A text link inside a sentence or on its own, routed through the app's link component.",
+    "client": false,
+    "importPath": "rift-ds/components/Link/Link",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Link",
+        "props": [
+          {
+            "name": "href",
+            "type": "string",
+            "required": true,
+            "description": "Where the link goes."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The link text."
+          },
+          {
+            "name": "variant",
+            "type": "\"inline\" | \"standalone\"",
+            "required": false,
+            "description": "`inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined.",
+            "values": [
+              "inline",
+              "standalone"
+            ],
+            "defaultValue": "inline"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The standalone link's type size: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "external",
+            "type": "boolean",
+            "required": false,
+            "description": "The link leaves the app: it opens in a new tab with `rel=\"noopener noreferrer\"`, carries an outward mark, and tells a screen reader it opens a new tab.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "externalLabel",
+            "type": "string",
+            "required": false,
+            "description": "Read after an external link's text, hidden from the eye. Defaults to \"(opens in a new tab)\".",
+            "defaultValue": "(opens in a new tab)"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Hold the link inert: it renders as text with `aria-disabled`, at the library's disabled treatment, and goes nowhere.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "iconLeft",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A Material Symbol name or a node before the text. A directional glyph mirrors in a right-to-left context."
+          },
+          {
+            "name": "iconRight",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A Material Symbol name or a node after the text. A directional glyph mirrors in a right-to-left context."
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one. An external link always renders a plain\n`<a>`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "LinkList",
     "label": "Link list",
     "slug": "link-list",
@@ -9811,6 +10305,120 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "LinkComponent",
             "required": false,
             "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "List",
+    "label": "List",
+    "slug": "list",
+    "category": "typography",
+    "description": "Ordered and unordered lists marked with a disc, a number, a check, or an icon.",
+    "client": false,
+    "importPath": "rift-ds/components/List/List",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "List",
+        "props": [
+          {
+            "name": "variant",
+            "type": "\"plain\" | \"unordered\" | \"ordered\"",
+            "required": false,
+            "description": "`unordered` is a `ul`, `ordered` an `ol` whose order means something (steps), `plain` a `ul` with no markers and no indent.",
+            "values": [
+              "ordered",
+              "plain",
+              "unordered"
+            ],
+            "defaultValue": "unordered"
+          },
+          {
+            "name": "marker",
+            "type": "\"number\" | \"none\" | (string & {}) | \"disc\" | \"check\"",
+            "required": false,
+            "description": "The mark before each item: a disc, the item's number, the form controls' check, nothing, or a Material Symbol name (`star`, `bolt`). Defaults to the variant's own: disc, number, none."
+          },
+          {
+            "name": "spacing",
+            "type": "\"default\" | \"compact\" | \"relaxed\"",
+            "required": false,
+            "description": "The room between items: `compact` for dense lists, `relaxed` for items with descriptions.",
+            "values": [
+              "compact",
+              "default",
+              "relaxed"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "The items' type size: `default` the paragraph face, `compact` the small paragraph face.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "start",
+            "type": "number",
+            "required": false,
+            "description": "The number an ordered list counts from."
+          },
+          {
+            "name": "reversed",
+            "type": "boolean",
+            "required": false,
+            "description": "Count an ordered list down instead of up."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The items, each a `ListItem`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "component": "ListItem",
+        "props": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The item's text."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A line of quieter text under the item."
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A Material Symbol name or a node that replaces this item's marker. A directional glyph mirrors in a right-to-left context."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
           }
         ]
       }
@@ -14883,6 +15491,129 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Text",
+    "label": "Text",
+    "slug": "text",
+    "category": "typography",
+    "description": "Running text in a tier of the type scale, with tones, truncation, and tabular figures.",
+    "client": false,
+    "importPath": "rift-ds/components/Text/Text",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Text",
+        "props": [
+          {
+            "name": "tier",
+            "type": "TextTier",
+            "required": false,
+            "description": "The type style: `paragraph` for body copy, `paragraph-sm` for helper copy and table cells, `caption` for the smallest notes, `overline` for an eyebrow above a title, `code` for an inline identifier in the code face.",
+            "values": [
+              "caption",
+              "code",
+              "overline",
+              "paragraph",
+              "paragraph-sm"
+            ],
+            "defaultValue": "paragraph"
+          },
+          {
+            "name": "as",
+            "type": "\"div\" | \"em\" | \"label\" | \"p\" | \"span\" | \"strong\"",
+            "required": false,
+            "description": "The element it renders as. Defaults to `p`; `span` sits inside a line, `label` names a control (pass `htmlFor`).",
+            "values": [
+              "div",
+              "em",
+              "label",
+              "p",
+              "span",
+              "strong"
+            ],
+            "defaultValue": "p"
+          },
+          {
+            "name": "tone",
+            "type": "\"inherit\" | \"default\" | \"error\" | \"positive\" | \"warning\" | \"neutral\"",
+            "required": false,
+            "description": "The colour role: `default` the primary text, `neutral` the secondary for quieter copy, a status role for a message of that kind, `inherit` the surrounding colour.",
+            "values": [
+              "default",
+              "error",
+              "inherit",
+              "neutral",
+              "positive",
+              "warning"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "weight",
+            "type": "\"default\" | \"emphasis\"",
+            "required": false,
+            "description": "`emphasis` sets the tier's emphasis weight, the one heavier weight the type scale gives running text.",
+            "values": [
+              "default",
+              "emphasis"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "truncate",
+            "type": "boolean",
+            "required": false,
+            "description": "Keep the text on one line, ending in an ellipsis where it runs out of room.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "lines",
+            "type": "number",
+            "required": false,
+            "description": "Clamp the text to this many lines, ending in an ellipsis. Overrides `truncate`."
+          },
+          {
+            "name": "numeric",
+            "type": "boolean",
+            "required": false,
+            "description": "Tabular figures, so digits line up in a column of amounts or times.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Where the text sits on the line, along the reading direction. `end` lines up a column of amounts.",
+            "values": [
+              "center",
+              "end",
+              "start"
+            ]
+          },
+          {
+            "name": "htmlFor",
+            "type": "string",
+            "required": false,
+            "description": "The control this text names, when `as` is `label`."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The text."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Textarea",
     "label": "Textarea",
     "slug": "textarea",
@@ -16876,10 +17607,60 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "h3"
           },
           {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A line of quieter text under the title, saying what the section holds. It also describes the section to a screen reader."
+          },
+          {
+            "name": "footer",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A slot under the body, behind a divider: the section's actions (Save, Cancel), a total, a link to everything."
+          },
+          {
+            "name": "padding",
+            "type": "\"none\" | \"default\" | \"compact\"",
+            "required": false,
+            "description": "The inset: `default` the tile's own, `compact` a step tighter for dense settings, `none` for a body that runs edge to edge (a table, a map) while the header and footer keep the default inset.",
+            "values": [
+              "compact",
+              "default",
+              "none"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "required": false,
+            "description": "Let the reader fold the section away: the title becomes a button that shows and hides the body and footer, which leave the tab order and the accessibility tree while hidden.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether a collapsible section is open (controlled). Pair with `onOpenChange`."
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether a collapsible section starts open (uncontrolled). Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "((open: boolean) => void)",
+            "required": false,
+            "description": "Called with the new open state when the reader folds or unfolds a collapsible section."
+          },
+          {
             "name": "children",
             "type": "ReactNode",
             "required": false,
-            "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything."
+            "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, a form, anything."
           },
           {
             "name": "locale",
@@ -17509,7 +18290,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "widgetsWidth",
-            "type": "\"column\" | \"wide\"",
+            "type": "\"wide\" | \"column\"",
             "required": false,
             "description": "How wide the widget slot runs. `column` holds it to the composer's\nbounding box; `wide` lets it run past them, for a dashboard.",
             "values": [

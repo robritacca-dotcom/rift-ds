@@ -1,0 +1,195 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "DescriptionList",
+  "label": "Description list",
+  "slug": "description-list",
+  "category": "data-display",
+  "description": "Terms and their values for review screens, receipts, and account details, stacked, in two columns, or in a grid.",
+  "client": false,
+  "importPath": "rift-ds/components/DescriptionList/DescriptionList",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/description-list",
+  "markdownUrl": "https://rift-ds.com/components/description-list.md",
+  "exports": [
+    {
+      "component": "DescriptionList",
+      "props": [
+        {
+          "name": "items",
+          "type": "DescriptionListEntry[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The entries, in order. Or compose `DescriptionListItem` children instead."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "`DescriptionListItem` children, for a list written out by hand."
+        },
+        {
+          "name": "layout",
+          "type": "\"grid\" | \"inline\" | \"stacked\"",
+          "typeKind": "enum",
+          "values": [
+            "grid",
+            "inline",
+            "stacked"
+          ],
+          "required": false,
+          "description": "`stacked` puts each term above its value; `inline` sets term and value in two columns and stacks them when the list is narrow; `grid` lays stacked entries out in `columns`.",
+          "default": "stacked"
+        },
+        {
+          "name": "columns",
+          "type": "1 | 2 | 4 | 3",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "required": false,
+          "description": "How many columns the `grid` layout uses at full width, 1 to 4. Fewer show as the list narrows.",
+          "default": 2
+        },
+        {
+          "name": "dividers",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draw a divider between entries.",
+          "default": false
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The type size: `default` the paragraph face, `compact` the small paragraph face for dense panels.",
+          "default": "default"
+        },
+        {
+          "name": "termWidth",
+          "type": "\"default\" | \"narrow\" | \"wide\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "narrow",
+            "wide"
+          ],
+          "required": false,
+          "description": "How much of the row the term column takes in the `inline` layout: a quarter, a third or a half.",
+          "default": "default"
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Where values sit: `end` lines amounts up against the far edge.",
+          "default": "start"
+        },
+        {
+          "name": "emptyValue",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "What an empty value shows. Defaults to \"Not set\".",
+          "defaultExpression": "Not set"
+        },
+        {
+          "name": "copyLabel",
+          "type": "((term: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The copy button's accessible name, given the entry's term when it is text and an empty string when it is not. Defaults to \"Copy <term>\", or \"Copy\".",
+          "defaultExpression": "(term: string) => (term ? `Copy ${term}` : 'Copy')"
+        },
+        {
+          "name": "copiedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The copy button's accessible name for a moment after a copy. Defaults to \"Copied\".",
+          "default": "Copied"
+        },
+        {
+          "name": "onValueCopy",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called after a value is put on the clipboard, so a host can confirm it or count it. Only reaches a list rendered from a client component."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "DescriptionListItem",
+      "props": [
+        {
+          "name": "details",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`."
+        },
+        {
+          "name": "term",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The term: what the value is (\"Account number\", \"Due date\")."
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A trailing control for this value: an Edit button, a link."
+        },
+        {
+          "name": "copyable",
+          "type": "string | boolean",
+          "typeKind": "other",
+          "required": false,
+          "description": "Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one)."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The value, as children. `details` wins when both are set."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

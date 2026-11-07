@@ -17,9 +17,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Label text rendered above the control |
 | children | `ReactNode` | no |  | The form control this field labels |
-| helperText | `string` | no |  | Helper or error message rendered below the control |
+| helperText | `string` | no |  | Helper text rendered below the control. With `errorText` it stays as it is while an error shows; with the older `error` flag it is recoloured as the error message. |
+| errorText | `ReactNode` | no |  | The error message, shown under the control in the error colour while the helper text keeps its place, and announced politely when it changes. Setting it marks the field invalid, so `error` is not needed alongside it. The older form, `error` with the message in `helperText`, still works. |
 | aside | `ReactNode` | no |  | Optional content rendered opposite the helper text — a character counter, a unit, a "0/280". Present only when supplied; without it the helper sits directly in the field's column and no extra wrapper is introduced. |
-| error | `boolean` | no | `false` | Error state — recolours the helper text and marks the control invalid |
+| error | `boolean` | no | `false` | Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. |
 | required | `boolean` | no | `false` | Marks the field required and renders the required marker |
 | disabled | `boolean` | no | `false` | Whether the control is disabled — dims the label |
 | size | `"default" \| "compact"` | no | `default` | Component size |

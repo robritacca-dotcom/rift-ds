@@ -392,7 +392,7 @@
         },
         {
           "name": "widgetsWidth",
-          "type": "\"column\" | \"wide\"",
+          "type": "\"wide\" | \"column\"",
           "typeKind": "enum",
           "values": [
             "column",

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "Text",
+  "label": "Text",
+  "slug": "text",
+  "category": "typography",
+  "description": "Running text in a tier of the type scale, with tones, truncation, and tabular figures.",
+  "client": false,
+  "importPath": "rift-ds/components/Text/Text",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/text",
+  "markdownUrl": "https://rift-ds.com/components/text.md",
+  "exports": [
+    {
+      "component": "Text",
+      "props": [
+        {
+          "name": "tier",
+          "type": "TextTier",
+          "typeKind": "enum",
+          "values": [
+            "caption",
+            "code",
+            "overline",
+            "paragraph",
+            "paragraph-sm"
+          ],
+          "required": false,
+          "description": "The type style: `paragraph` for body copy, `paragraph-sm` for helper copy and table cells, `caption` for the smallest notes, `overline` for an eyebrow above a title, `code` for an inline identifier in the code face.",
+          "default": "paragraph"
+        },
+        {
+          "name": "as",
+          "type": "\"div\" | \"em\" | \"label\" | \"p\" | \"span\" | \"strong\"",
+          "typeKind": "enum",
+          "values": [
+            "div",
+            "em",
+            "label",
+            "p",
+            "span",
+            "strong"
+          ],
+          "required": false,
+          "description": "The element it renders as. Defaults to `p`; `span` sits inside a line, `label` names a control (pass `htmlFor`).",
+          "default": "p"
+        },
+        {
+          "name": "tone",
+          "type": "\"inherit\" | \"default\" | \"error\" | \"positive\" | \"warning\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "error",
+            "inherit",
+            "neutral",
+            "positive",
+            "warning"
+          ],
+          "required": false,
+          "description": "The colour role: `default` the primary text, `neutral` the secondary for quieter copy, a status role for a message of that kind, `inherit` the surrounding colour.",
+          "default": "default"
+        },
+        {
+          "name": "weight",
+          "type": "\"default\" | \"emphasis\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "emphasis"
+          ],
+          "required": false,
+          "description": "`emphasis` sets the tier's emphasis weight, the one heavier weight the type scale gives running text.",
+          "default": "default"
+        },
+        {
+          "name": "truncate",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Keep the text on one line, ending in an ellipsis where it runs out of room.",
+          "default": false
+        },
+        {
+          "name": "lines",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Clamp the text to this many lines, ending in an ellipsis. Overrides `truncate`."
+        },
+        {
+          "name": "numeric",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Tabular figures, so digits line up in a column of amounts or times.",
+          "default": false
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "center",
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "Where the text sits on the line, along the reading direction. `end` lines up a column of amounts."
+        },
+        {
+          "name": "htmlFor",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The control this text names, when `as` is `label`."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The text."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

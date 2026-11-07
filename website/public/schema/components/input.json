@@ -72,7 +72,51 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Helper or error message displayed below the input"
+          "description": "Helper text displayed below the input. With the older `error` flag and no `errorText`, it doubles as the error message."
+        },
+        {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message, shown under the input while the helper text keeps its place. Setting it marks the input invalid; Field's spec owns the wiring."
+        },
+        {
+          "name": "prefix",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Text or a node inside the field before the value, read by a screen reader\nas part of the field (a currency symbol, `https://`, a country code). Not\nthe decorative `iconLeft`."
+        },
+        {
+          "name": "suffix",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`."
+        },
+        {
+          "name": "clearable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show a clear button while the field holds a value. It empties the field, fires `onChange` and `onValueChange` with an empty value, then `onClear`, and returns focus to the field.",
+          "default": false
+        },
+        {
+          "name": "clearLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the clear button. Defaults to \"Clear\".",
+          "default": "Clear"
+        },
+        {
+          "name": "onClear",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called after the clear button empties the field."
         },
         {
           "name": "iconLeft",

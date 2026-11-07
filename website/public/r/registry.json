@@ -340,6 +340,12 @@
       "description": "Inline calendar with month navigation, day selection, and today indicator."
     },
     {
+      "name": "description-list",
+      "type": "registry:ui",
+      "title": "Description list",
+      "description": "Terms and their values for review screens, receipts, and account details, stacked, in two columns, or in a grid."
+    },
+    {
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
@@ -394,6 +400,12 @@
       "description": "Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in."
     },
     {
+      "name": "error-summary",
+      "type": "registry:ui",
+      "title": "Error summary",
+      "description": "Every error on a form at the top of it, each a link that moves focus to its field."
+    },
+    {
       "name": "event-calendar",
       "type": "registry:ui",
       "title": "Event calendar",
@@ -446,6 +458,12 @@
       "type": "registry:ui",
       "title": "Globe",
       "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin."
+    },
+    {
+      "name": "heading",
+      "type": "registry:ui",
+      "title": "Heading",
+      "description": "A heading whose outline level and type tier are chosen apart."
     },
     {
       "name": "hover-card",
@@ -544,10 +562,22 @@
       "description": "Multi-series line chart for trends over time, with per-series colours and a summary row."
     },
     {
+      "name": "link",
+      "type": "registry:ui",
+      "title": "Link",
+      "description": "A text link inside a sentence or on its own, routed through the app's link component."
+    },
+    {
       "name": "link-list",
       "type": "registry:ui",
       "title": "Link list",
       "description": "Linked items with logo, label, and subtitle."
+    },
+    {
+      "name": "list",
+      "type": "registry:ui",
+      "title": "List",
+      "description": "Ordered and unordered lists marked with a disc, a number, a check, or an icon."
     },
     {
       "name": "map-callout",
@@ -878,6 +908,12 @@
       "type": "registry:ui",
       "title": "Tag input",
       "description": "Multi-value text input with entries held as removable tags."
+    },
+    {
+      "name": "text",
+      "type": "registry:ui",
+      "title": "Text",
+      "description": "Running text in a tier of the type scale, with tones, truncation, and tabular figures."
     },
     {
       "name": "textarea",

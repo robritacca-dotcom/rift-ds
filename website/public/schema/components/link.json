@@ -1,0 +1,113 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "Link",
+  "label": "Link",
+  "slug": "link",
+  "category": "typography",
+  "description": "A text link inside a sentence or on its own, routed through the app's link component.",
+  "client": false,
+  "importPath": "rift-ds/components/Link/Link",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/link",
+  "markdownUrl": "https://rift-ds.com/components/link.md",
+  "exports": [
+    {
+      "component": "Link",
+      "props": [
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "Where the link goes."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The link text."
+        },
+        {
+          "name": "variant",
+          "type": "\"inline\" | \"standalone\"",
+          "typeKind": "enum",
+          "values": [
+            "inline",
+            "standalone"
+          ],
+          "required": false,
+          "description": "`inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined.",
+          "default": "inline"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The standalone link's type size: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor.",
+          "default": "default"
+        },
+        {
+          "name": "external",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The link leaves the app: it opens in a new tab with `rel=\"noopener noreferrer\"`, carries an outward mark, and tells a screen reader it opens a new tab.",
+          "default": false
+        },
+        {
+          "name": "externalLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Read after an external link's text, hidden from the eye. Defaults to \"(opens in a new tab)\".",
+          "defaultExpression": "(opens in a new tab)"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Hold the link inert: it renders as text with `aria-disabled`, at the library's disabled treatment, and goes nowhere.",
+          "default": false
+        },
+        {
+          "name": "iconLeft",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A Material Symbol name or a node before the text. A directional glyph mirrors in a right-to-left context."
+        },
+        {
+          "name": "iconRight",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A Material Symbol name or a node after the text. A directional glyph mirrors in a right-to-left context."
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one. An external link always renders a plain\n`<a>`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

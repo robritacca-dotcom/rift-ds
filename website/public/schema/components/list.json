@@ -1,0 +1,130 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "List",
+  "label": "List",
+  "slug": "list",
+  "category": "typography",
+  "description": "Ordered and unordered lists marked with a disc, a number, a check, or an icon.",
+  "client": false,
+  "importPath": "rift-ds/components/List/List",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/list",
+  "markdownUrl": "https://rift-ds.com/components/list.md",
+  "exports": [
+    {
+      "component": "List",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"plain\" | \"unordered\" | \"ordered\"",
+          "typeKind": "enum",
+          "values": [
+            "ordered",
+            "plain",
+            "unordered"
+          ],
+          "required": false,
+          "description": "`unordered` is a `ul`, `ordered` an `ol` whose order means something (steps), `plain` a `ul` with no markers and no indent.",
+          "default": "unordered"
+        },
+        {
+          "name": "marker",
+          "type": "\"number\" | \"none\" | (string & {}) | \"disc\" | \"check\"",
+          "typeKind": "other",
+          "required": false,
+          "description": "The mark before each item: a disc, the item's number, the form controls' check, nothing, or a Material Symbol name (`star`, `bolt`). Defaults to the variant's own: disc, number, none."
+        },
+        {
+          "name": "spacing",
+          "type": "\"default\" | \"compact\" | \"relaxed\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default",
+            "relaxed"
+          ],
+          "required": false,
+          "description": "The room between items: `compact` for dense lists, `relaxed` for items with descriptions.",
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "The items' type size: `default` the paragraph face, `compact` the small paragraph face.",
+          "default": "default"
+        },
+        {
+          "name": "start",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The number an ordered list counts from."
+        },
+        {
+          "name": "reversed",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Count an ordered list down instead of up."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The items, each a `ListItem`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "component": "ListItem",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The item's text."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A line of quieter text under the item."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A Material Symbol name or a node that replaces this item's marker. A directional glyph mirrors in a right-to-left context."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

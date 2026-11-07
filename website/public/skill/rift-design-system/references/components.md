@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (29)
+## Data display (30)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -610,6 +610,14 @@ The wired table: typed columns, sorting, filters, editing, grouping with totals,
 - Import: `import { DataTable } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/data-table.md
+
+### Description list
+
+Terms and their values for review screens, receipts, and account details, stacked, in two columns, or in a grid.
+
+- Import: `import { DescriptionList } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/description-list.md
 
 ### Entity card
 
@@ -767,7 +775,7 @@ An ambient WebGL2 field of soft light sources that sample colour tokens, with a 
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/shader-field.md
 
-## Feedback (10)
+## Feedback (11)
 
 Alerts, toasts, progress, and empty states that tell people what is happening.
 
@@ -794,6 +802,14 @@ The placeholder for a list, table, or search with nothing to show: icon, headlin
 - Import: `import { EmptyState } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/empty-state.md
+
+### Error summary
+
+Every error on a form at the top of it, each a link that moves focus to its field.
+
+- Import: `import { ErrorSummary } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/error-summary.md
 
 ### Meter
 
@@ -1371,3 +1387,39 @@ Contextual text label that appears on hover or focus with position and delay opt
 - Import: `import { Tooltip } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/tooltip.md
+
+## Typography (4)
+
+Headings, running text, links, and lists, each drawn from a tier of the type scale.
+
+### Heading
+
+A heading whose outline level and type tier are chosen apart.
+
+- Import: `import { Heading } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/heading.md
+
+### Link
+
+A text link inside a sentence or on its own, routed through the app's link component.
+
+- Import: `import { Link } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/link.md
+
+### List
+
+Ordered and unordered lists marked with a disc, a number, a check, or an icon.
+
+- Import: `import { List } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/list.md
+
+### Text
+
+Running text in a tier of the type scale, with tones, truncation, and tabular figures.
+
+- Import: `import { Text } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/text.md

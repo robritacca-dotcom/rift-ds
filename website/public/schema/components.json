@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.24.0",
   "package": "rift-ds",
-  "count": 166,
+  "count": 172,
   "components": [
     {
       "name": "Accordion",
@@ -555,6 +555,16 @@
       "markdownUrl": "https://rift-ds.com/components/date-picker.md"
     },
     {
+      "name": "DescriptionList",
+      "label": "Description list",
+      "slug": "description-list",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/description-list.json",
+      "docsUrl": "https://rift-ds.com/components/description-list",
+      "markdownUrl": "https://rift-ds.com/components/description-list.md"
+    },
+    {
       "name": "Dialog",
       "label": "Dialog",
       "slug": "dialog",
@@ -645,6 +655,16 @@
       "markdownUrl": "https://rift-ds.com/components/entity-switcher.md"
     },
     {
+      "name": "ErrorSummary",
+      "label": "Error summary",
+      "slug": "error-summary",
+      "category": "feedback",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/error-summary.json",
+      "docsUrl": "https://rift-ds.com/components/error-summary",
+      "markdownUrl": "https://rift-ds.com/components/error-summary.md"
+    },
+    {
       "name": "EventCalendar",
       "label": "Event calendar",
       "slug": "event-calendar",
@@ -733,6 +753,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/globe.json",
       "docsUrl": "https://rift-ds.com/components/globe",
       "markdownUrl": "https://rift-ds.com/components/globe.md"
+    },
+    {
+      "name": "Heading",
+      "label": "Heading",
+      "slug": "heading",
+      "category": "typography",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/heading.json",
+      "docsUrl": "https://rift-ds.com/components/heading",
+      "markdownUrl": "https://rift-ds.com/components/heading.md"
     },
     {
       "name": "HoverCard",
@@ -895,6 +925,16 @@
       "markdownUrl": "https://rift-ds.com/components/line-chart.md"
     },
     {
+      "name": "Link",
+      "label": "Link",
+      "slug": "link",
+      "category": "typography",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/link.json",
+      "docsUrl": "https://rift-ds.com/components/link",
+      "markdownUrl": "https://rift-ds.com/components/link.md"
+    },
+    {
       "name": "LinkList",
       "label": "Link list",
       "slug": "link-list",
@@ -903,6 +943,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/link-list.json",
       "docsUrl": "https://rift-ds.com/components/link-list",
       "markdownUrl": "https://rift-ds.com/components/link-list.md"
+    },
+    {
+      "name": "List",
+      "label": "List",
+      "slug": "list",
+      "category": "typography",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/list.json",
+      "docsUrl": "https://rift-ds.com/components/list",
+      "markdownUrl": "https://rift-ds.com/components/list.md"
     },
     {
       "name": "MapCallout",
@@ -1453,6 +1503,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/tag-input.json",
       "docsUrl": "https://rift-ds.com/components/tag-input",
       "markdownUrl": "https://rift-ds.com/components/tag-input.md"
+    },
+    {
+      "name": "Text",
+      "label": "Text",
+      "slug": "text",
+      "category": "typography",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/text.json",
+      "docsUrl": "https://rift-ds.com/components/text",
+      "markdownUrl": "https://rift-ds.com/components/text.md"
     },
     {
       "name": "Textarea",

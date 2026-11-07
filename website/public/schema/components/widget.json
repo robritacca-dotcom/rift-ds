@@ -51,11 +51,68 @@
           "default": "h3"
         },
         {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A line of quieter text under the title, saying what the section holds. It also describes the section to a screen reader."
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A slot under the body, behind a divider: the section's actions (Save, Cancel), a total, a link to everything."
+        },
+        {
+          "name": "padding",
+          "type": "\"none\" | \"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default",
+            "none"
+          ],
+          "required": false,
+          "description": "The inset: `default` the tile's own, `compact` a step tighter for dense settings, `none` for a body that runs edge to edge (a table, a map) while the header and footer keep the default inset.",
+          "default": "default"
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Let the reader fold the section away: the title becomes a button that shows and hides the body and footer, which leave the tab order and the accessibility tree while hidden.",
+          "default": false
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether a collapsible section is open (controlled). Pair with `onOpenChange`."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether a collapsible section starts open (uncontrolled). Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the new open state when the reader folds or unfolds a collapsible section."
+        },
+        {
           "name": "children",
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything."
+          "description": "The tile's body: WidgetRows, WidgetGroups, a chart, a figure, a form, anything."
         },
         {
           "name": "locale",

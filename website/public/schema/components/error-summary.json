@@ -1,0 +1,94 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "ErrorSummary",
+  "label": "Error summary",
+  "slug": "error-summary",
+  "category": "feedback",
+  "description": "Every error on a form at the top of it, each a link that moves focus to its field.",
+  "client": true,
+  "importPath": "rift-ds/components/ErrorSummary/ErrorSummary",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/error-summary",
+  "markdownUrl": "https://rift-ds.com/components/error-summary.md",
+  "exports": [
+    {
+      "component": "ErrorSummary",
+      "props": [
+        {
+          "name": "errors",
+          "type": "ErrorSummaryError<ReactNode>[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The errors, in the form's order: each the id of the control it belongs to and what is wrong. The summary renders nothing while the list is empty."
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The heading, in place of the one `titleLabel` writes. Note: this replaces the native `title` attribute, which ErrorSummary does not expose."
+        },
+        {
+          "name": "titleLabel",
+          "type": "((count: string, total: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The heading for a given number of errors, already written in the locale. Defaults to \"There is a problem\" for one and \"There are <count> problems\" for more.",
+          "defaultExpression": "(count: string, total: number) =>\n  total === 1 ? 'There is a problem' : `There are ${count} problems`"
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A line under the heading, before the list."
+        },
+        {
+          "name": "focusOnMount",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Move focus to the summary when the list goes from empty to holding errors (on a submit), so a screen reader reads it and a keyboard user starts from it. Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 4 | 3",
+          "typeKind": "enum",
+          "values": [
+            "2",
+            "3",
+            "4"
+          ],
+          "required": false,
+          "description": "The heading's level, so the summary takes its place in the page's outline. Defaults to 2.",
+          "default": 2
+        },
+        {
+          "name": "onErrorClick",
+          "type": "((id: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with a control's id after its link moves focus to it."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the count is written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

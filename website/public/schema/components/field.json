@@ -35,7 +35,14 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Helper or error message rendered below the control"
+          "description": "Helper text rendered below the control. With `errorText` it stays as it is while an error shows; with the older `error` flag it is recoloured as the error message."
+        },
+        {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message, shown under the control in the error colour while the\nhelper text keeps its place, and announced politely when it changes.\nSetting it marks the field invalid, so `error` is not needed alongside\nit. The older form, `error` with the message in `helperText`, still\nworks."
         },
         {
           "name": "aside",
@@ -49,7 +56,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Error state — recolours the helper text and marks the control invalid",
+          "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
           "default": false
         },
         {

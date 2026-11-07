@@ -18,6 +18,7 @@
   border-radius: var(--radius-300);
   background-color: var(--color-bg-container-secondary);
   overflow: hidden;
+  container-type: inline-size;
 }
 
 .ds-document-viewer--height-fill {
@@ -87,6 +88,24 @@
 .ds-document-viewer__zoom:focus-visible {
   outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: var(--border-050);
+}
+
+/* A narrow frame gives the title a row of its own above the controls,
+   so a phone reads the whole name rather than its first word. */
+@container (max-width: 400px) {
+  .ds-document-viewer__toolbar {
+    flex-wrap: wrap;
+    row-gap: var(--gap-050);
+  }
+
+  .ds-document-viewer__title {
+    flex-basis: 100%;
+    white-space: normal;
+  }
+
+  .ds-document-viewer__actions {
+    margin-inline-start: auto;
+  }
 }
 
 /* Body */

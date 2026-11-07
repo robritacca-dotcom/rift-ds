@@ -96,3 +96,18 @@ export const InAttachmentViewer: Story = {
     );
   },
 };
+
+/** On a phone: the title takes a row of its own above the controls, so the whole name reads. */
+export const Narrow: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ inlineSize: '320px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const title = canvasElement.querySelector<HTMLElement>('.ds-document-viewer__title');
+    await expect(title && title.scrollWidth <= title.clientWidth).toBe(true);
+  },
+};

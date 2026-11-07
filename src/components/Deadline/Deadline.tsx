@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocale } from '../../behaviors/LocaleProvider';
 import { MOTION_DEADLINE_TICK_MS } from '../../tokens/motion';
 import { formatInTimeZone, formatRelative, toDate, type DateInput } from '../../format/relative';
@@ -96,11 +96,14 @@ export function Deadline({
   const now = useNow(fixed, tick);
   const status = due ? deadlineStatus(due, now, thresholds) : 'neutral';
 
-  const [reported, setReported] = useState(status);
-  if (reported !== status) {
-    setReported(status);
+  // Report a change of status after it renders, never during render, so a
+  // strict or concurrent render cannot report it twice.
+  const reported = useRef(status);
+  useEffect(() => {
+    if (reported.current === status) return;
+    reported.current = status;
     onStatusChange?.(status);
-  }
+  }, [status, onStatusChange]);
 
   if (!due) return null;
 

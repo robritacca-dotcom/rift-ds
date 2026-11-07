@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useId, useRef, useState } from 'react';
 import { Field } from '../Field/Field';
 import { CircularButton } from '../CircularButton/CircularButton';
 import './Input.css';
@@ -26,7 +26,8 @@ type InputOwnProps = {
   /**
    * Text or a node inside the field before the value, read by a screen reader
    * as part of the field (a currency symbol, `https://`, a country code). Not
-   * the decorative `iconLeft`.
+   * the decorative `iconLeft`. Note: this shadows the native `prefix`
+   * attribute (an RDFa vocabulary), which Input does not expose.
    */
   prefix?: React.ReactNode;
   /** Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`. */
@@ -159,11 +160,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     // Keep the historical id derivation — Field only generates one as a
     // fallback, so an explicit id/name/label still wins and existing markup
     // (and any consumer's own htmlFor) is unchanged.
+    const fallbackId = useId();
     const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
+    // The affixes need ids of their own even on a field with no id, name or label.
+    const affixBase = inputId || fallbackId;
     /* A consumer's aria-describedby joins the helper id rather than losing to it. */
     /* The prefix and suffix are read as part of the field, so they join it too. */
-    const prefixId = hasPrefix ? `${inputId}-prefix` : undefined;
-    const suffixId = hasSuffix ? `${inputId}-suffix` : undefined;
+    const prefixId = hasPrefix ? `${affixBase}-prefix` : undefined;
+    const suffixId = hasSuffix ? `${affixBase}-suffix` : undefined;
     const describedBy =
       [
         rest['aria-describedby'],

@@ -217,6 +217,9 @@ export function CurrencyInput({
     <>
       <Input
         {...rest}
+        // The visible field takes its id from `name`, as Input does, so an
+        // ErrorSummary link built from the field name (fieldErrorsFrom) lands on it.
+        id={rest.id ?? name}
         ref={ref}
         className={['ds-currency-input', className].filter(Boolean).join(' ')}
         label={label}

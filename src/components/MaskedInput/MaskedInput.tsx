@@ -183,6 +183,9 @@ export function MaskedInput({
         autoComplete={sensitive ? 'off' : undefined}
         spellCheck={false}
         {...rest}
+        // The visible field takes its id from `name`, as Input does, so an
+        // ErrorSummary link built from the field name (fieldErrorsFrom) lands on it.
+        id={rest.id ?? name}
         ref={setRef}
         className={['ds-masked-input', sensitive && !revealed && 'ds-masked-input--concealed', className]
           .filter(Boolean)

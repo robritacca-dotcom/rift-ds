@@ -110,6 +110,8 @@ export function ErrorSummary({
         <ul className="ds-error-summary__list">
           {errors.map((error, index) => (
             <li key={`${error.id}-${index}`} className="ds-error-summary__item">
+              {/* A same-page jump the component handles itself, so a raw anchor
+                  rather than linkComponent (sanctioned in the contract validator). */}
               <a className="ds-error-summary__link" href={`#${error.id}`} onClick={(event) => goTo(event, error.id)}>
                 {error.message}
               </a>

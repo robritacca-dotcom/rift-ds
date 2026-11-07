@@ -1,0 +1,133 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "Deadline",
+  "label": "Deadline",
+  "slug": "deadline",
+  "category": "data-display",
+  "description": "A due date against now that turns from neutral to warning to error as it nears.",
+  "client": true,
+  "importPath": "rift-ds/components/Deadline/Deadline",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/deadline",
+  "markdownUrl": "https://rift-ds.com/components/deadline.md",
+  "exports": [
+    {
+      "component": "Deadline",
+      "props": [
+        {
+          "name": "date",
+          "type": "DateInput",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch."
+        },
+        {
+          "name": "timeZone",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The IANA zone the time is shown in, named after it (\"4:00 PM PST\"), such as `America/Los_Angeles`. Without it the time shows in the reader's own zone."
+        },
+        {
+          "name": "display",
+          "type": "\"both\" | \"relative\" | \"absolute\"",
+          "typeKind": "enum",
+          "values": [
+            "absolute",
+            "both",
+            "relative"
+          ],
+          "required": false,
+          "description": "`relative` writes the distance (\"in 2 days\"), `absolute` the date and time, `both` the two together. Defaults to `relative`.",
+          "default": "relative"
+        },
+        {
+          "name": "thresholds",
+          "type": "DeadlineThresholds",
+          "typeKind": "reference",
+          "required": false,
+          "description": "How close the deadline must be before it turns to the warning and then the error role."
+        },
+        {
+          "name": "prefixLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The word before the distance: \"Due\", \"Closes\", \"Expires\". Defaults to \"Due\".",
+          "default": "Due"
+        },
+        {
+          "name": "overdueLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What a deadline that has passed says in place of the distance. Defaults to \"Overdue\".",
+          "default": "Overdue"
+        },
+        {
+          "name": "variant",
+          "type": "\"text\" | \"badge\"",
+          "typeKind": "enum",
+          "values": [
+            "badge",
+            "text"
+          ],
+          "required": false,
+          "description": "`badge` draws the Badge family's tinted pill; `text` writes it inline in the status text colour, for a sentence or a table cell.",
+          "default": "badge"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "tick",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Rewrite the distance as time passes, pausing while the page is hidden. Defaults to true; off when `now` is set.",
+          "default": true
+        },
+        {
+          "name": "now",
+          "type": "DateInput",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot."
+        },
+        {
+          "name": "onStatusChange",
+          "type": "((status: DeadlineStatus) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the deadline moves to a new status as time passes, so a host can react (sort, notify)."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the distance and the date are written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

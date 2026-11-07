@@ -1,0 +1,164 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "CurrencyInput",
+  "label": "Currency input",
+  "slug": "currency-input",
+  "category": "forms",
+  "description": "An amount of money as a decimal string, read in the locale's marks and grouped once the field is left.",
+  "client": true,
+  "importPath": "rift-ds/components/CurrencyInput/CurrencyInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/currency-input",
+  "markdownUrl": "https://rift-ds.com/components/currency-input.md",
+  "exports": [
+    {
+      "component": "CurrencyInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text above the field."
+        },
+        {
+          "name": "value",
+          "type": "string | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "The amount as a decimal string (`\"1234.50\"`), or `null` for none (controlled). Pair with `onValueChange`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "The amount the field starts with (uncontrolled).",
+          "default": null
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string | null) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the amount as a normalised decimal string as the reader types, or `null` while the field holds no number. Fires alongside the native `onChange`."
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The ISO 4217 code of the currency, such as `USD`, `EUR` or `JPY`. Defaults to `USD`.",
+          "default": "USD"
+        },
+        {
+          "name": "currencyDisplay",
+          "type": "\"symbol\" | \"code\" | \"none\"",
+          "typeKind": "enum",
+          "values": [
+            "code",
+            "none",
+            "symbol"
+          ],
+          "required": false,
+          "description": "How the currency shows inside the field: its symbol, its code, or nothing (when the label already says it). The side it sits on follows the locale.",
+          "default": "symbol"
+        },
+        {
+          "name": "fractionDigits",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Digits after the point. Defaults to the currency's own: 0 for JPY, 2 for USD, 3 for KWD."
+        },
+        {
+          "name": "allowNegative",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accept a negative amount (a refund, an adjustment). Defaults to false.",
+          "default": false
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The smallest amount, as a decimal string. A value below it is raised to it when the field loses focus."
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The largest amount, as a decimal string. A value above it is lowered to it when the field loses focus."
+        },
+        {
+          "name": "step",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How much the Up and Down arrow keys add or take away, as a decimal string. Defaults to `\"1\"`.",
+          "default": 1
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the amount is read and written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute).",
+          "default": "default"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper text below the field."
+        },
+        {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message under the field; setting it marks the field invalid."
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state without a message of its own."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The form field name. The form receives the normalised decimal string through a hidden input, never the formatted text."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the wrapper.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (30)
+## Data display (31)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -610,6 +610,14 @@ The wired table: typed columns, sorting, filters, editing, grouping with totals,
 - Import: `import { DataTable } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/data-table.md
+
+### Deadline
+
+A due date against now that turns from neutral to warning to error as it nears.
+
+- Import: `import { Deadline } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/deadline.md
 
 ### Description list
 
@@ -867,7 +875,7 @@ Temporary notification with status variants, auto-dismiss, and stacking via Toas
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toast.md
 
-## Forms (21)
+## Forms (24)
 
 Inputs, pickers, and selection controls for collecting and editing values.
 
@@ -895,6 +903,14 @@ A filterable select that narrows options as the user types, with multi-select ch
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/combobox.md
 
+### Currency input
+
+An amount of money as a decimal string, read in the locale's marks and grouped once the field is left.
+
+- Import: `import { CurrencyInput } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/currency-input.md
+
 ### Date input
 
 Date input with native picker, calendar icon, label, and validation states.
@@ -910,6 +926,14 @@ Inline calendar with month navigation, day selection, and today indicator.
 - Import: `import { DatePicker } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/date-picker.md
+
+### Date range picker
+
+An inline calendar for choosing a range of days, one or two months wide, with presets.
+
+- Import: `import { DateRangePicker } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/date-range-picker.md
 
 ### Dropdown
 
@@ -950,6 +974,14 @@ Text input with label, placeholder, left and right icons, helper text, and error
 - Import: `import { Input } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/input.md
+
+### Masked input
+
+A field that writes its value into a shape as it is typed, with a sensitive mode that hides it.
+
+- Import: `import { MaskedInput } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/masked-input.md
 
 ### Number input
 

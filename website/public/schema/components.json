@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.24.0",
   "package": "rift-ds",
-  "count": 172,
+  "count": 176,
   "components": [
     {
       "name": "Accordion",
@@ -525,6 +525,16 @@
       "markdownUrl": "https://rift-ds.com/components/contribution-graph.md"
     },
     {
+      "name": "CurrencyInput",
+      "label": "Currency input",
+      "slug": "currency-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/currency-input.json",
+      "docsUrl": "https://rift-ds.com/components/currency-input",
+      "markdownUrl": "https://rift-ds.com/components/currency-input.md"
+    },
+    {
       "name": "DataTable",
       "label": "Data table",
       "slug": "data-table",
@@ -553,6 +563,26 @@
       "schemaUrl": "https://rift-ds.com/schema/components/date-picker.json",
       "docsUrl": "https://rift-ds.com/components/date-picker",
       "markdownUrl": "https://rift-ds.com/components/date-picker.md"
+    },
+    {
+      "name": "DateRangePicker",
+      "label": "Date range picker",
+      "slug": "date-range-picker",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/date-range-picker.json",
+      "docsUrl": "https://rift-ds.com/components/date-range-picker",
+      "markdownUrl": "https://rift-ds.com/components/date-range-picker.md"
+    },
+    {
+      "name": "Deadline",
+      "label": "Deadline",
+      "slug": "deadline",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/deadline.json",
+      "docsUrl": "https://rift-ds.com/components/deadline",
+      "markdownUrl": "https://rift-ds.com/components/deadline.md"
     },
     {
       "name": "DescriptionList",
@@ -973,6 +1003,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/map-legend.json",
       "docsUrl": "https://rift-ds.com/components/map-legend",
       "markdownUrl": "https://rift-ds.com/components/map-legend.md"
+    },
+    {
+      "name": "MaskedInput",
+      "label": "Masked input",
+      "slug": "masked-input",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/masked-input.json",
+      "docsUrl": "https://rift-ds.com/components/masked-input",
+      "markdownUrl": "https://rift-ds.com/components/masked-input.md"
     },
     {
       "name": "MegaMenu",

@@ -65,6 +65,13 @@
           "description": "Callback when a date is selected"
         },
         {
+          "name": "isDateDisabled",
+          "type": "((date: string) => boolean)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Mark further days unavailable, beyond `min` and `max`: weekends, holidays, booked days. Given each day as a `YYYY-MM-DD` string; focus skips past none of them, but none can be chosen."
+        },
+        {
           "name": "previousLabel",
           "type": "string",
           "typeKind": "primitive",

@@ -21,6 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same dat
 | min | `string` | no |  | Minimum selectable date (YYYY-MM-DD) |
 | max | `string` | no |  | Maximum selectable date (YYYY-MM-DD) |
 | onDateSelect | `((date: string) => void)` | no |  | Callback when a date is selected |
+| isDateDisabled | `((date: string) => boolean)` | no |  | Mark further days unavailable, beyond `min` and `max`: weekends, holidays, booked days. Given each day as a `YYYY-MM-DD` string; focus skips past none of them, but none can be chosen. |
 | previousLabel | `string` | no | `Previous month` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `Next month` | Accessible name of the next-month button. |
 | monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of the month in view: the visible title, the name of the day grid, and the text announced on navigation. Defaults to the month name and the year in `locale` ("January 2026" in `en-US`). |

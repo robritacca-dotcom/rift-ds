@@ -1,0 +1,176 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "MaskedInput",
+  "label": "Masked input",
+  "slug": "masked-input",
+  "category": "forms",
+  "description": "A field that writes its value into a shape as it is typed, with a sensitive mode that hides it.",
+  "client": true,
+  "importPath": "rift-ds/components/MaskedInput/MaskedInput",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/masked-input",
+  "markdownUrl": "https://rift-ds.com/components/masked-input.md",
+  "exports": [
+    {
+      "component": "MaskedInput",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text above the field."
+        },
+        {
+          "name": "mask",
+          "type": "Mask",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The shape of the value: a pattern where `#` takes a digit, `A` a letter and `*` either (`'(###) ###-####'`), or a function from the raw characters to the shown text. `MASK_PRESETS` holds common patterns."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The raw value, the characters without the mask's separators (`\"5550100199\"`) (controlled). Pair with `onValueChange`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The raw value the field starts with (uncontrolled).",
+          "default": ""
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string, formatted: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the raw value and the shown text as the reader types. Fires alongside the native `onChange`."
+        },
+        {
+          "name": "sensitive",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Hide the value as dots until it is revealed: a tax ID, a card number. Defaults `autoComplete` to `off`.",
+          "default": false
+        },
+        {
+          "name": "revealable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Add a show and hide button to a sensitive field.",
+          "default": false
+        },
+        {
+          "name": "revealed",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether a sensitive value is shown (controlled). Pair with `onRevealedChange`."
+        },
+        {
+          "name": "defaultRevealed",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether a sensitive value starts shown (uncontrolled). Defaults to false.",
+          "default": false
+        },
+        {
+          "name": "onRevealedChange",
+          "type": "((revealed: boolean) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the new state when the reader shows or hides the value, or it hides itself."
+        },
+        {
+          "name": "visibleTail",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How many of the last characters of a hidden value stay readable while the field is not focused, so a reader can tell which card it is. Defaults to 0.",
+          "default": 0
+        },
+        {
+          "name": "autoHideAfter",
+          "type": "number | boolean",
+          "typeKind": "other",
+          "required": false,
+          "description": "Hide a revealed value again after this many milliseconds, or after the library's reveal timeout with `true`. Off by default.",
+          "default": false
+        },
+        {
+          "name": "showLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the reveal button while the value is hidden. Defaults to \"Show\".",
+          "default": "Show"
+        },
+        {
+          "name": "hideLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the reveal button while the value is shown. Defaults to \"Hide\".",
+          "default": "Hide"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size (not the native character-width `size` attribute).",
+          "default": "default"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper text below the field."
+        },
+        {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message under the field; setting it marks the field invalid."
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state without a message of its own."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The form field name. The form receives the raw value through a hidden input, never the shown text."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes, applied to the wrapper.",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

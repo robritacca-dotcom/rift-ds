@@ -1,0 +1,232 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "DateRangePicker",
+  "label": "Date range picker",
+  "slug": "date-range-picker",
+  "category": "forms",
+  "description": "An inline calendar for choosing a range of days, one or two months wide, with presets.",
+  "client": true,
+  "importPath": "rift-ds/components/DateRangePicker/DateRangePicker",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/date-range-picker",
+  "markdownUrl": "https://rift-ds.com/components/date-range-picker.md",
+  "exports": [
+    {
+      "component": "DateRangePicker",
+      "props": [
+        {
+          "name": "value",
+          "type": "DateRange",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The chosen range (controlled). Pair with `onValueChange`."
+        },
+        {
+          "name": "defaultValue",
+          "type": "DateRange",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The range it starts with (uncontrolled).",
+          "defaultExpression": "{ start: null, end: null }"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((range: DateRange) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the range as the reader chooses it: once with only `start` after the first day, then with both."
+        },
+        {
+          "name": "months",
+          "type": "1 | 2",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2"
+          ],
+          "required": false,
+          "description": "How many months show side by side, 1 or 2. Two stack when the picker is narrow. Defaults to 2.",
+          "default": 2
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The first day that can be chosen (YYYY-MM-DD)."
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The last day that can be chosen (YYYY-MM-DD)."
+        },
+        {
+          "name": "isDateDisabled",
+          "type": "((date: string) => boolean)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Mark further days unavailable: weekends, holidays, booked nights. Given each day as a `YYYY-MM-DD` string. A range may not span one."
+        },
+        {
+          "name": "minLength",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The fewest days a range may hold, counting both ends."
+        },
+        {
+          "name": "maxLength",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The most days a range may hold, counting both ends."
+        },
+        {
+          "name": "presets",
+          "type": "DateRangePreset[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Ranges the reader can pick in one press, shown above the calendar: \"Last 7 days\", \"This quarter\"."
+        },
+        {
+          "name": "presetsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the presets. Defaults to \"Presets\".",
+          "default": "Presets"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the picker is disabled",
+          "default": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The form field name: the form receives `<name>[start]` and `<name>[end]` as `YYYY-MM-DD` through hidden inputs."
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-month button.",
+          "default": "Previous month"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-month button.",
+          "default": "Next month"
+        },
+        {
+          "name": "monthLabel",
+          "type": "((month: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The month heading, given the first day of a month in view. Defaults to the month name and the year in `locale`."
+        },
+        {
+          "name": "dayLabel",
+          "type": "((date: Date, position: DateRangePosition) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label."
+        },
+        {
+          "name": "rangeStartLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Said after the first day of the range. Defaults to \"start of range\".",
+          "default": "start of range"
+        },
+        {
+          "name": "rangeEndLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Said after the last day of the range. Defaults to \"end of range\".",
+          "default": "end of range"
+        },
+        {
+          "name": "inRangeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Said after a day inside the range. Defaults to \"in range\".",
+          "default": "in range"
+        },
+        {
+          "name": "weekdayLabels",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The visible weekday headers: seven entries, Sunday first. Defaults as in DatePicker."
+        },
+        {
+          "name": "weekdayNames",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The weekday headers' spoken names: seven entries, Sunday first. Defaults to the weekday names in `locale`."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the calendar is written and laid out in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "weekStartsOn",
+          "type": "Weekday",
+          "typeKind": "enum",
+          "values": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

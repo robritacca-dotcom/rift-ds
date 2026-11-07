@@ -96,6 +96,13 @@
           "description": "Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`."
         },
         {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A control inside the field at its end, after the suffix: a show/hide button, a copy button. Unlike `suffix` it is not read as part of the field; it is a control of its own."
+        },
+        {
           "name": "clearable",
           "type": "boolean",
           "typeKind": "primitive",

@@ -5824,6 +5824,148 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "CurrencyInput",
+    "label": "Currency input",
+    "slug": "currency-input",
+    "category": "forms",
+    "description": "An amount of money as a decimal string, read in the locale's marks and grouped once the field is left.",
+    "client": true,
+    "importPath": "rift-ds/components/CurrencyInput/CurrencyInput",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "CurrencyInput",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label text above the field."
+          },
+          {
+            "name": "value",
+            "type": "string | null",
+            "required": false,
+            "description": "The amount as a decimal string (`\"1234.50\"`), or `null` for none (controlled). Pair with `onValueChange`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string | null",
+            "required": false,
+            "description": "The amount the field starts with (uncontrolled).",
+            "defaultValue": "null"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string | null) => void)",
+            "required": false,
+            "description": "Called with the amount as a normalised decimal string as the reader types, or `null` while the field holds no number. Fires alongside the native `onChange`."
+          },
+          {
+            "name": "currency",
+            "type": "string",
+            "required": false,
+            "description": "The ISO 4217 code of the currency, such as `USD`, `EUR` or `JPY`. Defaults to `USD`.",
+            "defaultValue": "USD"
+          },
+          {
+            "name": "currencyDisplay",
+            "type": "\"symbol\" | \"code\" | \"none\"",
+            "required": false,
+            "description": "How the currency shows inside the field: its symbol, its code, or nothing (when the label already says it). The side it sits on follows the locale.",
+            "values": [
+              "code",
+              "none",
+              "symbol"
+            ],
+            "defaultValue": "symbol"
+          },
+          {
+            "name": "fractionDigits",
+            "type": "number",
+            "required": false,
+            "description": "Digits after the point. Defaults to the currency's own: 0 for JPY, 2 for USD, 3 for KWD."
+          },
+          {
+            "name": "allowNegative",
+            "type": "boolean",
+            "required": false,
+            "description": "Accept a negative amount (a refund, an adjustment). Defaults to false.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "min",
+            "type": "string",
+            "required": false,
+            "description": "The smallest amount, as a decimal string. A value below it is raised to it when the field loses focus."
+          },
+          {
+            "name": "max",
+            "type": "string",
+            "required": false,
+            "description": "The largest amount, as a decimal string. A value above it is lowered to it when the field loses focus."
+          },
+          {
+            "name": "step",
+            "type": "string",
+            "required": false,
+            "description": "How much the Up and Down arrow keys add or take away, as a decimal string. Defaults to `\"1\"`.",
+            "defaultValue": "1"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the amount is read and written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size (not the native character-width `size` attribute).",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper text below the field."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message under the field; setting it marks the field invalid."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state without a message of its own."
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "The form field name. The form receives the normalised decimal string through a hidden input, never the formatted text."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the wrapper.",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "DataTable",
     "label": "Data table",
     "slug": "data-table",
@@ -6666,6 +6808,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Callback when a date is selected"
           },
           {
+            "name": "isDateDisabled",
+            "type": "((date: string) => boolean)",
+            "required": false,
+            "description": "Mark further days unavailable, beyond `min` and `max`: weekends, holidays, booked days. Given each day as a `YYYY-MM-DD` string; focus skips past none of them, but none can be chosen."
+          },
+          {
             "name": "previousLabel",
             "type": "string",
             "required": false,
@@ -6723,6 +6871,324 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "5",
               "6"
             ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "DateRangePicker",
+    "label": "Date range picker",
+    "slug": "date-range-picker",
+    "category": "forms",
+    "description": "An inline calendar for choosing a range of days, one or two months wide, with presets.",
+    "client": true,
+    "importPath": "rift-ds/components/DateRangePicker/DateRangePicker",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "DateRangePicker",
+        "props": [
+          {
+            "name": "value",
+            "type": "DateRange",
+            "required": false,
+            "description": "The chosen range (controlled). Pair with `onValueChange`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "DateRange",
+            "required": false,
+            "description": "The range it starts with (uncontrolled).",
+            "defaultValue": "{ start: null, end: null }"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((range: DateRange) => void)",
+            "required": false,
+            "description": "Called with the range as the reader chooses it: once with only `start` after the first day, then with both."
+          },
+          {
+            "name": "months",
+            "type": "1 | 2",
+            "required": false,
+            "description": "How many months show side by side, 1 or 2. Two stack when the picker is narrow. Defaults to 2.",
+            "values": [
+              "1",
+              "2"
+            ],
+            "defaultValue": "2"
+          },
+          {
+            "name": "min",
+            "type": "string",
+            "required": false,
+            "description": "The first day that can be chosen (YYYY-MM-DD)."
+          },
+          {
+            "name": "max",
+            "type": "string",
+            "required": false,
+            "description": "The last day that can be chosen (YYYY-MM-DD)."
+          },
+          {
+            "name": "isDateDisabled",
+            "type": "((date: string) => boolean)",
+            "required": false,
+            "description": "Mark further days unavailable: weekends, holidays, booked nights. Given each day as a `YYYY-MM-DD` string. A range may not span one."
+          },
+          {
+            "name": "minLength",
+            "type": "number",
+            "required": false,
+            "description": "The fewest days a range may hold, counting both ends."
+          },
+          {
+            "name": "maxLength",
+            "type": "number",
+            "required": false,
+            "description": "The most days a range may hold, counting both ends."
+          },
+          {
+            "name": "presets",
+            "type": "DateRangePreset[]",
+            "required": false,
+            "description": "Ranges the reader can pick in one press, shown above the calendar: \"Last 7 days\", \"This quarter\"."
+          },
+          {
+            "name": "presetsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the presets. Defaults to \"Presets\".",
+            "defaultValue": "Presets"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the picker is disabled",
+            "defaultValue": "false"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "The form field name: the form receives `<name>[start]` and `<name>[end]` as `YYYY-MM-DD` through hidden inputs."
+          },
+          {
+            "name": "previousLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-month button.",
+            "defaultValue": "Previous month"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-month button.",
+            "defaultValue": "Next month"
+          },
+          {
+            "name": "monthLabel",
+            "type": "((month: Date) => string)",
+            "required": false,
+            "description": "The month heading, given the first day of a month in view. Defaults to the month name and the year in `locale`."
+          },
+          {
+            "name": "dayLabel",
+            "type": "((date: Date, position: DateRangePosition) => string)",
+            "required": false,
+            "description": "A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label."
+          },
+          {
+            "name": "rangeStartLabel",
+            "type": "string",
+            "required": false,
+            "description": "Said after the first day of the range. Defaults to \"start of range\".",
+            "defaultValue": "start of range"
+          },
+          {
+            "name": "rangeEndLabel",
+            "type": "string",
+            "required": false,
+            "description": "Said after the last day of the range. Defaults to \"end of range\".",
+            "defaultValue": "end of range"
+          },
+          {
+            "name": "inRangeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Said after a day inside the range. Defaults to \"in range\".",
+            "defaultValue": "in range"
+          },
+          {
+            "name": "weekdayLabels",
+            "type": "string[]",
+            "required": false,
+            "description": "The visible weekday headers: seven entries, Sunday first. Defaults as in DatePicker."
+          },
+          {
+            "name": "weekdayNames",
+            "type": "string[]",
+            "required": false,
+            "description": "The weekday headers' spoken names: seven entries, Sunday first. Defaults to the weekday names in `locale`."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the calendar is written and laid out in. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "weekStartsOn",
+            "type": "Weekday",
+            "required": false,
+            "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`.",
+            "values": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "Deadline",
+    "label": "Deadline",
+    "slug": "deadline",
+    "category": "data-display",
+    "description": "A due date against now that turns from neutral to warning to error as it nears.",
+    "client": true,
+    "importPath": "rift-ds/components/Deadline/Deadline",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Deadline",
+        "props": [
+          {
+            "name": "date",
+            "type": "DateInput",
+            "required": true,
+            "description": "The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch."
+          },
+          {
+            "name": "timeZone",
+            "type": "string",
+            "required": false,
+            "description": "The IANA zone the time is shown in, named after it (\"4:00 PM PST\"), such as `America/Los_Angeles`. Without it the time shows in the reader's own zone."
+          },
+          {
+            "name": "display",
+            "type": "\"both\" | \"relative\" | \"absolute\"",
+            "required": false,
+            "description": "`relative` writes the distance (\"in 2 days\"), `absolute` the date and time, `both` the two together. Defaults to `relative`.",
+            "values": [
+              "absolute",
+              "both",
+              "relative"
+            ],
+            "defaultValue": "relative"
+          },
+          {
+            "name": "thresholds",
+            "type": "DeadlineThresholds",
+            "required": false,
+            "description": "How close the deadline must be before it turns to the warning and then the error role."
+          },
+          {
+            "name": "prefixLabel",
+            "type": "string",
+            "required": false,
+            "description": "The word before the distance: \"Due\", \"Closes\", \"Expires\". Defaults to \"Due\".",
+            "defaultValue": "Due"
+          },
+          {
+            "name": "overdueLabel",
+            "type": "string",
+            "required": false,
+            "description": "What a deadline that has passed says in place of the distance. Defaults to \"Overdue\".",
+            "defaultValue": "Overdue"
+          },
+          {
+            "name": "variant",
+            "type": "\"text\" | \"badge\"",
+            "required": false,
+            "description": "`badge` draws the Badge family's tinted pill; `text` writes it inline in the status text colour, for a sentence or a table cell.",
+            "values": [
+              "badge",
+              "text"
+            ],
+            "defaultValue": "badge"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "tick",
+            "type": "boolean",
+            "required": false,
+            "description": "Rewrite the distance as time passes, pausing while the page is hidden. Defaults to true; off when `now` is set.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "now",
+            "type": "DateInput",
+            "required": false,
+            "description": "The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot."
+          },
+          {
+            "name": "onStatusChange",
+            "type": "((status: DeadlineStatus) => void)",
+            "required": false,
+            "description": "Called when the deadline moves to a new status as time passes, so a host can react (sort, notify)."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the distance and the date are written in. Defaults to the nearest LocaleProvider's, else `en-US`."
           },
           {
             "name": "className",
@@ -9164,6 +9630,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`."
           },
           {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A control inside the field at its end, after the suffix: a show/hide button, a copy button. Unlike `suffix` it is not read as part of the field; it is a control of its own."
+          },
+          {
             "name": "clearable",
             "type": "boolean",
             "required": false,
@@ -10511,6 +10983,158 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "MaskedInput",
+    "label": "Masked input",
+    "slug": "masked-input",
+    "category": "forms",
+    "description": "A field that writes its value into a shape as it is typed, with a sensitive mode that hides it.",
+    "client": true,
+    "importPath": "rift-ds/components/MaskedInput/MaskedInput",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "MaskedInput",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label text above the field."
+          },
+          {
+            "name": "mask",
+            "type": "Mask",
+            "required": true,
+            "description": "The shape of the value: a pattern where `#` takes a digit, `A` a letter and `*` either (`'(###) ###-####'`), or a function from the raw characters to the shown text. `MASK_PRESETS` holds common patterns."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The raw value, the characters without the mask's separators (`\"5550100199\"`) (controlled). Pair with `onValueChange`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The raw value the field starts with (uncontrolled).",
+            "defaultValue": ""
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string, formatted: string) => void)",
+            "required": false,
+            "description": "Called with the raw value and the shown text as the reader types. Fires alongside the native `onChange`."
+          },
+          {
+            "name": "sensitive",
+            "type": "boolean",
+            "required": false,
+            "description": "Hide the value as dots until it is revealed: a tax ID, a card number. Defaults `autoComplete` to `off`.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "revealable",
+            "type": "boolean",
+            "required": false,
+            "description": "Add a show and hide button to a sensitive field.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "revealed",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether a sensitive value is shown (controlled). Pair with `onRevealedChange`."
+          },
+          {
+            "name": "defaultRevealed",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether a sensitive value starts shown (uncontrolled). Defaults to false.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onRevealedChange",
+            "type": "((revealed: boolean) => void)",
+            "required": false,
+            "description": "Called with the new state when the reader shows or hides the value, or it hides itself."
+          },
+          {
+            "name": "visibleTail",
+            "type": "number",
+            "required": false,
+            "description": "How many of the last characters of a hidden value stay readable while the field is not focused, so a reader can tell which card it is. Defaults to 0.",
+            "defaultValue": "0"
+          },
+          {
+            "name": "autoHideAfter",
+            "type": "number | boolean",
+            "required": false,
+            "description": "Hide a revealed value again after this many milliseconds, or after the library's reveal timeout with `true`. Off by default.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "showLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the reveal button while the value is hidden. Defaults to \"Show\".",
+            "defaultValue": "Show"
+          },
+          {
+            "name": "hideLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the reveal button while the value is shown. Defaults to \"Hide\".",
+            "defaultValue": "Hide"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size (not the native character-width `size` attribute).",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper text below the field."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message under the field; setting it marks the field invalid."
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state without a message of its own."
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "The form field name. The form receives the raw value through a hidden input, never the shown text."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes, applied to the wrapper.",
             "defaultValue": ""
           }
         ]

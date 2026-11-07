@@ -322,6 +322,12 @@
       "description": "A year of activity, one cell per day."
     },
     {
+      "name": "currency-input",
+      "type": "registry:ui",
+      "title": "Currency input",
+      "description": "An amount of money as a decimal string, read in the locale's marks and grouped once the field is left."
+    },
+    {
       "name": "data-table",
       "type": "registry:ui",
       "title": "Data table",
@@ -338,6 +344,18 @@
       "type": "registry:ui",
       "title": "Date picker",
       "description": "Inline calendar with month navigation, day selection, and today indicator."
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:ui",
+      "title": "Date range picker",
+      "description": "An inline calendar for choosing a range of days, one or two months wide, with presets."
+    },
+    {
+      "name": "deadline",
+      "type": "registry:ui",
+      "title": "Deadline",
+      "description": "A due date against now that turns from neutral to warning to error as it nears."
     },
     {
       "name": "description-list",
@@ -590,6 +608,12 @@
       "type": "registry:ui",
       "title": "Map legend",
       "description": "The corner block of a map: its name, what it shows, and the key to its markers."
+    },
+    {
+      "name": "masked-input",
+      "type": "registry:ui",
+      "title": "Masked input",
+      "description": "A field that writes its value into a shape as it is typed, with a sensitive mode that hides it."
     },
     {
       "name": "mega-menu",

@@ -11,6 +11,10 @@ import {
   type BackgroundMode,
   type ShaderParams,
 } from "@/data/shader-background";
+import ShaderSurface from "@/components/ShaderSurface/ShaderSurface";
+import { PASSES } from "@/lib/shaders/passes";
+import { SCENES } from "@/lib/shaders/scenes";
+import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
 
 /* Dev-only tuning panel, and the ternary is load-bearing: the bundler
    statically replaces process.env.NODE_ENV, so in a production build this
@@ -140,8 +144,26 @@ export default function BlurBackground() {
    * "css" resolves server-side, so that path never pends and the blobs are
    * painted in the very first frame with no gap at all.
    */
+  /* Framed by the playground's Templates view, the page's band follows the
+     Shaders view's pick (lib/shaders/staged): a lib/shaders scene paints in
+     the field's place, and Field moved by its levers runs live with them.
+     Only then does a framed page hold a context, one for the playground's
+     one frame; untouched, the frozen CSS band stays. A page at its own
+     route never sees the attribute, so this never changes the live site. */
+  const stagedSceneId = useStagedSceneId();
+  const stagedParams = useStagedFieldParams();
+  const stagedValues = useStagedValues();
+  const stagedScene =
+    embedded && stagedSceneId && stagedSceneId !== "field"
+      ? SCENES.find((scene) => scene.id === stagedSceneId)
+      : undefined;
+  const stagedField = embedded && stagedSceneId === "field" && stagedParams !== undefined;
+  const live = !embedded || stagedField;
+
   const state =
-    mode === "css" || embedded
+    stagedScene
+      ? "on"
+      : mode === "css" || !live
       ? "off"
       : status === "active"
         ? "on"
@@ -166,12 +188,16 @@ export default function BlurBackground() {
         <div className="blur-ellipse blur-orange" />
         <div className="blur-ellipse blur-teal" />
 
-        <ShaderField
-          params={params}
-          blobs={shaderBackground.blobs}
-          enabled={mode === "shader" && !embedded}
-          onStatusChange={onStatusChange}
-        />
+        {stagedScene ? (
+          <ShaderSurface scene={stagedScene} passes={PASSES} values={stagedValues} />
+        ) : (
+          <ShaderField
+            params={stagedField ? { ...params, ...stagedParams } : params}
+            blobs={shaderBackground.blobs}
+            enabled={mode === "shader" && live}
+            onStatusChange={onStatusChange}
+          />
+        )}
       </div>
 
       {ShaderTuner && tuning && (

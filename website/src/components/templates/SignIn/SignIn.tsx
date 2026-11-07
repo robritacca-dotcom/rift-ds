@@ -58,6 +58,7 @@ import {
   type ShaderBlob,
   type ShaderParams,
 } from "rift-ds/components/ShaderField/ShaderField";
+import StagedShader from "@/components/ShaderSurface/StagedShader";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { PublisherMark } from "../PublisherMarks/PublisherMarks";
@@ -272,10 +273,17 @@ export default function SignIn() {
       </div>
 
       <aside className={styles.artPane} aria-hidden="true">
-        <ShaderField
+        {/* The playground's shader pick, when it stages this screen; the
+            screen's own field everywhere else (StagedShader). */}
+        <StagedShader
           className={styles.field}
-          params={FIELD_PARAMS}
-          blobs={FIELD_BLOBS}
+          field={(staged) => (
+            <ShaderField
+              className={styles.field}
+              params={{ ...FIELD_PARAMS, ...staged }}
+              blobs={FIELD_BLOBS}
+            />
+          )}
         />
       </aside>
     </div>

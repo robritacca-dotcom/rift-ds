@@ -26,6 +26,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MOTION_SCROLL_SETTLE_MS } from "rift-ds/tokens/motion";
 import { STAGED_PRODUCT_NAME_ATTR } from "@/components/templates/useStagedProductName";
+import { STAGED_SHADER_ATTR } from "@/lib/shaders/staged";
 import { APP_FRAME_ATTR } from "@/components/templates/AppFrame/AppFrame";
 import chatStyles from "./ChatView.module.css";
 import { templatesSidebarLinks } from "@/config/navigation";
@@ -119,6 +120,12 @@ export default function TemplatesView({
        attribute (useStagedProductName), so typing never reloads the frame. */
     frameRoot.setAttribute(STAGED_PRODUCT_NAME_ATTR, productNameRef.current);
 
+    /* The Shaders view's pick, so a template's shader follows it
+       (lib/shaders/staged owns the contract). */
+    const staged = root.getAttribute(STAGED_SHADER_ATTR);
+    if (staged) frameRoot.setAttribute(STAGED_SHADER_ATTR, staged);
+    else frameRoot.removeAttribute(STAGED_SHADER_ATTR);
+
     /* The Mobile stage is a phone preview, so it carries the flag the
        templates carousel's Mobile mode sets (AppFrame.tsx owns it): a
        template dresses as an app here too, and a narrowed Desktop stage,
@@ -189,13 +196,13 @@ export default function TemplatesView({
     sync();
   }, [size, sync]);
 
-  /* Re-sync on every lever move (the inline style), theme flip, and brand
-     change. */
+  /* Re-sync on every lever move (the inline style), theme flip, brand
+     change and shader pick or slider move. */
   useEffect(() => {
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["style", "data-theme", "data-brand"],
+      attributeFilter: ["style", "data-theme", "data-brand", STAGED_SHADER_ATTR],
     });
     return () => observer.disconnect();
   }, [sync]);

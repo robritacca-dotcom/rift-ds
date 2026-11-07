@@ -35,8 +35,9 @@ export default function ShaderSurface({
   scene: Scene;
   /** The finishing passes, all compiled in and switched by the values. */
   passes: Pass[];
-  /** The live settings, read every frame and never rendered from. */
-  values: React.RefObject<Values>;
+  /** The live settings, read every frame and never rendered from. Empty
+      paints nothing until they arrive. */
+  values: React.RefObject<Values | null>;
 }) {
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);

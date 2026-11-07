@@ -35,6 +35,7 @@ import {
   TEMPLATES as SHADER_TEMPLATES,
   valuesOf,
 } from "@/lib/shaders/templates";
+import { STAGED_SHADER_ATTR, type StagedShader } from "@/lib/shaders/staged";
 import type { Recipe as ShaderRecipe, Values as ShaderValues } from "@/lib/shaders/types";
 import ShadersRail, { type ShaderEdits } from "./ShadersRail";
 import StageControlBar, {
@@ -459,18 +460,35 @@ export default function PlaygroundPage() {
     }
     setShaderId(next ? id : DEFAULT_SHADER.id);
   };
+  /* The pick, staged for the templates: written onto this root as an
+     attribute the Templates view mirrors into its frame (lib/shaders/
+     staged), where a template's shader follows it. The sliders rewrite it
+     in place, a DOM write per move, so a drag renders nothing here or in
+     the frame. Field untouched carries no params: the templates keep their
+     own field. */
+  const stagedRef = useRef<StagedShader>({ sceneId: DEFAULT_SHADER.sceneId });
+  const publishStaged = () => {
+    const staged = stagedRef.current;
+    const payload: StagedShader =
+      staged.sceneId === "field" ? staged : { sceneId: staged.sceneId, values: shaderValuesRef.current };
+    document.documentElement.setAttribute(STAGED_SHADER_ATTR, JSON.stringify(payload));
+  };
   const shaderEdits: ShaderEdits = {
     scene: (key, value) => {
       shaderValuesRef.current.scene[key] = value;
+      publishStaged();
     },
     speed: (value) => {
       shaderValuesRef.current.speed = value;
+      publishStaged();
     },
     passOn: (id, on) => {
       shaderValuesRef.current.passes[id].on = on;
+      publishStaged();
     },
     passParam: (id, key, value) => {
       shaderValuesRef.current.passes[id].params[key] = value;
+      publishStaged();
     },
   };
   /* Field's recipe is the theme's own ShaderField settings; the other
@@ -481,6 +499,18 @@ export default function PlaygroundPage() {
     const recipe: ShaderRecipe = { sceneId: shaderTemplate?.sceneId ?? "", ...shaderValuesRef.current };
     return JSON.stringify(recipe, null, 2);
   };
+
+  /* Restage whenever the pick, its seed or Field's settings change, and
+     take the attribute away when the playground goes. */
+  const stagedSceneId = shaderTemplate?.sceneId ?? DEFAULT_SHADER.sceneId;
+  useEffect(() => {
+    stagedRef.current =
+      stagedSceneId === "field"
+        ? { sceneId: "field", params: shaderPristine ? undefined : { ...shaderParams } }
+        : { sceneId: stagedSceneId };
+    publishStaged();
+  }, [stagedSceneId, shaderParams, shaderPristine, shaderGeneration]);
+  useEffect(() => () => document.documentElement.removeAttribute(STAGED_SHADER_ATTR), []);
 
   /* ---------- levers ---------- */
   const [preset, setPreset] = useState(BASE_THEME_ID);
@@ -1575,12 +1605,17 @@ export default function PlaygroundPage() {
           in the Components view instead). */}
       <HiddenBackground />
       <DotBackground dots={showDots} />
-      {/* The Shaders view, and only it, runs the theme's shader full bleed
-          on the dots' own layer, so the pick and every lever are judged on
-          the shader itself. Every other view keeps it in its banner. It
-          sits here rather than in the stage, whose entrance transform would
-          pin a fixed layer to the stage instead of the viewport. */}
-      {view === "shaders" && <div className={styles.shaderStage}>{stagedShader()}</div>}
+      {/* The Shaders view runs the theme's shader full bleed on the dots'
+          own layer, so the pick and every lever are judged on the shader
+          itself; so does the Chat view while its flush shell's backdrop is
+          blur, so the glass has the shader to frost. Every other view keeps
+          it in its banner. It sits here rather than in the stage, whose
+          entrance transform would pin a fixed layer to the stage instead of
+          the viewport. */}
+      {(view === "shaders" ||
+        (view === "chat" && chatShell === "flush" && chatBackdrop === "blur")) && (
+        <div className={styles.shaderStage}>{stagedShader()}</div>
+      )}
       {/* The stage has no visible title; this names the page for screen
           readers and search, one h1 like every other page. */}
       <h1 className={styles.visuallyHidden}>Playground</h1>

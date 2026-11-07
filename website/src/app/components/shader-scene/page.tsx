@@ -147,13 +147,19 @@ export default function ShaderScenePage() {
 
           {/* Motion and fallback */}
           <section className={styles.section}>
-            <SectionTitle title="Reduced motion and fallback" />
+            <SectionTitle title="Reduced motion, fallback and status" />
             <p className={styles.demoText}>
               Under <code>prefers-reduced-motion</code> the scene holds a still
               frame, which still answers its settings. <code>speed</code> at 0
               does the same on purpose. Where WebGL2 is not available the box
               shows the page ground and nothing else, so the worst case is a
-              plain page.
+              plain page. It reports which happened, as Shader field does:{" "}
+              <code>onStatusChange</code> and <code>data-status</code> move
+              from <code>pending</code> to <code>active</code> or{" "}
+              <code>unavailable</code>, and <code>enabled={"{false}"}</code>{" "}
+              switches it off, so a fallback of your own has something to
+              listen to. The loop also stops while the scene is scrolled out
+              of view.
             </p>
           </section>
 

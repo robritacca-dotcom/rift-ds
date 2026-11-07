@@ -14374,6 +14374,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props."
           },
           {
+            "name": "enabled",
+            "type": "boolean",
+            "required": false,
+            "description": "False never starts WebGL and reports `unavailable`, leaving the page\nground: the kill switch, as on ShaderField.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onStatusChange",
+            "type": "((status: ShaderSceneStatus) => void)",
+            "required": false,
+            "description": "Called whenever the status changes. Drive a fallback from this: the scene\npaints only the page ground when it cannot run, and what to show instead\nis the caller's design decision."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,

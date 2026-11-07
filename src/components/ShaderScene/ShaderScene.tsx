@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { MOTION_RENDERER_WATCHDOG_MS } from '../../tokens/motion';
 import { PASSES } from './passes';
 import { coloursFor, createRenderer } from './renderer';
 import { SCENES } from './scenes';
@@ -9,6 +10,14 @@ import './ShaderScene.css';
 
 /** The scenes ShaderScene paints. */
 export type ShaderSceneId = 'horizon' | 'rift';
+
+/**
+ * How the scene resolved, the same three states ShaderField reports.
+ * `pending` while the GL context comes up (bounded by a watchdog), `active`
+ * once a frame has painted, `unavailable` when it is disabled or WebGL2
+ * cannot run it.
+ */
+export type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';
 
 /** One finishing pass's setting: whether it runs, and its own settings. */
 export type ShaderScenePassSetting = {
@@ -41,6 +50,17 @@ type ShaderSceneOwnProps = {
    * scene and renders nothing. Empty falls back to the props.
    */
   liveRef?: React.RefObject<Values | null>;
+  /**
+   * False never starts WebGL and reports `unavailable`, leaving the page
+   * ground: the kill switch, as on ShaderField.
+   */
+  enabled?: boolean;
+  /**
+   * Called whenever the status changes. Drive a fallback from this: the scene
+   * paints only the page ground when it cannot run, and what to show instead
+   * is the caller's design decision.
+   */
+  onStatusChange?: (status: ShaderSceneStatus) => void;
   /** Additional CSS classes */
   className?: string;
 };
@@ -76,6 +96,8 @@ export function ShaderScene({
   passes,
   speed = DEFAULT_SPEED,
   liveRef,
+  enabled = true,
+  onStatusChange,
   className = '',
   ref,
   ...rest
@@ -110,6 +132,31 @@ export function ShaderScene({
     mergedRef.current = merged;
   }, [merged]);
 
+  /* 'failed' and 'painted' come from the GL effect; the watchdog bounds a
+     context that never paints, so pending can never be terminal. */
+  const [gl, setGl] = React.useState<'pending' | 'failed' | 'painted'>('pending');
+  const [gaveUp, setGaveUp] = React.useState(false);
+  React.useEffect(() => {
+    if (!enabled || gl !== 'pending') return;
+    const timer = window.setTimeout(() => setGaveUp(true), MOTION_RENDERER_WATCHDOG_MS);
+    return () => window.clearTimeout(timer);
+  }, [enabled, gl]);
+  const status: ShaderSceneStatus =
+    !enabled || gl === 'failed'
+      ? 'unavailable'
+      : gl === 'painted'
+        ? 'active'
+        : gaveUp
+          ? 'unavailable'
+          : 'pending';
+  const notify = React.useRef(onStatusChange);
+  React.useEffect(() => {
+    notify.current = onStatusChange;
+  }, [onStatusChange]);
+  React.useEffect(() => {
+    notify.current?.(status);
+  }, [status]);
+
   const setRef = (node: HTMLDivElement | null) => {
     hostRef.current = node;
     if (typeof ref === 'function') ref(node);
@@ -117,12 +164,17 @@ export function ShaderScene({
   };
 
   React.useEffect(() => {
+    if (!enabled) return;
     const host = hostRef.current;
     const canvas = canvasRef.current;
-    const gl = canvas?.getContext('webgl2', { antialias: false, alpha: false });
-    if (!host || !canvas || !gl) return;
-    const renderer = createRenderer(gl, definition, PASSES);
-    if (!renderer) return;
+    const context = canvas?.getContext('webgl2', { antialias: false, alpha: false });
+    const renderer = context ? createRenderer(context, definition, PASSES) : null;
+    if (!host || !canvas || !renderer) {
+      /* Reported from a frame, not the effect body, so the effect never
+         sets state synchronously. */
+      const failed = requestAnimationFrame(() => setGl('failed'));
+      return () => cancelAnimationFrame(failed);
+    }
 
     const applyColours = () => renderer.setColours(coloursFor(host, definition));
     const resize = () => {
@@ -135,18 +187,44 @@ export function ShaderScene({
     let time = 20;
     let last = performance.now();
     let frame = 0;
+    let painted = false;
     const draw = (now: number) => {
       const values = liveRef?.current ?? mergedRef.current;
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       if (!still) time += dt * values.speed;
       renderer.draw(values, time, canvas.width, canvas.height);
+      if (!painted) {
+        painted = true;
+        setGl('painted');
+      }
       frame = requestAnimationFrame(draw);
+    };
+    /* The loop runs only near the screen, as ShaderField's does: it stops
+       when the scene scrolls away and starts again 200px before it returns,
+       so a page of stages draws only the ones in view. A hidden tab stops
+       requestAnimationFrame by itself. */
+    const start = () => {
+      if (frame) return;
+      last = performance.now();
+      frame = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
     };
 
     applyColours();
     resize();
-    frame = requestAnimationFrame(draw);
+    start();
+    const visibilityObserver =
+      typeof IntersectionObserver === 'undefined'
+        ? null
+        : new IntersectionObserver(
+            (entries) => (entries[entries.length - 1].isIntersecting ? start() : stop()),
+            { rootMargin: '200px 0px' }
+          );
+    visibilityObserver?.observe(host);
 
     const sizeObserver = new ResizeObserver(resize);
     sizeObserver.observe(host);
@@ -159,18 +237,19 @@ export function ShaderScene({
     });
 
     return () => {
-      cancelAnimationFrame(frame);
+      stop();
+      visibilityObserver?.disconnect();
       sizeObserver.disconnect();
       themeObserver.disconnect();
       renderer.dispose();
     };
-  }, [definition, liveRef]);
+  }, [definition, liveRef, enabled]);
 
   const classes = ['ds-shader-scene', className].filter(Boolean).join(' ');
 
   return (
-    <div {...rest} ref={setRef} className={classes} aria-hidden="true">
-      <canvas ref={canvasRef} className="ds-shader-scene__canvas" />
+    <div {...rest} ref={setRef} className={classes} data-status={status} aria-hidden="true">
+      {enabled && <canvas ref={canvasRef} className="ds-shader-scene__canvas" />}
     </div>
   );
 }

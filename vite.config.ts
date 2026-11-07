@@ -19,6 +19,14 @@ export default defineConfig({
   },
   test: {
     projects: [{
+      // Plain unit tests for the pure modules (src/format), in Node: no
+      // browser, no stories. Anything with a DOM is a story with a play.
+      test: {
+        name: 'unit',
+        environment: 'node',
+        include: ['src/**/*.test.ts'],
+      }
+    }, {
       extends: true,
       plugins: [
       // The plugin will run tests for the stories defined in your Storybook config

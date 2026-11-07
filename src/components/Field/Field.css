@@ -62,6 +62,18 @@
   color: var(--color-status-error-border);
 }
 
+/* The newer form: the error is a message of its own under the control,
+   and the helper text keeps its colour beside it. */
+.ds-field__error {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-status-error-text);
+}
+
 /* ============================================
    DISABLED STATE
    ============================================ */

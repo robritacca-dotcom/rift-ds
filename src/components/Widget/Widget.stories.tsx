@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 import { Widget, WidgetGrid, WidgetGroup, WidgetRow } from './Widget';
+import { Button } from '../Button/Button';
+import { Input } from '../Input/Input';
+import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
+import { DescriptionList } from '../DescriptionList/DescriptionList';
+import { Table } from '../Table/Table';
 import { PixelAvatar } from '../PixelAvatar/PixelAvatar';
 import { Sparkline } from '../Sparkline/Sparkline';
 import { Spinner } from '../Spinner/Spinner';
@@ -197,4 +203,106 @@ export const Board: Story = {
       </Widget>
     </WidgetGrid>
   ),
+};
+
+/** A form section: a description under the title, the fields, and the section's actions in the footer. */
+export const FormSection: Story = {
+  args: {
+    title: 'Business details',
+    count: undefined,
+    description: 'Shown on invoices and receipts.',
+    footer: (
+      <>
+        <Button variant="tertiary" size="compact" label="Cancel" />
+        <Button variant="primary" size="compact" label="Save" />
+      </>
+    ),
+    children: (
+      <div style={{ display: 'grid', gap: 'var(--gap-300)' }}>
+        <Input label="Legal name" defaultValue="Northwind Supply Ltd" />
+        <Input label="Tax ID" defaultValue="GB 123 4567 89" />
+      </div>
+    ),
+  },
+};
+
+/** A settings group at the compact inset, folded away by its title. */
+export const SettingsGroup: Story = {
+  args: {
+    title: 'Notifications',
+    count: undefined,
+    padding: 'compact',
+    collapsible: true,
+    description: 'Choose what we email you about.',
+    children: (
+      <div style={{ display: 'grid', gap: 'var(--gap-200)' }}>
+        <ToggleSwitch label="Payment received" defaultChecked />
+        <ToggleSwitch label="Payout sent" defaultChecked />
+        <ToggleSwitch label="Weekly summary" defaultChecked={false} />
+      </div>
+    ),
+  },
+  play: async ({ canvas }) => {
+    const toggle = canvas.getByRole('button', { name: 'Notifications' });
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(canvas.queryByRole('switch', { name: 'Payment received' })).toBeNull();
+    await userEvent.click(toggle);
+    await expect(canvas.getByRole('switch', { name: 'Payment received' })).toBeVisible();
+  },
+};
+
+/** A review summary: the facts as a description list, an Edit action, and the total in the footer. */
+export const ReviewSummary: Story = {
+  args: {
+    title: 'Order summary',
+    count: undefined,
+    action: <Button variant="tertiary" size="compact" label="Edit" />,
+    footer: <span>Total $1,284.00</span>,
+    children: (
+      <DescriptionList
+        layout="inline"
+        size="compact"
+        termWidth="wide"
+        align="end"
+        items={[
+          { term: 'Standing desk', details: '$899.00' },
+          { term: 'Monitor arm', details: '$185.00' },
+          { term: 'Delivery', details: '$200.00' },
+        ]}
+      />
+    ),
+  },
+};
+
+/** A body that runs edge to edge, a table here, while the header and footer keep the tile's inset. */
+export const EdgeToEdge: Story = {
+  args: {
+    title: 'Recent payouts',
+    count: undefined,
+    padding: 'none',
+    footer: <Button variant="tertiary" size="compact" label="View all" />,
+    children: (
+      <Table
+        size="compact"
+        caption="Recent payouts"
+        captionHidden
+        columns={[
+          { key: 'date', header: 'Date' },
+          { key: 'amount', header: 'Amount', align: 'end' },
+        ]}
+        rows={[
+          { id: 'a', cells: { date: '4 Nov', amount: '$2,410.00' } },
+          { id: 'b', cells: { date: '28 Oct', amount: '$1,982.50' } },
+          { id: 'c', cells: { date: '21 Oct', amount: '$2,105.75' } },
+        ]}
+      />
+    ),
+  },
+};
+
+/** Starts folded: `defaultOpen` false. */
+export const CollapsedByDefault: Story = {
+  args: { collapsible: true, defaultOpen: false, children: invoices },
 };

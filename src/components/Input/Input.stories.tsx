@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import { Input } from './Input';
 
 const meta = {
@@ -152,5 +152,53 @@ export const NoLabel: Story = {
   args: {
     placeholder: 'No label input',
     'aria-label': 'Unlabelled input',
+  },
+};
+
+/** Text inside the field, read as part of it: a scheme before an address. */
+export const WithPrefix: Story = {
+  args: { label: 'Website', prefix: 'https://', placeholder: 'example.com' },
+};
+
+/** A unit after the value. */
+export const WithSuffix: Story = {
+  args: { label: 'Weight', suffix: 'kg', inputMode: 'decimal', defaultValue: '2.5' },
+};
+
+/** A prefix and a suffix together, at the compact size. */
+export const PrefixAndSuffixCompact: Story = {
+  args: { label: 'Subdomain', size: 'compact', prefix: 'https://', suffix: '.example.app', defaultValue: 'northwind' },
+};
+
+/** A clear button while the field holds a value; it empties the field and hands focus back. */
+export const Clearable: Story = {
+  args: { label: 'Search orders', iconLeft: 'search', clearable: true, defaultValue: 'INV-2041', onClear: fn(), onValueChange: fn() },
+  play: async ({ canvas, args }) => {
+    const input = canvas.getByRole('textbox', { name: 'Search orders' });
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear' }));
+    await expect(input).toHaveValue('');
+    await expect(input).toHaveFocus();
+    await expect(args.onClear).toHaveBeenCalled();
+    await expect(args.onValueChange).toHaveBeenCalledWith('');
+    await expect(canvas.queryByRole('button', { name: 'Clear' })).toBeNull();
+    await userEvent.type(input, 'INV-2041');
+  },
+};
+
+/** The newer error form: the message under the field, the helper text kept beside it. */
+export const WithErrorText: Story = {
+  args: {
+    label: 'Email',
+    type: 'email',
+    defaultValue: 'sam@',
+    helperText: 'We send receipts here.',
+    errorText: 'Enter an email address like name@example.com.',
+  },
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole('textbox', { name: 'Email' });
+    await expect(input).toHaveAttribute('aria-invalid', 'true');
+    await expect(input).toHaveAccessibleDescription(
+      'Enter an email address like name@example.com. We send receipts here.',
+    );
   },
 };

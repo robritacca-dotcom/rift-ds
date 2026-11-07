@@ -11,6 +11,8 @@
  * server's HTML and the browser's first render agree; a column sets its own.
  */
 
+import { formatMoney } from '../../format/money';
+import { formatRelative } from '../../format/relative';
 import type { CellEditorKind, CellValue } from './editorKinds';
 import type { FilterKind } from './filterModel';
 
@@ -72,31 +74,16 @@ export const absoluteDate = (date: Date, format: ColumnFormat | undefined, style
     timeZone: 'UTC',
   }).format(date);
 
-/** A calendar unit for reading dates, not a timing. */
-const MS_PER_DAY = 86_400_000;
-
 /** A date against today, in the largest unit that keeps it whole: "today", "in 3 days", "2 months ago". */
-export const relativeDate = (date: Date, format: ColumnFormat | undefined, now: Date) => {
-  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  const days = Math.round((date.getTime() - today) / MS_PER_DAY);
-  const rtf = new Intl.RelativeTimeFormat(format?.locale ?? DEFAULT_LOCALE, { numeric: 'auto' });
-  if (Math.abs(days) < 7) return rtf.format(days, 'day');
-  if (Math.abs(days) < 30) return rtf.format(Math.round(days / 7), 'week');
-  if (Math.abs(days) < 365) return rtf.format(Math.round(days / 30), 'month');
-  return rtf.format(Math.round(days / 365), 'year');
-};
+export const relativeDate = (date: Date, format: ColumnFormat | undefined, now: Date) =>
+  formatRelative(date, { now, locale: format?.locale ?? DEFAULT_LOCALE, minUnit: 'day' });
 
 /** A number as its type reads it: grouped, as money, or as a percent of 100. */
 export const formatNumber = (type: ColumnType, value: number, format: ColumnFormat | undefined) => {
   const locale = format?.locale ?? DEFAULT_LOCALE;
   const digits = format?.fractionDigits;
   if (type === 'currency')
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: format?.currency ?? 'USD',
-      minimumFractionDigits: digits ?? 0,
-      maximumFractionDigits: digits ?? 0,
-    }).format(value);
+    return formatMoney(value, { currency: format?.currency ?? 'USD', locale, fractionDigits: digits ?? 0 });
   if (type === 'progress')
     return new Intl.NumberFormat(locale, {
       style: 'percent',

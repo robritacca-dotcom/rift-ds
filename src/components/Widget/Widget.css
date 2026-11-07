@@ -66,6 +66,117 @@
   min-width: 0;
 }
 
+/* Heading block: the title and the description under it */
+
+.ds-widget__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-widget__description {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+/* Footer — behind the family's divider, a step below the body */
+
+.ds-widget__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-200);
+  min-width: 0;
+  padding-block-start: var(--padding-300);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+/* Padding */
+
+.ds-widget--padding-compact {
+  gap: var(--gap-200);
+  padding: var(--padding-300);
+}
+
+.ds-widget--padding-none {
+  gap: 0;
+  padding: 0;
+}
+
+.ds-widget--padding-none .ds-widget__header {
+  padding: var(--padding-500);
+  padding-block-end: var(--padding-300);
+}
+
+.ds-widget--padding-none .ds-widget__footer {
+  padding: var(--padding-300) var(--padding-500);
+}
+
+/* Collapsible — the title is the disclosure button */
+
+.ds-widget__region {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.ds-widget__region[hidden] {
+  display: none;
+}
+
+.ds-widget--padding-none .ds-widget__region {
+  gap: 0;
+}
+
+.ds-widget__toggle {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gap-200);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-100);
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.ds-widget__toggle:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+.ds-widget__chevron {
+  --icon-size: var(--icon-size-500);
+  align-self: center;
+  color: var(--color-icon-primary);
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-widget__toggle[aria-expanded='false'] .ds-widget__chevron {
+  transform: rotate(-90deg);
+}
+
+.ds-widget__toggle[aria-expanded='false'] .ds-widget__chevron:dir(rtl) {
+  transform: rotate(90deg);
+}
+
+.ds-widget--collapsible:has(.ds-widget__region[hidden]) {
+  gap: 0;
+}
+
 /* Group — a labelled run of rows */
 
 .ds-widget-group {

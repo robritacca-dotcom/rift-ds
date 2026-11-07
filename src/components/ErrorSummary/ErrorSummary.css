@@ -1,0 +1,94 @@
+/* ============================================
+   ERROR SUMMARY
+   The Alert's error surface (status fill, status
+   border, its radius and inset), holding a
+   heading and a list of links, one per error.
+   ============================================ */
+
+/* Base */
+.ds-error-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-200);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--padding-400);
+  border: var(--border-025) solid var(--color-status-error-border);
+  border-radius: var(--radius-200);
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-text);
+}
+
+.ds-error-summary:focus {
+  outline: none;
+}
+
+.ds-error-summary:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+.ds-error-summary__icon {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-600);
+  line-height: 1;
+  color: var(--color-status-error-border);
+}
+
+.ds-error-summary__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-error-summary__title {
+  margin: 0;
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-error-summary__description {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}
+
+/* List */
+.ds-error-summary__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-error-summary__link {
+  border-radius: var(--radius-050);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.2em;
+}
+
+.ds-error-summary__link:hover {
+  text-decoration-thickness: var(--border-050);
+}
+
+.ds-error-summary__link:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}

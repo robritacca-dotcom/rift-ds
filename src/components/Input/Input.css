@@ -154,3 +154,108 @@
   padding-inline-end: calc(var(--padding-300) + 20px + var(--gap-200)); /* 12px + 20px icon + 8px gap */
 }
 
+
+/* ============================================
+   AFFIXED: a prefix, a suffix or a clear button
+   The wrapper becomes the field's box (border,
+   fill, hover, focus, error, disabled), and the
+   native input inside it a bare, growing text
+   run, so an affix of any width sits on the
+   field's line with no padding to guess. Only
+   in this mode: an input without affixes keeps
+   its border on the <input> exactly as before.
+   ============================================ */
+
+.ds-input--affixed .ds-input__field-wrapper {
+  gap: var(--gap-200);
+  box-sizing: border-box;
+  height: var(--control-height-default);
+  padding-inline: var(--padding-400);
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300);
+  background-color: var(--color-input-bg-primary);
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-input--affixed .ds-input__field-wrapper:hover:not(:focus-within) {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-input--affixed .ds-input__field-wrapper:focus-within {
+  border-color: var(--color-input-border-selected);
+}
+
+.ds-input--affixed .ds-input__field,
+.ds-input--affixed .ds-input__field:hover,
+.ds-input--affixed .ds-input__field:focus {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.ds-input--affixed .ds-input__icon {
+  position: static;
+  transform: none;
+  flex-shrink: 0;
+}
+
+.ds-input--affixed.ds-input--has-icon-left .ds-input__field,
+.ds-input--affixed.ds-input--has-icon-right .ds-input__field {
+  padding-inline: 0;
+}
+
+.ds-input__affix {
+  flex-shrink: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* The clear button sits a step in from the edge, its circle centred in the row. */
+.ds-input__clear {
+  flex-shrink: 0;
+  margin-inline-end: calc(-1 * var(--padding-200));
+}
+
+.ds-input--affixed.ds-input--error .ds-input__field-wrapper,
+.ds-input--affixed.ds-input--error .ds-input__field-wrapper:focus-within {
+  border-color: var(--color-status-error-border);
+}
+
+.ds-input--affixed.ds-input--disabled .ds-input__field-wrapper {
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  cursor: not-allowed;
+}
+
+.ds-input--affixed.ds-input--disabled .ds-input__field {
+  background-color: transparent;
+  border: none;
+}
+
+.ds-input--affixed.ds-input--disabled .ds-input__affix {
+  color: var(--color-input-text-disabled);
+}
+
+.ds-input--affixed.ds-input--compact .ds-input__field-wrapper {
+  height: var(--control-height-compact);
+  padding-inline: var(--padding-300);
+}
+
+.ds-input--affixed.ds-input--compact .ds-input__affix {
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-input--affixed.ds-input--compact .ds-input__clear {
+  margin-inline-end: calc(-1 * var(--padding-300));
+}

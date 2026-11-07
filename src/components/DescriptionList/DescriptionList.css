@@ -1,0 +1,184 @@
+/* ============================================
+   DESCRIPTION LIST
+   Terms in the secondary text colour, values in
+   the primary, the facts recipe the chat cards
+   use made general. The frame is the size
+   container, so the inline layout stacks and the
+   grid drops columns by the room the list has,
+   never by the viewport.
+   ============================================ */
+
+/* Frame */
+.ds-description-list__frame {
+  container-type: inline-size;
+  min-width: 0;
+}
+
+/* Base */
+.ds-description-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin: 0;
+  min-width: 0;
+}
+
+.ds-description-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-description-list__term {
+  color: var(--color-text-secondary);
+  overflow-wrap: break-word;
+}
+
+.ds-description-list__details {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.ds-description-list__value {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Stacked and grid entries keep a copy button or action beside the value;
+   the inline layout's value column runs to the far edge, so its actions
+   line up down the list there. */
+.ds-description-list--stacked .ds-description-list__value,
+.ds-description-list--grid .ds-description-list__value {
+  flex: 0 1 auto;
+}
+
+.ds-description-list__value--empty {
+  color: var(--color-text-tertiary);
+}
+
+.ds-description-list__actions {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+/* The copy button sits on the value's line without making the row taller. */
+.ds-description-list__copy {
+  margin-block: calc(-1 * var(--padding-100));
+}
+
+/* Sizes */
+.ds-description-list--default .ds-description-list__term,
+.ds-description-list--default .ds-description-list__details {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}
+
+.ds-description-list--compact {
+  gap: var(--gap-200);
+}
+
+.ds-description-list--compact .ds-description-list__term,
+.ds-description-list--compact .ds-description-list__details {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* Inline: term and value in two columns, the term a quarter, a third or a half */
+.ds-description-list--inline .ds-description-list__item {
+  display: grid;
+  align-items: baseline;
+  column-gap: var(--gap-400);
+}
+
+.ds-description-list--inline.ds-description-list--term-narrow .ds-description-list__item {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+}
+
+.ds-description-list--inline.ds-description-list--term-default .ds-description-list__item {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+}
+
+.ds-description-list--inline.ds-description-list--term-wide .ds-description-list__item {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* Grid: stacked entries in columns */
+.ds-description-list--grid {
+  display: grid;
+  grid-template-columns: repeat(var(--ds-description-list-columns, 2), minmax(0, 1fr));
+  gap: var(--gap-400) var(--gap-500);
+}
+
+/* Alignment: values against the far edge */
+.ds-description-list--align-end .ds-description-list__value {
+  text-align: end;
+}
+
+.ds-description-list--align-end .ds-description-list__details {
+  justify-content: flex-end;
+}
+
+/* Dividers */
+.ds-description-list--dividers {
+  gap: 0;
+}
+
+.ds-description-list--dividers .ds-description-list__item {
+  padding-block: var(--padding-300);
+  border-block-end: var(--border-025) solid var(--color-divider);
+}
+
+.ds-description-list--dividers .ds-description-list__item:last-child {
+  border-block-end: none;
+}
+
+.ds-description-list--grid.ds-description-list--dividers {
+  column-gap: var(--gap-500);
+}
+
+/* Narrow room: the inline layout stacks once two columns cannot hold a
+   short term and value side by side; the grid drops to fewer columns. */
+@container (max-width: 360px) {
+  .ds-description-list--inline .ds-description-list__item,
+  .ds-description-list--inline.ds-description-list--term-narrow .ds-description-list__item,
+  .ds-description-list--inline.ds-description-list--term-default .ds-description-list__item,
+  .ds-description-list--inline.ds-description-list--term-wide .ds-description-list__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-050);
+  }
+
+  .ds-description-list--inline.ds-description-list--align-end .ds-description-list__value {
+    text-align: start;
+  }
+
+  .ds-description-list--inline.ds-description-list--align-end .ds-description-list__details {
+    justify-content: flex-start;
+  }
+}
+
+@container (max-width: 480px) {
+  .ds-description-list--grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container (min-width: 481px) and (max-width: 720px) {
+  .ds-description-list--grid {
+    grid-template-columns: repeat(min(var(--ds-description-list-columns, 2), 2), minmax(0, 1fr));
+  }
+}

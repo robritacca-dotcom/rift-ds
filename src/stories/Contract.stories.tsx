@@ -49,6 +49,8 @@ const FIXTURES: Record<string, Record<string, unknown>> = {
   CommandPalette: { open: true, onOpenChange: () => {}, groups: [] },
   Dialog: { open: true, onOpenChange: () => {}, title: 'Dialog' },
   Drawer: { open: true, onOpenChange: () => {}, title: 'Drawer' },
+  // Renders nothing with no errors, and its first story with args starts empty.
+  ErrorSummary: { errors: [{ id: 'contract-field', message: 'Fix this field.' }], focusOnMount: false },
 };
 
 const argsFor = (name: string): Record<string, unknown> | null => {

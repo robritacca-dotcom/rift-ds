@@ -149,6 +149,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return <LocaleProvider locale="de-DE">{children}</LocaleProvider>;
 }`;
 
+const FORMAT_SNIPPET = `import { addDecimal, formatMoney, formatRelative, parseDecimal } from 'rift-ds/format';
+
+const typed = parseDecimal('1.234,5', { locale: 'de-DE' }); // "1234.5"
+const total = addDecimal(typed ?? '0', '0.10'); // "1234.60", never a float
+formatMoney(total, { currency: 'EUR', locale: 'de-DE' }); // "1.234,60 €"
+formatRelative('2026-11-09', { now: '2026-11-06', minUnit: 'day' }); // "in 3 days"`;
+
 const SHORTCUT_SNIPPET = `'use client';
 import { useShortcut } from 'rift-ds/behaviors/shortcuts';
 import { Kbd } from 'rift-ds/components/Kbd/Kbd';
@@ -691,6 +698,17 @@ export default function GetStartedPage() {
                     <code>dir=&quot;rtl&quot;</code> on <code>&lt;html&gt;</code> and the layout,
                     keys, popups and directional icons follow.
                   </p>
+                </div>
+
+                <div id="money" className={styles.subsection}>
+                  <h3 className={styles.subheading}>Money and dates</h3>
+                  <p className={styles.sectionNote}>
+                    An amount is a decimal string such as <code>&quot;1234.50&quot;</code>, never a
+                    float. <code>rift-ds/format</code> reads what a person typed in their locale,
+                    adds and multiplies on whole numbers, and writes money and relative dates. It
+                    has no React, so a server route can use it too.
+                  </p>
+                  <CodeBlock code={FORMAT_SNIPPET} language="ts" showCopy />
                 </div>
 
                 <div id="shortcuts" className={styles.subsection}>

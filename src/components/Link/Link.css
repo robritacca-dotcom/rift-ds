@@ -1,0 +1,84 @@
+/* ============================================
+   LINK
+   Inline: the sentence's own face and colour,
+   underlined, so a link in prose reads as part
+   of the prose. Standalone: the tertiary action
+   text colour a tertiary Button wears, in its
+   own paragraph face. Both are underlined. Neither
+   takes the action fill, which stays reserved
+   for primary actions.
+   ============================================ */
+
+/* Base */
+.ds-link {
+  display: inline;
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.2em;
+  text-decoration-color: currentColor;
+  border-radius: var(--radius-050);
+  cursor: pointer;
+}
+
+.ds-link:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+/* Both variants keep the underline at rest, so a link always reads as one
+   whatever colour a theme gives its text, and thicken it on hover. */
+.ds-link:hover {
+  text-decoration-thickness: var(--border-050);
+}
+
+/* Standalone */
+.ds-link--standalone {
+  color: var(--color-action-primary-text-tertiary);
+}
+
+.ds-link--standalone.ds-link--default {
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-link--standalone.ds-link--compact {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+/* Icons: sized to the text, sitting on its line. An inline link takes the
+   size of whatever sentence it is in, so its glyph follows the text rather
+   than a step of the icon scale. */
+.ds-link__icon {
+  display: inline-block;
+  /* ds-allow(icon-size): an inline link's glyph is the height of the text it sits in, which can be any tier */
+  --icon-size: 1em;
+  line-height: 1;
+  vertical-align: -0.125em;
+  text-decoration: none;
+}
+
+.ds-link__icon--start {
+  margin-inline-end: var(--gap-050);
+}
+
+.ds-link__icon--end {
+  margin-inline-start: var(--gap-050);
+}
+
+/* States */
+.ds-link--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-link--disabled:hover {
+  text-decoration-thickness: from-font;
+}

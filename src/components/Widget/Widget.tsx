@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useId } from 'react';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './Widget.css';
 import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
+import { WidgetDisclosure } from './WidgetDisclosure';
 
 /* ============================================
    Widget — the tile
@@ -17,7 +18,21 @@ type WidgetOwnProps = {
   action?: React.ReactNode;
   /** Heading element for the title, so the tile takes its place in the page's outline. */
   titleAs?: 'h2' | 'h3' | 'h4';
-  /** The tile's body: WidgetRows, WidgetGroups, a chart, a figure, anything. */
+  /** A line of quieter text under the title, saying what the section holds. It also describes the section to a screen reader. */
+  description?: React.ReactNode;
+  /** A slot under the body, behind a divider: the section's actions (Save, Cancel), a total, a link to everything. */
+  footer?: React.ReactNode;
+  /** The inset: `default` the tile's own, `compact` a step tighter for dense settings, `none` for a body that runs edge to edge (a table, a map) while the header and footer keep the default inset. */
+  padding?: 'default' | 'compact' | 'none';
+  /** Let the reader fold the section away: the title becomes a button that shows and hides the body and footer, which leave the tab order and the accessibility tree while hidden. */
+  collapsible?: boolean;
+  /** Whether a collapsible section is open (controlled). Pair with `onOpenChange`. */
+  open?: boolean;
+  /** Whether a collapsible section starts open (uncontrolled). Defaults to true. */
+  defaultOpen?: boolean;
+  /** Called with the new open state when the reader folds or unfolds a collapsible section. */
+  onOpenChange?: (open: boolean) => void;
+  /** The tile's body: WidgetRows, WidgetGroups, a chart, a figure, a form, anything. */
   children?: React.ReactNode;
   /** The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
   locale?: string;
@@ -39,24 +54,90 @@ export interface WidgetProps
  * Purely presentational: safe to render from a Server Component.
  */
 export const Widget = React.forwardRef<HTMLElement, WidgetProps>(
-  ({ title, count, action, titleAs: Title = 'h3', children, locale = DEFAULT_LOCALE, className = '', ...rest }, ref) => {
+  (
+    {
+      title,
+      count,
+      action,
+      titleAs: Title = 'h3',
+      description,
+      footer,
+      padding = 'default',
+      collapsible = false,
+      open,
+      defaultOpen = true,
+      onOpenChange,
+      children,
+      locale = DEFAULT_LOCALE,
+      className = '',
+      ...rest
+    },
+    ref,
+  ) => {
     const baseClass = 'ds-widget';
+    const hasDescription = description != null && description !== false && description !== '';
+    const hasFooter = footer != null && footer !== false;
+    // useId is one of the hooks a Server Component may call, so the tile
+    // stays server-renderable.
+    const idBase = useId();
+    const descriptionId = hasDescription ? `${idBase}-description` : undefined;
+    const countText = count !== undefined ? formatNumber(count, locale) : undefined;
+
+    const classes = [
+      baseClass,
+      padding !== 'default' && `${baseClass}--padding-${padding}`,
+      collapsible && `${baseClass}--collapsible`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    const descriptionNode = hasDescription ? (
+      <p className={`${baseClass}__description`} id={descriptionId}>
+        {description}
+      </p>
+    ) : null;
+    const footerNode = hasFooter ? <footer className={`${baseClass}__footer`}>{footer}</footer> : null;
 
     return (
       <section
         aria-label={title}
+        aria-describedby={descriptionId}
         {...rest}
         ref={ref}
-        className={[baseClass, className].filter(Boolean).join(' ')}
+        className={classes}
       >
-        <header className={`${baseClass}__header`}>
-          <Title className={`${baseClass}__title`}>
-            {title}
-            {count !== undefined && <span className={`${baseClass}__count`}>{formatNumber(count, locale)}</span>}
-          </Title>
-          {action && <span className={`${baseClass}__action`}>{action}</span>}
-        </header>
-        <div className={`${baseClass}__body`}>{children}</div>
+        {collapsible ? (
+          <WidgetDisclosure
+            idBase={idBase}
+            title={title}
+            titleAs={Title}
+            count={countText}
+            action={action}
+            description={descriptionNode}
+            open={open}
+            defaultOpen={defaultOpen}
+            onOpenChange={onOpenChange}
+          >
+            <div className={`${baseClass}__body`}>{children}</div>
+            {footerNode}
+          </WidgetDisclosure>
+        ) : (
+          <>
+            <header className={`${baseClass}__header`}>
+              <div className={`${baseClass}__heading`}>
+                <Title className={`${baseClass}__title`}>
+                  {title}
+                  {countText !== undefined && <span className={`${baseClass}__count`}>{countText}</span>}
+                </Title>
+                {descriptionNode}
+              </div>
+              {action && <span className={`${baseClass}__action`}>{action}</span>}
+            </header>
+            <div className={`${baseClass}__body`}>{children}</div>
+            {footerNode}
+          </>
+        )}
       </section>
     );
   },

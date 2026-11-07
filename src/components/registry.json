@@ -60,6 +60,11 @@
       "id": "overlays",
       "label": "Overlays",
       "description": "Dialogs, drawers, menus, and tooltips that float above the page."
+    },
+    {
+      "id": "typography",
+      "label": "Typography",
+      "description": "Headings, running text, links, and lists, each drawn from a tier of the type scale."
     }
   ],
   "components": [
@@ -515,6 +520,14 @@
       "client": true
     },
     {
+      "name": "DescriptionList",
+      "label": "Description list",
+      "slug": "description-list",
+      "description": "Terms and their values for review screens, receipts, and account details, stacked, in two columns, or in a grid.",
+      "category": "data-display",
+      "client": false
+    },
+    {
       "name": "Dialog",
       "label": "Dialog",
       "slug": "dialog",
@@ -584,6 +597,14 @@
       "slug": "entity-switcher",
       "description": "Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in.",
       "category": "navigation",
+      "client": true
+    },
+    {
+      "name": "ErrorSummary",
+      "label": "Error summary",
+      "slug": "error-summary",
+      "description": "Every error on a form at the top of it, each a link that moves focus to its field.",
+      "category": "feedback",
       "client": true
     },
     {
@@ -658,6 +679,14 @@
       "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin.",
       "category": "maps",
       "client": true
+    },
+    {
+      "name": "Heading",
+      "label": "Heading",
+      "slug": "heading",
+      "description": "A heading whose outline level and type tier are chosen apart.",
+      "category": "typography",
+      "client": false
     },
     {
       "name": "HoverCard",
@@ -797,11 +826,27 @@
       "recharts": true
     },
     {
+      "name": "Link",
+      "label": "Link",
+      "slug": "link",
+      "description": "A text link inside a sentence or on its own, routed through the app's link component.",
+      "category": "typography",
+      "client": false
+    },
+    {
       "name": "LinkList",
       "label": "Link list",
       "slug": "link-list",
       "description": "Linked items with logo, label, and subtitle.",
       "category": "data-display",
+      "client": false
+    },
+    {
+      "name": "List",
+      "label": "List",
+      "slug": "list",
+      "description": "Ordered and unordered lists marked with a disc, a number, a check, or an icon.",
+      "category": "typography",
       "client": false
     },
     {
@@ -1253,6 +1298,14 @@
       "description": "Multi-value text input with entries held as removable tags.",
       "category": "forms",
       "client": true
+    },
+    {
+      "name": "Text",
+      "label": "Text",
+      "slug": "text",
+      "description": "Running text in a tier of the type scale, with tones, truncation, and tabular figures.",
+      "category": "typography",
+      "client": false
     },
     {
       "name": "Textarea",

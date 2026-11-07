@@ -95,6 +95,10 @@ const SANCTIONED_TONES = {
     values: ['accent', 'error', 'negative', 'neutral', 'positive'],
     reason: 'a trend line coloured by status role, with the chart accent as its default',
   },
+  Text: {
+    values: ['default', 'error', 'inherit', 'neutral', 'positive', 'warning'],
+    reason: 'running text that carries a status message (saved, declined) speaks the status roles, and `inherit` takes the colour of what it sits in',
+  },
   Spinner: {
     values: ['default', 'inherit', 'neutral'],
     reason: '`inherit` draws in currentColor so the spinner matches the control it sits in',
@@ -662,6 +666,8 @@ const SANCTIONED_FORM_VARIANTS = {
   AnchorNav: { values: ['list', 'floating'], reason: FORM },
   Card: { values: ['default', 'case-study'], reason: FORM },
   EmptyState: { values: ['plain', 'bordered'], reason: FORM },
+  Link: { values: ['inline', 'standalone'], reason: 'where the link sits, inside a sentence or on its own line, which it has instead of an emphasis' },
+  List: { values: ['unordered', 'ordered', 'plain'], reason: 'the list\'s form (a `ul`, an `ol`, or a markerless stack), which it has instead of an emphasis' },
   PixelAvatar: { values: ['plain', 'tile'], reason: FORM },
   QuestionSummary: { values: ['plain', 'card'], reason: FORM },
   Quote: { values: ['default', 'pull'], reason: FORM },

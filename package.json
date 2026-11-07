@@ -52,6 +52,7 @@
     "./chat/upstash": "./src/chat/upstash.ts",
     "./chat/demo": "./src/chat/demo.ts",
     "./chat/chat.css": "./src/chat/ChatWidget.css",
+    "./format": "./src/format/index.ts",
     "./tokens/registry": "./src/tokens/registry.ts",
     "./tokens/values": "./src/tokens/values.ts",
     "./tokens/motion": "./src/tokens/motion.ts",

@@ -1,0 +1,129 @@
+/* ============================================
+   TEXT
+   Running text in one of the scale's body
+   tiers. Each tier reads its tokens from
+   tokens-typography.css; `--emphasis` swaps in
+   the tier's emphasis weight, which the
+   paragraph tiers carry as their own style and
+   the small tiers borrow from paragraph-sm.
+   ============================================ */
+
+/* Base */
+.ds-text {
+  margin: 0;
+  color: var(--color-text-primary);
+  overflow-wrap: break-word;
+}
+
+/* Tiers */
+.ds-text--paragraph {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}
+
+.ds-text--paragraph.ds-text--emphasis {
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-text--paragraph-sm {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-text--paragraph-sm.ds-text--emphasis {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-text--caption {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+}
+
+.ds-text--overline {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+}
+
+.ds-text--code {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.ds-text--caption.ds-text--emphasis,
+.ds-text--overline.ds-text--emphasis,
+.ds-text--code.ds-text--emphasis {
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+/* Tone */
+.ds-text--tone-neutral {
+  color: var(--color-text-secondary);
+}
+
+.ds-text--tone-positive {
+  color: var(--color-status-positive-text);
+}
+
+.ds-text--tone-warning {
+  color: var(--color-status-warning-text);
+}
+
+.ds-text--tone-error {
+  color: var(--color-status-error-text);
+}
+
+.ds-text--tone-inherit {
+  color: inherit;
+}
+
+/* Wrapping */
+.ds-text--truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ds-text--clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--ds-text-lines);
+  line-clamp: var(--ds-text-lines);
+  overflow: hidden;
+}
+
+/* Figures */
+.ds-text--numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Alignment */
+.ds-text--align-start {
+  text-align: start;
+}
+
+.ds-text--align-center {
+  text-align: center;
+}
+
+.ds-text--align-end {
+  text-align: end;
+}

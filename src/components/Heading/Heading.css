@@ -1,0 +1,129 @@
+/* ============================================
+   HEADING
+   One element per outline level, one class per
+   type tier. Each tier reads its five tokens
+   from tokens-typography.css; the display tiers
+   take the display text role and the heading
+   tiers the heading role, so a theme that tones
+   either tier tones every Heading with it.
+   ============================================ */
+
+/* Base */
+.ds-heading {
+  margin: 0;
+  color: var(--color-text-heading);
+  overflow-wrap: break-word;
+}
+
+/* Tiers: display */
+.ds-heading--mega-1 {
+  font-family: var(--font-mega-1-family);
+  font-size: var(--font-mega-1-size);
+  font-weight: var(--font-mega-1-weight);
+  line-height: var(--font-mega-1-line-height);
+  letter-spacing: var(--font-mega-1-letter-spacing);
+  color: var(--color-text-display);
+}
+
+.ds-heading--mega-2 {
+  font-family: var(--font-mega-2-family);
+  font-size: var(--font-mega-2-size);
+  font-weight: var(--font-mega-2-weight);
+  line-height: var(--font-mega-2-line-height);
+  letter-spacing: var(--font-mega-2-letter-spacing);
+  color: var(--color-text-display);
+}
+
+.ds-heading--display-1 {
+  font-family: var(--font-display-1-family);
+  font-size: var(--font-display-1-size);
+  font-weight: var(--font-display-1-weight);
+  line-height: var(--font-display-1-line-height);
+  letter-spacing: var(--font-display-1-letter-spacing);
+  color: var(--color-text-display);
+}
+
+.ds-heading--display-2 {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-display);
+}
+
+.ds-heading--sub-display {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-display);
+}
+
+/* Tiers: heading */
+.ds-heading--heading-1 {
+  font-family: var(--font-heading-1-family);
+  font-size: var(--font-heading-1-size);
+  font-weight: var(--font-heading-1-weight);
+  line-height: var(--font-heading-1-line-height);
+  letter-spacing: var(--font-heading-1-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+.ds-heading--heading-2 {
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+.ds-heading--heading-3 {
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+/* Tiers: title in the body face */
+.ds-heading--title-body {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+/* Tone */
+.ds-heading.ds-heading--tone-neutral {
+  color: var(--color-text-secondary);
+}
+
+/* Wrapping */
+.ds-heading--truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ds-heading--balance {
+  text-wrap: balance;
+}
+
+/* Alignment */
+.ds-heading--align-start {
+  text-align: start;
+}
+
+.ds-heading--align-center {
+  text-align: center;
+}
+
+.ds-heading--align-end {
+  text-align: end;
+}

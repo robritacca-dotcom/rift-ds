@@ -100,3 +100,15 @@ export const AllStates: Story = {
     </div>
   ),
 };
+
+/** `errorText` keeps the helper text in place while the error shows under the control. */
+export const ErrorTextWithHelper: Story = {
+  render: () => (
+    <Input
+      label="Legal business name"
+      defaultValue="N"
+      helperText="As it appears on your registration documents."
+      errorText="Enter at least two characters."
+    />
+  ),
+};

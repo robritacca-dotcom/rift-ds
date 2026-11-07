@@ -56,6 +56,7 @@ export default defineConfig({
         'chat/actions': 'src/chat/actions.ts',
         'chat/upstash': 'src/chat/upstash.ts',
         'chat/demo': 'src/chat/demo.ts',
+        'format/index': 'src/format/index.ts',
         'tokens/registry': 'src/tokens/registry.ts',
         'tokens/values': 'src/tokens/values.ts',
         'tokens/motion': 'src/tokens/motion.ts',

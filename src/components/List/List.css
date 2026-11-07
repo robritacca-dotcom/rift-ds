@@ -1,0 +1,173 @@
+/* ============================================
+   LIST
+   Every marker sits in one gutter at the list's
+   inline start: the native disc and number, the
+   form controls' check, a named icon drawn by
+   the icon font in ::before, or an item's own
+   icon. The marker box is one line of the item's
+   text tall, so it centres on the first line
+   however the label wraps.
+   ============================================ */
+
+/* Base */
+.ds-list {
+  --ds-list-gutter: calc(var(--icon-size-500) + var(--gap-200));
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-list-gap);
+  margin: 0;
+  padding: 0;
+  padding-inline-start: var(--ds-list-gutter);
+  color: var(--color-text-primary);
+  list-style: none;
+}
+
+.ds-list__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-inline-size: 0;
+}
+
+.ds-list__label {
+  overflow-wrap: break-word;
+}
+
+.ds-list__description {
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* Sizes */
+.ds-list--default {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+}
+
+.ds-list--compact {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-list--compact .ds-list__description {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+}
+
+/* Spacing */
+.ds-list--spacing-compact {
+  --ds-list-gap: var(--gap-050);
+}
+
+.ds-list--spacing-default {
+  --ds-list-gap: var(--gap-200);
+}
+
+.ds-list--spacing-relaxed {
+  --ds-list-gap: var(--gap-400);
+}
+
+/* Markers: the gutter box every drawn marker sits in */
+.ds-list__marker,
+.ds-list--marker-icon .ds-list__item::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(-1 * var(--ds-list-gutter));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-size-500);
+  block-size: 1lh;
+  --icon-size: var(--icon-size-500);
+  color: var(--color-text-secondary);
+}
+
+/* Native markers: disc and number */
+.ds-list--marker-disc {
+  list-style: disc;
+}
+
+.ds-list--marker-number {
+  list-style: decimal;
+}
+
+.ds-list--marker-disc .ds-list__item,
+.ds-list--marker-number .ds-list__item {
+  display: list-item;
+}
+
+.ds-list--marker-disc .ds-list__item > * + *,
+.ds-list--marker-number .ds-list__item > * + * {
+  margin-block-start: var(--gap-050);
+}
+
+.ds-list--marker-disc .ds-list__description,
+.ds-list--marker-number .ds-list__description {
+  display: block;
+}
+
+.ds-list__item::marker {
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The tick: the form controls' CheckIcon, drawn only in a check list */
+.ds-list__tick {
+  display: none;
+}
+
+.ds-list--marker-check .ds-list__tick {
+  display: flex;
+  color: var(--color-status-positive-text);
+}
+
+.ds-list__tick-glyph {
+  inline-size: var(--icon-size-500);
+  block-size: var(--icon-size-500);
+  padding: var(--padding-050);
+  box-sizing: border-box;
+}
+
+/* A named icon, drawn by the icon font from the list's custom property */
+.ds-list--marker-icon .ds-list__item::before {
+  content: var(--ds-list-marker);
+  font-family: 'Material Symbols Rounded';
+  font-size: var(--icon-size);
+  line-height: 1;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* An item's own icon replaces the list's marker */
+.ds-list__item--icon {
+  display: flex;
+  list-style: none;
+}
+
+.ds-list .ds-list__item--icon::before {
+  content: none;
+}
+
+/* No marker, no gutter */
+.ds-list--marker-none {
+  padding-inline-start: 0;
+}
+
+.ds-list--marker-none .ds-list__item--icon {
+  padding-inline-start: var(--ds-list-gutter);
+}
+
+.ds-list--marker-none .ds-list__item--icon .ds-list__marker {
+  inset-inline-start: 0;
+}

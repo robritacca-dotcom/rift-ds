@@ -10,15 +10,23 @@ type FieldOwnProps = {
   label?: string;
   /** The form control this field labels */
   children?: React.ReactNode;
-  /** Helper or error message rendered below the control */
+  /** Helper text rendered below the control. With `errorText` it stays as it is while an error shows; with the older `error` flag it is recoloured as the error message. */
   helperText?: string;
+  /**
+   * The error message, shown under the control in the error colour while the
+   * helper text keeps its place, and announced politely when it changes.
+   * Setting it marks the field invalid, so `error` is not needed alongside
+   * it. The older form, `error` with the message in `helperText`, still
+   * works.
+   */
+  errorText?: React.ReactNode;
   /**
    * Optional content rendered opposite the helper text — a character counter,
    * a unit, a "0/280". Present only when supplied; without it the helper sits
    * directly in the field's column and no extra wrapper is introduced.
    */
   aside?: React.ReactNode;
-  /** Error state — recolours the helper text and marks the control invalid */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
   /** Marks the field required and renders the required marker */
   required?: boolean;
@@ -67,6 +75,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
       label,
       children,
       helperText,
+      errorText,
       aside,
       error = false,
       required = false,
@@ -82,13 +91,18 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
     const baseClass = 'ds-field';
     const generatedId = useId();
     const controlId = id || generatedId;
-    const describedBy = helperText ? `${controlId}-helper` : undefined;
+    const hasErrorText = errorText != null && errorText !== false && errorText !== '';
+    const helperId = helperText ? `${controlId}-helper` : undefined;
+    const errorId = hasErrorText ? `${controlId}-error` : undefined;
+    const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+    const invalid = error || hasErrorText;
     const labelId = label ? `${controlId}-label` : undefined;
 
     const classes = [
       baseClass,
       size === 'compact' ? `${baseClass}--compact` : '',
-      error ? `${baseClass}--error` : '',
+      error && !hasErrorText ? `${baseClass}--error` : '',
+      hasErrorText ? `${baseClass}--invalid` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
     ]
@@ -99,7 +113,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
       controlId,
       labelId,
       describedBy,
-      invalid: error,
+      invalid,
       required,
       disabled,
     };
@@ -134,12 +148,18 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
 
           {children}
 
+          {hasErrorText && (
+            <p className={`${baseClass}__error`} id={errorId} aria-live="polite">
+              {errorText}
+            </p>
+          )}
+
           {/* Without an aside the helper stays a direct child, so adopting
               Field introduces no wrapper and cannot shift existing layout. */}
           {aside ? (
             <div className={`${baseClass}__footer`}>
               {helperText ? (
-                <p className={`${baseClass}__helper`} id={describedBy}>
+                <p className={`${baseClass}__helper`} id={helperId}>
                   {helperText}
                 </p>
               ) : (
@@ -149,7 +169,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
             </div>
           ) : (
             helperText && (
-              <p className={`${baseClass}__helper`} id={describedBy}>
+              <p className={`${baseClass}__helper`} id={helperId}>
                 {helperText}
               </p>
             )

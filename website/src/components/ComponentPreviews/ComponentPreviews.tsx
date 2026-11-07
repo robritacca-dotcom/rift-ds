@@ -32,6 +32,10 @@ import { TableToolbar } from "rift-ds/components/TableToolbar/TableToolbar";
 import { Gauge } from "rift-ds/components/Gauge/Gauge";
 import { StreamingText } from "rift-ds/components/StreamingText/StreamingText";
 import { Badge } from "rift-ds/components/Badge/Badge";
+import { DescriptionList } from "rift-ds/components/DescriptionList/DescriptionList";
+import { Heading } from "rift-ds/components/Heading/Heading";
+import { List, ListItem } from "rift-ds/components/List/List";
+import { Text } from "rift-ds/components/Text/Text";
 import { Banner } from "rift-ds/components/Banner/Banner";
 import { Button } from "rift-ds/components/Button/Button";
 import { ImageCompare } from "rift-ds/components/ImageCompare/ImageCompare";
@@ -127,6 +131,70 @@ const contributionPreviewDays: ContributionDay[] = Array.from({ length: 10 * 7 }
 const PreviewRow: LinkComponent = ({ className, children }) => <span className={className}>{children}</span>;
 
 const previews: Record<string, () => ReactNode> = {
+  "description-list": () => (
+    <div style={{ width: "200px" }}>
+      <DescriptionList
+        layout="inline"
+        size="compact"
+        termWidth="wide"
+        align="end"
+        items={[
+          { term: "Subtotal", details: "$1,084.00" },
+          { term: "Delivery", details: "$200.00" },
+          { term: "Total", details: "$1,284.00" },
+        ]}
+      />
+    </div>
+  ),
+  /* Mockups: the card is itself a link, so the summary's links are drawn
+     as text in the summary's own colours rather than nested. */
+  "error-summary": () => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        width: "200px",
+        padding: "12px",
+        borderRadius: "var(--radius-200)",
+        border: "var(--border-025) solid var(--color-status-error-border)",
+        background: "var(--color-status-error-bg)",
+        color: "var(--color-status-error-text)",
+        fontSize: "12px",
+      }}
+    >
+      <strong>There are 2 problems</strong>
+      <span style={{ textDecoration: "underline" }}>Enter your business name.</span>
+      <span style={{ textDecoration: "underline" }}>Enter an email address.</span>
+    </div>
+  ),
+  "heading": () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }} data-anchor-ignore>
+      <Heading level={3} tier="heading-2">Statements</Heading>
+      <Heading level={4} tier="title-body" tone="neutral">October 2026</Heading>
+    </div>
+  ),
+  "link": () => (
+    <Text tier="paragraph-sm" style={{ width: "200px" }}>
+      Update your card in{" "}
+      <span style={{ textDecoration: "underline", textUnderlineOffset: "0.2em" }}>billing settings</span> before the next
+      invoice.
+    </Text>
+  ),
+  "list": () => (
+    <List marker="check" size="compact" spacing="compact">
+      <ListItem>Unlimited invoices</ListItem>
+      <ListItem>Card payments</ListItem>
+      <ListItem>Reminders</ListItem>
+    </List>
+  ),
+  "text": () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "200px" }}>
+      <Text tier="overline" tone="neutral">Balance</Text>
+      <Text tier="paragraph" weight="emphasis" numeric>$12,950.75</Text>
+      <Text tier="caption" tone="positive">Up 4% this month</Text>
+    </div>
+  ),
   "accordion": () => (
     <>
       <div className={styles.previewColumn} style={{ gap: "4px", width: "120px" }}>

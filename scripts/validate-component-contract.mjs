@@ -79,6 +79,8 @@ const SANCTIONED = {
 const SANCTIONED_ANCHORS = {
   'AnchorNav/AnchorNav.tsx':
     'in-page `#id` jumps the component scrolls and tracks itself; a router link would only add a history entry per jump',
+  'ErrorSummary/ErrorSummary.tsx':
+    'in-page `#id` jumps to a form control the component scrolls to and focuses itself; a router link would navigate away from the form',
 };
 
 const NATIVE_PROPS = /ComponentPropsWithoutRef|ComponentPropsWithRef|ComponentProps<|HTMLAttributes|SVGProps|SVGAttributes/;

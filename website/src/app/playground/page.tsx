@@ -1,16 +1,18 @@
 "use client";
 
 /**
- * The playground: the immersive re-theming tool. Four views over one set
- * of levers (Components, Type, Chat, Templates), chromeless, its
+ * The playground: the immersive re-theming tool. Five views over one set
+ * of levers (Components, Type, Chat, Templates, Shaders), chromeless, its
  * rails built from the library's Inspector family. The theme rail sits on the
  * left and every view seats a panel of its own on the right, so each stage
  * centres under the toolbar's view switch:
  * the Components view's layout, section switches and surface, the
  * Type view's specimen text and tier switches
  * (viewing choices that never reach the theme or its export), the chat
- * director (views/ChatView.tsx, ChatDirector.tsx) and the templates rail
- * (views/TemplatesView.tsx, TemplatesRail.tsx).
+ * director (views/ChatView.tsx, ChatDirector.tsx), the templates rail
+ * (views/TemplatesView.tsx, TemplatesRail.tsx) and the shaders rail
+ * (ShadersRail.tsx), whose pick grounds every view through ShaderGround
+ * (the scenes and their renderer live in lib/shaders/).
  *
  * A theme leaves through the Export theme button (lib/theme/theme-export.ts
  * owns what it writes); one comes in by dropping a picture
@@ -25,6 +27,11 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
+import ShaderGround from "@/components/ShaderGround/ShaderGround";
+import { PASSES as SHADER_PASSES } from "@/lib/shaders/passes";
+import { sceneOf, TEMPLATES as SHADER_TEMPLATES, valuesOf } from "@/lib/shaders/templates";
+import type { Recipe as ShaderRecipe, Values as ShaderValues } from "@/lib/shaders/types";
+import ShadersRail, { NO_SHADER, type ShaderEdits } from "./ShadersRail";
 import StageControlBar, {
   StageControlBarActionSlot,
   StageControlBarEndSlot,
@@ -167,12 +174,13 @@ import FeedbackSection from "./sections/FeedbackSection";
 
 /* The tool's lenses on the same theme state. One page, one set of levers —
    switching views never resets what you've styled. */
-type View = "components" | "type" | "chat" | "templates";
+type View = "components" | "type" | "chat" | "templates" | "shaders";
 const VIEWS = [
   { value: "components", label: "Components" },
   { value: "type", label: "Typography" },
   { value: "chat", label: "AI Chat" },
   { value: "templates", label: "Templates" },
+  { value: "shaders", label: "Shaders" },
 ];
 
 /* Where the toolbar's Get started goes: the chat's own guide from the Chat
@@ -281,7 +289,7 @@ export default function PlaygroundPage() {
     // MegaNav's navigation effect).
     const q = new URLSearchParams(window.location.search).get("view");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (q === "chat" || q === "type" || q === "templates") setView(q);
+    if (q === "chat" || q === "type" || q === "templates" || q === "shaders") setView(q);
     /* The Templates view was the Dashboard view, and links to it remain. */
     else if (q === "dashboard") setView("templates");
   }, []);
@@ -416,6 +424,48 @@ export default function PlaygroundPage() {
   const shaderPristine = SHADER_PARAM_CONTROLS.every(
     (c) => shaderParams[c.key] === shaderBackground.params[c.key]
   );
+
+  /* ---------- the shader ground ----------
+     The Shaders view picks a scene and tunes it; the pick then paints the
+     ground under every view, in DotBackground's place (ShaderGround).
+     None keeps the dot grid. `shaderSeed` is what the rail's settings
+     render their defaults from; the ref is the live copy the sliders write
+     and the ground reads every frame, so a drag renders nothing. Like the
+     banner's levers, no theme preset owns these, and nothing here reaches
+     the theme export: the shaders are the playground's own for now. */
+  const [shaderId, setShaderId] = useState<string>(NO_SHADER);
+  const [shaderSeed, setShaderSeed] = useState<ShaderValues>(() => valuesOf(SHADER_TEMPLATES[0]));
+  const shaderValuesRef = useRef<ShaderValues>(valuesOf(SHADER_TEMPLATES[0]));
+  const [shaderGeneration, setShaderGeneration] = useState(0);
+  const shaderTemplate = SHADER_TEMPLATES.find((t) => t.id === shaderId);
+  const startShader = (id: string, fresh: boolean) => {
+    const next = SHADER_TEMPLATES.find((t) => t.id === id);
+    if (next && (fresh || id !== shaderId)) {
+      const values = valuesOf(next);
+      shaderValuesRef.current = structuredClone(values);
+      setShaderSeed(values);
+      setShaderGeneration((g) => g + 1);
+    }
+    setShaderId(next ? id : NO_SHADER);
+  };
+  const shaderEdits: ShaderEdits = {
+    scene: (key, value) => {
+      shaderValuesRef.current.scene[key] = value;
+    },
+    speed: (value) => {
+      shaderValuesRef.current.speed = value;
+    },
+    passOn: (id, on) => {
+      shaderValuesRef.current.passes[id].on = on;
+    },
+    passParam: (id, key, value) => {
+      shaderValuesRef.current.passes[id].params[key] = value;
+    },
+  };
+  const shaderRecipe = () => {
+    const recipe: ShaderRecipe = { sceneId: shaderTemplate?.sceneId ?? "", ...shaderValuesRef.current };
+    return JSON.stringify(recipe, null, 2);
+  };
 
   /* ---------- levers ---------- */
   const [preset, setPreset] = useState(BASE_THEME_ID);
@@ -1407,6 +1457,18 @@ export default function PlaygroundPage() {
                     value={templateHref}
                     onValueChange={pickTemplate}
                   />
+                ) : view === "shaders" && compact ? (
+                  /* The shaders rail's picker and settings, the same way. */
+                  <ShadersRail
+                    variant="drawer"
+                    value={shaderId}
+                    onValueChange={(id) => startShader(id, false)}
+                    seed={shaderSeed}
+                    generation={shaderGeneration}
+                    edits={shaderEdits}
+                    onResetScene={() => startShader(shaderId, true)}
+                    copyText={shaderRecipe}
+                  />
                 ) : view === "type" && compact ? (
                   /* And the type rail's specimen and tiers. */
                   <TypeRail variant="drawer" state={typeView} onChange={setTypeView} />
@@ -1465,7 +1527,17 @@ export default function PlaygroundPage() {
           field — the shader stands down here (and is staged as a banner
           in the Components view instead). */}
       <HiddenBackground />
-      <DotBackground dots={showDots} />
+      {/* Or the shader the Shaders view picked, on the same layer: it
+          grounds every view until None brings the dots back. */}
+      {shaderTemplate ? (
+        <ShaderGround
+          scene={sceneOf(shaderTemplate)}
+          passes={SHADER_PASSES}
+          values={shaderValuesRef}
+        />
+      ) : (
+        <DotBackground dots={showDots} />
+      )}
       {/* The stage has no visible title; this names the page for screen
           readers and search, one h1 like every other page. */}
       <h1 className={styles.visuallyHidden}>Playground</h1>
@@ -1601,6 +1673,9 @@ export default function PlaygroundPage() {
                   checked={showDots}
                   label="Dot grid"
                   showLabel
+                  /* A shader ground replaces the dots, so the switch has
+                     nothing to move until None brings them back. */
+                  disabled={shaderTemplate !== undefined}
                   onCheckedChange={changeShowDots}
                 />
               </span>
@@ -1810,6 +1885,24 @@ export default function PlaygroundPage() {
             variant="panel"
             value={templateHref}
             onValueChange={pickTemplate}
+            collapsed={rightRailCollapsed}
+            onCollapsedChange={setRightRailCollapsed}
+          />
+        )}
+
+        {/* The shaders rail: the Shaders view's own panel. Its pick grounds
+            every view; the view's own stage stays empty, so the shader is
+            all there is to look at. Compact screens get it in the Drawer. */}
+        {view === "shaders" && !compact && (
+          <ShadersRail
+            variant="panel"
+            value={shaderId}
+            onValueChange={(id) => startShader(id, false)}
+            seed={shaderSeed}
+            generation={shaderGeneration}
+            edits={shaderEdits}
+            onResetScene={() => startShader(shaderId, true)}
+            copyText={shaderRecipe}
             collapsed={rightRailCollapsed}
             onCollapsedChange={setRightRailCollapsed}
           />

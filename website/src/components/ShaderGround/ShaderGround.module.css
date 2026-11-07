@@ -1,0 +1,15 @@
+/* The shader ground, viewport-fixed on DotBackground's layer, so page
+   content needs no z-index of its own and every view floats over it. */
+.ground {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-bg-page-primary);
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

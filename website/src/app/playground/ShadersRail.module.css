@@ -1,0 +1,45 @@
+/* ============================================
+   SHADERS RAIL: the cards' pictures and the settings' way back. The cards
+   themselves are the templates rail's (TemplatesRail.module.css), and the
+   rail geometry lives in page.module.css beside the other rails'.
+   ============================================ */
+
+/* A baked picture fills the card's media slot at its own shape, in full
+   colour: the templates rail's stills wear a duotone, these are the scene. */
+.thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* While the pictures bake: the slot at the same shape, blank. */
+.pending {
+  display: block;
+  aspect-ratio: 8 / 5;
+  background-color: var(--color-bg-container-secondary);
+}
+
+/* The None card's picture: the dot grid itself, filling the slot. */
+.none {
+  position: relative;
+  display: block;
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+}
+
+/* The settings' way back. The rail's scroll area already insets its
+   content, so the row adds none of its own, and the button is pulled back
+   by its own padding so the arrow stands on the same line as the section
+   titles below it. */
+.back {
+  padding-block-start: var(--padding-300);
+}
+
+.back > :global(.ds-button) {
+  margin-inline-start: calc(-1 * var(--padding-300));
+}
+
+/* The back arrow points toward the reading start, so it mirrors in RTL. */
+.backGlyph {
+  transform: scaleX(var(--ds-inline-sign, 1));
+}

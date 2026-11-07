@@ -82,6 +82,17 @@
       "axis": "both"
     },
     {
+      "label": "playground shaders rail: a scene slider over the live ground",
+      "route": "/playground?preset=contrast&view=shaders",
+      "ready": "button[aria-label=\"Field: open its settings\"]",
+      "setup": [
+        { "click": "button[aria-label=\"Field: open its settings\"]" },
+        { "waitFor": "aside[aria-label=\"Field settings\"] .ds-inspector-slider" }
+      ],
+      "grip": "aside[aria-label=\"Field settings\"] .ds-inspector-slider",
+      "axis": "x"
+    },
+    {
       "label": "site chat: docked widen grip",
       "route": "/overview",
       "ready": ".ds-chat-launcher__fab button",

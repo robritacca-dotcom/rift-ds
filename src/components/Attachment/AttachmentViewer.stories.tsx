@@ -6,8 +6,10 @@ import type { AttachmentViewerProps } from './AttachmentViewer';
 import type { AttachmentItem } from './fileTypes';
 import { Button } from '../Button/Button';
 import {
+  CONTRACT_TXT,
   DOCUMENT_FIRST_PAGE,
   PHOTOS,
+  statementPdfUrl,
 } from '../../stories/attachment-fixtures';
 
 const photos: AttachmentItem[] = PHOTOS.slice(0, 5).map((previewSrc, index) => ({
@@ -118,6 +120,28 @@ export const HostRenderedPdf: Story = {
     ),
   },
   render: (args) => <Demo {...args} />,
+};
+
+/** A PDF with a `fileUrl` shows in place, in the browser's own viewer, with no host code. */
+export const PdfInPlace: Story = {
+  render: function Render(args) {
+    const [fileUrl] = useState(statementPdfUrl);
+    return <Demo {...args} items={[{ ...pdf, name: 'statement.pdf', fileUrl }]} />;
+  },
+};
+
+/** A text file with a `fileUrl` is fetched and set in place. */
+export const TextInPlace: Story = {
+  args: {
+    items: [{ id: 'contract', name: 'agreement.txt', kind: 'text', size: 4_200, status: 'ready', fileUrl: CONTRACT_TXT }],
+  },
+  render: (args) => <Demo {...args} />,
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open viewer' }));
+    const dialog = await screen.findByRole('dialog');
+    await waitFor(() => expect(within(dialog).getByText(/SUPPLY AGREEMENT/)).toBeInTheDocument());
+    await userEvent.keyboard('{Escape}');
+  },
 };
 
 /** A file whose link has expired explains itself and offers another try. */

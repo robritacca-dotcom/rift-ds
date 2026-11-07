@@ -3,24 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor } from 'storybook/test';
 import { DocumentViewer } from './DocumentViewer';
 import { AttachmentViewer } from '../Attachment/AttachmentViewer';
+import { CONTRACT_TXT, statementPdfUrl } from '../../stories/attachment-fixtures';
 
-/** A one-page statement, generated for the stories. */
-const STATEMENT_PDF = 'JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCAxMzMgPj4Kc3RyZWFtCkJUIC9GMSAyNCBUZiA3MiA3MjAgVGQgKFN0YXRlbWVudCwgT2N0b2JlciAyMDI2KSBUaiBFVApCVCAvRjEgMTIgVGYgNzIgNjkwIFRkIChOb3J0aHdpbmQgU3VwcGx5IEx0ZC4gQ2xvc2luZyBiYWxhbmNlIDEyLDk1MC43NSkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDA0MjUgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0OTUKJSVFT0YK';
-
-/** The statement as a blob address, which a browser embeds where it refuses a data address. */
+/** The statement as a blob address, made once per story. */
 function usePdfUrl() {
-  return useMemo(() => {
-    const bytes = Uint8Array.from(atob(STATEMENT_PDF), (c) => c.charCodeAt(0));
-    return URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-  }, []);
+  return useMemo(() => statementPdfUrl(), []);
 }
 
 const RECEIPT_SVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640"><rect width="480" height="640" fill="#fff"/><text x="40" y="80" font-family="sans-serif" font-size="28">Receipt</text><text x="40" y="140" font-family="sans-serif" font-size="18">Standing desk     $899.00</text><text x="40" y="180" font-family="sans-serif" font-size="18">Monitor arm       $185.00</text><text x="40" y="240" font-family="sans-serif" font-size="20">Total            $1,084.00</text></svg>',
-)}`;
-
-const CONTRACT_TXT = `data:text/plain;charset=utf-8,${encodeURIComponent(
-  'SUPPLY AGREEMENT\n\n1. Parties. This agreement is between Northwind Supply Ltd and the buyer.\n\n2. Term. Twelve months from the start date, renewing for a further twelve unless either party gives sixty days notice.\n\n3. Payment. Invoices are due thirty days from issue.\n'.repeat(4),
 )}`;
 
 const meta = {
@@ -80,7 +71,19 @@ export const CustomToolbar: Story = {
   },
 };
 
-/** Inside AttachmentViewer, through its renderPreview slot. */
+/** Bare: no frame and no toolbar, for a host with a header of its own. */
+export const Bare: Story = {
+  args: { bare: true },
+  decorators: [
+    (Story) => (
+      <div style={{ blockSize: '360px', display: 'flex', flexDirection: 'column' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/** Inside AttachmentViewer with no host code: a PDF item with a `fileUrl` shows in place, bare. */
 export const InAttachmentViewer: Story = {
   render: function Render() {
     const src = usePdfUrl();
@@ -88,10 +91,7 @@ export const InAttachmentViewer: Story = {
       <AttachmentViewer
         open
         onOpenChange={() => {}}
-        items={[{ id: 'statement', name: 'statement.pdf', kind: 'pdf', status: 'ready', src }]}
-        renderPreview={(item) => (
-          <DocumentViewer src={item.src ?? ''} title={item.name} type="pdf" height="fill" openInNewTab={false} />
-        )}
+        items={[{ id: 'statement', name: 'statement.pdf', kind: 'pdf', status: 'ready', fileUrl: src }]}
       />
     );
   },

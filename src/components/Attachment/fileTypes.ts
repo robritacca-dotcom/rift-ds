@@ -312,6 +312,10 @@ export interface AttachmentItem {
   /** Full-size image for the viewer, when the preview is a thumbnail.
       Defaults to `previewSrc`. */
   src?: string;
+  /** The file itself, for the viewer to show a PDF or a text file in place
+      (through DocumentViewer) and for a picture with no `src`. Distinct
+      from `src`, which is always an image. */
+  fileUrl?: string;
   /** Intrinsic width of the preview, to reserve its shape before it loads. */
   width?: number;
   /** Intrinsic height of the preview. */

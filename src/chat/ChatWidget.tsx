@@ -355,6 +355,10 @@ export interface ChatWidgetProps {
   >;
   /** The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's "Drop files to attach". Its second line is `attachHint`. */
   attachmentDropZoneLabels?: Pick<AttachmentDropZoneProps, 'label'>;
+  /** Draws a sent file in the viewer its tile opens, in place of the built-in view: a document renderer of the host's own, a spreadsheet. Return nothing to keep the built-in view, which shows pictures, pasted text, and a PDF or a text file that carries a `fileUrl`. */
+  renderAttachmentPreview?: AttachmentGroupProps['renderPreview'];
+  /** Called with a sent file when the viewer's Download is pressed. Its presence renders the button. */
+  onAttachmentDownload?: AttachmentGroupProps['onDownload'];
   /** The words of the files on a sent message, over AttachmentGroup's English defaults: the list's name ("Attachments"), the overflow buttons ("Show 3 more", "Show fewer"), the tiles' status lines (`attachmentTileLabels`) and the viewer a pressed file opens in (`attachmentViewerLabels`). */
   attachmentGroupLabels?: Pick<
     AttachmentGroupProps,
@@ -469,6 +473,8 @@ export function ChatWidget({
   composerLabels,
   attachmentDropZoneLabels,
   attachmentGroupLabels,
+  renderAttachmentPreview,
+  onAttachmentDownload,
   chatThreadLabels,
   modelPickerLabels,
   artifactPanelLabels,
@@ -1226,7 +1232,13 @@ export function ChatWidget({
                     role="user"
                     attachments={
                       turn.attachments ? (
-                        <AttachmentGroup {...attachmentGroupLabels} align="end" items={turn.attachments} />
+                        <AttachmentGroup
+                          {...attachmentGroupLabels}
+                          align="end"
+                          items={turn.attachments}
+                          renderPreview={renderAttachmentPreview}
+                          onDownload={onAttachmentDownload}
+                        />
                       ) : (
                         <>
                           {turn.content}

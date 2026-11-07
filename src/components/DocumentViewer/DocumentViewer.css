@@ -24,6 +24,13 @@
   block-size: 100%;
 }
 
+/* Bare: no frame and no toolbar, the host's own surface and header around it */
+.ds-document-viewer--bare {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
 /* Toolbar */
 .ds-document-viewer__toolbar {
   display: flex;

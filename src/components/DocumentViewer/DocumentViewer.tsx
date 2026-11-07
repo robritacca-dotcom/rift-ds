@@ -27,6 +27,8 @@ type DocumentViewerOwnProps = {
   mimeType?: string;
   /** The viewer's height: `default`, `tall`, or `fill` to take the height of its container. */
   height?: 'default' | 'tall' | 'fill';
+  /** Drop the frame and the toolbar and fill the host, for a host that brings its own header with the name and the actions, such as AttachmentViewer. */
+  bare?: boolean;
   /** Show the download button. A string names the downloaded file. Defaults to true. */
   download?: boolean | string;
   /** Called when the download button is pressed, in place of the browser's own download: for a file the host must fetch with credentials. */
@@ -87,6 +89,7 @@ export function DocumentViewer({
   fileName,
   mimeType,
   height = 'default',
+  bare = false,
   download = true,
   onDownload,
   openInNewTab = true,
@@ -206,54 +209,63 @@ export function DocumentViewer({
     <section
       {...rest}
       ref={ref}
-      className={['ds-document-viewer', `ds-document-viewer--height-${height}`, className].filter(Boolean).join(' ')}
+      className={[
+        'ds-document-viewer',
+        `ds-document-viewer--height-${bare ? 'fill' : height}`,
+        bare && 'ds-document-viewer--bare',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
-      <header className="ds-document-viewer__toolbar">
-        <span className="ds-document-viewer__title">{title}</span>
-        <div className="ds-document-viewer__actions">
-          {resolved === 'image' && (
-            <>
+      {!bare && (
+        <header className="ds-document-viewer__toolbar">
+          <span className="ds-document-viewer__title">{title}</span>
+          <div className="ds-document-viewer__actions">
+            {resolved === 'image' && (
+              <>
+                <CircularButton
+                  icon="zoom_out"
+                  variant="tertiary"
+                  size="compact"
+                  ariaLabel={zoomOutLabel}
+                  disabled={zoom === 0}
+                  onClick={() => setZoom((z) => Math.max(0, z - 1))}
+                />
+                <button
+                  type="button"
+                  className="ds-document-viewer__zoom"
+                  aria-label={resetLabel}
+                  onClick={() => setZoom(ZOOMS.indexOf(1))}
+                >
+                  {percent}
+                </button>
+                <CircularButton
+                  icon="zoom_in"
+                  variant="tertiary"
+                  size="compact"
+                  ariaLabel={zoomInLabel}
+                  disabled={zoom === ZOOMS.length - 1}
+                  onClick={() => setZoom((z) => Math.min(ZOOMS.length - 1, z + 1))}
+                />
+              </>
+            )}
+            {toolbar}
+            {openInNewTab && (
               <CircularButton
-                icon="zoom_out"
+                icon="open_in_new"
                 variant="tertiary"
                 size="compact"
-                ariaLabel={zoomOutLabel}
-                disabled={zoom === 0}
-                onClick={() => setZoom((z) => Math.max(0, z - 1))}
+                ariaLabel={openLabel}
+                href={src}
+                target="_blank"
+                rel="noopener noreferrer"
               />
-              <button
-                type="button"
-                className="ds-document-viewer__zoom"
-                aria-label={resetLabel}
-                onClick={() => setZoom(ZOOMS.indexOf(1))}
-              >
-                {percent}
-              </button>
-              <CircularButton
-                icon="zoom_in"
-                variant="tertiary"
-                size="compact"
-                ariaLabel={zoomInLabel}
-                disabled={zoom === ZOOMS.length - 1}
-                onClick={() => setZoom((z) => Math.min(ZOOMS.length - 1, z + 1))}
-              />
-            </>
-          )}
-          {toolbar}
-          {openInNewTab && (
-            <CircularButton
-              icon="open_in_new"
-              variant="tertiary"
-              size="compact"
-              ariaLabel={openLabel}
-              href={src}
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          )}
-          {downloadButton}
-        </div>
-      </header>
+            )}
+            {downloadButton}
+          </div>
+        </header>
+      )}
       <div className="ds-document-viewer__body">{body}</div>
     </section>
   );

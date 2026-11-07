@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { Button } from '../Button/Button';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { formatBytes } from './fileTypes';
+import { DocumentViewer } from '../DocumentViewer/DocumentViewer';
 import type { AttachmentItem } from './fileTypes';
 import { renderTypeMark } from './typeMark';
 import { useMounted } from '../../behaviors/useMounted';
@@ -170,10 +171,18 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
     if (item) {
       const failed = item.status === 'error' || item.status === 'unavailable';
       const custom = failed ? undefined : renderPreview?.(item);
-      const imageSrc = item.src ?? item.previewSrc;
+      const imageSrc = item.src ?? item.previewSrc ?? (item.kind === 'image' ? item.fileUrl : undefined);
+      // A PDF or a text file with its own address shows in place, in the
+      // host's frame; anything that cannot embed falls back to the card below.
+      const documentKind = item.kind === 'pdf' || item.kind === 'text' || item.kind === 'code';
+      const showDocument = !failed && documentKind && Boolean(item.fileUrl);
+      const hasCustom = custom !== undefined && custom !== null && custom !== false;
+      let emptyStage: React.ReactNode = null;
 
-      if (custom !== undefined && custom !== null && custom !== false) {
+      if (hasCustom) {
         stage = custom;
+      } else if (showDocument) {
+        // Drawn below, with the empty card as its fallback.
       } else if (!failed && imageSrc) {
         stage = (
           <img
@@ -184,10 +193,12 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
         );
       } else if (!failed && item.excerpt) {
         stage = <p className={`${baseClass}__text`}>{item.excerpt}</p>;
-      } else {
-        // Nothing to draw: say so, and say which file, rather than leaving
-        // an empty stage. A failed file gets the retry path.
-        stage = (
+      }
+      if (!hasCustom && stage === null) {
+        // Nothing to draw (or a document that may not embed): say so, and
+        // say which file, rather than leaving an empty stage. A failed file
+        // gets the retry path.
+        emptyStage = (
           <div className={`${baseClass}__empty`}>
             <span className={`${baseClass}__empty-mark`}>
               {renderTypeMark(item.name, item.kind, { typeLabel: item.typeLabel })}
@@ -220,6 +231,21 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
               </div>
             )}
           </div>
+        );
+        stage = showDocument ? (
+          <DocumentViewer
+            className={`${baseClass}__document`}
+            bare
+            src={item.fileUrl ?? ''}
+            title={item.name}
+            fileName={item.name}
+            mimeType={item.mimeType}
+            download={false}
+            openInNewTab={false}
+            fallback={emptyStage}
+          />
+        ) : (
+          emptyStage
         );
       }
     }

@@ -812,6 +812,14 @@ button.ds-attachment-group__single:focus-visible {
   background-size: 26px 26px;
 }
 
+.ds-attachment-viewer__document {
+  align-self: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
+  border-radius: var(--radius-200);
+  background-color: var(--color-bg-container-primary);
+}
+
 .ds-attachment-viewer__image {
   display: block;
   max-width: 100%;

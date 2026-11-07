@@ -5,8 +5,12 @@
  * never has to restate a setting it does not change. A new template is one
  * entry here.
  */
-import { PASSES } from "./passes";
-import { defaultsFor, type Scene, type Values } from "./types";
+import {
+  SHADER_PASSES as PASSES,
+  shaderSceneDefaults as defaultsFor,
+  type ShaderSceneDefinition as Scene,
+  type ShaderSceneValues as Values,
+} from "rift-ds/components/ShaderScene/ShaderScene";
 import { SCENES } from "./scenes";
 
 export type Template = {

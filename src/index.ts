@@ -139,6 +139,7 @@ export * from './components/SectionTitle/SectionTitle';
 export * from './components/SegmentedControl/SegmentedControl';
 export * from './components/SelectionCard/SelectionCard';
 export * from './components/ShaderField/ShaderField';
+export * from './components/ShaderScene/ShaderScene';
 export * from './components/SidebarPanel/SidebarPanel';
 export * from './components/SignaturePad/SignaturePad';
 export * from './components/SiteHeader/SiteHeader';

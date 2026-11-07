@@ -236,6 +236,10 @@ const INTERNAL_MODULES = new Map([
     'the calculations a group row and the totals footer show; the table is the public surface, and its `DataTableAggregate` and `DataTableTotal` types are the published names'],
   ['src/components/DataTable/columnTypes.ts',
     'what each column type sets (alignment, sort, filter kind, editor) and how its values format; the table is the public surface, and its `DataTableColumnType` and `DataTableColumnFormat` types are the published names'],
+  ['src/components/ShaderScene/assemble.ts',
+    'builds one fragment shader from a scene and the passes; the component is the public surface, and SHADER_SCENES and SHADER_PASSES are the published shapes it reads'],
+  ['src/components/ShaderScene/common.glsl.ts',
+    'the noise, hash and lobe GLSL every scene calls; shader source with no meaning outside the scenes it is compiled into'],
   ['src/components/DataTable/editorKinds.ts',
     'the editor kinds DataTable and its cell editors share, with each compact field\'s floor; the table is the public surface, and its `DataTableEditorKind` and `DataTableValue` types are the kinds\' published names'],
 ]);

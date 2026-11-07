@@ -763,7 +763,7 @@ A titled section for a dashboard, a form, or settings, with rows, groups, a foot
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/widget.md
 
-## Effects (3)
+## Effects (4)
 
 Ambient and decorative surfaces that sit behind or around the interface.
 
@@ -790,6 +790,14 @@ An ambient WebGL2 field of soft light sources that sample colour tokens, with a 
 - Import: `import { ShaderField } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/shader-field.md
+
+### Shader scene
+
+A WebGL2 scene, a night horizon or a glowing rift, in the theme's field colours, with fades, a vignette and grain.
+
+- Import: `import { ShaderScene } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/shader-scene.md
 
 ## Feedback (11)
 

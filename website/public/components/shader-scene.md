@@ -1,0 +1,23 @@
+# Shader scene
+
+A WebGL2 scene, a night horizon or a glowing rift, in the theme's field colours, with fades, a vignette and grain.
+
+Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+
+- Category: effects
+- Import: `import { ShaderScene } from 'rift-ds';`
+- Deep import: `import { ShaderScene } from 'rift-ds/components/ShaderScene/ShaderScene';`
+- Rendering: client component (declares 'use client')
+- Live docs: https://rift-ds.com/components/shader-scene
+- Schema: https://rift-ds.com/schema/components/shader-scene.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+
+## ShaderScene props
+
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| scene | `ShaderSceneId` | no | `horizon` | The scene to paint: `horizon`, a planet's limb at night, or `rift`, a glowing tear. |
+| params | `Partial<Record<string, number>>` | no |  | The scene's settings, merged over its defaults (`SHADER_SCENES` lists each scene's keys and ranges), so passing one changes one thing. Changing them never rebuilds the GL state. |
+| passes | `Partial<Record<string, ShaderScenePassSetting>>` | no |  | The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`, `grain`), each merged over its defaults. |
+| speed | `number` | no | `1.6` | Scene seconds per second: how fast it moves. 0 holds it still. |
+| liveRef | `RefObject<Values \| null>` | no |  | A ref the scene reads every frame in place of `params`, `passes` and `speed`, for a host that tunes it by drag: writing the ref moves the scene and renders nothing. Empty falls back to the props. |
+| className | `string` | no | `` | Additional CSS classes |

@@ -1,0 +1,19 @@
+/* ShaderScene: the canvas, filling its positioned ancestor.
+   Placement and clipping belong to that ancestor, as with ShaderField: where
+   a scene sits is a layout decision. The ground under the canvas is the
+   page's, so a machine that cannot run WebGL2 shows the plain page. */
+
+.ds-shader-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* Scenery, never a target. */
+  pointer-events: none;
+  background-color: var(--color-bg-page-primary);
+}
+
+.ds-shader-scene__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

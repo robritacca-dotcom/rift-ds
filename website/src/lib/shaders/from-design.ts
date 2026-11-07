@@ -14,7 +14,7 @@
  * file did to the shader, in rift's words) and the playground (the values it
  * seeds a scene with). Pure: no DOM, no React.
  */
-import type { ParamSpec } from "./types";
+import type { ShaderSceneParamSpec as ParamSpec } from "rift-ds/components/ShaderScene/ShaderScene";
 
 /** What the importer's theme says that the shader reads. */
 export type ShaderTraits = {

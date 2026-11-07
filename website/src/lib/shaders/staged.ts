@@ -17,7 +17,7 @@
  * Field untouched carries no params, which means "keep your own field".
  */
 import React, { useSyncExternalStore } from "react";
-import type { Values } from "./types";
+import type { ShaderSceneValues as Values } from "rift-ds/components/ShaderScene/ShaderScene";
 
 export const STAGED_SHADER_ATTR = "data-staged-shader";
 
@@ -74,7 +74,7 @@ export function useStagedFieldParams(): Record<string, number> | undefined {
 
 /**
  * A staged scene's live values as a ref, rewritten on every change of the
- * attribute without rendering, for a ShaderSurface to read each frame.
+ * attribute without rendering, for a ShaderScene to read each frame (its liveRef).
  */
 export function useStagedValues(): React.RefObject<Values | null> {
   const ref = React.useRef<Values | null>(null);

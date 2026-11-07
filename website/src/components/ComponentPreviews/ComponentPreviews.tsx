@@ -91,6 +91,7 @@ import { Prose } from "rift-ds/components/Prose/Prose";
 import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { ShaderField } from "rift-ds/components/ShaderField/ShaderField";
+import { ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
 import { Skeleton } from "rift-ds/components/Skeleton/Skeleton";
 import { Slider } from "rift-ds/components/Slider/Slider";
 import { SourceChip } from "rift-ds/components/SourceChip/SourceChip";
@@ -1821,6 +1822,13 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ position: "relative", width: "180px", height: "84px", overflow: "hidden", borderRadius: "8px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)" }}>
         <ShaderField params={{ intensity: 0.85, scale: 1.6, streak: 0.3 }} />
+      </div>
+    </>
+  ),
+  "shader-scene": () => (
+    <>
+      <div style={{ position: "relative", width: "180px", height: "84px", overflow: "hidden", borderRadius: "8px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)" }}>
+        <ShaderScene scene="horizon" />
       </div>
     </>
   ),

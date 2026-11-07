@@ -14325,6 +14325,67 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "ShaderScene",
+    "label": "Shader scene",
+    "slug": "shader-scene",
+    "category": "effects",
+    "description": "A WebGL2 scene, a night horizon or a glowing rift, in the theme's field colours, with fades, a vignette and grain.",
+    "client": true,
+    "importPath": "rift-ds/components/ShaderScene/ShaderScene",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ShaderScene",
+        "props": [
+          {
+            "name": "scene",
+            "type": "ShaderSceneId",
+            "required": false,
+            "description": "The scene to paint: `horizon`, a planet's limb at night, or `rift`, a glowing tear.",
+            "values": [
+              "horizon",
+              "rift"
+            ],
+            "defaultValue": "horizon"
+          },
+          {
+            "name": "params",
+            "type": "Partial<Record<string, number>>",
+            "required": false,
+            "description": "The scene's settings, merged over its defaults (`SHADER_SCENES` lists each\nscene's keys and ranges), so passing one changes one thing. Changing them\nnever rebuilds the GL state."
+          },
+          {
+            "name": "passes",
+            "type": "Partial<Record<string, ShaderScenePassSetting>>",
+            "required": false,
+            "description": "The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`,\n`grain`), each merged over its defaults."
+          },
+          {
+            "name": "speed",
+            "type": "number",
+            "required": false,
+            "description": "Scene seconds per second: how fast it moves. 0 holds it still.",
+            "defaultValue": "1.6"
+          },
+          {
+            "name": "liveRef",
+            "type": "RefObject<Values | null>",
+            "required": false,
+            "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "SidebarPanel",
     "label": "Sidebar panel",
     "slug": "sidebar-panel",

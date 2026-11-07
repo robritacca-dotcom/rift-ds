@@ -7,7 +7,7 @@
  * and the CSS fallback are left out, and the field fills the stage rather
  * than a band.
  */
-import type { Scene } from "../types";
+import type { ShaderSceneDefinition as Scene } from "rift-ds/components/ShaderScene/ShaderScene";
 
 export const field: Scene = {
   id: "field",

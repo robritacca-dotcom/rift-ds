@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.24.0",
   "package": "rift-ds",
-  "count": 178,
+  "count": 179,
   "components": [
     {
       "name": "Accordion",
@@ -1353,6 +1353,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/shader-field.json",
       "docsUrl": "https://rift-ds.com/components/shader-field",
       "markdownUrl": "https://rift-ds.com/components/shader-field.md"
+    },
+    {
+      "name": "ShaderScene",
+      "label": "Shader scene",
+      "slug": "shader-scene",
+      "category": "effects",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/shader-scene.json",
+      "docsUrl": "https://rift-ds.com/components/shader-scene",
+      "markdownUrl": "https://rift-ds.com/components/shader-scene.md"
     },
     {
       "name": "SidebarPanel",

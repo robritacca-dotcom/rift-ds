@@ -820,6 +820,12 @@
       "description": "An ambient WebGL2 field of soft light sources that sample colour tokens, with a reported fallback status."
     },
     {
+      "name": "shader-scene",
+      "type": "registry:ui",
+      "title": "Shader scene",
+      "description": "A WebGL2 scene, a night horizon or a glowing rift, in the theme's field colours, with fades, a vignette and grain."
+    },
+    {
       "name": "sidebar-panel",
       "type": "registry:ui",
       "title": "Sidebar panel",

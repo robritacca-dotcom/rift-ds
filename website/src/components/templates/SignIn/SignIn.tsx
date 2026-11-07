@@ -58,7 +58,7 @@ import {
   type ShaderBlob,
   type ShaderParams,
 } from "rift-ds/components/ShaderField/ShaderField";
-import StagedShader from "@/components/ShaderSurface/StagedShader";
+import StagedShader from "@/components/StagedShader/StagedShader";
 import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { PublisherMark } from "../PublisherMarks/PublisherMarks";

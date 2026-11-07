@@ -12,7 +12,8 @@
  * director (views/ChatView.tsx, ChatDirector.tsx), the templates rail
  * (views/TemplatesView.tsx, TemplatesRail.tsx) and the shaders rail
  * (ShadersRail.tsx), whose pick is the theme's shader wherever one is
- * staged (the scenes and their renderer live in lib/shaders/).
+ * staged (the scenes are the library's ShaderScene; lib/shaders/ holds the
+ * playground's templates and staging).
  *
  * A theme leaves through the toolbar's Get started (lib/theme/theme-export.ts
  * owns what it writes); one comes in by dropping a picture
@@ -28,8 +29,7 @@ import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from "rift-ds/tokens/motion";
-import ShaderSurface from "@/components/ShaderSurface/ShaderSurface";
-import { PASSES as SHADER_PASSES } from "@/lib/shaders/passes";
+import { ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
 import {
   DEFAULT_TEMPLATE as DEFAULT_SHADER,
   sceneOf,
@@ -38,7 +38,7 @@ import {
 } from "@/lib/shaders/templates";
 import { applyCharacter, shaderCharacterFrom, type ShaderCharacter } from "@/lib/shaders/from-design";
 import { STAGED_SHADER_ATTR, type StagedShader } from "@/lib/shaders/staged";
-import type { Recipe as ShaderRecipe, Values as ShaderValues } from "@/lib/shaders/types";
+import type { ShaderSceneRecipe as ShaderRecipe, ShaderSceneValues as ShaderValues } from "rift-ds/components/ShaderScene/ShaderScene";
 import ShadersRail, { type ShaderEdits } from "./ShadersRail";
 import StageControlBar, {
   StageControlBarActionSlot,
@@ -440,11 +440,11 @@ export default function PlaygroundPage() {
      Components view's banner and the Shaders view's own stage, never the
      page, which keeps its dot grid. Field is the theme's own ShaderField,
      tuned by the banner's levers above; the other scenes run on
-     lib/shaders (ShaderSurface). `shaderSeed` is what the rail's settings
+     the library's ShaderScene. `shaderSeed` is what the rail's settings
      render their defaults from; the ref is the live copy the sliders write
-     and the surface reads every frame, so a drag renders nothing. Like the
-     banner's levers, no theme preset owns these, and nothing here reaches
-     the theme export: the shaders are the playground's own for now. */
+     and the scene reads every frame (its liveRef), so a drag renders
+     nothing. Like the banner's levers, no theme preset owns these; the
+     theme export carries the pick as its Shader section. */
   const [shaderId, setShaderId] = useState<string>(DEFAULT_SHADER.id);
   const [shaderSeed, setShaderSeed] = useState<ShaderValues>(() => valuesOf(DEFAULT_SHADER));
   const shaderValuesRef = useRef<ShaderValues>(valuesOf(DEFAULT_SHADER));
@@ -1417,14 +1417,13 @@ export default function PlaygroundPage() {
      re-theming live with the levers, tuned by its own shader levers in the
      rail. It opens both Components layouts. */
   /* The theme's shader as the Shaders view picked it: the real ShaderField
-     for Field, a lib/shaders scene on its own surface for the rest. One
+     for Field, a ShaderScene for the rest. One
      painter, so every place a shader is staged shows the same pick. */
   const stagedShader = () =>
     shaderTemplate && !shaderIsField ? (
-      <ShaderSurface
-        scene={sceneOf(shaderTemplate)}
-        passes={SHADER_PASSES}
-        values={shaderValuesRef}
+      <ShaderScene
+        scene={shaderTemplate.sceneId as ShaderSceneId}
+        liveRef={shaderValuesRef}
       />
     ) : (
       <ShaderField params={shaderParams} blobs={shaderBackground.blobs} />

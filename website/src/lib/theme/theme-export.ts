@@ -157,16 +157,16 @@ export interface ThemeExportContext {
 }
 
 /**
- * The shader the theme ships with. Field is the package's ShaderField, so
- * its params apply as written; any other scene is the playground's own and
- * not in the package yet, so its recipe rides along for when it ships.
+ * The shader the theme ships with. Field is the package's ShaderField and
+ * any other scene the package's ShaderScene, so either applies as written:
+ * Field's params, or the scene's recipe (settings, passes and speed).
  */
 export interface ThemeShader {
   sceneId: string;
   label: string;
   /** ShaderField's params, for Field. */
   params?: Record<string, number>;
-  /** The scene's recipe, for any other scene. */
+  /** The scene's recipe (`speed`, `scene`, `passes`), for any other scene. */
   recipe?: unknown;
 }
 
@@ -475,12 +475,38 @@ The theme's background shader is the field, tuned. Use ${field} wherever the pro
 <ShaderField params={{ ${params} }} />
 \`\`\``;
   }
+  const scene = `\`ShaderScene\` from \`${pkg}/components/ShaderScene/ShaderScene\``;
+  const recipe = (shader.recipe ?? {}) as {
+    speed?: number;
+    scene?: Record<string, number>;
+    passes?: Record<string, { on?: boolean; params?: Record<string, number> }>;
+  };
+  const num = (value: number) => Number(value.toFixed(3));
+  const obj = (values: Record<string, number> = {}) =>
+    `{ ${Object.entries(values).map(([key, value]) => `${key}: ${num(value)}`).join(", ")} }`;
+  const passes = Object.entries(recipe.passes ?? {})
+    .map(([id, pass]) =>
+      pass.on && pass.params && Object.keys(pass.params).length > 0
+        ? `    ${id}: { on: true, params: ${obj(pass.params)} },`
+        : `    ${id}: { on: ${Boolean(pass.on)} },`
+    )
+    .join("\n");
+  const props = [
+    `  scene="${shader.sceneId}"`,
+    `  params={${obj(recipe.scene)}}`,
+    passes ? `  passes={{\n${passes}\n  }}` : "",
+    recipe.speed !== undefined ? `  speed={${num(recipe.speed)}}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
   return `${heading} Shader
 
-The theme's shader is the ${shader.label} scene, made in the playground. It is not in ${pkg} yet, so there is nothing to import for it. Until it ships, use ${field} for an ambient background: it reads the theme's \`--color-ambient-*\` roles, the colours the ${shader.label} scene draws with too. The scene's recipe, for when it ships:
+The theme's background shader is the ${shader.label} scene, tuned. Use ${scene} wherever the product shows an ambient background, inside a positioned box it can fill, with these settings. It reads the theme's \`--color-ambient-*\` roles, so it takes the theme's colours by itself, and on a light page it lays its light on as a pale tint.
 
-\`\`\`json
-${JSON.stringify(shader.recipe, null, 2)}
+\`\`\`tsx
+<ShaderScene
+${props}
+/>
 \`\`\``;
 }
 

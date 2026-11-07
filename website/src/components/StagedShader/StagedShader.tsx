@@ -3,17 +3,15 @@
 /**
  * A template's shader slot, following the playground's pick
  * (lib/shaders/staged). With a lib/shaders scene staged, the slot paints it
- * on a ShaderSurface; otherwise it renders the template's own shader through
+ * with ShaderScene; otherwise it renders the template's own shader through
  * `field`, handed Field's staged settings when the playground has moved
  * them. At the template's own route nothing is staged, so the slot is
  * exactly the template's own shader.
  */
 
 import type React from "react";
-import { PASSES } from "@/lib/shaders/passes";
-import { SCENES } from "@/lib/shaders/scenes";
+import { SHADER_SCENES, ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
-import ShaderSurface from "./ShaderSurface";
 
 export default function StagedShader({
   className,
@@ -27,11 +25,11 @@ export default function StagedShader({
   const sceneId = useStagedSceneId();
   const params = useStagedFieldParams();
   const values = useStagedValues();
-  const scene = sceneId && sceneId !== "field" ? SCENES.find((s) => s.id === sceneId) : undefined;
+  const scene = sceneId && sceneId !== "field" ? SHADER_SCENES.find((s) => s.id === sceneId) : undefined;
   if (!scene) return <>{field(params)}</>;
   return (
     <div className={className}>
-      <ShaderSurface scene={scene} passes={PASSES} values={values} />
+      <ShaderScene scene={scene.id as ShaderSceneId} liveRef={values} />
     </div>
   );
 }

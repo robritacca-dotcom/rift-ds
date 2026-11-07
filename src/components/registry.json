@@ -1178,6 +1178,14 @@
       "client": true
     },
     {
+      "name": "ShaderScene",
+      "label": "Shader scene",
+      "slug": "shader-scene",
+      "description": "A WebGL2 scene, a night horizon or a glowing rift, in the theme's field colours, with fades, a vignette and grain.",
+      "category": "effects",
+      "client": true
+    },
+    {
       "name": "SidebarPanel",
       "label": "Sidebar panel",
       "slug": "sidebar-panel",

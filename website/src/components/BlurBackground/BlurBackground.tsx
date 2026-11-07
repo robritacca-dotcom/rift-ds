@@ -11,9 +11,7 @@ import {
   type BackgroundMode,
   type ShaderParams,
 } from "@/data/shader-background";
-import ShaderSurface from "@/components/ShaderSurface/ShaderSurface";
-import { PASSES } from "@/lib/shaders/passes";
-import { SCENES } from "@/lib/shaders/scenes";
+import { SHADER_SCENES, ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
 
 /* Dev-only tuning panel, and the ternary is load-bearing: the bundler
@@ -155,7 +153,7 @@ export default function BlurBackground() {
   const stagedValues = useStagedValues();
   const stagedScene =
     embedded && stagedSceneId && stagedSceneId !== "field"
-      ? SCENES.find((scene) => scene.id === stagedSceneId)
+      ? SHADER_SCENES.find((scene) => scene.id === stagedSceneId)
       : undefined;
   const stagedField = embedded && stagedSceneId === "field" && stagedParams !== undefined;
   const live = !embedded || stagedField;
@@ -189,7 +187,7 @@ export default function BlurBackground() {
         <div className="blur-ellipse blur-teal" />
 
         {stagedScene ? (
-          <ShaderSurface scene={stagedScene} passes={PASSES} values={stagedValues} />
+          <ShaderScene scene={stagedScene.id as ShaderSceneId} liveRef={stagedValues} />
         ) : (
           <ShaderField
             params={stagedField ? { ...params, ...stagedParams } : params}

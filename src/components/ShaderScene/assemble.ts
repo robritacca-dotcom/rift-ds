@@ -5,7 +5,7 @@
  * light page when it must (u_lightMode), then runs the light passes, the
  * encode and the srgb passes, each gated by its `u_<id>_on`.
  */
-import { COMMON_GLSL } from "./common";
+import { COMMON_GLSL } from "./common.glsl";
 import type { Pass, Scene } from "./types";
 import { MAX_COLOURS } from "./types";
 

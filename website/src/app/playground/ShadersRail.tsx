@@ -8,15 +8,14 @@ import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
 import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
-import { PASSES } from "@/lib/shaders/passes";
-import { bakeThumbnails } from "@/lib/shaders/renderer";
+import { SHADER_PASSES as PASSES, shaderSceneStills as bakeThumbnails } from "rift-ds/components/ShaderScene/ShaderScene";
 import {
   DEFAULT_TEMPLATE,
   sceneOf,
   TEMPLATES,
   valuesOf,
 } from "@/lib/shaders/templates";
-import type { Values } from "@/lib/shaders/types";
+import type { ShaderSceneValues as Values } from "rift-ds/components/ShaderScene/ShaderScene";
 import { FloatingRail } from "./FloatingRail";
 import styles from "./ShadersRail.module.css";
 import templateStyles from "./TemplatesRail.module.css";

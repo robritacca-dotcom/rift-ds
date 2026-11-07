@@ -2,7 +2,7 @@
 
 A signature drawn with a pointer or typed, kept as SVG with a PNG on demand.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: forms
 - Import: `import { SignaturePad } from 'rift-ds';`

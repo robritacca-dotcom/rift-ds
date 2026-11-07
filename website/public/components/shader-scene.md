@@ -2,7 +2,7 @@
 
 A WebGL2 scene, a night horizon or a glowing rift, in the theme's field colours, with fades, a vignette and grain.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: effects
 - Import: `import { ShaderScene } from 'rift-ds';`

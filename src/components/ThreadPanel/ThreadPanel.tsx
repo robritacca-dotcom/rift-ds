@@ -65,7 +65,7 @@ export interface ThreadPanelThread {
 }
 
 export interface ThreadPanelGroup {
-  /** Group heading in the overline face, e.g. a project or repo name. Omit for an unlabelled run of threads. */
+  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */
   label?: string;
   /** The group's threads, in display order. */
   threads: ThreadPanelThread[];
@@ -159,9 +159,9 @@ type ThreadPanelOwnProps = {
   controls?: ThreadPanelControl[];
   /** Fires with the clicked control's id. Rows with an `href` navigate as well. */
   onControlSelect?: (id: string) => void;
-  /** Project rows between the standing controls and the history, under their own overline header. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls. */
+  /** Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls. */
   projects?: ThreadPanelProject[];
-  /** The projects section's overline header text. */
+  /** The projects section's group heading text. */
   projectsLabel?: string;
   /** Id of the open project. Its row renders filled and carries `aria-current`. */
   activeProjectId?: string;

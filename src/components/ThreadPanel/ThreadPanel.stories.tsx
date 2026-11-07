@@ -245,7 +245,7 @@ export const Pinned: Story = {
   },
 };
 
-/** The projects section: rows under their own overline header between the
+/** The projects section: rows under their own group heading between the
  *  standing controls and the history, with a quiet new-project button. Each
  *  project wears its generated pixel avatar, the inks spread so neighbours
  *  differ. The active project renders filled and carries `aria-current`. */

@@ -347,7 +347,7 @@
 }
 
 /* ============================================
-   PROJECTS — standing rows under their own overline header
+   PROJECTS — standing rows under their own group heading
    Rows share the controls' anatomy (icon circles while collapsed, labels
    fading with the sweep); the header carries the section's name and the
    quiet new-project button, and fades out whole while collapsed — the
@@ -513,7 +513,7 @@
    20px line is the overline's it replaced, so the rhythm below is
    unchanged. On the rail's leading line, the logo's. The vertical padding
    is the rows' own inset restated — as if the label sat inside a row —
-   so the overline keeps the pills' rhythm instead of hugging the
+   so the heading keeps the pills' rhythm instead of hugging the
    new-thread row above and the first thread below. */
 .ds-thread-panel__group-label {
   padding: var(--padding-200);

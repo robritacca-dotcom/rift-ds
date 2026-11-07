@@ -1,0 +1,116 @@
+/* ============================================
+   LABS INDEX
+   A centred column of links, one per lab, in the privacy page's frame.
+   ============================================ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  /* Top offset matches the 40px every other page puts above its title,
+     so the h1 sits at the same height site-wide */
+  padding: var(--primitive-gap-1000) var(--padding-500) var(--gap-2000);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.title {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-display);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.sectionTitle {
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Each lab is a container surface that is itself a control: the border
+   takes the hover signal, and the focus ring is the action colour. */
+.lab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  padding: var(--padding-400) var(--padding-500);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  background-color: var(--color-bg-container-primary);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.lab:hover {
+  border-color: var(--color-action-primary-bg);
+}
+
+.lab:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+.name {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  letter-spacing: var(--font-title-body-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+.description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.path {
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}

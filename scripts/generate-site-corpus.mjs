@@ -737,6 +737,8 @@ const EXCLUDED_ROUTES = new Map([
     'the home page is the landing collage — its prose is demo filler for the live components, and its closing questions restate facts the pages they link to own (get-started, the chat docs, the playground); the sections it links to are all covered'],
   ['/graph',
     'the dependency-graph instrument — its prose is the instrument\'s own controls and panel labels; the graph\'s data is the registries the corpus already carries, and the /overview section that links to it is covered'],
+  ['/labs',
+    'the noindex labs index: a list of the labs experiments, each one excluded below, whose only prose is their titles and one-line descriptions'],
   ['/labs/marketing',
     'a noindex test page rebuilding a reference marketing dashboard entirely from the system\'s tokens and components, to probe how far they stretch — its prose is fictional demo data, not information'],
   ['/labs/glass-chat',

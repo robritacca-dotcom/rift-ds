@@ -6,7 +6,9 @@
 .ds-app-layout {
   display: flex;
   min-height: 100vh;
-  background-color: var(--color-bg-page-primary);
+  /* The shell recipe's plane (src/behaviors/shell.css), set per layout by
+     the data-ds-shell marker on this root. */
+  background-color: var(--ds-shell-plane);
 }
 
 /* ============================================
@@ -25,6 +27,12 @@
 
 .ds-app-layout--expanded {
   --ds-app-layout-rail: 280px;
+}
+
+/* Flush: the content column is the crisp surface, running from the rail's
+   divider to the far edge. */
+.ds-app-layout:not(.ds-app-layout--floating, .ds-app-layout--inset) .ds-app-layout__main {
+  background-color: var(--ds-shell-surface);
 }
 
 /* Panel mode's collapsed rail is the wider, labelled one. */
@@ -71,7 +79,6 @@
 .ds-app-layout--inset {
   height: 100dvh;
   min-height: 0;
-  background-color: var(--color-bg-app-shell);
 }
 
 .ds-app-layout--inset .ds-app-layout__main {
@@ -85,8 +92,12 @@
   min-width: 0;
   display: flex;
   overflow: hidden;
-  background-color: var(--color-bg-app-surface);
-  border-radius: var(--radius-600);
+  /* The raised surface: the floating rail's edge turned around, from the
+     shell recipe. */
+  background-color: var(--ds-shell-surface);
+  border: var(--border-025) solid var(--ds-shell-surface-border);
+  border-radius: var(--ds-shell-surface-radius);
+  box-shadow: var(--ds-shell-surface-shadow);
 }
 
 .ds-app-layout__scroller {
@@ -140,7 +151,9 @@
 
   .ds-app-layout__surface {
     overflow: visible;
+    border: none;
     border-radius: 0;
+    box-shadow: none;
   }
 
   .ds-app-layout__scroller {

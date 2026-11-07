@@ -137,7 +137,7 @@ export const Inset: Story = {
           Dashboard
         </h1>
         <p style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
-          The rail sits flush on the shell colour, and the content runs full width in an inset surface that scrolls on its own.
+          The rail sits flush on the shell colour, and the content runs full width in a raised surface that scrolls on its own.
         </p>
       </div>
     ),

@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * The app shell every rift-ds block page sits in: the floating sidebar, a
- * top bar (search, the AI entry and the colour mode), a page header
+ * The app shell every rift-ds block page sits in: the sidebar in one of
+ * rift-ds's three app shell modes (SHELL_LAYOUT below), a top bar (search, the AI entry and the colour mode), a page header
  * (breadcrumb, title, actions) and the content column, with the spacing
  * set. This file is yours: rename the product, change the navigation, and
  * grow it with your app.
@@ -11,7 +11,7 @@
  * it: bare while the page is at the top, then a fill above it and the
  * library's ProgressiveBlur behind it fade in once the page scrolls.
  *
- * Responsive by construction: above 768px the sidebar floats beside the
+ * Responsive by construction: above 768px the sidebar sits beside the
  * page and the content moves over by its width; below it the sidebar
  * becomes a drawer behind its own menu button, the search field folds to
  * its icon, and the content runs edge to edge at a tighter gutter.
@@ -21,6 +21,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AiButton } from 'rift-ds/components/AiButton/AiButton';
 import {
   AppSidebar,
+  type AppSidebarLayout,
   type AppSidebarProfile,
   type AppSidebarSection,
 } from 'rift-ds/components/AppSidebar/AppSidebar';
@@ -29,6 +30,15 @@ import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/
 import { ProgressiveBlur } from 'rift-ds/components/ProgressiveBlur/ProgressiveBlur';
 import { ThemeToggle } from 'rift-ds/components/ThemeToggle/ThemeToggle';
 import styles from './AppShell.module.css';
+
+/**
+ * How the sidebar and the content meet the page, one of the three app shell
+ * modes: `flush` runs the sidebar edge to edge on the shell colour behind a
+ * hairline, the content crisp beside it; `floating` lifts the sidebar into a
+ * glass card off the edges; `inset` runs it flush and sets the content in a
+ * raised surface held off the other edges, scrolling inside itself.
+ */
+const SHELL_LAYOUT: AppSidebarLayout = 'floating';
 
 /** The product's name, shown beside the logo in the sidebar. */
 const PRODUCT_NAME = 'Acme';
@@ -87,7 +97,10 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
   }, []);
 
   return (
-    <div className={styles.shell}>
+    <div
+      className={styles.shell}
+      data-ds-shell={SHELL_LAYOUT}
+    >
       <AppSidebar
         sections={NAV_SECTIONS}
         profile={PROFILE}
@@ -95,36 +108,38 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
         expanded={expanded}
         onExpandedChange={setExpanded}
         logoText={PRODUCT_NAME}
-        layout="floating"
+        layout={SHELL_LAYOUT}
       />
 
-      <div className={`${styles.main} ${expanded ? styles.mainExpanded : ''}`}>
-        <div className={styles.content}>
-          <div ref={markerRef} className={styles.topBarMarker} aria-hidden="true" />
-          <header className={styles.topBar} data-stuck={stuck ? '' : undefined}>
-            <ProgressiveBlur className={styles.topBarBlur} tinted={stuck} />
-            {/* Wire both to your command palette: CommandPalette from
-                rift-ds, opened from here and from Cmd+K. */}
-            <CommandPaletteTrigger className={styles.search} />
-            <div className={styles.topBarActions}>
-              <CommandPaletteTrigger iconOnly className={styles.searchIcon} />
-              {/* The AI entry. Point it at your chat: `npx rift-ds init chat`
-                  scaffolds one, and ChatLauncher opens it. */}
-              <AiButton />
-              <ThemeToggle showLabels={false} />
-            </div>
-          </header>
-
-          <main className={styles.page}>
-            <div className={styles.pageHead}>
-              <div className={styles.pageHeadText}>
-                {breadcrumb && <Breadcrumb items={breadcrumb} />}
-                <h1 className={styles.title}>{title}</h1>
+      <div className={styles.main}>
+        <div className={styles.surface}>
+          <div className={styles.content}>
+            <div ref={markerRef} className={styles.topBarMarker} aria-hidden="true" />
+            <header className={styles.topBar} data-stuck={stuck ? '' : undefined}>
+              <ProgressiveBlur className={styles.topBarBlur} tinted={stuck} />
+              {/* Wire both to your command palette: CommandPalette from
+                  rift-ds, opened from here and from Cmd+K. */}
+              <CommandPaletteTrigger className={styles.search} />
+              <div className={styles.topBarActions}>
+                <CommandPaletteTrigger iconOnly className={styles.searchIcon} />
+                {/* The AI entry. Point it at your chat: `npx rift-ds init chat`
+                    scaffolds one, and ChatLauncher opens it. */}
+                <AiButton />
+                <ThemeToggle showLabels={false} />
               </div>
-              {actions && <div className={styles.pageActions}>{actions}</div>}
-            </div>
-            {children}
-          </main>
+            </header>
+
+            <main className={styles.page}>
+              <div className={styles.pageHead}>
+                <div className={styles.pageHeadText}>
+                  {breadcrumb && <Breadcrumb items={breadcrumb} />}
+                  <h1 className={styles.title}>{title}</h1>
+                </div>
+                {actions && <div className={styles.pageActions}>{actions}</div>}
+              </div>
+              {children}
+            </main>
+          </div>
         </div>
       </div>
     </div>

@@ -536,7 +536,7 @@ export const Phone: Story = {
 export const Rails: Story = {
   args: {
     threads: true,
-    threadsProps: { defaultExpanded: true, profile: { name: 'Jordan Reyes', meta: 'Pro' } },
+    threadsProps: { defaultExpanded: true, profile: { name: 'Jordan Reyes', meta: 'jordan@acme.example' } },
     tabs: true,
     fileAttachments: true,
     mentions: DEMO_MENTIONS,
@@ -574,6 +574,37 @@ export const Rails: Story = {
       await canvas.findByRole('button', { name: 'How do I get started?' }, { timeout: 4000 })
     );
     await waitFor(() => expect(canvas.getAllByText('New chat').length).toBeGreaterThan(0), { timeout: 4000 });
+  },
+};
+
+/** As a page, in the inset app shell mode: the history rail flush on the shell colour, the conversation and the agent pane in raised surfaces, the header controls in the pane's top row. */
+export const InsetShell: Story = {
+  args: {
+    layout: 'inset',
+    threads: true,
+    threadsProps: { defaultExpanded: true, profile: { name: 'Jordan Reyes', meta: 'jordan@acme.example' } },
+  },
+  render: (args) => (
+    <ChatProvider
+      transport={createDemoTransport(FAST)}
+      renderers={DEMO_RENDERERS}
+      followups={false}
+      feedback={false}
+      threads={DEMO_THREADS}
+    >
+      <OpenOnMount>
+        <Stage width={1100} height={760}>
+          <ChatWidget {...args} agent={{ tabs: demoAgentTabs(args.title ?? 'Assistant'), defaultOpen: true }} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await canvas.findByText('Watch the Q3 invoices', undefined, { timeout: 4000 });
+    // The pane's own close gives way to the header toggle in its top row.
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide the agent panel' }));
+    await waitFor(() => expect(canvas.getByRole('button', { name: 'Show the agent panel' })).toBeInTheDocument(), { timeout: 4000 });
   },
 };
 

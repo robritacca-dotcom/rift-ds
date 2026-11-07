@@ -21,7 +21,11 @@
   /* The vertical padding sits inside the viewport height; content-box
      sizing ran the rail 40px past the bottom and clipped the profile. */
   box-sizing: border-box;
-  background-color: var(--color-bg-page-primary);
+  /* The flush rail, the shell recipe's (src/behaviors/shell.css): the
+     shell plane behind a hairline divider. A host that marks itself a
+     shell sets both; a rail standing alone takes the same look. */
+  background-color: var(--ds-shell-rail-bg, var(--color-bg-app-shell));
+  border-inline-end: var(--border-025) solid var(--ds-shell-rail-divider, var(--color-bg-container-border));
   /* The logo mark draws in currentColor; without a colour of its own the
      rail inherited the host's, and the mark vanished on a dark host. */
   color: var(--color-text-primary);
@@ -49,13 +53,15 @@
   top: var(--ds-sidebar-float-inset, 20px);
   inset-inline-start: var(--ds-sidebar-float-inset, 20px);
   height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
-  background-color: var(--color-bg-glass);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  box-shadow: var(--shadow-floating);
+  /* The shell recipe's glass card (src/behaviors/shell.css), with its
+     values as fallbacks for a rail standing outside a shell host. */
+  background-color: var(--ds-shell-glass, var(--color-bg-glass));
+  border: var(--border-025) solid var(--ds-shell-edge-border, var(--color-bg-container-border));
+  border-radius: var(--ds-shell-radius, var(--radius-600));
+  box-shadow: var(--ds-shell-edge-shadow, var(--shadow-floating));
   /* The glass token is deliberately translucent; this blur is what keeps
      content behind the rail readable through it. */
-  backdrop-filter: blur(24px);
+  backdrop-filter: var(--ds-shell-glass-blur, blur(24px));
 }
 
 /* The inset layout's gap: between the content surface and the viewport
@@ -71,7 +77,9 @@
    from the edges (AppLayout's inset layout)
    ============================================ */
 .ds-app-sidebar--inset {
-  background-color: var(--color-bg-app-shell);
+  background-color: var(--ds-shell-rail-bg, var(--color-bg-app-shell));
+  /* The content surface's raised edge is the seam; the rail needs none. */
+  border-inline-end-color: transparent;
 }
 
 /* ============================================
@@ -85,6 +93,12 @@
   overflow-x: hidden;
   flex: 1;
   min-height: 0;
+  /* The scroller clips at its edge, and the logo row sits on it: the
+     collapse toggle's hover pill, a --gap-100 step out from the icon, lost
+     its top to it. A pill's worth of room inside the top edge, taken back
+     from the rail's padding, so nothing moves. */
+  padding-top: var(--gap-100);
+  margin-top: calc(-1 * var(--gap-100));
 }
 
 /* ============================================
@@ -349,6 +363,15 @@
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
 }
 
+/* Collapsed, the row is a 40px circle, and its clip follows the curve: the
+   corner badge, which overhangs the icon seat's top end, lost its corner
+   to it. The collapsed row draws nothing that needs the clip (the label
+   and chevron truncate themselves, and the hover circle is the row's own
+   fill), so it lets the badge hang over. */
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) .ds-app-sidebar__btn {
+  overflow: visible;
+}
+
 .ds-app-sidebar--expanded .ds-app-sidebar__btn-corner-badge {
   opacity: 0;
   transition-duration: var(--motion-duration-fast);
@@ -536,6 +559,12 @@
   grid-area: 1 / 1;
 }
 
+/* The footer's controls start on the rail's leading line, the logo's, the
+   row icons' and the avatar's, a step deeper than the top slot. */
+.ds-app-sidebar__footer > .ds-app-sidebar__footer-slot:not(.ds-app-sidebar__footer-slot--collapsed) {
+  padding-inline: var(--padding-500);
+}
+
 .ds-app-sidebar__footer-slot--collapsed {
   display: flex;
   flex-direction: column;
@@ -599,12 +628,13 @@
   opacity: 1;
 }
 
+/* The profile pairs its lines as EntitySwitcher does: the name in
+   paragraph-sm emphasis, the second line in caption, secondary. */
 .ds-app-sidebar__profile-name {
-  font-family: var(--font-paragraph-emphasis-family);
-  font-size: var(--font-paragraph-emphasis-size);
-  font-weight: var(--font-paragraph-emphasis-weight);
-  line-height: var(--font-paragraph-emphasis-line-height);
-  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
@@ -612,11 +642,11 @@
 }
 
 .ds-app-sidebar__profile-email {
-  font-family: var(--font-paragraph-family);
-  font-size: var(--font-paragraph-size);
-  font-weight: var(--font-paragraph-weight);
-  line-height: var(--font-paragraph-line-height);
-  color: var(--color-text-tertiary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -702,11 +732,13 @@
   top: var(--ds-sidebar-float-inset, 20px);
   inset-inline-start: calc(var(--ds-sidebar-float-inset, 20px) + 64px + var(--gap-300));
   height: calc(100dvh - var(--ds-sidebar-float-inset, 20px) * 2);
-  background-color: var(--color-bg-glass);
-  border: var(--border-025) solid var(--color-bg-container-border);
-  border-radius: var(--radius-600);
-  box-shadow: var(--shadow-floating);
-  backdrop-filter: blur(24px);
+  /* The shell recipe's glass card (src/behaviors/shell.css), with its
+     values as fallbacks for a rail standing outside a shell host. */
+  background-color: var(--ds-shell-glass, var(--color-bg-glass));
+  border: var(--border-025) solid var(--ds-shell-edge-border, var(--color-bg-container-border));
+  border-radius: var(--ds-shell-radius, var(--radius-600));
+  box-shadow: var(--ds-shell-edge-shadow, var(--shadow-floating));
+  backdrop-filter: var(--ds-shell-glass-blur, blur(24px));
 }
 
 .ds-app-sidebar__panel--floating.ds-app-sidebar__panel--panel-mode {
@@ -721,8 +753,16 @@
    divider between the two levels, and the inset content surface starts
    beyond both (AppLayout reserves the panel's width while it shows). The
    trailing edge needs no border: the surface's own edge ends the panel. */
+/* Flush: the panel continues the rail on its shell colour, and the rail's
+   own divider is the seam between them, so the panel's leading hairline
+   would double it. */
+.ds-app-sidebar__panel:not(.ds-app-sidebar__panel--floating, .ds-app-sidebar__panel--inset) {
+  background-color: var(--ds-shell-rail-bg, var(--color-bg-app-shell));
+  border-inline-start-color: transparent;
+}
+
 .ds-app-sidebar__panel--inset {
-  background-color: var(--color-bg-app-shell);
+  background-color: var(--ds-shell-rail-bg, var(--color-bg-app-shell));
   border-inline-end-color: transparent;
 }
 
@@ -991,4 +1031,49 @@
 .ds-app-sidebar
   .material-symbols-rounded:not(:where(.ds-app-sidebar__top-slot *, .ds-app-sidebar__footer-slot *)) {
   color: inherit;
+}
+
+/* The toggle's pressed pill, ThreadPanel's: a passive hover and active fill
+   a gap step out from the 24px icon, drawn behind it so the icon's box and
+   the row's alignment stay as they are. Expanded only; collapsed, the toggle
+   has no width to draw around. */
+.ds-app-sidebar__toggle-tip {
+  flex: none;
+}
+
+/* Collapsed, the rail is too narrow for the tooltip and the toggle is gone;
+   the panel stays out of the way. */
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) .ds-app-sidebar__toggle-tip .ds-tooltip__panel {
+  display: none;
+}
+
+/* In the phone drawer the toggle is the drawer's close, a glyph that names
+   itself, and it takes the focus as the drawer opens: a tooltip there
+   would rise over the brand name on every open, so the drawer has none. */
+.ds-app-sidebar--mobile-open .ds-app-sidebar__toggle-tip .ds-tooltip__panel {
+  display: none;
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__toggle {
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+}
+
+.ds-app-sidebar__toggle::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--gap-100));
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar__toggle:hover::before {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-app-sidebar__toggle:active::before {
+  background-color: var(--color-action-passive-bg-active);
 }

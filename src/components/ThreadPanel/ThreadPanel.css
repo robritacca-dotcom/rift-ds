@@ -61,7 +61,9 @@
   align-items: center;
   flex: none;
   min-width: 0;
-  padding: var(--padding-150) var(--padding-200);
+  /* The top inset seats the logo and the toggle 20px down, AppSidebar's
+     top line. */
+  padding: var(--padding-100) var(--padding-200) var(--padding-150);
   margin-bottom: var(--gap-300);
 }
 
@@ -190,12 +192,11 @@
   display: none;
 }
 
-/* The glyph's ink stops a bearing short of its 24px box, so the box is
-   pulled out by that much: the mark's right edge lands on the rail the
-   rows' meta captions and the profile's caption end on. */
+/* The toggle's box sits on the rail's trailing line, where AppSidebar's
+   does, 20px in; the rows' trailing items keep a step more room, inside
+   their pills. */
 .ds-thread-panel--expanded .ds-thread-panel__toggle {
   width: 24px;
-  margin-inline-end: calc(-1 * var(--gap-100));
   opacity: 1;
 }
 
@@ -387,12 +388,10 @@
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
-  font-family: var(--font-overline-family);
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-overline-weight);
-  line-height: var(--font-overline-line-height);
-  letter-spacing: var(--font-overline-letter-spacing);
-  text-transform: uppercase;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
 }
 
@@ -509,10 +508,10 @@
   gap: var(--gap-050);
 }
 
-/* The overline face set one step down, at the caption's size: the labels
-   sit among caption-sized meta and second lines, and the full overline
-   outweighed the thread titles it files. The overline's own line-height
-   stays, so the rhythm below is unchanged. Aligned with the text seat. The vertical padding
+/* The rails' one group heading, AppSidebar's category and SidebarPanel's
+   group label: paragraph small in the tertiary text, mixed case. Its
+   20px line is the overline's it replaced, so the rhythm below is
+   unchanged. On the rail's leading line, the logo's. The vertical padding
    is the rows' own inset restated — as if the label sat inside a row —
    so the overline keeps the pills' rhythm instead of hugging the
    new-thread row above and the first thread below. */
@@ -520,12 +519,10 @@
   padding: var(--padding-200);
   overflow: hidden;
   white-space: nowrap;
-  font-family: var(--font-overline-family);
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-overline-weight);
-  line-height: var(--font-overline-line-height);
-  letter-spacing: var(--font-overline-letter-spacing);
-  text-transform: uppercase;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
 }
 
@@ -861,28 +858,45 @@
   pointer-events: auto;
 }
 
-/* --padding-100 centres the 32px avatar on the rail's axis (12 + 4) in
-   both states, so it holds still like the header's mark; expanded, only
-   the trailing inset deepens, landing the caption on the rows' meta rail. */
+/* The footer's controls start on the rail's leading line, over the avatar,
+   where AppSidebar's do. */
+.ds-thread-panel__footer-slot {
+  padding-inline-start: var(--padding-200);
+}
+
+/* The rails' one profile block, AppSidebar's: a 40px avatar, the name over
+   the meta line in paragraph type, AppSidebar's avatar-to-name gap.
+   Collapsed, the avatar sits on the rail's axis (12 + 40 + 12 = 64);
+   expanded, it glides to the rail's leading line, 20px in, as AppSidebar's
+   does. Only the inline padding moves, so the row's height never snaps. */
 .ds-thread-panel__profile {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: 'avatar name' 'avatar meta';
   align-items: center;
-  gap: var(--gap-200);
+  column-gap: 10px; /* ds-allow(spacing): AppSidebar's avatar-to-name gap, between the 8px and 12px steps */
   min-width: 0;
-  padding: var(--padding-100);
+  padding: var(--padding-200) 0 0;
   transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
 .ds-thread-panel--expanded .ds-thread-panel__profile {
-  padding: var(--padding-100) var(--padding-200) var(--padding-100)
-    var(--padding-100);
+  padding: var(--padding-200) var(--padding-200) 0;
 }
 
+.ds-thread-panel__profile > :first-child {
+  grid-area: avatar;
+}
+
+/* The profile pairs its lines as EntitySwitcher does: the name in
+   paragraph-sm emphasis, the second line in caption, secondary. */
 .ds-thread-panel__profile-name {
-  flex: 1;
+  grid-area: name;
+  align-self: end;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
   font-family: var(--font-paragraph-sm-emphasis-family);
   font-size: var(--font-paragraph-sm-emphasis-size);
   font-weight: var(--font-paragraph-sm-emphasis-weight);
@@ -897,14 +911,17 @@
 }
 
 .ds-thread-panel__profile-meta {
-  flex: none;
+  grid-area: meta;
+  align-self: start;
+  min-width: 0;
   overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);
   line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
   opacity: 0;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
 }
@@ -923,9 +940,21 @@
    dots under the pen's visible edge while the glyph itself stays centred
    under the logo. None of it shows collapsed, so nothing moves. */
 .ds-thread-panel__thread,
-.ds-thread-panel__group-label,
-.ds-thread-panel__projects-header,
 .ds-thread-panel__more,
 .ds-thread-panel__rename {
   padding-inline-start: var(--padding-300);
+}
+
+/* Group headings sit on the rail's leading line, the logo's and the row
+   icons', where AppSidebar's category does. */
+.ds-thread-panel__group-label,
+.ds-thread-panel__projects-header {
+  padding-inline-start: var(--padding-200);
+}
+
+/* A row's trailing item (the meta caption) keeps AppSidebar's badge room
+   from its pill's end, a step more than the pill's own inset. */
+.ds-thread-panel__thread,
+.ds-thread-panel__project {
+  padding-inline-end: var(--padding-300);
 }

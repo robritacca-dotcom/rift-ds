@@ -104,6 +104,7 @@
     "validate-class-names": { "group": "contract", "text": "Base classes are ds- plus the name in kebab case, with --modifier and __part." },
     "validate-shared-primitives": { "group": "contract", "text": "Shared marks and controls are composed, never redrawn." },
     "validate-chat-cards": { "group": "contract", "text": "Every card a chat reply carries reads one recipe for its fill, corner, inset, rhythm and row height, and an ai component drawing a card shell of its own fails until it joins." },
+    "validate-shell-recipe": { "group": "contract", "text": "Every app shell, in the library, the templates and the app-shell block, draws its mode from one recipe: a host that marks itself a shell reads the recipe's properties, every property it reads exists, and no host restates the recipe's colours or raised edge." },
 
     "validate-shader-background": { "group": "tokens", "text": "The background config sits inside the tuner's ranges, and its blob colours exist." },
     "validate-single-background-mount": { "group": "tokens", "text": "BlurBackground is mounted exactly once, in the root layout." },

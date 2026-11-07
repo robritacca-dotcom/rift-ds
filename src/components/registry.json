@@ -155,7 +155,7 @@
       "name": "AppLayout",
       "label": "App layout",
       "slug": "app-layout",
-      "description": "Full-page template pairing the collapsible App sidebar with a content area, centred or set in an inset surface.",
+      "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset.",
       "category": "layout",
       "client": true
     },

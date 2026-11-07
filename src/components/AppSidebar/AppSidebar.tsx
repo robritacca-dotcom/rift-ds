@@ -11,6 +11,8 @@ import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import type { PixelInk } from '../PixelAvatar/PixelAvatar';
 import { SidebarPanel } from '../SidebarPanel/SidebarPanel';
 import type { SidebarPanelItem } from '../SidebarPanel/SidebarPanel';
+import { Tooltip } from '../Tooltip/Tooltip';
+import '../../behaviors/shell.css';
 import './AppSidebar.css';
 import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
@@ -85,7 +87,7 @@ export interface AppSidebarProfile {
   avatarUrl?: string;
 }
 
-/** How the rail meets the page: edge to edge, floating as a card, or flush beside an inset content surface. */
+/** The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface. */
 export type AppSidebarLayout = 'flush' | 'floating' | 'inset';
 
 /** Props owned by AppSidebar itself — everything else falls through to the `<nav>`. */
@@ -124,13 +126,16 @@ type AppSidebarOwnProps = {
   /** Callback when profile more button clicked */
   onProfileMore?: () => void;
   /**
-   * How the rail meets the page. `flush` runs it edge to edge on the page
-   * colour. `floating` floats it off the viewport edges as a glass card:
+   * How the rail meets the page, one of the three app shell modes. `flush`
+   * runs it edge to edge on the shell colour behind a hairline divider,
+   * nothing raised. `floating` floats it off the viewport edges as a glass card:
    * inset with rounded corners, the translucent glass fill over a backdrop
    * blur, and the floating shadow (the inset defaults to 20px and is
    * overridable via the --ds-sidebar-float-inset custom property). `inset`
-   * runs it flush on the app shell colour, beside a content surface inset
-   * from the edges, as AppLayout's `inset` layout draws it. Defaults to
+   * runs it flush on the app shell colour, beside a raised content surface
+   * inset from the edges, as AppLayout's `inset` layout draws it. Inside a
+   * host that marks itself a shell (AppLayout, a chat or template page), the
+   * rail reads that host's mode from the shell recipe. Defaults to
    * `flush` (or `floating` while the deprecated `floating` is set).
    */
   layout?: AppSidebarLayout;
@@ -323,6 +328,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      overlay can only ever activate there; crossing back up while open
      closes it, or the scroll lock would outlive the drawer. */
   const [mobileOpen, setMobileOpen] = useState(false);
+  /* The toggle's one name, spoken and shown: closing the drawer on a phone,
+     otherwise collapsing or expanding the rail. */
+  const toggleLabel = mobileOpen ? closeLabel : isExpanded ? collapseLabel : expandLabel;
   const drawerRef = useRef<HTMLElement | null>(null);
   /** Keep the internal ref (focus trap, drill focus) while honouring a forwarded one. */
   const setDrawerRef = (node: HTMLElement | null) => {
@@ -569,21 +577,20 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
               the same button becomes the drawer's close control. Driven by
               `mobileOpen` rather than a media query: the flag can only be
               true below the breakpoint, so the two never disagree. */}
-          <button
-            className={`${baseClass}__toggle`}
-            onClick={mobileOpen ? closeMobile : toggleExpanded}
-            aria-label={
-              mobileOpen
-                ? closeLabel
-                : isExpanded
-                  ? collapseLabel
-                  : expandLabel
-            }
-          >
-            <span className="material-symbols-rounded ds-mirror-rtl">
-              {mobileOpen ? 'close' : isExpanded ? 'left_panel_close' : 'left_panel_open'}
-            </span>
-          </button>
+          {/* The tooltip names the control as ThreadPanel's toggle does, so
+              every rail's collapse reads the same; it opens toward the
+              rail's interior, where there is room for it. */}
+          <Tooltip content={toggleLabel} position="start" className={`${baseClass}__toggle-tip`}>
+            <button
+              className={`${baseClass}__toggle`}
+              onClick={mobileOpen ? closeMobile : toggleExpanded}
+              aria-label={toggleLabel}
+            >
+              <span className="material-symbols-rounded ds-mirror-rtl">
+                {mobileOpen ? 'close' : isExpanded ? 'left_panel_close' : 'left_panel_open'}
+              </span>
+            </button>
+          </Tooltip>
         </div>
 
         {/* Consumer slot under the logo row; hidden while collapsed, it is

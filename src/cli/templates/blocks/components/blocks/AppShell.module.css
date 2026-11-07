@@ -1,31 +1,72 @@
-/* The app shell's layout. Every value is a rift-ds token except the
-   sidebar's own widths (64px collapsed, 280px expanded) and its mobile
-   menu button (40px), which are the AppSidebar component's geometry. */
+/* The app shell's layout, in one of the three app shell modes (flush,
+   floating or inset; AppShell.tsx's SHELL_LAYOUT picks it). Every value is
+   a rift-ds token or a property of its shell recipe, except the sidebar's
+   own widths (64px collapsed, 280px expanded) and its mobile menu button
+   (40px), which are the AppSidebar component's geometry. */
 
 .shell {
-  /* One inset for the floating sidebar and the gap it leaves. */
+  /* One inset for the floating sidebar and the gap it leaves, and the
+     content's top inset. */
   --shell-inset: var(--padding-500);
   --ds-sidebar-float-inset: var(--shell-inset);
+  /* The rail's width, which the main column clears. */
+  --shell-rail: 64px;
 
   display: flex;
   min-width: 0;
   min-height: 100dvh;
-  background-color: var(--color-bg-page-primary);
+  /* The plane, from rift-ds's shell recipe: the root's data-ds-shell
+     marker (AppShell.tsx's SHELL_LAYOUT) picks the mode, and AppSidebar
+     brings the recipe's stylesheet with it. */
+  background-color: var(--ds-shell-plane);
 }
 
-/* The sidebar is fixed, so the main column reserves its width: the rail
-   plus the inset on either side of it. */
+.shell:has(:global(.ds-app-sidebar--expanded)) {
+  --shell-rail: 280px;
+}
+
+/* The sidebar is fixed, so the main column reserves its width: the rail,
+   plus the float gap either side of it in the floating layout. */
 .main {
   flex: 1;
   min-width: 0;
   display: flex;
   justify-content: center;
-  padding-left: calc(64px + var(--shell-inset) * 2);
-  transition: padding-left var(--motion-duration-slow) var(--motion-ease-emphasized);
+  padding-left: var(--shell-rail);
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
-.mainExpanded {
-  padding-left: calc(280px + var(--shell-inset) * 2);
+.shell[data-ds-shell='floating'] .main {
+  padding-left: calc(var(--shell-rail) + var(--shell-inset) * 2);
+}
+
+/* The content's ground: the crisp surface beside the flush rail, the page
+   itself when floating, and a raised surface
+   held off the edges in the inset layout, scrolling inside itself. */
+.surface {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  background-color: var(--ds-shell-surface);
+}
+
+.shell[data-ds-shell='inset'] {
+  height: 100dvh;
+  min-height: 0;
+}
+
+.shell[data-ds-shell='inset'] .main {
+  min-height: 0;
+  padding: var(--ds-shell-gap);
+  padding-left: var(--shell-rail);
+}
+
+.shell[data-ds-shell='inset'] .surface {
+  overflow-y: auto;
+  border: var(--border-025) solid var(--ds-shell-surface-border);
+  border-radius: var(--ds-shell-surface-radius);
+  box-shadow: var(--ds-shell-surface-shadow);
 }
 
 .content {
@@ -65,7 +106,7 @@
   bottom: 0;
   inset-inline: calc(-1 * var(--padding-400));
   z-index: -1;
-  background: linear-gradient(to bottom, var(--color-bg-page-primary) var(--shell-inset), transparent);
+  background: linear-gradient(to bottom, var(--ds-shell-surface) var(--shell-inset), transparent);
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
@@ -172,9 +213,22 @@
     --shell-inset: var(--padding-400);
   }
 
-  .main,
-  .mainExpanded {
-    padding-left: 0;
+  .shell .main,
+  .shell[data-ds-shell] .main {
+    padding: 0;
+  }
+
+  /* The inset surface gives way: the page scrolls, edge to edge. */
+  .shell[data-ds-shell='inset'] {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .shell[data-ds-shell='inset'] .surface {
+    overflow: visible;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .content {

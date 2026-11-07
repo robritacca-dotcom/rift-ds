@@ -187,3 +187,9 @@
     animation: none;
   }
 }
+
+/* The trigger's tooltip names the swatch; with the menu open the menu says
+   it all, and the bubble would sit on the side the menu takes. */
+.ds-theme-picker--open .ds-theme-picker__trigger-tip .ds-tooltip__panel {
+  display: none;
+}

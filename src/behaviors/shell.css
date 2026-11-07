@@ -1,0 +1,119 @@
+/* ============================================
+   THE SHELL RECIPE
+   The one home of what each app shell mode is
+   made of, so every host draws the same three:
+   AppLayout and AppSidebar, ChatWidget when it
+   is the page, and the site's TemplateShell.
+   Each host imports this file, marks its root
+   with data-ds-shell (and, for a chat in
+   flush, data-ds-shell-backdrop), and reads
+   these properties
+   instead of restating a token.
+
+   A mode decides four things: the plane (what
+   the page is), the surface (what the content
+   sits on), the rail (how the navigation meets
+   the plane) and the edge. The edge belongs to
+   the mode, never a choice of its own:
+
+   - flush: no gap and nothing raised. The rail
+     sits on the shell plane behind a hairline
+     divider; the content is crisp on the app
+     surface. A chat seated as a page has one
+     lever more, the backdrop: solid, or blur
+     (the site chat's takeover: the glass token
+     and a 40px blur over whatever lies behind,
+     with the rail and the conversation clear
+     on it). Blur says the chat rests above
+     something, so it is the chat's alone: an
+     app layout or a template is always the
+     floor of its page and stays solid.
+   - floating: the rail is a glass card held off
+     the edges by the float gap, hairline and
+     floating shadow; the content sits on the
+     page.
+   - inset: the rail runs flush on the shell
+     plane and the content is a raised surface,
+     hairline and floating shadow, held off the
+     other edges by the inset gap.
+
+   Declared on the marked root, not on :root, so
+   a theme scoped to part of a page reaches it.
+   design.md's "App shells" section owns the
+   rules these encode.
+   ============================================ */
+
+:where([data-ds-shell]) {
+  /* The two gaps. The inset gap's value lives with AppSidebar's root rule
+     (--ds-shell-inset) and the float gap's with the floating rail
+     (--ds-sidebar-float-inset); both are read here. */
+  --ds-shell-gap: var(--ds-shell-inset, 10px);
+  --ds-shell-float-gap: var(--ds-sidebar-float-inset, 20px);
+
+  /* The raised edge and the glass card, shared by floating and inset. */
+  --ds-shell-radius: var(--radius-600);
+  --ds-shell-edge-border: var(--color-bg-container-border);
+  --ds-shell-edge-shadow: var(--shadow-floating);
+  --ds-shell-glass: var(--color-bg-glass);
+  --ds-shell-glass-blur: blur(24px);
+}
+
+:where([data-ds-shell='flush']) {
+  --ds-shell-plane: var(--color-bg-app-shell);
+  --ds-shell-surface: var(--color-bg-app-surface);
+  --ds-shell-rail-bg: var(--color-bg-app-shell);
+  --ds-shell-rail-divider: var(--color-bg-container-border);
+  --ds-shell-surface-border: transparent;
+  --ds-shell-surface-shadow: none;
+  --ds-shell-surface-radius: 0;
+}
+
+/* Blur, a chat's alone: the plane is the glass over what lies behind, so
+   the rail and the conversation clear their own fills and the divider
+   stays. */
+:where([data-ds-shell='flush'][data-ds-shell-backdrop='blur']) {
+  --ds-shell-plane: transparent;
+  --ds-shell-surface: transparent;
+  --ds-shell-rail-bg: transparent;
+  --ds-shell-backdrop-fill: var(--color-bg-glass);
+  --ds-shell-backdrop-filter: blur(40px);
+}
+
+:where([data-ds-shell='floating']) {
+  --ds-shell-plane: var(--color-bg-page-primary);
+  --ds-shell-surface: var(--color-bg-page-primary);
+  --ds-shell-rail-bg: var(--ds-shell-glass);
+  --ds-shell-rail-divider: transparent;
+  --ds-shell-surface-border: transparent;
+  --ds-shell-surface-shadow: none;
+  --ds-shell-surface-radius: 0;
+}
+
+:where([data-ds-shell='inset']) {
+  --ds-shell-plane: var(--color-bg-app-shell);
+  --ds-shell-surface: var(--color-bg-app-surface);
+  --ds-shell-rail-bg: var(--color-bg-app-shell);
+  --ds-shell-rail-divider: transparent;
+  --ds-shell-surface-border: var(--ds-shell-edge-border);
+  --ds-shell-surface-shadow: var(--ds-shell-edge-shadow);
+  --ds-shell-surface-radius: var(--ds-shell-radius);
+}
+
+/* The blur backdrop, drawn once for any host: a fixed layer behind the
+   host's content rather than a filter on the host itself, which would
+   become the containing block of every fixed descendant (AppSidebar, the
+   chat's sheets) and carry them off when the page scrolls. */
+:where([data-ds-shell='flush'][data-ds-shell-backdrop='blur']) {
+  position: relative;
+  isolation: isolate;
+}
+
+:where([data-ds-shell='flush'][data-ds-shell-backdrop='blur'])::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--ds-shell-backdrop-fill);
+  backdrop-filter: var(--ds-shell-backdrop-filter);
+}

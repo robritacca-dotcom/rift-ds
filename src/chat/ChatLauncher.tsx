@@ -85,9 +85,9 @@ export interface ChatLauncherProps {
   /**
    * How the docked panel sits on the page. `raised` (the default) is a glass
    * card with the floating shadow, inset by `--ds-chat-inset`. `inset` is
-   * flat: the app surface colour, no shadow, border or blur, and the
-   * `--ds-shell-inset` gap, so it matches AppLayout's `inset` content
-   * surface beside it. The overlay below the dock threshold takes the same
+   * AppLayout's `inset` content surface beside it, solid on the app surface
+   * colour with the same raised edge (the hairline and the floating
+   * shadow), no blur, and the `--ds-shell-inset` gap. The overlay below the dock threshold takes the same
    * gap but keeps its shadow, since it still covers the page; the floating
    * card and the takeover keep their own look.
    */

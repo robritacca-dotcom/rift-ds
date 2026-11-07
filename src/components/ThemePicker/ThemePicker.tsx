@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLayer } from '../../behaviors/useLayer';
 import './ThemePicker.css';
@@ -187,19 +188,28 @@ export const ThemePicker = React.forwardRef<HTMLDivElement, ThemePickerProps>(
           .filter(Boolean)
           .join(' ')}
       >
-        <button
-          ref={triggerRef}
-          type="button"
-          className={`${baseClass}__trigger`}
-          aria-label={active ? triggerLabel(active.label) : menuLabel}
-          aria-haspopup="menu"
-          aria-expanded={isOpen}
-          aria-controls={isOpen ? menuId : undefined}
-          disabled={disabled}
-          onClick={() => setOpen(!isOpen)}
+        {/* The trigger is a bare swatch, so the tooltip names it, on the
+            side the menu opens to (there is room there by construction);
+            ThemePicker.css hides it while the menu is open. */}
+        <Tooltip
+          content={active ? triggerLabel(active.label) : menuLabel}
+          position={placement}
+          className={`${baseClass}__trigger-tip`}
         >
-          {swatch(active, 'swatch')}
-        </button>
+          <button
+            ref={triggerRef}
+            type="button"
+            className={`${baseClass}__trigger`}
+            aria-label={active ? triggerLabel(active.label) : menuLabel}
+            aria-haspopup="menu"
+            aria-expanded={isOpen}
+            aria-controls={isOpen ? menuId : undefined}
+            disabled={disabled}
+            onClick={() => setOpen(!isOpen)}
+          >
+            {swatch(active, 'swatch')}
+          </button>
+        </Tooltip>
         {isOpen && !disabled && (
           <div
             ref={menuRef}

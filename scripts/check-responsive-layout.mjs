@@ -55,6 +55,14 @@
  *     --concurrency <n>     pages swept in parallel (default 4)
  *     --shots <dir>         save a marked screenshot of each finding there
  *     --json <file>         write the grouped findings as JSON
+ *     --storage <k=v,...>   seed localStorage before every page loads, to
+ *                           sweep a stored choice other than the served
+ *                           default (an app shell mode, for one: the
+ *                           templates' `template-layout`, the chat home's
+ *                           `chat-layout` and `chat-backdrop`); a sweep of
+ *                           record runs once per seeded state, and once
+ *                           without, since the defaults are what a first
+ *                           visit sees
  */
 /* global document, getComputedStyle, NodeFilter, window -- inspect() runs in the browser */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -70,6 +78,28 @@ const option = (name) => {
   return i === -1 ? undefined : args[i + 1];
 };
 const list = (value) => value?.split(',').map((s) => s.trim()).filter(Boolean);
+
+/** The --storage pairs, as entries to seed before each page's own scripts run. */
+const storage = (list(option('storage')) ?? []).map((pair) => {
+  const at = pair.indexOf('=');
+  if (at < 1) throw new Error(`--storage expects key=value pairs, got "${pair}"`);
+  return [pair.slice(0, at), pair.slice(at + 1)];
+});
+
+/** A browser context for the sweep, with any --storage seeded before each page loads. */
+async function sweepContext(browser) {
+  const context = await browser.newContext({ reducedMotion: 'reduce', colorScheme: 'light' });
+  if (storage.length) {
+    await context.addInitScript((entries) => {
+      try {
+        for (const [key, value] of entries) window.localStorage.setItem(key, value);
+      } catch {
+        /* a page with no storage sweeps its default */
+      }
+    }, storage);
+  }
+  return context;
+}
 
 /** Width-axis steps of one breakpoint module, read from its documented list. */
 function breakpointWidths(rel) {
@@ -405,7 +435,7 @@ function group(findings) {
 
 async function shoot(browser, origin, groups, dir) {
   mkdirSync(dir, { recursive: true });
-  const context = await browser.newContext({ reducedMotion: 'reduce', colorScheme: 'light' });
+  const context = await sweepContext(browser);
   const page = await context.newPage();
   let n = 0;
   for (const g of groups) {
@@ -442,8 +472,9 @@ async function main() {
   const browser = await chromium.launch();
   const started = Date.now();
   console.log(`Sweeping ${routes.length} route(s) at ${widths.length} width(s): ${widths.join(', ')}`);
+  if (storage.length) console.log(`  with stored: ${storage.map(([k, v]) => `${k}=${v}`).join(', ')}`);
   try {
-    const context = await browser.newContext({ reducedMotion: 'reduce', colorScheme: 'light' });
+    const context = await sweepContext(browser);
     const queue = [...routes];
     const findings = [];
     let done = 0;

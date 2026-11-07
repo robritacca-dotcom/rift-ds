@@ -100,9 +100,9 @@ export interface ThreadPanelProject {
 export interface ThreadPanelProfile {
   /** The signed-in person's display name; also seeds the Avatar's initials. */
   name: string;
-  /** Quiet caption beside the name, e.g. the plan or workspace. */
+  /** The quiet second line under the name, e.g. the person's email, plan or workspace (AppSidebar's profile block carries the email there). */
   meta?: string;
-  /** Replace the initials Avatar with a custom element, e.g. an `<Avatar src>`. */
+  /** Replace the initials Avatar with a custom element, e.g. an `<Avatar src>`; the row seats a 40px mark (Avatar at `md`). */
   avatar?: React.ReactNode;
 }
 
@@ -900,7 +900,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
                 className={`${baseClass}__profile`}
                 title={expanded ? undefined : profile.name}
               >
-                {profile.avatar ?? <Avatar name={profile.name} size="sm" />}
+                {profile.avatar ?? <Avatar name={profile.name} size="md" />}
                 <span className={`${baseClass}__profile-name`}>
                   {profile.name}
                 </span>

@@ -18,6 +18,10 @@
   --ds-chat-width: 420px;
   /* The gap the panel and the launcher float off the viewport edges. */
   --ds-chat-inset: 20px;
+  /* The artifact card's resting width, held through its open and close
+     glide until the reader sizes it with the grip; it never takes more
+     than the room the widget measures (--ds-chat-artifact-room). */
+  --ds-chat-artifact-rest-width: 520px;
   /* The floating card's resting height. */
   --ds-chat-float-height: 640px;
 }
@@ -243,11 +247,14 @@
   padding: var(--gap-1000) var(--ds-chat-widget-inset) var(--padding-400);
 }
 
-/* With widgets the region takes its content's height before the slack is
-   split, so the composer sits above centre by half the widgets' height
-   rather than being squeezed against them. */
+/* With widgets the composer holds the same dead centre the starters give
+   it: the region keeps the zero basis, so the slack splits evenly and the
+   widgets hang below the composer. Its content is its floor (a flex item's
+   automatic minimum), so widgets taller than half the slack hold their
+   height and the composer rides up only by what they overflow, never
+   squeezing them. A scroll layout is the other answer, for widgets that
+   run below the fold. */
 .ds-chat-widget__bottom--widgets {
-  flex-basis: auto;
   flex-shrink: 0;
 }
 
@@ -998,16 +1005,18 @@ html[data-chat-resizing] .ds-chat-launcher__panel {
 /* The inset surface (ChatLauncher's surface="inset"). Docked and as an
    overlay, the panel is held off the edges by the shell's gap rather than
    the chat's own, so it lines up with AppLayout's inset content surface.
-   Docked, it is also flat: a plane on the app surface colour with no
-   shadow, border or blur. The overlay keeps its shadow over the page. */
+   Docked, it is that surface's twin: solid on the app surface colour with
+   the inset shell's raised edge (the hairline and the floating shadow,
+   src/behaviors/shell.css) and no blur. The overlay keeps its shadow over
+   the page. */
 .ds-chat-launcher__panel--inset {
   --ds-chat-inset: var(--ds-shell-inset, 10px); /* AppSidebar.css declares the gap; the fallback mirrors it */
 }
 
 .ds-chat-launcher__panel--flat {
   background: var(--color-bg-app-surface);
-  border-color: transparent;
-  box-shadow: none;
+  border-color: var(--color-bg-container-border);
+  box-shadow: var(--shadow-floating);
   backdrop-filter: none;
 }
 
@@ -1259,4 +1268,247 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
 
 .ds-chat-widget__sent-context .ds-document-chip {
   max-width: 100%;
+}
+
+
+/* ============================================
+   THE TRAILING SEATS AS DRAWERS
+   Both trailing panels (the agent pane and the artifact panel) open and
+   close as a drawer: the card is solid from the first frame to the last,
+   anchored to the seat's trailing edge so it slides in and out whole at
+   the width it will rest at, and the seat hides only once it has shut.
+   Placed last, so these timings win over the seats' own rules above.
+   ============================================ */
+
+.ds-chat-widget__aside-rail,
+.ds-chat-widget__artifact-rail {
+  justify-content: flex-end;
+  transition:
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    flex-basis var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    /* ds-allow(motion): an instant flip held to the glide's end, the visibility idiom applied to opacity */
+    opacity 0s linear var(--motion-duration-slow),
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+.ds-chat-widget__aside-rail--open,
+.ds-chat-widget__artifact-rail--open {
+  transition:
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    flex-basis var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    /* ds-allow(motion): an instant flip as the seat opens, the visibility idiom applied to opacity */
+    opacity 0s linear 0s,
+    visibility 0s linear 0s;
+}
+
+/* A swap (one panel taking the seat as the other gives it up): the card
+   leaving fades out at once as it shrinks, so the swap reads as the new
+   card arriving rather than two cards side by side. A plain close, with
+   nothing arriving, keeps the card solid until the seat has shut. */
+.ds-chat-widget__rails:has(.ds-chat-widget__artifact-rail--open) > .ds-chat-widget__aside-rail:not(.ds-chat-widget__aside-rail--open),
+.ds-chat-widget__rails:has(.ds-chat-widget__aside-rail--open) > .ds-chat-widget__artifact-rail:not(.ds-chat-widget__artifact-rail--open) {
+  transition:
+    width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    flex-basis var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+/* The cards hold their resting width and never shrink with the seat: the
+   agent pane the width the widget measured for it, the artifact its
+   resting width or the grip's, either held to the room the row has. */
+.ds-chat-widget__aside-rail-inner {
+  flex-shrink: 0;
+  min-width: var(--ds-chat-aside-width, max-content);
+}
+
+.ds-chat-widget__artifact-rail-inner {
+  flex-shrink: 0;
+  min-width: min(
+    var(--ds-chat-artifact-width, var(--ds-chat-artifact-rest-width)),
+    var(--ds-chat-artifact-room, var(--ds-chat-artifact-rest-width))
+  );
+}
+
+/* Before the grip sizes it, the artifact seat opens to its resting width
+   (held to the room), so the open is the same glide every time; the
+   grip's width takes over once the reader drags it, and the expanded
+   state still takes the whole row. */
+.ds-chat-widget__rails:not([data-artifact-sized], [data-artifact-expanded]) > .ds-chat-widget__artifact-rail--open {
+  flex: 0 1 min(var(--ds-chat-artifact-rest-width), var(--ds-chat-artifact-room, var(--ds-chat-artifact-rest-width)));
+}
+
+/* ============================================
+   SHELL MODES (the layout prop)
+   A host where the chat is the page seats it in one of the three app
+   shell modes, from the shell recipe (src/behaviors/shell.css): the
+   widget's outermost element carries data-ds-shell, and these rules read
+   its properties. Below the mobile breakpoint every mode gives way to the
+   plain full-screen chat.
+   ============================================ */
+
+.ds-chat-widget__rails[data-ds-shell],
+.ds-chat-widget[data-ds-shell] {
+  /* The seats' inset either side, which the room measurement subtracts. */
+  --ds-chat-artifact-inset: var(--padding-500);
+  background-color: var(--ds-shell-plane);
+}
+
+/* The conversation and the room around the trailing panels are the
+   content, on the shell's surface; the history rail takes the plane. */
+.ds-chat-widget__rails[data-ds-shell] > .ds-chat-widget,
+.ds-chat-widget[data-ds-shell] {
+  background-color: var(--ds-shell-surface);
+}
+
+.ds-chat-widget__rails[data-ds-shell='flush'] {
+  background-color: var(--ds-shell-surface);
+}
+
+.ds-chat-widget__rails[data-ds-shell] > .ds-chat-widget__threads-rail {
+  background-color: var(--ds-shell-rail-bg);
+  border-inline-end-color: var(--ds-shell-rail-divider);
+}
+
+/* Floating: the history rail lifts off the plane as a glass card, the
+   floating rail's; the trailing panels wear the same raised edge. */
+.ds-chat-widget__rails[data-ds-shell='floating'] > .ds-chat-widget__threads-rail {
+  margin: var(--ds-shell-float-gap);
+  margin-inline-end: 0;
+  overflow: hidden;
+  background-color: var(--ds-shell-glass);
+  border: var(--border-025) solid var(--ds-shell-edge-border);
+  border-radius: var(--ds-shell-radius);
+  box-shadow: var(--ds-shell-edge-shadow);
+  backdrop-filter: var(--ds-shell-glass-blur);
+}
+
+/* Raised trailing panels (floating and inset): the card keeps its
+   hairline and the seat wears the shadow. The seat clips for the glide,
+   which would cut a shadow the card drew; a box never clips its own. */
+.ds-chat-widget__rails:is([data-ds-shell='floating'], [data-ds-shell='inset']) > .ds-chat-widget__aside-rail,
+.ds-chat-widget__rails:is([data-ds-shell='floating'], [data-ds-shell='inset']) > .ds-chat-widget__artifact-rail {
+  border-radius: var(--ds-shell-radius);
+  box-shadow: var(--ds-shell-edge-shadow);
+}
+
+/* Inset: the history rail runs flush on the plane, and the conversation
+   and each trailing panel are raised surfaces held off the edges by the
+   inset gap. */
+.ds-chat-widget__rails[data-ds-shell='inset'] {
+  --ds-chat-artifact-inset: var(--ds-shell-gap);
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget__threads-rail {
+  border-inline-end-color: transparent;
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget {
+  /* The widget's own height is 100%, which the gap would push past the
+     floor; stretched, the margins come out of the row instead. */
+  height: auto;
+  align-self: stretch;
+  margin-block: var(--ds-shell-gap);
+  margin-inline-end: var(--ds-shell-gap);
+  border: var(--border-025) solid var(--ds-shell-surface-border);
+  border-radius: var(--ds-shell-surface-radius);
+  box-shadow: var(--ds-shell-surface-shadow);
+  overflow: hidden;
+}
+
+/* The seats hold the gap above and below in both states, so the glide is
+   the width alone. */
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget__aside-rail,
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget__artifact-rail {
+  margin-block: var(--ds-shell-gap);
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget__aside-rail--open,
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget__artifact-rail--open {
+  margin-inline-end: var(--ds-shell-gap);
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__aside-rail-inner,
+.ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__artifact-rail-inner {
+  background-color: var(--ds-shell-surface);
+}
+
+/* Inset raises the trailing panel to the frame's top, so the widget's
+   floating header controls sit in the panel's own top row: centred
+   between the card's top edge and the artifact header's divider (the gap,
+   the card's hairline, ArtifactPanel's --padding-300 header padding), and
+   as far in from the end edge. */
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget__rail-actions {
+  top: calc(var(--ds-shell-gap) + var(--border-025) + var(--padding-300));
+  inset-inline-end: calc(var(--ds-shell-gap) + var(--border-025) + var(--padding-300));
+}
+
+/* The agent pane has no header row, so its card keeps an empty top row of
+   the artifact header's height for the controls, and drops its own close:
+   the header's agent toggle, now in that row, does the same. */
+.ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__aside-rail-inner {
+  padding-top: calc(var(--padding-300) * 2 + var(--control-height-default));
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__aside-rail-inner .ds-agent-rail__collapse--close {
+  display: none;
+}
+
+/* The artifact header keeps room at its end for the two controls (a
+   default control each and their gap), so its own view toggle and expand
+   sit beside them and never pass under them as the card arrives; its close
+   is the header toggle's action, so it goes. */
+.ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__artifact-rail-inner .ds-artifact-panel__header {
+  padding-inline-end: calc(var(--padding-300) * 2 + var(--control-height-default) * 2 + var(--gap-100));
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__artifact-rail-inner .ds-artifact-panel__controls > :last-child {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .ds-chat-widget__rails[data-ds-shell] > .ds-chat-widget__threads-rail,
+  .ds-chat-widget__rails[data-ds-shell] > .ds-chat-widget {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .ds-chat-widget__rails[data-ds-shell] > .ds-chat-widget {
+    border: none;
+  }
+}
+
+/* The welcome page's bottom fade in a shell mode. Outside one, the
+   scrolling root is a mask over content alone; as a page, the root is the
+   conversation's surface (its fill, hairline and shadow), which a mask
+   would fade at the floor along with the content, showing the plane
+   through. So the mask gives way to a strip held to the floor of the
+   scroller, the surface's own colour rising out of clear: the content
+   still dissolves as it scrolls out, and the surface stays whole. Under
+   the blur backdrop the conversation has no fill or edge, so the mask
+   stays. */
+.ds-chat-widget__rails[data-ds-shell]:not([data-ds-shell-backdrop='blur']) > .ds-chat-widget[data-widgets='scroll'],
+.ds-chat-widget[data-ds-shell]:not([data-ds-shell-backdrop='blur'])[data-widgets='scroll'] {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.ds-chat-widget__rails[data-ds-shell]:not([data-ds-shell-backdrop='blur']) > .ds-chat-widget[data-widgets='scroll']::after,
+.ds-chat-widget[data-ds-shell]:not([data-ds-shell-backdrop='blur'])[data-widgets='scroll']::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  flex: none;
+  display: block;
+  height: var(--gap-1000);
+  margin-top: calc(-1 * var(--gap-1000));
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--ds-shell-surface));
 }

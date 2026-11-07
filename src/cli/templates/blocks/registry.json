@@ -4,7 +4,7 @@
     {
       "name": "app-shell",
       "label": "App shell",
-      "description": "The floating sidebar, a top bar with search, the AI entry and the colour mode, a page header, and an empty page with the spacing set.",
+      "description": "A sidebar in your pick of the three shell modes, a top bar with search, AI and colour mode, a page header, and an empty page with the spacing set.",
       "route": "/starter",
       "files": [
         "components/blocks/AppShell.tsx",

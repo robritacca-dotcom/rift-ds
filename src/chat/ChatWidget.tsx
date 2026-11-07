@@ -63,6 +63,7 @@ import { ReplyBody } from './TurnQuestion';
 import { ResponseActionsLabelsContext } from './ResponseActions';
 import { FollowupSuggestionsLabelContext } from './FollowupSuggestions';
 import type { ChatModelOption, Starter } from './types';
+import '../behaviors/shell.css';
 import './ChatWidget.css';
 import '../behaviors/direction.css';
 import { inlineSign } from '../behaviors/direction';
@@ -128,6 +129,12 @@ export interface ChatAgentOptions {
   defaultOpen?: boolean;
 }
 
+/** The three app shell modes a chat can be seated as a page in, AppLayout's and AppSidebar's (`AppSidebarLayout`), named here so the chat draws on the shell recipe without composing the sidebar. */
+export type ChatLayout = 'flush' | 'floating' | 'inset';
+
+/** What a chat seated as a page lies on in the flush layout: the solid shell colour, or the glass and a strong blur over what lies behind. */
+export type ChatBackdrop = 'solid' | 'blur';
+
 /** Props owned by ChatWidget itself. */
 export interface ChatWidgetProps {
   /** Show the expand toggle. A host whose stage is always a takeover hides it. */
@@ -140,6 +147,32 @@ export interface ChatWidgetProps {
   placementEnabled?: boolean;
   /** Narrow insets for phone-width hosts. */
   compact?: boolean;
+  /**
+   * Seat the widget as a page in one of the three app shell modes, the ones
+   * AppLayout draws, for a host where the chat is the page (a chat home)
+   * rather than a panel over one. `flush` runs the history rail on the
+   * shell colour behind a hairline with the conversation crisp beside it;
+   * `floating` lifts the rail into a glass card off the edges; `inset` runs
+   * the rail flush on the shell colour and seats the conversation and each
+   * trailing panel in raised surfaces. Left out, the widget draws no shell
+   * of its own and takes its host's ground, as a docked or floating panel
+   * does. A widget narrower than the inline rail's 720px threshold has no
+   * room for a raised mode, so floating and inset lay out flush on the
+   * solid backdrop there, and below the mobile breakpoint every mode gives
+   * way to the plain full-screen chat.
+   */
+  layout?: ChatLayout;
+  /**
+   * What the flush layout lies on, a chat's own lever: blur says the chat
+   * rests above something, solid that it is the floor of its own page.
+   * `blur` (the default, the site chat's takeover look) lays the glass and a
+   * strong blur over whatever is behind the widget, the history rail and the
+   * conversation clear on it; `solid` sets the rail on the shell colour
+   * beside a crisp conversation. App layouts and templates are always the
+   * floor, so they have no backdrop. Ignored without `layout`, and by the
+   * other modes.
+   */
+  backdrop?: ChatBackdrop;
   /** The host is a phone viewport, where the soft keyboard will claim the
       lower half of the screen the moment the composer is focused. The
       welcome screen stacks instead of centring the composer: greeting in
@@ -235,14 +268,15 @@ export interface ChatWidgetProps {
   /** The artifact panel's empty-state description. Defaults to "What the chat makes for you, like a dashboard or a page, opens in this panel." */
   artifactEmptyDescription?: string;
   /** A widget slot on the welcome screen, under the composer and its
-      starters. It takes any content and keeps its natural height, so the
-      composer rides up by half of it instead of holding dead centre: the
-      empty chat reads as a home page rather than a blank prompt. It leaves
+      starters. It takes any content and keeps its natural height, laid out
+      by `widgetsLayout`, so the empty chat reads as a home page rather than
+      a blank prompt. It leaves
       with the first message, like the rest of the welcome dressing. */
   widgets?: ReactNode;
   /** How the widget slot takes its room. `fit` keeps the welcome screen to
-      one viewport: the widgets hold their height and the composer rides up
-      to make room. `scroll` turns the welcome screen into a page: the
+      one viewport: the composer holds dead centre as it does over the
+      starters, the widgets hanging below it, and rides up only when they
+      need more than half the room. `scroll` turns the welcome screen into a page: the
       greeting and composer take the opening of the viewport, the widgets
       run on below the fold, and the whole welcome scrolls as one. */
   widgetsLayout?: 'fit' | 'scroll';
@@ -361,6 +395,8 @@ export interface ChatWidgetProps {
  */
 export function ChatWidget({
   fullscreenEnabled = true,
+  layout,
+  backdrop = 'blur',
   closeEnabled = true,
   placementEnabled = false,
   compact = false,
@@ -712,6 +748,20 @@ export function ChatWidget({
   }, [hasRails, closeArtifact]);
   const closeThreads = () => setThreadsOpen(false);
 
+  /* Whether the widget is too narrow for a raised shell mode, measured on
+     its outermost element (the rails row, or the column without rails). */
+  const [shellNarrow, setShellNarrow] = useState(false);
+  useEffect(() => {
+    if (!layout || layout === 'flush') return;
+    const host = railsHostRef.current ?? composerRef.current?.closest<HTMLElement>('.ds-chat-widget');
+    if (!host) return;
+    const measure = () => setShellNarrow(host.clientWidth < THREADS_RAIL_MIN_WIDTH);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [layout, hasRails]);
+
   /* ---------- the artifact panel ----------
      The trailing seat holds one panel at a time: an artifact on stage
      stands in for the agent pane, which returns when the artifact closes if
@@ -812,6 +862,31 @@ export function ChatWidget({
      header's hamburger. */
   const trailingUp = artifactInline || (Boolean(renderAside) && asideOpen && asideWide);
   const threadsInline = threadsWide && !(trailingUp && (!asideRoomy || artifactExpanded));
+
+  /* The room the artifact seat has before the conversation drops under its
+     floor: the row less the history rail, the conversation's floor and the
+     seats' inset either side. ChatWidget.css holds the artifact card at the
+     smaller of its resting width and this room, so the card keeps one
+     width through the open and close glide and is never cut off when the
+     row is narrow. Written straight to the row on every resize, so a
+     window drag never re-renders the transcript. */
+  useEffect(() => {
+    if (!artifacts) return;
+    const host = railsHostRef.current;
+    if (!host) return;
+    const measure = () => {
+      const threadsRail = host.querySelector<HTMLElement>(':scope > .ds-chat-widget__threads-rail');
+      const inset = parseFloat(getComputedStyle(host).getPropertyValue('--ds-chat-artifact-inset')) || 0;
+      const room = host.clientWidth - (threadsRail?.offsetWidth ?? 0) - ARTIFACT_MIN_COLUMN_WIDTH - inset * 2;
+      host.style.setProperty('--ds-chat-artifact-room', `${Math.max(0, Math.round(room))}px`);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(host);
+    const threadsRail = host.querySelector<HTMLElement>(':scope > .ds-chat-widget__threads-rail');
+    if (threadsRail) observer.observe(threadsRail);
+    return () => observer.disconnect();
+  }, [artifacts, threadsInline]);
 
   /* The inline rail glides to its pane's own width, which only the pane
      knows: measured here and handed to the stylesheet as a variable, written
@@ -1032,9 +1107,21 @@ export function ChatWidget({
   };
   useEffect(() => () => window.clearTimeout(rootSettleTimer.current), []);
 
+  /* The shell recipe's markers (src/behaviors/shell.css), on the widget's
+     outermost element: the rails row when it has one, else the column. A
+     raised mode needs room for its gap and edges, so a widget narrower than
+     the inline rail's threshold lays out flush on the solid backdrop
+     instead, the plain page every mode gives way to on a phone. */
+  const shellMode = layout && layout !== 'flush' && shellNarrow ? 'flush' : layout;
+  const shellBackdrop = shellMode === layout ? backdrop : 'solid';
+  const shellAttrs = shellMode
+    ? { 'data-ds-shell': shellMode, 'data-ds-shell-backdrop': shellMode === 'flush' ? shellBackdrop : undefined }
+    : {};
+
   const chatColumn = (
     <ChatRoot
       {...dropProps}
+      {...(hasRails ? {} : shellAttrs)}
       className={`ds-chat-widget ${renderThreads ? 'ds-chat-widget--with-threads' : ''}`}
       data-compact={compact || undefined}
       data-phone={phone || undefined}
@@ -1273,6 +1360,7 @@ export function ChatWidget({
     <div
       ref={railsHostRef}
       className="ds-chat-widget__rails"
+      {...shellAttrs}
       data-artifact-expanded={artifactExpanded || undefined}
       data-artifact-sized={artifactWidth !== null || artifactResizing || undefined}
       data-artifact-resizing={artifactResizing || undefined}

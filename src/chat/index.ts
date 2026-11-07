@@ -14,7 +14,7 @@
  * documentation, and validate-chat-widget.mjs holds the two together).
  */
 export { ChatProvider, type ChatProviderProps } from './ChatProvider';
-export { ChatWidget, type ChatWidgetProps, type ChatAgentOptions, type ChatContext, type RailSlot } from './ChatWidget';
+export { ChatWidget, type ChatWidgetProps, type ChatAgentOptions, type ChatBackdrop, type ChatContext, type ChatLayout, type RailSlot } from './ChatWidget';
 export { useSelectionFocus, useHeldHighlight, readSelection, describeSelection, CHAT_SOURCE_ATTRIBUTE, HELD_HIGHLIGHT_NAME, type SelectedText, type DescribeSelectionOptions } from './selection';
 export { sanitiseSelection, selectionLines, DEFAULT_SELECTION_LIMITS, type ChatSelection, type SelectionKind, type SelectionLimits, type SelectionLinesOptions } from './selectionContext';
 export { useGeneratedStarters, type GeneratedStarters, type GeneratedStartersOptions } from './generatedStarters';

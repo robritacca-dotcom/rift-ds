@@ -19,13 +19,13 @@
   margin-top: var(--gap-400);
 }
 
+/* The rails' one group heading (design.md's App shells): paragraph small
+   in the tertiary text, mixed case, as the history rail beside it. */
 .ds-chat-agent-pane__heading {
-  font-family: var(--font-overline-family);
-  font-size: var(--font-overline-size);
-  font-weight: var(--font-overline-weight);
-  line-height: var(--font-overline-line-height);
-  letter-spacing: var(--font-overline-letter-spacing);
-  text-transform: uppercase;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
   padding: var(--padding-100) var(--padding-200);
   margin: 0;

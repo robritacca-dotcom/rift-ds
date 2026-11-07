@@ -6,7 +6,7 @@
       "slug": "ai-chat",
       "label": "AI chat",
       "category": "ai",
-      "description": "The whole AI chat: the panel, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
+      "description": "The whole AI chat: the panel, or the page itself in an app shell mode, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.",
       "command": "init chat",
       "subpaths": {
         "./chat": "The widget, the provider, the launcher and the engine under them, with the hooks that let it follow the reader and write starters for what they picked.",

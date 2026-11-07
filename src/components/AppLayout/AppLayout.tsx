@@ -5,6 +5,7 @@ import { AppSidebar } from '../AppSidebar/AppSidebar';
 import type { AppSidebarSection, AppSidebarProfile, AppSidebarLayout } from '../AppSidebar/AppSidebar';
 import { MOTION_SCROLL_SETTLE_MS } from '../../tokens/motion';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
+import '../../behaviors/shell.css';
 import './AppLayout.css';
 
 /** Props owned by AppLayout itself — everything else falls through to the outer wrapper `<div>`. */
@@ -30,11 +31,14 @@ type AppLayoutOwnProps = {
   /** Page content — centred in the main area */
   children: React.ReactNode;
   /**
-   * How the rail and the content meet the page. `flush` (the default) runs
-   * the rail edge to edge with the content centred beside it. `floating`
-   * floats the rail as a glass card, the content still centred. `inset` runs
-   * the rail flush on the app shell colour and sets the content full width
-   * in a surface inset from the other edges, which scrolls inside itself.
+   * How the rail and the content meet the page, one of the three app shell
+   * modes. `flush` (the default) runs the rail edge to edge on the shell
+   * colour behind a hairline, the content centred beside it on the crisp
+   * app surface, nothing raised. `floating` floats the rail as a glass card,
+   * the content still centred. `inset` runs the rail flush on the shell
+   * colour and sets the content full width in a raised surface (hairline
+   * and floating shadow) inset from the other edges, which scrolls inside
+   * itself.
    */
   layout?: AppSidebarLayout;
   /**
@@ -123,6 +127,10 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
         // Spread conditionally so `inherit` leaves a consumer's own
         // data-theme in place rather than overwriting it with undefined.
         {...(theme === 'dark' ? { 'data-theme': 'dark' } : {})}
+        // The shell recipe's marker (src/behaviors/shell.css): the mode.
+        // An app layout is the floor of the page, never over anything, so
+        // it takes no backdrop; the blur is the chat's alone.
+        data-ds-shell={layout}
       >
         <AppSidebar
           sections={sections}

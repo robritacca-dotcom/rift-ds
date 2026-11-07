@@ -14,7 +14,7 @@
  * (ShadersRail.tsx), whose pick is the theme's shader wherever one is
  * staged (the scenes and their renderer live in lib/shaders/).
  *
- * A theme leaves through the Export theme button (lib/theme/theme-export.ts
+ * A theme leaves through the toolbar's Get started (lib/theme/theme-export.ts
  * owns what it writes); one comes in by dropping a picture
  * (lib/theme/image-palette.ts) or a DESIGN.md or other text file
  * (lib/theme/design-md.ts), read in this tab and never uploaded. Any drag
@@ -191,10 +191,6 @@ const VIEWS = [
   { value: "shaders", label: "Shaders" },
 ];
 
-/* Where the toolbar's Get started goes: the chat's own guide from the Chat
-   view, the install guide from every other. */
-const GET_STARTED_HREF: Record<string, string> = { chat: "/docs/chat" };
-const GET_STARTED_FALLBACK = "/docs/get-started";
 
 /* Below the tool's desktop breakpoint there is no room for the edge
    panel: the controls move into a bottom Drawer summoned by a fixed pill,
@@ -1579,7 +1575,6 @@ export default function PlaygroundPage() {
               onClearImage={clearImage}
               onReset={resetTheme}
               onOpenAdvanced={() => setAdvOpen(true)}
-              onExport={openExport}
               collapsed={themeRailCollapsed}
               onCollapsedChange={setThemeRailCollapsed}
               contextual={
@@ -1716,12 +1711,15 @@ export default function PlaygroundPage() {
         onTabChange={pickView}
         switchLabel="Switch the playground view"
         actions={
+          /* The playground's one primary action, from every view: it
+             opens the theme export, the file that sets a project up in
+             this look. Everything else on the tool is secondary. */
           <Button
             className={styles.getStarted}
             label="Get started"
             variant="primary"
             size="compact"
-            href={GET_STARTED_HREF[view] ?? GET_STARTED_FALLBACK}
+            onClick={openExport}
           />
         }
       />

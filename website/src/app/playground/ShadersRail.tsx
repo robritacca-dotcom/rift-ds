@@ -274,7 +274,7 @@ export default function ShadersRail({
       <Button
         label={copied ? "Copied" : "Copy recipe"}
         size="compact"
-        variant="primary"
+        variant="secondary"
         iconLeft="content_copy"
         onClick={copy}
       />

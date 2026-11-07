@@ -32,13 +32,13 @@ import { BREAKPOINT_STAGE_COMPACT_PX } from "@/config/breakpoints";
 const SOURCE_BAR_LABELS_MIN_WIDTH = 640;
 
 /* The bar's buttons, least to most committed, left to right: start over,
-   try another file, take this look away. Export is the one primary action
-   on the card, so it wears the imported theme's action colour: what the
-   import is for is taking the look away. */
+   try another file, take this look away. Export is secondary here: the
+   toolbar's Get started is the playground's one primary action, and opens
+   the same export. */
 const SOURCE_ACTIONS = [
   { key: "reset", label: "Reset", icon: "restart_alt", variant: "tertiary", tone: "neutral" },
   { key: "replace", label: "Upload new", icon: "upload", variant: "primary", tone: "neutral" },
-  { key: "export", label: "Export theme", icon: "ios_share", variant: "primary", tone: "default" },
+  { key: "export", label: "Export theme", icon: "ios_share", variant: "secondary", tone: "default" },
 ] as const;
 
 /** Whether a drag carries files, as opposed to text or a page element. */

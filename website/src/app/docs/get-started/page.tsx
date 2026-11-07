@@ -529,8 +529,8 @@ export default function GetStartedPage() {
                             <p className={styles.sectionNote}>
                               Made a theme in the{" "}
                               <Link href="/playground" className={styles.inlineLink}>playground</Link>?
-                              Export theme gives you one AGENTS.md with the setup, the theme in
-                              words and its CSS.
+                              Its Get started button gives you one AGENTS.md with the setup, the
+                              theme in words and its CSS.
                             </p>
                           </div>
                         ),

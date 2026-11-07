@@ -208,8 +208,6 @@ export interface PlaygroundControlsProps {
   onReset: () => void;
   /** Opens the advanced-mode dialog (every primitive ramp). */
   onOpenAdvanced: () => void;
-  /** Opens the export dialog on the themed AGENTS.md. */
-  onExport: () => void;
   /** The floating panel is folded into its toggle (panel variant only). */
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
@@ -284,7 +282,6 @@ export default function PlaygroundControls({
   onClearImage,
   onReset,
   onOpenAdvanced,
-  onExport,
   collapsed = false,
   onCollapsedChange = () => {},
 }: PlaygroundControlsProps) {
@@ -691,9 +688,9 @@ export default function PlaygroundControls({
             size="compact"
             className={styles.railSplit}
             label={copied ? copiedLabel[copied] : "Copy CSS"}
-            /* Secondary: the theme's one-file export below is the primary
-               way to take it away; the CSS and the separate pieces are for
-               whoever wants just one. */
+            /* Secondary: the theme's one-file export, behind the toolbar's
+               Get started, is the primary way to take it away; the CSS and
+               the separate pieces are for whoever wants just one. */
             variant="secondary"
             iconLeft={copied ? "check" : "content_copy"}
             disabled={isPristine}
@@ -716,13 +713,6 @@ export default function PlaygroundControls({
                 onClick: () => copy("prompt"),
               },
             ]}
-          />
-          <Button
-            size="compact"
-            label="Export theme"
-            variant="primary"
-            iconLeft="ios_share"
-            onClick={onExport}
           />
           {/* The floating panel carries its reset in the header; the Drawer
               has no header of ours, so its reset stays down here. */}

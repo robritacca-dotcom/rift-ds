@@ -21,6 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same dat
 | fileName | `string` | no |  | The file's name, extension included, for `auto` and for the downloaded file. Defaults to the last part of `src`. |
 | mimeType | `string` | no |  | The file's mime type, when `auto` cannot tell from the name. |
 | height | `"fill" \| "default" \| "tall"` | no | `default` | The viewer's height: `default`, `tall`, or `fill` to take the height of its container. |
+| bare | `boolean` | no | `false` | Drop the frame and the toolbar and fill the host, for a host that brings its own header with the name and the actions, such as AttachmentViewer. |
 | download | `string \| boolean` | no | `true` | Show the download button. A string names the downloaded file. Defaults to true. |
 | onDownload | `(() => void)` | no |  | Called when the download button is pressed, in place of the browser's own download: for a file the host must fetch with credentials. |
 | openInNewTab | `boolean` | no | `true` | Show the button that opens the file in a new tab. Defaults to true. |

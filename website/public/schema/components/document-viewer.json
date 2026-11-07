@@ -72,6 +72,14 @@
           "default": "default"
         },
         {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Drop the frame and the toolbar and fill the host, for a host that brings its own header with the name and the actions, such as AttachmentViewer.",
+          "default": false
+        },
+        {
           "name": "download",
           "type": "string | boolean",
           "typeKind": "other",

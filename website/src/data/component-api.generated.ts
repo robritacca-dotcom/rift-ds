@@ -7701,6 +7701,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "default"
           },
           {
+            "name": "bare",
+            "type": "boolean",
+            "required": false,
+            "description": "Drop the frame and the toolbar and fill the host, for a host that brings its own header with the name and the actions, such as AttachmentViewer.",
+            "defaultValue": "false"
+          },
+          {
             "name": "download",
             "type": "string | boolean",
             "required": false,
@@ -19458,6 +19465,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "Pick<AttachmentDropZoneProps, \"label\">",
             "required": false,
             "description": "The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's \"Drop files to attach\". Its second line is `attachHint`."
+          },
+          {
+            "name": "renderAttachmentPreview",
+            "type": "((item: AttachmentItem) => ReactNode)",
+            "required": false,
+            "description": "Draws a sent file in the viewer its tile opens, in place of the built-in view: a document renderer of the host's own, a spreadsheet. Return nothing to keep the built-in view, which shows pictures, pasted text, and a PDF or a text file that carries a `fileUrl`."
+          },
+          {
+            "name": "onAttachmentDownload",
+            "type": "((item: AttachmentItem) => void)",
+            "required": false,
+            "description": "Called with a sent file when the viewer's Download is pressed. Its presence renders the button."
           },
           {
             "name": "attachmentGroupLabels",

@@ -12,10 +12,14 @@
  * layers rather than a picture. Below the limb the night side is a world
  * in perspective: broad land masses with meandering coasts, faster cloud
  * decks lit pink near the limb, wind bands along the curve, and one soft
- * beam fanning down from the sun, which sits fixed at the apex of the arc.
+ * beam fanning down from the sun, which sits fixed at the apex of the arc,
+ * cooling as it goes; further down the night side settles into deep ocean
+ * blue.
  *
  * It moves: a domain warp flows through the whole field, the textures drift
- * at their own speeds. The limb, the sun and its beam hold still. The bottom of the stage fades into the page ground. The grain
+ * at their own speeds. The limb, the sun and its beam hold still. The bottom
+ * of the stage fades into the page ground, and the top does too, more
+ * gradually, so space reads as black. The grain
  * is the home page shader's own: an integer hash per pixel, animated, at
  * the same strength.
  *
@@ -38,8 +42,8 @@ const TOKENS = {
 /** Field seconds per wall second, as ShaderField's `speed` scales time. */
 const SPEED = 1.6;
 
-/** Grain strength: the home page field's 0.11 (shader-background.json), raised a fifth. */
-const GRAIN = 0.132;
+/** Grain strength: the home page field's 0.11 (shader-background.json), raised a fifth, then half again. */
+const GRAIN = 0.198;
 
 type Rgb = [number, number, number];
 
@@ -126,7 +130,10 @@ void main() {
   float crown = u_crown;
   float radius = 5.0 * max(aspect, 1.0);
   vec2 centre = vec2(0.0, crown - radius);
-  float d = length(w - centre) - radius;   // > 0 toward the sky
+  /* The limb itself takes only a whisper of the warp, so the line stays
+     crisp while everything around it flows. */
+  vec2 wl = p + 0.012 * (q - 0.5);
+  float d = length(wl - centre) - radius;   // > 0 toward the sky
 
   /* The sun sits fixed at the apex of the arc, so the light is brightest
      there and falls away along the limb to either side. */
@@ -154,9 +161,11 @@ void main() {
   light += mix(amber, u_rim, side * 0.4) * lobe(d - 0.01, 0.07, 0.045)
     * (0.35 + 0.35 * band) * energy;
   /* 4. The brighter core, still soft. */
-  light += mix(amber, u_sun, 0.3) * lobe(d, 0.028, 0.022) * (0.45 + 0.2 * band) * energy;
+  light += mix(amber, u_sun, 0.3) * lobe(d, 0.02, 0.012) * (0.45 + 0.2 * band) * energy;
+  /* 4b. The line: a hair of bright air right on the limb. */
+  light += mix(amber, vec3(1.0), 0.35) * lobe(d - 0.002, 0.006, 0.003) * 0.55 * energy;
   /* 5. Coral underglow bleeding into the night side. */
-  light += u_rim * lobe(d + 0.03, 0.05, 0.11) * (0.22 + 0.18 * veil) * (0.6 + 0.5 * energy);
+  light += u_rim * lobe(d + 0.03, 0.05, 0.07) * (0.22 + 0.18 * veil) * (0.6 + 0.5 * energy);
   /* The night side swallows the sky layers gradually. */
   light *= 1.0 - 0.8 * smoothstep(0.0, -0.4, d);
 
@@ -167,7 +176,7 @@ void main() {
      haze rather than a picture of one. */
   float below = max(-d, 0.0);
   float sky = max(d, 0.0);
-  float onGround = smoothstep(0.004, -0.03, d);
+  float onGround = smoothstep(0.002, -0.012, d);
   float z = 1.0 / (below * 2.4 + 0.08);
   vec2 sp = vec2(w.x * z * 0.55, z * 0.5);
   float drift = t * 0.018;
@@ -179,17 +188,21 @@ void main() {
   /* Cloud decks: a brighter, faster layer that swirls over the land. */
   vec2 cp = sp * 1.6 + vec2(-drift * 1.6, drift * 1.3);
   float cloud = fbm(cp + 2.0 * vec2(fbm(cp * 0.5 + q), fbm(cp * 0.5 - q + 5.0)));
-  cloud = smoothstep(0.48, 0.86, cloud);
+  /* A finer deck on top, so the cloud has structure at two scales. */
+  vec2 fp = sp * 3.4 + vec2(-drift * 2.4, drift * 1.8) + q * 0.8;
+  float fine = fbm(fp + 1.2 * vec2(fbm(fp * 0.6 + 2.3), fbm(fp * 0.6 + 6.1)));
+  cloud = smoothstep(0.42, 0.8, cloud);
+  cloud = clamp(cloud + 0.55 * smoothstep(0.5, 0.85, fine), 0.0, 1.0);
   /* Wind bands: long soft streaks along the curve. */
   float streaks = fbm(vec2(sp.x * 0.35 - drift * 2.0, sp.y * 4.0));
 
   /* Light from the limb reaches into the world and dies off toward us. */
-  float reach = exp(-below / 0.32);
+  float reach = exp(-below / 0.45);
   float near = exp(-below / 0.07);
   vec3 world = vec3(0.0);
   world += mix(u_ground, u_scatter, 0.5) * land * 0.14 * (0.35 + reach);
-  world += mix(u_scatter, vec3(1.0), 0.25) * cloud * 0.28 * reach;
-  world += mix(u_rim, amber, 0.4) * cloud * near * 0.45 * energy;
+  world += mix(u_scatter, vec3(1.0), 0.3) * cloud * 0.48 * reach;
+  world += mix(u_rim, amber, 0.4) * cloud * near * 0.6 * energy;
   world += u_scatter * streaks * 0.08 * reach;
 
   /* The beam: soft shafts fanning down from the sun at the apex. The
@@ -203,7 +216,8 @@ void main() {
   float cone = exp(-pow(ang, 2.0) / (2.0 * 0.55 * 0.55));
   float dist = length(r);
   float beams = shafts * cone * exp(-dist / 0.6);
-  world += mix(amber, u_sun, 0.3) * beams * 0.45 * (0.65 + 0.5 * cloud);
+  vec3 beamColour = mix(mix(amber, u_sun, 0.3), u_scatter, smoothstep(0.08, 0.45, dist) * 0.7);
+  world += beamColour * beams * 0.45 * (0.65 + 0.5 * cloud);
 
   /* The sun itself: a bloom at the apex, brightest on the limb, spilling a
      little into the sky and further across the ground. */
@@ -213,11 +227,26 @@ void main() {
   light += sunLight * (bloomSky * 0.45 + bloomWide * 0.12);
   world += mix(u_sun, amber, 0.4) * bloomWide * 0.12;
 
+  /* Ocean: away from the limb the night side settles into deep blue,
+     brightest where there is no land, with the wind bands moving through
+     it, so the lower stage reads as sea rather than a dark smudge. */
+  float sea = smoothstep(0.02, 0.16, below) * (1.0 - 0.65 * land);
+  vec3 deep = mix(u_scatter, u_ground, 0.2);
+  vec3 ocean = deep * sea * (0.16 + 0.07 * streaks + 0.05 * veil + 0.14 * cloud) * onGround;
+  /* The warm light cools as it reaches out over the sea. */
+  world *= mix(vec3(1.0), normalize(u_scatter + 0.05) * 1.2, smoothstep(0.08, 0.3, below) * 0.5);
+
   light += world * onGround;
 
   /* The bottom of the stage dissolves into the page ground. */
   float fade = smoothstep(u_fade.x, u_fade.y, uv.y);
-  vec3 lin = u_ground + light * fade;
+  /* The sea keeps its blue lower than the light does before it too
+     reaches the ground. */
+  float seaFade = smoothstep(u_fade.x * 0.5, u_fade.y * 0.65, uv.y);
+  /* The top mirrors it, more gradually: from just above the glow the sky
+     dissolves into the ground, so space reads as black. */
+  float topFade = 1.0 - pow(smoothstep(crown + 0.03, 1.0, uv.y), 0.75);
+  vec3 lin = u_ground + (light * fade + ocean * seaFade) * topFade;
   vec3 srgb = pow(max(lin, vec3(0.0)), vec3(1.0 / 2.2));
 
   /* The home page grain: animated integer-hash noise per pixel. */

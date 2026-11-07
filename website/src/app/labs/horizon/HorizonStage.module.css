@@ -71,12 +71,18 @@
   background-color: var(--glass-tint-deep);
 }
 
-/* The composer takes the rail's own coat, so the two solid surfaces on
-   the pane read as one material over the horizon. */
+/* The composer takes the rail's own coat, with no blur of its own, so the
+   two solid surfaces on the pane read as one material over the horizon:
+   the same faint tint of the light behind each. */
 .window :global(.ds-composer) {
   background-color: var(--glass-tint-deep);
-  -webkit-backdrop-filter: blur(var(--composer-blur));
-  backdrop-filter: blur(var(--composer-blur));
+}
+
+/* The composer's AI halo is drawn to sit behind an opaque shell; under this
+   translucent coat it shows through as a turning smear inside the box, so
+   it stands down here. The gradient ring on the border stays. */
+.window :global(.ds-composer--ai-glow)::after {
+  display: none;
 }
 
 /* Starter chips take a lighter glass so they sit on the halftone too. */
@@ -112,4 +118,21 @@
     border-radius: 0;
     border: none;
   }
+}
+
+/* The header carries no brand here: the horizon is the identity. The logo
+   goes, and the name is hidden only visually (the standard clip), so the
+   header keeps its accessible text; the narrow-width threads button in the
+   same slot stays. */
+.window :global(.ds-chat-widget__brand) > img {
+  display: none;
+}
+
+.window :global(.ds-chat-widget__brand-name) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

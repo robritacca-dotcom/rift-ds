@@ -2,10 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
-// EXPERIMENT: the horizon lab (/labs/horizon) on the home page, for a look.
-// Remove, or formalise as a ShaderField option, before this reaches main.
-import { usePathname } from "next/navigation";
-import HorizonCanvas from "@/app/labs/horizon/HorizonCanvas";
 import {
   ShaderField,
   type ShaderFieldStatus,
@@ -110,8 +106,6 @@ export default function BlurBackground() {
      the server markup stays identical; the hook loses the context it briefly
      opened when `enabled` flips. */
   const [embedded, setEmbedded] = useState(false);
-  // EXPERIMENT: the horizon lab on the home page (see the import above).
-  const horizon = usePathname() === "/";
 
   /* Read once on mount from the URL, which the server prerender cannot see —
      same approach as the playground's ?view= handling, and deliberately not
@@ -172,17 +166,12 @@ export default function BlurBackground() {
         <div className="blur-ellipse blur-orange" />
         <div className="blur-ellipse blur-teal" />
 
-        {horizon ? (
-          // EXPERIMENT: the horizon lab on the home page (see the import above).
-          <HorizonCanvas className="horizon-home" crown={0.37} fade={[0.0, 0.26]} />
-        ) : (
-          <ShaderField
-            params={params}
-            blobs={shaderBackground.blobs}
-            enabled={mode === "shader" && !embedded}
-            onStatusChange={onStatusChange}
-          />
-        )}
+        <ShaderField
+          params={params}
+          blobs={shaderBackground.blobs}
+          enabled={mode === "shader" && !embedded}
+          onStatusChange={onStatusChange}
+        />
       </div>
 
       {ShaderTuner && tuning && (

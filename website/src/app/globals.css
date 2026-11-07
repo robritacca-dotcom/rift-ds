@@ -646,28 +646,3 @@ html[data-app-frame] {
   /* ds-allow(spacing): the tab bar's geometry, BottomNav's iOS height and seat, which live on the nav itself and do not reach the root. */
   --ds-table-toolbar-floating-offset: calc(62px + 13px - var(--padding-300) + var(--gap-200));
 }
-
-/* EXPERIMENT: the horizon lab (/labs/horizon) on the home page, for a look;
-   remove, or formalise as a ShaderField option, before this reaches main.
-   The canvas covers the band above the CSS blobs, which it hides. */
-.horizon-home {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-.horizon-home canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-body:has(.horizon-home) .blur-ellipse {
-  display: none;
-}
-/* A taller band with the site's own mask off, so the sun can sit behind
-   the top of the chat block; the shader fades its own bottom. */
-body:has(.horizon-home) .blur-container {
-  height: 1100px;
-}
-body:has(.horizon-home) .blur-container::after {
-  display: none;
-}

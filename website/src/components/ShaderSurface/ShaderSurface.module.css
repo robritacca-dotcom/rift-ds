@@ -1,0 +1,14 @@
+/* A shader surface fills its positioned parent, under the parent's own
+   content, the way ShaderField's canvas fills the banner. */
+.surface {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

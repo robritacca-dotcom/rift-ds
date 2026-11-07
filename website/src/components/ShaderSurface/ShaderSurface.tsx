@@ -1,32 +1,32 @@
 "use client";
 
 /**
- * The playground's shader ground: a fixed, full-viewport canvas behind the
- * page, in DotBackground's place and on its layer, painting the scene the
- * Shaders view picked (website/src/lib/shaders). It holds the page's one
- * running WebGL2 context, builds a renderer for the scene, and every frame
- * paints it from the values ref, so moving a slider writes a number and
- * renders nothing (CLAUDE.md's drag rule). Time advances by the speed
+ * A shader surface: one of the playground's scenes (website/src/lib/shaders)
+ * painted to fill its positioned parent, the way ShaderField fills the
+ * Components view's banner. It is the theme's own shader, swapped: the
+ * Shaders view picks a scene and this paints it wherever the playground
+ * stages a shader (the banner, and the Shaders view's own stage).
+ *
+ * It holds one WebGL2 context, builds a renderer for the scene, and every
+ * frame paints it from the values ref, so moving a slider writes a number
+ * and renders nothing (CLAUDE.md's drag rule). Time advances by the speed
  * setting, so changing the pace never jumps.
  *
  * The colours are the scene's tokens resolved from the live cascade at the
- * canvas, read again whenever the theme, the preset or a lever changes
- * them, so the levers recolour the ground as they move. Nothing here sets
- * data-theme: a nested [data-theme] matches the base dark tokens and would
- * hide the preset's own colours.
- *
- * A night-only scene (mode "dark": it adds light to a dark ground) puts the
- * document in dark mode while it runs, and puts the mode back when it stops
- * unless the visitor changed it in the meantime. A visitor who prefers
- * reduced motion gets a still frame that still answers the sliders.
+ * surface, read again whenever the theme, the preset or a lever changes
+ * them, so the levers recolour it live. Nothing here sets data-theme: a
+ * nested [data-theme] matches the base dark tokens and would hide the
+ * preset's own colours. A night-only scene paints a dark ground of its own
+ * on a light page (coloursFor). A visitor who prefers reduced motion gets a
+ * still frame that still answers the sliders.
  */
 
 import React from "react";
-import { createRenderer, readColours } from "@/lib/shaders/renderer";
+import { coloursFor, createRenderer } from "@/lib/shaders/renderer";
 import type { Pass, Scene, Values } from "@/lib/shaders/types";
-import styles from "./ShaderGround.module.css";
+import styles from "./ShaderSurface.module.css";
 
-export default function ShaderGround({
+export default function ShaderSurface({
   scene,
   passes,
   values,
@@ -41,22 +41,6 @@ export default function ShaderGround({
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-  /* A night-only scene holds the document dark while it runs. */
-  React.useEffect(() => {
-    if (scene.mode !== "dark") return;
-    const root = document.documentElement;
-    const previous = root.getAttribute("data-theme");
-    if (previous === "dark") return;
-    root.setAttribute("data-theme", "dark");
-    return () => {
-      /* Only undo our own change: a visitor who flipped the mode while the
-         scene ran keeps what they picked. */
-      if (root.getAttribute("data-theme") !== "dark") return;
-      if (previous === null) root.removeAttribute("data-theme");
-      else root.setAttribute("data-theme", previous);
-    };
-  }, [scene.mode]);
-
   React.useEffect(() => {
     const host = hostRef.current;
     const canvas = canvasRef.current;
@@ -65,7 +49,7 @@ export default function ShaderGround({
     const renderer = createRenderer(gl, scene, passes);
     if (!renderer) return;
 
-    const applyColours = () => renderer.setColours(readColours(host, scene.colours));
+    const applyColours = () => renderer.setColours(coloursFor(host, scene));
     const resize = () => {
       const ratio = Math.min(2, window.devicePixelRatio || 1);
       canvas.width = Math.max(1, Math.round(host.clientWidth * ratio));
@@ -108,7 +92,7 @@ export default function ShaderGround({
   }, [scene, passes, values]);
 
   return (
-    <div ref={hostRef} className={styles.ground} aria-hidden="true">
+    <div ref={hostRef} className={styles.surface} aria-hidden="true">
       <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );

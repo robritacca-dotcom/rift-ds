@@ -11,7 +11,7 @@ import { MAX_COLOURS } from "./types";
 
 export type Rgb = [number, number, number];
 
-/** A near-black ground in linear RGB, for baking a night-only scene's card. */
+/** A near-black ground in linear RGB, for a night-only scene on a light page. */
 const NIGHT_GROUND: Rgb = [0.0015, 0.0018, 0.003];
 export type Colours = { ground: Rgb; colours: Rgb[] };
 
@@ -38,6 +38,18 @@ export function readColours(host: HTMLElement, tokens: string[]): Colours {
   const colours = tokens.slice(0, MAX_COLOURS).map(read);
   probe.remove();
   return { ground, colours };
+}
+
+/**
+ * A scene's colours for a surface: read from the cascade, with a night-only
+ * scene's ground held dark while the page is light, so a horizon or a rift
+ * reads the way it is made to inside a light theme too.
+ */
+export function coloursFor(host: HTMLElement, scene: Scene): Colours {
+  const colours = readColours(host, scene.colours);
+  const pageIsDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (scene.mode === "dark" && !pageIsDark) colours.ground = NIGHT_GROUND;
+  return colours;
 }
 
 function compile(gl: WebGL2RenderingContext, type: number, source: string) {
@@ -128,12 +140,7 @@ export function bakeThumbnails(
   const urls = jobs.map(({ scene, values }) => {
     const renderer = createRenderer(gl, scene, passes);
     if (!renderer) return "";
-    const colours = readColours(host, scene.colours);
-    /* A night-only scene bakes on a dark ground even while the page is
-       light, so its card shows it the way it runs. */
-    const pageIsDark = document.documentElement.getAttribute("data-theme") === "dark";
-    if (scene.mode === "dark" && !pageIsDark) colours.ground = NIGHT_GROUND;
-    renderer.setColours(colours);
+    renderer.setColours(coloursFor(host, scene));
     renderer.draw(values, 20, width, height);
     const url = canvas.toDataURL("image/jpeg", 0.85);
     renderer.dispose();

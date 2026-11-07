@@ -30,9 +30,10 @@ export type Scene = {
   colours: string[];
   /**
    * `dark` for a scene that only reads on a dark ground (it adds light).
-   * Its host puts the document in dark mode while such a scene runs, rather
-   * than setting data-theme on its own element: a nested [data-theme] matches the
-   * base dark tokens and would hide the theme preset's colours.
+   * On a light page its surface paints a near-black ground of its own
+   * (coloursFor), rather than setting data-theme on itself: a nested
+   * [data-theme] matches the base dark tokens and would hide the theme
+   * preset's colours.
    */
   mode?: "dark";
   params: ParamSpec[];

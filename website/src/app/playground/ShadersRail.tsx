@@ -8,10 +8,14 @@ import { InspectorSlider } from "rift-ds/components/Inspector/InspectorSlider";
 import { InspectorToggleSwitch } from "rift-ds/components/Inspector/InspectorToggleSwitch";
 import { MessageCard } from "rift-ds/components/MessageCard/MessageCard";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
-import DotBackground from "@/components/DotBackground/DotBackground";
 import { PASSES } from "@/lib/shaders/passes";
 import { bakeThumbnails } from "@/lib/shaders/renderer";
-import { sceneOf, TEMPLATES, valuesOf } from "@/lib/shaders/templates";
+import {
+  DEFAULT_TEMPLATE,
+  sceneOf,
+  TEMPLATES,
+  valuesOf,
+} from "@/lib/shaders/templates";
 import type { Values } from "@/lib/shaders/types";
 import { FloatingRail } from "./FloatingRail";
 import styles from "./ShadersRail.module.css";
@@ -20,10 +24,15 @@ import layout from "./page.module.css";
 
 /* ============================================
    The shaders rail: the Shaders view's own panel. Two levels in one seat:
-   the picker (None, the dot grid the playground stands on, then a card per
-   scene), and the picked scene's settings behind a back button. The pick
-   is the playground's ground in every view, so the panel only chooses and
-   tunes; the page owns the state and paints it (ShaderGround).
+   the picker (a card per scene), and the picked scene's settings behind a
+   back button. The pick is the theme's shader: it paints wherever the
+   playground stages one (the Components view's banner, the Shaders view's
+   stage), never the page itself. The panel only chooses and tunes; the
+   page owns the state and paints it.
+
+   Field is the theme's own shader, the home page's ShaderField, so its
+   settings are that shader's levers, handed in as `fieldSettings`. The
+   other scenes run on lib/shaders, with their finishing passes.
 
    The cards' pictures are each scene painted once on a throwaway context
    that is then released (bakeThumbnails), so the rail costs no live GPU
@@ -44,9 +53,6 @@ export type ShaderEdits = {
   passParam: (id: string, key: string, value: number) => void;
 };
 
-/** The id of the "no shader" pick: the dot grid. */
-export const NO_SHADER = "none";
-
 const SPEED = { min: 0, max: 4, step: 0.05 };
 
 /** The cards' baked pictures, at the templates rail's still proportions. */
@@ -59,6 +65,9 @@ export default function ShadersRail({
   seed,
   generation,
   edits,
+  fieldSettings,
+  detail,
+  onDetailChange,
   onResetScene,
   copyText,
   collapsed = false,
@@ -66,7 +75,7 @@ export default function ShadersRail({
 }: {
   /** The right rail on desktop, or bare content inside the compact Drawer. */
   variant: "panel" | "drawer";
-  /** The picked template's id, or NO_SHADER. */
+  /** The picked template's id. */
   value: string;
   /** Called with the id picked. */
   onValueChange: (id: string) => void;
@@ -75,6 +84,12 @@ export default function ShadersRail({
   /** Bumped when the seed is replaced, to remount the settings from it. */
   generation: number;
   edits: ShaderEdits;
+  /** Field's settings: the theme's own ShaderField levers, from the page. */
+  fieldSettings: React.ReactNode;
+  /** Whether the picked scene's settings are open, rather than the cards.
+      The page owns it, so the Components banner can open them. */
+  detail: boolean;
+  onDetailChange: (detail: boolean) => void;
   /** Puts the picked scene back on its template's settings. */
   onResetScene: () => void;
   /** The recipe Copy recipe puts on the clipboard, read when it is pressed. */
@@ -82,7 +97,6 @@ export default function ShadersRail({
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
 }) {
-  const [detail, setDetail] = React.useState(false);
   const [thumbs, setThumbs] = React.useState<string[]>([]);
   const [copied, setCopied] = React.useState(false);
   const hostRef = React.useRef<HTMLDivElement | null>(null);
@@ -102,9 +116,9 @@ export default function ShadersRail({
             TEMPLATES.map((t) => ({ scene: sceneOf(t), values: valuesOf(t) })),
             PASSES,
             THUMB.width,
-            THUMB.height
-          )
-        )
+            THUMB.height,
+          ),
+        ),
       );
     };
     bake();
@@ -131,26 +145,6 @@ export default function ShadersRail({
 
   const picker = (
     <ul className={templateStyles.list}>
-      <li>
-        <button
-          type="button"
-          className={templateStyles.tile}
-          aria-current={value === NO_SHADER || undefined}
-          aria-label="None: the dot grid"
-          onClick={() => onValueChange(NO_SHADER)}
-        >
-          <MessageCard
-            className={templateStyles.card}
-            media={
-              <span className={styles.none}>
-                <DotBackground contained />
-              </span>
-            }
-            title="None"
-            meta="The dot grid the playground stands on."
-          />
-        </button>
-      </li>
       {TEMPLATES.map((t, i) => (
         <li key={t.id}>
           <button
@@ -160,7 +154,7 @@ export default function ShadersRail({
             aria-label={`${t.label}: open its settings`}
             onClick={() => {
               onValueChange(t.id);
-              setDetail(true);
+              onDetailChange(true);
             }}
           >
             <MessageCard
@@ -194,50 +188,24 @@ export default function ShadersRail({
         <Button
           variant="tertiary"
           size="compact"
-          iconLeft={<span className={`material-symbols-rounded ${styles.backGlyph}`}>arrow_back</span>}
+          iconLeft={
+            <span className={`material-symbols-rounded ${styles.backGlyph}`}>
+              arrow_back
+            </span>
+          }
           label="Shaders"
-          onClick={() => setDetail(false)}
+          onClick={() => onDetailChange(false)}
         />
       </div>
 
-      <InspectorSection title={template.label} defaultOpen>
-        {sceneOf(template).params.map((param) => (
-          <InspectorSlider
-            key={param.key}
-            label={param.label}
-            size="compact"
-            min={param.min}
-            max={param.max}
-            step={param.step}
-            defaultValue={seed.scene[param.key]}
-            onValueChange={(next) => edits.scene(param.key, next)}
-          />
-        ))}
-      </InspectorSection>
-
-      <InspectorSection title="Motion" defaultOpen>
-        <InspectorSlider
-          label="Speed"
-          size="compact"
-          min={SPEED.min}
-          max={SPEED.max}
-          step={SPEED.step}
-          defaultValue={seed.speed}
-          onValueChange={edits.speed}
-        />
-      </InspectorSection>
-
-      {PASSES.map((pass) => {
-        const state = seed.passes[pass.id];
-        return (
-          <InspectorSection key={pass.id} title={pass.label} defaultOpen={state.on}>
-            <InspectorToggleSwitch
-              label="On"
-              size="compact"
-              defaultChecked={state.on}
-              onCheckedChange={(checked) => edits.passOn(pass.id, checked)}
-            />
-            {pass.params.map((param) => (
+      {template.sceneId === "field" ? (
+        <InspectorSection title={template.label} defaultOpen>
+          {fieldSettings}
+        </InspectorSection>
+      ) : (
+        <>
+          <InspectorSection title={template.label} defaultOpen>
+            {sceneOf(template).params.map((param) => (
               <InspectorSlider
                 key={param.key}
                 label={param.label}
@@ -245,13 +213,57 @@ export default function ShadersRail({
                 min={param.min}
                 max={param.max}
                 step={param.step}
-                defaultValue={state.params[param.key]}
-                onValueChange={(next) => edits.passParam(pass.id, param.key, next)}
+                defaultValue={seed.scene[param.key]}
+                onValueChange={(next) => edits.scene(param.key, next)}
               />
             ))}
           </InspectorSection>
-        );
-      })}
+
+          <InspectorSection title="Motion" defaultOpen>
+            <InspectorSlider
+              label="Speed"
+              size="compact"
+              min={SPEED.min}
+              max={SPEED.max}
+              step={SPEED.step}
+              defaultValue={seed.speed}
+              onValueChange={edits.speed}
+            />
+          </InspectorSection>
+
+          {PASSES.map((pass) => {
+            const state = seed.passes[pass.id];
+            return (
+              <InspectorSection
+                key={pass.id}
+                title={pass.label}
+                defaultOpen={state.on}
+              >
+                <InspectorToggleSwitch
+                  label="On"
+                  size="compact"
+                  defaultChecked={state.on}
+                  onCheckedChange={(checked) => edits.passOn(pass.id, checked)}
+                />
+                {pass.params.map((param) => (
+                  <InspectorSlider
+                    key={param.key}
+                    label={param.label}
+                    size="compact"
+                    min={param.min}
+                    max={param.max}
+                    step={param.step}
+                    defaultValue={state.params[param.key]}
+                    onValueChange={(next) =>
+                      edits.passParam(pass.id, param.key, next)
+                    }
+                  />
+                ))}
+              </InspectorSection>
+            );
+          })}
+        </>
+      )}
     </div>
   );
 
@@ -264,7 +276,6 @@ export default function ShadersRail({
         size="compact"
         variant="primary"
         iconLeft="content_copy"
-        disabled={template === undefined}
         onClick={copy}
       />
     </div>
@@ -286,9 +297,13 @@ export default function ShadersRail({
       title={open ? template.label : "Shaders"}
       collapsed={collapsed}
       onCollapsedChange={onCollapsedChange ?? (() => {})}
-      onReset={open ? onResetScene : () => onValueChange(NO_SHADER)}
-      resetLabel={open ? `Back to the ${template.label.toLowerCase()} defaults` : "Back to the dot grid"}
-      resetDisabled={!open && value === NO_SHADER}
+      onReset={open ? onResetScene : () => onValueChange(DEFAULT_TEMPLATE.id)}
+      resetLabel={
+        open
+          ? `Back to the ${template.label.toLowerCase()} defaults`
+          : "Back to the theme's field"
+      }
+      resetDisabled={!open && value === DEFAULT_TEMPLATE.id}
       footer={footer}
     >
       {body}

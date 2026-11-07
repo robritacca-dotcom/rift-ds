@@ -529,6 +529,39 @@
   background: var(--color-bg-page-primary);
 }
 
+/* The banner as the way into its shader's settings: a button that draws
+   nothing of its own beyond the banner, with a container's hover signal on
+   its edge and the focus ring on it. */
+.shaderBannerButton {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.shaderBannerButton:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+.shaderBannerButton:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+/* The Shaders view's stage: the theme's shader alone, full bleed and
+   viewport-fixed on DotBackground's layer (painted after it, so over it),
+   with the rails and the toolbar floating above as they do on the dots. */
+.shaderStage {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-bg-page-primary);
+}
+
 .shaderBannerName {
   /* Above the canvas, which is absolutely placed under it. */
   position: relative;

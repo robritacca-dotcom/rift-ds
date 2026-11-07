@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.24.0",
+      "date": "2026-11-07",
+      "title": "One app shell in three modes, and the Signal theme",
+      "body": [
+        "Every app shell now draws from one recipe in one of three modes: `flush`, edge to edge behind a hairline; `floating`, the rail raised as a card; and `inset`, the rail flush beside a raised content surface. AppLayout, AppSidebar, the `app-shell` block and ChatWidget all read it, so their gap, edge and background agree. The edge belongs to the mode: floating and inset are raised, and flush never is.",
+        "ChatWidget takes `layout` to sit as a page in any of the three modes, and `backdrop` (`solid` or `blur`) for what the flush layout lies on. When there is not room for a raised mode, it falls back to flush on the solid backdrop. Its `fit` widgets now hang under a centred composer. The rails share one geometry: the collapse toggle has a tooltip and hover pill, ThemePicker's swatch has a tooltip, and group headings are in mixed case.",
+        "The passive hover and active washes are a step lighter in both colour modes. The Aubergine preset is now Signal: safety-orange buttons with navy labels, navy headlines on a cool blue-grey page, the logo on the orange and blue-led chart series. Its id is still `plum`, so `data-brand=\"plum\"` and its stylesheet path are unchanged. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.23.0",
       "date": "2026-11-06",
       "title": "A chat that proposes changes, one recipe for chat cards, EntitySwitcher and Aubergine",

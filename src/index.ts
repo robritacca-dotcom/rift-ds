@@ -62,11 +62,9 @@ export * from './components/DataTable/TypedCell';
 export * from './components/DataTable/VirtualRows';
 export * from './components/DateInput/DateInput';
 export * from './components/DatePicker/DatePicker';
-export * from './components/DatePicker/MonthGrid';
 export * from './components/DateRangePicker/DateRangePicker';
 export * from './components/Deadline/Deadline';
 export * from './components/DescriptionList/DescriptionList';
-export * from './components/DescriptionList/DescriptionListCopy';
 export * from './components/Dialog/Dialog';
 export * from './components/Divider/Divider';
 export * from './components/DocumentChip/DocumentChip';
@@ -181,7 +179,6 @@ export * from './components/TreeView/TreeView';
 export * from './components/UsageCard/UsageCard';
 export * from './components/Waveform/Waveform';
 export * from './components/Widget/Widget';
-export * from './components/Widget/WidgetDisclosure';
 export * from './components/WorldMap/WorldMap';
 
 export {

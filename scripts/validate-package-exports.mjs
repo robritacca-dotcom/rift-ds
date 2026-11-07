@@ -171,6 +171,15 @@ if (JSON.stringify(pkg.exports) !== JSON.stringify(expected)) {
 }
 
 for (const [key, target] of Object.entries(expected)) {
+  /* A null target closes an internal part's path under the wildcard
+     (INTERNAL_PARTS in the manifest); the part it closes must exist, or
+     the entry is stale. */
+  if (target === null) {
+    if (!existsSync(join(repoRoot, 'src', `${key.slice(2)}.tsx`))) {
+      errors.push(`export "${key}" closes a part that no longer exists — drop it from INTERNAL_PARTS`);
+    }
+    continue;
+  }
   if (target.includes('*')) {
     const starIndex = target.indexOf('*');
     const baseDir = join(repoRoot, target.slice(0, starIndex));
@@ -269,7 +278,7 @@ const tsModules = [];
 /** Non-wildcard export targets, normalized to repo-relative paths. */
 const explicitTargets = new Set(
   Object.values(expected)
-    .filter((t) => !t.includes('*'))
+    .filter((t) => t !== null && !t.includes('*'))
     .map((t) => t.replace(/^\.\//, ''))
 );
 
@@ -326,7 +335,7 @@ if (!entryBlock) {
     [...entryBlock[1].matchAll(/:\s*'([^']+)'/g)].map((m) => m[1])
   );
   for (const [key, target] of Object.entries(expected)) {
-    if (target.includes('*') || !/\.tsx?$/.test(target)) continue;
+    if (target === null || target.includes('*') || !/\.tsx?$/.test(target)) continue;
     const src = target.replace(/^\.\//, '');
     if (!viteEntries.has(src)) {
       errors.push(

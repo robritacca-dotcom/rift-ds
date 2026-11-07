@@ -134,12 +134,26 @@ const SUBPATHS = [
   { key: './package.json', asset: './package.json', dist: './package.json' },
 ];
 
+/**
+ * Parts of a component that live in a .tsx of their own and are not public:
+ * the ./components/* wildcard would serve them, so each gets a null export
+ * (Node's way to close one path under a wildcard), and the barrel generator
+ * leaves them out. The component that composes the part is the public
+ * surface; publishing a part later is additive, withdrawing one is a break.
+ */
+export const INTERNAL_PARTS = [
+  { file: 'DatePicker/MonthGrid', reason: 'the month grid DatePicker and DateRangePicker share; the pickers are the public surface' },
+  { file: 'Widget/WidgetDisclosure', reason: "Widget's disclosure toggle; Widget is the public surface" },
+  { file: 'DescriptionList/DescriptionListCopy', reason: "the copy button a DescriptionList row carries, the client island of a server component; DescriptionList is the public surface" },
+];
+
 /** Exports map pointing at ./src — lives in the root package.json. */
 export function sourceExports() {
   const map = {};
   for (const { key, srcJs, asset } of SUBPATHS) {
     map[key] = srcJs ?? asset;
   }
+  for (const { file } of INTERNAL_PARTS) map[`./components/${file}`] = null;
   return map;
 }
 
@@ -151,6 +165,7 @@ export function distExports() {
       ? { types: `${dist}.d.ts`, import: `${dist}.js` }
       : dist;
   }
+  for (const { file } of INTERNAL_PARTS) map[`./components/${file}`] = null;
   return map;
 }
 

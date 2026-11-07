@@ -376,12 +376,19 @@ const wildcardTarget = (target) => {
   return (path) => path.startsWith(prefix) && path.endsWith(suffix) && !/\.(stories|test)\./.test(path);
 };
 let namesCompared = 0;
+/* An internal part's path is closed with a null export (INTERNAL_PARTS in
+   the manifest), so the wildcard never served it: its file may move. */
+const closedFiles = new Set(
+  Object.entries(baselinePackage.exports ?? {})
+    .filter(([, target]) => target === null)
+    .map(([subpath]) => `src/${subpath.slice(2)}.tsx`)
+);
 for (const [subpath, target] of Object.entries(baselinePackage.exports ?? {})) {
   if (typeof target !== 'string' || !currentSubpaths.has(subpath)) continue;
   if (target.includes('*')) {
     const matches = wildcardTarget(target);
     for (const path of baselineFiles.keys()) {
-      if (matches(path) && !currentFiles.has(path)) {
+      if (matches(path) && !closedFiles.has(path) && !currentFiles.has(path)) {
         record(
           { subpath, file: path, change: 'removed' },
           `${path} was removed, so the deep import it served through "${subpath}" stops resolving.`

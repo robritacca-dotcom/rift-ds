@@ -7664,8 +7664,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The document's name, shown in the toolbar and naming the frame for a screen reader. Note: this replaces the native `title` tooltip attribute, which DocumentViewer does not expose."
           },
           {
-            "name": "type",
-            "type": "\"auto\" | DocumentViewerType",
+            "name": "kind",
+            "type": "\"auto\" | DocumentViewerKind",
             "required": false,
             "description": "How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`.",
             "values": [
@@ -8424,10 +8424,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "titleLabel",
-            "type": "((count: string, total: number) => string)",
+            "type": "((count: number, formatted: string) => string)",
             "required": false,
-            "description": "The heading for a given number of errors, already written in the locale. Defaults to \"There is a problem\" for one and \"There are <count> problems\" for more.",
-            "defaultValue": "(count: string, total: number) =>\n  total === 1 ? 'There is a problem' : `There are ${count} problems`"
+            "description": "The heading for a given number of errors: the count as a number (for a plural rule) and as written in the locale (for display). Defaults to \"There is a problem\" for one and \"There are <count> problems\" for more.",
+            "defaultValue": "(count: number, formatted: string) =>\n  count === 1 ? 'There is a problem' : `There are ${formatted} problems`"
           },
           {
             "name": "description",

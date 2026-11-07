@@ -37,6 +37,10 @@ const registry = JSON.parse(readFileSync(join(componentsDir, 'registry.json'), '
    component importing any of them fails here rather than forcing every
    consumer's bundler to resolve a package it did not install. */
 import { OPTIONAL_PEER_PACKAGES } from './optional-peers.mjs';
+/* A component's internal parts (INTERNAL_PARTS in the manifest owns the
+   list and the reasons) stay out of the barrel, as their deep path does. */
+import { INTERNAL_PARTS } from './package-manifest.mjs';
+const internalParts = new Set(INTERNAL_PARTS.map((p) => `${p.file}.tsx`));
 
 const importsPackage = (path, name) =>
   new RegExp(`from\\s+['"]${name.replace(/[/@]/g, '\\$&')}['"]`).test(readFileSync(path, 'utf8'));
@@ -73,6 +77,7 @@ const componentFolders = [
 for (const name of componentFolders) {
   const modules = readdirSync(join(componentsDir, name))
     .filter((f) => f.endsWith('.tsx') && !f.endsWith('.stories.tsx'))
+    .filter((f) => !internalParts.has(`${name}/${f}`))
     .sort();
   if (modules.length === 0) {
     console.error(`✗ Barrel generation failed: ${name} has no implementation .tsx file`);

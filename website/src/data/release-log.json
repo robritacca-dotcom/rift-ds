@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.25.0",
+      "date": "2026-11-07",
+      "title": "Components for building apps, money and dates, and ShaderScene",
+      "body": [
+        "Twelve new components cover what a real app screen needs. Heading, Text, Link and List open a typography category. DescriptionList, ErrorSummary, CurrencyInput and MaskedInput handle data and forms, with `fieldErrorsFrom` turning a server's errors into the summary and a per-field `errorText`. DateRangePicker and Deadline handle dates, and SignaturePad and DocumentViewer handle documents.",
+        "`rift-ds/format` is a new subpath of pure helpers: money as decimal strings, added without floating-point drift, and relative and time-zone dates. Input gains `prefix`, `suffix`, `clearable`, `errorText` and `action`; Field gains `errorText`; Widget gains `description`, `footer`, `padding` and `collapsible`; and an attachment with a `fileUrl` now shows a PDF or a text file in place in the file viewer.",
+        "ShaderScene paints a horizon or a rift in the theme's ambient colours, with a scrim, a vignette, fades and grain, and a pale tint on a light page. It reports its status the way ShaderField does and pauses off screen. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.24.0",
       "date": "2026-11-07",
       "title": "One app shell in three modes, and the Signal theme",

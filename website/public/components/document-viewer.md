@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.24.0. The same dat
 | --- | --- | --- | --- | --- |
 | src | `string` | yes |  | The file's address. |
 | title | `string` | yes |  | The document's name, shown in the toolbar and naming the frame for a screen reader. Note: this replaces the native `title` tooltip attribute, which DocumentViewer does not expose. |
-| type | `"auto" \| DocumentViewerType` | no | `auto` | How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`. |
+| kind | `"auto" \| DocumentViewerKind` | no | `auto` | How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`. |
 | fileName | `string` | no |  | The file's name, extension included, for `auto` and for the downloaded file. Defaults to the last part of `src`. |
 | mimeType | `string` | no |  | The file's mime type, when `auto` cannot tell from the name. |
 | height | `"fill" \| "default" \| "tall"` | no | `default` | The viewer's height: `default`, `tall`, or `fill` to take the height of its container. |

@@ -20,7 +20,7 @@ const meta = {
   parameters: { layout: 'padded' },
   tags: ['autodocs'],
   argTypes: {
-    type: { control: 'inline-radio', options: ['auto', 'pdf', 'image', 'text'] },
+    kind: { control: 'inline-radio', options: ['auto', 'pdf', 'image', 'text'] },
     height: { control: 'inline-radio', options: ['default', 'tall', 'fill'] },
   },
   args: { src: RECEIPT_SVG, title: 'Receipt, 4 Nov 2026', fileName: 'receipt.svg' },
@@ -43,7 +43,7 @@ export const Image: Story = {
 export const Statement: Story = {
   render: function Render(args) {
     const src = usePdfUrl();
-    return <DocumentViewer {...args} src={src} type="pdf" title="Statement, October 2026" fileName="statement.pdf" />;
+    return <DocumentViewer {...args} src={src} kind="pdf" title="Statement, October 2026" fileName="statement.pdf" />;
   },
 };
 

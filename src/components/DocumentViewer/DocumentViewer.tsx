@@ -11,7 +11,7 @@ import '../../behaviors/visually-hidden.css';
 import './DocumentViewer.css';
 
 /** What the viewer shows a file as. */
-export type DocumentViewerType = 'pdf' | 'image' | 'text';
+export type DocumentViewerKind = 'pdf' | 'image' | 'text';
 
 /** Props owned by DocumentViewer itself; everything else falls through to the root `<section>`. */
 type DocumentViewerOwnProps = {
@@ -20,7 +20,7 @@ type DocumentViewerOwnProps = {
   /** The document's name, shown in the toolbar and naming the frame for a screen reader. Note: this replaces the native `title` tooltip attribute, which DocumentViewer does not expose. */
   title: string;
   /** How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`. */
-  type?: DocumentViewerType | 'auto';
+  kind?: DocumentViewerKind | 'auto';
   /** The file's name, extension included, for `auto` and for the downloaded file. Defaults to the last part of `src`. */
   fileName?: string;
   /** The file's mime type, when `auto` cannot tell from the name. */
@@ -66,12 +66,12 @@ export interface DocumentViewerProps
 /** The zoom steps an image moves through; 1 fits it to the width. */
 const ZOOMS = [0.5, 0.75, 1, 1.5, 2, 3];
 
-/** The type a file shows as, from its name and mime type. */
-function resolveType(type: DocumentViewerType | 'auto', name: string, mime?: string): DocumentViewerType | null {
-  if (type !== 'auto') return type;
-  const kind = getFileKind({ name, type: mime });
-  if (kind === 'pdf' || kind === 'image') return kind;
-  if (kind === 'text' || kind === 'code' || kind === 'pasted') return 'text';
+/** The kind a file shows as, from its name and mime type. */
+function resolveKind(kind: DocumentViewerKind | 'auto', name: string, mime?: string): DocumentViewerKind | null {
+  if (kind !== 'auto') return kind;
+  const file = getFileKind({ name, type: mime });
+  if (file === 'pdf' || file === 'image') return file;
+  if (file === 'text' || file === 'code' || file === 'pasted') return 'text';
   return null;
 }
 
@@ -85,7 +85,7 @@ function resolveType(type: DocumentViewerType | 'auto', name: string, mime?: str
 export function DocumentViewer({
   src,
   title,
-  type = 'auto',
+  kind = 'auto',
   fileName,
   mimeType,
   height = 'default',
@@ -109,7 +109,7 @@ export function DocumentViewer({
 }: DocumentViewerProps) {
   const locale = useLocale(localeProp);
   const name = fileName ?? decodeURIComponent(src.split(/[?#]/)[0].split('/').pop() ?? '');
-  const resolved = resolveType(type, name, mimeType);
+  const resolved = resolveKind(kind, name, mimeType);
   const [zoom, setZoom] = useState(ZOOMS.indexOf(1));
   const [text, setText] = useState<{ src: string; body: string | null; failed: boolean } | null>(null);
 

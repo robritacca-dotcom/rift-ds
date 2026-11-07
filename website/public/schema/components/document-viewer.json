@@ -31,8 +31,8 @@
           "description": "The document's name, shown in the toolbar and naming the frame for a screen reader. Note: this replaces the native `title` tooltip attribute, which DocumentViewer does not expose."
         },
         {
-          "name": "type",
-          "type": "\"auto\" | DocumentViewerType",
+          "name": "kind",
+          "type": "\"auto\" | DocumentViewerKind",
           "typeKind": "enum",
           "values": [
             "auto",

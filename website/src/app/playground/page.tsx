@@ -35,6 +35,7 @@ import {
   TEMPLATES as SHADER_TEMPLATES,
   valuesOf,
 } from "@/lib/shaders/templates";
+import { applyCharacter, shaderCharacterFrom, type ShaderCharacter } from "@/lib/shaders/from-design";
 import { STAGED_SHADER_ATTR, type StagedShader } from "@/lib/shaders/staged";
 import type { Recipe as ShaderRecipe, Values as ShaderValues } from "@/lib/shaders/types";
 import ShadersRail, { type ShaderEdits } from "./ShadersRail";
@@ -455,10 +456,21 @@ export default function PlaygroundPage() {
      rather than in the rail, so the Components banner can open them. */
   const [shaderDetail, setShaderDetail] = useState(false);
   const shaderTemplate = SHADER_TEMPLATES.find((t) => t.id === shaderId);
+  /* A DESIGN.md's character for the shader (lib/shaders/from-design), set
+     when a file is applied: every scene picked after it is seeded with it. */
+  const shaderCharacterRef = useRef<ShaderCharacter | null>(null);
+  const seedShader = (template: (typeof SHADER_TEMPLATES)[number]): ShaderValues => {
+    const values = valuesOf(template);
+    const scene = sceneOf(template);
+    return {
+      ...values,
+      scene: applyCharacter(values.scene, scene.id, scene.params, shaderCharacterRef.current),
+    };
+  };
   const startShader = (id: string, fresh: boolean) => {
     const next = SHADER_TEMPLATES.find((t) => t.id === id);
     if (next && (fresh || id !== shaderId)) {
-      const values = valuesOf(next);
+      const values = seedShader(next);
       shaderValuesRef.current = structuredClone(values);
       setShaderSeed(values);
       setShaderGeneration((g) => g + 1);
@@ -790,6 +802,20 @@ export default function PlaygroundPage() {
     clearImage();
     setDesignSource(source);
     const t = source.theme;
+    /* The file's character reaches the shader too: Field's own levers and
+       the picked scene take its nudges, as the report's Shader row says. */
+    const character = shaderCharacterFrom({
+      darkFirst: t.darkFirst,
+      elevation: t.elevation,
+      radiusScale: t.radiusScale,
+      pill: t.pill,
+      brand: t.brand,
+    });
+    shaderCharacterRef.current = character;
+    setShaderParams(
+      applyCharacter(shaderBackground.params, "field", SHADER_PARAM_CONTROLS, character)
+    );
+    startShader(shaderId, true);
     setPreset("custom");
     syncPresetParam("custom");
     /* The colours the file states outright ride the extras (the rebuilt

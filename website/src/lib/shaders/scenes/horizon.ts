@@ -12,11 +12,15 @@ export const horizon: Scene = {
   label: "Horizon",
   description: "A planet's limb at night, a fixed sun at the apex, a hazy world and ocean below.",
   mode: "dark",
+  /* The background field's roles, the ones a preset tunes for ambient
+     shaders and a DESIGN.md import rewrites from the action colour: in the
+     base theme they are cobalt, amber, coral and gold, so the horizon's own
+     look is unchanged, and an import recolours it with the field. */
   colours: [
-    "--color-core-accent-cobalt",
-    "--color-core-accent-amber",
-    "--color-core-accent-coral",
-    "--color-core-accent-gold",
+    "--color-ambient-4",
+    "--color-ambient-6",
+    "--color-ambient-5",
+    "--color-ambient-1",
   ],
   params: [
     { key: "crown", label: "Horizon height", min: 0.15, max: 0.75, step: 0.01, default: 0.4 },

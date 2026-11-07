@@ -97,6 +97,7 @@ import {
   type TextTone,
 } from "./theme-overrides";
 import { accentsFromColours } from "./image-palette";
+import { shaderCharacterFrom } from "../shaders/from-design";
 
 /* ---------- the YAML subset ---------- */
 
@@ -801,6 +802,9 @@ export interface DesignMdTheme {
       carries no field, and the accents it fills come from its status and
       secondary hues, which would put another brand's mood behind this one. */
   ambientField?: "fade";
+  /** The file describes its dark mode and leaves the light one to rift.
+      The playground's shader reads it (lib/shaders/from-design). */
+  darkFirst?: boolean;
   /** Ramps rebased around a stated colour (the status families), on the
       Advanced colours lever. */
   advanced?: AdvancedColorState;
@@ -1872,6 +1876,33 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
     { lever: "Motion", value: "100%", status: "kept", note: "The format carries no motion tokens." }
   );
 
+  /* The playground's shader: its colours are the field's above, and a few
+     traits the theme already carries nudge its settings
+     (lib/shaders/from-design owns the rules, for this row and the stage). */
+  const shader = shaderCharacterFrom({
+    darkFirst,
+    elevation: elevation.elevation,
+    radiusScale: shape.radiusScale,
+    pill: shape.pill,
+    brand: action.brand,
+  });
+  const fieldColours = action.brand ? "takes the field's action fade" : "follows the accents, as the field does";
+  report.push(
+    shader.reasons.length > 0
+      ? {
+          lever: "Shader",
+          value: "Tuned",
+          status: "approximated",
+          note: `The playground's shader ${fieldColours}, and ${shader.reasons.join("; ")}.`,
+        }
+      : {
+          lever: "Shader",
+          value: "Its own",
+          status: "kept",
+          note: `The playground's shader ${fieldColours}, with its own settings: the file states nothing that moves them.`,
+        }
+  );
+
   /* The stated colours as overrides: the rebuilt grey scale first, then
      the action ramp and its pinned states, which own their family. */
   const extraOverrides = { ...neutralExtras, ...actionExtras?.light };
@@ -1894,6 +1925,7 @@ export function readDesignMd(text: string, catalogue: FontCatalogue): DesignMdTh
     ...action,
     aiGradient: action.brand ? "fade" : undefined,
     ambientField: action.brand ? "fade" : undefined,
+    darkFirst: darkFirst || undefined,
     extraOverrides: Object.keys(extraOverrides).length > 0 ? extraOverrides : undefined,
     extraOverridesDark:
       extraOverridesDark && Object.keys(extraOverridesDark).length > 0 ? extraOverridesDark : undefined,

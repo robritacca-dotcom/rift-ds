@@ -364,7 +364,7 @@ const tableColours: SwatchData[] = [
   },
   {
     label: "Row selected", cssVar: "--color-table-row-selected-bg",
-    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    dark: { primitive: "--neutral--08-a50--", hex: "rgba(35,35,35,0.5)", rgb: "35 / 35 / 35" },
     light: { primitive: "--neutral--02--", hex: "#D6D6D6", rgb: "214 / 214 / 214" },
   },
   {
@@ -499,13 +499,13 @@ const actionPassiveColours: SwatchData[] = [
   },
   {
     label: "Background Hover", cssVar: "--color-action-passive-bg-hover",
-    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
-    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
+    dark: { primitive: "--neutral--08-a50--", hex: "rgba(35,35,35,0.5)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a50--", hex: "rgba(214,214,214,0.5)", rgb: "214 / 214 / 214" },
   },
   {
     label: "Background Active", cssVar: "--color-action-passive-bg-active",
-    dark: { primitive: "--neutral--07-a80--", hex: "rgba(48,48,48,0.8)", rgb: "48 / 48 / 48" },
-    light: { primitive: "--neutral--03-a80--", hex: "rgba(188,188,188,0.8)", rgb: "188 / 188 / 188" },
+    dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
+    light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
   },
   {
     label: "Text Primary", cssVar: "--color-action-passive-text",

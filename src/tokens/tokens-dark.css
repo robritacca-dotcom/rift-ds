@@ -135,8 +135,8 @@
   /* Action - Passive (Secondary button) */
   --color-action-passive-text: var(--primitive-neutral-01);
   --color-action-passive-bg: var(--primitive-neutral-09-a01);
-  --color-action-passive-bg-hover: var(--primitive-neutral-08-a80);
-  --color-action-passive-bg-active: var(--primitive-neutral-07-a80);
+  --color-action-passive-bg-hover: var(--primitive-neutral-08-a50);
+  --color-action-passive-bg-active: var(--primitive-neutral-08-a80);
 
   /* Action - Neutral (grey filled buttons). The fill stays visible at
      rest, one step above the container greys; hover and active brighten

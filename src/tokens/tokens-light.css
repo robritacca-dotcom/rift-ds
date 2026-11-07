@@ -158,8 +158,8 @@
   /* Action - Passive (Secondary button) */
   --color-action-passive-text: var(--primitive-neutral-10);
   --color-action-passive-bg: var(--primitive-neutral-01-a01);
-  --color-action-passive-bg-hover: var(--primitive-neutral-02-a80);
-  --color-action-passive-bg-active: var(--primitive-neutral-03-a80);
+  --color-action-passive-bg-hover: var(--primitive-neutral-02-a50);
+  --color-action-passive-bg-active: var(--primitive-neutral-02-a80);
 
   /* Action - Neutral (grey filled buttons). Unlike passive, the fill is a
      solid grey step that stays visible at rest — a filled button without

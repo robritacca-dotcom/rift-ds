@@ -479,6 +479,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
     "body": "CI runs every step of verify across its four jobs, plus these two, which a local run cannot do.",
     "checks": [
       {
+        "name": "node scripts/labs-only-change.mjs",
+        "text": "Decides whether a change touches only labs, so story tests, the Storybook build, the package steps and the site-wide gesture and axe sweeps can stand down for it."
+      },
+      {
         "name": "npm audit --audit-level=high --omit=dev",
         "text": "Fails on a high-severity advisory in a production dependency."
       },

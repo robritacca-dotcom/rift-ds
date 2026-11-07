@@ -4,6 +4,12 @@ name: CI
 # goes into verify in the same change. Three deliberate exceptions stay
 # CI-only: the dependency audit and the drift guard below, and Chromatic
 # (chromatic.yml, dispatch-only for its snapshot budget).
+#
+# Labs (website/src/app/labs/) are noindex surface experiments, made for
+# fun. A change that touches nothing else takes a lighter path: the jobs and
+# steps marked `labs-only` below stand down, and everything else still runs.
+# scripts/labs-only-change.mjs owns the allowlist and the reasoning, and
+# `npm run verify:labs` is the local mirror of that path.
 
 on:
   push:
@@ -16,8 +22,26 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    name: Detect a labs-only change
+    runs-on: ubuntu-latest
+    outputs:
+      labs-only: ${{ steps.detect.outputs.labs-only }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # Anything it cannot resolve (a new branch, a force push) reads as not
+      # labs-only, so the full path runs.
+      - id: detect
+        run: node scripts/labs-only-change.mjs
+        env:
+          LABS_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          LABS_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+
   library:
     name: Lint + build library
+    needs: changes
     runs-on: ubuntu-latest
     steps:
       # Full history with tags: the API compatibility gate below compares the
@@ -38,17 +62,23 @@ jobs:
       # plain `npm audit` still reports dev advisories; the dependency-advisory
       # skill owns the response to both kinds.
       - run: npm audit --audit-level=high --omit=dev
+        # labs-only: a labs page adds no dependency.
+        if: needs.changes.outputs.labs-only != 'true'
       - run: npm run lint
       - run: npm run build
       # Deprecate, never remove: nothing the latest release published may
       # vanish or narrow (props, export names, subpaths, deep-import files,
       # the published schema files and their meta-schema properties).
       - run: node scripts/validate-api-compat.mjs
+        # labs-only: a labs page publishes nothing, so the package steps stand down.
+        if: needs.changes.outputs.labs-only != 'true'
       - run: npm run build:lib
+        if: needs.changes.outputs.labs-only != 'true'
       # publint + arethetypeswrong against dist/: the manifest must match the
       # tarball and every export subpath must resolve for ESM and bundler
       # consumers — resolution modes the Vite consumer smoke never exercises.
       - run: node scripts/validate-package-publish.mjs
+        if: needs.changes.outputs.labs-only != 'true'
       # validate-registry (run by prebuild) regenerates README/skills/barrel
       # content; a dirty tree here means committed generated content is stale.
       # CI-only: a local tree is dirty with the change in progress, so verify
@@ -62,6 +92,9 @@ jobs:
 
   test:
     name: Story tests
+    needs: changes
+    # labs-only: a labs page has no stories.
+    if: needs.changes.outputs.labs-only != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -75,6 +108,9 @@ jobs:
 
   storybook:
     name: Build Storybook
+    needs: changes
+    # labs-only: a labs page is not in Storybook.
+    if: needs.changes.outputs.labs-only != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -87,6 +123,7 @@ jobs:
 
   website:
     name: Build website
+    needs: changes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -121,8 +158,14 @@ jobs:
       # page proves nothing about a grip: on 2026-10-20 the playground's
       # resize grip blanked the live site under a real drag, twice.
       - run: node scripts/validate-gestures.mjs
+        # labs-only: these two sweep the whole served site. A labs change can
+        # only reach its own noindex pages (a few lab grips and lab routes are
+        # in their sets), and the lighter path accepts that risk for an
+        # experiment; the next full run covers them again.
+        if: needs.changes.outputs.labs-only != 'true'
       # axe over the served pages in both themes: page-level composition
       # (landmarks, heading order, the mounted chrome) that the per-component
       # story gate cannot see. Rule set mirrors .storybook/preview.ts.
       - run: node scripts/validate-website-a11y.mjs
+        if: needs.changes.outputs.labs-only != 'true'
 

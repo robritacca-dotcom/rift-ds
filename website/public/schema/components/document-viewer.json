@@ -1,0 +1,184 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "DocumentViewer",
+  "label": "Document viewer",
+  "slug": "document-viewer",
+  "category": "data-display",
+  "description": "A PDF, an image or a text file shown on the page, with download and a fallback where the browser will not embed it.",
+  "client": true,
+  "importPath": "rift-ds/components/DocumentViewer/DocumentViewer",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/document-viewer",
+  "markdownUrl": "https://rift-ds.com/components/document-viewer.md",
+  "exports": [
+    {
+      "component": "DocumentViewer",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The file's address."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The document's name, shown in the toolbar and naming the frame for a screen reader. Note: this replaces the native `title` tooltip attribute, which DocumentViewer does not expose."
+        },
+        {
+          "name": "type",
+          "type": "\"auto\" | DocumentViewerType",
+          "typeKind": "enum",
+          "values": [
+            "auto",
+            "image",
+            "pdf",
+            "text"
+          ],
+          "required": false,
+          "description": "How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`.",
+          "default": "auto"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The file's name, extension included, for `auto` and for the downloaded file. Defaults to the last part of `src`."
+        },
+        {
+          "name": "mimeType",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The file's mime type, when `auto` cannot tell from the name."
+        },
+        {
+          "name": "height",
+          "type": "\"fill\" | \"default\" | \"tall\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "fill",
+            "tall"
+          ],
+          "required": false,
+          "description": "The viewer's height: `default`, `tall`, or `fill` to take the height of its container.",
+          "default": "default"
+        },
+        {
+          "name": "download",
+          "type": "string | boolean",
+          "typeKind": "other",
+          "required": false,
+          "description": "Show the download button. A string names the downloaded file. Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "onDownload",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the download button is pressed, in place of the browser's own download: for a file the host must fetch with credentials."
+        },
+        {
+          "name": "openInNewTab",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show the button that opens the file in a new tab. Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "toolbar",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "More controls for the toolbar, before the built-in ones: a share button, a page count."
+        },
+        {
+          "name": "fallback",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "What shows when the file cannot be shown here: an unknown kind, a text file that would not load, or a browser that will not embed a PDF. Defaults to a line saying so and a download button."
+        },
+        {
+          "name": "downloadLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name and text of the download button. Defaults to \"Download\".",
+          "default": "Download"
+        },
+        {
+          "name": "openLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the open button. Defaults to \"Open in new tab\".",
+          "default": "Open in new tab"
+        },
+        {
+          "name": "zoomInLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the zoom-in button. Defaults to \"Zoom in\".",
+          "default": "Zoom in"
+        },
+        {
+          "name": "zoomOutLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the zoom-out button. Defaults to \"Zoom out\".",
+          "default": "Zoom out"
+        },
+        {
+          "name": "resetZoomLabel",
+          "type": "((percent: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of the button that fits an image to the width again, given the zoom in percent. Defaults to \"Fit to width, now <zoom>%\"."
+        },
+        {
+          "name": "loadingLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Announced while a text file loads. Defaults to \"Loading document\".",
+          "default": "Loading document"
+        },
+        {
+          "name": "fallbackLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The default fallback's line. Defaults to \"This file can’t be shown here.\"",
+          "default": "This file can’t be shown here."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the zoom is written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

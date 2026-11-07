@@ -1,0 +1,219 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.24.0",
+  "kind": "component",
+  "name": "SignaturePad",
+  "label": "Signature pad",
+  "slug": "signature-pad",
+  "category": "forms",
+  "description": "A signature drawn with a pointer or typed, kept as SVG with a PNG on demand.",
+  "client": true,
+  "importPath": "rift-ds/components/SignaturePad/SignaturePad",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/signature-pad",
+  "markdownUrl": "https://rift-ds.com/components/signature-pad.md",
+  "exports": [
+    {
+      "component": "SignaturePad",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Label text above the pad."
+        },
+        {
+          "name": "mode",
+          "type": "\"both\" | \"type\" | \"draw\"",
+          "typeKind": "enum",
+          "values": [
+            "both",
+            "draw",
+            "type"
+          ],
+          "required": false,
+          "description": "`draw` takes a drawn signature, `type` a typed name, `both` lets the reader choose. Defaults to `both`, since typing is the way in for anyone who cannot draw with a pointer.",
+          "default": "both"
+        },
+        {
+          "name": "value",
+          "type": "SignatureValue | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "The signature (controlled). A drawn one cannot be loaded back for editing: pass `null` to clear the pad, or keep the value the pad last handed over."
+        },
+        {
+          "name": "defaultValue",
+          "type": "{ kind: \"typed\"; text: string; } | null",
+          "typeKind": "other",
+          "required": false,
+          "description": "The typed name the pad starts with (uncontrolled), which also starts it on the type tab.",
+          "default": null
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: SignatureValue | null) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the signature after each stroke, each change to the typed name, and each clear (with `null`)."
+        },
+        {
+          "name": "height",
+          "type": "\"default\" | \"tall\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "tall"
+          ],
+          "required": false,
+          "description": "The pad's height: `default`, or `tall` for a wider hand or a touch screen.",
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Component size",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the pad is disabled",
+          "default": false
+        },
+        {
+          "name": "error",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Error state without a message of its own."
+        },
+        {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message under the pad; setting it marks the pad invalid."
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Helper text below the pad."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Marks the pad required."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The form field name: the form receives the signature's SVG through a hidden input."
+        },
+        {
+          "name": "placeholderLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text on the baseline before anything is drawn. Defaults to \"Sign here\".",
+          "default": "Sign here"
+        },
+        {
+          "name": "padLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The drawing surface's accessible name. Defaults to \"Signature drawing area\".",
+          "default": "Signature drawing area"
+        },
+        {
+          "name": "modeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the draw and type choice. Defaults to \"Signature method\".",
+          "default": "Signature method"
+        },
+        {
+          "name": "drawLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The draw tab's text. Defaults to \"Draw\".",
+          "default": "Draw"
+        },
+        {
+          "name": "typeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The type tab's text. Defaults to \"Type\".",
+          "default": "Type"
+        },
+        {
+          "name": "nameLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The typed name's field label. Defaults to \"Type your full name\".",
+          "default": "Type your full name"
+        },
+        {
+          "name": "clearLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The clear button's text. Defaults to \"Clear\".",
+          "default": "Clear"
+        },
+        {
+          "name": "undoLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The undo button's text. Defaults to \"Undo\".",
+          "default": "Undo"
+        },
+        {
+          "name": "addedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Announced politely after a stroke is drawn. Defaults to \"Signature added\".",
+          "default": "Signature added"
+        },
+        {
+          "name": "clearedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Announced politely after the pad is cleared. Defaults to \"Signature cleared\".",
+          "default": "Signature cleared"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

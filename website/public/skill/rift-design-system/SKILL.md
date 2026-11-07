@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.24.0, alongside every deploy of https://rift-ds.com. The library is 175 React components across 13 categories, themed by 327 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.24.0, alongside every deploy of https://rift-ds.com. The library is 177 React components across 13 categories, themed by 327 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 
@@ -78,10 +78,10 @@ references/components.md lists every component with its import line and descript
 - Actions (9): Buttons, button groups, and toggles for triggering actions and switching modes.
 - AI (36): Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 - Charts (16): Data visualisation components for plotting series and activity over time.
-- Data display (31): Cards, tables, lists, and badges for presenting structured content.
+- Data display (32): Cards, tables, lists, and badges for presenting structured content.
 - Effects (3): Ambient and decorative surfaces that sit behind or around the interface.
 - Feedback (11): Alerts, toasts, progress, and empty states that tell people what is happening.
-- Forms (24): Inputs, pickers, and selection controls for collecting and editing values.
+- Forms (25): Inputs, pickers, and selection controls for collecting and editing values.
 - Inspector (7): One-row controls for tool panels and settings rails, each carrying its name inside the control and sized to match Button.
 - Layout (8): Page scaffolding: app shells, sidebars, dividers, and section headings.
 - Maps (4): Geographic surfaces for showing where things are and what connects them: a globe, a flat world map, and the callout and key that explain them.

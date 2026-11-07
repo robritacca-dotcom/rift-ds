@@ -7639,6 +7639,166 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "DocumentViewer",
+    "label": "Document viewer",
+    "slug": "document-viewer",
+    "category": "data-display",
+    "description": "A PDF, an image or a text file shown on the page, with download and a fallback where the browser will not embed it.",
+    "client": true,
+    "importPath": "rift-ds/components/DocumentViewer/DocumentViewer",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "DocumentViewer",
+        "props": [
+          {
+            "name": "src",
+            "type": "string",
+            "required": true,
+            "description": "The file's address."
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "The document's name, shown in the toolbar and naming the frame for a screen reader. Note: this replaces the native `title` tooltip attribute, which DocumentViewer does not expose."
+          },
+          {
+            "name": "type",
+            "type": "\"auto\" | DocumentViewerType",
+            "required": false,
+            "description": "How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`.",
+            "values": [
+              "auto",
+              "image",
+              "pdf",
+              "text"
+            ],
+            "defaultValue": "auto"
+          },
+          {
+            "name": "fileName",
+            "type": "string",
+            "required": false,
+            "description": "The file's name, extension included, for `auto` and for the downloaded file. Defaults to the last part of `src`."
+          },
+          {
+            "name": "mimeType",
+            "type": "string",
+            "required": false,
+            "description": "The file's mime type, when `auto` cannot tell from the name."
+          },
+          {
+            "name": "height",
+            "type": "\"fill\" | \"default\" | \"tall\"",
+            "required": false,
+            "description": "The viewer's height: `default`, `tall`, or `fill` to take the height of its container.",
+            "values": [
+              "default",
+              "fill",
+              "tall"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "download",
+            "type": "string | boolean",
+            "required": false,
+            "description": "Show the download button. A string names the downloaded file. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "onDownload",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called when the download button is pressed, in place of the browser's own download: for a file the host must fetch with credentials."
+          },
+          {
+            "name": "openInNewTab",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the button that opens the file in a new tab. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "toolbar",
+            "type": "ReactNode",
+            "required": false,
+            "description": "More controls for the toolbar, before the built-in ones: a share button, a page count."
+          },
+          {
+            "name": "fallback",
+            "type": "ReactNode",
+            "required": false,
+            "description": "What shows when the file cannot be shown here: an unknown kind, a text file that would not load, or a browser that will not embed a PDF. Defaults to a line saying so and a download button."
+          },
+          {
+            "name": "downloadLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name and text of the download button. Defaults to \"Download\".",
+            "defaultValue": "Download"
+          },
+          {
+            "name": "openLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the open button. Defaults to \"Open in new tab\".",
+            "defaultValue": "Open in new tab"
+          },
+          {
+            "name": "zoomInLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the zoom-in button. Defaults to \"Zoom in\".",
+            "defaultValue": "Zoom in"
+          },
+          {
+            "name": "zoomOutLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the zoom-out button. Defaults to \"Zoom out\".",
+            "defaultValue": "Zoom out"
+          },
+          {
+            "name": "resetZoomLabel",
+            "type": "((percent: string) => string)",
+            "required": false,
+            "description": "Accessible name of the button that fits an image to the width again, given the zoom in percent. Defaults to \"Fit to width, now <zoom>%\"."
+          },
+          {
+            "name": "loadingLabel",
+            "type": "string",
+            "required": false,
+            "description": "Announced while a text file loads. Defaults to \"Loading document\".",
+            "defaultValue": "Loading document"
+          },
+          {
+            "name": "fallbackLabel",
+            "type": "string",
+            "required": false,
+            "description": "The default fallback's line. Defaults to \"This file can’t be shown here.\"",
+            "defaultValue": "This file can’t be shown here."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the zoom is written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Drawer",
     "label": "Drawer",
     "slug": "drawer",
@@ -14231,6 +14391,197 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "LinkComponent",
             "required": false,
             "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "SignaturePad",
+    "label": "Signature pad",
+    "slug": "signature-pad",
+    "category": "forms",
+    "description": "A signature drawn with a pointer or typed, kept as SVG with a PNG on demand.",
+    "client": true,
+    "importPath": "rift-ds/components/SignaturePad/SignaturePad",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "SignaturePad",
+        "props": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label text above the pad."
+          },
+          {
+            "name": "mode",
+            "type": "\"both\" | \"type\" | \"draw\"",
+            "required": false,
+            "description": "`draw` takes a drawn signature, `type` a typed name, `both` lets the reader choose. Defaults to `both`, since typing is the way in for anyone who cannot draw with a pointer.",
+            "values": [
+              "both",
+              "draw",
+              "type"
+            ],
+            "defaultValue": "both"
+          },
+          {
+            "name": "value",
+            "type": "SignatureValue | null",
+            "required": false,
+            "description": "The signature (controlled). A drawn one cannot be loaded back for editing: pass `null` to clear the pad, or keep the value the pad last handed over."
+          },
+          {
+            "name": "defaultValue",
+            "type": "{ kind: \"typed\"; text: string; } | null",
+            "required": false,
+            "description": "The typed name the pad starts with (uncontrolled), which also starts it on the type tab.",
+            "defaultValue": "null"
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: SignatureValue | null) => void)",
+            "required": false,
+            "description": "Called with the signature after each stroke, each change to the typed name, and each clear (with `null`)."
+          },
+          {
+            "name": "height",
+            "type": "\"default\" | \"tall\"",
+            "required": false,
+            "description": "The pad's height: `default`, or `tall` for a wider hand or a touch screen.",
+            "values": [
+              "default",
+              "tall"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Component size",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "default"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the pad is disabled",
+            "defaultValue": "false"
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "required": false,
+            "description": "Error state without a message of its own."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message under the pad; setting it marks the pad invalid."
+          },
+          {
+            "name": "helperText",
+            "type": "string",
+            "required": false,
+            "description": "Helper text below the pad."
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "required": false,
+            "description": "Marks the pad required."
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "The form field name: the form receives the signature's SVG through a hidden input."
+          },
+          {
+            "name": "placeholderLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text on the baseline before anything is drawn. Defaults to \"Sign here\".",
+            "defaultValue": "Sign here"
+          },
+          {
+            "name": "padLabel",
+            "type": "string",
+            "required": false,
+            "description": "The drawing surface's accessible name. Defaults to \"Signature drawing area\".",
+            "defaultValue": "Signature drawing area"
+          },
+          {
+            "name": "modeLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the draw and type choice. Defaults to \"Signature method\".",
+            "defaultValue": "Signature method"
+          },
+          {
+            "name": "drawLabel",
+            "type": "string",
+            "required": false,
+            "description": "The draw tab's text. Defaults to \"Draw\".",
+            "defaultValue": "Draw"
+          },
+          {
+            "name": "typeLabel",
+            "type": "string",
+            "required": false,
+            "description": "The type tab's text. Defaults to \"Type\".",
+            "defaultValue": "Type"
+          },
+          {
+            "name": "nameLabel",
+            "type": "string",
+            "required": false,
+            "description": "The typed name's field label. Defaults to \"Type your full name\".",
+            "defaultValue": "Type your full name"
+          },
+          {
+            "name": "clearLabel",
+            "type": "string",
+            "required": false,
+            "description": "The clear button's text. Defaults to \"Clear\".",
+            "defaultValue": "Clear"
+          },
+          {
+            "name": "undoLabel",
+            "type": "string",
+            "required": false,
+            "description": "The undo button's text. Defaults to \"Undo\".",
+            "defaultValue": "Undo"
+          },
+          {
+            "name": "addedLabel",
+            "type": "string",
+            "required": false,
+            "description": "Announced politely after a stroke is drawn. Defaults to \"Signature added\".",
+            "defaultValue": "Signature added"
+          },
+          {
+            "name": "clearedLabel",
+            "type": "string",
+            "required": false,
+            "description": "Announced politely after the pad is cleared. Defaults to \"Signature cleared\".",
+            "defaultValue": "Signature cleared"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": ""
           }
         ]
       }

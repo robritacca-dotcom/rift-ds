@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (31)
+## Data display (32)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -626,6 +626,14 @@ Terms and their values for review screens, receipts, and account details, stacke
 - Import: `import { DescriptionList } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/description-list.md
+
+### Document viewer
+
+A PDF, an image or a text file shown on the page, with download and a fallback where the browser will not embed it.
+
+- Import: `import { DocumentViewer } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/document-viewer.md
 
 ### Entity card
 
@@ -875,7 +883,7 @@ Temporary notification with status variants, auto-dismiss, and stacking via Toas
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toast.md
 
-## Forms (24)
+## Forms (25)
 
 Inputs, pickers, and selection controls for collecting and editing values.
 
@@ -1022,6 +1030,14 @@ Dropdown's rich sibling: options preview their own heading face, body face, and 
 - Import: `import { RichDropdown } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/rich-dropdown.md
+
+### Signature pad
+
+A signature drawn with a pointer or typed, kept as SVG with a PNG on demand.
+
+- Import: `import { SignaturePad } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/signature-pad.md
 
 ### Slider
 

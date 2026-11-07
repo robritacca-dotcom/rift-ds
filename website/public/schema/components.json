@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.24.0",
   "package": "rift-ds",
-  "count": 176,
+  "count": 178,
   "components": [
     {
       "name": "Accordion",
@@ -623,6 +623,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/document-chip.json",
       "docsUrl": "https://rift-ds.com/components/document-chip",
       "markdownUrl": "https://rift-ds.com/components/document-chip.md"
+    },
+    {
+      "name": "DocumentViewer",
+      "label": "Document viewer",
+      "slug": "document-viewer",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/document-viewer.json",
+      "docsUrl": "https://rift-ds.com/components/document-viewer",
+      "markdownUrl": "https://rift-ds.com/components/document-viewer.md"
     },
     {
       "name": "Drawer",
@@ -1353,6 +1363,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/sidebar-panel.json",
       "docsUrl": "https://rift-ds.com/components/sidebar-panel",
       "markdownUrl": "https://rift-ds.com/components/sidebar-panel.md"
+    },
+    {
+      "name": "SignaturePad",
+      "label": "Signature pad",
+      "slug": "signature-pad",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/signature-pad.json",
+      "docsUrl": "https://rift-ds.com/components/signature-pad",
+      "markdownUrl": "https://rift-ds.com/components/signature-pad.md"
     },
     {
       "name": "SiteHeader",

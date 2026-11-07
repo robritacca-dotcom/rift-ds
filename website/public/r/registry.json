@@ -382,6 +382,12 @@
       "description": "A legacy one-row file reference, superseded by the attachment tile and kept for existing consumers."
     },
     {
+      "name": "document-viewer",
+      "type": "registry:ui",
+      "title": "Document viewer",
+      "description": "A PDF, an image or a text file shown on the page, with download and a fallback where the browser will not embed it."
+    },
+    {
       "name": "drawer",
       "type": "registry:ui",
       "title": "Drawer",
@@ -818,6 +824,12 @@
       "type": "registry:ui",
       "title": "Sidebar panel",
       "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting."
+    },
+    {
+      "name": "signature-pad",
+      "type": "registry:ui",
+      "title": "Signature pad",
+      "description": "A signature drawn with a pointer or typed, kept as SVG with a PNG on demand."
     },
     {
       "name": "site-header",

@@ -741,6 +741,8 @@ const EXCLUDED_ROUTES = new Map([
     'a noindex test page rebuilding a reference marketing dashboard entirely from the system\'s tokens and components, to probe how far they stretch — its prose is fictional demo data, not information'],
   ['/labs/glass-chat',
     'a noindex test page hosting the site chat as frosted glass over a piece of art — a surface experiment whose only prose is the chat widget\'s own'],
+  ['/labs/horizon',
+    'a noindex test page hosting the site chat over a soft planet horizon drawn in a shader, a surface experiment whose only prose is the chat widget\'s own'],
   ['/labs/rift',
     'a noindex test page hosting the site chat as frosted glass over a glowing tear in the page, a surface experiment whose only prose is the chat widget\'s own'],
   ['/labs/tables',

@@ -35,11 +35,9 @@ const errors = [];
 const SANCTIONED_DRIFT = {
   plum: {
     tracking:
-      'Aubergine tightens its display tier through its own extras, not the tracking lever; the file states the tightened display, which the importer fits as a lever.',
+      'Signal tightens its display tier through its own extras, not the tracking lever; the file states the tightened display, which the importer fits as a lever.',
     'display colour':
-      'Aubergine re-keys its purple ramp to cocoa, a brown whose hue the importer reads as the orange family; the file states the colour, not which ramp carries it.',
-    'logo colour':
-      'Aubergine re-keys its purple ramp to cocoa, a brown whose hue the importer reads as the orange family; the file states the colour, not which ramp carries it.',
+      'Signal re-keys its purple ramp to navy, whose hue the importer reads as the blue family; the file states the colour, not which ramp carries it.',
   },
   zest: {
     tracking:

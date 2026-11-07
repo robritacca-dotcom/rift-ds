@@ -386,21 +386,19 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
   },
   plum: {
-    label: "Aubergine",
-    // A warm two-tone look: honey buttons on a sandy cream page, with a
-    // cocoa second tone. The honey is the key, so buttons, focus and the
-    // selected state come from it; it lands in the yellow family, light
-    // enough that the lever derives near-black labels over it in both
-    // themes, with hover and pressed fills brightening away from them. The
-    // second tone is the purple ramp, re-keyed below to cocoa: it carries
-    // the mark and the headlines in light mode, over warm near-blacks in
-    // dark mode, where the headlines turn to a warm off-white and the mark
-    // to caramel.
-    brand: "#EFA640",
-    // A warm tan seed: the page floor lands on a cream with white cards
-    // above it, and the hairlines and secondary text pick up a taupe cast.
+    label: "Signal",
+    // A bright safety orange on a cool blue-grey page, with a deep
+    // navy second tone. The orange is the key, so buttons, focus and the
+    // selected state come from it; it is bright enough that the lever
+    // derives near-black labels over it in both themes. The second tone is
+    // the purple ramp, re-keyed below to navy: it carries the headlines in
+    // light mode, and turns to a pale sky blue in dark mode. The mark stays
+    // on the orange.
+    brand: "#FF5F1F",
+    // A slate-blue seed: the page floor lands on a cool grey with white
+    // cards above it, and the hairlines and secondary text pick up a blue cast.
     tintOn: true,
-    tintSeed: "#B07A45",
+    tintSeed: "#3A5A8C",
     tintStrength: 8,
     // Enterprise-crisp: 4px buttons and inputs, tight cards, no pill.
     radiusScale: 30,
@@ -419,9 +417,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     tracking: 1,
     iconWeight: 300,
     iconFill: false,
-    // The two tones split the page: cocoa for the mark and the headlines,
-    // honey for the click, and the headings in plain ink.
-    logoTone: "purple",
+    // The two tones split the page: orange for the mark and the click,
+    // navy for the headlines, and the headings in plain ink.
+    logoTone: "action",
     logoEndTone: "matched",
     displayTone: "purple",
     headingTone: "ink",
@@ -430,36 +428,46 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // Figtree, a friendly geometric for the text.
     fontLabel: "Figtree",
     headingFontLabel: "Bricolage Grotesque",
-    // Warm sextet with a cool pair: honey and cocoa from the two tones,
-    // and a denim and a sky blue in the mint and gold slots, so the first
-    // chart series after the key cross from warm to cool.
+    // Blue-led: the chart series after the orange key run signal blue,
+    // sky, peach, deep blue, teal and cyan (series 2 to 7 read mint, gold,
+    // coral, violet, amber, cobalt), so the charts read as blues with one
+    // warm counterpoint.
     accents: {
-      coral: "#E0605A",
-      violet: "#7A4A32",
-      cobalt: "#4F6BD8",
-      amber: "#EFA640",
-      gold: "#8CC0E8",
-      mint: "#3F78B5",
+      mint: "#2F6FDE",
+      gold: "#8FB8F0",
+      coral: "#FFB37A",
+      violet: "#1F4FA0",
+      amber: "#1E9E8A",
+      cobalt: "#5CC8E8",
     },
-    // The field is the two tones alone: cocoa at three depths moving
-    // through honey and a paler honey.
-    ambient: ["#EFA640", "#7A4A32", "#3B2218", "#F5C77E", "#5C3426", "#EFA640"],
-    // Warm neighbours, with purple re-keyed from violet to cocoa so the
-    // second tone has a full ramp of its own. Yellow is the action family,
+    // The field is the two tones alone: navy at three depths moving
+    // through orange and a paler peach.
+    ambient: ["#FF5F1F", "#14284B", "#2F6FDE", "#FFB37A", "#8FB8F0", "#FF5F1F"],
+    // Cool neighbours, with purple re-keyed from violet to navy so the
+    // second tone has a full ramp of its own. Orange is the action family,
     // left alone.
     advanced: bases({
-      purple: "#5C3426",
+      purple: "#14284B",
       red: "#D93B4A",
-      orange: "#F07A2E",
+      yellow: "#F5B93F",
       green: "#2E9E6E",
-      teal: "#1F8A9A",
-      blue: "#3F5BC8",
+      teal: "#1E9E8A",
+      blue: "#2F6FDE",
     }),
     extraOverrides: {
-      // The AI gradient crosses the two tones: deep cocoa, cocoa, honey.
-      "--color-ai-gradient-start": "var(--primitive-purple-09)",
-      "--color-ai-gradient-mid": "var(--primitive-purple-07)",
-      "--color-ai-gradient-end": "var(--primitive-yellow-07)",
+      // The orange is too bright to carry the light labels the lever
+      // derives, so the labels are pinned to the deepest navy and the hover
+      // and pressed fills brighten away from them instead of deepening.
+      "--color-action-primary-text": "var(--primitive-purple-10)",
+      "--color-action-primary-text-active": "var(--primitive-purple-10)",
+      "--color-action-primary-bg-hover": "var(--primitive-orange-04)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-03)",
+      // The AI gradient crosses from blue to the key: signal blue, a
+      // lighter blue, then the orange, all bright enough to read on a
+      // white card (dark mode lifts the blues further below).
+      "--color-ai-gradient-start": "var(--primitive-blue-07)",
+      "--color-ai-gradient-mid": "var(--primitive-blue-05)",
+      "--color-ai-gradient-end": "var(--primitive-orange-07)",
       // Tight headlines: the display tiers ship with open tracking, these
       // close it the way a medium-weight grotesk wants.
       "--font-mega-1-letter-spacing": "-0.025em",
@@ -467,34 +475,33 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--font-display-1-letter-spacing": "-0.022em",
       "--font-display-2-letter-spacing": "-0.018em",
       "--font-sub-display-letter-spacing": "-0.012em",
-      // The headlines sit a step deeper than the mark, a richer cocoa
-      // against the cream.
+      // The headlines sit a step deeper than the mark, a richer navy
+      // against the cool page.
       "--color-text-display": "var(--primitive-purple-08)",
-      // The page floor and the app shell sit on step 01, which light mode
-      // tints at only a quarter strength, so it reads grey; it is pinned to
-      // the warmer cream instead. The cards and the inset surface sit on
-      // step 00, pinned to pure white, so the content reads as white paper
-      // on the cream (dark mode re-tints both steps below).
+      // The cards and the inset surface sit on step 00, pinned to pure
+      // white, so the content reads as white paper on the blue-grey floor
+      // (dark mode re-tints the neutrals below).
       "--primitive-neutral-00": "#FFFFFF",
       "--primitive-neutral-00-a01": "rgba(255, 255, 255, 0.01)",
       "--primitive-neutral-00-a60": "rgba(255, 255, 255, 0.6)",
       "--primitive-neutral-00-a90": "rgba(255, 255, 255, 0.9)",
-      "--primitive-neutral-01": "#F2EEEB",
-      "--primitive-neutral-01-a01": "rgba(242, 238, 235, 0.01)",
-      "--primitive-neutral-01-a60": "rgba(242, 238, 235, 0.6)",
-      "--primitive-neutral-01-a82": "rgba(242, 238, 235, 0.82)",
+      "--primitive-neutral-01": "#EEF1F6",
+      "--primitive-neutral-01-a01": "rgba(238, 241, 246, 0.01)",
+      "--primitive-neutral-01-a60": "rgba(238, 241, 246, 0.6)",
+      "--primitive-neutral-01-a82": "rgba(238, 241, 246, 0.82)",
     },
-    // Dark mode keeps standard near-blacks, re-tinted from the tan seed so
-    // every grey (surfaces, hairlines, the translucent fills and the text
-    // greys alike) carries a faint warm cast. Cocoa has no bright step of
-    // its own, so the two tones leave the ramp here: the headlines take a
-    // warm off-white and the mark a caramel, both stated as hexes.
+    // Dark mode keeps standard near-blacks, re-tinted from the slate seed so
+    // every grey carries a faint blue cast. Navy has no bright step of its
+    // own, so the second tone leaves the ramp here: the headlines take a
+    // pale sky blue, stated as a hex.
     extraOverridesDark: {
-      ...neutralOverrides("#B07A45", 0.07, "dark"),
-      "--color-text-display": "#F2E8DC",
-      "--color-brand-mark": "#E0A878",
-      "--color-brand-mark-end": "#E0A878",
-      "--color-product-mark": "#E0A878",
+      ...neutralOverrides("#3A5A8C", 0.07, "dark"),
+      "--color-text-display": "#C9DAF5",
+      // On near-black the signal blue sinks a little, so the ring starts
+      // one step lighter; the mid stays a saturated blue, never a pale one,
+      // so the ring keeps its colour.
+      "--color-ai-gradient-start": "var(--primitive-blue-06)",
+      "--color-ai-gradient-mid": "var(--primitive-blue-05)",
     },
   },
   gold: {
@@ -1041,7 +1048,7 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
-  plum: "Warm and grounded, honey buttons and cocoa headlines in a quirky grotesk on sandy cream, over warm near-blacks in the dark.",
+  plum: "Bright and confident, safety-orange buttons and navy headlines in a quirky grotesk on a cool blue-grey, over slate near-blacks in the dark.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",
   zest: "Fresh and confident, a bright lime on clean white under heavy, tight headlines.",
   forest: "Grounded and calm, a deep woods green with organic softness throughout.",

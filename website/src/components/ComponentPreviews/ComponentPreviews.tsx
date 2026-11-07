@@ -135,6 +135,26 @@ const contributionPreviewDays: ContributionDay[] = Array.from({ length: 10 * 7 }
 const PreviewRow: LinkComponent = ({ className, children }) => <span className={className}>{children}</span>;
 
 const previews: Record<string, () => ReactNode> = {
+  /* Mockups: a signature in strokes, and a document frame in miniature. */
+  "signature-pad": () => (
+    <svg width="200" height="80" viewBox="0 0 200 80" aria-hidden="true" style={{ color: "var(--color-text-primary)" }}>
+      <path d="M12 58 L188 58" stroke="var(--color-divider)" strokeDasharray="4 3" />
+      <path d="M24 50 Q38 14 48 44 T72 40 Q84 30 92 46 T120 38 Q136 22 150 44" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  ),
+  "document-viewer": () => (
+    <div style={{ width: "180px", border: "var(--border-025) solid var(--color-bg-container-border)", borderRadius: "var(--radius-300)", overflow: "hidden", background: "var(--color-bg-container-secondary)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 10px", borderBottom: "var(--border-025) solid var(--color-divider)", background: "var(--color-bg-page-primary)", fontSize: "11px" }}>
+        <span>statement.pdf</span>
+        <span className="material-symbols-rounded" style={{ ["--icon-size" as string]: "14px" }}>download</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px", padding: "14px" }}>
+        <div style={{ height: "8px", width: "60%", background: "var(--color-divider)", borderRadius: "2px" }} />
+        <div style={{ height: "6px", width: "90%", background: "var(--color-divider)", borderRadius: "2px" }} />
+        <div style={{ height: "6px", width: "80%", background: "var(--color-divider)", borderRadius: "2px" }} />
+      </div>
+    </div>
+  ),
   /* Form controls held inert, so the card link stays the only target. */
   "currency-input": () => (
     <div inert style={{ width: "200px" }}>

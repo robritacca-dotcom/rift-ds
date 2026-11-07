@@ -1,0 +1,162 @@
+/* ============================================
+   DOCUMENT VIEWER
+   A bordered frame on the secondary container,
+   a toolbar row behind a divider, then the file:
+   the browser's own PDF viewer, an image that
+   zooms inside a scroller, or text set in the
+   code face. The frame's height is a step of the
+   control-height scale, or its container's.
+   ============================================ */
+
+/* Base */
+.ds-document-viewer {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-secondary);
+  overflow: hidden;
+}
+
+.ds-document-viewer--height-fill {
+  block-size: 100%;
+}
+
+/* Toolbar */
+.ds-document-viewer__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  padding: var(--padding-150) var(--padding-200) var(--padding-150) var(--padding-400);
+  border-block-end: var(--border-025) solid var(--color-divider);
+  background-color: var(--color-bg-page-primary);
+}
+
+.ds-document-viewer__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-document-viewer__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--gap-050);
+}
+
+/* The zoom reading doubles as the fit-to-width button. */
+.ds-document-viewer__zoom {
+  box-sizing: border-box;
+  min-inline-size: var(--control-height-default);
+  height: var(--control-height-compact);
+  padding: 0 var(--padding-150);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.ds-document-viewer__zoom:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-document-viewer__zoom:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+/* Body */
+.ds-document-viewer__body {
+  display: flex;
+  flex-direction: column;
+  block-size: calc(var(--control-height-default) * 12);
+  min-height: 0;
+}
+
+.ds-document-viewer--height-tall .ds-document-viewer__body {
+  block-size: calc(var(--control-height-default) * 18);
+}
+
+.ds-document-viewer--height-fill .ds-document-viewer__body {
+  flex: 1 1 auto;
+  block-size: auto;
+}
+
+.ds-document-viewer__frame {
+  flex: 1 1 auto;
+  inline-size: 100%;
+  block-size: 100%;
+  border: none;
+}
+
+.ds-document-viewer__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.ds-document-viewer__scroll:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: calc(-1 * var(--border-050));
+}
+
+.ds-document-viewer__image {
+  display: block;
+  max-inline-size: none;
+  block-size: auto;
+  margin-inline: auto;
+}
+
+.ds-document-viewer__text {
+  margin: 0;
+  padding: var(--padding-400);
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Loading and fallback */
+.ds-document-viewer__loading,
+.ds-document-viewer__fallback {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-300);
+  padding: var(--padding-500);
+  text-align: center;
+}
+
+.ds-document-viewer__fallback-icon {
+  --icon-size: var(--icon-size-800);
+  color: var(--color-icon-primary);
+}
+
+.ds-document-viewer__fallback-text {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}

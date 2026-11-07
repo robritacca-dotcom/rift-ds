@@ -204,6 +204,12 @@
       "route": "/labs/rtl",
       "grip": "#rtl-split .ds-split-pane__separator",
       "axis": "x"
+    },
+    {
+      "label": "signature pad: draw a stroke",
+      "route": "/components/signature-pad",
+      "grip": ".ds-signature-pad__canvas",
+      "axis": "both"
     }
   ]
 }

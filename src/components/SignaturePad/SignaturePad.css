@@ -1,0 +1,141 @@
+/* ============================================
+   SIGNATURE PAD
+   The input surface (fill, hairline, radius,
+   hover, error, disabled) holding a drawing
+   area over a dashed baseline. Strokes draw in
+   the primary text colour; the typed name sets
+   in the body face, italic, on the same line.
+   ============================================ */
+
+/* Base */
+.ds-signature-pad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+}
+
+.ds-signature-pad__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.ds-signature-pad__mode {
+  align-self: flex-start;
+}
+
+.ds-signature-pad__typed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+/* Surface */
+.ds-signature-pad__surface {
+  position: relative;
+  box-sizing: border-box;
+  block-size: calc(var(--control-height-default) * 4);
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300);
+  background-color: var(--color-input-bg-primary);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-signature-pad__surface:hover {
+  border-color: var(--color-input-border-hover);
+}
+
+.ds-signature-pad--height-tall .ds-signature-pad__surface {
+  block-size: calc(var(--control-height-default) * 6);
+}
+
+.ds-signature-pad--compact .ds-signature-pad__surface {
+  block-size: calc(var(--control-height-compact) * 4);
+}
+
+.ds-signature-pad--compact.ds-signature-pad--height-tall .ds-signature-pad__surface {
+  block-size: calc(var(--control-height-compact) * 6);
+}
+
+.ds-signature-pad__surface--typed {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* The baseline sits seven tenths down, inset from both ends. */
+.ds-signature-pad__baseline {
+  position: absolute;
+  inset-inline: var(--padding-500);
+  inset-block-start: 70%;
+  border-block-start: var(--border-025) dashed var(--color-divider);
+  pointer-events: none;
+}
+
+.ds-signature-pad__placeholder {
+  position: absolute;
+  inset-block-end: var(--gap-100);
+  inset-inline-start: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* Drawing */
+.ds-signature-pad__canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.ds-signature-pad__stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The typed name, set on the baseline */
+.ds-signature-pad__preview {
+  position: absolute;
+  inset-inline-start: var(--padding-500);
+  inset-inline-end: var(--padding-500);
+  inset-block-end: 30%;
+  overflow: hidden;
+  font-family: var(--font-family-body);
+  font-size: var(--font-heading-2-size);
+  font-style: italic;
+  line-height: var(--font-heading-2-line-height);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Actions */
+.ds-signature-pad__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-100);
+}
+
+/* States */
+.ds-signature-pad--error .ds-signature-pad__surface {
+  border-color: var(--color-status-error-border);
+}
+
+.ds-signature-pad--disabled .ds-signature-pad__surface {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-signature-pad--disabled .ds-signature-pad__canvas {
+  pointer-events: none;
+}

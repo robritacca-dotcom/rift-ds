@@ -13,8 +13,8 @@ type ErrorSummaryOwnProps = {
   errors: ErrorSummaryError<React.ReactNode>[];
   /** The heading, in place of the one `titleLabel` writes. Note: this replaces the native `title` attribute, which ErrorSummary does not expose. */
   title?: React.ReactNode;
-  /** The heading for a given number of errors, already written in the locale. Defaults to "There is a problem" for one and "There are <count> problems" for more. */
-  titleLabel?: (count: string, total: number) => string;
+  /** The heading for a given number of errors: the count as a number (for a plural rule) and as written in the locale (for display). Defaults to "There is a problem" for one and "There are <count> problems" for more. */
+  titleLabel?: (count: number, formatted: string) => string;
   /** A line under the heading, before the list. */
   description?: React.ReactNode;
   /** Move focus to the summary when the list goes from empty to holding errors (on a submit), so a screen reader reads it and a keyboard user starts from it. Defaults to true. */
@@ -33,8 +33,8 @@ export interface ErrorSummaryProps
   extends ErrorSummaryOwnProps,
     Omit<React.ComponentPropsWithRef<'section'>, keyof ErrorSummaryOwnProps | 'children'> {}
 
-const DEFAULT_TITLE_LABEL = (count: string, total: number) =>
-  total === 1 ? 'There is a problem' : `There are ${count} problems`;
+const DEFAULT_TITLE_LABEL = (count: number, formatted: string) =>
+  count === 1 ? 'There is a problem' : `There are ${formatted} problems`;
 
 /**
  * Every error on a form in one place, at the top of it: a heading that says
@@ -89,7 +89,7 @@ export function ErrorSummary({
   };
 
   const Heading = `h${headingLevel}` as const;
-  const heading = title ?? titleLabel(formatNumber(count, locale), count);
+  const heading = title ?? titleLabel(count, formatNumber(count, locale));
 
   return (
     <section

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
 import {
@@ -60,6 +60,10 @@ export interface ChatViewProps {
   shell: ChatLayout;
   /** The flush shell's backdrop (ChatWidget's `backdrop`). */
   backdrop: ChatBackdrop;
+  /** The theme's shader, painted inside the card under the welcome when
+      the Shader switch is on, and frosted over once a conversation starts.
+      Undefined leaves the card as the shell draws it. */
+  shader?: ReactNode;
   /** The dragged size, held by the page so it survives a switch to the
       Components view and back, and dies with the playground like every
       other lever. */
@@ -107,6 +111,7 @@ export default function ChatView({
   flow,
   shell,
   backdrop,
+  shader,
   manual,
   onManual,
   allowFullscreen,
@@ -115,7 +120,11 @@ export default function ChatView({
   agentRail,
   artifactPanel,
 }: ChatViewProps) {
-  const { open, setOpen, view, side, floating, returnFocusRef, send } = useChatWidget();
+  const { open, setOpen, view, side, floating, returnFocusRef, send, turns, live } =
+    useChatWidget();
+  /* A conversation on the card frosts its shader, as the horizon lab's
+     glass closes once there is a transcript to read. */
+  const conversing = turns.length > 0 || Boolean(live);
 
   /* A real phone viewport: the stage-size lever is hidden there and the
      widget goes fluid, so the preset alone cannot say it is a phone. */
@@ -521,9 +530,11 @@ export default function ChatView({
         !takeover && stageDocked ? styles.widgetDocked : "",
         !takeover && placeable && floating ? styles.widgetFloating : "",
         takeover ? styles.widgetFull : "",
+        shader ? styles.widgetShaded : "",
       ]
         .filter(Boolean)
         .join(" ")}
+      data-conversing={shader && conversing ? "" : undefined}
       /* Pinned phases hold the card's rect so the glide has somewhere to
          start and land; open lets the class's viewport geometry rule; in
          device mode the screen wrapper owns the size. Otherwise only a
@@ -544,6 +555,15 @@ export default function ChatView({
       onPointerUp={endMove}
       onPointerCancel={endMove}
     >
+      {shader && (
+        /* The card's own ground: the shader, then the frost that closes
+           over it once the conversation starts. Inside the card, so it is
+           part of the frame and never the page. */
+        <div className={styles.widgetShader} aria-hidden="true">
+          {shader}
+          <div className={styles.widgetFrost} />
+        </div>
+      )}
       <ChatWidget
         fullscreenEnabled={allowFullscreen && !isDevice}
         placementEnabled={placeable}

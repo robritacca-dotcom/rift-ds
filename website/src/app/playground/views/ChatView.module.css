@@ -128,6 +128,68 @@
 }
 
 /* A drag tracks the pointer; the glide comes back after. */
+/* The Shader switch: the theme's shader as the card's own ground, as in the
+   horizon lab. The card holds it and the frost in one layer under the
+   widget, and the widget's shell clears its plane, its surface and its blur
+   backdrop so the shader shows through (the shell's tokens are :where()
+   rules, so this class takes them). The threads rail keeps a near-solid
+   coat of the page, the lab's rail. */
+.widgetShaded {
+  /* The lab's rail coat: the page at 92%, for the rail and the inset ring. */
+  --chat-shader-coat: color-mix(in srgb, var(--color-bg-page-primary) 92%, transparent);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.widgetShader {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.widgetShaded > :not(.widgetShader) {
+  position: relative;
+  z-index: 1;
+}
+
+.widgetShaded :global([data-ds-shell]) {
+  --ds-shell-plane: transparent;
+  --ds-shell-surface: transparent;
+  --ds-shell-backdrop-fill: transparent;
+  --ds-shell-backdrop-filter: none;
+  --ds-shell-rail-bg: var(--chat-shader-coat);
+}
+
+/* Inset: the ring between the card's edge and the raised surface takes the
+   rail's coat, so the shader shows only inside the surface. Drawn as an
+   outline the width of the shell's gap, which follows the surface's own
+   corners, rather than as the plane, which would cover the shader under
+   the cleared surface too. */
+.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget) {
+  outline: var(--ds-shell-gap) solid var(--chat-shader-coat);
+}
+
+/* The frost: an even coat of glass over the shader, closed while the
+   welcome is up and fading in once a conversation starts, because a
+   transcript cannot be read over a moving field. */
+.widgetFrost {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(40px) saturate(1.3);
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.widgetShaded[data-conversing] .widgetFrost {
+  opacity: 1;
+}
+
 .resizing .widget {
   transition: none;
 }

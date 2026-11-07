@@ -341,6 +341,10 @@ export default function PlaygroundPage() {
      lever (a chat's only, blur by default). */
   const [chatShell, setChatShell] = useState<ChatLayout>("flush");
   const [chatBackdrop, setChatBackdrop] = useState<ChatBackdrop>("blur");
+  /* The chat card's own shader: off by default. On, the Shaders view's
+     pick paints inside the card, under the welcome, and frosts over once a
+     conversation starts (views/ChatView.tsx). */
+  const [chatShader, setChatShader] = useState(false);
   /* The staged thread furniture, feature by feature. The stage opens with
      every extra on and the dashboard welcome, the fullest version of the
      widget; switching them off walks back to the simple rail the live site
@@ -364,6 +368,7 @@ export default function PlaygroundPage() {
     setChatFlow("top-down");
     setChatShell("flush");
     setChatBackdrop("blur");
+    setChatShader(false);
     setRailProjects(true);
     setRailPins(true);
     setRailDetails(true);
@@ -1276,6 +1281,12 @@ export default function PlaygroundPage() {
             onValueChange={(value) => setChatBackdrop(value as ChatBackdrop)}
           />
         )}
+        <InspectorToggleSwitch
+          size="compact"
+          label="Shader"
+          checked={chatShader}
+          onCheckedChange={setChatShader}
+        />
       </div>
 
       <div className={styles.controlGroup}>
@@ -1605,17 +1616,13 @@ export default function PlaygroundPage() {
           in the Components view instead). */}
       <HiddenBackground />
       <DotBackground dots={showDots} />
-      {/* The Shaders view runs the theme's shader full bleed on the dots'
-          own layer, so the pick and every lever are judged on the shader
-          itself; so does the Chat view while its flush shell's backdrop is
-          blur, so the glass has the shader to frost. Every other view keeps
-          it in its banner. It sits here rather than in the stage, whose
-          entrance transform would pin a fixed layer to the stage instead of
-          the viewport. */}
-      {(view === "shaders" ||
-        (view === "chat" && chatShell === "flush" && chatBackdrop === "blur")) && (
-        <div className={styles.shaderStage}>{stagedShader()}</div>
-      )}
+      {/* The Shaders view, and only it, runs the theme's shader full bleed
+          on the dots' own layer, so the pick and every lever are judged on
+          the shader itself. Every other view keeps it in its own frame (the
+          banner, the chat card when its Shader switch is on). It sits here
+          rather than in the stage, whose entrance transform would pin a
+          fixed layer to the stage instead of the viewport. */}
+      {view === "shaders" && <div className={styles.shaderStage}>{stagedShader()}</div>}
       {/* The stage has no visible title; this names the page for screen
           readers and search, one h1 like every other page. */}
       <h1 className={styles.visuallyHidden}>Playground</h1>
@@ -1905,6 +1912,7 @@ export default function PlaygroundPage() {
               flow={chatFlow}
               shell={chatShell}
               backdrop={chatBackdrop}
+              shader={chatShader ? stagedShader() : undefined}
               manual={chatManual}
               onManual={(next) => setChatManual((m) => ({ ...m, ...next }))}
               allowFullscreen={!compact}

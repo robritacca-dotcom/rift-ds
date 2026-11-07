@@ -39,8 +39,10 @@
  *     effects answer every commit with another update (the welcome
  *     chart's entrance animation replaying on resize was the live one),
  *     so the check holds the page as a whole, not one grip's code;
- *   - a drag that never took: no style attribute changed anywhere in the
- *     document during the sweep, which means the pointer missed the grip or
+ *   - a drag that never took: no style attribute, and no SVG path's `d`,
+ *     changed anywhere in the document during the sweep (a resize or a move
+ *     writes a style per frame; a pen stroke, SignaturePad's, writes its
+ *     path's `d`), which means the pointer missed the grip or
  *     the selector went stale, and a check that drove nothing proves
  *     nothing. The same goes for a page the hook saw no commits on.
  *
@@ -51,9 +53,9 @@
  * for one never leaks into the next. One line is printed per gesture.
  *
  * Two grips stay outside the list for now, Globe's rotation and WorldMap's
- * pan: both draw to a canvas or an SVG attribute, and this script's evidence
- * that a drag took is a style write, so widening that evidence is their way
- * in. It needs the built site and a browser, which is why it runs after the
+ * pan: both draw to a canvas or an SVG attribute other than a path's `d`,
+ * and this script's evidence that a drag took is a style or `d` write, so
+ * widening that evidence further is their way in. It needs the built site and a browser, which is why it runs after the
  * website build rather than in the validate-registry chain.
  */
 /* global window, document -- page.evaluate() callbacks execute in the browser; the probe itself is a string the browser runs */
@@ -96,7 +98,7 @@ const BENIGN_PATTERNS = [/permissions policy violation/i];
 /** Installed before any page script runs. Production React hands every
  *  commit to a global hook that declares fiber support; the hook counts the
  *  commits and the longest run of them that ended with pending work, and a
- *  MutationObserver counts style writes while a gesture runs, the evidence
+ *  MutationObserver counts style and path-data writes while a gesture runs, the evidence
  *  the drag reached the DOM at all. */
 const PROBE_SCRIPT = `(() => {
   const probe = {
@@ -115,7 +117,7 @@ const PROBE_SCRIPT = `(() => {
       });
       this.observer.observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['style'],
+        attributeFilter: ['style', 'd'],
         subtree: true,
       });
     },
@@ -308,7 +310,7 @@ async function checkGesture(browser, origin, gesture) {
       );
     }
     if (stats.commits === 0) failures.push('the DevTools hook saw no React commits: the probe is not watching this page');
-    if (stats.styleWrites === 0) failures.push('no style attribute changed during the sweep: the drag never took');
+    if (stats.styleWrites === 0) failures.push('no style attribute or path data changed during the sweep: the drag never took');
   } catch (err) {
     failures.push(`could not drive the gesture: ${err.message.split('\n')[0]}`);
   } finally {

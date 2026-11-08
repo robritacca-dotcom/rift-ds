@@ -8,6 +8,17 @@ import { SCENES } from './scenes';
 import { defaultsFor, type Values } from './types';
 import './ShaderScene.css';
 
+/* At most one drawing-buffer pixel per CSS pixel. Both scenes are soft
+   light, layered noise with no edge finer than a CSS pixel, so a 2x
+   screen's extra pixels were invisible and quadrupled the fill: the scene
+   runs fourteen layered noise lookups per pixel, and a full-width band at
+   2x was six million pixels a frame. */
+const MAX_PIXEL_RATIO = 1;
+/* 30fps, as ShaderField holds at rest: the scenes drift on cycles of
+   tens of seconds, too slowly for 60fps to be visible, and every frame
+   skipped is a whole scene's fill the GPU gives back to the page. */
+const FRAME_MS = 1000 / 30;
+
 /** The scenes ShaderScene paints. */
 export type ShaderSceneId = 'horizon' | 'rift';
 
@@ -178,7 +189,7 @@ export function ShaderScene({
 
     const applyColours = () => renderer.setColours(coloursFor(host, definition));
     const resize = () => {
-      const ratio = Math.min(2, window.devicePixelRatio || 1);
+      const ratio = Math.min(MAX_PIXEL_RATIO, window.devicePixelRatio || 1);
       canvas.width = Math.max(1, Math.round(host.clientWidth * ratio));
       canvas.height = Math.max(1, Math.round(host.clientHeight * ratio));
     };
@@ -189,6 +200,8 @@ export function ShaderScene({
     let frame = 0;
     let painted = false;
     const draw = (now: number) => {
+      frame = requestAnimationFrame(draw);
+      if (painted && now - last < FRAME_MS - 1) return;
       const values = liveRef?.current ?? mergedRef.current;
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
@@ -198,7 +211,6 @@ export function ShaderScene({
         painted = true;
         setGl('painted');
       }
-      frame = requestAnimationFrame(draw);
     };
     /* The loop runs only near the screen, as ShaderField's does: it stops
        when the scene scrolls away and starts again 200px before it returns,

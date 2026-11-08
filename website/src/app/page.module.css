@@ -285,11 +285,17 @@
 
 /* Over the Horizon scene the counts sit in the limb's glow, where the
    secondary text colour is grey on pale grey. The labels step up to the
-   primary text colour and take a soft halo of the page ground, so they
-   read against the brightest part of the sky without a box behind them.
-   Field never reaches this rule. */
+   primary text colour, and labels and values both take a soft halo of the
+   page ground, so they read against the brightest part of the sky without
+   a box behind them. The values need it most on a phone, where the taller
+   hero puts the glow right behind their thin strokes. Field never reaches
+   these rules. */
 :global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__label) {
   color: var(--color-text-primary);
+}
+
+:global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__label),
+:global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__value) {
   /* ds-allow(spacing): a text halo, not layout spacing; no token covers a text-shadow blur */
   text-shadow:
     0 0 8px var(--color-bg-page-primary),

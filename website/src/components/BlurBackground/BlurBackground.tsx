@@ -11,9 +11,10 @@ import {
   type BackgroundMode,
   type ShaderParams,
 } from "@/data/shader-background";
-import { SHADER_SCENES, ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
+import type { ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
 import { HOME_HORIZON_PARAMS, useHomeShader } from "@/lib/shaders/home";
+import { useShaderSceneModule } from "@/lib/shaders/lazy-scene";
 
 /* Dev-only tuning panel, and the ternary is load-bearing: the bundler
    statically replaces process.env.NODE_ENV, so in a production build this
@@ -152,15 +153,22 @@ export default function BlurBackground() {
   const stagedSceneId = useStagedSceneId();
   const stagedParams = useStagedFieldParams();
   const stagedValues = useStagedValues();
-  const stagedScene =
-    embedded && stagedSceneId && stagedSceneId !== "field"
-      ? SHADER_SCENES.find((scene) => scene.id === stagedSceneId)
-      : undefined;
   const stagedField = embedded && stagedSceneId === "field" && stagedParams !== undefined;
   /* The home page's switch (lib/shaders/home) can trade the field for the
      Horizon scene, set low in the band, for the visit. Never inside a frame. */
   const homeShader = useHomeShader();
-  const homeHorizon = !embedded && homeShader === "horizon";
+  const wantsHorizon = !embedded && homeShader === "horizon";
+  /* ShaderScene loads only once one of those asks for it (lib/shaders/
+     lazy-scene), so it never ships in the bundle every page shares. Until
+     it arrives the field keeps painting, so the switch never flashes the
+     bare page floor. */
+  const wantsStaged = embedded && stagedSceneId !== "" && stagedSceneId !== "field";
+  const sceneModule = useShaderSceneModule(wantsHorizon || wantsStaged);
+  const SceneComponent = sceneModule?.ShaderScene;
+  const stagedScene = wantsStaged
+    ? sceneModule?.SHADER_SCENES.find((scene) => scene.id === stagedSceneId)
+    : undefined;
+  const homeHorizon = wantsHorizon && SceneComponent !== undefined;
   const live = !embedded || stagedField;
 
   const state =
@@ -191,10 +199,10 @@ export default function BlurBackground() {
         <div className="blur-ellipse blur-orange" />
         <div className="blur-ellipse blur-teal" />
 
-        {stagedScene ? (
-          <ShaderScene scene={stagedScene.id as ShaderSceneId} liveRef={stagedValues} />
-        ) : homeHorizon ? (
-          <ShaderScene scene="horizon" params={HOME_HORIZON_PARAMS} />
+        {SceneComponent && stagedScene ? (
+          <SceneComponent scene={stagedScene.id as ShaderSceneId} liveRef={stagedValues} />
+        ) : SceneComponent && homeHorizon ? (
+          <SceneComponent scene="horizon" params={HOME_HORIZON_PARAMS} />
         ) : (
           <ShaderField
             params={stagedField ? { ...params, ...stagedParams } : params}

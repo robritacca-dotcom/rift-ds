@@ -17,6 +17,7 @@ import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { setHomeShader, useHomeShader, type HomeShader } from "@/lib/shaders/home";
+import { loadShaderScene } from "@/lib/shaders/lazy-scene";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -512,11 +513,17 @@ function useNarrowCollage() {
    Beside the theme row: the page's background as the site's field or the
    Horizon scene (lib/shaders/home owns the attribute). It sits after the
    swatches because it is the same kind of pick, a look for the page, and
-   it resets as the page unmounts, so only the home page ever shows it. */
+   it resets as the page unmounts, so only the home page ever shows it.
+   Horizon's code is not on the page until it is wanted: a hover or a
+   focus on the switch starts the load, so the click rarely waits on it. */
 const BACKGROUND_SEGMENTS = [
   { value: "field", label: "Field" },
   { value: "horizon", label: "Horizon" },
 ];
+
+const preloadHorizon = () => {
+  loadShaderScene().catch(() => {});
+};
 
 function BackgroundSwitch() {
   const shader = useHomeShader();
@@ -527,6 +534,8 @@ function BackgroundSwitch() {
       segments={BACKGROUND_SEGMENTS}
       value={shader}
       onValueChange={(next) => setHomeShader(next as HomeShader)}
+      onPointerEnter={preloadHorizon}
+      onFocus={preloadHorizon}
       size="compact"
       aria-label="Background"
     />

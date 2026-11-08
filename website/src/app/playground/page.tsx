@@ -1337,12 +1337,27 @@ export default function PlaygroundPage() {
             onValueChange={(value) => setChatBackdrop(value as ChatBackdrop)}
           />
         )}
-        <InspectorToggleSwitch
+        {/* The card's shader in one lever: None, or a scene picked here
+            without a trip to the Shaders view. A scene is that view's own
+            pick, so the two stay in step. */}
+        <InspectorDropdown
           size="compact"
           label="Shader"
-          checked={chatShader}
-          onCheckedChange={setChatShader}
+          value={chatShader ? shaderId : "none"}
+          options={[
+            { value: "none", label: "None" },
+            ...SHADER_TEMPLATES.map((t) => ({ value: t.id, label: t.label })),
+          ]}
+          onValueChange={(id) => {
+            if (id === "none") {
+              setChatShader(false);
+              return;
+            }
+            setChatShader(true);
+            startShader(id, false);
+          }}
         />
+
       </div>
 
       <div className={styles.controlGroup}>

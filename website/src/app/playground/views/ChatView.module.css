@@ -127,8 +127,16 @@
     height var(--motion-duration-base) var(--motion-ease-standard);
 }
 
+/* Inset raises the conversation as a surface the gap in from the card's
+   edges, so the card's corner is the surface's plus the gap: the two
+   corners are concentric and the ring keeps one width around them. */
+.widget:not(.widgetFull):has([data-ds-shell="inset"]) {
+  /* AppSidebar.css declares the gap on its own root; the fallback mirrors it, as ChatWidget's does. */
+  border-radius: calc(var(--radius-600) + var(--ds-shell-inset, 10px));
+}
+
 /* A drag tracks the pointer; the glide comes back after. */
-/* The Shader switch: the theme's shader as the card's own ground, as in the
+/* The Shader lever: the theme's shader as the card's own ground, as in the
    horizon lab. The card holds it and the frost in one layer under the
    widget, and the widget's shell clears its plane, its surface and its blur
    backdrop so the shader shows through (the shell's tokens are :where()
@@ -165,13 +173,31 @@
   --ds-shell-rail-bg: var(--chat-shader-coat);
 }
 
-/* Inset: the ring between the card's edge and the raised surface takes the
-   rail's coat, so the shader shows only inside the surface. Drawn as an
-   outline the width of the shell's gap, which follows the surface's own
-   corners, rather than as the plane, which would cover the shader under
-   the cleared surface too. */
+/* Inset: everything outside the raised surface (the rail and the ring
+   between the card's edge and the surface) takes the rail's coat, so the
+   shader shows only inside the surface. Drawn as one spread shadow wide
+   enough to reach every corner of the card, which clips it, rather than as
+   the plane, which would cover the shader under the cleared surface too.
+   A ring the width of the gap rounded off at the surface's corners and let
+   the shader through beside the rail and inside the card's own corners. The
+   rail clears its coat, since the shadow already lies under it. The rail
+   and the trailing panels stand above the surface (which is positioned),
+   so the coat lies under their contents rather than over them. */
+.widgetShaded :global([data-ds-shell="inset"]) {
+  --ds-shell-rail-bg: transparent;
+}
+
+.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget__threads-rail),
+.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget__aside-rail),
+.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget__artifact-rail) {
+  position: relative;
+  z-index: 1;
+}
+
 .widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget) {
-  outline: var(--ds-shell-gap) solid var(--chat-shader-coat);
+  box-shadow:
+    var(--ds-shell-surface-shadow),
+    0 0 0 100vmax var(--chat-shader-coat);
 }
 
 /* The frost: an even coat of glass over the shader, closed while the

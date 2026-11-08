@@ -61,7 +61,7 @@ export interface ChatViewProps {
   /** The flush shell's backdrop (ChatWidget's `backdrop`). */
   backdrop: ChatBackdrop;
   /** The theme's shader, painted inside the card under the welcome when
-      the Shader switch is on, and frosted over once a conversation starts.
+      a scene is picked in the Shader lever, and frosted over once a conversation starts.
       Undefined leaves the card as the shell draws it. */
   shader?: ReactNode;
   /** The dragged size, held by the page so it survives a switch to the

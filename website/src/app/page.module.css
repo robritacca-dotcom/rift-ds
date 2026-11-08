@@ -283,6 +283,19 @@
   align-items: center;
 }
 
+/* Over the Horizon scene the counts sit in the limb's glow, where the
+   secondary text colour is grey on pale grey. The labels step up to the
+   primary text colour and take a soft halo of the page ground, so they
+   read against the brightest part of the sky without a box behind them.
+   Field never reaches this rule. */
+:global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__label) {
+  color: var(--color-text-primary);
+  /* ds-allow(spacing): a text halo, not layout spacing; no token covers a text-shadow blur */
+  text-shadow:
+    0 0 8px var(--color-bg-page-primary),
+    0 0 16px color-mix(in srgb, var(--color-bg-page-primary) 70%, transparent);
+}
+
 /* ============================================
    THEME SWITCHER — the hero's live re-theming
    row: one dot per shipped look, with a card

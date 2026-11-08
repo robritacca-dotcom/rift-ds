@@ -17,10 +17,11 @@ export const HOME_SHADER_ATTR = "data-home-shader";
 export type HomeShader = "field" | "horizon";
 
 /* The horizon set low in the band, so its bright limb lands under the
-   hero's calls to action instead of behind the counts, with the beam
-   softened so the counts above it stay readable. Held at module
-   scope, so the scene sees the same object every render. */
-export const HOME_HORIZON_PARAMS = { crown: 0.22, beam: 0.55 };
+   hero's calls to action and peeks over the top of the chat frame below
+   them, rather than behind the counts, with the beam softened so the
+   counts above it stay readable. Held at module scope, so the scene sees
+   the same object every render. */
+export const HOME_HORIZON_PARAMS = { crown: 0.31, beam: 0.55 };
 
 const read = (): HomeShader =>
   document.documentElement.getAttribute(HOME_SHADER_ATTR) === "horizon" ? "horizon" : "field";

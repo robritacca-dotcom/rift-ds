@@ -282,7 +282,9 @@ a {
 .blur-container {
   /* Anchored to the top of the DOCUMENT, not the viewport: the ambient
      field is the page's opening, and scrolling moves past it onto the
-     plain page surface — it does not follow the scroll. */
+     plain page surface — it does not follow the scroll. The home band
+     sinks a little as it goes (the parallax rule below), but it still
+     scrolls away. */
   position: absolute;
   top: 0;
   left: 0;
@@ -303,6 +305,29 @@ a {
    exactly like the full-bleed variant below. */
 body:has([data-bg-extended]) .blur-container {
   height: 900px;
+}
+
+/* Scroll parallax on the home band: it sinks at 30% of the scroll, so the
+   shader reads as deeper than the page passing over it. A scroll-driven
+   animation, not a scroll listener: it runs on the compositor in step with
+   the scroll itself, where a transform written from JavaScript lands a frame
+   behind and judders. The range ends once the band has scrolled out of view
+   (900px / 0.7 of scroll, 386px of travel). Where the browser lacks scroll
+   timelines, under reduced motion, in a frame or behind the phone takeover
+   (a fixed layer), the band simply stays anchored. */
+@keyframes bg-parallax {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, 386px, 0); }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-embedded]):not([data-chat="takeover"]) body:has([data-bg-extended]) .blur-container {
+      animation: bg-parallax linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 1286px;
+    }
+  }
 }
 
 /* Full-bleed variant. The background is mounted once in the root layout and

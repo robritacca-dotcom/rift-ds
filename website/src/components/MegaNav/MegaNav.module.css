@@ -23,6 +23,14 @@
   z-index: var(--layer-site-chrome);
 }
 
+/* The tint behind the stuck bar fades at the fast step, not the library's
+   structural one: it arrives the moment the page starts to scroll
+   (tintAfter={0} in MegaNav.tsx), and a 300ms fade let the first lines of
+   page text slide under a half-clear bar. */
+.header :global(.ds-site-header__blur.ds-progressive-blur)::after {
+  transition-duration: var(--motion-duration-fast);
+}
+
 /* The bar is the size container for the condensed set's pre-measurement
    stand-in (below). Not the header
    root: a container gets layout containment, which would make the sticky

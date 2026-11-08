@@ -112,6 +112,9 @@ export default function MegaNav() {
       // below it until the bar has measured itself. The wider "mid" step
       // would show the menu button first on every laptop between the two.
       initialFold="tablet"
+      // The tint behind the bar arrives on the first pixel of scroll, so
+      // page text never slides up under a clear bar first.
+      tintAfter={0}
       // Each action set opens the global palette mounted from the root
       // layout; the two trees never meet, so the click travels via
       // palette-bus. The condensed set is the same controls in their

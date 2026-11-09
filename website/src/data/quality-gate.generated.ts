@@ -294,6 +294,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "The background config sits inside the tuner's ranges, and its blob colours exist."
       },
       {
+        "name": "validate-site-backgrounds",
+        "text": "Every site background names a scene the library ships, with its tuning inside the scene's ranges and its colour roles in the token registry."
+      },
+      {
         "name": "validate-single-background-mount",
         "text": "BlurBackground is mounted exactly once, in the root layout."
       },

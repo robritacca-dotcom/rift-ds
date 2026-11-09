@@ -64,21 +64,6 @@
   animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) both;
 }
 
-/* The background switch rides the swatch row's line: the row sets its own
-   top margin, so the switch takes the same to sit level with the dots. */
-.backgroundSwitch {
-  margin-top: var(--gap-200);
-}
-
-/* Where the swatches and the switch no longer share one line, the switch
-   takes a line of its own, centred under the dots, instead of floating
-   beside a wrapped row. */
-@media (max-width: 768px) {
-  .heroThemes {
-    flex-direction: column;
-  }
-}
-
 @keyframes heroThemesIn {
   to {
     opacity: 1;
@@ -290,12 +275,12 @@
    a box behind them. The values need it most on a phone, where the taller
    hero puts the glow right behind their thin strokes. Field never reaches
    these rules. */
-:global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__label) {
+:global(html[data-background="horizon"]) .statStrip :global(.ds-stat__label) {
   color: var(--color-text-primary);
 }
 
-:global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__label),
-:global(html[data-home-shader="horizon"]) .statStrip :global(.ds-stat__value) {
+:global(html[data-background="horizon"]) .statStrip :global(.ds-stat__label),
+:global(html[data-background="horizon"]) .statStrip :global(.ds-stat__value) {
   /* ds-allow(spacing): a text halo, not layout spacing; no token covers a text-shadow blur */
   text-shadow:
     0 0 8px var(--color-bg-page-primary),

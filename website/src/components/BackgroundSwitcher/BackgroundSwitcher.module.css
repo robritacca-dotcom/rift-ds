@@ -1,0 +1,48 @@
+/* The background switcher is the package's DropdownMenu; this sheet styles
+   only its trigger, on the track recipe the theme switcher's trigger wears
+   (the ThemePicker spec in design.md: the row height as a circle,
+   the container fill behind a hairline, SegmentedControl's track curve),
+   with the active background's icon in the chip's place, so the two
+   triggers read as a pair in the bar. */
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  padding: 0;
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: calc(var(--radius-pill) + var(--padding-100));
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  --icon-size: var(--icon-size-500);
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.triggerCompact {
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
+}
+
+.trigger:hover,
+.trigger[aria-expanded="true"] {
+  background-color: var(--color-bg-container-secondary);
+  color: var(--color-text-primary);
+}
+
+.trigger:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The trigger's tooltip names the icon; with the menu open the menu says
+   it all, and the bubble would sit over the menu's first rows. */
+.tip:has([aria-expanded="true"]) :global(.ds-tooltip__panel) {
+  display: none;
+}

@@ -15,6 +15,11 @@ import "./globals.css";
 import { buildDesignSystemJsonLd, buildWebsiteJsonLd, SITE_URL } from "@/lib/structuredData";
 import { AUTHOR_NAME, AUTHOR_URL, BRAND_NAME, GA_ID, TITLE_SUFFIX } from "@/config/brand.generated";
 import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/theme/brand";
+import {
+  BACKGROUND_ATTR,
+  BACKGROUND_STORAGE_KEY,
+  SCENE_BACKGROUND_IDS,
+} from "@/lib/shaders/background-storage";
 import { colorModeScript } from "rift-ds/components/ThemeToggle/colorMode";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { SiteLinkProvider } from "@/components/SiteLinkProvider/SiteLinkProvider";
@@ -109,8 +114,8 @@ export const viewport: Viewport = {
 
 // Light and dark come from the package's own colorModeScript, the same
 // pre-paint script a consumer renders, so the site and a stranger's app can
-// never apply the mode differently. The site adds its own two facts after
-// it: the stored theme preset, and the ready mark.
+// never apply the mode differently. The site adds its own three facts after
+// it: the stored theme preset, the stored background pick, and the ready mark.
 const themeScript = `
 ${colorModeScript()}
 (function() {
@@ -125,6 +130,12 @@ ${colorModeScript()}
     var brand = localStorage.getItem('brand');
     if (brand === '${BASE_THEME_ID}' || brand === '${LEGACY_BASE_THEME_ID}') root.removeAttribute('data-brand');
     else if (brand) root.setAttribute('data-brand', brand);
+    /* The background pick (the header's switcher) rides the same path, so
+       a visitor who chose a scene never sees the field first;
+       lib/shaders/background-storage owns the key, the attribute and the
+       list of scenes. */
+    var background = localStorage.getItem('${BACKGROUND_STORAGE_KEY}');
+    if (${JSON.stringify(SCENE_BACKGROUND_IDS)}.indexOf(background) !== -1) root.setAttribute('${BACKGROUND_ATTR}', background);
   } catch (e) {}
   /* An attribute, not a class: React owns <html>'s className (the
      next/font variable class). Neither survives a hydration failure that

@@ -1,0 +1,38 @@
+{
+  "$comment": "SINGLE SOURCE OF TRUTH for the site's backgrounds: one row per pick the header's background menu offers. The row with no scene is the field, the served default; a row with a scene names a library ShaderScene and its tuning for each band BlurBackground paints (home: the tall bands under a hero; page: the standard band under a title). website/src/lib/shaders/background-storage.ts is the accessor and owns the tuning rationale; scripts/validate-site-backgrounds.mjs holds every row to the scenes, their params, their passes and the token registry.",
+  "backgrounds": [
+    {
+      "id": "field",
+      "label": "Field",
+      "description": "Soft colour that flows and streams",
+      "icon": "blur_on"
+    },
+    {
+      "id": "horizon",
+      "label": "Horizon",
+      "description": "A planet's limb at night",
+      "icon": "wb_twilight",
+      "scene": "horizon",
+      "home": {
+        "params": {
+          "crown": 0.28,
+          "beam": 0.55
+        }
+      },
+      "page": {
+        "params": {
+          "crown": 0.52,
+          "beam": 0.5
+        },
+        "passes": {
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.42
+            }
+          }
+        }
+      }
+    }
+  ]
+}

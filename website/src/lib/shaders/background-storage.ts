@@ -1,0 +1,90 @@
+/**
+ * The site's backgrounds: the registry of what a visitor can put behind
+ * every page, and the pick's names and restore, with no React in any of it.
+ * The root layout (a Server Component) interpolates the key, the attribute
+ * and the ids into its pre-paint script, and restoreDocumentTheme puts a
+ * stored pick back, so this half lives apart from the hooks in
+ * lib/shaders/background, which re-exports it and owns the contract.
+ *
+ * A new background is one row in website/src/data/site-backgrounds.json:
+ * the header's switcher, the pre-paint script and BlurBackground all read
+ * the list through SITE_BACKGROUNDS here. A row names a library ShaderScene and how it is tuned for each
+ * band BlurBackground paints (globals.css owns the bands): `home` for the
+ * tall bands, the extended one under the home hero and a full-bleed page,
+ * and `page` for the standard band under every other page's title. The
+ * field is the row with no scene: the site's own ShaderField, the served
+ * default, which an absent attribute means.
+ */
+import type { ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
+import data from "@/data/site-backgrounds.json";
+
+/** The attribute on <html> that carries the pick; absent means the field. */
+export const BACKGROUND_ATTR = "data-background";
+
+/** The localStorage key the layout's pre-paint script reads. */
+export const BACKGROUND_STORAGE_KEY = "background";
+
+type SceneTuning = {
+  params?: Partial<Record<string, number>>;
+  passes?: Partial<Record<string, { on?: boolean; params?: Partial<Record<string, number>> }>>;
+};
+
+export type SiteBackgroundEntry = {
+  /** The id the attribute and storage carry. */
+  id: string;
+  /** The name the switchers show. */
+  label: string;
+  /** One line under the name in the header's menu. */
+  description: string;
+  /** The Material Symbol the header's trigger and menu rows wear. */
+  icon: string;
+  /** The library scene painted in the field's place; none means the field itself. */
+  scene?: ShaderSceneId;
+  /** The scene in the tall bands: low, under a hero. */
+  home?: SceneTuning;
+  /** The scene in the standard band: the top half of it, under a title. */
+  page?: SceneTuning;
+};
+
+/* The rows live in website/src/data/site-backgrounds.json, the registry
+   (CLAUDE.md's Registries table), typed here against the library's scene
+   ids so a row can never name a scene the package does not ship; the
+   validator holds the params and passes to each scene's declared ranges.
+   The tuning each row carries is a design decision, so its reasons live
+   here beside the type rather than in the data:
+
+   Horizon, home: set low in the extended band, so its bright limb lands
+   under the hero's calls to action and peeks over the top of the chat
+   frame below them, rather than behind the counts, with the beam softened
+   so the counts above it stay readable.
+
+   Horizon, page: the top half of the scene in the standard band. The limb
+   sits high, so the sky's glow and the arc itself are what the band shows
+   under the page title, and the world below it fades to the page floor
+   inside the scene (the fadeBottom pass) before the band's own fade
+   finishes the job; the beam is softened as on the home page. */
+export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
+
+export type SiteBackground = string;
+
+/** The served default: the row with no scene. */
+export const DEFAULT_BACKGROUND = SITE_BACKGROUNDS.find((entry) => !entry.scene)?.id ?? "field";
+
+/** The ids that paint a scene, the ones the attribute ever carries. */
+export const SCENE_BACKGROUND_IDS = SITE_BACKGROUNDS.filter((entry) => entry.scene).map(
+  (entry) => entry.id,
+);
+
+/** The registry row for an id, when it is one. */
+export const backgroundEntry = (id: string | null | undefined): SiteBackgroundEntry | undefined =>
+  SITE_BACKGROUNDS.find((entry) => entry.id === id);
+
+/** Whether a stored or attribute value names a background that paints a scene. */
+export const isSceneBackground = (value: string | null | undefined): value is string =>
+  typeof value === "string" && SCENE_BACKGROUND_IDS.includes(value);
+
+/** Puts a stored pick back on <html>; the pre-paint script's work, for the restore path. */
+export function restoreSiteBackground(root: HTMLElement, stored: string | null) {
+  if (isSceneBackground(stored)) root.setAttribute(BACKGROUND_ATTR, stored);
+  else root.removeAttribute(BACKGROUND_ATTR);
+}

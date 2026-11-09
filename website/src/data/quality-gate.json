@@ -107,6 +107,7 @@
     "validate-shell-recipe": { "group": "contract", "text": "Every app shell, in the library, the templates and the app-shell block, draws its mode from one recipe: a host that marks itself a shell reads the recipe's properties, every property it reads exists, and no host restates the recipe's colours or raised edge." },
 
     "validate-shader-background": { "group": "tokens", "text": "The background config sits inside the tuner's ranges, and its blob colours exist." },
+    "validate-site-backgrounds": { "group": "tokens", "text": "Every site background names a scene the library ships, with its tuning inside the scene's ranges and its colour roles in the token registry." },
     "validate-single-background-mount": { "group": "tokens", "text": "BlurBackground is mounted exactly once, in the root layout." },
     "validate-token-references": { "group": "tokens", "text": "Semantic colours point at primitives through var(), never a hex value." },
     "validate-theme-mirrors": { "group": "tokens", "text": "Hand mirrors of token data in the site and design.md match the CSS." },

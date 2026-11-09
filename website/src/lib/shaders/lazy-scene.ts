@@ -7,9 +7,9 @@
  * statically ships on every page. ShaderScene (its renderer and both
  * scenes' GLSL) is only ever drawn when the home page's switch picks
  * Horizon or the playground stages a scene into a frame, so it stays out
- * of that shared bundle and arrives as its own chunk. The home switch
- * calls `loadShaderScene` on hover and focus, so the chunk is usually in
- * hand before the click lands.
+ * of that shared bundle and arrives as its own chunk. The header's
+ * background switcher calls `loadShaderScene` when its trigger is hovered
+ * or focused, so the chunk is usually in hand before a pick lands.
  *
  * One promise for the visit: every caller shares the same load, and a
  * failed load clears it so the next ask tries again.
@@ -33,9 +33,17 @@ export function loadShaderScene(): Promise<SceneModule> {
   return pending;
 }
 
-/** The ShaderScene module once `needed` has been true and it has loaded; null until then. */
-export function useShaderSceneModule(needed: boolean): SceneModule | null {
+/**
+ * The ShaderScene module once `needed` has been true and it has loaded, null
+ * until then; `failed` once a load has been refused, so the caller can fall
+ * back rather than wait. A later `needed` asks again.
+ */
+export function useShaderSceneModule(needed: boolean): {
+  module: SceneModule | null;
+  failed: boolean;
+} {
   const [module, setModule] = useState<SceneModule | null>(loaded);
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     if (!needed || module) return;
     let current = true;
@@ -43,11 +51,13 @@ export function useShaderSceneModule(needed: boolean): SceneModule | null {
       (next) => {
         if (current) setModule(next);
       },
-      () => {},
+      () => {
+        if (current) setFailed(true);
+      },
     );
     return () => {
       current = false;
     };
   }, [needed, module]);
-  return module;
+  return { module, failed };
 }

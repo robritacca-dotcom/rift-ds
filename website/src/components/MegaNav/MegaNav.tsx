@@ -9,6 +9,7 @@ import { useChatWidget } from "rift-ds/chat";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
+import BackgroundSwitcher from "../BackgroundSwitcher/BackgroundSwitcher";
 import { openSitePalette } from "../SitePalette/palette-bus";
 import { getNavSections } from "@/config/navigation";
 import { ShowcaseCover } from "./ShowcaseCover";
@@ -124,6 +125,7 @@ export default function MegaNav() {
           <CommandPaletteTrigger size="compact" className={styles.searchBtn} onClick={openSitePalette} />
           {chatButton}
           <BrandSwitcher size="compact" className={styles.barOnly} />
+          <BackgroundSwitcher size="compact" className={styles.barOnly} />
           <ThemeToggle size="compact" className={styles.barOnly} />
         </>
       }
@@ -132,17 +134,20 @@ export default function MegaNav() {
           <CommandPaletteTrigger size="compact" iconOnly onClick={openSitePalette} />
           {chatButton}
           <BrandSwitcher size="compact" className={styles.barOnly} />
+          <BackgroundSwitcher size="compact" className={styles.barOnly} />
           <ThemeToggle size="compact" cycle className={styles.barOnly} />
         </>
       }
       wideActions={<GetStartedSplit />}
       drawerFooter={
         // The drawer floor carries Get started, which folds with the pills,
-        // and at phone widths the look and mode controls the bar gives up,
-        // stacked in the bar's order. The look menu opens upward, since the
-        // stack sits on the drawer floor.
+        // and at phone widths the look, background and mode controls the
+        // bar gives up, stacked in the bar's order. The look menu opens
+        // upward, since the stack sits on the drawer floor; the background
+        // menu flips up by itself when it has no room below.
         <div className={styles.drawerFooter}>
           <BrandSwitcher size="compact" placement="up" align="left" className={styles.drawerOnly} />
+          <BackgroundSwitcher size="compact" align="start" className={styles.drawerOnly} />
           <ThemeToggle size="compact" className={styles.drawerOnly} />
           <GetStartedSplit onNavigate={() => setMenuOpen(false)} />
         </div>

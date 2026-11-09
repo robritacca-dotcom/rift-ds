@@ -16,8 +16,6 @@ import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { setHomeShader, useHomeShader, type HomeShader } from "@/lib/shaders/home";
-import { loadShaderScene } from "@/lib/shaders/lazy-scene";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -508,39 +506,6 @@ function useNarrowCollage() {
    click. BASE_THEME_ID is the base look (attribute removed, the raw
    token files); the server ships SERVED_THEME_ID, so that is what a
    visitor lands on and its tile wakes up ringed. */
-
-/* ---------- the background switch ----------
-   Beside the theme row: the page's background as the site's field or the
-   Horizon scene (lib/shaders/home owns the attribute). It sits after the
-   swatches because it is the same kind of pick, a look for the page, and
-   it resets as the page unmounts, so only the home page ever shows it.
-   Horizon's code is not on the page until it is wanted: a hover or a
-   focus on the switch starts the load, so the click rarely waits on it. */
-const BACKGROUND_SEGMENTS = [
-  { value: "field", label: "Field" },
-  { value: "horizon", label: "Horizon" },
-];
-
-const preloadHorizon = () => {
-  loadShaderScene().catch(() => {});
-};
-
-function BackgroundSwitch() {
-  const shader = useHomeShader();
-  useEffect(() => () => setHomeShader("field"), []);
-  return (
-    <SegmentedControl
-      className={styles.backgroundSwitch}
-      segments={BACKGROUND_SEGMENTS}
-      value={shader}
-      onValueChange={(next) => setHomeShader(next as HomeShader)}
-      onPointerEnter={preloadHorizon}
-      onFocus={preloadHorizon}
-      size="compact"
-      aria-label="Background"
-    />
-  );
-}
 
 // Matches the SSR value of data-brand on <html> in layout.tsx.
 const getServerBrand = () => SERVED_THEME_ID;
@@ -1413,10 +1378,11 @@ export default function DesignSystemLanding() {
         <section className={styles.hero} aria-label="About the design system">
           {/* The theme row opens the hero: picking a look comes first, and
               everything beneath it answers in that look. It enters by
-              opacity alone, outside the animated wrapper below. */}
+              opacity alone, outside the animated wrapper below. The
+              background pick is the header's (BackgroundSwitcher), on every
+              page, so it has no seat here. */}
           <div className={styles.heroThemes}>
             <ThemeSwitcher />
-            <BackgroundSwitch />
           </div>
           {/* The entrance animation lives on this wrapper, NOT the section:
               .animate-in's will-change makes an ancestor a backdrop root,

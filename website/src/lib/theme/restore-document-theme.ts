@@ -3,11 +3,13 @@ import {
   isColorModeSetting,
 } from "rift-ds/components/ThemeToggle/colorMode";
 import { BRAND_STORAGE_KEY, isBaseTheme } from "./brand";
+import { BACKGROUND_STORAGE_KEY, restoreSiteBackground } from "@/lib/shaders/background-storage";
 
 /**
  * Put back what the layout's pre-paint script wrote on <html>, when it is
- * gone: the colour mode, the theme pick and the ready mark that lifts the
- * document's visibility:hidden. Does nothing while the ready mark stands.
+ * gone: the colour mode, the theme pick, the background pick and the ready
+ * mark that lifts the document's visibility:hidden. Does nothing while the
+ * ready mark stands.
  *
  * Two paths lose them. A hydration failure that reaches the root makes
  * React client-render <html>, and acquiring that singleton removes every
@@ -29,9 +31,11 @@ export function restoreDocumentTheme() {
   if (root.hasAttribute("data-theme-ready")) return;
   let saved: string | null = null;
   let brand: string | null = null;
+  let background: string | null = null;
   try {
     saved = localStorage.getItem(DEFAULT_COLOR_MODE_STORAGE_KEY);
     brand = localStorage.getItem(BRAND_STORAGE_KEY);
+    background = localStorage.getItem(BACKGROUND_STORAGE_KEY);
   } catch {
     /* Private mode: the served theme stands. */
   }
@@ -41,5 +45,6 @@ export function restoreDocumentTheme() {
   root.setAttribute("data-theme", setting === "system" ? (prefersDark ? "dark" : "light") : setting);
   if (isBaseTheme(brand)) root.removeAttribute("data-brand");
   else if (brand) root.setAttribute("data-brand", brand);
+  restoreSiteBackground(root, background);
   root.setAttribute("data-theme-ready", "");
 }

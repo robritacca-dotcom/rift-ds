@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import {
   ShaderField,
   type ShaderFieldStatus,
@@ -11,9 +12,9 @@ import {
   type BackgroundMode,
   type ShaderParams,
 } from "@/data/shader-background";
-import type { ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
+import type { ShaderSceneId, ShaderSceneStatus } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
-import { HOME_HORIZON_PARAMS, useHomeShader } from "@/lib/shaders/home";
+import { backgroundEntry, useSiteBackground } from "@/lib/shaders/background";
 import { useShaderSceneModule } from "@/lib/shaders/lazy-scene";
 
 /* Dev-only tuning panel, and the ternary is load-bearing: the bundler
@@ -94,6 +95,12 @@ export function HiddenBackground() {
  * website/src/app/globals.css, which own the values and their reasons;
  * the numbers here are a description, not a second home.
  *
+ * What paints in the band is the visitor's pick (lib/shaders/background):
+ * the field, or one of the library's scenes in its place, on every page,
+ * from the SITE_BACKGROUNDS registry, whose row carries the scene and its
+ * tuning for each band (the home page's low horizon under the hero and a
+ * high one, the top half of the scene, under every other page's title).
+ *
  * Every tuneable value comes from website/src/data/shader-background.json.
  * Append `?tune=1` to any page in `npm run dev --workspace website` to adjust them live.
  */
@@ -102,6 +109,10 @@ export default function BlurBackground() {
   const [mode, setMode] = useState<BackgroundMode>(shaderBackground.mode);
   const [tuning, setTuning] = useState(false);
   const [status, setStatus] = useState<ShaderFieldStatus>("pending");
+  /* The scene's own status, the same three states the field reports, so a
+     picked or staged scene that cannot run (no WebGL2) brings the CSS blobs
+     back exactly as a field that cannot run does. */
+  const [sceneStatus, setSceneStatus] = useState<ShaderSceneStatus>("pending");
   /* Embedded in a frame (an embedding board can show a page live inside an
      iframe), the page holds no GL context — a board of N pages would
      otherwise open N contexts, and browsers start evicting them well before
@@ -154,33 +165,60 @@ export default function BlurBackground() {
   const stagedParams = useStagedFieldParams();
   const stagedValues = useStagedValues();
   const stagedField = embedded && stagedSceneId === "field" && stagedParams !== undefined;
-  /* The home page's switch (lib/shaders/home) can trade the field for the
-     Horizon scene, set low in the band, for the visit. Never inside a frame. */
-  const homeShader = useHomeShader();
-  const wantsHorizon = !embedded && homeShader === "horizon";
+  /* The visitor's pick (lib/shaders/background) can trade the field for a
+     library scene, on every page, for as long as they keep it. Never inside
+     a frame. */
+  const pick = backgroundEntry(useSiteBackground());
+  const pickedScene = embedded ? undefined : pick?.scene;
+  const wantsScene = pickedScene !== undefined;
   /* ShaderScene loads only once one of those asks for it (lib/shaders/
-     lazy-scene), so it never ships in the bundle every page shares. Until
-     it arrives the field keeps painting, so the switch never flashes the
-     bare page floor. */
+     lazy-scene), so it never ships in the bundle every page shares. While
+     it is on its way the band stays pending (nothing painted), as the
+     field itself does while its context comes up, rather than painting the
+     field and then replacing it; the header's switcher preloads the chunk
+     when its trigger is hovered or focused, so a pick rarely waits at all.
+     A refused load falls back to the field. */
   const wantsStaged = embedded && stagedSceneId !== "" && stagedSceneId !== "field";
-  const sceneModule = useShaderSceneModule(wantsHorizon || wantsStaged);
+  const { module: sceneModule, failed: sceneFailed } = useShaderSceneModule(
+    wantsScene || wantsStaged,
+  );
   const SceneComponent = sceneModule?.ShaderScene;
   const stagedScene = wantsStaged
     ? sceneModule?.SHADER_SCENES.find((scene) => scene.id === stagedSceneId)
     : undefined;
-  const homeHorizon = wantsHorizon && SceneComponent !== undefined;
+  const sceneReady = wantsScene && SceneComponent !== undefined;
+  const sceneLoading = wantsScene && SceneComponent === undefined && !sceneFailed;
   const live = !embedded || stagedField;
 
+  /* Which band the page declared, read from its marker after each
+     navigation: the scene is tuned for the band it fills. The extended and
+     full-bleed bands take the home tuning (the horizon low, under a hero);
+     the standard band takes the page tuning (the top half of the scene,
+     under a title). The markers are committed with the page, so a layout
+     effect keyed on the route sees them before that commit paints. */
+  const pathname = usePathname();
+  const [tallBand, setTallBand] = useState(false);
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTallBand(document.body.querySelector("[data-bg-extended], [data-bg-full-bleed]") !== null);
+  }, [pathname]);
+
   const state =
-    stagedScene || homeHorizon
-      ? "on"
-      : mode === "css" || !live
-      ? "off"
-      : status === "active"
+    stagedScene || sceneReady
+      ? sceneStatus === "active"
         ? "on"
-        : status === "unavailable"
+        : sceneStatus === "unavailable"
           ? "off"
-          : "pending";
+          : "pending"
+      : sceneLoading
+        ? "pending"
+        : mode === "css" || !live
+          ? "off"
+          : status === "active"
+            ? "on"
+            : status === "unavailable"
+              ? "off"
+              : "pending";
 
   return (
     <>
@@ -200,10 +238,19 @@ export default function BlurBackground() {
         <div className="blur-ellipse blur-teal" />
 
         {SceneComponent && stagedScene ? (
-          <SceneComponent scene={stagedScene.id as ShaderSceneId} liveRef={stagedValues} />
-        ) : SceneComponent && homeHorizon ? (
-          <SceneComponent scene="horizon" params={HOME_HORIZON_PARAMS} />
-        ) : (
+          <SceneComponent
+            scene={stagedScene.id as ShaderSceneId}
+            liveRef={stagedValues}
+            onStatusChange={setSceneStatus}
+          />
+        ) : SceneComponent && sceneReady ? (
+          <SceneComponent
+            scene={pickedScene}
+            params={(tallBand ? pick?.home : pick?.page)?.params}
+            passes={(tallBand ? pick?.home : pick?.page)?.passes}
+            onStatusChange={setSceneStatus}
+          />
+        ) : sceneLoading ? null : (
           <ShaderField
             params={stagedField ? { ...params, ...stagedParams } : params}
             blobs={shaderBackground.blobs}

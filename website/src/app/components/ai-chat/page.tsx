@@ -406,8 +406,12 @@ export default function AiChatPage() {
               puts anything under the composer: links, cards or a whole dashboard, held to one
               screen or scrolling as a page with <code>widgetsLayout</code>, and as wide as the
               composer or the panel with <code>widgetsWidth</code>. It all leaves with the first
-              message. The four fillings, side by side in the compact layout: the starters alone,
-              then links, cards and a dashboard in their place, the dashboard running wide.
+              message, and it arrives rather than appears: the composer first, then the greeting,
+              then the tiles of a dashboard one after another, after a short hold a host can
+              lengthen or zero with <code>--ds-chat-widget-welcome-hold</code>; reduced motion
+              makes the whole entrance instant. The four fillings, side by side in the compact
+              layout: the starters alone, then links, cards and a dashboard in their place, the
+              dashboard running wide.
             </p>
             <div className={styles.stageGrid}>
               {WELCOME_VARIANTS.map((variant) => (

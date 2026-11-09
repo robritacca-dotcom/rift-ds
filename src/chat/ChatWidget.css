@@ -247,6 +247,77 @@
   padding: var(--gap-1000) var(--ds-chat-widget-inset) var(--padding-400);
 }
 
+/* ============================================
+   THE WELCOME'S ENTRANCE
+   A fresh welcome arrives rather than appears: the composer rises in at
+   once, the thing to type into first; then the greeting, and then the
+   widget board's tiles pop in one after another, a dashboard assembling
+   itself. The overlay and the slot mount afresh on every new chat, so it
+   plays each time. The greeting and the tiles wait a short beat first
+   (--ds-chat-widget-welcome-hold, the deliberate duration by default), the
+   composer alone standing on the ground, so the ground itself (a shader
+   scene, the page) registers before the board lands on it; a host sets
+   the property on the widget or an ancestor to lengthen the wait or zero
+   it. The composer is read through the overlay's presence, since it stays
+   mounted into the conversation. Every length is a motion token or a
+   multiple of one, so reduced motion collapses the sequence to an instant.
+   The fill is backwards only: hidden through the hold, and once in, no
+   filled frame is left behind, so no transform lingers to become a
+   containing block under the composer's popovers.
+   ============================================ */
+
+.ds-chat-widget:has(.ds-chat-widget__welcome) .ds-chat-widget__composer {
+  animation: ds-chat-widget-welcome-in var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
+}
+
+.ds-chat-widget__greeting {
+  animation: ds-chat-widget-welcome-in var(--motion-duration-slow) var(--motion-ease-entrance) backwards;
+  animation-delay: var(--ds-chat-widget-welcome-hold, var(--motion-duration-deliberate));
+}
+
+@keyframes ds-chat-widget-welcome-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--gap-200));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The tiles, each a quick step after the last, starting as the greeting
+   is still rising, on the structural duration rather than the greeting's
+   slower one, so the board snaps together; anything in the slot that is
+   not a tile grid arrives as one piece. */
+.ds-chat-widget__widgets .ds-widget-grid > *,
+.ds-chat-widget__widgets > :not(.ds-widget-grid) {
+  --ds-chat-widget-tile: 0;
+  animation: ds-chat-widget-tile-in var(--motion-duration-slow) var(--motion-ease-entrance) backwards;
+  animation-delay: calc(
+    var(--ds-chat-widget-welcome-hold, var(--motion-duration-deliberate)) + var(--motion-duration-base) +
+      var(--ds-chat-widget-tile) * var(--motion-duration-fast) * 0.6
+  );
+}
+
+.ds-chat-widget__widgets .ds-widget-grid > :nth-child(2) { --ds-chat-widget-tile: 1; }
+.ds-chat-widget__widgets .ds-widget-grid > :nth-child(3) { --ds-chat-widget-tile: 2; }
+.ds-chat-widget__widgets .ds-widget-grid > :nth-child(4) { --ds-chat-widget-tile: 3; }
+.ds-chat-widget__widgets .ds-widget-grid > :nth-child(5) { --ds-chat-widget-tile: 4; }
+.ds-chat-widget__widgets .ds-widget-grid > :nth-child(6) { --ds-chat-widget-tile: 5; }
+.ds-chat-widget__widgets .ds-widget-grid > :nth-child(n + 7) { --ds-chat-widget-tile: 6; }
+
+@keyframes ds-chat-widget-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--gap-400)) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* With widgets the composer holds the same dead centre the starters give
    it: the region keeps the zero basis, so the slack splits evenly and the
    widgets hang below the composer. Its content is its floor (a flex item's
@@ -1420,6 +1491,15 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   border-radius: var(--ds-shell-surface-radius);
   box-shadow: var(--ds-shell-surface-shadow);
   overflow: hidden;
+}
+
+/* The raised surface clips to its corners, but the scrolling welcome page
+   is the surface itself scrolling (the scroll layout above makes the root
+   the scroller), so inset keeps the clip on the inline axis and lets the
+   block axis scroll; otherwise a long dashboard sits cut off at the foot
+   with no way to reach the rest of it. */
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget[data-widgets='scroll'] {
+  overflow-y: auto;
 }
 
 /* The seats hold the gap above and below in both states, so the glide is

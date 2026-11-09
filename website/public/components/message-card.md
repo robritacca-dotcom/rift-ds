@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same dat
 | title | `string` | no |  | Card heading. Note: this shadows the native `title` tooltip attribute, which MessageCard does not expose. |
 | description | `string` | no |  | One or two lines under the title. |
 | media | `ReactNode` | no |  | Top media slot — an image or chart, inset from the card edges with its own rounded corners. |
-| icon | `ReactNode` | no |  | Small leading icon beside the title — a Material Symbol name, or any custom element. |
+| icon | `ReactNode` | no |  | Small icon trailing the title at the row's end — a Material Symbol name, or any custom element. |
 | meta | `string` | no |  | Free-text metadata line, e.g. a domain or date, so callers keep their own formatting. |
 | actions | `ReactNode` | no |  | Action row rendered in a footer outside the body — small secondary or tertiary Buttons, mirroring ToolCall's actions footer. |
 | className | `string` | no | `` | Additional CSS classes |

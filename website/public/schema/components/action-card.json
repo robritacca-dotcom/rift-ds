@@ -42,7 +42,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "The leading mark: a Material Symbol name, or your own element."
+          "description": "The mark trailing the title: a Material Symbol name, or your own element."
         },
         {
           "name": "status",

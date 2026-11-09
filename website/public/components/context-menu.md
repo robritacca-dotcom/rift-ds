@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| items | `DropdownMenuEntry[]` | yes |  | Menu entries — the same model as DropdownMenu (items, groups, separators) |
+| items | `DropdownMenuEntry[]` | yes |  | Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read. |
 | size | `"default" \| "compact"` | no | `default` | Component size |
 | ariaLabel | `string` | no |  | Accessible name for the menu |
 | keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. |

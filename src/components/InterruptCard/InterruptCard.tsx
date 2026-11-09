@@ -69,7 +69,7 @@ type InterruptCardOwnProps = {
   title: string;
   /** One line of context under the title. */
   description?: string;
-  /** Leading Material Symbol name, or any custom element. No icon by default. */
+  /** A Material Symbol name trailing the title, or any custom element. No icon by default. */
   icon?: string | React.ReactNode;
   /** The choices, rendered as buttons left to right. */
   options?: InterruptCardOption[];

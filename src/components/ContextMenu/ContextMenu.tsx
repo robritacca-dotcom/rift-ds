@@ -20,7 +20,7 @@ import { mirrorClass } from '../../behaviors/direction';
 
 /** Props owned by ContextMenu itself — everything else falls through to the wrapper div. */
 type ContextMenuOwnProps = {
-  /** Menu entries — the same model as DropdownMenu (items, groups, separators) */
+  /** Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read. */
   items: DropdownMenuEntry[];
   /** Component size */
   size?: 'default' | 'compact';

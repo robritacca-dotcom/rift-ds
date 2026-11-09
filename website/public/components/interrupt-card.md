@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `string` | yes |  | The question, e.g. "Allow file edit?". Note: this shadows the native `title` tooltip attribute, which InterruptCard does not expose. |
 | description | `string` | no |  | One line of context under the title. |
-| icon | `ReactNode` | no |  | Leading Material Symbol name, or any custom element. No icon by default. |
+| icon | `ReactNode` | no |  | A Material Symbol name trailing the title, or any custom element. No icon by default. |
 | options | `InterruptCardOption[]` | no |  | The choices, rendered as buttons left to right. |
 | onValueChange | `((value: string) => void)` | no |  | Fires with the chosen option's value. |
 | value | `string` | no |  | The already-chosen value. When set, the card renders its answered state: the options give way to the chosen one's read-out, worded as the decision made, in the status that choice records. |

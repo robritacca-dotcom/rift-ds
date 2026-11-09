@@ -287,9 +287,9 @@
 }
 
 /* The tiles, each a quick step after the last, starting as the greeting
-   is still rising, on the structural duration rather than the greeting's
-   slower one, so the board snaps together; anything in the slot that is
-   not a tile grid arrives as one piece. */
+   is still rising, on the same structural duration as the greeting, so
+   the board snaps together; anything in the slot that is not a tile grid
+   arrives as one piece. */
 .ds-chat-widget__widgets .ds-widget-grid > *,
 .ds-chat-widget__widgets > :not(.ds-widget-grid) {
   --ds-chat-widget-tile: 0;

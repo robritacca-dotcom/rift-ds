@@ -17,7 +17,7 @@ type ActionCardOwnProps = {
   detail?: React.ReactNode;
   /** What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in. */
   facts?: ActionReadoutFact[];
-  /** The leading mark: a Material Symbol name, or your own element. */
+  /** The mark trailing the title: a Material Symbol name, or your own element. */
   icon?: string | React.ReactNode;
   /** Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`. */
   status?: ActionCardStatus;

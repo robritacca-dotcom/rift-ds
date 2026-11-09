@@ -144,7 +144,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "The leading mark: a Material Symbol name, or your own element."
+            "description": "The mark trailing the title: a Material Symbol name, or your own element."
           },
           {
             "name": "status",
@@ -5656,7 +5656,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "DropdownMenuEntry[]",
             "required": true,
-            "description": "Menu entries — the same model as DropdownMenu (items, groups, separators)"
+            "description": "Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read."
           },
           {
             "name": "size",
@@ -10463,7 +10463,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "Leading Material Symbol name, or any custom element. No icon by default."
+            "description": "A Material Symbol name trailing the title, or any custom element. No icon by default."
           },
           {
             "name": "options",
@@ -11567,7 +11567,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "Small leading icon beside the title — a Material Symbol name, or any custom element."
+            "description": "Small icon trailing the title at the row's end — a Material Symbol name, or any custom element."
           },
           {
             "name": "meta",

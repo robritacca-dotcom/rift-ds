@@ -21,7 +21,7 @@
           "type": "DropdownMenuEntry[]",
           "typeKind": "array",
           "required": true,
-          "description": "Menu entries — the same model as DropdownMenu (items, groups, separators)"
+          "description": "Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read."
         },
         {
           "name": "size",

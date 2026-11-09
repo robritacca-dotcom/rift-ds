@@ -35,7 +35,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "Leading Material Symbol name, or any custom element. No icon by default."
+          "description": "A Material Symbol name trailing the title, or any custom element. No icon by default."
         },
         {
           "name": "options",

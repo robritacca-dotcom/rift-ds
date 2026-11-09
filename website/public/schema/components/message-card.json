@@ -42,7 +42,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "Small leading icon beside the title — a Material Symbol name, or any custom element."
+          "description": "Small icon trailing the title at the row's end — a Material Symbol name, or any custom element."
         },
         {
           "name": "meta",

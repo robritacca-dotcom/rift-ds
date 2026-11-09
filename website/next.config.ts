@@ -94,6 +94,15 @@ const nextConfig: NextConfig = {
   transpilePackages: ['rift-ds'],
   turbopack: {
     root: worktreeRoot,
+    // xeokit's bundle (the raceway chat lab's 3D viewer) carries Emscripten's
+    // Node file reader behind an environment check. The branch never runs
+    // in a browser, but the bundler still has to resolve its require('fs')
+    // and require('path'), so the browser target gets an empty module for
+    // each; the server target keeps the real builtins.
+    resolveAlias: {
+      fs: { browser: "./src/lib/empty-module.ts" },
+      path: { browser: "./src/lib/empty-module.ts" },
+    },
   },
 };
 

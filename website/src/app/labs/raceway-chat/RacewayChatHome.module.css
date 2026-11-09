@@ -1,0 +1,401 @@
+/* Labs: raceway-chat. The shell is the chat and nothing else, as in
+   the chat home template: ChatWidget fills the viewport and owns its
+   scrolling, so this sheet owns the frame it stands in, the 3D artifact's
+   stage and its overlays, and the view receipt. Every colour, space, radius
+   and type style is a semantic token; the raw sizes are the stage's floor
+   height and the frost behind its overlays. */
+
+.shell {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  height: calc(var(--layout-viewport-height, 100vh));
+  overflow: hidden;
+}
+
+.ground {
+  height: 100%;
+}
+
+/* The model opens wide: the conversation keeps the docked chat's width
+   (--ds-chat-width) and the artifact takes the rest of the room the widget
+   measures, which already holds the conversation's 320px floor; the grip
+   and the expand toggle take it from there. */
+.ground :global(.ds-chat-widget__rails) {
+  --ds-chat-artifact-rest-width: calc(var(--ds-chat-artifact-room, 520px) + 320px - var(--ds-chat-width));
+}
+
+/* -------------------------------------------------- the model artifact */
+
+/* The canvas is transparent, so the panel's own surface is the model's background. */
+.model {
+  position: relative;
+  container: raceway-model / inline-size;
+  height: 100%;
+  min-height: 360px;
+  overflow: hidden;
+}
+
+/* The viewer's canvases fill the stage; the view cube sits in the corner. */
+.viewer {
+  position: absolute;
+  inset: 0;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.canvas:active {
+  cursor: grabbing;
+}
+
+/* Seated above the floating toolbar's row, as the picked readout is, so the
+   toolbar never covers it at any panel width. */
+.cube {
+  position: absolute;
+  inset-block-end: calc(var(--padding-400) + var(--control-height-default) + var(--padding-300));
+  inset-inline-start: var(--padding-300);
+  width: 88px;
+  height: 88px;
+}
+
+/* The generation's status, centred under the legend while the building grows. */
+.generating {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--ds-inline-sign, 1)), -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-200);
+  width: min(320px, 70%);
+  padding: var(--padding-300) var(--padding-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  pointer-events: none;
+}
+
+.generatingText {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+.generatingBar {
+  width: 100%;
+}
+
+.overlayTop {
+  position: absolute;
+  inset-block-start: var(--padding-300);
+  inset-inline: var(--padding-300);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  pointer-events: none;
+}
+
+.overlayTop > * {
+  pointer-events: auto;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-100);
+}
+
+/* A hidden trade's swatch empties, the way a hidden series does in a legend. */
+.legend [aria-pressed="false"] .swatch {
+  background-color: transparent;
+}
+
+.legendCount {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+}
+
+.swatch {
+  display: block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  border: var(--border-050) solid currentColor;
+}
+
+.swatchMechanical {
+  color: var(--color-chart-series-1);
+  background-color: var(--color-chart-series-1);
+}
+
+.swatchPlumbing {
+  color: var(--color-chart-series-2);
+  background-color: var(--color-chart-series-2);
+}
+
+.swatchFire {
+  color: var(--color-chart-series-3);
+  background-color: var(--color-chart-series-3);
+}
+
+.swatchElectrical {
+  color: var(--color-chart-series-4);
+  background-color: var(--color-chart-series-4);
+}
+
+.picked {
+  position: absolute;
+  inset-block-end: calc(var(--padding-400) + var(--control-height-default) + var(--padding-300));
+  inset-inline-start: 50%;
+  transform: translateX(calc(-50% * var(--ds-inline-sign, 1)));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: calc(100% - 2 * var(--padding-300));
+  padding: var(--padding-150) var(--padding-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-glass);
+  backdrop-filter: blur(24px);
+  pointer-events: none;
+}
+
+.pickedType {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-tertiary);
+}
+
+.pickedName {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+.toolbar {
+  position: absolute;
+  inset-block-end: var(--padding-400);
+  inset-inline-start: 50%;
+  transform: translateX(calc(-50% * var(--ds-inline-sign, 1)));
+  max-width: calc(100% - 2 * var(--padding-300));
+}
+
+.zoomValue {
+  min-width: 4ch;
+  text-align: center;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------- the board's model */
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+/* The hero beside a two-by-two of quick views; under 560px the views run
+   as a row of their own under the hero. */
+.modelTile {
+  container: raceway-board / inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--gap-200);
+}
+
+@container raceway-board (max-width: 560px) {
+  .modelTile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.quickLinks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each view is a control: a stage for the still, a caption under it. The
+   hover signal is the action colour's border, as on any surface that is
+   itself a control. */
+.heroLink,
+.quickLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  width: 100%;
+  height: 100%;
+  padding: var(--padding-200);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  background-color: var(--color-bg-page-primary);
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.heroLink:hover,
+.quickLink:hover {
+  border-color: var(--color-action-primary-bg);
+}
+
+.heroLink:focus-visible,
+.quickLink:focus-visible {
+  outline: var(--border-050) solid var(--color-action-primary-bg);
+  outline-offset: var(--border-050);
+}
+
+.heroLink .preview {
+  aspect-ratio: 16 / 11;
+}
+
+/* The views share the hero's height between two rows, and each still
+   fills what its caption leaves. */
+.quickLink .preview {
+  flex: 1;
+  min-height: 64px;
+}
+
+.quickLink .linkCaption {
+  flex-direction: column;
+  gap: 0;
+}
+
+.quickLink .linkMeta {
+  flex-shrink: 1;
+}
+
+.linkCaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.linkLabel {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+.linkMeta {
+  flex-shrink: 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-tertiary);
+}
+
+/* The still: lines hold their width at any size, the shell quiet under the trades. */
+.preview {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.preview path,
+.preview circle {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.previewShell {
+  fill: none;
+  stroke: var(--color-text-tertiary);
+  stroke-width: 0.5;
+  opacity: 0.55;
+}
+
+.previewRuns {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+}
+
+.previewEquipment {
+  fill: currentColor;
+  fill-opacity: 0.6;
+  stroke: currentColor;
+  stroke-width: 0.75;
+}
+
+.previewMechanical {
+  color: var(--color-chart-series-1);
+}
+
+.previewPlumbing {
+  color: var(--color-chart-series-2);
+}
+
+.previewFire {
+  color: var(--color-chart-series-3);
+}
+
+.previewElectrical {
+  color: var(--color-chart-series-4);
+}
+
+.previewClash {
+  fill: var(--color-status-warning-icon);
+}
+
+.previewClashRing {
+  fill: none;
+  stroke: var(--color-status-warning-icon);
+  stroke-width: 1.5;
+}
+
+/* ------------------------------------------------------ chat receipt */
+
+.receipt {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  padding: var(--padding-200) var(--padding-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-chat-card-bg);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+}
+
+/* Zoom is the wheel's job too, so a narrow panel gives its buttons up first. */
+.zoomGroup {
+  display: contents;
+}
+
+@container raceway-model (max-width: 560px) {
+  .zoomGroup {
+    display: none;
+  }
+}

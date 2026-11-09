@@ -66,6 +66,13 @@ export default function PrivacyPage() {
             a tick is sent as you make it, before you type anything, so it can
             suggest questions about it.
           </p>
+          <p className={styles.body}>
+            The assistant in the raceway chat lab works the same way: your
+            messages in that conversation, what its 3D model shows, and the
+            names, kinds and sizes of any files you attach go to Anthropic,
+            and none of it is stored. The files themselves never leave your
+            browser. Its rate limit and budget share the chat&apos;s.
+          </p>
         </div>
 
         <div className={`${styles.section} animate-in animate-delay-3`}>

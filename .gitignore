@@ -43,9 +43,13 @@ storybook-static
 
 # Claude's internal session notes — local-only, not for the public repo
 .claude/memory/
-# Local Claude settings — machine-specific, never committed
-.claude/settings.local.json
-.claude/*.local.json
+# Local Claude settings — machine-specific, never committed, at any depth.
+# "Don't ask again" approvals are saved here as the literal command, so a key
+# typed into a command lands in this file. Unanchored on purpose: a worktree or
+# a workspace folder carries its own .claude/ folder.
+**/.claude/settings.local.json
+**/.claude/*.local.json
+**/.claude/worktrees/
 
 # macOS Finder/iCloud duplicate copies ("name 2.ext") — the registry
 # validator also fails the build on these so they get deleted, not shipped

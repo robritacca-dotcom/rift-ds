@@ -66,6 +66,25 @@ export const Default: Story = {
 };
 
 /* ============================================
+   WITH DESCRIPTIONS
+   ============================================ */
+
+const describedItems: DropdownMenuEntry[] = [
+  { label: 'Private', description: 'Only you can open it', icon: 'lock', selected: true, onClick: () => {} },
+  { label: 'Team', description: 'Everyone in the workspace', icon: 'group', selected: false, onClick: () => {} },
+  { label: 'Anyone with the link', description: 'No sign-in needed', icon: 'link', selected: false, onClick: () => {} },
+  { type: 'separator' },
+  { label: 'Sharing settings', description: 'Opens the admin page', icon: 'settings', onClick: () => {} },
+];
+
+export const WithDescriptions: Story = {
+  args: {
+    trigger: <TriggerButton />,
+    items: describedItems,
+  },
+};
+
+/* ============================================
    WITH GROUPS
    ============================================ */
 

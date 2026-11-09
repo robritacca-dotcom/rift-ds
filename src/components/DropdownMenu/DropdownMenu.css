@@ -211,6 +211,32 @@
   line-height: 1;
 }
 
+/* A row with a description: the label over a caption line, the pair
+   stacked and the icon centred on them, the two-line row ThemePicker's
+   rows set the pattern for. */
+.ds-dropdown-menu__item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: start;
+}
+
+.ds-dropdown-menu__item-title {
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.ds-dropdown-menu__item-description {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-dropdown-menu__item--destructive .ds-dropdown-menu__item-description {
+  color: var(--color-action-destructive-text-secondary);
+  opacity: 0.7;
+}
+
 /* Figma: icons are 24px within menu items */
 .ds-dropdown-menu__item-icon {
   --icon-size: var(--icon-size-600);

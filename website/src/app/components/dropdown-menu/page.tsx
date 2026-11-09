@@ -44,6 +44,40 @@ function SelectedStateDemo() {
   );
 }
 
+/* A choice whose options need a word of explanation: each row carries a
+   description line under its label. */
+function WithDescriptionsDemo() {
+  const [access, setAccess] = React.useState("team");
+  return (
+    <DropdownMenu
+      trigger={<Button label="Who can open it" variant="secondary" />}
+      items={[
+        {
+          label: "Only me",
+          description: "Nobody else sees it",
+          icon: "lock",
+          selected: access === "me",
+          onClick: () => setAccess("me"),
+        },
+        {
+          label: "The team",
+          description: "Everyone in the workspace",
+          icon: "group",
+          selected: access === "team",
+          onClick: () => setAccess("team"),
+        },
+        {
+          label: "Anyone with the link",
+          description: "No sign-in needed",
+          icon: "link",
+          selected: access === "link",
+          onClick: () => setAccess("link"),
+        },
+      ]}
+    />
+  );
+}
+
 function CheckboxItemsDemo() {
   const [shown, setShown] = React.useState<Record<string, boolean>>({ name: true, owner: true, due: false });
   const toggle = (key: string) => setShown((current) => ({ ...current, [key]: !current[key] }));
@@ -153,7 +187,7 @@ export default function DropdownMenuPage() {
               A contextual menu for actions and navigation
             </p>
             <p className={styles.introBody}>
-              Triggered by a button or element, the dropdown menu displays a floating panel with items, sections, keyboard shortcuts, and nested sub-menus. Hover fills are inset from the panel edge for a refined look.
+              Triggered by a button or element, the dropdown menu displays a floating panel with items, sections, keyboard shortcuts, a line of description under an item where the choice needs one, and nested sub-menus. Hover fills are inset from the panel edge for a refined look.
             </p>
           </div>
 
@@ -232,6 +266,19 @@ export default function DropdownMenuPage() {
             <div className={styles.variantRow}>
               <div className={styles.variantItem}>
                 <SelectedStateDemo />
+              </div>
+            </div>
+          </section>
+
+          {/* With descriptions */}
+          <section className={styles.section}>
+            <SectionTitle title="With descriptions" />
+            <p className={styles.introBody}>
+              An item can carry a line of description under its label, for a choice a word alone does not settle. The row grows to two lines and keeps its icon centred on the pair; the rest of the menu is unchanged.
+            </p>
+            <div className={styles.variantRow}>
+              <div className={styles.variantItem}>
+                <WithDescriptionsDemo />
               </div>
             </div>
           </section>

@@ -20,6 +20,8 @@ export interface DropdownMenuItem {
   type?: 'item';
   /** Display label */
   label: string;
+  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */
+  description?: string;
   /** Keyboard shortcut hint as literal text (e.g. "⇧ ⌘ P"). `keys` writes it for the reader's platform instead. */
   shortcut?: string;
   /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */
@@ -116,6 +118,17 @@ function itemSemantics(item: DropdownMenuItem) {
 /** Whether choosing an item closes the menu. */
 const closesOnSelect = (item: DropdownMenuItem) => item.closeOnSelect ?? item.checked === undefined;
 
+/** The row's text: the label alone, or the label over its description line. */
+const MenuItemText = ({ baseClass, label, description }: { baseClass: string; label: string; description?: string }) =>
+  description ? (
+    <span className={`${baseClass}__item-text`}>
+      <span className={`${baseClass}__item-title`}>{label}</span>
+      <span className={`${baseClass}__item-description`}>{description}</span>
+    </span>
+  ) : (
+    <>{label}</>
+  );
+
 /** The roles a keyboard-focusable menu row can carry. */
 const ITEM_SELECTOR = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]';
 
@@ -210,7 +223,7 @@ const SubMenuItem = ({ item, baseClass, itemId, focused, size, onActivate }: Sub
               {item.icon}
             </span>
           ))}
-        {item.label}
+        <MenuItemText baseClass={baseClass} label={item.label} description={item.description} />
       </span>
       <span className={`${baseClass}__submenu-icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
         chevron_right
@@ -341,7 +354,7 @@ const MenuPanel = ({
                 {entry.icon}
               </span>
             ))}
-          {entry.label}
+          <MenuItemText baseClass={baseClass} label={entry.label} description={entry.description} />
         </span>
         <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
         {entry.selected && (
@@ -606,7 +619,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
                 {entry.icon}
               </span>
             ))}
-          {entry.label}
+          <MenuItemText baseClass={baseClass} label={entry.label} description={entry.description} />
         </span>
         <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
         {entry.selected && (

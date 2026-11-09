@@ -53,5 +53,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same dat
 | expandLabel | `string` | no | `Expand the panel` | Accessible name for the expand affordance while collapsed. |
 | profile | `ThreadPanelProfile` | no |  | The signed-in person, rendered as the footer's Avatar row. |
 | footerSlot | `ReactNode` | no |  | Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract. |
+| collapsedFooterSlot | `ReactNode` | no |  | Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert. |
 | className | `string` | no | `` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |

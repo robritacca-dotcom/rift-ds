@@ -507,7 +507,9 @@ export default function AiChatPage() {
               conversation. An HTML document or a URL is drawn in a sandboxed frame, with the
               source behind the Code view; the provider&apos;s <code>artifactRenderers</code> draw
               a kind of your own as live components. Drag the panel&apos;s left edge to size it, or
-              expand it to fill the chat. It opens at a resting width, or at the room the
+              expand it to take the conversation&apos;s room: it glides across while the
+              conversation folds away, the history stays where it is, and Escape brings the
+              conversation back. It opens at a resting width, or at the room the
               conversation leaves it, and slides in and out as a drawer at that width. The panel
               sits beside the conversation from{" "}
               {ASIDE_RAIL_MIN_WIDTH}px of chat width, and opens as a sheet below that and on a

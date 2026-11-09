@@ -28,7 +28,7 @@
  *      and the rail thresholds design.md states (threads, the trailing seat,
  *      the width under which the threads rail yields, the artifact grip's
  *      column floor) are the ones queries.ts holds, the last also against
- *      the stylesheet's flex basis.
+ *      the stylesheet's floor for the sized conversation.
  *   6. The surfaces that document the widget exist: its page under
  *      website/src/app/components/<slug>/ (the props and every option, held
  *      to the component page rules by validate-website-surfaces.mjs), the
@@ -307,7 +307,8 @@ function optionalPeersInClosure(entry) {
   /* The trailing seat's other two numbers: the width under which the
      threads rail yields, stated in the spec, and the floor both columns
      keep under the artifact's size grip, stated in the spec and mirrored
-     by the stylesheet's flex basis for the conversation. */
+     by the stylesheet's min-width for the sized conversation (a min-width,
+     not a flex basis, so the expand glide trades grow shares alone). */
   const withThreads = queries.match(/ASIDE_WITH_THREADS_MIN_WIDTH = (\d+)/);
   const columnFloor = queries.match(/ARTIFACT_MIN_COLUMN_WIDTH = (\d+)/);
   if (!withThreads || !columnFloor) {
@@ -319,9 +320,9 @@ function optionalPeersInClosure(entry) {
     if (!spec.includes(`ARTIFACT_MIN_COLUMN_WIDTH\` (${columnFloor[1]}px)`)) {
       errors.push(`design.md's ChatWidget section does not state ARTIFACT_MIN_COLUMN_WIDTH as ${columnFloor[1]}px`);
     }
-    const cssFloor = css.match(/\[data-artifact-sized\] > \.ds-chat-widget \{\s*flex: 1 0 (\d+)px;/);
+    const cssFloor = css.match(/\[data-artifact-sized\] > \.ds-chat-widget \{\s*flex: 1 0 0;\s*min-width: (\d+)px;/);
     if (!cssFloor) {
-      errors.push("could not read the sized conversation's flex basis from ChatWidget.css");
+      errors.push("could not read the sized conversation's min-width from ChatWidget.css");
     } else if (cssFloor[1] !== columnFloor[1]) {
       errors.push(
         `ARTIFACT_MIN_COLUMN_WIDTH is ${columnFloor[1]} but ChatWidget.css floors the sized conversation at ${cssFloor[1]}px: the two must agree`

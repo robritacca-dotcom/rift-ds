@@ -241,7 +241,7 @@ export interface ChatWidgetProps {
   aside?: (ctx: { overlay: boolean; close: () => void }) => ReactNode;
   /** The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`. */
   agent?: ChatAgentOptions;
-  /** Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel. */
+  /** Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. The panel's expand toggle gives it the conversation's room, never the history's: the history rail keeps its place, and Escape steps back. Off, none of it exists: no header button, no tile, no panel. */
   artifacts?: boolean;
   /** What the chat is looking at, named on the composer's context note: a page, a selection, a passage. Omit for none. A host whose context follows the reader (rows they ticked, text they highlighted) updates it as they go, and can offer a way back and repeat it on each message sent. */
   context?: ChatContext | null;
@@ -863,11 +863,11 @@ export function ChatWidget({
   }, [artifacts, turns, openArtifact]);
 
   /* The inline threads rail yields to a trailing panel that needs its room,
-     the agent pane and the artifact alike: under the roomy threshold, or
-     whenever the artifact is expanded, the history goes back behind the
-     header's hamburger. */
+     the agent pane and the artifact alike: under the roomy threshold the
+     history goes back behind the header's hamburger. An expanded artifact
+     takes the conversation's room, not the history's, so the rail stays. */
   const trailingUp = artifactInline || (Boolean(renderAside) && asideOpen && asideWide);
-  const threadsInline = threadsWide && !(trailingUp && (!asideRoomy || artifactExpanded));
+  const threadsInline = threadsWide && !(trailingUp && !asideRoomy);
 
   /* The room the artifact seat has before the conversation drops under its
      floor: the row less the history rail, the conversation's floor and the
@@ -1376,10 +1376,13 @@ export function ChatWidget({
       data-artifact-expanded={artifactExpanded || undefined}
       data-artifact-sized={artifactWidth !== null || artifactResizing || undefined}
       data-artifact-resizing={artifactResizing || undefined}
+      /* The cluster's size rides the rails too, so an inset panel's header
+         keeps room for exactly the controls that float over it. */
       style={
-        artifactWidth !== null
-          ? ({ '--ds-chat-artifact-width': `${artifactWidth}px` } as React.CSSProperties)
-          : undefined
+        {
+          '--ds-chat-action-count': actionCount,
+          ...(artifactWidth !== null ? { '--ds-chat-artifact-width': `${artifactWidth}px` } : {}),
+        } as React.CSSProperties
       }
       onKeyDown={(event) => {
         /* Expanded, the conversation is off stage and cannot hear the key:

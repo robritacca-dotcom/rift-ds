@@ -21,6 +21,8 @@ export interface ChatThreadsProps {
   profile?: ThreadPanelProfile;
   /** Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed. */
   footerSlot?: ReactNode;
+  /** Rendered in the inline rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. The sheet never collapses, so it never shows. */
+  collapsedFooterSlot?: ReactNode;
   /** Whether the inline rail can collapse to its icon strip. */
   collapsible?: boolean;
   /**
@@ -66,6 +68,7 @@ export function ChatThreads({
   logoText,
   profile,
   footerSlot,
+  collapsedFooterSlot,
   collapsible = true,
   defaultExpanded = false,
   historyLabel = 'Chat history',
@@ -131,6 +134,7 @@ export function ChatThreads({
       onExpandedChange={overlay || !collapsible ? undefined : setExpanded}
       profile={overlay ? undefined : profile}
       footerSlot={footerSlot}
+      collapsedFooterSlot={overlay ? undefined : collapsedFooterSlot}
     />
   );
 }

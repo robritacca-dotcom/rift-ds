@@ -17260,6 +17260,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract."
           },
           {
+            "name": "collapsedFooterSlot",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -19238,7 +19244,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "artifacts",
             "type": "boolean",
             "required": false,
-            "description": "Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. Off, none of it exists: no header button, no tile, no panel.",
+            "description": "Seat the artifact panel: a reply that carries an artifact draws a tile in the thread, and the tile (or the header's artifact button) opens the artifact beside the conversation on a wide host and as a bottom sheet on a narrow one. The trailing seat holds one panel at a time, so an open artifact stands in for the agent pane. The panel's expand toggle gives it the conversation's room, never the history's: the history rail keeps its place, and Escape steps back. Off, none of it exists: no header button, no tile, no panel.",
             "defaultValue": "false"
           },
           {
@@ -19823,6 +19829,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Rendered in the rail's footer in both seats (above the profile row on the inline rail; the sheet has none): a theme toggle, a link out. Fades out while the inline rail is collapsed."
+          },
+          {
+            "name": "collapsedFooterSlot",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Rendered in the inline rail's footer while it is collapsed, in `footerSlot`'s place: the same controls at their smallest, stacked on the rail's axis, crossfading with the full form. The sheet never collapses, so it never shows."
           },
           {
             "name": "collapsible",

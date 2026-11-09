@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
+import { Button } from '../Button/Button';
+import { CircularButton } from '../CircularButton/CircularButton';
 import { ThreadPanel } from './ThreadPanel';
 
 /* All data here is fictional: Skylark is a made-up product, atlas-* are
@@ -96,6 +98,33 @@ export const Collapsed: Story = {
     newThreadLabel: 'New thread',
     controls: CONTROLS,
     profile: { name: 'Robin Vale', meta: 'Team' },
+  },
+};
+
+/** The footer's two forms, AppSidebar's: collapsed, `collapsedFooterSlot`
+ *  stands in for `footerSlot` with the same controls at their smallest,
+ *  stacked on the rail's axis. Both share one cell and crossfade, and the
+ *  hidden form is inert, so nothing invisible stays in the tab order. */
+export const CollapsedFooter: Story = {
+  args: {
+    logoText: 'Skylark',
+    expanded: false,
+    onExpandedChange: fn(),
+    newThreadLabel: 'New thread',
+    profile: { name: 'Robin Vale', meta: 'Team' },
+    footerSlot: <Button variant="secondary" size="compact" iconLeft="dark_mode" label="Dark mode" />,
+    collapsedFooterSlot: <CircularButton icon="dark_mode" variant="secondary" size="compact" ariaLabel="Dark mode" />,
+  },
+  play: async ({ canvasElement }) => {
+    const slots = [...canvasElement.querySelectorAll<HTMLElement>('.ds-thread-panel__footer-slot')];
+    const mini = slots.find((slot) => slot.classList.contains('ds-thread-panel__footer-slot--collapsed'));
+    const full = slots.find((slot) => slot !== mini);
+    // Collapsed: the small form is live and the full form is inert.
+    await expect(mini?.hasAttribute('inert')).toBe(false);
+    await expect(full?.hasAttribute('inert')).toBe(true);
+    await expect(mini?.querySelector('.ds-circular-button')).not.toBeNull();
+    // The two share one cell, so the footer keeps one height.
+    await expect(mini?.parentElement).toBe(full?.parentElement);
   },
 };
 

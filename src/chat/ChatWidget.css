@@ -840,11 +840,12 @@
    gives it back before the conversation drops under its floor (the 320px
    mirrors ARTIFACT_MIN_COLUMN_WIDTH in queries.ts). */
 .ds-chat-widget__rails[data-artifact-sized] > .ds-chat-widget__artifact-rail--open {
-  flex: 0 1 var(--ds-chat-artifact-width);
+  flex: 0 1 min(var(--ds-chat-artifact-width), var(--ds-chat-artifact-room, var(--ds-chat-artifact-width)));
 }
 
 .ds-chat-widget__rails[data-artifact-sized] > .ds-chat-widget {
-  flex: 1 0 320px;
+  flex: 1 0 0;
+  min-width: 320px;
 }
 
 /* The pointer drives the width frame by frame, so the glides stand down
@@ -901,16 +902,44 @@
   background: var(--color-text-secondary);
 }
 
-/* Expanded, the artifact has the widget: the conversation and the history
-   leave the row (and with them the tab order), and the card takes an inset
-   on its leading edge too. */
-.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget,
-.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget__threads-rail {
-  display: none;
+/* Expanded, the artifact takes the conversation's room: the conversation
+   folds to nothing beside it (fading first, so its reflow is never seen,
+   then leaving the tab order once the fold has finished) while the card
+   glides across and takes an inset on its leading edge too. The history
+   rail keeps its place. Collapsing runs the same glide back, the
+   conversation fading in once it has its room again.
+   Only the two grow shares move (the conversation's from 1 to 0, the
+   card's from 0 to 1, in the expanded seat rule further down); both bases hold
+   still, since a basis gliding against a share bows the split and the
+   conversation swells before it folds. The grip's floor for the
+   conversation steps aside at once on the way out and returns only once
+   the way back has finished, so it never shoves the glide. */
+.ds-chat-widget__rails > .ds-chat-widget {
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard) calc(var(--motion-duration-slow) - var(--motion-duration-base)),
+    /* ds-allow(motion): an instant step for the conversation's floor, the visibility idiom applied to min-width */
+
+    min-width 0s linear var(--motion-duration-slow),
+    visibility 0s linear 0s;
+}
+
+.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget {
+  flex-grow: 0;
+  min-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    /* ds-allow(motion): an instant step for the conversation's floor, the visibility idiom applied to min-width */
+
+    min-width 0s linear 0s,
+    visibility 0s linear var(--motion-duration-slow);
 }
 
 .ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget__artifact-rail--open {
-  flex: 1 1 0;
   margin-inline-start: var(--padding-500);
 }
 
@@ -1411,8 +1440,14 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
    (held to the room), so the open is the same glide every time; the
    grip's width takes over once the reader drags it, and the expanded
    state still takes the whole row. */
-.ds-chat-widget__rails:not([data-artifact-sized], [data-artifact-expanded]) > .ds-chat-widget__artifact-rail--open {
+.ds-chat-widget__rails:not([data-artifact-sized]) > .ds-chat-widget__artifact-rail--open {
   flex: 0 1 min(var(--ds-chat-artifact-rest-width), var(--ds-chat-artifact-room, var(--ds-chat-artifact-rest-width)));
+}
+
+/* Expanded, the seat keeps its basis (resting or the grip's) and takes a
+   grow share, so the glide is the shares trading and nothing else. */
+.ds-chat-widget__rails[data-artifact-expanded] > .ds-chat-widget__artifact-rail--open {
+  flex-grow: 1;
 }
 
 /* ============================================
@@ -1514,6 +1549,39 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   margin-inline-end: var(--ds-shell-gap);
 }
 
+/* Expanded, the raised conversation folds its gap and hairline away with
+   its width, and the card takes the conversation's exact seat: flush to
+   the history rail, as the conversation was, with no inset of its own. */
+.ds-chat-widget__rails[data-ds-shell='inset'] > .ds-chat-widget {
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard) calc(var(--motion-duration-slow) - var(--motion-duration-base)),
+    /* ds-allow(motion): an instant step for the conversation's floor, the visibility idiom applied to min-width */
+
+    min-width 0s linear var(--motion-duration-slow),
+    visibility 0s linear 0s;
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'][data-artifact-expanded] > .ds-chat-widget {
+  margin-inline-end: 0;
+  border-inline-width: 0;
+  transition:
+    flex-grow var(--motion-duration-slow) var(--motion-ease-emphasized),
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    border-width var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    /* ds-allow(motion): an instant step for the conversation's floor, the visibility idiom applied to min-width */
+
+    min-width 0s linear 0s,
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+.ds-chat-widget__rails[data-ds-shell='inset'][data-artifact-expanded] > .ds-chat-widget__artifact-rail--open {
+  margin-inline-start: 0;
+}
+
 .ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__aside-rail-inner,
 .ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__artifact-rail-inner {
   background-color: var(--ds-shell-surface);
@@ -1540,12 +1608,15 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   display: none;
 }
 
-/* The artifact header keeps room at its end for the two controls (a
-   default control each and their gap), so its own view toggle and expand
-   sit beside them and never pass under them as the card arrives; its close
-   is the header toggle's action, so it goes. */
+/* The artifact header keeps room at its end for the floating controls (as
+   many default controls as the cluster holds, each with the controls' own
+   gap), so its view toggle and expand sit beside them as one cluster and
+   never pass under them as the card arrives; its close is the header
+   toggle's action, so it goes. */
 .ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__artifact-rail-inner .ds-artifact-panel__header {
-  padding-inline-end: calc(var(--padding-300) * 2 + var(--control-height-default) * 2 + var(--gap-100));
+  padding-inline-end: calc(
+    var(--padding-300) + var(--ds-chat-action-count, 2) * (var(--control-height-default) + var(--gap-100))
+  );
 }
 
 .ds-chat-widget__rails[data-ds-shell='inset'] .ds-chat-widget__artifact-rail-inner .ds-artifact-panel__controls > :last-child {

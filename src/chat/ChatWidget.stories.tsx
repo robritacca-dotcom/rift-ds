@@ -644,6 +644,110 @@ export const Artifacts: Story = {
   },
 };
 
+/**
+ * Clicks `button` and samples the conversation's width every frame for
+ * longer than the glide: the samples must only move one way (a bow in the
+ * split reads as a bounce), and each run ends where the other began.
+ */
+async function sampleGlide(conversation: HTMLElement, button: HTMLElement) {
+  const widths = [conversation.getBoundingClientRect().width];
+  await userEvent.click(button);
+  const start = performance.now();
+  while (performance.now() - start < 700) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    widths.push(conversation.getBoundingClientRect().width);
+  }
+  return widths;
+}
+
+const monotonic = (widths: number[], direction: 1 | -1) =>
+  widths.every((width, i) => i === 0 || direction * (width - widths[i - 1]) >= -0.5);
+
+/** The expand round trip both expand stories run. */
+async function expandAndBack(canvasElement: HTMLElement, checkExpanded?: () => Promise<void>) {
+  const canvas = within(canvasElement);
+  const history = await canvas.findByText('Plan the launch week', undefined, { timeout: 4000 });
+  const composer = canvas.getByRole('textbox');
+  const conversation = canvasElement.querySelector<HTMLElement>('.ds-chat-widget__rails > .ds-chat-widget')!;
+  await userEvent.type(composer, 'Draft the launch page{Enter}');
+  await waitFor(() => expect(canvas.getByTitle('Launch page')).toBeVisible(), { timeout: 15000 });
+  await waitFor(() => expect(canvas.getByRole('button', { name: 'Expand the artifact' })).toBeVisible(), { timeout: 4000 });
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  // The conversation folds without first swelling, and leaves once its fold has finished; the history never does.
+  const out = await sampleGlide(conversation, canvas.getByRole('button', { name: 'Expand the artifact' }));
+  await expect(monotonic(out, -1)).toBe(true);
+  await waitFor(() => expect(composer).not.toBeVisible(), { timeout: 4000 });
+  await expect(history).toBeVisible();
+  await checkExpanded?.();
+  // The way back is the same glide reversed, to the same width.
+  const back = await sampleGlide(conversation, canvas.getByRole('button', { name: 'Collapse the artifact' }));
+  await expect(monotonic(back, 1)).toBe(true);
+  await expect(Math.abs(back[back.length - 1] - out[0])).toBeLessThan(1);
+  await waitFor(() => expect(composer).toBeVisible(), { timeout: 4000 });
+  // Escape steps an expanded card back too.
+  await userEvent.click(canvas.getByRole('button', { name: 'Expand the artifact' }));
+  await waitFor(() => expect(composer).not.toBeVisible(), { timeout: 4000 });
+  await userEvent.keyboard('{Escape}');
+  await waitFor(() => expect(composer).toBeVisible(), { timeout: 4000 });
+  await expect(history).toBeVisible();
+}
+
+/* Narrow enough that the card's resting width is over half the row, where
+   a basis gliding against a grow share would bow the split. */
+function ExpandStage(args: ChatWidgetProps) {
+  return (
+    <ChatProvider
+      transport={createDemoTransport(FAST)}
+      renderers={DEMO_RENDERERS}
+      artifactRenderers={DEMO_ARTIFACT_RENDERERS}
+      followups={false}
+      feedback={false}
+      threads={DEMO_THREADS}
+    >
+      <OpenOnMount>
+        <Stage width={1180} height={760}>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  );
+}
+
+/**
+ * Expanded, the artifact takes the conversation's room and nothing else:
+ * the history rail keeps its place, the conversation folds out of the row
+ * and the tab order in one smooth glide, and Escape gives it back.
+ */
+export const ArtifactExpanded: Story = {
+  args: { artifacts: true, threads: true, threadsProps: { defaultExpanded: true } },
+  render: (args) => <ExpandStage {...args} />,
+  play: async ({ canvasElement }) => expandAndBack(canvasElement),
+};
+
+/**
+ * The same in the inset shell mode: the card's header keeps room for
+ * exactly the controls floating over it, and expanded, the card takes the
+ * raised conversation's seat, flush to the history rail.
+ */
+export const ArtifactExpandedInset: Story = {
+  args: { artifacts: true, threads: true, layout: 'inset', threadsProps: { defaultExpanded: true } },
+  render: (args) => <ExpandStage {...args} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expandAndBack(canvasElement, async () => {
+      const rail = canvasElement.querySelector('.ds-chat-widget__threads-rail')!.getBoundingClientRect();
+      const seat = canvasElement.querySelector('.ds-chat-widget__artifact-rail--open')!.getBoundingClientRect();
+      await waitFor(() => expect(Math.abs(seat.left - rail.right)).toBeLessThan(1), { timeout: 2000 });
+      // The card's own expand sits the controls' gap from the floating panel toggle.
+      const expand = canvas.getByRole('button', { name: 'Collapse the artifact' }).getBoundingClientRect();
+      const toggle = canvas.getByRole('button', { name: 'Hide the artifact panel' }).getBoundingClientRect();
+      const controls = canvasElement.querySelector('.ds-artifact-panel__controls')!;
+      const gap = parseFloat(getComputedStyle(controls).columnGap) || 0;
+      await expect(Math.abs(toggle.left - expand.right - gap)).toBeLessThan(1);
+    });
+  },
+};
+
 /* The stage both copy stories share: every slot that writes visible English
    switched on, so each string can be found on screen. */
 function CopyStage(args: ChatWidgetProps) {

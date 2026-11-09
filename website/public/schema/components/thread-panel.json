@@ -293,6 +293,13 @@
           "description": "Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract."
         },
         {
+          "name": "collapsedFooterSlot",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert."
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

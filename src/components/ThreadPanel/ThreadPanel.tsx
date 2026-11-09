@@ -189,6 +189,8 @@ type ThreadPanelOwnProps = {
   profile?: ThreadPanelProfile;
   /** Rendered in the footer above the profile row — a theme toggle, a storage meter. Fades out while collapsed, AppSidebar's contract. */
   footerSlot?: React.ReactNode;
+  /** Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert. */
+  collapsedFooterSlot?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -412,6 +414,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
       expandLabel = 'Expand the panel',
       profile,
       footerSlot,
+      collapsedFooterSlot,
       className = '',
       linkComponent,
       ...rest
@@ -442,7 +445,7 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
 
     const showHeader = Boolean(logo || logoText || onExpandedChange);
     const showNew = Boolean(newThreadLabel || onNewThread || newThreadHref);
-    const showFooter = Boolean(footerSlot || profile);
+    const showFooter = Boolean(footerSlot || collapsedFooterSlot || profile);
 
     /* Collapsed, the logo is the expand affordance (AppSidebar's pattern);
        the toggle carries it only while expanded, or always when there is
@@ -892,8 +895,25 @@ export const ThreadPanel = React.forwardRef<HTMLDivElement, ThreadPanelProps>(
 
         {showFooter && (
           <div className={`${baseClass}__footer`}>
-            {footerSlot && (
-              <div className={`${baseClass}__footer-slot`}>{footerSlot}</div>
+            {/* The two forms share one cell, so the footer keeps one height
+                through the collapse; the hidden form is inert, so no invisible
+                control stays in the tab order. */}
+            {(footerSlot || collapsedFooterSlot) && (
+              <div className={`${baseClass}__footer-slots`}>
+                {footerSlot && (
+                  <div className={`${baseClass}__footer-slot`} inert={!expanded}>
+                    {footerSlot}
+                  </div>
+                )}
+                {collapsedFooterSlot && (
+                  <div
+                    className={`${baseClass}__footer-slot ${baseClass}__footer-slot--collapsed`}
+                    inert={expanded}
+                  >
+                    {collapsedFooterSlot}
+                  </div>
+                )}
+              </div>
             )}
             {profile && (
               <div

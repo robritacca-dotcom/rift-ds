@@ -864,6 +864,35 @@
   padding-inline-start: var(--padding-200);
 }
 
+/* The footer's two forms share one cell, AppSidebar's: the slot keeps one
+   height in both states, so the rail never snaps, and the expanded form
+   fades out as the collapsed form fades in. The collapsed form stacks its
+   controls (the same ones at their smallest) on the rail's axis. */
+.ds-thread-panel__footer-slots {
+  display: grid;
+  min-width: 0;
+}
+
+.ds-thread-panel__footer-slots > .ds-thread-panel__footer-slot {
+  grid-area: 1 / 1;
+}
+
+.ds-thread-panel__footer-slot--collapsed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-200);
+  padding-inline-start: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-thread-panel--expanded .ds-thread-panel__footer-slot--collapsed {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* The rails' one profile block, AppSidebar's: a 40px avatar, the name over
    the meta line in paragraph type, AppSidebar's avatar-to-name gap.
    Collapsed, the avatar sits on the rail's axis (12 + 40 + 12 = 64);

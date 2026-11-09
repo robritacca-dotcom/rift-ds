@@ -76,7 +76,7 @@ import shaded from "@/components/StagedShader/ShadedChat.module.css";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
 import { ProductMark } from "../ProductMark/ProductMark";
-import SidebarSwitchers from "../SidebarSwitchers/SidebarSwitchers";
+import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { useChatBackdrop, useTemplateLayout } from "../TemplateShell/useTemplateLayout";
 
 /* ------------------------------------------------------------- the page */
@@ -167,6 +167,9 @@ function ChatHomeShell() {
             /* The templates' shared footer: the way back to the index above
                the theme controls. */
             footerSlot: <SidebarSwitchers showLayout backLink scope="chat" />,
+            /* Collapsed, the same switchers at their smallest, as the app
+               shells' rail keeps them. */
+            collapsedFooterSlot: <CollapsedSidebarSwitchers showLayout scope="chat" />,
           }}
           agent={{
             /* Closed on arrival, so the home screen opens on the board and the

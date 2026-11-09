@@ -36,10 +36,21 @@
   margin: var(--padding-300) var(--padding-300) 0;
   border-radius: var(--radius-300);
   overflow: hidden;
-  /* The slot carries its own surface, so drawn media — a chart, an SVG —
-     reads as the same image-shaped panel a photo would: one step in from
-     the card's crisp fill, so it shows as a slot in both themes. */
+  /* The slot carries its own surface, so drawn media — an SVG, an
+     illustration — reads as the same image-shaped panel a photo would: a
+     step in from the card's crisp fill, so it shows as a slot in both
+     themes. */
   background-color: var(--color-bg-container-secondary);
+}
+
+/* A chart's slot takes the primary container tone instead. The secondary
+   tone is the second elevation, a mid grey in dark mode (three steps
+   lighter than the card), and a plot drawn straight on it read as a grey
+   block with its fill washed out. The primary tone is the surface every
+   chart stands on elsewhere (its own panel's fill), a step in from the card
+   and nothing like a block. */
+.ds-message-card__media:has(.ds-chart) {
+  background-color: var(--color-bg-container-primary);
 }
 
 .ds-message-card__media img {
@@ -48,9 +59,9 @@
 }
 
 /* A Chart in the slot sheds its own panel chrome — the card is already the
-   panel, and the slot's page tone is the brightest surface in light mode and
-   the darkest in dark, so the drawing keeps maximum contrast against its
-   ground instead of sitting on a second container tone. */
+   panel, and the slot above gives it the same primary container tone its
+   own panel would, so the drawing sits on one surface, not a panel inside a
+   slot. */
 .ds-message-card__media .ds-chart {
   background-color: transparent;
   border: none;

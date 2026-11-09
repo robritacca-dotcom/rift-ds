@@ -31,6 +31,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Semantic tokens | `src/tokens/registry.json` (generated) | `src/tokens/registry.ts` | `scripts/validate-token-registry.mjs` |
 | Theme presets | `website/src/lib/theme/presets.ts` + `src/tokens/presets/` (generated) | `THEME_PRESETS` | `scripts/validate-preset-stylesheets.mjs`, `scripts/validate-theme-presets.mjs` |
 | Ambient background | `website/src/data/shader-background.json` | `website/src/data/shader-background.ts` | `scripts/validate-shader-background.mjs` |
+| Site backgrounds | `website/src/data/site-backgrounds.json` | `website/src/lib/shaders/background-storage.ts` | `scripts/validate-site-backgrounds.mjs` |
 | Dependency graph | `website/src/data/dependency-graph.generated.ts` | `website/src/data/dependency-graph.ts` | `scripts/validate-dependency-graph.mjs` |
 | Site chat corpus | `website/src/data/site-corpus.generated.ts` | same file | `scripts/validate-site-corpus.mjs`, `scripts/validate-chat-coverage.mjs`, `scripts/validate-corpus-coverage.mjs` |
 | Component prop API | `website/src/data/component-api.generated.ts` | same file | `scripts/validate-component-api.mjs` |
@@ -50,6 +51,7 @@ Notes an agent needs while editing them:
 - **Page summaries**: a new static page needs a summary and a starters pool, or must be chromeless; component pages derive theirs.
 - **Theme presets**: `presetOverrides` in `presets.ts` is the one composer the stylesheets and the playground export are written from; every preset sets every lever and passes the contrast gate.
 - **Ambient background**: the site's config for the library's `ShaderField`; tune it with `?tune=1` in dev. `BlurBackground` mounts once, in the root layout.
+- **Site backgrounds**: one row per pick the header's background menu offers, painted on every page and kept in localStorage like the theme pick; a row names a library `ShaderScene` and its tuning for each band, and the row with no scene is the field. The accessor's doc block owns the tuning rationale.
 - **Gestures**: every new drag grip on the site needs an entry with the setup that reaches it. No validator notices a missing one.
 - **Blocks** are source the consumer owns, never components; design.md's Blocks section owns the conventions.
 

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { AreaChart } from "rift-ds/components/Chart/AreaChart";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { Card } from "rift-ds/components/Card/Card";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
@@ -9,16 +8,19 @@ import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { DataTable, type DataTableColumn, type DataTableRow } from "rift-ds/components/DataTable/DataTable";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
 import { componentPages } from "@/data/component-pages";
 import styles from "./FeaturedComponents.module.css";
 
 /**
  * The featured row at the top of /components: a few component pages picked
  * by hand, each a case-study Card whose cover stages the real component on
- * one of the core accents. The label and description come from the
- * registries through componentPages, so a card never restates a fact; only
- * the pick, the accent and the staging live here. Each cover is inert: the
- * card is one link, and nothing inside it takes focus or a click.
+ * one of the core accents, or, where the component is itself a field (the
+ * shader scene), fills the cover with it. The label and description come
+ * from the registries through componentPages, so a card never restates a
+ * fact; only the pick, the accent and the staging live here. Each cover is
+ * inert: the card is one link, and nothing inside it takes focus or a
+ * click.
  */
 
 const STATUS_VARIANT = { Shipped: "positive", Waiting: "warning", Failed: "error" } as const;
@@ -46,16 +48,19 @@ const TABLE_ROWS: DataTableRow[] = [
   { id: "r5", values: { name: "Omar Vetrovs", status: "Waiting", price: "$1,747" } },
 ];
 
-const CHART_DATA = [
-  { month: "Jan", desktop: 186, mobile: 80 },
-  { month: "Feb", desktop: 305, mobile: 200 },
-  { month: "Mar", desktop: 237, mobile: 120 },
-  { month: "Apr", desktop: 273, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "Jun", desktop: 314, mobile: 240 },
-];
+/* The horizon as the card shows it: the limb at mid-height with the sun's
+   beam lifted, so the whole scene, sky, arc and world, fits a cover this
+   short. Held at module scope, so the scene sees the same object every
+   render. */
+const HORIZON_PARAMS = { crown: 0.5, beam: 1.4 };
 
-const STAGES: { slug: string; accent: "violet" | "cobalt" | "mint"; stage: React.ReactNode }[] = [
+type Stage =
+  /* A component set into an accent field, scaled down whole. */
+  | { slug: string; accent: "violet" | "cobalt" | "mint"; stage: React.ReactNode }
+  /* A component that is a field itself, filling the cover edge to edge. */
+  | { slug: string; accent?: undefined; fill: React.ReactNode };
+
+const STAGES: Stage[] = [
   {
     slug: "ai-chat",
     accent: "violet",
@@ -91,22 +96,8 @@ const STAGES: { slug: string; accent: "violet" | "cobalt" | "mint"; stage: React
     ),
   },
   {
-    slug: "area-chart",
-    accent: "mint",
-    stage: (
-      <AreaChart
-        title="Visitors"
-        subtitle="January to June"
-        data={CHART_DATA}
-        xKey="month"
-        series={[
-          { dataKey: "desktop", label: "Desktop" },
-          { dataKey: "mobile", label: "Mobile" },
-        ]}
-        stacked
-        height={160}
-      />
-    ),
+    slug: "shader-scene",
+    fill: <ShaderScene scene="horizon" params={HORIZON_PARAMS} />,
   },
 ];
 
@@ -119,18 +110,24 @@ export default function FeaturedComponents() {
     <section id="featured" className={styles.featured}>
       <SectionTitle title="Featured" divider={false} />
       <div className={styles.grid}>
-        {cards.map(({ page, accent, stage }) => (
+        {cards.map((card) => (
           <Card
-            key={page.slug}
+            key={card.page.slug}
             variant="case-study"
-            href={`/components/${page.slug}`}
+            href={`/components/${card.page.slug}`}
             linkComponent={Link}
-            title={page.label}
-            dek={page.description}
+            title={card.page.label}
+            dek={card.page.description}
             cover={
-              <div className={`${styles.cover} ${styles[accent]}`} inert>
-                <div className={styles.shot}>{stage}</div>
-              </div>
+              card.accent ? (
+                <div className={`${styles.cover} ${styles[card.accent]}`} inert>
+                  <div className={styles.shot}>{card.stage}</div>
+                </div>
+              ) : (
+                <div className={styles.cover} inert>
+                  {card.fill}
+                </div>
+              )
             }
           />
         ))}

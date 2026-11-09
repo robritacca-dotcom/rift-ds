@@ -21,6 +21,9 @@
 
 /* ---- Cover ---- */
 
+/* Positioned, so a component that fills the cover (ShaderScene fills its
+   positioned ancestor) takes the whole slot, which the Card gives its
+   aspect ratio. */
 .cover {
   position: relative;
   overflow: hidden;

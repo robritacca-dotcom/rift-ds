@@ -72,6 +72,25 @@
   padding: var(--gap-1000);
 }
 
+/* Bare, for a recording: no frame chrome, no padding ring, no card edge,
+   so the card is the whole footprint and nothing else is in the picture. */
+.bare,
+.bare .card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* The home page caps the frame at the footprint's own width; a recording's
+   footprint is the video's, so the cap stands down. */
+.bare {
+  max-width: none;
+}
+
+.bare .stage {
+  padding: 0;
+}
+
 /* The chat on the ground: the AI chat page's stage card, filling the
    footprint inside the ground's margin. */
 .card {

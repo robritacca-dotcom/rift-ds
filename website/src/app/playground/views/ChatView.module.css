@@ -136,86 +136,6 @@
 }
 
 /* A drag tracks the pointer; the glide comes back after. */
-/* The Shader lever: the theme's shader as the card's own ground, as in the
-   horizon lab. The card holds it and the frost in one layer under the
-   widget, and the widget's shell clears its plane, its surface and its blur
-   backdrop so the shader shows through (the shell's tokens are :where()
-   rules, so this class takes them). The threads rail keeps a near-solid
-   coat of the page, the lab's rail. */
-.widgetShaded {
-  /* The lab's rail coat: the page at 92%, for the rail and the inset ring. */
-  --chat-shader-coat: color-mix(in srgb, var(--color-bg-page-primary) 92%, transparent);
-
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.widgetShader {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.widgetShaded > :not(.widgetShader) {
-  position: relative;
-  z-index: 1;
-}
-
-.widgetShaded :global([data-ds-shell]) {
-  --ds-shell-plane: transparent;
-  --ds-shell-surface: transparent;
-  --ds-shell-backdrop-fill: transparent;
-  --ds-shell-backdrop-filter: none;
-  --ds-shell-rail-bg: var(--chat-shader-coat);
-}
-
-/* Inset: everything outside the raised surface (the rail and the ring
-   between the card's edge and the surface) takes the rail's coat, so the
-   shader shows only inside the surface. Drawn as one spread shadow wide
-   enough to reach every corner of the card, which clips it, rather than as
-   the plane, which would cover the shader under the cleared surface too.
-   A ring the width of the gap rounded off at the surface's corners and let
-   the shader through beside the rail and inside the card's own corners. The
-   rail clears its coat, since the shadow already lies under it. The rail
-   and the trailing panels stand above the surface (which is positioned),
-   so the coat lies under their contents rather than over them. */
-.widgetShaded :global([data-ds-shell="inset"]) {
-  --ds-shell-rail-bg: transparent;
-}
-
-.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget__threads-rail),
-.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget__aside-rail),
-.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget__artifact-rail) {
-  position: relative;
-  z-index: 1;
-}
-
-.widgetShaded :global([data-ds-shell="inset"] > .ds-chat-widget) {
-  box-shadow:
-    var(--ds-shell-surface-shadow),
-    0 0 0 100vmax var(--chat-shader-coat);
-}
-
-/* The frost: an even coat of glass over the shader, closed while the
-   welcome is up and fading in once a conversation starts, because a
-   transcript cannot be read over a moving field. */
-.widgetFrost {
-  position: absolute;
-  inset: 0;
-  background-color: var(--color-bg-glass);
-  backdrop-filter: blur(40px) saturate(1.3);
-  opacity: 0;
-  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard);
-}
-
-.widgetShaded[data-conversing] .widgetFrost {
-  opacity: 1;
-}
-
 .resizing .widget {
   transition: none;
 }
@@ -514,12 +434,18 @@
   transform: rotate(-45deg);
 }
 
-/* The closed widget's entry point, centred where the widget was. The
-   button's own solid field (--color-ai-button-bg) keeps it legible over
-   the blur field; the wrapper adds only the floating elevation — no
-   backdrop-filter, since the fill is opaque and an ancestor backdrop
-   root is the trap design.md's FAB note warns about. */
+/* The closed widget's entry point, in the middle of the stage both ways:
+   the stage seats its children from the top (the widget starts level with
+   the rails), but a lone pill at the top of an empty zone read as left
+   behind, so it centres itself in the zone and across it, whichever edge
+   the stage is docked to. The button's own solid field
+   (--color-ai-button-bg) keeps it legible over the blur field; the wrapper
+   adds only the floating elevation — no backdrop-filter, since the fill is
+   opaque and an ancestor backdrop root is the trap design.md's FAB note
+   warns about. */
 .launcher {
+  align-self: center;
+  margin-inline: auto;
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-floating);
 }

@@ -8,11 +8,13 @@ import { MentionMenu } from "rift-ds/components/Mention/Mention";
 import { filterMentionItems, type MentionItem } from "rift-ds/components/Mention/mentions";
 import { ModelPicker } from "rift-ds/components/ModelPicker/ModelPicker";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
-import { ChatWidget, createSimTransport, useChatWidget } from "rift-ds/chat";
+import { ChatWidget, createSimTransport, useChatWidget, type ChatLayout } from "rift-ds/chat";
+import { ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
 import { DEMO_ARTIFACT_RENDERERS, DEMO_MODELS, DEMO_RENDERERS, demoAgentTabs } from "rift-ds/chat/demo";
 import { MOTION_AUTOPLAY_INTERVAL_MS } from "rift-ds/tokens/motion";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import DotBackground from "@/components/DotBackground/DotBackground";
+import shaded from "@/components/StagedShader/ShadedChat.module.css";
 import PhoneKeyboard, { findKey } from "@/components/PhoneKeyboard/PhoneKeyboard";
 import {
   FINANCE_MENTIONS,
@@ -57,6 +59,12 @@ import styles from "./HomeChatFrame.module.css";
    than dragged, the history and the board report open as sheets, and the
    reel opens and closes them the way a thumb would, with a soft keyboard
    up while it types.
+
+   Four optional props restage it for a recording, with the home page's
+   look as every default: the card's shell mode, the Horizon scene under it
+   through the shaded-chat recipe, a bare mode that drops the frame's
+   chrome, and a footprint of the video's own size (the local reel lab
+   under labs/local is the one host).
    ============================================ */
 
 const TARGET_HREF = "/playground?view=chat";
@@ -198,7 +206,30 @@ interface Staging {
   mention: { x: number; y: number; items: MentionItem[]; query: string } | null;
 }
 
-export default function HomeChatFrame() {
+export default function HomeChatFrame({
+  layout,
+  shader = false,
+  bare = false,
+  footprint = FOOTPRINT,
+}: {
+  /** The chat card's shell mode (ChatWidget's `layout`); the home page
+      leaves it to the widget's own default. A recording or a lab can stage
+      another. */
+  layout?: ChatLayout;
+  /** Stand the card on the Horizon scene, frosted once the conversation
+      starts, through the shaded-chat recipe the playground card and the
+      chat home share. Off on the home page, where the card sits on the
+      stage's dot ground. */
+  shader?: boolean;
+  /** The card alone: no header, no links, no dot ground and no frame
+      chrome, the card filling the footprint edge to edge, for a recording
+      of the reel. */
+  bare?: boolean;
+  /** The stage's footprint in CSS pixels; the home page's is 1440x1040, a
+      recording's is its video size. The reel measures the DOM, so only the
+      cursor's entry point reads it. */
+  footprint?: { w: number; h: number };
+} = {}) {
   const frameRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -216,9 +247,9 @@ export default function HomeChatFrame() {
     return () => observer.disconnect();
   }, []);
 
-  const scale = width > 0 ? width / FOOTPRINT.w : 0;
+  const scale = width > 0 ? width / footprint.w : 0;
   const toggleLabels = width >= HEADER_TOGGLE_LABELS_MIN;
-  const showHeader = width === 0 || width >= HEADER_MIN;
+  const showHeader = !bare && (width === 0 || width >= HEADER_MIN);
   const [transport, setTransport] = useState(() => createSimTransport(FINANCE_SCRIPT.build()));
 
   /* A switch starts the script over, on a fresh transport. The transport
@@ -240,6 +271,7 @@ export default function HomeChatFrame() {
      and the history waits behind the header's menu. */
   const widget = (
     <ChatWidget
+      layout={layout}
       title={FINANCE_PRODUCT}
       tagline="What should we look at today?"
       showStarters={false}
@@ -270,23 +302,23 @@ export default function HomeChatFrame() {
   return (
     <div
       ref={frameRef}
-      className={styles.frame}
-      style={{ aspectRatio: `${FOOTPRINT.w} / ${FOOTPRINT.h}`, "--stage-scale": scale, "--header-room": `${HEADER_ROOM}px` } as React.CSSProperties}
+      className={`${styles.frame} ${bare ? styles.bare : ""}`}
+      style={{ aspectRatio: `${footprint.w} / ${footprint.h}`, "--stage-scale": scale, "--header-room": `${HEADER_ROOM}px` } as React.CSSProperties}
     >
       {scale > 0 && (
         <div
           ref={stageRef}
           className={styles.stage}
           style={{
-            width: FOOTPRINT.w,
-            height: FOOTPRINT.h,
+            width: footprint.w,
+            height: footprint.h,
             paddingBlockStart: showHeader ? HEADER_ROOM : undefined,
             transform: `scale(${scale})`,
           }}
           aria-hidden="true"
           inert
         >
-          <DotBackground contained />
+          {!bare && <DotBackground contained />}
           <SiteChatProvider
             key={`chat-${device}`}
             transport={transport}
@@ -301,8 +333,15 @@ export default function HomeChatFrame() {
               fileRef={fileRef}
               setStaging={setStaging}
               phone={phone}
+              footprint={footprint}
             />
-            {phone ? <Phone>{widget}</Phone> : <div className={styles.card}>{widget}</div>}
+            {phone ? (
+              <Phone>{widget}</Phone>
+            ) : shader ? (
+              <ShadedCard>{widget}</ShadedCard>
+            ) : (
+              <div className={styles.card}>{widget}</div>
+            )}
           </SiteChatProvider>
           {staging.mention && (
             <MentionMenu
@@ -326,7 +365,7 @@ export default function HomeChatFrame() {
           <Cursor key={`cursor-${device}`} ref={cursorRef} touch={phone} name={CURSOR_NAME} />
         </div>
       )}
-      <Link href={TARGET_HREF} className={styles.hit} aria-label="Open the AI chat playground" />
+      {!bare && <Link href={TARGET_HREF} className={styles.hit} aria-label="Open the AI chat playground" />}
       {/* The header sits above the link, so a press on the toggle or its
           links does its own thing rather than opening the playground. */}
       {showHeader && (
@@ -354,6 +393,27 @@ export default function HomeChatFrame() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/** The stage card standing on the Horizon scene: the shaded-chat recipe
+    (ShadedChat.module.css) over the card's own frame, with the scene on its
+    sinking plate and the frost that closes once there is a transcript, as
+    on the playground's card. Inside the provider, so it can read the
+    conversation. */
+function ShadedCard({ children }: { children: React.ReactNode }) {
+  const { turns, live } = useChatWidget();
+  const conversing = turns.length > 0 || Boolean(live);
+  return (
+    <div className={`${styles.card} ${shaded.shaded}`} data-conversing={conversing ? "" : undefined}>
+      <div className={shaded.shader} aria-hidden="true">
+        <div className={shaded.plate}>
+          <ShaderScene scene="horizon" />
+        </div>
+        <div className={shaded.frost} />
+      </div>
+      {children}
     </div>
   );
 }
@@ -417,6 +477,7 @@ function Reel({
   fileRef,
   setStaging,
   phone,
+  footprint,
 }: {
   frameRef: React.RefObject<HTMLDivElement | null>;
   stageRef: React.RefObject<HTMLDivElement | null>;
@@ -425,12 +486,18 @@ function Reel({
   setStaging: React.Dispatch<React.SetStateAction<Staging>>;
   /** The widget is in the phone, so the reel taps rather than points. */
   phone: boolean;
+  /** The stage's footprint, for the cursor's entry point and the scale. */
+  footprint: { w: number; h: number };
 }) {
   const chat = useChatWidget();
-  /* The latest state and actions, read as the reel runs. */
+  /* The latest state and actions, read as the reel runs. The footprint
+     rides the same way, so a host passing a fresh object never restarts
+     the loop. */
   const chatRef = useRef(chat);
+  const footprintRef = useRef(footprint);
   useEffect(() => {
     chatRef.current = chat;
+    footprintRef.current = footprint;
   });
   const [inView, setInView] = useState(false);
 
@@ -465,8 +532,8 @@ function Reel({
     /* Where the cursor is, in footprint pixels; it enters from the lower
        right, or beside the phone's lower edge. */
     const at = phone
-      ? { x: (FOOTPRINT.w + PHONE.w) / 2 + 40, y: FOOTPRINT.h * 0.85 }
-      : { x: FOOTPRINT.w * 0.82, y: FOOTPRINT.h * 0.9 };
+      ? { x: (footprintRef.current.w + PHONE.w) / 2 + 40, y: footprintRef.current.h * 0.85 }
+      : { x: footprintRef.current.w * 0.82, y: footprintRef.current.h * 0.9 };
     let swing = 1;
     /* The staged file, while the cursor carries it: its offset from the tip. */
     let carrying: { dx: number; dy: number } | null = null;
@@ -511,7 +578,7 @@ function Reel({
       });
 
     const stage = () => stageRef.current!;
-    const scaleNow = () => stage().getBoundingClientRect().width / FOOTPRINT.w;
+    const scaleNow = () => stage().getBoundingClientRect().width / footprintRef.current.w;
 
     const place = () => {
       const el = cursorRef.current;
@@ -525,7 +592,7 @@ function Reel({
         of a text field, where a person would click to type. */
     const pointOn = (el: Element, text = false) => {
       const s = stage().getBoundingClientRect();
-      const k = s.width / FOOTPRINT.w;
+      const k = s.width / footprintRef.current.w;
       const r = el.getBoundingClientRect();
       const x = text ? r.left + Math.min(r.width * 0.25, 160 * k) : r.left + r.width / 2;
       return { x: (x - s.left) / k, y: (r.top + r.height / 2 - s.top) / k };
@@ -536,7 +603,7 @@ function Reel({
     const measure = document.createElement("canvas").getContext("2d");
     const textStart = (field: HTMLElement, prefix: string) => {
       const s = stage().getBoundingClientRect();
-      const k = s.width / FOOTPRINT.w;
+      const k = s.width / footprintRef.current.w;
       const style = getComputedStyle(field);
       const left = (field.getBoundingClientRect().left - s.left) / k + parseFloat(style.paddingInlineStart);
       if (!measure) return left;

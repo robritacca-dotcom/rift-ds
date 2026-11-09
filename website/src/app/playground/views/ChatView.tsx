@@ -22,6 +22,7 @@ import {
 } from "rift-ds/chat/demo";
 import PhoneKeyboard, { findKey } from "@/components/PhoneKeyboard/PhoneKeyboard";
 import styles from "./ChatView.module.css";
+import shaded from "@/components/StagedShader/ShadedChat.module.css";
 
 /** The composer's placeholder when the Placeholder lever is empty. The
     simulated stage has mentions on, so its line says how to reach them;
@@ -530,7 +531,7 @@ export default function ChatView({
         !takeover && stageDocked ? styles.widgetDocked : "",
         !takeover && placeable && floating ? styles.widgetFloating : "",
         takeover ? styles.widgetFull : "",
-        shader ? styles.widgetShaded : "",
+        shader ? shaded.shaded : "",
       ]
         .filter(Boolean)
         .join(" ")}
@@ -559,9 +560,9 @@ export default function ChatView({
         /* The card's own ground: the shader, then the frost that closes
            over it once the conversation starts. Inside the card, so it is
            part of the frame and never the page. */
-        <div className={styles.widgetShader} aria-hidden="true">
-          {shader}
-          <div className={styles.widgetFrost} />
+        <div className={shaded.shader} aria-hidden="true">
+          <div className={shaded.plate}>{shader}</div>
+          <div className={shaded.frost} />
         </div>
       )}
       <ChatWidget

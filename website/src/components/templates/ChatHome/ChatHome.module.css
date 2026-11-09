@@ -16,6 +16,12 @@
   overflow: hidden;
 }
 
+/* The ground the chat stands on: the shaded-chat recipe (ShadedChat.module.css)
+   positions it and clips the shader to it, and it fills the pinned shell. */
+.ground {
+  height: 100%;
+}
+
 /* The Revenue-style tile's period note, beside its title. */
 .widgetNote {
   font-family: var(--font-caption-family);

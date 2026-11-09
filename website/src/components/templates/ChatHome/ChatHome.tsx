@@ -17,11 +17,18 @@
  *     it has no close and no full-screen toggle, and it fills the viewport
  *     at every width, which is the chat's takeover mode held permanently.
  *   - The screen takes a shell choice like every app-shell template, its
- *     own (the footer's shell switch writes it), flush with the blur
- *     backdrop until the visitor picks, the live site chat's look:
- *     ChatWidget's `layout` seats the chat flush, floating or inset from
- *     the same shell recipe TemplateShell draws, and in flush its
+ *     own (the footer's shell switch writes it), flush until the visitor
+ *     picks: ChatWidget's `layout` seats the chat flush, floating or inset
+ *     from the same shell recipe TemplateShell draws, and in flush its
  *     `backdrop` sets blur or solid, a lever only a chat has.
+ *   - The screen stands on a shader, the Horizon scene, as the playground's
+ *     chat card does under its Shader lever: the same shaded-chat recipe
+ *     (ShadedChat.module.css) clears the shell's plane so the scene shows
+ *     through, keeps the history rail on its near-solid coat, and frosts
+ *     the scene over once a conversation starts, since a transcript cannot
+ *     be read over a moving field. The slot follows the playground's pick
+ *     when it stages this screen (StagedShader), Horizon everywhere else,
+ *     and the page's own ambient background stays hidden beneath it.
  *   - The history rail is the widget's built-in threads rail over the
  *     provider's thread lifecycle, so it is an inline rail on a wide window
  *     and a sheet behind the header's menu on a narrow one, with no
@@ -63,6 +70,9 @@ import {
   demoAgentTabs,
 } from "rift-ds/chat/demo";
 import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
+import { ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
+import StagedShader from "@/components/StagedShader/StagedShader";
+import shaded from "@/components/StagedShader/ShadedChat.module.css";
 import { useStagedProductName } from "../useStagedProductName";
 import styles from "./ChatHome.module.css";
 import { ProductMark } from "../ProductMark/ProductMark";
@@ -92,16 +102,17 @@ export default function ChatHome() {
 
 function ChatHomeShell() {
   const product = useStagedProductName("Acme Corp");
-  const { setOpen, send } = useChatWidget();
+  const { setOpen, send, turns, live } = useChatWidget();
+  /* A conversation frosts the scene, as on the playground's card. */
+  const conversing = turns.length > 0 || Boolean(live);
   const takeover = useTakeoverViewport();
   /* The chat home's own shell choice (its footer switch writes it), flush
-     with the blur backdrop until the visitor picks: the same three modes
-     TemplateShell draws, through ChatWidget's layout, and the backdrop,
-     which only a chat carries (it can rest over a page, as the site chat
-     does, or be its own; a template is always the floor). */
+     until the visitor picks: the same three modes TemplateShell draws,
+     through ChatWidget's layout, and the backdrop lever only a chat
+     carries: under the scene the shaded recipe reads it for the frost's
+     finish, glass for blur and the page floor for solid. */
   const layout = useTemplateLayout("chat");
   const backdrop = useChatBackdrop();
-  const blur = layout === "flush" && backdrop === "blur";
 
   /* The chat's state machine reads `open` for everything a visible chat
      does (composer focus, the welcome's reveal). Here the chat is the page,
@@ -111,59 +122,69 @@ function ChatHomeShell() {
   }, [setOpen]);
 
   return (
-    /* The layout's own switch for the ambient background: the screen sits
-       on the flat page colour like the rest of the family, except under the
-       flush blur backdrop, which frosts the field run full bleed. */
+    /* The screen's ground is its own shader, so the site's ambient
+       background stands down beneath it. */
     <div className={styles.shell}>
-      {blur ? <div data-bg-full-bleed hidden /> : <div data-bg-hidden hidden />}
-      <ChatWidget
-        layout={layout}
-        backdrop={backdrop}
-        fullscreenEnabled={false}
-        closeEnabled={false}
-        compact={takeover}
-        phone={takeover}
-        title={product}
-        tagline="How can we help you today?"
-        showStarters={false}
-        fileAttachments
-        mentions={DEMO_MENTIONS}
-        composerActions={<ModelPicker models={DEMO_MODELS} placement="top" />}
-        widgets={<DemoBoard onAsk={(prompt) => send(prompt)} />}
-        widgetsLayout="scroll"
-        widgetsWidth="wide"
-        threads
-        /* The strip of open sessions, on a wide window only: a phone keeps
-           the plain header, as on the playground stage. */
-        tabs={!takeover}
-        threadsProps={{
-          /* The sheet names the product and skips the collapse (its scrim is
-             the dismissal); the inline rail skips the name, since the chat
-             header already says it, and offers the collapse. */
-          logo: <ProductMark />,
-          logoText: product,
-          defaultExpanded: true,
-          profile: { name: "Jordan Reyes", meta: "jordan@acme.example" },
-          /* The templates' shared footer: the way back to the index above
-             the theme controls. */
-          footerSlot: <SidebarSwitchers showLayout backLink scope="chat" />,
-        }}
-        agent={{
-          /* Closed on arrival, so the home screen opens on the board and the
-             conversation; the header's agent toggle raises it. The trailing
-             seat holds one panel at a time, so the artifact panel takes over
-             when an answer makes one or its header button asks. */
-          defaultOpen: false,
-          tabs: demoAgentTabs(product),
-          profile: {
-            name: product,
-            status: "Connected",
-            onEdit: () => {},
-            editLabel: `Edit ${product}`,
-          },
-        }}
-        artifacts
-      />
+      <div data-bg-hidden hidden />
+      <div
+        className={`${styles.ground} ${shaded.shaded}`}
+        data-conversing={conversing ? "" : undefined}
+      >
+        <div className={shaded.shader} aria-hidden="true">
+          <div className={shaded.plate}>
+            <StagedShader className={shaded.fill} field={() => <ShaderScene scene="horizon" />} />
+          </div>
+          <div className={shaded.frost} />
+        </div>
+        <ChatWidget
+          layout={layout}
+          backdrop={backdrop}
+          fullscreenEnabled={false}
+          closeEnabled={false}
+          compact={takeover}
+          phone={takeover}
+          title={product}
+          tagline="How can we help you today?"
+          showStarters={false}
+          fileAttachments
+          mentions={DEMO_MENTIONS}
+          composerActions={<ModelPicker models={DEMO_MODELS} placement="top" />}
+          widgets={<DemoBoard onAsk={(prompt) => send(prompt)} />}
+          widgetsLayout="scroll"
+          widgetsWidth="wide"
+          threads
+          /* The strip of open sessions, on a wide window only: a phone keeps
+             the plain header, as on the playground stage. */
+          tabs={!takeover}
+          threadsProps={{
+            /* The sheet names the product and skips the collapse (its scrim is
+               the dismissal); the inline rail skips the name, since the chat
+               header already says it, and offers the collapse. */
+            logo: <ProductMark />,
+            logoText: product,
+            defaultExpanded: true,
+            profile: { name: "Jordan Reyes", meta: "jordan@acme.example" },
+            /* The templates' shared footer: the way back to the index above
+               the theme controls. */
+            footerSlot: <SidebarSwitchers showLayout backLink scope="chat" />,
+          }}
+          agent={{
+            /* Closed on arrival, so the home screen opens on the board and the
+               conversation; the header's agent toggle raises it. The trailing
+               seat holds one panel at a time, so the artifact panel takes over
+               when an answer makes one or its header button asks. */
+            defaultOpen: false,
+            tabs: demoAgentTabs(product),
+            profile: {
+              name: product,
+              status: "Connected",
+              onEdit: () => {},
+              editLabel: `Edit ${product}`,
+            },
+          }}
+          artifacts
+        />
+      </div>
     </div>
   );
 }

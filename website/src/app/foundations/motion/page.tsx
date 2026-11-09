@@ -281,7 +281,7 @@ export default function MotionPage() {
             </p>
             <p className={styles.sectionNote}>
               That guard is CSS, so it cannot reach animation driven from JavaScript. The
-              background field runs on the GPU through a frame loop, which means it has to
+              background shader runs on the GPU through a frame loop, which means it has to
               check the preference itself. It does: with reduced motion set, it draws a
               single still frame and never starts animating. The charts animate their
               marks in from JavaScript too, and delegate the same check to recharts,
@@ -304,7 +304,7 @@ export default function MotionPage() {
               reduced-motion collapse deliberately leaves them alone: a toast that
               dismisses itself faster would help nobody. The ones that pace an animation
               check the preference in JavaScript instead, the same way the background
-              field does.
+              shader does.
             </p>
           </section>
         </main>

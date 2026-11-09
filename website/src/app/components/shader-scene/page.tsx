@@ -76,7 +76,9 @@ export default function ShaderScenePage() {
               Two scenes, picked with <code>scene</code>. The horizon sets a
               fixed sun at the top of a curved limb over hazy land and a
               moving ocean. The rift opens at its middle and streams light
-              outwards. Two stages and no more: each one is a live GL context.
+              outwards. The horizon is also one of this site&rsquo;s own
+              backgrounds, picked from the header. Two stages and no more:
+              each one is a live GL context.
             </p>
             <div className={styles.stageGrid}>
               <Stage caption='scene="horizon"'>

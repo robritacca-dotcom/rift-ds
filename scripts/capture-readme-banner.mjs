@@ -81,9 +81,12 @@ await page.waitForTimeout(2_000);
 
 // The chat frame's staged demo cursor tours the frame and rests on its
 // top-left corner, over the frame's own heading; a still freezes it there,
-// so the banner leaves it out.
+// so the banner leaves it out. A dev server's own corner badge is not the
+// site either, so a shot taken from `next dev` leaves that out too.
 await page.addStyleTag({
-  content: 'section[class*="chatFrame"] [class*="_cursor"] { visibility: hidden !important; }',
+  content:
+    'section[class*="chatFrame"] [class*="_cursor"] { visibility: hidden !important; }' +
+    ' nextjs-portal { display: none !important; }',
 });
 
 const tmp = mkdtempSync(join(tmpdir(), 'rift-banner-'));

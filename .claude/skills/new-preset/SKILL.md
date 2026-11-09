@@ -71,7 +71,7 @@ Then `npm run verify` — the mirror guards and the site build exercise everythi
 
 ### 4. Prove it live
 
-Pick the new theme from the home page's selector and walk a component page, a chart, and the chat surfaces in both light and dark, plus a doc page with an h2 over an h3 (or the playground's Type view) when the two tier weights are equal or close, since size is then carrying the hierarchy alone. Then open its specimen page, `/foundations/themes/<id>`, in both modes: the header, the description, the shader banner and every swatch, type row and control on it are drawn in the theme, so it is the quickest single look at the whole theme, and the hex values on its swatches are the ones the theme actually resolves to. The completeness gate proves resolution; only eyes prove the look holds together.
+Pick the new theme from the home page's selector and walk a component page, a chart, and the chat surfaces in both light and dark and under each background in the header menu (Horizon reads the preset's `--color-ambient-*` roles on every page, so the ambient sextet has a second ground to hold up on), plus a doc page with an h2 over an h3 (or the playground's Type view) when the two tier weights are equal or close, since size is then carrying the hierarchy alone. Then open its specimen page, `/foundations/themes/<id>`, in both modes: the header, the description, the shader banner and every swatch, type row and control on it are drawn in the theme, so it is the quickest single look at the whole theme, and the hex values on its swatches are the ones the theme actually resolves to. The completeness gate proves resolution; only eyes prove the look holds together.
 
 ## Guardrails
 

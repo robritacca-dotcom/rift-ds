@@ -31,6 +31,16 @@ export default function PrivacyPage() {
         </div>
 
         <div className={`${styles.section} animate-in animate-delay-2`}>
+          <h2 className={styles.sectionTitle}>Your picks</h2>
+          <p className={styles.body}>
+            The site remembers what you pick for it: light or dark, the
+            theme, the background, and a template&apos;s shell and backdrop.
+            They stay in your browser&apos;s local storage, on this device,
+            and are never sent anywhere.
+          </p>
+        </div>
+
+        <div className={`${styles.section} animate-in animate-delay-2`}>
           <h2 className={styles.sectionTitle}>The site chat</h2>
           <p className={styles.body}>
             The chat answers questions about this design system and its site.

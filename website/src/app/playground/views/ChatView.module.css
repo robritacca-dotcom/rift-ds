@@ -149,8 +149,15 @@
    inline with the card's rect, and the transition — the live panel's
    takeover glide, same duration and easing — carries the card between
    the two. The border fades rather than vanishing: border: none would
-   change border-width and snap the geometry mid-glide. */
-.widgetFull {
+   change border-width and snap the geometry mid-glide.
+
+   The doubled class outranks the shaded chat recipe's `position: relative`
+   (ShadedChat.module.css's .shaded, on this same element when the Shader
+   lever is on), whichever order the build loads the two stylesheets in.
+   Losing to it left the takeover in flow at the stage's offset, a viewport
+   wide, running off the screen's far edge. A fixed box is still the
+   containing block the recipe's shader layer needs. */
+.widgetFull.widgetFull {
   position: fixed;
   top: 0;
   left: 0;

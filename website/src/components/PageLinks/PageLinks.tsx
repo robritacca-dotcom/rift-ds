@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "rift-ds/components/Button/Button";
 import PageAgentDocs from "./PageAgentDocs";
+import PageFigmaLink from "./PageFigmaLink";
 import styles from "./PageLinks.module.css";
 import { STORYBOOK_URL } from "@/config/brand.generated";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
@@ -8,7 +9,7 @@ import { SHOW_FIGMA_LINKS } from "@/config/social";
 const STORYBOOK_BASE = STORYBOOK_URL;
 
 interface PageLinksProps {
-  /** Figma file URL — omit to hide the Figma button */
+  /** Figma URL override. Omit it and the button links the route's frame from figma-nodes.json, or hides when there is none. */
   figmaUrl?: string;
   /** Storybook story path (e.g. "/?path=/docs/components-button--docs") — omit to hide the Storybook button */
   storybookPath?: string;
@@ -140,7 +141,7 @@ export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substack
         />
       )}
 
-      {SHOW_FIGMA_LINKS && figmaUrl && (
+      {SHOW_FIGMA_LINKS && (figmaUrl ? (
         <Button
           label="Figma"
           variant="tertiary"
@@ -151,7 +152,10 @@ export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substack
           target="_blank"
           rel="noopener noreferrer"
         />
-      )}
+      ) : (
+        // Self-gated: links the route's frame from figma-nodes.json, if any.
+        <PageFigmaLink icon={<FigmaIcon />} />
+      ))}
 
       {storybookPath && (
         <Button

@@ -13,7 +13,7 @@ import type { ButtonProps } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
-import { BRAND_NAME, BRAND_SHORT, FIGMA_FILE_URL } from "@/config/brand.generated";
+import { BRAND_NAME, BRAND_SHORT } from "@/config/brand.generated";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 /* ============================================
    DEMO NAV BUTTON DATA
@@ -64,7 +64,6 @@ export default function NavigationPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Nav</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=155-7279`}
               storybookPath="/?path=/docs/components-nav--docs"
             />
           </div>

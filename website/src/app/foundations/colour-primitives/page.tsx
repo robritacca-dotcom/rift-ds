@@ -11,7 +11,6 @@ import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { Tooltip } from "rift-ds/components/Tooltip/Tooltip";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-primitives");
 
@@ -277,7 +276,6 @@ export default function PrimitiveColoursPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Primitive colours</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=155-6434`}
               storybookPath="/?path=/docs/foundations-tokens--docs"
             />
           </div>

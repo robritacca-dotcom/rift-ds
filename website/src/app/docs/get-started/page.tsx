@@ -23,7 +23,7 @@ import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
 import { SITE_URL } from "@/lib/structuredData";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { ASSISTANT_NAME, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { ASSISTANT_NAME, FIGMA_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import {
   AGENT_SKILLS,
   AGENT_STARTER,
@@ -327,7 +327,7 @@ const STACK_TOOLS: {
     logo: "/logos/Figma.svg",
     // The card stays (it is a fact about the stack); the link out follows
     // the site-wide Figma switch.
-    ...(SHOW_FIGMA_LINKS ? { href: `${FIGMA_FILE_URL}?node-id=246-5864` } : {}),
+    ...(SHOW_FIGMA_LINKS ? { href: FIGMA_URL } : {}),
   },
 ];
 

@@ -12,7 +12,6 @@ import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { Table } from "rift-ds/components/Table/Table";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/spatial");
 
@@ -107,7 +106,6 @@ export default function SemanticSpacingPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Semantic spacing</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=113-5648`}
               storybookPath="/?path=/docs/foundations-tokens--docs"
             />
           </div>

@@ -19,7 +19,7 @@ import {
   AUTHOR_NAME,
   AUTHOR_URL,
   BRAND_NAME,
-  FIGMA_FILE_URL,
+  FIGMA_URL,
   REPOSITORY_URL,
   STORYBOOK_URL,
 } from "@/config/brand.generated";
@@ -314,7 +314,7 @@ export default function AboutDsPage() {
 
                 {SHOW_FIGMA_LINKS && (
                   <a
-                    href={`${FIGMA_FILE_URL}?node-id=246-5864`}
+                    href={FIGMA_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.toolItem}

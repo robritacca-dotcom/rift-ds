@@ -115,10 +115,12 @@ export const RETIRED_HOSTS = [
 export const NPM_URL = `https://www.npmjs.com/package/${PACKAGE_NAME}`;
 
 /**
- * The Figma origin. This is the real design file the system was drawn
- * from, so it survives the codename: it is provenance, not branding.
+ * The Rift DS kit's Figma Community page: the public copy anyone can
+ * open or duplicate. The footer's "Figma community" link and the
+ * site's whole-file Figma cards land here; per-page deep links use
+ * FIGMA_FILE_URL below.
  */
-export const FIGMA_URL = 'https://www.figma.com/@robr0';
+export const FIGMA_URL = 'https://www.figma.com/community/file/1701820123445795117';
 
 /**
  * The design file every figmaUrl deep link appends its node-id to. The
@@ -126,7 +128,7 @@ export const FIGMA_URL = 'https://www.figma.com/@robr0';
  * links keep working whatever the file is called); keeping the base
  * here means a renamed file is still a one-line change.
  */
-export const FIGMA_FILE_URL = 'https://www.figma.com/design/8NzqDS8iRsBTFPbNGj3Woj/Rift';
+export const FIGMA_FILE_URL = 'https://www.figma.com/design/CkhwrFylqmbc0dI123ll6h/Rift-DS';
 
 /** Browser-tab title suffix and og:site_name. */
 export const TITLE_SUFFIX = BRAND_NAME;

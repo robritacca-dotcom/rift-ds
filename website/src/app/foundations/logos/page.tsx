@@ -9,7 +9,6 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/logos");
 
@@ -84,7 +83,6 @@ export default function LogosPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Logos</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=253-13813`}
               storybookPath="/?path=/docs/foundations-logos--docs"
             />
           </div>

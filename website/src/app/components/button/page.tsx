@@ -9,7 +9,6 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 /* ============================================
    BUTTON STATES & VARIANTS
    ============================================ */
@@ -124,7 +123,6 @@ export default function ButtonPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Button</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=113-5392`}
               storybookPath="/?path=/docs/components-button--docs"
             />
           </div>

@@ -25,18 +25,18 @@ export interface ExternalLink {
 export const SOCIAL_PROFILES: ExternalLink[] = [];
 
 /**
- * Every Figma link on the site renders only while this is true. Hidden
- * for now (2026-09-20, Rob): the Figma file lags the coded system badly
- * enough that linking it misleads. Flip to true to restore the whole
- * set at once — the footer row, PageLinks chips, the landing resources
- * strip, and the overview and get-started cards all guard on it.
+ * Every Figma link on the site renders only while this is true: the footer
+ * row, the PageLinks chip, the landing resources strip, and the overview
+ * and get-started cards all guard on it. Hidden from 2026-09-20 while the
+ * old file lagged the code; on again since the Rift DS kit was rebuilt
+ * from the tokens, with a frame per component (data/figma-nodes.json).
  */
-export const SHOW_FIGMA_LINKS = false;
+export const SHOW_FIGMA_LINKS = true;
 
 /** Where the design system lives off-site. */
 export const PROJECT_LINKS: ExternalLink[] = [
   { label: "GitHub", href: REPOSITORY_URL },
   { label: "npm", href: NPM_URL },
   { label: "Storybook", href: STORYBOOK_URL },
-  ...(SHOW_FIGMA_LINKS ? [{ label: "Figma", href: FIGMA_URL }] : []),
+  ...(SHOW_FIGMA_LINKS ? [{ label: "Figma community", href: FIGMA_URL }] : []),
 ];

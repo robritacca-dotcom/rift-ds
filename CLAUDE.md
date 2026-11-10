@@ -40,6 +40,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Consumer agent skills | `AGENT_SKILLS` in `scripts/brand.mjs` + `website/public/skill/manifest.json` (generated) | `website/src/data/agent-skills.ts` | `scripts/validate-agent-skill.mjs` |
 | Chat widget | `src/chat/registry.json` | `src/chat/registry.ts` | `scripts/validate-chat-widget.mjs` |
 | Blocks | `src/cli/templates/blocks/registry.json` | `website/src/data/blocks.ts` | `scripts/validate-blocks.mjs` |
+| Figma frames | `website/src/data/figma-nodes.json` | `website/src/data/figma-nodes.ts` | `scripts/validate-figma-nodes.mjs` |
 | Accessibility coverage | `website/src/data/a11y-coverage.generated.ts` | `website/src/data/a11y-coverage.ts` | `scripts/validate-a11y-coverage.mjs` |
 | Gestures | `scripts/gestures.json` (every drag grip a visitor can press) | (read by the script) | `scripts/validate-gestures.mjs` |
 | Quality gate list (/skills/super-ship) | order from `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-quality-gate.mjs` |
@@ -347,5 +348,5 @@ Stated at the level of **token roles**: which colour, radius, typeface or shadow
 
 ## Known Gaps
 
-- **Figma parity**: the system originates in a Figma file that lags the coded system, so every Figma link is hidden behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts` (its doc comment lists the guarded surfaces). The DTCG files under `website/public/schema/tokens/` are an export a Figma plugin can import, but nothing pushes them into the file, so keeping Figma and the tokens in sync is manual.
+- **Figma parity**: the Rift DS kit (`FIGMA_FILE_URL` in `scripts/brand.mjs`) has a frame per component, and every docs page links its frame from `website/src/data/figma-nodes.json` through PageLinks, all behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts`. Code Connect is unavailable on the Figma plan, and nothing pushes the DTCG files under `website/public/schema/tokens/` into the file, so keeping the kit in step with the code, and a rebuilt frame's node id in the map, is manual.
 - **Visual regression**: Chromatic runs dispatch-only, but this repo has no Chromatic project yet (the `first-deploy` skill owns that step). axe catches roughly a third of WCAG issues, so keyboard order outside the asserted overlay stories and meaningful alt text still need human review.

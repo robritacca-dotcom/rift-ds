@@ -6,7 +6,6 @@ import TocCard from "../../components/TocCard/TocCard";
 import PageLinks from "../../components/PageLinks/PageLinks";
 import { foundationsSidebarLinks, getSidebarLinks, sectionLandingMetadata } from "@/config/navigation";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations");
 
@@ -35,7 +34,7 @@ export default function FoundationsPage() {
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Foundations</h1>
-            <PageLinks figmaUrl={`${FIGMA_FILE_URL}?node-id=244-3125`} storybookPath="/?path=/docs/foundations-tokens--docs" />
+            <PageLinks storybookPath="/?path=/docs/foundations-tokens--docs" />
           </div>
 
           {/* Intro */}

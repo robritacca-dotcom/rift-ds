@@ -14,7 +14,6 @@ import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 /* ============================================
    PAGE
@@ -36,7 +35,6 @@ export default function CardPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Card</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=253-12702`}
               storybookPath="/?path=/docs/components-card--docs"
             />
           </div>

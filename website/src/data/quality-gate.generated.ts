@@ -220,6 +220,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "The blocks registry matches the block templates on disk."
       },
       {
+        "name": "validate-figma-nodes",
+        "text": "Every component has its frame in the Figma kit's map, and every mapped page exists."
+      },
+      {
         "name": "validate-package-exports",
         "text": "package.json's name, version, exports and bin match the manifest, and the lockfile agrees."
       },

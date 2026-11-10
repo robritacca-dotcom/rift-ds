@@ -10,7 +10,6 @@ import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/icons");
 
@@ -307,7 +306,6 @@ export default function IconsPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Icons</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=113-5431`}
               storybookPath="/?path=/docs/foundations-icons--docs"
             />
           </div>

@@ -11,7 +11,7 @@ import HomeBento from "@/components/HomeBento/HomeBento";
 import HomeFaq from "@/components/HomeFaq/HomeFaq";
 import HomeChatFrame from "@/components/HomeChatFrame/HomeChatFrame";
 import HomeDashboardFrame from "@/components/HomeDashboardFrame/HomeDashboardFrame";
-import { AUTHOR_NAME, AUTHOR_URL, FIGMA_FILE_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { AUTHOR_NAME, AUTHOR_URL, FIGMA_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
 import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
@@ -1511,7 +1511,7 @@ export default function DesignSystemLanding() {
                       variant: "tertiary" as const,
                       iconLeft: <FigmaIcon />,
                       iconRight: "open_in_new",
-                      href: FIGMA_FILE_URL,
+                      href: FIGMA_URL,
                       target: "_blank",
                       rel: "noopener noreferrer",
                     },

@@ -9,7 +9,6 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { componentCategoryMetadata } from "rift-ds/components/registry";
 import { componentPages } from "@/data/component-pages";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 
 // Page-level, so it never cascades to the sub-pages (see sectionLandingMetadata).
 export const metadata = sectionLandingMetadata("/components");
@@ -27,7 +26,7 @@ export default function ComponentsPage() {
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Components</h1>
-            <PageLinks figmaUrl={`${FIGMA_FILE_URL}?node-id=113-6513`} storybookPath="/?path=/docs/components-button--docs" />
+            <PageLinks storybookPath="/?path=/docs/components-button--docs" />
           </div>
 
           {/* Intro */}

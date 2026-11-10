@@ -9,7 +9,6 @@ import type { ButtonProps } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
-import { FIGMA_FILE_URL } from "@/config/brand.generated";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 /* ============================================
    DEMO DATA
@@ -69,7 +68,6 @@ export default function ButtonGroupPage() {
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Button group</h1>
             <PageLinks
-              figmaUrl={`${FIGMA_FILE_URL}?node-id=256-12612`}
               storybookPath="/?path=/docs/components-buttongroup--docs"
             />
           </div>

@@ -10,7 +10,7 @@ import type {
 } from '../DropdownMenu/DropdownMenu';
 import './ContextMenu.css';
 import '../../fonts/material-symbols.css';
-import { MenuKeyLabelsContext, MenuShortcutHint } from '../DropdownMenu/ShortcutHint';
+import { MenuIconRight, MenuKeyLabelsContext, MenuShortcutHint } from '../DropdownMenu/ShortcutHint';
 import { shortcutAriaAnyPlatform, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import { mirrorClass } from '../../behaviors/direction';
 
@@ -235,6 +235,7 @@ const SubEntry = ({
         {entry.label}
       </span>
       <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
+      <MenuIconRight item={entry} baseClass={baseClass} />
       {entry.selected && (
         <ChosenMark />
       )}
@@ -496,6 +497,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
             {entry.label}
           </span>
           <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
+          <MenuIconRight item={entry} baseClass={baseClass} />
           {entry.selected && (
             <ChosenMark />
           )}

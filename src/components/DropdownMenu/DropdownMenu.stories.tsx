@@ -182,6 +182,25 @@ export const WithShortcuts: Story = {
 };
 
 /* ============================================
+   WITH TRAILING ICONS
+   ============================================ */
+
+/* Items that open another site carry a trailing open_in_new. */
+const linkItems: DropdownMenuEntry[] = [
+  { label: 'Copy setup file', icon: 'content_copy' },
+  { type: 'separator' },
+  { label: 'Package page', icon: 'deployed_code', iconRight: 'open_in_new' },
+  { label: 'Source code', icon: 'code', iconRight: 'open_in_new' },
+];
+
+export const WithTrailingIcons: Story = {
+  args: {
+    trigger: <TriggerButton label="Get going" />,
+    items: linkItems,
+  },
+};
+
+/* ============================================
    COMPACT
    ============================================ */
 

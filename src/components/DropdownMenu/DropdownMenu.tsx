@@ -8,7 +8,7 @@ import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';
 import '../../fonts/material-symbols.css';
-import { MenuKeyLabelsContext, MenuShortcutHint } from './ShortcutHint';
+import { MenuIconRight, MenuKeyLabelsContext, MenuShortcutHint } from './ShortcutHint';
 import { shortcutAriaAnyPlatform, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import { mirrorClass } from '../../behaviors/direction';
 
@@ -28,6 +28,8 @@ export interface DropdownMenuItem {
   keys?: Shortcut;
   /** Item icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */
+  iconRight?: string | React.ReactNode;
   /** Disabled state */
   disabled?: boolean;
   /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */
@@ -357,6 +359,7 @@ const MenuPanel = ({
           <MenuItemText baseClass={baseClass} label={entry.label} description={entry.description} />
         </span>
         <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
+        <MenuIconRight item={entry} baseClass={baseClass} />
         {entry.selected && (
           <ChosenMark />
         )}
@@ -622,6 +625,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
           <MenuItemText baseClass={baseClass} label={entry.label} description={entry.description} />
         </span>
         <MenuShortcutHint item={entry} className={`${baseClass}__shortcut`} />
+        <MenuIconRight item={entry} baseClass={baseClass} />
         {entry.selected && (
           <ChosenMark />
         )}

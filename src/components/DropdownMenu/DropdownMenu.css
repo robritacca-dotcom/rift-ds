@@ -248,6 +248,18 @@
   line-height: 1;
 }
 
+/* A trailing icon (an external link's open_in_new): the row's quietest
+   mark, one step under the leading icon, pushed to the trailing edge. */
+.ds-dropdown-menu__item-icon-right {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+  line-height: 1;
+}
+
 /* ============================================
    KEYBOARD SHORTCUT
    ============================================ */

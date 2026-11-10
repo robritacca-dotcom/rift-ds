@@ -1,5 +1,5 @@
 {
-  "$comment": "Where each docs page lives in the Rift DS Figma kit: a page route or component slug mapped to the node id of its frame, appended to FIGMA_FILE_URL in scripts/brand.mjs. Read by website/src/data/figma-nodes.ts and held to the component registry and the page folders by scripts/validate-figma-nodes.mjs. A page with no entry shows no Figma link.",
+  "$comment": "Where each docs page lives in the Rift DS Figma kit: a page route or component slug mapped to the node id of its frame, appended to FIGMA_FILE_URL in scripts/brand.mjs. Read by website/src/data/figma-nodes.ts and held to the component registry and the page folders by scripts/validate-figma-nodes.mjs. A page with no entry links the Figma community page (FIGMA_URL).",
   "components": {
     "accordion": "88-96",
     "action-card": "104-152",
@@ -182,14 +182,10 @@
     "world-map": "122-289"
   },
   "pages": {
-    "/components": "142-33153",
-    "/docs/get-started": "142-33153",
-    "/foundations": "142-33153",
     "/foundations/colour-mode": "5-2",
     "/foundations/colour-primitives": "5-1436",
     "/foundations/icons": "60-2",
     "/foundations/themes": "129-2",
-    "/foundations/typography": "62-4",
-    "/overview": "142-33153"
+    "/foundations/typography": "62-4"
   }
 }

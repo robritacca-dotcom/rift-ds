@@ -9,7 +9,7 @@ import { SHOW_FIGMA_LINKS } from "@/config/social";
 const STORYBOOK_BASE = STORYBOOK_URL;
 
 interface PageLinksProps {
-  /** Figma URL override. Omit it and the button links the route's frame from figma-nodes.json, or hides when there is none. */
+  /** Figma URL override. Omit it and the button links the route's frame from figma-nodes.json, or the Figma community page when there is none. */
   figmaUrl?: string;
   /** Storybook story path (e.g. "/?path=/docs/components-button--docs") — omit to hide the Storybook button */
   storybookPath?: string;
@@ -153,7 +153,7 @@ export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substack
           rel="noopener noreferrer"
         />
       ) : (
-        // Self-gated: links the route's frame from figma-nodes.json, if any.
+        // Links the route's frame from figma-nodes.json, or the community page.
         <PageFigmaLink icon={<FigmaIcon />} />
       ))}
 

@@ -13,12 +13,11 @@ interface PageFigmaLinkProps {
 /**
  * The Figma action on a docs page, beside Storybook. Rendered by PageLinks
  * and self-gated like PageAgentDocs: it reads the route and links the frame
- * figma-nodes.json maps it to, so no page passes a URL and a route the kit
- * does not cover shows nothing.
+ * figma-nodes.json maps it to, so no page passes a URL; a route the kit has
+ * no frame for links the Figma community page.
  */
 export default function PageFigmaLink({ icon }: PageFigmaLinkProps) {
   const href = figmaUrlForPath(usePathname());
-  if (!href) return null;
   return (
     <Button
       label="Figma"

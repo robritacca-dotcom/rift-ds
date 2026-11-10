@@ -2,11 +2,13 @@
   "$comment": "SINGLE SOURCE OF TRUTH for the skills list. `displayed` + `external` appear on /skills, IN THIS ORDER (scripts/generate-skills-content.mjs builds the page data from the skill files in registry order); `unlisted` are internal-only. Every .claude/skills/<name>/SKILL.md must be registered here; external skills keep their published copy in website/src/data/external-skills/<name>.md. scripts/validate-skills-registry.mjs enforces all of this at build time.",
   "displayed": [
     "new-component",
+    "new-figma-component",
     "new-token",
     "new-preset",
     "new-background",
     "new-page",
     "new-template",
+    "new-figma-template",
     "new-validator",
     "visual-review",
     "design-qa",
@@ -28,6 +30,8 @@
     "accessibility-audit",
     "api-consistency",
     "component-consistency-audit",
+    "figma-parity",
+    "figma-tokens",
     "seo-audit",
     "chat-quality",
     "link-rot"

@@ -36,6 +36,10 @@ CLAUDE.md's **How to Add a New Token** section is the authoritative checklist �
 
 6. **Verify**: `npm run validate-registry` must pass end to end (it regenerates `src/tokens/registry.json`, `src/tokens/values.json` with the DTCG files under `website/public/schema/tokens/` (`scripts/validate-token-values.mjs` holds them; CLAUDE.md's How to Add a New Token step 5 says what fails when a token has no family or its value no mapper) and the other derived surfaces that carry token names or values, the consumer skills' token reference among them, and re-checks every home; the generator scripts at the front of the `validate-registry` entry in the root `package.json` are the authoritative list, so commit every file the chain rewrites), then `npm run build` for the type-check. Displayed counts update themselves — never hardcode one.
 
+## Then Figma
+
+The Figma kit's variables do not follow on their own. Ask the owner whether to run the `figma-tokens` skill now or in a separate session, so the kit picks up the change.
+
 ## Guardrails
 
 - Never hand-edit `src/tokens/registry.json`, `src/tokens/values.json` or `website/public/schema/tokens/` — they regenerate from the CSS

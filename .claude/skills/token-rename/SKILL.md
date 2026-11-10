@@ -47,6 +47,10 @@ Repeat codemod-then-chain until green, then `npm run verify` — the story tests
 
 One category per commit, verify green between categories, and note the rename in the entry the release skill writes when the version ships — a renamed published token is exactly what a consumer's changelog exists for.
 
+## Then Figma
+
+The Figma kit's variables do not follow on their own. Ask the owner whether to run the `figma-tokens` skill now or in a separate session, so the kit picks up the change.
+
 ## Guardrails
 
 - Never weaken a validator to get past a rename failure — fix the data or the parser's grammar, keeping what it asserts

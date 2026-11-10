@@ -64,6 +64,13 @@ export default function AboutDsPage() {
               <Link href="/loops" className={styles.inlineLink}>loops</Link> are yours to lift into your own codebase or AI tooling. Agents read the same contracts through the MCP endpoint at <code>/api/mcp</code>, or as files: one JSON{" "}
               <Link href="/docs/schemas" className={styles.inlineLink}>schema</Link> per component and the tokens in the DTCG format.
             </p>
+            {/* The Figma kit, shown while the site links to Figma. */}
+            {SHOW_FIGMA_LINKS && (
+              <p className={styles.introBody}>
+                Designers get the same system in{" "}
+                <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>the Figma kit</a>: a page for every component, built on variables named after the same tokens, with themes and light and dark as variable modes. Every component page here links to its frame.
+              </p>
+            )}
             {/* The authorship line. The footer credits the author on every
                 page, but the footer sits outside app/, so the chat corpus
                 never sees it: this sentence is what lets the site answer
@@ -322,7 +329,7 @@ export default function AboutDsPage() {
                     <Image src="/logos/Figma.svg" alt="" width={28} height={28} />
                     <div className={styles.toolDetails}>
                       <span className={styles.toolName}>Figma</span>
-                      <span className={styles.toolDesc}>Where the foundation was designed</span>
+                      <span className={styles.toolDesc}>Every component, on the same tokens</span>
                     </div>
                     <span className={`material-symbols-rounded ${styles.toolLinkIcon}`} aria-hidden="true">open_in_new</span>
                   </a>

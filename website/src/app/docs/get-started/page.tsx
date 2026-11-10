@@ -16,6 +16,8 @@ import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 import { Accordion } from "rift-ds/components/Accordion/Accordion";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
+import { Button } from "rift-ds/components/Button/Button";
+import { FigmaIcon } from "@/components/BrandIcons/BrandIcons";
 import { OpenChatLink } from "./OpenChatLink";
 import { componentMetadata } from "rift-ds/components/registry";
 import { chatWidget } from "rift-ds/chat";
@@ -51,12 +53,15 @@ const PAGE_SECTIONS = [
   { id: "built-with", label: "Built with" },
 ];
 
-/* The ways in, agents first: real alternatives, so a reader picks one. */
+/* The ways in, agents first: real alternatives, so a reader picks one.
+   The Figma kit is the designer's way in, shown while the site links to
+   Figma. */
 const INSTALL_TABS = [
   { value: "agent-quickstart", label: "With an agent", panelId: "agent-quickstart" },
   { value: "quick-start", label: "Next.js", panelId: "quick-start" },
   { value: "react", label: "Any React app", panelId: "react" },
   { value: "other", label: "Other ways", panelId: "other-ways" },
+  ...(SHOW_FIGMA_LINKS ? [{ value: "figma", label: "Figma kit", panelId: "figma-kit" }] : []),
 ];
 
 /* Deep links and the anchors of the sections these tabs replaced, each to its tab. */
@@ -68,6 +73,7 @@ const LINKED_TABS: Record<string, string> = {
   "other-ways": "other",
   "shadcn-registry": "other",
   clone: "other",
+  ...(SHOW_FIGMA_LINKS ? { "figma-kit": "figma" } : {}),
 };
 
 const INSTALL_SNIPPET = `npm install rift-ds`;
@@ -323,7 +329,7 @@ const STACK_TOOLS: {
   },
   {
     name: "Figma",
-    desc: "Where the foundation was designed",
+    desc: "Every component, on the same tokens",
     logo: "/logos/Figma.svg",
     // The card stays (it is a fact about the stack); the link out follows
     // the site-wide Figma switch.
@@ -529,7 +535,7 @@ export default function GetStartedPage() {
                             <p className={styles.sectionNote}>
                               Made a theme in the{" "}
                               <Link href="/playground" className={styles.inlineLink}>playground</Link>?
-                              Its Get started button gives you one AGENTS.md with the setup, the
+                              Its Export theme button gives you one AGENTS.md with the setup, the
                               theme in words and its CSS.
                             </p>
                           </div>
@@ -619,6 +625,45 @@ export default function GetStartedPage() {
                   </p>
                   <CodeBlock code={CLONE_SNIPPET} language="bash" showCopy onCopied={countInstall("clone")} />
                 </div>
+
+                {SHOW_FIGMA_LINKS && (
+                  <div id="figma-kit" role="tabpanel" aria-label="Figma kit" hidden={installTab !== "figma"} className={styles.panel}>
+                    <p className={styles.sectionNote}>
+                      Use this if you design in Figma. The kit has a page for every component, with
+                      a sticker sheet of its states, the main component and the parts it is built
+                      from. Its variables are named after the code’s tokens, with themes and light
+                      and dark as variable modes. Duplicate it from the Figma Community to start.
+                    </p>
+                    <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" className={styles.kitImageLink}>
+                      {/* The same frame exported in Light and Dark, swapped by the site's theme. */}
+                      <Image
+                        src="/images/figma-kit-light.jpg"
+                        alt="Component pages in the Figma kit, each with a sticker sheet, the main component, and links to the docs and Storybook"
+                        width={1920}
+                        height={1080}
+                        className={`${styles.kitImage} ${styles.kitImageLight}`}
+                      />
+                      <Image
+                        src="/images/figma-kit-dark.jpg"
+                        alt="Component pages in the Figma kit, each with a sticker sheet, the main component, and links to the docs and Storybook"
+                        width={1920}
+                        height={1080}
+                        className={`${styles.kitImage} ${styles.kitImageDark}`}
+                      />
+                    </a>
+                    <div>
+                      <Button
+                        label="Open the Figma kit"
+                        variant="secondary"
+                        iconLeft={<FigmaIcon />}
+                        iconRight="open_in_new"
+                        href={FIGMA_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    </div>
+                  </div>
+                )}
               </section>
 
               {/* Customise */}

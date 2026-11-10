@@ -173,8 +173,8 @@ const ACTIVITY = [
    the version claims and the build holds those to package.json.
    Storybook is absent because it is a link in the row above. Next.js
    ships a black and a white mark, swapped by theme in the stylesheet;
-   TypeScript and Recharts carry a stand-in icon until their marks are
-   added to /public/logos. */
+   TypeScript, Recharts and TanStack carry a stand-in icon until their
+   marks are added to /public/logos. */
 const BUILT_WITH: readonly {
   name: string;
   logo?: string;
@@ -186,6 +186,7 @@ const BUILT_WITH: readonly {
   { name: "Vite", logo: "/logos/vite.svg" },
   { name: "Next.js", logo: "/logos/nextjs black.svg", logoDark: "/logos/nextjs white.svg" },
   { name: "Recharts", placeholderIcon: "show_chart" },
+  { name: "TanStack", placeholderIcon: "table_chart" },
 ];
 
 const SAVINGS_GOALS = [
@@ -585,9 +586,12 @@ const SUBTITLE_FULL =
 /* One headline per reason the README leads with, in the same order (plus
    the playground's theme-from-a-file drop beside the themes line), and
    held to a similar length so every sweep covers about the same ground.
-   The component figure is the registry's count, never a typed number. */
+   The component figure is the registry's count, never a typed number.
+   The Figma kit's line follows it, and shows only while the site links
+   to Figma. */
 const SUBTITLE_PHRASES = [
   `${COMPONENT_COUNT} typed components, from buttons to charts.`,
+  ...(SHOW_FIGMA_LINKS ? ["A matching Figma kit, one frame per component."] : []),
   "AI chat patterns and templates, ready to use.",
   "Complete themes, applied with one attribute.",
   "Drop in a DESIGN.md or any image to theme it.",

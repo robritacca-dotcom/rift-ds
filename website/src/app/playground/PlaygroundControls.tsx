@@ -689,7 +689,7 @@ export default function PlaygroundControls({
             className={styles.railSplit}
             label={copied ? copiedLabel[copied] : "Copy CSS"}
             /* Secondary: the theme's one-file export, behind the toolbar's
-               Get started, is the primary way to take it away; the CSS and
+               Export theme, is the primary way to take it away; the CSS and
                the separate pieces are for whoever wants just one. */
             variant="secondary"
             iconLeft={copied ? "check" : "content_copy"}

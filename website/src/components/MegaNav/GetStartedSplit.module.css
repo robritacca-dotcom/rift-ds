@@ -1,0 +1,10 @@
+/* The brand marks in the Get started menu, drawn at the menu's own
+   glyph size so they line up with the Material Symbols beside them. */
+.mark {
+  display: inline-flex;
+}
+
+.mark svg {
+  inline-size: var(--icon-size-500);
+  block-size: var(--icon-size-500);
+}

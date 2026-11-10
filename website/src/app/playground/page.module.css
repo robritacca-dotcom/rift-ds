@@ -1132,11 +1132,11 @@
   white-space: nowrap;
 }
 
-/* The toolbar's way into the docs. A phone's toolbar leaves the view switch
+/* The toolbar's Export theme. A phone's toolbar leaves the view switch
    the room, the same width at which StageToolbar drops its trail. */
 /* ds-allow(breakpoint): content-driven, StageToolbar's own phone width: below it the switch needs the room. */
 @media (max-width: 699px) {
-  .getStarted {
+  .exportTheme {
     display: none;
   }
 }

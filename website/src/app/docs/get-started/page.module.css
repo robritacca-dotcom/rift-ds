@@ -218,6 +218,30 @@ a.toolItem:hover {
   display: none;
 }
 
+/* The Figma kit's picture, a link to the kit: the code block's frame,
+   so it sits in the panel like the snippets in the other tabs. */
+.kitImageLink {
+  display: block;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+}
+
+.kitImage {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.kitImageDark,
+:global([data-theme="dark"]) .kitImageLight {
+  display: none;
+}
+
+:global([data-theme="dark"]) .kitImageDark {
+  display: block;
+}
+
 .subsection {
   display: flex;
   flex-direction: column;

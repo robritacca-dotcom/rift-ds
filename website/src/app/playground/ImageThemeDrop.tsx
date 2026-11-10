@@ -33,7 +33,7 @@ const SOURCE_BAR_LABELS_MIN_WIDTH = 640;
 
 /* The bar's buttons, least to most committed, left to right: start over,
    try another file, take this look away. Export is secondary here: the
-   toolbar's Get started is the playground's one primary action, and opens
+   toolbar's Export theme is the playground's one primary action, and opens
    the same export. */
 const SOURCE_ACTIONS = [
   { key: "reset", label: "Reset", icon: "restart_alt", variant: "tertiary", tone: "neutral" },

@@ -15,7 +15,7 @@
  * staged (the scenes are the library's ShaderScene; lib/shaders/ holds the
  * playground's templates and staging).
  *
- * A theme leaves through the toolbar's Get started (lib/theme/theme-export.ts
+ * A theme leaves through the toolbar's Export theme (lib/theme/theme-export.ts
  * owns what it writes); one comes in by dropping a picture
  * (lib/theme/image-palette.ts) or a DESIGN.md or other text file
  * (lib/theme/design-md.ts), read in this tab and never uploaded. Any drag
@@ -1716,8 +1716,8 @@ export default function PlaygroundPage() {
       />
 
       {/* Not the site's full navigation — a full-screen view's floating
-          toolbar pill: brand mark, breadcrumb trail, the view pills, a way
-          into the docs, and the X out. (Footer and the site chat still
+          toolbar pill: brand mark, breadcrumb trail, the view pills, the
+          theme export, and the X out. (Footer and the site chat still
           skip this route.) */}
       <StageToolbar
         tabs={VIEWS}
@@ -1729,8 +1729,9 @@ export default function PlaygroundPage() {
              opens the theme export, the file that sets a project up in
              this look. Everything else on the tool is secondary. */
           <Button
-            className={styles.getStarted}
-            label="Get started"
+            className={styles.exportTheme}
+            label="Export theme"
+            iconLeft="ios_share"
             variant="primary"
             size="compact"
             onClick={openExport}

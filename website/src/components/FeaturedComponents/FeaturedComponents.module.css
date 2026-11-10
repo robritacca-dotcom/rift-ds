@@ -76,4 +76,27 @@
   .grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  /* One card to a row, a cover is several times wider than in the row of
+     three, but the staged component is no taller, so it stopped short of
+     the foot and left the field bare. The cover is drawn shorter and the
+     component at full size, so it runs off the foot again. */
+  .grid :global(.ds-card--case-study__cover-wrap) {
+    aspect-ratio: 940 / 320;
+  }
+
+  .shot {
+    zoom: 1;
+  }
+}
+
+/* On a phone the cover is narrow enough for the row-of-three staging. */
+@media (max-width: 600px) {
+  .grid :global(.ds-card--case-study__cover-wrap) {
+    aspect-ratio: 940 / 480;
+  }
+
+  .shot {
+    zoom: 0.7;
+  }
 }

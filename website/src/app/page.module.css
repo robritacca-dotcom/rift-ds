@@ -492,12 +492,11 @@
 
 
 /* The hero's section-link row wraps and stays centred on narrow screens.
-   The symmetric margin keeps the divider sandwich even: the same air
-   above and below the buttons. */
+   It sits as far below the counts as the rule sits above them. */
 .hero :global(.ds-button-group) {
   flex-wrap: wrap;
   justify-content: center;
-  margin: var(--gap-200) 0;
+  margin: var(--gap-400) 0 var(--gap-200);
 }
 
 /* ============================================

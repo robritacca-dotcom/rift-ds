@@ -1397,7 +1397,7 @@ export default function DesignSystemLanding() {
           <h1 className={styles.pageTitle}>The open source AI design system</h1>
           <RotatingSubtitle />
           <FadeDivider className={styles.heroDivider} />
-          {/* The counts, between two rules: every figure imports from the registry export that
+          {/* The counts, under a rule: every figure imports from the registry export that
               owns it, so the band can never overstate. */}
           <div className={styles.statStrip} role="group" aria-label="What the system counts today">
             <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />
@@ -1409,12 +1409,25 @@ export default function DesignSystemLanding() {
               label="Cost"
             />
           </div>
-          <FadeDivider className={styles.heroDivider} />
           <ButtonGroup
             aria-label="Explore the system"
             buttons={[
-              { label: "Playground", variant: "primary" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
-              { label: "Templates", variant: "secondary" as const, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
+              { label: "Playground", variant: "primary" as const, size: "compact" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
+              { label: "Templates", variant: "secondary" as const, size: "compact" as const, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
+              ...(SHOW_FIGMA_LINKS
+                ? [
+                    {
+                      label: "Figma kit",
+                      variant: "secondary" as const,
+                      size: "compact" as const,
+                      iconLeft: <FigmaIcon />,
+                      iconRight: "open_in_new",
+                      href: FIGMA_URL,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    },
+                  ]
+                : []),
             ]}
           />
           </div>

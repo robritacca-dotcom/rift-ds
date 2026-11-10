@@ -64,7 +64,7 @@ Never hand-edit these; edit the source, and commit what a build regenerates. Eac
 
 - **Package barrels and exports**: `src/index.ts` and `src/charts.ts` by `scripts/generate-library-barrel.mjs` (recharts modules only in `charts.ts`, since recharts is an optional peer). Name, version, subpaths and bin by `scripts/package-manifest.mjs`, held by `scripts/validate-package-exports.mjs`.
 - **Renames are mechanical**: `PACKAGE_NAME`, `RETIRED_PACKAGE_NAMES` and `RETIRED_HOSTS` in `scripts/brand.mjs` with `scripts/rename-package.mjs`. Never restate a retired name or write a site URL from memory; derive it from `SITE_URL`.
-- **README.md regions** (component count and list, npm badge, banner link, author credit) by `scripts/generate-readme-content.mjs`, which also holds the Tech section's major versions and both install surfaces (README and `src/stories/Configure.mdx`). README ships in the npm tarball, so its prose is production copy.
+- **README.md regions** (component count and list, npm badge, banner link, author credit, Figma kit link) by `scripts/generate-readme-content.mjs`, which also holds the Tech section's major versions and both install surfaces (README and `src/stories/Configure.mdx`). README ships in the npm tarball, so its prose is production copy.
 - **The author credit**: `AUTHOR_NAME` and `AUTHOR_URL` in `scripts/brand.mjs` are its only home.
 - **Screenshot surfaces with no generator**: re-shoot the README banner (`scripts/capture-readme-banner.mjs`) and the playground's template stills (`scripts/capture-template-thumbnails.mjs`) by hand whenever what they show changes.
 - **Website files**: the /blueprints spec copies (`scripts/sync-blueprints.mjs`, whose `FILES` array is the list), per-component markdown (`scripts/generate-component-md.mjs`), the per-component JSON schemas and their index (`scripts/generate-component-schema.mjs`, validated against the hand-written meta-schema beside them), the token values and DTCG files (`scripts/generate-token-values.mjs`), the shadcn registry in `website/public/r/` (`scripts/generate-shadcn-registry.mjs`; fetches counted by `website/src/proxy.ts`), per-theme DESIGN.md files (`scripts/generate-theme-design-md.mjs`), the consumer skills and `AGENTS.md` (`scripts/generate-agent-skill.mjs`; its manifest is the one home of the file list the init bin installs), and the /skills page data (`scripts/generate-skills-content.mjs`; never hand-add a card).
@@ -268,8 +268,9 @@ A new component is not done until it appears in **every** place the system docum
    - `src/components/registry.json`: an entry in `components` (alphabetical by `name`) with `name`, `label`, `slug`, `description`, `category` and `client`. Nav, sitemap, breadcrumbs, mega-nav and page metadata derive from it.
    - `website/src/components/ComponentPreviews/ComponentPreviews.tsx`: a preview entry under the slug (the one hand-maintained surface).
 7. **Document it in `design.md`**: a short spec section (class name, tokens used, key behaviours).
+8. **Draw it in the Figma kit**: a frame mapped in `website/src/data/figma-nodes.json`, through the `new-figma-component` skill, which can run as its own session.
 
-Steps 5 to 7 are build-enforced by `scripts/validate-website-surfaces.mjs` and `scripts/validate-page-titles.mjs`.
+Steps 5 to 7 are build-enforced by `scripts/validate-website-surfaces.mjs` and `scripts/validate-page-titles.mjs`, and step 8 by `scripts/validate-figma-nodes.mjs`, so nothing ships until all of them are done.
 
 Checklist before shipping a component:
 - [ ] Every rule in **Component Anatomy** holds: the props contract, links, ownable state, English strings as props, numbers and dates in the resolved locale, layout from the reading direction (checked with Storybook's Direction toolbar), overlays through `useLayer`, keys through `useShortcut`, shared primitives and its surface family
@@ -279,7 +280,7 @@ Checklist before shipping a component:
 - [ ] Disabled state at `opacity: 0.4`, `cursor: not-allowed` (a control held inert by a loading contract keeps full colour with `cursor: progress`; design.md owns the exception)
 - [ ] Interactive elements have ARIA roles and keyboard navigation
 - [ ] At least one Storybook story per variant
-- [ ] Steps 5 to 7 done, with `client` in the registry matching the `'use client'` directive
+- [ ] Steps 5 to 8 done, with `client` in the registry matching the `'use client'` directive
 - [ ] `node scripts/validate-json-schemas.mjs` passes: the component's generated schema validates against the meta-schema
 
 ---
@@ -348,5 +349,5 @@ Stated at the level of **token roles**: which colour, radius, typeface or shadow
 
 ## Known Gaps
 
-- **Figma parity**: the Rift DS kit (`FIGMA_FILE_URL` in `scripts/brand.mjs`) has a frame per component, and every docs page links its frame from `website/src/data/figma-nodes.json` through PageLinks, all behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts`. Code Connect is unavailable on the Figma plan, and nothing pushes the DTCG files under `website/public/schema/tokens/` into the file, so keeping the kit in step with the code, and a rebuilt frame's node id in the map, is manual.
+- **Figma parity**: the Rift DS kit (`FIGMA_FILE_URL` in `scripts/brand.mjs`) has a frame per component, and every docs page links its frame from `website/src/data/figma-nodes.json` through PageLinks, all behind `SHOW_FIGMA_LINKS` in `website/src/config/social.ts`. Code Connect is unavailable on the Figma plan, and nothing pushes the DTCG files under `website/public/schema/tokens/` into the file, so keeping the kit in step with the code, and a rebuilt frame's node id in the map, is manual, run through the `figma-parity` and `figma-tokens` skills (and `new-figma-template` for screens).
 - **Visual regression**: Chromatic runs dispatch-only, but this repo has no Chromatic project yet (the `first-deploy` skill owns that step). axe catches roughly a third of WCAG issues, so keyboard order outside the asserted overlay stories and meaningful alt text still need human review.

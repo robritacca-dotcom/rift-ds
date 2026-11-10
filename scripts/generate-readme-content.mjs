@@ -11,6 +11,7 @@
  *   <!-- npm-badge:start --> … <!-- npm-badge:end -->   (from PACKAGE_NAME)
  *   <!-- banner:start --> … <!-- banner:end -->   (absolute raw URL from REPOSITORY_URL)
  *   <!-- author:start --> … <!-- author:end -->   (AUTHOR_NAME/AUTHOR_URL)
+ *   <!-- figma-kit-link -->…<!-- /figma-kit-link -->   (inline, from FIGMA_URL)
  *
  * Commit README.md whenever a build regenerates it; CI's drift guard
  * fails on an uncommitted regeneration.
@@ -30,7 +31,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AUTHOR_NAME, AUTHOR_URL, REPOSITORY_URL, SITE_URL } from './brand.mjs';
+import { AUTHOR_NAME, AUTHOR_URL, FIGMA_URL, REPOSITORY_URL, SITE_URL } from './brand.mjs';
 import { PACKAGE_NAME } from './package-manifest.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -54,6 +55,7 @@ const bannerMarker =
   /(<!-- banner:start -->\n)[\s\S]*?(\n<!-- banner:end -->)/;
 const authorMarker =
   /(<!-- author:start -->\n)[\s\S]*?(\n<!-- author:end -->)/;
+const figmaKitMarker = /<!-- figma-kit-link -->[\s\S]*?<!-- \/figma-kit-link -->/;
 
 for (const [name, re] of [
   ['component-count', countMarker],
@@ -61,6 +63,7 @@ for (const [name, re] of [
   ['npm-badge', npmBadgeMarker],
   ['banner', bannerMarker],
   ['author', authorMarker],
+  ['figma-kit-link', figmaKitMarker],
 ]) {
   if (!re.test(readme)) {
     console.error(
@@ -110,6 +113,13 @@ readme = readme.replace(
 readme = readme.replace(
   authorMarker,
   `$1Designed and built by [${AUTHOR_NAME}](${AUTHOR_URL}).$2`
+);
+
+// The Figma kit's link, the kit's Community page, from the one FIGMA_URL
+// the site's Figma links use, so the README never points at a moved file.
+readme = readme.replace(
+  figmaKitMarker,
+  `<!-- figma-kit-link -->[Figma kit](${FIGMA_URL})<!-- /figma-kit-link -->`
 );
 
 // Version drift check: README prose vs. package.json majors.

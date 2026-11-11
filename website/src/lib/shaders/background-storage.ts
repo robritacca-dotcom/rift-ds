@@ -88,9 +88,11 @@ export type SiteBackgroundEntry = {
    through a title, with the glow eased and a long bottom fade, so the
    beams give out into the page before the content starts.
 
-   Meteors, home: the limb set low, as Horizon's is, so it meets the top
-   of the chat frame and the shower falls behind the hero; the flare is
-   eased so the counts above it read. Meteors, page: the limb crosses the
+   Meteors, home: the limb is flattened and levelled and set so it only
+   just clears the top of the chat frame across its whole width, the sun
+   peeking over it, and the shower falls behind the hero; the scene's own
+   lean would lift the limb's left end into the counts. The flare is eased
+   so the counts above it read. Meteors, page: the limb crosses the
    standard band behind the title and the planet below it fades to the
    page floor inside the scene, as Horizon's world does.
 

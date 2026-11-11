@@ -143,8 +143,10 @@
       "scene": "meteors",
       "home": {
         "params": {
-          "crown": 0.22,
-          "flare": 0.7
+          "crown": 0.3,
+          "flare": 0.7,
+          "curve": 4.5,
+          "lean": -0.04
         },
         "passes": {
           "grain": {

@@ -30,7 +30,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # The browser alone, without --with-deps, as in ci.yml: the runner image
+      # has Chromium's system libraries, and the apt step that flag adds
+      # depends on Ubuntu's archive. When the runners cannot reach it this
+      # run would fail and read as a site outage that is not one.
+      - run: npx playwright install chromium
       # The origin comes from scripts/brand.mjs, the one home for it. A
       # workflow cannot import a module, so it reads the value at run time
       # rather than restating it — a domain change is then one edit there.

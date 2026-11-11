@@ -701,6 +701,25 @@ Do not build a chat UI by hand. \`npx ${BIN_NAME} ${widget.command}\` scaffolds 
 - Size an icon by setting \`--icon-size\` to an \`--icon-size-*\` step, never \`font-size\`.
 - Never guess a prop. Check it in the \`.d.ts\` files in \`node_modules/${PACKAGE_NAME}\`, which work offline, or in the component's contract, linked from the catalogue below.
 
+## Check your work
+
+The library ships no checker for an app built with it: which rules an app holds itself to is the project's decision. Once the first screen works, offer to write the project a small check script of its own, and agree with the person which of these it covers before writing any. Each is a rule above with the published data that settles it:
+
+- **Token names exist.** Every \`var(--…)\` in the project's CSS is a name in \`tokenRegistry\` from \`${subpath('./tokens/registry')}\`, or one the project declares itself.
+- **No raw values.** A colour, a duration, or a spacing or radius length in the project's CSS is a finding. \`tokenValue\` from \`${PACKAGE_NAME}/tokens/values\` tells you whether a token already holds that value, so the message can name it.
+- **No restyling from outside.** No selector in the project's CSS targets a \`ds-\` class, and no library component is passed a \`style\`.
+- **A library component before your own.** A hand-written \`<button>\`, \`<input>\`, \`<select>\`, \`<table>\` or \`<dialog>\` in a screen is a finding when the catalogue has the component. ${origin}/schema/components.json lists every one.
+- **Props are real.** The type check already proves this, so the script runs it and adds nothing.
+- **The screen holds up.** If the project has a browser test runner, load each route at a phone and a desktop width, in light and dark, and fail on horizontal overflow or a console error.
+
+Keep it light, however much it covers:
+
+- One script, one command in \`package.json\`, run before every commit you make and in CI if the project has it.
+- A failure names the rule, the file and the line, and says what to use instead.
+- A deliberate exception is a comment on that line with its reason, which the script reads. Never loosen a check to pass.
+- When a screen needs a part the library lacks, build it in the project, mark it with a comment saying the job it does and why no component fit, and have the script list every marked part. That list is what to raise with the library, or to fold into one shared component once the part repeats.
+- A rule the project chose not to check is written down beside the script as unchecked, so nobody assumes it is held.
+
 ## Look it up
 
 - Every component, with its import and a link to its prop contract: ${refUrl('components.md')}

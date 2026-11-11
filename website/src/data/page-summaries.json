@@ -1525,6 +1525,10 @@
         {
           "id": "fonts",
           "label": "Which fonts does the kit need?"
+        },
+        {
+          "id": "props",
+          "label": "Are all the props in Figma?"
         }
       ]
     }

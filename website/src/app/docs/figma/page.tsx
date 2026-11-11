@@ -88,11 +88,21 @@ const KIT_PAGES = [
 const CODE_MAP = [
   { figma: "Variable bg/container-primary", code: "Token --color-bg-container-primary" },
   { figma: "Component set Button", code: "Component Button" },
-  { figma: "Variant properties Variant, Tone, Size", code: "Props variant, tone, size" },
-  { figma: "Hover and Pressed variants", code: "CSS states, not props" },
-  { figma: "Component description", code: "How to use it and the props it takes" },
+  { figma: "Component description", code: "The import line, how to use it and every prop" },
   { figma: "A page's Docs and Storybook buttons", code: "The component's docs page and its Storybook story" },
   { figma: "A component's frame", code: "The Figma button on that component's docs page" },
+];
+
+/* How each kind of prop reaches a component set. The new-figma-component
+   skill's conventions are the rule the kit is built to; this is its
+   public statement. */
+const PROP_MAP = [
+  { prop: "An enum prop, such as variant, tone or size", figma: "A variant property with the same name and the same values" },
+  { prop: "A boolean state prop, such as disabled", figma: "A boolean property with the same name" },
+  { prop: "The label, or other visible text", figma: "A text property" },
+  { prop: "An icon, such as iconLeft or iconRight", figma: "An instance-swap property" },
+  { prop: "Hover, pressed and focus, which are CSS states and not props", figma: "A State property at most, never a prop the code lacks" },
+  { prop: "Callbacks, links, refs and accessible names, which have no look", figma: "Not a property; the component's description lists them" },
 ];
 
 const TIERS = [
@@ -200,6 +210,27 @@ export default function FigmaKitPage() {
               ]}
               rows={CODE_MAP.map((row) => ({ id: row.figma, cells: row }))}
             />
+            <p className={s.sectionNote}>
+              Every prop that changes how a component looks is a property in the kit. Each enum prop
+              is a variant property with the same name and values, each boolean state prop such as{" "}
+              <code>disabled</code> is a boolean property, the label is a text property and icons are
+              instance-swap properties. Hover, pressed and focus are CSS states rather than props, so
+              they are a State property at most. Props that only change behaviour, such as callbacks,
+              links and accessible names, have no look and are not properties; each component set&apos;s
+              description lists every prop with the import line, and the component&apos;s docs page has
+              the full contract.
+            </p>
+            <Table
+              bordered
+              size="compact"
+              caption="How each kind of prop appears in the kit"
+              captionHidden
+              columns={[
+                { key: "prop", header: "In code", width: "45%", rowHeader: true },
+                { key: "figma", header: "In Figma" },
+              ]}
+              rows={PROP_MAP.map((row) => ({ id: row.prop, cells: row }))}
+            />
             <div className={s.tiers} role="list" aria-label="The token tiers in Figma and in code">
               {TIERS.map((tier, i) => (
                 <div key={tier.figma} className={s.tier} role="listitem">
@@ -282,6 +313,21 @@ export default function FigmaKitPage() {
                       props. Nothing syncs the two automatically: the kit is brought in step by hand
                       after a change, so if they ever disagree, the code and the docs pages on this
                       site are right.
+                    </p>
+                  ),
+                },
+                {
+                  id: "props",
+                  title: "Are all the props in the Figma kit?",
+                  content: (
+                    <p className={s.sectionNote}>
+                      Every prop that changes how a component looks is. Enum props are variant
+                      properties with the same names and values, boolean state props such as{" "}
+                      <code>disabled</code> are boolean properties, the label is a text property and
+                      icons are instance-swap properties. Props with no look, such as callbacks, links
+                      and accessible names, are not properties. Each component set&apos;s description in
+                      the kit lists every prop with its import line, and the component&apos;s docs page
+                      on this site has the full contract.
                     </p>
                   ),
                 },

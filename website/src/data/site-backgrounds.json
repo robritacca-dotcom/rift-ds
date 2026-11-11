@@ -92,8 +92,8 @@
       "scene": "prism",
       "home": {
         "params": {
-          "position": 0.2,
-          "glow": 0.8
+          "glow": 0.8,
+          "offset": 0.2
         },
         "passes": {
           "fadeTop": {
@@ -114,8 +114,8 @@
       },
       "page": {
         "params": {
-          "position": 0.25,
-          "glow": 0.7
+          "glow": 0.7,
+          "offset": 0.25
         },
         "passes": {
           "fadeTop": {

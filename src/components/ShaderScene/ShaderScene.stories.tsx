@@ -76,7 +76,7 @@ export const Meteors: Story = {
   },
 };
 
-/** Waves: a sea of points rolling off into mist, bright on the crests. */
+/** Waves: a sea of points rolling off into the dark, bright on the crests. */
 export const Waves: Story = {
   args: {
     scene: 'waves',

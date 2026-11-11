@@ -343,11 +343,11 @@ export const prism: Scene = {
     "--color-ambient-4",
   ],
   params: [
-    { key: "position", label: "Position", min: -0.5, max: 0.5, step: 0.01, default: 0.12 },
+    { key: "offset", label: "Position", min: -0.5, max: 0.5, step: 0.01, default: 0.12 },
     { key: "spread", label: "Spread", min: 0, max: 2, step: 0.01, default: 0.6 },
     { key: "tilt", label: "Tilt", min: -1, max: 1, step: 0.01, default: -0.25 },
     { key: "fan", label: "Fan", min: 0, max: 3, step: 0.01, default: 1 },
-    { key: "shafts", label: "Beams", min: 1, max: 10, step: 1, default: 7 },
+    { key: "beams", label: "Beams", min: 1, max: 10, step: 1, default: 7 },
     { key: "sharp", label: "Sharpness", min: 0, max: 1, step: 0.01, default: 0.35 },
     { key: "dispersion", label: "Dispersion", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "bleed", label: "Bleed", min: 0, max: 2, step: 0.01, default: 1 },
@@ -378,11 +378,11 @@ vec3 scene(vec2 uv, float t) {
   float edge = mix(0.95, 0.12, u_sharp);
   vec3 light = vec3(0.0);
   for (int i = 0; i < 10; i++) {
-    if (float(i) >= u_shafts) break;
+    if (float(i) >= u_beams) break;
     ivec2 id = ivec2(i * 37 + 5, 91);
     /* The facet this beam leaves, above the stage, and the way it points. */
     vec2 facet = vec2(
-      u_position * aspect + (rnd(id) - 0.5) * (0.25 + 0.5 * u_spread),
+      u_offset * aspect + (rnd(id) - 0.5) * (0.25 + 0.5 * u_spread),
       0.58 + 0.5 * rnd(id + 1)
     );
     float angle = u_tilt * 0.7 + (rnd(id + 2) - 0.5) * 1.5 * u_spread
@@ -561,7 +561,7 @@ vec3 scene(vec2 uv, float t) {
 
 /**
  * Waves: a sea drawn in points, seen from above it. A plane of dots runs off
- * into mist and rolls in slow swells, each dot a round point that grows and brightens on a
+ * into the dark and rolls in slow swells, each dot a round point that grows and brightens on a
  * crest and all but goes out in a trough, over a glow that lies in the
  * water under them. The surface is found by marching the eye's ray through
  * the slab the swells can occupy, in steps too short to pass through a
@@ -572,19 +572,19 @@ vec3 scene(vec2 uv, float t) {
 export const waves: Scene = {
   id: "waves",
   label: "Waves",
-  description: "A sea of points rolling off into mist, bright on the crests, over a deep glow.",
+  description: "A sea of points rolling off into the dark, bright on the crests, over a deep glow.",
   mode: "dark",
   colours: ["--color-ambient-4", "--color-ambient-3", "--color-ambient-2"],
   params: [
     { key: "rise", label: "Height", min: -0.3, max: 0.9, step: 0.01, default: 0.12 },
     { key: "pitch", label: "View", min: 0.15, max: 1.2, step: 0.01, default: 0.3 },
     { key: "swell", label: "Swell", min: 0, max: 2, step: 0.01, default: 1 },
-    { key: "reach", label: "Wave length", min: 0.4, max: 3, step: 0.01, default: 1 },
+    { key: "wavelength", label: "Wave length", min: 0.4, max: 3, step: 0.01, default: 1 },
     { key: "density", label: "Density", min: 3, max: 30, step: 0.5, default: 16 },
     { key: "dot", label: "Dot size", min: 0.3, max: 2, step: 0.01, default: 1 },
     { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
-    { key: "mist", label: "Reach", min: 0.2, max: 3, step: 0.01, default: 1 },
-    { key: "flow", label: "Flow", min: 0, max: 3, step: 0.01, default: 1 },
+    { key: "reach", label: "Reach", min: 0.2, max: 3, step: 0.01, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
   ],
   glsl: /* glsl */ `
 vec3 waveHue(vec3 c) {
@@ -597,7 +597,7 @@ const float WAVE_LENS = 1.6;
 
 /* The sea's height at a place on the plane, -1 to 1. */
 float waveHeight(vec2 q, float t) {
-  q /= u_reach;
+  q /= u_wavelength;
   float h = 0.5 * sin(dot(q, vec2(0.62, 0.78)) * 1.15 + t * 0.3)
     + 0.28 * sin(dot(q, vec2(-0.74, 0.55)) * 2.1 - t * 0.23 + 1.3)
     + 0.7 * (vnoise(q * 0.5 + vec2(0.0, t * 0.05)) - 0.5);
@@ -608,7 +608,7 @@ vec3 scene(vec2 uv, float t) {
   float aspect = u_size.x / u_size.y;
   vec2 p = vec2((uv.x - 0.5) * aspect, uv.y - u_rise);
   float px = 1.0 / u_size.y;
-  t *= u_flow;
+  t *= u_drift;
 
   vec3 deep = waveHue(u_col[0]);
   vec3 smoke = waveHue(u_col[1]);
@@ -621,7 +621,7 @@ vec3 scene(vec2 uv, float t) {
   float fall = WAVE_LENS * sp - p.y * cp;
   float run = WAVE_LENS * cp + p.y * sp;
   float amp = 0.3 * u_swell;
-  float farZ = 6.6 * u_mist;
+  float farZ = 6.6 * u_reach;
   vec3 light = vec3(0.0);
 
   if (fall > 1e-4 && run > 1e-4) {
@@ -634,7 +634,7 @@ vec3 scene(vec2 uv, float t) {
        caught turned on where the samples fell, so patches of sea flickered
        as the swell moved. Steps shrink toward the surface; a ray still
        short of it when they run out is grazing a crest, and rests there. */
-    float closing = fall + amp * 1.7 / u_reach * length(vec2(p.x, run));
+    float closing = fall + amp * 1.7 / u_wavelength * length(vec2(p.x, run));
     float k = enter;
     /* The last crest the ray cleared on its way: where its height over
        the sea stopped falling and rose again. */

@@ -71,7 +71,7 @@ export const TEMPLATES: Template[] = [
   {
     id: "waves",
     label: "Waves",
-    description: "A sea of points rolling off into mist, bright on the crests.",
+    description: "A sea of points rolling off into the dark, bright on the crests.",
     sceneId: "waves",
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },

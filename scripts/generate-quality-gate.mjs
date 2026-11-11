@@ -38,7 +38,7 @@ const descriptionsPath = join(repoRoot, 'website', 'src', 'data', 'quality-gate.
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 /** CI steps that prepare the runner rather than check anything. */
-const CI_SETUP = new Set(['npm ci', 'npx playwright install --with-deps chromium']);
+const CI_SETUP = new Set(['npm ci', 'npx playwright install chromium']);
 
 /** A chain entry's key: a script's basename, or the command itself. */
 function keyOf(command) {

@@ -321,7 +321,7 @@ vec3 scene(vec2 uv, float t) {
 
 /**
  * The prism: light through cut glass. Shafts of light cross the dark at a
- * tilt, some wide and soft, some thin and hard, gathered round one place
+ * tilt, dim and diffuse, some wide, some thin, gathered round one place
  * and thinning away from it. Each shaft is drawn once per colour role, every
  * role a step further along, as glass bends each wavelength a little more:
  * where the copies overlap they sum to white, and where they part the edge
@@ -341,11 +341,11 @@ export const prism: Scene = {
   ],
   params: [
     { key: "position", label: "Position", min: -0.5, max: 0.5, step: 0.01, default: 0.2 },
-    { key: "spread", label: "Spread", min: 0.15, max: 2, step: 0.01, default: 0.55 },
+    { key: "spread", label: "Spread", min: 0.15, max: 2, step: 0.01, default: 0.7 },
     { key: "tilt", label: "Tilt", min: -1, max: 1, step: 0.01, default: -0.22 },
     { key: "fan", label: "Fan", min: 0, max: 1, step: 0.01, default: 0.35 },
     { key: "shafts", label: "Shafts", min: 1, max: 10, step: 0.1, default: 2.8 },
-    { key: "sharp", label: "Sharpness", min: 0, max: 1, step: 0.01, default: 0.65 },
+    { key: "sharp", label: "Sharpness", min: 0, max: 1, step: 0.01, default: 0.2 },
     { key: "dispersion", label: "Dispersion", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
@@ -370,12 +370,13 @@ vec3 prismSpectrum(float x) {
 float prismShafts(float s, float t) {
   float wide = vnoise(vec2(s * u_shafts * 0.5 + t * 0.021, 3.7));
   float thin = vnoise(vec2(s * u_shafts * 2.4 - t * 0.034, 9.1));
-  float wideEdge = mix(0.4, 0.1, u_sharp);
-  float thinEdge = mix(0.22, 0.02, u_sharp);
+  float wideEdge = mix(0.44, 0.1, u_sharp);
+  float thinEdge = mix(0.3, 0.02, u_sharp);
   float soft = smoothstep(0.56, 0.56 + wideEdge, wide);
   /* No two thin shafts are as bright as each other. */
   float each = 0.12 + 0.88 * smoothstep(0.3, 0.75, vnoise(vec2(s * u_shafts * 0.9 + 5.3, 1.9)));
-  return 0.16 * soft * soft + each * smoothstep(0.72, 0.72 + thinEdge, thin);
+  float hard = smoothstep(0.7, 0.7 + thinEdge, thin);
+  return 0.3 * soft * soft + each * hard * hard;
 }
 
 vec3 scene(vec2 uv, float t) {
@@ -403,7 +404,7 @@ vec3 scene(vec2 uv, float t) {
   /* Each shaft comes and goes along its length. */
   float reach = 0.35 + 0.65 * smoothstep(0.25, 0.75, fbm(vec2(s * 2.4, along * 0.9 - t * 0.03) + 4.0));
   vec3 haze = (total / 14.0) * 0.0015 * exp(-(s * s) / (2.0 * u_spread * u_spread * 2.5));
-  return u_ground + (light * gather * reach * 0.9 + haze) * u_glow;
+  return u_ground + (light * gather * reach * 0.3 + haze) * u_glow;
 }
 `,
 };
@@ -414,6 +415,8 @@ vec3 scene(vec2 uv, float t) {
  * head with a tail that cools through the theme's colours as it thins; and
  * a planet's limb crosses the foot of the scene, lit to a crescent by a sun
  * that flares where it clears the edge. The limb hides what falls behind it.
+ * It is soft by default: the streaks, the crescent and the flare are all
+ * blurred, and the sky between them is left all but black.
  */
 export const meteors: Scene = {
   id: "meteors",
@@ -439,6 +442,7 @@ export const meteors: Scene = {
     { key: "tail", label: "Tail length", min: 0.2, max: 3, step: 0.01, default: 1 },
     { key: "fall", label: "Fall speed", min: 0, max: 3, step: 0.01, default: 1 },
     { key: "stars", label: "Stars", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "soft", label: "Softness", min: 0, max: 2, step: 0.01, default: 1 },
   ],
   glsl: /* glsl */ `
 vec3 meteorHue(vec3 c) {
@@ -462,7 +466,7 @@ vec3 scene(vec2 uv, float t) {
   float radius = u_curve * max(aspect, 1.0);
   vec2 centre = vec2(u_lean * radius, u_crown - radius * sqrt(max(1.0 - u_lean * u_lean, 0.05)));
   float d = length(p - centre) - radius;
-  float sky = smoothstep(0.0, 2.0 * px, d);
+  float sky = smoothstep(0.0, 2.0 * px + 0.012 * u_soft, d);
   /* The sun sits on the edge, over its own place across the stage. */
   float sx = u_sun * aspect;
   float reachX = clamp(sx - centre.x, -radius * 0.98, radius * 0.98);
@@ -480,7 +484,7 @@ vec3 scene(vec2 uv, float t) {
   vec2 at = (vec2(cell) + 0.15 + 0.7 * vec2(rnd(cell + 37), rnd(cell + 71))) * 30.0;
   float sd = length(frag - at);
   float pick = rnd(cell + 911);
-  float star = exp(-(sd * sd) / (2.0 * 0.7 * 0.7)) * step(0.62, pick)
+  float star = exp(-(sd * sd) / (2.0 * 0.7 * 0.7)) * step(0.74, pick) * 0.32
     * (0.25 + 0.75 * pow(rnd(cell + 5), 3.0))
     * (0.7 + 0.3 * sin(t * (0.5 + 1.5 * rnd(cell + 13)) + 40.0 * pick));
   light += mix(vec3(1.0), mix(near, far, rnd(cell + 3)), 0.3) * star * u_stars * (1.0 - 0.8 * exp(-fromSun / 0.18));
@@ -498,42 +502,46 @@ vec3 scene(vec2 uv, float t) {
     ivec2 id = ivec2(int(lane) + 2048, i * 57 + 3);
     float u = t * u_fall * (0.1 + 0.16 * rnd(id)) / depth + rnd(id + 11) * 17.0;
     ivec2 pass = id + ivec2(0, int(mod(floor(u), 512.0)) * 131 + 7);
-    float there = step(1.0 - 0.55 * u_shower, rnd(pass + 5));
+    float there = step(1.0 - 0.7 * u_shower, rnd(pass + 5));
     float head = (fract(u) - 0.5) * span;
     float ax = (lane + 0.2 + 0.6 * rnd(pass + 9)) * laneW;
-    float len = u_tail * (0.1 + 0.3 * rnd(pass + 13)) / depth;
+    float len = u_tail * (0.16 + 0.34 * rnd(pass + 13)) / depth;
     float back = (head - b) / len;
-    float w = max((0.0011 + 0.0012 * rnd(pass + 17)) / depth, 0.6 * px) * (1.0 - 0.6 * clamp(back, 0.0, 1.0));
+    float w = max((0.0011 + 0.0012 * rnd(pass + 17)) * (1.0 + 0.5 * u_soft) / depth, 0.6 * px) * (1.0 - 0.5 * clamp(back, 0.0, 1.0));
     float across = exp(-pow((a - ax) / w, 2.0) * 0.5);
-    float trail = smoothstep(-3.0 * w / len, 0.0, back) * pow(max(1.0 - back, 0.0), 1.6);
+    float trail = smoothstep(-3.0 * w / len, 0.25 * u_soft, back) * pow(max(1.0 - back, 0.0), 1.6);
     vec3 tint = mix(vec3(1.0), near, smoothstep(0.0, 0.22, back));
     tint = mix(tint, ember, smoothstep(0.2, 0.6, back));
     tint = mix(tint, far, smoothstep(0.55, 1.0, back));
-    light += tint * across * trail * there * (0.35 + 0.65 * rnd(pass + 21)) * 0.9 / sqrt(depth);
+    light += tint * across * trail * there * (0.3 + 0.7 * rnd(pass + 21)) * 0.55 / (1.0 + 1.2 * u_soft) / sqrt(depth);
   }
 
-  /* ---- Air on the limb: tight and bright by the sun, wide and cool away from it. */
+  /* ---- Air on the limb: a thin wash, cool away from the sun. */
   vec3 air = mix(far, near, lit);
-  light += air * lobe(d - 0.012, 0.07, 0.02) * (0.1 + 0.5 * litWide) * u_glow;
-  light += deep * lobe(d, 0.3, 0.05) * 0.06 * litWide * u_glow;
+  light += air * lobe(d - 0.012, 0.06, 0.02) * (0.015 + 0.08 * litWide) * u_glow;
+  light += deep * lobe(d, 0.3, 0.05) * 0.012 * litWide * u_glow;
   light *= sky;
 
-  /* ---- The planet's lit edge: a crescent, thick by the sun. */
-  float inside = max(-d, 0.0);
-  float crescent = exp(-inside / (0.004 + 0.07 * lit * lit)) * (0.06 + 0.94 * lit);
-  vec3 edge = mix(mix(air, vec3(1.0), 0.75 * lit), vec3(1.0), 0.5 * exp(-inside / 0.006));
-  light += edge * crescent * (1.0 - sky) * 0.95 * u_glow;
-  light += mix(near, vec3(1.0), 0.5) * exp(-pow(d / (1.5 * px), 2.0)) * (0.12 + 0.6 * litWide) * u_glow;
+  /* ---- The planet's lit edge: a band of light with no line in it, wide
+     by the sun and thinning to nothing away from it. */
+  float blur = 0.004 + 0.02 * u_soft;
+  float litMid = exp(-fromSun / 0.75);
+  float band = lobe(d + 0.3 * blur, blur * (0.12 + 1.1 * litMid), blur * (0.15 + 1.9 * litMid));
+  vec3 edge = mix(air, vec3(1.0), 0.3 + 0.55 * litMid);
+  light += edge * band * (0.06 + 0.6 * litMid * litMid) * u_glow;
 
-  /* ---- The sun: a core, a bloom and four spikes. */
-  float core = exp(-dot(r, r) / (2.0 * 0.012 * 0.012));
-  float bloom = exp(-dot(r, r) / (2.0 * 0.07 * 0.07)) * 0.5 + exp(-fromSun / 0.16) * 0.22;
+  /* ---- The sun: a soft core, a bloom, and four short spikes that the
+     softness melts into it. */
+  float coreR = 0.01 + 0.008 * u_soft;
+  float core = exp(-dot(r, r) / (2.0 * coreR * coreR));
+  float bloom = exp(-dot(r, r) / (2.0 * 0.07 * 0.07)) * 0.3 + exp(-fromSun / 0.16) * 0.1;
   vec2 k = vec2(r.x + r.y, r.x - r.y) * 0.7071;
-  float spikes = exp(-pow(k.x / 0.006, 2.0) * 0.5) * exp(-abs(k.y) / 0.085)
-    + exp(-pow(k.y / 0.006, 2.0) * 0.5) * exp(-abs(k.x) / 0.085);
-  float veil = mix(0.4, 1.0, sky);
-  light += mix(sunTint, vec3(1.0), 0.8) * (core * 1.4 + spikes * 0.55 * veil) * u_flare;
-  light += mix(sunTint, vec3(1.0), 0.55) * bloom * veil * u_flare;
+  float thick = 0.006 + 0.012 * u_soft;
+  float spikes = exp(-pow(k.x / thick, 2.0) * 0.5) * exp(-abs(k.y) / 0.09)
+    + exp(-pow(k.y / thick, 2.0) * 0.5) * exp(-abs(k.x) / 0.09);
+  float veil = mix(0.5, 1.0, sky);
+  light += mix(sunTint, vec3(1.0), 0.85) * (core * 0.55 + spikes * 0.6 / (1.0 + u_soft) * veil) * u_flare;
+  light += mix(sunTint, vec3(1.0), 0.7) * bloom * veil * u_flare;
 
   return u_ground + light;
 }

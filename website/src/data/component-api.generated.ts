@@ -14329,7 +14329,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Shader scene",
     "slug": "shader-scene",
     "category": "effects",
-    "description": "A WebGL2 scene, a night horizon, a glowing rift or light printed in type, in the theme's field colours, with fades, a vignette and grain.",
+    "description": "A WebGL2 scene, from a night horizon and a glowing rift to a meteor shower and an aurora, in the theme's field colours, with fades, a vignette and grain.",
     "client": true,
     "importPath": "rift-ds/components/ShaderScene/ShaderScene",
     "barrel": "main",
@@ -14341,11 +14341,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "scene",
             "type": "ShaderSceneId",
             "required": false,
-            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, or `glyphs`, soft light printed in type.",
+            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, shafts of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void.",
             "values": [
+              "aurora",
               "glyphs",
               "horizon",
-              "rift"
+              "meteors",
+              "prism",
+              "rift",
+              "waves"
             ],
             "defaultValue": "horizon"
           },

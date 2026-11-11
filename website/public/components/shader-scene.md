@@ -1,6 +1,6 @@
 # Shader scene
 
-A WebGL2 scene, a night horizon, a glowing rift or light printed in type, in the theme's field colours, with fades, a vignette and grain.
+A WebGL2 scene, from a night horizon and a glowing rift to a meteor shower and an aurora, in the theme's field colours, with fades, a vignette and grain.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| scene | `ShaderSceneId` | no | `horizon` | The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, or `glyphs`, soft light printed in type. |
+| scene | `ShaderSceneId` | no | `horizon` | The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, shafts of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. |
 | params | `Partial<Record<string, number>>` | no |  | The scene's settings, merged over its defaults (`SHADER_SCENES` lists each scene's keys and ranges), so passing one changes one thing. Changing them never rebuilds the GL state. |
 | passes | `Partial<Record<string, ShaderScenePassSetting>>` | no |  | The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`, `grain`), each merged over its defaults. |
 | speed | `number` | no | `1.6` | Scene seconds per second: how fast it moves. 0 holds it still. |

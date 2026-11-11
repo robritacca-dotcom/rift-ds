@@ -320,18 +320,20 @@ vec3 scene(vec2 uv, float t) {
 };
 
 /**
- * The prism: light through cut glass. Wedges of light open from a point
- * above the stage and cross the dark at a tilt, dim and diffuse, some
- * wide, some thin, gathered round one place, thinning as they widen and
- * each coming and going in its own time. Each shaft is drawn once per colour role, every
- * role a step further along, as glass bends each wavelength a little more:
- * where the copies overlap they sum to white, and where they part the edge
- * of the shaft breaks into the theme's own spectrum.
+ * The prism: light through a cut stone. A handful of beams leave the
+ * facets of something above the stage, and no two alike: each has its own
+ * facet to leave from, its own angle, width and strength, so the light is
+ * uneven the way a diamond's is, a few strong beams among faint ones. The
+ * beams themselves are true: each runs dead straight, opens as it travels
+ * and thins as it opens, and each colour role leaves at a slightly
+ * different angle, so a beam is white where its colours still overlap and
+ * breaks into the theme's spectrum at its edges, more the further it runs.
+ * The stone turns slowly, so beams swing a little and come and go.
  */
 export const prism: Scene = {
   id: "prism",
   label: "Prism",
-  description: "Wedges of light through glass, their edges split into the theme's spectrum.",
+  description: "Beams of light from a cut stone, uneven in strength, their edges split into the theme's spectrum.",
   mode: "dark",
   colours: [
     "--color-ambient-5",
@@ -341,13 +343,14 @@ export const prism: Scene = {
     "--color-ambient-4",
   ],
   params: [
-    { key: "position", label: "Position", min: -0.5, max: 0.5, step: 0.01, default: 0.2 },
-    { key: "spread", label: "Spread", min: 0.15, max: 2, step: 0.01, default: 0.7 },
-    { key: "tilt", label: "Tilt", min: -1, max: 1, step: 0.01, default: -0.22 },
-    { key: "fan", label: "Fan", min: 0, max: 3, step: 0.01, default: 1.5 },
-    { key: "shafts", label: "Shafts", min: 1, max: 10, step: 0.1, default: 2.8 },
-    { key: "sharp", label: "Sharpness", min: 0, max: 1, step: 0.01, default: 0.2 },
+    { key: "position", label: "Position", min: -0.5, max: 0.5, step: 0.01, default: 0.12 },
+    { key: "spread", label: "Spread", min: 0, max: 2, step: 0.01, default: 0.6 },
+    { key: "tilt", label: "Tilt", min: -1, max: 1, step: 0.01, default: -0.25 },
+    { key: "fan", label: "Fan", min: 0, max: 3, step: 0.01, default: 1 },
+    { key: "shafts", label: "Beams", min: 1, max: 10, step: 1, default: 7 },
+    { key: "sharp", label: "Sharpness", min: 0, max: 1, step: 0.01, default: 0.35 },
     { key: "dispersion", label: "Dispersion", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "bleed", label: "Bleed", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
   ],
@@ -360,58 +363,57 @@ vec3 prismHue(vec3 c) {
   return c / max(max(c.r, max(c.g, c.b)), 1e-3);
 }
 
-/* The theme's spectrum, one end to the other. */
-vec3 prismSpectrum(float x) {
-  float f = clamp(x, 0.0, 1.0) * 4.0;
-  int i = int(min(floor(f), 3.0));
-  return mix(prismHue(u_col[i]), prismHue(u_col[i + 1]), f - float(i));
-}
-
-/* The shafts across their own axis: wide soft ones and thin hard ones. */
-float prismShafts(float s, float t) {
-  float wide = vnoise(vec2(s * u_shafts * 0.5 + t * 0.021, 3.7));
-  float thin = vnoise(vec2(s * u_shafts * 2.4 - t * 0.034, 9.1));
-  float wideEdge = mix(0.44, 0.1, u_sharp);
-  float thinEdge = mix(0.3, 0.02, u_sharp);
-  float soft = smoothstep(0.56, 0.56 + wideEdge, wide);
-  /* No two thin shafts are as bright as each other. */
-  /* And each comes and goes in its own time. */
-  float each = 0.04 + 0.96 * smoothstep(0.3, 0.75, vnoise(vec2(s * u_shafts * 0.9 + 5.3, 1.9 + t * 0.07)));
-  soft *= 0.35 + 0.65 * smoothstep(0.25, 0.7, vnoise(vec2(s * u_shafts * 0.4 + 8.1, 6.3 - t * 0.05)));
-  float hard = smoothstep(0.7, 0.7 + thinEdge, thin);
-  return 0.3 * soft * soft + each * hard * hard;
-}
-
 vec3 scene(vec2 uv, float t) {
   float aspect = u_size.x / u_size.y;
   vec2 p = vec2((uv.x - 0.5) * aspect, uv.y - 0.5);
   t *= u_drift;
 
-  /* Across the shafts, which open as they fall from above. */
-  float open = 1.0 + u_fan * (0.5 - p.y);
-  float s = (p.x - u_position * aspect + u_tilt * p.y) / open;
-  float along = p.y - u_tilt * p.x;
-  s += 0.04 * (fbm(vec2(p.x * 0.9 + t * 0.02, p.y * 0.7 - t * 0.015)) - 0.5);
-
-  vec3 light = vec3(0.0);
+  vec3 hues[5];
   vec3 total = vec3(0.0);
-  for (int k = 0; k < 14; k++) {
-    float x = float(k) / 13.0;
-    vec3 hue = prismSpectrum(x);
-    light += hue * prismShafts(s + (x - 0.5) * 0.085 * u_dispersion, t);
-    total += hue;
+  for (int k = 0; k < 5; k++) {
+    hues[k] = prismHue(u_col[k]);
+    total += hues[k];
   }
-  /* Every copy in one place is white light. */
-  light /= max(total, vec3(1e-3));
 
-  float gather = exp(-(s * s) / (2.0 * u_spread * u_spread));
-  /* Each shaft comes and goes along its length. */
-  float reach = 0.35 + 0.65 * smoothstep(0.25, 0.75, fbm(vec2(s * 2.4, along * 0.9 - t * 0.03) + 4.0));
-  vec3 haze = (total / 14.0) * 0.0015 * exp(-(s * s) / (2.0 * u_spread * u_spread * 2.5));
-  /* A wedge of light thins as it widens, and gives out before the floor. */
-  float thinning = pow(1.0 / open, 0.8) * (1.0 + 0.5 * u_fan);
-  float fade = mix(1.0, smoothstep(-0.62, 0.2, p.y), min(u_fan, 1.0));
-  return u_ground + (light * gather * reach * thinning * fade * 0.3 + haze) * u_glow;
+  float edge = mix(0.95, 0.12, u_sharp);
+  vec3 light = vec3(0.0);
+  for (int i = 0; i < 10; i++) {
+    if (float(i) >= u_shafts) break;
+    ivec2 id = ivec2(i * 37 + 5, 91);
+    /* The facet this beam leaves, above the stage, and the way it points. */
+    vec2 facet = vec2(
+      u_position * aspect + (rnd(id) - 0.5) * (0.25 + 0.5 * u_spread),
+      0.58 + 0.5 * rnd(id + 1)
+    );
+    float angle = u_tilt * 0.7 + (rnd(id + 2) - 0.5) * 1.5 * u_spread
+      + 0.05 * sin(t * (0.05 + 0.06 * rnd(id + 3)) + 6.28 * rnd(id + 4));
+    vec2 dir = vec2(sin(angle), -cos(angle));
+    vec2 rel = p - facet;
+    float run = dot(rel, dir);
+    if (run <= 0.0) continue;
+    float across = dot(rel, vec2(dir.y, -dir.x));
+
+    /* A few strong beams among faint ones, each breathing as the stone turns. */
+    float strength = pow(rnd(id + 5), 2.2)
+      * (0.45 + 0.55 * sin(t * (0.04 + 0.05 * rnd(id + 6)) + 6.28 * rnd(id + 7)));
+    strength = max(strength, 0.0) + 0.012;
+    float mouth = 0.004 + 0.035 * rnd(id + 8) * rnd(id + 8);
+    float halfW = mouth + u_fan * (0.008 + 0.035 * rnd(id + 9)) * run;
+    float split = (0.5 + rnd(id + 10)) * 0.13 * u_dispersion * run;
+    /* It thins as it opens and gives out with distance. */
+    float carry = pow((mouth + 0.02) / (halfW + 0.02), 0.7) * exp(-run / (0.9 + 1.4 * rnd(id + 11)));
+
+    vec3 beam = vec3(0.0);
+    for (int k = 0; k < 5; k++) {
+      float off = abs(across - (float(k) / 4.0 - 0.5) * split);
+      float body = 1.0 - smoothstep(halfW * (1.0 - edge), halfW * (1.0 + edge) + 0.002, off);
+      float halo = exp(-(off * off) / (2.0 * (halfW * 1.7 + 0.015) * (halfW * 1.7 + 0.015)));
+      beam += hues[k] * (body + 0.1 * u_bleed * halo);
+    }
+    /* Every colour in one place is white light. */
+    light += beam / max(total, vec3(1e-3)) * strength * carry;
+  }
+  return u_ground + light * 0.5 * u_glow;
 }
 `,
 };

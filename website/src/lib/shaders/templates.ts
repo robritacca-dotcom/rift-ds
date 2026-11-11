@@ -55,7 +55,7 @@ export const TEMPLATES: Template[] = [
   {
     id: "prism",
     label: "Prism",
-    description: "Wedges of light through glass, their edges split into the theme's spectrum.",
+    description: "Beams of light from a cut stone, uneven in strength, their edges split into the theme's spectrum.",
     sceneId: "prism",
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },

@@ -42,7 +42,7 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, shafts of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each

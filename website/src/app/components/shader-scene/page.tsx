@@ -91,8 +91,9 @@ export default function ShaderScenePage() {
               outwards. Glyphs prints a streak of light and its blooms in
               type: each character cell reads the light under it and takes a
               heavier character the brighter it is, in the theme&rsquo;s code
-              face. Prism crosses the dark with shafts of light through
-              glass, each edge split into the theme&rsquo;s own spectrum.
+              face. Prism sends beams of light out of a cut stone, a few
+              strong among faint ones, each edge split into the theme&rsquo;s
+              own spectrum.
               Meteors drops a shower past a planet&rsquo;s edge, where a sun
               flares on the limb. Waves is a sea drawn in points, each one
               larger and brighter on a crest. Aurora folds wide ribbons of

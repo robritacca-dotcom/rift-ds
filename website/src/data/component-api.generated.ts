@@ -14341,7 +14341,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "scene",
             "type": "ShaderSceneId",
             "required": false,
-            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, shafts of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void.",
+            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void.",
             "values": [
               "aurora",
               "glyphs",

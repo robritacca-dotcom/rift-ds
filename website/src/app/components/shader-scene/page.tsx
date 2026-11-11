@@ -79,13 +79,13 @@ export default function ShaderScenePage() {
           <section className={styles.section}>
             <SectionTitle title="Scenes" />
             <p className={styles.demoText}>
-              Three scenes, picked with <code>scene</code>. The horizon sets a
+              The scenes, picked with <code>scene</code>. The horizon sets a
               fixed sun at the top of a curved limb over hazy land and a
               moving ocean. The rift opens at its middle and streams light
               outwards. Glyphs prints a streak of light and its blooms in
               type: each character cell reads the light under it and takes a
               heavier character the brighter it is, in the theme&rsquo;s code
-              face. The horizon is also one of this site&rsquo;s own
+              face. The horizon and glyphs are also this site&rsquo;s own
               backgrounds, picked from the header. Three stages and no more:
               each one is a live GL context.
             </p>
@@ -122,7 +122,7 @@ export default function ShaderScenePage() {
           <section className={styles.section}>
             <SectionTitle title="Finishing passes" />
             <p className={styles.demoText}>
-              Five passes run over the scene: a scrim, a vignette, fades to the
+              Finishing passes run over the scene: a scrim, a vignette, fades to the
               page at the top and the bottom, and film grain. Each is on or off
               with its own settings in <code>passes</code>. The fades melt the
               scene into the page ground, and the scrim is the one to reach for

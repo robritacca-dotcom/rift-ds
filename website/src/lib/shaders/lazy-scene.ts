@@ -4,9 +4,9 @@
  * ShaderScene, loaded only when a page asks for it.
  *
  * BlurBackground mounts from the root layout, so anything it imports
- * statically ships on every page. ShaderScene (its renderer and both
- * scenes' GLSL) is only ever drawn when the home page's switch picks
- * Horizon or the playground stages a scene into a frame, so it stays out
+ * statically ships on every page. ShaderScene (its renderer and every
+ * scene's GLSL) is only ever drawn when the header's background menu picks
+ * a scene or the playground stages one into a frame, so it stays out
  * of that shared bundle and arrives as its own chunk. The header's
  * background switcher calls `loadShaderScene` when its trigger is hovered
  * or focused, so the chunk is usually in hand before a pick lands.

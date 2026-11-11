@@ -98,8 +98,9 @@ export function HiddenBackground() {
  * What paints in the band is the visitor's pick (lib/shaders/background):
  * the field, or one of the library's scenes in its place, on every page,
  * from the SITE_BACKGROUNDS registry, whose row carries the scene and its
- * tuning for each band (the home page's low horizon under the hero and a
- * high one, the top half of the scene, under every other page's title).
+ * tuning for each band (`home` for the tall bands under a hero, `page`
+ * for the standard band under a title; background-storage.ts owns each
+ * row's reasons).
  *
  * Every tuneable value comes from website/src/data/shader-background.json.
  * Append `?tune=1` to any page in `npm run dev --workspace website` to adjust them live.
@@ -192,9 +193,8 @@ export default function BlurBackground() {
 
   /* Which band the page declared, read from its marker after each
      navigation: the scene is tuned for the band it fills. The extended and
-     full-bleed bands take the home tuning (the horizon low, under a hero);
-     the standard band takes the page tuning (the top half of the scene,
-     under a title). The markers are committed with the page, so a layout
+     full-bleed bands take the row's home tuning; the standard band takes
+     its page tuning. The markers are committed with the page, so a layout
      effect keyed on the route sees them before that commit paints. */
   const pathname = usePathname();
   const [tallBand, setTallBand] = useState(false);

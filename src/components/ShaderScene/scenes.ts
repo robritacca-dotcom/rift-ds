@@ -197,7 +197,7 @@ vec3 scene(vec2 uv, float t) {
 };
 
 /**
- * The glyph field, after the local glyphs lab: soft light printed in type.
+ * The glyph field: soft light printed in type.
  * Two layers in one pass. Six stretched Gaussian lights (a wide haze, a
  * bloom, a white-hot core, one long thin streak and two blooms below) are
  * added over the ground and tone-mapped, so where colours stack the core

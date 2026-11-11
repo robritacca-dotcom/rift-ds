@@ -44,6 +44,14 @@ export const TEMPLATES: Template[] = [
     sceneId: "rift",
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, vignette: { on: true, params: { amount: 0.6 } } },
   },
+  {
+    id: "glyphs",
+    label: "Glyphs",
+    description: "Soft light printed in type: characters that thicken with the brightness.",
+    sceneId: "glyphs",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.06 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

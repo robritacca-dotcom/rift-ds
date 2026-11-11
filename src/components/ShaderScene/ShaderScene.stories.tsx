@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -49,6 +49,14 @@ export const Rift: Story = {
   args: {
     scene: 'rift',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, vignette: { on: true, params: { amount: 0.6 } } },
+  },
+};
+
+/** Glyphs: soft light printed in type, the characters thickening with the brightness under them. */
+export const Glyphs: Story = {
+  args: {
+    scene: 'glyphs',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.06 } } },
   },
 };
 

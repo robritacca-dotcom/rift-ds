@@ -33,6 +33,11 @@ const RIFT_PASSES = {
   fadeBottom: { on: false },
   vignette: { on: true, params: { amount: 0.6 } },
 };
+const GLYPH_PASSES = {
+  fadeTop: { on: false },
+  fadeBottom: { on: false },
+  grain: { params: { amount: 0.06 } },
+};
 const SCRIM = {
   scrim: { on: true, params: { amount: 0.3 } },
   vignette: { on: true },
@@ -57,8 +62,9 @@ export default function ShaderScenePage() {
             <p className={styles.subDisplay}>A scene, not a field</p>
             <p className={styles.introBody}>
               Where Shader field sums soft light into an abstract wash, Shader
-              scene paints a place: a planet&rsquo;s limb at night, or a tear
-              of light opening across the dark. Both read the background
+              scene paints a place: a planet&rsquo;s limb at night, a tear of
+              light opening across the dark, or a streak of light printed in
+              type. All read the background
               field&rsquo;s colour roles from the page, so a theme, a preset
               or a scoped override recolours them with nothing to configure.
             </p>
@@ -73,11 +79,14 @@ export default function ShaderScenePage() {
           <section className={styles.section}>
             <SectionTitle title="Scenes" />
             <p className={styles.demoText}>
-              Two scenes, picked with <code>scene</code>. The horizon sets a
+              Three scenes, picked with <code>scene</code>. The horizon sets a
               fixed sun at the top of a curved limb over hazy land and a
               moving ocean. The rift opens at its middle and streams light
-              outwards. The horizon is also one of this site&rsquo;s own
-              backgrounds, picked from the header. Two stages and no more:
+              outwards. Glyphs prints a streak of light and its blooms in
+              type: each character cell reads the light under it and takes a
+              heavier character the brighter it is, in the theme&rsquo;s code
+              face. The horizon is also one of this site&rsquo;s own
+              backgrounds, picked from the header. Three stages and no more:
               each one is a live GL context.
             </p>
             <div className={styles.stageGrid}>
@@ -88,6 +97,9 @@ export default function ShaderScenePage() {
                 <ShaderScene scene="rift" passes={RIFT_PASSES} />
               </Stage>
             </div>
+            <Stage caption='scene="glyphs"'>
+              <ShaderScene scene="glyphs" passes={GLYPH_PASSES} speed={1} />
+            </Stage>
           </section>
 
           {/* Settings */}
@@ -125,7 +137,7 @@ export default function ShaderScenePage() {
           <section className={styles.section}>
             <SectionTitle title="Light mode" />
             <p className={styles.demoText}>
-              Both scenes are night scenes: they add light to a dark ground. On
+              Every scene is a night scene: it adds light to a dark ground. On
               a light page each one works its light out against a dark ground
               of its own and lays it onto the page as a pale tint, so it reads
               as a soft dawn instead of a dark block. Switch the theme to see

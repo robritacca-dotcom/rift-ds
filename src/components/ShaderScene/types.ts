@@ -36,6 +36,19 @@ export type Scene = {
    * preset's colours.
    */
   mode?: "dark";
+  /**
+   * A ramp of characters, thin to heavy, for a scene that prints type. The
+   * renderer draws it once into a strip texture in the theme's code face
+   * (`--font-family-code`) and hands it to the GLSL as `u_glyphs`, with
+   * the number of characters in `u_glyphCount`.
+   */
+  glyphs?: string;
+  /**
+   * The most drawing-buffer pixels per CSS pixel the scene may use, for a
+   * scene with detail finer than soft light (type). Defaults to 1; the
+   * ratio in use reaches the GLSL as `u_ratio`.
+   */
+  pixelRatio?: number;
   params: ParamSpec[];
   glsl: string;
 };

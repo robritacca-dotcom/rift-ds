@@ -3,16 +3,18 @@
 import React from 'react';
 import { MOTION_RENDERER_WATCHDOG_MS } from '../../tokens/motion';
 import { PASSES } from './passes';
-import { coloursFor, createRenderer } from './renderer';
+import { coloursFor, createRenderer, glyphFontFor } from './renderer';
 import { SCENES } from './scenes';
 import { defaultsFor, type Values } from './types';
 import './ShaderScene.css';
 
-/* At most one drawing-buffer pixel per CSS pixel. Both scenes are soft
-   light, layered noise with no edge finer than a CSS pixel, so a 2x
-   screen's extra pixels were invisible and quadrupled the fill: the scene
-   runs fourteen layered noise lookups per pixel, and a full-width band at
-   2x was six million pixels a frame. */
+/* At most one drawing-buffer pixel per CSS pixel, unless the scene asks for
+   more. The horizon and the rift are soft light, layered noise with no
+   edge finer than a CSS pixel, so a 2x screen's extra pixels were invisible
+   and quadrupled the fill: the horizon runs fourteen layered noise lookups
+   per pixel, and a full-width band at 2x was six million pixels a frame. A
+   scene that prints type declares its own cap (`pixelRatio` in scenes.ts),
+   since type at 1x on a 2x screen is soft. */
 const MAX_PIXEL_RATIO = 1;
 /* 30fps, as ShaderField holds at rest: the scenes drift on cycles of
    tens of seconds, too slowly for 60fps to be visible, and every frame
@@ -20,7 +22,7 @@ const MAX_PIXEL_RATIO = 1;
 const FRAME_MS = 1000 / 30;
 
 /** The scenes ShaderScene paints. */
-export type ShaderSceneId = 'horizon' | 'rift';
+export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -40,7 +42,7 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, or `rift`, a glowing tear. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, or `glyphs`, soft light printed in type. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each
@@ -83,14 +85,14 @@ export interface ShaderSceneProps
 const DEFAULT_SPEED = 1.6;
 
 /**
- * ShaderScene paints one of the system's shader scenes, a horizon or a rift,
- * in WebGL2, with finishing passes over it (a scrim, a vignette, top and
+ * ShaderScene paints one of the system's shader scenes, a horizon, a rift or
+ * a field of glyphs, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
  * bottom fades to the page, film grain). Its colours are the background
  * field's roles (`--color-ambient-*`) read from the live cascade at the
  * scene, so it re-themes with `data-theme`, a preset or any scoped override,
  * and its fades melt into the page ground.
  *
- * Both scenes are night scenes: they add light over a dark ground. On a light
+ * Every scene is a night scene: it adds light over a dark ground. On a light
  * page each computes its light against a dark ground of its own and lays it
  * onto the page as a pale tint, so it reads as a soft dawn rather than a dark
  * block. Nothing here sets `data-theme`, which would hide a preset's colours.
@@ -187,9 +189,15 @@ export function ShaderScene({
       return () => cancelAnimationFrame(failed);
     }
 
-    const applyColours = () => renderer.setColours(coloursFor(host, definition));
+    /* The colours, and for a type scene the face its ramp is drawn in: a
+       preset can change both. */
+    const applyColours = () => {
+      renderer.setColours(coloursFor(host, definition));
+      renderer.setGlyphs(glyphFontFor(host));
+    };
+    let ratio = 1;
     const resize = () => {
-      const ratio = Math.min(MAX_PIXEL_RATIO, window.devicePixelRatio || 1);
+      ratio = Math.min(definition.pixelRatio ?? MAX_PIXEL_RATIO, window.devicePixelRatio || 1);
       canvas.width = Math.max(1, Math.round(host.clientWidth * ratio));
       canvas.height = Math.max(1, Math.round(host.clientHeight * ratio));
     };
@@ -206,7 +214,7 @@ export function ShaderScene({
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       if (!still) time += dt * values.speed;
-      renderer.draw(values, time, canvas.width, canvas.height);
+      renderer.draw(values, time, canvas.width, canvas.height, ratio);
       if (!painted) {
         painted = true;
         setGl('painted');
@@ -229,6 +237,16 @@ export function ShaderScene({
     applyColours();
     resize();
     start();
+    /* A code face still on its way draws the ramp in a fallback; draw it
+       again once the fonts land. */
+    let mounted = true;
+    if (definition.glyphs) {
+      document.fonts?.ready.then(() => {
+        if (!mounted) return;
+        renderer.setGlyphs('');
+        renderer.setGlyphs(glyphFontFor(host));
+      });
+    }
     const visibilityObserver =
       typeof IntersectionObserver === 'undefined'
         ? null
@@ -249,6 +267,7 @@ export function ShaderScene({
     });
 
     return () => {
+      mounted = false;
       stop();
       visibilityObserver?.disconnect();
       sizeObserver.disconnect();

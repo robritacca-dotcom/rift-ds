@@ -1,7 +1,7 @@
 /**
  * ShaderScene's scenes. Each is one look: its GLSL `scene()`, its settings
  * as typed data (so a host can draw a slider per setting) and the colour
- * roles it reads. Both read the background field's roles
+ * roles it reads. All read the background field's roles
  * (`--color-ambient-*`), the ones a theme tunes for ambient shaders, so a
  * theme recolours them with no wiring.
  */
@@ -196,5 +196,128 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
+/**
+ * The glyph field, after the local glyphs lab: soft light printed in type.
+ * Two layers in one pass. Six stretched Gaussian lights (a wide haze, a
+ * bloom, a white-hot core, one long thin streak and two blooms below) are
+ * added over the ground and tone-mapped, so where colours stack the core
+ * burns to white; they drift, breathe and roll on slow travelling swells.
+ * Then the screen is cut into character cells: each cell reads the light at
+ * its centre and prints a glyph from the ramp that thickens with the
+ * brightness, lighter than what is under it. Below a floor nothing prints,
+ * so the type gathers on the light and scatters to dots at its edge.
+ * Nothing snaps: the scatter eases from one roll to the next, and a cell
+ * crossing a step of the ramp dissolves between the two glyphs.
+ */
+export const glyphs: Scene = {
+  id: "glyphs",
+  label: "Glyphs",
+  description: "Soft light printed in type: a streak and its blooms read through characters that thicken with the brightness.",
+  mode: "dark",
+  colours: [
+    "--color-ambient-4",
+    "--color-ambient-2",
+    "--color-ambient-1",
+    "--color-ambient-3",
+    "--color-ambient-5",
+  ],
+  glyphs: ".·xxXXSO0#@",
+  /* Type at 1x on a 2x screen is soft, and this scene is cheap: six
+     Gaussians and two noise lookups a pixel. */
+  pixelRatio: 2,
+  params: [
+    { key: "cell", label: "Type size", min: 6, max: 40, step: 1, default: 15 },
+    { key: "ink", label: "Type strength", min: 0, max: 1, step: 0.01, default: 0.42 },
+    { key: "density", label: "Density", min: 0.2, max: 4, step: 0.05, default: 1.6 },
+    { key: "floor", label: "Floor", min: 0, max: 0.6, step: 0.01, default: 0.06 },
+    { key: "scatter", label: "Scatter", min: 0, max: 1.5, step: 0.01, default: 0.55 },
+    { key: "shimmer", label: "Shimmer", min: 0, max: 6, step: 0.1, default: 0.75 },
+    { key: "exposure", label: "Exposure", min: 0.2, max: 4, step: 0.05, default: 1.25 },
+    { key: "spread", label: "Spread", min: 0.3, max: 2.5, step: 0.05, default: 0.85 },
+    { key: "warp", label: "Warp", min: 0, max: 2, step: 0.05, default: 0.6 },
+    { key: "wave", label: "Wave", min: 0, max: 3, step: 0.05, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1.4 },
+    { key: "mosaic", label: "Mosaic", min: 0, max: 1, step: 0.01, default: 0 },
+    { key: "rise", label: "Height", min: -0.45, max: 0.45, step: 0.01, default: 0 },
+  ],
+  glsl: /* glsl */ `
+/* A theme's ambient tones can be muted; pushed from their own grey and up
+   to full brightness they still read as hues once they are light. */
+vec3 glyphHue(vec3 c) {
+  float grey = (c.r + c.g + c.b) / 3.0;
+  c = max(grey + (c - grey) * 1.8, vec3(0.0));
+  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+}
+
+/* One stretched Gaussian light: centre in 0 to 1 across and up the stage,
+   half extents along and across its own axis in stage heights, a tilt. */
+float glyphLamp(vec2 p, float aspect, vec2 centre, vec2 extent, float tilt, float k, float t) {
+  vec2 c = (centre - 0.5) * vec2(aspect, 1.0);
+  c += u_drift * 0.05 * vec2(sin(t * 0.13 + k * 1.7), cos(t * 0.11 + k * 2.3));
+  float a = tilt + u_drift * 0.06 * sin(t * 0.09 + k * 1.3);
+  vec2 d = p - c;
+  d = vec2(cos(a) * d.x + sin(a) * d.y, -sin(a) * d.x + cos(a) * d.y) / (extent * u_spread);
+  return (1.0 + u_drift * 0.12 * sin(t * 0.21 + k * 2.9)) * exp(-dot(d, d));
+}
+
+/* The light at a pixel, tone-mapped. */
+vec3 glyphLight(vec2 frag, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = (frag / u_size - 0.5) * vec2(aspect, 1.0);
+  p.y -= u_rise;
+  p += u_warp * 0.09 * (vec2(vnoise(p * 1.6 + t * 0.05), vnoise(p * 1.6 + 7.3 - t * 0.04)) - 0.5);
+  /* Slow travelling swells, so the streak rolls like a ribbon. */
+  p.y += u_wave * (0.045 * sin(p.x * 2.6 + t * 0.35) + 0.025 * sin(p.x * 5.3 - t * 0.27 + 1.7));
+  p.x += u_wave * 0.03 * sin(p.y * 3.1 + t * 0.22);
+
+  vec3 haze = glyphHue(u_col[0]);
+  vec3 bloom = glyphHue(u_col[1]);
+  vec3 streak = glyphHue(u_col[2]);
+  vec3 low = glyphHue(u_col[3]);
+  vec3 foot = glyphHue(u_col[4]);
+  vec3 core = mix((haze + bloom + streak + low + foot) / 5.0, vec3(1.0), 0.85);
+
+  vec3 c = u_ground;
+  c += haze * 0.55 * glyphLamp(p, aspect, vec2(0.47, 0.62), vec2(0.95, 0.3), 0.05, 0.0, t);
+  c += bloom * 0.95 * glyphLamp(p, aspect, vec2(0.66, 0.74), vec2(0.5, 0.17), 0.2, 1.0, t);
+  c += core * 1.7 * glyphLamp(p, aspect, vec2(0.68, 0.625), vec2(0.3, 0.045), 0.0, 2.0, t);
+  c += streak * 1.5 * glyphLamp(p, aspect, vec2(0.3, 0.585), vec2(0.62, 0.011), 0.0, 3.0, t);
+  c += low * 1.0 * glyphLamp(p, aspect, vec2(0.8, 0.42), vec2(0.36, 0.2), -0.7, 4.0, t);
+  c += foot * 0.75 * glyphLamp(p, aspect, vec2(0.76, 0.2), vec2(0.4, 0.16), -1.1, 5.0, t);
+  return u_ground + (1.0 - exp(-(c - u_ground) * u_exposure));
+}
+
+vec3 scene(vec2 uv, float t) {
+  vec2 frag = uv * u_size;
+  float cellH = max(4.0, floor(u_cell * u_ratio + 0.5));
+  vec2 size = vec2(cellH * 0.6, cellH);
+  vec2 cell = floor(frag / size);
+  vec2 local = fract(frag / size);
+
+  vec3 blocky = glyphLight((cell + 0.5) * size, t);
+  vec3 col = mix(glyphLight(frag, t), blocky, u_mosaic);
+  /* A mosaic shows its seams. */
+  vec2 edge = min(local, 1.0 - local) * size;
+  col = mix(col, u_ground, u_mosaic * 0.3 * (1.0 - smoothstep(0.0, 1.5 * u_ratio, min(edge.x, edge.y))));
+
+  float lum = dot(blocky - u_ground, vec3(0.2126, 0.7152, 0.0722));
+  float beat = t * u_shimmer;
+  int tick = int(mod(floor(beat), 512.0));
+  ivec2 at = ivec2(cell) + 2048;
+  float roll = mix(rnd(at + tick * ivec2(17, 31)), rnd(at + (tick + 1) * ivec2(17, 31)),
+                   smoothstep(0.0, 1.0, fract(beat)));
+  float v = (lum - u_floor) / (1.0 - u_floor) * u_density
+    + (roll - 0.5) * u_scatter * min(1.0, lum * 6.0 + 0.15);
+  float g = max(v, 0.0) * u_glyphCount;
+  float first = min(u_glyphCount - 1.0, floor(g));
+  float second = min(u_glyphCount - 1.0, first + 1.0);
+  float ink = mix(texture(u_glyphs, vec2((first + local.x) / u_glyphCount, local.y)).r,
+                  texture(u_glyphs, vec2((second + local.x) / u_glyphCount, local.y)).r,
+                  smoothstep(0.25, 0.75, fract(g)));
+  return mix(col, vec3(1.0), ink * u_ink * smoothstep(0.0, 0.1, v) * (0.45 + 0.55 * min(1.0, v)));
+}
+`,
+};
+
 /** Every scene, in picker order. */
-export const SCENES = [horizon, rift];
+export const SCENES = [horizon, rift, glyphs];

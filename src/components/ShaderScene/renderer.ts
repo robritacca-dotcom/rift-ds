@@ -3,7 +3,8 @@
  * `createRenderer` compiles one scene with the passes into a program on a
  * WebGL2 context and returns a `draw` that sets every uniform from a values
  * object and paints one frame. `readColours` resolves a scene's tokens from
- * the live cascade.
+ * the live cascade. A scene that prints type (`glyphs`) also gets its ramp
+ * as a strip texture, drawn in the theme's code face.
  */
 import { assemble, uniformNames, VERTEX } from "./assemble";
 import type { Pass, Scene, Values } from "./types";
@@ -65,6 +66,33 @@ export function coloursFor(host: HTMLElement, scene: Scene): Colours {
   return colours;
 }
 
+/** The face a scene's type is drawn in: the theme's code face at `host`. */
+export function glyphFontFor(host: HTMLElement) {
+  return getComputedStyle(host).getPropertyValue("--font-family-code").trim() || "monospace";
+}
+
+const GLYPH_W = 48;
+const GLYPH_H = 80;
+
+/** A scene's ramp as one strip, a character per cell, white on black. */
+function drawGlyphs(ramp: string, font: string) {
+  const glyphs = [...ramp];
+  const strip = document.createElement("canvas");
+  strip.width = GLYPH_W * glyphs.length;
+  strip.height = GLYPH_H;
+  const ctx = strip.getContext("2d");
+  if (ctx) {
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, strip.width, strip.height);
+    ctx.fillStyle = "#fff";
+    ctx.font = `700 ${GLYPH_H * 0.78}px ${font}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    glyphs.forEach((glyph, i) => ctx.fillText(glyph, (i + 0.5) * GLYPH_W, GLYPH_H * 0.52));
+  }
+  return { strip, count: glyphs.length };
+}
+
 function compile(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
   if (!shader) return null;
@@ -110,7 +138,11 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
   const uPage = at("u_page");
   const uLightMode = at("u_lightMode");
   const uCols = at("u_col");
+  const uRatio = at("u_ratio");
+  const uGlyphCount = at("u_glyphCount");
   const floats = uniformNames(scene, passes).map((name) => [name, at(name)] as const);
+  const glyphTexture = scene.glyphs ? gl.createTexture() : null;
+  let glyphFont = "";
 
   return {
     setColours({ ground, page, lightMode, colours }: Colours) {
@@ -121,14 +153,31 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
       colours.forEach((rgb, i) => flat.set(rgb, i * 3));
       gl.uniform3fv(uCols, flat);
     },
-    draw(values: Values, time: number, width: number, height: number) {
+    /** Draws a type scene's ramp in `font`; a scene without one ignores it. */
+    setGlyphs(font: string) {
+      if (!scene.glyphs || !glyphTexture || font === glyphFont) return;
+      glyphFont = font;
+      const { strip, count } = drawGlyphs(scene.glyphs, font);
+      gl.bindTexture(gl.TEXTURE_2D, glyphTexture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, strip);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.uniform1f(uGlyphCount, count);
+    },
+    draw(values: Values, time: number, width: number, height: number, ratio = 1) {
       gl.viewport(0, 0, width, height);
       gl.uniform2f(uSize, width, height);
+      gl.uniform1f(uRatio, ratio);
       gl.uniform1f(uTime, time);
       for (const [name, location] of floats) gl.uniform1f(location, valueOf(values, passes, name));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     },
     dispose() {
+      gl.deleteTexture(glyphTexture);
       gl.deleteVertexArray(vao);
       gl.deleteProgram(program);
       gl.deleteShader(vs);
@@ -158,6 +207,7 @@ export function bakeThumbnails(
     const renderer = createRenderer(gl, scene, passes);
     if (!renderer) return "";
     renderer.setColours(coloursFor(host, scene));
+    renderer.setGlyphs(glyphFontFor(host));
     renderer.draw(values, 20, width, height);
     const url = canvas.toDataURL("image/jpeg", 0.85);
     renderer.dispose();

@@ -45,7 +45,9 @@ uniform float u_time;
 uniform vec3 u_ground;   // the scene's ground: the page's, or a night scene's own
 uniform vec3 u_page;     // the page's ground, which the passes fade to
 uniform float u_lightMode; // 1: a night scene laid onto a light page
+uniform float u_ratio;   // drawing-buffer pixels per CSS pixel
 uniform vec3 u_col[${MAX_COLOURS}];
+${scene.glyphs ? "uniform sampler2D u_glyphs;\nuniform float u_glyphCount;" : ""}
 ${floats}
 
 out vec4 outColor;

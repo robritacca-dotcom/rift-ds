@@ -195,11 +195,21 @@ export function ShaderScene({
       renderer.setColours(coloursFor(host, definition));
       renderer.setGlyphs(glyphFontFor(host));
     };
+    /* The drawing buffer is sized inside the frame that paints it, as
+       ShaderField's is, never from the resize observer: setting a canvas's
+       size clears it, and the observer runs after the frame's draw, so a
+       buffer resized there reached the screen empty, a flash of the page
+       ground on every step of a window drag. Compared first, since
+       reallocating is the expensive part. Between throttled frames the old
+       buffer stretches to the new box, which reads as nothing at all. */
     let ratio = 1;
-    const resize = () => {
+    const fit = () => {
       ratio = Math.min(definition.pixelRatio ?? MAX_PIXEL_RATIO, window.devicePixelRatio || 1);
-      canvas.width = Math.max(1, Math.round(host.clientWidth * ratio));
-      canvas.height = Math.max(1, Math.round(host.clientHeight * ratio));
+      const width = Math.max(1, Math.round(host.clientWidth * ratio));
+      const height = Math.max(1, Math.round(host.clientHeight * ratio));
+      if (canvas.width === width && canvas.height === height) return;
+      canvas.width = width;
+      canvas.height = height;
     };
 
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -214,6 +224,7 @@ export function ShaderScene({
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       if (!still) time += dt * values.speed;
+      fit();
       renderer.draw(values, time, canvas.width, canvas.height, ratio);
       if (!painted) {
         painted = true;
@@ -235,7 +246,6 @@ export function ShaderScene({
     };
 
     applyColours();
-    resize();
     start();
     /* A code face still on its way draws the ramp in a fallback; draw it
        again once the fonts land. */
@@ -256,7 +266,13 @@ export function ShaderScene({
           );
     visibilityObserver?.observe(host);
 
-    const sizeObserver = new ResizeObserver(resize);
+    /* A paused scene (scrolled away) still has to fill a box that changed:
+       one frame at the time it stopped on, sized and painted together. */
+    const sizeObserver = new ResizeObserver(() => {
+      if (frame) return;
+      fit();
+      renderer.draw(liveRef?.current ?? mergedRef.current, time, canvas.width, canvas.height, ratio);
+    });
     sizeObserver.observe(host);
     /* A theme flip, a preset and a live override (an inline custom property
        on the root) all re-read the colours. */

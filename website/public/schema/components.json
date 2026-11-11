@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "package": "rift-ds",
   "count": 179,
   "components": [

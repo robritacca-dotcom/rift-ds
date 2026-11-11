@@ -2,7 +2,7 @@
 
 Every error on a form at the top of it, each a link that moves focus to its field.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.26.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: feedback
 - Import: `import { ErrorSummary } from 'rift-ds';`

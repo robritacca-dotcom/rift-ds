@@ -2,7 +2,7 @@
 
 The whole AI chat: the panel, or the page itself in an app shell mode, the streaming replies, the history, the cards and questions a reply can carry and the server handlers, set up with props.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.25.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.26.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: widget
 - Import: `import { ChatWidget, ChatProvider, ChatLauncher, ChatThreads, ChatTabs, ChatAgentPane, ChatArtifactPane, ChatArtifactCard } from 'rift-ds/chat';`

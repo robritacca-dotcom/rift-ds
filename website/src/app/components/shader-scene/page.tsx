@@ -97,9 +97,8 @@ export default function ShaderScenePage() {
               Meteors drops a shower past a planet&rsquo;s edge, where a sun
               flares on the limb. Waves is a sea drawn in points, each one
               larger and brighter on a crest. Aurora folds wide ribbons of
-              colour through one another, round a deep void. The horizon and
-              glyphs are also this site&rsquo;s own backgrounds, picked from
-              the header. One stage a scene and no more: each one is a live
+              colour through one another, round a deep void. Every scene but the rift is also one of this
+              site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
               GL context.
             </p>
             <div className={styles.stageGrid}>

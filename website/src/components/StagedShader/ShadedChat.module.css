@@ -17,7 +17,8 @@
    holds the shader and the frost in one layer under the widget, and the widget's shell clears its plane, its surface and its blur
    backdrop so the shader shows through (the shell's tokens are :where()
    rules, so this class takes them). The threads rail keeps a near-solid
-   coat of the page, the lab's rail. */
+   coat of the page, the lab's rail, where the browser cannot anchor the
+   glass coat below. */
 .shaded {
   /* The lab's rail coat: the page at 92%, for the rail and the inset ring. */
   --chat-shader-coat: color-mix(in srgb, var(--color-bg-page-primary) 92%, transparent);

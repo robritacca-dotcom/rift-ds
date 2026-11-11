@@ -83,6 +83,196 @@
           }
         }
       }
+    },
+    {
+      "id": "prism",
+      "label": "Prism",
+      "description": "Light through a cut stone",
+      "icon": "diamond",
+      "scene": "prism",
+      "home": {
+        "params": {
+          "position": 0.2,
+          "glow": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "position": 0.25,
+          "glow": 0.7
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "meteors",
+      "label": "Meteors",
+      "description": "A shower over a planet's edge",
+      "icon": "flare",
+      "scene": "meteors",
+      "home": {
+        "params": {
+          "crown": 0.22,
+          "flare": 0.7
+        },
+        "passes": {
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "crown": 0.5,
+          "flare": 0.6
+        },
+        "passes": {
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.42
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "waves",
+      "label": "Waves",
+      "description": "A rolling sea of points",
+      "icon": "waves",
+      "scene": "waves",
+      "home": {
+        "params": {
+          "rise": 0.18,
+          "dot": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.04,
+              "to": 0.2
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "rise": 0.6,
+          "dot": 0.7
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.4,
+              "to": 0.7
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "description": "Ribbons of colour round a void",
+      "icon": "gradient",
+      "scene": "aurora",
+      "home": {
+        "params": {
+          "bright": 0.5
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "bright": 0.4
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
     }
   ]
 }

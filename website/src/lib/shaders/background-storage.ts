@@ -77,7 +77,33 @@ export type SiteBackgroundEntry = {
    longer bottom fade so the blooms below it are gone before the content
    starts; thinner type and less exposure again, since a title sits on it.
    Both bands take far less grain than the scenes' default: grain over
-   type reads as noise in the characters. */
+   type reads as noise in the characters.
+
+   The four that follow fill their box with no top fade, since each is
+   dark at its own top or is colour all the way up, and all take the
+   lighter grain.
+
+   Prism, both bands: the stone sits right of centre, so the strong beams
+   fall beside a centred headline and behind a page's links rather than
+   through a title, with the glow eased and a long bottom fade, so the
+   beams give out into the page before the content starts.
+
+   Meteors, home: the limb set low, as Horizon's is, so it meets the top
+   of the chat frame and the shower falls behind the hero; the flare is
+   eased so the counts above it read. Meteors, page: the limb crosses the
+   standard band behind the title and the planet below it fades to the
+   page floor inside the scene, as Horizon's world does.
+
+   Waves, home: the sea is lowered until its far edge lies under the
+   counts, so the dots run behind the calls to action and into the chat
+   frame and never behind a number, with the dots a little smaller. Waves,
+   page: the sea is raised so its brightest dots sit behind the header,
+   and the bottom fade starts high, so by the title it is down to a faint
+   glow: a title cannot be read through a field of points.
+
+   Aurora, both bands: the one background that is colour edge to edge, so
+   it is dimmed to half on the home page and a little further under a
+   title, and a long bottom fade takes it to the page. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

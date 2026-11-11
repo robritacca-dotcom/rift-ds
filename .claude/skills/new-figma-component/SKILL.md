@@ -24,7 +24,7 @@ If the component does not exist in `src/components/registry.json` (or `src/chat/
 
 ## The kit's conventions
 
-This section is the one home of how the kit is built. The `figma-parity` and `new-figma-template` skills point here rather than restating it.
+This section is the one home of how the kit is built. The `figma-parity` and `new-figma-template` skills point here rather than restating it. The site's `/docs/figma` page is the kit's public description and states some of these conventions for visitors (its source is `website/src/app/docs/figma/`), so a change to a convention it describes moves that page too.
 
 **Variables.** Three collections. Primitives holds each preset's raw values and is hidden. Theme has one mode per preset the file carries (the default theme first) and holds the light and dark colour layers, the dimensions and the fonts. Mode (Light, Dark) holds the semantic colours, and it is the only collection components bind colour to. Every fill, stroke, radius, gap and padding binds to a variable named after its token, so a theme or mode switch at the page changes everything. A value with no token is a sign the code has one you missed: look it up in `src/tokens/values.json` before reaching for a raw number.
 

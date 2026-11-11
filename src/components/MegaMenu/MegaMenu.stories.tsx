@@ -65,7 +65,7 @@ type Story = StoryObj<typeof meta>;
 /** The link grid beside a featured card. */
 export const Default: Story = {};
 
-/** No showcase: the grid takes the whole panel and wraps into a third column. */
+/** No showcase: the grid takes the whole panel and wraps into a second column. */
 export const WithoutShowcase: Story = {
   args: { showcase: undefined },
 };

@@ -372,6 +372,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-table-styles",
         "text": "Every table draws from the one table token family."
+      },
+      {
+        "name": "validate-backdrop-layers",
+        "text": "No backdrop blur grows past its host or has a hole masked out of it."
       }
     ]
   },

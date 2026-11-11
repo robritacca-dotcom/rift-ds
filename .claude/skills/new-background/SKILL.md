@@ -43,4 +43,5 @@ Read the owners before changing anything; this skill holds no copy of their fact
 - Never hand-edit a generated file: the shadcn registry entry for the chat, the schemas, the blueprints and the dependency graph regenerate from the sources you changed.
 - Never put a colour value in a scene or a row: a scene reads token roles, and a row carries only params, so every theme recolours both.
 - A new param or pass goes through the component, with a range, never through a site-only override; the validator rejects a key the scene does not declare.
+- Never lay a blur over a scene to hide part of it: a scene repaints every frame, and a blur grown past its host or with a hole masked out of it flickers over one. Clip the scene to the surface that shows it, as the shaded chat recipe does for the inset shell; `scripts/validate-backdrop-layers.mjs` fails the build on the drawing and its doc block records the incident.
 - Examples in this skill are fictional; the registry and the scenes are the facts.

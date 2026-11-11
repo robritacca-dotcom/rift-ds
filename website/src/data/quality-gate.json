@@ -127,6 +127,7 @@
     "validate-stacking": { "group": "tokens", "text": "Every z-index of 10 or more names a layer token." },
     "validate-tier-colours": { "group": "tokens", "text": "Display and heading text take their tier's colour role." },
     "validate-table-styles": { "group": "tokens", "text": "Every table draws from the one table token family." },
+    "validate-backdrop-layers": { "group": "tokens", "text": "No backdrop blur grows past its host or has a hole masked out of it." },
 
     "validate-analytics-events": { "group": "site", "text": "Events go out only through SITE_EVENTS and trackEvent." },
     "validate-chat-coverage": { "group": "site", "text": "Every golden-set fact is in the corpus, and every route is covered or excluded with a reason." },

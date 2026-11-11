@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Button } from '../Button/Button';
 import { MegaMenu, type MegaMenuItem, type MegaMenuShowcase } from './MegaMenu';
 
@@ -67,6 +68,27 @@ export const Default: Story = {};
 /** No showcase: the grid takes the whole panel and wraps into a third column. */
 export const WithoutShowcase: Story = {
   args: { showcase: undefined },
+};
+
+/* Thirteen rows: more than three columns of four can hold beside a showcase. */
+const LONG_ITEMS: MegaMenuItem[] = Array.from({ length: 13 }, (_, i) => ({
+  ...ITEMS[i % ITEMS.length],
+  href: `${ITEMS[i % ITEMS.length].href}-${i}`,
+}));
+
+/**
+ * A long menu: every column deepens before another opens, so thirteen rows
+ * beside a showcase sit in three columns of five, five and three rather
+ * than leaving a fourth column holding one row.
+ */
+export const LongMenu: Story = {
+  args: { items: LONG_ITEMS },
+  play: async ({ canvasElement }) => {
+    const rows = [...canvasElement.querySelectorAll<HTMLElement>('.ds-mega-menu__item')];
+    const columns = new Set(rows.map((row) => Math.round(row.getBoundingClientRect().left)));
+    await expect(rows).toHaveLength(13);
+    await expect(columns.size).toBe(3);
+  },
 };
 
 /** The page being viewed is marked on its row, one step past the hover wash. */

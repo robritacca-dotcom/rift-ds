@@ -60,7 +60,7 @@ export default function MegaMenuPage() {
           <section className={styles.section}>
             <SectionTitle title="With a showcase" />
             <p className={styles.introBody}>
-              The rows run four to a column in two thirds of the panel, and the card fills the last third, its cover
+              The rows run at least four to a column in two thirds of the panel, growing deeper before a fourth column opens, and the card fills the last third, its cover
               stretching to whatever height the rows reach.
             </p>
             <MegaMenu open items={ITEMS} showcase={SHOWCASE} />
@@ -69,8 +69,8 @@ export default function MegaMenuPage() {
           <section className={styles.section}>
             <SectionTitle title="Rows only" />
             <p className={styles.introBody}>
-              Without a showcase the rows take the whole panel and wrap into further columns, so a long menu grows
-              sideways and never into a scroll.
+              Without a showcase the rows take the whole panel, up to four columns, each growing deeper before
+              another opens, so a long menu never scrolls.
             </p>
             <MegaMenu open items={ITEMS} />
           </section>

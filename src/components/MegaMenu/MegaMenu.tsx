@@ -44,7 +44,10 @@ type MegaMenuOwnProps = {
    * out and is `inert`, so its links leave the tab order.
    */
   open: boolean;
-  /** The link rows, laid out four to a column and wrapping into further columns. */
+  /**
+   * The link rows, in columns of at least four. A column grows taller before
+   * the grid adds one, up to three columns beside a showcase and four without.
+   */
   items: MegaMenuItem[];
   /** A featured card in its own column beside the link grid. */
   showcase?: MegaMenuShowcase;
@@ -69,6 +72,13 @@ type MegaMenuOwnProps = {
 export interface MegaMenuProps
   extends MegaMenuOwnProps,
     Omit<React.ComponentPropsWithRef<'div'>, keyof MegaMenuOwnProps> {}
+
+/* The fewest rows a column holds, and the most columns the grid opens
+   beside a showcase and without one. A longer menu deepens every column
+   before it adds another, so no column is left holding a stray row. */
+const MIN_ROWS = 4;
+const MAX_COLUMNS_WITH_SHOWCASE = 3;
+const MAX_COLUMNS = 4;
 
 const isCurrent = (href: string, currentHref?: string) =>
   currentHref != null && (currentHref === href || currentHref.startsWith(`${href}/`));
@@ -95,6 +105,10 @@ export function MegaMenu({
   const Link = linkComponent ?? 'a';
   const baseClass = 'ds-mega-menu';
   const classes = [baseClass, open && `${baseClass}--open`, className].filter(Boolean).join(' ');
+  const rows = Math.max(
+    MIN_ROWS,
+    Math.ceil(items.length / (showcase ? MAX_COLUMNS_WITH_SHOWCASE : MAX_COLUMNS))
+  );
 
   return (
     <div {...rest} ref={ref} className={classes} inert={!open}>
@@ -103,7 +117,10 @@ export function MegaMenu({
           .filter(Boolean)
           .join(' ')}
       >
-        <div className={`${baseClass}__grid`}>
+        <div
+          className={`${baseClass}__grid`}
+          style={{ '--ds-mega-menu-rows': rows } as React.CSSProperties}
+        >
           {items.map((item) => {
             const current = isCurrent(item.href, currentHref);
             return (

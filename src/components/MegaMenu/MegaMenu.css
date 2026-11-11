@@ -47,11 +47,13 @@
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 
-/* The link grid: four rows to a column, wrapping into further columns, so
-   a long menu grows sideways and never into a scroll. */
+/* The link grid: columns of at least four rows. MegaMenu.tsx sets the row
+   count, deepening every column before it adds one (three columns at most
+   beside a showcase, four without), so a long menu grows downward first
+   and never leaves a column holding one stray row. */
 .ds-mega-menu__grid {
   display: grid;
-  grid-template-rows: repeat(4, auto);
+  grid-template-rows: repeat(var(--ds-mega-menu-rows, 4), auto);
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
   gap: var(--gap-200) var(--gap-1000);

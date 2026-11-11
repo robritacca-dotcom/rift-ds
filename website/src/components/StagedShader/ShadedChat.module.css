@@ -144,6 +144,47 @@
   pointer-events: none;
 }
 
+/* Where the browser can anchor a layer to the surface, the coat is glass:
+   the scene shows through the rail and the ring, blurred, in place of a
+   near-solid coat that let a bright scene through sharp (a sea of dots
+   under the rail, a lit stripe along the ring that read as a second
+   border). A shadow cannot blur what is behind it, so the coat becomes a
+   layer on the shell: laid to the surface's own box by anchor, grown past
+   every edge of the card by its padding, and masked to everything but its
+   content box, which is the surface. Its radius is the padding plus the
+   surface's, so the hole takes the surface's corners. The surface clears
+   its shadow coat, and a browser without anchors keeps it. */
+@supports (anchor-name: --a) and (anchor-scope: --a) and (mask-composite: exclude) {
+  .shaded :global([data-ds-shell="inset"]) {
+    anchor-scope: --shaded-chat-surface;
+  }
+
+  .shaded :global([data-ds-shell="inset"] > .ds-chat-widget) {
+    anchor-name: --shaded-chat-surface;
+    box-shadow: none;
+  }
+
+  .shaded :global([data-ds-shell="inset"])::before {
+    content: "";
+    position: absolute;
+    /* ds-allow(physical): the layer is laid to the surface's own box, edge for edge. */
+    top: calc(anchor(--shaded-chat-surface top) - 100vmax);
+    right: calc(anchor(--shaded-chat-surface right) - 100vmax);
+    bottom: calc(anchor(--shaded-chat-surface bottom) - 100vmax);
+    left: calc(anchor(--shaded-chat-surface left) - 100vmax);
+    z-index: 0;
+    box-sizing: border-box;
+    padding: 100vmax;
+    border-radius: calc(100vmax + var(--ds-shell-surface-radius));
+    background-color: color-mix(in srgb, var(--color-bg-page-primary) 70%, var(--color-bg-glass));
+    backdrop-filter: blur(40px) saturate(1.3);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+}
+
 /* The frost: an even coat of glass over the shader, closed while the
    welcome is up and fading in once a conversation starts, because a
    transcript cannot be read over a moving field. The coat is the glass

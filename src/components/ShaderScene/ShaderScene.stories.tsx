@@ -60,7 +60,7 @@ export const Glyphs: Story = {
   },
 };
 
-/** Prism: shafts of light through glass, their edges split into the theme's spectrum. */
+/** Prism: wedges of light through glass, their edges split into the theme's spectrum. */
 export const Prism: Story = {
   args: {
     scene: 'prism',

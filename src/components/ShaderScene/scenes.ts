@@ -320,9 +320,10 @@ vec3 scene(vec2 uv, float t) {
 };
 
 /**
- * The prism: light through cut glass. Shafts of light cross the dark at a
- * tilt, dim and diffuse, some wide, some thin, gathered round one place
- * and thinning away from it. Each shaft is drawn once per colour role, every
+ * The prism: light through cut glass. Wedges of light open from a point
+ * above the stage and cross the dark at a tilt, dim and diffuse, some
+ * wide, some thin, gathered round one place, thinning as they widen and
+ * each coming and going in its own time. Each shaft is drawn once per colour role, every
  * role a step further along, as glass bends each wavelength a little more:
  * where the copies overlap they sum to white, and where they part the edge
  * of the shaft breaks into the theme's own spectrum.
@@ -330,7 +331,7 @@ vec3 scene(vec2 uv, float t) {
 export const prism: Scene = {
   id: "prism",
   label: "Prism",
-  description: "Shafts of light through glass, their edges split into the theme's spectrum.",
+  description: "Wedges of light through glass, their edges split into the theme's spectrum.",
   mode: "dark",
   colours: [
     "--color-ambient-5",
@@ -343,7 +344,7 @@ export const prism: Scene = {
     { key: "position", label: "Position", min: -0.5, max: 0.5, step: 0.01, default: 0.2 },
     { key: "spread", label: "Spread", min: 0.15, max: 2, step: 0.01, default: 0.7 },
     { key: "tilt", label: "Tilt", min: -1, max: 1, step: 0.01, default: -0.22 },
-    { key: "fan", label: "Fan", min: 0, max: 1, step: 0.01, default: 0.35 },
+    { key: "fan", label: "Fan", min: 0, max: 3, step: 0.01, default: 1.5 },
     { key: "shafts", label: "Shafts", min: 1, max: 10, step: 0.1, default: 2.8 },
     { key: "sharp", label: "Sharpness", min: 0, max: 1, step: 0.01, default: 0.2 },
     { key: "dispersion", label: "Dispersion", min: 0, max: 2, step: 0.01, default: 1 },
@@ -374,7 +375,9 @@ float prismShafts(float s, float t) {
   float thinEdge = mix(0.3, 0.02, u_sharp);
   float soft = smoothstep(0.56, 0.56 + wideEdge, wide);
   /* No two thin shafts are as bright as each other. */
-  float each = 0.12 + 0.88 * smoothstep(0.3, 0.75, vnoise(vec2(s * u_shafts * 0.9 + 5.3, 1.9)));
+  /* And each comes and goes in its own time. */
+  float each = 0.04 + 0.96 * smoothstep(0.3, 0.75, vnoise(vec2(s * u_shafts * 0.9 + 5.3, 1.9 + t * 0.07)));
+  soft *= 0.35 + 0.65 * smoothstep(0.25, 0.7, vnoise(vec2(s * u_shafts * 0.4 + 8.1, 6.3 - t * 0.05)));
   float hard = smoothstep(0.7, 0.7 + thinEdge, thin);
   return 0.3 * soft * soft + each * hard * hard;
 }
@@ -385,7 +388,8 @@ vec3 scene(vec2 uv, float t) {
   t *= u_drift;
 
   /* Across the shafts, which open as they fall from above. */
-  float s = (p.x - u_position * aspect + u_tilt * p.y) / (1.0 + u_fan * (0.5 - p.y));
+  float open = 1.0 + u_fan * (0.5 - p.y);
+  float s = (p.x - u_position * aspect + u_tilt * p.y) / open;
   float along = p.y - u_tilt * p.x;
   s += 0.04 * (fbm(vec2(p.x * 0.9 + t * 0.02, p.y * 0.7 - t * 0.015)) - 0.5);
 
@@ -404,7 +408,10 @@ vec3 scene(vec2 uv, float t) {
   /* Each shaft comes and goes along its length. */
   float reach = 0.35 + 0.65 * smoothstep(0.25, 0.75, fbm(vec2(s * 2.4, along * 0.9 - t * 0.03) + 4.0));
   vec3 haze = (total / 14.0) * 0.0015 * exp(-(s * s) / (2.0 * u_spread * u_spread * 2.5));
-  return u_ground + (light * gather * reach * 0.3 + haze) * u_glow;
+  /* A wedge of light thins as it widens, and gives out before the floor. */
+  float thinning = pow(1.0 / open, 0.8) * (1.0 + 0.5 * u_fan);
+  float fade = mix(1.0, smoothstep(-0.62, 0.2, p.y), min(u_fan, 1.0));
+  return u_ground + (light * gather * reach * thinning * fade * 0.3 + haze) * u_glow;
 }
 `,
 };

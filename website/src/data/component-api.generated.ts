@@ -11332,7 +11332,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "MegaMenuItem[]",
             "required": true,
-            "description": "The link rows, laid out four to a column and wrapping into further columns."
+            "description": "The link rows, in columns of at least four. A column grows taller before\nthe grid adds one, up to three columns beside a showcase and four without."
           },
           {
             "name": "showcase",

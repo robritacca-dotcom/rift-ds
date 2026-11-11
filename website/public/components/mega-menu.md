@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.26.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | open | `boolean` | yes |  | Whether the panel shows. Controlled by design: the host owns the triggers that open it, so it owns this state too. A closed panel fades out and is `inert`, so its links leave the tab order. |
-| items | `MegaMenuItem[]` | yes |  | The link rows, laid out four to a column and wrapping into further columns. |
+| items | `MegaMenuItem[]` | yes |  | The link rows, in columns of at least four. A column grows taller before the grid adds one, up to three columns beside a showcase and four without. |
 | showcase | `MegaMenuShowcase` | no |  | A featured card in its own column beside the link grid. |
 | currentHref | `string` | no |  | The path of the page being viewed. A row whose `href` is this path, or a parent of it, is marked as the current page. |
 | onNavigate | `(() => void)` | no |  | Called when any link in the panel is followed, so a host can close it. |

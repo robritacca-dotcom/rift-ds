@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'dusk', 'embers'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -89,6 +89,21 @@ export const Aurora: Story = {
   args: {
     scene: 'aurora',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Dusk: a soft dome of light low on black, curtains of violet trailing below. */
+export const Dusk: Story = {
+  args: {
+    scene: 'dusk',
+  },
+};
+
+/** Embers: sparks rising off a low hearth glow, cooling as they climb. */
+export const Embers: Story = {
+  args: {
+    scene: 'embers',
+    passes: { fadeTop: { on: false } },
   },
 };
 

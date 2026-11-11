@@ -6,7 +6,7 @@
   "label": "Shader scene",
   "slug": "shader-scene",
   "category": "effects",
-  "description": "A WebGL2 scene, from a night horizon and a glowing rift to a meteor shower and an aurora, in the theme's field colours, with fades, a vignette and grain.",
+  "description": "A WebGL2 scene, from a night horizon and a glowing rift to an aurora and a hearth of embers, in the theme's field colours, with fades, a vignette and grain.",
   "client": true,
   "importPath": "rift-ds/components/ShaderScene/ShaderScene",
   "barrel": "main",
@@ -22,6 +22,8 @@
           "typeKind": "enum",
           "values": [
             "aurora",
+            "dusk",
+            "embers",
             "glyphs",
             "horizon",
             "meteors",
@@ -30,7 +32,7 @@
             "waves"
           ],
           "required": false,
-          "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void.",
+          "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `aurora`, ribbons of colour round a void, `dusk`, a soft dome of light low on black, or `embers`, sparks rising off a hearth.",
           "default": "horizon"
         },
         {
@@ -61,6 +63,21 @@
           "typeKind": "reference",
           "required": false,
           "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props."
+        },
+        {
+          "name": "pointerRef",
+          "type": "RefObject<ShaderScenePointer | null>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A ref the host writes the pointer into on every move, in client pixels,\nor sets to null when the pointer leaves. The scene maps it onto its own\nbox and eases toward it each frame, so a move renders nothing. The scene\nitself stays inert to pointer events; the host does the listening. Read\nonly while `pointerFollow` is above 0."
+        },
+        {
+          "name": "pointerFollow",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How strongly the scene answers the pointer: a broad swell round it,\nrings running out from it while it moves, a slight lean toward it and a\nlift of light under it. 0, the default, ignores the pointer; a value\nnear 0.3 is a subtle answer. Reduced motion turns it off.",
+          "default": 0
         },
         {
           "name": "enabled",

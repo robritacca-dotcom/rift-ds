@@ -40,6 +40,7 @@
       "description": "Soft light printed in type",
       "icon": "text_fields",
       "scene": "glyphs",
+      "pointer": 0.3,
       "home": {
         "params": {
           "rise": -0.38,
@@ -233,6 +234,7 @@
       "description": "Ribbons of colour round a void",
       "icon": "gradient",
       "scene": "aurora",
+      "pointer": 0.3,
       "home": {
         "params": {
           "bright": 0.5
@@ -266,6 +268,167 @@
             "params": {
               "from": 0.1,
               "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "rift",
+      "label": "Rift",
+      "description": "A glowing tear in the page",
+      "icon": "flare",
+      "scene": "rift",
+      "pointer": 0.3,
+      "home": {
+        "params": {
+          "glow": 0.8,
+          "wave": 0.25,
+          "flow": 0.05
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "glow": 0.6,
+          "wave": 0.25,
+          "flow": 0.05
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.55
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "dusk",
+      "label": "Dusk",
+      "description": "A dome of light low on black",
+      "icon": "brightness_3",
+      "scene": "dusk",
+      "pointer": 0.3,
+      "home": {
+        "params": {
+          "crown": 0.32,
+          "drift": 0.4
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "crown": 0.5,
+          "drift": 0.4,
+          "glow": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.55
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "embers",
+      "label": "Embers",
+      "description": "Sparks rising off a hearth",
+      "icon": "local_fire_department",
+      "scene": "embers",
+      "pointer": 0.3,
+      "home": {
+        "params": {
+          "rise": 0.5,
+          "drift": 0.5
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "rise": 0.5,
+          "drift": 0.5,
+          "heat": 0.8,
+          "sparks": 0.3
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.55
             }
           },
           "grain": {

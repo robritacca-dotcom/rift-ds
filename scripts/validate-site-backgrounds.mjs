@@ -28,6 +28,8 @@
  *  6. the menu copy holds to its register row in content-design.md: a
  *     one-word label, a short verbless description with no full stop and no
  *     em dash, and a Material Symbol name for the icon
+ *  7. a row's `pointer`, where given, is a number from 0 to 2 on a scene
+ *     row (it is handed to ShaderScene's pointerFollow; the field has none)
  *
  * Runs in the validate-registry chain, after validate-shader-background.mjs,
  * because it reads only source files and the registry.
@@ -158,8 +160,11 @@ for (const row of rows) {
     defaults += 1;
     if (row.home !== undefined || row.page !== undefined)
       errors.push(`"${id}" has no scene, so it takes no tuning; "home" and "page" belong on a scene row`);
+    if (row.pointer !== undefined) errors.push(`"${id}" has no scene, so it takes no "pointer"`);
     continue;
   }
+  if (row.pointer !== undefined && (typeof row.pointer !== 'number' || row.pointer < 0 || row.pointer > 2))
+    errors.push(`"${id}".pointer must be a number from 0 to 2 (ShaderScene's pointerFollow)`);
   const scene = scenes.get(row.scene);
   if (!scene) {
     errors.push(`"${id}".scene "${row.scene}" is not a scene the library ships (${[...scenes.keys()].join(', ')})`);

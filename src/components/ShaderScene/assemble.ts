@@ -1,9 +1,10 @@
 /**
  * Builds one fragment shader from a scene and the passes: the uniforms
  * both declare, the common GLSL, the scene's `scene()`, each pass's
- * function, and a `main` that runs the scene, lays a night scene onto a
- * light page when it must (u_lightMode), then runs the light passes, the
- * encode and the srgb passes, each gated by its `u_<id>_on`.
+ * function, and a `main` that bends the plane round the pointer when the
+ * host asks (u_pointerFollow above 0), runs the scene, lays a night scene
+ * onto a light page when it must (u_lightMode), then runs the light passes,
+ * the encode and the srgb passes, each gated by its `u_<id>_on`.
  */
 import { COMMON_GLSL } from "./common.glsl";
 import type { Pass, Scene } from "./types";
@@ -46,6 +47,9 @@ uniform vec3 u_ground;   // the scene's ground: the page's, or a night scene's o
 uniform vec3 u_page;     // the page's ground, which the passes fade to
 uniform float u_lightMode; // 1: a night scene laid onto a light page
 uniform float u_ratio;   // drawing-buffer pixels per CSS pixel
+uniform vec2 u_pointerAt;      // the eased pointer, -1 to 1 across the surface
+uniform float u_pointerStir;   // how much it is moving, 0 to 1
+uniform float u_pointerFollow; // how strongly the scene answers it; 0 ignores it
 uniform vec3 u_col[${MAX_COLOURS}];
 ${scene.glyphs ? "uniform sampler2D u_glyphs;\nuniform float u_glyphCount;" : ""}
 ${floats}
@@ -60,7 +64,20 @@ ${passes.map((pass) => pass.glsl).join("\n")}
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_size;
-  vec3 lin = scene(uv, u_time);
+  /* The pointer: a broad swell outward round it and, while it moves, rings
+     running out from it, a slight lean toward it, and a lift of the scene's
+     own light under it. Every bend is proportional to the offset from the
+     pointer, so it is zero at the pointer and smooth through it, never a
+     pinch, and gentle enough that the plane never folds over. The passes
+     keep the unbent uv, so the fades stay put. */
+  float aspect = u_size.x / u_size.y;
+  vec2 pd = (uv - (0.5 + 0.5 * u_pointerAt)) * vec2(aspect, 1.0);
+  float pr = length(pd);
+  float bend = (0.2 * exp(-pr * pr / 0.12)
+    + sin(pr * 28.0 - u_time * 6.0) * exp(-pr * 3.0) * u_pointerStir * 0.05) * u_pointerFollow;
+  vec2 sceneUv = uv - pd * bend / vec2(aspect, 1.0) - u_pointerAt * 0.025 * u_pointerFollow;
+  vec3 lin = scene(sceneUv, u_time);
+  lin += max(lin - u_ground, vec3(0.0)) * 0.3 * exp(-pr * pr / 0.035) * u_pointerFollow;
   /* A night scene on a light page: the light it adds over its own dark
      ground is laid onto the page as a pale tint, its hue washed most of
      the way to white and never more than a light wash, so a horizon reads

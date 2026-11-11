@@ -140,6 +140,9 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
   const uCols = at("u_col");
   const uRatio = at("u_ratio");
   const uGlyphCount = at("u_glyphCount");
+  const uPointerAt = at("u_pointerAt");
+  const uPointerStir = at("u_pointerStir");
+  const uPointerFollow = at("u_pointerFollow");
   const floats = uniformNames(scene, passes).map((name) => [name, at(name)] as const);
   const glyphTexture = scene.glyphs ? gl.createTexture() : null;
   let glyphFont = "";
@@ -152,6 +155,13 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
       const flat = new Float32Array(MAX_COLOURS * 3);
       colours.forEach((rgb, i) => flat.set(rgb, i * 3));
       gl.uniform3fv(uCols, flat);
+    },
+    /** The eased pointer (-1 to 1 across the surface), how much it is moving
+        (0 to 1) and how strongly the scene answers it (0 ignores it). */
+    setPointer(x: number, y: number, stir: number, follow: number) {
+      gl.uniform2f(uPointerAt, x, y);
+      gl.uniform1f(uPointerStir, stir);
+      gl.uniform1f(uPointerFollow, follow);
     },
     /** Draws a type scene's ramp in `font`; a scene without one ignores it. */
     setGlyphs(font: string) {

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ShaderField,
   type ShaderFieldStatus,
@@ -12,7 +12,11 @@ import {
   type BackgroundMode,
   type ShaderParams,
 } from "@/data/shader-background";
-import type { ShaderSceneId, ShaderSceneStatus } from "rift-ds/components/ShaderScene/ShaderScene";
+import type {
+  ShaderSceneId,
+  ShaderScenePointer,
+  ShaderSceneStatus,
+} from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
 import { backgroundEntry, useSiteBackground } from "@/lib/shaders/background";
 import { useShaderSceneModule } from "@/lib/shaders/lazy-scene";
@@ -188,6 +192,31 @@ export default function BlurBackground() {
     ? sceneModule?.SHADER_SCENES.find((scene) => scene.id === stagedSceneId)
     : undefined;
   const sceneReady = wantsScene && SceneComponent !== undefined;
+
+  /* The pointer, for a picked scene whose row asks it to answer: written
+     on every move into a ref the scene reads each frame, so a move renders
+     nothing, and cleared when the pointer leaves the window. A touch is
+     left out, since a finger on the page is a scroll, not a hover. Passive,
+     and only while such a scene is up. */
+  const pointerRef = useRef<ShaderScenePointer | null>(null);
+  const pointerFollow = sceneReady ? (pick?.pointer ?? 0) : 0;
+  useEffect(() => {
+    if (pointerFollow <= 0) return;
+    const move = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      pointerRef.current = { x: event.clientX, y: event.clientY };
+    };
+    const leave = () => {
+      pointerRef.current = null;
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    document.documentElement.addEventListener("mouseleave", leave);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      document.documentElement.removeEventListener("mouseleave", leave);
+      pointerRef.current = null;
+    };
+  }, [pointerFollow]);
   const sceneLoading = wantsScene && SceneComponent === undefined && !sceneFailed;
   const live = !embedded || stagedField;
 
@@ -248,6 +277,8 @@ export default function BlurBackground() {
             scene={pickedScene}
             params={(tallBand ? pick?.home : pick?.page)?.params}
             passes={(tallBand ? pick?.home : pick?.page)?.passes}
+            pointerRef={pointerRef}
+            pointerFollow={pointerFollow}
             onStatusChange={setSceneStatus}
           />
         ) : sceneLoading ? null : (

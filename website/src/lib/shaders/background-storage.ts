@@ -44,6 +44,8 @@ export type SiteBackgroundEntry = {
   home?: SceneTuning;
   /** The scene in the standard band: the top half of it, under a title. */
   page?: SceneTuning;
+  /** How strongly the scene answers the pointer (ShaderScene's pointerFollow); absent ignores it. */
+  pointer?: number;
 };
 
 /* The rows live in website/src/data/site-backgrounds.json, the registry
@@ -106,7 +108,17 @@ export type SiteBackgroundEntry = {
 
    Aurora, both bands: the one background that is colour edge to edge, so
    it is dimmed on the home page and a little further under a
-   title, and a long bottom fade takes it to the page. */
+   title, and a long bottom fade takes it to the page.
+
+   Rift, Dusk and Embers joined the menu for the owner to test
+   (2026-11-11), with every motion turned down to start: Rift wanders and
+   streams at about half its default and glows less under a title; Dusk's
+   dome sits low under the hero and higher under a title, drifting at 0.4;
+   Embers rises and drifts at half pace, cooler and sparser under a title.
+
+   Pointer: Glyphs, Aurora, Rift, Dusk and Embers answer the pointer at
+   0.3, a subtle swell and ripple the owner asked to start from; the rest
+   ignore it. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

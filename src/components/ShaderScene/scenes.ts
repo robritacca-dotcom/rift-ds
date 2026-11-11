@@ -800,5 +800,174 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
+/**
+ * Dusk: a dome of light low on a black page. The limb is a clean arc, bright
+ * in patches and gone at its ends; one warm bloom sits over its hot side;
+ * under the limb the key tone falls through rose to violet and quickly to
+ * black in the middle, while violet curtains hang down at the sides. The
+ * hot side follows the pointer when the host passes one (pointerFollow).
+ * Brought over from the scene lab, 2026-11-11.
+ */
+export const dusk: Scene = {
+  id: "dusk",
+  label: "Dusk",
+  description: "A soft, uneven dome of light low on black, curtains of violet trailing below.",
+  mode: "dark",
+  colours: ["--color-ambient-1", "--color-ambient-5", "--color-ambient-3", "--color-ambient-4"],
+  params: [
+    { key: "crown", label: "Dome height", min: 0.1, max: 0.8, step: 0.01, default: 0.4 },
+    { key: "curve", label: "Flatness", min: 0.8, max: 6, step: 0.05, default: 2.2 },
+    { key: "shift", label: "Hot side", min: -1, max: 1, step: 0.01, default: -0.2 },
+    { key: "rough", label: "Unevenness", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "curtains", label: "Curtains", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "haze", label: "Haze", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "depth", label: "Depth", min: 0.05, max: 0.6, step: 0.01, default: 0.16 },
+    { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 0.5 },
+  ],
+  glsl: /* glsl */ `
+vec3 duskHue(vec3 c, float push) {
+  float grey = (c.r + c.g + c.b) / 3.0;
+  c = max(grey + (c - grey) * push, vec3(0.0));
+  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+}
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 pale = mix(duskHue(u_col[0], 1.5), vec3(1.0), 0.35);
+  vec3 warm = duskHue(u_col[1], 2.0);
+  vec3 rose = duskHue(u_col[2], 2.2);
+  vec3 deep = duskHue(u_col[3], 2.0);
+  float halfW = 0.5 * aspect;
+  float x = p.x / halfW;
+
+  /* The limb: a clean arc. The unevenness is in the light along it and
+     below it, never in its shape (a wandering limb read as wiggly). */
+  float radius = u_curve * max(aspect, 1.0) * 0.5;
+  /* The pointer lifts the dome a little as it rises. */
+  vec2 centre = vec2(0.0, u_crown + u_pointerAt.y * 0.06 * u_pointerFollow - radius);
+  float d = length(p - centre) - radius;
+
+  /* Where along the limb it is bright: a hot side and patches, gone at the ends. */
+  /* The hot side drifts on its own and follows the pointer across. */
+  float hot = u_shift * 0.6 + 0.12 * sin(t * 0.02) + u_pointerAt.x * 0.75 * u_pointerFollow;
+  float side = exp(-pow(x - hot, 2.0) / (2.0 * 0.28 * 0.28));
+  float patches = mix(1.0, smoothstep(0.25, 0.75, fbm(vec2(x * 2.2 - t * 0.02, 7.7))) * 1.5, u_rough);
+  float ends = smoothstep(1.05, 0.55, abs(x));
+
+  vec3 light = vec3(0.0);
+  /* The limb line: thin, pale, broken. */
+  light += mix(warm, pale, 0.5) * lobe(d, 0.006, 0.018) * (0.15 + 0.9 * side) * patches * ends;
+
+  /* The haze: one warm bloom above the hot side, its edge broken up. */
+  vec2 hz = vec2((x - hot) * 2.4, d * 5.5);
+  float bloom = exp(-dot(hz, hz) / 0.3) * smoothstep(-0.03, 0.01, d);
+  bloom *= 0.4 + 0.9 * fbm(p * 3.0 + vec2(t * 0.02, -t * 0.01));
+  light += mix(warm, pale, 0.15) * bloom * 0.35 * u_haze;
+
+  /* Below the limb: key tone, rose, violet, falling to black; the fall is
+     short in the middle and long where a curtain hangs. */
+  float below = max(-d, 0.0);
+  float curtain = smoothstep(0.45, 0.8, fbm(vec2(x * 3.2 + 1.7, below * 0.9 - t * 0.008)));
+  curtain *= smoothstep(0.15, 0.75, abs(x)) * u_curtains;
+  float reach = u_depth * (0.55 + 4.5 * curtain);
+  float fall = exp(-pow(below / reach, 2.0)) * step(d, 0.0);
+  vec3 body = mix(warm, rose, smoothstep(0.0, 0.05, below) * (1.0 - 0.5 * side));
+  body = mix(body, mix(deep, rose, 0.35) * 0.6, smoothstep(0.03, 0.03 + reach, below));
+  float mottle = 0.55 + 0.9 * fbm(vec2(x * 2.0 - t * 0.015, below * 3.0 + 4.2));
+  light += body * fall * (0.25 + 0.4 * side) * mix(1.0, mottle, u_rough) * ends;
+
+  /* A faint rose glow round the limb, so it melts rather than cuts. */
+  light += rose * lobe(d, 0.04, 0.09) * 0.12 * ends * patches;
+  return u_ground + light * u_glow;
+}
+`,
+};
+
+/**
+ * Embers: a low hearth glow across the foot of the page, heat shimmering up
+ * off it, and sparks rising in three depths, pale gold at birth and cooling
+ * to the key tone as they climb and go out. Brought over from the scene
+ * lab, 2026-11-11.
+ */
+export const embers: Scene = {
+  id: "embers",
+  label: "Embers",
+  description: "Sparks rising off a low hearth glow, cooling as they climb.",
+  mode: "dark",
+  colours: ["--color-ambient-5", "--color-ambient-1", "--color-ambient-6", "--color-ambient-4"],
+  params: [
+    { key: "heat", label: "Heat", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "bed", label: "Hearth height", min: 0.04, max: 0.6, step: 0.01, default: 0.2 },
+    { key: "sparks", label: "Sparks", min: 0, max: 1, step: 0.01, default: 0.4 },
+    { key: "spark", label: "Spark size", min: 0.3, max: 3, step: 0.01, default: 1 },
+    { key: "reach", label: "Reach", min: 0.2, max: 2, step: 0.01, default: 0.8 },
+    { key: "rise", label: "Rise", min: 0, max: 2.5, step: 0.01, default: 0.6 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 0.6 },
+  ],
+  glsl: /* glsl */ `
+vec3 emberHue(vec3 c, float push) {
+  float grey = (c.r + c.g + c.b) / 3.0;
+  c = max(grey + (c - grey) * push, vec3(0.0));
+  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+}
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 hot = emberHue(u_col[0], 1.8);
+  vec3 gold = emberHue(u_col[1], 1.6);
+  vec3 pale = mix(emberHue(u_col[2], 1.4), vec3(1.0), 0.5);
+  vec3 cool = emberHue(u_col[3], 1.4);
+
+  /* The hearth: a glow along the foot whose top breathes and flickers. */
+  float flick = fbm(vec2(p.x * 1.4 + t * 0.12, t * 0.35));
+  float top = u_bed * (0.55 + 0.8 * flick);
+  float hearth = exp(-max(p.y, 0.0) / max(top, 0.02));
+  vec3 light = mix(hot, gold, exp(-p.y / 0.05) * 0.7) * hearth * (0.3 + 0.45 * flick) * u_heat;
+
+  /* Heat haze: faint warm columns rising, cooling to a blue smoke high up. */
+  vec2 hq = vec2(p.x * 2.6, p.y * 1.2 - t * 0.18);
+  float haze = fbm(hq + 1.3 * vec2(fbm(hq * 0.7 + t * 0.05), fbm(hq * 0.7 + 4.1)));
+  light += mix(hot, cool, smoothstep(0.2, 0.9, p.y)) * smoothstep(0.45, 0.85, haze)
+    * exp(-p.y / (0.35 + 0.4 * u_reach)) * 0.1 * u_heat;
+
+  /* The sparks: three depths, the nearest largest and fastest. Each cell of
+     a grid that scrolls upward holds at most one, which sways as it rises. */
+  for (int L = 0; L < 3; L++) {
+    float fl = float(L);
+    float s = 9.0 + fl * 7.0;
+    float speed = (0.07 + 0.035 * (2.0 - fl)) * u_rise;
+    vec2 sp = vec2(p.x * s, (p.y - t * speed) * s);
+    vec2 cell = floor(sp);
+    for (int j = -1; j <= 1; j++) {
+      for (int i = -1; i <= 1; i++) {
+        ivec2 c = ivec2(cell) + ivec2(i, j) + ivec2(L * 311, 0);
+        if (rnd(c) > u_sparks) continue;
+        vec2 o = vec2(0.2, 0.1) + vec2(0.6, 0.8) * rnd2(c + 7);
+        float phase = 6.283 * rnd(c + 11);
+        o.x += 0.35 * sin(t * (0.6 + 0.8 * rnd(c + 13)) + phase);
+        vec2 d = (sp - (cell + vec2(i, j) + o)) / s;
+        /* Stretched along the rise, a short streak rather than a dot. */
+        d.y *= 0.4;
+        float size = (0.0012 + 0.0022 * rnd(c + 17)) * (1.5 - 0.35 * fl) * u_spark;
+        float r2 = dot(d, d);
+        float core = exp(-r2 / (2.0 * size * size));
+        float halo = exp(-r2 / (2.0 * 16.0 * size * size)) * 0.12;
+        /* Each goes out at its own height, flickering as it goes. */
+        float life = exp(-p.y / (u_reach * (0.25 + 0.6 * rnd(c + 19))));
+        float twinkle = 0.65 + 0.35 * sin(t * (5.0 + 6.0 * rnd(c + 23)) + phase);
+        vec3 col = mix(pale, gold, smoothstep(0.0, 0.18, p.y));
+        col = mix(col, hot, smoothstep(0.12, 0.55, p.y));
+        light += col * (core * 1.6 + halo) * life * twinkle * (1.0 - 0.3 * fl);
+      }
+    }
+  }
+  return u_ground + light;
+}
+`,
+};
+
 /** Every scene, in picker order. */
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora];
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, dusk, embers];

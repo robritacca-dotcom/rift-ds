@@ -97,8 +97,10 @@ export default function ShaderScenePage() {
               Meteors drops a shower past a planet&rsquo;s edge, where a sun
               flares on the limb. Waves is a sea drawn in points, each one
               larger and brighter on a crest. Aurora folds wide ribbons of
-              colour through one another, round a deep void. Every scene but the rift is also one of this
-              site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
+              colour through one another, round a deep void. Dusk lays a soft dome of light low on black,
+              its limb a clean arc, with violet curtains trailing below, and Embers raises sparks off a low
+              hearth glow that cool as they climb. Every scene is also one of this site&rsquo;s own
+              backgrounds, picked from the header. One stage a scene and no more: each one is a live
               GL context.
             </p>
             <div className={styles.stageGrid}>
@@ -124,6 +126,12 @@ export default function ShaderScenePage() {
               </Stage>
               <Stage caption='scene="aurora"'>
                 <ShaderScene scene="aurora" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="dusk"'>
+                <ShaderScene scene="dusk" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="embers"'>
+                <ShaderScene scene="embers" passes={FULL_PASSES} speed={1} />
               </Stage>
             </div>
           </section>

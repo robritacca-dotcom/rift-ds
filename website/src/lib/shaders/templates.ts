@@ -84,6 +84,22 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
+  {
+    id: "dusk",
+    label: "Dusk",
+    description: "A soft dome of light low on black, curtains of violet trailing below.",
+    sceneId: "dusk",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+  {
+    id: "embers",
+    label: "Embers",
+    description: "Sparks rising off a low hearth glow, cooling as they climb.",
+    sceneId: "embers",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

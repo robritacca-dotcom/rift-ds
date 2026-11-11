@@ -22,7 +22,16 @@ const MAX_PIXEL_RATIO = 1;
 const FRAME_MS = 1000 / 30;
 
 /** The scenes ShaderScene paints. */
-export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora';
+export type ShaderSceneId =
+  | 'horizon'
+  | 'rift'
+  | 'glyphs'
+  | 'prism'
+  | 'meteors'
+  | 'waves'
+  | 'aurora'
+  | 'dusk'
+  | 'embers';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -40,9 +49,17 @@ export type ShaderScenePassSetting = {
   params?: Partial<Record<string, number>>;
 };
 
+/** Where the pointer is, in client (viewport) pixels. */
+export type ShaderScenePointer = {
+  /** Distance from the viewport's left edge. */
+  x: number;
+  /** Distance from the viewport's top edge. */
+  y: number;
+};
+
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `aurora`, ribbons of colour round a void, `dusk`, a soft dome of light low on black, or `embers`, sparks rising off a hearth. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each
@@ -63,6 +80,21 @@ type ShaderSceneOwnProps = {
    * scene and renders nothing. Empty falls back to the props.
    */
   liveRef?: React.RefObject<Values | null>;
+  /**
+   * A ref the host writes the pointer into on every move, in client pixels,
+   * or sets to null when the pointer leaves. The scene maps it onto its own
+   * box and eases toward it each frame, so a move renders nothing. The scene
+   * itself stays inert to pointer events; the host does the listening. Read
+   * only while `pointerFollow` is above 0.
+   */
+  pointerRef?: React.RefObject<ShaderScenePointer | null>;
+  /**
+   * How strongly the scene answers the pointer: a broad swell round it,
+   * rings running out from it while it moves, a slight lean toward it and a
+   * lift of light under it. 0, the default, ignores the pointer; a value
+   * near 0.3 is a subtle answer. Reduced motion turns it off.
+   */
+  pointerFollow?: number;
   /**
    * False never starts WebGL and reports `unavailable`, leaving the page
    * ground: the kill switch, as on ShaderField.
@@ -86,7 +118,8 @@ const DEFAULT_SPEED = 1.6;
 
 /**
  * ShaderScene paints one of the system's shader scenes, a horizon, a rift,
- * a field of glyphs, a prism, a meteor shower, a sea of points or an aurora, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
+ * a field of glyphs, a prism, a meteor shower, a sea of points, an aurora, a
+ * dome of light at dusk or a hearth of embers, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
  * bottom fades to the page, film grain). Its colours are the background
  * field's roles (`--color-ambient-*`) read from the live cascade at the
  * scene, so it re-themes with `data-theme`, a preset or any scoped override,
@@ -109,6 +142,8 @@ export function ShaderScene({
   passes,
   speed = DEFAULT_SPEED,
   liveRef,
+  pointerRef,
+  pointerFollow = 0,
   enabled = true,
   onStatusChange,
   className = '',
@@ -144,6 +179,11 @@ export function ShaderScene({
   React.useEffect(() => {
     mergedRef.current = merged;
   }, [merged]);
+  /* Read each frame, so changing the strength never rebuilds the GL state. */
+  const followRef = React.useRef(pointerFollow);
+  React.useEffect(() => {
+    followRef.current = pointerFollow;
+  }, [pointerFollow]);
 
   /* 'failed' and 'painted' come from the GL effect; the watchdog bounds a
      context that never paints, so pending can never be terminal. */
@@ -217,6 +257,42 @@ export function ShaderScene({
     let last = performance.now();
     let frame = 0;
     let painted = false;
+    /* The pointer, eased: where the scene has it now (-1 to 1 across its
+       box), where it was last frame, and how much it has been moving. */
+    let pointerX = 0;
+    let pointerY = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let energy = 0;
+    let stir = 0;
+    const clamp = (n: number) => Math.max(-1, Math.min(1, n));
+    const followPointer = (dt: number) => {
+      const follow = still ? 0 : followRef.current;
+      if (follow <= 0) {
+        renderer.setPointer(0, 0, 0, 0);
+        return;
+      }
+      const at = pointerRef?.current;
+      let tx = 0;
+      let ty = 0;
+      if (at) {
+        const box = host.getBoundingClientRect();
+        if (box.width > 0 && box.height > 0) {
+          tx = clamp(((at.x - box.left) / box.width) * 2 - 1);
+          ty = clamp(1 - ((at.y - box.top) / box.height) * 2);
+          energy = Math.min(1, energy + Math.hypot(tx - lastX, ty - lastY) * 4);
+        }
+        lastX = tx;
+        lastY = ty;
+      }
+      /* Frame-rate independent: the same glide at 30fps as at 60. */
+      const ease = 1 - Math.exp(-dt * 3.6);
+      pointerX += (tx - pointerX) * ease;
+      pointerY += (ty - pointerY) * ease;
+      energy *= Math.exp(-dt * 3.7);
+      stir += (energy - stir) * Math.min(1, dt * 9);
+      renderer.setPointer(pointerX, pointerY, stir, follow);
+    };
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
       if (painted && now - last < FRAME_MS - 1) return;
@@ -224,6 +300,7 @@ export function ShaderScene({
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       if (!still) time += dt * values.speed;
+      followPointer(dt);
       fit();
       renderer.draw(values, time, canvas.width, canvas.height, ratio);
       if (!painted) {
@@ -290,7 +367,7 @@ export function ShaderScene({
       themeObserver.disconnect();
       renderer.dispose();
     };
-  }, [definition, liveRef, enabled]);
+  }, [definition, liveRef, pointerRef, enabled]);
 
   const classes = ['ds-shader-scene', className].filter(Boolean).join(' ');
 

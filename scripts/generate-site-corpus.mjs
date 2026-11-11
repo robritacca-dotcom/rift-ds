@@ -125,8 +125,13 @@ const CHARS_PER_TOKEN = 2.85;
  * (their data module's doc block owns why) — so this is the ordinary-growth
  * case, sized well past the ceiling for the same headroom reason as every
  * raise above.
+ *
+ * Raised to 150K on 2026-11-11, when the 1.26.0 release-log entry landed
+ * against about 55 tokens of headroom. No section doubled: the room had gone
+ * to the specs' ordinary growth (the blueprints are half the corpus) and to
+ * one log entry a release, so this is the ordinary-growth case again.
  */
-const TOKEN_BUDGET = 140_000;
+const TOKEN_BUDGET = 150_000;
 
 /** Normalize CRLF so Windows checkouts generate byte-identical output to CI. */
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');

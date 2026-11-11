@@ -23,6 +23,7 @@
 .pageHeader {
   margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--primitive-gap-500);

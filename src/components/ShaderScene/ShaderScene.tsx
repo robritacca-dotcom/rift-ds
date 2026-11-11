@@ -22,7 +22,7 @@ const MAX_PIXEL_RATIO = 1;
 const FRAME_MS = 1000 / 30;
 
 /** The scenes ShaderScene paints. */
-export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs';
+export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -42,7 +42,7 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, or `glyphs`, soft light printed in type. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, shafts of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each
@@ -85,8 +85,8 @@ export interface ShaderSceneProps
 const DEFAULT_SPEED = 1.6;
 
 /**
- * ShaderScene paints one of the system's shader scenes, a horizon, a rift or
- * a field of glyphs, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
+ * ShaderScene paints one of the system's shader scenes, a horizon, a rift,
+ * a field of glyphs, a prism, a meteor shower, a sea of points or an aurora, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
  * bottom fades to the page, film grain). Its colours are the background
  * field's roles (`--color-ambient-*`) read from the live cascade at the
  * scene, so it re-themes with `data-theme`, a preset or any scoped override,

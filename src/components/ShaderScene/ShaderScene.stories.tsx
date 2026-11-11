@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -57,6 +57,38 @@ export const Glyphs: Story = {
   args: {
     scene: 'glyphs',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.06 } } },
+  },
+};
+
+/** Prism: shafts of light through glass, their edges split into the theme's spectrum. */
+export const Prism: Story = {
+  args: {
+    scene: 'prism',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Meteors: a shower over a planet's edge, with a sun flaring on the limb. */
+export const Meteors: Story = {
+  args: {
+    scene: 'meteors',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Waves: a sea of points rolling off into mist, bright on the crests. */
+export const Waves: Story = {
+  args: {
+    scene: 'waves',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Aurora: wide ribbons of the theme's colour folding through one another, round a deep void. */
+export const Aurora: Story = {
+  args: {
+    scene: 'aurora',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
 };
 

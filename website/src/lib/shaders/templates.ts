@@ -52,6 +52,38 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.06 } } },
   },
+  {
+    id: "prism",
+    label: "Prism",
+    description: "Shafts of light through glass, their edges split into the theme's spectrum.",
+    sceneId: "prism",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+  {
+    id: "meteors",
+    label: "Meteors",
+    description: "A meteor shower over a planet's edge, a sun flaring on the limb.",
+    sceneId: "meteors",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+  {
+    id: "waves",
+    label: "Waves",
+    description: "A sea of points rolling off into mist, bright on the crests.",
+    sceneId: "waves",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+  {
+    id: "aurora",
+    label: "Aurora",
+    description: "Wide ribbons of the theme's colour folding through one another, round a deep void.",
+    sceneId: "aurora",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

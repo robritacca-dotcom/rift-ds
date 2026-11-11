@@ -38,6 +38,12 @@ const GLYPH_PASSES = {
   fadeBottom: { on: false },
   grain: { params: { amount: 0.06 } },
 };
+/* The scenes with no fade of their own: they fill their box edge to edge. */
+const FULL_PASSES = {
+  fadeTop: { on: false },
+  fadeBottom: { on: false },
+  grain: { params: { amount: 0.08 } },
+};
 const SCRIM = {
   scrim: { on: true, params: { amount: 0.3 } },
   vignette: { on: true },
@@ -63,8 +69,8 @@ export default function ShaderScenePage() {
             <p className={styles.introBody}>
               Where Shader field sums soft light into an abstract wash, Shader
               scene paints a place: a planet&rsquo;s limb at night, a tear of
-              light opening across the dark, or a streak of light printed in
-              type. All read the background
+              light opening across the dark, a streak of light printed in
+              type, a meteor shower, a sea drawn in points. All read the background
               field&rsquo;s colour roles from the page, so a theme, a preset
               or a scoped override recolours them with nothing to configure.
             </p>
@@ -85,9 +91,15 @@ export default function ShaderScenePage() {
               outwards. Glyphs prints a streak of light and its blooms in
               type: each character cell reads the light under it and takes a
               heavier character the brighter it is, in the theme&rsquo;s code
-              face. The horizon and glyphs are also this site&rsquo;s own
-              backgrounds, picked from the header. Three stages and no more:
-              each one is a live GL context.
+              face. Prism crosses the dark with shafts of light through
+              glass, each edge split into the theme&rsquo;s own spectrum.
+              Meteors drops a shower past a planet&rsquo;s edge, where a sun
+              flares on the limb. Waves is a sea drawn in points, each one
+              larger and brighter on a crest. Aurora folds wide ribbons of
+              colour through one another, round a deep void. The horizon and
+              glyphs are also this site&rsquo;s own backgrounds, picked from
+              the header. One stage a scene and no more: each one is a live
+              GL context.
             </p>
             <div className={styles.stageGrid}>
               <Stage caption='scene="horizon"'>
@@ -100,6 +112,20 @@ export default function ShaderScenePage() {
             <Stage caption='scene="glyphs"'>
               <ShaderScene scene="glyphs" passes={GLYPH_PASSES} speed={1} />
             </Stage>
+            <div className={styles.stageGrid}>
+              <Stage caption='scene="prism"'>
+                <ShaderScene scene="prism" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="meteors"'>
+                <ShaderScene scene="meteors" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="waves"'>
+                <ShaderScene scene="waves" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="aurora"'>
+                <ShaderScene scene="aurora" passes={FULL_PASSES} speed={1} />
+              </Stage>
+            </div>
           </section>
 
           {/* Settings */}

@@ -572,7 +572,7 @@ export const waves: Scene = {
     { key: "density", label: "Density", min: 3, max: 30, step: 0.5, default: 16 },
     { key: "dot", label: "Dot size", min: 0.3, max: 2, step: 0.01, default: 1 },
     { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
-    { key: "mist", label: "Mist", min: 0.2, max: 3, step: 0.01, default: 1 },
+    { key: "mist", label: "Reach", min: 0.2, max: 3, step: 0.01, default: 1 },
     { key: "flow", label: "Flow", min: 0, max: 3, step: 0.01, default: 1 },
   ],
   glsl: /* glsl */ `
@@ -610,7 +610,7 @@ vec3 scene(vec2 uv, float t) {
   float fall = WAVE_LENS * sp - p.y * cp;
   float run = WAVE_LENS * cp + p.y * sp;
   float amp = 0.3 * u_swell;
-  float farZ = 6.3 * u_mist;
+  float farZ = 6.6 * u_mist;
   vec3 light = vec3(0.0);
 
   if (fall > 1e-4 && run > 1e-4) {
@@ -638,8 +638,12 @@ vec3 scene(vec2 uv, float t) {
     float z = at.y;
     float h = waveHeight(at, t);
     float lift = smoothstep(-0.7, 0.8, h);
-    /* Mist takes the far sea, and the near edge eases in. */
-    float fog = exp(-(z * z) / (farZ * farZ)) * smoothstep(0.0, 0.08, uv.y);
+    /* Black takes the far sea, and starkly: the dots go first, over a
+       short run, and the glow under them a little further out. The near
+       edge eases in. */
+    float nearEdge = smoothstep(0.0, 0.08, uv.y);
+    float fog = exp(-pow(z / (0.8 * farZ), 4.0)) * nearEdge;
+    float dotFog = exp(-pow(z / (0.56 * farZ), 6.0)) * nearEdge;
 
     /* The glow in the water, smoky, brighter under a crest. */
     float cloud = fbm(at * 0.3 + vec2(t * 0.03, -t * 0.02));
@@ -676,7 +680,7 @@ vec3 scene(vec2 uv, float t) {
     float rowPx = 0.5 * length(behind - before) / px;
     float even = 0.06 * u_dot * u_dot * (0.1 + 0.9 * lift * lift);
     dots = mix(even, dots, smoothstep(1.5, 3.5, rowPx));
-    light += mix(deep, crest, 0.3 + 0.7 * lift) * dots * fog * 1.3;
+    light += mix(deep, crest, 0.3 + 0.7 * lift) * dots * dotFog * 1.3;
   }
   return u_ground + light;
 }

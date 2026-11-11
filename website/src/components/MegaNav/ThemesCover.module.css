@@ -1,0 +1,77 @@
+/* ============================================
+   THEMES COVER
+   The Foundations showcase card's drawing: four themes in a 2 by 2 grid,
+   each tile that theme's own surface, faces, radius, action colour and
+   accents, passed in as --tile-* properties from the published token
+   values. The grid sits in the card's upper part, above its copy.
+   ============================================ */
+.cover {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: var(--gap-300);
+  padding: var(--padding-400);
+  overflow: hidden;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+  padding: var(--padding-400);
+  background: var(--tile-surface);
+  border: var(--border-025) solid var(--tile-border);
+  border-radius: var(--tile-radius);
+}
+
+.name {
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--tile-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pairing {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--tile-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  margin-block-start: var(--gap-300);
+}
+
+.pill {
+  padding: var(--padding-050) var(--padding-300);
+  border-radius: var(--tile-pill);
+  background: var(--tile-action);
+  color: var(--tile-action-text);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  white-space: nowrap;
+}
+
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.dot {
+  inline-size: var(--primitive-gap-200);
+  block-size: var(--primitive-gap-200);
+  border-radius: var(--radius-pill);
+}

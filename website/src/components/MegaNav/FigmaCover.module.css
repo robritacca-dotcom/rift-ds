@@ -1,0 +1,30 @@
+/* ============================================
+   FIGMA COVER
+   The Docs showcase card's drawing: Figma's canvas with a selected
+   component set, set in the card's upper part so the card's copy and fade
+   sit below it. Palette, selection and cursors come from the /docs/figma
+   window's stylesheet.
+   ============================================ */
+.canvas {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--padding-1000) var(--padding-400) 0;
+  background: var(--fg-canvas);
+  overflow: hidden;
+}
+
+.stage {
+  display: flex;
+  max-inline-size: 100%;
+}
+
+.selection {
+  margin-block-start: var(--gap-500);
+  background: var(--color-bg-container-primary);
+}
+
+.set {
+  grid-template-columns: repeat(2, auto);
+}

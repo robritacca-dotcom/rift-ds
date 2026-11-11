@@ -5,9 +5,16 @@
    ============================================ */
 
 import type { Metadata } from "next";
-import { COMPONENT_COUNT, componentCategoryMetadata } from "rift-ds/components/registry";
+import { COMPONENT_COUNT, componentCategoryMetadata, componentMetadata } from "rift-ds/components/registry";
 import { componentPages } from "@/data/component-pages";
-import { chatWidget } from "rift-ds/chat";
+
+/* The Components panel's featured page. A registry entry, so a rename or
+   a retired component fails the build here rather than linking nowhere. */
+const SHOWCASE_COMPONENT = (() => {
+  const entry = componentMetadata.find((c) => c.name === "ShaderScene");
+  if (!entry) throw new Error("navigation.ts: the Components showcase names ShaderScene, which is not in the registry");
+  return entry;
+})();
 
 export interface NavLink {
   href: string;
@@ -79,8 +86,8 @@ export interface MegaShowcase {
   overline: string;
   label: string;
   description: string;
-  /** Which cover the card draws — a token-drawn vector, never a raster. */
-  graphic: "pipeline" | "primitives" | "chat";
+  /** Which cover the card draws: a token-drawn vector or a live library scene, never a raster. */
+  graphic: "themes" | "scene" | "figma";
 }
 
 /**
@@ -163,6 +170,7 @@ export const DOC_ITEM_ICONS: Record<string, string> = {
   "/docs/chat": "forum",
   "/docs/blocks": "view_quilt",
   "/docs/schemas": "data_object",
+  "/docs/figma": "draw",
   "/blueprints/claude": "description",
   "/blueprints/design": "description",
   "/blueprints/content-design": "description",
@@ -170,12 +178,12 @@ export const DOC_ITEM_ICONS: Record<string, string> = {
   "/loops": "all_inclusive",
   "/releases": "new_releases",
 };
-  "/docs/figma": "draw",
 
-/* The Docs panel's grouping. Get started is the showcase, the blueprints
+/* The Docs panel's grouping. The Figma kit is the showcase, the blueprints
    and the system-at-work pages have named groups, and Learn takes the rest,
    so no docs page can be left out of the panel. */
-const DOCS_SHOWCASE_HREF = "/docs/get-started";
+const DOCS_SHOWCASE_HREF = "/docs/figma";
+const FOUNDATIONS_SHOWCASE_HREF = "/foundations/themes";
 const isBlueprintDoc = (l: NavLink) => l.href.startsWith("/blueprints");
 const isSystemAtWorkDoc = (l: NavLink) =>
   ["/skills", "/loops", "/releases"].includes(l.href);
@@ -210,15 +218,16 @@ function buildNavSections(): NavSection[] {
             items: componentCategoryItems,
           },
         ],
-        // The chat widget leaves the grid: it is the panel's showcase, the
-        // one page under /components that is a whole product surface
-        // rather than a part (src/chat/registry.json names it).
+        // The panel's showcase is the shader scene, the most visual page
+        // under /components; its card plays the scene live while the panel
+        // is open (ShowcaseCover). Label and description come from the
+        // component registry.
         showcase: {
-          href: `/components/${chatWidget.slug}`,
-          overline: "The whole chat",
-          label: chatWidget.label,
-          description: chatWidget.description,
-          graphic: "chat",
+          href: `/components/${SHOWCASE_COMPONENT.slug}`,
+          overline: "In motion",
+          label: SHOWCASE_COMPONENT.label,
+          description: SHOWCASE_COMPONENT.description,
+          graphic: "scene",
         },
       },
       isActive: (path) => path.startsWith("/components"),
@@ -235,22 +244,20 @@ function buildNavSections(): NavSection[] {
           {
             id: "foundations",
             label: "Foundations",
-            // Primitive colours leaves the grid: it is the panel's showcase.
+            // Themes leaves the grid: it is the panel's showcase.
             items: linksToMegaItems(
-              foundationsSidebarLinks.filter(
-                (l) => l.href !== "/foundations/colour-primitives"
-              ),
+              foundationsSidebarLinks.filter((l) => l.href !== FOUNDATIONS_SHOWCASE_HREF),
               FOUNDATION_ICONS
             ),
           },
         ],
         showcase: {
-          href: "/foundations/colour-primitives",
-          overline: "The raw layer",
-          label: "Primitive colours",
+          href: FOUNDATIONS_SHOWCASE_HREF,
+          overline: "Every look",
+          label: "Themes",
           description:
-            "The raw ramps every colour token resolves to. Retune a primitive and the whole system follows.",
-          graphic: "primitives",
+            "Whole looks the system wears through its tokens alone, each in light and dark, in its own colours and faces.",
+          graphic: "themes",
         },
       },
       isActive: (path) => path.startsWith("/foundations"),
@@ -311,11 +318,11 @@ function buildNavSections(): NavSection[] {
         ],
         showcase: {
           href: DOCS_SHOWCASE_HREF,
-          overline: "Start here",
-          label: "Get started",
+          overline: "For designers",
+          label: "Figma kit",
           description:
-            "Install the package, load the tokens, and theme the system to your brand in minutes.",
-          graphic: "pipeline",
+            "Every component in Figma, on variables named after the tokens, with themes and light and dark as modes.",
+          graphic: "figma",
         },
       },
       isActive: (path) =>
@@ -428,6 +435,7 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/docs/chat", label: "Add AI chat", description: "One command, the panel alone, or the engine" },
   { href: "/docs/blocks", label: "Blocks", description: "Whole starting pages, added with one command" },
   { href: "/docs/schemas", label: "Schemas", description: "Component contracts and tokens as JSON" },
+  { href: "/docs/figma", label: "Figma kit", description: "Every component in Figma, on the same tokens" },
   { href: "/blueprints/claude", label: "Claude MD", description: "The agent instructions behind this repo" },
   { href: "/blueprints/design", label: "Design MD", description: "The design spec behind the system" },
   { href: "/blueprints/content-design", label: "Content MD", description: "The style guide behind the words" },
@@ -435,7 +443,6 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/loops", label: "Loops", description: "The recurring loops that keep it current" },
   { href: "/releases", label: "Release log", description: "One entry per npm release" },
 ];
-  { href: "/docs/figma", label: "Figma kit", description: "Every component in Figma, on the same tokens" },
 
 /**
  * Sidebar for the Templates section — complete screens built from the

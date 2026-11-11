@@ -17,10 +17,10 @@
    holds the shader and the frost in one layer under the widget, and the widget's shell clears its plane, its surface and its blur
    backdrop so the shader shows through (the shell's tokens are :where()
    rules, so this class takes them). The threads rail keeps a near-solid
-   coat of the page, the lab's rail, where the browser cannot anchor the
-   glass coat below. */
+   coat of the page, the lab's rail. */
 .shaded {
-  /* The lab's rail coat: the page at 92%, for the rail and the inset ring. */
+  /* The lab's rail coat: the page at 92%, for the rail, and for the inset
+     plane where the browser cannot anchor (below). */
   --chat-shader-coat: color-mix(in srgb, var(--color-bg-page-primary) 92%, transparent);
 
   position: relative;
@@ -88,16 +88,20 @@
   --ds-shell-rail-bg: var(--chat-shader-coat);
 }
 
-/* Inset: everything outside the raised surface (the rail and the ring
-   between the card's edge and the surface) takes the rail's coat, so the
-   shader shows only inside the surface. Drawn as one spread shadow wide
-   enough to reach every corner of the card, which clips it, rather than as
-   the plane, which would cover the shader under the cleared surface too.
-   A ring the width of the gap rounded off at the surface's corners and let
-   the shader through beside the rail and inside the card's own corners. The
-   rail clears its coat, since the shadow already lies under it. The rail
-   and the trailing panels stand above the surface (which is positioned),
-   so the coat lies under their contents rather than over them. */
+/* Inset: the scene belongs to the raised surface alone, and everything
+   outside it (the rail, and the ring between the card's edge and the
+   surface) is the shell's plane, as in any inset shell. The rail clears
+   its own coat, since the plane already lies under it.
+
+   Where the browser cannot anchor a layer to the surface, the plane is one
+   spread shadow on the surface, wide enough to reach every corner of the
+   card, which clips it: the shell's own plane would cover the scene under
+   the cleared surface too. The rail and the trailing panels stand above
+   the surface (which is positioned), so that coat lies under their
+   contents rather than over them. The coat stands alone, never chained
+   with the mode's edge shadow: a theme whose floating shadow is `none`
+   (several presets) made the chained value invalid and dropped the coat
+   with it, leaving the rail bare over the scene. */
 .shaded :global([data-ds-shell="inset"]) {
   --ds-shell-rail-bg: transparent;
 }
@@ -110,79 +114,43 @@
 }
 
 .shaded :global([data-ds-shell="inset"] > .ds-chat-widget) {
-  /* The coat alone, never chained with the mode's edge shadow: a theme
-     whose floating shadow is `none` (several presets) made the chained
-     value invalid and dropped the coat with it, leaving the rail bare over
-     the scene. */
   box-shadow: 0 0 0 100vmax var(--chat-shader-coat);
-  /* Positioned and isolated for the edge layer below; the flush blur mode
-     already seats the surface this way (shell.css), so nothing inside it
-     is new to a positioned root. */
-  position: relative;
-  isolation: isolate;
 }
 
-/* The mode's edge shadow, on a layer of its own just above the coat (the
-   surface's own background is cleared, so a negative layer still reads),
-   so the raised edge shows over the coat where a theme has one and a theme
-   without one paints nothing. The surface is the welcome page's scroller,
-   so the layer is pinned to its scrollport rather than laid absolutely:
-   stuck at the top, the scrollport's own height (the widget is a size
-   container, so cqh is that height), its room given back below it, the
-   way the widget pins its own bottom fade. An absolute layer travelled
-   with the tiles and dragged its rounded foot up through the board. */
-.shaded :global([data-ds-shell="inset"] > .ds-chat-widget)::before {
-  content: "";
-  position: sticky;
-  top: 0;
-  z-index: -1;
-  display: block;
-  flex: none;
-  height: 100cqh;
-  margin-block-end: -100cqh;
-  border-radius: inherit;
-  box-shadow: var(--ds-shell-surface-shadow);
-  pointer-events: none;
-}
+/* Where the browser can anchor, nothing is laid over the scene at all: the
+   shader layer itself is laid to the surface's box by anchor and takes its
+   corners, so the scene is clipped to the surface, the host paints the
+   plane under it, and the surface keeps the mode's own raised edge.
 
-/* Where the browser can anchor a layer to the surface, the coat is glass:
-   the scene shows through the rail and the ring, blurred, in place of a
-   near-solid coat that let a bright scene through sharp (a sea of dots
-   under the rail, a lit stripe along the ring that read as a second
-   border). A shadow cannot blur what is behind it, so the coat becomes a
-   layer on the shell: laid to the surface's own box by anchor, grown past
-   every edge of the card by its padding, and masked to everything but its
-   content box, which is the surface. Its radius is the padding plus the
-   surface's, so the hole takes the surface's corners. The surface clears
-   its shadow coat, and a browser without anchors keeps it. */
-@supports (anchor-name: --a) and (anchor-scope: --a) and (mask-composite: exclude) {
-  .shaded :global([data-ds-shell="inset"]) {
+   Two earlier drawings are why. A glass coat over the rail and the ring
+   was one backdrop blur several viewports wide with a hole masked out of
+   it, resampling a moving scene every frame, and it flickered. And the
+   raised edge drawn on a layer inside the surface sat below the surface's
+   top padding, where the surface clipped its shadow to a second rounded
+   line under the real border. */
+@supports (anchor-name: --a) and (anchor-scope: --a) {
+  .shaded {
     anchor-scope: --shaded-chat-surface;
+  }
+
+  .shaded:has(:global([data-ds-shell="inset"])) {
+    background-color: var(--color-bg-app-shell);
   }
 
   .shaded :global([data-ds-shell="inset"] > .ds-chat-widget) {
     anchor-name: --shaded-chat-surface;
-    box-shadow: none;
+    box-shadow: var(--ds-shell-surface-shadow);
   }
 
-  .shaded :global([data-ds-shell="inset"])::before {
-    content: "";
-    position: absolute;
+  .shaded:has(:global([data-ds-shell="inset"])) > .shader {
     /* ds-allow(physical): the layer is laid to the surface's own box, edge for edge. */
-    top: calc(anchor(--shaded-chat-surface top) - 100vmax);
-    right: calc(anchor(--shaded-chat-surface right) - 100vmax);
-    bottom: calc(anchor(--shaded-chat-surface bottom) - 100vmax);
-    left: calc(anchor(--shaded-chat-surface left) - 100vmax);
-    z-index: 0;
-    box-sizing: border-box;
-    padding: 100vmax;
-    border-radius: calc(100vmax + var(--ds-shell-surface-radius));
-    background-color: color-mix(in srgb, var(--color-bg-page-primary) 70%, var(--color-bg-glass));
-    backdrop-filter: blur(40px) saturate(1.3);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    pointer-events: none;
+    top: anchor(--shaded-chat-surface top);
+    right: anchor(--shaded-chat-surface right);
+    bottom: anchor(--shaded-chat-surface bottom);
+    left: anchor(--shaded-chat-surface left);
+    /* The surface's radius (shell.css's --ds-shell-radius), which is
+       declared on the shell and so out of this sibling's reach. */
+    border-radius: var(--radius-600);
   }
 }
 
@@ -195,6 +163,10 @@
 .frost {
   position: absolute;
   inset: 0;
+  /* The layer's own corners, not only the layer's clip: a backdrop blur is
+     cut to its own box, and the browser does not round it by an ancestor's
+     rounded clip, so a square frost showed past the surface's corners. */
+  border-radius: inherit;
   background-color: color-mix(in srgb, var(--color-bg-page-primary) 50%, var(--color-bg-glass));
   backdrop-filter: blur(40px) saturate(1.3);
   opacity: 0;

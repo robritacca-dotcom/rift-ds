@@ -103,7 +103,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # The browser alone, without --with-deps: the runner image already has
+      # the system libraries Chromium needs, and the apt step that flag adds
+      # depends on Ubuntu's archive, which a runner network fault has made
+      # unreachable and so failed this job before a single test ran.
+      - run: npx playwright install chromium
       - run: npm run test
 
   storybook:
@@ -150,7 +154,11 @@ jobs:
       # succeed and the page must be visible with content. HTTP 200 and a
       # green build prove neither — the 2026-09-06 outage served 200 while
       # every JS browser showed a blank page.
-      - run: npx playwright install --with-deps chromium
+      # The browser alone, without --with-deps: the runner image already has
+      # the system libraries Chromium needs, and the apt step that flag adds
+      # depends on Ubuntu's archive, which a runner network fault has made
+      # unreachable and so failed this job before a single test ran.
+      - run: npx playwright install chromium
       - run: node scripts/smoke-hydration.mjs
       # Drives every drag grip on the served site with a 250Hz pointer flood
       # under CPU throttling and fails on a page error, an empty body or a

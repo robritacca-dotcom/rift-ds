@@ -245,14 +245,14 @@
     }
   },
   {
-    "description": "designer: Figma source (the answer gives the Community link and the /docs/figma page)",
+    "description": "designer: Figma source (the answer names the Figma Community and points at /docs/figma; off-site links are never given, SPEC G6)",
     "vars": {
       "question": "Is there a Figma file for this design system?"
     },
     "assert": [
       {
         "type": "icontains",
-        "value": "figma.com/community"
+        "value": "Figma Community"
       },
       {
         "type": "icontains",
@@ -262,7 +262,7 @@
     "metadata": {
       "seat": "designer",
       "requiredFacts": [
-        "figma.com/community",
+        "Figma Community",
         "/docs/figma"
       ]
     }
@@ -307,21 +307,21 @@
     }
   },
   {
-    "description": "designer: Figma and code stay in step (a definite answer: the code leads, synced by hand)",
+    "description": "designer: Figma and code stay in step (a definite answer: nothing syncs them, the kit is updated by hand and the code wins)",
     "vars": {
       "question": "Is the Figma kit always in sync with the code?"
     },
     "assert": [
       {
         "type": "icontains",
-        "value": "source of truth"
+        "value": "by hand"
       }
     ],
     "metadata": {
       "seat": "designer",
       "requiredFacts": [
-        "source of truth",
-        "by hand"
+        "by hand",
+        "the code and the docs pages on this"
       ]
     }
   },
@@ -341,6 +341,101 @@
       "requiredFacts": [
         "Code Connect needs a Figma Organization or Enterprise plan",
         "component description"
+      ]
+    }
+  },
+  {
+    "description": "designer: are all the props in the Figma kit (a definite answer: every prop with a look is a property, behaviour props live in the description)",
+    "vars": {
+      "question": "Are all the props in the Figma kit?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "variant propert"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "variant property with the same name",
+        "boolean property",
+        "instance-swap properties",
+        "description lists every prop"
+      ]
+    }
+  },
+  {
+    "description": "designer: the disabled state in Figma",
+    "vars": {
+      "question": "Is the disabled state in the Figma kit?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "boolean"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "boolean property"
+      ]
+    }
+  },
+  {
+    "description": "developer: where a component's props live in Figma",
+    "vars": {
+      "question": "Where do I find a component's props in Figma?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "description"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "requiredFacts": [
+        "description lists every prop"
+      ]
+    }
+  },
+  {
+    "description": "designer: which themes are modes in the Figma kit",
+    "vars": {
+      "question": "Which themes are in the Figma kit?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "Blueprint"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "Blueprint",
+        "Signal",
+        "Forest"
+      ]
+    }
+  },
+  {
+    "description": "designer: fonts the Figma kit needs",
+    "vars": {
+      "question": "Which fonts do I need for the Figma kit?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "Google"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "Google Fonts"
       ]
     }
   },

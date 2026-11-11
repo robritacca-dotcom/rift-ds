@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.26.0",
+      "date": "2026-11-11",
+      "title": "Five new shader scenes, menu descriptions and a staged chat welcome",
+      "body": [
+        "ShaderScene gains five scenes. Glyphs prints a streak of light in type, in the theme's code face. Prism sends straight beams of light out of a cut stone, each edge split into the theme's spectrum. Meteors drops a shower past a planet's edge, where a sun flares on the limb. Waves is a rolling sea drawn in points, and Aurora folds wide ribbons of colour round a deep void. All read the theme's ambient colours, and `SHADER_SCENES` lists every setting with its label and range.",
+        "Scenes now hold to ShaderField's budget: 30 frames a second and at most one drawing-buffer pixel per CSS pixel, with Glyphs allowed two for its type. A scene resized by a window drag no longer flashes the page ground.",
+        "A DropdownMenu item takes `description`, a caption line under its label, and items in DropdownMenu and ContextMenu take `iconRight`, a trailing glyph for an item that leaves the site. ThreadPanel takes `collapsedFooterSlot`. In the chat, the welcome arrives in stages (the composer, the greeting, then each tile) with `--ds-chat-widget-welcome-hold` setting the wait, the inset shell's welcome page scrolls, and an expanded artifact keeps the history rail. Nothing published was renamed or removed, so upgrading needs no code changes."
+      ]
+    },
+    {
       "version": "1.25.0",
       "date": "2026-11-07",
       "title": "Components for building apps, money and dates, and ShaderScene",

@@ -1,0 +1,236 @@
+/* ============================================
+   FIGMA KIT (docs)
+   The standard doc page shell (the same classes as the schemas page),
+   plus a picture of the file open in Figma, the kit's page cards, the
+   variables panel and the token tiers.
+   ============================================ */
+.dsLayout {
+  display: flex;
+  gap: var(--layout-column-gap);
+  width: 100%;
+  max-width: 1440px;
+  padding-top: var(--primitive-gap-1000);
+}
+
+.dsContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-2000);
+}
+
+.pageHeader {
+  margin-top: calc(var(--primitive-gap-1000) - var(--gap-2000));
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--primitive-gap-500);
+  width: 100%;
+}
+
+.pageTitle {
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  color: var(--color-text-display);
+}
+
+.introSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+}
+
+.subDisplay {
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  letter-spacing: var(--font-sub-display-letter-spacing);
+  color: var(--color-text-display);
+  margin: 0;
+}
+
+.introBody {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.headerAction {
+  flex: none;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--primitive-gap-500);
+  scroll-margin-top: var(--layout-anchor-clearance);
+}
+
+.section > :global(.ds-section-title:not(.ds-section-title--no-divider)) {
+  margin-bottom: calc(var(--gap-1000) - var(--primitive-gap-500));
+}
+
+.sectionNote {
+  margin: 0;
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.sectionNote code,
+.sectionNote strong {
+  color: var(--color-text-primary);
+}
+
+.inlineLink {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.defKey {
+  margin: 0;
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.figureCaption {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   THE FIGMA WINDOW (drawn by KitWindow)
+   ============================================ */
+.window {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); /* ds-allow(spacing): the card's minimum width */
+  gap: var(--gap-400);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: var(--padding-400);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+}
+
+.cardIcon {
+  --icon-size: var(--icon-size-600);
+  color: var(--color-text-secondary);
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-heading);
+}
+
+.cardBody {
+  margin: 0;
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   VARIABLES TABLE
+   ============================================ */
+.variables {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.variableValue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.variableSwatch {
+  inline-size: var(--primitive-gap-500);
+  block-size: var(--primitive-gap-500);
+  flex: none;
+  border-radius: var(--radius-100);
+  background: var(--swatch);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* ============================================
+   TOKEN TIERS
+   ============================================ */
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); /* ds-allow(spacing): a tier's minimum width */
+  gap: var(--gap-300);
+}
+
+.tier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  padding: var(--padding-400);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+}
+
+.tierStep {
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.tierFigma {
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+.tierCode {
+  font-family: var(--font-family-code);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  word-break: break-word;
+}
+
+.tierNote {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}

@@ -3,6 +3,7 @@
 import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import Image from "next/image";
 import TocCard from "../../components/TocCard/TocCard";
 import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
@@ -117,6 +118,13 @@ export default function DocsPage() {
                     <span className={kit.bar} style={{ width: `${w}px` }} />
                   </div>
                 ))}
+              </div>
+            </TocCard>
+
+            <TocCard disc href="/docs/figma" title="Figma kit">
+              {/* The Figma mark on a canvas frame */}
+              <div className={`${kit.frame} ${styles.figmaFrame}`} aria-hidden="true">
+                <Image src="/logos/Figma.svg" alt="" width={28} height={42} className={styles.figmaMark} />
               </div>
             </TocCard>
 

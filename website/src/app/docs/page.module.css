@@ -310,6 +310,18 @@
   padding-inline-start: var(--gap-200);
 }
 
+/* Figma kit: the Figma mark centred on a frame */
+.figmaFrame.figmaFrame {
+  align-items: center;
+  justify-content: center;
+}
+
+.figmaMark {
+  display: block;
+  block-size: var(--icon-size-1200);
+  inline-size: auto;
+}
+
 /* Loops: a ring with a dot riding it */
 .loopRing {
   position: relative;

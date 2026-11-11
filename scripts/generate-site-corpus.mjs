@@ -64,6 +64,7 @@ import {
   AGENT_STARTER_FILE,
   AUTHOR_NAME,
   AUTHOR_URL,
+  FIGMA_URL,
   NPM_URL,
   PACKAGE_NAME,
   REPOSITORY_URL,
@@ -703,6 +704,7 @@ ${componentDocLines()}
 - Storybook: ${STORYBOOK_URL} (rendered API reference with props tables)
 - npm: ${NPM_URL} (\`npm install ${PACKAGE_NAME}\`)
 - GitHub: ${REPOSITORY_URL} (full source)
+- Figma: ${FIGMA_URL} (the free Figma kit on the Figma Community; /docs/figma explains it)
 
 ### Author
 

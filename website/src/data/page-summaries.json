@@ -1477,6 +1477,56 @@
           "label": "Can the playground read it?"
         }
       ]
+    },
+    "/docs/figma": {
+      "title": "Figma kit",
+      "text": "The free Figma kit: a page per component, variables named after the tokens, and themes and light and dark as modes.",
+      "chips": [
+        {
+          "id": "get",
+          "label": "How do I get the Figma kit?",
+          "prompt": "Where do I get the Figma kit, and is it free?"
+        },
+        {
+          "id": "sync",
+          "label": "Does the kit match the code?",
+          "prompt": "Does the Figma kit match the code, and how is it kept in step?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "get",
+          "label": "How do I get the Figma kit?"
+        },
+        {
+          "id": "free",
+          "label": "Is the Figma kit free?"
+        },
+        {
+          "id": "switch",
+          "label": "How do I switch the theme?"
+        },
+        {
+          "id": "sync",
+          "label": "Does the kit match the code?"
+        },
+        {
+          "id": "names",
+          "label": "How do variables match tokens?"
+        },
+        {
+          "id": "themes",
+          "label": "Which themes are in the kit?"
+        },
+        {
+          "id": "connect",
+          "label": "Does it use Code Connect?"
+        },
+        {
+          "id": "fonts",
+          "label": "Which fonts does the kit need?"
+        }
+      ]
     }
   },
   "essays": {}

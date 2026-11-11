@@ -1,0 +1,682 @@
+/* ============================================
+   KIT WINDOW
+   A picture of the kit open in Figma (UI3): the file and layers panel,
+   the canvas with a selected component set and the floating toolbar, and
+   the Design panel. Figma's interface is drawn in Figma's own colours and
+   type, light and dark, because they are Figma's, not a theme's; only the
+   canvas content wears the kit's theme (a theme scope). Side panels drop
+   out on narrower screens; the canvas stays.
+   ============================================ */
+/* Figma's palette and type, shared by the window here and the Docs menu's
+   showcase cover (website/src/components/MegaNav/FigmaCover.tsx). */
+.app,
+.palette {
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-panel: #FFFFFF;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-canvas: #F5F5F5;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-line: #E6E6E6;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-text: rgba(0, 0, 0, 0.9);
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-text-2: rgba(0, 0, 0, 0.5);
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-field: #F5F5F5;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-hover: #F0F0F0;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-select: #EBF5FF;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-component: #9747FF;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-blue: #0D99FF;
+  /* ds-allow(mockup): Figma's interface palette, light */
+  --fg-white: #FFFFFF;
+  /* ds-allow(mockup): Figma's multiplayer cursor colours */
+  --fg-cursor-designer: #F24822;
+  /* ds-allow(mockup): Figma's multiplayer cursor colours */
+  --fg-cursor-engineer: #14AE5C;
+  /* ds-allow(mockup): Figma's multiplayer cursor colours */
+  --fg-cursor-agent: #E0329B;
+  /* ds-allow(mockup): Figma's toolbar and panel shadow */
+  --fg-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 0 0.5px rgba(0, 0, 0, 0.15);
+  color: var(--fg-text);
+  /* ds-allow(typography): Figma's interface type, Inter at 11px */
+  font: 450 11px/16px "Inter", system-ui, sans-serif;
+  letter-spacing: 0.005em; /* ds-allow(typography): Figma's interface tracking */
+}
+
+.app {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 15rem); /* ds-allow(mockup): Figma's side panels at its own widths */
+  block-size: 36rem; /* ds-allow(mockup): the window's height, sized to the canvas */
+  background: var(--fg-panel);
+  border: var(--border-025) solid var(--fg-line);
+  border-radius: var(--radius-400);
+  overflow: hidden;
+  user-select: none;
+}
+
+:global([data-theme="dark"]) .app,
+:global([data-theme="dark"]) .palette {
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-panel: #2C2C2C;
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-canvas: #1E1E1E;
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-line: #444444;
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-text: rgba(255, 255, 255, 0.9);
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-text-2: rgba(255, 255, 255, 0.5);
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-field: #383838;
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-hover: #383838;
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-select: #2A3A4D;
+  /* ds-allow(mockup): Figma's interface palette, dark */
+  --fg-component: #C29EFF;
+  /* ds-allow(mockup): Figma's toolbar and panel shadow */
+  --fg-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0.5px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- glyphs ---------- */
+.glyph,
+.chevron {
+  inline-size: 16px; /* ds-allow(mockup): Figma's 16px glyph box */
+  block-size: 16px; /* ds-allow(mockup): Figma's 16px glyph box */
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chevron {
+  inline-size: 12px; /* ds-allow(mockup): Figma's chevron */
+  block-size: 12px; /* ds-allow(mockup): Figma's chevron */
+  color: var(--fg-text-2);
+}
+
+.symbol {
+  --icon-size: var(--icon-size-500);
+  font-variation-settings: "wght" 300;
+  flex: none;
+}
+
+/* ---------- panels ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--fg-panel);
+}
+
+.panelStart {
+  border-inline-end: var(--border-025) solid var(--fg-line);
+}
+
+.panelEnd {
+  border-inline-start: var(--border-025) solid var(--fg-line);
+}
+
+.fileBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px 4px 16px; /* ds-allow(mockup): Figma's panel padding */
+  color: var(--fg-text-2);
+}
+
+.fileMenu {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  --icon-size: 16px; /* ds-allow(mockup): Figma's logo size */
+}
+
+.fileTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* ds-allow(mockup): Figma's spacing */
+  padding: 8px 16px 12px; /* ds-allow(mockup): Figma's panel padding */
+  border-block-end: var(--border-025) solid var(--fg-line);
+}
+
+.fileName {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  font-size: 13px; /* ds-allow(typography): Figma's file title */
+  font-weight: 550;
+}
+
+.fileProject {
+  color: var(--fg-text-2);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  padding: 8px; /* ds-allow(mockup): Figma's panel padding */
+  border-block-end: var(--border-025) solid var(--fg-line);
+}
+
+.tab,
+.tabOn {
+  padding: 4px 8px; /* ds-allow(mockup): Figma's tab padding */
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+  color: var(--fg-text-2);
+  font-weight: 550;
+}
+
+.tabOn {
+  background: var(--fg-field);
+  color: var(--fg-text);
+}
+
+.zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px; /* ds-allow(mockup): Figma's spacing */
+  margin-inline-start: auto;
+  padding-inline-end: 4px; /* ds-allow(mockup): Figma's spacing */
+}
+
+.tree {
+  display: flex;
+  flex-direction: column;
+  padding: 8px; /* ds-allow(mockup): Figma's panel padding */
+  border-block-end: var(--border-025) solid var(--fg-line);
+}
+
+.tree:last-child {
+  border-block-end: 0;
+}
+
+.treeHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: 32px; /* ds-allow(mockup): Figma's row height */
+  padding-inline: 0 4px; /* ds-allow(mockup): Figma's spacing */
+  color: var(--fg-text-2);
+}
+
+.treeTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  color: var(--fg-text);
+  font-weight: 550;
+}
+
+.row,
+.rowOn,
+.layer {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* ds-allow(mockup): Figma's spacing */
+  block-size: 28px; /* ds-allow(mockup): Figma's row height */
+  padding-inline: 16px 8px; /* ds-allow(mockup): Figma's row inset */
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rowOn {
+  background: var(--fg-hover);
+  font-weight: 550;
+}
+
+.layer {
+  padding-inline-start: 8px; /* ds-allow(mockup): Figma's row inset */
+  color: var(--fg-text);
+}
+
+.layer .glyph {
+  color: var(--fg-text-2);
+}
+
+.selectedLayers {
+  display: flex;
+  flex-direction: column;
+  background: var(--fg-select);
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+}
+
+.layerComponent,
+.layerComponent .glyph {
+  color: var(--fg-component);
+}
+
+.layerChild {
+  padding-inline-start: 28px; /* ds-allow(mockup): Figma's nested row inset */
+}
+
+/* ---------- design panel ---------- */
+.shareBar {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* ds-allow(mockup): Figma's spacing */
+  padding: 12px 12px 4px; /* ds-allow(mockup): Figma's panel padding */
+}
+
+.people {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px; /* ds-allow(mockup): Figma's spacing */
+  margin-inline-end: auto;
+}
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 24px; /* ds-allow(mockup): Figma's avatar */
+  block-size: 24px; /* ds-allow(mockup): Figma's avatar */
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 2px var(--fg-panel); /* ds-allow(mockup): the avatar ring */
+  background: var(--cursor-colour);
+  color: var(--fg-white);
+  font-weight: 600;
+}
+
+.avatar + .avatar {
+  margin-inline-start: -6px; /* ds-allow(mockup): Figma's avatar overlap */
+}
+
+.present {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fg-text);
+}
+
+.share {
+  padding: 4px 12px; /* ds-allow(mockup): Figma's button padding */
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+  background: var(--fg-blue);
+  color: var(--fg-white);
+  font-weight: 550;
+  line-height: 16px; /* ds-allow(typography): Figma's button line */
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  padding: 8px 16px 12px; /* ds-allow(mockup): Figma's section padding */
+  border-block-end: var(--border-025) solid var(--fg-line);
+}
+
+.sectionHead,
+.sectionHeadMuted {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: 28px; /* ds-allow(mockup): Figma's row height */
+  font-weight: 550;
+}
+
+.sectionHeadMuted {
+  color: var(--fg-text-2);
+  font-weight: 450;
+}
+
+.setTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: 32px; /* ds-allow(mockup): Figma's row height */
+  color: var(--fg-text-2);
+}
+
+.setName {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  color: var(--fg-component);
+  font-size: 13px; /* ds-allow(typography): Figma's selection title */
+  font-weight: 550;
+}
+
+.setName .chevron {
+  color: var(--fg-component);
+}
+
+.prop {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr); /* ds-allow(mockup): Figma's label column */
+  align-items: center;
+  gap: 8px; /* ds-allow(mockup): Figma's spacing */
+}
+
+.propName {
+  color: var(--fg-text-2);
+}
+
+.select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+  block-size: 24px; /* ds-allow(mockup): Figma's field height */
+  padding-inline: 8px 4px; /* ds-allow(mockup): Figma's field padding */
+  background: var(--fg-field);
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.whenDark,
+:global([data-theme="dark"]) .whenLight {
+  display: none;
+}
+
+:global([data-theme="dark"]) .whenDark {
+  display: inline;
+}
+
+.colours {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* ds-allow(mockup): Figma's spacing */
+}
+
+.colour {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* ds-allow(mockup): Figma's spacing */
+  block-size: 24px; /* ds-allow(mockup): Figma's field height */
+  padding-inline: 4px 8px; /* ds-allow(mockup): Figma's field padding */
+  background: var(--fg-field);
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+}
+
+.swatch {
+  inline-size: 14px; /* ds-allow(mockup): Figma's swatch */
+  block-size: 14px; /* ds-allow(mockup): Figma's swatch */
+  flex: none;
+  border-radius: 3px; /* ds-allow(mockup): Figma's swatch radius */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); /* ds-allow(mockup): the swatch edge */
+}
+
+.colourName {
+  color: var(--fg-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- canvas ---------- */
+.canvas {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 96px; /* ds-allow(mockup): room for the frame name and toolbar */
+  background: var(--fg-canvas);
+  overflow: hidden;
+}
+
+/* The kit's own surface: this part wears the kit page's theme. */
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* ds-allow(mockup): Figma's frame-name gap */
+  max-inline-size: 100%;
+  background: transparent;
+}
+
+.frameName {
+  color: var(--fg-text-2);
+  font: 450 11px/16px "Inter", system-ui, sans-serif; /* ds-allow(typography): Figma's frame name */
+}
+
+.kitPanel {
+  padding: var(--padding-500) var(--padding-500) var(--padding-1000);
+  background: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+}
+
+.selection {
+  position: relative;
+  margin-block-start: 24px; /* ds-allow(mockup): room for the selection name */
+  outline: 1.5px solid var(--fg-component); /* ds-allow(mockup): Figma's selection stroke */
+}
+
+.selectionName {
+  position: absolute;
+  inset-block-end: calc(100% + 6px); /* ds-allow(mockup): Figma's label offset */
+  inset-inline-start: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px; /* ds-allow(mockup): Figma's spacing */
+  color: var(--fg-component);
+  font: 500 11px/16px "Inter", system-ui, sans-serif; /* ds-allow(typography): Figma's selection label */
+}
+
+.set {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-items: start;
+  gap: var(--gap-400) var(--gap-500);
+  padding: var(--padding-400);
+  border: 1px dashed var(--fg-component); /* ds-allow(mockup): Figma's component set border */
+  border-radius: 5px; /* ds-allow(mockup): Figma's component set radius */
+}
+
+.handle {
+  position: absolute;
+  inline-size: 7px; /* ds-allow(mockup): Figma's resize handle */
+  block-size: 7px; /* ds-allow(mockup): Figma's resize handle */
+  background: var(--fg-white);
+  border: 1px solid var(--fg-component); /* ds-allow(mockup): Figma's handle stroke */
+}
+
+.handleTl { inset-block-start: -4px; inset-inline-start: -4px; } /* ds-allow(mockup): handle on the corner */
+.handleTr { inset-block-start: -4px; inset-inline-end: -4px; } /* ds-allow(mockup): handle on the corner */
+.handleBl { inset-block-end: -4px; inset-inline-start: -4px; } /* ds-allow(mockup): handle on the corner */
+.handleBr { inset-block-end: -4px; inset-inline-end: -4px; } /* ds-allow(mockup): handle on the corner */
+
+.sizeTag {
+  position: absolute;
+  inset-block-start: calc(100% + 8px); /* ds-allow(mockup): Figma's size tag offset */
+  inset-inline-start: 50%;
+  translate: calc(-50% * var(--ds-inline-sign, 1)) 0;
+  padding: 0 4px; /* ds-allow(mockup): Figma's tag padding */
+  border-radius: 2px; /* ds-allow(mockup): Figma's tag radius */
+  background: var(--fg-component);
+  color: var(--fg-white);
+  font: 500 11px/16px "Inter", system-ui, sans-serif; /* ds-allow(typography): Figma's size tag */
+  white-space: nowrap;
+}
+
+/* ---------- toolbar ---------- */
+.toolbar {
+  position: absolute;
+  inset-block-end: 16px; /* ds-allow(mockup): Figma's toolbar inset */
+  inset-inline-start: 50%;
+  translate: calc(-50% * var(--ds-inline-sign, 1)) 0;
+  display: flex;
+  align-items: center;
+  gap: 2px; /* ds-allow(mockup): Figma's spacing */
+  padding: 8px; /* ds-allow(mockup): Figma's toolbar padding */
+  background: var(--fg-panel);
+  border-radius: 13px; /* ds-allow(mockup): Figma's toolbar radius */
+  box-shadow: var(--fg-shadow);
+  color: var(--fg-text);
+}
+
+.toolbar > .chevron {
+  margin-inline: -2px 2px; /* ds-allow(mockup): the tool's flyout chevron */
+}
+
+.tool,
+.toolOn {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 32px; /* ds-allow(mockup): Figma's tool button */
+  block-size: 32px; /* ds-allow(mockup): Figma's tool button */
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+}
+
+.toolOn {
+  background: var(--fg-blue);
+  color: var(--fg-white);
+}
+
+.toolRule {
+  inline-size: 1px; /* ds-allow(mockup): the toolbar divider */
+  align-self: stretch;
+  margin-inline: 6px; /* ds-allow(mockup): Figma's spacing */
+  background: var(--fg-line);
+}
+
+.devToggle {
+  display: inline-flex;
+  inline-size: 48px; /* ds-allow(mockup): the Dev Mode toggle */
+  padding: 2px; /* ds-allow(mockup): the toggle's inset */
+  background: var(--fg-field);
+  border-radius: 7px; /* ds-allow(mockup): the toggle's radius */
+}
+
+.devKnob {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 28px; /* ds-allow(mockup): the toggle's knob */
+  block-size: 28px; /* ds-allow(mockup): the toggle's knob */
+  border-radius: 5px; /* ds-allow(mockup): Figma's control radius */
+  background: var(--fg-panel);
+  box-shadow: var(--fg-shadow);
+  color: var(--fg-text-2);
+}
+
+/* ---------- cursors ----------
+   Each cursor walks its own loop over the canvas; positions are fractions
+   of the canvas, so the paths scale with it. Reduced motion parks them. */
+.cursor {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  pointer-events: none;
+  color: var(--cursor-colour);
+  animation-iteration-count: infinite;
+  animation-timing-function: var(--motion-ease-standard);
+}
+
+.cursorArrow {
+  display: block;
+  inline-size: 18px; /* ds-allow(mockup): Figma's cursor */
+  block-size: 18px; /* ds-allow(mockup): Figma's cursor */
+  fill: currentColor;
+  stroke: var(--fg-white);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25)); /* ds-allow(mockup): the cursor's shadow */
+}
+
+.cursorName {
+  position: absolute;
+  inset-block-start: 16px; /* ds-allow(mockup): Figma's name tag offset */
+  inset-inline-start: 12px; /* ds-allow(mockup): Figma's name tag offset */
+  padding: 2px 6px; /* ds-allow(mockup): Figma's name tag padding */
+  border-radius: 4px; /* ds-allow(mockup): Figma's name tag radius */
+  background: var(--cursor-colour);
+  color: var(--fg-white);
+  font: 500 11px/16px "Inter", system-ui, sans-serif; /* ds-allow(typography): Figma's name tag */
+  white-space: nowrap;
+}
+
+.cursorDesigner {
+  --cursor-colour: var(--fg-cursor-designer);
+  animation-name: kit-cursor-designer;
+  animation-duration: 13s; /* ds-allow(motion): an ambient loop slower than any token */
+}
+
+.cursorEngineer {
+  --cursor-colour: var(--fg-cursor-engineer);
+  animation-name: kit-cursor-engineer;
+  animation-duration: 17s; /* ds-allow(motion): an ambient loop slower than any token */
+}
+
+.cursorAgent {
+  --cursor-colour: var(--fg-cursor-agent);
+  animation-name: kit-cursor-agent;
+  animation-duration: 11s; /* ds-allow(motion): an ambient loop slower than any token */
+}
+
+/* The avatars share the cursors' colours but never move. */
+.avatar.cursorDesigner,
+.avatar.cursorEngineer,
+.avatar.cursorAgent {
+  animation: none;
+}
+
+@keyframes kit-cursor-designer {
+  0%, 100% { inset-inline-start: 34%; inset-block-start: 58%; }
+  25% { inset-inline-start: 48%; inset-block-start: 64%; }
+  50% { inset-inline-start: 42%; inset-block-start: 46%; }
+  75% { inset-inline-start: 28%; inset-block-start: 68%; }
+}
+
+@keyframes kit-cursor-engineer {
+  0%, 100% { inset-inline-start: 72%; inset-block-start: 26%; }
+  30% { inset-inline-start: 62%; inset-block-start: 36%; }
+  60% { inset-inline-start: 76%; inset-block-start: 60%; }
+  80% { inset-inline-start: 68%; inset-block-start: 46%; }
+}
+
+@keyframes kit-cursor-agent {
+  0%, 100% { inset-inline-start: 16%; inset-block-start: 22%; }
+  35% { inset-inline-start: 30%; inset-block-start: 32%; }
+  65% { inset-inline-start: 56%; inset-block-start: 76%; }
+}
+
+/* ds-allow(motion): parks the cursors' ambient loops */
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+/* ---------- narrower screens ---------- */
+@media (max-width: 1279px) {
+  .app {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); /* ds-allow(mockup): Figma's layers panel at its own width */
+  }
+
+  .panelEnd {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    block-size: auto;
+    min-block-size: 28rem; /* ds-allow(mockup): the canvas alone on a phone */
+  }
+
+  .panelStart {
+    display: none;
+  }
+
+  .set {
+    grid-template-columns: repeat(2, auto);
+  }
+
+  .toolbar > .chevron,
+  .toolbar > .tool:nth-of-type(n + 5) {
+    display: none;
+  }
+}

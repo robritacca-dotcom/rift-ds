@@ -170,6 +170,7 @@ export const DOC_ITEM_ICONS: Record<string, string> = {
   "/loops": "all_inclusive",
   "/releases": "new_releases",
 };
+  "/docs/figma": "draw",
 
 /* The Docs panel's grouping. Get started is the showcase, the blueprints
    and the system-at-work pages have named groups, and Learn takes the rest,
@@ -434,6 +435,7 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/loops", label: "Loops", description: "The recurring loops that keep it current" },
   { href: "/releases", label: "Release log", description: "One entry per npm release" },
 ];
+  { href: "/docs/figma", label: "Figma kit", description: "Every component in Figma, on the same tokens" },
 
 /**
  * Sidebar for the Templates section — complete screens built from the

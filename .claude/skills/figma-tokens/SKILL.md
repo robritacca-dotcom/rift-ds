@@ -47,7 +47,7 @@ Diff it against the sources for every theme the kit carries and both modes. This
 Write the plan as a table: collection, variable, action, value per mode. Two cases wait for the owner's yes:
 
 - **Removing a variable.** Count the layers bound to it first. A removed token usually means its consumers moved to another, so rebind them (step 5) before removing it.
-- **A theme past the mode cap.** The kit's plan caps a collection's modes. A new theme takes a Theme mode only while there is room. At the cap, ask which theme to leave out of Figma, or whether the new one stays code-only.
+- **A theme past the mode cap.** The kit's plan caps a collection's modes. A new theme takes a Theme mode only while there is room. At the cap, ask which theme to leave out of Figma, or whether the new one stays code-only. Whenever a theme joins or leaves the Theme collection, update `KIT_THEMES` in `website/src/app/docs/figma/page.tsx` in the same change, so the site's Figma kit page names the modes the kit really has.
 
 Everything else proceeds.
 

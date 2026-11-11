@@ -245,20 +245,102 @@
     }
   },
   {
-    "description": "developer: Figma source",
+    "description": "designer: Figma source (the answer gives the Community link and the /docs/figma page)",
     "vars": {
       "question": "Is there a Figma file for this design system?"
     },
     "assert": [
       {
         "type": "icontains",
-        "value": "figma"
+        "value": "figma.com/community"
+      },
+      {
+        "type": "icontains",
+        "value": "/docs/figma"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "figma.com/community",
+        "/docs/figma"
+      ]
+    }
+  },
+  {
+    "description": "designer: Figma kit is free",
+    "vars": {
+      "question": "Is the Figma kit free to use?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "free"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "free",
+        "Figma Community"
+      ]
+    }
+  },
+  {
+    "description": "designer: switching theme and mode in Figma",
+    "vars": {
+      "question": "How do I switch between themes and dark mode in the Figma kit?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "mode"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "Theme",
+        "Mode",
+        "variable modes"
+      ]
+    }
+  },
+  {
+    "description": "designer: Figma and code stay in step (a definite answer: the code leads, synced by hand)",
+    "vars": {
+      "question": "Is the Figma kit always in sync with the code?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "source of truth"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "source of truth",
+        "by hand"
+      ]
+    }
+  },
+  {
+    "description": "developer: Code Connect",
+    "vars": {
+      "question": "Does the Figma kit support Code Connect?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "Code Connect"
       }
     ],
     "metadata": {
       "seat": "developer",
       "requiredFacts": [
-        "Figma"
+        "Code Connect needs a Figma Organization or Enterprise plan",
+        "component description"
       ]
     }
   },

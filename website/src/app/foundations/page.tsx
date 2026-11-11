@@ -43,7 +43,7 @@ export default function FoundationsPage() {
               The shared values behind every component
             </p>
             <p className={styles.introBody}>
-              Foundations are the colours, spacing, type styles, motion, layout and stacking values that all components are built on. Every value here is a CSS token in the repo (the foundation was originally designed as Figma variables), and components reference tokens rather than hard-coded values. That means updating a colour or spacing value in one place updates it everywhere it is used.
+              Foundations are the colours, spacing, type styles, motion, layout and stacking values that all components are built on. Every value here is a CSS token in the repo, and the Figma kit&apos;s variables are named after the same tokens, and components reference tokens rather than hard-coded values. That means updating a colour or spacing value in one place updates it everywhere it is used.
             </p>
           </div>
 

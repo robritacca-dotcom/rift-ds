@@ -62,7 +62,22 @@ export type SiteBackgroundEntry = {
    sits high, so the sky's glow and the arc itself are what the band shows
    under the page title, and the world below it fades to the page floor
    inside the scene (the fadeBottom pass) before the band's own fade
-   finishes the job; the beam is softened as on the home page. */
+   finishes the job; the beam is softened as on the home page.
+
+   Glyphs, home: the whole composition dropped (rise), so the streak and
+   its core land under the hero's calls to action and over the top of the
+   chat frame rather than behind the headline and the counts, with the
+   type thinned and the exposure eased. That alone left the bloom above
+   the core printing bright type straight through the counts, so the top
+   fade starts as low as it can and falls off fast: by the counts' row the
+   scene is down to about a third, and the counts and their labels read.
+
+   Glyphs, page: the streak sits in the upper half of the standard band,
+   between the header and the page title, with no top fade to cut it and a
+   longer bottom fade so the blooms below it are gone before the content
+   starts; thinner type and less exposure again, since a title sits on it.
+   Both bands take far less grain than the scenes' default: grain over
+   type reads as noise in the characters. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

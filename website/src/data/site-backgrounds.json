@@ -33,6 +33,56 @@
           }
         }
       }
+    },
+    {
+      "id": "glyphs",
+      "label": "Glyphs",
+      "description": "Soft light printed in type",
+      "icon": "text_fields",
+      "scene": "glyphs",
+      "home": {
+        "params": {
+          "rise": -0.38,
+          "ink": 0.2,
+          "exposure": 0.9
+        },
+        "passes": {
+          "fadeTop": {
+            "params": {
+              "start": 0.2,
+              "softness": 0.3
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "rise": 0.05,
+          "ink": 0.24,
+          "exposure": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
     }
   ]
 }

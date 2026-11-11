@@ -503,7 +503,9 @@ vec3 scene(vec2 uv, float t) {
   vec2 q = vec2(p.x, p.y - 0.5);
   float a = dot(q, vec2(-dir.y, dir.x));
   float b = dot(q, dir);
-  float span = 2.0 + aspect;
+  /* Long enough that a meteor and its whole tail are off the stage when
+     its lane starts over, so none ever blinks out. */
+  float span = 2.0 + aspect + u_tail;
   for (int i = 0; i < 3; i++) {
     float depth = 1.0 + float(i) * 0.7;
     float laneW = 0.13 / depth;
@@ -562,8 +564,8 @@ vec3 scene(vec2 uv, float t) {
  * into mist and rolls in slow swells, each dot a round point that grows and brightens on a
  * crest and all but goes out in a trough, over a glow that lies in the
  * water under them. The surface is found by marching the eye's ray through
- * the slab the swells can occupy, so a near crest hides the trough behind
- * it; each dot is then drawn round on the screen from its own place on the
+ * the slab the swells can occupy, in steps too short to pass through a
+ * crest, so a near crest hides the trough behind it and nothing flickers; each dot is then drawn round on the screen from its own place on the
  * surface. Far off, where the dots would be finer than a pixel, they melt
  * into the glow rather than shimmer.
  */
@@ -626,22 +628,30 @@ vec3 scene(vec2 uv, float t) {
     /* The ray can only meet the sea inside the slab the swells occupy. */
     float enter = (1.0 - amp) / fall;
     float leave = min((1.0 + amp) / fall, 2.5 * farZ / run);
+    /* March by the clear height over the sea, divided by the fastest the
+       ray and the sea can close on each other, so a step can never pass
+       through a crest: fixed strides did, and whether a thin crest was
+       caught turned on where the samples fell, so patches of sea flickered
+       as the swell moved. Steps shrink toward the surface; a ray still
+       short of it when they run out is grazing a crest, and rests there. */
+    float closing = fall + amp * 1.7 / u_reach * length(vec2(p.x, run));
     float k = enter;
-    float last = enter;
-    float stride = max(leave - enter, 0.0) / 28.0;
-    for (int i = 0; i < 28; i++) {
+    /* The last crest the ray cleared on its way: where its height over
+       the sea stopped falling and rose again. */
+    float skimK = -1.0;
+    float lastOver = 1e3;
+    float lastK = enter;
+    bool falling = false;
+    for (int i = 0; i < 72; i++) {
       float over = (1.0 - fall * k) - amp * waveHeight(vec2(p.x * k, run * k), t);
-      if (over < 0.0) break;
-      last = k;
-      k += stride;
+      if (over < 0.0015 * k || k > leave) break;
+      if (over > lastOver && falling) skimK = lastK;
+      falling = over < lastOver;
+      lastOver = over;
+      lastK = k;
+      k += over / closing;
     }
     k = min(k, leave);
-    /* Close in on the surface between the last two steps. */
-    for (int i = 0; i < 5; i++) {
-      float mid = 0.5 * (last + k);
-      float over = (1.0 - fall * mid) - amp * waveHeight(vec2(p.x * mid, run * mid), t);
-      if (over < 0.0) k = mid; else last = mid;
-    }
 
     vec2 at = vec2(p.x * k, run * k);
     float z = at.y;
@@ -663,15 +673,27 @@ vec3 scene(vec2 uv, float t) {
        round on the screen from its own place on the surface. */
     float cellW = 1.0 / u_density;
     float row = floor(z / cellW);
+    /* The rows either side of where the ray lands, three each way: seen
+       side-on a swell packs its rows closer than a dot is wide, and a dot
+       left out of the search was a notch in its neighbours that came and
+       went as the swell moved. */
+    /* And a dot stands proud of the surface it sits on, so one on a crest
+       shows above the crest's edge, where the ray has already gone past
+       to the sea behind: the rows at the crest it last cleared are looked
+       at too, or those dots are cut flat along every crest. */
+    float skimRow = skimK > 0.0 ? floor(run * skimK / cellW) : row;
     float dots = 0.0;
     vec2 before = p;
     vec2 behind = p;
-    for (int j = -1; j <= 1; j++) {
-      float cz = (row + float(j) + 0.5) * cellW;
+    float here = 0.0;
+    for (int j = -3; j <= 6; j++) {
+      float r = j <= 3 ? row + float(j) : skimRow + float(j - 5);
+      if (j > 3 && abs(r - row) < 3.5) continue;
+      float cz = (r + 0.5) * cellW;
       /* Where this ray is when it is that far out, to pick the column. */
       float kz = cz / run;
       /* Every other row sits half a cell across, like a halftone. */
-      float stagger = 0.5 * mod(row + float(j), 2.0);
+      float stagger = 0.5 * mod(r, 2.0);
       float cx = (floor(p.x * kz / cellW - stagger) + 0.5 + stagger) * cellW;
       float ch = waveHeight(vec2(cx, cz), t);
       float cy = amp * ch - 1.0;
@@ -681,14 +703,21 @@ vec3 scene(vec2 uv, float t) {
       if (j == 1) behind = on;
       float up = smoothstep(-0.7, 0.8, ch);
       float rad = 0.15 * cellW * u_dot * (0.4 + 0.6 * up) * WAVE_LENS / depth;
-      float shown = max(rad, 0.75 * px);
-      float disc = 1.0 - smoothstep(shown - px, shown + px, length(p - on));
+      if (j == 0) here = rad;
+      /* A dot finer than a pixel is drawn a pixel wide and that much
+         fainter, with a softer edge, so it glides rather than snapping
+         from one pixel to the next. */
+      float shown = max(rad, 1.2 * px);
+      float soft = px * mix(1.5, 1.0, smoothstep(1.5 * px, 4.0 * px, rad));
+      float disc = 1.0 - smoothstep(shown - soft, shown + soft, length(p - on));
       dots = max(dots, disc * (rad * rad) / (shown * shown) * (0.1 + 0.9 * up * up));
     }
-    /* Where rows are finer than the pixels, the dots become their average. */
+    /* Where the rows are finer than the pixels, or the dots themselves
+       are, they become their average: a field of points too small to
+       draw can only twinkle. */
     float rowPx = 0.5 * length(behind - before) / px;
     float even = 0.06 * u_dot * u_dot * (0.1 + 0.9 * lift * lift);
-    dots = mix(even, dots, smoothstep(1.5, 3.5, rowPx));
+    dots = mix(even, dots, smoothstep(1.5, 3.5, rowPx) * smoothstep(0.7, 1.6, here / px));
     light += mix(deep, crest, 0.3 + 0.7 * lift) * dots * dotFog * 1.3;
   }
   return u_ground + light;

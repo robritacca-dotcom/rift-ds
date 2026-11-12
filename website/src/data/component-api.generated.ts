@@ -14382,14 +14382,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "enabled",
             "type": "boolean",
             "required": false,
-            "description": "False never starts WebGL and reports `unavailable`, leaving the page\nground: the kill switch, as on ShaderField.",
+            "description": "False never starts WebGL and reports `unavailable`, painting nothing:\nthe kill switch, as on ShaderField.",
             "defaultValue": "true"
           },
           {
             "name": "onStatusChange",
             "type": "((status: ShaderSceneStatus) => void)",
             "required": false,
-            "description": "Called whenever the status changes. Drive a fallback from this: the scene\npaints only the page ground when it cannot run, and what to show instead\nis the caller's design decision."
+            "description": "Called whenever the status changes. Drive a fallback from this, or lay\none under the scene: it paints nothing until it is `active`, so what\nshows while it is pending or cannot run is the caller's design\ndecision."
           },
           {
             "name": "className",

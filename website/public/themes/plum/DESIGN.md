@@ -161,7 +161,7 @@ components:
 
 Signal: Bricolage Grotesque headings over Figtree text, #ff5f1f for actions, buttons squared to 4px, 4px inputs and 7px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="plum"` on `<html>`. See it at https://rift-ds.com/foundations/themes/plum.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="plum"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/plum.
 
 ## Colour
 

@@ -161,7 +161,7 @@ components:
 
 Zest: Inter Tight headings over Inter text, #8ae86e for actions, pill buttons, 17px inputs and 34px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="zest"` on `<html>`. See it at https://rift-ds.com/foundations/themes/zest.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="zest"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/zest.
 
 ## Colour
 

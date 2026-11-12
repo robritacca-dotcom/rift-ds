@@ -20,6 +20,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.26.0. The same dat
 | passes | `Partial<Record<string, ShaderScenePassSetting>>` | no |  | The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`, `grain`), each merged over its defaults. |
 | speed | `number` | no | `1.6` | Scene seconds per second: how fast it moves. 0 holds it still. |
 | liveRef | `RefObject<Values \| null>` | no |  | A ref the scene reads every frame in place of `params`, `passes` and `speed`, for a host that tunes it by drag: writing the ref moves the scene and renders nothing. Empty falls back to the props. |
-| enabled | `boolean` | no | `true` | False never starts WebGL and reports `unavailable`, leaving the page ground: the kill switch, as on ShaderField. |
-| onStatusChange | `((status: ShaderSceneStatus) => void)` | no |  | Called whenever the status changes. Drive a fallback from this: the scene paints only the page ground when it cannot run, and what to show instead is the caller's design decision. |
+| enabled | `boolean` | no | `true` | False never starts WebGL and reports `unavailable`, painting nothing: the kill switch, as on ShaderField. |
+| onStatusChange | `((status: ShaderSceneStatus) => void)` | no |  | Called whenever the status changes. Drive a fallback from this, or lay one under the scene: it paints nothing until it is `active`, so what shows while it is pending or cannot run is the caller's design decision. |
 | className | `string` | no | `` | Additional CSS classes |

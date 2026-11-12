@@ -161,7 +161,7 @@ components:
 
 Bubblegum: Fredoka headings over Nunito text, #d0117e for actions, pill buttons, 14px inputs and 29px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="pink"` on `<html>`. See it at https://rift-ds.com/foundations/themes/pink.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="pink"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/pink.
 
 ## Colour
 

@@ -161,7 +161,7 @@ components:
 
 Smoke: Montserrat headings over Inter text, #232323 for actions, buttons squared to 5px, 5px inputs and 10px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="mono"` on `<html>`. See it at https://rift-ds.com/foundations/themes/mono.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="mono"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/mono.
 
 ## Colour
 

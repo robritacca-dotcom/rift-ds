@@ -164,7 +164,7 @@ components:
 
 Volt: Space Grotesk headings over Manrope text, #2c2a26 for actions, buttons squared to 4px, 4px inputs and 7px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="gold"` on `<html>`. See it at https://rift-ds.com/foundations/themes/gold.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="gold"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/gold.
 
 ## Colour
 

@@ -161,7 +161,7 @@ components:
 
 Marquee: Anton headings over Work Sans text, #c9c340 for actions, buttons squared to 2px, 2px inputs and 5px cards. Flat: no shadows at all. Surfaces separate from the page by contrast alone.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="marquee"` on `<html>`. See it at https://rift-ds.com/foundations/themes/marquee.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="marquee"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/marquee.
 
 ## Colour
 

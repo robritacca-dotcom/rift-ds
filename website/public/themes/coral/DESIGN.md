@@ -161,7 +161,7 @@ components:
 
 Getaway: Poppins headings over DM Sans text, #d9234e for actions, buttons squared to 12px, 12px inputs and 24px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="coral"` on `<html>`. See it at https://rift-ds.com/foundations/themes/coral.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="coral"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/coral.
 
 ## Colour
 

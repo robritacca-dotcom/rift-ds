@@ -164,7 +164,7 @@ components:
 
 Blueprint: IBM Plex Sans throughout, #003dff for actions, buttons squared to 8px, 8px inputs and 17px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="contrast"` on `<html>`. See it at https://rift-ds.com/foundations/themes/contrast.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="contrast"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/contrast.
 
 ## Colour
 

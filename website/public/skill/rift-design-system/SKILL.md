@@ -34,7 +34,7 @@ The token stylesheet defines custom properties and styles no element, so paint t
 
 ## Theming
 
-Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry. Never write a token name from memory: look it up there, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`, since a misspelt `var()` resolves to nothing and fails silently. For the resolved values of every theme in code, read `rift-ds/tokens/values`; the same values are served as DTCG files under `https://rift-ds.com/schema/tokens/`.
+Components read semantic tokens (`--color-*`, `--radius-*`, `--font-*`, `--motion-*`, ...), and every semantic colour token references a `--primitive-*` value. Re-theme by overriding primitives: one override cascades through both themes at once. A shipped theme (`data-brand`) is a starting point, never a locked set: the token and theme stylesheets sit in cascade layers (`rift.tokens`, then `rift.preset`), so a plain `:root` rule of your own outranks them whatever its selector, and overriding one token (the face, say) keeps the rest of the theme in light and dark alike. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the registry. Never write a token name from memory: look it up there, or read the names from `tokenRegistry` in `rift-ds/tokens/registry`, since a misspelt `var()` resolves to nothing and fails silently. For the resolved values of every theme in code, read `rift-ds/tokens/values`; the same values are served as DTCG files under `https://rift-ds.com/schema/tokens/`.
 
 ## Charts
 
@@ -42,7 +42,7 @@ Components that import recharts ship from `rift-ds/charts` and need the optional
 
 ## Fonts
 
-The primary typeface is not bundled: set `--font-family-primary` to your own (the system is designed around Nunito Sans). The Material Symbols icon font ships inside the package, and any component import loads it.
+The primary typeface is not bundled: set `--font-family-primary` to your own (the system is designed around Nunito Sans). A plain `:root` rule also replaces a shipped theme's face; to give the base theme a face that the shipped themes still replace with their own, declare it inside `@layer rift.tokens { :root { … } }`. The Material Symbols icon font ships inside the package, and any component import loads it.
 
 ## The chat widget
 

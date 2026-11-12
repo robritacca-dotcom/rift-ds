@@ -164,7 +164,7 @@ components:
 
 Ember: Lora headings over Source Sans 3 text, #d97757 for actions, pill buttons, 12px inputs and 24px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="warm"` on `<html>`. See it at https://rift-ds.com/foundations/themes/warm.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="warm"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/warm.
 
 ## Colour
 

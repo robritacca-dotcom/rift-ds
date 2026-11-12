@@ -161,7 +161,7 @@ components:
 
 Velvet: Playfair Display headings over Plus Jakarta Sans text, #7434b3 for actions, pill buttons, 17px inputs and 34px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
-Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="violet"` on `<html>`. See it at https://rift-ds.com/foundations/themes/violet.
+Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="violet"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/violet.
 
 ## Colour
 

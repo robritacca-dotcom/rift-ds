@@ -310,6 +310,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Semantic colours point at primitives through var(), never a hex value."
       },
       {
+        "name": "validate-token-layers",
+        "text": "Every base token sits in the rift.tokens cascade layer, so a consumer's own CSS outranks it."
+      },
+      {
         "name": "validate-theme-mirrors",
         "text": "Hand mirrors of token data in the site and design.md match the CSS."
       },

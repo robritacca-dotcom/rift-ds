@@ -22,7 +22,7 @@ An open source React design system built for AI products and coding agents: comp
 
 ## Documentation
 
-Everything deep lives on the docs site: **[rift-ds.com](https://rift-ds.com/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://rift-ds.com/docs/get-started)**. **[Storybook](https://storybook.rift-ds.com/?path=/docs/rift-ds--docs)** is the interactive component explorer.
+Everything deep lives on the docs site: **[rift-ds.com](https://rift-ds.com/)**, with live examples, foundations, templates, the playground, and the **[get-started guide](https://rift-ds.com/docs/get-started)**. **[Storybook](https://storybook.rift-ds.com/?path=/docs/rift-ds--docs)** is the interactive component explorer. What changed in each version, and anything you need to do when you upgrade, is in the **[release notes](https://rift-ds.com/releases)**, also published as [GitHub releases](https://github.com/robritacca-dotcom/rift-ds/releases).
 
 ## Install
 

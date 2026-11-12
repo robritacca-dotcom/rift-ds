@@ -56,8 +56,8 @@ function Trigger({
  * line on it, the active one marked, in the form the theme menu's rows
  * take. The trigger wears the active background's icon on the same
  * circular track the theme switcher's trigger wears, with a tooltip naming
- * it, so the two read as a pair. It is the one place the background is
- * picked. Selection applies through the shared background helper, and
+ * it, so the two read as a pair. The home hero's scene row picks the same
+ * background from a second seat. Selection applies through the shared helper, and
  * every instance (the bar's and the drawer's) stays in sync by subscribing
  * to the attribute itself. The menu ends with
  * a row that opens the playground's Shaders view, where a visitor tunes a

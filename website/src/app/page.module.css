@@ -51,6 +51,7 @@
    would hold it forever. Delay comes from the shared stagger class. */
 .heroThemes {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -60,13 +61,15 @@
   /* The row opens the hero, so it stands clear of the headline: the same
      step again on top of the hero's own gap. */
   margin-bottom: var(--gap-400);
-  opacity: 0;
-  animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) both;
+  /* Fill is backwards only: an animation still holding opacity once it
+     ends keeps this wrapper a backdrop root, and the swatch cards inside
+     it then frost nothing outside it (the other row, the field). */
+  animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
 }
 
 @keyframes heroThemesIn {
-  to {
-    opacity: 1;
+  from {
+    opacity: 0;
   }
 }
 
@@ -298,6 +301,25 @@
     max-width: calc(7 * 24px + 7 * var(--gap-200));
     margin-inline: auto;
   }
+}
+
+/* The scene row: the theme row's dots, carrying an icon in place of a
+   colour, a step down so the theme row still leads. */
+.sceneRow {
+  margin-top: 0;
+}
+
+.sceneSwatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-container-primary);
+  color: var(--color-text-secondary);
+  --icon-size: var(--icon-size-500);
+}
+
+.sceneSwatch:hover {
+  color: var(--color-text-primary);
 }
 
 .swatchWrap {

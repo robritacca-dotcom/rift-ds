@@ -16,6 +16,8 @@ import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
+import { SITE_BACKGROUNDS, setSiteBackground, useSiteBackground } from "@/lib/shaders/background";
+import { loadShaderScene } from "@/lib/shaders/lazy-scene";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -566,6 +568,61 @@ function ThemeSwitcher() {
         </Link>
         <span className={styles.swatchTip} aria-hidden="true">
           <span className={styles.swatchTipName}>Make your own</span>
+          <span className={styles.swatchTipFont}>Opens the playground</span>
+        </span>
+      </span>
+    </div>
+  );
+}
+
+/* ---------- the scene selector ----------
+   A second row under the theme row, in its form: one dot per background
+   in SITE_BACKGROUNDS, wearing the scene's icon, picked through the same
+   helper the header's BackgroundSwitcher uses, so the two stay in step.
+   A hover or focus starts loading the scene code, as the header does. */
+const preloadScenes = () => {
+  loadShaderScene().catch(() => {});
+};
+
+function SceneSwitcher() {
+  const active = useSiteBackground();
+  return (
+    <div className={`${styles.accentRow} ${styles.sceneRow}`} role="group" aria-label="Background">
+      {SITE_BACKGROUNDS.map((entry, index) => (
+        <span key={entry.id} className={styles.swatchWrap}>
+          <button
+            type="button"
+            className={`${styles.accentSwatch} ${styles.sceneSwatch} ${active === entry.id ? styles.accentSwatchActive : ""}`}
+            style={{ "--swatch-i": index } as React.CSSProperties}
+            aria-pressed={active === entry.id}
+            aria-label={`${entry.label} (${entry.description})`}
+            onPointerEnter={preloadScenes}
+            onFocus={preloadScenes}
+            onClick={() => setSiteBackground(entry.id)}
+          >
+            <span className="material-symbols-rounded" aria-hidden="true">
+              {entry.icon}
+            </span>
+          </button>
+          <span className={styles.swatchTip} aria-hidden="true">
+            <span className={styles.swatchTipName}>{entry.label}</span>
+            <span className={styles.swatchTipFont}>{entry.description}</span>
+          </span>
+        </span>
+      ))}
+      <span className={styles.swatchWrap}>
+        <Link
+          href="/playground?view=shaders"
+          className={styles.accentSwatchAdd}
+          style={{ "--swatch-i": SITE_BACKGROUNDS.length } as React.CSSProperties}
+          aria-label="Tune a scene in the playground"
+        >
+          <span className="material-symbols-rounded" aria-hidden="true">
+            tune
+          </span>
+        </Link>
+        <span className={styles.swatchTip} aria-hidden="true">
+          <span className={styles.swatchTipName}>Tune a scene</span>
           <span className={styles.swatchTipFont}>Opens the playground</span>
         </span>
       </span>
@@ -1382,11 +1439,12 @@ export default function DesignSystemLanding() {
         <section className={styles.hero} aria-label="About the design system">
           {/* The theme row opens the hero: picking a look comes first, and
               everything beneath it answers in that look. It enters by
-              opacity alone, outside the animated wrapper below. The
-              background pick is the header's (BackgroundSwitcher), on every
-              page, so it has no seat here. */}
+              opacity alone, outside the animated wrapper below. The scene
+              row under it is the header's background pick (BackgroundSwitcher)
+              given a seat in the hero; both write the same attribute. */}
           <div className={styles.heroThemes}>
             <ThemeSwitcher />
+            <SceneSwitcher />
           </div>
           {/* The entrance animation lives on this wrapper, NOT the section:
               .animate-in's will-change makes an ancestor a backdrop root,

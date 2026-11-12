@@ -33,8 +33,8 @@ name: Release
 #
 # Version history is not kept here: the release log
 # (website/src/data/release-log.json, rendered on /releases) owns every
-# version this repo publishes, and HISTORY.md records the predecessor's 0.x
-# releases.
+# version this repo publishes, and the predecessor's 0.x releases are listed
+# beside it (predecessorReleases in website/src/data/release-log.ts).
 
 on:
   workflow_dispatch:

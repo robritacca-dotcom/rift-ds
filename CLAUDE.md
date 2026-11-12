@@ -10,7 +10,7 @@ A React component library, design system and documentation website, in three con
 
 **Every chat suggestion is one chip, and a chip never wraps.** Starters, follow-ups, the FAB summary chips and a `QuestionCard`'s options share one length budget, `SUGGESTION_MAX_CHARS` in `src/chat/suggestions.ts`, sized so a chip fits the smallest phone. A suggestion that will not fit is dropped, never cut; a chip that still meets a narrower container ends in an ellipsis at its edge rather than running past it. A month or weekday is written short ("Oct", "Mon"). A suggestion asks about roles, never theme values ("the action colour", not the colour a theme gives it). `scripts/validate-chat-starters.mjs` and `scripts/validate-page-summaries.mjs` hold written copy to both rules.
 
-The design spec lives in [`design.md`](design.md): read it before touching tokens, colours or typography. The content style guide lives in [`content-design.md`](content-design.md): read it before writing or editing any shipped prose (page copy, descriptions, README, release notes, microcopy). Dated decisions and incidents behind the rules below are recorded in `HISTORY.md`.
+The design spec lives in [`design.md`](design.md): read it before touching tokens, colours or typography. The content style guide lives in [`content-design.md`](content-design.md): read it before writing or editing any shipped prose (page copy, descriptions, README, release notes, microcopy). Dated decisions and incidents behind the rules below are recorded in HISTORY.md at the repo root, a local file kept out of the repository (it is gitignored, so it exists only on the owner's machine).
 
 ---
 
@@ -163,7 +163,7 @@ If asked to "merge and push" (a retired skill name), confirm the intended end st
 
 ## Project Structure
 
-- `design.md`, `content-design.md`, `HISTORY.md`, `SECURITY.md`: the specs, the history and the security policy.
+- `design.md`, `content-design.md`, `SECURITY.md`: the specs and the security policy.
 - `scripts/`: generators and validators (the `validate-registry` chain) and release tooling. `evals/chat/`: the chat eval.
 - `src/components/`: one folder per component, plus `registry.json`. `src/index.ts` and `src/charts.ts` are GENERATED barrels.
 - `src/chat/`: the chat widget over its engine, with its own registry and hand-written barrels. `src/cli/`: the init bin and its scaffold templates.
@@ -335,7 +335,6 @@ Stated at the level of **token roles**: which colour, radius, typeface or shadow
 
 | File | Purpose |
 |---|---|
-| [`HISTORY.md`](HISTORY.md) | Release history, the build journal, and the dated decisions behind these rules |
 | [`src/tokens/tokens-primitives.css`](src/tokens/tokens-primitives.css) | Raw hex/px values |
 | [`src/tokens/tokens-light.css`](src/tokens/tokens-light.css) | Semantic token definitions (light) |
 | [`src/tokens/tokens-dark.css`](src/tokens/tokens-dark.css) | Semantic token overrides (dark) |

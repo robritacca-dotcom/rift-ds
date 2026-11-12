@@ -47,7 +47,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - Should follow `is*`/`has*` convention OR plain adjective — not both (e.g. `isDisabled` on one component, `disabled` on another doing the same thing)
    - Flag: mixed usage within the same component family
 
-   The machine-held half of this vocabulary is `website/public/schema/component.schema.json`: its `allOf` rules are the list of what it locks, every generated component schema is proven against it on each build, and CLAUDE.md's **Schemas are generated twins** bullet owns the rule that a new sanctioned tone changes that file and `SANCTIONED_TONES` together. A finding that changes a locked vocabulary is also an edit there. The decisions in HISTORY.md's 2026-11-01 schemas entry are accepted findings: do not re-raise them.
+   The machine-held half of this vocabulary is `website/public/schema/component.schema.json`: its `allOf` rules are the list of what it locks, every generated component schema is proven against it on each build, and CLAUDE.md's **Schemas are generated twins** bullet owns the rule that a new sanctioned tone changes that file and `SANCTIONED_TONES` together. A finding that changes a locked vocabulary is also an edit there. The schema decisions of 2026-11-01 (recorded in the owner's local, gitignored HISTORY.md) are accepted findings: do not re-raise them.
 
    **Event handler naming:**
    - Must be `on*` (e.g. `onClick`, `onChange`, `onDismiss`)

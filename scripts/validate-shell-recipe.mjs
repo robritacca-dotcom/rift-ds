@@ -6,7 +6,7 @@
  * src/behaviors/shell.css: a host marks its root with data-ds-shell and
  * reads the recipe's --ds-shell-* properties instead of restating a token.
  * Four shells drifted apart before the recipe existed (design.md's App
- * shells section and HISTORY.md's 2026-11-06 entry own the story), and
+ * shells section owns the story; the dated decision is in the local HISTORY.md), and
  * nothing but this script stops a fifth. It checks:
  *
  *   1. Every library file that writes the data-ds-shell marker imports the

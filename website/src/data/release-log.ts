@@ -38,8 +38,8 @@ export interface PredecessorReleaseEntry {
 /**
  * The versions published before the rename, newest first, shown under
  * the log on /releases. A closed record: the predecessor package is
- * retired, so this list never grows. Copied from HISTORY.md at the repo
- * root, which stays the fuller record (it also holds the build journal).
+ * retired, so this list never grows. It is the record itself: the fuller
+ * history it was copied from is now a local, untracked file.
  * Validated by the same script as the log above.
  */
 export const predecessorReleases: PredecessorReleaseEntry[] =

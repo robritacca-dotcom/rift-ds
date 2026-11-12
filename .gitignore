@@ -82,3 +82,6 @@ website/CLAUDE.md
 # read them, and tracked code may not import from them (scripts/local-labs.mjs owns the contract).
 website/src/app/labs/local/
 website/src/app/api/local/
+
+# The owner's history and decision log: local only, never published.
+/HISTORY.md

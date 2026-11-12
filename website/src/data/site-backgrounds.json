@@ -15,14 +15,16 @@
       "scene": "horizon",
       "home": {
         "params": {
-          "crown": 0.28,
-          "beam": 0.55
+          "crown": 0.34,
+          "beam": 0.55,
+          "dawn": -0.3
         }
       },
       "page": {
         "params": {
           "crown": 0.52,
-          "beam": 0.5
+          "beam": 0.5,
+          "dawn": -0.3
         },
         "passes": {
           "fadeBottom": {
@@ -143,7 +145,8 @@
       "scene": "meteors",
       "home": {
         "params": {
-          "crown": 0.325,
+          "crown": 0.4,
+          "sun": 0.32,
           "flare": 0.7,
           "curve": 4.5,
           "lean": -0.04
@@ -158,8 +161,12 @@
       },
       "page": {
         "params": {
-          "crown": 0.5,
-          "flare": 0.6
+          "crown": 0.42,
+          "stars": 1.6,
+          "sun": 0.32,
+          "flare": 0.6,
+          "curve": 4.5,
+          "lean": -0.04
         },
         "passes": {
           "fadeBottom": {
@@ -206,8 +213,10 @@
       },
       "page": {
         "params": {
-          "rise": 0.6,
-          "dot": 0.7
+          "rise": 0.42,
+          "dot": 0.55,
+          "swell": 0.8,
+          "glow": 0.7
         },
         "passes": {
           "fadeTop": {
@@ -215,8 +224,8 @@
           },
           "fadeBottom": {
             "params": {
-              "from": 0.4,
-              "to": 0.7
+              "from": 0.15,
+              "to": 0.6
             }
           },
           "grain": {

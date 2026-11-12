@@ -34,7 +34,7 @@ export const TEMPLATES: Template[] = [
   {
     id: "horizon",
     label: "Horizon",
-    description: "A planet's limb at night: a fixed sun, soft layers of light, clouds and ocean.",
+    description: "A planet's limb at night: a sun on the arc, soft layers of light, clouds and ocean.",
     sceneId: "horizon",
   },
   {

@@ -9,7 +9,7 @@ import type { Scene } from './types';
 
 /**
  * The horizon, ported from /labs/horizon as a scene: a planet's limb at
- * night with a fixed sun at the apex, soft layers of light along the arc,
+ * night with a sun on the arc (at the apex by default), soft layers of light along the arc,
  * a hazy world of land and cloud below, and deep ocean blue further down.
  * The horizon lab's own fades and grain are passes here, so they can be switched
  * and tuned like any other scene's.
@@ -17,7 +17,7 @@ import type { Scene } from './types';
 export const horizon: Scene = {
   id: "horizon",
   label: "Horizon",
-  description: "A planet's limb at night, a fixed sun at the apex, a hazy world and ocean below.",
+  description: "A planet's limb at night, a sun on the arc, a hazy world and ocean below.",
   mode: "dark",
   /* The background field's roles, the ones a preset tunes for ambient
      shaders and a DESIGN.md import rewrites from the action colour: in the
@@ -37,6 +37,7 @@ export const horizon: Scene = {
     { key: "clouds", label: "Clouds", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "ocean", label: "Ocean", min: 0, max: 2.5, step: 0.01, default: 1 },
     { key: "beam", label: "Beam", min: 0, max: 2.5, step: 0.01, default: 1 },
+    { key: "dawn", label: "Sun position", min: -0.5, max: 0.5, step: 0.01, default: 0 },
   ],
   glsl: /* glsl */ `
 #define u_scatter u_col[0]
@@ -61,10 +62,16 @@ vec3 scene(vec2 uv, float t) {
   float d = length(wl - centre) - radius;
 
   float halfW = 0.5 * aspect;
-  float sunX = exp(-pow(w.x, 2.0) / (2.0 * 0.28 * 0.28));
-  float wide = exp(-pow(w.x, 2.0) / (2.0 * 0.75 * 0.75));
+  /* The sun sits on the arc over its own place across the stage (the apex
+     at 0), and the light along the limb gathers round it. */
+  float sx = u_dawn * aspect;
+  float reachX = clamp(sx, -radius * 0.98, radius * 0.98);
+  float sy = centre.y + sqrt(radius * radius - reachX * reachX);
+  float fx = w.x - sx;
+  float sunX = exp(-pow(fx, 2.0) / (2.0 * 0.28 * 0.28));
+  float wide = exp(-pow(fx, 2.0) / (2.0 * 0.75 * 0.75));
   float energy = (0.4 + 0.45 * wide + 0.9 * sunX) * u_glow;
-  float side = clamp(abs(w.x) / halfW, 0.0, 1.0);
+  float side = clamp(abs(fx) / halfW, 0.0, 1.0);
 
   float curtain = fbm(vec2(w.x * 5.0 + t * 0.05, d * 1.2 - t * 0.02));
   float band = fbm(vec2(w.x * 1.2 - t * 0.035, d * 11.0 + t * 0.015));
@@ -106,7 +113,7 @@ vec3 scene(vec2 uv, float t) {
   world += mix(u_rim, amber, 0.4) * cloud * near * 0.6 * energy;
   world += u_scatter * streaks * 0.08 * reach;
 
-  vec2 src = vec2(0.0, crown - 0.005);
+  vec2 src = vec2(sx, sy - 0.005);
   vec2 r = p - src;
   float ang = atan(r.x, -r.y);
   float shafts = smoothstep(0.2, 0.95, fbm(vec2(ang * 1.6, 3.7)));
@@ -755,10 +762,17 @@ export const aurora: Scene = {
     { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
   ],
   glsl: /* glsl */ `
+/* Each tone saturated and lifted to full value, so the ribbons glow in a
+   theme's colour however dark its role sits. A tone with next to no hue
+   (a monochrome theme's greys) keeps its own value instead: lifted, every
+   grey would come out the same white. */
 vec3 auroraHue(vec3 c) {
+  float hi = max(c.r, max(c.g, c.b));
+  float chroma = (hi - min(c.r, min(c.g, c.b))) / max(hi, 1e-3);
   float grey = (c.r + c.g + c.b) / 3.0;
-  c = max(grey + (c - grey) * 1.6, vec3(0.0));
-  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+  vec3 s = max(grey + (c - grey) * 1.6, vec3(0.0));
+  vec3 lifted = s / max(max(s.r, max(s.g, s.b)), 1e-3);
+  return mix(c, lifted, smoothstep(0.04, 0.2, chroma));
 }
 
 vec3 scene(vec2 uv, float t) {

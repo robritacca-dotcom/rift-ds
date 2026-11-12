@@ -86,8 +86,8 @@ export default function ShaderScenePage() {
             <SectionTitle title="Scenes" />
             <p className={styles.demoText}>
               The scenes, picked with <code>scene</code>. The horizon sets a
-              fixed sun at the top of a curved limb over hazy land and a
-              moving ocean. The rift opens at its middle and streams light
+              sun on a curved limb over hazy land and a moving ocean, and
+              its <code>dawn</code> setting moves the sun along the arc. The rift opens at its middle and streams light
               outwards. Glyphs prints a streak of light and its blooms in
               type: each character cell reads the light under it and takes a
               heavier character the brighter it is, in the theme&rsquo;s code

@@ -41,7 +41,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The horizon: a planet's limb at night, a fixed sun at the apex, a hazy world and ocean below. */
+/** The horizon: a planet's limb at night, a sun on the arc, a hazy world and ocean below. */
 export const Horizon: Story = {};
 
 /** The rift: a glowing tear that opens at its middle, with light streaming in. */

@@ -1,7 +1,6 @@
 /* ShaderScene: the canvas, filling its positioned ancestor.
    Placement and clipping belong to that ancestor, as with ShaderField: where
-   a scene sits is a layout decision. The ground under the canvas is the
-   page's, so a machine that cannot run WebGL2 shows the plain page. */
+   a scene sits is a layout decision. */
 
 .ds-shader-scene {
   position: absolute;
@@ -9,7 +8,16 @@
   overflow: hidden;
   /* Scenery, never a target. */
   pointer-events: none;
-  background-color: var(--color-bg-page-primary);
+  /* Paints nothing until a context is live and the first frame is drawn,
+     as ShaderField does, so whatever the caller lays under it (the page,
+     or a fallback of its own) shows while it is pending, disabled or where
+     WebGL2 cannot run. Once active the canvas is opaque. */
+  opacity: 0;
+  transition: opacity var(--motion-duration-slower) var(--motion-ease-entrance);
+}
+
+.ds-shader-scene[data-status='active'] {
+  opacity: 1;
 }
 
 .ds-shader-scene__canvas {

@@ -64,14 +64,15 @@ type ShaderSceneOwnProps = {
    */
   liveRef?: React.RefObject<Values | null>;
   /**
-   * False never starts WebGL and reports `unavailable`, leaving the page
-   * ground: the kill switch, as on ShaderField.
+   * False never starts WebGL and reports `unavailable`, painting nothing:
+   * the kill switch, as on ShaderField.
    */
   enabled?: boolean;
   /**
-   * Called whenever the status changes. Drive a fallback from this: the scene
-   * paints only the page ground when it cannot run, and what to show instead
-   * is the caller's design decision.
+   * Called whenever the status changes. Drive a fallback from this, or lay
+   * one under the scene: it paints nothing until it is `active`, so what
+   * shows while it is pending or cannot run is the caller's design
+   * decision.
    */
   onStatusChange?: (status: ShaderSceneStatus) => void;
   /** Additional CSS classes */
@@ -100,8 +101,9 @@ const DEFAULT_SPEED = 1.6;
  * It is scenery, not interface. It fills its positioned ancestor and is inert
  * to pointer events and to assistive tech; give the ancestor the placement and
  * the clipping. It honours reduced motion in JavaScript, holding a still frame
- * that still answers its settings, and paints the page ground alone where
- * WebGL2 is unavailable.
+ * that still answers its settings. Like ShaderField it paints nothing until
+ * its first frame is drawn, then fades in, so where WebGL2 is unavailable
+ * whatever lies under it (the page, or a fallback of the caller's) shows.
  */
 export function ShaderScene({
   scene = 'horizon',

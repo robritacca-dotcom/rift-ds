@@ -191,9 +191,12 @@ export default function ShaderScenePage() {
             <p className={styles.demoText}>
               Under <code>prefers-reduced-motion</code> the scene holds a still
               frame, which still answers its settings. <code>speed</code> at 0
-              does the same on purpose. Where WebGL2 is not available the box
-              shows the page ground and nothing else, so the worst case is a
-              plain page. It reports which happened, as Shader field does:{" "}
+              does the same on purpose. Like Shader field, the scene paints
+              nothing until its first frame is drawn and then fades in, so
+              while it is pending, switched off or where WebGL2 is not
+              available, whatever sits under it shows: the page, or a
+              fallback of your own laid beneath it. It reports which
+              happened, as Shader field does:{" "}
               <code>onStatusChange</code> and <code>data-status</code> move
               from <code>pending</code> to <code>active</code> or{" "}
               <code>unavailable</code>, and <code>enabled={"{false}"}</code>{" "}

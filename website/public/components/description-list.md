@@ -2,7 +2,7 @@
 
 Terms and their values for review screens, receipts, and account details, stacked, in two columns, or in a grid.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.26.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { DescriptionList } from 'rift-ds';`

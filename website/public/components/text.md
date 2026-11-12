@@ -2,7 +2,7 @@
 
 Running text in a tier of the type scale, with tones, truncation, and tabular figures.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.26.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: typography
 - Import: `import { Text } from 'rift-ds';`

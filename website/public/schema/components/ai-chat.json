@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.26.0",
+  "version": "1.27.0",
   "kind": "widget",
   "name": "ChatWidget",
   "label": "AI chat",

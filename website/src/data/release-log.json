@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.27.0",
+      "date": "2026-11-12",
+      "title": "Override one part of a shipped theme, and a scene that fades in over your fallback",
+      "body": [
+        "The token and theme stylesheets now sit in cascade layers, the token files in `rift.tokens` and the shipped themes in `rift.preset`, so any rule of yours outside a layer outranks them in light and dark mode alike. Keep a theme and change its face with a plain `:root { --font-family-primary: … }`; to set a default face that a shipped theme still replaces, declare it inside `@layer rift.tokens`. A theme's dark block now lists only what changes in dark mode.",
+        "ShaderScene paints nothing until its first frame is drawn, then fades in as ShaderField does, so a fallback laid under it shows while it is pending, switched off or where WebGL2 cannot run. The horizon takes a `dawn` setting that slides its sun along the limb, Aurora keeps a monochrome theme's greys grey, and DataTable no longer rebuilds every row while it is resized.",
+        "Nothing published was renamed or removed, but two behaviours changed. A token set in CSS outside a layer now outranks a shipped theme, so an app scaffolded by an earlier `npx rift-ds init app` should wrap the rule in `components/rift/font.css` in `@layer rift.tokens { … }` to give the themes their own faces back. ShaderScene no longer paints the page colour behind itself, so a host that relied on that cover gives the scene's box a background of its own."
+      ]
+    },
+    {
       "version": "1.26.0",
       "date": "2026-11-11",
       "title": "Five new shader scenes, menu descriptions and a staged chat welcome",

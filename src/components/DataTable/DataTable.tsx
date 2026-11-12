@@ -1174,25 +1174,23 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   ].filter((key, index, all) => all.indexOf(key) === index);
   /* Narrower than a phone, measured on the table itself. */
   const rootRef = useRef<HTMLDivElement | null>(null);
-  /* The table's width while it is narrower than a phone, to the nearest
-     eight pixels (so a resize renders every few pixels, not every one),
-     else 0. The pinned row header is capped against it. */
+  /* Whether the table is narrower than a phone. Only the crossing is
+     state: the pinned row header's cap follows the width in the stylesheet
+     (see widthCss), so a resize either side of the line never renders. */
   const tableId = useId();
-  const [narrowWidth, setNarrowWidth] = useState(0);
-  const narrow = narrowWidth > 0;
+  const [narrow, setNarrow] = useState(false);
   useLayoutEffect(() => {
     const el = rootRef.current;
     if (!el) return;
     /* Set only on a change: React does not promise to skip a render for an
-       unchanged value, and a render here rebuilds every row, so a table
-       wider than a phone would otherwise render on every resize frame. */
-    let last = 0;
+       unchanged value, and a render here rebuilds every row. */
+    let last = false;
     const observer = new ResizeObserver(([entry]) => {
       const width = entry.contentRect.width;
-      const next = width > 0 && width < BREAKPOINT_PHONE_PX ? Math.round(width / 8) * 8 : 0;
+      const next = width > 0 && width < BREAKPOINT_PHONE_PX;
       if (next === last) return;
       last = next;
-      setNarrowWidth(next);
+      setNarrow(next);
     });
     observer.observe(el);
     return () => observer.disconnect();
@@ -1601,35 +1599,58 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   /* On a phone the pinned row header takes at most this share of the table,
      so the columns scrolling past it keep room to be read. */
   const PHONE_PINNED_SHARE = 0.4;
-  const widthOf = (key: string, widths: Record<string, number> = widthsState) => {
+  const cappedKey =
+    narrow && !stacked && rowHeaderKey && regionOf(rowHeaderKey) === 'start' ? rowHeaderKey : undefined;
+  const plainWidthOf = (key: string, widths: Record<string, number>) => {
     const col = byKey.get(key)!;
-    const width = clampWidth(col, widths[key] ?? declaredOf(key) ?? measured[key] ?? minWidthOf(col));
-    if (narrow && !stacked && key === rowHeaderKey && regionOf(key) === 'start')
-      return Math.min(width, Math.max(minWidthOf(col), Math.round(narrowWidth * PHONE_PINNED_SHARE)));
-    return width;
+    return clampWidth(col, widths[key] ?? declaredOf(key) ?? measured[key] ?? minWidthOf(col));
+  };
+  /* A column's width as CSS. The capped row header is a share of the
+     frame, the inline-size container its cells sit in, so the cap follows
+     a resize without a render. */
+  const widthCss = (key: string, widths: Record<string, number>) => {
+    const width = plainWidthOf(key, widths);
+    if (key !== cappedKey) return `${width}px`;
+    const floor = Math.min(width, minWidthOf(byKey.get(key)!));
+    return `min(${width}px, max(${floor}px, ${PHONE_PINNED_SHARE * 100}cqi))`;
+  };
+  /* A column's width in pixels, for a gesture or an announcement: the
+     capped row header is resolved against the frame as it is now. */
+  const widthOf = (key: string, widths: Record<string, number> = widthsState) => {
+    const width = plainWidthOf(key, widths);
+    if (key !== cappedKey) return width;
+    const frame = tableEl?.parentElement?.clientWidth ?? 0;
+    return Math.min(width, Math.max(minWidthOf(byKey.get(key)!), Math.round(frame * PHONE_PINNED_SHARE)));
   };
 
   /** Every width and pinned offset as custom properties on the table, from one width map. */
   const layoutVars = (widths: Record<string, number>): Record<string, string> => {
     const vars: Record<string, string> = {};
-    let total = utilityKeys.length * UTILITY_COLUMN_WIDTH;
+    /* A sum of widths: whole pixels, plus the capped header's expression
+       when it is one of them. */
+    const sumOf = (keys: string[], start: number, extra?: string) => {
+      let px = start;
+      const terms: string[] = [];
+      keys.forEach((key) => {
+        if (key === cappedKey) terms.push(widthCss(key, widths));
+        else px += plainWidthOf(key, widths);
+      });
+      if (extra) terms.push(extra);
+      return terms.length ? `calc(${[`${px}px`, ...terms].join(' + ')})` : `${px}px`;
+    };
+    const actions = showActions ? 'var(--ds-dt-w-actions)' : undefined;
+    const utility = utilityKeys.length * UTILITY_COLUMN_WIDTH;
     visibleKeys.forEach((key) => {
-      const w = widthOf(key, widths);
-      vars[`--ds-dt-w-${indexOfKey.get(key)}`] = `${w}px`;
-      total += w;
+      vars[`--ds-dt-w-${indexOfKey.get(key)}`] = widthCss(key, widths);
     });
-    let offset = utilityKeys.length * UTILITY_COLUMN_WIDTH;
-    startKeys.forEach((key) => {
-      vars[`--ds-dt-off-${indexOfKey.get(key)}`] = `${offset}px`;
-      offset += widthOf(key, widths);
+    startKeys.forEach((key, index) => {
+      vars[`--ds-dt-off-${indexOfKey.get(key)}`] = sumOf(startKeys.slice(0, index), utility);
     });
-    const plusActions = (px: number) => (showActions ? `calc(${px}px + var(--ds-dt-w-actions))` : `${px}px`);
-    let fromEnd = 0;
-    [...endKeys].reverse().forEach((key) => {
-      vars[`--ds-dt-off-${indexOfKey.get(key)}`] = plusActions(fromEnd);
-      fromEnd += widthOf(key, widths);
+    const fromEnd = [...endKeys].reverse();
+    fromEnd.forEach((key, index) => {
+      vars[`--ds-dt-off-${indexOfKey.get(key)}`] = sumOf(fromEnd.slice(0, index), 0, actions);
     });
-    vars['--ds-dt-total'] = plusActions(total);
+    vars['--ds-dt-total'] = sumOf(visibleKeys, utility, actions);
     return vars;
   };
   const writeVars = (vars: Record<string, string>) => {

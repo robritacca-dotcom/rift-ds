@@ -963,6 +963,43 @@ export const ResizeStaysCheap: Story = {
   },
 };
 
+/** The same table on a stage narrower than a phone, so it scrolls sideways with its row header pinned: the header keeps its share of the table as the sidebar opens, without the rows rendering again. */
+export const PhoneResizeStaysCheap: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, width: 600 }}>
+      <div data-testid="sidebar" style={{ width: 64, flexShrink: 0, background: 'var(--color-bg-container-secondary)' }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <Profiler id="phone-resize-stays-cheap" onRender={() => (resizeCommits.count += 1)}>
+          <DataTable columns={resizeColumns} rows={resizeRows} defaultColumnWidths={{ name: 400 }} caption="Orders" />
+        </Profiler>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const sidebar = canvasElement.querySelector<HTMLElement>('[data-testid="sidebar"]')!;
+    const frame = canvasElement.querySelector<HTMLElement>('.ds-data-table__frame')!;
+    const header = () => canvasElement.querySelector<HTMLElement>('thead th[data-col="name"]')!;
+    // Pinned to the start below a phone's width, and, wider than that share, capped at it.
+    await waitFor(() => expect(header().className).toContain('ds-data-table__cell--pinned'));
+    const holdsShare = () =>
+      // The width a column sets is its content box; the cell's padding sits outside it.
+      expect(Math.abs(parseFloat(getComputedStyle(header()).width) - 0.4 * frame.clientWidth)).toBeLessThanOrEqual(1);
+    await waitFor(holdsShare);
+    resizeCommits.count = 0;
+    resizeCells.count = 0;
+    // Up to 160px, where the share is still wider than the column's floor.
+    for (let width = 64; width <= 160; width += 4) {
+      sidebar.style.width = `${width}px`;
+      await nextFrame();
+    }
+    await nextFrame();
+    await nextFrame();
+    await expect(resizeCommits.count).toBeLessThanOrEqual(4);
+    await expect(resizeCells.count).toBe(0);
+    holdsShare();
+  },
+};
+
 const detailFor = (row: DataTableRow) => <p style={{ margin: 0 }}>Order for {String(row.values.name)}</p>;
 
 /** An open details panel in each layout that makes its width hard: a grid wider than its frame, with a pinned column and a scrollbar; a virtualised body; and the stacked cards of a phone. Scrolling or not, the panel spans the visible table and holds the start edge. */

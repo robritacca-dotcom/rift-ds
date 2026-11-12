@@ -963,6 +963,74 @@ export const ResizeStaysCheap: Story = {
   },
 };
 
+const detailFor = (row: DataTableRow) => <p style={{ margin: 0 }}>Order for {String(row.values.name)}</p>;
+
+/** An open details panel in each layout that makes its width hard: a grid wider than its frame, with a pinned column and a scrollbar; a virtualised body; and the stacked cards of a phone. Scrolling or not, the panel spans the visible table and holds the start edge. */
+export const RowDetailsFit: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <div data-testid="scrolling" style={{ width: 640 }}>
+        <DataTable
+          columns={columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true, pin: 'start' as const } : col))}
+          rows={rows}
+          defaultColumnWidths={{ name: 240, status: 240, updated: 240, price: 240 }}
+          maxHeight={240}
+          renderDetail={detailFor}
+          defaultExpandedIds={['r1']}
+          caption="Orders, scrolling"
+        />
+      </div>
+      <div data-testid="virtual" style={{ width: 640 }}>
+        <DataTable
+          columns={columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col))}
+          rows={manyRows}
+          maxHeight={240}
+          renderDetail={detailFor}
+          defaultExpandedIds={['m1']}
+          caption="Customers, virtualised"
+        />
+      </div>
+      <div data-testid="stacked" style={{ width: 360 }}>
+        <DataTable
+          columns={columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col))}
+          rows={rows.slice(0, 2)}
+          phoneLayout="stack"
+          renderDetail={detailFor}
+          defaultExpandedIds={['r1']}
+          caption="Orders, stacked"
+        />
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const host = (id: string) => canvasElement.querySelector<HTMLElement>(`[data-testid="${id}"]`)!;
+    const parts = (id: string) => {
+      const frame = host(id).querySelector<HTMLElement>('.ds-data-table__frame')!;
+      const panel = host(id).querySelector<HTMLElement>('.ds-data-table__detail')!;
+      return { frame, panel };
+    };
+    for (const id of ['scrolling', 'virtual']) {
+      await waitFor(() => expect(parts(id).panel).not.toBeNull());
+      const { frame, panel } = parts(id);
+      // As wide as the visible table, inside the frame's border and scrollbar.
+      await expect(Math.abs(panel.getBoundingClientRect().width - frame.clientWidth)).toBeLessThanOrEqual(1);
+      // Scrolled to the far end, the panel is still at the frame's start edge.
+      frame.scrollLeft = frame.scrollWidth;
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      const inner = frame.getBoundingClientRect().left + frame.clientLeft;
+      await expect(Math.abs(panel.getBoundingClientRect().left - inner)).toBeLessThanOrEqual(1);
+      frame.scrollLeft = 0;
+    }
+    // The grid really is wider than its frame, or the case proves nothing.
+    await expect(parts('scrolling').frame.scrollWidth).toBeGreaterThan(parts('scrolling').frame.clientWidth);
+    // Stacked, the details take the card's width and stay inside it.
+    await waitFor(() => expect(host('stacked').querySelector('.ds-data-table__grid--stacked')).not.toBeNull());
+    const { panel } = parts('stacked');
+    const cell = panel.closest('td')!;
+    await expect(Math.abs(panel.getBoundingClientRect().width - cell.getBoundingClientRect().width)).toBeLessThanOrEqual(1);
+  },
+};
+
 /** With `hasMore`, a loading row ends the rows and asks for the next batch as it comes into view. */
 export const InfiniteScroll: Story = {
   render: () => {

@@ -142,8 +142,13 @@
 /* Under fixed widths a cell clips what does not fit, so a narrow column
    never draws over its neighbour. Menus and tooltips inside are fixed
    panels and escape the clip. A pinned edge cell clips its content box
-   instead, since its scrolling-edge shadow is drawn outside the cell. */
-.ds-data-table__grid--fixed .ds-table__body .ds-table__cell:not(.ds-data-table__cell--pinned-edge),
+   instead, since its scrolling-edge shadow is drawn outside the cell. The
+   details cell is left out: a clipping cell would be the scroll container
+   its sticky panel holds to, and the panel would scroll away with the
+   columns; the panel clips its own body instead. */
+.ds-data-table__grid--fixed
+  .ds-table__body
+  .ds-table__cell:not(.ds-data-table__cell--pinned-edge, .ds-data-table__detail-cell),
 .ds-data-table__grid--fixed .ds-data-table__cell--pinned-edge > .ds-table__cell-content {
   overflow: hidden;
 }
@@ -921,7 +926,8 @@
 }
 
 /* Every other column: its label, then its value, on a line of its own. */
-.ds-data-table__grid--stacked .ds-table__cell:not(.ds-table__cell--row-header, .ds-data-table__utility, .ds-data-table__actions) {
+.ds-data-table__grid--stacked
+  .ds-table__cell:not(.ds-table__cell--row-header, .ds-data-table__utility, .ds-data-table__actions, .ds-data-table__detail-cell) {
   order: 2;
   display: grid;
   flex-basis: 100%;

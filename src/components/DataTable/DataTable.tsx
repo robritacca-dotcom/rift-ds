@@ -457,8 +457,6 @@ const ESTIMATED_ROW_HEIGHT = { default: 52, compact: 40 } as const;
 /** Rows drawn past each edge of the view, so a quick scroll never shows a gap. */
 const VIRTUAL_OVERSCAN = 8;
 
-/** The bordered frame's line, either side of a details panel that spans the visible table. */
-const UTILITY_BORDER = 1;
 /** The rank a header shows beside its sort glyph while several columns sort. */
 const SORT_RANK_WIDTH = 12;
 const MENU_BUTTON_WIDTH = 36;
@@ -1181,25 +1179,20 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
      else 0. The pinned row header is capped against it. */
   const tableId = useId();
   const [narrowWidth, setNarrowWidth] = useState(0);
-  /* The table's width, to the nearest eight pixels, kept only when rows
-     open details: a details panel is as wide as the visible table, not the
-     whole scrolling grid. */
-  const [tableWidth, setTableWidth] = useState(0);
-  const hasDetails = Boolean(renderDetail);
-  useLayoutEffect(() => {
-    const el = rootRef.current;
-    if (!el || !hasDetails) return;
-    const observer = new ResizeObserver(([entry]) => setTableWidth(Math.round(entry.contentRect.width / 8) * 8));
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasDetails]);
   const narrow = narrowWidth > 0;
   useLayoutEffect(() => {
     const el = rootRef.current;
     if (!el) return;
+    /* Set only on a change: React does not promise to skip a render for an
+       unchanged value, and a render here rebuilds every row, so a table
+       wider than a phone would otherwise render on every resize frame. */
+    let last = 0;
     const observer = new ResizeObserver(([entry]) => {
       const width = entry.contentRect.width;
-      setNarrowWidth(width > 0 && width < BREAKPOINT_PHONE_PX ? Math.round(width / 8) * 8 : 0);
+      const next = width > 0 && width < BREAKPOINT_PHONE_PX ? Math.round(width / 8) * 8 : 0;
+      if (next === last) return;
+      last = next;
+      setNarrowWidth(next);
     });
     observer.observe(el);
     return () => observer.disconnect();
@@ -3428,7 +3421,9 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     if (part === 'record' || !expandedHere) return record;
     /* The details: one cell across every column, its panel as wide as the
        visible table and held to its start edge, so it stays in view while
-       the columns scroll sideways. Rendered only while open. */
+       the columns scroll sideways. The width is the stylesheet's, read off
+       the frame as a container, so a resize never renders the rows again.
+       Rendered only while open. */
     const details = (
       <tr
         key={`${row.id}:detail`}
@@ -3439,10 +3434,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         aria-rowindex={slot ? slot.index + 2 : undefined}
       >
         <td id={detailId} colSpan={columnCount} className={`ds-table__cell ${baseClass}__detail-cell`}>
-          <div
-            className={`${baseClass}__detail`}
-            style={tableWidth && !stacked ? { width: tableWidth - 2 * UTILITY_BORDER } : undefined}
-          >
+          <div className={`${baseClass}__detail`}>
             <div className={`${baseClass}__detail-body`}>{renderDetail!(row)}</div>
           </div>
         </td>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Profiler, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { DataTable, type DataTableColumn, type DataTableProps, type DataTableRow } from './DataTable';
@@ -885,6 +885,81 @@ export const SearchStaysCheap: Story = {
     await userEvent.type(field, 'u');
     await settled();
     await expect(rowReads.count).toBeLessThan(countedRows.length);
+  },
+};
+
+/* Commits of the table below, counted by its Profiler, and its rows' cells drawn. */
+const resizeCommits = { count: 0 };
+const resizeCells = { count: 0 };
+const resizeRows = Array.from({ length: 25 }, (_, i) => ({ ...rows[i % rows.length], id: `resize-${i}` }));
+const resizeColumns: DataTableColumn[] = columns.map((col) =>
+  col.key === 'name'
+    ? {
+        ...col,
+        rowHeader: true,
+        render: (row) => {
+          resizeCells.count += 1;
+          return String(row.values.name);
+        },
+      }
+    : col,
+);
+const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+
+/** A table with row details beside a sidebar that opens frame by frame: the table follows the width without rendering again, and an open details panel stays as wide as the visible table. The stage is a desktop width, wider than the test runner's viewport, so the table stays above the phone layout throughout. */
+export const ResizeStaysCheap: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, width: 1024 }}>
+      <div data-testid="sidebar" style={{ width: 64, flexShrink: 0, background: 'var(--color-bg-container-secondary)' }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <Profiler id="resize-stays-cheap" onRender={() => (resizeCommits.count += 1)}>
+          <DataTable
+            columns={resizeColumns}
+            rows={resizeRows}
+            renderDetail={(row: DataTableRow) => <p style={{ margin: 0 }}>Order for {String(row.values.name)}</p>}
+            caption="Orders"
+          />
+        </Profiler>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const sidebar = canvas.getByTestId('sidebar');
+    const frame = canvasElement.querySelector<HTMLElement>('.ds-data-table__frame')!;
+    const animate = async (from: number, to: number) => {
+      const step = from < to ? 4 : -4;
+      for (let width = from; width !== to + step; width += step) {
+        sidebar.style.width = `${width}px`;
+        await nextFrame();
+      }
+      await nextFrame();
+      await nextFrame();
+    };
+    const panelFits = () => {
+      const panel = canvasElement.querySelector<HTMLElement>('.ds-data-table__detail')!;
+      expect(Math.abs(panel.getBoundingClientRect().width - frame.clientWidth)).toBeLessThanOrEqual(1);
+    };
+    await nextFrame();
+
+    const measure = async (from: number, to: number) => {
+      resizeCommits.count = 0;
+      resizeCells.count = 0;
+      await animate(from, to);
+      // Fifty-five steps: a commit or two (the frame's own overflow check), never one per step, and no row drawn again.
+      await expect(resizeCommits.count).toBeLessThanOrEqual(4);
+      await expect(resizeCells.count).toBe(0);
+    };
+
+    // Closed rows: opening the sidebar is layout alone.
+    await measure(64, 280);
+
+    // An open row: its panel follows the visible table, still without a render per step.
+    await userEvent.click(canvas.getAllByRole('button', { name: 'Show details for John Clarkson' })[0]);
+    await canvas.findByText('Order for John Clarkson');
+    panelFits();
+    await measure(280, 64);
+    panelFits();
   },
 };
 

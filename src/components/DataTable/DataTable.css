@@ -120,9 +120,13 @@
    ============================================ */
 
 /* The frame holds the guide and drop lines, and is the scroll container
-   a sticky header and pinned columns stick to. */
+   a sticky header and pinned columns stick to. It is also the
+   inline-size container a details panel takes its width from (see
+   DETAILS below), so the visible width reaches the panel through the
+   stylesheet, never through a render. */
 .ds-data-table__frame {
   position: relative;
+  container-type: inline-size;
 }
 
 /* Fixed widths: every column holds its own width exactly, and a filler
@@ -1161,10 +1165,15 @@
   background-color: var(--color-table-body-bg);
 }
 
+/* The panel is as wide as the visible table, not the whole scrolling
+   grid: the frame's content box, read as its container's inline size
+   (inside the frame's border and any scrollbar), so a pinned, scrolling or
+   virtualised grid keeps its details in view at every width. */
 .ds-data-table__detail {
   position: sticky;
   inset-inline-start: 0;
   display: grid;
+  width: 100cqi;
   grid-template-rows: 1fr;
   max-width: 100%;
   animation: ds-data-table-detail-open var(--motion-duration-base) var(--motion-ease-standard);
@@ -1195,6 +1204,11 @@
 .ds-data-table__grid--stacked .ds-data-table__detail-cell {
   display: block;
   flex-basis: 100%;
+}
+
+/* A card is narrower than the frame, so its details take the card's width. */
+.ds-data-table__grid--stacked .ds-data-table__detail {
+  width: auto;
 }
 
 /* ============================================

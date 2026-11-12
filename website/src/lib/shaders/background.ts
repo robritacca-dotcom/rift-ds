@@ -3,8 +3,8 @@
 /**
  * The site's background pick: the field (the site's own ShaderField) or one
  * of the library's scenes in its place, from SITE_BACKGROUNDS. The header's
- * BackgroundSwitcher picks it, on every page, as does the home hero's scene
- * row; both come here.
+ * BackgroundSwitcher picks it, on every page, as do the home hero's scene
+ * row and the playground's scene picks; all come here.
  *
  * The pick is written as `data-background` on <html>, the way the theme row
  * writes `data-brand`, and the root layout's BlurBackground reads it, so the

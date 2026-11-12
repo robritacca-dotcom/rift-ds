@@ -38,6 +38,7 @@ import {
 } from "@/lib/shaders/templates";
 import { applyCharacter, shaderCharacterFrom, type ShaderCharacter } from "@/lib/shaders/from-design";
 import { STAGED_SHADER_ATTR, type StagedShader } from "@/lib/shaders/staged";
+import { backgroundEntry, setSiteBackground, useSiteBackground } from "@/lib/shaders/background";
 import type { ShaderSceneRecipe as ShaderRecipe, ShaderSceneValues as ShaderValues } from "rift-ds/components/ShaderScene/ShaderScene";
 import ShadersRail, { type ShaderEdits } from "./ShadersRail";
 import StageControlBar, {
@@ -474,6 +475,11 @@ export default function PlaygroundPage() {
       setShaderGeneration((g) => g + 1);
     }
     setShaderId(next ? id : DEFAULT_SHADER.id);
+    /* A scene the site also offers as its background becomes that pick
+       too, so the header, the home hero and every page show the scene the
+       playground staged. Rift is a playground scene only and leaves the
+       site's pick alone. */
+    if (next && backgroundEntry(id)) setSiteBackground(id);
   };
   /* The pick, staged for the templates: written onto this root as an
      attribute the Templates view mirrors into its frame (lib/shaders/
@@ -545,6 +551,15 @@ export default function PlaygroundPage() {
     publishStaged();
   }, [stagedSceneId, shaderParams, shaderPristine, shaderGeneration]);
   useEffect(() => () => document.documentElement.removeAttribute(STAGED_SHADER_ATTR), []);
+  /* The other way round: the playground opens on the site's background,
+     and follows it when the header's menu changes it here. Keyed on the
+     site's pick alone, so staging Rift never snaps back. */
+  const siteBackground = useSiteBackground();
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the pick lives on <html> and in storage, only readable after hydration
+    if (siteBackground !== shaderId) startShader(siteBackground, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteBackground]);
 
   /* ---------- levers ---------- */
   const [preset, setPreset] = useState(BASE_THEME_ID);

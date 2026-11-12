@@ -6,6 +6,13 @@
    (validated by scripts/validate-token-references.mjs)
    ============================================ */
 
+@layer rift.tokens, rift.preset;
+
+/* The whole file sits in the rift.tokens cascade layer, so any unlayered
+   rule outranks it whatever its selector (tokens.css owns why). The
+   contents are not re-indented. */
+@layer rift.tokens {
+
 [data-theme="light"], :root {
   /* Text */
   --color-text-primary: var(--primitive-neutral-10);
@@ -437,3 +444,5 @@
     --padding-1500: var(--primitive-padding-1000); /* 60 → 40 */
   }
 }
+
+} /* @layer rift.tokens */

@@ -25,12 +25,6 @@ html[data-theme-ready] {
 }
 
 :root {
-  /* Feed the next/font-loaded Nunito Sans into the design system's single
-     font token. The body reads the token (not the font variable directly)
-     so one override — here, or live in /playground — restyles
-     the site and every component together. */
-  --font-family-primary: var(--font-nunito-sans), 'Nunito Sans', sans-serif;
-
   /* Docs-shell column widths: left nav rail, right details rail, and the
      gap between columns. Every page module sizes its rails from these so
      the mid-breakpoint override below reaches all of them at once. */
@@ -120,6 +114,18 @@ html[data-theme-ready] {
     var(--layout-chat-inset) + var(--padding-200) * 2 + var(--font-paragraph-emphasis-line-height) +
       var(--gap-200)
   );
+}
+
+/* Feed the next/font-loaded Nunito Sans into the design system's single
+   font token. The body reads the token (not the font variable directly)
+   so one override — here, or live in /playground — restyles the site and
+   every component together. It is the base theme's face, so it sits in
+   the library's base token layer: a preset (data-brand) still sets its
+   own face over it, as it would over the token files. */
+@layer rift.tokens {
+  :root {
+    --font-family-primary: var(--font-nunito-sans), 'Nunito Sans', sans-serif;
+  }
 }
 
 /* Mid breakpoint (960–1279px): narrow both rails and tighten the column

@@ -33,6 +33,22 @@ export type DeclaredTokens = {
 const DARK_SCOPE = /\[data-theme=["']?dark/;
 const LIGHT_SCOPE = /\[data-theme=["']?light/;
 
+/**
+ * The style rules a token can be declared in: top-level rules and those
+ * inside a cascade layer block (the token files sit in `rift.tokens`, the
+ * presets in `rift.preset`). The one media block in the token files (the
+ * display tier's responsive collapse) holds literal sizes, never
+ * references, so media rules are skipped.
+ */
+function tokenRules(rules: CSSRuleList): CSSStyleRule[] {
+  const out: CSSStyleRule[] = [];
+  for (const rule of Array.from(rules)) {
+    if (rule instanceof CSSStyleRule) out.push(rule);
+    else if (rule instanceof CSSLayerBlockRule) out.push(...tokenRules(rule.cssRules));
+  }
+  return out;
+}
+
 export function collectDeclaredTokens(): DeclaredTokens {
   const root = new Map<string, string>();
   const dark = new Map<string, string>();
@@ -44,11 +60,7 @@ export function collectDeclaredTokens(): DeclaredTokens {
     } catch {
       continue; // cross-origin (Google Fonts) — no token declarations there
     }
-    for (const rule of Array.from(rules)) {
-      /* Token declarations live in top-level rules; the one media block in
-         the token layer (the display tier's responsive collapse) holds
-         literal sizes, never references, so nested rules can be skipped. */
-      if (!(rule instanceof CSSStyleRule)) continue;
+    for (const rule of tokenRules(rules)) {
       const selector = rule.selectorText;
       const isDark = DARK_SCOPE.test(selector);
       const isBase =

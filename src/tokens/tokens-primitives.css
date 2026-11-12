@@ -4,6 +4,13 @@
    Do not use these directly in components
    ============================================ */
 
+@layer rift.tokens, rift.preset;
+
+/* The whole file sits in the rift.tokens cascade layer, so any unlayered
+   rule outranks it whatever its selector (tokens.css owns why). The
+   contents are not re-indented. */
+@layer rift.tokens {
+
 :root {
   /* ============================================
      COLOR PRIMITIVES
@@ -230,3 +237,5 @@
   --primitive-gap-2000: 80px;
   --primitive-gap-3000: 120px;
 }
+
+} /* @layer rift.tokens */

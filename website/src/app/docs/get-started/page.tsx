@@ -228,6 +228,20 @@ import 'rift-ds/tokens/presets/presets.css';
 
 <html data-brand="terminal">`;
 
+const PRESET_OVERRIDE_SNIPPET = `/* Keep a shipped theme and change one part of it. Your CSS
+   outranks every theme stylesheet, in light and dark alike. */
+:root {
+  --font-family-primary: 'Nunito Sans', sans-serif;
+}
+
+/* Or set a default face that a shipped theme still replaces:
+   declare it in the library's base layer. */
+@layer rift.tokens {
+  :root {
+    --font-family-primary: 'Inter', sans-serif;
+  }
+}`;
+
 const INIT_SNIPPET = `npx rift-ds init`;
 
 /* One curl per file of every skill, built from the generated manifest
@@ -694,6 +708,12 @@ export default function GetStartedPage() {
                     . Each also loads alone from <code>tokens/presets/&lt;id&gt;.css</code>.
                   </p>
                   <CodeBlock code={PRESET_SNIPPET} language="tsx" showCopy />
+                  <p className={styles.sectionNote}>
+                    To change one part of a shipped theme, override its token. The theme
+                    stylesheets sit in cascade layers, so any rule of your own outranks them,
+                    whatever its selector, in both modes:
+                  </p>
+                  <CodeBlock code={PRESET_OVERRIDE_SNIPPET} language="css" showCopy />
                 </div>
 
                 <div id="dark-mode" className={styles.subsection}>

@@ -9,7 +9,7 @@
  *
  * This module re-declares the whole token layer at a scope instead. It reads
  * every token rule off the live CSSOM (the base scopes, the dark scope, and
- * each `html[data-brand]` preset rule, media wrappers kept) and re-emits the
+ * each `html[data-brand]` preset rule, media and layer wrappers kept) and re-emits the
  * custom properties under `[data-theme-scope="<id>"]`, where the chains
  * resolve again against that element. An element carrying the attribute
  * wears that theme whatever the page around it is wearing, and still follows
@@ -56,6 +56,13 @@ function scopedRules(rules: CSSRuleList): string {
     if (rule instanceof CSSMediaRule) {
       const inner = scopedRules(rule.cssRules);
       if (inner) css += `@media ${rule.conditionText} {\n${inner}}\n`;
+      continue;
+    }
+    /* The twins join their original's cascade layer, so a preset twin
+       outranks a base twin the way rift.preset outranks rift.tokens. */
+    if (rule instanceof CSSLayerBlockRule) {
+      const inner = scopedRules(rule.cssRules);
+      if (inner) css += `@layer ${rule.name} {\n${inner}}\n`;
       continue;
     }
     if (!(rule instanceof CSSStyleRule)) continue;

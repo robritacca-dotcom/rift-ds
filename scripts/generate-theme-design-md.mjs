@@ -317,7 +317,7 @@ export function buildThemeDesignMd({ id, label, values, siteUrl, packageName }) 
 
 ${label}: ${pairing}, ${hex(light('--color-action-primary-bg'))} for actions, ${shape}. ${depthLine}
 
-Take it whole: \`import '${packageName}/tokens/presets/presets.css'\` after the tokens, then set \`data-brand="${id}"\` on \`<html>\`. See it at ${siteUrl}/foundations/themes/${id}.
+Take it whole: \`import '${packageName}/tokens/presets/presets.css'\` after the tokens, then set \`data-brand="${id}"\` on \`<html>\`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at ${siteUrl}/foundations/themes/${id}.
 
 ## Colour
 

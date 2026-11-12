@@ -12,7 +12,10 @@
    It defines no token of its own, only new values for existing ones, so
    the token registry does not read it. The selector carries an id's
    weight so it wins over every theme and preset sheet, whatever their
-   attribute selectors.
+   attribute selectors. It stays outside the rift.* cascade layers on
+   purpose: unlayered, it outranks every layered token, and the id still
+   outranks a consumer's own :root override, so a rebrand cannot switch
+   the system colours off.
    ============================================ */
 
 @media (forced-colors: active) {

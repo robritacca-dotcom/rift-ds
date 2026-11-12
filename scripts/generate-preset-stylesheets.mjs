@@ -7,13 +7,18 @@
  * site or app end to end, light and dark, with zero runtime JavaScript:
  *
  *   - one <id>.css per preset in THEME_PRESETS
- *     (website/src/lib/theme/presets.ts), containing an
- *     html[data-brand="<id>"] block with the preset's light-theme
- *     declarations and an html[data-brand="<id>"][data-theme="dark"]
- *     block with its dark-theme declarations. The dark block is emitted
- *     even when it matches the light one, so the cascade is self-evident:
- *     html[data-brand] outranks the token files' :root/[data-theme]
- *     blocks, and the dark block outranks the light one.
+ *     (website/src/lib/theme/presets.ts), containing, inside the
+ *     rift.preset cascade layer, an html[data-brand="<id>"] block with
+ *     the preset's light-theme declarations and an
+ *     html[data-brand="<id>"][data-theme="dark"] block with only the
+ *     dark-theme declarations whose value differs from the light one.
+ *     The cascade: rift.preset outranks rift.tokens (the base token
+ *     files), so the light block applies in both modes and the dark
+ *     block, more specific, overrides it where dark differs. Anything a
+ *     theme does not split (the faces, the radius ramp) is declared once.
+ *     Any unlayered rule outranks the whole layer, so a consumer's plain
+ *     :root override of one token wins under every preset in both modes
+ *     (src/tokens/tokens.css owns the layer contract).
  *   - one presets.css that only @imports them all, so a consumer imports
  *     a single file (after tokens.css) and every data-brand value works.
  *
@@ -156,19 +161,26 @@ function fontFaceBlocks(preset, source) {
   return blocks;
 }
 
-/** One preset's stylesheet: light block, then the always-emitted dark block. */
+/** The layer order every token stylesheet states, so whichever loads first fixes it. */
+export const LAYER_ORDER = '@layer rift.tokens, rift.preset;';
+
+/**
+ * One preset's stylesheet: inside rift.preset, the light block, then a dark
+ * block holding only what dark changes (omitted when nothing does).
+ */
 export function buildPresetCss(id, preset, presetOverrides, source) {
-  const block = (theme) => {
-    const overrides = presetOverrides(preset, theme);
-    const selector =
-      theme === 'light'
-        ? `html[data-brand="${id}"]`
-        : `html[data-brand="${id}"][data-theme="dark"]`;
-    const declarations = Object.keys(overrides)
-      .sort()
-      .map((name) => `  ${name}: ${overrides[name]};`);
-    return `${selector} {\n${declarations.join('\n')}\n}`;
-  };
+  const light = presetOverrides(preset, 'light');
+  const dark = presetOverrides(preset, 'dark');
+  const block = (selector, overrides, names) =>
+    `  ${selector} {\n${names.map((name) => `    ${name}: ${overrides[name]};`).join('\n')}\n  }`;
+  const lightNames = Object.keys(light).sort();
+  const darkNames = Object.keys(dark)
+    .filter((name) => dark[name] !== light[name])
+    .sort();
+  const blocks = [block(`html[data-brand="${id}"]`, light, lightNames)];
+  if (darkNames.length > 0) {
+    blocks.push(block(`html[data-brand="${id}"][data-theme="dark"]`, dark, darkNames));
+  }
   const fonts = fontFaceBlocks(preset, source);
   return (
     header([
@@ -177,9 +189,11 @@ export function buildPresetCss(id, preset, presetOverrides, source) {
       'Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).',
       `Regenerate: ${REGENERATE}`,
       'Import after tokens.css, then set data-brand="' + id + '" on <html>.',
+      'Layered (rift.preset): any unlayered rule of yours outranks it.',
     ]) +
+    `${LAYER_ORDER}\n\n` +
     (fonts.length > 0 ? `${fonts.join('\n\n')}\n\n` : '') +
-    `${block('light')}\n\n${block('dark')}\n`
+    `@layer rift.preset {\n${blocks.join('\n\n')}\n}\n`
   );
 }
 
@@ -199,7 +213,7 @@ export async function assemblePresetStylesheets() {
       'Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).',
       `Regenerate: ${REGENERATE}`,
       'Import after tokens.css, then set data-brand="<id>" on <html>.',
-    ]) + ids.map((id) => `@import url("./${id}.css");`).join('\n') + '\n'
+    ]) + `${LAYER_ORDER}\n` + ids.map((id) => `@import url("./${id}.css");`).join('\n') + '\n'
   );
   return files;
 }

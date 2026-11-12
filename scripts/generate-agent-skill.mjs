@@ -297,7 +297,7 @@ The token stylesheet defines custom properties and styles no element, so paint t
 
 ## Theming
 
-Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry. Never write a token name from memory: look it up there, or read the names from \`tokenRegistry\` in \`${PACKAGE_NAME}/tokens/registry\`, since a misspelt \`var()\` resolves to nothing and fails silently. For the resolved values of every theme in code, read \`${PACKAGE_NAME}/tokens/values\`; the same values are served as DTCG files under \`${origin}/schema/tokens/\`.
+Components read semantic tokens (\`--color-*\`, \`--radius-*\`, \`--font-*\`, \`--motion-*\`, ...), and every semantic colour token references a \`--primitive-*\` value. Re-theme by overriding primitives: one override cascades through both themes at once. A shipped theme (\`data-brand\`) is a starting point, never a locked set: the token and theme stylesheets sit in cascade layers (\`rift.tokens\`, then \`rift.preset\`), so a plain \`:root\` rule of your own outranks them whatever its selector, and overriding one token (the face, say) keeps the rest of the theme in light and dark alike. Never hardcode a colour beside the components; override the token it should come from. references/tokens.md lists every semantic token with the value it resolves to in light and dark; the live reference is at ${origin}/foundations, and the MCP endpoint's \`list_tokens\` tool serves the registry. Never write a token name from memory: look it up there, or read the names from \`tokenRegistry\` in \`${PACKAGE_NAME}/tokens/registry\`, since a misspelt \`var()\` resolves to nothing and fails silently. For the resolved values of every theme in code, read \`${PACKAGE_NAME}/tokens/values\`; the same values are served as DTCG files under \`${origin}/schema/tokens/\`.
 
 ## Charts
 
@@ -305,7 +305,7 @@ Components that import recharts ship from \`${PACKAGE_NAME}/charts\` and need th
 
 ## Fonts
 
-The primary typeface is not bundled: set \`--font-family-primary\` to your own (the system is designed around Nunito Sans). The Material Symbols icon font ships inside the package, and any component import loads it.
+The primary typeface is not bundled: set \`--font-family-primary\` to your own (the system is designed around Nunito Sans). A plain \`:root\` rule also replaces a shipped theme's face; to give the base theme a face that the shipped themes still replace with their own, declare it inside \`@layer rift.tokens { :root { … } }\`. The Material Symbols icon font ships inside the package, and any component import loads it.
 
 ## The chat widget
 
@@ -416,7 +416,7 @@ ${catalogSections.join('\n\n')}
     '',
     '## Order of work',
     '',
-    `1. Wire the theme. ${c('theme.css')}, when there is one, is imported after ${c('tokens.css')}. A shipped preset needs ${c(`${PACKAGE_NAME}/tokens/presets/presets.css`)} imported once and ${c('data-brand')} on the root element set to one of: ${presets.map(c).join(', ')}. Dark mode is ${c('data-theme="dark"')} on the root element.`,
+    `1. Wire the theme. ${c('theme.css')}, when there is one, is imported after ${c('tokens.css')}. A shipped preset needs ${c(`${PACKAGE_NAME}/tokens/presets/presets.css`)} imported once and ${c('data-brand')} on the root element set to one of: ${presets.map(c).join(', ')}. To change one part of a preset, override that token in the project's own CSS: it outranks the preset in both modes. Dark mode is ${c('data-theme="dark"')} on the root element.`,
     `2. Swap components first. Where the screen hand-builds a control the library ships (a button, an input, a dialog, a table), replace it with the library component. Find it in the catalogue, then read its prop contract before you write the JSX: do not guess props. Once a component is in place, do not restyle it from outside to recover the old look. If it looks wrong, the theme is wrong, and the fix is a token.`,
     '3. Then move what is left onto tokens. Every remaining raw colour, radius, spacing value, shadow, font value and timing becomes a semantic token, chosen by the rules below.',
     `4. Remove the duplicate dark styles. Each colour token already holds a light and a dark value, so a ${c('prefers-color-scheme')} branch or a second set of dark colours for a tokenised value is dead weight. Delete it.`,
@@ -678,7 +678,7 @@ import { Button } from '${PACKAGE_NAME}';
 \`\`\`
 
 - \`base.css\` paints the page (\`body\` on ${token('--color-bg-page-primary')}, ${token('--color-text-primary')} and ${token('--font-family-primary')}) and resets box sizing and margins; without it, components render too padded.
-- The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set ${token('--font-family-primary')} to it. A shipped theme bundles its own faces, and the icon font always ships.
+- The base theme's typeface is not bundled. It is designed around Nunito Sans: load that (or your own) and set ${token('--font-family-primary')} to it. A shipped theme bundles its own faces, and the icon font always ships. A plain \`:root\` rule outranks a shipped theme in both modes, which is how to keep a theme and change one part of it; a face that the shipped themes should still replace goes inside \`@layer rift.tokens { … }\` instead.
 - Dark mode is \`data-theme="dark"\` on \`<html>\`. \`colorModeScript()\` from \`${PACKAGE_NAME}/components/ThemeToggle/colorMode\` applies the stored choice before first paint, and \`ThemeToggle\` changes it. A shipped theme is \`data-brand\` on \`<html>\`, with \`${subpath('./tokens/presets/*.css').replace('*', 'presets')}\` imported once.
 - In a routed app, wrap the tree in \`LinkProvider\` from \`${subpath('./behaviors/LinkProvider')}\` with the router's link, or every component link reloads the page. A component rendered by a Server Component cannot read it, so pass \`linkComponent\` on that instance instead.
 - For an app not in US English, wrap the tree in \`LocaleProvider\` from \`${subpath('./behaviors/LocaleProvider')}\` with its locale, or every number, date and calendar reads as \`en-US\`. A component rendered by a Server Component cannot read it, so pass \`locale\` on that instance instead. Translate the words through each component's label props.

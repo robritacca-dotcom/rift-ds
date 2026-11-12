@@ -1,7 +1,10 @@
 /* Points the library's primary face at the one font.ts loads. The class
    that defines --font-rift-primary sits on <html>, which is :root, so the
-   variable resolves here. A shipped theme (data-brand on <html>) sets its
-   own face and wins over this rule. */
-:root {
-  --font-family-primary: var(--font-rift-primary), 'Nunito Sans', sans-serif;
+   variable resolves here. The rule sits in the library's base token layer,
+   so a shipped theme (data-brand on <html>) still sets its own face over
+   it. Move it out of the layer to keep this face under every theme. */
+@layer rift.tokens {
+  :root {
+    --font-family-primary: var(--font-rift-primary), 'Nunito Sans', sans-serif;
+  }
 }

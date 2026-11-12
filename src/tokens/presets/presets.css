@@ -5,6 +5,7 @@
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
  * Import after tokens.css, then set data-brand="<id>" on <html>.
  */
+@layer rift.tokens, rift.preset;
 @import url("./contrast.css");
 @import url("./coral.css");
 @import url("./forest.css");

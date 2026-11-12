@@ -111,6 +111,7 @@
     "validate-site-backgrounds": { "group": "tokens", "text": "Every site background names a scene the library ships, with its tuning inside the scene's ranges and its colour roles in the token registry." },
     "validate-single-background-mount": { "group": "tokens", "text": "BlurBackground is mounted exactly once, in the root layout." },
     "validate-token-references": { "group": "tokens", "text": "Semantic colours point at primitives through var(), never a hex value." },
+    "validate-token-layers": { "group": "tokens", "text": "Every base token sits in the rift.tokens cascade layer, so a consumer's own CSS outranks it." },
     "validate-theme-mirrors": { "group": "tokens", "text": "Hand mirrors of token data in the site and design.md match the CSS." },
     "validate-foundation-mirrors": { "group": "tokens", "text": "The values the foundations pages print match the CSS." },
     "validate-theme-export": { "group": "tokens", "text": "The playground's exported AGENTS.md, CSS and THEME.md describe the system correctly." },

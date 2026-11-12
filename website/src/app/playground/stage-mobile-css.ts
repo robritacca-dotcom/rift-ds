@@ -64,25 +64,39 @@ export function stageMobileCss(): string {
     } catch {
       continue; /* cross-origin: the Google Fonts link */
     }
-    for (const rule of Array.from(rules)) {
-      if (!(rule instanceof CSSMediaRule)) continue;
-      const cond = rule.media.mediaText.match(MAX_WIDTH_ONLY);
-      if (!cond || parseFloat(cond[1]) < STAGE_WIDTH) continue;
-      for (const inner of Array.from(rule.cssRules)) {
-        if (!(inner instanceof CSSStyleRule)) continue;
-        const selectors = inner.selectorText.split(",").map((s) => s.trim());
-        if (selectors.every((s) => s === ":root")) {
-          const decls = customProps(inner.style);
-          if (decls) out.push(`${STAGE_SCOPE} { ${decls} }`);
-        } else if (selectors.every((s) => s.startsWith(".ds-"))) {
-          const scoped = selectors
-            .map((s) => `${STAGE_SCOPE} ${s}`)
-            .join(", ");
-          out.push(`${scoped} { ${inner.style.cssText} }`);
-        }
-      }
-    }
+    out.push(...phoneRules(rules));
   }
   cached = out.join("\n");
   return cached;
+}
+
+/** The re-scoped phone rules among `rules`, a cascade layer's kept around its own. */
+function phoneRules(rules: CSSRuleList): string[] {
+  const out: string[] = [];
+  for (const rule of Array.from(rules)) {
+    /* The token files sit in a cascade layer (rift.tokens), so their media
+       blocks are one level down; the copies join the same layer. */
+    if (rule instanceof CSSLayerBlockRule) {
+      const inner = phoneRules(rule.cssRules);
+      if (inner.length) out.push(`@layer ${rule.name} {\n${inner.join("\n")}\n}`);
+      continue;
+    }
+    if (!(rule instanceof CSSMediaRule)) continue;
+    const cond = rule.media.mediaText.match(MAX_WIDTH_ONLY);
+    if (!cond || parseFloat(cond[1]) < STAGE_WIDTH) continue;
+    for (const inner of Array.from(rule.cssRules)) {
+      if (!(inner instanceof CSSStyleRule)) continue;
+      const selectors = inner.selectorText.split(",").map((s) => s.trim());
+      if (selectors.every((s) => s === ":root")) {
+        const decls = customProps(inner.style);
+        if (decls) out.push(`${STAGE_SCOPE} { ${decls} }`);
+      } else if (selectors.every((s) => s.startsWith(".ds-"))) {
+        const scoped = selectors
+          .map((s) => `${STAGE_SCOPE} ${s}`)
+          .join(", ");
+        out.push(`${scoped} { ${inner.style.cssText} }`);
+      }
+    }
+  }
+  return out;
 }

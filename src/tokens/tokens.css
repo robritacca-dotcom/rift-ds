@@ -2,7 +2,19 @@
    TOKENS — MAIN ENTRY POINT
    Import this file once in your app
    Order matters: primitives first, then themes
+
+   CASCADE LAYERS
+   Every token sits in a cascade layer: these files in rift.tokens, the
+   shipped presets (presets/) in rift.preset, which outranks it. Any rule
+   outside a layer outranks both, whatever its selector, so a consumer
+   overrides one token, of the base theme or of a preset, in both modes,
+   with a plain :root rule. To supply a base value a preset still
+   replaces (a default face, say), declare it inside the rift.tokens
+   layer instead. The forced-colors sheet stays unlayered (its own
+   header says why).
    ============================================ */
+
+@layer rift.tokens, rift.preset;
 
 @import './tokens-primitives.css';
 @import './tokens-typography.css';

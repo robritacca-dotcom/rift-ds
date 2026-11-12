@@ -4,6 +4,13 @@
    All typography styles from Figma design system
    ============================================ */
 
+@layer rift.tokens, rift.preset;
+
+/* The whole file sits in the rift.tokens cascade layer, so any unlayered
+   rule outranks it whatever its selector (tokens.css owns why). The
+   contents are not re-indented. */
+@layer rift.tokens {
+
 :root {
   /* ============================================
      FONT FAMILIES
@@ -214,3 +221,5 @@
     --font-sub-display-line-height: var(--font-line-height-900);
   }
 }
+
+} /* @layer rift.tokens */

@@ -13,8 +13,10 @@
  *      preset left THEME_PRESETS without taking its stylesheet along.
  *   3. Parity proof, belt-and-braces on the shared-composer claim: for
  *      one preset (mono), the CSS blocks are parsed back out of the disk
- *      file and their declarations compared, name for name and value for
- *      value, against presetOverrides(mono, theme) for both themes. The
+ *      file's rift.preset layer and compared, name for name and value for
+ *      value, against presetOverrides(mono, theme): the light block is the
+ *      light output exactly, and dark mode (the dark block over the light
+ *      one) resolves to the dark output, with nothing repeated. The
  *      byte-compare already implies this through the generator; the parse
  *      goes around the generator, so a formatting bug that dropped or
  *      mangled a declaration on both sides of the byte-compare still
@@ -67,32 +69,44 @@ if (!THEME_PRESETS.mono) {
 } else if (existsSync(monoPath)) {
   // Normalize CRLF so Windows checkouts validate identically to CI.
   const monoCss = readFileSync(monoPath, 'utf8').replace(/\r\n/g, '\n');
-  for (const theme of ['light', 'dark']) {
-    const selector =
-      theme === 'light' ? 'html[data-brand="mono"]' : 'html[data-brand="mono"][data-theme="dark"]';
+  /* The blocks sit inside the rift.preset layer, indented one level. */
+  const layer = monoCss.match(/^@layer rift\.preset \{\n([\s\S]*?)\n\}$/m);
+  if (!layer) errors.push(`mono.css has no @layer rift.preset block — ${REGENERATE}`);
+  const parse = (selector) => {
     const escaped = selector.replace(/[[\]"]/g, '\\$&');
-    const block = monoCss.match(new RegExp(`^${escaped} \\{\\n([\\s\\S]*?)\\n\\}`, 'm'));
-    if (!block) {
-      errors.push(`mono.css has no ${selector} block — ${REGENERATE}`);
-      continue;
+    const block = (layer?.[1] ?? '').match(new RegExp(`^  ${escaped} \\{\\n([\\s\\S]*?)\\n  \\}`, 'm'));
+    return block
+      ? Object.fromEntries([...block[1].matchAll(/^ {4}(--[a-z0-9-]+): (.+);$/gm)].map((m) => [m[1], m[2]]))
+      : null;
+  };
+  const light = parse('html[data-brand="mono"]');
+  const dark = parse('html[data-brand="mono"][data-theme="dark"]') ?? {};
+  const expectedLight = presetOverrides(THEME_PRESETS.mono, 'light');
+  const expectedDark = presetOverrides(THEME_PRESETS.mono, 'dark');
+  if (!light) {
+    errors.push(`mono.css has no html[data-brand="mono"] block — ${REGENERATE}`);
+  } else {
+    // Light: the block is exactly the composer's light output.
+    for (const [name, value] of Object.entries(expectedLight)) {
+      if (!(name in light)) errors.push(`mono.css light block is missing ${name} — presetOverrides emits it`);
+      else if (light[name] !== value)
+        errors.push(`mono.css light block has ${name}: ${light[name]}, but presetOverrides says ${value}`);
     }
-    const parsed = Object.fromEntries(
-      [...block[1].matchAll(/^ {2}(--[a-z0-9-]+): (.+);$/gm)].map((m) => [m[1], m[2]])
-    );
-    const expected = presetOverrides(THEME_PRESETS.mono, theme);
-    for (const [name, value] of Object.entries(expected)) {
-      if (!(name in parsed)) {
-        errors.push(`mono.css ${theme} block is missing ${name} — presetOverrides emits it`);
-      } else if (parsed[name] !== value) {
-        errors.push(
-          `mono.css ${theme} block has ${name}: ${parsed[name]}, but presetOverrides says ${value}`
-        );
-      }
+    for (const name of Object.keys(light)) {
+      if (!(name in expectedLight)) errors.push(`mono.css light block declares ${name}, which presetOverrides does not emit`);
     }
-    for (const name of Object.keys(parsed)) {
-      if (!(name in expected)) {
-        errors.push(`mono.css ${theme} block declares ${name}, which presetOverrides does not emit`);
-      }
+    // Dark: the light block applies in both modes, so what dark mode sees
+    // (its own block over the light one) must be the composer's dark output,
+    // and the dark block holds only what differs.
+    for (const [name, value] of Object.entries(expectedDark)) {
+      const seen = name in dark ? dark[name] : light[name];
+      if (seen === undefined) errors.push(`mono.css dark mode never sets ${name} — presetOverrides emits it`);
+      else if (seen !== value)
+        errors.push(`mono.css dark mode resolves ${name}: ${seen}, but presetOverrides says ${value}`);
+    }
+    for (const name of Object.keys(dark)) {
+      if (!(name in expectedDark)) errors.push(`mono.css dark block declares ${name}, which presetOverrides does not emit`);
+      else if (light[name] === dark[name]) errors.push(`mono.css dark block repeats ${name} from the light block — ${REGENERATE}`);
     }
   }
 }

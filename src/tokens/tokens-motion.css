@@ -5,6 +5,13 @@
    split) — defined once in :root, like typography.
    ============================================ */
 
+@layer rift.tokens, rift.preset;
+
+/* The whole file sits in the rift.tokens cascade layer, so any unlayered
+   rule outranks it whatever its selector (tokens.css owns why). The
+   contents are not re-indented. */
+@layer rift.tokens {
+
 :root {
   /* ============================================
      DURATIONS — CORE
@@ -62,7 +69,14 @@
     --motion-duration-loop-shimmer: 0.01ms;
     --motion-duration-loop-matrix: 0.01ms;
   }
+}
 
+} /* @layer rift.tokens */
+
+/* The universal guard sets no token, so it stays outside the layer: an
+   !important rule in a layer would outrank a consumer's own !important,
+   which this guard has never done. */
+@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {

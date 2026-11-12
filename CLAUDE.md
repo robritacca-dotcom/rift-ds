@@ -206,6 +206,7 @@ Key invariants, each build-enforced (the validator's doc block owns the sanction
 - **JavaScript timer delays** come from `src/tokens/motion.ts` (published as `rift-ds/tokens/motion`), never a literal: `scripts/validate-js-timings.mjs`.
 - **Breakpoints** come from `src/tokens/breakpoints.ts` (and `website/src/config/breakpoints.ts` for the site); JS builds queries with `mediaBelow`/`mediaAbove`, CSS keeps a literal from the set: `scripts/validate-breakpoints.mjs`.
 - **Every z-index of 10 or more names a `--layer-*` token** (or `--layer-site-*` in the site): `scripts/validate-stacking.mjs`.
+- **Every token sits in a cascade layer**: the base token files in `rift.tokens`, the presets in `rift.preset`, so a consumer's unlayered CSS outranks both and one token of a preset is overridable in both modes. The forced-colors sheet stays unlayered on purpose; `src/tokens/tokens.css` owns the contract, `scripts/validate-token-layers.mjs` holds it, and `src/stories/TokenLayers.stories.tsx` proves the cascade in a browser.
 
 ---
 

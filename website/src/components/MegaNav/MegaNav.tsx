@@ -75,8 +75,9 @@ export default function MegaNav() {
               },
             },
             // Pages that need a pointer and a wide screen stay out of the
-            // drawer, which only narrow screens see.
-            drawerItems: items.filter((item) => !item.desktopOnly),
+            // drawer, which only narrow screens see. A showcase page lifted
+            // out of the grid is back in the drawer's list (navigation.ts).
+            drawerItems: (section.mega.drawerItems ?? items).filter((item) => !item.desktopOnly),
           }
         : {}),
     };

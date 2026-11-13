@@ -105,7 +105,18 @@ export interface NavSection {
   icon: string;
   /** One-line summary for panels, the footer and the palette. */
   description: string;
-  mega?: { groups: MegaGroup[]; showcase?: MegaShowcase };
+  mega?: {
+    groups: MegaGroup[];
+    showcase?: MegaShowcase;
+    /**
+     * The section's rows in the mobile drawer, when the grid alone would
+     * leave a page out. A showcase lifted out of the grid is still a page
+     * of the section, and the drawer has no card to show it in, so it goes
+     * back in its place here. Omit it when the showcase is a sub-page the
+     * grid's rows already lead to. Defaults to the groups' items.
+     */
+    drawerItems?: MegaItem[];
+  };
   isActive: (path: string) => boolean;
 }
 
@@ -251,6 +262,8 @@ function buildNavSections(): NavSection[] {
             ),
           },
         ],
+        // The drawer has no showcase card, so Themes keeps its row there.
+        drawerItems: linksToMegaItems(foundationsSidebarLinks, FOUNDATION_ICONS),
         showcase: {
           href: FOUNDATIONS_SHOWCASE_HREF,
           overline: "Every look",
@@ -316,6 +329,16 @@ function buildNavSections(): NavSection[] {
             items: linksToMegaItems(docsSidebarLinks.filter(isSystemAtWorkDoc), DOC_ITEM_ICONS),
           },
         ],
+        // The drawer has no showcase card, so the Figma kit keeps its row
+        // there, among the Learn pages it was lifted from.
+        drawerItems: linksToMegaItems(
+          [
+            ...docsSidebarLinks.filter((l) => !isBlueprintDoc(l) && !isSystemAtWorkDoc(l)),
+            ...docsSidebarLinks.filter(isBlueprintDoc),
+            ...docsSidebarLinks.filter(isSystemAtWorkDoc),
+          ],
+          DOC_ITEM_ICONS
+        ),
         showcase: {
           href: DOCS_SHOWCASE_HREF,
           overline: "For designers",

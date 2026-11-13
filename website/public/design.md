@@ -192,7 +192,7 @@ The family carries one solid fill alongside the stops: `--color-ai-button-bg`, t
 ---
 
 ### Pixel ink (mode-split — the "which generated character" role)
-- Ink 1 to Ink 6: `--color-pixel-ink-1` → `-6` — one ink per chromatic ramp outside the brand's (red, orange, yellow, green, blue, purple), each a deep step of its ramp in light mode and a high step in dark
+- Ink 1 to Ink 6: `--color-pixel-ink-1` → `-6` — one ink per chromatic ramp outside the brand's (red, orange, yellow, green, blue, purple), each a deep step of its ramp in light mode and a high step in dark. On the dark page all six sit inside one contrast band (`PIXEL_INK_BAND` in `scripts/validate-theme-presets.mjs`, held in every theme), so each stands off the page and none glares beside the others
 
 A PixelAvatar is drawn in one of these, picked by its name. They are a set of their own rather than the chart series because the job is different: a series colour fills a large mark on a chart and is tuned as a mid-tone that works on both grounds, while a sprite is a few small solid shapes on the page and needs a text-like contrast, so each ink splits by mode. Yellow and green sit a step deeper than their neighbours in light mode, because those ramps stay bright for longer. PromptSuggestions' card covers borrow the same inks for their tint, cycled by position. The brand's own ramp is left out on purpose: a theme re-points it, so an ink there would become a second copy of whichever ink the theme's colour resembles, and two neighbours in a list would match. Nothing else uses them: they identify, they never signal a state.
 

@@ -15,10 +15,19 @@
  * file must equal the registered count. Surfaces that describe the tools by
  * capability without a number (llms.txt) have nothing to drift and are not
  * checked.
+ *
+ * It also holds every tool argument to a description. An agent choosing an
+ * argument reads nothing else about it, so one without a description is a
+ * guess. Two declarations are read from their syntax trees: each property of
+ * an `inputSchema: z.object({...})` in the MCP route must end in a
+ * `.describe()` with text, and each property of an `input_schema` in the
+ * site chat's route (the same tools, offered to the chat model) must carry a
+ * `description` with text.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execSync } from 'node:child_process';
+import ts from 'typescript';
 
 const repoRoot = execSync('git rev-parse --show-toplevel').toString().trim();
 
@@ -109,6 +118,96 @@ for (const file of COUNTED_SURFACES) {
   }
 }
 
+/* ---- Every tool argument has a description ---- */
+
+const parse = (path, text) => ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true);
+const nameOf = (property) =>
+  ts.isIdentifier(property.name) || ts.isStringLiteralLike(property.name) ? property.name.text : property.name.getText();
+const visit = (node, fn) => {
+  fn(node);
+  ts.forEachChild(node, (child) => visit(child, fn));
+};
+const hasText = (node) =>
+  node !== undefined && (ts.isStringLiteralLike(node) || ts.isTemplateExpression(node)) && node.getText().length > 2;
+
+/** True when a zod chain (`z.string().optional().describe("…")`) calls describe with text. */
+const describes = (expression) => {
+  let found = false;
+  visit(expression, (node) => {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === 'describe' &&
+      hasText(node.arguments[0])
+    ) {
+      found = true;
+    }
+  });
+  return found;
+};
+
+let describedArguments = 0;
+
+visit(parse(routePath, route), (node) => {
+  if (!ts.isPropertyAssignment(node) || nameOf(node) !== 'inputSchema') return;
+  const shape = ts.isCallExpression(node.initializer) ? node.initializer.arguments[0] : undefined;
+  if (!shape || !ts.isObjectLiteralExpression(shape)) {
+    errors.push(
+      'an inputSchema in website/src/app/api/mcp/route.ts is not a z.object({...}) literal, so its ' +
+        'arguments cannot be read; write it inline, or teach scripts/validate-mcp-tools.mjs the new shape.'
+    );
+    return;
+  }
+  for (const property of shape.properties) {
+    if (!ts.isPropertyAssignment(property) || !describes(property.initializer)) {
+      errors.push(
+        `the MCP argument "${property.name?.getText() ?? property.getText()}" in website/src/app/api/mcp/route.ts ` +
+          'has no description; end its zod chain in .describe("...").'
+      );
+    } else {
+      describedArguments += 1;
+    }
+  }
+});
+
+const chatRoutePath = join(repoRoot, 'website/src/app/api/chat/route.ts');
+visit(parse(chatRoutePath, readFileSync(chatRoutePath, 'utf8')), (node) => {
+  if (!ts.isPropertyAssignment(node) || nameOf(node) !== 'input_schema') return;
+  const schema = node.initializer;
+  const properties =
+    ts.isObjectLiteralExpression(schema) &&
+    schema.properties.find((p) => ts.isPropertyAssignment(p) && nameOf(p) === 'properties');
+  if (!properties) return; // a tool that takes no arguments
+  if (!ts.isObjectLiteralExpression(properties.initializer)) {
+    errors.push(
+      'an input_schema in website/src/app/api/chat/route.ts does not write its properties inline, so its ' +
+        'arguments cannot be read; write them inline, or teach scripts/validate-mcp-tools.mjs the new shape.'
+    );
+    return;
+  }
+  for (const property of properties.initializer.properties) {
+    const description =
+      ts.isPropertyAssignment(property) &&
+      ts.isObjectLiteralExpression(property.initializer) &&
+      property.initializer.properties.find((p) => ts.isPropertyAssignment(p) && nameOf(p) === 'description');
+    if (!description || !hasText(description.initializer)) {
+      errors.push(
+        `the chat tool argument "${property.name?.getText() ?? property.getText()}" in website/src/app/api/chat/route.ts ` +
+          'has no description; add a description with text.'
+      );
+    } else {
+      describedArguments += 1;
+    }
+  }
+});
+
+if (describedArguments === 0) {
+  errors.push(
+    'no tool arguments were found in the MCP route or the chat route; if the declarations moved, ' +
+      'update scripts/validate-mcp-tools.mjs.'
+  );
+}
+
 if (errors.length > 0) {
   console.error('\n✗ MCP tool count validation failed:\n');
   for (const error of errors) console.error(`  - ${error}\n`);
@@ -117,5 +216,5 @@ if (errors.length > 0) {
 
 console.log(
   `✓ MCP tool count in sync — ${registered.length} tools registered ` +
-    `(${registered.join(', ')}), every stated count matches.`
+    `(${registered.join(', ')}), every stated count matches, and all ${describedArguments} tool arguments are described.`
 );

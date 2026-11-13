@@ -184,6 +184,8 @@
         "type": {
           "type": "string",
           "minLength": 1,
+          "not": { "pattern": "\\|\\s*undefined\\s*$" },
+          "$comment": "The required flag already says whether a prop may be left out, so a type never ends in | undefined.",
           "description": "The resolved TypeScript type as text, literal unions expanded."
         },
         "typeKind": {
@@ -307,6 +309,26 @@
               "default": { "type": "string" }
             }
           }
+        },
+        {
+          "$comment": "A default written as arithmetic on number literals carries the number it comes to. The two patterns are arithmeticValue's test in scripts/generate-component-api.mjs.",
+          "if": {
+            "required": ["defaultExpression"],
+            "properties": {
+              "defaultExpression": {
+                "type": "string",
+                "allOf": [
+                  { "type": "string", "pattern": "^[\\d\\s+\\-*/().]+$" },
+                  { "type": "string", "pattern": "\\d\\s*[+\\-*/]\\s*[\\d(]" }
+                ]
+              }
+            }
+          },
+          "then": { "required": ["defaultResolved"] }
+        },
+        {
+          "$comment": "defaultResolved only ever explains a defaultExpression.",
+          "dependentRequired": { "defaultResolved": ["defaultExpression"] }
         }
       ]
     }

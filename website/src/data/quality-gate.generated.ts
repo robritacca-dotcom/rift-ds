@@ -217,7 +217,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-mcp-tools",
-        "text": "Every stated MCP tool count matches the tools the route registers."
+        "text": "Every stated MCP tool count matches the tools the route registers, and every tool argument has a description."
       },
       {
         "name": "validate-chat-widget",
@@ -339,7 +339,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-theme-presets",
-        "text": "Every preset sets every lever and passes the contrast gate."
+        "text": "Every preset sets every lever and passes the contrast gate, and the six pixel inks hold a contrast band on the dark page."
       },
       {
         "name": "validate-token-usage",

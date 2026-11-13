@@ -69,6 +69,11 @@
  *      name, and a removed theme cannot leave its line behind. Each one
  *      is shipped copy, so it is held to one sentence ending in a full
  *      stop with no em dash (content-design.md bans them).
+ *   f. The pixel inks on the dark page: each of the six
+ *      --color-pixel-ink-* tokens, in every preset's dark theme and in the
+ *      shipped dark tokens, sits inside PIXEL_INK_BAND against the page.
+ *      An ink outside it is pinned in SANCTIONED_INK_GAPS with its ratio
+ *      and a reason, the way a contrast gap is.
  *
  * Belongs in the validate-registry chain (and the website prebuild),
  * right after validate-preset-stylesheets.mjs: it reads theme source and
@@ -170,6 +175,24 @@ const PAIRINGS = [...ACTION_PAIRINGS, ...TIER_PAIRINGS, ...LOGO_PAIRINGS];
     its authoritative record — pinning is deliberate acceptance, never a
     silent weakening of the gate. Currently empty: every cell holds. */
 const SANCTIONED_AA_GAPS = new Map([]);
+
+/** f. The pixel inks on the dark page. PixelAvatar and the PromptSuggestions
+    card covers draw a name's character in one of these six, side by side, so
+    in dark mode each must stand off the page (the 3:1 graphic minimum) and
+    none may glare beside the others (the ceiling). The band is the owner's
+    call, set 2026-11-13 from the ratios every theme measured that day. */
+const PIXEL_INKS = [1, 2, 3, 4, 5, 6].map((n) => `--color-pixel-ink-${n}`);
+const PIXEL_INK_BAND = { min: 3, max: 16 };
+
+/** Inks outside the band today, keyed "<preset>|<ink>" and pinned with
+    their computed ratio like SANCTIONED_AA_GAPS, so a fix or a further
+    slide fails until the pin moves. */
+const SANCTIONED_INK_GAPS = new Map([
+  // Plum's purple ramp is its brand ramp pulled dark, so the purple ink
+  // sits close to the page. Accepted 2026-11-13 so the band could ship
+  // without a colour change; retuning Plum's ink is a separate decision.
+  ['plum|--color-pixel-ink-6', '2.32'],
+]);
 
 /** d. The levers a preset stores as a number. */
 const NUMBER_LEVERS = [
@@ -292,6 +315,37 @@ const checkPairings = (id, theme, overrides, logoToned = false) => {
   }
 };
 
+/** f. Every pixel ink against the dark page, within PIXEL_INK_BAND. */
+let inkChecks = 0;
+const checkPixelInks = (id, overrides) => {
+  const label = id === 'shipped' ? 'shipped tokens (dark)' : `preset "${id}" (dark)`;
+  const page = resolveValue('--color-bg-page-primary', 'dark', overrides);
+  const pageRgb = page === null ? null : parseColor(page);
+  if (!pageRgb) return; // checkPairings has already reported it
+  for (const ink of PIXEL_INKS) {
+    const value = resolveValue(ink, 'dark', overrides);
+    const color = value === null ? null : parseColor(value);
+    if (!color) {
+      errors.push(`${label}: ${ink} resolves to ${value ?? 'nothing'}, not a colour, so the ink band cannot judge it`);
+      continue;
+    }
+    inkChecks += 1;
+    const ratio = contrastRatio(compositeOver(color, pageRgb), pageRgb.slice(0, 3));
+    const key = `${id}|${ink}`;
+    const pinned = SANCTIONED_INK_GAPS.get(key);
+    const inBand = ratio >= PIXEL_INK_BAND.min && ratio <= PIXEL_INK_BAND.max;
+    if (!inBand && pinned !== ratio.toFixed(2)) {
+      errors.push(
+        `${label}: ${ink} is ${ratio.toFixed(2)}:1 on the page, outside the ${PIXEL_INK_BAND.min}:1 to ` +
+          `${PIXEL_INK_BAND.max}:1 band the six inks share; move the ink to a step inside the band, ` +
+          `or pin "${key}" at "${ratio.toFixed(2)}" in SANCTIONED_INK_GAPS with the reason`
+      );
+    } else if (inBand && pinned !== undefined) {
+      errors.push(`${label}: "${key}" is pinned in SANCTIONED_INK_GAPS but now sits in the band at ${ratio.toFixed(2)}:1; remove the pin`);
+    }
+  }
+};
+
 for (const [id, preset] of Object.entries(THEME_PRESETS)) {
   // d. Lever completeness (runtime guard over the required schema).
   for (const lever of NUMBER_LEVERS) {
@@ -358,6 +412,7 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
     }
 
     checkPairings(id, theme, overrides, preset.logoTone !== 'action' || preset.logoEndTone !== 'matched');
+    if (theme === 'dark') checkPixelInks(id, overrides);
   }
 }
 
@@ -366,6 +421,23 @@ for (const [id, preset] of Object.entries(THEME_PRESETS)) {
 for (const theme of ['light', 'dark']) {
   cells += 1;
   checkPairings('shipped', theme, {});
+}
+checkPixelInks('shipped', {});
+for (const key of SANCTIONED_INK_GAPS.keys()) {
+  const [id, ink] = key.split('|');
+  if ((id !== 'shipped' && !(id in THEME_PRESETS)) || !PIXEL_INKS.includes(ink)) {
+    errors.push(`SANCTIONED_INK_GAPS pins "${key}", which names no preset or no pixel ink; remove the pin`);
+  }
+}
+for (const ink of PIXEL_INKS) {
+  if (!registryNames.has(ink)) errors.push(`PIXEL_INKS names ${ink}, which is not in src/tokens/registry.json`);
+}
+const registryInks = [...registryNames].filter((name) => name.startsWith('--color-pixel-ink-'));
+if (registryInks.length !== PIXEL_INKS.length) {
+  errors.push(
+    `the registry has ${registryInks.length} --color-pixel-ink-* tokens and PIXEL_INKS lists ${PIXEL_INKS.length}; ` +
+      'list every ink in scripts/validate-theme-presets.mjs so the band covers it'
+  );
 }
 
 // c (reverse). Every action fill in the registry is some row's fill.
@@ -415,5 +487,6 @@ console.log(
   `✓ Theme presets complete — ${Object.keys(THEME_PRESETS).length} presets × 2 themes: every override names a real token, ` +
     `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and all ${PAIRINGS.length} action ` +
     `and type-tier pairings hold contrast across ${cells} theme cells (${pairChecks} checks, ${SANCTIONED_AA_GAPS.size} pinned gaps, ` +
-    `tightest at ${minRatio.toFixed(2)}× its minimum), and every theme has its one-line description.`
+    `tightest at ${minRatio.toFixed(2)}× its minimum), the ${PIXEL_INKS.length} pixel inks sit in their dark-page band ` +
+    `(${inkChecks} checks, ${SANCTIONED_INK_GAPS.size} pinned), and every theme has its one-line description.`
 );

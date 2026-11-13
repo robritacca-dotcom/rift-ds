@@ -20,8 +20,8 @@ const openExternal = (url: string) => () => window.open(url, "_blank", "noopener
 
 /**
  * The header's primary action: Get started opens the setup guide, and the
- * menu copies the agent starter for a coding agent, opens the MCP
- * endpoint's page, then links to where
+ * menu copies the agent starter for a coding agent, then links to the MCP
+ * endpoint's page and to where
  * the system lives off-site: the npm package, the repo and, while the
  * site links to Figma, the Figma kit. Without a clipboard
  * (or on a failed fetch) the file opens in a new tab instead. A copy
@@ -75,8 +75,8 @@ function GetStartedSplitButton({ onNavigate }: GetStartedSplitProps) {
       }}
       items={[
         { label: "Copy AGENTS.md", icon: "content_copy", onClick: copyAgentsMd },
-        { label: "MCP endpoint", icon: "hub", iconRight: "open_in_new", onClick: openExternal(MCP_PAGE) },
         { type: "separator" },
+        { label: "MCP endpoint", icon: "hub", iconRight: "open_in_new", onClick: openExternal(MCP_PAGE) },
         { label: "npm package", iconRight: "open_in_new", icon: <span className={styles.mark} aria-hidden="true"><NpmIcon /></span>, onClick: openExternal(NPM_URL) },
         { label: "GitHub repo", iconRight: "open_in_new", icon: <span className={styles.mark} aria-hidden="true"><GitHubIcon /></span>, onClick: openExternal(REPOSITORY_URL) },
         ...(SHOW_FIGMA_LINKS

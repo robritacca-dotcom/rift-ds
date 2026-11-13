@@ -77,6 +77,10 @@ export const typesOutputPath = join(
  */
 const lf = (value) => value.replace(/\r\n/g, '\n');
 
+/** A copy of an object without the named keys. */
+const omit = (object, keys) =>
+  Object.fromEntries(Object.entries(object).filter(([key]) => !keys.includes(key)));
+
 /** Assemble the data structure — exported so the validator can rebuild it. */
 export function assembleComponentApi() {
   const parsed = parseLibrary();
@@ -175,8 +179,8 @@ export function assembleComponentApi() {
     const { types, externalTypes, propRefs } = resolveComponentTypes(
       exportsList.map(({ file, component, props }) => ({ file, component, props }))
     );
-    const exportsOut = exportsList.map(({ file, ...exported }) => ({
-      ...exported,
+    const exportsOut = exportsList.map((exported) => ({
+      ...omit(exported, ['file']),
       props: exported.props.map((prop) => {
         const refs = propRefs.get(`${exported.component}.${prop.name}`);
         return refs ? { ...prop, typeRefs: refs } : prop;
@@ -250,8 +254,7 @@ export function assembleComponentApi() {
 }
 
 /** The entries without their type maps: the prop reference file's shape. */
-const withoutTypes = (entries) =>
-  entries.map(({ types, externalTypes, ...entry }) => entry);
+const withoutTypes = (entries) => entries.map((entry) => omit(entry, ['types', 'externalTypes']));
 
 export function buildComponentApiFile(entries = assembleComponentApi()) {
   entries = withoutTypes(entries);

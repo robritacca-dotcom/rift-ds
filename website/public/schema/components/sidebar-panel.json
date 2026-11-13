@@ -21,7 +21,10 @@
           "type": "SidebarPanelItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Items to list, optionally grouped with `group` and nested one level with `children`"
+          "description": "Items to list, optionally grouped with `group` and nested one level with `children`",
+          "typeRefs": [
+            "SidebarPanelItem"
+          ]
         },
         {
           "name": "title",
@@ -86,9 +89,35 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "SidebarPanelItem": {
+      "kind": "interface",
+      "definition": "interface SidebarPanelItem {\n  /** Unique key for this item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */\n  group?: string;\n  /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */\n  children?: SidebarPanelItem[];\n}"
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react"
+  }
 }

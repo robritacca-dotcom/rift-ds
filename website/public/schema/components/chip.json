@@ -25,8 +25,8 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
         },
@@ -90,7 +90,7 @@
           "typeKind": "other",
           "required": false,
           "description": "Accessible label for the remove button. Defaults to \"Remove\". Pass a\nfunction to name each chip's button after its own label, so a row of\nchips does not announce one name for every button: it is given the\nlabel's text (a rich label's text content), e.g.\n`(label) => \\`Remove ${label}\\``. A plain string is used as given.",
-          "defaultExpression": "Remove"
+          "default": "Remove"
         },
         {
           "name": "className",
@@ -102,5 +102,10 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react",
+    "ReactNode": "react"
+  }
 }

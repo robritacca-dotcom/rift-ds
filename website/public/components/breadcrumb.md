@@ -17,6 +17,40 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | items | `BreadcrumbItem[]` | yes |  | Ordered list of breadcrumb items |
 | maxItems | `number` | no |  | Maximum visible items before collapsing (min 2: first + last) |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the nav landmark. Deprecated: Pass the native `aria-label` attribute instead. |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
+
+## Types
+
+### BreadcrumbItem
+
+```ts
+interface BreadcrumbItem {
+  /** Display label */
+  label: string;
+  /** Link href — omit for the current / last item */
+  href?: string;
+}
+```
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react).

@@ -79,8 +79,29 @@ export function deriveTokenRegistry() {
     );
   }
 
-  for (const names of Object.values(categories)) names.sort();
+  for (const names of Object.values(categories)) names.sort(byStep);
   return { categories };
+}
+
+/**
+ * Token names in step order: a run of digits compares as a number, so the
+ * radius scale reads 050, 100, 200 … 1200, pill rather than 050, 100, 1200,
+ * 200. Everything else compares by code unit, with no locale, so every
+ * machine sorts alike (a locale collation ignores hyphens).
+ */
+export function byStep(a, b) {
+  const chunks = (name) => name.match(/\d+|\D+/g) ?? [];
+  const left = chunks(a);
+  const right = chunks(b);
+  for (let i = 0; i < Math.min(left.length, right.length); i++) {
+    const x = left[i];
+    const y = right[i];
+    if (x === y) continue;
+    const numeric = /^\d/.test(x) && /^\d/.test(y);
+    if (numeric && Number(x) !== Number(y)) return Number(x) - Number(y);
+    return x < y ? -1 : 1;
+  }
+  return left.length - right.length;
 }
 
 export function summarize(categories) {

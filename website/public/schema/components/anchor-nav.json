@@ -21,7 +21,10 @@
           "type": "AnchorNavItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The on-page sections to list, in document order"
+          "description": "The on-page sections to list, in document order",
+          "typeRefs": [
+            "AnchorNavItem"
+          ]
         },
         {
           "name": "variant",
@@ -45,11 +48,11 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none",
-          "defaultExpression": "toc"
+          "default": "toc"
         },
         {
           "name": "activeId",
@@ -75,5 +78,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AnchorNavItem": {
+      "kind": "interface",
+      "definition": "interface AnchorNavItem {\n  /** The id of the element the item jumps to (rendered as `href=\"#id\"`) */\n  id: string;\n  /** Link text */\n  label: string;\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

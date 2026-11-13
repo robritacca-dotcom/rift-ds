@@ -25,8 +25,8 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Icon — Material Symbol name (string, e.g. \"home\") rendered via the rounded font, or custom element (ReactNode)"
         },
@@ -54,5 +54,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

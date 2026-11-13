@@ -72,5 +72,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

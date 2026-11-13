@@ -18,5 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | children | `ReactNode` | yes |  | The quote text |
 | attribution | `string` | no |  | Who said it, e.g. "Jordan Reyes" |
 | detail | `string` | no |  | Context under the attribution, e.g. "Design Lead, Northlight" |
-| variant | `"default" \| "pull"` | no | `default` | `default` is an inline blockquote; `pull` is a large display pull-quote |
-| className | `string` | no | `` | Additional CSS classes |
+| variant | `"default" \| "pull"` | no | `'default'` | `default` is an inline blockquote; `pull` is a large display pull-quote |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

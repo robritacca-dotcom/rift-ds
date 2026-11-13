@@ -48,16 +48,39 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "A whole shortcut in the shortcut grammar (`mod+k`, `shift+?`, `g i`),\ndrawn as one keycap per key in the platform's legends: ⌘ K on a Mac,\nCtrl K elsewhere. The server draws the non-Apple legends and the browser\nsettles on its own after hydration."
+          "description": "A whole shortcut in the shortcut grammar (`mod+k`, `shift+?`, `g i`),\ndrawn as one keycap per key in the platform's legends: ⌘ K on a Mac,\nCtrl K elsewhere. The server draws the non-Apple legends and the browser\nsettles on its own after hydration.",
+          "typeRefs": [
+            "Shortcut"
+          ]
         },
         {
           "name": "keyLabels",
           "type": "Partial<Record<string, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. Merged over the platform's defaults."
+          "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. Merged over the platform's defaults.",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

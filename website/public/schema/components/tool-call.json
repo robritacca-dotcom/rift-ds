@@ -35,7 +35,10 @@
           ],
           "required": false,
           "description": "Where the call has got to. Drives the colour, the indicator, and the default status text.",
-          "default": "success"
+          "default": "success",
+          "typeRefs": [
+            "ToolCallStatus"
+          ]
         },
         {
           "name": "summary",
@@ -104,5 +107,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ToolCallStatus": {
+      "kind": "type",
+      "definition": "type ToolCallStatus = 'pending' | 'running' | 'success' | 'error';"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

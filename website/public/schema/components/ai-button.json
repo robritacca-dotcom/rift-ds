@@ -26,11 +26,11 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)",
-          "defaultExpression": "auto_awesome"
+          "default": "auto_awesome"
         },
         {
           "name": "iconOnly",
@@ -72,14 +72,20 @@
             "working"
           ],
           "required": false,
-          "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work."
+          "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work.",
+          "typeRefs": [
+            "AgentStatusState"
+          ]
         },
         {
           "name": "statusLabels",
           "type": "Partial<Record<AgentStatusState, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing."
+          "description": "What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing.",
+          "typeRefs": [
+            "AgentStatusState"
+          ]
         },
         {
           "name": "href",
@@ -107,7 +113,10 @@
           "type": "AiButtonSummary",
           "typeKind": "reference",
           "required": false,
-          "description": "A TLDR panel the button can summon: overline, title, a pre-written\nsummary revealed through a skeleton beat and a typed stream (once per\nmount — later openings show it instantly, as if cached), and optional\nprompt chips. Hovering the button opens it after the standard hover\ndelay; the pointer keeps it alive anywhere over the button or panel,\nand it hides a grace period after leaving both. Omit for the plain\nbutton."
+          "description": "A TLDR panel the button can summon: overline, title, a pre-written\nsummary revealed through a skeleton beat and a typed stream (once per\nmount — later openings show it instantly, as if cached), and optional\nprompt chips. Hovering the button opens it after the standard hover\ndelay; the pointer keeps it alive anywhere over the button or panel,\nand it hides a grace period after leaving both. Omit for the plain\nbutton.",
+          "typeRefs": [
+            "AiButtonSummary"
+          ]
         },
         {
           "name": "summaryPlacement",
@@ -229,9 +238,51 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+          "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AgentStatusState": {
+      "kind": "type",
+      "definition": "type AgentStatusState =\n  | 'idle'\n  | 'thinking'\n  | 'working'\n  | 'waiting'\n  | 'done'\n  | 'error';"
+    },
+    "AiButtonSummary": {
+      "kind": "interface",
+      "definition": "interface AiButtonSummary {\n  /** Overline label above the title. */\n  overline?: string;\n  /** Title line — usually the page or subject being summarized. */\n  title: string;\n  /** Small caption beside the overline, e.g. a reading time. */\n  caption?: string;\n  /** The pre-written summary the panel reveals. */\n  text: string;\n  /** Prompt chips under the summary; a tap reports through `onSummarySuggestion`. */\n  suggestions?: PromptSuggestion[];\n}",
+      "description": "The content of AiButton's summary panel.",
+      "refs": [
+        "PromptSuggestion"
+      ]
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "PromptSuggestion": {
+      "kind": "interface",
+      "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
+      "description": "One tappable suggestion in the row."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

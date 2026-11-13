@@ -43,7 +43,10 @@
           "type": "LineSeriesConfig[]",
           "typeKind": "array",
           "required": true,
-          "description": "One or more line series to render"
+          "description": "One or more line series to render",
+          "typeRefs": [
+            "LineSeriesConfig"
+          ]
         },
         {
           "name": "title",
@@ -64,7 +67,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -92,5 +98,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    },
+    "LineSeriesConfig": {
+      "kind": "interface",
+      "definition": "interface LineSeriesConfig {\n  /** Key in data for this series */\n  dataKey: string;\n  /** Display name (shown in tooltip) */\n  label: string;\n  /** Line colour — CSS value */\n  color?: string;\n  /** Dashed line */\n  strokeDasharray?: string;\n}"
+    }
+  },
+  "externalTypes": {
+    "Record": "typescript"
+  }
 }

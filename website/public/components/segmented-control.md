@@ -21,7 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((value: string) => void)` | no |  | Called with the value of the segment the user selects |
 | activeSegment | `string` | no |  | Legacy name for `value`. Deprecated: Use `value` instead. |
 | onSegmentChange | `((value: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | tone | `"default" \| "neutral"` | no |  | Colour of the active segment: `default` takes the action colour, `neutral` fills it grey, for a set whose selection should not carry the action colour's weight. |
 | variant | `"neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
 | fullWidth | `boolean` | no | `false` | Full width — segments fill container |
@@ -30,4 +30,25 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the strip. Deprecated: Pass the native `aria-label` attribute instead. |
 | cycle | `boolean` | no | `false` | Draw one circle in place of the strip, for a seat with room for a single control (a collapsed rail's foot, a condensed header's actions): it shows the current segment's glyph (a segment without an icon shows its label's first character), each press steps to the next enabled segment, round again, and the current label is its tooltip. Its accessible name comes from `cycleLabel`. ThemeToggle's `cycle` is this form. |
 | cycleLabel | `((current: string, next: string) => string)` | no |  | The cycle circle's accessible name, from the current segment's label and the next one's. Default: the control's `aria-label`, then both, as in "View: List. Switch to Grid". |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### Segment
+
+```ts
+interface Segment {
+  /** Unique value for this segment */
+  value: string;
+  /** Display label */
+  label: string;
+  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
+  /** Whether disabled */
+  disabled?: boolean;
+  /** The id of the `role="tabpanel"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */
+  panelId?: string;
+}
+```
+
+Types from other packages: `ReactNode` (react).

@@ -26,8 +26,15 @@
  *   2. Public-only. Every fact here is already published — the registry, the
  *      prop JSDoc, the generated barrels. Do not add a source that is not.
  *
+ * It also writes website/src/data/component-types.generated.ts: every type
+ * the props name, nested ones included, walked from the source by
+ * scripts/component-types.mjs, so the contract it serves is closed (the
+ * typesOutputPath comment says why the types live in a file of their own).
+ * Each prop's `defaultValue` is source text: a string default is written
+ * quoted, whether docgen read it from code or from a JSDoc @default.
+ *
  * Runs via the validate-registry chain and the website's predev/prebuild —
- * never edit the generated file by hand.
+ * never edit the generated files by hand.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -40,10 +47,26 @@ import {
   repoRoot,
   sourceFilesFor,
 } from './component-docgen.mjs';
+import {
+  declaredUnionText,
+  resolveComponentTypes,
+  stringLiteralDefaults,
+} from './component-types.mjs';
 import { PACKAGE_NAME } from './package-manifest.mjs';
 
 export const outputPath = join(
   repoRoot, 'website', 'src', 'data', 'component-api.generated.ts'
+);
+
+/**
+ * The types each entry's props reference live in a second file, keyed by
+ * slug: the prop reference is imported by a client page (the chat widget's
+ * component page reads its exports), and the type definitions would add a
+ * third to that bundle for nothing it renders. Only the server surfaces
+ * (/api/mcp, the site chat's tools) import this one.
+ */
+export const typesOutputPath = join(
+  repoRoot, 'website', 'src', 'data', 'component-types.generated.ts'
 );
 
 /**
@@ -73,17 +96,26 @@ export function assembleComponentApi() {
   // restating the rule that produced it.
   const chartsBarrel = readFileSync(join(repoRoot, 'src', 'charts.ts'), 'utf8');
 
-  const propsOf = (doc) =>
-    Object.entries(doc.props ?? {}).map(([propName, prop]) => {
+  const propsOf = (doc) => {
+    const literalDefaults = stringLiteralDefaults(doc.filePath, doc.displayName);
+    return Object.entries(doc.props ?? {}).map(([propName, prop]) => {
+      // Docgen collapses a literal union to the name "enum"; the raw
+      // text is the actual contract, so prefer it there.
+      let type = lf(
+        (prop.type?.name === 'enum' ? prop.type?.raw : prop.type?.name) ??
+          prop.type?.name ??
+          'unknown'
+      );
+      // The checker folds a union into a wider member (`boolean | ReactNode`
+      // reads as ReactNode), which hides a value the prop documents. When
+      // the declaration is a union and the docgen string has lost its bars,
+      // the declaration as written is the contract.
+      if (!type.includes('|') && !Array.isArray(prop.type?.value)) {
+        type = declaredUnionText(doc.filePath, doc.displayName, propName) ?? type;
+      }
       const entry = {
         name: propName,
-        // Docgen collapses a literal union to the name "enum"; the raw
-        // text is the actual contract, so prefer it there.
-        type: lf(
-          (prop.type?.name === 'enum' ? prop.type?.raw : prop.type?.name) ??
-            prop.type?.name ??
-            'unknown'
-        ),
+        type,
         required: Boolean(prop.required),
         description: lf((prop.description ?? '').trim()),
       };
@@ -100,13 +132,24 @@ export function assembleComponentApi() {
           .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
       }
       if (prop.defaultValue?.value != null) {
-        entry.defaultValue = lf(String(prop.defaultValue.value));
+        // Always source text: a string default comes back from docgen
+        // unquoted when it is code and quoted when it is a JSDoc @default,
+        // so the code case is quoted again here. `'Close chat'` then reads
+        // as a string everywhere it is shown, and `DEFAULT_LOCALE` as the
+        // identifier it is.
+        const raw = lf(String(prop.defaultValue.value));
+        const literal = literalDefaults.get(propName);
+        entry.defaultValue =
+          literal !== undefined && literal === raw
+            ? `'${raw.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
+            : raw;
       }
       if (prop.tags && 'deprecated' in prop.tags) {
         entry.deprecated = lf(String(prop.tags.deprecated || '').trim()) || 'Deprecated.';
       }
       return entry;
     });
+  };
 
   // A whole component deprecated in its JSDoc (`@deprecated` on the
   // component, not a prop) says so on the export, and on the entry when it is
@@ -117,10 +160,33 @@ export function assembleComponentApi() {
       ? lf(String(doc.tags.deprecated || '').trim()) || 'Deprecated.'
       : undefined;
   const exportOf = (doc) => {
-    const entry = { component: doc.displayName, props: propsOf(doc) };
+    const entry = { component: doc.displayName, props: propsOf(doc), file: doc.filePath };
     const deprecated = deprecationOf(doc);
     if (deprecated) entry.deprecated = deprecated;
     return entry;
+  };
+
+  // The closed type map for one entry (scripts/component-types.mjs owns the
+  // walk): every in-repo type its props reference, nested ones included,
+  // and the outside ones named with their package. Each prop lists the
+  // local types it mentions in `typeRefs`, so a reader taking one export
+  // can take only the types that export needs.
+  const withTypes = (exportsList) => {
+    const { types, externalTypes, propRefs } = resolveComponentTypes(
+      exportsList.map(({ file, component, props }) => ({ file, component, props }))
+    );
+    const exportsOut = exportsList.map(({ file, ...exported }) => ({
+      ...exported,
+      props: exported.props.map((prop) => {
+        const refs = propRefs.get(`${exported.component}.${prop.name}`);
+        return refs ? { ...prop, typeRefs: refs } : prop;
+      }),
+    }));
+    return {
+      exports: exportsOut,
+      ...(Object.keys(types).length > 0 ? { types } : {}),
+      ...(Object.keys(externalTypes).length > 0 ? { externalTypes } : {}),
+    };
   };
 
   const componentEntries = registry.components.map((component) => {
@@ -151,7 +217,7 @@ export function assembleComponentApi() {
         ? 'charts'
         : 'main',
       ...(deprecated ? { deprecated } : {}),
-      exports: exportedComponents,
+      ...withTypes(exportedComponents),
     };
   });
 
@@ -176,15 +242,19 @@ export function assembleComponentApi() {
       client: true,
       importPath: `${PACKAGE_NAME}/chat`,
       barrel: 'chat',
-      exports: exportedComponents,
+      ...withTypes(exportedComponents),
     };
   });
 
   return [...componentEntries, ...widgetEntries];
 }
 
-export function buildComponentApiFile() {
-  const entries = assembleComponentApi();
+/** The entries without their type maps: the prop reference file's shape. */
+const withoutTypes = (entries) =>
+  entries.map(({ types, externalTypes, ...entry }) => entry);
+
+export function buildComponentApiFile(entries = assembleComponentApi()) {
+  entries = withoutTypes(entries);
 
   const empty = entries.filter((entry) => entry.exports.length === 0);
   if (empty.length > 0) {
@@ -215,6 +285,8 @@ export interface ComponentPropApi {
   defaultValue?: string;
   /** Set when the prop carries an @deprecated tag; the replacement guidance. */
   deprecated?: string;
+  /** The in-repo types the prop's declared type mentions, each a key of the entry's \`types\`. */
+  typeRefs?: string[];
 }
 
 /** One exported component and its documented props. */
@@ -251,7 +323,47 @@ export const componentApi: readonly ComponentApiEntry[] = ${JSON.stringify(entri
 `;
 }
 
+export function buildComponentTypesFile(entries = assembleComponentApi()) {
+  const bySlug = Object.fromEntries(
+    entries
+      .filter((entry) => entry.types || entry.externalTypes)
+      .map((entry) => [
+        entry.slug,
+        { types: entry.types ?? {}, externalTypes: entry.externalTypes ?? {} },
+      ])
+  );
+  return `// AUTO-GENERATED — do not edit by hand.
+// Source of truth: the type declarations under src/, walked from each
+// component's props by scripts/component-types.mjs.
+// Regenerate: node scripts/generate-component-api.mjs (runs via predev/prebuild).
+
+/** One in-repo type a prop reaches, as declared in the source. */
+export interface ComponentTypeApi {
+  kind: 'interface' | 'type' | 'enum' | 'class';
+  /** The declaration as written in the source, keywords such as \`export\` dropped. */
+  definition: string;
+  /** The declaration's JSDoc summary, when it has one. */
+  description?: string;
+  /** The other in-repo types the definition mentions, each a key of the entry's \`types\`. */
+  refs?: string[];
+}
+
+/** One entry's closed type map. */
+export interface ComponentTypesApi {
+  /** Every in-repo type the props reference, nested ones included, by name. */
+  types: Record<string, ComponentTypeApi>;
+  /** Every outside type the props or \`types\` mention, with the package that defines it (\`typescript\` for a built-in). */
+  externalTypes: Record<string, string>;
+}
+
+/** The type map for every entry whose props reference a named type, by slug. */
+export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = ${JSON.stringify(bySlug, null, 2)};
+`;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  writeFileSync(outputPath, buildComponentApiFile());
-  console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')}`);
+  const entries = assembleComponentApi();
+  writeFileSync(outputPath, buildComponentApiFile(entries));
+  writeFileSync(typesOutputPath, buildComponentTypesFile(entries));
+  console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')} and ${typesOutputPath.replace(repoRoot + '/', '')}`);
 }

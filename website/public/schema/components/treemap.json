@@ -28,7 +28,10 @@
           "type": "TreemapDataItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Hierarchical data — each item needs `name` and `size` (or `children`)"
+          "description": "Hierarchical data — each item needs `name` and `size` (or `children`)",
+          "typeRefs": [
+            "TreemapDataItem"
+          ]
         },
         {
           "name": "dataKey",
@@ -57,7 +60,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -93,5 +99,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    },
+    "TreemapDataItem": {
+      "kind": "interface",
+      "definition": "interface TreemapDataItem {\n  /** Display name for the node */\n  name: string;\n  /** Numeric size — determines rectangle area */\n  size: number;\n  /** Optional fill colour */\n  color?: string;\n  /** Nested children for hierarchical data */\n  children?: TreemapDataItem[];\n  [key: string]: unknown;\n}"
+    }
+  }
 }

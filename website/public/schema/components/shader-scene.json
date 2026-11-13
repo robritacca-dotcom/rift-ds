@@ -31,7 +31,10 @@
           ],
           "required": false,
           "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void.",
-          "default": "horizon"
+          "default": "horizon",
+          "typeRefs": [
+            "ShaderSceneId"
+          ]
         },
         {
           "name": "params",
@@ -45,7 +48,10 @@
           "type": "Partial<Record<string, ShaderScenePassSetting>>",
           "typeKind": "reference",
           "required": false,
-          "description": "The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`,\n`grain`), each merged over its defaults."
+          "description": "The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`,\n`grain`), each merged over its defaults.",
+          "typeRefs": [
+            "ShaderScenePassSetting"
+          ]
         },
         {
           "name": "speed",
@@ -60,7 +66,10 @@
           "type": "RefObject<Values | null>",
           "typeKind": "reference",
           "required": false,
-          "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props."
+          "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props.",
+          "typeRefs": [
+            "Values"
+          ]
         },
         {
           "name": "enabled",
@@ -75,7 +84,10 @@
           "type": "((status: ShaderSceneStatus) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called whenever the status changes. Drive a fallback from this, or lay\none under the scene: it paints nothing until it is `active`, so what\nshows while it is pending or cannot run is the caller's design\ndecision."
+          "description": "Called whenever the status changes. Drive a fallback from this, or lay\none under the scene: it paints nothing until it is `active`, so what\nshows while it is pending or cannot run is the caller's design\ndecision.",
+          "typeRefs": [
+            "ShaderSceneStatus"
+          ]
         },
         {
           "name": "className",
@@ -87,5 +99,32 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ShaderSceneId": {
+      "kind": "type",
+      "definition": "type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora';",
+      "description": "The scenes ShaderScene paints."
+    },
+    "ShaderScenePassSetting": {
+      "kind": "type",
+      "definition": "type ShaderScenePassSetting = {\n  /** Run the pass. Each pass has its own default. */\n  on?: boolean;\n  /** The pass's settings, merged over its defaults. */\n  params?: Partial<Record<string, number>>;\n};",
+      "description": "One finishing pass's setting: whether it runs, and its own settings."
+    },
+    "ShaderSceneStatus": {
+      "kind": "type",
+      "definition": "type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';",
+      "description": "How the scene resolved, the same three states ShaderField reports.\n`pending` while the GL context comes up (bounded by a watchdog), `active`\nonce a frame has painted, `unavailable` when it is disabled or WebGL2\ncannot run it."
+    },
+    "Values": {
+      "kind": "type",
+      "definition": "type Values = {\n  speed: number;\n  scene: Record<string, number>;\n  passes: Record<string, { on: boolean; params: Record<string, number> }>;\n};",
+      "description": "What the canvas reads every frame. A ref holds it, so a drag never renders."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "Record": "typescript",
+    "RefObject": "react"
+  }
 }

@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | The setting's name, drawn inside the bar on the left, as the field's real <label>. |
 | value | `string` | no |  | Current value. |
-| type | `"search" \| "text" \| "tel" \| "url" \| "email"` | no | `text` | Input type: a curated subset of the single-line text types. |
-| size | `"default" \| "compact"` | no | `default` | Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute). |
+| type | `"search" \| "text" \| "tel" \| "url" \| "email"` | no | `'text'` | Input type: a curated subset of the single-line text types. |
+| size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute). |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
-| className | `string` | no | `` | Additional CSS classes, applied to the bar rather than the <input>. |
+| className | `string` | no | `''` | Additional CSS classes, applied to the bar rather than the <input>. |

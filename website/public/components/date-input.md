@@ -17,11 +17,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Input label text |
 | value | `string` | no |  | Current value (YYYY-MM-DD format) |
-| size | `"default" \| "compact"` | no | `default` | Component size (not the native character-width `size` attribute) |
+| size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
 | min | `string` | no |  | Minimum selectable date (YYYY-MM-DD) |
 | max | `string` | no |  | Maximum selectable date (YYYY-MM-DD) |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
-| className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
+| className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |

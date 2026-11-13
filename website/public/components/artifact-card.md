@@ -17,6 +17,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `ReactNode` | yes |  | The artifact's name. Collides with the native `title` tooltip attribute on purpose: the card shows its name, it does not hide it in a tooltip. |
 | meta | `ReactNode` | no |  | A quiet line under the name: what kind of thing this is, or which version. |
-| icon | `ReactNode` | no | `draft` | The leading mark — Material Symbol name (string) or custom element (ReactNode). |
+| icon | `string \| ReactNode` | no | `'draft'` | The leading mark — Material Symbol name (string) or custom element (ReactNode). |
 | open | `boolean` | no | `false` | Whether this card's artifact is on stage in its panel. The card holds the on-stage fill, announces itself pressed, and its trailing cue turns from open to close. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

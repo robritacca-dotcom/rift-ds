@@ -43,7 +43,10 @@
           "type": "BarSeriesConfig[]",
           "typeKind": "array",
           "required": true,
-          "description": "One or more bar series to render (stacked)"
+          "description": "One or more bar series to render (stacked)",
+          "typeRefs": [
+            "BarSeriesConfig"
+          ]
         },
         {
           "name": "title",
@@ -64,7 +67,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -99,5 +105,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "BarSeriesConfig": {
+      "kind": "interface",
+      "definition": "interface BarSeriesConfig {\n  /** Key in data for this series */\n  dataKey: string;\n  /** Display name (shown in tooltip & legend) */\n  label: string;\n  /** Bar fill colour */\n  color?: string;\n}"
+    },
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    }
+  },
+  "externalTypes": {
+    "Record": "typescript"
+  }
 }

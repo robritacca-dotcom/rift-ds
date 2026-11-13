@@ -28,7 +28,10 @@
           "type": "PieSlice[]",
           "typeKind": "array",
           "required": true,
-          "description": "Array of slices"
+          "description": "Array of slices",
+          "typeRefs": [
+            "PieSlice"
+          ]
         },
         {
           "name": "title",
@@ -49,7 +52,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -101,5 +107,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    },
+    "PieSlice": {
+      "kind": "interface",
+      "definition": "interface PieSlice {\n  /** Display name */\n  name: string;\n  /** Numeric value */\n  value: number;\n  /** Slice fill colour */\n  color?: string;\n}"
+    }
+  }
 }

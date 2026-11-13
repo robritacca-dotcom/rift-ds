@@ -59,7 +59,10 @@
           "type": "GaugeThreshold[]",
           "typeKind": "array",
           "required": false,
-          "description": "Colour switch points, e.g. warning at 70 and error at 90. The highest\nthreshold at or below the current reading wins; below them all, the\n`tone` prop applies."
+          "description": "Colour switch points, e.g. warning at 70 and error at 90. The highest\nthreshold at or below the current reading wins; below them all, the\n`tone` prop applies.",
+          "typeRefs": [
+            "GaugeThreshold"
+          ]
         },
         {
           "name": "showValue",
@@ -139,5 +142,12 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "GaugeThreshold": {
+      "kind": "interface",
+      "definition": "interface GaugeThreshold {\n  /** Reading at which this tone takes over. */\n  value: number;\n  /** Tone applied from this reading upward. */\n  tone: 'accent' | 'positive' | 'warning' | 'error' | 'neutral';\n}",
+      "description": "One colour switch point: at or above `value`, the dial takes `tone`."
+    }
+  }
 }

@@ -28,7 +28,10 @@
           "type": "Mask",
           "typeKind": "reference",
           "required": true,
-          "description": "The shape of the value: a pattern where `#` takes a digit, `A` a letter and `*` either (`'(###) ###-####'`), or a function from the raw characters to the shown text. `MASK_PRESETS` holds common patterns."
+          "description": "The shape of the value: a pattern where `#` takes a digit, `A` a letter and `*` either (`'(###) ###-####'`), or a function from the raw characters to the shown text. `MASK_PRESETS` holds common patterns.",
+          "typeRefs": [
+            "Mask"
+          ]
         },
         {
           "name": "value",
@@ -172,5 +175,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "Mask": {
+      "kind": "type",
+      "definition": "type Mask = string | ((raw: string) => string);",
+      "description": "A pattern string, or a function from the raw characters to the shown text."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

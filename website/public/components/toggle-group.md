@@ -19,11 +19,26 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | value | `string \| string[]` | no |  | Currently active value(s), controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValue`. |
 | defaultValue | `string \| string[]` | no | `[]` | Active value(s) on first render when uncontrolled (`value` undefined). |
 | multiple | `boolean` | no | `false` | Allow multiple selection, where each item toggles on or off. Without it exactly one item is active once chosen, and pressing it again keeps it. |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | tone | `"default" \| "neutral"` | no |  | Colour of active items: `default` takes the action colour, `neutral` fills them grey, for a set whose selection should not carry the action colour's weight. |
 | variant | `"neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
 | disabled | `boolean` | no | `false` | Whether the whole group is disabled |
 | onValueChange | `((value: string \| string[]) => void)` | no |  | Called with the next selection — a string when single, an array when `multiple` |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((value: string \| string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+
+## Types
+
+### ToggleGroupItem
+
+```ts
+interface ToggleGroupItem {
+  /** Unique value */
+  value: string;
+  /** Display label or icon name (Material Symbols) */
+  label: string;
+  /** Use Material Symbol icon instead of text */
+  icon?: boolean;
+}
+```

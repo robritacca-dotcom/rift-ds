@@ -18,8 +18,8 @@
       "props": [
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Leading icon — a Material Symbol name, or any custom element."
         },
@@ -48,5 +48,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

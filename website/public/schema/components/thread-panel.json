@@ -21,7 +21,10 @@
           "type": "ThreadPanelGroup[]",
           "typeKind": "array",
           "required": true,
-          "description": "The history, in display order. A flat list is one group with no label."
+          "description": "The history, in display order. A flat list is one group with no label.",
+          "typeRefs": [
+            "ThreadPanelGroup"
+          ]
         },
         {
           "name": "activeThreadId",
@@ -42,7 +45,10 @@
           "type": "ThreadPanelThreadAction[]",
           "typeKind": "array",
           "required": false,
-          "description": "Shared menu actions for every thread row, behind a hover-revealed trailing trigger; a thread's own `actions` overrides the set. The menu renders only when `onThreadAction` is also given, and never on a `pending` row."
+          "description": "Shared menu actions for every thread row, behind a hover-revealed trailing trigger; a thread's own `actions` overrides the set. The menu renders only when `onThreadAction` is also given, and never on a `pending` row.",
+          "typeRefs": [
+            "ThreadPanelThreadAction"
+          ]
         },
         {
           "name": "onThreadAction",
@@ -56,7 +62,10 @@
           "type": "Partial<Record<ThreadPanelThreadStatus, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here."
+          "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here.",
+          "typeRefs": [
+            "ThreadPanelThreadStatus"
+          ]
         },
         {
           "name": "pinnedLabel",
@@ -72,7 +81,7 @@
           "typeKind": "other",
           "required": false,
           "description": "Accessible name for a row's menu trigger. A string is followed by a colon\nand the thread's title (\"Thread options: Q3 plan\"); a function is given\nthe title and returns the whole name, so a translation can put the title\nwhere its grammar needs it.",
-          "defaultExpression": "Thread options"
+          "default": "Thread options"
         },
         {
           "name": "renamingThreadId",
@@ -126,11 +135,11 @@
         },
         {
           "name": "newThreadIcon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat.",
-          "defaultExpression": "edit_square"
+          "default": "edit_square"
         },
         {
           "name": "newThreadShortcut",
@@ -144,14 +153,20 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`."
+          "description": "Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`.",
+          "typeRefs": [
+            "Shortcut"
+          ]
         },
         {
           "name": "keyLabels",
           "type": "Partial<Record<string, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+          "description": "Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
         },
         {
           "name": "onNewThread",
@@ -172,7 +187,10 @@
           "type": "ThreadPanelControl[]",
           "typeKind": "array",
           "required": false,
-          "description": "Standing rows between the new-thread action and the history, e.g. Automations or Settings."
+          "description": "Standing rows between the new-thread action and the history, e.g. Automations or Settings.",
+          "typeRefs": [
+            "ThreadPanelControl"
+          ]
         },
         {
           "name": "onControlSelect",
@@ -186,7 +204,10 @@
           "type": "ThreadPanelProject[]",
           "typeKind": "array",
           "required": false,
-          "description": "Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls."
+          "description": "Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls.",
+          "typeRefs": [
+            "ThreadPanelProject"
+          ]
         },
         {
           "name": "projectsLabel",
@@ -283,7 +304,10 @@
           "type": "ThreadPanelProfile",
           "typeKind": "reference",
           "required": false,
-          "description": "The signed-in person, rendered as the footer's Avatar row."
+          "description": "The signed-in person, rendered as the footer's Avatar row.",
+          "typeRefs": [
+            "ThreadPanelProfile"
+          ]
         },
         {
           "name": "footerSlot",
@@ -312,9 +336,80 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+    },
+    "ThreadPanelControl": {
+      "kind": "interface",
+      "definition": "interface ThreadPanelControl {\n  /** Stable identifier reported through `onControlSelect`. */\n  id: string;\n  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). */\n  icon: string | React.ReactNode;\n  /** Row text. */\n  label: string;\n  /** Optional href — the row renders as an `<a>` instead of a `<button>`. */\n  href?: string;\n}"
+    },
+    "ThreadPanelGroup": {
+      "kind": "interface",
+      "definition": "interface ThreadPanelGroup {\n  /** Group heading in the rails' shared mixed-case style, e.g. a project or repo name. Omit for an unlabelled run of threads. */\n  label?: string;\n  /** The group's threads, in display order. */\n  threads: ThreadPanelThread[];\n}",
+      "refs": [
+        "ThreadPanelThread"
+      ]
+    },
+    "ThreadPanelProfile": {
+      "kind": "interface",
+      "definition": "interface ThreadPanelProfile {\n  /** The signed-in person's display name; also seeds the Avatar's initials. */\n  name: string;\n  /** The quiet second line under the name, e.g. the person's email, plan or workspace (AppSidebar's profile block carries the email there). */\n  meta?: string;\n  /** Replace the initials Avatar with a custom element, e.g. an `<Avatar src>`; the row seats a 40px mark (Avatar at `md`). */\n  avatar?: React.ReactNode;\n}"
+    },
+    "ThreadPanelProject": {
+      "kind": "interface",
+      "definition": "interface ThreadPanelProject {\n  /** Stable identifier: `activeProjectId` matches against it and `onProjectSelect` reports it. */\n  id: string;\n  /** The project's name. */\n  label: string;\n  /** Leading icon on the row — Material Symbol name (string) or custom element (ReactNode). Omit it and the row draws the project's generated PixelAvatar, which is the default mark. */\n  icon?: string | React.ReactNode;\n  /** Seed for the generated PixelAvatar a project wears when it has no `icon`. Defaults to `label`; pass a stable id so a renamed project keeps its character. The panel spreads the inks across its projects, so neighbours differ in colour as well as shape. */\n  pixelAvatar?: string;\n  /** Small trailing annotation in the caption face, e.g. how recently the project was touched. */\n  meta?: string;\n  /** Optional href — the row renders as an `<a>` instead of a `<button>`. */\n  href?: string;\n}"
+    },
+    "ThreadPanelThread": {
+      "kind": "interface",
+      "definition": "interface ThreadPanelThread {\n  /** Stable identifier: `activeThreadId` matches against it and `onThreadSelect` reports it. */\n  id: string;\n  /** The thread's one-line title. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the row's native tooltip. */\n  title: string;\n  /** Optional href — the row renders as an `<a>` for real navigation instead of a `<button>`. */\n  href?: string;\n  /** Small trailing annotation in the caption face, e.g. a relative timestamp. */\n  meta?: string;\n  /** The title is still being generated: the row shows a shimmer bar in the title's place and hides its menu, keeping `title` (e.g. \"New chat\") as the accessible name. */\n  pending?: boolean;\n  /** This thread's own menu actions, overriding the panel-wide `threadActions`. */\n  actions?: ThreadPanelThreadAction[];\n  /** Quiet second line under the title in the caption face — a repo, an environment, a one-line summary. Overflows under the same trailing mask as the title. */\n  description?: string;\n  /** The thread's state, drawn as the dot leading the row: `idle` (nothing new, nothing running), `working` (an agent is running now), `unread` (finished, not yet seen), `waiting` (blocked on the reader) or `error` (stopped on a failure). Once any thread in the panel carries a status every row draws a dot, the rest reading `idle`, so the titles share one left edge. The dot is decorative; every state but `idle` is also read aloud through `statusLabels`. */\n  status?: ThreadPanelThreadStatus;\n  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */\n  unread?: boolean;\n  /** Trailing icon before the meta — Material Symbol name (string) or custom element (ReactNode), e.g. `cloud` for a session that lives remotely. */\n  icon?: string | React.ReactNode;\n  /** Marks the thread pinned with a trailing pin glyph, read aloud through the panel's `pinnedLabel`. A marker only: the host groups pinned threads (typically a leading group) and offers pin/unpin through the row menu. */\n  pinned?: boolean;\n}",
+      "refs": [
+        "ThreadPanelThreadAction",
+        "ThreadPanelThreadStatus"
+      ]
+    },
+    "ThreadPanelThreadAction": {
+      "kind": "interface",
+      "definition": "interface ThreadPanelThreadAction {\n  /** Stable identifier reported through `onThreadAction`. */\n  id: string;\n  /** Menu row text. */\n  label: string;\n  /** Leading icon on the menu row — Material Symbol name (string) or custom element (ReactNode). */\n  icon?: string | React.ReactNode;\n  /** Destructive styling (the error text colour) for delete-like actions. */\n  destructive?: boolean;\n}"
+    },
+    "ThreadPanelThreadStatus": {
+      "kind": "type",
+      "definition": "type ThreadPanelThreadStatus =\n  | 'idle'\n  | 'working'\n  | 'unread'\n  | 'waiting'\n  | 'error';",
+      "description": "What a thread's leading dot reports. Fill says whether the thread wants\nthe reader, colour says what it wants, motion says it is live right now:\n`idle` is a hollow neutral ring, `working` a pulsing neutral dot, and\n`unread`, `waiting` and `error` solid dots in the info, warning and error\nroles."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

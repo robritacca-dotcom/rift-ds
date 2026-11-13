@@ -17,19 +17,71 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `string` | yes |  | The screen's title. Note: this shadows the native `title` tooltip attribute, which TopAppBar does not expose. |
 | subtitle | `string` | no |  | A second line under the title, e.g. a count or a date range |
-| platform | `"default" \| "ios" \| "android"` | no | `default` | Which platform's bar to draw. `default` is the Rift bar; `ios` is the iOS 26 navigation bar, with glass circle buttons over content and a soft blurred edge; `android` is the Material 3 Expressive top app bar. |
-| size | `"small" \| "large" \| "medium"` | no | `small` | `small` puts the title in the bar. `medium` and `large` add an expanded title under it that collapses into the bar as the page scrolls; on iOS both are the large title. |
+| platform | `"default" \| "ios" \| "android"` | no | `'default'` | Which platform's bar to draw. `default` is the Rift bar; `ios` is the iOS 26 navigation bar, with glass circle buttons over content and a soft blurred edge; `android` is the Material 3 Expressive top app bar. |
+| size | `"small" \| "large" \| "medium"` | no | `'small'` | `small` puts the title in the bar. `medium` and `large` add an expanded title under it that collapses into the bar as the page scrolls; on iOS both are the large title. |
 | align | `"center" \| "start"` | no |  | Title alignment in the bar. Defaults to centred on iOS and to the start edge elsewhere |
 | navigation | `"menu" \| "close" \| "back"` | no |  | The leading control: a menu button, a back button, or a close button |
 | onNavigate | `(() => void)` | no |  | Called when the leading control is pressed |
 | navigationLabel | `string` | no |  | Accessible label of the leading control; defaults to "Open menu", "Back" or "Close" |
 | actions | `TopAppBarAction[]` | no | `[]` | Trailing actions. The first three show as icon buttons; any more join the overflow menu, ahead of `overflowActions`, where they render as plain rows (a menu row draws no badge and routes from `onClick`, not `href`) |
 | overflowActions | `TopAppBarOverflowAction[]` | no | `[]` | Actions listed in a menu behind a trailing "More" button |
-| overflowLabel | `string` | no | `More` | Accessible label of the button that opens the overflow menu |
-| badgeLabel | `((label: string) => string)` | no | `(label: string) => `${label}, new`` | The accessible name of an action that carries a `badge`, given the action's `label`. Defaults to "<label>, new", e.g. "Notifications, new". |
+| overflowLabel | `string` | no | `'More'` | Accessible label of the button that opens the overflow menu |
+| badgeLabel | `((label: string) => string)` | no | `` (label: string) => `${label}, new` `` | The accessible name of an action that carries a `badge`, given the action's `label`. Defaults to "<label>, new", e.g. "Notifications, new". |
 | scrolled | `boolean` | no |  | Whether content has scrolled under the bar, which collapses an expanded title and switches the bar to its scrolled surface. Leave unset to have the bar watch `scrollTarget` itself. |
 | scrollTarget | `HTMLElement \| null` | no |  | The element whose scroll the bar watches when `scrolled` is unset. Defaults to the window |
 | headingLevel | `1 \| 2 \| 4 \| 3 \| 5 \| 6` | no | `1` | Level of the title's heading element |
 | sticky | `boolean` | no | `true` | Keeps the bar stuck to the top of its scroll container |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Types
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
+```
+
+### TopAppBarAction
+
+```ts
+interface TopAppBarAction {
+  /** Unique key for this action */
+  key: string;
+  /** Icon — Material Symbol name (string) or custom element (ReactNode) */
+  icon: string | React.ReactNode;
+  /** Accessible label; also the overflow menu's row text */
+  label: string;
+  /** Click handler */
+  onClick?: () => void;
+  /** Renders the action as a link to this URL instead of a button */
+  href?: string;
+  /** Shows a dot on the icon's corner, e.g. unread notifications */
+  badge?: boolean;
+}
+```
+
+### TopAppBarOverflowAction
+
+An action in the overflow menu. The menu's rows are buttons and draw no
+icon badge, so `href` and `badge` are left out rather than silently
+dropped: route from `onClick` instead.
+
+```ts
+type TopAppBarOverflowAction = Omit<TopAppBarAction, 'href' | 'badge'>;
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `HTMLElement` (typescript), `Omit` (typescript), `ReactNode` (react).

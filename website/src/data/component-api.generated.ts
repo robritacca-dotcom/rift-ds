@@ -18,6 +18,8 @@ export interface ComponentPropApi {
   defaultValue?: string;
   /** Set when the prop carries an @deprecated tag; the replacement guidance. */
   deprecated?: string;
+  /** The in-repo types the prop's declared type mentions, each a key of the entry's `types`. */
+  typeRefs?: string[];
 }
 
 /** One exported component and its documented props. */
@@ -69,7 +71,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "AccordionItem[]",
             "required": true,
-            "description": "List of accordion items"
+            "description": "List of accordion items",
+            "typeRefs": [
+              "AccordionItem"
+            ]
           },
           {
             "name": "multiple",
@@ -102,7 +107,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -138,11 +143,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "facts",
             "type": "ActionReadoutFact[]",
             "required": false,
-            "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in."
+            "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in.",
+            "typeRefs": [
+              "ActionReadoutFact"
+            ]
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "The mark trailing the title: a Material Symbol name, or your own element."
           },
@@ -157,7 +165,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "proposed",
               "undone"
             ],
-            "defaultValue": "proposed"
+            "defaultValue": "'proposed'",
+            "typeRefs": [
+              "ActionCardStatus"
+            ]
           },
           {
             "name": "receipt",
@@ -174,7 +185,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "destructive"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onConfirm",
@@ -199,49 +210,49 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The Confirm button's words. Defaults to \"Confirm\".",
-            "defaultValue": "Confirm"
+            "defaultValue": "'Confirm'"
           },
           {
             "name": "dismissLabel",
             "type": "string",
             "required": false,
             "description": "The Dismiss button's words. Not \"Cancel\", which beside a cancellation reads as the action itself. Defaults to \"Dismiss\".",
-            "defaultValue": "Dismiss"
+            "defaultValue": "'Dismiss'"
           },
           {
             "name": "undoLabel",
             "type": "string",
             "required": false,
             "description": "The Undo button's words. Defaults to \"Undo\".",
-            "defaultValue": "Undo"
+            "defaultValue": "'Undo'"
           },
           {
             "name": "confirmedLabel",
             "type": "string",
             "required": false,
             "description": "The read-out where Confirm stood, on a confirmed card that keeps its `facts`. Defaults to \"Confirmed\".",
-            "defaultValue": "Confirmed"
+            "defaultValue": "'Confirmed'"
           },
           {
             "name": "dismissedLabel",
             "type": "string",
             "required": false,
             "description": "What a dismissed card says after its title. Defaults to \"Not changed\".",
-            "defaultValue": "Not changed"
+            "defaultValue": "'Not changed'"
           },
           {
             "name": "undoneLabel",
             "type": "string",
             "required": false,
             "description": "What an undone card says after its title. Defaults to \"Undone\".",
-            "defaultValue": "Undone"
+            "defaultValue": "'Undone'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -271,11 +282,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "facts",
             "type": "ActionReadoutFact[]",
             "required": true,
-            "description": "What it did, a line each: the status it moved, the money it touched, who it reached."
+            "description": "What it did, a line each: the status it moved, the money it touched, who it reached.",
+            "typeRefs": [
+              "ActionReadoutFact"
+            ]
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "A leading mark beside the title: a Material Symbol name, or your own element."
           },
@@ -284,7 +298,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -308,7 +322,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "steps",
             "type": "AgentPlanStep[]",
             "required": true,
-            "description": "The plan, in order. Step status drives each row's indicator and colour."
+            "description": "The plan, in order. Step status drives each row's indicator and colour.",
+            "typeRefs": [
+              "AgentPlanStep"
+            ]
           },
           {
             "name": "title",
@@ -328,13 +345,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The computed header once every step is complete. Defaults to\n\"All steps complete\". Ignored when `title` is set.",
-            "defaultValue": "All steps complete"
+            "defaultValue": "'All steps complete'"
           },
           {
             "name": "statusLabels",
             "type": "Partial<Record<AgentPlanStepStatus, string>>",
             "required": false,
-            "description": "Visually hidden text announcing each step's status after its label.\nMerged over the English defaults (Not started, In progress, Completed, Failed)."
+            "description": "Visually hidden text announcing each step's status after its label.\nMerged over the English defaults (Not started, In progress, Completed, Failed).",
+            "typeRefs": [
+              "AgentPlanStepStatus"
+            ]
           },
           {
             "name": "open",
@@ -360,7 +380,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -384,13 +404,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "profile",
             "type": "AgentRailProfile",
             "required": false,
-            "description": "The agent this rail belongs to, rendered as the header's portrait block."
+            "description": "The agent this rail belongs to, rendered as the header's portrait block.",
+            "typeRefs": [
+              "AgentRailProfile"
+            ]
           },
           {
             "name": "tabs",
             "type": "AgentRailTab[]",
             "required": true,
-            "description": "The rail's tabs, in display order. Each carries its own pane."
+            "description": "The rail's tabs, in display order. Each carries its own pane.",
+            "typeRefs": [
+              "AgentRailTab"
+            ]
           },
           {
             "name": "value",
@@ -423,7 +449,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the tab strip.",
-            "defaultValue": "Agent views"
+            "defaultValue": "'Agent views'"
           },
           {
             "name": "ariaLabel",
@@ -443,7 +469,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the collapse affordance.",
-            "defaultValue": "Collapse the agent panel"
+            "defaultValue": "'Collapse the agent panel'"
           },
           {
             "name": "collapseVariant",
@@ -454,7 +480,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "chevron",
               "close"
             ],
-            "defaultValue": "chevron"
+            "defaultValue": "'chevron'"
           },
           {
             "name": "footer",
@@ -467,7 +493,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -500,7 +526,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "waiting",
               "working"
             ],
-            "defaultValue": "thinking"
+            "defaultValue": "'thinking'",
+            "typeRefs": [
+              "AgentStatusState"
+            ]
           },
           {
             "name": "label",
@@ -530,6 +559,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "sparkle",
               "twinkle",
               "wave-rows"
+            ],
+            "typeRefs": [
+              "AgentStatusPattern"
             ]
           },
           {
@@ -549,7 +581,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "md",
               "sm"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "variant",
@@ -561,7 +593,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "inline",
               "pill"
             ],
-            "defaultValue": "inline"
+            "defaultValue": "'inline'"
           },
           {
             "name": "action",
@@ -574,7 +606,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -600,7 +632,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "waiting",
               "working"
             ],
-            "defaultValue": "working"
+            "defaultValue": "'working'",
+            "typeRefs": [
+              "AgentStatusState"
+            ]
           },
           {
             "name": "pattern",
@@ -624,6 +659,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "sparkle",
               "twinkle",
               "wave-rows"
+            ],
+            "typeRefs": [
+              "AgentStatusPattern"
             ]
           },
           {
@@ -631,7 +669,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -656,14 +694,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Button text content",
-            "defaultValue": "Ask AI"
+            "defaultValue": "'Ask AI'"
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)",
-            "defaultValue": "auto_awesome"
+            "defaultValue": "'auto_awesome'"
           },
           {
             "name": "iconOnly",
@@ -681,7 +719,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -701,13 +739,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "thinking",
               "waiting",
               "working"
+            ],
+            "typeRefs": [
+              "AgentStatusState"
             ]
           },
           {
             "name": "statusLabels",
             "type": "Partial<Record<AgentStatusState, string>>",
             "required": false,
-            "description": "What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing."
+            "description": "What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing.",
+            "typeRefs": [
+              "AgentStatusState"
+            ]
           },
           {
             "name": "href",
@@ -731,7 +775,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summary",
             "type": "AiButtonSummary",
             "required": false,
-            "description": "A TLDR panel the button can summon: overline, title, a pre-written\nsummary revealed through a skeleton beat and a typed stream (once per\nmount — later openings show it instantly, as if cached), and optional\nprompt chips. Hovering the button opens it after the standard hover\ndelay; the pointer keeps it alive anywhere over the button or panel,\nand it hides a grace period after leaving both. Omit for the plain\nbutton."
+            "description": "A TLDR panel the button can summon: overline, title, a pre-written\nsummary revealed through a skeleton beat and a typed stream (once per\nmount — later openings show it instantly, as if cached), and optional\nprompt chips. Hovering the button opens it after the standard hover\ndelay; the pointer keeps it alive anywhere over the button or panel,\nand it hides a grace period after leaving both. Omit for the plain\nbutton.",
+            "typeRefs": [
+              "AiButtonSummary"
+            ]
           },
           {
             "name": "summaryPlacement",
@@ -742,7 +789,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom",
               "top"
             ],
-            "defaultValue": "top"
+            "defaultValue": "'top'"
           },
           {
             "name": "request",
@@ -778,14 +825,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom",
               "top"
             ],
-            "defaultValue": "top"
+            "defaultValue": "'top'"
           },
           {
             "name": "requestRegionLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the request panel.",
-            "defaultValue": "Waiting for you"
+            "defaultValue": "'Waiting for you'"
           },
           {
             "name": "summaryPinned",
@@ -818,27 +865,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the summary panel's dismiss button.",
-            "defaultValue": "Dismiss summary"
+            "defaultValue": "'Dismiss summary'"
           },
           {
             "name": "suggestionsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the summary panel's group of prompt chips.",
-            "defaultValue": "Suggested prompts"
+            "defaultValue": "'Suggested prompts'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -882,7 +932,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "info"
+            "defaultValue": "'info'"
           },
           {
             "name": "size",
@@ -893,7 +943,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "dismissible",
@@ -904,7 +954,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -919,14 +969,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the dismiss button",
-            "defaultValue": "Dismiss alert"
+            "defaultValue": "'Dismiss alert'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -975,14 +1025,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Confirm button label",
-            "defaultValue": "Confirm"
+            "defaultValue": "'Confirm'"
           },
           {
             "name": "cancelLabel",
             "type": "string",
             "required": false,
             "description": "Cancel button label",
-            "defaultValue": "Cancel"
+            "defaultValue": "'Cancel'"
           },
           {
             "name": "onConfirm",
@@ -1022,7 +1072,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the overlay container (the ref and native attributes go on the panel)",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -1046,7 +1096,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "AnchorNavItem[]",
             "required": true,
-            "description": "The on-page sections to list, in document order"
+            "description": "The on-page sections to list, in document order",
+            "typeRefs": [
+              "AnchorNavItem"
+            ]
           },
           {
             "name": "variant",
@@ -1057,21 +1110,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "floating",
               "list"
             ],
-            "defaultValue": "list"
+            "defaultValue": "'list'"
           },
           {
             "name": "title",
             "type": "string",
             "required": false,
             "description": "Header text above the list; pass an empty string to render no header.\nNote: this shadows the native `title` tooltip attribute, which AnchorNav does not expose.",
-            "defaultValue": "On this page"
+            "defaultValue": "'On this page'"
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none",
-            "defaultValue": "toc"
+            "defaultValue": "'toc'"
           },
           {
             "name": "activeId",
@@ -1154,7 +1207,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -1178,13 +1231,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sections",
             "type": "AppSidebarSection[]",
             "required": true,
-            "description": "Sidebar navigation sections"
+            "description": "Sidebar navigation sections",
+            "typeRefs": [
+              "AppSidebarSection"
+            ]
           },
           {
             "name": "profile",
             "type": "AppSidebarProfile",
             "required": false,
-            "description": "Sidebar profile"
+            "description": "Sidebar profile",
+            "typeRefs": [
+              "AppSidebarProfile"
+            ]
           },
           {
             "name": "activeKey",
@@ -1249,7 +1308,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "flush",
               "inset"
             ],
-            "defaultValue": "flush"
+            "defaultValue": "'flush'",
+            "typeRefs": [
+              "AppSidebarLayout"
+            ]
           },
           {
             "name": "theme",
@@ -1260,20 +1322,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "dark",
               "inherit"
             ],
-            "defaultValue": "dark"
+            "defaultValue": "'dark'"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to the AppSidebar rail. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to the AppSidebar rail. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on outer wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -1297,13 +1362,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sections",
             "type": "AppSidebarSection[]",
             "required": true,
-            "description": "Navigation sections"
+            "description": "Navigation sections",
+            "typeRefs": [
+              "AppSidebarSection"
+            ]
           },
           {
             "name": "profile",
             "type": "AppSidebarProfile",
             "required": false,
-            "description": "Profile data for the bottom section"
+            "description": "Profile data for the bottom section",
+            "typeRefs": [
+              "AppSidebarProfile"
+            ]
           },
           {
             "name": "activeKey",
@@ -1332,7 +1403,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "accordion",
               "panel"
             ],
-            "defaultValue": "accordion"
+            "defaultValue": "'accordion'"
           },
           {
             "name": "defaultPanelOpen",
@@ -1387,6 +1458,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "floating",
               "flush",
               "inset"
+            ],
+            "typeRefs": [
+              "AppSidebarLayout"
             ]
           },
           {
@@ -1427,13 +1501,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "logo",
@@ -1446,7 +1523,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text shown next to logo when expanded",
-            "defaultValue": "Rift"
+            "defaultValue": "'Rift'"
           },
           {
             "name": "showMobileTrigger",
@@ -1460,42 +1537,42 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the mobile hamburger trigger that opens the drawer",
-            "defaultValue": "Open navigation"
+            "defaultValue": "'Open navigation'"
           },
           {
             "name": "closeLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the toggle when it closes the mobile drawer",
-            "defaultValue": "Close navigation"
+            "defaultValue": "'Close navigation'"
           },
           {
             "name": "expandLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the toggle (and the collapsed logo) when it expands the rail",
-            "defaultValue": "Expand sidebar"
+            "defaultValue": "'Expand sidebar'"
           },
           {
             "name": "collapseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the toggle when it collapses the rail",
-            "defaultValue": "Collapse sidebar"
+            "defaultValue": "'Collapse sidebar'"
           },
           {
             "name": "profileMoreLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the profile block's more button",
-            "defaultValue": "Profile options"
+            "defaultValue": "'Profile options'"
           },
           {
             "name": "menuLabel",
             "type": "string",
             "required": false,
             "description": "Back-button text in the mobile drawer's drill-in when the open level\nhas no parent row to name (a top-level item opened with `subNav=\"panel\"`)",
-            "defaultValue": "Menu"
+            "defaultValue": "'Menu'"
           }
         ]
       }
@@ -1532,13 +1609,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key in data for x-axis values",
-            "defaultValue": "label"
+            "defaultValue": "'label'"
           },
           {
             "name": "series",
             "type": "AreaSeriesConfig[]",
             "required": true,
-            "description": "One or more area series to render"
+            "description": "One or more area series to render",
+            "typeRefs": [
+              "AreaSeriesConfig"
+            ]
           },
           {
             "name": "stacked",
@@ -1563,7 +1643,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -1591,7 +1674,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -1625,10 +1708,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "The leading mark — Material Symbol name (string) or custom element (ReactNode).",
-            "defaultValue": "draft"
+            "defaultValue": "'draft'"
           },
           {
             "name": "open",
@@ -1642,7 +1725,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -1676,7 +1759,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading mark in the header — Material Symbol name (string) or custom element (ReactNode)."
           },
@@ -1703,7 +1786,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The frame's `sandbox` tokens for `html` and `src`. The default lets a document run its own scripts and forms in an origin of its own, with no reach into the host page; widen it only for a source you trust.",
-            "defaultValue": "allow-scripts allow-forms"
+            "defaultValue": "'allow-scripts allow-forms'"
           },
           {
             "name": "frameTitle",
@@ -1731,6 +1814,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "values": [
               "code",
               "preview"
+            ],
+            "typeRefs": [
+              "ArtifactPanelView"
             ]
           },
           {
@@ -1741,13 +1827,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "values": [
               "code",
               "preview"
+            ],
+            "typeRefs": [
+              "ArtifactPanelView"
             ]
           },
           {
             "name": "onViewChange",
             "type": "((view: ArtifactPanelView) => void)",
             "required": false,
-            "description": "Fires with the chosen view."
+            "description": "Fires with the chosen view.",
+            "typeRefs": [
+              "ArtifactPanelView"
+            ]
           },
           {
             "name": "expanded",
@@ -1779,55 +1871,58 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Label for the preview segment of the view switch.",
-            "defaultValue": "Preview"
+            "defaultValue": "'Preview'"
           },
           {
             "name": "codeLabel",
             "type": "string",
             "required": false,
             "description": "Label for the code segment of the view switch.",
-            "defaultValue": "Code"
+            "defaultValue": "'Code'"
           },
           {
             "name": "viewLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the view switch.",
-            "defaultValue": "Artifact view"
+            "defaultValue": "'Artifact view'"
           },
           {
             "name": "expandLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the expand toggle while the panel is at its resting size.",
-            "defaultValue": "Expand the artifact"
+            "defaultValue": "'Expand the artifact'"
           },
           {
             "name": "collapseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the expand toggle while the panel is expanded.",
-            "defaultValue": "Collapse the artifact"
+            "defaultValue": "'Collapse the artifact'"
           },
           {
             "name": "closeLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the close button.",
-            "defaultValue": "Close the artifact"
+            "defaultValue": "'Close the artifact'"
           },
           {
             "name": "codeBlockLabels",
             "type": "Pick<CodeBlockProps, \"codeLabel\" | \"copyLabel\" | \"copyText\" | \"copiedLabel\">",
             "required": false,
-            "description": "The words the code view's CodeBlock writes, merged over its English defaults: the copy button's name and text (\"Copy code\", \"Copy\", \"Copied\") and the code region's name (\"Code: <language>\")."
+            "description": "The words the code view's CodeBlock writes, merged over its English defaults: the copy button's name and text (\"Copy code\", \"Copy\", \"Copied\") and the code region's name (\"Code: <language>\").",
+            "typeRefs": [
+              "CodeBlockProps"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -1862,17 +1957,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon above the overlay's headline: a Material Symbol name, or any\ncustom element. Pass `null` for none.",
-            "defaultValue": "upload_file"
+            "defaultValue": "'upload_file'"
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
             "description": "Headline of the overlay shown while files are dragged over the zone.",
-            "defaultValue": "Drop files to attach"
+            "defaultValue": "'Drop files to attach'"
           },
           {
             "name": "hint",
@@ -1885,7 +1980,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -1915,7 +2010,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "AttachmentItem[]",
             "required": true,
-            "description": "The files on the message, in order."
+            "description": "The files on the message, in order.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "align",
@@ -1926,7 +2024,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "start"
+            "defaultValue": "'start'"
           },
           {
             "name": "max",
@@ -1965,25 +2063,37 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onItemClick",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Fires when a file is pressed, whether or not the viewer opens."
+            "description": "Fires when a file is pressed, whether or not the viewer opens.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "renderPreview",
             "type": "((item: AttachmentItem) => ReactNode)",
             "required": false,
-            "description": "Passed to the viewer: draws a file it cannot, such as the pages of a PDF."
+            "description": "Passed to the viewer: draws a file it cannot, such as the pages of a PDF.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "onDownload",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Passed to the viewer: fires when Download is pressed, and renders the buttons."
+            "description": "Passed to the viewer: fires when Download is pressed, and renders the buttons.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "onRetry",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Passed to the viewer: fires when \"Try again\" is pressed on a file that failed to load."
+            "description": "Passed to the viewer: fires when \"Try again\" is pressed on a file that failed to load.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "size",
@@ -1994,14 +2104,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
             "description": "Accessible label for the list.",
-            "defaultValue": "Attachments"
+            "defaultValue": "'Attachments'"
           },
           {
             "name": "showMoreLabel",
@@ -2015,19 +2125,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text of the collapse button under an expanded group.",
-            "defaultValue": "Show fewer"
+            "defaultValue": "'Show fewer'"
           },
           {
             "name": "attachmentTileLabels",
             "type": "Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\">",
             "required": false,
-            "description": "The status lines and progress name every tile writes, merged over the tile's English defaults (\"Uploading…\", \"Upload failed\", \"Unavailable\")."
+            "description": "The status lines and progress name every tile writes, merged over the tile's English defaults (\"Uploading…\", \"Upload failed\", \"Unavailable\").",
+            "typeRefs": [
+              "AttachmentTileProps"
+            ]
           },
           {
             "name": "attachmentViewerLabels",
             "type": "Pick<AttachmentViewerProps, \"closeLabel\" | \"downloadLabel\" | \"previousLabel\" | \"nextLabel\" | \"retryLabel\" | \"noPreviewLabel\" | \"failedLabel\" | \"failedDescription\" | \"formatPosition\">",
             "required": false,
-            "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\")."
+            "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\").",
+            "typeRefs": [
+              "AttachmentViewerProps"
+            ]
           },
           {
             "name": "locale",
@@ -2040,7 +2156,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2085,7 +2201,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "text",
               "video"
             ],
-            "defaultValue": "generic"
+            "defaultValue": "'generic'",
+            "typeRefs": [
+              "FileKind"
+            ]
           },
           {
             "name": "typeLabel",
@@ -2104,7 +2223,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "unavailable",
               "uploading"
             ],
-            "defaultValue": "ready"
+            "defaultValue": "'ready'",
+            "typeRefs": [
+              "AttachmentStatus"
+            ]
           },
           {
             "name": "progress",
@@ -2157,7 +2279,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onClick",
@@ -2176,21 +2298,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Status line while `uploading`.",
-            "defaultValue": "Uploading…"
+            "defaultValue": "'Uploading…'"
           },
           {
             "name": "errorLabel",
             "type": "string",
             "required": false,
             "description": "Status line while `error`, when no `error` message is given.",
-            "defaultValue": "Upload failed"
+            "defaultValue": "'Upload failed'"
           },
           {
             "name": "unavailableLabel",
             "type": "string",
             "required": false,
             "description": "Status line while `unavailable`.",
-            "defaultValue": "Unavailable"
+            "defaultValue": "'Unavailable'"
           },
           {
             "name": "removeLabel",
@@ -2210,7 +2332,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2246,7 +2368,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "AttachmentItem[]",
             "required": true,
-            "description": "The files the viewer steps through, in order."
+            "description": "The files the viewer steps through, in order.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "activeId",
@@ -2270,19 +2395,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "renderPreview",
             "type": "((item: AttachmentItem) => ReactNode)",
             "required": false,
-            "description": "Draws a file the viewer cannot: the pages of a PDF, a media player, a\nrendered spreadsheet. Return nothing to fall back to the built-in view."
+            "description": "Draws a file the viewer cannot: the pages of a PDF, a media player, a\nrendered spreadsheet. Return nothing to fall back to the built-in view.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "onDownload",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Fires with the file on show when Download is pressed. Its presence renders the buttons."
+            "description": "Fires with the file on show when Download is pressed. Its presence renders the buttons.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "onRetry",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Fires with a file that failed to load when \"Try again\" is pressed. Its presence renders the button."
+            "description": "Fires with a file that failed to load when \"Try again\" is pressed. Its presence renders the button.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "dismissible",
@@ -2296,56 +2430,56 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text of the Download buttons.",
-            "defaultValue": "Download"
+            "defaultValue": "'Download'"
           },
           {
             "name": "closeLabel",
             "type": "string",
             "required": false,
             "description": "Accessible label for the close button.",
-            "defaultValue": "Close"
+            "defaultValue": "'Close'"
           },
           {
             "name": "previousLabel",
             "type": "string",
             "required": false,
             "description": "Accessible label for the previous-file button.",
-            "defaultValue": "Previous file"
+            "defaultValue": "'Previous file'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible label for the next-file button.",
-            "defaultValue": "Next file"
+            "defaultValue": "'Next file'"
           },
           {
             "name": "retryLabel",
             "type": "string",
             "required": false,
             "description": "Text of the retry button.",
-            "defaultValue": "Try again"
+            "defaultValue": "'Try again'"
           },
           {
             "name": "noPreviewLabel",
             "type": "string",
             "required": false,
             "description": "Headline when a file has nothing the viewer can draw.",
-            "defaultValue": "No preview for this file type"
+            "defaultValue": "'No preview for this file type'"
           },
           {
             "name": "failedLabel",
             "type": "string",
             "required": false,
             "description": "Headline when a file failed to load or is no longer available.",
-            "defaultValue": "Couldn’t load this file"
+            "defaultValue": "'Couldn’t load this file'"
           },
           {
             "name": "failedDescription",
             "type": "string",
             "required": false,
             "description": "Sentence under `failedLabel`, when the file carries no error message of its own.",
-            "defaultValue": "The link may have expired."
+            "defaultValue": "'The link may have expired.'"
           },
           {
             "name": "formatPosition",
@@ -2365,7 +2499,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the portal container, not the panel.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2413,7 +2547,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "md",
               "sm"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "fill",
@@ -2428,6 +2562,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "5",
               "6",
               "neutral"
+            ],
+            "typeRefs": [
+              "AvatarFill"
             ]
           },
           {
@@ -2453,7 +2590,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2496,7 +2633,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "md",
               "sm"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "overflowLabel",
@@ -2509,7 +2646,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2547,14 +2684,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "neutral"
+            "defaultValue": "'neutral'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2586,7 +2723,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "info"
+            "defaultValue": "'info'"
           },
           {
             "name": "title",
@@ -2602,7 +2739,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -2630,7 +2767,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the dismiss button.",
-            "defaultValue": "Dismiss banner"
+            "defaultValue": "'Dismiss banner'"
           },
           {
             "name": "align",
@@ -2641,14 +2778,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "center",
               "start"
             ],
-            "defaultValue": "start"
+            "defaultValue": "'start'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2685,21 +2822,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key in data for x-axis values",
-            "defaultValue": "label"
+            "defaultValue": "'label'"
           },
           {
             "name": "yKey",
             "type": "string",
             "required": false,
             "description": "Key in data for y-axis values",
-            "defaultValue": "value"
+            "defaultValue": "'value'"
           },
           {
             "name": "dataLabel",
             "type": "string",
             "required": false,
             "description": "Display name for the data series (shown in tooltip)",
-            "defaultValue": "Value"
+            "defaultValue": "'Value'"
           },
           {
             "name": "title",
@@ -2717,7 +2854,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "barColor",
@@ -2744,7 +2884,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2800,7 +2940,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "solid",
               "transparent"
             ],
-            "defaultValue": "shader"
+            "defaultValue": "'shader'"
           },
           {
             "name": "highlight",
@@ -2826,7 +2966,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "center"
+            "defaultValue": "'center'"
           },
           {
             "name": "children",
@@ -2870,14 +3010,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the overlay's close control.",
-            "defaultValue": "Close"
+            "defaultValue": "'Close'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the tile.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2909,6 +3049,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "rays",
               "rings",
               "waves"
+            ],
+            "typeRefs": [
+              "BentoTileArtPattern"
             ]
           },
           {
@@ -2916,7 +3059,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the layer.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -2940,7 +3083,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "BottomNavItem[]",
             "required": true,
-            "description": "Destinations, three to five of them"
+            "description": "Destinations, three to five of them",
+            "typeRefs": [
+              "BottomNavItem"
+            ]
           },
           {
             "name": "activeKey",
@@ -2964,13 +3110,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "ios"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "search",
             "type": "BottomNavSearch",
             "required": false,
-            "description": "A destination set apart from the rest, search unless its `icon` says\notherwise. On iOS it is its own glass circle beside the bar; elsewhere it\njoins the bar as the last destination."
+            "description": "A destination set apart from the rest, search unless its `icon` says\notherwise. On iOS it is its own glass circle beside the bar; elsewhere it\njoins the bar as the last destination.",
+            "typeRefs": [
+              "BottomNavSearch"
+            ]
           },
           {
             "name": "minimized",
@@ -2991,7 +3140,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom Nav's \"Main\", so a screen carrying both announces two different navs",
-            "defaultValue": "Tabs"
+            "defaultValue": "'Tabs'"
           },
           {
             "name": "badgeLabel",
@@ -3005,13 +3154,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -3035,7 +3187,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "BreadcrumbItem[]",
             "required": true,
-            "description": "Ordered list of breadcrumb items"
+            "description": "Ordered list of breadcrumb items",
+            "typeRefs": [
+              "BreadcrumbItem"
+            ]
           },
           {
             "name": "maxItems",
@@ -3048,7 +3203,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -3061,7 +3216,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -3096,13 +3254,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "iconLeft",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon for left side — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "iconRight",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon for right side — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -3117,18 +3275,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "primary",
               "secondary",
               "tertiary"
-            ]
+            ],
+            "defaultValue": "'primary'"
           },
           {
             "name": "tone",
             "type": "\"default\" | \"destructive\" | \"neutral\"",
             "required": false,
-            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
+            "description": "Colour, independent of emphasis. `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge. Left unset, a legacy `variant` (`neutral` or\n`destructive`) supplies the tone instead.",
             "values": [
               "default",
               "destructive",
               "neutral"
-            ]
+            ],
+            "defaultValue": "'default'"
           },
           {
             "name": "size",
@@ -3139,7 +3299,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -3175,7 +3335,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "ariaCurrent",
@@ -3188,7 +3351,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "priority",
@@ -3218,7 +3381,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode).",
             "deprecated": "Use `iconLeft` instead."
@@ -3258,13 +3421,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "horizontal"
+            "defaultValue": "'horizontal'"
           },
           {
             "name": "buttons",
             "type": "ButtonProps[]",
             "required": true,
-            "description": "Array of button configurations"
+            "description": "Array of button configurations",
+            "typeRefs": [
+              "ButtonProps"
+            ]
           },
           {
             "name": "ariaLabel",
@@ -3278,7 +3444,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS class",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -3307,7 +3473,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "case-study",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "title",
@@ -3333,7 +3499,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "href",
@@ -3388,7 +3554,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -3472,7 +3641,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -3557,14 +3726,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the previous-slide arrow",
-            "defaultValue": "Previous slide"
+            "defaultValue": "'Previous slide'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the next-slide arrow",
-            "defaultValue": "Next slide"
+            "defaultValue": "'Next slide'"
           },
           {
             "name": "slideLabel",
@@ -3578,14 +3747,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Role description announced for each slide",
-            "defaultValue": "slide"
+            "defaultValue": "'slide'"
           },
           {
             "name": "dotsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the dot indicators' tab list",
-            "defaultValue": "Slide indicators"
+            "defaultValue": "'Slide indicators'"
           },
           {
             "name": "dotLabel",
@@ -3599,7 +3768,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -3636,7 +3805,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -3658,7 +3827,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading icon — a Material Symbol name, or any custom element."
           },
@@ -3674,7 +3843,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -3709,7 +3878,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "assistant",
               "user"
             ],
-            "defaultValue": "assistant"
+            "defaultValue": "'assistant'"
           },
           {
             "name": "avatar",
@@ -3765,7 +3934,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "pending",
@@ -3779,7 +3948,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible text announced for the pending state.",
-            "defaultValue": "Waiting for a reply"
+            "defaultValue": "'Waiting for a reply'"
           },
           {
             "name": "actions",
@@ -3811,7 +3980,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -3853,28 +4022,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom-up",
               "top-down"
             ],
-            "defaultValue": "top-down"
+            "defaultValue": "'top-down'"
           },
           {
             "name": "ariaLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the scrollable conversation region.",
-            "defaultValue": "Conversation"
+            "defaultValue": "'Conversation'"
           },
           {
             "name": "jumpLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the scroll-to-bottom control.",
-            "defaultValue": "Scroll to the latest message"
+            "defaultValue": "'Scroll to the latest message'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -3955,7 +4124,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onCheckedChange",
@@ -3968,7 +4137,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -3995,7 +4164,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The value submitted under `name` while checked. Defaults to \"on\", the native checkbox's.",
-            "defaultValue": "on"
+            "defaultValue": "'on'"
           }
         ]
       },
@@ -4062,7 +4231,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "vertical"
+            "defaultValue": "'vertical'"
           },
           {
             "name": "size",
@@ -4073,7 +4242,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onValuesChange",
@@ -4086,7 +4255,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -4123,14 +4292,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -4142,7 +4311,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes; the default is the checkbox icon's, which sizes and colours it.",
-            "defaultValue": "ds-checkbox__icon"
+            "defaultValue": "'ds-checkbox__icon'"
           }
         ]
       },
@@ -4154,7 +4323,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes; the default is the checkbox icon's, which sizes and colours it.",
-            "defaultValue": "ds-checkbox__icon"
+            "defaultValue": "'ds-checkbox__icon'"
           }
         ]
       }
@@ -4182,7 +4351,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -4201,7 +4370,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "neutral"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -4220,7 +4389,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "large"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onClick",
@@ -4239,14 +4408,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | ((label: string) => string)",
             "required": false,
             "description": "Accessible label for the remove button. Defaults to \"Remove\". Pass a\nfunction to name each chip's button after its own label, so a row of\nchips does not announce one name for every button: it is given the\nlabel's text (a rich label's text content), e.g.\n`(label) => \\`Remove ${label}\\``. A plain string is used as given.",
-            "defaultValue": "Remove"
+            "defaultValue": "'Remove'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -4268,7 +4437,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": true,
             "description": "The icon — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -4335,7 +4504,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "loading",
@@ -4368,7 +4537,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "start",
               "top"
             ],
-            "defaultValue": "top"
+            "defaultValue": "'top'"
           },
           {
             "name": "href",
@@ -4393,13 +4562,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -4475,35 +4647,35 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the copy button before it is pressed",
-            "defaultValue": "Copy code"
+            "defaultValue": "'Copy code'"
           },
           {
             "name": "copyText",
             "type": "string",
             "required": false,
             "description": "Visible text on the copy button before it is pressed",
-            "defaultValue": "Copy"
+            "defaultValue": "'Copy'"
           },
           {
             "name": "copiedLabel",
             "type": "string",
             "required": false,
             "description": "Text and accessible name the copy button shows once the code is copied",
-            "defaultValue": "Copied"
+            "defaultValue": "'Copied'"
           },
           {
             "name": "expandLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the collapse toggle while the code is collapsed",
-            "defaultValue": "Expand code"
+            "defaultValue": "'Expand code'"
           },
           {
             "name": "collapseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the collapse toggle while the code is showing",
-            "defaultValue": "Collapse code"
+            "defaultValue": "'Collapse code'"
           },
           {
             "name": "codeLabel",
@@ -4516,7 +4688,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -4566,7 +4738,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "changeLabels",
             "type": "Partial<CodeDiffChangeLabels>",
             "required": false,
-            "description": "Visually hidden text announced before each changed line, so the change\ntype is not carried by colour and the marker alone. Merged over the\nEnglish defaults: `added` \"Added line:\", `removed` \"Removed line:\"."
+            "description": "Visually hidden text announced before each changed line, so the change\ntype is not carried by colour and the marker alone. Merged over the\nEnglish defaults: `added` \"Added line:\", `removed` \"Removed line:\".",
+            "typeRefs": [
+              "CodeDiffChangeLabels"
+            ]
           },
           {
             "name": "statsLabel",
@@ -4580,7 +4755,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -4617,7 +4792,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Initial colour for uncontrolled use",
-            "defaultValue": "#118AB2"
+            "defaultValue": "'#118AB2'"
           },
           {
             "name": "onValueChange",
@@ -4648,7 +4823,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -4694,7 +4869,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the saturation and brightness area.",
-            "defaultValue": "Saturation and brightness"
+            "defaultValue": "'Saturation and brightness'"
           },
           {
             "name": "saturationValueText",
@@ -4708,21 +4883,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the hue slider.",
-            "defaultValue": "Hue"
+            "defaultValue": "'Hue'"
           },
           {
             "name": "alphaLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the alpha slider, shown with `showAlpha`.",
-            "defaultValue": "Alpha"
+            "defaultValue": "'Alpha'"
           },
           {
             "name": "hexLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the hex text field.",
-            "defaultValue": "Hex colour value"
+            "defaultValue": "'Hex colour value'"
           },
           {
             "name": "triggerLabel",
@@ -4736,7 +4911,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the trigger",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -4773,7 +4948,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key in data for x-axis values",
-            "defaultValue": "label"
+            "defaultValue": "'label'"
           },
           {
             "name": "barKey",
@@ -4834,7 +5009,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -4855,7 +5033,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -4886,7 +5064,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Placeholder shown in the text field when nothing is selected",
-            "defaultValue": "Search…"
+            "defaultValue": "'Search…'"
           },
           {
             "name": "value",
@@ -4904,13 +5082,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "options",
             "type": "ComboboxOption[]",
             "required": true,
-            "description": "Available options (flat list)"
+            "description": "Available options (flat list)",
+            "typeRefs": [
+              "ComboboxOption"
+            ]
           },
           {
             "name": "groups",
             "type": "ComboboxOptionGroup[]",
             "required": false,
-            "description": "Optional grouped options — when provided, `options` is ignored"
+            "description": "Optional grouped options — when provided, `options` is ignored",
+            "typeRefs": [
+              "ComboboxOptionGroup"
+            ]
           },
           {
             "name": "multiple",
@@ -4928,7 +5112,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -4969,14 +5153,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Message shown when the filter matches no options",
-            "defaultValue": "No results found"
+            "defaultValue": "'No results found'"
           },
           {
             "name": "loadingMessage",
             "type": "string",
             "required": false,
             "description": "Status text shown in the menu while `loading` is set. Defaults to \"Loading…\".",
-            "defaultValue": "Loading…"
+            "defaultValue": "'Loading…'"
           },
           {
             "name": "clearable",
@@ -4990,7 +5174,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the clear button. Defaults to \"Clear selection\".",
-            "defaultValue": "Clear selection"
+            "defaultValue": "'Clear selection'"
           },
           {
             "name": "removeLabel",
@@ -5023,7 +5207,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -5079,21 +5263,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "groups",
             "type": "CommandPaletteGroup[]",
             "required": true,
-            "description": "Commands, grouped under headings"
+            "description": "Commands, grouped under headings",
+            "typeRefs": [
+              "CommandPaletteGroup"
+            ]
           },
           {
             "name": "placeholder",
             "type": "string",
             "required": false,
             "description": "Placeholder for the search field",
-            "defaultValue": "Type a command or search…"
+            "defaultValue": "'Type a command or search…'"
           },
           {
             "name": "emptyMessage",
             "type": "string",
             "required": false,
             "description": "Message shown when the query matches nothing",
-            "defaultValue": "No matching commands"
+            "defaultValue": "'No matching commands'"
           },
           {
             "name": "loading",
@@ -5107,7 +5294,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Status text shown in place of results while `loading` is set. Defaults to \"Loading…\".",
-            "defaultValue": "Loading…"
+            "defaultValue": "'Loading…'"
           },
           {
             "name": "hotkey",
@@ -5121,19 +5308,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | string[]",
             "required": false,
             "description": "The shortcuts that toggle the palette when `hotkey` is on, in the\nshortcut grammar. Defaults to `['meta+k', 'ctrl+k']`, so both answer on\nevery platform. They go through the shared shortcut listener, so they\nfire from a text field and over an open dialog.",
-            "defaultValue": "['meta+k', 'ctrl+k']"
+            "defaultValue": "['meta+k', 'ctrl+k']",
+            "typeRefs": [
+              "Shortcut"
+            ]
           },
           {
             "name": "keyLabels",
             "type": "Partial<Record<string, string>>",
             "required": false,
-            "description": "Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+            "description": "Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           },
           {
             "name": "onSelect",
             "type": "((command: CommandPaletteCommand) => void)",
             "required": false,
-            "description": "Called with the chosen command, after its own `onSelect`. Replaces the\nnative `onSelect` (text-selection) handler on the panel."
+            "description": "Called with the chosen command, after its own `onSelect`. Replaces the\nnative `onSelect` (text-selection) handler on the panel.",
+            "typeRefs": [
+              "CommandPaletteCommand"
+            ]
           },
           {
             "name": "onSearchChange",
@@ -5166,14 +5362,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the close button",
-            "defaultValue": "Close command palette"
+            "defaultValue": "'Close command palette'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the overlay container (the ref and native attributes go on the panel)",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -5198,7 +5394,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The prompt the field shows, which is also the button's accessible name.",
-            "defaultValue": "Search or ask anything"
+            "defaultValue": "'Search or ask anything'"
           },
           {
             "name": "shortcut",
@@ -5211,20 +5407,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The keyboard shortcut drawn at the end, in the shortcut grammar, in the\nreader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K\nelsewhere, announced as both, since CommandPalette answers to either.\n`shortcut` wins when it is given.",
-            "defaultValue": "mod+k"
+            "defaultValue": "'mod+k'",
+            "typeRefs": [
+              "Shortcut"
+            ]
           },
           {
             "name": "keyLabels",
             "type": "Partial<Record<string, string>>",
             "required": false,
-            "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+            "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode).",
-            "defaultValue": "search"
+            "defaultValue": "'search'"
           },
           {
             "name": "size",
@@ -5235,7 +5437,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "iconOnly",
@@ -5249,7 +5451,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -5315,7 +5517,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "inline",
@@ -5353,11 +5555,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "above",
               "inside"
             ],
-            "defaultValue": "inside"
+            "defaultValue": "'inside'"
           },
           {
             "name": "contextIcon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
           },
@@ -5372,13 +5574,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The accessible name of the context chip's clear button. Defaults to \"Clear context\".",
-            "defaultValue": "Clear context"
+            "defaultValue": "'Clear context'"
           },
           {
             "name": "files",
             "type": "AttachmentItem[]",
             "required": false,
-            "description": "The files queued on this message, drawn as a scrolling row of square\ntiles above the textarea. Controlled by the caller: Composer draws the\nlist and reports what was added or removed, and never stores a file.\n`useAttachments` is the usual owner."
+            "description": "The files queued on this message, drawn as a scrolling row of square\ntiles above the textarea. Controlled by the caller: Composer draws the\nlist and reports what was added or removed, and never stores a file.\n`useAttachments` is the usual owner.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "onFilesSelected",
@@ -5396,7 +5601,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onFileClick",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons."
+            "description": "Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons.",
+            "typeRefs": [
+              "AttachmentItem"
+            ]
           },
           {
             "name": "accept",
@@ -5435,27 +5643,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible label for the attach button.",
-            "defaultValue": "Attach files"
+            "defaultValue": "'Attach files'"
           },
           {
             "name": "dropLabel",
             "type": "string",
             "required": false,
             "description": "Text shown on the shell while files are dragged over it.",
-            "defaultValue": "Drop files to attach"
+            "defaultValue": "'Drop files to attach'"
           },
           {
             "name": "filesLabel",
             "type": "string",
             "required": false,
             "description": "Accessible label for the list of queued files.",
-            "defaultValue": "Attachments"
+            "defaultValue": "'Attachments'"
           },
           {
             "name": "attachmentTileLabels",
             "type": "(Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\"> & { removeLabel?: ((name: string) => string); })",
             "required": false,
-            "description": "The words each queued file's tile writes, merged over the tile's English\ndefaults: its status lines (\"Uploading…\", \"Upload failed\", \"Unavailable\"),\nits progress spinner's name, and its remove button's name, which is given\nthe file name and defaults to \"Remove\" followed by it."
+            "description": "The words each queued file's tile writes, merged over the tile's English\ndefaults: its status lines (\"Uploading…\", \"Upload failed\", \"Unavailable\"),\nits progress spinner's name, and its remove button's name, which is given\nthe file name and defaults to \"Remove\" followed by it.",
+            "typeRefs": [
+              "AttachmentTileProps"
+            ]
           },
           {
             "name": "formatFileAnnouncement",
@@ -5475,13 +5686,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "mentions",
             "type": "MentionSource[]",
             "required": false,
-            "description": "What a person can reference while typing, one source per trigger\ncharacter: `@` for entities, `/` for skills. Typing a trigger at the\nstart of a word opens a menu of that source's items, filtered as the\nword grows. Arrows move through it, Enter or Tab writes the choice into\nthe text, Escape closes it. A mention is drawn in the tag colour\nwherever its exact name stands in the text; the value stays a plain\nstring."
+            "description": "What a person can reference while typing, one source per trigger\ncharacter: `@` for entities, `/` for skills. Typing a trigger at the\nstart of a word opens a menu of that source's items, filtered as the\nword grows. Arrows move through it, Enter or Tab writes the choice into\nthe text, Escape closes it. A mention is drawn in the tag colour\nwherever its exact name stands in the text; the value stays a plain\nstring.",
+            "typeRefs": [
+              "MentionSource"
+            ]
           },
           {
             "name": "onMentionSelect",
             "type": "((item: MentionItem, trigger: string) => void)",
             "required": false,
-            "description": "Fires with the item a person chose from the mention menu, and the trigger that opened it."
+            "description": "Fires with the item a person chose from the mention menu, and the trigger that opened it.",
+            "typeRefs": [
+              "MentionItem"
+            ]
           },
           {
             "name": "mentionPlacement",
@@ -5492,7 +5709,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom",
               "top"
             ],
-            "defaultValue": "top"
+            "defaultValue": "'top'"
           },
           {
             "name": "formatMentionAnnouncement",
@@ -5518,14 +5735,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible label for the send button.",
-            "defaultValue": "Send message"
+            "defaultValue": "'Send message'"
           },
           {
             "name": "stopLabel",
             "type": "string",
             "required": false,
             "description": "Accessible label for the stop button.",
-            "defaultValue": "Stop generating"
+            "defaultValue": "'Stop generating'"
           },
           {
             "name": "locale",
@@ -5538,7 +5755,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the shell, not the <textarea>.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -5578,7 +5795,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon used when no logo is set — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -5626,13 +5843,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -5656,7 +5876,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "DropdownMenuEntry[]",
             "required": true,
-            "description": "Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read."
+            "description": "Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read.",
+            "typeRefs": [
+              "DropdownMenuEntry"
+            ]
           },
           {
             "name": "size",
@@ -5667,7 +5890,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "ariaLabel",
@@ -5679,14 +5902,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "keyLabels",
             "type": "Partial<Record<string, string>>",
             "required": false,
-            "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+            "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -5716,7 +5942,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "days",
             "type": "ContributionDay[]",
             "required": true,
-            "description": "One entry per day, ordered oldest to newest"
+            "description": "One entry per day, ordered oldest to newest",
+            "typeRefs": [
+              "ContributionDay"
+            ]
           },
           {
             "name": "title",
@@ -5768,21 +5997,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The legend's low-end word. Defaults to \"Less\".",
-            "defaultValue": "Less"
+            "defaultValue": "'Less'"
           },
           {
             "name": "moreLabel",
             "type": "string",
             "required": false,
             "description": "The legend's high-end word. Defaults to \"More\".",
-            "defaultValue": "More"
+            "defaultValue": "'More'"
           },
           {
             "name": "locale",
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the dates are written in: the default month labels\nabove the grid (\"Jan\" to \"Dec\" in `en-US`) and the date in each cell's\ndefault tooltip (\"Jul 8, 2026\"), and the weekday each column starts on. Defaults to `en-US`.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "weekStartsOn",
@@ -5797,6 +6026,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "4",
               "5",
               "6"
+            ],
+            "typeRefs": [
+              "Weekday"
             ]
           },
           {
@@ -5816,7 +6048,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -5846,27 +6078,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "string | null",
             "required": false,
-            "description": "The amount as a decimal string (`\"1234.50\"`), or `null` for none (controlled). Pair with `onValueChange`."
+            "description": "The amount as a decimal string (`\"1234.50\"`), or `null` for none (controlled). Pair with `onValueChange`.",
+            "typeRefs": [
+              "DecimalString"
+            ]
           },
           {
             "name": "defaultValue",
             "type": "string | null",
             "required": false,
             "description": "The amount the field starts with (uncontrolled).",
-            "defaultValue": "null"
+            "defaultValue": "null",
+            "typeRefs": [
+              "DecimalString"
+            ]
           },
           {
             "name": "onValueChange",
             "type": "((value: string | null) => void)",
             "required": false,
-            "description": "Called with the amount as a normalised decimal string as the reader types, or `null` while the field holds no number. Fires alongside the native `onChange`."
+            "description": "Called with the amount as a normalised decimal string as the reader types, or `null` while the field holds no number. Fires alongside the native `onChange`.",
+            "typeRefs": [
+              "DecimalString"
+            ]
           },
           {
             "name": "currency",
             "type": "string",
             "required": false,
             "description": "The ISO 4217 code of the currency, such as `USD`, `EUR` or `JPY`. Defaults to `USD`.",
-            "defaultValue": "USD"
+            "defaultValue": "'USD'"
           },
           {
             "name": "currencyDisplay",
@@ -5878,7 +6119,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "none",
               "symbol"
             ],
-            "defaultValue": "symbol"
+            "defaultValue": "'symbol'"
           },
           {
             "name": "fractionDigits",
@@ -5897,20 +6138,29 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "min",
             "type": "string",
             "required": false,
-            "description": "The smallest amount, as a decimal string. A value below it is raised to it when the field loses focus."
+            "description": "The smallest amount, as a decimal string. A value below it is raised to it when the field loses focus.",
+            "typeRefs": [
+              "DecimalString"
+            ]
           },
           {
             "name": "max",
             "type": "string",
             "required": false,
-            "description": "The largest amount, as a decimal string. A value above it is lowered to it when the field loses focus."
+            "description": "The largest amount, as a decimal string. A value above it is lowered to it when the field loses focus.",
+            "typeRefs": [
+              "DecimalString"
+            ]
           },
           {
             "name": "step",
             "type": "string",
             "required": false,
             "description": "How much the Up and Down arrow keys add or take away, as a decimal string. Defaults to `\"1\"`.",
-            "defaultValue": "1"
+            "defaultValue": "'1'",
+            "typeRefs": [
+              "DecimalString"
+            ]
           },
           {
             "name": "locale",
@@ -5927,7 +6177,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "helperText",
@@ -5958,7 +6208,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the wrapper.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -5982,7 +6232,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columns",
             "type": "DataTableColumn<R>[]",
             "required": true,
-            "description": "Column definitions."
+            "description": "Column definitions.",
+            "typeRefs": [
+              "DataTableColumn"
+            ]
           },
           {
             "name": "rows",
@@ -6037,7 +6290,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The page size picker's label. Defaults to \"Rows per page\".",
-            "defaultValue": "Rows per page"
+            "defaultValue": "'Rows per page'"
           },
           {
             "name": "phoneLayout",
@@ -6048,7 +6301,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "scroll",
               "stack"
             ],
-            "defaultValue": "scroll"
+            "defaultValue": "'scroll'"
           },
           {
             "name": "selectable",
@@ -6079,50 +6332,71 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sort",
             "type": "DataTableSort | null",
             "required": false,
-            "description": "Sort state for controlled use. Pair with `onSortChange`; `null` means unsorted."
+            "description": "Sort state for controlled use. Pair with `onSortChange`; `null` means unsorted.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "defaultSort",
             "type": "DataTableSort",
             "required": false,
-            "description": "Initial sort state for uncontrolled use."
+            "description": "Initial sort state for uncontrolled use.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "onSortChange",
             "type": "((sort: DataTableSort | null) => void)",
             "required": false,
-            "description": "Fires with the new sort state — `null` when a third click clears the sort."
+            "description": "Fires with the new sort state — `null` when a third click clears the sort.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "sorts",
             "type": "DataTableSort[]",
             "required": false,
-            "description": "Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`."
+            "description": "Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "defaultSorts",
             "type": "DataTableSort[]",
             "required": false,
-            "description": "Initial sorts for uncontrolled use."
+            "description": "Initial sorts for uncontrolled use.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "onSortsChange",
             "type": "((sorts: DataTableSort[]) => void)",
             "required": false,
-            "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`."
+            "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
+            "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "virtualize",
             "type": "boolean | \"auto\"",
             "required": false,
             "description": "Draws only the rows in view, so a table of thousands scrolls as\nsmoothly as one of ten. `auto` (the default) does it for an unpaged,\nungrouped table of more than 200 rows; `true` always; `false` never.\nA virtualised table scrolls inside its frame (`maxHeight`, 640px when\nunset), keeps its header in view, and still sends its first screen of\nrows in the server's HTML.",
-            "defaultValue": "auto"
+            "defaultValue": "'auto'"
           },
           {
             "name": "onLoadMore",
@@ -6173,7 +6447,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "loadLabels",
             "type": "Partial<DataTableLoadLabels>",
             "required": false,
-            "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button."
+            "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button.",
+            "typeRefs": [
+              "DataTableLoadLabels"
+            ]
           },
           {
             "name": "renderDetail",
@@ -6208,13 +6485,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "multiple",
               "single"
             ],
-            "defaultValue": "multiple"
+            "defaultValue": "'multiple'"
           },
           {
             "name": "onViewChange",
             "type": "((view: TableView) => void)",
             "required": false,
-            "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view."
+            "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view.",
+            "typeRefs": [
+              "DataTableView"
+            ]
           },
           {
             "name": "grouping",
@@ -6245,19 +6525,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "totals",
             "type": "Record<string, Total>",
             "required": false,
-            "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`."
+            "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`.",
+            "typeRefs": [
+              "DataTableTotal"
+            ]
           },
           {
             "name": "defaultTotals",
             "type": "Record<string, Total>",
             "required": false,
-            "description": "The footer calculations to start with, for uncontrolled use."
+            "description": "The footer calculations to start with, for uncontrolled use.",
+            "typeRefs": [
+              "DataTableTotal"
+            ]
           },
           {
             "name": "onTotalsChange",
             "type": "((totals: Record<string, Total>) => void)",
             "required": false,
-            "description": "Fires with every footer calculation after one is picked."
+            "description": "Fires with every footer calculation after one is picked.",
+            "typeRefs": [
+              "DataTableTotal"
+            ]
           },
           {
             "name": "multiSort",
@@ -6278,7 +6567,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Placeholder for the search field.",
-            "defaultValue": "Search"
+            "defaultValue": "'Search'"
           },
           {
             "name": "toolbar",
@@ -6320,7 +6609,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the select-all checkbox in the header, shown with `selectable`.",
-            "defaultValue": "Select all rows on this page"
+            "defaultValue": "'Select all rows on this page'"
           },
           {
             "name": "selectRowLabel",
@@ -6334,21 +6623,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
             "required": false,
             "description": "Accessible name of a sortable header's button, given the column's header\ntext (its `key` when the header is not a string) and its current sort\ndirection, `null` when unsorted. Defaults to the header text alone: the\nsort state is the header's `aria-sort`, so naming it here too would read\nit twice.",
-            "defaultValue": "(header: string) => header"
+            "defaultValue": "(header: string) => header",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "sortAnnouncement",
             "type": "((header: string, direction: \"desc\" | \"asc\" | null) => string)",
             "required": false,
             "description": "Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to \"Sorted by Name, ascending\" or \"Sort cleared\".",
-            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n    direction === null ? 'Sort cleared' : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+            "defaultValue": "(header: string, direction: DataTableSort['direction'] | null) =>\n    direction === null ? 'Sort cleared' : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "sortRankLabel",
             "type": "((name: string, rank: number, direction: \"desc\" | \"asc\") => string)",
             "required": false,
             "description": "With several sorts, names a header's sort button after the first: given the `sortLabel` name, its rank and its direction. Defaults to \"Owner, sort 2, ascending\". The first sort's header carries `aria-sort` instead.",
-            "defaultValue": "(name: string, rank: number, direction: DataTableSort['direction']) =>\n    `${name}, sort ${rank}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+            "defaultValue": "(name: string, rank: number, direction: DataTableSort['direction']) =>\n    `${name}, sort ${rank}, ${direction === 'asc' ? 'ascending' : 'descending'}`",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "pageAnnouncement",
@@ -6375,13 +6673,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "paginationLabels",
             "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"pageLabel\" | \"readoutLabel\">",
             "required": false,
-            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`)."
+            "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`).",
+            "typeRefs": [
+              "PaginationProps"
+            ]
           },
           {
             "name": "emptyStateLabels",
             "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
             "required": false,
-            "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node."
+            "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node.",
+            "typeRefs": [
+              "EmptyStateProps"
+            ]
           },
           {
             "name": "resizableColumns",
@@ -6474,19 +6778,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columnPinning",
             "type": "DataTableColumnPinning",
             "required": false,
-            "description": "Columns pinned to each edge, for controlled use."
+            "description": "Columns pinned to each edge, for controlled use.",
+            "typeRefs": [
+              "DataTableColumnPinning"
+            ]
           },
           {
             "name": "defaultColumnPinning",
             "type": "DataTableColumnPinning",
             "required": false,
-            "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`."
+            "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`.",
+            "typeRefs": [
+              "DataTableColumnPinning"
+            ]
           },
           {
             "name": "onColumnPinningChange",
             "type": "((pinning: DataTableColumnPinning) => void)",
             "required": false,
-            "description": "Fires with the pins after a column is pinned or unpinned."
+            "description": "Fires with the pins after a column is pinned or unpinned.",
+            "typeRefs": [
+              "DataTableColumnPinning"
+            ]
           },
           {
             "name": "hiddenColumns",
@@ -6528,7 +6841,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columnLabels",
             "type": "Partial<DataTableColumnLabels>",
             "required": false,
-            "description": "The column and row controls' words, merged over their English defaults."
+            "description": "The column and row controls' words, merged over their English defaults.",
+            "typeRefs": [
+              "DataTableColumnLabels"
+            ]
           },
           {
             "name": "columnDividers",
@@ -6548,13 +6864,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "truncate",
               "wrap"
             ],
-            "defaultValue": "wrap"
+            "defaultValue": "'wrap'",
+            "typeRefs": [
+              "DataTableCellText"
+            ]
           },
           {
             "name": "rowActions",
             "type": "((row: R) => DataTableRowAction[])",
             "required": false,
-            "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu."
+            "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu.",
+            "typeRefs": [
+              "DataTableRowAction"
+            ]
           },
           {
             "name": "editMode",
@@ -6565,37 +6887,52 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "cell",
               "row"
             ],
-            "defaultValue": "cell"
+            "defaultValue": "'cell'"
           },
           {
             "name": "onCellEdit",
             "type": "((edit: DataTableCellEdit<R>) => void | Promise<unknown>)",
             "required": false,
-            "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure."
+            "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure.",
+            "typeRefs": [
+              "DataTableCellEdit"
+            ]
           },
           {
             "name": "onRowEdit",
             "type": "((edit: DataTableRowEdit<R>) => void | Promise<unknown>)",
             "required": false,
-            "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`."
+            "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`.",
+            "typeRefs": [
+              "DataTableRowEdit"
+            ]
           },
           {
             "name": "filters",
             "type": "Filter[]",
             "required": false,
-            "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar."
+            "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar.",
+            "typeRefs": [
+              "DataTableFilter"
+            ]
           },
           {
             "name": "defaultFilters",
             "type": "Filter[]",
             "required": false,
-            "description": "Starting filters, for uncontrolled use."
+            "description": "Starting filters, for uncontrolled use.",
+            "typeRefs": [
+              "DataTableFilter"
+            ]
           },
           {
             "name": "onFiltersChange",
             "type": "((filters: Filter[]) => void)",
             "required": false,
-            "description": "Fires with every filter after one is added, changed or removed."
+            "description": "Fires with every filter after one is added, changed or removed.",
+            "typeRefs": [
+              "DataTableFilter"
+            ]
           },
           {
             "name": "search",
@@ -6635,7 +6972,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "filterLabels",
             "type": "Partial<FilterLabels>",
             "required": false,
-            "description": "The filters' words, merged over their English defaults."
+            "description": "The filters' words, merged over their English defaults.",
+            "typeRefs": [
+              "DataTableFilterLabels"
+            ]
           },
           {
             "name": "rowActionsVisibility",
@@ -6646,7 +6986,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "always",
               "hover"
             ],
-            "defaultValue": "hover"
+            "defaultValue": "'hover'"
           },
           {
             "name": "locale",
@@ -6659,7 +6999,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -6700,7 +7040,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "error",
@@ -6738,7 +7078,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -6780,7 +7120,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -6818,14 +7158,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the previous-month button.",
-            "defaultValue": "Previous month"
+            "defaultValue": "'Previous month'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the next-month button.",
-            "defaultValue": "Next month"
+            "defaultValue": "'Next month'"
           },
           {
             "name": "monthLabel",
@@ -6870,6 +7210,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "4",
               "5",
               "6"
+            ],
+            "typeRefs": [
+              "Weekday"
             ]
           },
           {
@@ -6877,7 +7220,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -6901,20 +7244,29 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "value",
             "type": "DateRange",
             "required": false,
-            "description": "The chosen range (controlled). Pair with `onValueChange`."
+            "description": "The chosen range (controlled). Pair with `onValueChange`.",
+            "typeRefs": [
+              "DateRange"
+            ]
           },
           {
             "name": "defaultValue",
             "type": "DateRange",
             "required": false,
             "description": "The range it starts with (uncontrolled).",
-            "defaultValue": "{ start: null, end: null }"
+            "defaultValue": "{ start: null, end: null }",
+            "typeRefs": [
+              "DateRange"
+            ]
           },
           {
             "name": "onValueChange",
             "type": "((range: DateRange) => void)",
             "required": false,
-            "description": "Called with the range as the reader chooses it: once with only `start` after the first day, then with both."
+            "description": "Called with the range as the reader chooses it: once with only `start` after the first day, then with both.",
+            "typeRefs": [
+              "DateRange"
+            ]
           },
           {
             "name": "months",
@@ -6961,14 +7313,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "presets",
             "type": "DateRangePreset[]",
             "required": false,
-            "description": "Ranges the reader can pick in one press, shown above the calendar: \"Last 7 days\", \"This quarter\"."
+            "description": "Ranges the reader can pick in one press, shown above the calendar: \"Last 7 days\", \"This quarter\".",
+            "typeRefs": [
+              "DateRangePreset"
+            ]
           },
           {
             "name": "presetsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the presets. Defaults to \"Presets\".",
-            "defaultValue": "Presets"
+            "defaultValue": "'Presets'"
           },
           {
             "name": "size",
@@ -6979,7 +7334,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -6999,14 +7354,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the previous-month button.",
-            "defaultValue": "Previous month"
+            "defaultValue": "'Previous month'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the next-month button.",
-            "defaultValue": "Next month"
+            "defaultValue": "'Next month'"
           },
           {
             "name": "monthLabel",
@@ -7018,28 +7373,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "dayLabel",
             "type": "((date: Date, position: DateRangePosition) => string)",
             "required": false,
-            "description": "A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label."
+            "description": "A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label.",
+            "typeRefs": [
+              "DateRangePosition"
+            ]
           },
           {
             "name": "rangeStartLabel",
             "type": "string",
             "required": false,
             "description": "Said after the first day of the range. Defaults to \"start of range\".",
-            "defaultValue": "start of range"
+            "defaultValue": "'start of range'"
           },
           {
             "name": "rangeEndLabel",
             "type": "string",
             "required": false,
             "description": "Said after the last day of the range. Defaults to \"end of range\".",
-            "defaultValue": "end of range"
+            "defaultValue": "'end of range'"
           },
           {
             "name": "inRangeLabel",
             "type": "string",
             "required": false,
             "description": "Said after a day inside the range. Defaults to \"in range\".",
-            "defaultValue": "in range"
+            "defaultValue": "'in range'"
           },
           {
             "name": "weekdayLabels",
@@ -7072,6 +7430,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "4",
               "5",
               "6"
+            ],
+            "typeRefs": [
+              "Weekday"
             ]
           },
           {
@@ -7079,7 +7440,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7103,7 +7464,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "date",
             "type": "DateInput",
             "required": true,
-            "description": "The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch."
+            "description": "The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch.",
+            "typeRefs": [
+              "DateInput"
+            ]
           },
           {
             "name": "timeZone",
@@ -7121,27 +7485,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "both",
               "relative"
             ],
-            "defaultValue": "relative"
+            "defaultValue": "'relative'"
           },
           {
             "name": "thresholds",
             "type": "DeadlineThresholds",
             "required": false,
-            "description": "How close the deadline must be before it turns to the warning and then the error role."
+            "description": "How close the deadline must be before it turns to the warning and then the error role.",
+            "typeRefs": [
+              "DeadlineThresholds"
+            ]
           },
           {
             "name": "prefixLabel",
             "type": "string",
             "required": false,
             "description": "The word before the distance: \"Due\", \"Closes\", \"Expires\". Defaults to \"Due\".",
-            "defaultValue": "Due"
+            "defaultValue": "'Due'"
           },
           {
             "name": "overdueLabel",
             "type": "string",
             "required": false,
             "description": "What a deadline that has passed says in place of the distance. Defaults to \"Overdue\".",
-            "defaultValue": "Overdue"
+            "defaultValue": "'Overdue'"
           },
           {
             "name": "variant",
@@ -7152,7 +7519,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "badge",
               "text"
             ],
-            "defaultValue": "badge"
+            "defaultValue": "'badge'"
           },
           {
             "name": "size",
@@ -7163,7 +7530,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "tick",
@@ -7176,13 +7543,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "now",
             "type": "DateInput",
             "required": false,
-            "description": "The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot."
+            "description": "The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot.",
+            "typeRefs": [
+              "DateInput"
+            ]
           },
           {
             "name": "onStatusChange",
             "type": "((status: DeadlineStatus) => void)",
             "required": false,
-            "description": "Called when the deadline moves to a new status as time passes, so a host can react (sort, notify)."
+            "description": "Called when the deadline moves to a new status as time passes, so a host can react (sort, notify).",
+            "typeRefs": [
+              "DeadlineStatus"
+            ]
           },
           {
             "name": "locale",
@@ -7195,7 +7568,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7219,7 +7592,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "DescriptionListEntry[]",
             "required": false,
-            "description": "The entries, in order. Or compose `DescriptionListItem` children instead."
+            "description": "The entries, in order. Or compose `DescriptionListItem` children instead.",
+            "typeRefs": [
+              "DescriptionListEntry"
+            ]
           },
           {
             "name": "children",
@@ -7237,7 +7613,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "inline",
               "stacked"
             ],
-            "defaultValue": "stacked"
+            "defaultValue": "'stacked'"
           },
           {
             "name": "columns",
@@ -7268,7 +7644,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "termWidth",
@@ -7280,7 +7656,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "narrow",
               "wide"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "align",
@@ -7291,14 +7667,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "start"
+            "defaultValue": "'start'"
           },
           {
             "name": "emptyValue",
             "type": "ReactNode",
             "required": false,
             "description": "What an empty value shows. Defaults to \"Not set\".",
-            "defaultValue": "Not set"
+            "defaultValue": "'Not set'"
           },
           {
             "name": "copyLabel",
@@ -7312,7 +7688,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The copy button's accessible name for a moment after a copy. Defaults to \"Copied\".",
-            "defaultValue": "Copied"
+            "defaultValue": "'Copied'"
           },
           {
             "name": "onValueCopy",
@@ -7325,7 +7701,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -7367,7 +7743,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7433,7 +7809,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "md",
               "sm"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "dismissible",
@@ -7447,14 +7823,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the close button.",
-            "defaultValue": "Close dialog"
+            "defaultValue": "'Close dialog'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the portal container, not the panel",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7483,7 +7859,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "horizontal"
+            "defaultValue": "'horizontal'"
           },
           {
             "name": "label",
@@ -7500,7 +7876,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "center",
               "start"
             ],
-            "defaultValue": "center"
+            "defaultValue": "'center'"
           },
           {
             "name": "spacing",
@@ -7513,14 +7889,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "none",
               "sm"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7562,11 +7938,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "sheet",
               "slide"
             ],
-            "defaultValue": "generic"
+            "defaultValue": "'generic'",
+            "typeRefs": [
+              "DocumentChipFileType"
+            ]
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Override the type icon — a Material Symbol name, or any custom element."
           },
@@ -7597,7 +7976,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onClick",
@@ -7616,7 +7995,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible label for the remove button.",
-            "defaultValue": "Remove file"
+            "defaultValue": "'Remove file'"
           },
           {
             "name": "progressLabel",
@@ -7630,7 +8009,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ],
         "deprecated": "Use `AttachmentTile` instead."
@@ -7674,7 +8053,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "pdf",
               "text"
             ],
-            "defaultValue": "auto"
+            "defaultValue": "'auto'",
+            "typeRefs": [
+              "DocumentViewerKind"
+            ]
           },
           {
             "name": "fileName",
@@ -7698,7 +8080,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "fill",
               "tall"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "bare",
@@ -7744,28 +8126,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name and text of the download button. Defaults to \"Download\".",
-            "defaultValue": "Download"
+            "defaultValue": "'Download'"
           },
           {
             "name": "openLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the open button. Defaults to \"Open in new tab\".",
-            "defaultValue": "Open in new tab"
+            "defaultValue": "'Open in new tab'"
           },
           {
             "name": "zoomInLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the zoom-in button. Defaults to \"Zoom in\".",
-            "defaultValue": "Zoom in"
+            "defaultValue": "'Zoom in'"
           },
           {
             "name": "zoomOutLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the zoom-out button. Defaults to \"Zoom out\".",
-            "defaultValue": "Zoom out"
+            "defaultValue": "'Zoom out'"
           },
           {
             "name": "resetZoomLabel",
@@ -7778,14 +8160,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Announced while a text file loads. Defaults to \"Loading document\".",
-            "defaultValue": "Loading document"
+            "defaultValue": "'Loading document'"
           },
           {
             "name": "fallbackLabel",
             "type": "string",
             "required": false,
             "description": "The default fallback's line. Defaults to \"This file can’t be shown here.\"",
-            "defaultValue": "This file can’t be shown here."
+            "defaultValue": "'This file can’t be shown here.'"
           },
           {
             "name": "locale",
@@ -7798,7 +8180,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7873,7 +8255,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "start",
               "top"
             ],
-            "defaultValue": "right"
+            "defaultValue": "'right'"
           },
           {
             "name": "size",
@@ -7885,7 +8267,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "md",
               "sm"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "dismissible",
@@ -7899,14 +8281,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the close button.",
-            "defaultValue": "Close drawer"
+            "defaultValue": "'Close drawer'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the portal container, not the panel",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -7937,7 +8319,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Placeholder when no value selected",
-            "defaultValue": "Select an option"
+            "defaultValue": "'Select an option'"
           },
           {
             "name": "value",
@@ -7955,13 +8337,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "options",
             "type": "DropdownOption[]",
             "required": true,
-            "description": "Available options (flat list)"
+            "description": "Available options (flat list)",
+            "typeRefs": [
+              "DropdownOption"
+            ]
           },
           {
             "name": "groups",
             "type": "DropdownOptionGroup[]",
             "required": false,
-            "description": "Optional grouped options — when provided, renders groups with labels and separators"
+            "description": "Optional grouped options — when provided, renders groups with labels and separators",
+            "typeRefs": [
+              "DropdownOptionGroup"
+            ]
           },
           {
             "name": "size",
@@ -7972,7 +8360,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -8031,7 +8419,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -8063,7 +8451,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8093,7 +8481,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "DropdownMenuEntry[]",
             "required": true,
-            "description": "Menu entries (items, groups, separators)"
+            "description": "Menu entries (items, groups, separators)",
+            "typeRefs": [
+              "DropdownMenuEntry"
+            ]
           },
           {
             "name": "align",
@@ -8104,7 +8495,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "start"
+            "defaultValue": "'start'"
           },
           {
             "name": "size",
@@ -8115,7 +8506,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "open",
@@ -8140,14 +8531,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "keyLabels",
             "type": "Partial<Record<string, string>>",
             "required": false,
-            "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+            "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the root wrapper, which holds the trigger and the panel",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8169,7 +8563,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Material Symbol icon name, or a custom element (e.g. an illustration)"
           },
@@ -8200,7 +8594,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "variant",
@@ -8211,14 +8605,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bordered",
               "plain"
             ],
-            "defaultValue": "plain"
+            "defaultValue": "'plain'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8246,7 +8640,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon — Material Symbol name (string, e.g. \"home\") rendered via the rounded font, or custom element (ReactNode)"
           },
@@ -8267,7 +8661,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8291,7 +8685,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "EntitySwitcherItem[]",
             "required": true,
-            "description": "The top level of the tree. Its shape decides the list: all leaves is one flat list, any children make it drill in."
+            "description": "The top level of the tree. Its shape decides the list: all leaves is one flat list, any children make it drill in.",
+            "typeRefs": [
+              "EntitySwitcherItem"
+            ]
           },
           {
             "name": "value",
@@ -8309,7 +8706,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onValueChange",
             "type": "((id: string, item: EntitySwitcherItem) => void)",
             "required": false,
-            "description": "Called with the id and the entity when one is picked."
+            "description": "Called with the id and the entity when one is picked.",
+            "typeRefs": [
+              "EntitySwitcherItem"
+            ]
           },
           {
             "name": "open",
@@ -8348,49 +8748,49 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the trigger and the panel; the selected entity's name follows it on the trigger.",
-            "defaultValue": "Switch entity"
+            "defaultValue": "'Switch entity'"
           },
           {
             "name": "searchLabel",
             "type": "string",
             "required": false,
             "description": "Placeholder and accessible name of the search field.",
-            "defaultValue": "Search"
+            "defaultValue": "'Search'"
           },
           {
             "name": "backLabel",
             "type": "string",
             "required": false,
             "description": "The row that climbs out of a level. `{name}` is the level above.",
-            "defaultValue": "Back to {name}"
+            "defaultValue": "'Back to {name}'"
           },
           {
             "name": "topLevelLabel",
             "type": "string",
             "required": false,
             "description": "Stands in for `{name}` in `backLabel` when the level above is the top.",
-            "defaultValue": "all"
+            "defaultValue": "'all'"
           },
           {
             "name": "wholeBranchLabel",
             "type": "string",
             "required": false,
             "description": "The description of the row that picks a whole branch, leading its level. `{name}` is the branch.",
-            "defaultValue": "All of {name}"
+            "defaultValue": "'All of {name}'"
           },
           {
             "name": "emptyLabel",
             "type": "string",
             "required": false,
             "description": "Shown when a search finds nothing.",
-            "defaultValue": "Nothing matches"
+            "defaultValue": "'Nothing matches'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the root.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8414,7 +8814,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "errors",
             "type": "ErrorSummaryError<ReactNode>[]",
             "required": true,
-            "description": "The errors, in the form's order: each the id of the control it belongs to and what is wrong. The summary renders nothing while the list is empty."
+            "description": "The errors, in the form's order: each the id of the control it belongs to and what is wrong. The summary renders nothing while the list is empty.",
+            "typeRefs": [
+              "ErrorSummaryError"
+            ]
           },
           {
             "name": "title",
@@ -8471,7 +8874,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8496,7 +8899,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "EventCalendarEvent[]",
             "required": false,
             "description": "The events to place on the grid, including any that fall on the visible leading and trailing days of the neighbouring months.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "EventCalendarEvent"
+            ]
           },
           {
             "name": "month",
@@ -8527,7 +8933,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onEventClick",
             "type": "((event: EventCalendarEvent) => void)",
             "required": false,
-            "description": "Fires with the clicked event. Pills only render as buttons when this is set."
+            "description": "Fires with the clicked event. Pills only render as buttons when this is set.",
+            "typeRefs": [
+              "EventCalendarEvent"
+            ]
           },
           {
             "name": "onDateClick",
@@ -8552,14 +8961,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the previous-month button.",
-            "defaultValue": "Previous month"
+            "defaultValue": "'Previous month'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the next-month button.",
-            "defaultValue": "Next month"
+            "defaultValue": "'Next month'"
           },
           {
             "name": "monthLabel",
@@ -8605,6 +9014,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "4",
               "5",
               "6"
+            ],
+            "typeRefs": [
+              "Weekday"
             ]
           },
           {
@@ -8612,7 +9024,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8692,7 +9104,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "group",
@@ -8712,7 +9124,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8755,7 +9167,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8786,14 +9198,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Instructional copy inside the dropzone",
-            "defaultValue": "Drag and drop, or click to browse"
+            "defaultValue": "'Drag and drop, or click to browse'"
           },
           {
             "name": "files",
             "type": "FileInputFile[]",
             "required": false,
             "description": "Files to list under the dropzone",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "FileInputFile"
+            ]
           },
           {
             "name": "size",
@@ -8804,7 +9219,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "error",
@@ -8863,7 +9278,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -8894,7 +9309,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "filters",
             "type": "FilterBarFilter[]",
             "required": true,
-            "description": "The filters on the bar, in display order."
+            "description": "The filters on the bar, in display order.",
+            "typeRefs": [
+              "FilterBarFilter"
+            ]
           },
           {
             "name": "values",
@@ -8919,7 +9337,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Label for the button that clears every filter at once.",
-            "defaultValue": "Clear all"
+            "defaultValue": "'Clear all'"
           },
           {
             "name": "clearFilterLabel",
@@ -8937,14 +9355,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -8974,7 +9392,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "data",
             "type": "FunnelStage[]",
             "required": true,
-            "description": "Ordered stages, first stage widest. Each later stage's width is its share of the first."
+            "description": "Ordered stages, first stage widest. Each later stage's width is its share of the first.",
+            "typeRefs": [
+              "FunnelStage"
+            ]
           },
           {
             "name": "title",
@@ -9013,14 +9434,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryLabel",
             "type": "((data: FunnelStage[]) => string)",
             "required": false,
-            "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\"."
+            "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\".",
+            "typeRefs": [
+              "FunnelStage"
+            ]
           },
           {
             "name": "emptyLabel",
             "type": "string",
             "required": false,
             "description": "The chart's accessible name when `data` is empty. Defaults to \"Funnel, no data\".",
-            "defaultValue": "Funnel, no data"
+            "defaultValue": "'Funnel, no data'"
           },
           {
             "name": "minStageShare",
@@ -9034,7 +9458,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9058,14 +9482,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "GanttChartItem[]",
             "required": true,
-            "description": "Task bars, in display order."
+            "description": "Task bars, in display order.",
+            "typeRefs": [
+              "GanttChartItem"
+            ]
           },
           {
             "name": "milestones",
             "type": "GanttChartMilestone[]",
             "required": false,
             "description": "Point-in-time markers, each rendered as its own diamond row at the end of its group.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "GanttChartMilestone"
+            ]
           },
           {
             "name": "range",
@@ -9103,7 +9533,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onItemClick",
             "type": "((item: GanttChartItem) => void)",
             "required": false,
-            "description": "Called with the item when a bar is clicked. Bars render as buttons only when this is set; without it the chart is inert and renders from a Server Component."
+            "description": "Called with the item when a bar is clicked. Bars render as buttons only when this is set; without it the chart is inert and renders from a Server Component.",
+            "typeRefs": [
+              "GanttChartItem"
+            ]
           },
           {
             "name": "title",
@@ -9129,14 +9562,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The visible label on the today rule. Defaults to \"Today\".",
-            "defaultValue": "Today"
+            "defaultValue": "'Today'"
           },
           {
             "name": "locale",
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the dates are written in: the month names on the axis\n(\"Jan 2026\", then \"Feb\"), and the days in each bar's and milestone's\ntooltip and accessible text (\"Mar 9, 2026\"). Defaults to `en-US`.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "rangeLabel",
@@ -9157,14 +9590,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The word a `projected` bar's tooltip and accessible text carries. Defaults to \"projected\".",
-            "defaultValue": "projected"
+            "defaultValue": "'projected'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9216,13 +9649,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "accent"
+            "defaultValue": "'accent'"
           },
           {
             "name": "thresholds",
             "type": "GaugeThreshold[]",
             "required": false,
-            "description": "Colour switch points, e.g. warning at 70 and error at 90. The highest\nthreshold at or below the current reading wins; below them all, the\n`tone` prop applies."
+            "description": "Colour switch points, e.g. warning at 70 and error at 90. The highest\nthreshold at or below the current reading wins; below them all, the\n`tone` prop applies.",
+            "typeRefs": [
+              "GaugeThreshold"
+            ]
           },
           {
             "name": "showValue",
@@ -9281,14 +9717,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9313,33 +9749,48 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "GlobePoint[]",
             "required": false,
             "description": "The places to mark.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "GlobePoint"
+            ]
           },
           {
             "name": "arcs",
             "type": "GlobeArc[]",
             "required": false,
             "description": "The arcs to draw between them. An arc whose endpoint is not in `points` is skipped.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "GlobeArc"
+            ]
           },
           {
             "name": "rotation",
             "type": "GlobeRotation",
             "required": false,
-            "description": "Controlled view: `[longitude, latitude]` of the centre, in degrees.\nPair with `onRotationChange`. Omit to let the globe own its rotation."
+            "description": "Controlled view: `[longitude, latitude]` of the centre, in degrees.\nPair with `onRotationChange`. Omit to let the globe own its rotation.",
+            "typeRefs": [
+              "GlobeRotation"
+            ]
           },
           {
             "name": "defaultRotation",
             "type": "GlobeRotation",
             "required": false,
             "description": "Initial view when uncontrolled.",
-            "defaultValue": "[-20, 20]"
+            "defaultValue": "[-20, 20]",
+            "typeRefs": [
+              "GlobeRotation"
+            ]
           },
           {
             "name": "onRotationChange",
             "type": "((rotation: GlobeRotation) => void)",
             "required": false,
-            "description": "Fires whenever the view changes — drag, keys, or the auto-rotation."
+            "description": "Fires whenever the view changes — drag, keys, or the auto-rotation.",
+            "typeRefs": [
+              "GlobeRotation"
+            ]
           },
           {
             "name": "autoRotate",
@@ -9379,26 +9830,35 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onPointHover",
             "type": "((point: GlobePoint | null) => void)",
             "required": false,
-            "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves."
+            "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves.",
+            "typeRefs": [
+              "GlobePoint"
+            ]
           },
           {
             "name": "onPointClick",
             "type": "((point: GlobePoint) => void)",
             "required": false,
-            "description": "Fires when a marker is clicked, or activated with Enter or Space while\nfocused. Setting it makes the markers real buttons on a non-interactive\nglobe too."
+            "description": "Fires when a marker is clicked, or activated with Enter or Space while\nfocused. Setting it makes the markers real buttons on a non-interactive\nglobe too.",
+            "typeRefs": [
+              "GlobePoint"
+            ]
           },
           {
             "name": "renderCallout",
             "type": "((point: GlobePoint) => ReactNode)",
             "required": false,
-            "description": "Renders the annotation for the active (or hovered) point. It is placed\nbeside the marker in an HTML overlay, so any markup works; MapCallout is\nthe intended filling. The overlay carries `data-side=\"left\"|\"right\"` for\nwhich side of the marker it sits on."
+            "description": "Renders the annotation for the active (or hovered) point. It is placed\nbeside the marker in an HTML overlay, so any markup works; MapCallout is\nthe intended filling. The overlay carries `data-side=\"left\"|\"right\"` for\nwhich side of the marker it sits on.",
+            "typeRefs": [
+              "GlobePoint"
+            ]
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
             "description": "Accessible name for the globe, e.g. \"Listening points across the\nnetwork\". The point and arc counts are appended for screen readers.",
-            "defaultValue": "Globe"
+            "defaultValue": "'Globe'"
           },
           {
             "name": "pointsLabel",
@@ -9419,21 +9879,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The pointer and keyboard instructions appended to the accessible name while `interactive`.",
-            "defaultValue": "Drag to rotate, or use the arrow keys when focused."
+            "defaultValue": "'Drag to rotate, or use the arrow keys when focused.'"
           },
           {
             "name": "roleDescription",
             "type": "string",
             "required": false,
             "description": "What assistive technology calls the globe in place of its role, applied\nwhichever role it takes: `application` while `interactive`, `group` when\nonly `onPointClick` makes the markers buttons, and `img` otherwise.\nDefaults to \"globe\".",
-            "defaultValue": "globe"
+            "defaultValue": "'globe'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9483,6 +9943,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "mega-2",
               "sub-display",
               "title-body"
+            ],
+            "typeRefs": [
+              "HeadingTier"
             ]
           },
           {
@@ -9494,7 +9957,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "neutral"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "truncate",
@@ -9532,7 +9995,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9577,7 +10040,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "start",
               "top"
             ],
-            "defaultValue": "bottom"
+            "defaultValue": "'bottom'"
           },
           {
             "name": "showDelay",
@@ -9598,7 +10061,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9647,14 +10110,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Corner label over the before side",
-            "defaultValue": "Before"
+            "defaultValue": "'Before'"
           },
           {
             "name": "afterLabel",
             "type": "string",
             "required": false,
             "description": "Corner label over the after side",
-            "defaultValue": "After"
+            "defaultValue": "'After'"
           },
           {
             "name": "showLabels",
@@ -9699,14 +10162,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "CSS aspect-ratio of the frame (both images are sized to cover it)",
-            "defaultValue": "16 / 10"
+            "defaultValue": "'16 / 10'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9752,7 +10215,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "text",
               "url"
             ],
-            "defaultValue": "text"
+            "defaultValue": "'text'"
           },
           {
             "name": "size",
@@ -9763,7 +10226,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "error",
@@ -9814,7 +10277,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the clear button. Defaults to \"Clear\".",
-            "defaultValue": "Clear"
+            "defaultValue": "'Clear'"
           },
           {
             "name": "onClear",
@@ -9824,13 +10287,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "iconLeft",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
           },
           {
             "name": "iconRight",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Trailing icon — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -9845,7 +10308,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -9925,14 +10388,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the wrapper.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -9974,13 +10437,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "options",
             "type": "DropdownOption[]",
             "required": true,
-            "description": "Available options (flat list). Each option's `font` previews the face, as in Dropdown."
+            "description": "Available options (flat list). Each option's `font` previews the face, as in Dropdown.",
+            "typeRefs": [
+              "DropdownOption"
+            ]
           },
           {
             "name": "groups",
             "type": "DropdownOptionGroup[]",
             "required": false,
-            "description": "Optional grouped options. When provided, renders groups with labels and separators."
+            "description": "Optional grouped options. When provided, renders groups with labels and separators.",
+            "typeRefs": [
+              "DropdownOptionGroup"
+            ]
           },
           {
             "name": "placeholder",
@@ -10004,7 +10473,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onValueChange",
@@ -10017,7 +10486,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the wrapper.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10061,7 +10530,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "text",
               "url"
             ],
-            "defaultValue": "text"
+            "defaultValue": "'text'"
           },
           {
             "name": "size",
@@ -10072,7 +10541,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onValueChange",
@@ -10085,7 +10554,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the bar rather than the <input>.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10141,7 +10610,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the <section>.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10171,7 +10640,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "options",
             "type": "InspectorSegment[]",
             "required": true,
-            "description": "The choices, drawn left to right in the bar's end."
+            "description": "The choices, drawn left to right in the bar's end.",
+            "typeRefs": [
+              "InspectorSegment"
+            ]
           },
           {
             "name": "value",
@@ -10207,7 +10679,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onValueChange",
@@ -10220,7 +10692,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the bar.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10294,7 +10766,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onValueChange",
@@ -10313,7 +10785,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the bar rather than the <input>.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10348,7 +10820,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onCheckedChange",
@@ -10361,7 +10833,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the bar rather than the <input>.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10391,7 +10863,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "steps",
             "type": "InstructionStep[]",
             "required": true,
-            "description": "Array of instruction steps"
+            "description": "Array of instruction steps",
+            "typeRefs": [
+              "InstructionStep"
+            ]
           },
           {
             "name": "size",
@@ -10402,7 +10877,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "direction",
@@ -10413,7 +10888,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "vertical"
+            "defaultValue": "'vertical'"
           },
           {
             "name": "numbered",
@@ -10427,7 +10902,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10461,7 +10936,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "A Material Symbol name trailing the title, or any custom element. No icon by default."
           },
@@ -10469,7 +10944,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "options",
             "type": "InterruptCardOption[]",
             "required": false,
-            "description": "The choices, rendered as buttons left to right."
+            "description": "The choices, rendered as buttons left to right.",
+            "typeRefs": [
+              "InterruptCardOption"
+            ]
           },
           {
             "name": "onValueChange",
@@ -10494,14 +10972,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Visually hidden status announced while the card waits for a decision. Defaults to \"Waiting for your decision\".",
-            "defaultValue": "Waiting for your decision"
+            "defaultValue": "'Waiting for your decision'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -10543,14 +11021,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -10562,13 +11040,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "keys",
             "type": "string",
             "required": false,
-            "description": "A whole shortcut in the shortcut grammar (`mod+k`, `shift+?`, `g i`),\ndrawn as one keycap per key in the platform's legends: ⌘ K on a Mac,\nCtrl K elsewhere. The server draws the non-Apple legends and the browser\nsettles on its own after hydration."
+            "description": "A whole shortcut in the shortcut grammar (`mod+k`, `shift+?`, `g i`),\ndrawn as one keycap per key in the platform's legends: ⌘ K on a Mac,\nCtrl K elsewhere. The server draws the non-Apple legends and the browser\nsettles on its own after hydration.",
+            "typeRefs": [
+              "Shortcut"
+            ]
           },
           {
             "name": "keyLabels",
             "type": "Partial<Record<string, string>>",
             "required": false,
-            "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. Merged over the platform's defaults."
+            "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. Merged over the platform's defaults.",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           }
         ]
       }
@@ -10611,14 +11095,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale a number `value` is written in, such as `de-DE`. Defaults to `en-US`.\nLegendTile can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10698,35 +11182,35 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The panel's accessible name when neither `alt` nor `caption` is set.",
-            "defaultValue": "Media viewer"
+            "defaultValue": "'Media viewer'"
           },
           {
             "name": "closeLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the close button.",
-            "defaultValue": "Close viewer"
+            "defaultValue": "'Close viewer'"
           },
           {
             "name": "previousLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the previous button, shown with `onPrev`.",
-            "defaultValue": "Previous"
+            "defaultValue": "'Previous'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the next button, shown with `onNext`.",
-            "defaultValue": "Next"
+            "defaultValue": "'Next'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the portal container, not the panel",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10763,13 +11247,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key in data for x-axis values",
-            "defaultValue": "label"
+            "defaultValue": "'label'"
           },
           {
             "name": "series",
             "type": "LineSeriesConfig[]",
             "required": true,
-            "description": "One or more line series to render"
+            "description": "One or more line series to render",
+            "typeRefs": [
+              "LineSeriesConfig"
+            ]
           },
           {
             "name": "title",
@@ -10787,7 +11274,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -10808,7 +11298,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10849,7 +11339,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "inline",
               "standalone"
             ],
-            "defaultValue": "inline"
+            "defaultValue": "'inline'"
           },
           {
             "name": "size",
@@ -10860,7 +11350,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "external",
@@ -10874,7 +11364,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Read after an external link's text, hidden from the eye. Defaults to \"(opens in a new tab)\".",
-            "defaultValue": "(opens in a new tab)"
+            "defaultValue": "'(opens in a new tab)'"
           },
           {
             "name": "disabled",
@@ -10885,13 +11375,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "iconLeft",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "A Material Symbol name or a node before the text. A directional glyph mirrors in a right-to-left context."
           },
           {
             "name": "iconRight",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "A Material Symbol name or a node after the text. A directional glyph mirrors in a right-to-left context."
           },
@@ -10899,14 +11389,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one. An external link always renders a plain\n`<a>`."
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one. An external link always renders a plain\n`<a>`.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -10930,20 +11423,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "LinkListItem[]",
             "required": true,
-            "description": "Links to render, in display order"
+            "description": "Links to render, in display order",
+            "typeRefs": [
+              "LinkListItem"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -10973,7 +11472,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "plain",
               "unordered"
             ],
-            "defaultValue": "unordered"
+            "defaultValue": "'unordered'"
           },
           {
             "name": "marker",
@@ -10991,7 +11490,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "relaxed"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "size",
@@ -11002,7 +11501,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "start",
@@ -11027,7 +11526,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -11048,7 +11547,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "A Material Symbol name or a node that replaces this item's marker. A directional glyph mirrors in a right-to-left context."
           },
@@ -11057,7 +11556,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11099,14 +11598,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "start"
+            "defaultValue": "'start'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11143,14 +11642,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "MapLegendItem[]",
             "required": false,
             "description": "The key itself: one row per marker kind.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "MapLegendItem"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11180,7 +11682,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "mask",
             "type": "Mask",
             "required": true,
-            "description": "The shape of the value: a pattern where `#` takes a digit, `A` a letter and `*` either (`'(###) ###-####'`), or a function from the raw characters to the shown text. `MASK_PRESETS` holds common patterns."
+            "description": "The shape of the value: a pattern where `#` takes a digit, `A` a letter and `*` either (`'(###) ###-####'`), or a function from the raw characters to the shown text. `MASK_PRESETS` holds common patterns.",
+            "typeRefs": [
+              "Mask"
+            ]
           },
           {
             "name": "value",
@@ -11193,7 +11698,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The raw value the field starts with (uncontrolled).",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onValueChange",
@@ -11253,14 +11758,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the reveal button while the value is hidden. Defaults to \"Show\".",
-            "defaultValue": "Show"
+            "defaultValue": "'Show'"
           },
           {
             "name": "hideLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the reveal button while the value is shown. Defaults to \"Hide\".",
-            "defaultValue": "Hide"
+            "defaultValue": "'Hide'"
           },
           {
             "name": "size",
@@ -11271,7 +11776,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "helperText",
@@ -11302,7 +11807,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the wrapper.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11332,13 +11837,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "MegaMenuItem[]",
             "required": true,
-            "description": "The link rows, in columns of at least four. A column grows taller before\nthe grid adds one, up to three columns beside a showcase and four without."
+            "description": "The link rows, in columns of at least four. A column grows taller before\nthe grid adds one, up to three columns beside a showcase and four without.",
+            "typeRefs": [
+              "MegaMenuItem"
+            ]
           },
           {
             "name": "showcase",
             "type": "MegaMenuShowcase",
             "required": false,
-            "description": "A featured card in its own column beside the link grid."
+            "description": "A featured card in its own column beside the link grid.",
+            "typeRefs": [
+              "MegaMenuShowcase"
+            ]
           },
           {
             "name": "currentHref",
@@ -11356,14 +11867,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. The panel is server-renderable, so it\ncannot read a `LinkProvider`; a client host resolves one and passes it\nhere. Defaults to `<a>`."
+            "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. The panel is server-renderable, so it\ncannot read a `LinkProvider`; a client host resolves one and passes it\nhere. Defaults to `<a>`.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the panel.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11388,14 +11902,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The character that opened the mention, drawn a step quieter than the name.",
-            "defaultValue": "@"
+            "defaultValue": "'@'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -11412,7 +11926,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "MentionItem[]",
             "required": true,
-            "description": "The items to list, already filtered and ordered."
+            "description": "The items to list, already filtered and ordered.",
+            "typeRefs": [
+              "MentionItem"
+            ]
           },
           {
             "name": "activeId",
@@ -11430,21 +11947,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onSelect",
             "type": "((item: MentionItem) => void)",
             "required": false,
-            "description": "Fires with the item a person chose.\nNote: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose."
+            "description": "Fires with the item a person chose.\nNote: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose.",
+            "typeRefs": [
+              "MentionItem"
+            ]
           },
           {
             "name": "query",
             "type": "string",
             "required": false,
             "description": "The text typed so far. The part of each label that matches it is drawn stronger.",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
             "description": "Accessible name for the list.",
-            "defaultValue": "Suggestions"
+            "defaultValue": "'Suggestions'"
           },
           {
             "name": "emptyText",
@@ -11457,7 +11977,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -11474,14 +11994,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sources",
             "type": "MentionSource[]",
             "required": true,
-            "description": "The sources whose items count as mentions in this text."
+            "description": "The sources whose items count as mentions in this text.",
+            "typeRefs": [
+              "MentionSource"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11505,7 +12028,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "MessageAction[]",
             "required": true,
-            "description": "The actions, rendered left to right."
+            "description": "The actions, rendered left to right.",
+            "typeRefs": [
+              "MessageAction"
+            ]
           },
           {
             "name": "onActionClick",
@@ -11525,7 +12051,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11565,7 +12091,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Small icon trailing the title at the row's end — a Material Symbol name, or any custom element."
           },
@@ -11586,7 +12112,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -11664,7 +12190,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "info"
+            "defaultValue": "'info'"
           },
           {
             "name": "size",
@@ -11675,21 +12201,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "locale",
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11713,7 +12239,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "models",
             "type": "ModelPickerModel[]",
             "required": true,
-            "description": "The models on offer, in display order."
+            "description": "The models on offer, in display order.",
+            "typeRefs": [
+              "ModelPickerModel"
+            ]
           },
           {
             "name": "value",
@@ -11738,7 +12267,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text the trigger shows when no model is selected, and the trigger's\naccessible name when no `aria-label` is passed. Defaults to \"Choose a model\".",
-            "defaultValue": "Choose a model"
+            "defaultValue": "'Choose a model'"
           },
           {
             "name": "effort",
@@ -11763,21 +12292,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ModelPickerEffortOption[]",
             "required": false,
             "description": "The effort levels on offer. Defaults to low, medium and high.",
-            "defaultValue": "[\n  { label: 'Low', value: 'low' },\n  { label: 'Medium', value: 'medium' },\n  { label: 'High', value: 'high' },\n]"
+            "defaultValue": "[\n  { label: 'Low', value: 'low' },\n  { label: 'Medium', value: 'medium' },\n  { label: 'High', value: 'high' },\n]",
+            "typeRefs": [
+              "ModelPickerEffortOption"
+            ]
           },
           {
             "name": "listLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the model list in the open panel.",
-            "defaultValue": "Model"
+            "defaultValue": "'Model'"
           },
           {
             "name": "effortLabel",
             "type": "string",
             "required": false,
             "description": "Heading of the effort row, which is also the accessible name of its radio group.",
-            "defaultValue": "Effort"
+            "defaultValue": "'Effort'"
           },
           {
             "name": "placement",
@@ -11788,7 +12320,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom",
               "top"
             ],
-            "defaultValue": "bottom"
+            "defaultValue": "'bottom'"
           },
           {
             "name": "size",
@@ -11799,7 +12331,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -11813,7 +12345,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11850,7 +12382,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "buttons",
             "type": "ButtonProps[]",
             "required": true,
-            "description": "Navigation buttons config — passed directly to ButtonGroup"
+            "description": "Navigation buttons config — passed directly to ButtonGroup",
+            "typeRefs": [
+              "ButtonGroupProps"
+            ]
           },
           {
             "name": "trailing",
@@ -11863,7 +12398,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ],
         "deprecated": "Use `SiteHeader` instead."
@@ -11888,7 +12423,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "NavListItem[]",
             "required": true,
-            "description": "Navigation tree to render."
+            "description": "Navigation tree to render.",
+            "typeRefs": [
+              "NavListItem"
+            ]
           },
           {
             "name": "currentHref",
@@ -11925,7 +12463,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onNavigate",
             "type": "((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
             "required": false,
-            "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list."
+            "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list.",
+            "typeRefs": [
+              "NavListItem"
+            ]
           },
           {
             "name": "expandLabel",
@@ -11945,14 +12486,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -11977,7 +12521,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Heading shown in the header.\nNote: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose.",
-            "defaultValue": "Notifications"
+            "defaultValue": "'Notifications'"
           },
           {
             "name": "unreadCount",
@@ -12009,13 +12553,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text of the mark-all-read control.",
-            "defaultValue": "Mark all read"
+            "defaultValue": "'Mark all read'"
           },
           {
             "name": "tabs",
             "type": "NotificationCenterTab[]",
             "required": false,
-            "description": "Filter tabs under the header, each with an optional count."
+            "description": "Filter tabs under the header, each with an optional count.",
+            "typeRefs": [
+              "NotificationCenterTab"
+            ]
           },
           {
             "name": "value",
@@ -12066,7 +12613,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "emptyStateLabels",
             "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
             "required": false,
-            "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set."
+            "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set.",
+            "typeRefs": [
+              "EmptyStateProps"
+            ]
           },
           {
             "name": "locale",
@@ -12079,7 +12629,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -12116,11 +12666,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Visually hidden text announcing the unread dot. Defaults to \"Unread\".",
-            "defaultValue": "Unread"
+            "defaultValue": "'Unread'"
           },
           {
             "name": "media",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Leading visual — a Material Symbol name (string) or a custom element (e.g. an Avatar)."
           },
@@ -12135,7 +12685,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -12207,7 +12757,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "error",
@@ -12233,21 +12783,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the decrement stepper button. Defaults to \"Decrease value\".",
-            "defaultValue": "Decrease value"
+            "defaultValue": "'Decrease value'"
           },
           {
             "name": "increaseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the increment stepper button. Defaults to \"Increase value\".",
-            "defaultValue": "Increase value"
+            "defaultValue": "'Increase value'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12308,7 +12858,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "ariaLabel",
@@ -12322,14 +12872,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the previous-page arrow",
-            "defaultValue": "Previous page"
+            "defaultValue": "'Previous page'"
           },
           {
             "name": "nextLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the next-page arrow",
-            "defaultValue": "Next page"
+            "defaultValue": "'Next page'"
           },
           {
             "name": "pageLabel",
@@ -12356,7 +12906,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12386,14 +12936,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "none"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -12429,7 +12979,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "data",
             "type": "PieSlice[]",
             "required": true,
-            "description": "Array of slices"
+            "description": "Array of slices",
+            "typeRefs": [
+              "PieSlice"
+            ]
           },
           {
             "name": "title",
@@ -12447,7 +13000,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -12489,7 +13045,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12556,7 +13112,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "alphanumeric",
               "numeric"
             ],
-            "defaultValue": "numeric"
+            "defaultValue": "'numeric'"
           },
           {
             "name": "label",
@@ -12601,7 +13157,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the cells",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12638,7 +13194,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "sm",
               "xl"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "ink",
@@ -12652,6 +13208,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "4",
               "5",
               "6"
+            ],
+            "typeRefs": [
+              "PixelInk"
             ]
           },
           {
@@ -12663,7 +13222,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "plain",
               "tile"
             ],
-            "defaultValue": "plain"
+            "defaultValue": "'plain'"
           },
           {
             "name": "label",
@@ -12676,7 +13235,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12717,7 +13276,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "surface",
@@ -12728,7 +13287,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "menu",
               "panel"
             ],
-            "defaultValue": "panel"
+            "defaultValue": "'panel'"
           },
           {
             "name": "position",
@@ -12743,7 +13302,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "start",
               "top"
             ],
-            "defaultValue": "bottom"
+            "defaultValue": "'bottom'"
           },
           {
             "name": "align",
@@ -12754,7 +13313,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "start"
+            "defaultValue": "'start'"
           },
           {
             "name": "trigger",
@@ -12765,7 +13324,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "click",
               "hover"
             ],
-            "defaultValue": "click"
+            "defaultValue": "'click'"
           },
           {
             "name": "open",
@@ -12797,7 +13356,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes for the popover's root wrapper, which holds the trigger and the panel",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12833,7 +13392,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "showLabel",
@@ -12853,14 +13412,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the percentage label is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12889,7 +13448,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom",
               "top"
             ],
-            "defaultValue": "top"
+            "defaultValue": "'top'"
           },
           {
             "name": "tinted",
@@ -12903,7 +13462,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the root.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -12927,7 +13486,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "suggestions",
             "type": "PromptSuggestion[]",
             "required": true,
-            "description": "The suggestions to render, in order."
+            "description": "The suggestions to render, in order.",
+            "typeRefs": [
+              "PromptSuggestion"
+            ]
           },
           {
             "name": "onValueChange",
@@ -12986,7 +13548,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "value",
@@ -12999,21 +13561,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Visually hidden text read after the taken suggestion once `value` is set. Defaults to \"(chosen)\".",
-            "defaultValue": "(chosen)"
+            "defaultValue": "'(chosen)'"
           },
           {
             "name": "ariaLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the list.",
-            "defaultValue": "Suggested prompts"
+            "defaultValue": "'Suggested prompts'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13042,7 +13604,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "sm"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "tableSize",
@@ -13053,14 +13615,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -13090,19 +13652,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "questions",
             "type": "QuestionCardQuestion[]",
             "required": true,
-            "description": "The questions, asked one at a time when there is more than one."
+            "description": "The questions, asked one at a time when there is more than one.",
+            "typeRefs": [
+              "QuestionCardQuestion"
+            ]
           },
           {
             "name": "values",
             "type": "QuestionCardAnswer[]",
             "required": false,
-            "description": "The answers already given. When set, the card renders its answered\nstate and stops taking input: the options stay where they were, the\npicked ones marked and the rest dimmed, so the record of the choice\nstays in place. An empty array records a skip."
+            "description": "The answers already given. When set, the card renders its answered\nstate and stops taking input: the options stay where they were, the\npicked ones marked and the rest dimmed, so the record of the choice\nstays in place. An empty array records a skip.",
+            "typeRefs": [
+              "QuestionCardAnswer"
+            ]
           },
           {
             "name": "onValuesChange",
             "type": "((answers: QuestionCardAnswer[]) => void)",
             "required": false,
-            "description": "Fires with every question's answer once the last one is given."
+            "description": "Fires with every question's answer once the last one is given.",
+            "typeRefs": [
+              "QuestionCardAnswer"
+            ]
           },
           {
             "name": "onSkip",
@@ -13121,14 +13692,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "labels",
             "type": "Partial<QuestionCardLabels>",
             "required": false,
-            "description": "Replacement copy for the words the card draws itself."
+            "description": "Replacement copy for the words the card draws itself.",
+            "typeRefs": [
+              "QuestionCardLabels"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -13139,14 +13713,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "QuestionSummaryItem[]",
             "required": true,
-            "description": "The questions and their answers, in the order they were asked."
+            "description": "The questions and their answers, in the order they were asked.",
+            "typeRefs": [
+              "QuestionSummaryItem"
+            ]
           },
           {
             "name": "missingLabel",
             "type": "string",
             "required": false,
             "description": "What stands in the answer's place for a question left without one.",
-            "defaultValue": "No answer"
+            "defaultValue": "'No answer'"
           },
           {
             "name": "variant",
@@ -13157,14 +13734,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "card",
               "plain"
             ],
-            "defaultValue": "card"
+            "defaultValue": "'card'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13211,14 +13788,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "pull"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13255,13 +13832,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key in data for the category labels on each axis",
-            "defaultValue": "subject"
+            "defaultValue": "'subject'"
           },
           {
             "name": "series",
             "type": "RadarSeriesConfig[]",
             "required": true,
-            "description": "One or more radar series to render"
+            "description": "One or more radar series to render",
+            "typeRefs": [
+              "RadarSeriesConfig"
+            ]
           },
           {
             "name": "title",
@@ -13279,7 +13859,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -13300,7 +13883,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13330,7 +13913,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "data",
             "type": "RadialDataItem[]",
             "required": true,
-            "description": "Array of data items — each renders as a concentric ring"
+            "description": "Array of data items — each renders as a concentric ring",
+            "typeRefs": [
+              "RadialDataItem"
+            ]
           },
           {
             "name": "maxValue",
@@ -13355,7 +13941,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -13409,7 +13998,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13479,7 +14068,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -13565,7 +14154,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "vertical"
+            "defaultValue": "'vertical'"
           },
           {
             "name": "onValueChange",
@@ -13578,7 +14167,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -13604,7 +14193,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13673,10 +14262,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads.",
-            "defaultValue": "star"
+            "defaultValue": "'star'"
           },
           {
             "name": "size",
@@ -13687,14 +14276,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
             "description": "Accessible name for the group, and the base of each step's label",
-            "defaultValue": "Rating"
+            "defaultValue": "'Rating'"
           },
           {
             "name": "valueLabel",
@@ -13708,7 +14297,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -13752,7 +14341,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The summary while reasoning streams. Defaults to \"Thinking\".",
-            "defaultValue": "Thinking"
+            "defaultValue": "'Thinking'"
           },
           {
             "name": "durationLabel",
@@ -13766,7 +14355,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The summary once complete with no duration. Defaults to \"Thought process\".",
-            "defaultValue": "Thought process"
+            "defaultValue": "'Thought process'"
           },
           {
             "name": "summary",
@@ -13790,7 +14379,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "open",
@@ -13815,7 +14404,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -13852,7 +14441,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Placeholder when no value selected",
-            "defaultValue": "Select an option"
+            "defaultValue": "'Select an option'"
           },
           {
             "name": "value",
@@ -13870,7 +14459,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "options",
             "type": "RichDropdownOption[]",
             "required": true,
-            "description": "The options on offer, in display order."
+            "description": "The options on offer, in display order.",
+            "typeRefs": [
+              "RichDropdownOption"
+            ]
           },
           {
             "name": "disabled",
@@ -13910,7 +14502,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "name",
@@ -13946,35 +14538,38 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "datasets",
             "type": "ScatterDatasetConfig[]",
             "required": true,
-            "description": "One or more scatter datasets to plot"
+            "description": "One or more scatter datasets to plot",
+            "typeRefs": [
+              "ScatterDatasetConfig"
+            ]
           },
           {
             "name": "xKey",
             "type": "string",
             "required": false,
             "description": "Key in data for x-axis values",
-            "defaultValue": "x"
+            "defaultValue": "'x'"
           },
           {
             "name": "yKey",
             "type": "string",
             "required": false,
             "description": "Key in data for y-axis values",
-            "defaultValue": "y"
+            "defaultValue": "'y'"
           },
           {
             "name": "xLabel",
             "type": "string",
             "required": false,
             "description": "Display label for x-axis",
-            "defaultValue": "X"
+            "defaultValue": "'X'"
           },
           {
             "name": "yLabel",
             "type": "string",
             "required": false,
             "description": "Display label for y-axis",
-            "defaultValue": "Y"
+            "defaultValue": "'Y'"
           },
           {
             "name": "title",
@@ -13992,7 +14587,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -14013,7 +14611,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14080,7 +14678,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "segments",
             "type": "Segment[]",
             "required": true,
-            "description": "Array of segments"
+            "description": "Array of segments",
+            "typeRefs": [
+              "Segment"
+            ]
           },
           {
             "name": "value",
@@ -14123,7 +14724,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "tone",
@@ -14192,7 +14793,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14222,13 +14823,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "radio",
               "toggle"
             ],
-            "defaultValue": "radio"
+            "defaultValue": "'radio'"
           },
           {
             "name": "options",
             "type": "SelectionCardOption[]",
             "required": true,
-            "description": "Available options"
+            "description": "Available options",
+            "typeRefs": [
+              "SelectionCardOption"
+            ]
           },
           {
             "name": "value",
@@ -14259,7 +14863,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -14290,14 +14894,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "params",
             "type": "Partial<ShaderParams>",
             "required": false,
-            "description": "Field parameters, merged over the shipped defaults, so passing one\nproperty changes one thing. Changing them never rebuilds the GL state."
+            "description": "Field parameters, merged over the shipped defaults, so passing one\nproperty changes one thing. Changing them never rebuilds the GL state.",
+            "typeRefs": [
+              "ShaderParams"
+            ]
           },
           {
             "name": "blobs",
             "type": "readonly ShaderBlob[]",
             "required": false,
             "description": "The light sources. Defaults to an eight-source composition: six on the\nambient tokens (`--color-ambient-*`, which follow the core accents unless a\ntheme re-points them) and two on surface tokens. Fewer than `BLOB_COUNT` entries is fine — unused slots park\noff-field; more are ignored, because the shader's uniform arrays are\nfixed-size.",
-            "defaultValue": "[\n  { token: \"--color-ambient-1\", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },\n  { token: \"--color-ambient-2\", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },\n  { token: \"--color-ambient-3\", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },\n  { token: \"--color-bg-container-secondary\", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },\n  { token: \"--color-ambient-4\", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },\n  { token: \"--color-ambient-5\", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },\n  { token: \"--color-ambient-6\", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },\n  { token: \"--color-core-ui-secondary\", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },\n]"
+            "defaultValue": "[\n  { token: \"--color-ambient-1\", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },\n  { token: \"--color-ambient-2\", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },\n  { token: \"--color-ambient-3\", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },\n  { token: \"--color-bg-container-secondary\", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },\n  { token: \"--color-ambient-4\", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },\n  { token: \"--color-ambient-5\", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },\n  { token: \"--color-ambient-6\", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },\n  { token: \"--color-core-ui-secondary\", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },\n]",
+            "typeRefs": [
+              "ShaderBlob"
+            ]
           },
           {
             "name": "enabled",
@@ -14310,14 +14920,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onStatusChange",
             "type": "((status: ShaderFieldStatus) => void)",
             "required": false,
-            "description": "Called whenever the renderer's status changes. Drive the fallback layer's\nvisibility from this — the component deliberately does not own one, since\nwhat to paint instead is a design decision, not a rendering one."
+            "description": "Called whenever the renderer's status changes. Drive the fallback layer's\nvisibility from this — the component deliberately does not own one, since\nwhat to paint instead is a design decision, not a rendering one.",
+            "typeRefs": [
+              "ShaderFieldStatus"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14351,7 +14964,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "rift",
               "waves"
             ],
-            "defaultValue": "horizon"
+            "defaultValue": "'horizon'",
+            "typeRefs": [
+              "ShaderSceneId"
+            ]
           },
           {
             "name": "params",
@@ -14363,7 +14979,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "passes",
             "type": "Partial<Record<string, ShaderScenePassSetting>>",
             "required": false,
-            "description": "The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`,\n`grain`), each merged over its defaults."
+            "description": "The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`,\n`grain`), each merged over its defaults.",
+            "typeRefs": [
+              "ShaderScenePassSetting"
+            ]
           },
           {
             "name": "speed",
@@ -14376,7 +14995,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "liveRef",
             "type": "RefObject<Values | null>",
             "required": false,
-            "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props."
+            "description": "A ref the scene reads every frame in place of `params`, `passes` and\n`speed`, for a host that tunes it by drag: writing the ref moves the\nscene and renders nothing. Empty falls back to the props.",
+            "typeRefs": [
+              "Values"
+            ]
           },
           {
             "name": "enabled",
@@ -14389,14 +15011,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onStatusChange",
             "type": "((status: ShaderSceneStatus) => void)",
             "required": false,
-            "description": "Called whenever the status changes. Drive a fallback from this, or lay\none under the scene: it paints nothing until it is `active`, so what\nshows while it is pending or cannot run is the caller's design\ndecision."
+            "description": "Called whenever the status changes. Drive a fallback from this, or lay\none under the scene: it paints nothing until it is `active`, so what\nshows while it is pending or cannot run is the caller's design\ndecision.",
+            "typeRefs": [
+              "ShaderSceneStatus"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14420,7 +15045,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "SidebarPanelItem[]",
             "required": true,
-            "description": "Items to list, optionally grouped with `group` and nested one level with `children`"
+            "description": "Items to list, optionally grouped with `group` and nested one level with `children`",
+            "typeRefs": [
+              "SidebarPanelItem"
+            ]
           },
           {
             "name": "title",
@@ -14463,20 +15091,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Label of the back row",
-            "defaultValue": "Back"
+            "defaultValue": "'Back'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -14512,13 +15143,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "draw",
               "type"
             ],
-            "defaultValue": "both"
+            "defaultValue": "'both'"
           },
           {
             "name": "value",
             "type": "SignatureValue | null",
             "required": false,
-            "description": "The signature (controlled). A drawn one cannot be loaded back for editing: pass `null` to clear the pad, or keep the value the pad last handed over."
+            "description": "The signature (controlled). A drawn one cannot be loaded back for editing: pass `null` to clear the pad, or keep the value the pad last handed over.",
+            "typeRefs": [
+              "SignatureValue"
+            ]
           },
           {
             "name": "defaultValue",
@@ -14531,7 +15165,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onValueChange",
             "type": "((value: SignatureValue | null) => void)",
             "required": false,
-            "description": "Called with the signature after each stroke, each change to the typed name, and each clear (with `null`)."
+            "description": "Called with the signature after each stroke, each change to the typed name, and each clear (with `null`).",
+            "typeRefs": [
+              "SignatureValue"
+            ]
           },
           {
             "name": "height",
@@ -14542,7 +15179,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "tall"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "size",
@@ -14553,7 +15190,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -14597,77 +15234,77 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Text on the baseline before anything is drawn. Defaults to \"Sign here\".",
-            "defaultValue": "Sign here"
+            "defaultValue": "'Sign here'"
           },
           {
             "name": "padLabel",
             "type": "string",
             "required": false,
             "description": "The drawing surface's accessible name. Defaults to \"Signature drawing area\".",
-            "defaultValue": "Signature drawing area"
+            "defaultValue": "'Signature drawing area'"
           },
           {
             "name": "modeLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the draw and type choice. Defaults to \"Signature method\".",
-            "defaultValue": "Signature method"
+            "defaultValue": "'Signature method'"
           },
           {
             "name": "drawLabel",
             "type": "string",
             "required": false,
             "description": "The draw tab's text. Defaults to \"Draw\".",
-            "defaultValue": "Draw"
+            "defaultValue": "'Draw'"
           },
           {
             "name": "typeLabel",
             "type": "string",
             "required": false,
             "description": "The type tab's text. Defaults to \"Type\".",
-            "defaultValue": "Type"
+            "defaultValue": "'Type'"
           },
           {
             "name": "nameLabel",
             "type": "string",
             "required": false,
             "description": "The typed name's field label. Defaults to \"Type your full name\".",
-            "defaultValue": "Type your full name"
+            "defaultValue": "'Type your full name'"
           },
           {
             "name": "clearLabel",
             "type": "string",
             "required": false,
             "description": "The clear button's text. Defaults to \"Clear\".",
-            "defaultValue": "Clear"
+            "defaultValue": "'Clear'"
           },
           {
             "name": "undoLabel",
             "type": "string",
             "required": false,
             "description": "The undo button's text. Defaults to \"Undo\".",
-            "defaultValue": "Undo"
+            "defaultValue": "'Undo'"
           },
           {
             "name": "addedLabel",
             "type": "string",
             "required": false,
             "description": "Announced politely after a stroke is drawn. Defaults to \"Signature added\".",
-            "defaultValue": "Signature added"
+            "defaultValue": "'Signature added'"
           },
           {
             "name": "clearedLabel",
             "type": "string",
             "required": false,
             "description": "Announced politely after the pad is cleared. Defaults to \"Signature cleared\".",
-            "defaultValue": "Signature cleared"
+            "defaultValue": "'Signature cleared'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14697,7 +15334,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sections",
             "type": "SiteHeaderSection[]",
             "required": true,
-            "description": "The site's top-level sections, in order."
+            "description": "The site's top-level sections, in order.",
+            "typeRefs": [
+              "SiteHeaderSection"
+            ]
           },
           {
             "name": "currentHref",
@@ -14758,7 +15398,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "never",
               "tablet"
             ],
-            "defaultValue": "tablet"
+            "defaultValue": "'tablet'"
           },
           {
             "name": "sticky",
@@ -14778,42 +15418,45 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. Falls back to the nearest\n`LinkProvider`, then `<a>`."
+            "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. Falls back to the nearest\n`LinkProvider`, then `<a>`.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "navLabel",
             "type": "string",
             "required": false,
             "description": "The accessible name of the section links' `<nav>` landmark.",
-            "defaultValue": "Primary"
+            "defaultValue": "'Primary'"
           },
           {
             "name": "drawerOpenLabel",
             "type": "string",
             "required": false,
             "description": "The accessible name of the menu button that opens the drawer.",
-            "defaultValue": "Open menu"
+            "defaultValue": "'Open menu'"
           },
           {
             "name": "drawerTitle",
             "type": "string",
             "required": false,
             "description": "The drawer's title, naming the dialog. Shown at its top when there is no\n`brand`; with one, the brand takes its place and the title is read only\nby assistive tech.",
-            "defaultValue": "Menu"
+            "defaultValue": "'Menu'"
           },
           {
             "name": "drawerCloseLabel",
             "type": "string",
             "required": false,
             "description": "The accessible name of the drawer's close button.",
-            "defaultValue": "Close menu"
+            "defaultValue": "'Close menu'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the `<header>`.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14843,7 +15486,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "rectangular",
               "text"
             ],
-            "defaultValue": "text"
+            "defaultValue": "'text'"
           },
           {
             "name": "width",
@@ -14869,14 +15512,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence.",
-            "defaultValue": "Loading"
+            "defaultValue": "'Loading'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -14972,7 +15615,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onValueChange",
@@ -14985,7 +15628,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -15026,10 +15669,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "The glyph for a source with neither a number nor a logo — a Material Symbol\nname (string) or custom element (ReactNode). Defaults to a globe, so the\nleading slot is never empty.",
-            "defaultValue": "language"
+            "defaultValue": "'language'"
           },
           {
             "name": "href",
@@ -15051,7 +15694,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "logo",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "The source's logo or favicon — an image URL (string) or a custom element\n(ReactNode), cropped to a circle. It fills the chip's leading slot when\nthere is no `index`, and always leads the preview's top line. Decorative:\nthe title and `source` text carry the name."
           },
@@ -15072,13 +15715,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -15102,7 +15748,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "SourceTrailItem[]",
             "required": true,
-            "description": "The sources, in the order the agent opened them."
+            "description": "The sources, in the order the agent opened them.",
+            "typeRefs": [
+              "SourceTrailItem"
+            ]
           },
           {
             "name": "title",
@@ -15128,7 +15777,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "statusLabels",
             "type": "Partial<Record<SourceTrailStatus, string>>",
             "required": false,
-            "description": "Visually hidden text announcing each row's status after its source. Merged over the English defaults (Not opened yet, Reading now, Read)."
+            "description": "Visually hidden text announcing each row's status after its source. Merged over the English defaults (Not opened yet, Reading now, Read).",
+            "typeRefs": [
+              "SourceTrailStatus"
+            ]
           },
           {
             "name": "streaming",
@@ -15160,14 +15812,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each source's SourceChip. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each source's SourceChip. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15202,7 +15857,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "area",
               "line"
             ],
-            "defaultValue": "line"
+            "defaultValue": "'line'"
           },
           {
             "name": "tone",
@@ -15216,7 +15871,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "neutral",
               "positive"
             ],
-            "defaultValue": "accent"
+            "defaultValue": "'accent'"
           },
           {
             "name": "showDot",
@@ -15257,7 +15912,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15287,7 +15942,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "md",
               "sm"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "tone",
@@ -15317,14 +15972,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible label, announced as the spinner's name. A passed `aria-label` takes precedence.",
-            "defaultValue": "Loading"
+            "defaultValue": "'Loading'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15360,7 +16015,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "DropdownMenuEntry[]",
             "required": true,
-            "description": "Menu entries for the alternative actions"
+            "description": "Menu entries for the alternative actions",
+            "typeRefs": [
+              "DropdownMenuEntry"
+            ]
           },
           {
             "name": "variant",
@@ -15372,7 +16030,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "primary",
               "secondary"
             ],
-            "defaultValue": "primary"
+            "defaultValue": "'primary'"
           },
           {
             "name": "tone",
@@ -15394,7 +16052,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -15412,7 +16070,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "iconLeft",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon for the primary segment — Material Symbol name or custom element"
           },
@@ -15425,21 +16083,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "end"
+            "defaultValue": "'end'"
           },
           {
             "name": "menuLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the menu trigger segment",
-            "defaultValue": "More actions"
+            "defaultValue": "'More actions'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the wrapper around both segments, not the primary button",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15474,7 +16132,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "horizontal"
+            "defaultValue": "'horizontal'"
           },
           {
             "name": "split",
@@ -15514,14 +16172,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the resize handle.",
-            "defaultValue": "Resize panes"
+            "defaultValue": "'Resize panes'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15558,13 +16216,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Key in data for x-axis values",
-            "defaultValue": "label"
+            "defaultValue": "'label'"
           },
           {
             "name": "series",
             "type": "BarSeriesConfig[]",
             "required": true,
-            "description": "One or more bar series to render (stacked)"
+            "description": "One or more bar series to render (stacked)",
+            "typeRefs": [
+              "BarSeriesConfig"
+            ]
           },
           {
             "name": "title",
@@ -15582,7 +16243,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -15609,7 +16273,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15657,7 +16321,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "neutral",
               "up"
             ],
-            "defaultValue": "neutral"
+            "defaultValue": "'neutral'"
           },
           {
             "name": "deltaPlacement",
@@ -15669,7 +16333,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "inline",
               "stacked"
             ],
-            "defaultValue": "stacked"
+            "defaultValue": "'stacked'"
           },
           {
             "name": "size",
@@ -15680,21 +16344,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "large"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "locale",
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15726,7 +16390,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "neutral"
+            "defaultValue": "'neutral'"
           },
           {
             "name": "size",
@@ -15739,7 +16403,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "sm",
               "xs"
             ],
-            "defaultValue": "md"
+            "defaultValue": "'md'"
           },
           {
             "name": "outline",
@@ -15773,7 +16437,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15797,7 +16461,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "steps",
             "type": "StepperStep[]",
             "required": true,
-            "description": "Ordered list of steps in the flow"
+            "description": "Ordered list of steps in the flow",
+            "typeRefs": [
+              "StepperStep"
+            ]
           },
           {
             "name": "activeStep",
@@ -15820,14 +16487,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "horizontal"
+            "defaultValue": "'horizontal'"
           },
           {
             "name": "completeLabel",
             "type": "string",
             "required": false,
             "description": "Status read after a completed step's label. The check mark that draws the\nstate is decorative, so this visually hidden text is what tells a screen\nreader a done step from an upcoming one. Defaults to \"Completed\".",
-            "defaultValue": "Completed"
+            "defaultValue": "'Completed'"
           },
           {
             "name": "locale",
@@ -15840,7 +16507,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15910,7 +16577,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -15958,7 +16625,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "shape",
@@ -15969,7 +16636,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "circle",
               "square"
             ],
-            "defaultValue": "circle"
+            "defaultValue": "'circle'"
           },
           {
             "name": "disabled",
@@ -15983,7 +16650,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -16007,13 +16674,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columns",
             "type": "TableColumn[]",
             "required": true,
-            "description": "Column definitions"
+            "description": "Column definitions",
+            "typeRefs": [
+              "TableColumn"
+            ]
           },
           {
             "name": "rows",
             "type": "TableRow[]",
             "required": true,
-            "description": "Row data"
+            "description": "Row data",
+            "typeRefs": [
+              "TableRow"
+            ]
           },
           {
             "name": "size",
@@ -16024,7 +16697,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "striped",
@@ -16065,7 +16738,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -16089,25 +16762,37 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "columns",
             "type": "TableToolbarColumn[]",
             "required": false,
-            "description": "The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used."
+            "description": "The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used.",
+            "typeRefs": [
+              "TableToolbarColumn"
+            ]
           },
           {
             "name": "filters",
             "type": "Filter[]",
             "required": false,
-            "description": "The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set."
+            "description": "The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set.",
+            "typeRefs": [
+              "DataTableFilter"
+            ]
           },
           {
             "name": "defaultFilters",
             "type": "Filter[]",
             "required": false,
-            "description": "Starting filters, for uncontrolled use outside a DataTable."
+            "description": "Starting filters, for uncontrolled use outside a DataTable.",
+            "typeRefs": [
+              "DataTableFilter"
+            ]
           },
           {
             "name": "onFiltersChange",
             "type": "((filters: Filter[]) => void)",
             "required": false,
-            "description": "Fires with every filter after one is added, changed or removed."
+            "description": "Fires with every filter after one is added, changed or removed.",
+            "typeRefs": [
+              "DataTableFilter"
+            ]
           },
           {
             "name": "search",
@@ -16234,43 +16919,64 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "TableToolbarBulkAction[]",
             "required": false,
             "description": "The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "TableToolbarBulkAction"
+            ]
           },
           {
             "name": "sorts",
             "type": "DataTableSort[]",
             "required": false,
-            "description": "Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set."
+            "description": "Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "defaultSorts",
             "type": "DataTableSort[]",
             "required": false,
-            "description": "Initial sorts for uncontrolled use."
+            "description": "Initial sorts for uncontrolled use.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "onSortsChange",
             "type": "((sorts: DataTableSort[]) => void)",
             "required": false,
-            "description": "Fires with every sort after the sort panel changes one."
+            "description": "Fires with every sort after the sort panel changes one.",
+            "typeRefs": [
+              "DataTableSort"
+            ]
           },
           {
             "name": "views",
             "type": "TableToolbarView[]",
             "required": false,
-            "description": "Saved views, shown as tabs over the bar inside a DataTable: picking one\napplies its setup to the table, its tab shows a dot while the table no\nlonger matches it, and its menu saves, saves as new, resets, renames\nand deletes. For controlled use; store them however you like (each\n`view` is plain data). Pair with `onViewsChange`."
+            "description": "Saved views, shown as tabs over the bar inside a DataTable: picking one\napplies its setup to the table, its tab shows a dot while the table no\nlonger matches it, and its menu saves, saves as new, resets, renames\nand deletes. For controlled use; store them however you like (each\n`view` is plain data). Pair with `onViewsChange`.",
+            "typeRefs": [
+              "TableToolbarView"
+            ]
           },
           {
             "name": "defaultViews",
             "type": "TableToolbarView[]",
             "required": false,
-            "description": "The saved views to start with, for uncontrolled use."
+            "description": "The saved views to start with, for uncontrolled use.",
+            "typeRefs": [
+              "TableToolbarView"
+            ]
           },
           {
             "name": "onViewsChange",
             "type": "((views: TableToolbarView[]) => void)",
             "required": false,
-            "description": "Fires with every view after one is saved, added, renamed or deleted."
+            "description": "Fires with every view after one is saved, added, renamed or deleted.",
+            "typeRefs": [
+              "TableToolbarView"
+            ]
           },
           {
             "name": "activeView",
@@ -16326,14 +17032,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "primaryAction",
             "type": "TableToolbarAction",
             "required": false,
-            "description": "The page's main action (New project, Invite), drawn as the primary button at the bar's end."
+            "description": "The page's main action (New project, Invite), drawn as the primary button at the bar's end.",
+            "typeRefs": [
+              "TableToolbarAction"
+            ]
           },
           {
             "name": "secondaryActions",
             "type": "TableToolbarAction[]",
             "required": false,
             "description": "Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "TableToolbarAction"
+            ]
           },
           {
             "name": "actions",
@@ -16345,26 +17057,35 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "command",
             "type": "TableToolbarCommand",
             "required": false,
-            "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nA long request grows the composer to three rows, pushing the table down.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable."
+            "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nA long request grows the composer to three rows, pushing the table down.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable.",
+            "typeRefs": [
+              "TableToolbarCommand"
+            ]
           },
           {
             "name": "labels",
             "type": "Partial<TableToolbarLabels>",
             "required": false,
-            "description": "The bar's words, merged over their English defaults."
+            "description": "The bar's words, merged over their English defaults.",
+            "typeRefs": [
+              "TableToolbarLabels"
+            ]
           },
           {
             "name": "filterLabels",
             "type": "Partial<FilterLabels>",
             "required": false,
-            "description": "The filters' words, merged over their English defaults (inside a DataTable, over the table's)."
+            "description": "The filters' words, merged over their English defaults (inside a DataTable, over the table's).",
+            "typeRefs": [
+              "DataTableFilterLabels"
+            ]
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -16388,7 +17109,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tabs",
             "type": "Tab[]",
             "required": true,
-            "description": "Array of tab definitions"
+            "description": "Array of tab definitions",
+            "typeRefs": [
+              "Tab"
+            ]
           },
           {
             "name": "value",
@@ -16431,7 +17155,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "fullWidth",
@@ -16445,7 +17169,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -16511,7 +17235,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "error",
@@ -16538,7 +17262,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "name",
@@ -16576,7 +17300,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "paragraph",
               "paragraph-sm"
             ],
-            "defaultValue": "paragraph"
+            "defaultValue": "'paragraph'",
+            "typeRefs": [
+              "TextTier"
+            ]
           },
           {
             "name": "as",
@@ -16591,7 +17318,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "span",
               "strong"
             ],
-            "defaultValue": "p"
+            "defaultValue": "'p'"
           },
           {
             "name": "tone",
@@ -16606,7 +17333,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "weight",
@@ -16617,7 +17344,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "emphasis"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "truncate",
@@ -16667,7 +17394,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -16714,7 +17441,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "error",
@@ -16740,7 +17467,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "none",
               "vertical"
             ],
-            "defaultValue": "vertical"
+            "defaultValue": "'vertical'"
           },
           {
             "name": "maxLength",
@@ -16759,7 +17486,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <textarea>",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "ariaLabel",
@@ -16790,7 +17517,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "themes",
             "type": "ThemePickerOption[]",
             "required": true,
-            "description": "The themes on offer, in the order the menu lists them."
+            "description": "The themes on offer, in the order the menu lists them.",
+            "typeRefs": [
+              "ThemePickerOption"
+            ]
           },
           {
             "name": "value",
@@ -16845,7 +17575,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "placement",
@@ -16856,7 +17586,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom",
               "top"
             ],
-            "defaultValue": "bottom"
+            "defaultValue": "'bottom'"
           },
           {
             "name": "align",
@@ -16867,7 +17597,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ],
-            "defaultValue": "end"
+            "defaultValue": "'end'"
           },
           {
             "name": "footer",
@@ -16887,14 +17617,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the menu.",
-            "defaultValue": "Theme"
+            "defaultValue": "'Theme'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -16923,6 +17653,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "dark",
               "light",
               "system"
+            ],
+            "typeRefs": [
+              "ColorModeSetting"
             ]
           },
           {
@@ -16934,13 +17667,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "dark",
               "light",
               "system"
+            ],
+            "typeRefs": [
+              "ColorModeSetting"
             ]
           },
           {
             "name": "onValueChange",
             "type": "((value: \"dark\" | \"system\" | \"light\") => void)",
             "required": false,
-            "description": "Fires with the setting after every pick, controlled or not."
+            "description": "Fires with the setting after every pick, controlled or not.",
+            "typeRefs": [
+              "ColorModeSetting"
+            ]
           },
           {
             "name": "size",
@@ -16951,7 +17690,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "showLabels",
@@ -16985,28 +17724,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Label of the setting that follows the operating system.",
-            "defaultValue": "System"
+            "defaultValue": "'System'"
           },
           {
             "name": "lightLabel",
             "type": "string",
             "required": false,
             "description": "Label of the light setting.",
-            "defaultValue": "Light"
+            "defaultValue": "'Light'"
           },
           {
             "name": "darkLabel",
             "type": "string",
             "required": false,
             "description": "Label of the dark setting.",
-            "defaultValue": "Dark"
+            "defaultValue": "'Dark'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -17030,7 +17769,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "groups",
             "type": "ThreadPanelGroup[]",
             "required": true,
-            "description": "The history, in display order. A flat list is one group with no label."
+            "description": "The history, in display order. A flat list is one group with no label.",
+            "typeRefs": [
+              "ThreadPanelGroup"
+            ]
           },
           {
             "name": "activeThreadId",
@@ -17048,7 +17790,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "threadActions",
             "type": "ThreadPanelThreadAction[]",
             "required": false,
-            "description": "Shared menu actions for every thread row, behind a hover-revealed trailing trigger; a thread's own `actions` overrides the set. The menu renders only when `onThreadAction` is also given, and never on a `pending` row."
+            "description": "Shared menu actions for every thread row, behind a hover-revealed trailing trigger; a thread's own `actions` overrides the set. The menu renders only when `onThreadAction` is also given, and never on a `pending` row.",
+            "typeRefs": [
+              "ThreadPanelThreadAction"
+            ]
           },
           {
             "name": "onThreadAction",
@@ -17060,21 +17805,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "statusLabels",
             "type": "Partial<Record<ThreadPanelThreadStatus, string>>",
             "required": false,
-            "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here."
+            "description": "Spoken text for each thread status, read after the row's title; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed). `idle` is silent unless given a label here.",
+            "typeRefs": [
+              "ThreadPanelThreadStatus"
+            ]
           },
           {
             "name": "pinnedLabel",
             "type": "string",
             "required": false,
             "description": "Spoken text for a `pinned` thread, read after the title and any status; the pin glyph itself is decorative. Not read on a `pending` row, whose name is its tooltip alone.",
-            "defaultValue": "Pinned"
+            "defaultValue": "'Pinned'"
           },
           {
             "name": "threadMenuLabel",
             "type": "string | ((title: string) => string)",
             "required": false,
             "description": "Accessible name for a row's menu trigger. A string is followed by a colon\nand the thread's title (\"Thread options: Q3 plan\"); a function is given\nthe title and returns the whole name, so a translation can put the title\nwhere its grammar needs it.",
-            "defaultValue": "Thread options"
+            "defaultValue": "'Thread options'"
           },
           {
             "name": "renamingThreadId",
@@ -17099,7 +17847,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the inline rename field.",
-            "defaultValue": "Rename thread"
+            "defaultValue": "'Rename thread'"
           },
           {
             "name": "logo",
@@ -17121,10 +17869,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "newThreadIcon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Icon for the new-thread row — Material Symbol name (string) or custom element (ReactNode). Defaults to the pen-in-a-box `edit_square`, the same glyph chat headers use for New chat.",
-            "defaultValue": "edit_square"
+            "defaultValue": "'edit_square'"
           },
           {
             "name": "newThreadShortcut",
@@ -17136,13 +17884,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "newThreadKeys",
             "type": "string",
             "required": false,
-            "description": "Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`."
+            "description": "Keyboard hint at the row's trailing edge in the shortcut grammar (`mod+shift+o`), drawn in the reader's platform legends. Decorative — bind the action with `useShortcut`. Wins over `newThreadShortcut`.",
+            "typeRefs": [
+              "Shortcut"
+            ]
           },
           {
             "name": "keyLabels",
             "type": "Partial<Record<string, string>>",
             "required": false,
-            "description": "Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+            "description": "Replaces any legend `newThreadKeys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
           },
           {
             "name": "onNewThread",
@@ -17160,7 +17914,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "controls",
             "type": "ThreadPanelControl[]",
             "required": false,
-            "description": "Standing rows between the new-thread action and the history, e.g. Automations or Settings."
+            "description": "Standing rows between the new-thread action and the history, e.g. Automations or Settings.",
+            "typeRefs": [
+              "ThreadPanelControl"
+            ]
           },
           {
             "name": "onControlSelect",
@@ -17172,14 +17929,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "projects",
             "type": "ThreadPanelProject[]",
             "required": false,
-            "description": "Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls."
+            "description": "Project rows between the standing controls and the history, under their own group heading. The section renders only when non-empty; collapsed, the rows fold to icon circles like the controls.",
+            "typeRefs": [
+              "ThreadPanelProject"
+            ]
           },
           {
             "name": "projectsLabel",
             "type": "string",
             "required": false,
             "description": "The projects section's group heading text.",
-            "defaultValue": "Projects"
+            "defaultValue": "'Projects'"
           },
           {
             "name": "activeProjectId",
@@ -17204,7 +17964,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the new-project button.",
-            "defaultValue": "New project"
+            "defaultValue": "'New project'"
           },
           {
             "name": "moreLabel",
@@ -17223,7 +17983,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the scrollable history region.",
-            "defaultValue": "Thread history"
+            "defaultValue": "'Thread history'"
           },
           {
             "name": "expanded",
@@ -17243,20 +18003,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the header toggle while expanded.",
-            "defaultValue": "Collapse the panel"
+            "defaultValue": "'Collapse the panel'"
           },
           {
             "name": "expandLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the expand affordance while collapsed.",
-            "defaultValue": "Expand the panel"
+            "defaultValue": "'Expand the panel'"
           },
           {
             "name": "profile",
             "type": "ThreadPanelProfile",
             "required": false,
-            "description": "The signed-in person, rendered as the footer's Avatar row."
+            "description": "The signed-in person, rendered as the footer's Avatar row.",
+            "typeRefs": [
+              "ThreadPanelProfile"
+            ]
           },
           {
             "name": "footerSlot",
@@ -17275,13 +18038,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -17305,7 +18071,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tabs",
             "type": "ThreadTab[]",
             "required": true,
-            "description": "The open tabs, in display order. A tab added between renders glides open in place; a removed one folds away while its neighbours slide over."
+            "description": "The open tabs, in display order. A tab added between renders glides open in place; a removed one folds away while its neighbours slide over.",
+            "typeRefs": [
+              "ThreadTab"
+            ]
           },
           {
             "name": "activeId",
@@ -17329,14 +18098,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "statusLabels",
             "type": "Partial<Record<ThreadTabStatus, string>>",
             "required": false,
-            "description": "Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed)."
+            "description": "Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed).",
+            "typeRefs": [
+              "ThreadTabStatus"
+            ]
           },
           {
             "name": "closeLabel",
             "type": "string | ((title: string) => string)",
             "required": false,
             "description": "Accessible name for a tab's close button. A string is followed by a colon\nand the tab's label (\"Close thread: Q3 plan\"); a function is given the\nlabel and returns the whole name, so a translation can put the label where\nits grammar needs it.",
-            "defaultValue": "Close thread"
+            "defaultValue": "'Close thread'"
           },
           {
             "name": "onAdd",
@@ -17349,21 +18121,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the new-tab button.",
-            "defaultValue": "New thread"
+            "defaultValue": "'New thread'"
           },
           {
             "name": "ariaLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the tab strip.",
-            "defaultValue": "Open threads"
+            "defaultValue": "'Open threads'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -17394,7 +18166,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Placeholder shown when no time is selected",
-            "defaultValue": "Select time"
+            "defaultValue": "'Select time'"
           },
           {
             "name": "value",
@@ -17413,14 +18185,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Earliest generated option, as a 24-hour \"HH:MM\" string",
-            "defaultValue": "00:00"
+            "defaultValue": "'00:00'"
           },
           {
             "name": "maxTime",
             "type": "string",
             "required": false,
             "description": "Latest generated option, as a 24-hour \"HH:MM\" string",
-            "defaultValue": "23:30"
+            "defaultValue": "'23:30'"
           },
           {
             "name": "stepMinutes",
@@ -17460,7 +18232,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "disabled",
@@ -17506,7 +18278,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes, applied to the Field wrapper around the label,\ntrigger and helper text, not to the trigger button the ref and the other\nprops reach.",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -17540,7 +18312,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "TimelineItem[] | TimelineCompany[]",
             "required": true,
-            "description": "The entries, in order. Their shape follows `variant`: in the default layout, steps or events (`TimelineItem`).\nIn the `company` layout, companies with their roles (`TimelineCompany`)."
+            "description": "The entries, in order. Their shape follows `variant`: in the default layout, steps or events (`TimelineItem`).\nIn the `company` layout, companies with their roles (`TimelineCompany`).",
+            "typeRefs": [
+              "TimelineCompany",
+              "TimelineItem"
+            ]
           },
           {
             "name": "orientation",
@@ -17551,7 +18327,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "vertical"
+            "defaultValue": "'vertical'"
           },
           {
             "name": "numbered",
@@ -17565,21 +18341,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the marker numbers are written in, such as `ar-EG`. Defaults to `en-US`. Timeline can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "presentLabel",
             "type": "string",
             "required": false,
             "description": "Text shown in place of the end date for a role marked `present`",
-            "defaultValue": "Present"
+            "defaultValue": "'Present'"
           }
         ]
       }
@@ -17623,7 +18399,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "positive",
               "warning"
             ],
-            "defaultValue": "info"
+            "defaultValue": "'info'"
           },
           {
             "name": "dismissible",
@@ -17634,7 +18410,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "icon",
-            "type": "ReactNode",
+            "type": "string | ReactNode",
             "required": false,
             "description": "Custom icon override — Material Symbol name (string) or custom element (ReactNode)"
           },
@@ -17655,14 +18431,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the dismiss button",
-            "defaultValue": "Dismiss notification"
+            "defaultValue": "'Dismiss notification'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -17688,7 +18464,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "top-left",
               "top-right"
             ],
-            "defaultValue": "bottom-right"
+            "defaultValue": "'bottom-right'"
           },
           {
             "name": "maxToasts",
@@ -17702,14 +18478,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the toast stack's region landmark",
-            "defaultValue": "Notifications"
+            "defaultValue": "'Notifications'"
           },
           {
             "name": "dismissLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of every toast's dismiss button",
-            "defaultValue": "Dismiss notification"
+            "defaultValue": "'Dismiss notification'"
           }
         ]
       }
@@ -17733,7 +18509,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "ToggleGroupItem[]",
             "required": true,
-            "description": "Available items"
+            "description": "Available items",
+            "typeRefs": [
+              "ToggleGroupItem"
+            ]
           },
           {
             "name": "value",
@@ -17764,7 +18543,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "tone",
@@ -17805,7 +18584,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -17857,7 +18636,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Label text displayed next to the toggle",
-            "defaultValue": "Toggle"
+            "defaultValue": "'Toggle'"
           },
           {
             "name": "showLabel",
@@ -17888,7 +18667,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "onCheckedChange",
@@ -17901,7 +18680,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "onChange",
@@ -17928,7 +18707,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | number | readonly string[]",
             "required": false,
             "description": "The value submitted under `name` while on. Defaults to \"on\", the native checkbox's.",
-            "defaultValue": "on"
+            "defaultValue": "'on'"
           }
         ]
       },
@@ -17951,14 +18730,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -17995,7 +18774,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "running",
               "success"
             ],
-            "defaultValue": "success"
+            "defaultValue": "'success'",
+            "typeRefs": [
+              "ToolCallStatus"
+            ]
           },
           {
             "name": "summary",
@@ -18045,7 +18827,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "children",
@@ -18086,7 +18868,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "horizontal",
               "vertical"
             ],
-            "defaultValue": "horizontal"
+            "defaultValue": "'horizontal'"
           },
           {
             "name": "variant",
@@ -18097,7 +18879,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "floating"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "children",
@@ -18110,7 +18892,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -18159,7 +18941,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "start",
               "top"
             ],
-            "defaultValue": "top"
+            "defaultValue": "'top'"
           },
           {
             "name": "showDelay",
@@ -18180,7 +18962,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -18222,7 +19004,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "ios"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "size",
@@ -18234,7 +19016,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "medium",
               "small"
             ],
-            "defaultValue": "small"
+            "defaultValue": "'small'"
           },
           {
             "name": "align",
@@ -18274,21 +19056,27 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "TopAppBarAction[]",
             "required": false,
             "description": "Trailing actions. The first three show as icon buttons; any more join the\noverflow menu, ahead of `overflowActions`, where they render as plain rows\n(a menu row draws no badge and routes from `onClick`, not `href`)",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "TopAppBarAction"
+            ]
           },
           {
             "name": "overflowActions",
             "type": "TopAppBarOverflowAction[]",
             "required": false,
             "description": "Actions listed in a menu behind a trailing \"More\" button",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "TopAppBarOverflowAction"
+            ]
           },
           {
             "name": "overflowLabel",
             "type": "string",
             "required": false,
             "description": "Accessible label of the button that opens the overflow menu",
-            "defaultValue": "More"
+            "defaultValue": "'More'"
           },
           {
             "name": "badgeLabel",
@@ -18336,13 +19124,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -18366,7 +19157,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "nodes",
             "type": "TreeViewNode[]",
             "required": true,
-            "description": "Tree data to render"
+            "description": "Tree data to render",
+            "typeRefs": [
+              "TreeViewNode"
+            ]
           },
           {
             "name": "defaultExpandedIds",
@@ -18410,7 +19204,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -18440,14 +19234,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "data",
             "type": "TreemapDataItem[]",
             "required": true,
-            "description": "Hierarchical data — each item needs `name` and `size` (or `children`)"
+            "description": "Hierarchical data — each item needs `name` and `size` (or `children`)",
+            "typeRefs": [
+              "TreemapDataItem"
+            ]
           },
           {
             "name": "dataKey",
             "type": "string",
             "required": false,
             "description": "Key used for sizing rectangles",
-            "defaultValue": "size"
+            "defaultValue": "'size'"
           },
           {
             "name": "title",
@@ -18465,7 +19262,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "summaryItems",
             "type": "ChartSummaryItem[]",
             "required": false,
-            "description": "Summary stats displayed in the header"
+            "description": "Summary stats displayed in the header",
+            "typeRefs": [
+              "ChartSummaryItem"
+            ]
           },
           {
             "name": "height",
@@ -18486,14 +19286,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The tooltip's name for a tile's value. Defaults to \"Size\".",
-            "defaultValue": "Size"
+            "defaultValue": "'Size'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the wrapper",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -18517,7 +19317,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "items",
             "type": "UsageItem[]",
             "required": true,
-            "description": "The budgets to show, one meter row each"
+            "description": "The budgets to show, one meter row each",
+            "typeRefs": [
+              "UsageItem"
+            ]
           },
           {
             "name": "title",
@@ -18549,14 +19352,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale each meter's readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -18586,7 +19389,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "listening",
               "speaking"
             ],
-            "defaultValue": "idle"
+            "defaultValue": "'idle'"
           },
           {
             "name": "bars",
@@ -18610,7 +19413,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "compact",
               "default"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "label",
@@ -18623,7 +19426,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -18671,7 +19474,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "h3",
               "h4"
             ],
-            "defaultValue": "h3"
+            "defaultValue": "'h3'"
           },
           {
             "name": "description",
@@ -18695,7 +19498,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default",
               "none"
             ],
-            "defaultValue": "default"
+            "defaultValue": "'default'"
           },
           {
             "name": "collapsible",
@@ -18734,14 +19537,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the count is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "en-US"
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -18771,7 +19574,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -18795,7 +19598,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       },
@@ -18837,13 +19640,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -18868,14 +19674,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "WorldMapPoint[]",
             "required": false,
             "description": "The places to mark. A point outside the framed view is simply not drawn.",
-            "defaultValue": "[]"
+            "defaultValue": "[]",
+            "typeRefs": [
+              "WorldMapPoint"
+            ]
           },
           {
             "name": "bounds",
             "type": "WorldMapBounds",
             "required": false,
             "description": "The window the map frames: `[west, south, east, north]` in degrees.\nIt must not cross the antimeridian. Defaults to the whole world\n(Antarctica is not in the land data). Changing it resets any zoom.",
-            "defaultValue": "[-180, -58, 180, 84]"
+            "defaultValue": "[-180, -58, 180, 84]",
+            "typeRefs": [
+              "WorldMapBounds"
+            ]
           },
           {
             "name": "fit",
@@ -18886,7 +19698,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "contain",
               "cover"
             ],
-            "defaultValue": "contain"
+            "defaultValue": "'contain'"
           },
           {
             "name": "showZoomControls",
@@ -18933,32 +19745,44 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onPointHover",
             "type": "((point: WorldMapPoint | null) => void)",
             "required": false,
-            "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves."
+            "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves.",
+            "typeRefs": [
+              "WorldMapPoint"
+            ]
           },
           {
             "name": "onPointClick",
             "type": "((point: WorldMapPoint) => void)",
             "required": false,
-            "description": "Fires when a marker is clicked."
+            "description": "Fires when a marker is clicked.",
+            "typeRefs": [
+              "WorldMapPoint"
+            ]
           },
           {
             "name": "renderCallout",
             "type": "((point: WorldMapPoint) => ReactNode)",
             "required": false,
-            "description": "Renders the annotation for the active (or hovered) point, placed beside\nits marker in an HTML overlay; MapCallout is the intended filling. The\noverlay carries `data-side=\"left\"|\"right\"` for which side of the marker\nit opens on — toward the map's centre, where the room is."
+            "description": "Renders the annotation for the active (or hovered) point, placed beside\nits marker in an HTML overlay; MapCallout is the intended filling. The\noverlay carries `data-side=\"left\"|\"right\"` for which side of the marker\nit opens on — toward the map's centre, where the room is.",
+            "typeRefs": [
+              "WorldMapPoint"
+            ]
           },
           {
             "name": "renderHoverCard",
             "type": "((point: WorldMapPoint) => ReactNode)",
             "required": false,
-            "description": "Wraps each marker in the library's HoverCard, with this as the card's\ncontent — the floating-panel alternative to `renderCallout`'s bare\nreadout, opening on hover or focus with the system's delays and Escape\ndismissal. Content must be phrasing-level (spans), the panel's own\nrule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower.\nNeeds `interactive`; when both renderers are given, this one wins."
+            "description": "Wraps each marker in the library's HoverCard, with this as the card's\ncontent — the floating-panel alternative to `renderCallout`'s bare\nreadout, opening on hover or focus with the system's delays and Escape\ndismissal. Content must be phrasing-level (spans), the panel's own\nrule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower.\nNeeds `interactive`; when both renderers are given, this one wins.",
+            "typeRefs": [
+              "WorldMapPoint"
+            ]
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
             "description": "Accessible name for the map, e.g. \"Offices across the network\". The\npoint count is appended for screen readers.",
-            "defaultValue": "World map"
+            "defaultValue": "'World map'"
           },
           {
             "name": "pointsLabel",
@@ -18972,28 +19796,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The keyboard and pointer instructions appended to the map's accessible name while zooming is on.",
-            "defaultValue": "Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map."
+            "defaultValue": "'Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map.'"
           },
           {
             "name": "zoomControlsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the zoom toolbar. Defaults to \"Map zoom controls\".",
-            "defaultValue": "Map zoom controls"
+            "defaultValue": "'Map zoom controls'"
           },
           {
             "name": "zoomOutLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the zoom-out button. Defaults to \"Zoom out\".",
-            "defaultValue": "Zoom out"
+            "defaultValue": "'Zoom out'"
           },
           {
             "name": "zoomInLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the zoom-in button. Defaults to \"Zoom in\".",
-            "defaultValue": "Zoom in"
+            "defaultValue": "'Zoom in'"
           },
           {
             "name": "zoomResetLabel",
@@ -19007,7 +19831,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
-            "defaultValue": ""
+            "defaultValue": "''"
           }
         ]
       }
@@ -19064,6 +19888,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "floating",
               "flush",
               "inset"
+            ],
+            "typeRefs": [
+              "ChatLayout"
             ]
           },
           {
@@ -19075,7 +19902,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "blur",
               "solid"
             ],
-            "defaultValue": "blur"
+            "defaultValue": "'blur'",
+            "typeRefs": [
+              "ChatBackdrop"
+            ]
           },
           {
             "name": "phone",
@@ -19089,7 +19919,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The header brand name, which also seeds the agent's PixelAvatar.\nNote: not the native `title` tooltip attribute; ChatWidget spreads no native attributes.",
-            "defaultValue": "Assistant"
+            "defaultValue": "'Assistant'"
           },
           {
             "name": "flow",
@@ -19100,21 +19930,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "bottom-up",
               "top-down"
             ],
-            "defaultValue": "top-down"
+            "defaultValue": "'top-down'"
           },
           {
             "name": "placeholder",
             "type": "string",
             "required": false,
             "description": "The composer's placeholder text.",
-            "defaultValue": "Ask anything"
+            "defaultValue": "'Ask anything'"
           },
           {
             "name": "questionsPlaceholder",
             "type": "string",
             "required": false,
             "description": "The composer's placeholder while a set of questions holds it: the answer goes in the card, or the card is skipped.",
-            "defaultValue": "Answer the questions above, or skip them"
+            "defaultValue": "'Answer the questions above, or skip them'"
           },
           {
             "name": "showStarters",
@@ -19135,20 +19965,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The welcome screen's line under the greeting.",
-            "defaultValue": "How can I help you today?"
+            "defaultValue": "'How can I help you today?'"
           },
           {
             "name": "starters",
             "type": "Starter[]",
             "required": false,
-            "description": "The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped."
+            "description": "The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped.",
+            "typeRefs": [
+              "Starter"
+            ]
           },
           {
             "name": "startersKey",
             "type": "string",
             "required": false,
             "description": "Keys the starters' staged reveal: a new key replays the generation beat, the same key shows the set standing. A host whose starters follow the page passes the pathname.",
-            "defaultValue": ""
+            "defaultValue": "''"
           },
           {
             "name": "startersPending",
@@ -19167,7 +20000,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "models",
             "type": "ChatModelOption[]",
             "required": false,
-            "description": "The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker."
+            "description": "The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker.",
+            "typeRefs": [
+              "ChatModelOption"
+            ]
           },
           {
             "name": "defaultModel",
@@ -19180,7 +20016,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The one line a locked model shows in place of its description.",
-            "defaultValue": "Paused for today to stay in budget."
+            "defaultValue": "'Paused for today to stay in budget.'"
           },
           {
             "name": "fileAttachments",
@@ -19207,23 +20043,32 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "mentions",
             "type": "MentionSource[]",
             "required": false,
-            "description": "What the visitor can reference while typing: one source per trigger\ncharacter, drawn as tags in the composer and in the sent bubble."
+            "description": "What the visitor can reference while typing: one source per trigger\ncharacter, drawn as tags in the composer and in the sent bubble.",
+            "typeRefs": [
+              "MentionSource"
+            ]
           },
           {
             "name": "threads",
             "type": "RailSlot",
             "required": false,
-            "description": "A session-history rail. `true` seats the built-in ChatThreads over the\nprovider's thread lifecycle; a render prop seats your own. Wide hosts\nseat it as an inline left rail, narrow ones summon it from a header\nhamburger as a slide-over sheet behind a scrim."
+            "description": "A session-history rail. `true` seats the built-in ChatThreads over the\nprovider's thread lifecycle; a render prop seats your own. Wide hosts\nseat it as an inline left rail, narrow ones summon it from a header\nhamburger as a slide-over sheet behind a scrim.",
+            "typeRefs": [
+              "RailSlot"
+            ]
           },
           {
             "name": "threadsProps",
             "type": "Omit<ChatThreadsProps, \"close\" | \"overlay\">",
             "required": false,
-            "description": "Props for the built-in threads rail when `threads` is `true`."
+            "description": "Props for the built-in threads rail when `threads` is `true`.",
+            "typeRefs": [
+              "ChatThreadsProps"
+            ]
           },
           {
             "name": "tabs",
-            "type": "ReactNode",
+            "type": "boolean | ReactNode",
             "required": false,
             "description": "An open-sessions tab strip as its own row under the header. `true` seats the built-in ChatTabs; a node seats your own."
           },
@@ -19231,7 +20076,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tabsProps",
             "type": "ChatTabsProps",
             "required": false,
-            "description": "Props for the built-in tab strip when `tabs` is `true`: its name, its close buttons' names and its spoken statuses."
+            "description": "Props for the built-in tab strip when `tabs` is `true`: its name, its close buttons' names and its spoken statuses.",
+            "typeRefs": [
+              "ChatTabsProps"
+            ]
           },
           {
             "name": "aside",
@@ -19243,7 +20091,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "agent",
             "type": "ChatAgentOptions",
             "required": false,
-            "description": "The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`."
+            "description": "The built-in agent pane: who the agent is and what it has been doing. Seated like `aside`.",
+            "typeRefs": [
+              "ChatAgentOptions"
+            ]
           },
           {
             "name": "artifacts",
@@ -19256,14 +20107,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "context",
             "type": "ChatContext | null",
             "required": false,
-            "description": "What the chat is looking at, named on the composer's context note: a page, a selection, a passage. Omit for none. A host whose context follows the reader (rows they ticked, text they highlighted) updates it as they go, and can offer a way back and repeat it on each message sent."
+            "description": "What the chat is looking at, named on the composer's context note: a page, a selection, a passage. Omit for none. A host whose context follows the reader (rows they ticked, text they highlighted) updates it as they go, and can offer a way back and repeat it on each message sent.",
+            "typeRefs": [
+              "ChatContext"
+            ]
           },
           {
             "name": "contextClearLabel",
             "type": "string",
             "required": false,
             "description": "The accessible name of the context note's clear button, shown when `context.onClear` is set. Defaults to \"Clear context\".",
-            "defaultValue": "Clear context"
+            "defaultValue": "'Clear context'"
           },
           {
             "name": "contextLabel",
@@ -19281,7 +20135,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "above",
               "inside"
             ],
-            "defaultValue": "inside"
+            "defaultValue": "'inside'"
           },
           {
             "name": "contextNote",
@@ -19302,41 +20156,47 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "greetings",
             "type": "Partial<GreetingCopy>",
             "required": false,
-            "description": "The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to \"Good morning\", \"Good afternoon\" and \"Good evening\"."
+            "description": "The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to \"Good morning\", \"Good afternoon\" and \"Good evening\".",
+            "typeRefs": [
+              "GreetingCopy"
+            ]
           },
           {
             "name": "placementLabels",
             "type": "Partial<Record<ChatPlacement, string>>",
             "required": false,
-            "description": "The Chat position menu's rows, one per seat; a key left out keeps its English. Defaults to \"Dock right\", \"Dock left\" and \"Floating\"."
+            "description": "The Chat position menu's rows, one per seat; a key left out keeps its English. Defaults to \"Dock right\", \"Dock left\" and \"Floating\".",
+            "typeRefs": [
+              "ChatPlacement"
+            ]
           },
           {
             "name": "agentStatus",
             "type": "string",
             "required": false,
             "description": "The status line under the agent's name in the agent pane, where `agent` brings no `profile` of its own. Defaults to \"Connected\".",
-            "defaultValue": "Connected"
+            "defaultValue": "'Connected'"
           },
           {
             "name": "artifactPanelTitle",
             "type": "string",
             "required": false,
             "description": "The artifact panel's title while nothing is on stage. Defaults to \"Artifacts\".",
-            "defaultValue": "Artifacts"
+            "defaultValue": "'Artifacts'"
           },
           {
             "name": "artifactEmptyTitle",
             "type": "string",
             "required": false,
             "description": "The artifact panel's empty-state heading. Defaults to \"Nothing here yet\".",
-            "defaultValue": "Nothing here yet"
+            "defaultValue": "'Nothing here yet'"
           },
           {
             "name": "artifactEmptyDescription",
             "type": "string",
             "required": false,
             "description": "The artifact panel's empty-state description. Defaults to \"What the chat makes for you, like a dashboard or a page, opens in this panel.\"",
-            "defaultValue": "What the chat makes for you, like a dashboard or a page, opens in this panel."
+            "defaultValue": "'What the chat makes for you, like a dashboard or a page, opens in this panel.'"
           },
           {
             "name": "widgets",
@@ -19353,7 +20213,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "fit",
               "scroll"
             ],
-            "defaultValue": "fit"
+            "defaultValue": "'fit'"
           },
           {
             "name": "widgetsWidth",
@@ -19364,168 +20224,168 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "column",
               "wide"
             ],
-            "defaultValue": "column"
+            "defaultValue": "'column'"
           },
           {
             "name": "disclaimer",
             "type": "ReactNode",
             "required": false,
             "description": "The quiet line pinned to the widget's floor: what the chat is and where its policy lives.",
-            "defaultValue": "Answers may be wrong."
+            "defaultValue": "'Answers may be wrong.'"
           },
           {
             "name": "startersLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the welcome screen's conversation starters. Defaults to \"Conversation starters\".",
-            "defaultValue": "Conversation starters"
+            "defaultValue": "'Conversation starters'"
           },
           {
             "name": "newChatLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the header's new-chat button. Defaults to \"New chat\".",
-            "defaultValue": "New chat"
+            "defaultValue": "'New chat'"
           },
           {
             "name": "showAgentLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the agent-pane toggle while the pane is closed. Defaults to \"Show the agent panel\".",
-            "defaultValue": "Show the agent panel"
+            "defaultValue": "'Show the agent panel'"
           },
           {
             "name": "hideAgentLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the agent-pane toggle while the pane is open. Defaults to \"Hide the agent panel\".",
-            "defaultValue": "Hide the agent panel"
+            "defaultValue": "'Hide the agent panel'"
           },
           {
             "name": "closeAgentLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the agent pane's own close button, and of the scrim that closes the pane's bottom sheet. Defaults to \"Close the agent panel\".",
-            "defaultValue": "Close the agent panel"
+            "defaultValue": "'Close the agent panel'"
           },
           {
             "name": "showArtifactLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the artifact-panel toggle while the panel is closed. Defaults to \"Show the artifact panel\".",
-            "defaultValue": "Show the artifact panel"
+            "defaultValue": "'Show the artifact panel'"
           },
           {
             "name": "hideArtifactLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the artifact-panel toggle while the panel is open. Defaults to \"Hide the artifact panel\".",
-            "defaultValue": "Hide the artifact panel"
+            "defaultValue": "'Hide the artifact panel'"
           },
           {
             "name": "closeArtifactLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the scrim that closes the artifact panel's bottom sheet. Defaults to \"Close the artifact panel\".",
-            "defaultValue": "Close the artifact panel"
+            "defaultValue": "'Close the artifact panel'"
           },
           {
             "name": "placementLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the Chat position menu's button, and the heading of its group. Defaults to \"Chat position\".",
-            "defaultValue": "Chat position"
+            "defaultValue": "'Chat position'"
           },
           {
             "name": "enterFullscreenLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the expand toggle in panel view. Defaults to \"Enter full screen\".",
-            "defaultValue": "Enter full screen"
+            "defaultValue": "'Enter full screen'"
           },
           {
             "name": "exitFullscreenLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the expand toggle in full-screen view. Defaults to \"Exit full screen\".",
-            "defaultValue": "Exit full screen"
+            "defaultValue": "'Exit full screen'"
           },
           {
             "name": "closeLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the header's close button. Defaults to \"Close chat\".",
-            "defaultValue": "Close chat"
+            "defaultValue": "'Close chat'"
           },
           {
             "name": "openThreadsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the header button that opens the chat-history sheet on a narrow host. Defaults to \"Open the chat history\".",
-            "defaultValue": "Open the chat history"
+            "defaultValue": "'Open the chat history'"
           },
           {
             "name": "closeThreadsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the scrim that closes the chat-history sheet. Defaults to \"Close the chat history\".",
-            "defaultValue": "Close the chat history"
+            "defaultValue": "'Close the chat history'"
           },
           {
             "name": "modelPickerLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the composer's model picker. Defaults to \"Choose a model\".",
-            "defaultValue": "Choose a model"
+            "defaultValue": "'Choose a model'"
           },
           {
             "name": "sendLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the composer's send button. Defaults to \"Send\".",
-            "defaultValue": "Send"
+            "defaultValue": "'Send'"
           },
           {
             "name": "copyResponseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of a reply's copy button. Defaults to \"Copy response\".",
-            "defaultValue": "Copy response"
+            "defaultValue": "'Copy response'"
           },
           {
             "name": "copiedResponseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of a reply's copy button once the copy has landed. Defaults to \"Copied\".",
-            "defaultValue": "Copied"
+            "defaultValue": "'Copied'"
           },
           {
             "name": "copiedAnnouncementLabel",
             "type": "string",
             "required": false,
             "description": "What screen readers hear once a reply has been copied. Defaults to \"Copied to clipboard\".",
-            "defaultValue": "Copied to clipboard"
+            "defaultValue": "'Copied to clipboard'"
           },
           {
             "name": "goodResponseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of a reply's thumbs-up button. Defaults to \"Good response\".",
-            "defaultValue": "Good response"
+            "defaultValue": "'Good response'"
           },
           {
             "name": "badResponseLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of a reply's thumbs-down button. Defaults to \"Bad response\".",
-            "defaultValue": "Bad response"
+            "defaultValue": "'Bad response'"
           },
           {
             "name": "followupsLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the follow-up question row under a finished answer. Defaults to \"Follow-up questions\".",
-            "defaultValue": "Follow-up questions"
+            "defaultValue": "'Follow-up questions'"
           },
           {
             "name": "pastedTextLabel",
@@ -19543,79 +20403,118 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "composerLabels",
             "type": "Pick<ComposerProps, \"aria-label\" | \"attachmentTileLabels\" | \"attachLabel\" | \"dropLabel\" | \"filesLabel\" | \"formatFileAnnouncement\" | \"formatMentionAnnouncement\" | \"stopLabel\">",
             "required": false,
-            "description": "The composer's words, over Composer's English defaults: the attach button (\"Attach files\"), the drop overlay on the shell (\"Drop files to attach\"), the queued files' list (\"Attachments\") and their tiles (`attachmentTileLabels`), the stop button (\"Stop generating\"), the text field's name (\"Message\"), and the sentences announced when files or mention matches change. The send button's name is `sendLabel`."
+            "description": "The composer's words, over Composer's English defaults: the attach button (\"Attach files\"), the drop overlay on the shell (\"Drop files to attach\"), the queued files' list (\"Attachments\") and their tiles (`attachmentTileLabels`), the stop button (\"Stop generating\"), the text field's name (\"Message\"), and the sentences announced when files or mention matches change. The send button's name is `sendLabel`.",
+            "typeRefs": [
+              "ComposerProps"
+            ]
           },
           {
             "name": "attachmentDropZoneLabels",
             "type": "Pick<AttachmentDropZoneProps, \"label\">",
             "required": false,
-            "description": "The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's \"Drop files to attach\". Its second line is `attachHint`."
+            "description": "The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's \"Drop files to attach\". Its second line is `attachHint`.",
+            "typeRefs": [
+              "AttachmentDropZoneProps"
+            ]
           },
           {
             "name": "renderAttachmentPreview",
             "type": "((item: AttachmentItem) => ReactNode)",
             "required": false,
-            "description": "Draws a sent file in the viewer its tile opens, in place of the built-in view: a document renderer of the host's own, a spreadsheet. Return nothing to keep the built-in view, which shows pictures, pasted text, and a PDF or a text file that carries a `fileUrl`."
+            "description": "Draws a sent file in the viewer its tile opens, in place of the built-in view: a document renderer of the host's own, a spreadsheet. Return nothing to keep the built-in view, which shows pictures, pasted text, and a PDF or a text file that carries a `fileUrl`.",
+            "typeRefs": [
+              "AttachmentGroupProps"
+            ]
           },
           {
             "name": "onAttachmentDownload",
             "type": "((item: AttachmentItem) => void)",
             "required": false,
-            "description": "Called with a sent file when the viewer's Download is pressed. Its presence renders the button."
+            "description": "Called with a sent file when the viewer's Download is pressed. Its presence renders the button.",
+            "typeRefs": [
+              "AttachmentGroupProps"
+            ]
           },
           {
             "name": "attachmentGroupLabels",
             "type": "Pick<AttachmentGroupProps, \"label\" | \"showMoreLabel\" | \"showLessLabel\" | \"attachmentTileLabels\" | \"attachmentViewerLabels\">",
             "required": false,
-            "description": "The words of the files on a sent message, over AttachmentGroup's English defaults: the list's name (\"Attachments\"), the overflow buttons (\"Show 3 more\", \"Show fewer\"), the tiles' status lines (`attachmentTileLabels`) and the viewer a pressed file opens in (`attachmentViewerLabels`)."
+            "description": "The words of the files on a sent message, over AttachmentGroup's English defaults: the list's name (\"Attachments\"), the overflow buttons (\"Show 3 more\", \"Show fewer\"), the tiles' status lines (`attachmentTileLabels`) and the viewer a pressed file opens in (`attachmentViewerLabels`).",
+            "typeRefs": [
+              "AttachmentGroupProps"
+            ]
           },
           {
             "name": "chatThreadLabels",
             "type": "Pick<ChatThreadProps, \"ariaLabel\" | \"jumpLabel\">",
             "required": false,
-            "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\") and the scroll-to-latest control (\"Scroll to the latest message\")."
+            "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\") and the scroll-to-latest control (\"Scroll to the latest message\").",
+            "typeRefs": [
+              "ChatThreadProps"
+            ]
           },
           {
             "name": "modelPickerLabels",
             "type": "Pick<ModelPickerProps, \"placeholder\" | \"listLabel\">",
             "required": false,
-            "description": "The model picker's words, over ModelPicker's English defaults: the open list's name (\"Model\") and the trigger's text when nothing is selected (\"Choose a model\"). The trigger's own name is `modelPickerLabel`."
+            "description": "The model picker's words, over ModelPicker's English defaults: the open list's name (\"Model\") and the trigger's text when nothing is selected (\"Choose a model\"). The trigger's own name is `modelPickerLabel`.",
+            "typeRefs": [
+              "ModelPickerProps"
+            ]
           },
           {
             "name": "artifactPanelLabels",
             "type": "Pick<ArtifactPanelProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"previewLabel\" | \"codeLabel\" | \"viewLabel\" | \"codeBlockLabels\">",
             "required": false,
-            "description": "The artifact panel's words, over ArtifactPanel's English defaults: the view switch (\"Preview\", \"Code\", \"Artifact view\"), the expand and close buttons (\"Expand the artifact\", \"Collapse the artifact\", \"Close the artifact\") and the code view's CodeBlock (`codeBlockLabels`)."
+            "description": "The artifact panel's words, over ArtifactPanel's English defaults: the view switch (\"Preview\", \"Code\", \"Artifact view\"), the expand and close buttons (\"Expand the artifact\", \"Collapse the artifact\", \"Close the artifact\") and the code view's CodeBlock (`codeBlockLabels`).",
+            "typeRefs": [
+              "ArtifactPanelProps"
+            ]
           },
           {
             "name": "agentRailLabels",
             "type": "Pick<AgentRailProps, \"tabsLabel\">",
             "required": false,
-            "description": "The agent pane's words, over AgentRail's English defaults: the tab strip's name (\"Agent views\"). The pane's close is `closeAgentLabel`."
+            "description": "The agent pane's words, over AgentRail's English defaults: the tab strip's name (\"Agent views\"). The pane's close is `closeAgentLabel`.",
+            "typeRefs": [
+              "AgentRailProps"
+            ]
           },
           {
             "name": "questionCardLabels",
             "type": "Partial<QuestionCardLabels>",
             "required": false,
-            "description": "The words of a question card a reply ends in, over QuestionCard's English defaults: the step count (\"1 of 3\"), the buttons (\"Back\", \"Next\", \"Send\", \"Skip\"), the records (\"Skipped\", \"Not answered\", \"(chosen)\"), the pick lines (\"Choose one\") and the \"Something else\" row."
+            "description": "The words of a question card a reply ends in, over QuestionCard's English defaults: the step count (\"1 of 3\"), the buttons (\"Back\", \"Next\", \"Send\", \"Skip\"), the records (\"Skipped\", \"Not answered\", \"(chosen)\"), the pick lines (\"Choose one\") and the \"Something else\" row.",
+            "typeRefs": [
+              "QuestionCardLabels"
+            ]
           },
           {
             "name": "questionSummaryLabels",
             "type": "Pick<QuestionSummaryProps, \"missingLabel\">",
             "required": false,
-            "description": "The words of a sent set of answers, over QuestionSummary's English default: what stands in for a question left without an answer (\"No answer\")."
+            "description": "The words of a sent set of answers, over QuestionSummary's English default: what stands in for a question left without an answer (\"No answer\").",
+            "typeRefs": [
+              "QuestionSummaryProps"
+            ]
           },
           {
             "name": "codeBlockLabels",
             "type": "(Pick<CodeBlockProps, \"copyLabel\" | \"copyText\" | \"copiedLabel\"> & { codeLabel?: ((language: string) => string); }) | undefined",
             "required": false,
-            "description": "The words of a reply's fenced code, over CodeBlock's English defaults: the copy button (\"Copy code\", \"Copy\", \"Copied\"), and the code region's name, given the fence's language (\"Code: bash\", or \"Code\" with none)."
+            "description": "The words of a reply's fenced code, over CodeBlock's English defaults: the copy button (\"Copy code\", \"Copy\", \"Copied\"), and the code region's name, given the fence's language (\"Code: bash\", or \"Code\" with none).",
+            "typeRefs": [
+              "CodeBlockProps"
+            ]
           },
           {
             "name": "promptSuggestionsLabels",
             "type": "Pick<PromptSuggestionsProps, \"chosenLabel\">",
             "required": false,
-            "description": "The follow-up row's words, over PromptSuggestions' English default: the hidden text read after the sent suggestion (\"(chosen)\"). The row's name is `followupsLabel`."
+            "description": "The follow-up row's words, over PromptSuggestions' English default: the hidden text read after the sent suggestion (\"(chosen)\"). The row's name is `followupsLabel`.",
+            "typeRefs": [
+              "PromptSuggestionsProps"
+            ]
           }
         ]
       },
@@ -19626,14 +20525,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "transport",
             "type": "ChatTransport",
             "required": false,
-            "description": "Where the conversation goes. Defaults to the fetch transport against\n`endpoint`, carrying the visitor's model pick. A script from\n`scriptChat()` runs the widget with no backend at all."
+            "description": "Where the conversation goes. Defaults to the fetch transport against\n`endpoint`, carrying the visitor's model pick. A script from\n`scriptChat()` runs the widget with no backend at all.",
+            "typeRefs": [
+              "ChatTransport"
+            ]
           },
           {
             "name": "endpoint",
             "type": "string",
             "required": false,
             "description": "The endpoint the default transport posts to.",
-            "defaultValue": "/api/chat"
+            "defaultValue": "'/api/chat'"
           },
           {
             "name": "getContext",
@@ -19651,14 +20553,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "left",
               "right"
             ],
-            "defaultValue": "right"
+            "defaultValue": "'right'",
+            "typeRefs": [
+              "ChatPlacement"
+            ]
           },
           {
             "name": "followups",
             "type": "string | false | FollowupsSource",
             "required": false,
             "description": "Where follow-up questions come from after an answer commits: a source\nfunction, an endpoint for the built-in fetcher, or `false` for none:\nwith `false` no chips show under an answer at all, not even the written\n`fallbackFollowups`. Defaults to the fetcher against `/api/chat/followups`.",
-            "defaultValue": "/api/chat/followups"
+            "defaultValue": "'/api/chat/followups'",
+            "typeRefs": [
+              "FollowupsSource"
+            ]
           },
           {
             "name": "fallbackFollowups",
@@ -19672,26 +20580,38 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | false | FeedbackSink",
             "required": false,
             "description": "Where a thumbs verdict goes: a sink function, an endpoint for the\nbuilt-in poster, or `false` to hide the thumbs. Defaults to the poster\nagainst `/api/chat/feedback`. Thumbs only ever show on a turn the\nserver logged (one with an exchange id).",
-            "defaultValue": "/api/chat/feedback"
+            "defaultValue": "'/api/chat/feedback'",
+            "typeRefs": [
+              "FeedbackSink"
+            ]
           },
           {
             "name": "renderers",
             "type": "ChatCardRenderers",
             "required": false,
-            "description": "Draws `card` events by kind."
+            "description": "Draws `card` events by kind.",
+            "typeRefs": [
+              "ChatCardRenderers"
+            ]
           },
           {
             "name": "artifactRenderers",
             "type": "ChatArtifactRenderers",
             "required": false,
-            "description": "Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL."
+            "description": "Draws an artifact's preview by kind, for artifacts that are live React content rather than a document or a URL.",
+            "typeRefs": [
+              "ChatArtifactRenderers"
+            ]
           },
           {
             "name": "renderLink",
             "type": "ChatLinkRenderer",
             "required": false,
             "description": "Renders a same-site link in an answer. The default renders through the\nnearest LinkProvider's link component, else a plain anchor; passing\nthis wins over both.",
-            "defaultValue": "(props) => <DefaultChatLink {...props} />"
+            "defaultValue": "(props) => <DefaultChatLink {...props} />",
+            "typeRefs": [
+              "ChatLinkRenderer"
+            ]
           },
           {
             "name": "isInternalHref",
@@ -19704,13 +20624,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "threads",
             "type": "ThreadsOptions",
             "required": false,
-            "description": "Seeds the thread lifecycle behind the `threads` and `tabs` slots."
+            "description": "Seeds the thread lifecycle behind the `threads` and `tabs` slots.",
+            "typeRefs": [
+              "ThreadsOptions"
+            ]
           },
           {
             "name": "placeholders",
             "type": "Partial<ChatPlaceholderCopy>",
             "required": false,
-            "description": "Replacement copy for the words the hook writes itself, merged over the English defaults: the status line of a reply that has not started (\"Thinking\") and the placeholder replies for an empty, stopped or failed turn."
+            "description": "Replacement copy for the words the hook writes itself, merged over the English defaults: the status line of a reply that has not started (\"Thinking\") and the placeholder replies for an empty, stopped or failed turn.",
+            "typeRefs": [
+              "ChatPlaceholderCopy"
+            ]
           }
         ]
       },
@@ -19722,20 +20648,23 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The floating button's text.",
-            "defaultValue": "Ask"
+            "defaultValue": "'Ask'"
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
             "description": "The button's icon.",
-            "defaultValue": "forum"
+            "defaultValue": "'forum'"
           },
           {
             "name": "summary",
             "type": "(AiButtonSummary & { chips?: { id: string; label: string; prompt: string; }[]; })",
             "required": false,
-            "description": "A TLDR panel the button summons on hover: a pre-written summary and\nprompt chips. A tapped chip opens the chat and sends the chip's\n`prompt`. The launcher hands it to the closed button's AiButton, which\nopens the panel on pointer hover; it does no device or hydration gating\nof its own, so a host that wants the panel on hover-capable devices only,\nor kept out of server HTML, passes `summary` only there."
+            "description": "A TLDR panel the button summons on hover: a pre-written summary and\nprompt chips. A tapped chip opens the chat and sends the chip's\n`prompt`. The launcher hands it to the closed button's AiButton, which\nopens the panel on pointer hover; it does no device or hydration gating\nof its own, so a host that wants the panel on hover-capable devices only,\nor kept out of server HTML, passes `summary` only there.",
+            "typeRefs": [
+              "AiButtonSummary"
+            ]
           },
           {
             "name": "hidden",
@@ -19749,33 +20678,39 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The panel's DOM id, for a host control's `aria-controls`.",
-            "defaultValue": "ds-chat-panel"
+            "defaultValue": "'ds-chat-panel'"
           },
           {
             "name": "hostAttribute",
             "type": "string | false",
             "required": false,
             "description": "The attribute the launcher writes on `<html>` to say how the panel sits\n(`docked`, `docked-left`, `takeover`), so the host's stylesheet can pad\nthe page or hide it. `false` writes none.",
-            "defaultValue": "data-chat"
+            "defaultValue": "'data-chat'"
           },
           {
             "name": "panelLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name for the panel.",
-            "defaultValue": "Chat"
+            "defaultValue": "'Chat'"
           },
           {
             "name": "aiButtonLabels",
             "type": "Pick<AiButtonProps, \"dismissLabel\" | \"summaryRegionLabel\" | \"suggestionsLabel\">",
             "required": false,
-            "description": "The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title (\"Summary: <title>\"), its dismiss button (\"Dismiss summary\") and its chips' group (\"Suggested prompts\")."
+            "description": "The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title (\"Summary: <title>\"), its dismiss button (\"Dismiss summary\") and its chips' group (\"Suggested prompts\").",
+            "typeRefs": [
+              "AiButtonProps"
+            ]
           },
           {
             "name": "widget",
             "type": "Omit<ChatWidgetProps, \"compact\" | \"fullscreenEnabled\" | \"placementEnabled\" | \"phone\">",
             "required": false,
-            "description": "Everything the widget takes. The launcher sets the responsive ones itself."
+            "description": "Everything the widget takes. The launcher sets the responsive ones itself.",
+            "typeRefs": [
+              "ChatWidgetProps"
+            ]
           },
           {
             "name": "children",
@@ -19792,7 +20727,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "inset",
               "raised"
             ],
-            "defaultValue": "raised"
+            "defaultValue": "'raised'"
           }
         ]
       },
@@ -19827,7 +20762,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "profile",
             "type": "ThreadPanelProfile",
             "required": false,
-            "description": "The signed-in person, shown on the inline rail."
+            "description": "The signed-in person, shown on the inline rail.",
+            "typeRefs": [
+              "ThreadPanelProfile"
+            ]
           },
           {
             "name": "footerSlot",
@@ -19860,13 +20798,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible heading over the history.",
-            "defaultValue": "Chat history"
+            "defaultValue": "'Chat history'"
           },
           {
             "name": "threadPanelLabels",
             "type": "Pick<ThreadPanelProps, \"statusLabels\" | \"collapseLabel\" | \"expandLabel\" | \"pinnedLabel\" | \"threadMenuLabel\" | \"renameLabel\" | \"projectsLabel\" | \"newProjectLabel\">",
             "required": false,
-            "description": "The words the ThreadPanel writes, merged over its English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects header and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`."
+            "description": "The words the ThreadPanel writes, merged over its English defaults: the\nspoken pin and status text (\"Pinned\", \"Working\"…), each row's menu\ntrigger (\"Thread options\"), the rename field (\"Rename thread\"), the\nprojects header and its add button (\"Projects\", \"New project\"), and the\ncollapse toggle (\"Collapse the panel\", \"Expand the panel\"). The history's\nown name is `historyLabel`.",
+            "typeRefs": [
+              "ThreadPanelProps"
+            ]
           },
           {
             "name": "actionLabels",
@@ -19884,20 +20825,26 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name for the tab strip.",
-            "defaultValue": "Open chats"
+            "defaultValue": "'Open chats'"
           },
           {
             "name": "closeLabel",
             "type": "string | ((title: string) => string)",
             "required": false,
             "description": "Accessible name of each tab's close button. A string is followed by a colon and the tab's title; a function is given the title and returns the whole name. Defaults to \"Close chat\".",
-            "defaultValue": "Close chat"
+            "defaultValue": "'Close chat'",
+            "typeRefs": [
+              "ThreadTabsProps"
+            ]
           },
           {
             "name": "statusLabels",
             "type": "Partial<Record<ThreadTabStatus, string>>",
             "required": false,
-            "description": "Spoken text for each tab's status, merged over ThreadTabs' English defaults (Working, Unread, Needs input, Failed)."
+            "description": "Spoken text for each tab's status, merged over ThreadTabs' English defaults (Working, Unread, Needs input, Failed).",
+            "typeRefs": [
+              "ThreadTabsProps"
+            ]
           }
         ]
       },
@@ -19908,13 +20855,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "profile",
             "type": "AgentRailProfile",
             "required": true,
-            "description": "The agent this pane belongs to: the portrait block at the top."
+            "description": "The agent this pane belongs to: the portrait block at the top.",
+            "typeRefs": [
+              "AgentRailProfile"
+            ]
           },
           {
             "name": "tabs",
             "type": "AgentRailTab[]",
             "required": true,
-            "description": "The panes, in display order: activity, approvals, automations, personalisation, or whatever the agent has."
+            "description": "The panes, in display order: activity, approvals, automations, personalisation, or whatever the agent has.",
+            "typeRefs": [
+              "AgentRailTab"
+            ]
           },
           {
             "name": "value",
@@ -19965,13 +20918,16 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Accessible name of the pane's own close button. Defaults to \"Close the agent panel\".",
-            "defaultValue": "Close the agent panel"
+            "defaultValue": "'Close the agent panel'"
           },
           {
             "name": "agentRailLabels",
             "type": "Pick<AgentRailProps, \"tabsLabel\">",
             "required": false,
-            "description": "The words the AgentRail writes, merged over its English defaults: the tab strip's name (\"Agent views\")."
+            "description": "The words the AgentRail writes, merged over its English defaults: the tab strip's name (\"Agent views\").",
+            "typeRefs": [
+              "AgentRailProps"
+            ]
           }
         ]
       },
@@ -19982,7 +20938,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "artifact",
             "type": "ChatArtifact | null",
             "required": true,
-            "description": "The artifact on stage, or null for the empty state: the panel opened before the conversation has made anything."
+            "description": "The artifact on stage, or null for the empty state: the panel opened before the conversation has made anything.",
+            "typeRefs": [
+              "ChatArtifact"
+            ]
           },
           {
             "name": "expanded",
@@ -20007,27 +20966,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The panel's title while nothing is on stage. Defaults to \"Artifacts\".",
-            "defaultValue": "Artifacts"
+            "defaultValue": "'Artifacts'"
           },
           {
             "name": "emptyTitle",
             "type": "string",
             "required": false,
             "description": "The empty state's heading. Defaults to \"Nothing here yet\".",
-            "defaultValue": "Nothing here yet"
+            "defaultValue": "'Nothing here yet'"
           },
           {
             "name": "emptyDescription",
             "type": "string",
             "required": false,
             "description": "The empty state's description. Defaults to \"What the chat makes for you, like a dashboard or a page, opens in this panel.\"",
-            "defaultValue": "What the chat makes for you, like a dashboard or a page, opens in this panel."
+            "defaultValue": "'What the chat makes for you, like a dashboard or a page, opens in this panel.'"
           },
           {
             "name": "artifactPanelLabels",
             "type": "Pick<ArtifactPanelProps, \"collapseLabel\" | \"closeLabel\" | \"expandLabel\" | \"previewLabel\" | \"codeLabel\" | \"viewLabel\" | \"codeBlockLabels\">",
             "required": false,
-            "description": "The words the ArtifactPanel writes, merged over its English defaults:\nthe view switch's segments and name (\"Preview\", \"Code\", \"Artifact\nview\"), the expand toggle and close button's names (\"Expand the\nartifact\", \"Collapse the artifact\", \"Close the artifact\"), and the code\nview's copy button and region (`codeBlockLabels`)."
+            "description": "The words the ArtifactPanel writes, merged over its English defaults:\nthe view switch's segments and name (\"Preview\", \"Code\", \"Artifact\nview\"), the expand toggle and close button's names (\"Expand the\nartifact\", \"Collapse the artifact\", \"Close the artifact\"), and the code\nview's copy button and region (`codeBlockLabels`).",
+            "typeRefs": [
+              "ArtifactPanelProps"
+            ]
           }
         ]
       },
@@ -20038,7 +21000,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "artifact",
             "type": "ChatArtifact",
             "required": true,
-            "description": "The artifact this tile stands for."
+            "description": "The artifact this tile stands for.",
+            "typeRefs": [
+              "ChatArtifact"
+            ]
           }
         ]
       }

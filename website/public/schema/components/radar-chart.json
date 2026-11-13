@@ -43,7 +43,10 @@
           "type": "RadarSeriesConfig[]",
           "typeKind": "array",
           "required": true,
-          "description": "One or more radar series to render"
+          "description": "One or more radar series to render",
+          "typeRefs": [
+            "RadarSeriesConfig"
+          ]
         },
         {
           "name": "title",
@@ -64,7 +67,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -92,5 +98,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    },
+    "RadarSeriesConfig": {
+      "kind": "interface",
+      "definition": "interface RadarSeriesConfig {\n  /** Key in data for this series */\n  dataKey: string;\n  /** Display name (shown in tooltip and legend) */\n  label: string;\n  /** Fill / stroke colour — CSS value */\n  color?: string;\n  /** Fill opacity (0–1) */\n  fillOpacity?: number;\n}"
+    }
+  },
+  "externalTypes": {
+    "Record": "typescript"
+  }
 }

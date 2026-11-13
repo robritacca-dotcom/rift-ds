@@ -22,4 +22,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | charIntervalMs | `number` | no |  | The retired interval between reveal steps; when set and `floorCps` is not, its equivalent rate becomes the reveal's floor. Deprecated: The reveal is frame-driven now — pace it with `floorCps` and `drainMs` instead. |
 | cursor | `boolean` | no | `true` | Shows the blinking cursor while streaming or revealing. |
 | onRevealComplete | `(() => void)` | no |  | Fires once when the reveal catches up with `text` after `streaming` has ended — the moment the message is fully on screen. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |

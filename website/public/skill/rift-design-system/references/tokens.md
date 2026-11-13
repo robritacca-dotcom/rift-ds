@@ -220,13 +220,13 @@ Prefix: `--font-*`.
 | `--font-heading-3-line-height` | `28px` |  |
 | `--font-heading-3-size` | `22px` |  |
 | `--font-heading-3-weight` | `600` |  |
-| `--font-line-height-1100` | `44px` |  |
 | `--font-line-height-400` | `16px` |  |
 | `--font-line-height-500` | `20px` |  |
 | `--font-line-height-600` | `24px` |  |
 | `--font-line-height-700` | `28px` |  |
 | `--font-line-height-800` | `32px` |  |
 | `--font-line-height-900` | `36px` |  |
+| `--font-line-height-1100` | `44px` |  |
 | `--font-mega-1-family` | `'Nunito Sans', sans-serif` |  |
 | `--font-mega-1-letter-spacing` | `0.02em` |  |
 | `--font-mega-1-line-height` | `0.92` |  |
@@ -262,20 +262,20 @@ Prefix: `--font-*`.
 | `--font-paragraph-sm-size` | `14px` |  |
 | `--font-paragraph-sm-weight` | `400` |  |
 | `--font-paragraph-weight` | `400` |  |
-| `--font-size-1000` | `40px` |  |
-| `--font-size-1200` | `48px` |  |
-| `--font-size-1400` | `56px` |  |
-| `--font-size-1600` | `64px` |  |
-| `--font-size-2400` | `96px` |  |
-| `--font-size-2900` | `116px` |  |
 | `--font-size-300` | `12px` |  |
-| `--font-size-3300` | `132px` |  |
 | `--font-size-350` | `14px` |  |
 | `--font-size-400` | `16px` |  |
 | `--font-size-550` | `22px` |  |
 | `--font-size-600` | `24px` |  |
 | `--font-size-650` | `26px` |  |
 | `--font-size-750` | `30px` |  |
+| `--font-size-1000` | `40px` |  |
+| `--font-size-1200` | `48px` |  |
+| `--font-size-1400` | `56px` |  |
+| `--font-size-1600` | `64px` |  |
+| `--font-size-2400` | `96px` |  |
+| `--font-size-2900` | `116px` |  |
+| `--font-size-3300` | `132px` |  |
 | `--font-sub-display-family` | `'Nunito Sans', sans-serif` |  |
 | `--font-sub-display-letter-spacing` | `0.015em` |  |
 | `--font-sub-display-line-height` | `44px` | `36px` |
@@ -295,23 +295,23 @@ Prefix: `--gap-*`, `--padding-*`.
 | --- | --- | --- |
 | `--gap-050` | `2px` (`--primitive-gap-050`) |  |
 | `--gap-100` | `4px` (`--primitive-gap-100`) |  |
-| `--gap-1000` | `40px` (`--primitive-gap-1000`) |  |
-| `--gap-1500` | `60px` (`--primitive-gap-1500`) | `40px` (`--primitive-gap-1000`) |
 | `--gap-200` | `8px` (`--primitive-gap-200`) |  |
-| `--gap-2000` | `80px` (`--primitive-gap-2000`) | `60px` (`--primitive-gap-1500`) |
 | `--gap-300` | `12px` (`--primitive-gap-300`) |  |
-| `--gap-3000` | `120px` (`--primitive-gap-3000`) | `80px` (`--primitive-gap-2000`) |
 | `--gap-400` | `16px` (`--primitive-gap-400`) |  |
 | `--gap-500` | `20px` (`--primitive-gap-500`) |  |
+| `--gap-1000` | `40px` (`--primitive-gap-1000`) |  |
+| `--gap-1500` | `60px` (`--primitive-gap-1500`) | `40px` (`--primitive-gap-1000`) |
+| `--gap-2000` | `80px` (`--primitive-gap-2000`) | `60px` (`--primitive-gap-1500`) |
+| `--gap-3000` | `120px` (`--primitive-gap-3000`) | `80px` (`--primitive-gap-2000`) |
 | `--padding-050` | `2px` (`--primitive-padding-050`) |  |
 | `--padding-100` | `4px` (`--primitive-padding-100`) |  |
-| `--padding-1000` | `40px` (`--primitive-padding-1000`) |  |
 | `--padding-150` | `6px` (`--primitive-padding-150`) |  |
-| `--padding-1500` | `60px` (`--primitive-padding-1500`) | `40px` (`--primitive-padding-1000`) |
 | `--padding-200` | `8px` (`--primitive-padding-200`) |  |
 | `--padding-300` | `12px` (`--primitive-padding-300`) |  |
 | `--padding-400` | `16px` (`--primitive-padding-400`) |  |
 | `--padding-500` | `20px` (`--primitive-padding-500`) |  |
+| `--padding-1000` | `40px` (`--primitive-padding-1000`) |  |
+| `--padding-1500` | `60px` (`--primitive-padding-1500`) | `40px` (`--primitive-padding-1000`) |
 
 ## Radius (8)
 
@@ -321,11 +321,11 @@ Prefix: `--radius-*`.
 | --- | --- |
 | `--radius-050` | `2px` (`--primitive-radius-050`) |
 | `--radius-100` | `4px` (`--primitive-radius-100`) |
-| `--radius-1200` | `48px` (`--primitive-radius-1200`) |
 | `--radius-200` | `8px` (`--primitive-radius-200`) |
 | `--radius-300` | `12px` (`--primitive-radius-300`) |
 | `--radius-400` | `16px` (`--primitive-radius-400`) |
 | `--radius-600` | `24px` (`--primitive-radius-600`) |
+| `--radius-1200` | `48px` (`--primitive-radius-1200`) |
 | `--radius-pill` | `999px` (`--primitive-radius-pill`) |
 
 ## Border (2)
@@ -353,10 +353,10 @@ Prefix: `--icon-size-*`.
 
 | Token | Value |
 | --- | --- |
-| `--icon-size-1200` | `48px` (`--primitive-icon-1200`) |
 | `--icon-size-500` | `20px` (`--primitive-icon-500`) |
 | `--icon-size-600` | `24px` (`--primitive-icon-600`) |
 | `--icon-size-800` | `32px` (`--primitive-icon-800`) |
+| `--icon-size-1200` | `48px` (`--primitive-icon-1200`) |
 
 ## Controls (2)
 

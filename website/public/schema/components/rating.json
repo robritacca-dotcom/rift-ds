@@ -72,11 +72,11 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads.",
-          "defaultExpression": "star"
+          "default": "star"
         },
         {
           "name": "size",
@@ -116,5 +116,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

@@ -21,7 +21,10 @@
           "type": "ThreadTab[]",
           "typeKind": "array",
           "required": true,
-          "description": "The open tabs, in display order. A tab added between renders glides open in place; a removed one folds away while its neighbours slide over."
+          "description": "The open tabs, in display order. A tab added between renders glides open in place; a removed one folds away while its neighbours slide over.",
+          "typeRefs": [
+            "ThreadTab"
+          ]
         },
         {
           "name": "activeId",
@@ -49,7 +52,10 @@
           "type": "Partial<Record<ThreadTabStatus, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed)."
+          "description": "Spoken text for each tab status, read after the tab's label; the dot itself is decorative. Merged over the English defaults (Working, Unread, Needs input, Failed).",
+          "typeRefs": [
+            "ThreadTabStatus"
+          ]
         },
         {
           "name": "closeLabel",
@@ -57,7 +63,7 @@
           "typeKind": "other",
           "required": false,
           "description": "Accessible name for a tab's close button. A string is followed by a colon\nand the tab's label (\"Close thread: Q3 plan\"); a function is given the\nlabel and returns the whole name, so a translation can put the label where\nits grammar needs it.",
-          "defaultExpression": "Close thread"
+          "default": "Close thread"
         },
         {
           "name": "onAdd",
@@ -92,5 +98,24 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ThreadTab": {
+      "kind": "interface",
+      "definition": "interface ThreadTab {\n  /** Stable identifier: `activeId` matches against it and the callbacks report it. */\n  id: string;\n  /** The tab's one-line label. Overflow fades out under a trailing mask rather than clipping; the full text stays readable in the tab's native tooltip. */\n  label: string;\n  /** The tab's leading icon — Material Symbol name (string) or custom element (ReactNode). */\n  icon?: string | React.ReactNode;\n  /** The thread's state, drawn as a dot leading the label: `working` pulses in neutral, `unread`, `waiting` and `error` are solid in the info, warning and error roles. An `idle` tab draws no dot: a strip has no left edge to keep, so only a state worth a glance takes the room. The dot is decorative; the state is also read aloud through `statusLabels`. */\n  status?: ThreadTabStatus;\n  /** Legacy boolean for `status: 'unread'`, ignored when `status` is set. @deprecated Use `status: 'unread'` instead. */\n  unread?: boolean;\n}",
+      "refs": [
+        "ThreadTabStatus"
+      ]
+    },
+    "ThreadTabStatus": {
+      "kind": "type",
+      "definition": "type ThreadTabStatus = 'idle' | 'working' | 'unread' | 'waiting' | 'error';",
+      "description": "What a tab's leading dot reports — ThreadPanel's thread statuses, so a session reads the same in the rail and in the strip."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

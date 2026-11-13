@@ -22,13 +22,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultChecked | `boolean` | no | `false` | Whether the checkbox starts checked when uncontrolled (`checked` undefined). |
 | indeterminate | `boolean` | no | `false` | Whether the checkbox is in an indeterminate state |
 | disabled | `boolean` | no | `false` | Whether the checkbox is disabled |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | onCheckedChange | `((checked: boolean) => void)` | no |  | Called with the next checked state when toggled |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((checked: boolean) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onCheckedChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
 | name | `string` | no |  | Form field name. When set, the checkbox submits with an enclosing form through a hidden input: `value` while checked, nothing while unchecked or disabled, as a native checkbox does. |
-| value | `string` | no | `on` | The value submitted under `name` while checked. Defaults to "on", the native checkbox's. |
+| value | `string` | no | `'on'` | The value submitted under `name` while checked. Defaults to "on", the native checkbox's. |
 
 ## CheckboxGroup props
 
@@ -42,10 +42,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | items | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Checkbox options |
 | values | `string[]` | no |  | Currently selected values, controlled. Leave undefined to let the group keep its own selection, seeded from `defaultValues`. |
 | defaultValues | `string[]` | no | `[]` | Selected values on first render when uncontrolled (`values` undefined). |
-| direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| direction | `"horizontal" \| "vertical"` | no | `'vertical'` | Layout direction |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | onValuesChange | `((values: string[]) => void)` | no |  | Called with the next selected values |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((values: string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValuesChange` instead. |
 
 ## CheckboxIndicator props
@@ -54,17 +54,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | checked | `boolean` | no | `false` | Whether the box shows its check. |
 | indeterminate | `boolean` | no | `false` | Whether the box shows the minus of an indeterminate state (ignored when `checked`). |
-| size | `"default" \| "compact"` | no | `default` | Box size: `default` is 24px, `compact` 20px. |
-| className | `string` | no | `` | Additional CSS classes |
+| size | `"default" \| "compact"` | no | `'default'` | Box size: `default` is 24px, `compact` 20px. |
+| className | `string` | no | `''` | Additional CSS classes |
 
 ## CheckIcon props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| className | `string` | no | `ds-checkbox__icon` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |
+| className | `string` | no | `'ds-checkbox__icon'` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |
 
 ## MinusIcon props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| className | `string` | no | `ds-checkbox__icon` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |
+| className | `string` | no | `'ds-checkbox__icon'` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |

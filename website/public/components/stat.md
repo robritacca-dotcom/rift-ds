@@ -18,8 +18,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | value | `ReactNode` | yes |  | The headline number, e.g. "~900%" or "3.8M" — or a node, such as an AnimatedNumber, for figures that move |
 | label | `string` | yes |  | What the number measures |
 | delta | `string` | no |  | Optional change annotation, e.g. "+42% vs last quarter" |
-| trend | `"neutral" \| "up" \| "down"` | no | `neutral` | Direction of the delta — colours it and adds an arrow |
-| deltaPlacement | `"auto" \| "inline" \| "stacked"` | no | `stacked` | Where the delta sits: stacked below the label, inline to the right of the value (bottom-aligned), or `auto`: inline while the stat has room and stacked once it is narrow, such as a KPI tile in a two-up phone grid. `auto` fills its parent's width and reads its own, so it restacks wherever it sits, whatever the viewport. |
-| size | `"default" \| "large"` | no | `default` | Stat size |
-| locale | `string` | no | `en-US` | The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
-| className | `string` | no | `` | Additional CSS classes |
+| trend | `"neutral" \| "up" \| "down"` | no | `'neutral'` | Direction of the delta — colours it and adds an arrow |
+| deltaPlacement | `"auto" \| "inline" \| "stacked"` | no | `'stacked'` | Where the delta sits: stacked below the label, inline to the right of the value (bottom-aligned), or `auto`: inline while the stat has room and stacked once it is narrow, such as a KPI tile in a two-up phone grid. `auto` fills its parent's width and reads its own, so it restacks wherever it sits, whatever the viewport. |
+| size | `"default" \| "large"` | no | `'default'` | Stat size |
+| locale | `string` | no | `'en-US'` | The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

@@ -51,7 +51,10 @@
           "type": "Partial<CodeDiffChangeLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "Visually hidden text announced before each changed line, so the change\ntype is not carried by colour and the marker alone. Merged over the\nEnglish defaults: `added` \"Added line:\", `removed` \"Removed line:\"."
+          "description": "Visually hidden text announced before each changed line, so the change\ntype is not carried by colour and the marker alone. Merged over the\nEnglish defaults: `added` \"Added line:\", `removed` \"Removed line:\".",
+          "typeRefs": [
+            "CodeDiffChangeLabels"
+          ]
         },
         {
           "name": "statsLabel",
@@ -71,5 +74,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "CodeDiffChangeLabels": {
+      "kind": "interface",
+      "definition": "interface CodeDiffChangeLabels {\n  /** Announced before an added line */\n  added: string;\n  /** Announced before a removed line */\n  removed: string;\n}",
+      "description": "The visually hidden text announced before a changed line, per change type."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript"
+  }
 }

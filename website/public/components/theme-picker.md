@@ -23,10 +23,37 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultOpen | `boolean` | no | `false` | Whether the menu starts open when uncontrolled. |
 | onOpenChange | `((open: boolean) => void)` | no |  | Fires when the menu opens or closes. |
 | disabled | `boolean` | no | `false` | Whether the picker is disabled: the trigger takes no press and the menu cannot open. |
-| size | `"default" \| "compact"` | no | `default` | Trigger size, on the row-control scale: `default` is 40px, `compact` 32px. |
-| placement | `"top" \| "bottom"` | no | `bottom` | Which side of the trigger the menu prefers; it flips when that side has no room. |
-| align | `"start" \| "end"` | no | `end` | Which trigger edge the menu lines up with. |
+| size | `"default" \| "compact"` | no | `'default'` | Trigger size, on the row-control scale: `default` is 40px, `compact` 32px. |
+| placement | `"top" \| "bottom"` | no | `'bottom'` | Which side of the trigger the menu prefers; it flips when that side has no room. |
+| align | `"start" \| "end"` | no | `'end'` | Which trigger edge the menu lines up with. |
 | footer | `ReactNode` | no |  | Content after the themes, below a divider: a link to make a theme of your own, say. Give each control in it `role="menuitem"`, since a menu holds only menu items; the arrow keys reach it. |
-| triggerLabel | `((label: string) => string)` | no | `(label: string) => `Theme: ${label}`` | Accessible name of the trigger, given the active theme's name. Defaults to "Theme: " followed by it. |
-| menuLabel | `string` | no | `Theme` | Accessible name of the menu. |
-| className | `string` | no | `` | Additional CSS classes |
+| triggerLabel | `((label: string) => string)` | no | `` (label: string) => `Theme: ${label}` `` | Accessible name of the trigger, given the active theme's name. Defaults to "Theme: " followed by it. |
+| menuLabel | `string` | no | `'Theme'` | Accessible name of the menu. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### ThemePickerOption
+
+One theme on offer: its name, its swatch, and optionally the faces it sets.
+
+```ts
+interface ThemePickerOption {
+  /** The theme's id, reported through `onValueChange` (a `data-brand` value, say). */
+  value: string;
+  /** The theme's name. */
+  label: string;
+  /** The swatch colour, the theme's action colour as a CSS value. Without one the swatch is an empty chip. */
+  color?: string;
+  /** The swatch's corner, so the chip shows the theme's corner language too. Defaults to a circle. */
+  swatchRadius?: string;
+  /** A line under the name, such as the faces the theme pairs. */
+  description?: string;
+  /** CSS font stack the name is set in, so each row previews its heading face. */
+  headingFont?: string;
+  /** CSS font stack the description is set in, previewing the body face. */
+  bodyFont?: string;
+}
+```
+
+Types from other packages: `ReactNode` (react).

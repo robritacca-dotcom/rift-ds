@@ -118,7 +118,7 @@
           "typeKind": "other",
           "required": false,
           "description": "The value submitted under `name` while on. Defaults to \"on\", the native checkbox's.",
-          "defaultExpression": "on"
+          "default": "on"
         }
       ]
     },
@@ -155,5 +155,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ComponentPropsWithoutRef": "react"
+  }
 }

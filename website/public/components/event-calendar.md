@@ -24,12 +24,54 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onDateClick | `((date: string) => void)` | no |  | Fires with the clicked day (YYYY-MM-DD) — from anywhere on the cell, the day number, and the "+N more" overflow row. The number and overflow row only become buttons when this is set, and cells only take their pointer cursor and hover feedback with it. |
 | selectedDate | `string` | no |  | Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip on its number, taking precedence over the today chip. Controlled by the consumer; pair with `onDateClick` to move it. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
-| previousLabel | `string` | no | `Previous month` | Accessible name of the previous-month button. |
-| nextLabel | `string` | no | `Next month` | Accessible name of the next-month button. |
+| previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
+| nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
 | monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of the month in view: the visible title and the name of the day grid. Defaults to the month name and the year in `locale` ("January 2026" in `en-US`). |
 | overflowLabel | `((count: number, date: Date) => string)` | no |  | Accessible name of a day's "+N more" overflow button, given the number of hidden events and the day. Defaults to "N more events" followed by the full date in `locale`. |
-| moreLabel | `((count: number) => string)` | no | `(count: number): string => `+${count} more`` | The visible text of a day's overflow row, given the number of hidden events. Defaults to "+N more". The row's accessible name is `overflowLabel` when it is a button. |
+| moreLabel | `((count: number) => string)` | no | `` (count: number): string => `+${count} more` `` | The visible text of a day's overflow row, given the number of hidden events. Defaults to "+N more". The row's accessible name is `overflowLabel` when it is a button. |
 | weekdayLabels | `string[]` | no |  | The weekday headers above the grid: seven entries, Sunday first, laid out from `weekStartsOn`. Defaults to the short weekday names in `locale` ("Sun" to "Sat" in `en-US`); a list of any other length falls back to the default. |
 | locale | `string` | no |  | The BCP 47 locale the calendar is written and laid out in, such as `de-DE`: the month heading, the weekday names, the spoken dates and the first day of the week. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | weekStartsOn | `Weekday` | no |  | The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### EventCalendarColor
+
+```ts
+type EventCalendarColor =
+  | 'neutral'
+  | 'coral'
+  | 'violet'
+  | 'cobalt'
+  | 'amber'
+  | 'gold'
+  | 'mint';
+```
+
+### EventCalendarEvent
+
+```ts
+interface EventCalendarEvent {
+  /** Unique event identifier. */
+  id: string;
+  /** The day the event falls on (YYYY-MM-DD). */
+  date: string;
+  /** Short label shown in the event pill. */
+  title: string;
+  /** Start time as already-formatted text like "09:30". Untimed events sort first. */
+  time?: string;
+  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
+  color?: EventCalendarColor;
+}
+```
+
+### Weekday
+
+A day of the week as `Date.getDay()` numbers it: 0 is Sunday, 6 is Saturday.
+
+```ts
+type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+Types from other packages: `Date` (typescript), `ReactNode` (react).

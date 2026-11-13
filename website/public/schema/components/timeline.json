@@ -32,7 +32,11 @@
           "type": "TimelineItem[] | TimelineCompany[]",
           "typeKind": "other",
           "required": true,
-          "description": "The entries, in order. Their shape follows `variant`: in the default layout, steps or events (`TimelineItem`).\nIn the `company` layout, companies with their roles (`TimelineCompany`)."
+          "description": "The entries, in order. Their shape follows `variant`: in the default layout, steps or events (`TimelineItem`).\nIn the `company` layout, companies with their roles (`TimelineCompany`).",
+          "typeRefs": [
+            "TimelineCompany",
+            "TimelineItem"
+          ]
         },
         {
           "name": "orientation",
@@ -80,5 +84,27 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "TimelineCompany": {
+      "kind": "interface",
+      "definition": "interface TimelineCompany {\n  /** Company or tool name shown beside the logo */\n  name: string;\n  /** Image node used as the marker (e.g. an `<img>` / framework image element) */\n  logo?: React.ReactNode;\n  /** One or more roles nested under this entry */\n  roles: TimelineRole[];\n}",
+      "description": "A company/tool entry grouping one or more roles under a logo (`company` variant).",
+      "refs": [
+        "TimelineRole"
+      ]
+    },
+    "TimelineItem": {
+      "kind": "interface",
+      "definition": "interface TimelineItem {\n  /** Step or event title */\n  title: string;\n  /** Small line above the title, e.g. a date range or stage tag */\n  meta?: string;\n  /** Body content under the title */\n  description?: React.ReactNode;\n  /** Icon shown in the marker (overrides dot/number) — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n}"
+    },
+    "TimelineRole": {
+      "kind": "interface",
+      "definition": "interface TimelineRole {\n  /** Role or position title */\n  title: string;\n  /** Secondary line under the title, e.g. the team, org, or product the role sat in */\n  subtitle?: React.ReactNode;\n  /** Start of the date range, e.g. \"May 2024\" (omit for entries with no dates) */\n  start?: string;\n  /** End of the date range, e.g. \"Jan 2026\" (ignored when `present` is set) */\n  end?: string;\n  /** Renders a green \"Present\" in place of `end` for current roles */\n  present?: boolean;\n  /** Optional summary paragraph under the role header */\n  description?: React.ReactNode;\n  /** Optional bullet points; each entry is rendered as an `<li>` */\n  bullets?: React.ReactNode[];\n}",
+      "description": "A single role/position within a company entry (`company` variant)."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

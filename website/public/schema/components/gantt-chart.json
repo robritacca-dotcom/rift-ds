@@ -21,7 +21,10 @@
           "type": "GanttChartItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Task bars, in display order."
+          "description": "Task bars, in display order.",
+          "typeRefs": [
+            "GanttChartItem"
+          ]
         },
         {
           "name": "milestones",
@@ -29,7 +32,10 @@
           "typeKind": "array",
           "required": false,
           "description": "Point-in-time markers, each rendered as its own diamond row at the end of its group.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "GanttChartMilestone"
+          ]
         },
         {
           "name": "range",
@@ -73,7 +79,10 @@
           "type": "((item: GanttChartItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called with the item when a bar is clicked. Bars render as buttons only when this is set; without it the chart is inert and renders from a Server Component."
+          "description": "Called with the item when a bar is clicked. Bars render as buttons only when this is set; without it the chart is inert and renders from a Server Component.",
+          "typeRefs": [
+            "GanttChartItem"
+          ]
         },
         {
           "name": "title",
@@ -147,5 +156,28 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "GanttChartColor": {
+      "kind": "type",
+      "definition": "type GanttChartColor =\n  | 'neutral'\n  | 'coral'\n  | 'violet'\n  | 'cobalt'\n  | 'amber'\n  | 'gold'\n  | 'mint';",
+      "description": "Accent roles a Gantt bar or milestone can take — the core accent vocabulary shared with EventCalendar."
+    },
+    "GanttChartItem": {
+      "kind": "interface",
+      "definition": "interface GanttChartItem {\n  /** Unique item identifier. Selection and the click callback key on it. */\n  id: string;\n  /** Task name, shown in the sticky label column. */\n  label: string;\n  /** First day of the bar (YYYY-MM-DD). */\n  start: string;\n  /** Last day of the bar, inclusive (YYYY-MM-DD). */\n  end: string;\n  /** Accent for the bar, from the core accent roles. Defaults to `neutral`. */\n  color?: GanttChartColor;\n  /** Completion from 0 to 100. When set, the bar shows a quiet track with the accent filling this share; without it the whole bar takes the accent. */\n  progress?: number;\n  /** Draws the bar as a dashed outline, for planned or tentative work whose dates are targets rather than commitments. */\n  projected?: boolean;\n  /** Group heading this item sits under. Items sharing a group render under one heading row; omit for a flat chart. */\n  group?: string;\n  /** Extra line appended to the bar's tooltip and accessible text, e.g. \"Target: Q4 2026\". */\n  detail?: string;\n}",
+      "description": "One task bar on the timeline.",
+      "refs": [
+        "GanttChartColor"
+      ]
+    },
+    "GanttChartMilestone": {
+      "kind": "interface",
+      "definition": "interface GanttChartMilestone {\n  /** Unique milestone identifier. */\n  id: string;\n  /** Milestone name, shown in the sticky label column. */\n  label: string;\n  /** The day the diamond sits on (YYYY-MM-DD). */\n  date: string;\n  /** Accent for the diamond, from the core accent roles. Defaults to `neutral`. */\n  color?: GanttChartColor;\n  /** Group heading this milestone sits under, matching the items' group labels. */\n  group?: string;\n}",
+      "description": "A point-in-time marker on the timeline, drawn as a diamond on its own row.",
+      "refs": [
+        "GanttChartColor"
+      ]
+    }
+  }
 }

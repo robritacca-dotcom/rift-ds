@@ -15,11 +15,31 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| label | `string` | no | `Search or ask anything` | The prompt the field shows, which is also the button's accessible name. |
+| label | `string` | no | `'Search or ask anything'` | The prompt the field shows, which is also the button's accessible name. |
 | shortcut | `string[]` | no |  | The keyboard shortcut drawn as literal keycaps at the end, one key per entry, in place of `keys`. Pass an empty array for none. |
-| keys | `string` | no | `mod+k` | The keyboard shortcut drawn at the end, in the shortcut grammar, in the reader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K elsewhere, announced as both, since CommandPalette answers to either. `shortcut` wins when it is given. |
+| keys | `string` | no | `'mod+k'` | The keyboard shortcut drawn at the end, in the shortcut grammar, in the reader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K elsewhere, announced as both, since CommandPalette answers to either. `shortcut` wins when it is given. |
 | keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
-| icon | `ReactNode` | no | `search` | Leading icon — Material Symbol name (string) or custom element (ReactNode). |
-| size | `"default" \| "compact"` | no | `default` | Control size, on the row-control scale: `default` is 40px, `compact` 32px. |
+| icon | `string \| ReactNode` | no | `'search'` | Leading icon — Material Symbol name (string) or custom element (ReactNode). |
+| size | `"default" \| "compact"` | no | `'default'` | Control size, on the row-control scale: `default` is 40px, `compact` 32px. |
 | iconOnly | `boolean` | no | `false` | Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### Shortcut
+
+A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`.
+
+```ts
+type Shortcut = string;
+```
+
+### ShortcutKeyLabels
+
+The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults.
+
+```ts
+type ShortcutKeyLabels = Partial<Record<string, string>>;
+```
+
+Types from other packages: `Partial` (typescript), `ReactNode` (react), `Record` (typescript).

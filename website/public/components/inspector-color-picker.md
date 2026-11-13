@@ -22,5 +22,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | showAlpha | `boolean` | no | `false` | Add an alpha (opacity) slider to the panel and emit 8-digit hex when alpha is below 100%. |
 | name | `string` | no |  | When set, a hidden input carries the current hex under this name, so the picker joins native form submission. |
 | disabled | `boolean` | no | `false` | Whether the picker is disabled. |
-| size | `"default" \| "compact"` | no | `default` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
-| className | `string` | no | `` | Additional CSS classes, applied to the wrapper. |
+| size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
+| className | `string` | no | `''` | Additional CSS classes, applied to the wrapper. |

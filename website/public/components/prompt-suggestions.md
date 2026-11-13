@@ -22,8 +22,29 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | pending | `boolean` | no | `false` | The suggestions are still being generated: shimmer placeholder pills hold their place, matching the current size's chip geometry so nothing shifts when the real chips land. While pending the given `suggestions` are not rendered, the placeholders are hidden from assistive technology, and the row reports `aria-busy` instead. |
 | pendingCount | `number` | no | `3` | How many placeholder pills the pending state holds space with. |
 | entrance | `boolean` | no | `true` | Play the staggered pop-in when the items mount. On by default; a host re-showing a set that has already landed (reopening a panel over the same suggestions) turns it off, so the chips stand where they were instead of arriving twice. |
-| size | `"default" \| "compact"` | no | `default` | Row scale. `default` sits at the body-paragraph scale, so a suggestion reads at the same weight as the messages it will become; `compact` is the quieter row for placements alongside a live conversation. |
+| size | `"default" \| "compact"` | no | `'default'` | Row scale. `default` sits at the body-paragraph scale, so a suggestion reads at the same weight as the messages it will become; `compact` is the quieter row for placements alongside a live conversation. |
 | value | `string` | no |  | The `id` of the suggestion already taken. Set, the row becomes the record of that choice: the taken suggestion outlined solid in the strongest ink, the rest faded behind a dashed line, and none of them tappable any more. The same treatment QuestionCard gives a pick. For a row that stays on screen after use, such as the follow-ups under an earlier answer. |
-| chosenLabel | `string` | no | `(chosen)` | Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". |
-| ariaLabel | `string` | no | `Suggested prompts` | Accessible name for the list. |
-| className | `string` | no | `` | Additional CSS classes |
+| chosenLabel | `string` | no | `'(chosen)'` | Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". |
+| ariaLabel | `string` | no | `'Suggested prompts'` | Accessible name for the list. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### PromptSuggestion
+
+One tappable suggestion in the row.
+
+```ts
+interface PromptSuggestion {
+  /** Stable identifier passed to `onValueChange`. */
+  id: string;
+  /** The suggestion text shown in the chip. */
+  label: string;
+  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */
+  icon?: string | React.ReactNode;
+  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */
+  description?: string;
+}
+```
+
+Types from other packages: `ReactNode` (react).

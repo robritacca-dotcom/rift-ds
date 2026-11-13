@@ -27,10 +27,7 @@ import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 
 import pkg from "rift-ds/package.json";
-import {
-  COMPONENT_COUNT,
-  componentCategoryMetadata,
-} from "rift-ds/components/registry";
+import { COMPONENT_COUNT } from "rift-ds/components/registry";
 import {
   TOKEN_COUNT,
   TOKEN_COUNTS,
@@ -45,10 +42,9 @@ import {
   SITE_URL,
 } from "@/config/brand.generated";
 import { AGENT_SKILLS, skillFileUrl } from "@/data/agent-skills";
-import { componentApi } from "@/data/component-api.generated";
 import { MCP_CLIENTS } from "@/lib/mcp-clients";
 import { MCP_TOOLS } from "@/lib/mcp-tools";
-import { lookupComponent, lookupTokens, searchCorpus } from "@/lib/site-tools";
+import { listComponents, lookupComponent, lookupTokens, searchSite } from "@/lib/site-tools";
 
 /** The bare host, for prose that names the site rather than links it. */
 const SITE_HOST = new URL(SITE_URL).host;
@@ -77,38 +73,17 @@ const handler = createMcpHandler(
         title: "List components",
         description:
           `List the ${COMPONENT_COUNT} public components in rift-ds, ` +
-          `with category, description, docs URL and the URL of its published JSON schema. Filter with the optional ` +
-          `category argument. Use get_component for a component's full prop API.`,
+          `with category, description, docs URL and the URL of its published JSON schema, and the ` +
+          `widgets (the AI chat) in their own list. Filter with the optional category argument, ` +
+          `an id or label in any case. Use get_component for a component's full prop API.`,
         inputSchema: z.object({
           category: z
             .string()
             .optional()
-            .describe("A category id from the categories list, to filter by"),
+            .describe("A category id or label, e.g. ai or Data display; widget lists the widgets"),
         }),
       },
-      async ({ category }) => {
-        // Components only: the chat widget rides the same data (get_component
-        // serves it by name) but is not one of the COMPONENT_COUNT.
-        const components = componentApi
-          .filter((entry) => entry.kind === "component")
-          .filter((entry) => !category || entry.category === category)
-          .map((entry) => ({
-            name: entry.name,
-            label: entry.label,
-            category: entry.category,
-            description: entry.description,
-            docsUrl: `${SITE_URL}/components/${entry.slug}`,
-            schemaUrl: `${SITE_URL}/schema/components/${entry.slug}.json`,
-          }));
-        return json({
-          package: pkg.name,
-          version: pkg.version,
-          categories: componentCategoryMetadata,
-          count: components.length,
-          schemaIndexUrl: `${SITE_URL}/schema/components.json`,
-          components,
-        });
-      }
+      async ({ category }) => json(listComponents(category))
     );
 
     server.registerTool(
@@ -119,16 +94,22 @@ const handler = createMcpHandler(
           "The full contract for one component: import paths, whether it needs " +
           "'use client', every exported component in its module, and every own " +
           "prop with its type, allowed values, default, requiredness and JSDoc description, " +
-          "plus its docs, markdown and JSON schema URLs. The data is generated from the " +
-          "same source as the published .d.ts, so it matches what npm ships.",
+          "plus every type those props name (defined in types, or named with its package in " +
+          "externalTypes) and its docs, markdown and JSON schema URLs. The data is generated from the " +
+          "same source as the published .d.ts, so it matches what npm ships. A miss suggests the " +
+          "nearest names.",
         inputSchema: z.object({
           name: z
             .string()
             .min(1)
             .describe("Component name, label or docs slug, e.g. Button or agent-plan"),
+          export: z
+            .string()
+            .optional()
+            .describe("One exported component of the module, e.g. ChatLauncher, to fetch alone with only the types it needs"),
         }),
       },
-      async ({ name }) => json(lookupComponent(name))
+      async ({ name, export: exportName }) => json(lookupComponent(name, exportName))
     );
 
     server.registerTool(
@@ -146,7 +127,7 @@ const handler = createMcpHandler(
           category: z
             .string()
             .optional()
-            .describe("A token category to filter by, e.g. colour or motion"),
+            .describe("A token category to filter by, e.g. colour (or color) or motion"),
           theme: z
             .string()
             .optional()
@@ -154,7 +135,7 @@ const handler = createMcpHandler(
           mode: z
             .enum(["light", "dark"])
             .optional()
-            .describe("light (the default) or dark, with a theme"),
+            .describe("light (the default) or dark; needs a theme"),
         }),
       },
       async ({ category, theme, mode }) => json(lookupTokens(category, theme, mode))
@@ -165,15 +146,17 @@ const handler = createMcpHandler(
       {
         title: "Search the site",
         description:
-          `Full-text search over everything published on ${SITE_HOST}: the ` +
-          "design system docs and specs, the foundations, the skills and the " +
-          "release log. Returns the most relevant sections as markdown.",
+          `Full-text search over the documentation published on ${SITE_HOST} for people ` +
+          "building with the package: the docs, the foundations, the design spec, the agent " +
+          "starter, the component list and the release log. Returns the most relevant sections " +
+          "as markdown, each with the URL it is published at. Ask about the latest release " +
+          "to get the newest entry.",
         inputSchema: z.object({
           query: z.string().min(2).max(200).describe("Words to look for"),
         }),
       },
       async ({ query }) => {
-        const results = searchCorpus(query);
+        const results = searchSite(query);
         if (results.length === 0) {
           return text(
             `Nothing matched ${JSON.stringify(query)}. The corpus covers the design ` +

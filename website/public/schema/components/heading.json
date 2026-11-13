@@ -48,7 +48,10 @@
             "title-body"
           ],
           "required": false,
-          "description": "The type style it wears, apart from `level`, so a card's `h3` can look like a small title and a page's `h1` like a display line. Defaults to the level's own: heading-1 to heading-3 for levels 1 to 3, title-body below."
+          "description": "The type style it wears, apart from `level`, so a card's `h3` can look like a small title and a page's `h1` like a display line. Defaults to the level's own: heading-1 to heading-3 for levels 1 to 3, title-body below.",
+          "typeRefs": [
+            "HeadingTier"
+          ]
         },
         {
           "name": "tone",
@@ -107,5 +110,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "HeadingTier": {
+      "kind": "type",
+      "definition": "type HeadingTier =\n  | 'mega-1'\n  | 'mega-2'\n  | 'display-1'\n  | 'display-2'\n  | 'sub-display'\n  | 'heading-1'\n  | 'heading-2'\n  | 'heading-3'\n  | 'title-body';",
+      "description": "A heading type style, named as the type scale names it, from the largest."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

@@ -30,6 +30,7 @@ type ButtonOwnProps = {
    * legacy values from before the split: `neutral` renders as
    * `variant="primary" tone="neutral"` and `destructive` as
    * `variant="secondary" tone="destructive"`.
+   * @default 'primary'
    */
   variant?: 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'destructive';
   /**
@@ -37,7 +38,9 @@ type ButtonOwnProps = {
    * `neutral` the greys, `destructive` the danger colour. Tertiary is
    * already grey, so `neutral` leaves it unchanged; a tertiary
    * `destructive` takes the outlined look, since a danger action needs a
-   * visible edge.
+   * visible edge. Left unset, a legacy `variant` (`neutral` or
+   * `destructive`) supplies the tone instead.
+   * @default 'default'
    */
   tone?: 'default' | 'neutral' | 'destructive';
   /** Button size */

@@ -111,8 +111,8 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "A Material Symbol name or a node that replaces this item's marker. A directional glyph mirrors in a right-to-left context."
         },
@@ -126,5 +126,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

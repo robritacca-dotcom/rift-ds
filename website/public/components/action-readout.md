@@ -17,5 +17,22 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `ReactNode` | yes |  | What was done, with how much: "69 orders cancelled". Collides with the native `title` tooltip attribute on purpose: the readout shows it. |
 | facts | `ActionReadoutFact[]` | yes |  | What it did, a line each: the status it moved, the money it touched, who it reached. |
-| icon | `ReactNode` | no |  | A leading mark beside the title: a Material Symbol name, or your own element. |
-| className | `string` | no | `` | Additional CSS classes |
+| icon | `string \| ReactNode` | no |  | A leading mark beside the title: a Material Symbol name, or your own element. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### ActionReadoutFact
+
+One line of a readout: what it measures and its value, already written in the reader's locale.
+
+```ts
+interface ActionReadoutFact {
+  /** What it measures: "Refunded". */
+  label: string;
+  /** Its value: "$101,137 across 52 orders". */
+  value: React.ReactNode;
+}
+```
+
+Types from other packages: `ReactNode` (react).

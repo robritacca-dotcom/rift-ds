@@ -68,5 +68,8 @@
       "component": "ToolbarSeparator",
       "props": []
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

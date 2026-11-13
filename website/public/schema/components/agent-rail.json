@@ -21,14 +21,20 @@
           "type": "AgentRailProfile",
           "typeKind": "reference",
           "required": false,
-          "description": "The agent this rail belongs to, rendered as the header's portrait block."
+          "description": "The agent this rail belongs to, rendered as the header's portrait block.",
+          "typeRefs": [
+            "AgentRailProfile"
+          ]
         },
         {
           "name": "tabs",
           "type": "AgentRailTab[]",
           "typeKind": "array",
           "required": true,
-          "description": "The rail's tabs, in display order. Each carries its own pane."
+          "description": "The rail's tabs, in display order. Each carries its own pane.",
+          "typeRefs": [
+            "AgentRailTab"
+          ]
         },
         {
           "name": "value",
@@ -120,5 +126,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AgentRailProfile": {
+      "kind": "interface",
+      "definition": "interface AgentRailProfile {\n  /** The agent's display name, shown under the portrait; also seeds the Avatar's initials. */\n  name: string;\n  /** The portrait's image src, handed to an `lg` Avatar. Without one the rail draws its own agent mark instead, since initials would claim a person. Ignored when `avatar` is given. */\n  avatarSrc?: string;\n  /** Replaces the default portrait with a custom element — a hero portrait, an illustrated mark. */\n  avatar?: React.ReactNode;\n  /** A short line under the name, e.g. \"Connected\". Renders with a leading status dot. */\n  status?: React.ReactNode;\n  /** Which status role the dot under the name takes. */\n  statusTone?: 'positive' | 'info' | 'warning' | 'error' | 'neutral';\n  /** Fires when the portrait's edit affordance is pressed. The pencil renders only when this is given. */\n  onEdit?: () => void;\n  /** Accessible name for the portrait's edit affordance. */\n  editLabel?: string;\n}"
+    },
+    "AgentRailTab": {
+      "kind": "interface",
+      "definition": "interface AgentRailTab {\n  /** Stable identifier: `value` matches against it and `onValueChange` reports it. */\n  id: string;\n  /** The tab's label, shown beside its icon and used as the pane's accessible name. */\n  label: string;\n  /** Leading icon on the tab — Material Symbol name (string) or custom element (ReactNode). Give every tab one and a squeezed rail can fall back to icons alone; give none and it keeps the labels. */\n  icon?: string | React.ReactNode;\n  /** The pane rendered while this tab is active. */\n  content?: React.ReactNode;\n  /** Whether the tab is selectable. */\n  disabled?: boolean;\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

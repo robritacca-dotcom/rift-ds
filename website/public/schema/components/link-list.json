@@ -21,7 +21,10 @@
           "type": "LinkListItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Links to render, in display order"
+          "description": "Links to render, in display order",
+          "typeRefs": [
+            "LinkListItem"
+          ]
         },
         {
           "name": "className",
@@ -36,9 +39,36 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "LinkListItem": {
+      "kind": "interface",
+      "definition": "interface LinkListItem {\n  /** Link destination */\n  href: string;\n  /** Primary label — shown with the open_in_new icon */\n  label: string;\n  /** One or more subtitle lines shown below the label */\n  sub?: string | string[];\n  /** Path to a logo image (preferred over icon when both are set) */\n  logo?: string;\n  /** Alt text for the logo — defaults to empty string (decorative) */\n  logoAlt?: string;\n  /** Icon used when no logo is provided — Material Symbol name (string, e.g. \"emoji_events\") or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Open in a new tab. Defaults to true; set false for links inside the same site, which swaps the open_in_new indicator for arrow_forward. */\n  newTab?: boolean;\n}"
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  }
 }

@@ -15,8 +15,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| size | `"sm" \| "md" \| "lg"` | no | `md` | Size of the spinner |
+| size | `"sm" \| "md" \| "lg"` | no | `'md'` | Size of the spinner |
 | tone | `"inherit" \| "default" \| "neutral"` | no |  | Colour of the arc: `default` in the primary text colour, `neutral` in the secondary one, `inherit` in `currentColor`, for use inside coloured controls. |
 | variant | `"inherit" \| "neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
-| label | `string` | no | `Loading` | Accessible label, announced as the spinner's name. A passed `aria-label` takes precedence. |
-| className | `string` | no | `` | Additional CSS classes |
+| label | `string` | no | `'Loading'` | Accessible label, announced as the spinner's name. A passed `aria-label` takes precedence. |
+| className | `string` | no | `''` | Additional CSS classes |

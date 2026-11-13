@@ -21,7 +21,10 @@
           "type": "DateRange",
           "typeKind": "reference",
           "required": false,
-          "description": "The chosen range (controlled). Pair with `onValueChange`."
+          "description": "The chosen range (controlled). Pair with `onValueChange`.",
+          "typeRefs": [
+            "DateRange"
+          ]
         },
         {
           "name": "defaultValue",
@@ -29,14 +32,20 @@
           "typeKind": "reference",
           "required": false,
           "description": "The range it starts with (uncontrolled).",
-          "defaultExpression": "{ start: null, end: null }"
+          "defaultExpression": "{ start: null, end: null }",
+          "typeRefs": [
+            "DateRange"
+          ]
         },
         {
           "name": "onValueChange",
           "type": "((range: DateRange) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called with the range as the reader chooses it: once with only `start` after the first day, then with both."
+          "description": "Called with the range as the reader chooses it: once with only `start` after the first day, then with both.",
+          "typeRefs": [
+            "DateRange"
+          ]
         },
         {
           "name": "months",
@@ -90,7 +99,10 @@
           "type": "DateRangePreset[]",
           "typeKind": "array",
           "required": false,
-          "description": "Ranges the reader can pick in one press, shown above the calendar: \"Last 7 days\", \"This quarter\"."
+          "description": "Ranges the reader can pick in one press, shown above the calendar: \"Last 7 days\", \"This quarter\".",
+          "typeRefs": [
+            "DateRangePreset"
+          ]
         },
         {
           "name": "presetsLabel",
@@ -155,7 +167,10 @@
           "type": "((date: Date, position: DateRangePosition) => string)",
           "typeKind": "function",
           "required": false,
-          "description": "A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label."
+          "description": "A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label.",
+          "typeRefs": [
+            "DateRangePosition"
+          ]
         },
         {
           "name": "rangeStartLabel",
@@ -216,7 +231,10 @@
             "6"
           ],
           "required": false,
-          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`."
+          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`.",
+          "typeRefs": [
+            "Weekday"
+          ]
         },
         {
           "name": "className",
@@ -228,5 +246,30 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DateRange": {
+      "kind": "type",
+      "definition": "type DateRange = { start: string | null; end: string | null };",
+      "description": "A range as two `YYYY-MM-DD` strings; `end` is null while the second day is still to be chosen."
+    },
+    "DateRangePosition": {
+      "kind": "type",
+      "definition": "type DateRangePosition = 'start' | 'end' | 'start-end' | 'inside' | 'outside';",
+      "description": "Where a day sits in the range, for its spoken name."
+    },
+    "DateRangePreset": {
+      "kind": "type",
+      "definition": "type DateRangePreset = {\n  /** What the preset is called: \"Last 7 days\", \"This month\". */\n  label: string;\n  /** The range it sets. */\n  range: { start: string; end: string };\n};",
+      "description": "A ready-made range the reader can pick in one press."
+    },
+    "Weekday": {
+      "kind": "type",
+      "definition": "type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "A day of the week as `Date.getDay()` numbers it: 0 is Sunday, 6 is Saturday."
+    }
+  },
+  "externalTypes": {
+    "Date": "typescript"
+  }
 }

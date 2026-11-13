@@ -15,7 +15,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| icon | `ReactNode` | no |  | Leading icon — a Material Symbol name, or any custom element. |
+| icon | `string \| ReactNode` | no |  | Leading icon — a Material Symbol name, or any custom element. |
 | line | `boolean` | no | `true` | Draw the flanking divider lines. Turn off for a bare centred note. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The marker text, e.g. "Today" or "Chat renamed". |
+
+Types from other packages: `ReactNode` (react).

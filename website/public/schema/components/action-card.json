@@ -35,12 +35,15 @@
           "type": "ActionReadoutFact[]",
           "typeKind": "array",
           "required": false,
-          "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in."
+          "description": "What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in.",
+          "typeRefs": [
+            "ActionReadoutFact"
+          ]
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "The mark trailing the title: a Material Symbol name, or your own element."
         },
@@ -56,7 +59,10 @@
           ],
           "required": false,
           "description": "Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`.",
-          "default": "proposed"
+          "default": "proposed",
+          "typeRefs": [
+            "ActionCardStatus"
+          ]
         },
         {
           "name": "receipt",
@@ -156,5 +162,20 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ActionCardStatus": {
+      "kind": "type",
+      "definition": "type ActionCardStatus = 'proposed' | 'confirmed' | 'dismissed' | 'undone';",
+      "description": "Where a proposed change stands."
+    },
+    "ActionReadoutFact": {
+      "kind": "interface",
+      "definition": "interface ActionReadoutFact {\n  /** What it measures: \"Refunded\". */\n  label: string;\n  /** Its value: \"$101,137 across 52 orders\". */\n  value: React.ReactNode;\n}",
+      "description": "One line of a readout: what it measures and its value, already written in the reader's locale."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

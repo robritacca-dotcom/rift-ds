@@ -21,11 +21,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the joined code whenever any cell changes. There is no single native `onChange` here: the control is a group of one-character inputs, so the value callback is the primary API. |
 | onComplete | `((value: string) => void)` | no |  | Fires once when every cell is filled, with the complete code |
 | mask | `boolean` | no | `false` | Render cells as password fields, hiding the entered characters |
-| format | `"numeric" \| "alphanumeric"` | no | `numeric` | Accepted characters — `numeric` rejects non-digits and sets a numeric keyboard |
+| format | `"numeric" \| "alphanumeric"` | no | `'numeric'` | Accepted characters — `numeric` rejects non-digits and sets a numeric keyboard |
 | label | `string` | no |  | Label text rendered above the cells; also names the group for screen readers |
 | helperText | `string` | no |  | Helper or error message displayed below the cells |
 | error | `boolean` | no | `false` | Error state — recolours cell borders and the helper text |
 | disabled | `boolean` | no | `false` | Whether the whole control is disabled |
 | name | `string` | no |  | Form field name. When set, the joined code submits with an enclosing form through a hidden input, nothing while disabled. The cells themselves carry no name. |
 | cellLabel | `((position: number, count: number) => string)` | no |  | Accessible name of each cell, given its 1-based position and the cell count. Defaults to "Digit <position> of <count>" for the numeric format and "Character <position> of <count>" for alphanumeric. |
-| className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the cells |
+| className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the cells |

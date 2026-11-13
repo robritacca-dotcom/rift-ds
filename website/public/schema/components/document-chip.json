@@ -41,12 +41,15 @@
           ],
           "required": false,
           "description": "Document type — picks the leading Material Symbol.",
-          "default": "generic"
+          "default": "generic",
+          "typeRefs": [
+            "DocumentChipFileType"
+          ]
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Override the type icon — a Material Symbol name, or any custom element."
         },
@@ -123,5 +126,16 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DocumentChipFileType": {
+      "kind": "type",
+      "definition": "type DocumentChipFileType =\n  | 'pdf'\n  | 'doc'\n  | 'sheet'\n  | 'slide'\n  | 'image'\n  | 'code'\n  | 'archive'\n  | 'generic';"
+    }
+  },
+  "externalTypes": {
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react",
+    "ReactNode": "react"
+  }
 }

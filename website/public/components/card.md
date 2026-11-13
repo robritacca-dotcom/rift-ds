@@ -15,11 +15,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| variant | `"default" \| "case-study"` | no | `default` | Card variant |
+| variant | `"default" \| "case-study"` | no | `'default'` | Card variant |
 | title | `string` | yes |  | Card title displayed below the preview. Note: this shadows the native `title` tooltip attribute, which Card does not expose. |
 | children | `ReactNode` | no |  | Preview content rendered inside the card (default variant only) |
 | interactive | `boolean` | no | `false` | Whether the card is interactive (hoverable) |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | href | `string` | no |  | Navigation href — renders the card as an <a> tag |
 | coverSrc | `string` | no |  | Cover image src |
 | cover | `ReactNode` | no |  | Cover content rendered in place of the image — for a cover that is drawn rather than photographed (an SVG, a chart, a live preview). Takes precedence over `coverSrc`, and fills the same fixed-ratio slot. |
@@ -29,3 +29,26 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | dek | `string` | no |  | Subtitle / dek line below the title |
 | placeholder | `boolean` | no | `false` | Render as a disabled placeholder (no href, dimmed, not interactive) |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Types
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).

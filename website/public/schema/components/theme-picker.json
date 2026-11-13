@@ -21,7 +21,10 @@
           "type": "ThemePickerOption[]",
           "typeKind": "array",
           "required": true,
-          "description": "The themes on offer, in the order the menu lists them."
+          "description": "The themes on offer, in the order the menu lists them.",
+          "typeRefs": [
+            "ThemePickerOption"
+          ]
         },
         {
           "name": "value",
@@ -143,5 +146,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ThemePickerOption": {
+      "kind": "interface",
+      "definition": "interface ThemePickerOption {\n  /** The theme's id, reported through `onValueChange` (a `data-brand` value, say). */\n  value: string;\n  /** The theme's name. */\n  label: string;\n  /** The swatch colour, the theme's action colour as a CSS value. Without one the swatch is an empty chip. */\n  color?: string;\n  /** The swatch's corner, so the chip shows the theme's corner language too. Defaults to a circle. */\n  swatchRadius?: string;\n  /** A line under the name, such as the faces the theme pairs. */\n  description?: string;\n  /** CSS font stack the name is set in, so each row previews its heading face. */\n  headingFont?: string;\n  /** CSS font stack the description is set in, previewing the body face. */\n  bodyFont?: string;\n}",
+      "description": "One theme on offer: its name, its swatch, and optionally the faces it sets."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

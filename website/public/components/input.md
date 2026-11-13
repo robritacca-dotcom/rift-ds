@@ -17,8 +17,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Input label text |
 | value | `string` | no |  | Current value |
-| type | `"number" \| "search" \| "text" \| "tel" \| "url" \| "email" \| "password"` | no | `text` | Input type — curated subset; use a dedicated component for checkbox/radio/file |
-| size | `"default" \| "compact"` | no | `default` | Component size (not the native character-width `size` attribute) |
+| type | `"number" \| "search" \| "text" \| "tel" \| "url" \| "email" \| "password"` | no | `'text'` | Input type — curated subset; use a dedicated component for checkbox/radio/file |
+| size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper text displayed below the input. With the older `error` flag and no `errorText`, it doubles as the error message. |
 | errorText | `ReactNode` | no |  | The error message, shown under the input while the helper text keeps its place. Setting it marks the input invalid; Field's spec owns the wiring. |
@@ -26,10 +26,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | suffix | `ReactNode` | no |  | Text or a node inside the field after the value, read by a screen reader as part of the field (a unit, `.com`, `%`). Not the decorative `iconRight`. |
 | action | `ReactNode` | no |  | A control inside the field at its end, after the suffix: a show/hide button, a copy button. Unlike `suffix` it is not read as part of the field; it is a control of its own. |
 | clearable | `boolean` | no | `false` | Show a clear button while the field holds a value. It empties the field, fires `onChange` and `onValueChange` with an empty value, then `onClear`, and returns focus to the field. |
-| clearLabel | `string` | no | `Clear` | Accessible name of the clear button. Defaults to "Clear". |
+| clearLabel | `string` | no | `'Clear'` | Accessible name of the clear button. Defaults to "Clear". |
 | onClear | `(() => void)` | no |  | Called after the clear button empties the field. |
-| iconLeft | `ReactNode` | no |  | Leading icon — Material Symbol name (string) or custom element (ReactNode) |
-| iconRight | `ReactNode` | no |  | Trailing icon — Material Symbol name (string) or custom element (ReactNode) |
+| iconLeft | `string \| ReactNode` | no |  | Leading icon — Material Symbol name (string) or custom element (ReactNode) |
+| iconRight | `string \| ReactNode` | no |  | Trailing icon — Material Symbol name (string) or custom element (ReactNode) |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries (react-hook-form, Formik, TanStack Form) work unmodified. |
-| className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
+| className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+
+Types from other packages: `ReactNode` (react).

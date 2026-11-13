@@ -28,12 +28,15 @@
           "type": "ActionReadoutFact[]",
           "typeKind": "array",
           "required": true,
-          "description": "What it did, a line each: the status it moved, the money it touched, who it reached."
+          "description": "What it did, a line each: the status it moved, the money it touched, who it reached.",
+          "typeRefs": [
+            "ActionReadoutFact"
+          ]
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "A leading mark beside the title: a Material Symbol name, or your own element."
         },
@@ -47,5 +50,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ActionReadoutFact": {
+      "kind": "interface",
+      "definition": "interface ActionReadoutFact {\n  /** What it measures: \"Refunded\". */\n  label: string;\n  /** Its value: \"$101,137 across 52 orders\". */\n  value: React.ReactNode;\n}",
+      "description": "One line of a readout: what it measures and its value, already written in the reader's locale."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

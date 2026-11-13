@@ -21,14 +21,20 @@
           "type": "AppSidebarSection[]",
           "typeKind": "array",
           "required": true,
-          "description": "Sidebar navigation sections"
+          "description": "Sidebar navigation sections",
+          "typeRefs": [
+            "AppSidebarSection"
+          ]
         },
         {
           "name": "profile",
           "type": "AppSidebarProfile",
           "typeKind": "reference",
           "required": false,
-          "description": "Sidebar profile"
+          "description": "Sidebar profile",
+          "typeRefs": [
+            "AppSidebarProfile"
+          ]
         },
         {
           "name": "activeKey",
@@ -102,7 +108,10 @@
           ],
           "required": false,
           "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content full width in a raised surface (hairline\nand floating shadow) inset from the other edges, which scrolls inside\nitself.",
-          "default": "flush"
+          "default": "flush",
+          "typeRefs": [
+            "AppSidebarLayout"
+          ]
         },
         {
           "name": "theme",
@@ -121,7 +130,10 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to the AppSidebar rail. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to the AppSidebar rail. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "className",
@@ -133,5 +145,52 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AppSidebarItem": {
+      "kind": "interface",
+      "definition": "interface AppSidebarItem {\n  /** Unique key for this item */\n  key: string;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode). Optional only when `pixelAvatar` draws the mark instead */\n  icon?: string | React.ReactNode;\n  /**\n   * Draws a generated PixelAvatar in the icon seat instead of `icon`, for\n   * rows that name a thing rather than a place — projects, workspaces,\n   * accounts. `true` seeds the character from `label`; a string seeds it\n   * from that value, so a renamed item can keep its character by passing a\n   * stable id. The sidebar spreads the inks across all of its avatar rows,\n   * so neighbours differ in colour as well as shape. The character is\n   * decorative: the label beside it is the name\n   */\n  pixelAvatar?: boolean | string;\n  /** Display label (shown when expanded) */\n  label: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */\n  badge?: string | number;\n  /** Sub-items: an accordion under the row, or the side panel's contents when `subNav=\"panel\"` */\n  children?: AppSidebarSubItem[];\n}",
+      "refs": [
+        "AppSidebarSubItem"
+      ]
+    },
+    "AppSidebarLayout": {
+      "kind": "type",
+      "definition": "type AppSidebarLayout = 'flush' | 'floating' | 'inset';",
+      "description": "The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface."
+    },
+    "AppSidebarProfile": {
+      "kind": "interface",
+      "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** User email */\n  email: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n}"
+    },
+    "AppSidebarSection": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSection {\n  /** Optional category label above the group */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
+      "refs": [
+        "AppSidebarItem"
+      ]
+    },
+    "AppSidebarSubItem": {
+      "kind": "interface",
+      "definition": "interface AppSidebarSubItem {\n  /** Unique key for this sub-item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Click handler — also fires on a link sub-item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Renders the sub-item as a real link to this URL instead of a button. Ignored when the sub-item has children, whose row opens them */\n  href?: string;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */\n  group?: string;\n  /**\n   * The next level down. With `subNav=\"accordion\"` a sub-item's children are\n   * level 3 and open in the side panel; with `subNav=\"panel\"` they are the\n   * panel's own accordion. Navigation stops at three levels, so deeper\n   * children are not rendered.\n   */\n  children?: AppSidebarSubItem[];\n}"
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  }
 }

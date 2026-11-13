@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | locale | `string` | no |  | The BCP 47 locale the values, tooltips and value axis are written in, such as `de-DE`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | data | `Record<string, unknown>[]` | yes |  | Array of data objects |
-| xKey | `string` | no | `label` | Key in data for x-axis values |
+| xKey | `string` | no | `'label'` | Key in data for x-axis values |
 | series | `AreaSeriesConfig[]` | yes |  | One or more area series to render |
 | stacked | `boolean` | no | `false` | Whether areas stack on top of each other |
 | title | `string` | no |  | Chart title, in the shared chart header; it also names the figure. Note: this replaces the native `title` tooltip attribute, which the chart does not expose. |
@@ -26,4 +26,34 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | height | `number` | no | `350` | Chart area height in pixels |
 | showLegend | `boolean` | no | `true` | Show the legend under a multi-series chart |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
-| className | `string` | no | `` | Additional CSS classes on the wrapper |
+| className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Types
+
+### AreaSeriesConfig
+
+```ts
+interface AreaSeriesConfig {
+  /** Key in data for this series */
+  dataKey: string;
+  /** Display name (shown in tooltip and legend) */
+  label: string;
+  /** Area stroke / fill colour — CSS value */
+  color?: string;
+  /** Fill opacity (0–1) */
+  fillOpacity?: number;
+}
+```
+
+### ChartSummaryItem
+
+```ts
+interface ChartSummaryItem {
+  /** Label shown above the value */
+  label: string;
+  /** Formatted value to display */
+  value: string | number;
+}
+```
+
+Types from other packages: `Record` (typescript).

@@ -58,4 +58,465 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | command | `TableToolbarCommand` | no |  | The AI command: a button at the bar's start that turns the whole row into a one-off composer, as selecting rows turns it into the bulk bar, whose text your handler turns into a whole table setup. It reaches everything a view holds (filters, sorts, search, columns, pinning, grouping, density), so it can do in a sentence what the bar's other controls do one at a time. A long request grows the composer to three rows, pushing the table down. The library calls no model; your handler does. A change or an error lands in a toast, in the surrounding ToastProvider's stack if there is one, else in the bar's own at the bottom-right. Shows only inside a DataTable. |
 | labels | `Partial<TableToolbarLabels>` | no |  | The bar's words, merged over their English defaults. |
 | filterLabels | `Partial<FilterLabels>` | no |  | The filters' words, merged over their English defaults (inside a DataTable, over the table's). |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### DataTableFilter
+
+One filter condition on one column, as the table and TableToolbar share it.
+
+```ts
+type DataTableFilter = Filter;
+```
+
+### DataTableFilterLabels
+
+Every word a filter shows or announces, each defaulting to English.
+
+```ts
+type DataTableFilterLabels = FilterLabels;
+```
+
+### DataTableSort
+
+```ts
+interface DataTableSort {
+  /** The column being sorted. */
+  key: string;
+  /** Sort direction. */
+  direction: 'asc' | 'desc';
+}
+```
+
+### DataTableView
+
+One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view.
+
+```ts
+type DataTableView = TableView;
+```
+
+### Filter
+
+One condition on one column.
+
+```ts
+interface Filter {
+  /** Stable id, so a chip and its editor keep their place while the value changes. */
+  id: string;
+  /** The column's key. */
+  column: string;
+  /** How the value is compared. */
+  operator: FilterOperator;
+  /** What it is compared with; missing until it is picked. */
+  value?: FilterValue;
+}
+```
+
+### FilterKind
+
+The kinds of filter, each with its own operators. A typed column's kind follows its type; an untyped one's is read from its values.
+
+```ts
+type FilterKind = 'text' | 'number' | 'date' | 'enum' | 'tags' | 'boolean';
+```
+
+### FilterLabels
+
+Every word a filter shows or announces, each defaulting to English.
+
+```ts
+interface FilterLabels {
+  /** An operator as a chip and the operator menu read it. */
+  operators: Record<FilterOperator, string>;
+  /** The toolbar's button that adds a filter. */
+  addFilter: string;
+  /** The editor's name, given the column's header. */
+  editor: (header: string) => string;
+  /** The operator field's name. */
+  operatorField: string;
+  /** The value field's name, given the column's header. */
+  valueField: (header: string) => string;
+  /** The first value of a `between`. */
+  from: string;
+  /** The second value of a `between`. */
+  to: string;
+  /** Placeholder and name of the search field over a list filter's choices. */
+  searchChoices: string;
+  /** Shown when the search matches none of a list filter's choices. */
+  noChoices: string;
+  /** Removes one filter, given its chip's text. */
+  remove: (chip: string) => string;
+  /** Removes every filter. */
+  clearAll: string;
+  /** A chip's placeholder for a value not picked yet. */
+  noValue: string;
+  /** Joins the two ends of a `between` on a chip. */
+  and: string;
+  /** Joins two or more chosen values on a chip, given how many past the first. */
+  more: (count: number) => string;
+  /** The header menu item that opens a column's filter. */
+  filterColumn: string;
+  /** Name of a filtered header's mark, given the header. */
+  filtered: (header: string) => string;
+  /** Announced when the filters change, given the rows that match. */
+  filteredAnnouncement: (count: number) => string;
+}
+```
+
+### FilterOperator
+
+Every operator, across the kinds.
+
+```ts
+type FilterOperator =
+  | 'contains'
+  | 'notContains'
+  | 'is'
+  | 'isNot'
+  | 'startsWith'
+  | 'endsWith'
+  | 'eq'
+  | 'neq'
+  | 'lt'
+  | 'lte'
+  | 'gt'
+  | 'gte'
+  | 'between'
+  | 'before'
+  | 'after'
+  | 'isAnyOf'
+  | 'isNoneOf'
+  | 'hasAnyOf'
+  | 'hasAllOf'
+  | 'hasNoneOf'
+  | 'isEmpty'
+  | 'isNotEmpty'
+  | 'isChecked'
+  | 'isNotChecked';
+```
+
+### FilterValue
+
+A filter's value: text or a date for one-value operators, a number, a pair for `between`, a list for the set operators.
+
+```ts
+type FilterValue = string | number | [number | string | null, number | string | null] | string[] | null | undefined;
+```
+
+### TableToolbarAction
+
+One of the bar's own actions: its primary action, or a secondary one beside it.
+
+```ts
+interface TableToolbarAction {
+  /** Stable id for the action. */
+  id: string;
+  /** What the action does, as its label (and its name and tooltip when the bar folds it to an icon). */
+  label: string;
+  /** Material Symbol name (string) or custom element; the folded bar's primary icon. Defaults to `add` there. */
+  icon?: React.ReactNode;
+  /** Runs the action. */
+  onSelect: () => void;
+  /** Whether the action is unavailable. */
+  disabled?: boolean;
+  /** On the primary action, the further actions its split button's menu offers (Import, a template); folded, they move into the More panel. */
+  menu?: TableToolbarAction[];
+}
+```
+
+### TableToolbarBulkAction
+
+One action the bulk bar offers for the selected rows.
+
+```ts
+interface TableToolbarBulkAction {
+  /** Stable id for the action. */
+  id: string;
+  /** What the action does, as its menu label. */
+  label: string;
+  /** Material Symbol name (string) or custom element. */
+  icon?: React.ReactNode;
+  /** Runs the action on the selection. */
+  onSelect: (selection: TableToolbarSelection) => void;
+  /** Marks a dangerous or irreversible action: drawn in the destructive colour and set apart at the bar's end. */
+  destructive?: boolean;
+  /** Whether the action is unavailable. */
+  disabled?: boolean;
+}
+```
+
+### TableToolbarColumn
+
+One column as a TableToolbar over some other table is told about it.
+
+```ts
+interface TableToolbarColumn {
+  /** The column's key. */
+  key: string;
+  /** Its header text. */
+  label: string;
+  /** How it filters: `text`, `number`, `date`, `enum` (choices) or `tags`. Defaults to `text`, or `enum` when it has options. */
+  filterType?: FilterKind;
+  /** The choices an `enum` or `tags` filter offers. */
+  options?: { value: string; label: string }[];
+  /** Whether the Columns panel may hide it. Defaults to true. */
+  hideable?: boolean;
+  /** Whether the Columns panel may move it, DataTable's word for the same. Defaults to true. */
+  reorderable?: boolean;
+  /** Whether it can be filtered. Defaults to true. */
+  filterable?: boolean;
+  /** Whether it can be sorted. Defaults to true. */
+  sortable?: boolean;
+  /** Whether the rows can be grouped by it. Defaults to false. */
+  groupable?: boolean;
+}
+```
+
+### TableToolbarCommand
+
+The AI command in a TableToolbar.
+
+```ts
+interface TableToolbarCommand {
+  /** Turns the reader's text into a setup. A rejection shows as an error toast, using the error's message, and leaves the table alone. */
+  onSubmit: (request: TableToolbarCommandRequest) => Promise<TableToolbarCommandResult>;
+}
+```
+
+### TableToolbarCommandRequest
+
+What a TableToolbar's command handler is given.
+
+```ts
+interface TableToolbarCommandRequest {
+  /** What the reader typed. */
+  text: string;
+  /** The table's setup right now, so a command can refine it. */
+  view: TableView;
+  /** The columns, as the bar knows them: keys, labels, filter kinds and choices. */
+  columns: ToolbarColumn[];
+  /** Aborts when the table leaves the page while the command runs. */
+  signal: AbortSignal;
+}
+```
+
+### TableToolbarCommandResult
+
+What a TableToolbar's command handler answers with.
+
+```ts
+interface TableToolbarCommandResult {
+  /** The whole setup to apply; applying replaces the setup, and leaving it out changes nothing. */
+  view?: TableView;
+  /** What was done or found. A toast carries it, with an Undo when the setup changed; a setup that changed with no message takes the `commandApplied` label. */
+  message?: string;
+}
+```
+
+### TableToolbarLabels
+
+Every word the control bar shows or announces, beyond the filters', each defaulting to English.
+
+```ts
+interface TableToolbarLabels {
+  /** The bar's accessible name. */
+  toolbar: string;
+  /** The search field's placeholder and name. */
+  search: string;
+  /** The Columns button, its panel and the column list's name. */
+  columns: string;
+  /** The Columns panel's Show all button. */
+  showAll: string;
+  /** The density switch's name. */
+  density: string;
+  /** The density switch's default segment. */
+  densityDefault: string;
+  /** The density switch's compact segment. */
+  densityCompact: string;
+  /** The result count, given the rows that match and the rows in all. */
+  count: (shown: number, total: number) => string;
+  /** The Filter icon's name, given how many filters are on. */
+  filters: (count: number) => string;
+  /** The title of the filter panel when a phone opens it as a sheet. */
+  filterSheet: string;
+  /** The folded bar's filter panel button that adds a filter. */
+  addFilter: string;
+  /** The chip the filters that do not fit fold into, given how many. */
+  moreFilters: (count: number) => string;
+  /** The More button, shown when the bar is folded, whose panel holds the secondary actions and the density switch. */
+  more: string;
+  /** The More panel's heading over the secondary actions it holds when the bar is folded. */
+  actionsSection: string;
+  /** The Sort button, given how many sorts are set. */
+  sort: (count: number) => string;
+  /** The view tabs' name. */
+  views: string;
+  /** The active view's menu button, given its name and whether the table has moved on from it (the tab's dot, said aloud). */
+  viewMenu: (name: string, unsaved: boolean) => string;
+  /** The view menu's items. */
+  saveView: string;
+  saveAsNewView: string;
+  resetView: string;
+  renameView: string;
+  deleteView: string;
+  /** The button that saves the table's setup as a new view, and a new view's name, given its number. */
+  newView: string;
+  newViewName: (count: number) => string;
+  /** The rename field's name, and its buttons. */
+  viewName: string;
+  saveName: string;
+  cancelRename: string;
+  /** The Group button, given whether the rows are grouped. */
+  group: (grouped: boolean) => string;
+  /** The Group panel's column field. */
+  groupBy: string;
+  /** The Group panel's choice for no grouping. */
+  noGrouping: string;
+  /** The Group panel's buttons that close and open every group. */
+  collapseAll: string;
+  expandAll: string;
+  /** The sort panel's button that adds a sort. */
+  addSort: string;
+  /** The sort panel's button that clears every sort. */
+  clearSorts: string;
+  /** A sort row's column field. */
+  sortColumn: string;
+  /** A sort row's direction switch, and its two choices. */
+  sortDirection: string;
+  ascending: string;
+  descending: string;
+  /** Removes one sort, given its column's header. */
+  removeSort: (column: string) => string;
+  /** Name of a sort row's move grip, given its column's header. */
+  moveSort: (column: string) => string;
+  /** Announced when a sort row moves, given its column, its new rank and how many sorts there are. */
+  movedSort: (column: string, rank: number, count: number) => string;
+  /** The bulk bar's count and its name, given how many rows are selected. */
+  selected: (count: number) => string;
+  /** The bulk bar's count once every matching row is selected, given how many. */
+  allSelected: (count: number) => string;
+  /** The command button's label. */
+  command: string;
+  /** Closes the command's row and brings the bar back. */
+  commandClose: string;
+  /** The command composer's placeholder. */
+  commandPlaceholder: string;
+  /** The command composer's send button. */
+  commandSend: string;
+  /** Shown when a command changes the table without a message of its own. */
+  commandApplied: string;
+  /** Shown when a command fails without a message of its own. */
+  commandFailed: string;
+  /** Puts the table back as it was before the last command. */
+  commandUndo: string;
+  /** Closes a command's toast in the bar's own stack; inside a ToastProvider, its `dismissLabel` applies instead. */
+  commandDismiss: string;
+  /** The bulk bar's menu of the actions that do not fit. */
+  moreBulkActions: string;
+  /** The bulk bar's button that selects every matching row, given how many match. */
+  selectAll: (count: number) => string;
+  /** The bulk bar's button that clears the selection. */
+  clearSelection: string;
+  /** On a phone, the stop in the bar's own row that hands the keyboard to the bulk bar floating at the foot of the screen, given how many rows are selected. */
+  goToBulkBar: (count: number) => string;
+  /** Name of a column's move grip in the Columns panel, given its header. */
+  moveColumn: (label: string) => string;
+  /** Announced after the panel moves a column, given its header, its new position and the column count. */
+  movedColumn: (label: string, position: number, count: number) => string;
+}
+```
+
+### TableToolbarSelection
+
+What a bulk action runs on. `ids` lists every selected row. `allMatching`
+says the selection is every row that matches the search and filters,
+which a server can act on as a query rather than a list, leaving out
+`except`. A table that holds every row resolves `ids` in full either way.
+
+```ts
+interface TableToolbarSelection {
+  /** The selected row ids. */
+  ids: string[];
+  /** Whether every matching row is selected. */
+  allMatching: boolean;
+  /** Matching rows left out of an `allMatching` selection. */
+  except: string[];
+}
+```
+
+### TableToolbarView
+
+One saved view of the table: its label and its setup.
+
+```ts
+interface TableToolbarView {
+  /** Stable id for the view. */
+  id: string;
+  /** The view's name, shown as its tab's label. */
+  label: string;
+  /** The table's setup the view holds. */
+  view: DataTableView;
+}
+```
+
+### TableView
+
+One saved setup of a table. Every field is optional: a view leaves out what it does not set.
+
+```ts
+interface TableView {
+  /** The view format's version, so a stored view can be read by a later one. */
+  version: 1;
+  /** The sorts, first sort first. */
+  sorts?: { key: string; direction: 'asc' | 'desc' }[];
+  /** The filters. */
+  filters?: Filter[];
+  /** The search text. */
+  search?: string;
+  /** The hidden columns' keys. */
+  hiddenColumns?: string[];
+  /** Every column key in display order. */
+  columnOrder?: string[];
+  /** The columns pinned to either edge. */
+  columnPinning?: { start?: string[]; end?: string[] };
+  /** The column widths in pixels, by key. */
+  columnWidths?: Record<string, number>;
+  /** The column keys the rows are grouped by. */
+  grouping?: string[];
+  /** The density. */
+  size?: 'default' | 'compact';
+  /** Rows per page. */
+  pageSize?: number;
+}
+```
+
+### ToolbarColumn
+
+One column as the control bar sees it.
+
+```ts
+interface ToolbarColumn {
+  /** The column's key. */
+  key: string;
+  /** Its header text. */
+  label: string;
+  /** Whether the columns panel may hide it. */
+  hideable: boolean;
+  /** Whether the columns panel may move it. */
+  movable: boolean;
+  /** Whether it can be filtered. */
+  filterable: boolean;
+  /** Whether it can be sorted. */
+  sortable: boolean;
+  /** Whether the rows can be grouped by it. */
+  groupable: boolean;
+  /** Its filter kind. */
+  kind: FilterKind;
+  /** The values a choice filter offers: the column's options, else the values it holds. */
+  options: { value: string; label: string }[];
+}
+```
+
+Types from other packages: `AbortSignal` (typescript), `Partial` (typescript), `Promise` (typescript), `ReactNode` (react), `Record` (typescript).

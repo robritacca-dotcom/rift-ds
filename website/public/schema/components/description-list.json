@@ -21,7 +21,10 @@
           "type": "DescriptionListEntry[]",
           "typeKind": "array",
           "required": false,
-          "description": "The entries, in order. Or compose `DescriptionListItem` children instead."
+          "description": "The entries, in order. Or compose `DescriptionListItem` children instead.",
+          "typeRefs": [
+            "DescriptionListEntry"
+          ]
         },
         {
           "name": "children",
@@ -108,7 +111,7 @@
           "typeKind": "reference",
           "required": false,
           "description": "What an empty value shows. Defaults to \"Not set\".",
-          "defaultExpression": "Not set"
+          "default": "Not set"
         },
         {
           "name": "copyLabel",
@@ -191,5 +194,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DescriptionListEntry": {
+      "kind": "type",
+      "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n};",
+      "description": "One term and its value, as `items` takes them."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

@@ -15,6 +15,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| padding | `"none" \| "default" \| "compact"` | no | `default` | Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it |
-| className | `string` | no | `` | Additional CSS classes |
+| padding | `"none" \| "default" \| "compact"` | no | `'default'` | Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it |
+| className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | Panel content |
+
+Types from other packages: `ReactNode` (react).

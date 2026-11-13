@@ -29,7 +29,10 @@
           ],
           "required": false,
           "description": "The type style: `paragraph` for body copy, `paragraph-sm` for helper copy and table cells, `caption` for the smallest notes, `overline` for an eyebrow above a title, `code` for an inline identifier in the code face.",
-          "default": "paragraph"
+          "default": "paragraph",
+          "typeRefs": [
+            "TextTier"
+          ]
         },
         {
           "name": "as",
@@ -134,5 +137,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "TextTier": {
+      "kind": "type",
+      "definition": "type TextTier = 'paragraph' | 'paragraph-sm' | 'caption' | 'overline' | 'code';",
+      "description": "A running-text type style, named as the type scale names it."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

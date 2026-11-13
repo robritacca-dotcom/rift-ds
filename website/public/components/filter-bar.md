@@ -19,7 +19,46 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | values | `Record<string, string[]>` | no |  | Active options per filter id (controlled). Pair with `onValuesChange`. |
 | defaultValues | `Record<string, string[]>` | no |  | Active options per filter id (uncontrolled initial state). |
 | onValuesChange | `((values: Record<string, string[]>) => void)` | no |  | Fires with the full active-filter map on every change. Filters with nothing active are absent from the map, so an empty object means unfiltered. |
-| clearLabel | `string` | no | `Clear all` | Label for the button that clears every filter at once. |
-| clearFilterLabel | `((filterLabel: string) => string)` | no | `(filterLabel: string) => `Clear ${filterLabel}`` | Accessible name of an active filter's own clear button, given the filter's label. Defaults to "Clear" followed by the label. |
-| size | `"default" \| "compact"` | no | `default` | Component size |
-| className | `string` | no | `` | Additional CSS classes |
+| clearLabel | `string` | no | `'Clear all'` | Label for the button that clears every filter at once. |
+| clearFilterLabel | `((filterLabel: string) => string)` | no | `` (filterLabel: string) => `Clear ${filterLabel}` `` | Accessible name of an active filter's own clear button, given the filter's label. Defaults to "Clear" followed by the label. |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### FilterBarFilter
+
+One filter: a chip on the bar with a popover of options behind it.
+
+```ts
+interface FilterBarFilter {
+  /** Stable key for this filter — the key under which its values are reported. */
+  id: string;
+  /** Chip label, e.g. "Status". */
+  label: string;
+  /** Icon shown before the label — Material Symbol name (string) or custom element (ReactNode). */
+  icon?: string | React.ReactNode;
+  /** The choices this filter offers. */
+  options: FilterBarOption[];
+  /**
+   * Whether several options can be active at once. Defaults to true; set it
+   * to false for a single-select filter, which closes on choice.
+   */
+  multiple?: boolean;
+}
+```
+
+### FilterBarOption
+
+One choice inside a filter's popover.
+
+```ts
+interface FilterBarOption {
+  /** Stored value, reported through `onValuesChange`. */
+  value: string;
+  /** Display label. */
+  label: string;
+}
+```
+
+Types from other packages: `ReactNode` (react), `Record` (typescript).

@@ -17,4 +17,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `ReactNode` | no |  | The chat or assistant name. Deliberately shadows the native `title` tooltip attribute — a header's title is content, not a tooltip. Pass a string for the default treatment, or your own heading element. |
 | actions | `ReactNode` | no |  | Trailing controls: a new-chat CircularButton, a view switcher, a close button. The slot only lays them out — each control owns its behaviour. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

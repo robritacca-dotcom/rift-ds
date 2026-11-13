@@ -26,7 +26,10 @@
             "system"
           ],
           "required": false,
-          "description": "The setting shown, for a host that owns colour mode (its own settings\nstore, or a library such as next-themes). A pick then only calls\n`onValueChange`, and the host applies it. Leave undefined to let the\ntoggle keep the setting in its own store, `useColorMode`."
+          "description": "The setting shown, for a host that owns colour mode (its own settings\nstore, or a library such as next-themes). A pick then only calls\n`onValueChange`, and the host applies it. Leave undefined to let the\ntoggle keep the setting in its own store, `useColorMode`.",
+          "typeRefs": [
+            "ColorModeSetting"
+          ]
         },
         {
           "name": "defaultValue",
@@ -38,14 +41,20 @@
             "system"
           ],
           "required": false,
-          "description": "The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system."
+          "description": "The setting applied when the store holds no choice yet, for uncontrolled use. Without it, a first visit follows the operating system.",
+          "typeRefs": [
+            "ColorModeSetting"
+          ]
         },
         {
           "name": "onValueChange",
           "type": "((value: \"dark\" | \"system\" | \"light\") => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the setting after every pick, controlled or not."
+          "description": "Fires with the setting after every pick, controlled or not.",
+          "typeRefs": [
+            "ColorModeSetting"
+          ]
         },
         {
           "name": "size",
@@ -124,5 +133,11 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ColorModeSetting": {
+      "kind": "type",
+      "definition": "type ColorModeSetting = (typeof colorModeSettings)[number];"
+    }
+  }
 }

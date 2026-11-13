@@ -16,11 +16,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | children | `ReactNode` | yes |  | The two panes, in order. Children beyond the first two are ignored. |
-| direction | `"horizontal" \| "vertical"` | no | `horizontal` | Which way the panes sit: side by side, or stacked. |
+| direction | `"horizontal" \| "vertical"` | no | `'horizontal'` | Which way the panes sit: side by side, or stacked. |
 | split | `number` | no |  | First pane's share as a percentage (controlled). Pair with `onSplitChange`. |
 | defaultSplit | `number` | no | `50` | First pane's share as a percentage (uncontrolled initial value). |
 | minSplit | `number` | no | `10` | Smallest share the first pane can be dragged to, as a percentage. |
 | maxSplit | `number` | no | `90` | Largest share the first pane can be dragged to, as a percentage. |
 | onSplitChange | `((split: number) => void)` | no |  | Fires with the new percentage on every drag step or keyboard resize. |
-| separatorLabel | `string` | no | `Resize panes` | Accessible name for the resize handle. |
-| className | `string` | no | `` | Additional CSS classes |
+| separatorLabel | `string` | no | `'Resize panes'` | Accessible name for the resize handle. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

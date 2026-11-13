@@ -13,6 +13,10 @@
  *      along.
  *   3. Every page byte-matches what the generator produces now, so a prop
  *      or description change cannot ship with a stale contract beside it.
+ *   4. Every props table row reads cleanly: no empty code span (an empty
+ *      string default is written `''`, never as nothing in backticks) and no
+ *      double space inside a cell (a folded JSDoc paragraph break). Both
+ *      once shipped on button.md.
  *
  * Belongs in the validate-registry chain, not post-build: the source is
  * generated data, not rendered HTML.
@@ -20,6 +24,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { assembleComponentMdFiles, outputDir } from './generate-component-md.mjs';
+
 import { repoRoot } from './component-docgen.mjs';
 
 const errors = [];
@@ -35,6 +40,17 @@ for (const file of files) {
   }
   if (readFileSync(dest, 'utf8').replace(/\r\n/g, '\n') !== file.content) {
     errors.push(`${display(file)} is stale — run: node scripts/generate-component-md.mjs`);
+  }
+  // 4. Clean table rows, checked on what the generator writes.
+  for (const row of file.content.split('\n').filter((line) => line.startsWith('| '))) {
+    const prop = row.slice(2, row.indexOf(' |'));
+    const cells = row.slice(2, -2).split(/(?<!\\)\|/).map((text) => text.trim());
+    if (cells.some((text) => /^`+$/.test(text))) {
+      errors.push(`${display(file)}: the ${prop} row has an empty code span. Write an empty string default as ''.`);
+    }
+    if (cells.some((text) => / {2,}/.test(text))) {
+      errors.push(`${display(file)}: the ${prop} row has a double space. Fold the whitespace in generate-component-md.mjs.`);
+    }
   }
 }
 

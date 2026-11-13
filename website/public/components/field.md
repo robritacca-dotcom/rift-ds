@@ -23,7 +23,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | error | `boolean` | no | `false` | Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. |
 | required | `boolean` | no | `false` | Marks the field required and renders the required marker |
 | disabled | `boolean` | no | `false` | Whether the control is disabled — dims the label |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | group | `boolean` | no | `false` | Group mode: renders the label as a `<span id>` instead of a `<label htmlFor>`, for scaffolding a set of controls (a checkbox or radio group) where no single labelable element exists — the group node points `aria-labelledby` at the span via `labelId`. |
 | id | `string` | no |  | id for the control. Generated when omitted, so the label/control/helper association works with no configuration. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

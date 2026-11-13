@@ -28,7 +28,10 @@
           "type": "SiteHeaderSection[]",
           "typeKind": "array",
           "required": true,
-          "description": "The site's top-level sections, in order."
+          "description": "The site's top-level sections, in order.",
+          "typeRefs": [
+            "SiteHeaderSection"
+          ]
         },
         {
           "name": "currentHref",
@@ -121,7 +124,10 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. Falls back to the nearest\n`LinkProvider`, then `<a>`."
+          "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. Falls back to the nearest\n`LinkProvider`, then `<a>`.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "navLabel",
@@ -165,5 +171,44 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "MegaMenuItem": {
+      "kind": "interface",
+      "definition": "interface MegaMenuItem {\n  /** Where the row links. */\n  href: string;\n  /** The page's name. */\n  label: string;\n  /** One line on what the page holds, clamped to two lines in the panel. */\n  description?: string;\n  /** A Material Symbols name drawn in the row's icon tile. */\n  icon?: string;\n  /** An image path drawn in the icon tile instead of `icon`, for a brand or product mark. */\n  logo?: string;\n}",
+      "description": "One link row in a mega menu: a page and the line that says what is on it."
+    },
+    "MegaMenuShowcase": {
+      "kind": "interface",
+      "definition": "interface MegaMenuShowcase {\n  /** Where the card links. */\n  href: string;\n  /** A short kicker above the title, set in the overline face. */\n  overline?: string;\n  /** The card's title, followed by a forward arrow. */\n  label: string;\n  /** One or two lines under the title. */\n  description?: string;\n  /**\n   * A drawing that fills the card behind the copy. Decorative: the title and\n   * description carry the meaning, so mark it `aria-hidden`.\n   */\n  cover?: React.ReactNode;\n}",
+      "description": "The featured card beside a mega menu's link grid: one link that is the whole card."
+    },
+    "SiteHeaderSection": {
+      "kind": "interface",
+      "definition": "interface SiteHeaderSection {\n  /** A stable key for the section. */\n  id: string;\n  /** The pill's text. */\n  label: string;\n  /** The section's landing page: where a click on the pill goes. */\n  href: string;\n  /**\n   * A mega menu for the section. Hovering or focusing the pill opens it; its\n   * items are also the section's sub-list in the drawer.\n   */\n  mega?: {\n    /** The panel's link rows. */\n    items: MegaMenuItem[];\n    /** A featured card beside the rows. */\n    showcase?: MegaMenuShowcase;\n  };\n  /**\n   * The section's sub-list in the drawer, when it should differ from its\n   * menu's items: a page that needs a wide screen, say, left out of the\n   * drawer that only narrow screens see. Defaults to the menu's items.\n   */\n  drawerItems?: { href: string; label: string }[];\n  /**\n   * Marks the section as the one being viewed. Left unset, the header works\n   * it out from `currentHref`: the section's own page, a page under it, or\n   * any page its menu lists.\n   */\n  current?: boolean;\n}",
+      "description": "One top-level section of the site: a pill in the bar, a row in the drawer.",
+      "refs": [
+        "MegaMenuItem",
+        "MegaMenuShowcase"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  }
 }

@@ -33,11 +33,11 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Icon above the overlay's headline: a Material Symbol name, or any\ncustom element. Pass `null` for none.",
-          "defaultExpression": "upload_file"
+          "default": "upload_file"
         },
         {
           "name": "label",
@@ -71,5 +71,9 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "File": "typescript",
+    "ReactNode": "react"
+  }
 }

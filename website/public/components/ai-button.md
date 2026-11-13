@@ -15,10 +15,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| label | `string` | no | `Ask AI` | Button text content |
-| icon | `ReactNode` | no | `auto_awesome` | Leading icon — Material Symbol name (string) or custom element (ReactNode) |
+| label | `string` | no | `'Ask AI'` | Button text content |
+| icon | `string \| ReactNode` | no | `'auto_awesome'` | Leading icon — Material Symbol name (string) or custom element (ReactNode) |
 | iconOnly | `boolean` | no | `false` | Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name. |
-| size | `"default" \| "compact"` | no | `default` | Button size |
+| size | `"default" \| "compact"` | no | `'default'` | Button size |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | state | `AgentStatusState` | no |  | What the agent behind the button is doing, in AgentStatus's vocabulary. The label never changes; the icon carries the state. `thinking` and `working` show AgentStatusMark and spin the ring faster, `waiting` shows the mark breathing in the warning colour with the ring at rest, and `done` and `error` turn the button to their status colours with the mark filled solid in the status colour, then return to the resting look after a beat. The button stays clickable throughout, unlike Button's `loading`, so a click can open the conversation to watch the work. |
 | statusLabels | `Partial<Record<AgentStatusState, string>>` | no |  | What a screen reader hears when the state changes, per state, merged over the English defaults; `idle` says nothing. |
@@ -26,18 +26,89 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |
 | summary | `AiButtonSummary` | no |  | A TLDR panel the button can summon: overline, title, a pre-written summary revealed through a skeleton beat and a typed stream (once per mount — later openings show it instantly, as if cached), and optional prompt chips. Hovering the button opens it after the standard hover delay; the pointer keeps it alive anywhere over the button or panel, and it hides a grace period after leaving both. Omit for the plain button. |
-| summaryPlacement | `"top" \| "bottom"` | no | `top` | Which side of the button the summary panel opens on. |
+| summaryPlacement | `"top" \| "bottom"` | no | `'top'` | Which side of the button the summary panel opens on. |
 | request | `ReactNode` | no |  | What the agent needs from the person while `state` is `waiting`: any content, drawn in a glass panel at the button. An InterruptCard approval is the usual filling; a question, a form or a preview work the same way. It opens each time the state becomes `waiting` and stays open without hover. Escape or a click on the button folds it back into the button, where the waiting mark keeps showing, and another click opens it again. While it is open the summary panel never opens. |
 | requestOpen | `boolean` | no |  | Whether the request panel is open, for a host that owns it (say, to keep it shut while the chat shows the request). Leave undefined to let the button manage it. |
 | defaultRequestOpen | `boolean` | no | `true` | Whether the request panel starts open, when the button manages it. Each later move into `waiting` opens it again. |
 | onRequestOpenChange | `((open: boolean) => void)` | no |  | Fires when the request panel opens or closes, including when a move into `waiting` opens it. |
-| requestPlacement | `"top" \| "bottom"` | no | `top` | Which side of the button the request panel opens on. |
-| requestRegionLabel | `string` | no | `Waiting for you` | Accessible name of the request panel. |
+| requestPlacement | `"top" \| "bottom"` | no | `'top'` | Which side of the button the request panel opens on. |
+| requestRegionLabel | `string` | no | `'Waiting for you'` | Accessible name of the request panel. |
 | summaryPinned | `boolean` | no | `false` | Holds the summary panel open regardless of hover — for callers that reveal it on their own signal (scroll depth, dwell). Hover mechanics still run when it flips back off. |
 | onSummaryDismiss | `(() => void)` | no |  | Fires when the panel's dismiss button is pressed. The panel closes itself either way; hovering away and back re-summons it. |
 | onSummarySuggestion | `((id: string) => void)` | no |  | Fires with the tapped summary suggestion's `id`. |
-| summaryRegionLabel | `((title: string) => string)` | no | `(title: string) => `Summary: ${title}`` | Accessible name of the summary panel, given the summary's title. Defaults to "Summary: " followed by the title. |
-| dismissLabel | `string` | no | `Dismiss summary` | Accessible name of the summary panel's dismiss button. |
-| suggestionsLabel | `string` | no | `Suggested prompts` | Accessible name of the summary panel's group of prompt chips. |
-| className | `string` | no | `` | Additional CSS classes |
+| summaryRegionLabel | `((title: string) => string)` | no | `` (title: string) => `Summary: ${title}` `` | Accessible name of the summary panel, given the summary's title. Defaults to "Summary: " followed by the title. |
+| dismissLabel | `string` | no | `'Dismiss summary'` | Accessible name of the summary panel's dismiss button. |
+| suggestionsLabel | `string` | no | `'Suggested prompts'` | Accessible name of the summary panel's group of prompt chips. |
+| className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Types
+
+### AgentStatusState
+
+```ts
+type AgentStatusState =
+  | 'idle'
+  | 'thinking'
+  | 'working'
+  | 'waiting'
+  | 'done'
+  | 'error';
+```
+
+### AiButtonSummary
+
+The content of AiButton's summary panel.
+
+```ts
+interface AiButtonSummary {
+  /** Overline label above the title. */
+  overline?: string;
+  /** Title line — usually the page or subject being summarized. */
+  title: string;
+  /** Small caption beside the overline, e.g. a reading time. */
+  caption?: string;
+  /** The pre-written summary the panel reveals. */
+  text: string;
+  /** Prompt chips under the summary; a tap reports through `onSummarySuggestion`. */
+  suggestions?: PromptSuggestion[];
+}
+```
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
+```
+
+### PromptSuggestion
+
+One tappable suggestion in the row.
+
+```ts
+interface PromptSuggestion {
+  /** Stable identifier passed to `onValueChange`. */
+  id: string;
+  /** The suggestion text shown in the chip. */
+  label: string;
+  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */
+  icon?: string | React.ReactNode;
+  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */
+  description?: string;
+}
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `Partial` (typescript), `ReactNode` (react), `Record` (typescript).

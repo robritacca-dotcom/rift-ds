@@ -37,22 +37,28 @@
           "typeKind": "primitive",
           "required": false,
           "description": "The keyboard shortcut drawn at the end, in the shortcut grammar, in the\nreader's platform legends. Defaults to `mod+k`: ⌘ K on a Mac and Ctrl K\nelsewhere, announced as both, since CommandPalette answers to either.\n`shortcut` wins when it is given.",
-          "default": "mod+k"
+          "default": "mod+k",
+          "typeRefs": [
+            "Shortcut"
+          ]
         },
         {
           "name": "keyLabels",
           "type": "Partial<Record<string, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+          "description": "Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode).",
-          "defaultExpression": "search"
+          "default": "search"
         },
         {
           "name": "size",
@@ -84,5 +90,22 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

@@ -18,11 +18,72 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | items | `BottomNavItem[]` | yes |  | Destinations, three to five of them |
 | activeKey | `string` | no |  | Key of the destination for the current page |
 | onValueChange | `((key: string) => void)` | no |  | Called with a destination's key when it is pressed |
-| platform | `"default" \| "ios" \| "android"` | no | `default` | Which platform's tab bar to draw. `default` is the Rift bar; `ios` is the iOS 26 Liquid Glass capsule floating over content with a sliding lens behind the selection; `android` is the Material 3 Expressive navigation bar with a pill indicator behind the selected icon. |
+| platform | `"default" \| "ios" \| "android"` | no | `'default'` | Which platform's tab bar to draw. `default` is the Rift bar; `ios` is the iOS 26 Liquid Glass capsule floating over content with a sliding lens behind the selection; `android` is the Material 3 Expressive navigation bar with a pill indicator behind the selected icon. |
 | search | `BottomNavSearch` | no |  | A destination set apart from the rest, search unless its `icon` says otherwise. On iOS it is its own glass circle beside the bar; elsewhere it joins the bar as the last destination. |
 | minimized | `boolean` | no | `false` | iOS only: shrinks the bar to the selected destination alone, the way the system bar minimises while the page scrolls down. Ignored on other platforms. |
 | fixed | `boolean` | no | `false` | Pins the bar to the bottom of the viewport, above the home-indicator safe area |
-| aria-label | `string` | no | `Tabs` | Accessible name of the navigation landmark. Defaults to "Tabs", distinct from Nav's "Main", so a screen carrying both announces two different navs |
-| badgeLabel | `((badge: string \| number \| true) => string)` | no | `(badge: number \| string \| true) =>   badge === true ? ', new' : `, ${badge} new`` | Visually hidden text read after a destination's label when it carries a badge, given the item's `badge`. Defaults to ", new" for a dot (`true`) and ", 3 new" for a count; the leading comma and space are part of the text. |
-| className | `string` | no | `` | Additional CSS classes |
+| aria-label | `string` | no | `'Tabs'` | Accessible name of the navigation landmark. Defaults to "Tabs", distinct from Nav's "Main", so a screen carrying both announces two different navs |
+| badgeLabel | `((badge: string \| number \| true) => string)` | no | `` (badge: number \| string \| true) => badge === true ? ', new' : `, ${badge} new` `` | Visually hidden text read after a destination's label when it carries a badge, given the item's `badge`. Defaults to ", new" for a dot (`true`) and ", 3 new" for a count; the leading comma and space are part of the text. |
+| className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Types
+
+### BottomNavItem
+
+```ts
+interface BottomNavItem {
+  /** Unique key for this destination */
+  key: string;
+  /** Display label, always shown under the icon */
+  label: string;
+  /** Icon — Material Symbol name (string, drawn filled when selected) or custom element (ReactNode) */
+  icon: string | React.ReactNode;
+  /** Renders the destination as a real link to this URL instead of a button */
+  href?: string;
+  /** Click handler — also fires on a link destination, so a consumer can route client-side */
+  onClick?: () => void;
+  /** Count on the icon's corner; `true` shows a dot with no number */
+  badge?: number | string | true;
+}
+```
+
+### BottomNavSearch
+
+```ts
+interface BottomNavSearch {
+  /** The button's accessible name on iOS, and its visible tab label on the other platforms */
+  label: string;
+  /**
+   * Icon — Material Symbol name (string) or custom element (ReactNode).
+   * Defaults to `search`; set it when the set-apart slot launches something
+   * else, such as an assistant.
+   */
+  icon?: string | React.ReactNode;
+  /** Click handler */
+  onClick?: () => void;
+  /** Renders the button as a link to this URL instead */
+  href?: string;
+}
+```
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).

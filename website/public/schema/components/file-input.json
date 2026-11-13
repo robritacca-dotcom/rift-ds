@@ -37,7 +37,10 @@
           "typeKind": "array",
           "required": false,
           "description": "Files to list under the dropzone",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "FileInputFile"
+          ]
         },
         {
           "name": "size",
@@ -129,5 +132,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "FileInputFile": {
+      "kind": "interface",
+      "definition": "interface FileInputFile {\n  /** Stable identifier */\n  id: string;\n  /** File name shown in the list */\n  name: string;\n  /** Size in bytes — rendered human-readable */\n  size?: number;\n  /** Upload progress 0–100. Omit for files that are already stored. */\n  progress?: number;\n  /** Per-file error message — replaces the size line */\n  error?: string;\n}"
+    }
+  },
+  "externalTypes": {
+    "File": "typescript"
+  }
 }

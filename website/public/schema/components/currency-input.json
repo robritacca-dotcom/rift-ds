@@ -28,7 +28,10 @@
           "type": "string | null",
           "typeKind": "other",
           "required": false,
-          "description": "The amount as a decimal string (`\"1234.50\"`), or `null` for none (controlled). Pair with `onValueChange`."
+          "description": "The amount as a decimal string (`\"1234.50\"`), or `null` for none (controlled). Pair with `onValueChange`.",
+          "typeRefs": [
+            "DecimalString"
+          ]
         },
         {
           "name": "defaultValue",
@@ -36,14 +39,20 @@
           "typeKind": "other",
           "required": false,
           "description": "The amount the field starts with (uncontrolled).",
-          "default": null
+          "default": null,
+          "typeRefs": [
+            "DecimalString"
+          ]
         },
         {
           "name": "onValueChange",
           "type": "((value: string | null) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called with the amount as a normalised decimal string as the reader types, or `null` while the field holds no number. Fires alongside the native `onChange`."
+          "description": "Called with the amount as a normalised decimal string as the reader types, or `null` while the field holds no number. Fires alongside the native `onChange`.",
+          "typeRefs": [
+            "DecimalString"
+          ]
         },
         {
           "name": "currency",
@@ -86,14 +95,20 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "The smallest amount, as a decimal string. A value below it is raised to it when the field loses focus."
+          "description": "The smallest amount, as a decimal string. A value below it is raised to it when the field loses focus.",
+          "typeRefs": [
+            "DecimalString"
+          ]
         },
         {
           "name": "max",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "The largest amount, as a decimal string. A value above it is lowered to it when the field loses focus."
+          "description": "The largest amount, as a decimal string. A value above it is lowered to it when the field loses focus.",
+          "typeRefs": [
+            "DecimalString"
+          ]
         },
         {
           "name": "step",
@@ -101,7 +116,10 @@
           "typeKind": "primitive",
           "required": false,
           "description": "How much the Up and Down arrow keys add or take away, as a decimal string. Defaults to `\"1\"`.",
-          "default": 1
+          "default": "1",
+          "typeRefs": [
+            "DecimalString"
+          ]
         },
         {
           "name": "locale",
@@ -160,5 +178,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DecimalString": {
+      "kind": "type",
+      "definition": "type DecimalString = string;",
+      "description": "A decimal amount written with an optional leading minus, digits and an optional `.` fraction: `\"1234.50\"`, `\"-0.07\"`."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

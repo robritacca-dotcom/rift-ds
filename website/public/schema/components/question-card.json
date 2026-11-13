@@ -21,21 +21,30 @@
           "type": "QuestionCardQuestion[]",
           "typeKind": "array",
           "required": true,
-          "description": "The questions, asked one at a time when there is more than one."
+          "description": "The questions, asked one at a time when there is more than one.",
+          "typeRefs": [
+            "QuestionCardQuestion"
+          ]
         },
         {
           "name": "values",
           "type": "QuestionCardAnswer[]",
           "typeKind": "array",
           "required": false,
-          "description": "The answers already given. When set, the card renders its answered\nstate and stops taking input: the options stay where they were, the\npicked ones marked and the rest dimmed, so the record of the choice\nstays in place. An empty array records a skip."
+          "description": "The answers already given. When set, the card renders its answered\nstate and stops taking input: the options stay where they were, the\npicked ones marked and the rest dimmed, so the record of the choice\nstays in place. An empty array records a skip.",
+          "typeRefs": [
+            "QuestionCardAnswer"
+          ]
         },
         {
           "name": "onValuesChange",
           "type": "((answers: QuestionCardAnswer[]) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every question's answer once the last one is given."
+          "description": "Fires with every question's answer once the last one is given.",
+          "typeRefs": [
+            "QuestionCardAnswer"
+          ]
         },
         {
           "name": "onSkip",
@@ -57,7 +66,10 @@
           "type": "Partial<QuestionCardLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "Replacement copy for the words the card draws itself."
+          "description": "Replacement copy for the words the card draws itself.",
+          "typeRefs": [
+            "QuestionCardLabels"
+          ]
         },
         {
           "name": "className",
@@ -77,7 +89,10 @@
           "type": "QuestionSummaryItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The questions and their answers, in the order they were asked."
+          "description": "The questions and their answers, in the order they were asked.",
+          "typeRefs": [
+            "QuestionSummaryItem"
+          ]
         },
         {
           "name": "missingLabel",
@@ -109,5 +124,38 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "QuestionCardAnswer": {
+      "kind": "interface",
+      "definition": "interface QuestionCardAnswer {\n  /** The `id` of the question answered. */\n  questionId: string;\n  /** The `value` of every option picked, in the options' order. */\n  values: string[];\n  /** The text written in the \"Something else\" field, when it was used. */\n  other?: string;\n}",
+      "description": "What the person answered to one question."
+    },
+    "QuestionCardLabels": {
+      "kind": "interface",
+      "definition": "interface QuestionCardLabels {\n  /** The last row's label when `other` is set. */\n  other: string;\n  /** The placeholder of the field that row opens. */\n  otherPlaceholder: string;\n  /** The button that sends the answers. */\n  submit: string;\n  /** The button that moves to the next question in a set. */\n  next: string;\n  /** The button that moves back a question in a set. */\n  back: string;\n  /** The button that declines to answer, shown when `onSkip` is passed. */\n  skip: string;\n  /** The line an answered-by-skipping card shows. */\n  skipped: string;\n  /** The line a card shows when the moment to answer passed. */\n  unanswered: string;\n  /** The step count beside a set's heading. */\n  step: (current: number, total: number) => string;\n  /** The line above a one-answer question's options. */\n  chooseOne: string;\n  /** The line above a several-answer question's options, from its `min` and `max`. */\n  chooseMany: (min: number, max: number, total: number) => string;\n  /** Visually hidden text read after each picked option in the answered record. Defaults to \"(chosen)\". */\n  chosen?: string;\n}",
+      "description": "Every word the card draws itself, for a host writing in another voice or language."
+    },
+    "QuestionCardOption": {
+      "kind": "interface",
+      "definition": "interface QuestionCardOption {\n  /** Stable identifier reported in the answer's `values`. */\n  value: string;\n  /** The answer as the person would say it, e.g. \"Next.js\". One line. */\n  label: string;\n  /** A quiet second line under the label: what choosing it means. */\n  description?: string;\n}",
+      "description": "One answer a question offers."
+    },
+    "QuestionCardQuestion": {
+      "kind": "interface",
+      "definition": "interface QuestionCardQuestion {\n  /** Stable identifier reported in the answer's `questionId`. */\n  id: string;\n  /** The question in a few words, e.g. \"Which framework?\". Shown as the step's heading in a set, and the options' accessible name always. */\n  prompt: string;\n  /** `single` takes one option, `multi` any number of them. */\n  mode?: 'single' | 'multi';\n  /** The answers on offer, in order. */\n  options: QuestionCardOption[];\n  /** Offer a last \"Something else\" row that opens a text field, for an answer the options do not hold. */\n  other?: boolean;\n  /** `multi` only: the fewest options that make an answer. Defaults to 1. */\n  min?: number;\n  /** `multi` only: the most options that can be picked. Defaults to all of them. */\n  max?: number;\n}",
+      "description": "One question the card asks.",
+      "refs": [
+        "QuestionCardOption"
+      ]
+    },
+    "QuestionSummaryItem": {
+      "kind": "interface",
+      "definition": "interface QuestionSummaryItem {\n  /** The question, as it was asked. */\n  prompt: string;\n  /** Every answer given, as the person would say each one. Empty when none was. */\n  answers: string[];\n}",
+      "description": "One question in a summary, and what was answered to it."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript"
+  }
 }

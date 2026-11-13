@@ -16,5 +16,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | Badge label text |
-| variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `neutral` | Badge variant determines colour |
-| className | `string` | no | `` | Additional CSS classes |
+| variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `'neutral'` | Badge variant determines colour |
+| className | `string` | no | `''` | Additional CSS classes |

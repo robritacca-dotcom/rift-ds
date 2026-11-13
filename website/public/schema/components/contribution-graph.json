@@ -21,7 +21,10 @@
           "type": "ContributionDay[]",
           "typeKind": "array",
           "required": true,
-          "description": "One entry per day, ordered oldest to newest"
+          "description": "One entry per day, ordered oldest to newest",
+          "typeRefs": [
+            "ContributionDay"
+          ]
         },
         {
           "name": "title",
@@ -113,7 +116,10 @@
             "6"
           ],
           "required": false,
-          "description": "The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`."
+          "description": "The weekday each column starts on, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`.",
+          "typeRefs": [
+            "Weekday"
+          ]
         },
         {
           "name": "monthLabels",
@@ -139,5 +145,19 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ContributionDay": {
+      "kind": "interface",
+      "definition": "interface ContributionDay {\n  /** ISO date string, e.g. \"2026-07-08\" */\n  date: string;\n  /** Number of contributions on this day */\n  count: number;\n  /** Intensity level 0 (none) to 4 (most) — drives the cell colour */\n  level: 0 | 1 | 2 | 3 | 4;\n}"
+    },
+    "Weekday": {
+      "kind": "type",
+      "definition": "type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "A day of the week as `Date.getDay()` numbers it: 0 is Sunday, 6 is Saturday."
+    }
+  },
+  "externalTypes": {
+    "Date": "typescript"
+  }
 }

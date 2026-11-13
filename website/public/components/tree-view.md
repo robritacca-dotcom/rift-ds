@@ -22,4 +22,23 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | selectedId | `string` | no |  | Selected node ID (controlled) — pair with `onSelect` |
 | defaultSelectedId | `string` | no |  | ID of the initially selected node (uncontrolled) |
 | onSelect | `((id: string) => void)` | no |  | Called with the node's ID when a row is selected via click, Enter, or Space. Intentionally shadows the native `select` event handler, which has no meaning on a tree widget. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### TreeViewNode
+
+```ts
+interface TreeViewNode {
+  /** Unique identifier for the node */
+  id: string;
+  /** Text shown on the row */
+  label: string;
+  /** Icon on the row — Material Symbol name (string) or custom element (ReactNode); defaults to `folder` for branches and `draft` for leaves */
+  icon?: string | React.ReactNode;
+  /** Child nodes; a non-empty list makes the node an expandable branch */
+  children?: TreeViewNode[];
+}
+```
+
+Types from other packages: `ReactNode` (react).

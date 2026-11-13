@@ -21,6 +21,23 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultValue | `string` | no |  | The starting selection for an uncontrolled set. |
 | name | `string` | no |  | The radios' shared `name`, for native form submission. Generated when unset. |
 | disabled | `boolean` | no | `false` | Takes the whole set out of use. |
-| size | `"default" \| "compact"` | no | `default` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
+| size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly chosen value. |
-| className | `string` | no | `` | Additional CSS classes, applied to the bar. |
+| className | `string` | no | `''` | Additional CSS classes, applied to the bar. |
+
+## Types
+
+### InspectorSegment
+
+One choice in an InspectorSegmentedControl.
+
+```ts
+interface InspectorSegment {
+  /** The value reported when this segment is chosen. */
+  value: string;
+  /** Visible text. */
+  label: string;
+  /** Takes this one choice out of the set. */
+  disabled?: boolean;
+}
+```

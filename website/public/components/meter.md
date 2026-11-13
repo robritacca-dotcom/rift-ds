@@ -21,7 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | no |  | Visible label naming what is measured, doubling as the meter's accessible name. A native `aria-label` takes precedence, and with neither the meter is announced as "Level". |
 | showValue | `boolean` | no | `false` | Shows the value readout on the trailing edge of the label row |
 | valueText | `string` | no |  | Readout override — replaces the default percentage, spoken via aria-valuetext |
-| variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `info` | Status role colouring the fill |
-| size | `"default" \| "compact"` | no | `default` | Component size (bar height) |
-| locale | `string` | no | `en-US` | The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
-| className | `string` | no | `` | Additional CSS classes |
+| variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `'info'` | Status role colouring the fill |
+| size | `"default" \| "compact"` | no | `'default'` | Component size (bar height) |
+| locale | `string` | no | `'en-US'` | The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
+| className | `string` | no | `''` | Additional CSS classes |

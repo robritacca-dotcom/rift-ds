@@ -95,9 +95,49 @@
       "minItems": 1,
       "items": { "$ref": "#/$defs/export" },
       "description": "Every documented export of the module, the registry-named component first."
+    },
+    "types": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Z][A-Za-z0-9]*$" },
+      "additionalProperties": { "$ref": "#/$defs/type" },
+      "description": "Every type the props reference that this package defines, nested ones included, keyed by name. With externalTypes it closes the contract: every type name in a prop's type is one or the other."
+    },
+    "externalTypes": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Z][A-Za-z0-9]*$" },
+      "additionalProperties": { "type": "string", "minLength": 1 },
+      "description": "Every type the props or types mention that another package defines, mapped to that package (typescript for a built-in such as Record)."
     }
   },
   "$defs": {
+    "type": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "definition"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["interface", "type", "enum", "class"]
+        },
+        "definition": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The declaration as written in the source, member comments included."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The declaration's JSDoc summary."
+        },
+        "refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+          "description": "The other types in this file's types map that the definition mentions."
+        }
+      }
+    },
     "export": {
       "type": "object",
       "additionalProperties": false,
@@ -135,7 +175,7 @@
         "typeKind": {
           "type": "string",
           "enum": ["enum", "primitive", "array", "function", "reference", "other"],
-          "description": "The shape of the type: enum carries values; primitive is string, number or boolean; reference names a type the .d.ts defines and this schema does not expand."
+          "description": "The shape of the type: enum carries values; primitive is string, number or boolean; reference names a type, defined in types or named in externalTypes."
         },
         "values": {
           "type": "array",
@@ -152,17 +192,26 @@
         },
         "default": {
           "type": ["string", "number", "boolean", "null"],
-          "description": "The default as a value: a number, a boolean, null, an enum member, or a string on a prop typed as a plain string."
+          "description": "The default as a value: a number, a boolean, null, an enum member, or a string literal."
         },
         "defaultExpression": {
           "type": "string",
           "minLength": 1,
-          "description": "Any other default as source text (a function, a computed number, a reference to another prop, or a string on a prop with a wider type)."
+          "not": { "pattern": "^(?:'[^']*'|\"[^\"]*\")$" },
+          "$comment": "A lone quoted string is a value, so it belongs in default; this keeps a string literal from sliding back into the expression slot.",
+          "description": "Any other default as source text: a function, a computed number, a template string or a reference to another prop."
         },
         "deprecated": {
           "type": "string",
           "minLength": 1,
           "description": "Set when the prop carries @deprecated: the replacement guidance. The prop still works; the published API only grows."
+        },
+        "typeRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+          "description": "The types in this file's types map that the prop's declared type mentions."
         }
       },
       "allOf": [

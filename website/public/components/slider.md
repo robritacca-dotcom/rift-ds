@@ -25,7 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | min | `number` | no | `0` | Minimum value |
 | max | `number` | no | `100` | Maximum value |
 | step | `number` | no | `1` | Step increment |
-| size | `"default" \| "compact"` | no | `default` | Component size (not the native character-width `size` attribute) |
+| size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
 | onValueChange | `((value: number) => void)` | no |  | Convenience callback receiving the numeric value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
-| className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
+| className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |

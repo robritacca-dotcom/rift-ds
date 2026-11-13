@@ -17,8 +17,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | onFilesSelected | `((files: File[]) => void)` | no |  | Fires with the files dropped anywhere on the zone. |
 | disabled | `boolean` | no | `false` | Stops the zone reacting to drags; its children behave as if it were not there. |
-| icon | `ReactNode` | no | `upload_file` | Icon above the overlay's headline: a Material Symbol name, or any custom element. Pass `null` for none. |
-| label | `string` | no | `Drop files to attach` | Headline of the overlay shown while files are dragged over the zone. |
+| icon | `string \| ReactNode` | no | `'upload_file'` | Icon above the overlay's headline: a Material Symbol name, or any custom element. Pass `null` for none. |
+| label | `string` | no | `'Drop files to attach'` | Headline of the overlay shown while files are dragged over the zone. |
 | hint | `string` | no |  | Second line of the overlay: what may be dropped, e.g. accepted types and limits. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The surface that accepts drops: a chat panel, a thread and its composer. |
+
+Types from other packages: `File` (typescript), `ReactNode` (react).

@@ -18,17 +18,42 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | title | `ReactNode` | yes |  | What the change is, with how much it touches: "Cancel orders: 69 orders". Collides with the native `title` tooltip attribute on purpose: the card shows it. |
 | detail | `ReactNode` | no |  | A quiet line under the title: what the change leaves alone, and why ("Left as they are: 2 already shipped"). |
 | facts | `ActionReadoutFact[]` | no |  | What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in. |
-| icon | `ReactNode` | no |  | The mark trailing the title: a Material Symbol name, or your own element. |
-| status | `ActionCardStatus` | no | `proposed` | Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`. |
+| icon | `string \| ReactNode` | no |  | The mark trailing the title: a Material Symbol name, or your own element. |
+| status | `ActionCardStatus` | no | `'proposed'` | Where the change stands. Fully controlled by design: the host makes the change, so it owns whether it was made. `proposed` offers Confirm and Dismiss; the others are the card's record. Defaults to `proposed`. |
 | receipt | `ReactNode` | no |  | What the confirmed card says was done: "69 orders cancelled". Defaults to the title. |
-| tone | `"default" \| "destructive"` | no | `default` | The colour of Confirm: `destructive` for a change that takes something away (a cancellation, a refund). Defaults to `default`. |
+| tone | `"default" \| "destructive"` | no | `'default'` | The colour of Confirm: `destructive` for a change that takes something away (a cancellation, a refund). Defaults to `default`. |
 | onConfirm | `(() => void)` | no |  | Called by Confirm. The host makes the change, then sets `status` to `confirmed`. |
 | onDismiss | `(() => void)` | no |  | Called by Dismiss. The host sets `status` to `dismissed`; nothing changed. |
 | onUndo | `(() => void)` | no |  | Called by Undo on a confirmed card, shown only when this is set. The host reverses the change and sets `status` to `undone`. |
-| confirmLabel | `string` | no | `Confirm` | The Confirm button's words. Defaults to "Confirm". |
-| dismissLabel | `string` | no | `Dismiss` | The Dismiss button's words. Not "Cancel", which beside a cancellation reads as the action itself. Defaults to "Dismiss". |
-| undoLabel | `string` | no | `Undo` | The Undo button's words. Defaults to "Undo". |
-| confirmedLabel | `string` | no | `Confirmed` | The read-out where Confirm stood, on a confirmed card that keeps its `facts`. Defaults to "Confirmed". |
-| dismissedLabel | `string` | no | `Not changed` | What a dismissed card says after its title. Defaults to "Not changed". |
-| undoneLabel | `string` | no | `Undone` | What an undone card says after its title. Defaults to "Undone". |
-| className | `string` | no | `` | Additional CSS classes |
+| confirmLabel | `string` | no | `'Confirm'` | The Confirm button's words. Defaults to "Confirm". |
+| dismissLabel | `string` | no | `'Dismiss'` | The Dismiss button's words. Not "Cancel", which beside a cancellation reads as the action itself. Defaults to "Dismiss". |
+| undoLabel | `string` | no | `'Undo'` | The Undo button's words. Defaults to "Undo". |
+| confirmedLabel | `string` | no | `'Confirmed'` | The read-out where Confirm stood, on a confirmed card that keeps its `facts`. Defaults to "Confirmed". |
+| dismissedLabel | `string` | no | `'Not changed'` | What a dismissed card says after its title. Defaults to "Not changed". |
+| undoneLabel | `string` | no | `'Undone'` | What an undone card says after its title. Defaults to "Undone". |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### ActionCardStatus
+
+Where a proposed change stands.
+
+```ts
+type ActionCardStatus = 'proposed' | 'confirmed' | 'dismissed' | 'undone';
+```
+
+### ActionReadoutFact
+
+One line of a readout: what it measures and its value, already written in the reader's locale.
+
+```ts
+interface ActionReadoutFact {
+  /** What it measures: "Refunded". */
+  label: string;
+  /** Its value: "$101,137 across 52 orders". */
+  value: React.ReactNode;
+}
+```
+
+Types from other packages: `ReactNode` (react).

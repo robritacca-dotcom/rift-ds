@@ -41,7 +41,10 @@
           "type": "SignatureValue | null",
           "typeKind": "other",
           "required": false,
-          "description": "The signature (controlled). A drawn one cannot be loaded back for editing: pass `null` to clear the pad, or keep the value the pad last handed over."
+          "description": "The signature (controlled). A drawn one cannot be loaded back for editing: pass `null` to clear the pad, or keep the value the pad last handed over.",
+          "typeRefs": [
+            "SignatureValue"
+          ]
         },
         {
           "name": "defaultValue",
@@ -56,7 +59,10 @@
           "type": "((value: SignatureValue | null) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called with the signature after each stroke, each change to the typed name, and each clear (with `null`)."
+          "description": "Called with the signature after each stroke, each change to the typed name, and each clear (with `null`).",
+          "typeRefs": [
+            "SignatureValue"
+          ]
         },
         {
           "name": "height",
@@ -215,5 +221,17 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "SignatureValue": {
+      "kind": "type",
+      "definition": "type SignatureValue = {\n  /** Whether it was drawn or typed. */\n  kind: 'drawn' | 'typed';\n  /** The signature as a standalone SVG document in `currentColor`, so it scales and prints. */\n  svg: string;\n  /** The typed name, for a typed signature. */\n  text?: string;\n  /** Renders the signature to a PNG on demand, at twice its size. */\n  png: () => Promise<Blob>;\n};",
+      "description": "A signature as the pad hands it over."
+    }
+  },
+  "externalTypes": {
+    "Blob": "typescript",
+    "Promise": "typescript",
+    "ReactNode": "react"
+  }
 }

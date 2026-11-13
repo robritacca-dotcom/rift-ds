@@ -32,8 +32,8 @@
         },
         {
           "name": "icon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "A Material Symbol name trailing the title, or any custom element. No icon by default."
         },
@@ -42,7 +42,10 @@
           "type": "InterruptCardOption[]",
           "typeKind": "array",
           "required": false,
-          "description": "The choices, rendered as buttons left to right."
+          "description": "The choices, rendered as buttons left to right.",
+          "typeRefs": [
+            "InterruptCardOption"
+          ]
         },
         {
           "name": "onValueChange",
@@ -98,5 +101,23 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "InterruptCardAnsweredVariant": {
+      "kind": "type",
+      "definition": "type InterruptCardAnsweredVariant = 'positive' | 'error' | 'neutral';",
+      "description": "The status an answered card records: an approval, a refusal, or neither."
+    },
+    "InterruptCardOption": {
+      "kind": "interface",
+      "definition": "interface InterruptCardOption {\n  /** Value passed to `onValueChange` when this option is chosen. */\n  value: string;\n  /** Button text, e.g. \"Allow once\". */\n  label: string;\n  /**\n   * Visual weight: `primary` for the recommended choice, `secondary` (the\n   * default) for the rest. `danger` is the legacy value from before colour\n   * moved onto `tone`, and renders as `variant=\"secondary\" tone=\"destructive\"`.\n   */\n  variant?: 'primary' | 'secondary' | 'danger';\n  /** Colour, passed to the option's Button: `destructive` for dangerous approvals. */\n  tone?: 'default' | 'destructive';\n  /**\n   * The status the answered card's read-out takes once this option is chosen.\n   * Defaults to `positive` for a `primary` option, `error` for a destructive\n   * one and `neutral` for the rest; set `error` on a refusal such as \"Deny\".\n   */\n  answeredVariant?: InterruptCardAnsweredVariant;\n  /**\n   * What the answered card's read-out says once this option is chosen,\n   * written as the decision made rather than the button pressed, e.g.\n   * \"Denied\" for \"Deny\". Defaults to `label`.\n   */\n  answeredLabel?: string;\n}",
+      "description": "One choice the card offers, rendered as a Button in the options footer.",
+      "refs": [
+        "InterruptCardAnsweredVariant"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

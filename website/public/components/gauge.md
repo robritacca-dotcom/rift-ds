@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | value | `number` | yes |  | Current reading. Clamped into the `min`–`max` range for drawing. |
 | min | `number` | no | `0` | Lower bound of the dial. |
 | max | `number` | no | `100` | Upper bound of the dial. |
-| tone | `"error" \| "positive" \| "warning" \| "neutral" \| "accent"` | no | `accent` | Colour role for the value arc. `accent` (the default) follows the chart palette's lead colour. Ignored while a threshold matches — thresholds exist so the dial recolours itself as the reading crosses them. |
+| tone | `"error" \| "positive" \| "warning" \| "neutral" \| "accent"` | no | `'accent'` | Colour role for the value arc. `accent` (the default) follows the chart palette's lead colour. Ignored while a threshold matches — thresholds exist so the dial recolours itself as the reading crosses them. |
 | thresholds | `GaugeThreshold[]` | no |  | Colour switch points, e.g. warning at 70 and error at 90. The highest threshold at or below the current reading wins; below them all, the `tone` prop applies. |
 | showValue | `boolean` | no | `true` | Shows the reading in the centre of the dial. |
 | formatValue | `((value: number) => string)` | no |  | Formats the centre reading — for units, precision, or locale. |
@@ -28,5 +28,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | size | `number` | no | `120` | Rendered dial diameter in pixels. The arc geometry scales with it. |
 | strokeWidth | `number` | no | `12` | Arc thickness in pixels. |
-| locale | `string` | no | `en-US` | The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
-| className | `string` | no | `` | Additional CSS classes |
+| locale | `string` | no | `'en-US'` | The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### GaugeThreshold
+
+One colour switch point: at or above `value`, the dial takes `tone`.
+
+```ts
+interface GaugeThreshold {
+  /** Reading at which this tone takes over. */
+  value: number;
+  /** Tone applied from this reading upward. */
+  tone: 'accent' | 'positive' | 'warning' | 'error' | 'neutral';
+}
+```

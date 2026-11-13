@@ -99,7 +99,10 @@
           "typeKind": "array",
           "required": false,
           "description": "Trailing actions. The first three show as icon buttons; any more join the\noverflow menu, ahead of `overflowActions`, where they render as plain rows\n(a menu row draws no badge and routes from `onClick`, not `href`)",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "TopAppBarAction"
+          ]
         },
         {
           "name": "overflowActions",
@@ -107,7 +110,10 @@
           "typeKind": "array",
           "required": false,
           "description": "Actions listed in a menu behind a trailing \"More\" button",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "TopAppBarOverflowAction"
+          ]
         },
         {
           "name": "overflowLabel",
@@ -176,9 +182,46 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "TopAppBarAction": {
+      "kind": "interface",
+      "definition": "interface TopAppBarAction {\n  /** Unique key for this action */\n  key: string;\n  /** Icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon: string | React.ReactNode;\n  /** Accessible label; also the overflow menu's row text */\n  label: string;\n  /** Click handler */\n  onClick?: () => void;\n  /** Renders the action as a link to this URL instead of a button */\n  href?: string;\n  /** Shows a dot on the icon's corner, e.g. unread notifications */\n  badge?: boolean;\n}"
+    },
+    "TopAppBarOverflowAction": {
+      "kind": "type",
+      "definition": "type TopAppBarOverflowAction = Omit<TopAppBarAction, 'href' | 'badge'>;",
+      "description": "An action in the overflow menu. The menu's rows are buttons and draw no\nicon badge, so `href` and `badge` are left out rather than silently\ndropped: route from `onClick` instead.",
+      "refs": [
+        "TopAppBarAction"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "HTMLElement": "typescript",
+    "Omit": "typescript",
+    "ReactNode": "react"
+  }
 }

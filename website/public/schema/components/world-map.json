@@ -22,7 +22,10 @@
           "typeKind": "array",
           "required": false,
           "description": "The places to mark. A point outside the framed view is simply not drawn.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "WorldMapPoint"
+          ]
         },
         {
           "name": "bounds",
@@ -30,7 +33,10 @@
           "typeKind": "reference",
           "required": false,
           "description": "The window the map frames: `[west, south, east, north]` in degrees.\nIt must not cross the antimeridian. Defaults to the whole world\n(Antarctica is not in the land data). Changing it resets any zoom.",
-          "defaultExpression": "[-180, -58, 180, 84]"
+          "defaultExpression": "[-180, -58, 180, 84]",
+          "typeRefs": [
+            "WorldMapBounds"
+          ]
         },
         {
           "name": "fit",
@@ -96,28 +102,40 @@
           "type": "((point: WorldMapPoint | null) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves."
+          "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves.",
+          "typeRefs": [
+            "WorldMapPoint"
+          ]
         },
         {
           "name": "onPointClick",
           "type": "((point: WorldMapPoint) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires when a marker is clicked."
+          "description": "Fires when a marker is clicked.",
+          "typeRefs": [
+            "WorldMapPoint"
+          ]
         },
         {
           "name": "renderCallout",
           "type": "((point: WorldMapPoint) => ReactNode)",
           "typeKind": "function",
           "required": false,
-          "description": "Renders the annotation for the active (or hovered) point, placed beside\nits marker in an HTML overlay; MapCallout is the intended filling. The\noverlay carries `data-side=\"left\"|\"right\"` for which side of the marker\nit opens on — toward the map's centre, where the room is."
+          "description": "Renders the annotation for the active (or hovered) point, placed beside\nits marker in an HTML overlay; MapCallout is the intended filling. The\noverlay carries `data-side=\"left\"|\"right\"` for which side of the marker\nit opens on — toward the map's centre, where the room is.",
+          "typeRefs": [
+            "WorldMapPoint"
+          ]
         },
         {
           "name": "renderHoverCard",
           "type": "((point: WorldMapPoint) => ReactNode)",
           "typeKind": "function",
           "required": false,
-          "description": "Wraps each marker in the library's HoverCard, with this as the card's\ncontent — the floating-panel alternative to `renderCallout`'s bare\nreadout, opening on hover or focus with the system's delays and Escape\ndismissal. Content must be phrasing-level (spans), the panel's own\nrule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower.\nNeeds `interactive`; when both renderers are given, this one wins."
+          "description": "Wraps each marker in the library's HoverCard, with this as the card's\ncontent — the floating-panel alternative to `renderCallout`'s bare\nreadout, opening on hover or focus with the system's delays and Escape\ndismissal. Content must be phrasing-level (spans), the panel's own\nrule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower.\nNeeds `interactive`; when both renderers are given, this one wins.",
+          "typeRefs": [
+            "WorldMapPoint"
+          ]
         },
         {
           "name": "label",
@@ -185,5 +203,20 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "WorldMapBounds": {
+      "kind": "type",
+      "definition": "type WorldMapBounds = [number, number, number, number];",
+      "description": "The framed window: `[west, south, east, north]` in degrees."
+    },
+    "WorldMapPoint": {
+      "kind": "interface",
+      "definition": "interface WorldMapPoint {\n  /** Stable identifier, referenced by `activePointId`. */\n  id: string;\n  /** Latitude in degrees, north positive. */\n  lat: number;\n  /** Longitude in degrees, east positive. */\n  lng: number;\n  /** Short label drawn beside the marker when `showLabels` is on, and the marker's accessible name. */\n  label?: string;\n  /**\n   * Marker glyph. `point` is a filled dot (something plotted), `anchor` is\n   * an outlined square (something fixed) — the same vocabulary Globe and\n   * MapLegend draw.\n   */\n  kind?: 'point' | 'anchor';\n  /**\n   * Marker colour, any CSS colour (`var(--color-chart-series-2)` works) —\n   * the flat map's channel for colour-coding a category per point. Omit for\n   * the default text colour.\n   */\n  color?: string;\n}",
+      "description": "A place on the map."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

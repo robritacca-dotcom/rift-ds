@@ -28,14 +28,20 @@
           "type": "MegaMenuItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The link rows, in columns of at least four. A column grows taller before\nthe grid adds one, up to three columns beside a showcase and four without."
+          "description": "The link rows, in columns of at least four. A column grows taller before\nthe grid adds one, up to three columns beside a showcase and four without.",
+          "typeRefs": [
+            "MegaMenuItem"
+          ]
         },
         {
           "name": "showcase",
           "type": "MegaMenuShowcase",
           "typeKind": "reference",
           "required": false,
-          "description": "A featured card in its own column beside the link grid."
+          "description": "A featured card in its own column beside the link grid.",
+          "typeRefs": [
+            "MegaMenuShowcase"
+          ]
         },
         {
           "name": "currentHref",
@@ -56,7 +62,10 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. The panel is server-renderable, so it\ncannot read a `LinkProvider`; a client host resolves one and passes it\nhere. Defaults to `<a>`."
+          "description": "The component every link renders through, so a router's link (Next.js\n`Link`) navigates without a reload. The panel is server-renderable, so it\ncannot read a `LinkProvider`; a client host resolves one and passes it\nhere. Defaults to `<a>`.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "className",
@@ -68,5 +77,35 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "MegaMenuItem": {
+      "kind": "interface",
+      "definition": "interface MegaMenuItem {\n  /** Where the row links. */\n  href: string;\n  /** The page's name. */\n  label: string;\n  /** One line on what the page holds, clamped to two lines in the panel. */\n  description?: string;\n  /** A Material Symbols name drawn in the row's icon tile. */\n  icon?: string;\n  /** An image path drawn in the icon tile instead of `icon`, for a brand or product mark. */\n  logo?: string;\n}",
+      "description": "One link row in a mega menu: a page and the line that says what is on it."
+    },
+    "MegaMenuShowcase": {
+      "kind": "interface",
+      "definition": "interface MegaMenuShowcase {\n  /** Where the card links. */\n  href: string;\n  /** A short kicker above the title, set in the overline face. */\n  overline?: string;\n  /** The card's title, followed by a forward arrow. */\n  label: string;\n  /** One or two lines under the title. */\n  description?: string;\n  /**\n   * A drawing that fills the card behind the copy. Decorative: the title and\n   * description carry the meaning, so mark it `aria-hidden`.\n   */\n  cover?: React.ReactNode;\n}",
+      "description": "The featured card beside a mega menu's link grid: one link that is the whole card."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  }
 }

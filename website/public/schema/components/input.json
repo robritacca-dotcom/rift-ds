@@ -127,15 +127,15 @@
         },
         {
           "name": "iconLeft",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Leading icon — Material Symbol name (string) or custom element (ReactNode)"
         },
         {
           "name": "iconRight",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Trailing icon — Material Symbol name (string) or custom element (ReactNode)"
         },
@@ -164,5 +164,8 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

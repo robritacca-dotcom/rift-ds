@@ -19,3 +19,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | trailing | `ReactNode` | no |  | Optional trailing content (count, badge, metadata) |
 | divider | `boolean` | no | `true` | Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone. |
 | className | `string` | no |  | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

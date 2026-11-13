@@ -50,7 +50,10 @@
             "6"
           ],
           "required": false,
-          "description": "Overrides the ink the name picks (1 to 6, the `--color-pixel-ink-*`\ntokens). A name's own ink is one of six, so two neighbours can land on\nthe same one; a host drawing a list passes each row's entry from\n`distinctPixelInks` here to keep them apart. The character's shape still\ncomes from the name."
+          "description": "Overrides the ink the name picks (1 to 6, the `--color-pixel-ink-*`\ntokens). A name's own ink is one of six, so two neighbours can land on\nthe same one; a host drawing a list passes each row's entry from\n`distinctPixelInks` here to keep them apart. The character's shape still\ncomes from the name.",
+          "typeRefs": [
+            "PixelInk"
+          ]
         },
         {
           "name": "variant",
@@ -81,5 +84,12 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "PixelInk": {
+      "kind": "type",
+      "definition": "type PixelInk = 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "One of the six pixel inks, by token number."
+    }
+  }
 }

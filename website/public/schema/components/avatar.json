@@ -64,7 +64,10 @@
             "neutral"
           ],
           "required": false,
-          "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ."
+          "description": "Which of the six fills the initials sit on. Picked from the name when\nunset, so a person keeps one colour everywhere; `neutral` keeps the\nplain grey. An AvatarGroup\nsets it on its avatars so neighbours in the stack differ.",
+          "typeRefs": [
+            "AvatarFill"
+          ]
         },
         {
           "name": "status",
@@ -96,5 +99,12 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AvatarFill": {
+      "kind": "type",
+      "definition": "type AvatarFill = 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "One of the six avatar fills, by token number (`--color-avatar-bg-*`)."
+    }
+  }
 }

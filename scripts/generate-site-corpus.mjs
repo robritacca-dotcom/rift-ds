@@ -53,13 +53,16 @@
  */
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { siteRoutes, isDynamicSegment } from './site-routes.mjs';
 import { navLinks } from './nav-links.mjs';
 import { readBreakpoints } from './breakpoint-source.mjs';
 import { buildQualityGate } from './generate-quality-gate.mjs';
 import { assembleAgentStarter } from './generate-agent-skill.mjs';
+import { loadThemeSource } from './generate-preset-stylesheets.mjs';
+import { collectA11yCoverage } from './generate-a11y-coverage.mjs';
+import * as brand from './brand.mjs';
 import {
   AGENT_STARTER_FILE,
   AUTHOR_NAME,
@@ -166,6 +169,24 @@ const ENTITIES = {
   '&lt;': '<', '&gt;': '>', '&rarr;': '→', '&larr;': '←', '&harr;': '↔',
 };
 
+/**
+ * A JSX text node as React renders it: whitespace that holds a line break
+ * is dropped at the start and end of the node, and a run of lines between
+ * is joined by one space. Collapsing it to a space instead put one before
+ * the full stop in `</Link>⏎  . Add it with:`, which the page never shows.
+ */
+const jsxText = (raw) =>
+  raw
+    .split(/\r?\n/)
+    .map((line, index, lines) => {
+      let text = line.replace(/\t/g, ' ');
+      if (index > 0) text = text.replace(/^ +/, '');
+      if (index < lines.length - 1) text = text.replace(/ +$/, '');
+      return text;
+    })
+    .filter((line, index, lines) => line !== '' || lines.length === 1)
+    .join(' ');
+
 const decode = (text) =>
   text.replace(/&[a-z]+;/gi, (entity) => ENTITIES[entity] ?? entity);
 
@@ -243,12 +264,215 @@ export const PROSE_ATTRIBUTES = new Set([
 
 /**
  * The brand constants page prose interpolates as visible text, resolved to
- * what the page renders. Only public, owner-authored values belong here.
+ * what the page renders. Only public, owner-authored values belong here:
+ * every string export of scripts/brand.mjs is one, since the site prints
+ * them.
  */
-const INLINE_CONSTANTS = new Map([
-  ['AUTHOR_NAME', AUTHOR_NAME],
-  ['PACKAGE_NAME', PACKAGE_NAME],
+const INLINE_CONSTANTS = new Map(
+  Object.entries(brand).filter(([, value]) => typeof value === 'string' || typeof value === 'number')
+);
+
+/* ============================================================
+   Inline values
+
+   A page writes values into its prose (`{COMPONENT_COUNT} components`,
+   `<code>{AGENT_STARTER_FILE}</code>`). Dropping one leaves the sentence
+   with a hole ("save it at your project root as ."), and a model reading
+   the corpus repeats the hole as an instruction, so every inline value is
+   resolved, or its line is left out, and which of the two is never silent.
+
+   resolveInline() tries, in order: a literal; a brand constant; a value in
+   INLINE_VALUES; a module-scope constant in the same file whose initializer
+   is a literal, an array literal (for `.length`) or a sum of those. A line
+   with anything left over is recorded in unresolvedExpressions and kept
+   out of the corpus, and pageProse fails generation for a corpus route
+   unless the expression is in RUNTIME_EXPRESSIONS: a value that only
+   exists while the page runs (the chip a visitor just picked).
+   ============================================================ */
+
+const read0 = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+const jsonOf = (path) => JSON.parse(read0(path));
+
+// The theme modules, loaded the way the preset generator loads them (Node's
+// TypeScript stripping), so a theme's label is read from its one home.
+const themeSource = await loadThemeSource();
+const themeBrand = await import(
+  pathToFileURL(join(repoRoot, 'website', 'src', 'lib', 'theme', 'brand.ts')).href
+);
+// The chat's media queries, built by the library's own helpers.
+const chatQueries = await import(pathToFileURL(join(repoRoot, 'src', 'chat', 'queries.ts')).href);
+
+/** "a, b and c", the way the pages join a short list. */
+const andList = (items) =>
+  items.length > 1 ? `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}` : items.join('');
+
+/** The month-day-year date the pages print, in the site's one locale. */
+const longDate = (iso) =>
+  new Date(`${iso}T00:00:00`).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+/**
+ * Values a page computes from published data, keyed by the expression as
+ * written (whitespace folded), each computed here from the same source the
+ * page reads. pageProse records which are used, and validate-site-corpus.mjs
+ * fails on an entry no page uses any more, so the table cannot rot.
+ */
+const INLINE_VALUES = new Map(Object.entries({
+  COMPONENT_COUNT: () => jsonOf(join(repoRoot, 'src', 'components', 'registry.json')).components.length,
+  SKILL_COUNT: () => {
+    const skills = jsonOf(join(repoRoot, '.claude', 'skills', 'registry.json'));
+    return skills.displayed.length + skills.external.length;
+  },
+  'TOKEN_COUNTS.colour': () => jsonOf(join(repoRoot, 'src', 'tokens', 'registry.json')).categories.colour.length,
+  SYSTEM_THEME_COUNT: () => Object.keys(jsonOf(join(repoRoot, 'src', 'tokens', 'values.json')).themes).length,
+  'themeList(KIT_THEME_LABELS)': (sourceFile) =>
+    andList(literalValue(sourceFile, 'KIT_THEMES').map((theme) => theme.label)),
+  'THEME_SELECTOR_ORDER.filter((id) => id !== BASE_THEME_ID) .map((id) => THEME_PRESETS[id].label) .join(", ")': () =>
+    themeSource.THEME_SELECTOR_ORDER.filter((id) => id !== themeBrand.BASE_THEME_ID)
+      .map((id) => themeSource.THEME_PRESETS[id].label)
+      .join(', '),
+  BEHAVIOUR_MODULE_COUNT: () => a11yCoverage().behaviourModules,
+  'modalOverlays.slice(0, -1).join(", ")': () => a11yCoverage().modalOverlays.slice(0, -1).join(', '),
+  'modalOverlays.at(-1)': () => a11yCoverage().modalOverlays.at(-1),
+  'layerComponents.length': () => a11yCoverage().layerComponents.length,
+  totalIcons: (sourceFile) =>
+    literalValue(sourceFile, 'iconCategories').reduce((sum, category) => sum + category.icons.length, 0),
+  'DOCK_QUERY.replace(/[()]/g, "")': () => chatQueries.DOCK_QUERY.replace(/[()]/g, ''),
+  'TAKEOVER_QUERY.replace(/[()]/g, "")': () => chatQueries.TAKEOVER_QUERY.replace(/[()]/g, ''),
+  THREADS_RAIL_MIN_WIDTH: () => moduleConstant(join(repoRoot, 'src', 'chat', 'queries.ts'), 'THREADS_RAIL_MIN_WIDTH'),
+  ASIDE_RAIL_MIN_WIDTH: () => moduleConstant(join(repoRoot, 'src', 'chat', 'queries.ts'), 'ASIDE_RAIL_MIN_WIDTH'),
+  SUGGESTION_MAX_CHARS: () => moduleConstant(join(repoRoot, 'src', 'chat', 'suggestions.ts'), 'SUGGESTION_MAX_CHARS'),
+  ARTIFACT_CARD_KIND: () => moduleConstant(join(repoRoot, 'src', 'chat', 'types.ts'), 'ARTIFACT_CARD_KIND'),
+  'firstRelease.version': () => releaseLog().releases.at(-1).version,
+  'formatDate(firstRelease.date)': () => longDate(releaseLog().releases.at(-1).date),
+  'formatDate(firstEarlierRelease.date)': () => longDate(releaseLog().predecessorReleases.at(-1).date),
+  PREDECESSOR_RELEASE_COUNT: () => releaseLog().predecessorReleases.length,
+}));
+
+// From the generator's own collector, not its output file: the chain writes
+// that file after this one, so reading it would lag a change by one build.
+let a11yCache;
+const a11yCoverage = () => (a11yCache ??= collectA11yCoverage());
+const releaseLog = () => jsonOf(join(repoRoot, 'website', 'src', 'data', 'release-log.json'));
+
+/** Expressions INLINE_VALUES answered, so a stale entry can be found. */
+export const usedInlineValues = new Set();
+export const inlineValueKeys = () => [...INLINE_VALUES.keys()];
+
+/**
+ * Values that exist only while a page runs, keyed `<route file>::<expression>`.
+ * A line holding one is left out of the corpus, by decision, with the reason.
+ */
+const RUNTIME_EXPRESSIONS = new Map([
+  ['docs/blocks/page.tsx::block.route', 'one line per block, drawn in a loop; the blocks section lists each block by name'],
+  ['foundations/themes/page.tsx::preset.radiusScale', 'a per-theme readout drawn in a loop over the presets'],
+  ['foundations/themes/page.tsx::preset.density', 'a per-theme readout drawn in a loop over the presets'],
+  ['foundations/themes/page.tsx::motionSpeedPercent(preset.motionScale)', 'a per-theme readout drawn in a loop over the presets'],
+  ['foundations/themes/page.tsx::preset.elevation', 'a per-theme readout drawn in a loop over the presets'],
+  ['foundations/themes/page.tsx::tiles.length', 'the count of tiles the page draws for the visitor\'s colour mode'],
+  ['playground/sections/AiSection.tsx::suggestion', 'the chip the visitor just picked'],
+  ['playground/sections/SurfacesSection.tsx::card + 1', 'the card the visitor is on in the deck'],
 ]);
+export const runtimeExpressionKeys = () => [...RUNTIME_EXPRESSIONS.keys()];
+
+/** Marks a value the walk could not resolve, inside a line being gathered. */
+const UNRESOLVED = '\u0000';
+
+/**
+ * Inline expressions a page renders that could not be resolved, gathered
+ * per file by extractProse: { expression, line }. pageProse checks them.
+ */
+export const unresolvedExpressions = new Map();
+
+/** A literal initializer as a JS value: strings, numbers, booleans, arrays and objects of them. */
+function literalOf(node) {
+  while (node && (ts.isAsExpression(node) || ts.isParenthesizedExpression(node) || ts.isSatisfiesExpression(node))) {
+    node = node.expression;
+  }
+  if (!node) return undefined;
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
+  if (ts.isNumericLiteral(node)) return Number(node.text);
+  if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
+  if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
+  if (ts.isArrayLiteralExpression(node)) {
+    const items = node.elements.map(literalOf);
+    return items.includes(undefined) ? undefined : items;
+  }
+  if (ts.isObjectLiteralExpression(node)) {
+    const out = {};
+    for (const property of node.properties) {
+      if (!ts.isPropertyAssignment(property)) continue; // a spread or method is not data
+      const key = property.name.text ?? property.name.getText();
+      // A value that is not literal (JSX, a call) stays undefined in the
+      // object: the count of an array of such objects still resolves.
+      out[key] = literalOf(property.initializer);
+    }
+    return out;
+  }
+  return undefined;
+}
+
+/** A module-scope `const` in the file, as a literal value, or undefined. */
+function literalValue(sourceFile, name) {
+  for (const statement of sourceFile.statements) {
+    if (!ts.isVariableStatement(statement)) continue;
+    if (!(statement.declarationList.flags & ts.NodeFlags.Const)) continue;
+    for (const declaration of statement.declarationList.declarations) {
+      if (ts.isIdentifier(declaration.name) && declaration.name.text === name) {
+        return literalOf(declaration.initializer);
+      }
+    }
+  }
+  return undefined;
+}
+
+/** A literal constant exported by another module, read without running it. */
+function moduleConstant(path, name) {
+  const value = literalValue(ts.createSourceFile(path, read0(path), ts.ScriptTarget.Latest, true), name);
+  if (value === undefined) throw new Error(`generate-site-corpus: ${name} in ${path} is no longer a literal constant; update INLINE_VALUES.`);
+  return value;
+}
+
+/** What an inline `{expression}` renders as text, or undefined when unknown. */
+function resolveInline(expression, sourceFile) {
+  const value = valueOf(expression, sourceFile);
+  return value === undefined || typeof value === 'object' ? undefined : String(value);
+}
+
+function valueOf(expression, sourceFile) {
+  if (ts.isStringLiteral(expression) || ts.isNoSubstitutionTemplateLiteral(expression)) return expression.text;
+  if (ts.isNumericLiteral(expression)) return Number(expression.text);
+  if (ts.isParenthesizedExpression(expression)) return valueOf(expression.expression, sourceFile);
+  if (ts.isTemplateExpression(expression)) {
+    let text = expression.head.text;
+    for (const span of expression.templateSpans) {
+      const part = valueOf(span.expression, sourceFile);
+      if (part === undefined || typeof part === 'object') return undefined;
+      text += String(part) + span.literal.text;
+    }
+    return text;
+  }
+  const key = expression.getText(sourceFile).replace(/\s+/g, ' ');
+  if (INLINE_VALUES.has(key)) {
+    usedInlineValues.add(key);
+    return INLINE_VALUES.get(key)(sourceFile);
+  }
+  if (ts.isIdentifier(expression)) {
+    if (INLINE_CONSTANTS.has(expression.text)) return INLINE_CONSTANTS.get(expression.text);
+    return literalValue(sourceFile, expression.text);
+  }
+  // `items.length` on a literal array in the same file.
+  if (ts.isPropertyAccessExpression(expression) && expression.name.text === 'length') {
+    const target = valueOf(expression.expression, sourceFile);
+    return Array.isArray(target) ? target.length : undefined;
+  }
+  // A sum of resolved numbers (`core.length + extended.length`).
+  if (ts.isBinaryExpression(expression) && expression.operatorToken.kind === ts.SyntaxKind.PlusToken) {
+    const left = valueOf(expression.left, sourceFile);
+    const right = valueOf(expression.right, sourceFile);
+    return typeof left === 'number' && typeof right === 'number' ? left + right : undefined;
+  }
+  return undefined;
+}
 
 /** True when a string literal is structural rather than prose. */
 function isStructuralString(node) {
@@ -280,6 +504,17 @@ export function extractProse(source, fileName) {
 
   const push = (raw) => {
     const text = decode(raw).replace(/\s+/g, ' ').trim();
+    if (text.includes(UNRESOLVED)) {
+      const readable = text.replace(new RegExp(`${UNRESOLVED}([^${UNRESOLVED}]*)${UNRESOLVED}`, 'g'), '{$1}');
+      const words = text.replace(new RegExp(`${UNRESOLVED}[^${UNRESOLVED}]*${UNRESOLVED}`, 'g'), '');
+      if (!isProse(words.trim())) return;
+      const found = unresolvedExpressions.get(fileName) ?? [];
+      for (const match of text.matchAll(new RegExp(`${UNRESOLVED}([^${UNRESOLVED}]*)${UNRESOLVED}`, 'g'))) {
+        found.push({ expression: match[1], line: readable });
+      }
+      unresolvedExpressions.set(fileName, found);
+      return;
+    }
     if (!isProse(text) || seen.has(text)) return;
     seen.add(text);
     lines.push(text);
@@ -290,15 +525,21 @@ export function extractProse(source, fileName) {
     node.forEachChild((child) => {
       if (ts.isJsxText(child)) {
         consumed.add(child);
-        parts.push(decode(child.text));
-      } else if (ts.isJsxExpression(child) && child.expression) {
+        parts.push(decode(jsxText(child.text)));
+      } else if (ts.isJsxExpression(child) && child.expression && !ts.isJsxAttribute(child.parent)) {
         // `{" "}` and `{AUTHOR_NAME}` render as text, so they read as text:
         // dropping them left "built by ." in the corpus.
         const { expression } = child;
-        if (ts.isStringLiteral(expression)) parts.push(expression.text);
-        else if (ts.isIdentifier(expression) && INLINE_CONSTANTS.has(expression.text)) {
-          parts.push(INLINE_CONSTANTS.get(expression.text));
-        } else inlineText(child, parts);
+        const value = resolveInline(expression, sourceFile);
+        if (value !== undefined) parts.push(value);
+        else {
+          // JSX inside the expression (`{open && <em>…</em>}`) still reads
+          // as text; an expression that yields none is a value the page
+          // computes, which the walk cannot know.
+          const before = parts.join('');
+          inlineText(child, parts);
+          if (parts.join('') === before) parts.push(`${UNRESOLVED}${expression.getText(sourceFile).replace(/\s+/g, ' ')}${UNRESOLVED}`);
+        }
       } else if (isBlockElement(child)) {
         // Emitted on its own line when the walk reaches it.
       } else {
@@ -314,7 +555,7 @@ export function extractProse(source, fileName) {
       // adding one puts a space before the punctuation after an inline <strong>.
       push(inlineText(node, []).join(''));
     } else if (ts.isJsxText(node) && !consumed.has(node)) {
-      push(node.text);
+      push(jsxText(node.text));
     } else if (
       (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) &&
       !isStructuralString(node)
@@ -372,13 +613,34 @@ function coLocatedFiles(dir, isRoot) {
   return files;
 }
 
-const pageProse = (...segments) => {
+/** Runtime expressions met on corpus routes, so a stale sanction can be found. */
+export const usedRuntimeExpressions = new Set();
+
+export const pageProse = (...segments) => {
   const dir = join(websiteApp, ...segments);
   const sources = [join(dir, 'page.tsx'), ...coLocatedFiles(dir, segments.length === 0)];
-  return sources
+  const prose = sources
     .map((path) => extractProse(read(path), path))
     .filter(Boolean)
     .join('\n');
+  // An inline value the walk could not resolve, on a page the chat reads,
+  // fails generation (the Inline values block above owns the rules).
+  for (const path of sources) {
+    const rel = path.slice(websiteApp.length + 1).replaceAll('\\', '/');
+    for (const { expression, line } of unresolvedExpressions.get(path) ?? []) {
+      const key = `${rel}::${expression}`;
+      if (RUNTIME_EXPRESSIONS.has(key)) {
+        usedRuntimeExpressions.add(key);
+        continue;
+      }
+      throw new Error(
+        `generate-site-corpus: ${rel} renders {${expression}} in prose the corpus cannot resolve:\n  ${line}\n` +
+          `Add it to INLINE_VALUES in scripts/generate-site-corpus.mjs, computed from the same data the page reads, ` +
+          `or to RUNTIME_EXPRESSIONS with a reason if it only exists while the page runs.`
+      );
+    }
+  }
+  return prose;
 };
 
 /* ============================================================
@@ -669,7 +931,7 @@ function condenseDesignSpec(source) {
    Sections
    ============================================================ */
 
-function sectionSiteMap() {
+export function sectionSiteMap() {
   const nav = read(join(repoRoot, 'website', 'src', 'config', 'navigation.ts'));
   return `## Site map
 
@@ -856,15 +1118,25 @@ const ROUTE_DATA = new Map([
       .join('\n')],
 ]);
 
-function sectionSitePages() {
-  const pages = sitePageRoutes()
+/**
+ * Each corpus page's text, by route: its prose, its corpus-facts blocks and
+ * its route data. Shared with generate-site-search.mjs, so the MCP's search
+ * index reads a page exactly as the chat does.
+ */
+export function sitePageBodies() {
+  return sitePageRoutes()
     .map((route) => {
       const segments = route === '/' ? [] : route.slice(1).split('/');
       const { prose, factsMarkdown } = pageContent(...segments);
       const body = [prose, factsMarkdown, ROUTE_DATA.get(route)?.()].filter(Boolean).join('\n\n');
-      return body ? `### ${route === '/' ? '/ (home)' : route}\n\n${body}` : null;
+      return { route, body };
     })
-    .filter(Boolean)
+    .filter(({ body }) => body);
+}
+
+function sectionSitePages() {
+  const pages = sitePageBodies()
+    .map(({ route, body }) => `### ${route === '/' ? '/ (home)' : route}\n\n${body}`)
     .join('\n\n');
 
   return `## Site pages
@@ -1060,6 +1332,15 @@ Everything below is published on this site or in its public repository. It is th
 /** The corpus text itself, ungated so --dump still works when over budget. */
 export function assembleCorpus() {
   const parts = SECTIONS.map(([, build]) => build());
+  // Both inline tables only hold what a page still renders.
+  const staleValues = inlineValueKeys().filter((key) => !usedInlineValues.has(key));
+  const staleRuntime = runtimeExpressionKeys().filter((key) => !usedRuntimeExpressions.has(key));
+  if (staleValues.length + staleRuntime.length > 0) {
+    throw new Error(
+      `generate-site-corpus: no corpus page renders ${[...staleValues, ...staleRuntime].join(', ')} any more; ` +
+        `remove ${staleValues.length ? 'INLINE_VALUES' : 'RUNTIME_EXPRESSIONS'} entries that no page uses.`
+    );
+  }
   return { corpus: [PREAMBLE, ...parts].join('\n\n---\n\n') + '\n', parts };
 }
 

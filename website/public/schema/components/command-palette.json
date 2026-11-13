@@ -35,7 +35,10 @@
           "type": "CommandPaletteGroup[]",
           "typeKind": "array",
           "required": true,
-          "description": "Commands, grouped under headings"
+          "description": "Commands, grouped under headings",
+          "typeRefs": [
+            "CommandPaletteGroup"
+          ]
         },
         {
           "name": "placeholder",
@@ -83,21 +86,30 @@
           "typeKind": "other",
           "required": false,
           "description": "The shortcuts that toggle the palette when `hotkey` is on, in the\nshortcut grammar. Defaults to `['meta+k', 'ctrl+k']`, so both answer on\nevery platform. They go through the shared shortcut listener, so they\nfire from a text field and over an open dialog.",
-          "defaultExpression": "['meta+k', 'ctrl+k']"
+          "defaultExpression": "['meta+k', 'ctrl+k']",
+          "typeRefs": [
+            "Shortcut"
+          ]
         },
         {
           "name": "keyLabels",
           "type": "Partial<Record<string, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+          "description": "Replaces any legend a command's `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
         },
         {
           "name": "onSelect",
           "type": "((command: CommandPaletteCommand) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called with the chosen command, after its own `onSelect`. Replaces the\nnative `onSelect` (text-selection) handler on the panel."
+          "description": "Called with the chosen command, after its own `onSelect`. Replaces the\nnative `onSelect` (text-selection) handler on the panel.",
+          "typeRefs": [
+            "CommandPaletteCommand"
+          ]
         },
         {
           "name": "onSearchChange",
@@ -147,5 +159,36 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "CommandPaletteCommand": {
+      "kind": "interface",
+      "definition": "interface CommandPaletteCommand {\n  /** Stable identifier */\n  id: string;\n  /** Display label — the primary text matched when filtering */\n  label: string;\n  /** Optional secondary line under the label */\n  description?: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Keyboard shortcut shown on the right as literal keycaps, e.g. ['⌘', 'P']. `keys` draws it for the visitor's platform instead. */\n  shortcut?: string[];\n  /** Keyboard shortcut shown on the right in the shortcut grammar (`mod+p`), drawn in the platform's legends: ⌘ P on a Mac, Ctrl P elsewhere. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Custom node at the row's right edge, after any `shortcut` — a badge or affordance the keycap slot can't express. It renders inside the option row, so keep it non-interactive: a focusable element here would nest controls. */\n  trailing?: React.ReactNode;\n  /** Extra terms that should match this command when filtering */\n  keywords?: string[];\n  /** Whether the command is disabled */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible command (delete, remove…): the row takes the danger colour, the same as a destructive DropdownMenu item */\n  destructive?: boolean;\n  /** Called when this command is chosen */\n  onSelect?: () => void;\n}",
+      "refs": [
+        "Shortcut"
+      ]
+    },
+    "CommandPaletteGroup": {
+      "kind": "interface",
+      "definition": "interface CommandPaletteGroup {\n  /** Group heading */\n  label: string;\n  /** Commands within the group */\n  commands: CommandPaletteCommand[];\n}",
+      "refs": [
+        "CommandPaletteCommand"
+      ]
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

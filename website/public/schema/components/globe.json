@@ -22,7 +22,10 @@
           "typeKind": "array",
           "required": false,
           "description": "The places to mark.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "GlobePoint"
+          ]
         },
         {
           "name": "arcs",
@@ -30,14 +33,20 @@
           "typeKind": "array",
           "required": false,
           "description": "The arcs to draw between them. An arc whose endpoint is not in `points` is skipped.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "GlobeArc"
+          ]
         },
         {
           "name": "rotation",
           "type": "GlobeRotation",
           "typeKind": "reference",
           "required": false,
-          "description": "Controlled view: `[longitude, latitude]` of the centre, in degrees.\nPair with `onRotationChange`. Omit to let the globe own its rotation."
+          "description": "Controlled view: `[longitude, latitude]` of the centre, in degrees.\nPair with `onRotationChange`. Omit to let the globe own its rotation.",
+          "typeRefs": [
+            "GlobeRotation"
+          ]
         },
         {
           "name": "defaultRotation",
@@ -45,14 +54,20 @@
           "typeKind": "reference",
           "required": false,
           "description": "Initial view when uncontrolled.",
-          "defaultExpression": "[-20, 20]"
+          "defaultExpression": "[-20, 20]",
+          "typeRefs": [
+            "GlobeRotation"
+          ]
         },
         {
           "name": "onRotationChange",
           "type": "((rotation: GlobeRotation) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires whenever the view changes — drag, keys, or the auto-rotation."
+          "description": "Fires whenever the view changes — drag, keys, or the auto-rotation.",
+          "typeRefs": [
+            "GlobeRotation"
+          ]
         },
         {
           "name": "autoRotate",
@@ -98,21 +113,30 @@
           "type": "((point: GlobePoint | null) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves."
+          "description": "Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves.",
+          "typeRefs": [
+            "GlobePoint"
+          ]
         },
         {
           "name": "onPointClick",
           "type": "((point: GlobePoint) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires when a marker is clicked, or activated with Enter or Space while\nfocused. Setting it makes the markers real buttons on a non-interactive\nglobe too."
+          "description": "Fires when a marker is clicked, or activated with Enter or Space while\nfocused. Setting it makes the markers real buttons on a non-interactive\nglobe too.",
+          "typeRefs": [
+            "GlobePoint"
+          ]
         },
         {
           "name": "renderCallout",
           "type": "((point: GlobePoint) => ReactNode)",
           "typeKind": "function",
           "required": false,
-          "description": "Renders the annotation for the active (or hovered) point. It is placed\nbeside the marker in an HTML overlay, so any markup works; MapCallout is\nthe intended filling. The overlay carries `data-side=\"left\"|\"right\"` for\nwhich side of the marker it sits on."
+          "description": "Renders the annotation for the active (or hovered) point. It is placed\nbeside the marker in an HTML overlay, so any markup works; MapCallout is\nthe intended filling. The overlay carries `data-side=\"left\"|\"right\"` for\nwhich side of the marker it sits on.",
+          "typeRefs": [
+            "GlobePoint"
+          ]
         },
         {
           "name": "label",
@@ -164,5 +188,25 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "GlobeArc": {
+      "kind": "interface",
+      "definition": "interface GlobeArc {\n  /** `id` of the point the arc leaves. */\n  from: string;\n  /** `id` of the point the arc reaches. */\n  to: string;\n  /**\n   * Stroke colour, any CSS colour (`var(--color-chart-series-3)` works).\n   * Omit for the default cobalt-to-violet gradient along the arc.\n   */\n  color?: string;\n  /** How far the arc lifts off the surface at its midpoint, as a fraction of the radius. */\n  altitude?: number;\n}",
+      "description": "A great-circle arc between two points."
+    },
+    "GlobePoint": {
+      "kind": "interface",
+      "definition": "interface GlobePoint {\n  /** Stable identifier, referenced by arcs and by `activePointId`. */\n  id: string;\n  /** Latitude in degrees, north positive. */\n  lat: number;\n  /** Longitude in degrees, east positive. */\n  lng: number;\n  /** Short label drawn beside the marker when `showLabels` is on. */\n  label?: string;\n  /**\n   * Marker glyph. `point` is a cross (something that moves or listens),\n   * `anchor` is a square (something fixed). The glyph is the only difference.\n   */\n  kind?: 'point' | 'anchor';\n  /**\n   * Marker colour, any CSS colour (`var(--color-status-warning-border)`\n   * works) — the same per-point channel WorldMap carries, so one dataset\n   * keys identically on both projections. Omit for the text-ramp default;\n   * a coloured marker keeps its colour on hover instead of brightening.\n   */\n  color?: string;\n}",
+      "description": "A place on the globe."
+    },
+    "GlobeRotation": {
+      "kind": "type",
+      "definition": "type GlobeRotation = [number, number];",
+      "description": "Where the globe is looking: `[longitude, latitude]` of the centre, in degrees."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

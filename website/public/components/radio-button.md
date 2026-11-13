@@ -22,7 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | disabled | `boolean` | no | `false` | Whether the radio is disabled |
 | value | `string` | no |  | Value for this radio option, passed to the callbacks and submitted under `name`. A form reads "on", the native radio's, when it is omitted. |
 | onValueChange | `((value: string) => void)` | no |  | Called with this radio's value when selected |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
 | name | `string` | no |  | Form field name. When set, the radio submits its `value` with an enclosing form through a hidden input while checked, nothing otherwise or while disabled, as a native radio does. Grouping stays React state (`RadioGroup` passes its own `name` to every option, so exactly one entry submits). |
@@ -39,9 +39,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultValue | `string` | no |  | Selected value on first render when uncontrolled (`value` undefined). |
 | name | `string` | no |  | Form field name. When set, the checked option's `value` submits with an enclosing form through one hidden input, as a native radio set does; a disabled option submits nothing. Grouping itself stays React state (`value`/`onValueChange`). |
 | options | `{ label: string; value: string; disabled?: boolean \| undefined; }[]` | yes |  | Radio options |
-| direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |
+| direction | `"horizontal" \| "vertical"` | no | `'vertical'` | Layout direction |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 
 ## RadioIndicator props
@@ -49,4 +49,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | checked | `boolean` | no | `false` | Whether the circle shows its dot. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |

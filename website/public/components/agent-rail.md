@@ -21,10 +21,52 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((id: string) => void)` | no |  | Fires with the chosen tab's id. |
 | activeTab | `string` | no |  | Legacy name for `value`. Deprecated: Use `value` instead. |
 | onTabChange | `((id: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
-| tabsLabel | `string` | no | `Agent views` | Accessible name for the tab strip. |
+| tabsLabel | `string` | no | `'Agent views'` | Accessible name for the tab strip. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the rail. Deprecated: Pass the native `aria-label` attribute instead. |
 | onCollapse | `(() => void)` | no |  | Fires when the rail's collapse affordance is pressed. The button renders only when this is given, pinned to the rail's top trailing corner. It is a chevron rather than a cross on purpose: the host's own close control is usually a cross a few pixels away, and two of them side by side read as two ways to dismiss the same thing. |
-| collapseLabel | `string` | no | `Collapse the agent panel` | Accessible name for the collapse affordance. |
-| collapseVariant | `"chevron" \| "close"` | no | `chevron` | How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is. |
+| collapseLabel | `string` | no | `'Collapse the agent panel'` | Accessible name for the collapse affordance. |
+| collapseVariant | `"chevron" \| "close"` | no | `'chevron'` | How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is. |
 | footer | `ReactNode` | no |  | Rendered under the pane, outside its scroll — a sign-out row, a quiet hint. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### AgentRailProfile
+
+```ts
+interface AgentRailProfile {
+  /** The agent's display name, shown under the portrait; also seeds the Avatar's initials. */
+  name: string;
+  /** The portrait's image src, handed to an `lg` Avatar. Without one the rail draws its own agent mark instead, since initials would claim a person. Ignored when `avatar` is given. */
+  avatarSrc?: string;
+  /** Replaces the default portrait with a custom element — a hero portrait, an illustrated mark. */
+  avatar?: React.ReactNode;
+  /** A short line under the name, e.g. "Connected". Renders with a leading status dot. */
+  status?: React.ReactNode;
+  /** Which status role the dot under the name takes. */
+  statusTone?: 'positive' | 'info' | 'warning' | 'error' | 'neutral';
+  /** Fires when the portrait's edit affordance is pressed. The pencil renders only when this is given. */
+  onEdit?: () => void;
+  /** Accessible name for the portrait's edit affordance. */
+  editLabel?: string;
+}
+```
+
+### AgentRailTab
+
+```ts
+interface AgentRailTab {
+  /** Stable identifier: `value` matches against it and `onValueChange` reports it. */
+  id: string;
+  /** The tab's label, shown beside its icon and used as the pane's accessible name. */
+  label: string;
+  /** Leading icon on the tab — Material Symbol name (string) or custom element (ReactNode). Give every tab one and a squeezed rail can fall back to icons alone; give none and it keeps the labels. */
+  icon?: string | React.ReactNode;
+  /** The pane rendered while this tab is active. */
+  content?: React.ReactNode;
+  /** Whether the tab is selectable. */
+  disabled?: boolean;
+}
+```
+
+Types from other packages: `ReactNode` (react).

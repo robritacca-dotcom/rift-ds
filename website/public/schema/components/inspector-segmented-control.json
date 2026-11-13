@@ -28,7 +28,10 @@
           "type": "InspectorSegment[]",
           "typeKind": "array",
           "required": true,
-          "description": "The choices, drawn left to right in the bar's end."
+          "description": "The choices, drawn left to right in the bar's end.",
+          "typeRefs": [
+            "InspectorSegment"
+          ]
         },
         {
           "name": "value",
@@ -88,5 +91,12 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "InspectorSegment": {
+      "kind": "interface",
+      "definition": "interface InspectorSegment {\n  /** The value reported when this segment is chosen. */\n  value: string;\n  /** Visible text. */\n  label: string;\n  /** Takes this one choice out of the set. */\n  disabled?: boolean;\n}",
+      "description": "One choice in an InspectorSegmentedControl."
+    }
+  }
 }

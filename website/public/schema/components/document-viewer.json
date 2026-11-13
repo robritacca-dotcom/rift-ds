@@ -42,7 +42,10 @@
           ],
           "required": false,
           "description": "How to show it, or `auto` to read it from `fileName`, `src` and `mimeType`. A kind the viewer cannot show renders the fallback. Defaults to `auto`.",
-          "default": "auto"
+          "default": "auto",
+          "typeRefs": [
+            "DocumentViewerKind"
+          ]
         },
         {
           "name": "fileName",
@@ -188,5 +191,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DocumentViewerKind": {
+      "kind": "type",
+      "definition": "type DocumentViewerKind = 'pdf' | 'image' | 'text';",
+      "description": "What the viewer shows a file as."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

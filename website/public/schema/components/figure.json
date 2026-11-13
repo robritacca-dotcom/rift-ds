@@ -47,5 +47,10 @@
         }
       ]
     }
-  ]
+  ],
+  "externalTypes": {
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react",
+    "ReactNode": "react"
+  }
 }

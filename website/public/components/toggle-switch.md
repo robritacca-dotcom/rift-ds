@@ -17,22 +17,24 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | checked | `boolean` | no |  | Whether the toggle is on, controlled. Leave undefined to let the switch keep its own state, seeded from `defaultChecked`. |
 | defaultChecked | `boolean` | no | `true` | Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false. |
-| label | `string` | no | `Toggle` | Label text displayed next to the toggle |
+| label | `string` | no | `'Toggle'` | Label text displayed next to the toggle |
 | showLabel | `boolean` | no | `true` | Whether to show the label |
 | helperText | `string` | no |  | Helper or error message rendered under the label text |
 | error | `boolean` | no | `false` | Error state — recolours the helper text and marks the switch invalid |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | onCheckedChange | `((checked: boolean) => void)` | no |  | Called with the next checked state when toggled |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((checked: boolean) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onCheckedChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
 | name | `string` | no |  | Form field name. When set, the switch submits with an enclosing form through a hidden input: `value` while on, nothing while off or disabled, as a native checkbox does. |
-| value | `string \| number \| readonly string[]` | no | `on` | The value submitted under `name` while on. Defaults to "on", the native checkbox's. |
+| value | `string \| number \| readonly string[]` | no | `'on'` | The value submitted under `name` while on. Defaults to "on", the native checkbox's. |
 
 ## SwitchIndicator props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | checked | `boolean` | no | `false` | Whether the switch is on. |
-| size | `"default" \| "compact"` | no | `default` | Track size: `default` is 42×24px, `compact` 34×20px. |
-| className | `string` | no | `` | Additional CSS classes |
+| size | `"default" \| "compact"` | no | `'default'` | Track size: `default` is 42×24px, `compact` 34×20px. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ComponentPropsWithoutRef` (react).

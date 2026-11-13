@@ -25,4 +25,30 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | outerRadius | `number` | no | `140` | Outer radius |
 | showLegend | `boolean` | no | `true` | Show legend |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
-| className | `string` | no | `` | Additional CSS classes on the wrapper |
+| className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Types
+
+### ChartSummaryItem
+
+```ts
+interface ChartSummaryItem {
+  /** Label shown above the value */
+  label: string;
+  /** Formatted value to display */
+  value: string | number;
+}
+```
+
+### PieSlice
+
+```ts
+interface PieSlice {
+  /** Display name */
+  name: string;
+  /** Numeric value */
+  value: number;
+  /** Slice fill colour */
+  color?: string;
+}
+```

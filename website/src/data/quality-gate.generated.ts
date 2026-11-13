@@ -62,8 +62,12 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Builds the one document the site chat answers from."
       },
       {
+        "name": "generate-site-search",
+        "text": "Builds the documentation index the MCP endpoint searches, every section with its link."
+      },
+      {
         "name": "generate-component-api",
-        "text": "Writes the prop reference the MCP endpoint serves."
+        "text": "Writes the prop reference the MCP endpoint serves, and every type its props name."
       },
       {
         "name": "generate-component-md",
@@ -122,11 +126,15 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-site-corpus",
-        "text": "The chat corpus is fresh, carries no leaked contact details and fits its token budget."
+        "text": "The chat corpus is fresh, carries no leaked contact details, no dropped values, and fits its token budget."
+      },
+      {
+        "name": "validate-site-search",
+        "text": "The MCP search index is fresh, links every section and holds only documentation for people building with the package."
       },
       {
         "name": "validate-component-api",
-        "text": "The prop reference the MCP endpoint serves is fresh."
+        "text": "The prop reference the MCP endpoint serves is fresh, defines every type it names and gives every optional enum a default."
       },
       {
         "name": "validate-component-md",

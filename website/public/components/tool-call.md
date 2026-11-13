@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | name | `string` | yes |  | The tool that was invoked, shown in monospace. |
-| status | `ToolCallStatus` | no | `success` | Where the call has got to. Drives the colour, the indicator, and the default status text. |
+| status | `ToolCallStatus` | no | `'success'` | Where the call has got to. Drives the colour, the indicator, and the default status text. |
 | summary | `string` | no |  | One line describing this particular call, e.g. the target path or query. |
 | duration | `string` | no |  | How long the call took, e.g. "1.2s". Free text, so callers keep their own formatting. |
 | statusLabel | `string` | no |  | Override the status text shown beside the indicator. |
@@ -24,5 +24,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultOpen | `boolean` | no | `false` | Open state for uncontrolled use. |
 | onOpenChange | `((open: boolean) => void)` | no |  | Fires whenever the panel opens or closes. |
 | actions | `ReactNode` | no |  | Controls for a call awaiting a decision — allow, deny, always allow. Rendered outside the collapsible panel, so approving never requires expanding the call first. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The call's arguments and result. |
+
+## Types
+
+### ToolCallStatus
+
+```ts
+type ToolCallStatus = 'pending' | 'running' | 'success' | 'error';
+```
+
+Types from other packages: `ReactNode` (react).

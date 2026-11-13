@@ -18,11 +18,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | no |  | Textarea label text |
 | value | `string` | no |  | Current value (controlled). Leave it undefined for an uncontrolled textarea, which keeps its own state seeded from `defaultValue`. |
 | defaultValue | `string` | no |  | Initial value when uncontrolled (`value` undefined). |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below |
-| resize | `"none" \| "both" \| "horizontal" \| "vertical"` | no | `vertical` | Whether the textarea is resizable |
+| resize | `"none" \| "both" \| "horizontal" \| "vertical"` | no | `'vertical'` | Whether the textarea is resizable |
 | maxLength | `number` | no |  | Max character count — shows counter when set |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
-| className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <textarea> |
+| className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <textarea> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |

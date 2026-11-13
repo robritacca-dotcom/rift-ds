@@ -27,6 +27,17 @@ export default defineConfig({
         include: ['src/**/*.test.ts'],
       }
     }, {
+      // The website's pure server modules (the MCP and chat tools in
+      // website/src/lib), in Node, with the site's `@/` alias.
+      resolve: {
+        alias: { '@': path.join(dirname, 'website', 'src') },
+      },
+      test: {
+        name: 'site',
+        environment: 'node',
+        include: ['website/src/lib/**/*.test.ts'],
+      }
+    }, {
       extends: true,
       plugins: [
       // The plugin will run tests for the stories defined in your Storybook config

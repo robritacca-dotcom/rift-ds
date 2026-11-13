@@ -34,7 +34,10 @@
           "type": "SelectionCardOption[]",
           "typeKind": "array",
           "required": true,
-          "description": "Available options"
+          "description": "Available options",
+          "typeRefs": [
+            "SelectionCardOption"
+          ]
         },
         {
           "name": "value",
@@ -82,5 +85,11 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "SelectionCardOption": {
+      "kind": "interface",
+      "definition": "interface SelectionCardOption {\n  /** Unique value for this option */\n  value: string;\n  /** Primary label */\n  label: string;\n  /** Optional description text below the label */\n  description?: string;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+    }
+  }
 }

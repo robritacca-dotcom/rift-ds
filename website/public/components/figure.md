@@ -18,4 +18,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | children | `ReactNode` | yes |  | The image element — a plain <img> or a framework image component |
 | caption | `ReactNode` | no |  | Caption rendered below the image |
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support. It is attached to the zoom button wrapping the image, not to the `<figure>`, so it replaces the native `onClick` on the root. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `HTMLButtonElement` (typescript), `MouseEventHandler` (react), `ReactNode` (react).

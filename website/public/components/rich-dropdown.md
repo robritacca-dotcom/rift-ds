@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Field label text |
-| placeholder | `string` | no | `Select an option` | Placeholder when no value selected |
+| placeholder | `string` | no | `'Select an option'` | Placeholder when no value selected |
 | value | `string` | no |  | Selected option value for controlled use. Pair with `onValueChange`. |
 | defaultValue | `string` | no |  | Initially selected option value for uncontrolled use. |
 | options | `RichDropdownOption[]` | yes |  | The options on offer, in display order. |
@@ -25,5 +25,40 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
 | onValueChange | `((value: string) => void)` | no |  | Fires with the newly selected option's value. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | name | `string` | no |  | Form field name. When set, the selected option's `value` submits with an enclosing form through a hidden input (nothing while no value is set, nothing while disabled), as Combobox does. Also the fallback for the element id (`id \|\| name \|\| label`). |
+
+## Types
+
+### RichDropdownOption
+
+```ts
+interface RichDropdownOption {
+  /** Display name of the option, rendered in its own heading face. */
+  label: string;
+  /** Stable identifier reported through `onValueChange`. */
+  value: string;
+  /**
+   * CSS font-family stack this option's headings use — the option name
+   * renders in it. Falls back to the theme's heading face when omitted.
+   */
+  headingFont?: string;
+  /**
+   * CSS font-family stack this option's body text uses — the detail line
+   * renders in it. Falls back to the theme's body face when omitted.
+   */
+  bodyFont?: string;
+  /** Key colour shown as the option's swatch dot — any valid CSS colour. */
+  color?: string;
+  /**
+   * Corner radius for the swatch, so the dot can carry the option's corner
+   * language too — a sharp-cornered look gets a square swatch. Any CSS
+   * radius value (`'0px'`, `'4px'`); the default is a full circle.
+   */
+  swatchRadius?: string;
+  /** One-line supporting text, typically the font pairing's names. */
+  description?: string;
+  /** Whether this option can be chosen. */
+  disabled?: boolean;
+}
+```

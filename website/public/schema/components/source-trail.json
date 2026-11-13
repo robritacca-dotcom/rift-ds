@@ -21,7 +21,10 @@
           "type": "SourceTrailItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The sources, in the order the agent opened them."
+          "description": "The sources, in the order the agent opened them.",
+          "typeRefs": [
+            "SourceTrailItem"
+          ]
         },
         {
           "name": "title",
@@ -51,7 +54,10 @@
           "type": "Partial<Record<SourceTrailStatus, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Visually hidden text announcing each row's status after its source. Merged over the English defaults (Not opened yet, Reading now, Read)."
+          "description": "Visually hidden text announcing each row's status after its source. Merged over the English defaults (Not opened yet, Reading now, Read).",
+          "typeRefs": [
+            "SourceTrailStatus"
+          ]
         },
         {
           "name": "streaming",
@@ -88,7 +94,10 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each source's SourceChip. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each source's SourceChip. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "className",
@@ -100,5 +109,39 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "SourceTrailItem": {
+      "kind": "interface",
+      "definition": "interface SourceTrailItem {\n  /** The source name, passed through to the row's SourceChip. */\n  title: string;\n  /** Optional link to the source — the chip renders as an anchor. */\n  href?: string;\n  /** Leading icon for the chip — a Material Symbol name (string) or custom element (ReactNode). */\n  icon?: string | React.ReactNode;\n  /** Where the visit has got to. Drives the row's indicator; defaults to done. */\n  status?: SourceTrailStatus;\n  /** Supporting line, e.g. what the source contributed to the answer. */\n  detail?: string;\n}",
+      "description": "One source the agent opened while answering.",
+      "refs": [
+        "SourceTrailStatus"
+      ]
+    },
+    "SourceTrailStatus": {
+      "kind": "type",
+      "definition": "type SourceTrailStatus = 'pending' | 'active' | 'done';"
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

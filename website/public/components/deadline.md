@@ -17,14 +17,47 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | date | `DateInput` | yes |  | The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch. |
 | timeZone | `string` | no |  | The IANA zone the time is shown in, named after it ("4:00 PM PST"), such as `America/Los_Angeles`. Without it the time shows in the reader's own zone. |
-| display | `"both" \| "relative" \| "absolute"` | no | `relative` | `relative` writes the distance ("in 2 days"), `absolute` the date and time, `both` the two together. Defaults to `relative`. |
+| display | `"both" \| "relative" \| "absolute"` | no | `'relative'` | `relative` writes the distance ("in 2 days"), `absolute` the date and time, `both` the two together. Defaults to `relative`. |
 | thresholds | `DeadlineThresholds` | no |  | How close the deadline must be before it turns to the warning and then the error role. |
-| prefixLabel | `string` | no | `Due` | The word before the distance: "Due", "Closes", "Expires". Defaults to "Due". |
-| overdueLabel | `string` | no | `Overdue` | What a deadline that has passed says in place of the distance. Defaults to "Overdue". |
-| variant | `"text" \| "badge"` | no | `badge` | `badge` draws the Badge family's tinted pill; `text` writes it inline in the status text colour, for a sentence or a table cell. |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| prefixLabel | `string` | no | `'Due'` | The word before the distance: "Due", "Closes", "Expires". Defaults to "Due". |
+| overdueLabel | `string` | no | `'Overdue'` | What a deadline that has passed says in place of the distance. Defaults to "Overdue". |
+| variant | `"text" \| "badge"` | no | `'badge'` | `badge` draws the Badge family's tinted pill; `text` writes it inline in the status text colour, for a sentence or a table cell. |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | tick | `boolean` | no | `true` | Rewrite the distance as time passes, pausing while the page is hidden. Defaults to true; off when `now` is set. |
 | now | `DateInput` | no |  | The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot. |
 | onStatusChange | `((status: DeadlineStatus) => void)` | no |  | Called when the deadline moves to a new status as time passes, so a host can react (sort, notify). |
 | locale | `string` | no |  | The BCP 47 locale the distance and the date are written in. Defaults to the nearest LocaleProvider's, else `en-US`. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### DateInput
+
+A date, an ISO 8601 string, or milliseconds since the epoch. A bare `YYYY-MM-DD` is read as midnight UTC, so it never shifts a day.
+
+```ts
+type DateInput = Date | string | number;
+```
+
+### DeadlineStatus
+
+Where a deadline stands against now.
+
+```ts
+type DeadlineStatus = 'neutral' | 'warning' | 'error' | 'overdue';
+```
+
+### DeadlineThresholds
+
+How close a deadline must be for each warning, in milliseconds.
+
+```ts
+type DeadlineThresholds = {
+  /** Under this long to go, the deadline turns to the warning role. Defaults to three days. */
+  warning?: number;
+  /** Under this long to go, the deadline turns to the error role. Defaults to one day. */
+  critical?: number;
+};
+```
+
+Types from other packages: `Date` (typescript).

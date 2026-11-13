@@ -21,7 +21,10 @@
           "type": "ModelPickerModel[]",
           "typeKind": "array",
           "required": true,
-          "description": "The models on offer, in display order."
+          "description": "The models on offer, in display order.",
+          "typeRefs": [
+            "ModelPickerModel"
+          ]
         },
         {
           "name": "value",
@@ -79,7 +82,10 @@
           "typeKind": "array",
           "required": false,
           "description": "The effort levels on offer. Defaults to low, medium and high.",
-          "defaultExpression": "[\n  { label: 'Low', value: 'low' },\n  { label: 'Medium', value: 'medium' },\n  { label: 'High', value: 'high' },\n]"
+          "defaultExpression": "[\n  { label: 'Low', value: 'low' },\n  { label: 'Medium', value: 'medium' },\n  { label: 'High', value: 'high' },\n]",
+          "typeRefs": [
+            "ModelPickerEffortOption"
+          ]
         },
         {
           "name": "listLabel",
@@ -139,5 +145,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ModelPickerEffortOption": {
+      "kind": "interface",
+      "definition": "interface ModelPickerEffortOption {\n  /** Display label, e.g. \"Medium\". */\n  label: string;\n  /** Stable identifier reported through `onEffortChange`. */\n  value: string;\n}"
+    },
+    "ModelPickerModel": {
+      "kind": "interface",
+      "definition": "interface ModelPickerModel {\n  /** Display name, e.g. \"Fable 5\". */\n  label: string;\n  /** Stable identifier reported through `onValueChange`. */\n  value: string;\n  /** One line on what the model is good at or how fast it is. */\n  description?: string;\n  /** Small trailing tag, e.g. \"New\". */\n  badge?: string;\n  /** Whether this model can be chosen. */\n  disabled?: boolean;\n}"
+    }
+  }
 }

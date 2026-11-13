@@ -21,7 +21,10 @@
           "type": "Partial<ShaderParams>",
           "typeKind": "reference",
           "required": false,
-          "description": "Field parameters, merged over the shipped defaults, so passing one\nproperty changes one thing. Changing them never rebuilds the GL state."
+          "description": "Field parameters, merged over the shipped defaults, so passing one\nproperty changes one thing. Changing them never rebuilds the GL state.",
+          "typeRefs": [
+            "ShaderParams"
+          ]
         },
         {
           "name": "blobs",
@@ -29,7 +32,10 @@
           "typeKind": "array",
           "required": false,
           "description": "The light sources. Defaults to an eight-source composition: six on the\nambient tokens (`--color-ambient-*`, which follow the core accents unless a\ntheme re-points them) and two on surface tokens. Fewer than `BLOB_COUNT` entries is fine — unused slots park\noff-field; more are ignored, because the shader's uniform arrays are\nfixed-size.",
-          "defaultExpression": "[\n  { token: \"--color-ambient-1\", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },\n  { token: \"--color-ambient-2\", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },\n  { token: \"--color-ambient-3\", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },\n  { token: \"--color-bg-container-secondary\", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },\n  { token: \"--color-ambient-4\", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },\n  { token: \"--color-ambient-5\", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },\n  { token: \"--color-ambient-6\", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },\n  { token: \"--color-core-ui-secondary\", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },\n]"
+          "defaultExpression": "[\n  { token: \"--color-ambient-1\", size: 0.45, cx: 0.175, cy: 0.125, period: 18, phase: 0, weight: 1 },\n  { token: \"--color-ambient-2\", size: 0.55, cx: 0.125, cy: 0.125, period: 16, phase: 1, weight: 1 },\n  { token: \"--color-ambient-3\", size: 0.9, cx: 0.35, cy: 0.25, period: 22, phase: 0.5, weight: 1 },\n  { token: \"--color-bg-container-secondary\", size: 0.55, cx: 0.025, cy: 0.075, period: 14, phase: 1.5, weight: 1 },\n  { token: \"--color-ambient-4\", size: 0.55, cx: -0.125, cy: 0.475, period: 17, phase: 0.8, weight: 1 },\n  { token: \"--color-ambient-5\", size: 0.48, cx: 0.39, cy: -0.26, period: 19, phase: 0.3, weight: 1 },\n  { token: \"--color-ambient-6\", size: 0.3, cx: 0.35, cy: 0.3, period: 15, phase: 1.2, weight: 1 },\n  { token: \"--color-core-ui-secondary\", size: 0.75, cx: -0.125, cy: -0.025, period: 20, phase: 0.7, weight: 1 },\n]",
+          "typeRefs": [
+            "ShaderBlob"
+          ]
         },
         {
           "name": "enabled",
@@ -44,7 +50,10 @@
           "type": "((status: ShaderFieldStatus) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called whenever the renderer's status changes. Drive the fallback layer's\nvisibility from this — the component deliberately does not own one, since\nwhat to paint instead is a design decision, not a rendering one."
+          "description": "Called whenever the renderer's status changes. Drive the fallback layer's\nvisibility from this — the component deliberately does not own one, since\nwhat to paint instead is a design decision, not a rendering one.",
+          "typeRefs": [
+            "ShaderFieldStatus"
+          ]
         },
         {
           "name": "className",
@@ -56,5 +65,25 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ShaderBlob": {
+      "kind": "interface",
+      "definition": "interface ShaderBlob {\n  /**\n   * Semantic colour token, read from the canvas's computed style at runtime,\n   * so the field re-themes with `data-theme` and with any scoped custom-\n   * property override. A token nothing defines resolves to no colour — an\n   * invisible source, never an error.\n   */\n  token: string;\n  /** Disc diameter in container-width units. */\n  size: number;\n  /** Centre offset from the container centre, width units. */\n  cx: number;\n  /** Centre offset from the container centre, width units. */\n  cy: number;\n  /** Drift cycle in seconds, before `speed` is applied. */\n  period: number;\n  /** Phase offset, so sources never move in lockstep. */\n  phase: number;\n  /**\n   * Emission weight. Positive emits light; negative absorbs it, giving a\n   * shadow that occludes whatever shines behind it.\n   */\n  weight: number;\n}",
+      "description": "One light source in the field.\n\nThe coordinate space is the shader's (see field.glsl): origin at the\ncontainer centre, one unit = container width, y running downward. Centres\nare constants — nothing here is recomputed on resize."
+    },
+    "ShaderFieldStatus": {
+      "kind": "type",
+      "definition": "type ShaderFieldStatus = 'pending' | 'active' | 'unavailable';",
+      "description": "How the renderer has resolved.\n\n`pending` is the one that matters to a caller: the context is still coming\nup, so neither the field nor a fallback should be painted yet — showing a\nfallback here and swapping it a frame later reads as two backgrounds loading\nin sequence."
+    },
+    "ShaderParams": {
+      "kind": "interface",
+      "definition": "interface ShaderParams {\n  /** Overall opacity of the field, 0.1–1. */\n  intensity: number;\n  /** Domain-warp strength: how much fbm noise bends the field, 0–0.5. */\n  warp: number;\n  /** Noise frequency. Higher values give finer, busier structure, 0.5–6. */\n  scale: number;\n  /** Drift-rate multiplier on every blob's period, 0–4. */\n  speed: number;\n  /** Dither/film-grain amplitude, 0–0.4. Also what kills 8-bit banding. */\n  grain: number;\n  /** Anisotropic stretch: 0 renders discs, 1 renders diagonal streams, 0–1. */\n  streak: number;\n  /**\n   * Cursor-wake strength, 0–1. Defaults to 0 — the interaction is built and\n   * dormant, not absent. Raising it turns on the swirl and glow trail, and\n   * with them the loop's step up from 30fps to 60fps while a wake is alive.\n   */\n  react: number;\n  /**\n   * How much the composition resists shrinking with the container, 0–1.\n   *\n   * At 0 — the behaviour a CSS blob layer has — the whole\n   * field is fitted to whatever width it is given, so a phone shows the\n   * entire composition at phone scale: every source small, and more of them\n   * crowded into view than the look was built for. At 1 the field holds the\n   * scale it was composed at (`REFERENCE_WIDTH`) and a narrower container\n   * crops into it instead. Values between blend the two geometrically,\n   * keeping some of the shrink so colours still bleed together on a small\n   * screen. Above the reference width it does nothing.\n   *\n   * The default sits between the two, which suits a full-viewport background,\n   * read on a phone as a scene rather than a diagram; set it to 0 wherever\n   * the point is to see the whole composition, such as a small demo tile.\n   */\n  crop: number;\n}",
+      "description": "The eight tuneable properties of the field."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript"
+  }
 }

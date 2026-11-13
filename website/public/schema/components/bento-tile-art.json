@@ -29,7 +29,10 @@
             "waves"
           ],
           "required": false,
-          "description": "Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`."
+          "description": "Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`.",
+          "typeRefs": [
+            "BentoTileArtPattern"
+          ]
         },
         {
           "name": "className",
@@ -41,5 +44,12 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "BentoTileArtPattern": {
+      "kind": "type",
+      "definition": "type BentoTileArtPattern = 'dots' | 'lines' | 'rings' | 'grid' | 'waves' | 'rays';",
+      "description": "One pattern of the BentoTile art set, listed in the order tiles rotate through them."
+    }
+  }
 }

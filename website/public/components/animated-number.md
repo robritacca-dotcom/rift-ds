@@ -21,4 +21,4 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | locale | `string` | no |  | The BCP 47 locale the number is written in when no `format` is given, such as `de-DE` (`1.234,5`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | duration | `number` | no | `800` | Tween length in ms. Defaults to the shared `MOTION_COUNT_UP_MS` constant; an animation pace, so the tween is skipped entirely under reduced motion. |
 | animateOnMount | `boolean` | no | `true` | Counts up from zero on first render. Turn off to arrive settled and animate only on later changes. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |

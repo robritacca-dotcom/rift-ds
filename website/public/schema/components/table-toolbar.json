@@ -21,28 +21,40 @@
           "type": "TableToolbarColumn[]",
           "typeKind": "array",
           "required": false,
-          "description": "The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used."
+          "description": "The columns the bar filters and shows, for a bar over some other table. Inside a DataTable's `toolbar` the table's own columns are used.",
+          "typeRefs": [
+            "TableToolbarColumn"
+          ]
         },
         {
           "name": "filters",
           "type": "Filter[]",
           "typeKind": "array",
           "required": false,
-          "description": "The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set."
+          "description": "The filters, for controlled use. Inside a DataTable the table's filters are used unless this is set.",
+          "typeRefs": [
+            "DataTableFilter"
+          ]
         },
         {
           "name": "defaultFilters",
           "type": "Filter[]",
           "typeKind": "array",
           "required": false,
-          "description": "Starting filters, for uncontrolled use outside a DataTable."
+          "description": "Starting filters, for uncontrolled use outside a DataTable.",
+          "typeRefs": [
+            "DataTableFilter"
+          ]
         },
         {
           "name": "onFiltersChange",
           "type": "((filters: Filter[]) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every filter after one is added, changed or removed."
+          "description": "Fires with every filter after one is added, changed or removed.",
+          "typeRefs": [
+            "DataTableFilter"
+          ]
         },
         {
           "name": "search",
@@ -188,49 +200,70 @@
           "typeKind": "array",
           "required": false,
           "description": "The actions for the selected rows. Inside a DataTable with `selectable`, selecting a row turns the bar, at the same height, into the bulk bar: Clear, the count, Select all N, then these, the first non-destructive one and the first destructive one labelled and the rest in a More menu.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "TableToolbarBulkAction"
+          ]
         },
         {
           "name": "sorts",
           "type": "DataTableSort[]",
           "typeKind": "array",
           "required": false,
-          "description": "Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set."
+          "description": "Every sort, first sort first, for controlled use. Inside a DataTable the table's sorts are used unless this is set.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "defaultSorts",
           "type": "DataTableSort[]",
           "typeKind": "array",
           "required": false,
-          "description": "Initial sorts for uncontrolled use."
+          "description": "Initial sorts for uncontrolled use.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "onSortsChange",
           "type": "((sorts: DataTableSort[]) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every sort after the sort panel changes one."
+          "description": "Fires with every sort after the sort panel changes one.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "views",
           "type": "TableToolbarView[]",
           "typeKind": "array",
           "required": false,
-          "description": "Saved views, shown as tabs over the bar inside a DataTable: picking one\napplies its setup to the table, its tab shows a dot while the table no\nlonger matches it, and its menu saves, saves as new, resets, renames\nand deletes. For controlled use; store them however you like (each\n`view` is plain data). Pair with `onViewsChange`."
+          "description": "Saved views, shown as tabs over the bar inside a DataTable: picking one\napplies its setup to the table, its tab shows a dot while the table no\nlonger matches it, and its menu saves, saves as new, resets, renames\nand deletes. For controlled use; store them however you like (each\n`view` is plain data). Pair with `onViewsChange`.",
+          "typeRefs": [
+            "TableToolbarView"
+          ]
         },
         {
           "name": "defaultViews",
           "type": "TableToolbarView[]",
           "typeKind": "array",
           "required": false,
-          "description": "The saved views to start with, for uncontrolled use."
+          "description": "The saved views to start with, for uncontrolled use.",
+          "typeRefs": [
+            "TableToolbarView"
+          ]
         },
         {
           "name": "onViewsChange",
           "type": "((views: TableToolbarView[]) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every view after one is saved, added, renamed or deleted."
+          "description": "Fires with every view after one is saved, added, renamed or deleted.",
+          "typeRefs": [
+            "TableToolbarView"
+          ]
         },
         {
           "name": "activeView",
@@ -295,7 +328,10 @@
           "type": "TableToolbarAction",
           "typeKind": "reference",
           "required": false,
-          "description": "The page's main action (New project, Invite), drawn as the primary button at the bar's end."
+          "description": "The page's main action (New project, Invite), drawn as the primary button at the bar's end.",
+          "typeRefs": [
+            "TableToolbarAction"
+          ]
         },
         {
           "name": "secondaryActions",
@@ -303,7 +339,10 @@
           "typeKind": "array",
           "required": false,
           "description": "Actions beside the primary one (Export, Import), drawn as icon buttons before it, each named and tooltipped by its label; folded, they move into the More panel.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "TableToolbarAction"
+          ]
         },
         {
           "name": "actions",
@@ -317,21 +356,30 @@
           "type": "TableToolbarCommand",
           "typeKind": "reference",
           "required": false,
-          "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nA long request grows the composer to three rows, pushing the table down.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable."
+          "description": "The AI command: a button at the bar's start that turns the whole row into a\none-off composer, as selecting rows turns it into the bulk bar, whose\ntext your handler turns into a whole table setup. It reaches everything a\nview holds (filters, sorts, search, columns, pinning, grouping, density),\nso it can do in a sentence what the bar's other controls do one at a time.\nA long request grows the composer to three rows, pushing the table down.\nThe library calls no model; your handler does. A change or an error lands in\na toast, in the surrounding ToastProvider's stack if there is one, else in the\nbar's own at the bottom-right. Shows only inside a DataTable.",
+          "typeRefs": [
+            "TableToolbarCommand"
+          ]
         },
         {
           "name": "labels",
           "type": "Partial<TableToolbarLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "The bar's words, merged over their English defaults."
+          "description": "The bar's words, merged over their English defaults.",
+          "typeRefs": [
+            "TableToolbarLabels"
+          ]
         },
         {
           "name": "filterLabels",
           "type": "Partial<FilterLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "The filters' words, merged over their English defaults (inside a DataTable, over the table's)."
+          "description": "The filters' words, merged over their English defaults (inside a DataTable, over the table's).",
+          "typeRefs": [
+            "DataTableFilterLabels"
+          ]
         },
         {
           "name": "className",
@@ -343,5 +391,155 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DataTableFilter": {
+      "kind": "type",
+      "definition": "type DataTableFilter = Filter;",
+      "description": "One filter condition on one column, as the table and TableToolbar share it.",
+      "refs": [
+        "Filter"
+      ]
+    },
+    "DataTableFilterLabels": {
+      "kind": "type",
+      "definition": "type DataTableFilterLabels = FilterLabels;",
+      "description": "Every word a filter shows or announces, each defaulting to English.",
+      "refs": [
+        "FilterLabels"
+      ]
+    },
+    "DataTableSort": {
+      "kind": "interface",
+      "definition": "interface DataTableSort {\n  /** The column being sorted. */\n  key: string;\n  /** Sort direction. */\n  direction: 'asc' | 'desc';\n}"
+    },
+    "DataTableView": {
+      "kind": "type",
+      "definition": "type DataTableView = TableView;",
+      "description": "One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view.",
+      "refs": [
+        "TableView"
+      ]
+    },
+    "Filter": {
+      "kind": "interface",
+      "definition": "interface Filter {\n  /** Stable id, so a chip and its editor keep their place while the value changes. */\n  id: string;\n  /** The column's key. */\n  column: string;\n  /** How the value is compared. */\n  operator: FilterOperator;\n  /** What it is compared with; missing until it is picked. */\n  value?: FilterValue;\n}",
+      "description": "One condition on one column.",
+      "refs": [
+        "FilterOperator",
+        "FilterValue"
+      ]
+    },
+    "FilterKind": {
+      "kind": "type",
+      "definition": "type FilterKind = 'text' | 'number' | 'date' | 'enum' | 'tags' | 'boolean';",
+      "description": "The kinds of filter, each with its own operators. A typed column's kind follows its type; an untyped one's is read from its values."
+    },
+    "FilterLabels": {
+      "kind": "interface",
+      "definition": "interface FilterLabels {\n  /** An operator as a chip and the operator menu read it. */\n  operators: Record<FilterOperator, string>;\n  /** The toolbar's button that adds a filter. */\n  addFilter: string;\n  /** The editor's name, given the column's header. */\n  editor: (header: string) => string;\n  /** The operator field's name. */\n  operatorField: string;\n  /** The value field's name, given the column's header. */\n  valueField: (header: string) => string;\n  /** The first value of a `between`. */\n  from: string;\n  /** The second value of a `between`. */\n  to: string;\n  /** Placeholder and name of the search field over a list filter's choices. */\n  searchChoices: string;\n  /** Shown when the search matches none of a list filter's choices. */\n  noChoices: string;\n  /** Removes one filter, given its chip's text. */\n  remove: (chip: string) => string;\n  /** Removes every filter. */\n  clearAll: string;\n  /** A chip's placeholder for a value not picked yet. */\n  noValue: string;\n  /** Joins the two ends of a `between` on a chip. */\n  and: string;\n  /** Joins two or more chosen values on a chip, given how many past the first. */\n  more: (count: number) => string;\n  /** The header menu item that opens a column's filter. */\n  filterColumn: string;\n  /** Name of a filtered header's mark, given the header. */\n  filtered: (header: string) => string;\n  /** Announced when the filters change, given the rows that match. */\n  filteredAnnouncement: (count: number) => string;\n}",
+      "description": "Every word a filter shows or announces, each defaulting to English.",
+      "refs": [
+        "FilterOperator"
+      ]
+    },
+    "FilterOperator": {
+      "kind": "type",
+      "definition": "type FilterOperator =\n  | 'contains'\n  | 'notContains'\n  | 'is'\n  | 'isNot'\n  | 'startsWith'\n  | 'endsWith'\n  | 'eq'\n  | 'neq'\n  | 'lt'\n  | 'lte'\n  | 'gt'\n  | 'gte'\n  | 'between'\n  | 'before'\n  | 'after'\n  | 'isAnyOf'\n  | 'isNoneOf'\n  | 'hasAnyOf'\n  | 'hasAllOf'\n  | 'hasNoneOf'\n  | 'isEmpty'\n  | 'isNotEmpty'\n  | 'isChecked'\n  | 'isNotChecked';",
+      "description": "Every operator, across the kinds."
+    },
+    "FilterValue": {
+      "kind": "type",
+      "definition": "type FilterValue = string | number | [number | string | null, number | string | null] | string[] | null | undefined;",
+      "description": "A filter's value: text or a date for one-value operators, a number, a pair for `between`, a list for the set operators."
+    },
+    "TableToolbarAction": {
+      "kind": "interface",
+      "definition": "interface TableToolbarAction {\n  /** Stable id for the action. */\n  id: string;\n  /** What the action does, as its label (and its name and tooltip when the bar folds it to an icon). */\n  label: string;\n  /** Material Symbol name (string) or custom element; the folded bar's primary icon. Defaults to `add` there. */\n  icon?: React.ReactNode;\n  /** Runs the action. */\n  onSelect: () => void;\n  /** Whether the action is unavailable. */\n  disabled?: boolean;\n  /** On the primary action, the further actions its split button's menu offers (Import, a template); folded, they move into the More panel. */\n  menu?: TableToolbarAction[];\n}",
+      "description": "One of the bar's own actions: its primary action, or a secondary one beside it."
+    },
+    "TableToolbarBulkAction": {
+      "kind": "interface",
+      "definition": "interface TableToolbarBulkAction {\n  /** Stable id for the action. */\n  id: string;\n  /** What the action does, as its menu label. */\n  label: string;\n  /** Material Symbol name (string) or custom element. */\n  icon?: React.ReactNode;\n  /** Runs the action on the selection. */\n  onSelect: (selection: TableToolbarSelection) => void;\n  /** Marks a dangerous or irreversible action: drawn in the destructive colour and set apart at the bar's end. */\n  destructive?: boolean;\n  /** Whether the action is unavailable. */\n  disabled?: boolean;\n}",
+      "description": "One action the bulk bar offers for the selected rows.",
+      "refs": [
+        "TableToolbarSelection"
+      ]
+    },
+    "TableToolbarColumn": {
+      "kind": "interface",
+      "definition": "interface TableToolbarColumn {\n  /** The column's key. */\n  key: string;\n  /** Its header text. */\n  label: string;\n  /** How it filters: `text`, `number`, `date`, `enum` (choices) or `tags`. Defaults to `text`, or `enum` when it has options. */\n  filterType?: FilterKind;\n  /** The choices an `enum` or `tags` filter offers. */\n  options?: { value: string; label: string }[];\n  /** Whether the Columns panel may hide it. Defaults to true. */\n  hideable?: boolean;\n  /** Whether the Columns panel may move it, DataTable's word for the same. Defaults to true. */\n  reorderable?: boolean;\n  /** Whether it can be filtered. Defaults to true. */\n  filterable?: boolean;\n  /** Whether it can be sorted. Defaults to true. */\n  sortable?: boolean;\n  /** Whether the rows can be grouped by it. Defaults to false. */\n  groupable?: boolean;\n}",
+      "description": "One column as a TableToolbar over some other table is told about it.",
+      "refs": [
+        "FilterKind"
+      ]
+    },
+    "TableToolbarCommand": {
+      "kind": "interface",
+      "definition": "interface TableToolbarCommand {\n  /** Turns the reader's text into a setup. A rejection shows as an error toast, using the error's message, and leaves the table alone. */\n  onSubmit: (request: TableToolbarCommandRequest) => Promise<TableToolbarCommandResult>;\n}",
+      "description": "The AI command in a TableToolbar.",
+      "refs": [
+        "TableToolbarCommandRequest",
+        "TableToolbarCommandResult"
+      ]
+    },
+    "TableToolbarCommandRequest": {
+      "kind": "interface",
+      "definition": "interface TableToolbarCommandRequest {\n  /** What the reader typed. */\n  text: string;\n  /** The table's setup right now, so a command can refine it. */\n  view: TableView;\n  /** The columns, as the bar knows them: keys, labels, filter kinds and choices. */\n  columns: ToolbarColumn[];\n  /** Aborts when the table leaves the page while the command runs. */\n  signal: AbortSignal;\n}",
+      "description": "What a TableToolbar's command handler is given.",
+      "refs": [
+        "TableView",
+        "ToolbarColumn"
+      ]
+    },
+    "TableToolbarCommandResult": {
+      "kind": "interface",
+      "definition": "interface TableToolbarCommandResult {\n  /** The whole setup to apply; applying replaces the setup, and leaving it out changes nothing. */\n  view?: TableView;\n  /** What was done or found. A toast carries it, with an Undo when the setup changed; a setup that changed with no message takes the `commandApplied` label. */\n  message?: string;\n}",
+      "description": "What a TableToolbar's command handler answers with.",
+      "refs": [
+        "TableView"
+      ]
+    },
+    "TableToolbarLabels": {
+      "kind": "interface",
+      "definition": "interface TableToolbarLabels {\n  /** The bar's accessible name. */\n  toolbar: string;\n  /** The search field's placeholder and name. */\n  search: string;\n  /** The Columns button, its panel and the column list's name. */\n  columns: string;\n  /** The Columns panel's Show all button. */\n  showAll: string;\n  /** The density switch's name. */\n  density: string;\n  /** The density switch's default segment. */\n  densityDefault: string;\n  /** The density switch's compact segment. */\n  densityCompact: string;\n  /** The result count, given the rows that match and the rows in all. */\n  count: (shown: number, total: number) => string;\n  /** The Filter icon's name, given how many filters are on. */\n  filters: (count: number) => string;\n  /** The title of the filter panel when a phone opens it as a sheet. */\n  filterSheet: string;\n  /** The folded bar's filter panel button that adds a filter. */\n  addFilter: string;\n  /** The chip the filters that do not fit fold into, given how many. */\n  moreFilters: (count: number) => string;\n  /** The More button, shown when the bar is folded, whose panel holds the secondary actions and the density switch. */\n  more: string;\n  /** The More panel's heading over the secondary actions it holds when the bar is folded. */\n  actionsSection: string;\n  /** The Sort button, given how many sorts are set. */\n  sort: (count: number) => string;\n  /** The view tabs' name. */\n  views: string;\n  /** The active view's menu button, given its name and whether the table has moved on from it (the tab's dot, said aloud). */\n  viewMenu: (name: string, unsaved: boolean) => string;\n  /** The view menu's items. */\n  saveView: string;\n  saveAsNewView: string;\n  resetView: string;\n  renameView: string;\n  deleteView: string;\n  /** The button that saves the table's setup as a new view, and a new view's name, given its number. */\n  newView: string;\n  newViewName: (count: number) => string;\n  /** The rename field's name, and its buttons. */\n  viewName: string;\n  saveName: string;\n  cancelRename: string;\n  /** The Group button, given whether the rows are grouped. */\n  group: (grouped: boolean) => string;\n  /** The Group panel's column field. */\n  groupBy: string;\n  /** The Group panel's choice for no grouping. */\n  noGrouping: string;\n  /** The Group panel's buttons that close and open every group. */\n  collapseAll: string;\n  expandAll: string;\n  /** The sort panel's button that adds a sort. */\n  addSort: string;\n  /** The sort panel's button that clears every sort. */\n  clearSorts: string;\n  /** A sort row's column field. */\n  sortColumn: string;\n  /** A sort row's direction switch, and its two choices. */\n  sortDirection: string;\n  ascending: string;\n  descending: string;\n  /** Removes one sort, given its column's header. */\n  removeSort: (column: string) => string;\n  /** Name of a sort row's move grip, given its column's header. */\n  moveSort: (column: string) => string;\n  /** Announced when a sort row moves, given its column, its new rank and how many sorts there are. */\n  movedSort: (column: string, rank: number, count: number) => string;\n  /** The bulk bar's count and its name, given how many rows are selected. */\n  selected: (count: number) => string;\n  /** The bulk bar's count once every matching row is selected, given how many. */\n  allSelected: (count: number) => string;\n  /** The command button's label. */\n  command: string;\n  /** Closes the command's row and brings the bar back. */\n  commandClose: string;\n  /** The command composer's placeholder. */\n  commandPlaceholder: string;\n  /** The command composer's send button. */\n  commandSend: string;\n  /** Shown when a command changes the table without a message of its own. */\n  commandApplied: string;\n  /** Shown when a command fails without a message of its own. */\n  commandFailed: string;\n  /** Puts the table back as it was before the last command. */\n  commandUndo: string;\n  /** Closes a command's toast in the bar's own stack; inside a ToastProvider, its `dismissLabel` applies instead. */\n  commandDismiss: string;\n  /** The bulk bar's menu of the actions that do not fit. */\n  moreBulkActions: string;\n  /** The bulk bar's button that selects every matching row, given how many match. */\n  selectAll: (count: number) => string;\n  /** The bulk bar's button that clears the selection. */\n  clearSelection: string;\n  /** On a phone, the stop in the bar's own row that hands the keyboard to the bulk bar floating at the foot of the screen, given how many rows are selected. */\n  goToBulkBar: (count: number) => string;\n  /** Name of a column's move grip in the Columns panel, given its header. */\n  moveColumn: (label: string) => string;\n  /** Announced after the panel moves a column, given its header, its new position and the column count. */\n  movedColumn: (label: string, position: number, count: number) => string;\n}",
+      "description": "Every word the control bar shows or announces, beyond the filters', each defaulting to English."
+    },
+    "TableToolbarSelection": {
+      "kind": "interface",
+      "definition": "interface TableToolbarSelection {\n  /** The selected row ids. */\n  ids: string[];\n  /** Whether every matching row is selected. */\n  allMatching: boolean;\n  /** Matching rows left out of an `allMatching` selection. */\n  except: string[];\n}",
+      "description": "What a bulk action runs on. `ids` lists every selected row. `allMatching`\nsays the selection is every row that matches the search and filters,\nwhich a server can act on as a query rather than a list, leaving out\n`except`. A table that holds every row resolves `ids` in full either way."
+    },
+    "TableToolbarView": {
+      "kind": "interface",
+      "definition": "interface TableToolbarView {\n  /** Stable id for the view. */\n  id: string;\n  /** The view's name, shown as its tab's label. */\n  label: string;\n  /** The table's setup the view holds. */\n  view: DataTableView;\n}",
+      "description": "One saved view of the table: its label and its setup.",
+      "refs": [
+        "DataTableView"
+      ]
+    },
+    "TableView": {
+      "kind": "interface",
+      "definition": "interface TableView {\n  /** The view format's version, so a stored view can be read by a later one. */\n  version: 1;\n  /** The sorts, first sort first. */\n  sorts?: { key: string; direction: 'asc' | 'desc' }[];\n  /** The filters. */\n  filters?: Filter[];\n  /** The search text. */\n  search?: string;\n  /** The hidden columns' keys. */\n  hiddenColumns?: string[];\n  /** Every column key in display order. */\n  columnOrder?: string[];\n  /** The columns pinned to either edge. */\n  columnPinning?: { start?: string[]; end?: string[] };\n  /** The column widths in pixels, by key. */\n  columnWidths?: Record<string, number>;\n  /** The column keys the rows are grouped by. */\n  grouping?: string[];\n  /** The density. */\n  size?: 'default' | 'compact';\n  /** Rows per page. */\n  pageSize?: number;\n}",
+      "description": "One saved setup of a table. Every field is optional: a view leaves out what it does not set.",
+      "refs": [
+        "Filter"
+      ]
+    },
+    "ToolbarColumn": {
+      "kind": "interface",
+      "definition": "interface ToolbarColumn {\n  /** The column's key. */\n  key: string;\n  /** Its header text. */\n  label: string;\n  /** Whether the columns panel may hide it. */\n  hideable: boolean;\n  /** Whether the columns panel may move it. */\n  movable: boolean;\n  /** Whether it can be filtered. */\n  filterable: boolean;\n  /** Whether it can be sorted. */\n  sortable: boolean;\n  /** Whether the rows can be grouped by it. */\n  groupable: boolean;\n  /** Its filter kind. */\n  kind: FilterKind;\n  /** The values a choice filter offers: the column's options, else the values it holds. */\n  options: { value: string; label: string }[];\n}",
+      "description": "One column as the control bar sees it.",
+      "refs": [
+        "FilterKind"
+      ]
+    }
+  },
+  "externalTypes": {
+    "AbortSignal": "typescript",
+    "Partial": "typescript",
+    "Promise": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

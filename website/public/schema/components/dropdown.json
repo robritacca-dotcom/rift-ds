@@ -50,14 +50,20 @@
           "type": "DropdownOption[]",
           "typeKind": "array",
           "required": true,
-          "description": "Available options (flat list)"
+          "description": "Available options (flat list)",
+          "typeRefs": [
+            "DropdownOption"
+          ]
         },
         {
           "name": "groups",
           "type": "DropdownOptionGroup[]",
           "typeKind": "array",
           "required": false,
-          "description": "Optional grouped options — when provided, renders groups with labels and separators"
+          "description": "Optional grouped options — when provided, renders groups with labels and separators",
+          "typeRefs": [
+            "DropdownOptionGroup"
+          ]
         },
         {
           "name": "size",
@@ -177,5 +183,21 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DropdownOption": {
+      "kind": "interface",
+      "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+    },
+    "DropdownOptionGroup": {
+      "kind": "interface",
+      "definition": "interface DropdownOptionGroup {\n  /** Group heading */\n  label: string;\n  /** Options within the group */\n  options: DropdownOption[];\n}",
+      "refs": [
+        "DropdownOption"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

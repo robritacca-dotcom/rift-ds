@@ -17,12 +17,35 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `string` | yes |  | The source name, e.g. "Design tokens quarterly". Truncates with an ellipsis when long. Note: this shadows the native `title` tooltip attribute, which SourceChip does not expose. |
 | index | `number` | no |  | Citation number, rendered as a leading numeral in its own small badge circle. Wins the leading slot over `logo` and `icon`. |
-| icon | `ReactNode` | no | `language` | The glyph for a source with neither a number nor a logo — a Material Symbol name (string) or custom element (ReactNode). Defaults to a globe, so the leading slot is never empty. |
+| icon | `string \| ReactNode` | no | `'language'` | The glyph for a source with neither a number nor a logo — a Material Symbol name (string) or custom element (ReactNode). Defaults to a globe, so the leading slot is never empty. |
 | href | `string` | no |  | Optional href — renders as an `<a>` instead of a `<span>`. |
 | excerpt | `string` | no |  | The passage the answer drew on. Setting it gives the chip a preview panel that opens on hover, focus or press: the full title over this excerpt. Without an `href` the chip then renders as a `<button>`, so the preview is reachable from the keyboard. |
 | source | `string` | no |  | Where the source lives, shown as the preview's top line, e.g. "docs.acme.com". Only rendered with `excerpt`. |
-| logo | `ReactNode` | no |  | The source's logo or favicon — an image URL (string) or a custom element (ReactNode), cropped to a circle. It fills the chip's leading slot when there is no `index`, and always leads the preview's top line. Decorative: the title and `source` text carry the name. |
+| logo | `string \| ReactNode` | no |  | The source's logo or favicon — an image URL (string) or a custom element (ReactNode), cropped to a circle. It fills the chip's leading slot when there is no `index`, and always leads the preview's top line. Decorative: the title and `source` text carry the name. |
 | meta | `string` | no |  | A short trailing fact for the preview's top line, e.g. "Updated 3 days ago". Only rendered with `excerpt`. |
 | locale | `string` | no |  | The BCP 47 locale the index numeral is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Types
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).

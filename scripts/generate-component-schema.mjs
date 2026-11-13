@@ -22,14 +22,23 @@
  *   then present), `primitive` for string/number/boolean, `array` for one
  *   top-level member ending in [] or Array<…>, `function` for one member
  *   with an arrow or an EventHandler name, `reference` for one capitalised
- *   type name the .d.ts defines (ReactNode, LinkComponent, DataTableSort;
- *   not expanded here, by decision), and `other` for anything mixed.
+ *   type name (ReactNode, LinkComponent, DataTableSort), and `other` for
+ *   anything mixed.
+ *
+ *   types — every type the props reach, defined from the source, and
+ *   externalTypes, the outside ones named with their package, carried over
+ *   from assembleComponentApi() (scripts/component-types.mjs owns the walk).
+ *   A type name in a prop's type is always one or the other, held by
+ *   validate-component-api.mjs. The type string itself is never expanded.
  *
  *   default — the source default as a value when it is a literal (`default`:
- *   a number, a boolean, null, an enum member, or a plain string on a string
- *   prop), and otherwise as source text (`defaultExpression`: a function,
- *   `50 * 1024 * 1024`, `inline ? 1 : 8`, a reference to another prop, or a
- *   string on a prop with a wider type). component-api.generated.ts keeps the raw docgen text untouched.
+ *   a number, a boolean, null, an enum member, or a string literal on a prop
+ *   of any type), and otherwise as source text (`defaultExpression`: a
+ *   function, `50 * 1024 * 1024`, `inline ? 1 : 8`, a template string or a
+ *   reference to another prop). validate-json-schemas.mjs fails on a
+ *   `defaultExpression` that is only a quoted string, so a literal can never
+ *   slide back into the expression slot. component-api.generated.ts keeps
+ *   the raw docgen text untouched.
  *
  * Two properties this surface must keep, or the build breaks:
  *
@@ -122,8 +131,6 @@ export function typeKindOf(prop) {
   return 'other';
 }
 
-const EXPRESSION_MARKS = ['=>', '(', '{', '[', '`', ' ? ', ' * '];
-
 /** The default as `{ default }` or `{ defaultExpression }`, or `{}` for none. */
 export function defaultOf(prop, typeKind) {
   const raw = prop.defaultValue;
@@ -134,13 +141,14 @@ export function defaultOf(prop, typeKind) {
   if (text === 'null') return { default: null };
   const unquoted = text.replace(/^(['"])(.*)\1$/s, '$2');
   if (typeKind === 'enum' && prop.values.includes(unquoted)) return { default: unquoted };
-  if (
-    typeKind === 'primitive' &&
-    prop.type.trim() === 'string' &&
-    !EXPRESSION_MARKS.some((mark) => unquoted.includes(mark))
-  ) {
-    return { default: unquoted };
-  }
+  // component-api's defaultValue is source text (generate-component-api.mjs
+  // quotes a code string default again), so a string literal is a value
+  // whatever the prop's type: `'Answers may be
+  // wrong.'` on a ReactNode prop, or `'Close chat'` on a string-or-function
+  // label, is still exactly that string. Only a quote pair with no other
+  // quote of its kind inside counts, so `'a' + b` stays an expression.
+  const literal = text.match(/^(['"])((?:\\.|(?!\1)[^\\])*)\1$/s);
+  if (literal) return { default: literal[2].replace(/\\(.)/gs, '$1') };
   return { defaultExpression: text };
 }
 
@@ -152,6 +160,7 @@ function propSchema(prop) {
   out.description = prop.description;
   Object.assign(out, defaultOf(prop, typeKind));
   if (prop.deprecated) out.deprecated = prop.deprecated;
+  if (prop.typeRefs) out.typeRefs = prop.typeRefs;
   return out;
 }
 
@@ -177,6 +186,8 @@ function componentSchema(entry) {
       ...(exported.deprecated ? { deprecated: exported.deprecated } : {}),
       props: exported.props.map(propSchema),
     })),
+    ...(entry.types ? { types: entry.types } : {}),
+    ...(entry.externalTypes ? { externalTypes: entry.externalTypes } : {}),
   };
 }
 

@@ -21,7 +21,10 @@
           "type": "ToggleGroupItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Available items"
+          "description": "Available items",
+          "typeRefs": [
+            "ToggleGroupItem"
+          ]
         },
         {
           "name": "value",
@@ -122,5 +125,11 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ToggleGroupItem": {
+      "kind": "interface",
+      "definition": "interface ToggleGroupItem {\n  /** Unique value */\n  value: string;\n  /** Display label or icon name (Material Symbols) */\n  label: string;\n  /** Use Material Symbol icon instead of text */\n  icon?: boolean;\n}"
+    }
+  }
 }

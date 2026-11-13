@@ -17,9 +17,30 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | level | `1 \| 2 \| 4 \| 3 \| 5 \| 6` | no | `2` | The heading's place in the document outline, which sets the element (`h1` to `h6`). Choose it for the outline, never for the size. |
 | tier | `HeadingTier` | no |  | The type style it wears, apart from `level`, so a card's `h3` can look like a small title and a page's `h1` like a display line. Defaults to the level's own: heading-1 to heading-3 for levels 1 to 3, title-body below. |
-| tone | `"default" \| "neutral"` | no | `default` | The colour role: `default` takes the tier's own (the display or heading text colour a theme can tone), `neutral` the secondary text colour for a quieter title. |
+| tone | `"default" \| "neutral"` | no | `'default'` | The colour role: `default` takes the tier's own (the display or heading text colour a theme can tone), `neutral` the secondary text colour for a quieter title. |
 | truncate | `boolean` | no | `false` | Keep the heading on one line, ending in an ellipsis where it runs out of room. The full text stays in the accessible name. |
 | balance | `boolean` | no | `false` | Balance the lines of a heading that wraps, so the last line is never a lone word. |
 | align | `"center" \| "start" \| "end"` | no |  | Where the text sits on the line, along the reading direction. |
 | children | `ReactNode` | no |  | The heading's text. |
-| className | `string` | no | `` | Additional CSS classes. |
+| className | `string` | no | `''` | Additional CSS classes. |
+
+## Types
+
+### HeadingTier
+
+A heading type style, named as the type scale names it, from the largest.
+
+```ts
+type HeadingTier =
+  | 'mega-1'
+  | 'mega-2'
+  | 'display-1'
+  | 'display-2'
+  | 'sub-display'
+  | 'heading-1'
+  | 'heading-2'
+  | 'heading-3'
+  | 'title-body';
+```
+
+Types from other packages: `ReactNode` (react).

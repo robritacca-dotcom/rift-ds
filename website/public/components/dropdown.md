@@ -16,12 +16,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Dropdown label text |
-| placeholder | `string` | no | `Select an option` | Placeholder when no value selected |
+| placeholder | `string` | no | `'Select an option'` | Placeholder when no value selected |
 | value | `string` | no |  | Currently selected value, controlled. Leave undefined to let the dropdown keep its own selection, seeded from `defaultValue`. |
 | defaultValue | `string` | no |  | Selected value on first render when uncontrolled (`value` undefined). |
 | options | `DropdownOption[]` | yes |  | Available options (flat list) |
 | groups | `DropdownOptionGroup[]` | no |  | Optional grouped options — when provided, renders groups with labels and separators |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | disabled | `boolean` | no | `false` | Whether the dropdown is disabled |
 | required | `boolean` | no | `false` | Whether the dropdown is required |
 | error | `boolean` | no | `false` | Error state |
@@ -30,7 +30,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | open | `boolean` | no |  | Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself. |
 | defaultOpen | `boolean` | no | `false` | Whether the list starts open when uncontrolled (`open` undefined). |
 | onOpenChange | `((open: boolean) => void)` | no |  | Fires when the list opens or closes, with the new state. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((value: string) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
 | name | `string` | no |  | Form field name. When set, the selected option's `value` submits with an enclosing form through a hidden input (nothing while no value is set, nothing while disabled), as Combobox does. Also the fallback for the element id (`id \|\| name \|\| label`). |
@@ -39,4 +39,45 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### DropdownOption
+
+```ts
+interface DropdownOption {
+  /** Display label */
+  label: string;
+  /** Option value */
+  value: string;
+  /**
+   * CSS font-family stack to render this option's label in, so a typeface
+   * can preview itself in a font picker. Applies to the option row and to
+   * the closed trigger while the option is selected; omitted, the label
+   * keeps the theme's own face.
+   */
+  font?: string;
+  /**
+   * Icon drawn before the label, in the option row and on the closed
+   * trigger while the option is selected — Material Symbol name (string)
+   * or custom element (ReactNode).
+   */
+  icon?: string | React.ReactNode;
+  /** Whether this option is disabled */
+  disabled?: boolean;
+}
+```
+
+### DropdownOptionGroup
+
+```ts
+interface DropdownOptionGroup {
+  /** Group heading */
+  label: string;
+  /** Options within the group */
+  options: DropdownOption[];
+}
+```
+
+Types from other packages: `ReactNode` (react).

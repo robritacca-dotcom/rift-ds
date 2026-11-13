@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | value | `string` | yes |  | The colour this swatch shows — any valid CSS colour, typically a hex value |
 | label | `string` | no |  | Accessible name for the swatch. Defaults to the colour value, which is meaningful but terse — prefer a human name ("Teal 07") when you have one. |
 | selected | `boolean` | no | `false` | Selected state — renders the selection ring and sets aria-pressed |
-| size | `"default" \| "compact"` | no | `default` | Swatch size |
-| shape | `"circle" \| "square"` | no | `circle` | Corner treatment — circle matches the site's preset grids; square suits picker triggers |
+| size | `"default" \| "compact"` | no | `'default'` | Swatch size |
+| shape | `"circle" \| "square"` | no | `'circle'` | Corner treatment — circle matches the site's preset grids; square suits picker triggers |
 | disabled | `boolean` | no | `false` | Whether the swatch is disabled |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |

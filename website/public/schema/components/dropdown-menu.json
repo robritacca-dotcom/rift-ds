@@ -28,7 +28,10 @@
           "type": "DropdownMenuEntry[]",
           "typeKind": "array",
           "required": true,
-          "description": "Menu entries (items, groups, separators)"
+          "description": "Menu entries (items, groups, separators)",
+          "typeRefs": [
+            "DropdownMenuEntry"
+          ]
         },
         {
           "name": "align",
@@ -81,7 +84,10 @@
           "type": "Partial<Record<string, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard."
+          "description": "Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard.",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
         },
         {
           "name": "className",
@@ -93,5 +99,50 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DropdownMenuEntry": {
+      "kind": "type",
+      "definition": "type DropdownMenuEntry =\n  | DropdownMenuItem\n  | DropdownMenuSeparator\n  | DropdownMenuGroup;",
+      "refs": [
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuSeparator"
+      ]
+    },
+    "DropdownMenuGroup": {
+      "kind": "interface",
+      "definition": "interface DropdownMenuGroup {\n  type: 'group';\n  /** Section heading */\n  label: string;\n  /** Items within the group */\n  items: DropdownMenuEntry[];\n}",
+      "refs": [
+        "DropdownMenuEntry"
+      ]
+    },
+    "DropdownMenuItem": {
+      "kind": "interface",
+      "definition": "interface DropdownMenuItem {\n  type?: 'item';\n  /** Display label */\n  label: string;\n  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */\n  description?: string;\n  /** Keyboard shortcut hint as literal text (e.g. \"⇧ ⌘ P\"). `keys` writes it for the reader's platform instead. */\n  shortcut?: string;\n  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */\n  iconRight?: string | React.ReactNode;\n  /** Disabled state */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */\n  destructive?: boolean;\n  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */\n  selected?: boolean;\n  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */\n  checked?: boolean;\n  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */\n  closeOnSelect?: boolean;\n  /** Click handler */\n  onClick?: () => void;\n  /** Nested sub-menu items */\n  children?: DropdownMenuEntry[];\n}",
+      "refs": [
+        "DropdownMenuEntry",
+        "Shortcut"
+      ]
+    },
+    "DropdownMenuSeparator": {
+      "kind": "interface",
+      "definition": "interface DropdownMenuSeparator {\n  type: 'separator';\n}"
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

@@ -43,7 +43,10 @@
           ],
           "required": false,
           "description": "What kind of file it is, which picks the type mark: a coloured lettered\nglyph for the well-known formats, a neutral extension badge for the\nrest. Derive it with `getFileKind`.",
-          "default": "generic"
+          "default": "generic",
+          "typeRefs": [
+            "FileKind"
+          ]
         },
         {
           "name": "typeLabel",
@@ -64,7 +67,10 @@
           ],
           "required": false,
           "description": "Where the file is in its life. Anything but `ready` shows the name with a status line.",
-          "default": "ready"
+          "default": "ready",
+          "typeRefs": [
+            "AttachmentStatus"
+          ]
         },
         {
           "name": "progress",
@@ -190,5 +196,20 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AttachmentStatus": {
+      "kind": "type",
+      "definition": "type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';",
+      "description": "Where an attachment is in its life: usable, on its way, failed, or gone."
+    },
+    "FileKind": {
+      "kind": "type",
+      "definition": "type FileKind =\n  | 'pdf'\n  | 'document'\n  | 'spreadsheet'\n  | 'presentation'\n  | 'image'\n  | 'audio'\n  | 'video'\n  | 'archive'\n  | 'code'\n  | 'text'\n  | 'pasted'\n  | 'generic';"
+    }
+  },
+  "externalTypes": {
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react"
+  }
 }

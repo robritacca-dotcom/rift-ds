@@ -49,7 +49,10 @@
           "type": "MentionItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The items to list, already filtered and ordered."
+          "description": "The items to list, already filtered and ordered.",
+          "typeRefs": [
+            "MentionItem"
+          ]
         },
         {
           "name": "activeId",
@@ -70,7 +73,10 @@
           "type": "((item: MentionItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the item a person chose.\nNote: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose."
+          "description": "Fires with the item a person chose.\nNote: this replaces the native `onSelect` text-selection event, which MentionMenu does not expose.",
+          "typeRefs": [
+            "MentionItem"
+          ]
         },
         {
           "name": "query",
@@ -120,7 +126,10 @@
           "type": "MentionSource[]",
           "typeKind": "array",
           "required": true,
-          "description": "The sources whose items count as mentions in this text."
+          "description": "The sources whose items count as mentions in this text.",
+          "typeRefs": [
+            "MentionSource"
+          ]
         },
         {
           "name": "className",
@@ -132,5 +141,23 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "MentionItem": {
+      "kind": "type",
+      "definition": "type MentionItem = {\n  /** Stable identity, unique within its source. */\n  id: string;\n  /** The name shown in the menu and written into the text after the trigger character. */\n  label: string;\n  /** A quieter second phrase on the same row: a role, a path, what a skill does. */\n  description?: string;\n  /** Leading mark: a Material Symbol name, or any node (an Avatar). Decorative. */\n  icon?: string | React.ReactNode;\n  /** Extra words the filter matches on besides the label. */\n  keywords?: string[];\n  /** Listed but not choosable. */\n  disabled?: boolean;\n};",
+      "description": "One thing a person can reference: a teammate, a file, a skill."
+    },
+    "MentionSource": {
+      "kind": "type",
+      "definition": "type MentionSource = {\n  /** The single character that opens this source. */\n  trigger: string;\n  /** The items it offers. */\n  items: MentionItem[];\n  /** Accessible name for this source's menu (\"People\", \"Skills\"). */\n  label?: string;\n};",
+      "description": "Everything one trigger character opens: `@` for entities, `/` for skills.",
+      "refs": [
+        "MentionItem"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

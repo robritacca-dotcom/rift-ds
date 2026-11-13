@@ -136,7 +136,10 @@
             "6"
           ],
           "required": false,
-          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
+          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`.",
+          "typeRefs": [
+            "Weekday"
+          ]
         },
         {
           "name": "className",
@@ -148,5 +151,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "Weekday": {
+      "kind": "type",
+      "definition": "type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "A day of the week as `Date.getDay()` numbers it: 0 is Sunday, 6 is Saturday."
+    }
+  },
+  "externalTypes": {
+    "Date": "typescript"
+  }
 }

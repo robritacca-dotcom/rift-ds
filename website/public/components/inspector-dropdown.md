@@ -22,6 +22,47 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | groups | `DropdownOptionGroup[]` | no |  | Optional grouped options. When provided, renders groups with labels and separators. |
 | placeholder | `string` | no |  | Shown on the right when nothing is selected. |
 | disabled | `boolean` | no | `false` | Whether the dropdown is disabled. |
-| size | `"default" \| "compact"` | no | `default` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
+| size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value. |
-| className | `string` | no | `` | Additional CSS classes, applied to the wrapper. |
+| className | `string` | no | `''` | Additional CSS classes, applied to the wrapper. |
+
+## Types
+
+### DropdownOption
+
+```ts
+interface DropdownOption {
+  /** Display label */
+  label: string;
+  /** Option value */
+  value: string;
+  /**
+   * CSS font-family stack to render this option's label in, so a typeface
+   * can preview itself in a font picker. Applies to the option row and to
+   * the closed trigger while the option is selected; omitted, the label
+   * keeps the theme's own face.
+   */
+  font?: string;
+  /**
+   * Icon drawn before the label, in the option row and on the closed
+   * trigger while the option is selected — Material Symbol name (string)
+   * or custom element (ReactNode).
+   */
+  icon?: string | React.ReactNode;
+  /** Whether this option is disabled */
+  disabled?: boolean;
+}
+```
+
+### DropdownOptionGroup
+
+```ts
+interface DropdownOptionGroup {
+  /** Group heading */
+  label: string;
+  /** Options within the group */
+  options: DropdownOption[];
+}
+```
+
+Types from other packages: `ReactNode` (react).

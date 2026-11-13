@@ -21,7 +21,10 @@
           "type": "DataTableColumn<R>[]",
           "typeKind": "array",
           "required": true,
-          "description": "Column definitions."
+          "description": "Column definitions.",
+          "typeRefs": [
+            "DataTableColumn"
+          ]
         },
         {
           "name": "rows",
@@ -133,49 +136,70 @@
           "type": "DataTableSort | null",
           "typeKind": "other",
           "required": false,
-          "description": "Sort state for controlled use. Pair with `onSortChange`; `null` means unsorted."
+          "description": "Sort state for controlled use. Pair with `onSortChange`; `null` means unsorted.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "defaultSort",
           "type": "DataTableSort",
           "typeKind": "reference",
           "required": false,
-          "description": "Initial sort state for uncontrolled use."
+          "description": "Initial sort state for uncontrolled use.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "onSortChange",
           "type": "((sort: DataTableSort | null) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the new sort state — `null` when a third click clears the sort."
+          "description": "Fires with the new sort state — `null` when a third click clears the sort.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "sorts",
           "type": "DataTableSort[]",
           "typeKind": "array",
           "required": false,
-          "description": "Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`."
+          "description": "Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "defaultSorts",
           "type": "DataTableSort[]",
           "typeKind": "array",
           "required": false,
-          "description": "Initial sorts for uncontrolled use."
+          "description": "Initial sorts for uncontrolled use.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "onSortsChange",
           "type": "((sorts: DataTableSort[]) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`."
+          "description": "Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`.",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "linkComponent",
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor."
+          "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "virtualize",
@@ -183,7 +207,7 @@
           "typeKind": "other",
           "required": false,
           "description": "Draws only the rows in view, so a table of thousands scrolls as\nsmoothly as one of ten. `auto` (the default) does it for an unpaged,\nungrouped table of more than 200 rows; `true` always; `false` never.\nA virtualised table scrolls inside its frame (`maxHeight`, 640px when\nunset), keeps its header in view, and still sends its first screen of\nrows in the server's HTML.",
-          "defaultExpression": "auto"
+          "default": "auto"
         },
         {
           "name": "onLoadMore",
@@ -242,7 +266,10 @@
           "type": "Partial<DataTableLoadLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button."
+          "description": "The words of loading and failed loads, merged over their English defaults: the skeleton rows' name, the loading row, a failed load's title and its retry button.",
+          "typeRefs": [
+            "DataTableLoadLabels"
+          ]
         },
         {
           "name": "renderDetail",
@@ -289,7 +316,10 @@
           "type": "((view: TableView) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view."
+          "description": "Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view.",
+          "typeRefs": [
+            "DataTableView"
+          ]
         },
         {
           "name": "grouping",
@@ -325,21 +355,30 @@
           "type": "Record<string, Total>",
           "typeKind": "reference",
           "required": false,
-          "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`."
+          "description": "Each column's footer calculation, by key, for controlled use. A column left out shows its `aggregate`, or nothing. Pair with `onTotalsChange`.",
+          "typeRefs": [
+            "DataTableTotal"
+          ]
         },
         {
           "name": "defaultTotals",
           "type": "Record<string, Total>",
           "typeKind": "reference",
           "required": false,
-          "description": "The footer calculations to start with, for uncontrolled use."
+          "description": "The footer calculations to start with, for uncontrolled use.",
+          "typeRefs": [
+            "DataTableTotal"
+          ]
         },
         {
           "name": "onTotalsChange",
           "type": "((totals: Record<string, Total>) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every footer calculation after one is picked."
+          "description": "Fires with every footer calculation after one is picked.",
+          "typeRefs": [
+            "DataTableTotal"
+          ]
         },
         {
           "name": "multiSort",
@@ -427,7 +466,10 @@
           "typeKind": "function",
           "required": false,
           "description": "Accessible name of a sortable header's button, given the column's header\ntext (its `key` when the header is not a string) and its current sort\ndirection, `null` when unsorted. Defaults to the header text alone: the\nsort state is the header's `aria-sort`, so naming it here too would read\nit twice.",
-          "defaultExpression": "(header: string) => header"
+          "defaultExpression": "(header: string) => header",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "sortAnnouncement",
@@ -435,7 +477,10 @@
           "typeKind": "function",
           "required": false,
           "description": "Announced when the sort changes, given the header text and the new direction, `null` when cleared. Defaults to \"Sorted by Name, ascending\" or \"Sort cleared\".",
-          "defaultExpression": "(header: string, direction: DataTableSort['direction'] | null) =>\n    direction === null ? 'Sort cleared' : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+          "defaultExpression": "(header: string, direction: DataTableSort['direction'] | null) =>\n    direction === null ? 'Sort cleared' : `Sorted by ${header}, ${direction === 'asc' ? 'ascending' : 'descending'}`",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "sortRankLabel",
@@ -443,7 +488,10 @@
           "typeKind": "function",
           "required": false,
           "description": "With several sorts, names a header's sort button after the first: given the `sortLabel` name, its rank and its direction. Defaults to \"Owner, sort 2, ascending\". The first sort's header carries `aria-sort` instead.",
-          "defaultExpression": "(name: string, rank: number, direction: DataTableSort['direction']) =>\n    `${name}, sort ${rank}, ${direction === 'asc' ? 'ascending' : 'descending'}`"
+          "defaultExpression": "(name: string, rank: number, direction: DataTableSort['direction']) =>\n    `${name}, sort ${rank}, ${direction === 'asc' ? 'ascending' : 'descending'}`",
+          "typeRefs": [
+            "DataTableSort"
+          ]
         },
         {
           "name": "pageAnnouncement",
@@ -474,14 +522,20 @@
           "type": "Pick<PaginationProps, \"aria-label\" | \"previousLabel\" | \"nextLabel\" | \"pageLabel\" | \"readoutLabel\">",
           "typeKind": "reference",
           "required": false,
-          "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`)."
+          "description": "The built-in pager's words, merged over its English defaults: the arrows'\nnames (\"Previous page\", \"Next page\"), the readout (\"Page 2 of 4\") and the\nlandmark's name (\"Pagination\"). The pager follows the table's `size`:\nnumbered pages at the default size (named by `pageLabel`), a \"Page X of Y\"\nreadout when compact (`readoutLabel`).",
+          "typeRefs": [
+            "PaginationProps"
+          ]
         },
         {
           "name": "emptyStateLabels",
           "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
           "typeKind": "reference",
           "required": false,
-          "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node."
+          "description": "The built-in empty state's words, merged over its English defaults\n(\"No matching rows\", \"Adjust the search or filters and try again.\").\nIgnored when `emptyState` replaces the whole node.",
+          "typeRefs": [
+            "EmptyStateProps"
+          ]
         },
         {
           "name": "resizableColumns",
@@ -588,21 +642,30 @@
           "type": "DataTableColumnPinning",
           "typeKind": "reference",
           "required": false,
-          "description": "Columns pinned to each edge, for controlled use."
+          "description": "Columns pinned to each edge, for controlled use.",
+          "typeRefs": [
+            "DataTableColumnPinning"
+          ]
         },
         {
           "name": "defaultColumnPinning",
           "type": "DataTableColumnPinning",
           "typeKind": "reference",
           "required": false,
-          "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`."
+          "description": "Starting pins, for uncontrolled use; merged with each column's own `pin`.",
+          "typeRefs": [
+            "DataTableColumnPinning"
+          ]
         },
         {
           "name": "onColumnPinningChange",
           "type": "((pinning: DataTableColumnPinning) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the pins after a column is pinned or unpinned."
+          "description": "Fires with the pins after a column is pinned or unpinned.",
+          "typeRefs": [
+            "DataTableColumnPinning"
+          ]
         },
         {
           "name": "hiddenColumns",
@@ -651,7 +714,10 @@
           "type": "Partial<DataTableColumnLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "The column and row controls' words, merged over their English defaults."
+          "description": "The column and row controls' words, merged over their English defaults.",
+          "typeRefs": [
+            "DataTableColumnLabels"
+          ]
         },
         {
           "name": "columnDividers",
@@ -673,14 +739,20 @@
           ],
           "required": false,
           "description": "How every cell's text fits unless its column says otherwise: `wrap` (the default), `nowrap`, `truncate` or `lines-2`.",
-          "default": "wrap"
+          "default": "wrap",
+          "typeRefs": [
+            "DataTableCellText"
+          ]
         },
         {
           "name": "rowActions",
           "type": "((row: R) => DataTableRowAction[])",
           "typeKind": "array",
           "required": false,
-          "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu."
+          "description": "The actions a row offers, in an actions column that sticks to the end edge: inline ones as icon buttons, the rest in a More menu.",
+          "typeRefs": [
+            "DataTableRowAction"
+          ]
         },
         {
           "name": "editMode",
@@ -699,35 +771,50 @@
           "type": "((edit: DataTableCellEdit<R>) => void | Promise<unknown>)",
           "typeKind": "other",
           "required": false,
-          "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure."
+          "description": "Saves one edited cell. Rows stay the record: update them from here. Return\na promise to have the cell show the new value as pending until it\nsettles; a rejection rolls the cell back and announces the failure.",
+          "typeRefs": [
+            "DataTableCellEdit"
+          ]
         },
         {
           "name": "onRowEdit",
           "type": "((edit: DataTableRowEdit<R>) => void | Promise<unknown>)",
           "typeKind": "other",
           "required": false,
-          "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`."
+          "description": "Saves one edited row with `editMode=\"row\"`, its changed values together. Without it, each changed cell goes to `onCellEdit`.",
+          "typeRefs": [
+            "DataTableRowEdit"
+          ]
         },
         {
           "name": "filters",
           "type": "Filter[]",
           "typeKind": "array",
           "required": false,
-          "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar."
+          "description": "The filters, for controlled use: conditions on columns, joined with AND. Set from the header menus (with `columnMenu`) or a TableToolbar.",
+          "typeRefs": [
+            "DataTableFilter"
+          ]
         },
         {
           "name": "defaultFilters",
           "type": "Filter[]",
           "typeKind": "array",
           "required": false,
-          "description": "Starting filters, for uncontrolled use."
+          "description": "Starting filters, for uncontrolled use.",
+          "typeRefs": [
+            "DataTableFilter"
+          ]
         },
         {
           "name": "onFiltersChange",
           "type": "((filters: Filter[]) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with every filter after one is added, changed or removed."
+          "description": "Fires with every filter after one is added, changed or removed.",
+          "typeRefs": [
+            "DataTableFilter"
+          ]
         },
         {
           "name": "search",
@@ -773,7 +860,10 @@
           "type": "Partial<FilterLabels>",
           "typeKind": "reference",
           "required": false,
-          "description": "The filters' words, merged over their English defaults."
+          "description": "The filters' words, merged over their English defaults.",
+          "typeRefs": [
+            "DataTableFilterLabels"
+          ]
         },
         {
           "name": "rowActionsVisibility",
@@ -804,5 +894,285 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "Aggregate": {
+      "kind": "type",
+      "definition": "type Aggregate = 'sum' | 'avg' | 'min' | 'max' | 'count' | 'countDistinct' | 'range';",
+      "description": "The calculations a column's `aggregate` can name."
+    },
+    "CellEditorKind": {
+      "kind": "type",
+      "definition": "type CellEditorKind =\n  | 'text'\n  | 'textarea'\n  | 'number'\n  | 'select'\n  | 'multiselect'\n  | 'combobox'\n  | 'tags'\n  | 'date'\n  | 'time'\n  | 'checkbox'\n  | 'switch';",
+      "description": "The editor kinds a column can name, each one of the library's fields."
+    },
+    "CellValue": {
+      "kind": "type",
+      "definition": "type CellValue = string | number | boolean | string[] | null | undefined;",
+      "description": "Any value a cell can hold."
+    },
+    "ColumnFormat": {
+      "kind": "interface",
+      "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to none for money and progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
+      "description": "How a typed column formats its values."
+    },
+    "ColumnType": {
+      "kind": "type",
+      "definition": "type ColumnType =\n  'text' | 'number' | 'currency' | 'date' | 'status' | 'person' | 'tags' | 'progress' | 'checkbox' | 'link';",
+      "description": "The types a column can be."
+    },
+    "DataTableAggregate": {
+      "kind": "type",
+      "definition": "type DataTableAggregate = Aggregate;",
+      "description": "The calculations a column's `aggregate` can name.",
+      "refs": [
+        "Aggregate"
+      ]
+    },
+    "DataTableCellEdit": {
+      "kind": "interface",
+      "definition": "interface DataTableCellEdit<R extends DataTableRow = DataTableRow> {\n  /** The row, as it was before the edit. */\n  row: R;\n  /** The column's key. */\n  key: string;\n  /** The new value. */\n  value: DataTableValue;\n  /** The value before the edit. */\n  previous: DataTableValue;\n}",
+      "description": "One saved cell, as `onCellEdit` hears it.",
+      "refs": [
+        "DataTableRow",
+        "DataTableValue"
+      ]
+    },
+    "DataTableCellText": {
+      "kind": "type",
+      "definition": "type DataTableCellText = 'wrap' | 'nowrap' | 'truncate' | 'lines-2';",
+      "description": "How a cell's text fits its width: `wrap` breaks onto as many lines as it\nneeds; `nowrap` stays on one line and runs on; `truncate` stays on one\nline and ends in an ellipsis, with the full text as the cell's tooltip;\n`lines-2` wraps onto two lines at most, then ends in an ellipsis."
+    },
+    "DataTableColumn": {
+      "kind": "interface",
+      "definition": "interface DataTableColumn<R extends DataTableRow = DataTableRow> {\n  /** Unique column identifier, used as the key into each row's values. */\n  key: string;\n  /** Header label displayed in the column header. */\n  header: React.ReactNode;\n  /** Whether clicking this header sorts by the column. */\n  sortable?: boolean;\n  /** Optional column width (CSS value like '200px', '30%', 'auto'). */\n  width?: string;\n  /** Text alignment for cells in this column. `start` and `end` follow the reading direction (a typed column defaults to its type's: `end` for numbers, money and progress, `start` for text); `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** Render the cell for a row; defaults to the row's raw value for this key. */\n  render?: (row: R) => React.ReactNode;\n  /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox (\"Select Ada Lovelace\"). One column per table. */\n  rowHeader?: boolean;\n  /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */\n  minWidth?: number;\n  /** Widest width a resize can reach, in pixels. */\n  maxWidth?: number;\n  /** Starts the column pinned to the start or end edge (logical, so right-to-left correct), where it stays while the rest scroll sideways. */\n  pin?: 'start' | 'end';\n  /** Whether this column can be resized. Defaults to the table's `resizableColumns`. */\n  resizable?: boolean;\n  /** Whether this column can be moved. Defaults to the table's `reorderableColumns`. */\n  reorderable?: boolean;\n  /** Whether this column can be hidden from its header menu. Defaults to true. */\n  hideable?: boolean;\n  /** Starts the column hidden, seeding `defaultHiddenColumns`. */\n  defaultHidden?: boolean;\n  /** Holds the column where it is: it cannot be resized, moved, hidden or unpinned, whatever the table allows. The row header is the usual one. */\n  locked?: boolean;\n  /** How this column's cell text fits. Defaults to the table's `cellText`. */\n  cellText?: DataTableCellText;\n  /**\n   * Makes the column's cells editable, with one of the library's fields\n   * (`text`, `textarea`, `number`, `select`, `multiselect`, `combobox`,\n   * `tags`, `date`, `time`, `checkbox`, `switch`) or a function that renders\n   * your own editor. A cell reads as text until it is edited; `checkbox` and\n   * `switch` are live controls in the cell, saved as they toggle.\n   */\n  editor?: DataTableEditorKind | ((context: DataTableEditorContext<R>) => React.ReactNode);\n  /** The choices of a `select`, `multiselect` or `combobox` editor. A cell shows the chosen option's label. */\n  options?: DataTableOption[];\n  /** Checks a new value before it is saved: return the message to show, or nothing when it passes. An error keeps the editor open. */\n  validate?: (value: DataTableValue, row: R) => string | null | undefined;\n  /** Whether a row's cell in this column can be edited, given the row. Defaults to true when the column has an `editor`. */\n  editable?: boolean | ((row: R) => boolean);\n  /** Whether the column can be filtered, from its header menu or a TableToolbar. Defaults to true. */\n  filterable?: boolean;\n  /**\n   * What the column holds, which sets everything the column does not set\n   * itself: how a cell is drawn (`render` still wins), its alignment, its\n   * sort, its filter's conditions, and the editor it opens when `editable`\n   * is set. `text`, `number`, `currency`, `date` (a `YYYY-MM-DD` value),\n   * `status` (a Badge in the option's `status` role, sorted in the options'\n   * order), `person` (an Avatar and the name, or a stack for a list),\n   * `tags` (a list, the first two shown), `progress` (0 to 100),\n   * `checkbox` (a check, or a live checkbox when editable) and `link` (a\n   * URL, shown without its scheme). An untyped column reads as text and\n   * filters by what its values look like.\n   */\n  type?: DataTableColumnType;\n  /** How a typed column formats its values: the locale, the currency, the digits after the point, the date style. */\n  format?: DataTableColumnFormat;\n  /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */\n  groupable?: boolean;\n  /**\n   * The calculation a group row shows in this column, and the totals\n   * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,\n   * `countDistinct` or `range`, formatted through the column's type, or a\n   * function of the column's values returning what to show.\n   */\n  aggregate?: DataTableAggregate | ((values: DataTableValue[], rows: R[]) => React.ReactNode);\n}",
+      "refs": [
+        "DataTableAggregate",
+        "DataTableCellText",
+        "DataTableColumnFormat",
+        "DataTableColumnType",
+        "DataTableEditorContext",
+        "DataTableEditorKind",
+        "DataTableOption",
+        "DataTableRow",
+        "DataTableValue"
+      ]
+    },
+    "DataTableColumnFormat": {
+      "kind": "type",
+      "definition": "type DataTableColumnFormat = ColumnFormat;",
+      "description": "How a typed column formats its values.",
+      "refs": [
+        "ColumnFormat"
+      ]
+    },
+    "DataTableColumnLabels": {
+      "kind": "interface",
+      "definition": "interface DataTableColumnLabels {\n  /** Accessible name of a column's menu button, given the header text. */\n  menu: (header: string) => string;\n  /** Menu item: sort the column ascending. */\n  sortAscending: string;\n  /** Menu item: sort the column descending. */\n  sortDescending: string;\n  /** Menu item: clear the sort. */\n  clearSort: string;\n  /** Menu item, with `multiSort`: add the column after the current sorts. */\n  addToSort: string;\n  /** Menu item, with several sorts: take the column out of the sort and keep the others. */\n  removeFromSort: string;\n  /** Menu item: pin the column to the start edge. */\n  pinStart: string;\n  /** Menu item: pin the column to the end edge. */\n  pinEnd: string;\n  /** Menu item: unpin the column. */\n  unpin: string;\n  /** Menu item: move the column one place towards the start. */\n  moveLeft: string;\n  /** Menu item: move the column one place towards the end. */\n  moveRight: string;\n  /** Menu item: hide the column. */\n  hide: string;\n  /** Menu item: fit the column to its widest visible content. */\n  fit: string;\n  /** Menu item: put the column back to its starting width. */\n  resetWidth: string;\n  /** Accessible name of a row's move grip, given the row's name. */\n  rowGrip: (rowName: string) => string;\n  /** Accessible name of the move-grip column header. */\n  rowGripColumn: string;\n  /** The hidden header of the details column. */\n  detailsColumn: string;\n  /** A row's details toggle, given the row's name and whether its details are showing. */\n  toggleDetails: (rowName: string, expanded: boolean) => string;\n  /** Accessible name of the actions column header. */\n  actionsColumn: string;\n  /** Accessible name of a row's More menu button, given the row's name. */\n  moreActions: (rowName: string) => string;\n  /** Announced after a column moves, given its header, its new position and the column count. */\n  movedColumn: (header: string, position: number, count: number) => string;\n  /** Announced after a row moves, given its name, its new position and the row count. */\n  movedRow: (rowName: string, position: number, count: number) => string;\n  /** Announced after a column is pinned, given its header and the edge. */\n  pinnedColumn: (header: string, edge: 'start' | 'end') => string;\n  /** Announced after a column is unpinned, given its header. */\n  unpinnedColumn: (header: string) => string;\n  /** Announced after a column is hidden, given its header. */\n  hiddenColumn: (header: string) => string;\n  /** Announced after a column is resized, given its header and the new width in pixels. */\n  resizedColumn: (header: string, width: number) => string;\n  /** Accessible name of a cell's editor, given the column's header and the row's name. */\n  editField: (header: string, rowName: string) => string;\n  /** Accessible name of a cell's hover edit button, in cell mode, given the column's header and the row's name. */\n  editCell: (header: string, rowName: string) => string;\n  /** How a `checkbox` column's checked cell is read. */\n  checkedValue: string;\n  /** How a `checkbox` column's unchecked cell is read. */\n  uncheckedValue: string;\n  /** The count a `tags` cell shows for the tags it folds away, given how many. */\n  moreValues: (count: number) => string;\n  /** Menu item: group the table by the column. */\n  groupBy: string;\n  /** Menu item: stop grouping, on the grouped column. */\n  ungroup: string;\n  /** A group row's toggle, given the group's value, its row count and whether it is open. */\n  groupToggle: (value: string, count: number, expanded: boolean) => string;\n  /** A group row's row count, given how many. */\n  groupCount: (count: number) => string;\n  /** The group of rows with no value in the grouped column. */\n  emptyGroup: string;\n  /** Selects every row in a group, given the group's value. */\n  selectGroup: (value: string) => string;\n  /** The totals footer's prompt on a column with no calculation picked. */\n  calculate: string;\n  /** The totals footer's menu button, given the column's header. */\n  totalsMenu: (header: string) => string;\n  /** A picked footer cell's name, given the column's header, the calculation and its result, so it says which column it totals. */\n  totalsValue: (header: string, calculation: string, value: string) => string;\n  /** Each calculation's name, as the footer's menu and its caption read it. */\n  totals: Record<DataTableTotal, string>;\n  /** Accessible name of a row's Edit button, with `editMode=\"row\"`, given the row's name. */\n  editRow: (rowName: string) => string;\n  /** Accessible name of a row's Save button while it edits, given the row's name. */\n  saveRow: (rowName: string) => string;\n  /** Accessible name of a row's Cancel button while it edits, given the row's name. */\n  cancelRow: (rowName: string) => string;\n  /** Announced, assertively, when a save fails and the value rolls back, given the column's header and the row's name. */\n  saveFailed: (header: string, rowName: string) => string;\n}",
+      "refs": [
+        "DataTableTotal"
+      ]
+    },
+    "DataTableColumnPinning": {
+      "kind": "interface",
+      "definition": "interface DataTableColumnPinning {\n  /** Keys pinned to the start edge, outermost first. */\n  start?: string[];\n  /** Keys pinned to the end edge, outermost first. */\n  end?: string[];\n}",
+      "description": "Columns pinned to either edge, by column key, in order from that edge."
+    },
+    "DataTableColumnType": {
+      "kind": "type",
+      "definition": "type DataTableColumnType = ColumnType;",
+      "description": "The types a column can be; see `DataTableColumn.type`.",
+      "refs": [
+        "ColumnType"
+      ]
+    },
+    "DataTableEditorContext": {
+      "kind": "interface",
+      "definition": "interface DataTableEditorContext<R extends DataTableRow = DataTableRow> {\n  /** The draft value. */\n  value: DataTableValue;\n  /** Changes the draft. */\n  setValue: (value: DataTableValue) => void;\n  /** Saves the draft, or the value given. */\n  commit: (value?: DataTableValue) => void;\n  /** Ends the edit without saving. */\n  cancel: () => void;\n  /** The row being edited. */\n  row: R;\n  /** The size to draw the editor at: always `compact`, the size every built-in editor takes, whatever the table's density. */\n  size: 'default' | 'compact';\n  /** The editor's accessible name. */\n  label: string;\n  /** The validation message, when the draft does not pass. */\n  error?: string;\n}",
+      "description": "What a custom editor is handed.",
+      "refs": [
+        "DataTableRow",
+        "DataTableValue"
+      ]
+    },
+    "DataTableEditorKind": {
+      "kind": "type",
+      "definition": "type DataTableEditorKind = CellEditorKind;",
+      "description": "The editor kinds a column's `editor` can name, each composed from the library's own field.",
+      "refs": [
+        "CellEditorKind"
+      ]
+    },
+    "DataTableFilter": {
+      "kind": "type",
+      "definition": "type DataTableFilter = Filter;",
+      "description": "One filter condition on one column, as the table and TableToolbar share it.",
+      "refs": [
+        "Filter"
+      ]
+    },
+    "DataTableFilterLabels": {
+      "kind": "type",
+      "definition": "type DataTableFilterLabels = FilterLabels;",
+      "description": "Every word a filter shows or announces, each defaulting to English.",
+      "refs": [
+        "FilterLabels"
+      ]
+    },
+    "DataTableLoadLabels": {
+      "kind": "interface",
+      "definition": "interface DataTableLoadLabels {\n  /** The skeleton rows' name, and the refetch line's. */\n  loading: string;\n  /** The loading row that ends the rows while `hasMore` fetches the next batch. */\n  loadingMore: string;\n  /** The title of a failed load, in the error state and the Banner. */\n  errorTitle: string;\n  /** The button that calls `onRetry`. */\n  retry: string;\n}",
+      "description": "Every word the table shows while rows load or fail to, each defaulting to English."
+    },
+    "DataTableOption": {
+      "kind": "interface",
+      "definition": "interface DataTableOption {\n  /** The value stored in the row. */\n  value: string;\n  /** What the cell and the list show. */\n  label: string;\n  /** For a `status` column, the status role its Badge takes. Defaults to `neutral`. */\n  status?: StatusRole;\n}",
+      "description": "One choice of a `select`, `multiselect` or `combobox` editor.",
+      "refs": [
+        "StatusRole"
+      ]
+    },
+    "DataTableRow": {
+      "kind": "interface",
+      "definition": "interface DataTableRow {\n  /** Unique row identifier. */\n  id: string;\n  /** Raw values keyed by column key — used for sorting, searching, and default rendering. */\n  values: Record<string, DataTableValue>;\n}",
+      "refs": [
+        "DataTableValue"
+      ]
+    },
+    "DataTableRowAction": {
+      "kind": "interface",
+      "definition": "interface DataTableRowAction {\n  /** Stable id for the action. */\n  id: string;\n  /** What the action does, as its accessible name and its tooltip or menu label. */\n  label: string;\n  /** Material Symbol name (string) or custom element. */\n  icon?: React.ReactNode;\n  /** Runs the action. */\n  onSelect: () => void;\n  /** Shows the action as its own button rather than in the More menu. Defaults to false. */\n  inline?: boolean;\n  /** Marks a dangerous or irreversible action, drawn in the destructive colour in the menu. */\n  destructive?: boolean;\n  /** Whether the action is unavailable for this row. */\n  disabled?: boolean;\n}",
+      "description": "One action a row offers in its actions column."
+    },
+    "DataTableRowEdit": {
+      "kind": "interface",
+      "definition": "interface DataTableRowEdit<R extends DataTableRow = DataTableRow> {\n  /** The row, as it was before the edit. */\n  row: R;\n  /** The changed values, by column key. */\n  values: Record<string, DataTableValue>;\n  /** The changed columns' values before the edit. */\n  previous: Record<string, DataTableValue>;\n}",
+      "description": "One saved row, as `onRowEdit` hears it.",
+      "refs": [
+        "DataTableRow",
+        "DataTableValue"
+      ]
+    },
+    "DataTableSort": {
+      "kind": "interface",
+      "definition": "interface DataTableSort {\n  /** The column being sorted. */\n  key: string;\n  /** Sort direction. */\n  direction: 'asc' | 'desc';\n}"
+    },
+    "DataTableTotal": {
+      "kind": "type",
+      "definition": "type DataTableTotal = Total;",
+      "description": "Every calculation the totals footer offers, `none` included.",
+      "refs": [
+        "Total"
+      ]
+    },
+    "DataTableValue": {
+      "kind": "type",
+      "definition": "type DataTableValue = CellValue;",
+      "description": "Any value a cell can hold.",
+      "refs": [
+        "CellValue"
+      ]
+    },
+    "DataTableView": {
+      "kind": "type",
+      "definition": "type DataTableView = TableView;",
+      "description": "One saved setup of a table: its sorts, filters, search, columns, pinning, widths, grouping, density and page size. Selection, the page and open details are the session, never part of a view.",
+      "refs": [
+        "TableView"
+      ]
+    },
+    "EmptyStateOwnProps": {
+      "kind": "type",
+      "definition": "type EmptyStateOwnProps = {\n  /** Material Symbol icon name, or a custom element (e.g. an illustration) */\n  icon?: string | React.ReactNode;\n  /**\n   * Short headline describing the empty condition.\n   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.\n   */\n  title: string;\n  /** Supporting copy — say what to do next, not just what is missing */\n  description?: string;\n  /** Action slot — typically one primary Button, optionally a secondary */\n  action?: React.ReactNode;\n  /** Component size */\n  size?: 'default' | 'compact';\n  /**\n   * Visual treatment. `plain` sits directly on the page; `bordered` draws a\n   * dashed container, which reads better inside a card, table, or panel.\n   */\n  variant?: 'plain' | 'bordered';\n  /** Additional CSS classes */\n  className?: string;\n};",
+      "description": "Props owned by EmptyState itself — everything else falls through to the root div."
+    },
+    "EmptyStateProps": {
+      "kind": "interface",
+      "definition": "interface EmptyStateProps\n  extends EmptyStateOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}",
+      "refs": [
+        "EmptyStateOwnProps"
+      ]
+    },
+    "Filter": {
+      "kind": "interface",
+      "definition": "interface Filter {\n  /** Stable id, so a chip and its editor keep their place while the value changes. */\n  id: string;\n  /** The column's key. */\n  column: string;\n  /** How the value is compared. */\n  operator: FilterOperator;\n  /** What it is compared with; missing until it is picked. */\n  value?: FilterValue;\n}",
+      "description": "One condition on one column.",
+      "refs": [
+        "FilterOperator",
+        "FilterValue"
+      ]
+    },
+    "FilterLabels": {
+      "kind": "interface",
+      "definition": "interface FilterLabels {\n  /** An operator as a chip and the operator menu read it. */\n  operators: Record<FilterOperator, string>;\n  /** The toolbar's button that adds a filter. */\n  addFilter: string;\n  /** The editor's name, given the column's header. */\n  editor: (header: string) => string;\n  /** The operator field's name. */\n  operatorField: string;\n  /** The value field's name, given the column's header. */\n  valueField: (header: string) => string;\n  /** The first value of a `between`. */\n  from: string;\n  /** The second value of a `between`. */\n  to: string;\n  /** Placeholder and name of the search field over a list filter's choices. */\n  searchChoices: string;\n  /** Shown when the search matches none of a list filter's choices. */\n  noChoices: string;\n  /** Removes one filter, given its chip's text. */\n  remove: (chip: string) => string;\n  /** Removes every filter. */\n  clearAll: string;\n  /** A chip's placeholder for a value not picked yet. */\n  noValue: string;\n  /** Joins the two ends of a `between` on a chip. */\n  and: string;\n  /** Joins two or more chosen values on a chip, given how many past the first. */\n  more: (count: number) => string;\n  /** The header menu item that opens a column's filter. */\n  filterColumn: string;\n  /** Name of a filtered header's mark, given the header. */\n  filtered: (header: string) => string;\n  /** Announced when the filters change, given the rows that match. */\n  filteredAnnouncement: (count: number) => string;\n}",
+      "description": "Every word a filter shows or announces, each defaulting to English.",
+      "refs": [
+        "FilterOperator"
+      ]
+    },
+    "FilterOperator": {
+      "kind": "type",
+      "definition": "type FilterOperator =\n  | 'contains'\n  | 'notContains'\n  | 'is'\n  | 'isNot'\n  | 'startsWith'\n  | 'endsWith'\n  | 'eq'\n  | 'neq'\n  | 'lt'\n  | 'lte'\n  | 'gt'\n  | 'gte'\n  | 'between'\n  | 'before'\n  | 'after'\n  | 'isAnyOf'\n  | 'isNoneOf'\n  | 'hasAnyOf'\n  | 'hasAllOf'\n  | 'hasNoneOf'\n  | 'isEmpty'\n  | 'isNotEmpty'\n  | 'isChecked'\n  | 'isNotChecked';",
+      "description": "Every operator, across the kinds."
+    },
+    "FilterValue": {
+      "kind": "type",
+      "definition": "type FilterValue = string | number | [number | string | null, number | string | null] | string[] | null | undefined;",
+      "description": "A filter's value: text or a date for one-value operators, a number, a pair for `between`, a list for the set operators."
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "PaginationOwnProps": {
+      "kind": "type",
+      "definition": "type PaginationOwnProps = {\n  /**\n   * Current page (1-based), for a controlled pager. Leave it undefined to let\n   * the component keep its own page, seeded from `defaultPage`.\n   */\n  page?: number;\n  /** Page shown on first render when the pager is uncontrolled (1-based) */\n  defaultPage?: number;\n  /** Total number of pages */\n  pageCount: number;\n  /** Called with the page the user requests */\n  onPageChange?: (page: number) => void;\n  /** Pages shown on each side of the current page */\n  siblingCount?: number;\n  /** Component size — compact swaps the numbers for a \"Page X of Y\" readout */\n  size?: 'default' | 'compact';\n  /**\n   * Legacy accessible-name prop for the nav landmark.\n   *\n   * @deprecated Pass the native `aria-label` attribute instead.\n   */\n  ariaLabel?: string;\n  /** Accessible name of the previous-page arrow */\n  previousLabel?: string;\n  /** Accessible name of the next-page arrow */\n  nextLabel?: string;\n  /** Accessible name of a numbered page button, given its page number */\n  pageLabel?: (page: number) => string;\n  /** Text of the compact size's readout, given the current page and the page count */\n  readoutLabel?: (page: number, pageCount: number) => string;\n  /** The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */\n  locale?: string;\n  /** Additional CSS classes */\n  className?: string;\n};",
+      "description": "Props owned by Pagination itself — everything else falls through to the nav landmark."
+    },
+    "PaginationProps": {
+      "kind": "interface",
+      "definition": "interface PaginationProps\n  extends PaginationOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'nav'>, keyof PaginationOwnProps | 'children'> {}",
+      "refs": [
+        "PaginationOwnProps"
+      ]
+    },
+    "StatusRole": {
+      "kind": "type",
+      "definition": "type StatusRole = 'info' | 'positive' | 'warning' | 'error' | 'neutral';",
+      "description": "A status option's role, the Badge variant its cells take."
+    },
+    "TableView": {
+      "kind": "interface",
+      "definition": "interface TableView {\n  /** The view format's version, so a stored view can be read by a later one. */\n  version: 1;\n  /** The sorts, first sort first. */\n  sorts?: { key: string; direction: 'asc' | 'desc' }[];\n  /** The filters. */\n  filters?: Filter[];\n  /** The search text. */\n  search?: string;\n  /** The hidden columns' keys. */\n  hiddenColumns?: string[];\n  /** Every column key in display order. */\n  columnOrder?: string[];\n  /** The columns pinned to either edge. */\n  columnPinning?: { start?: string[]; end?: string[] };\n  /** The column widths in pixels, by key. */\n  columnWidths?: Record<string, number>;\n  /** The column keys the rows are grouped by. */\n  grouping?: string[];\n  /** The density. */\n  size?: 'default' | 'compact';\n  /** Rows per page. */\n  pageSize?: number;\n}",
+      "description": "One saved setup of a table. Every field is optional: a view leaves out what it does not set.",
+      "refs": [
+        "Filter"
+      ]
+    },
+    "Total": {
+      "kind": "type",
+      "definition": "type Total = 'none' | 'count' | 'countDistinct' | 'empty' | 'filled' | 'percentEmpty' | 'sum' | 'avg' | 'min' | 'max' | 'range';",
+      "description": "Every calculation the totals footer offers, `none` included (Notion's Calculate set)."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithoutRef": "react",
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "Omit": "typescript",
+    "Partial": "typescript",
+    "Pick": "typescript",
+    "Promise": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

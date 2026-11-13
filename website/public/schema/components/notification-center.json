@@ -66,7 +66,10 @@
           "type": "NotificationCenterTab[]",
           "typeKind": "array",
           "required": false,
-          "description": "Filter tabs under the header, each with an optional count."
+          "description": "Filter tabs under the header, each with an optional count.",
+          "typeRefs": [
+            "NotificationCenterTab"
+          ]
         },
         {
           "name": "value",
@@ -125,7 +128,10 @@
           "type": "Partial<Pick<EmptyStateProps, \"title\" | \"description\">>",
           "typeKind": "reference",
           "required": false,
-          "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set."
+          "description": "The built-in empty state's copy, merged over the English defaults: title\n\"Nothing new\", description \"Notifications will collect here as they\narrive.\" Ignored when `emptyState` is set.",
+          "typeRefs": [
+            "EmptyStateProps"
+          ]
         },
         {
           "name": "locale",
@@ -186,8 +192,8 @@
         },
         {
           "name": "media",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Leading visual — a Material Symbol name (string) or a custom element (e.g. an Avatar)."
         },
@@ -215,5 +221,30 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "EmptyStateOwnProps": {
+      "kind": "type",
+      "definition": "type EmptyStateOwnProps = {\n  /** Material Symbol icon name, or a custom element (e.g. an illustration) */\n  icon?: string | React.ReactNode;\n  /**\n   * Short headline describing the empty condition.\n   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.\n   */\n  title: string;\n  /** Supporting copy — say what to do next, not just what is missing */\n  description?: string;\n  /** Action slot — typically one primary Button, optionally a secondary */\n  action?: React.ReactNode;\n  /** Component size */\n  size?: 'default' | 'compact';\n  /**\n   * Visual treatment. `plain` sits directly on the page; `bordered` draws a\n   * dashed container, which reads better inside a card, table, or panel.\n   */\n  variant?: 'plain' | 'bordered';\n  /** Additional CSS classes */\n  className?: string;\n};",
+      "description": "Props owned by EmptyState itself — everything else falls through to the root div."
+    },
+    "EmptyStateProps": {
+      "kind": "interface",
+      "definition": "interface EmptyStateProps\n  extends EmptyStateOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}",
+      "refs": [
+        "EmptyStateOwnProps"
+      ]
+    },
+    "NotificationCenterTab": {
+      "kind": "interface",
+      "definition": "interface NotificationCenterTab {\n  /** Display label */\n  label: string;\n  /** Unique tab identifier */\n  value: string;\n  /** Count shown beside the label, e.g. the number of notifications in this filter. */\n  count?: number;\n}"
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithoutRef": "react",
+    "Omit": "typescript",
+    "Partial": "typescript",
+    "Pick": "typescript",
+    "ReactNode": "react"
+  }
 }

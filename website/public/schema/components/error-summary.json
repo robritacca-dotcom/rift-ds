@@ -21,7 +21,10 @@
           "type": "ErrorSummaryError<ReactNode>[]",
           "typeKind": "array",
           "required": true,
-          "description": "The errors, in the form's order: each the id of the control it belongs to and what is wrong. The summary renders nothing while the list is empty."
+          "description": "The errors, in the form's order: each the id of the control it belongs to and what is wrong. The summary renders nothing while the list is empty.",
+          "typeRefs": [
+            "ErrorSummaryError"
+          ]
         },
         {
           "name": "title",
@@ -90,5 +93,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ErrorSummaryError": {
+      "kind": "type",
+      "definition": "type ErrorSummaryError<Message = string> = {\n  /** The id of the control the error belongs to; the summary's link focuses it. */\n  id: string;\n  /** What is wrong, in words that say how to fix it. */\n  message: Message;\n};",
+      "description": "One error ErrorSummary lists: the id of the control it belongs to, and what is wrong."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

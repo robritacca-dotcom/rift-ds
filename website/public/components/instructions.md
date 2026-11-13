@@ -17,7 +17,24 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `string` | no |  | Instructions title, rendered as a heading above the steps. Note: this shadows the native `title` tooltip attribute, which Instructions does not expose. |
 | steps | `InstructionStep[]` | yes |  | Array of instruction steps |
-| size | `"default" \| "compact"` | no | `default` | Component size |
-| direction | `"horizontal" \| "vertical"` | no | `vertical` | Layout direction |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
+| direction | `"horizontal" \| "vertical"` | no | `'vertical'` | Layout direction |
 | numbered | `boolean` | no | `true` | What a step without an `icon` shows in its badge: its number when true (the default), a small dot when false. A step's own `icon` always wins. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### InstructionStep
+
+```ts
+interface InstructionStep {
+  /** Step label/title */
+  label: string;
+  /** Optional step description */
+  description?: string;
+  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */
+  icon?: string | React.ReactNode;
+}
+```
+
+Types from other packages: `ReactNode` (react).

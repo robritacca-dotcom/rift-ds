@@ -21,7 +21,10 @@
           "type": "FilterBarFilter[]",
           "typeKind": "array",
           "required": true,
-          "description": "The filters on the bar, in display order."
+          "description": "The filters on the bar, in display order.",
+          "typeRefs": [
+            "FilterBarFilter"
+          ]
         },
         {
           "name": "values",
@@ -82,5 +85,24 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "FilterBarFilter": {
+      "kind": "interface",
+      "definition": "interface FilterBarFilter {\n  /** Stable key for this filter — the key under which its values are reported. */\n  id: string;\n  /** Chip label, e.g. \"Status\". */\n  label: string;\n  /** Icon shown before the label — Material Symbol name (string) or custom element (ReactNode). */\n  icon?: string | React.ReactNode;\n  /** The choices this filter offers. */\n  options: FilterBarOption[];\n  /**\n   * Whether several options can be active at once. Defaults to true; set it\n   * to false for a single-select filter, which closes on choice.\n   */\n  multiple?: boolean;\n}",
+      "description": "One filter: a chip on the bar with a popover of options behind it.",
+      "refs": [
+        "FilterBarOption"
+      ]
+    },
+    "FilterBarOption": {
+      "kind": "interface",
+      "definition": "interface FilterBarOption {\n  /** Stored value, reported through `onValuesChange`. */\n  value: string;\n  /** Display label. */\n  label: string;\n}",
+      "description": "One choice inside a filter's popover."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

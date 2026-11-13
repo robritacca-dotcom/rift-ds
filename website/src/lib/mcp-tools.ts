@@ -24,12 +24,12 @@ export interface McpTool {
 export const MCP_TOOLS: McpTool[] = [
   {
     name: "list_components",
-    blurb: "every component in the library, with category, description, docs URL and schema URL",
+    blurb: "every component in the library, with category, description, docs URL and schema URL, and the AI chat widget",
     prompt: "Which components are in the ai category?",
   },
   {
     name: "get_component",
-    blurb: "one component's full prop contract, generated from the same JSDoc as the published .d.ts",
+    blurb: "one component's full prop contract and every type its props name, generated from the same source as the published .d.ts",
     prompt: "What props does DataTable take?",
   },
   {
@@ -39,7 +39,7 @@ export const MCP_TOOLS: McpTool[] = [
   },
   {
     name: "search_site",
-    blurb: "full-text search over everything published on this site",
+    blurb: "search over the documentation for building with the library, each result with its link",
     prompt: "What does this site say about design tokens?",
   },
   {

@@ -28,7 +28,10 @@
           "type": "InstructionStep[]",
           "typeKind": "array",
           "required": true,
-          "description": "Array of instruction steps"
+          "description": "Array of instruction steps",
+          "typeRefs": [
+            "InstructionStep"
+          ]
         },
         {
           "name": "size",
@@ -72,5 +75,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "InstructionStep": {
+      "kind": "interface",
+      "definition": "interface InstructionStep {\n  /** Step label/title */\n  label: string;\n  /** Optional step description */\n  description?: string;\n  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */\n  icon?: string | React.ReactNode;\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

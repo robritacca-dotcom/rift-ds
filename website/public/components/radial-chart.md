@@ -28,4 +28,30 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | centerLabel | `string` | no |  | Headline printed in the donut hole, e.g. "46%"; pairs best with showLegend false, since the legend shifts the rings above centre |
 | centerSublabel | `string` | no |  | Small caption under the centre headline |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
-| className | `string` | no | `` | Additional CSS classes on the wrapper |
+| className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Types
+
+### ChartSummaryItem
+
+```ts
+interface ChartSummaryItem {
+  /** Label shown above the value */
+  label: string;
+  /** Formatted value to display */
+  value: string | number;
+}
+```
+
+### RadialDataItem
+
+```ts
+interface RadialDataItem {
+  /** Display name */
+  name: string;
+  /** Numeric value */
+  value: number;
+  /** Ring fill colour */
+  color?: string;
+}
+```

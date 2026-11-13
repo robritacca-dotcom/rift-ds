@@ -21,7 +21,10 @@
           "type": "NavListItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Navigation tree to render."
+          "description": "Navigation tree to render.",
+          "typeRefs": [
+            "NavListItem"
+          ]
         },
         {
           "name": "currentHref",
@@ -64,7 +67,10 @@
           "type": "((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list."
+          "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list.",
+          "typeRefs": [
+            "NavListItem"
+          ]
         },
         {
           "name": "expandLabel",
@@ -87,7 +93,10 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         },
         {
           "name": "className",
@@ -99,5 +108,30 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "NavListItem": {
+      "kind": "interface",
+      "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n}"
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "HTMLElement": "typescript",
+    "MouseEvent": "react"
+  }
 }

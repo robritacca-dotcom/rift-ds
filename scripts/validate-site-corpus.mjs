@@ -3,7 +3,8 @@
  * validate-site-corpus.mjs
  *
  * Guards website/src/data/site-corpus.generated.ts, the document /api/chat
- * sends to the model as its cached system block. Three checks:
+ * sends to the model as its cached system block, and served by the MCP's
+ * search_site through its search sections. Four checks:
  *
  *   1. Freshness — regenerates in memory and byte-compares against disk, so a
  *      page edit that changes the corpus can't land without the regenerated
@@ -18,6 +19,14 @@
  *   3. Budget — the corpus is billed on every chat message. Generation already
  *      refuses to write an over-budget corpus; this catches a file that was
  *      committed before the gate existed, or edited by hand.
+ *
+ *   4. No holes — a value a page renders inline and the walk dropped leaves
+ *      punctuation with nothing before it ("save it at your project root
+ *      as .", "one mode per theme: , of the themes"). Generation already
+ *      fails on an expression it cannot resolve (INLINE_VALUES in the
+ *      generator owns the rules); this is the backstop on the text itself:
+ *      a word, a closing bracket or a quote followed by a space and then a
+ *      lone , . ; or : fails, as does a colon followed by punctuation.
  *
  * Runs before every build via the validate-registry chain.
  */
@@ -85,6 +94,27 @@ try {
   }
 } catch {
   // Generation already failed above; no need to report it twice.
+}
+
+// 4. No holes left by a dropped inline value.
+try {
+  const { corpus } = assembleCorpus();
+  const holes = [
+    /[\w)\]`'"’] [,.;:](?=\s|$)/g,
+    /: [,.;](?=\s|$)/g,
+  ];
+  for (const pattern of holes) {
+    for (const match of corpus.matchAll(pattern)) {
+      const at = match.index;
+      fail(
+        `The site corpus has a hole where a value was dropped: ` +
+          `${JSON.stringify(corpus.slice(Math.max(0, at - 50), at + 10))}. ` +
+          `Find the page line, and resolve its inline value in INLINE_VALUES in scripts/generate-site-corpus.mjs.`
+      );
+    }
+  }
+} catch {
+  // Generation already failed above.
 }
 
 // 2b. The other system block. persona.ts is sent to the model alongside the

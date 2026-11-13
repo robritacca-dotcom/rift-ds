@@ -18,14 +18,32 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | name | `string` | yes |  | File name, truncated with an ellipsis when it outgrows the tile. |
-| fileType | `DocumentChipFileType` | no | `generic` | Document type — picks the leading Material Symbol. |
-| icon | `ReactNode` | no |  | Override the type icon — a Material Symbol name, or any custom element. |
+| fileType | `DocumentChipFileType` | no | `'generic'` | Document type — picks the leading Material Symbol. |
+| icon | `string \| ReactNode` | no |  | Override the type icon — a Material Symbol name, or any custom element. |
 | meta | `string` | no |  | Free-text metadata line, e.g. "1.2 MB" or "12 pages" — callers keep their own formatting. |
 | progress | `number` | no |  | Upload progress, 0–100. While set, replaces the metadata line with a progress bar. |
 | error | `string` | no |  | Error message — replaces the metadata line and colours the tile with the error pair. |
-| size | `"default" \| "compact"` | no | `default` | Tile size. Compact drops the metadata line — name only — for dense composer rows. |
+| size | `"default" \| "compact"` | no | `'default'` | Tile size. Compact drops the metadata line — name only — for dense composer rows. |
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler — presence makes the chip body (icon + text) an interactive button. |
 | onRemove | `(() => void)` | no |  | Remove handler — renders a trailing close button. |
-| removeLabel | `string` | no | `Remove file` | Accessible label for the remove button. |
-| progressLabel | `((name: string) => string)` | no | `(fileName: string) => `Uploading ${fileName}`` | Accessible name of the upload progress bar, given the file name. Defaults to "Uploading <name>". |
-| className | `string` | no | `` | Additional CSS classes |
+| removeLabel | `string` | no | `'Remove file'` | Accessible label for the remove button. |
+| progressLabel | `((name: string) => string)` | no | `` (fileName: string) => `Uploading ${fileName}` `` | Accessible name of the upload progress bar, given the file name. Defaults to "Uploading <name>". |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### DocumentChipFileType
+
+```ts
+type DocumentChipFileType =
+  | 'pdf'
+  | 'doc'
+  | 'sheet'
+  | 'slide'
+  | 'image'
+  | 'code'
+  | 'archive'
+  | 'generic';
+```
+
+Types from other packages: `HTMLButtonElement` (typescript), `MouseEventHandler` (react), `ReactNode` (react).

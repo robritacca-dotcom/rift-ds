@@ -35,7 +35,10 @@
           "type": "AttachmentItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The files the viewer steps through, in order."
+          "description": "The files the viewer steps through, in order.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "activeId",
@@ -63,21 +66,30 @@
           "type": "((item: AttachmentItem) => ReactNode)",
           "typeKind": "function",
           "required": false,
-          "description": "Draws a file the viewer cannot: the pages of a PDF, a media player, a\nrendered spreadsheet. Return nothing to fall back to the built-in view."
+          "description": "Draws a file the viewer cannot: the pages of a PDF, a media player, a\nrendered spreadsheet. Return nothing to fall back to the built-in view.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "onDownload",
           "type": "((item: AttachmentItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the file on show when Download is pressed. Its presence renders the buttons."
+          "description": "Fires with the file on show when Download is pressed. Its presence renders the buttons.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "onRetry",
           "type": "((item: AttachmentItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with a file that failed to load when \"Try again\" is pressed. Its presence renders the button."
+          "description": "Fires with a file that failed to load when \"Try again\" is pressed. Its presence renders the button.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "dismissible",
@@ -176,5 +188,28 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AttachmentItem": {
+      "kind": "interface",
+      "definition": "interface AttachmentItem {\n  /** Stable identity, unique within its list. */\n  id: string;\n  /** File name, extension included. */\n  name: string;\n  /** What kind of file it is. */\n  kind: FileKind;\n  /**\n   * Short label on the file's type mark, replacing the one derived from its\n   * kind and extension (`getFileTypeLabel`: \"PDF\", \"DOC\", the extension, or\n   * \"FILE\"), wherever the family draws the mark: the tile, a lone picture's\n   * badge, the viewer and a composer's queue. Set it to localise the mark or\n   * to name a format the derivation does not know.\n   */\n  typeLabel?: string;\n  /** Size in bytes. */\n  size?: number;\n  /** Mime type, when the source reported one. */\n  mimeType?: string;\n  /** Where the file is in its life. */\n  status: AttachmentStatus;\n  /** Upload progress, 0 to 100, while `status` is `uploading`. */\n  progress?: number;\n  /** Why it failed, while `status` is `error`. */\n  error?: string;\n  /** Image that fills the tile: an object URL for a picture, or a\n      host-rendered first page for a document. */\n  previewSrc?: string;\n  /** Alt text for the preview. Defaults to the name. */\n  previewAlt?: string;\n  /** Full-size image for the viewer, when the preview is a thumbnail.\n      Defaults to `previewSrc`. */\n  src?: string;\n  /** The file itself, for the viewer to show a PDF or a text file in place\n      (through DocumentViewer) and for a picture with no `src`. Distinct\n      from `src`, which is always an image. */\n  fileUrl?: string;\n  /** Intrinsic width of the preview, to reserve its shape before it loads. */\n  width?: number;\n  /** Intrinsic height of the preview. */\n  height?: number;\n  /** First lines of a pasted block, drawn as the tile's excerpt. */\n  excerpt?: string;\n}",
+      "description": "One attachment as the family passes it around: what a tile draws, what a\ngroup lays out, and what `useAttachments` keeps. Plain data, so it\nserialises and crosses the server boundary; the `File` itself stays with\nwhoever owns the upload.",
+      "refs": [
+        "AttachmentStatus",
+        "FileKind"
+      ]
+    },
+    "AttachmentStatus": {
+      "kind": "type",
+      "definition": "type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';",
+      "description": "Where an attachment is in its life: usable, on its way, failed, or gone."
+    },
+    "FileKind": {
+      "kind": "type",
+      "definition": "type FileKind =\n  | 'pdf'\n  | 'document'\n  | 'spreadsheet'\n  | 'presentation'\n  | 'image'\n  | 'audio'\n  | 'video'\n  | 'archive'\n  | 'code'\n  | 'text'\n  | 'pasted'\n  | 'generic';"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

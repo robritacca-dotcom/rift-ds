@@ -21,7 +21,10 @@
           "type": "AgentPlanStep[]",
           "typeKind": "array",
           "required": true,
-          "description": "The plan, in order. Step status drives each row's indicator and colour."
+          "description": "The plan, in order. Step status drives each row's indicator and colour.",
+          "typeRefs": [
+            "AgentPlanStep"
+          ]
         },
         {
           "name": "title",
@@ -51,7 +54,10 @@
           "type": "Partial<Record<AgentPlanStepStatus, string>>",
           "typeKind": "reference",
           "required": false,
-          "description": "Visually hidden text announcing each step's status after its label.\nMerged over the English defaults (Not started, In progress, Completed, Failed)."
+          "description": "Visually hidden text announcing each step's status after its label.\nMerged over the English defaults (Not started, In progress, Completed, Failed).",
+          "typeRefs": [
+            "AgentPlanStepStatus"
+          ]
         },
         {
           "name": "open",
@@ -85,5 +91,22 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AgentPlanStep": {
+      "kind": "interface",
+      "definition": "interface AgentPlanStep {\n  /** What this step does, in one line. */\n  label: string;\n  /** Where the step has got to. Defaults to `pending`. */\n  status?: AgentPlanStepStatus;\n  /** Optional supporting line under the label, e.g. the file it touched. */\n  detail?: string;\n}",
+      "refs": [
+        "AgentPlanStepStatus"
+      ]
+    },
+    "AgentPlanStepStatus": {
+      "kind": "type",
+      "definition": "type AgentPlanStepStatus = 'pending' | 'active' | 'completed' | 'failed';"
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "Record": "typescript"
+  }
 }

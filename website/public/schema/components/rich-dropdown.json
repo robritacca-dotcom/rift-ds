@@ -50,7 +50,10 @@
           "type": "RichDropdownOption[]",
           "typeKind": "array",
           "required": true,
-          "description": "The options on offer, in display order."
+          "description": "The options on offer, in display order.",
+          "typeRefs": [
+            "RichDropdownOption"
+          ]
         },
         {
           "name": "disabled",
@@ -107,5 +110,11 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "RichDropdownOption": {
+      "kind": "interface",
+      "definition": "interface RichDropdownOption {\n  /** Display name of the option, rendered in its own heading face. */\n  label: string;\n  /** Stable identifier reported through `onValueChange`. */\n  value: string;\n  /**\n   * CSS font-family stack this option's headings use — the option name\n   * renders in it. Falls back to the theme's heading face when omitted.\n   */\n  headingFont?: string;\n  /**\n   * CSS font-family stack this option's body text uses — the detail line\n   * renders in it. Falls back to the theme's body face when omitted.\n   */\n  bodyFont?: string;\n  /** Key colour shown as the option's swatch dot — any valid CSS colour. */\n  color?: string;\n  /**\n   * Corner radius for the swatch, so the dot can carry the option's corner\n   * language too — a sharp-cornered look gets a square swatch. Any CSS\n   * radius value (`'0px'`, `'4px'`); the default is a full circle.\n   */\n  swatchRadius?: string;\n  /** One-line supporting text, typically the font pairing's names. */\n  description?: string;\n  /** Whether this option can be chosen. */\n  disabled?: boolean;\n}"
+    }
+  }
 }

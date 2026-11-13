@@ -17,5 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `string` | yes |  | The place's name, set in capitals: "Santiago, CL". Intentionally shadows the native `title` tooltip attribute, which MapCallout does not expose. |
 | lines | `ReactNode[]` | no | `[]` | Readout lines under the title, in order: a status, a reading, a route. |
-| align | `"start" \| "end"` | no | `start` | Which way the text ranges. A callout sitting left of its marker ranges right so it hangs off the point; `start` is the ordinary reading order. |
-| className | `string` | no | `` | Additional CSS classes |
+| align | `"start" \| "end"` | no | `'start'` | Which way the text ranges. A callout sitting left of its marker ranges right so it hangs off the point; `start` is the ordinary reading order. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

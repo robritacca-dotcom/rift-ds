@@ -21,14 +21,20 @@
           "type": "TableColumn[]",
           "typeKind": "array",
           "required": true,
-          "description": "Column definitions"
+          "description": "Column definitions",
+          "typeRefs": [
+            "TableColumn"
+          ]
         },
         {
           "name": "rows",
           "type": "TableRow[]",
           "typeKind": "array",
           "required": true,
-          "description": "Row data"
+          "description": "Row data",
+          "typeRefs": [
+            "TableRow"
+          ]
         },
         {
           "name": "size",
@@ -91,5 +97,19 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "TableColumn": {
+      "kind": "interface",
+      "definition": "interface TableColumn {\n  /** Unique column identifier, used as the key into each row's cells */\n  key: string;\n  /** Header label displayed in the column header */\n  header: React.ReactNode;\n  /** Optional column width (CSS value like '200px', '30%', 'auto') */\n  width?: string;\n  /** Text alignment for cells in this column. `start` (the default) and `end` follow the reading direction, so a number column set to `end` sits right in English and left in Arabic; `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */\n  sort?: 'asc' | 'desc';\n  /** Whether this column names each row. Its cells render as row headers (`<th scope=\"row\">`), so moving along a row announces which record it is. */\n  rowHeader?: boolean;\n}"
+    },
+    "TableRow": {
+      "kind": "interface",
+      "definition": "interface TableRow {\n  /** Unique row identifier */\n  id: string;\n  /** Cell values keyed by column key — each accepts any React node */\n  cells: Record<string, React.ReactNode>;\n  /** Whether the row is selected, drawn with the table's selected-row tint. */\n  selected?: boolean;\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react",
+    "Record": "typescript"
+  }
 }

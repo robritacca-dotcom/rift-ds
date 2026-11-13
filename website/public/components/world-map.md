@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | points | `WorldMapPoint[]` | no | `[]` | The places to mark. A point outside the framed view is simply not drawn. |
 | bounds | `WorldMapBounds` | no | `[-180, -58, 180, 84]` | The window the map frames: `[west, south, east, north]` in degrees. It must not cross the antimeridian. Defaults to the whole world (Antarctica is not in the land data). Changing it resets any zoom. |
-| fit | `"cover" \| "contain"` | no | `contain` | How the framed window meets the container: `contain` letterboxes so the whole window is visible, `cover` fills the container and crops the window's edges — the full-bleed stage look. |
+| fit | `"cover" \| "contain"` | no | `'contain'` | How the framed window meets the container: `contain` letterboxes so the whole window is visible, `cover` fills the container and crops the window's edges — the full-bleed stage look. |
 | showZoomControls | `boolean` | no | `false` | Renders the zoom pill (zoom out, a percent readout that resets the view, zoom in). Zoom steps into `bounds` and out past them — down to the whole world with air around it, the graticule carrying on into the space. Ctrl or ⌘ with the scroll wheel (a trackpad pinch) zooms at the pointer; a plain scroll keeps scrolling the page. Dragging, or the arrow keys with the map focused, moves the view anywhere on the world at any zoom; a finger only drags while zoomed in, so the page keeps its touch scroll too. Needs `interactive`. |
 | maxZoom | `number` | no | `8` | How far the zoom controls can step in, as a multiple of `bounds`. |
 | graticuleStep | `number` | no | `15` | Degrees between graticule lines. `0` removes the graticule. |
@@ -28,11 +28,52 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onPointClick | `((point: WorldMapPoint) => void)` | no |  | Fires when a marker is clicked. |
 | renderCallout | `((point: WorldMapPoint) => ReactNode)` | no |  | Renders the annotation for the active (or hovered) point, placed beside its marker in an HTML overlay; MapCallout is the intended filling. The overlay carries `data-side="left"\|"right"` for which side of the marker it opens on — toward the map's centre, where the room is. |
 | renderHoverCard | `((point: WorldMapPoint) => ReactNode)` | no |  | Wraps each marker in the library's HoverCard, with this as the card's content — the floating-panel alternative to `renderCallout`'s bare readout, opening on hover or focus with the system's delays and Escape dismissal. Content must be phrasing-level (spans), the panel's own rule. Opens toward the map's centre, where the room is: downward from the upper half, upward from the lower. Needs `interactive`; when both renderers are given, this one wins. |
-| label | `string` | no | `World map` | Accessible name for the map, e.g. "Offices across the network". The point count is appended for screen readers. |
-| pointsLabel | `((count: number) => string)` | no | `(count) => `${count} ${count === 1 ? 'point' : 'points'}`` | The point count appended to the map's accessible name, given the count. Defaults to "<count> point" or "<count> points". |
-| zoomHintLabel | `string` | no | `Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map.` | The keyboard and pointer instructions appended to the map's accessible name while zooming is on. |
-| zoomControlsLabel | `string` | no | `Map zoom controls` | Accessible name of the zoom toolbar. Defaults to "Map zoom controls". |
-| zoomOutLabel | `string` | no | `Zoom out` | Accessible name of the zoom-out button. Defaults to "Zoom out". |
-| zoomInLabel | `string` | no | `Zoom in` | Accessible name of the zoom-in button. Defaults to "Zoom in". |
-| zoomResetLabel | `((percent: number) => string)` | no | `(percent) => `Zoom ${percent}%. Reset the view`` | Accessible name of the zoom readout that resets the view, given the zoom as a whole percentage. Defaults to "Zoom <percent>%. Reset the view". |
-| className | `string` | no | `` | Additional CSS classes |
+| label | `string` | no | `'World map'` | Accessible name for the map, e.g. "Offices across the network". The point count is appended for screen readers. |
+| pointsLabel | `((count: number) => string)` | no | `` (count) => `${count} ${count === 1 ? 'point' : 'points'}` `` | The point count appended to the map's accessible name, given the count. Defaults to "<count> point" or "<count> points". |
+| zoomHintLabel | `string` | no | `'Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map.'` | The keyboard and pointer instructions appended to the map's accessible name while zooming is on. |
+| zoomControlsLabel | `string` | no | `'Map zoom controls'` | Accessible name of the zoom toolbar. Defaults to "Map zoom controls". |
+| zoomOutLabel | `string` | no | `'Zoom out'` | Accessible name of the zoom-out button. Defaults to "Zoom out". |
+| zoomInLabel | `string` | no | `'Zoom in'` | Accessible name of the zoom-in button. Defaults to "Zoom in". |
+| zoomResetLabel | `((percent: number) => string)` | no | `` (percent) => `Zoom ${percent}%. Reset the view` `` | Accessible name of the zoom readout that resets the view, given the zoom as a whole percentage. Defaults to "Zoom <percent>%. Reset the view". |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### WorldMapBounds
+
+The framed window: `[west, south, east, north]` in degrees.
+
+```ts
+type WorldMapBounds = [number, number, number, number];
+```
+
+### WorldMapPoint
+
+A place on the map.
+
+```ts
+interface WorldMapPoint {
+  /** Stable identifier, referenced by `activePointId`. */
+  id: string;
+  /** Latitude in degrees, north positive. */
+  lat: number;
+  /** Longitude in degrees, east positive. */
+  lng: number;
+  /** Short label drawn beside the marker when `showLabels` is on, and the marker's accessible name. */
+  label?: string;
+  /**
+   * Marker glyph. `point` is a filled dot (something plotted), `anchor` is
+   * an outlined square (something fixed) — the same vocabulary Globe and
+   * MapLegend draw.
+   */
+  kind?: 'point' | 'anchor';
+  /**
+   * Marker colour, any CSS colour (`var(--color-chart-series-2)` works) —
+   * the flat map's channel for colour-coding a category per point. Omit for
+   * the default text colour.
+   */
+  color?: string;
+}
+```
+
+Types from other packages: `ReactNode` (react).

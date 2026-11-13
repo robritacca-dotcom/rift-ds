@@ -4,7 +4,7 @@
  *
  * Holds the generated preset stylesheets (src/tokens/presets/ — one
  * <id>.css per THEME_PRESETS entry plus the presets.css aggregate) to
- * their source. Three checks:
+ * their source. Four checks:
  *
  *   1. Every file byte-matches what generate-preset-stylesheets.mjs
  *      produces now (regenerated in memory), so a preset edit cannot ship
@@ -21,6 +21,11 @@
  *      goes around the generator, so a formatting bug that dropped or
  *      mangled a declaration on both sides of the byte-compare still
  *      fails here.
+ *   4. Every rebased primitive ramp keeps a distinct colour per step. A
+ *      preset that rebases a ramp around its own key rebuilt purple's 05,
+ *      06 and 07 as one colour in ten presets (the ramp weights in
+ *      theme-overrides.ts clamped a hue-drifted step to the key); two
+ *      neighbouring steps of one ramp written alike fails here.
  *
  * Belongs in the validate-registry chain (and the website prebuild),
  * right after its generator: the source is TypeScript theme data, not
@@ -107,6 +112,28 @@ if (!THEME_PRESETS.mono) {
     for (const name of Object.keys(dark)) {
       if (!(name in expectedDark)) errors.push(`mono.css dark block declares ${name}, which presetOverrides does not emit`);
       else if (light[name] === dark[name]) errors.push(`mono.css dark block repeats ${name} from the light block — ${REGENERATE}`);
+    }
+  }
+}
+
+// 4. Distinct steps in every rebased ramp, on the files as generated.
+for (const [name, content] of files) {
+  if (!name.endsWith('.css') || name === 'presets.css') continue;
+  const ramps = new Map();
+  for (const [, family, step, hex] of content.matchAll(/--primitive-([a-z]+)-(\d\d):\s*(#[0-9A-Fa-f]{6})\s*;/g)) {
+    if (family === 'neutral') continue; // the tint lever owns neutral, alpha variants and all
+    const steps = ramps.get(family) ?? new Map();
+    if (!steps.has(step)) steps.set(step, hex.toUpperCase());
+    ramps.set(family, steps);
+  }
+  for (const [family, steps] of ramps) {
+    const ordered = [...steps].sort(([a], [b]) => a.localeCompare(b));
+    for (let i = 1; i < ordered.length; i++) {
+      const [previousStep, previousHex] = ordered[i - 1];
+      const [step, hex] = ordered[i];
+      if (Number(step) === Number(previousStep) + 1 && hex === previousHex) {
+        errors.push(`${name} writes ${family}-${previousStep} and ${family}-${step} as one colour (${hex}): the ramp rebase in website/src/lib/theme/theme-overrides.ts collapsed a step`);
+      }
     }
   }
 }

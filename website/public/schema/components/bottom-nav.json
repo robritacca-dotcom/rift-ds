@@ -21,7 +21,10 @@
           "type": "BottomNavItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "Destinations, three to five of them"
+          "description": "Destinations, three to five of them",
+          "typeRefs": [
+            "BottomNavItem"
+          ]
         },
         {
           "name": "activeKey",
@@ -55,7 +58,10 @@
           "type": "BottomNavSearch",
           "typeKind": "reference",
           "required": false,
-          "description": "A destination set apart from the rest, search unless its `icon` says\notherwise. On iOS it is its own glass circle beside the bar; elsewhere it\njoins the bar as the last destination."
+          "description": "A destination set apart from the rest, search unless its `icon` says\notherwise. On iOS it is its own glass circle beside the bar; elsewhere it\njoins the bar as the last destination.",
+          "typeRefs": [
+            "BottomNavSearch"
+          ]
         },
         {
           "name": "minimized",
@@ -102,9 +108,40 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set."
+          "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "BottomNavItem": {
+      "kind": "interface",
+      "definition": "interface BottomNavItem {\n  /** Unique key for this destination */\n  key: string;\n  /** Display label, always shown under the icon */\n  label: string;\n  /** Icon — Material Symbol name (string, drawn filled when selected) or custom element (ReactNode) */\n  icon: string | React.ReactNode;\n  /** Renders the destination as a real link to this URL instead of a button */\n  href?: string;\n  /** Click handler — also fires on a link destination, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Count on the icon's corner; `true` shows a dot with no number */\n  badge?: number | string | true;\n}"
+    },
+    "BottomNavSearch": {
+      "kind": "interface",
+      "definition": "interface BottomNavSearch {\n  /** The button's accessible name on iOS, and its visible tab label on the other platforms */\n  label: string;\n  /**\n   * Icon — Material Symbol name (string) or custom element (ReactNode).\n   * Defaults to `search`; set it when the set-apart slot launches something\n   * else, such as an assistant.\n   */\n  icon?: string | React.ReactNode;\n  /** Click handler */\n  onClick?: () => void;\n  /** Renders the button as a link to this URL instead */\n  href?: string;\n}"
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  }
 }

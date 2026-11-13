@@ -42,8 +42,26 @@ export function siteUrl() {
   return SITE_URL;
 }
 
-/** One markdown table cell: pipes escaped, newlines flattened. */
-const cell = (value) => String(value ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
+/**
+ * One markdown table cell: pipes escaped, and every run of whitespace that
+ * holds a line break folded to one space, so a JSDoc paragraph break reads
+ * as a sentence gap rather than a double space.
+ */
+const cell = (value) =>
+  String(value ?? '').replace(/\|/g, '\\|').replace(/[ \t]*\r?\n\s*/g, ' ').trim();
+
+/**
+ * A code span that survives backticks inside it: the fence is one backtick
+ * longer than the longest run in the text, padded with a space when the
+ * text starts or ends with one (`remainingLabel`'s default is a template
+ * string, and a single-backtick fence closed it after `(remaining: number) => `).
+ */
+const code = (text) => {
+  const longest = Math.max(0, ...[...text.matchAll(/`+/g)].map((run) => run[0].length));
+  const fence = '`'.repeat(longest + 1);
+  const pad = longest > 0 ? ' ' : '';
+  return `${fence}${pad}${text}${pad}${fence}`;
+};
 
 /** The widget's route and import lines come from its registry, never from a rule restated here. */
 const widgetFor = (entry) => chatRegistry.widgets.find((widget) => widget.name === entry.name);
@@ -111,10 +129,31 @@ export function buildComponentMarkdown(entry, origin) {
         ? `${cell(prop.description)} Deprecated: ${cell(prop.deprecated)}`
         : cell(prop.description);
       lines.push(
-        `| ${cell(prop.name)} | \`${cell(prop.type)}\` | ${prop.required ? 'yes' : 'no'} | ` +
-          `${prop.defaultValue != null ? `\`${cell(prop.defaultValue)}\`` : ''} | ${description} |`
+        `| ${cell(prop.name)} | ${code(cell(prop.type))} | ${prop.required ? 'yes' : 'no'} | ` +
+          `${prop.defaultValue != null ? code(cell(prop.defaultValue)) : ''} | ${description} |`
       );
     }
+  }
+
+  // The types the props reference, so the page is a closed contract like
+  // the schema and the MCP response: every type named in a table above is
+  // defined here, or named with the package that defines it.
+  const types = Object.entries(entry.types ?? {});
+  if (types.length > 0) {
+    lines.push('', '## Types', '');
+    for (const [name, type] of types) {
+      lines.push(`### ${name}`, '');
+      if (type.description) lines.push(type.description, '');
+      lines.push('```ts', type.definition, '```', '');
+    }
+    lines.pop();
+  }
+  const external = Object.entries(entry.externalTypes ?? {});
+  if (external.length > 0) {
+    lines.push(
+      '',
+      `Types from other packages: ${external.map(([name, from]) => `\`${name}\` (${from})`).join(', ')}.`
+    );
   }
 
   lines.push('');

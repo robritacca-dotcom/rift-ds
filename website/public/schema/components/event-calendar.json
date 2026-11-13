@@ -22,7 +22,10 @@
           "typeKind": "array",
           "required": false,
           "description": "The events to place on the grid, including any that fall on the visible leading and trailing days of the neighbouring months.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "EventCalendarEvent"
+          ]
         },
         {
           "name": "month",
@@ -58,7 +61,10 @@
           "type": "((event: EventCalendarEvent) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the clicked event. Pills only render as buttons when this is set."
+          "description": "Fires with the clicked event. Pills only render as buttons when this is set.",
+          "typeRefs": [
+            "EventCalendarEvent"
+          ]
         },
         {
           "name": "onDateClick",
@@ -147,7 +153,10 @@
             "6"
           ],
           "required": false,
-          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`."
+          "description": "The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to\nthe first day of the week in `locale`: Sunday in `en-US`, Monday in\n`de-DE`.",
+          "typeRefs": [
+            "Weekday"
+          ]
         },
         {
           "name": "className",
@@ -159,5 +168,27 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "EventCalendarColor": {
+      "kind": "type",
+      "definition": "type EventCalendarColor =\n  | 'neutral'\n  | 'coral'\n  | 'violet'\n  | 'cobalt'\n  | 'amber'\n  | 'gold'\n  | 'mint';"
+    },
+    "EventCalendarEvent": {
+      "kind": "interface",
+      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD). */\n  date: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+      "refs": [
+        "EventCalendarColor"
+      ]
+    },
+    "Weekday": {
+      "kind": "type",
+      "definition": "type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "A day of the week as `Date.getDay()` numbers it: 0 is Sunday, 6 is Saturday."
+    }
+  },
+  "externalTypes": {
+    "Date": "typescript",
+    "ReactNode": "react"
+  }
 }

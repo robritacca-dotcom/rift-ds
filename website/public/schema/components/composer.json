@@ -116,8 +116,8 @@
         },
         {
           "name": "contextIcon",
-          "type": "ReactNode",
-          "typeKind": "reference",
+          "type": "string | ReactNode",
+          "typeKind": "other",
           "required": false,
           "description": "Icon at the left of the context chip — Material Symbol name (string,\ne.g. `visibility`, `article`) or custom element (ReactNode). Decorative\nand hidden from assistive technology — the chip's text carries the\nmeaning. None by default, matching the ai set's icon-free-unless-asked\nconvention."
         },
@@ -141,7 +141,10 @@
           "type": "AttachmentItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "The files queued on this message, drawn as a scrolling row of square\ntiles above the textarea. Controlled by the caller: Composer draws the\nlist and reports what was added or removed, and never stores a file.\n`useAttachments` is the usual owner."
+          "description": "The files queued on this message, drawn as a scrolling row of square\ntiles above the textarea. Controlled by the caller: Composer draws the\nlist and reports what was added or removed, and never stores a file.\n`useAttachments` is the usual owner.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "onFilesSelected",
@@ -162,7 +165,10 @@
           "type": "((item: AttachmentItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons."
+          "description": "Fires with a queued file when its tile is pressed. Its presence makes the tiles buttons.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "accept",
@@ -230,7 +236,10 @@
           "type": "(Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\"> & { removeLabel?: ((name: string) => string); })",
           "typeKind": "function",
           "required": false,
-          "description": "The words each queued file's tile writes, merged over the tile's English\ndefaults: its status lines (\"Uploading…\", \"Upload failed\", \"Unavailable\"),\nits progress spinner's name, and its remove button's name, which is given\nthe file name and defaults to \"Remove\" followed by it."
+          "description": "The words each queued file's tile writes, merged over the tile's English\ndefaults: its status lines (\"Uploading…\", \"Upload failed\", \"Unavailable\"),\nits progress spinner's name, and its remove button's name, which is given\nthe file name and defaults to \"Remove\" followed by it.",
+          "typeRefs": [
+            "AttachmentTileProps"
+          ]
         },
         {
           "name": "formatFileAnnouncement",
@@ -253,14 +262,20 @@
           "type": "MentionSource[]",
           "typeKind": "array",
           "required": false,
-          "description": "What a person can reference while typing, one source per trigger\ncharacter: `@` for entities, `/` for skills. Typing a trigger at the\nstart of a word opens a menu of that source's items, filtered as the\nword grows. Arrows move through it, Enter or Tab writes the choice into\nthe text, Escape closes it. A mention is drawn in the tag colour\nwherever its exact name stands in the text; the value stays a plain\nstring."
+          "description": "What a person can reference while typing, one source per trigger\ncharacter: `@` for entities, `/` for skills. Typing a trigger at the\nstart of a word opens a menu of that source's items, filtered as the\nword grows. Arrows move through it, Enter or Tab writes the choice into\nthe text, Escape closes it. A mention is drawn in the tag colour\nwherever its exact name stands in the text; the value stays a plain\nstring.",
+          "typeRefs": [
+            "MentionSource"
+          ]
         },
         {
           "name": "onMentionSelect",
           "type": "((item: MentionItem, trigger: string) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the item a person chose from the mention menu, and the trigger that opened it."
+          "description": "Fires with the item a person chose from the mention menu, and the trigger that opened it.",
+          "typeRefs": [
+            "MentionItem"
+          ]
         },
         {
           "name": "mentionPlacement",
@@ -329,5 +344,63 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AttachmentItem": {
+      "kind": "interface",
+      "definition": "interface AttachmentItem {\n  /** Stable identity, unique within its list. */\n  id: string;\n  /** File name, extension included. */\n  name: string;\n  /** What kind of file it is. */\n  kind: FileKind;\n  /**\n   * Short label on the file's type mark, replacing the one derived from its\n   * kind and extension (`getFileTypeLabel`: \"PDF\", \"DOC\", the extension, or\n   * \"FILE\"), wherever the family draws the mark: the tile, a lone picture's\n   * badge, the viewer and a composer's queue. Set it to localise the mark or\n   * to name a format the derivation does not know.\n   */\n  typeLabel?: string;\n  /** Size in bytes. */\n  size?: number;\n  /** Mime type, when the source reported one. */\n  mimeType?: string;\n  /** Where the file is in its life. */\n  status: AttachmentStatus;\n  /** Upload progress, 0 to 100, while `status` is `uploading`. */\n  progress?: number;\n  /** Why it failed, while `status` is `error`. */\n  error?: string;\n  /** Image that fills the tile: an object URL for a picture, or a\n      host-rendered first page for a document. */\n  previewSrc?: string;\n  /** Alt text for the preview. Defaults to the name. */\n  previewAlt?: string;\n  /** Full-size image for the viewer, when the preview is a thumbnail.\n      Defaults to `previewSrc`. */\n  src?: string;\n  /** The file itself, for the viewer to show a PDF or a text file in place\n      (through DocumentViewer) and for a picture with no `src`. Distinct\n      from `src`, which is always an image. */\n  fileUrl?: string;\n  /** Intrinsic width of the preview, to reserve its shape before it loads. */\n  width?: number;\n  /** Intrinsic height of the preview. */\n  height?: number;\n  /** First lines of a pasted block, drawn as the tile's excerpt. */\n  excerpt?: string;\n}",
+      "description": "One attachment as the family passes it around: what a tile draws, what a\ngroup lays out, and what `useAttachments` keeps. Plain data, so it\nserialises and crosses the server boundary; the `File` itself stays with\nwhoever owns the upload.",
+      "refs": [
+        "AttachmentStatus",
+        "FileKind"
+      ]
+    },
+    "AttachmentStatus": {
+      "kind": "type",
+      "definition": "type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';",
+      "description": "Where an attachment is in its life: usable, on its way, failed, or gone."
+    },
+    "AttachmentTileOwnProps": {
+      "kind": "type",
+      "definition": "type AttachmentTileOwnProps = {\n  /** File name, extension included. Truncates in the middle so the extension stays visible. */\n  name: string;\n  /**\n   * What kind of file it is, which picks the type mark: a coloured lettered\n   * glyph for the well-known formats, a neutral extension badge for the\n   * rest. Derive it with `getFileKind`.\n   */\n  kind?: FileKind;\n  /** Short uppercase label on the type mark. Defaults from the kind and the extension. */\n  typeLabel?: string;\n  /** Where the file is in its life. Anything but `ready` shows the name with a status line. */\n  status?: AttachmentStatus;\n  /** Upload progress, 0 to 100, reported to assistive technology while `uploading`. */\n  progress?: number;\n  /**\n   * Image that fills the tile while `ready`: an object URL for a picture, or\n   * a first page the host rendered for a document. A non-image kind keeps\n   * its type mark over the corner.\n   */\n  previewSrc?: string;\n  /** Alt text for the preview. Defaults to the file name. */\n  previewAlt?: string;\n  /**\n   * Whether the type mark sits over the corner of a preview. Defaults to on\n   * for a document's first page, which still has to say what format it is,\n   * and off for a picture, which is its own description. A sent message\n   * turns it on for pictures too.\n   */\n  previewMark?: boolean;\n  /** First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`. */\n  excerpt?: string;\n  /** Secondary line under the name while `ready`, e.g. \"1.2 MB\". Callers keep their own formatting. */\n  meta?: string;\n  /** Why the file failed. Replaces `errorLabel` on the status line. */\n  error?: string;\n  /**\n   * Tile size. Compact shrinks the square and drops the secondary line of a\n   * ready file. Unrelated to any native `size` attribute: the root is a div.\n   */\n  size?: 'default' | 'compact';\n  /** Click handler. Its presence makes the tile body a button. */\n  onClick?: React.MouseEventHandler<HTMLButtonElement>;\n  /** Remove handler. Its presence renders the corner remove button. */\n  onRemove?: () => void;\n  /** Status line while `uploading`. */\n  uploadingLabel?: string;\n  /** Status line while `error`, when no `error` message is given. */\n  errorLabel?: string;\n  /** Status line while `unavailable`. */\n  unavailableLabel?: string;\n  /** Accessible label for the remove button. Defaults to \"Remove\" and the file name. */\n  removeLabel?: string;\n  /** Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to \"Uploading\" followed by the name. */\n  progressLabel?: (name: string) => string;\n  /** Additional CSS classes */\n  className?: string;\n};",
+      "description": "Props owned by AttachmentTile itself — everything else falls through to the root element.",
+      "refs": [
+        "AttachmentStatus",
+        "FileKind"
+      ]
+    },
+    "AttachmentTileProps": {
+      "kind": "interface",
+      "definition": "interface AttachmentTileProps\n  extends AttachmentTileOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AttachmentTileOwnProps> {}",
+      "refs": [
+        "AttachmentTileOwnProps"
+      ]
+    },
+    "FileKind": {
+      "kind": "type",
+      "definition": "type FileKind =\n  | 'pdf'\n  | 'document'\n  | 'spreadsheet'\n  | 'presentation'\n  | 'image'\n  | 'audio'\n  | 'video'\n  | 'archive'\n  | 'code'\n  | 'text'\n  | 'pasted'\n  | 'generic';"
+    },
+    "MentionItem": {
+      "kind": "type",
+      "definition": "type MentionItem = {\n  /** Stable identity, unique within its source. */\n  id: string;\n  /** The name shown in the menu and written into the text after the trigger character. */\n  label: string;\n  /** A quieter second phrase on the same row: a role, a path, what a skill does. */\n  description?: string;\n  /** Leading mark: a Material Symbol name, or any node (an Avatar). Decorative. */\n  icon?: string | React.ReactNode;\n  /** Extra words the filter matches on besides the label. */\n  keywords?: string[];\n  /** Listed but not choosable. */\n  disabled?: boolean;\n};",
+      "description": "One thing a person can reference: a teammate, a file, a skill."
+    },
+    "MentionSource": {
+      "kind": "type",
+      "definition": "type MentionSource = {\n  /** The single character that opens this source. */\n  trigger: string;\n  /** The items it offers. */\n  items: MentionItem[];\n  /** Accessible name for this source's menu (\"People\", \"Skills\"). */\n  label?: string;\n};",
+      "description": "Everything one trigger character opens: `@` for entities, `/` for skills.",
+      "refs": [
+        "MentionItem"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithoutRef": "react",
+    "File": "typescript",
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react",
+    "Omit": "typescript",
+    "Pick": "typescript",
+    "ReactNode": "react"
+  }
 }

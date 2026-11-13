@@ -21,7 +21,10 @@
           "type": "AccordionItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "List of accordion items"
+          "description": "List of accordion items",
+          "typeRefs": [
+            "AccordionItem"
+          ]
         },
         {
           "name": "multiple",
@@ -63,5 +66,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AccordionItem": {
+      "kind": "interface",
+      "definition": "interface AccordionItem {\n  /** Unique identifier */\n  id: string;\n  /** Header text */\n  title: string;\n  /** Body content */\n  content: React.ReactNode;\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

@@ -50,14 +50,20 @@
           "type": "ComboboxOption[]",
           "typeKind": "array",
           "required": true,
-          "description": "Available options (flat list)"
+          "description": "Available options (flat list)",
+          "typeRefs": [
+            "ComboboxOption"
+          ]
         },
         {
           "name": "groups",
           "type": "ComboboxOptionGroup[]",
           "typeKind": "array",
           "required": false,
-          "description": "Optional grouped options — when provided, `options` is ignored"
+          "description": "Optional grouped options — when provided, `options` is ignored",
+          "typeRefs": [
+            "ComboboxOptionGroup"
+          ]
         },
         {
           "name": "multiple",
@@ -213,5 +219,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ComboboxOption": {
+      "kind": "interface",
+      "definition": "interface ComboboxOption {\n  /** Display label — also the text matched when filtering */\n  label: string;\n  /** Option value */\n  value: string;\n  /** Optional secondary line shown under the label */\n  description?: string;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+    },
+    "ComboboxOptionGroup": {
+      "kind": "interface",
+      "definition": "interface ComboboxOptionGroup {\n  /** Group heading */\n  label: string;\n  /** Options within the group */\n  options: ComboboxOption[];\n}",
+      "refs": [
+        "ComboboxOption"
+      ]
+    }
+  }
 }

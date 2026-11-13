@@ -21,7 +21,10 @@
           "type": "TreeViewNode[]",
           "typeKind": "array",
           "required": true,
-          "description": "Tree data to render"
+          "description": "Tree data to render",
+          "typeRefs": [
+            "TreeViewNode"
+          ]
         },
         {
           "name": "defaultExpandedIds",
@@ -76,5 +79,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "TreeViewNode": {
+      "kind": "interface",
+      "definition": "interface TreeViewNode {\n  /** Unique identifier for the node */\n  id: string;\n  /** Text shown on the row */\n  label: string;\n  /** Icon on the row — Material Symbol name (string) or custom element (ReactNode); defaults to `folder` for branches and `draft` for leaves */\n  icon?: string | React.ReactNode;\n  /** Child nodes; a non-empty list makes the node an expandable branch */\n  children?: TreeViewNode[];\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

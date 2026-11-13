@@ -21,7 +21,10 @@
           "type": "DateInput",
           "typeKind": "reference",
           "required": true,
-          "description": "The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch."
+          "description": "The moment it falls due: a Date, an ISO 8601 string or milliseconds since the epoch.",
+          "typeRefs": [
+            "DateInput"
+          ]
         },
         {
           "name": "timeZone",
@@ -48,7 +51,10 @@
           "type": "DeadlineThresholds",
           "typeKind": "reference",
           "required": false,
-          "description": "How close the deadline must be before it turns to the warning and then the error role."
+          "description": "How close the deadline must be before it turns to the warning and then the error role.",
+          "typeRefs": [
+            "DeadlineThresholds"
+          ]
         },
         {
           "name": "prefixLabel",
@@ -103,14 +109,20 @@
           "type": "DateInput",
           "typeKind": "reference",
           "required": false,
-          "description": "The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot."
+          "description": "The moment to measure from, in place of the clock: for a server render that must match, a test, or a screenshot.",
+          "typeRefs": [
+            "DateInput"
+          ]
         },
         {
           "name": "onStatusChange",
           "type": "((status: DeadlineStatus) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called when the deadline moves to a new status as time passes, so a host can react (sort, notify)."
+          "description": "Called when the deadline moves to a new status as time passes, so a host can react (sort, notify).",
+          "typeRefs": [
+            "DeadlineStatus"
+          ]
         },
         {
           "name": "locale",
@@ -129,5 +141,25 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "DateInput": {
+      "kind": "type",
+      "definition": "type DateInput = Date | string | number;",
+      "description": "A date, an ISO 8601 string, or milliseconds since the epoch. A bare `YYYY-MM-DD` is read as midnight UTC, so it never shifts a day."
+    },
+    "DeadlineStatus": {
+      "kind": "type",
+      "definition": "type DeadlineStatus = 'neutral' | 'warning' | 'error' | 'overdue';",
+      "description": "Where a deadline stands against now."
+    },
+    "DeadlineThresholds": {
+      "kind": "type",
+      "definition": "type DeadlineThresholds = {\n  /** Under this long to go, the deadline turns to the warning role. Defaults to three days. */\n  warning?: number;\n  /** Under this long to go, the deadline turns to the error role. Defaults to one day. */\n  critical?: number;\n};",
+      "description": "How close a deadline must be for each warning, in milliseconds."
+    }
+  },
+  "externalTypes": {
+    "Date": "typescript"
+  }
 }

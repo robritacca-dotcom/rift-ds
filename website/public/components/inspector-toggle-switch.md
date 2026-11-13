@@ -16,6 +16,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | The setting's name, drawn inside the bar on the left. Also the switch's accessible name. |
-| size | `"default" \| "compact"` | no | `default` | Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute). |
+| size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute). |
 | onCheckedChange | `((checked: boolean) => void)` | no |  | Convenience callback receiving the checked state directly. Fires alongside `onChange`, which keeps the standard React event signature. |
-| className | `string` | no | `` | Additional CSS classes, applied to the bar rather than the <input>. |
+| className | `string` | no | `''` | Additional CSS classes, applied to the bar rather than the <input>. |

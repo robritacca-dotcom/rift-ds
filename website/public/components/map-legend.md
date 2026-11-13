@@ -18,4 +18,27 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | title | `string` | no |  | The map's name, set above the key. Intentionally shadows the native `title` tooltip attribute, which MapLegend does not expose. |
 | description | `ReactNode` | no |  | One or two lines saying what the map shows. |
 | items | `MapLegendItem[]` | no | `[]` | The key itself: one row per marker kind. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### MapLegendItem
+
+One row of the key.
+
+```ts
+interface MapLegendItem {
+  /**
+   * The marker the row explains. `point` and `anchor` draw Globe's cross and
+   * square; `arc` draws a short stroke of the arc gradient; a `line` is a flat
+   * rule in `color`; any React node renders as given.
+   */
+  glyph: 'point' | 'anchor' | 'arc' | 'line' | React.ReactNode;
+  /** What the marker means. */
+  label: React.ReactNode;
+  /** Colour for the `line` glyph (and the `arc` glyph, replacing its gradient). Any CSS colour. */
+  color?: string;
+}
+```
+
+Types from other packages: `ReactNode` (react).

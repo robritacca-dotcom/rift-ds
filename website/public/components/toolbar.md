@@ -16,11 +16,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | Accessible name for the toolbar — what a screen reader calls the group. |
-| orientation | `"horizontal" \| "vertical"` | no | `horizontal` | Which way the controls run. |
-| variant | `"default" \| "floating"` | no | `default` | `default` is an attached bar on the container fill; `floating` is the glass pill for controls hovering over content — position it with your own layout (the component never fixes itself to the viewport). |
+| orientation | `"horizontal" \| "vertical"` | no | `'horizontal'` | Which way the controls run. |
+| variant | `"default" \| "floating"` | no | `'default'` | `default` is an attached bar on the container fill; `floating` is the glass pill for controls hovering over content — position it with your own layout (the component never fixes itself to the viewport). |
 | children | `ReactNode` | no |  | The toolbar's controls — group unrelated clusters with `ToolbarSeparator`. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 
 ## ToolbarSeparator props
 
 No own props; native attributes pass through.
+
+Types from other packages: `ReactNode` (react).

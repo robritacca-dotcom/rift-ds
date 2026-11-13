@@ -21,7 +21,10 @@
           "type": "AttachmentItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The files on the message, in order."
+          "description": "The files on the message, in order.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "align",
@@ -78,28 +81,40 @@
           "type": "((item: AttachmentItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires when a file is pressed, whether or not the viewer opens."
+          "description": "Fires when a file is pressed, whether or not the viewer opens.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "renderPreview",
           "type": "((item: AttachmentItem) => ReactNode)",
           "typeKind": "function",
           "required": false,
-          "description": "Passed to the viewer: draws a file it cannot, such as the pages of a PDF."
+          "description": "Passed to the viewer: draws a file it cannot, such as the pages of a PDF.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "onDownload",
           "type": "((item: AttachmentItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Passed to the viewer: fires when Download is pressed, and renders the buttons."
+          "description": "Passed to the viewer: fires when Download is pressed, and renders the buttons.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "onRetry",
           "type": "((item: AttachmentItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Passed to the viewer: fires when \"Try again\" is pressed on a file that failed to load."
+          "description": "Passed to the viewer: fires when \"Try again\" is pressed on a file that failed to load.",
+          "typeRefs": [
+            "AttachmentItem"
+          ]
         },
         {
           "name": "size",
@@ -142,14 +157,20 @@
           "type": "Pick<AttachmentTileProps, \"uploadingLabel\" | \"errorLabel\" | \"unavailableLabel\" | \"progressLabel\">",
           "typeKind": "reference",
           "required": false,
-          "description": "The status lines and progress name every tile writes, merged over the tile's English defaults (\"Uploading…\", \"Upload failed\", \"Unavailable\")."
+          "description": "The status lines and progress name every tile writes, merged over the tile's English defaults (\"Uploading…\", \"Upload failed\", \"Unavailable\").",
+          "typeRefs": [
+            "AttachmentTileProps"
+          ]
         },
         {
           "name": "attachmentViewerLabels",
           "type": "Pick<AttachmentViewerProps, \"closeLabel\" | \"downloadLabel\" | \"previousLabel\" | \"nextLabel\" | \"retryLabel\" | \"noPreviewLabel\" | \"failedLabel\" | \"failedDescription\" | \"formatPosition\">",
           "typeKind": "reference",
           "required": false,
-          "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\")."
+          "description": "The words the built-in viewer writes, merged over its English defaults: its buttons (\"Download\", \"Close\", \"Previous file\", \"Next file\", \"Try again\"), its fallback headlines and the position text (\"2 of 5\").",
+          "typeRefs": [
+            "AttachmentViewerProps"
+          ]
         },
         {
           "name": "locale",
@@ -168,5 +189,64 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AttachmentItem": {
+      "kind": "interface",
+      "definition": "interface AttachmentItem {\n  /** Stable identity, unique within its list. */\n  id: string;\n  /** File name, extension included. */\n  name: string;\n  /** What kind of file it is. */\n  kind: FileKind;\n  /**\n   * Short label on the file's type mark, replacing the one derived from its\n   * kind and extension (`getFileTypeLabel`: \"PDF\", \"DOC\", the extension, or\n   * \"FILE\"), wherever the family draws the mark: the tile, a lone picture's\n   * badge, the viewer and a composer's queue. Set it to localise the mark or\n   * to name a format the derivation does not know.\n   */\n  typeLabel?: string;\n  /** Size in bytes. */\n  size?: number;\n  /** Mime type, when the source reported one. */\n  mimeType?: string;\n  /** Where the file is in its life. */\n  status: AttachmentStatus;\n  /** Upload progress, 0 to 100, while `status` is `uploading`. */\n  progress?: number;\n  /** Why it failed, while `status` is `error`. */\n  error?: string;\n  /** Image that fills the tile: an object URL for a picture, or a\n      host-rendered first page for a document. */\n  previewSrc?: string;\n  /** Alt text for the preview. Defaults to the name. */\n  previewAlt?: string;\n  /** Full-size image for the viewer, when the preview is a thumbnail.\n      Defaults to `previewSrc`. */\n  src?: string;\n  /** The file itself, for the viewer to show a PDF or a text file in place\n      (through DocumentViewer) and for a picture with no `src`. Distinct\n      from `src`, which is always an image. */\n  fileUrl?: string;\n  /** Intrinsic width of the preview, to reserve its shape before it loads. */\n  width?: number;\n  /** Intrinsic height of the preview. */\n  height?: number;\n  /** First lines of a pasted block, drawn as the tile's excerpt. */\n  excerpt?: string;\n}",
+      "description": "One attachment as the family passes it around: what a tile draws, what a\ngroup lays out, and what `useAttachments` keeps. Plain data, so it\nserialises and crosses the server boundary; the `File` itself stays with\nwhoever owns the upload.",
+      "refs": [
+        "AttachmentStatus",
+        "FileKind"
+      ]
+    },
+    "AttachmentStatus": {
+      "kind": "type",
+      "definition": "type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';",
+      "description": "Where an attachment is in its life: usable, on its way, failed, or gone."
+    },
+    "AttachmentTileOwnProps": {
+      "kind": "type",
+      "definition": "type AttachmentTileOwnProps = {\n  /** File name, extension included. Truncates in the middle so the extension stays visible. */\n  name: string;\n  /**\n   * What kind of file it is, which picks the type mark: a coloured lettered\n   * glyph for the well-known formats, a neutral extension badge for the\n   * rest. Derive it with `getFileKind`.\n   */\n  kind?: FileKind;\n  /** Short uppercase label on the type mark. Defaults from the kind and the extension. */\n  typeLabel?: string;\n  /** Where the file is in its life. Anything but `ready` shows the name with a status line. */\n  status?: AttachmentStatus;\n  /** Upload progress, 0 to 100, reported to assistive technology while `uploading`. */\n  progress?: number;\n  /**\n   * Image that fills the tile while `ready`: an object URL for a picture, or\n   * a first page the host rendered for a document. A non-image kind keeps\n   * its type mark over the corner.\n   */\n  previewSrc?: string;\n  /** Alt text for the preview. Defaults to the file name. */\n  previewAlt?: string;\n  /**\n   * Whether the type mark sits over the corner of a preview. Defaults to on\n   * for a document's first page, which still has to say what format it is,\n   * and off for a picture, which is its own description. A sent message\n   * turns it on for pictures too.\n   */\n  previewMark?: boolean;\n  /** First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`. */\n  excerpt?: string;\n  /** Secondary line under the name while `ready`, e.g. \"1.2 MB\". Callers keep their own formatting. */\n  meta?: string;\n  /** Why the file failed. Replaces `errorLabel` on the status line. */\n  error?: string;\n  /**\n   * Tile size. Compact shrinks the square and drops the secondary line of a\n   * ready file. Unrelated to any native `size` attribute: the root is a div.\n   */\n  size?: 'default' | 'compact';\n  /** Click handler. Its presence makes the tile body a button. */\n  onClick?: React.MouseEventHandler<HTMLButtonElement>;\n  /** Remove handler. Its presence renders the corner remove button. */\n  onRemove?: () => void;\n  /** Status line while `uploading`. */\n  uploadingLabel?: string;\n  /** Status line while `error`, when no `error` message is given. */\n  errorLabel?: string;\n  /** Status line while `unavailable`. */\n  unavailableLabel?: string;\n  /** Accessible label for the remove button. Defaults to \"Remove\" and the file name. */\n  removeLabel?: string;\n  /** Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to \"Uploading\" followed by the name. */\n  progressLabel?: (name: string) => string;\n  /** Additional CSS classes */\n  className?: string;\n};",
+      "description": "Props owned by AttachmentTile itself — everything else falls through to the root element.",
+      "refs": [
+        "AttachmentStatus",
+        "FileKind"
+      ]
+    },
+    "AttachmentTileProps": {
+      "kind": "interface",
+      "definition": "interface AttachmentTileProps\n  extends AttachmentTileOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AttachmentTileOwnProps> {}",
+      "refs": [
+        "AttachmentTileOwnProps"
+      ]
+    },
+    "AttachmentViewerOwnProps": {
+      "kind": "type",
+      "definition": "type AttachmentViewerOwnProps = {\n  /** Whether the viewer is open. */\n  open: boolean;\n  /** Fires when the viewer asks to close: the close button, Escape, or the backdrop. */\n  onOpenChange: (open: boolean) => void;\n  /** The files the viewer steps through, in order. */\n  items: AttachmentItem[];\n  /** Id of the file on show, for controlled use. Pair with `onActiveChange`. */\n  activeId?: string;\n  /** Id of the file shown first, for uncontrolled use. Defaults to the first item. */\n  defaultActiveId?: string;\n  /** Fires with the id of the file stepped to. */\n  onActiveChange?: (id: string) => void;\n  /**\n   * Draws a file the viewer cannot: the pages of a PDF, a media player, a\n   * rendered spreadsheet. Return nothing to fall back to the built-in view.\n   */\n  renderPreview?: (item: AttachmentItem) => React.ReactNode;\n  /** Fires with the file on show when Download is pressed. Its presence renders the buttons. */\n  onDownload?: (item: AttachmentItem) => void;\n  /** Fires with a file that failed to load when \"Try again\" is pressed. Its presence renders the button. */\n  onRetry?: (item: AttachmentItem) => void;\n  /** Whether Escape, the backdrop and the close button dismiss the viewer. */\n  dismissible?: boolean;\n  /** Text of the Download buttons. */\n  downloadLabel?: string;\n  /** Accessible label for the close button. */\n  closeLabel?: string;\n  /** Accessible label for the previous-file button. */\n  previousLabel?: string;\n  /** Accessible label for the next-file button. */\n  nextLabel?: string;\n  /** Text of the retry button. */\n  retryLabel?: string;\n  /** Headline when a file has nothing the viewer can draw. */\n  noPreviewLabel?: string;\n  /** Headline when a file failed to load or is no longer available. */\n  failedLabel?: string;\n  /** Sentence under `failedLabel`, when the file carries no error message of its own. */\n  failedDescription?: string;\n  /** Builds the position text, e.g. \"2 of 5\", from a one-based index and the total. */\n  formatPosition?: (position: number, total: number) => string;\n  /** The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. */\n  locale?: string;\n  /** Additional CSS classes — applied to the portal container, not the panel. */\n  className?: string;\n};",
+      "description": "Props owned by AttachmentViewer itself — everything else falls through to the panel.",
+      "refs": [
+        "AttachmentItem"
+      ]
+    },
+    "AttachmentViewerProps": {
+      "kind": "interface",
+      "definition": "interface AttachmentViewerProps\n  extends AttachmentViewerOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AttachmentViewerOwnProps> {}",
+      "refs": [
+        "AttachmentViewerOwnProps"
+      ]
+    },
+    "FileKind": {
+      "kind": "type",
+      "definition": "type FileKind =\n  | 'pdf'\n  | 'document'\n  | 'spreadsheet'\n  | 'presentation'\n  | 'image'\n  | 'audio'\n  | 'video'\n  | 'archive'\n  | 'code'\n  | 'text'\n  | 'pasted'\n  | 'generic';"
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithoutRef": "react",
+    "HTMLButtonElement": "typescript",
+    "MouseEventHandler": "react",
+    "Omit": "typescript",
+    "Pick": "typescript",
+    "ReactNode": "react"
+  }
 }

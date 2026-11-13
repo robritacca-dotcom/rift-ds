@@ -21,7 +21,10 @@
           "type": "Segment[]",
           "typeKind": "array",
           "required": true,
-          "description": "Array of segments"
+          "description": "Array of segments",
+          "typeRefs": [
+            "Segment"
+          ]
         },
         {
           "name": "value",
@@ -152,5 +155,14 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "Segment": {
+      "kind": "interface",
+      "definition": "interface Segment {\n  /** Unique value for this segment */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

@@ -28,9 +28,70 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onPointHover | `((point: GlobePoint \| null) => void)` | no |  | Fires as the pointer enters a marker (or it takes focus), and with `null` as it leaves. |
 | onPointClick | `((point: GlobePoint) => void)` | no |  | Fires when a marker is clicked, or activated with Enter or Space while focused. Setting it makes the markers real buttons on a non-interactive globe too. |
 | renderCallout | `((point: GlobePoint) => ReactNode)` | no |  | Renders the annotation for the active (or hovered) point. It is placed beside the marker in an HTML overlay, so any markup works; MapCallout is the intended filling. The overlay carries `data-side="left"\|"right"` for which side of the marker it sits on. |
-| label | `string` | no | `Globe` | Accessible name for the globe, e.g. "Listening points across the network". The point and arc counts are appended for screen readers. |
-| pointsLabel | `((count: number) => string)` | no | `(count: number) => `${count} ${count === 1 ? 'point' : 'points'}`` | The point count appended to the globe's accessible name, given the count. Defaults to "<count> point" or "<count> points". |
-| arcsLabel | `((count: number) => string)` | no | `(count: number) => `${count} ${count === 1 ? 'arc' : 'arcs'}`` | The arc count appended to the globe's accessible name, given the count. Defaults to "<count> arc" or "<count> arcs". |
-| rotateHintLabel | `string` | no | `Drag to rotate, or use the arrow keys when focused.` | The pointer and keyboard instructions appended to the accessible name while `interactive`. |
-| roleDescription | `string` | no | `globe` | What assistive technology calls the globe in place of its role, applied whichever role it takes: `application` while `interactive`, `group` when only `onPointClick` makes the markers buttons, and `img` otherwise. Defaults to "globe". |
-| className | `string` | no | `` | Additional CSS classes |
+| label | `string` | no | `'Globe'` | Accessible name for the globe, e.g. "Listening points across the network". The point and arc counts are appended for screen readers. |
+| pointsLabel | `((count: number) => string)` | no | `` (count: number) => `${count} ${count === 1 ? 'point' : 'points'}` `` | The point count appended to the globe's accessible name, given the count. Defaults to "<count> point" or "<count> points". |
+| arcsLabel | `((count: number) => string)` | no | `` (count: number) => `${count} ${count === 1 ? 'arc' : 'arcs'}` `` | The arc count appended to the globe's accessible name, given the count. Defaults to "<count> arc" or "<count> arcs". |
+| rotateHintLabel | `string` | no | `'Drag to rotate, or use the arrow keys when focused.'` | The pointer and keyboard instructions appended to the accessible name while `interactive`. |
+| roleDescription | `string` | no | `'globe'` | What assistive technology calls the globe in place of its role, applied whichever role it takes: `application` while `interactive`, `group` when only `onPointClick` makes the markers buttons, and `img` otherwise. Defaults to "globe". |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### GlobeArc
+
+A great-circle arc between two points.
+
+```ts
+interface GlobeArc {
+  /** `id` of the point the arc leaves. */
+  from: string;
+  /** `id` of the point the arc reaches. */
+  to: string;
+  /**
+   * Stroke colour, any CSS colour (`var(--color-chart-series-3)` works).
+   * Omit for the default cobalt-to-violet gradient along the arc.
+   */
+  color?: string;
+  /** How far the arc lifts off the surface at its midpoint, as a fraction of the radius. */
+  altitude?: number;
+}
+```
+
+### GlobePoint
+
+A place on the globe.
+
+```ts
+interface GlobePoint {
+  /** Stable identifier, referenced by arcs and by `activePointId`. */
+  id: string;
+  /** Latitude in degrees, north positive. */
+  lat: number;
+  /** Longitude in degrees, east positive. */
+  lng: number;
+  /** Short label drawn beside the marker when `showLabels` is on. */
+  label?: string;
+  /**
+   * Marker glyph. `point` is a cross (something that moves or listens),
+   * `anchor` is a square (something fixed). The glyph is the only difference.
+   */
+  kind?: 'point' | 'anchor';
+  /**
+   * Marker colour, any CSS colour (`var(--color-status-warning-border)`
+   * works) — the same per-point channel WorldMap carries, so one dataset
+   * keys identically on both projections. Omit for the text-ramp default;
+   * a coloured marker keeps its colour on hover instead of brightening.
+   */
+  color?: string;
+}
+```
+
+### GlobeRotation
+
+Where the globe is looking: `[longitude, latitude]` of the centre, in degrees.
+
+```ts
+type GlobeRotation = [number, number];
+```
+
+Types from other packages: `ReactNode` (react).

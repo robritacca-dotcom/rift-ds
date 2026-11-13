@@ -28,7 +28,10 @@
           "type": "ScatterDatasetConfig[]",
           "typeKind": "array",
           "required": true,
-          "description": "One or more scatter datasets to plot"
+          "description": "One or more scatter datasets to plot",
+          "typeRefs": [
+            "ScatterDatasetConfig"
+          ]
         },
         {
           "name": "xKey",
@@ -81,7 +84,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -109,5 +115,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    },
+    "ScatterDatasetConfig": {
+      "kind": "interface",
+      "definition": "interface ScatterDatasetConfig {\n  /** Display name for this dataset (shown in tooltip and legend) */\n  name: string;\n  /** Array of data points */\n  data: Record<string, unknown>[];\n  /** Fill colour */\n  color?: string;\n}"
+    }
+  },
+  "externalTypes": {
+    "Record": "typescript"
+  }
 }

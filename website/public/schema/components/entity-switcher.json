@@ -21,7 +21,10 @@
           "type": "EntitySwitcherItem[]",
           "typeKind": "array",
           "required": true,
-          "description": "The top level of the tree. Its shape decides the list: all leaves is one flat list, any children make it drill in."
+          "description": "The top level of the tree. Its shape decides the list: all leaves is one flat list, any children make it drill in.",
+          "typeRefs": [
+            "EntitySwitcherItem"
+          ]
         },
         {
           "name": "value",
@@ -42,7 +45,10 @@
           "type": "((id: string, item: EntitySwitcherItem) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called with the id and the entity when one is picked."
+          "description": "Called with the id and the entity when one is picked.",
+          "typeRefs": [
+            "EntitySwitcherItem"
+          ]
         },
         {
           "name": "open",
@@ -103,7 +109,7 @@
           "typeKind": "primitive",
           "required": false,
           "description": "The row that climbs out of a level. `{name}` is the level above.",
-          "defaultExpression": "Back to {name}"
+          "default": "Back to {name}"
         },
         {
           "name": "topLevelLabel",
@@ -119,7 +125,7 @@
           "typeKind": "primitive",
           "required": false,
           "description": "The description of the row that picks a whole branch, leading its level. `{name}` is the branch.",
-          "defaultExpression": "All of {name}"
+          "default": "All of {name}"
         },
         {
           "name": "emptyLabel",
@@ -139,5 +145,23 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AvatarFill": {
+      "kind": "type",
+      "definition": "type AvatarFill = 1 | 2 | 3 | 4 | 5 | 6;",
+      "description": "One of the six avatar fills, by token number (`--color-avatar-bg-*`)."
+    },
+    "EntitySwitcherItem": {
+      "kind": "interface",
+      "definition": "interface EntitySwitcherItem {\n  /** Unique across the whole tree; the value `value` and `onValueChange` carry. */\n  id: string;\n  /** The entity's name: the trigger's title and the row's label. */\n  name: string;\n  /** One line under the name. The trigger falls back to the entity's path when it is omitted. */\n  description?: string;\n  /** A logo or photo, by image URL, filling the mark's tile. Wins over `icon`. Decorative: the name carries the entity. */\n  logo?: string;\n  /** The mark when there is no `logo`: a Material Symbol name (string) or any element (ReactNode), such as an inline SVG logo. Initials stand in when both are omitted. */\n  icon?: string | React.ReactNode;\n  /** Which of Avatar's six fills the initials tile takes, so entities read apart at a glance. Only initials take it; a logo or icon keeps the plain tile. Plain when omitted. */\n  fill?: AvatarFill;\n  /** The entities under this one. Any child anywhere in the tree makes the list drill in. */\n  children?: EntitySwitcherItem[];\n  /** Whether the entity is shown but cannot be picked or opened. */\n  disabled?: boolean;\n}",
+      "description": "One entity in the tree: a company, a business unit, a team, an advertiser, an account.",
+      "refs": [
+        "AvatarFill"
+      ]
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

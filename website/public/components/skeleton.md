@@ -15,9 +15,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| variant | `"text" \| "circular" \| "rectangular"` | no | `text` | Shape of the skeleton |
+| variant | `"text" \| "circular" \| "rectangular"` | no | `'text'` | Shape of the skeleton |
 | width | `string` | no |  | Width (CSS value, e.g. '100%', '200px') |
 | height | `string` | no |  | Height (CSS value, e.g. '20px', '100px') |
 | lines | `number` | no | `1` | Number of text lines to render (only for text variant) |
-| loadingLabel | `string` | no | `Loading` | Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence. |
-| className | `string` | no | `` | Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group. |
+| loadingLabel | `string` | no | `'Loading'` | Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence. |
+| className | `string` | no | `''` | Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group. |

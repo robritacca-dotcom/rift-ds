@@ -28,7 +28,10 @@
           "type": "FunnelStage[]",
           "typeKind": "array",
           "required": true,
-          "description": "Ordered stages, first stage widest. Each later stage's width is its share of the first."
+          "description": "Ordered stages, first stage widest. Each later stage's width is its share of the first.",
+          "typeRefs": [
+            "FunnelStage"
+          ]
         },
         {
           "name": "title",
@@ -73,7 +76,10 @@
           "type": "((data: FunnelStage[]) => string)",
           "typeKind": "function",
           "required": false,
-          "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\"."
+          "description": "The chart's accessible name, summarising every stage, given `data` when it\nholds at least one stage. Defaults to \"Funnel: \" then each stage's label and\nreading (its `displayValue`, else the value in the reader's locale),\ncomma-separated, e.g. \"Funnel: Visits 12,400, Sign-ups 3,100\".",
+          "typeRefs": [
+            "FunnelStage"
+          ]
         },
         {
           "name": "emptyLabel",
@@ -101,5 +107,12 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "FunnelStage": {
+      "kind": "interface",
+      "definition": "interface FunnelStage {\n  /** Stage name, shown beside the stage and read into the chart's accessible label. */\n  label: string;\n  /** Raw count for the stage — drives the stage's width as a share of the first stage. */\n  value: number;\n  /**\n   * Preformatted value (\"96.4K\") for the tooltip and the accessible label.\n   * Falls back to the raw `value`, locale-formatted.\n   */\n  displayValue?: string;\n}",
+      "description": "One stage of the funnel, ordered widest first."
+    }
+  }
 }

@@ -20,4 +20,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultOpen | `boolean` | no | `false` | Whether an uncontrolled section starts expanded. |
 | onOpenChange | `((open: boolean) => void)` | no |  | Called with the next expanded state when the header is pressed. |
 | children | `ReactNode` | no |  | The section's controls, stacked one rhythm apart. |
-| className | `string` | no | `` | Additional CSS classes, applied to the <section>. |
+| className | `string` | no | `''` | Additional CSS classes, applied to the <section>. |
+
+Types from other packages: `ReactNode` (react).

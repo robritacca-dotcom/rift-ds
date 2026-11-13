@@ -16,4 +16,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | pattern | `BentoTileArtPattern` | no |  | Which pattern to draw. Unset, it follows its tile's shader pair (pinned by `highlight`, or by position); outside a tile it draws `dots`. |
-| className | `string` | no | `` | Additional CSS classes on the layer. |
+| className | `string` | no | `''` | Additional CSS classes on the layer. |
+
+## Types
+
+### BentoTileArtPattern
+
+One pattern of the BentoTile art set, listed in the order tiles rotate through them.
+
+```ts
+type BentoTileArtPattern = 'dots' | 'lines' | 'rings' | 'grid' | 'waves' | 'rays';
+```

@@ -36,7 +36,10 @@
           "typeKind": "array",
           "required": false,
           "description": "The key itself: one row per marker kind.",
-          "defaultExpression": "[]"
+          "defaultExpression": "[]",
+          "typeRefs": [
+            "MapLegendItem"
+          ]
         },
         {
           "name": "className",
@@ -48,5 +51,15 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "MapLegendItem": {
+      "kind": "interface",
+      "definition": "interface MapLegendItem {\n  /**\n   * The marker the row explains. `point` and `anchor` draw Globe's cross and\n   * square; `arc` draws a short stroke of the arc gradient; a `line` is a flat\n   * rule in `color`; any React node renders as given.\n   */\n  glyph: 'point' | 'anchor' | 'arc' | 'line' | React.ReactNode;\n  /** What the marker means. */\n  label: React.ReactNode;\n  /** Colour for the `line` glyph (and the `arc` glyph, replacing its gradient). Any CSS colour. */\n  color?: string;\n}",
+      "description": "One row of the key."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  }
 }

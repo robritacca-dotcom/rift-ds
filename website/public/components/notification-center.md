@@ -15,12 +15,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| title | `string` | no | `Notifications` | Heading shown in the header. Note: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose. |
+| title | `string` | no | `'Notifications'` | Heading shown in the header. Note: this shadows the native `title` tooltip attribute, which NotificationCenter does not expose. |
 | unreadCount | `number` | no |  | How many notifications are unread, shown under the heading. Omit to hide the line. |
-| unreadCountLabel | `((count: number) => string)` | no | `(count) => `${count} unread`` | Text of the unread line under the heading, given the count. Defaults to "<count> unread". |
+| unreadCountLabel | `((count: number) => string)` | no | `` (count) => `${count} unread` `` | Text of the unread line under the heading, given the count. Defaults to "<count> unread". |
 | tabsLabel | `string` | no |  | Accessible name of the filter tablist. Defaults to "<title> filters". |
 | onMarkAllRead | `(() => void)` | no |  | Fires when "Mark all read" is pressed; the control only renders when this is set. |
-| markAllLabel | `string` | no | `Mark all read` | Text of the mark-all-read control. |
+| markAllLabel | `string` | no | `'Mark all read'` | Text of the mark-all-read control. |
 | tabs | `NotificationCenterTab[]` | no |  | Filter tabs under the header, each with an optional count. |
 | value | `string` | no |  | Value of the active filter tab, for controlled use. Leave it undefined to let the component keep its own selection, seeded from `defaultValue`. |
 | defaultValue | `string` | no |  | Value of the tab active on first render when the tabs are uncontrolled. Falls back to the first tab. |
@@ -31,7 +31,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | emptyState | `ReactNode` | no |  | What to render when there are no children — defaults to a built-in empty state. |
 | emptyStateLabels | `Partial<Pick<EmptyStateProps, "title" \| "description">>` | no |  | The built-in empty state's copy, merged over the English defaults: title "Nothing new", description "Notifications will collect here as they arrive." Ignored when `emptyState` is set. |
 | locale | `string` | no |  | The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The notifications, newest first — typically NotificationItems. |
 
 ## NotificationItem props
@@ -41,8 +41,62 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | title | `string` | yes |  | One-line headline, e.g. who did what. Note: this shadows the native `title` tooltip attribute, which NotificationItem does not expose. |
 | time | `string` | no |  | When it happened, as already-formatted text like "2m" or "Mon". |
 | unread | `boolean` | no | `false` | Marks the notification as not yet read: a dot beside the time and emphasised title. |
-| unreadLabel | `string` | no | `Unread` | Visually hidden text announcing the unread dot. Defaults to "Unread". |
-| media | `ReactNode` | no |  | Leading visual — a Material Symbol name (string) or a custom element (e.g. an Avatar). |
+| unreadLabel | `string` | no | `'Unread'` | Visually hidden text announcing the unread dot. Defaults to "Unread". |
+| media | `string \| ReactNode` | no |  | Leading visual — a Material Symbol name (string) or a custom element (e.g. an Avatar). |
 | actions | `ReactNode` | no |  | Action row under the body — typically compact Buttons like "Reply" or "Retry". |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | Supporting copy under the title. |
+
+## Types
+
+### EmptyStateOwnProps
+
+Props owned by EmptyState itself — everything else falls through to the root div.
+
+```ts
+type EmptyStateOwnProps = {
+  /** Material Symbol icon name, or a custom element (e.g. an illustration) */
+  icon?: string | React.ReactNode;
+  /**
+   * Short headline describing the empty condition.
+   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.
+   */
+  title: string;
+  /** Supporting copy — say what to do next, not just what is missing */
+  description?: string;
+  /** Action slot — typically one primary Button, optionally a secondary */
+  action?: React.ReactNode;
+  /** Component size */
+  size?: 'default' | 'compact';
+  /**
+   * Visual treatment. `plain` sits directly on the page; `bordered` draws a
+   * dashed container, which reads better inside a card, table, or panel.
+   */
+  variant?: 'plain' | 'bordered';
+  /** Additional CSS classes */
+  className?: string;
+};
+```
+
+### EmptyStateProps
+
+```ts
+interface EmptyStateProps
+  extends EmptyStateOwnProps,
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}
+```
+
+### NotificationCenterTab
+
+```ts
+interface NotificationCenterTab {
+  /** Display label */
+  label: string;
+  /** Unique tab identifier */
+  value: string;
+  /** Count shown beside the label, e.g. the number of notifications in this filter. */
+  count?: number;
+}
+```
+
+Types from other packages: `ComponentPropsWithoutRef` (react), `Omit` (typescript), `Partial` (typescript), `Pick` (typescript), `ReactNode` (react).

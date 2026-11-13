@@ -43,7 +43,10 @@
           "type": "AreaSeriesConfig[]",
           "typeKind": "array",
           "required": true,
-          "description": "One or more area series to render"
+          "description": "One or more area series to render",
+          "typeRefs": [
+            "AreaSeriesConfig"
+          ]
         },
         {
           "name": "stacked",
@@ -72,7 +75,10 @@
           "type": "ChartSummaryItem[]",
           "typeKind": "array",
           "required": false,
-          "description": "Summary stats displayed in the header"
+          "description": "Summary stats displayed in the header",
+          "typeRefs": [
+            "ChartSummaryItem"
+          ]
         },
         {
           "name": "height",
@@ -108,5 +114,18 @@
         }
       ]
     }
-  ]
+  ],
+  "types": {
+    "AreaSeriesConfig": {
+      "kind": "interface",
+      "definition": "interface AreaSeriesConfig {\n  /** Key in data for this series */\n  dataKey: string;\n  /** Display name (shown in tooltip and legend) */\n  label: string;\n  /** Area stroke / fill colour — CSS value */\n  color?: string;\n  /** Fill opacity (0–1) */\n  fillOpacity?: number;\n}"
+    },
+    "ChartSummaryItem": {
+      "kind": "interface",
+      "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
+    }
+  },
+  "externalTypes": {
+    "Record": "typescript"
+  }
 }

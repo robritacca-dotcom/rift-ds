@@ -16,11 +16,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | data | `number[]` | yes |  | The series to plot, in order. Values are normalised into the viewBox. |
-| variant | `"area" \| "line"` | no | `line` | Rendering treatment — a bare line, or a line with a soft fill underneath. |
-| tone | `"error" \| "positive" \| "neutral" \| "accent" \| "negative"` | no | `accent` | Colour role for the line and end dot. `accent` follows the chart palette's lead colour; `positive`/`error` map to the trend pair (up and down), named like the status roles Gauge and the status components use; `neutral` recedes to secondary text. `negative` is the legacy name for `error`. |
+| variant | `"area" \| "line"` | no | `'line'` | Rendering treatment — a bare line, or a line with a soft fill underneath. |
+| tone | `"error" \| "positive" \| "neutral" \| "accent" \| "negative"` | no | `'accent'` | Colour role for the line and end dot. `accent` follows the chart palette's lead colour; `positive`/`error` map to the trend pair (up and down), named like the status roles Gauge and the status components use; `neutral` recedes to secondary text. `negative` is the legacy name for `error`. |
 | showDot | `boolean` | no | `true` | Marks the final point with a small dot. |
 | strokeWidth | `number` | no | `2` | Line thickness in viewBox units — an SVG geometry attribute, not a token. |
 | width | `number` | no | `120` | ViewBox width. Also the default rendered width; the SVG scales to its container when sized externally via CSS. Intentionally shadows the native SVG `width` attribute, which it sets. |
 | height | `number` | no | `32` | ViewBox height. Also the default rendered height; the SVG scales to its container when sized externally via CSS. Intentionally shadows the native SVG `height` attribute, which it sets. |
 | label | `string` | no |  | Accessible description of the trend, e.g. "Revenue, trending up". When omitted the SVG is decorative and hidden from assistive technology. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |

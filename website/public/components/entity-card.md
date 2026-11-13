@@ -16,7 +16,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | Display label beneath the icon / image |
-| icon | `ReactNode` | no |  | Icon — Material Symbol name (string, e.g. "home") rendered via the rounded font, or custom element (ReactNode) |
+| icon | `string \| ReactNode` | no |  | Icon — Material Symbol name (string, e.g. "home") rendered via the rounded font, or custom element (ReactNode) |
 | imageSrc | `string` | no |  | Path to an image asset — used instead of icon when provided |
 | imageAlt | `string` | no |  | Alt text for the image |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+Types from other packages: `ReactNode` (react).

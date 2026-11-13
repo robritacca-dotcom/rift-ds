@@ -16,9 +16,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | name | `string` | yes |  | File name, extension included. Truncates in the middle so the extension stays visible. |
-| kind | `FileKind` | no | `generic` | What kind of file it is, which picks the type mark: a coloured lettered glyph for the well-known formats, a neutral extension badge for the rest. Derive it with `getFileKind`. |
+| kind | `FileKind` | no | `'generic'` | What kind of file it is, which picks the type mark: a coloured lettered glyph for the well-known formats, a neutral extension badge for the rest. Derive it with `getFileKind`. |
 | typeLabel | `string` | no |  | Short uppercase label on the type mark. Defaults from the kind and the extension. |
-| status | `AttachmentStatus` | no | `ready` | Where the file is in its life. Anything but `ready` shows the name with a status line. |
+| status | `AttachmentStatus` | no | `'ready'` | Where the file is in its life. Anything but `ready` shows the name with a status line. |
 | progress | `number` | no |  | Upload progress, 0 to 100, reported to assistive technology while `uploading`. |
 | previewSrc | `string` | no |  | Image that fills the tile while `ready`: an object URL for a picture, or a first page the host rendered for a document. A non-image kind keeps its type mark over the corner. |
 | previewAlt | `string` | no |  | Alt text for the preview. Defaults to the file name. |
@@ -26,12 +26,42 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | excerpt | `string` | no |  | First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`. |
 | meta | `string` | no |  | Secondary line under the name while `ready`, e.g. "1.2 MB". Callers keep their own formatting. |
 | error | `string` | no |  | Why the file failed. Replaces `errorLabel` on the status line. |
-| size | `"default" \| "compact"` | no | `default` | Tile size. Compact shrinks the square and drops the secondary line of a ready file. Unrelated to any native `size` attribute: the root is a div. |
+| size | `"default" \| "compact"` | no | `'default'` | Tile size. Compact shrinks the square and drops the secondary line of a ready file. Unrelated to any native `size` attribute: the root is a div. |
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler. Its presence makes the tile body a button. |
 | onRemove | `(() => void)` | no |  | Remove handler. Its presence renders the corner remove button. |
-| uploadingLabel | `string` | no | `Uploading…` | Status line while `uploading`. |
-| errorLabel | `string` | no | `Upload failed` | Status line while `error`, when no `error` message is given. |
-| unavailableLabel | `string` | no | `Unavailable` | Status line while `unavailable`. |
+| uploadingLabel | `string` | no | `'Uploading…'` | Status line while `uploading`. |
+| errorLabel | `string` | no | `'Upload failed'` | Status line while `error`, when no `error` message is given. |
+| unavailableLabel | `string` | no | `'Unavailable'` | Status line while `unavailable`. |
 | removeLabel | `string` | no |  | Accessible label for the remove button. Defaults to "Remove" and the file name. |
-| progressLabel | `((name: string) => string)` | no | `(fileName: string) => `Uploading ${fileName}`` | Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. |
-| className | `string` | no | `` | Additional CSS classes |
+| progressLabel | `((name: string) => string)` | no | `` (fileName: string) => `Uploading ${fileName}` `` | Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### AttachmentStatus
+
+Where an attachment is in its life: usable, on its way, failed, or gone.
+
+```ts
+type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';
+```
+
+### FileKind
+
+```ts
+type FileKind =
+  | 'pdf'
+  | 'document'
+  | 'spreadsheet'
+  | 'presentation'
+  | 'image'
+  | 'audio'
+  | 'video'
+  | 'archive'
+  | 'code'
+  | 'text'
+  | 'pasted'
+  | 'generic';
+```
+
+Types from other packages: `HTMLButtonElement` (typescript), `MouseEventHandler` (react).

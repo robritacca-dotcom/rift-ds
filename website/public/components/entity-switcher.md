@@ -24,10 +24,47 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onOpenChange | `((open: boolean) => void)` | no |  | Called when the panel opens or closes. |
 | collapsed | `boolean` | no |  | The mark alone, the rest of the trigger faded out, and the panel opening beside it rather than below: the form for a collapsed rail. The mark never moves between the two forms. Left unset, it follows a host rail that marks itself `data-expanded="false"` (AppSidebar's `persistentTopSlot`). |
 | searchThreshold | `number` | no | `8` | How many entities, across every level, before the search field appears. |
-| switcherLabel | `string` | no | `Switch entity` | Accessible name of the trigger and the panel; the selected entity's name follows it on the trigger. |
-| searchLabel | `string` | no | `Search` | Placeholder and accessible name of the search field. |
-| backLabel | `string` | no | `Back to {name}` | The row that climbs out of a level. `{name}` is the level above. |
-| topLevelLabel | `string` | no | `all` | Stands in for `{name}` in `backLabel` when the level above is the top. |
-| wholeBranchLabel | `string` | no | `All of {name}` | The description of the row that picks a whole branch, leading its level. `{name}` is the branch. |
-| emptyLabel | `string` | no | `Nothing matches` | Shown when a search finds nothing. |
-| className | `string` | no | `` | Additional CSS classes on the root. |
+| switcherLabel | `string` | no | `'Switch entity'` | Accessible name of the trigger and the panel; the selected entity's name follows it on the trigger. |
+| searchLabel | `string` | no | `'Search'` | Placeholder and accessible name of the search field. |
+| backLabel | `string` | no | `'Back to {name}'` | The row that climbs out of a level. `{name}` is the level above. |
+| topLevelLabel | `string` | no | `'all'` | Stands in for `{name}` in `backLabel` when the level above is the top. |
+| wholeBranchLabel | `string` | no | `'All of {name}'` | The description of the row that picks a whole branch, leading its level. `{name}` is the branch. |
+| emptyLabel | `string` | no | `'Nothing matches'` | Shown when a search finds nothing. |
+| className | `string` | no | `''` | Additional CSS classes on the root. |
+
+## Types
+
+### AvatarFill
+
+One of the six avatar fills, by token number (`--color-avatar-bg-*`).
+
+```ts
+type AvatarFill = 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+### EntitySwitcherItem
+
+One entity in the tree: a company, a business unit, a team, an advertiser, an account.
+
+```ts
+interface EntitySwitcherItem {
+  /** Unique across the whole tree; the value `value` and `onValueChange` carry. */
+  id: string;
+  /** The entity's name: the trigger's title and the row's label. */
+  name: string;
+  /** One line under the name. The trigger falls back to the entity's path when it is omitted. */
+  description?: string;
+  /** A logo or photo, by image URL, filling the mark's tile. Wins over `icon`. Decorative: the name carries the entity. */
+  logo?: string;
+  /** The mark when there is no `logo`: a Material Symbol name (string) or any element (ReactNode), such as an inline SVG logo. Initials stand in when both are omitted. */
+  icon?: string | React.ReactNode;
+  /** Which of Avatar's six fills the initials tile takes, so entities read apart at a glance. Only initials take it; a logo or icon keeps the plain tile. Plain when omitted. */
+  fill?: AvatarFill;
+  /** The entities under this one. Any child anywhere in the tree makes the list drill in. */
+  children?: EntitySwitcherItem[];
+  /** Whether the entity is shown but cannot be picked or opened. */
+  disabled?: boolean;
+}
+```
+
+Types from other packages: `ReactNode` (react).

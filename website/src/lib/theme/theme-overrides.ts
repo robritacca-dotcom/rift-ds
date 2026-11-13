@@ -272,8 +272,36 @@ const stepWeight = (
     sum += (target[i] - base[i]) / denom;
     n++;
   }
-  const w = Math.min(1, Math.max(0, n ? sum / n : 0));
+  const fitted = n ? sum / n : 0;
+  // A step whose hue drifts from the base (purple's 05 and 06 sit bluer and
+  // greyer than its 07) can average to a weight at or below zero, which
+  // clamped to 0 and rebuilt the step as the key itself: three purple steps
+  // shared one colour in every preset that rebased purple. A step that is
+  // not the base always gets a weight that reproduces its lightness instead.
+  const w =
+    fitted > 0 || luminance(target) === luminance(base)
+      ? Math.min(1, fitted)
+      : lightnessWeight(base, target, pole);
   return towardWhite ? w : -w;
+};
+
+/** The mix toward `pole` whose luminance matches `target`'s, by bisection. */
+const lightnessWeight = (
+  base: [number, number, number],
+  target: [number, number, number],
+  pole: number
+): number => {
+  const goal = luminance(target);
+  const rising = pole === 255;
+  let lo = 0;
+  let hi = 1;
+  for (let i = 0; i < 32; i++) {
+    const mid = (lo + hi) / 2;
+    const reached = luminance(mix(base, [pole, pole, pole], mid));
+    if (rising ? reached < goal : reached > goal) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
 };
 
 const rampWeights = new Map<string, ReadonlyArray<[string, number]>>();

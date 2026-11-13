@@ -20,9 +20,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultValues | `string[]` | no |  | Initial tags when uncontrolled |
 | onValuesChange | `((values: string[]) => void)` | no |  | Convenience callback receiving the full tag array whenever a tag is added or removed. The native `onChange` still fires for draft-text edits, which keeps the standard React event signature for form libraries. |
 | maxTags | `number` | no |  | Maximum number of tags — at the limit the input stops accepting new ones |
-| size | `"default" \| "compact"` | no | `default` | Component size (not the native character-width `size` attribute) |
+| size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below the control |
-| removeLabel | `((tag: string) => string)` | no | `(tag) => `Remove ${tag}`` | Accessible name of a tag's remove button, given the tag. Defaults to "Remove <tag>". |
-| className | `string` | no | `` | Additional CSS classes — applied to the wrapper, not the <input> |
+| removeLabel | `((tag: string) => string)` | no | `` (tag) => `Remove ${tag}` `` | Accessible name of a tag's remove button, given the tag. Defaults to "Remove <tag>". |
+| className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | name | `string` | no |  | Form field name. When set, the committed tags submit with an enclosing form through hidden inputs, one entry per tag, nothing while disabled. The draft text being typed is never submitted. Also the fallback for the element id (`id \|\| name \|\| label`). |

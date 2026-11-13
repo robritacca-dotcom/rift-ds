@@ -31,9 +31,10 @@ const PROP_FIELDS = [
   { field: "values", what: "The members of a literal union, present exactly when typeKind is enum. A prop typed through a named alias gets its members here too." },
   { field: "required", what: "Whether the prop must be passed." },
   { field: "description", what: "The prop's JSDoc description, present on every own prop by build rule." },
-  { field: "default", what: "The default as a value: a number, a boolean, null, an enum member, or a string on a prop typed as a plain string." },
-  { field: "defaultExpression", what: "Any other default as source text: a function, a computed number, a reference to another prop, or a string on a prop with a wider type." },
+  { field: "default", what: "The default as a value: a number, a boolean, null, an enum member, or a string literal." },
+  { field: "defaultExpression", what: "Any other default as source text: a function, a computed number, a template string or a reference to another prop." },
   { field: "deprecated", what: "Set when the prop carries a deprecation: the replacement guidance. The prop still works, because the published API only grows." },
+  { field: "typeRefs", what: "The types in the file's types map that the prop's type names, so one prop's types can be read without the rest." },
 ];
 
 const FETCH_SNIPPET = `curl ${SITE_URL}/schema/components/button.json | jq '.exports[0].props[] | {name, typeKind, values, default}'`;
@@ -81,6 +82,11 @@ export default function SchemasPage() {
                 cells: { what: row.what, where: <code className={s.defKey}>{row.where}</code> },
               }))}
             />
+            <p className={s.sectionNote}>
+              Each component schema is a closed contract. Every type its props name is defined under{" "}
+              <code>types</code>, nested types included, or named under <code>externalTypes</code>{" "}
+              with the package that defines it, such as <code>ReactNode</code> from React.
+            </p>
             <CodeBlock code={FETCH_SNIPPET} language="bash" showCopy />
             <Accordion
               items={[

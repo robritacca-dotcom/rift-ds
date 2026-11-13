@@ -25,19 +25,60 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | minLength | `number` | no |  | The fewest days a range may hold, counting both ends. |
 | maxLength | `number` | no |  | The most days a range may hold, counting both ends. |
 | presets | `DateRangePreset[]` | no |  | Ranges the reader can pick in one press, shown above the calendar: "Last 7 days", "This quarter". |
-| presetsLabel | `string` | no | `Presets` | Accessible name of the presets. Defaults to "Presets". |
-| size | `"default" \| "compact"` | no | `default` | Component size |
+| presetsLabel | `string` | no | `'Presets'` | Accessible name of the presets. Defaults to "Presets". |
+| size | `"default" \| "compact"` | no | `'default'` | Component size |
 | disabled | `boolean` | no | `false` | Whether the picker is disabled |
 | name | `string` | no |  | The form field name: the form receives `<name>[start]` and `<name>[end]` as `YYYY-MM-DD` through hidden inputs. |
-| previousLabel | `string` | no | `Previous month` | Accessible name of the previous-month button. |
-| nextLabel | `string` | no | `Next month` | Accessible name of the next-month button. |
+| previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
+| nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
 | monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of a month in view. Defaults to the month name and the year in `locale`. |
 | dayLabel | `((date: Date, position: DateRangePosition) => string)` | no |  | A day button's accessible name, given its date and where it sits in the range. Defaults to the full date in `locale`, followed by the matching position label. |
-| rangeStartLabel | `string` | no | `start of range` | Said after the first day of the range. Defaults to "start of range". |
-| rangeEndLabel | `string` | no | `end of range` | Said after the last day of the range. Defaults to "end of range". |
-| inRangeLabel | `string` | no | `in range` | Said after a day inside the range. Defaults to "in range". |
+| rangeStartLabel | `string` | no | `'start of range'` | Said after the first day of the range. Defaults to "start of range". |
+| rangeEndLabel | `string` | no | `'end of range'` | Said after the last day of the range. Defaults to "end of range". |
+| inRangeLabel | `string` | no | `'in range'` | Said after a day inside the range. Defaults to "in range". |
 | weekdayLabels | `string[]` | no |  | The visible weekday headers: seven entries, Sunday first. Defaults as in DatePicker. |
 | weekdayNames | `string[]` | no |  | The weekday headers' spoken names: seven entries, Sunday first. Defaults to the weekday names in `locale`. |
 | locale | `string` | no |  | The BCP 47 locale the calendar is written and laid out in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | weekStartsOn | `Weekday` | no |  | The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`. |
-| className | `string` | no | `` | Additional CSS classes |
+| className | `string` | no | `''` | Additional CSS classes |
+
+## Types
+
+### DateRange
+
+A range as two `YYYY-MM-DD` strings; `end` is null while the second day is still to be chosen.
+
+```ts
+type DateRange = { start: string | null; end: string | null };
+```
+
+### DateRangePosition
+
+Where a day sits in the range, for its spoken name.
+
+```ts
+type DateRangePosition = 'start' | 'end' | 'start-end' | 'inside' | 'outside';
+```
+
+### DateRangePreset
+
+A ready-made range the reader can pick in one press.
+
+```ts
+type DateRangePreset = {
+  /** What the preset is called: "Last 7 days", "This month". */
+  label: string;
+  /** The range it sets. */
+  range: { start: string; end: string };
+};
+```
+
+### Weekday
+
+A day of the week as `Date.getDay()` numbers it: 0 is Sunday, 6 is Saturday.
+
+```ts
+type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+Types from other packages: `Date` (typescript).

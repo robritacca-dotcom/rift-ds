@@ -314,6 +314,20 @@ body:has([data-bg-extended]) .blur-container {
   height: 900px;
 }
 
+/* Smoke paints its shader scenes in greys, all but one: on the prism, the
+   ambient roles re-point at the theme's accent spectrum (the base look's
+   own pairing), so the beams split into colour at their edges while every
+   other scene and the field stay smoke. Scoped to the band, so nothing
+   else that reads the ambient roles changes. */
+:root[data-brand="mono"][data-background="prism"] .blur-container {
+  --color-ambient-1: var(--color-core-accent-gold);
+  --color-ambient-2: var(--color-core-accent-mint);
+  --color-ambient-3: var(--color-core-accent-violet);
+  --color-ambient-4: var(--color-core-accent-cobalt);
+  --color-ambient-5: var(--color-core-accent-coral);
+  --color-ambient-6: var(--color-core-accent-amber);
+}
+
 /* Scroll parallax on the band, whatever shader paints it: it sinks at 30%
    of the scroll, so the shader reads as deeper than the page passing over
    it. A scroll-driven animation, not a scroll listener: it runs on the

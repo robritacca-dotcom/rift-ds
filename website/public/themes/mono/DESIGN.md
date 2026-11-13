@@ -28,22 +28,22 @@ colors:
   text-tertiary: "#6d6d6d"
   border: "#d6d6d6"
   input: "#ffffff"
-  error: "#b64b64"
-  success: "#179373"
-  warning: "#a66845"
-  info: "#4e6aae"
-  accent-amber: "#b8b8b8"
-  accent-cobalt: "#5c5c5c"
-  accent-coral: "#a3a3a3"
-  accent-gold: "#c9c9c9"
-  accent-mint: "#adadad"
-  accent-violet: "#8f8f8f"
-  chart-1: "#4e6aae"
-  chart-2: "#1ebe94"
-  chart-3: "#edca78"
-  chart-4: "#db5b79"
-  chart-5: "#9d5bdb"
-  chart-6: "#db895b"
+  error: "#c53955"
+  success: "#0e9c6e"
+  warning: "#b95c2c"
+  info: "#527df2"
+  accent-amber: "#ff8e4a"
+  accent-cobalt: "#4a7bff"
+  accent-coral: "#f2506f"
+  accent-gold: "#f4cf5e"
+  accent-mint: "#3eddb0"
+  accent-violet: "#9a6bff"
+  chart-1: "#232323"
+  chart-2: "#12c98e"
+  chart-3: "#f2c440"
+  chart-4: "#ee4566"
+  chart-5: "#8f55f5"
+  chart-6: "#f57a3a"
 
 typography:
   display-lg:
@@ -185,12 +185,12 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `text-tertiary` | `#6d6d6d` | `#a2a2a2` | `--color-text-tertiary` |
 | `border` | `#d6d6d6` | `#232323` | `--color-bg-container-border` |
 | `input` | `#ffffff` | `#050505` | `--color-input-bg-primary` |
-| `error` | `#b64b64` | `#e0738c` | `--color-status-error-icon` |
-| `success` | `#179373` | `#1ebe94` | `--color-status-positive-icon` |
-| `warning` | `#a66845` | `#db895b` | `--color-status-warning-icon` |
-| `info` | `#4e6aae` | `#7186bd` | `--color-status-info-icon` |
+| `error` | `#c53955` | `#f0607c` | `--color-status-error-icon` |
+| `success` | `#0e9c6e` | `#12c98e` | `--color-status-positive-icon` |
+| `warning` | `#b95c2c` | `#f57a3a` | `--color-status-warning-icon` |
+| `info` | `#527df2` | `#7396f5` | `--color-status-info-icon` |
 
-Accents, for charts and the background field: amber `#b8b8b8`, cobalt `#5c5c5c`, coral `#a3a3a3`, gold `#c9c9c9`, mint `#adadad`, violet `#8f8f8f`.
+Accents, for charts and the background field: amber `#ff8e4a`, cobalt `#4a7bff`, coral `#f2506f`, gold `#f4cf5e`, mint `#3eddb0`, violet `#9a6bff`.
 
 ## Typography
 

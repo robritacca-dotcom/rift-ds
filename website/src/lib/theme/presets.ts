@@ -224,32 +224,41 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     textTone: "ink",
     fontLabel: "Inter",
     headingFontLabel: "Montserrat",
-    // Ink-wash chromatics: hue and value hold and saturation is pulled
-    // back from the base look's, so colour reads as quiet but still colour.
+    // Spectral chromatics: every hue run clean and near full saturation,
+    // keyed to sit beside the accent spectrum, so a badge, an alert or a
+    // chart series is the one bright thing on a black and white page.
+    // The action colour is neutral, so no family is left alone.
     advanced: bases({
-      red: "#DB5B79",
-      orange: "#DB895B",
-      yellow: "#EDCA78",
-      green: "#1EBE94",
-      teal: "#25819F",
-      blue: "#2F4F9F",
-      purple: "#9D5BDB",
+      red: "#EE4566",
+      orange: "#F57A3A",
+      yellow: "#F2C440",
+      green: "#12C98E",
+      teal: "#1A9CC4",
+      blue: "#3366F0",
+      purple: "#8F55F5",
     }),
-    // Greyed accents: the background glow blobs go monochrome with the rest
-    // of the look. Status colours follow the ink-wash ramps above, so they
-    // desaturate too, and the chart series draw from the same ramps (in the
-    // extras below) so a chart carries the colour a badge does.
-    aiGradient: "tonal",
+    // Light through glass: the ink stays black and white, and colour enters
+    // only where light does. The accents are a clean spectrum, luminous but
+    // a step short of neon, so the prism's
+    // beams break into it (coral, amber, gold, mint, cobalt) the way
+    // Blueprint's do. The AI gradient draws its default
+    // red and blue stops from the spectral ramps below, so the AI entry
+    // points are the one place colour sits in the chrome. Status colours
+    // take the spectral ramps below. A chart leads on the key, black or
+    // white like the action colour, and its later series draw from the same
+    // ramps (in the extras below), so a chart carries the colour a badge does.
     accents: {
-      coral: "#A3A3A3",
-      violet: "#8F8F8F",
-      cobalt: "#5C5C5C",
-      amber: "#B8B8B8",
-      gold: "#C9C9C9",
-      mint: "#ADADAD",
+      coral: "#F2506F",
+      violet: "#9A6BFF",
+      cobalt: "#4A7BFF",
+      amber: "#FF8E4A",
+      gold: "#F4CF5E",
+      mint: "#3EDDB0",
     },
-    // The ambient field keeps the accents' gold, mint, violet and cobalt
-    // and trades the coral and amber blobs for lighter tones of the key colour.
+    // The ambient field stays monochrome: every shader scene paints these
+    // greys, so the washes (the field, aurora, waves) stay smoke. Only the
+    // prism takes the spectrum above, by a site rule in globals.css that
+    // re-points these roles at the accents on its band alone.
     ambient: ["#C9C9C9", "#ADADAD", "#8F8F8F", "#5C5C5C", "#707070", "#A7A7A7"],
     // Hairlines carry Smoke's depth, so its dividers step ONE ramp
     // notch stronger than the base theme's (which they inherit as
@@ -259,7 +268,6 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // since dozens of components ride this token.
     extraOverrides: {
       "--color-divider": "var(--primitive-neutral-03)",
-      "--color-chart-series-1": "var(--primitive-blue-06)",
       "--color-chart-series-2": "var(--primitive-green-07)",
       "--color-chart-series-3": "var(--primitive-yellow-07)",
       "--color-chart-series-4": "var(--primitive-red-07)",
@@ -269,8 +277,6 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
     extraOverridesDark: {
       "--color-divider": "var(--primitive-neutral-07)",
-      // The deep blue sinks on a dark ground, so series 1 lifts a step.
-      "--color-chart-series-1": "var(--primitive-blue-05)",
       // Smoke's key flips to near-white in dark mode, so the two blobs that
       // carry its lighter tones flip with it.
       "--color-ambient-5": "#F6F6F6",
@@ -1044,7 +1050,7 @@ export const DEFAULT_THEME_LABEL = "Tide";
 export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   [BASE_THEME_ID]: "The base look: a calm teal on quiet surfaces, set in one friendly face.",
   warm: "Warm and bookish, a serif heading over an easy sans, like a well-loved paperback.",
-  mono: "Black and white on flat surfaces with tight corners, keeping colour for status and charts.",
+  mono: "Black and white on flat surfaces with tight corners, with colour kept for light, status and charts.",
   marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",

@@ -1,6 +1,58 @@
 {
-  "$comment": "SINGLE SOURCE OF TRUTH for the site's backgrounds: one row per pick the header's background menu offers. The row with no scene is the field, the served default; a row with a scene names a library ShaderScene and its tuning for each band BlurBackground paints (home: the tall bands under a hero; page: the standard band under a title). website/src/lib/shaders/background-storage.ts is the accessor and owns the tuning rationale; scripts/validate-site-backgrounds.mjs holds every row to the scenes, their params, their passes and the token registry.",
+  "$comment": "SINGLE SOURCE OF TRUTH for the site's backgrounds: one row per pick the header's background menu offers. The row with no scene is the field; `default` names the row a first visit gets (the served default), and the rows' order is the menu's; a row with a scene names a library ShaderScene and its tuning for each band BlurBackground paints (home: the tall bands under a hero; page: the standard band under a title). website/src/lib/shaders/background-storage.ts is the accessor and owns the tuning rationale; scripts/validate-site-backgrounds.mjs holds every row to the scenes, their params, their passes and the token registry.",
+  "default": "prism",
   "backgrounds": [
+    {
+      "id": "prism",
+      "label": "Prism",
+      "description": "Light through a cut stone",
+      "icon": "diamond",
+      "scene": "prism",
+      "home": {
+        "params": {
+          "glow": 0.8,
+          "offset": 0.2
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "glow": 0.7,
+          "offset": 0.25
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
     {
       "id": "field",
       "label": "Field",
@@ -76,57 +128,6 @@
             "params": {
               "from": 0.1,
               "to": 0.5
-            }
-          },
-          "grain": {
-            "params": {
-              "amount": 0.08
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "prism",
-      "label": "Prism",
-      "description": "Light through a cut stone",
-      "icon": "diamond",
-      "scene": "prism",
-      "home": {
-        "params": {
-          "glow": 0.8,
-          "offset": 0.2
-        },
-        "passes": {
-          "fadeTop": {
-            "on": false
-          },
-          "fadeBottom": {
-            "params": {
-              "from": 0.1,
-              "to": 0.6
-            }
-          },
-          "grain": {
-            "params": {
-              "amount": 0.08
-            }
-          }
-        }
-      },
-      "page": {
-        "params": {
-          "glow": 0.7,
-          "offset": 0.25
-        },
-        "passes": {
-          "fadeTop": {
-            "on": false
-          },
-          "fadeBottom": {
-            "params": {
-              "from": 0.1,
-              "to": 0.6
             }
           },
           "grain": {

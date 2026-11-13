@@ -13,14 +13,15 @@
  * BACKGROUND_STORAGE_KEY, the layout's pre-paint script puts it back on
  * <html> before first paint, and restoreDocumentTheme puts it back after a
  * root re-render, so a returning visitor lands on the background they chose
- * and keeps it across every page. Nothing stored, or the field's id, is the
- * field: the served default, which an absent attribute means.
+ * and keeps it across every page. Nothing stored means the served default
+ * (the registry's `default`); the field's id, once picked, is the field,
+ * which an absent attribute means.
  */
 import { useSyncExternalStore } from "react";
 import {
   BACKGROUND_ATTR,
   BACKGROUND_STORAGE_KEY,
-  DEFAULT_BACKGROUND,
+  FIELD_BACKGROUND,
   isSceneBackground,
 } from "./background-storage";
 
@@ -29,10 +30,13 @@ import {
 export {
   BACKGROUND_ATTR,
   BACKGROUND_STORAGE_KEY,
+  BACKGROUND_IDS,
   DEFAULT_BACKGROUND,
+  FIELD_BACKGROUND,
   SITE_BACKGROUNDS,
   backgroundEntry,
   isSceneBackground,
+  resolveBackground,
   restoreSiteBackground,
   type SiteBackground,
   type SiteBackgroundEntry,
@@ -40,7 +44,7 @@ export {
 
 const read = (): string => {
   const value = document.documentElement.getAttribute(BACKGROUND_ATTR);
-  return isSceneBackground(value) ? value : DEFAULT_BACKGROUND;
+  return isSceneBackground(value) ? value : FIELD_BACKGROUND;
 };
 
 const subscribe = (onChange: () => void) => {
@@ -56,9 +60,10 @@ const subscribe = (onChange: () => void) => {
   };
 };
 
-/** The background the visitor picked; the field until the attribute says otherwise. */
+/** The background on <html>: the attribute's scene, or the field when it is absent.
+    The server renders no attribute, so its snapshot is the field. */
 export function useSiteBackground(): string {
-  return useSyncExternalStore(subscribe, read, () => DEFAULT_BACKGROUND);
+  return useSyncExternalStore(subscribe, read, () => FIELD_BACKGROUND);
 }
 
 /** Picks the background, on <html> and in storage. The field removes the attribute. */

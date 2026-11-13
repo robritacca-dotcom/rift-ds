@@ -10,8 +10,9 @@
  *
  * Checks:
  *  1. ids are unique, and exactly one row has no scene: that row is the field
- *     (the served default, which an absent attribute means), and the menu
- *     needs exactly one of it
+ *     (which an absent attribute means), and the menu needs exactly one of
+ *     it; `default`, where given, names a row (the served default, the pick
+ *     a visit with nothing stored gets; absent, the field is the default)
  *  2. every scene names one the library ships (the scene ids declared in
  *     src/components/ShaderScene/scenes.ts), since a row is handed straight
  *     to ShaderScene's `scene` prop
@@ -169,7 +170,9 @@ for (const row of rows) {
   checkTuning(id, 'page', row.page, scene);
 }
 if (rows.length > 0 && defaults !== 1)
-  errors.push(`exactly one row must have no scene (the field, the served default); found ${defaults}`);
+  errors.push(`exactly one row must have no scene (the field); found ${defaults}`);
+if (data.default !== undefined && !ids.has(data.default))
+  errors.push(`"default" is "${data.default}", which names no row (${[...ids].join(', ')})`);
 
 for (const [sceneId, scene] of scenes) {
   for (const role of scene.colours) {

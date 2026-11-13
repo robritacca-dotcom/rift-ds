@@ -18,6 +18,8 @@ import { BASE_THEME_ID, LEGACY_BASE_THEME_ID, SERVED_THEME_ID } from "@/lib/them
 import {
   BACKGROUND_ATTR,
   BACKGROUND_STORAGE_KEY,
+  BACKGROUND_IDS,
+  DEFAULT_BACKGROUND,
   SCENE_BACKGROUND_IDS,
 } from "@/lib/shaders/background-storage";
 import { colorModeScript } from "rift-ds/components/ThemeToggle/colorMode";
@@ -135,8 +137,12 @@ ${colorModeScript()}
        lib/shaders/background-storage owns the key, the attribute and the
        list of scenes. */
     var background = localStorage.getItem('${BACKGROUND_STORAGE_KEY}');
-    if (${JSON.stringify(SCENE_BACKGROUND_IDS)}.indexOf(background) !== -1) root.setAttribute('${BACKGROUND_ATTR}', background);
   } catch (e) {}
+  /* Nothing valid stored (a first visit, or private mode) is the served
+     default, so a first visit paints the default scene, never the field
+     first. */
+  if (${JSON.stringify(BACKGROUND_IDS)}.indexOf(background) === -1) background = '${DEFAULT_BACKGROUND}';
+  if (${JSON.stringify(SCENE_BACKGROUND_IDS)}.indexOf(background) !== -1) root.setAttribute('${BACKGROUND_ATTR}', background);
   /* An attribute, not a class: React owns <html>'s className (the
      next/font variable class). Neither survives a hydration failure that
      reaches the root, though: React then strips every attribute on <html>

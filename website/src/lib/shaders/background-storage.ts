@@ -12,8 +12,9 @@
  * band BlurBackground paints (globals.css owns the bands): `home` for the
  * tall bands, the extended one under the home hero and a full-bleed page,
  * and `page` for the standard band under every other page's title. The
- * field is the row with no scene: the site's own ShaderField, the served
- * default, which an absent attribute means.
+ * field is the row with no scene: the site's own ShaderField, which an
+ * absent attribute means. The registry's `default` names the row a visit
+ * with no stored pick gets.
  */
 import type { ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
 import data from "@/data/site-backgrounds.json";
@@ -111,8 +112,13 @@ export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds
 
 export type SiteBackground = string;
 
-/** The served default: the row with no scene. */
-export const DEFAULT_BACKGROUND = SITE_BACKGROUNDS.find((entry) => !entry.scene)?.id ?? "field";
+/** The field: the row with no scene, the one an absent attribute means. */
+export const FIELD_BACKGROUND = SITE_BACKGROUNDS.find((entry) => !entry.scene)?.id ?? "field";
+
+/** The served default: the row a visit with no stored pick gets (the
+    registry's `default`). A scene, so a first visit carries the attribute;
+    the field, once picked, is stored by name and so survives the default. */
+export const DEFAULT_BACKGROUND: string = (data as { default?: string }).default ?? FIELD_BACKGROUND;
 
 /** The ids that paint a scene, the ones the attribute ever carries. */
 export const SCENE_BACKGROUND_IDS = SITE_BACKGROUNDS.filter((entry) => entry.scene).map(
@@ -127,8 +133,16 @@ export const backgroundEntry = (id: string | null | undefined): SiteBackgroundEn
 export const isSceneBackground = (value: string | null | undefined): value is string =>
   typeof value === "string" && SCENE_BACKGROUND_IDS.includes(value);
 
-/** Puts a stored pick back on <html>; the pre-paint script's work, for the restore path. */
+/** Every id a stored pick may name. */
+export const BACKGROUND_IDS = SITE_BACKGROUNDS.map((entry) => entry.id);
+
+/** A stored pick, or the served default when nothing valid is stored. */
+export const resolveBackground = (stored: string | null | undefined): string =>
+  typeof stored === "string" && BACKGROUND_IDS.includes(stored) ? stored : DEFAULT_BACKGROUND;
+
+/** Puts a stored pick (or the default) back on <html>; the pre-paint script's work, for the restore path. */
 export function restoreSiteBackground(root: HTMLElement, stored: string | null) {
-  if (isSceneBackground(stored)) root.setAttribute(BACKGROUND_ATTR, stored);
+  const background = resolveBackground(stored);
+  if (isSceneBackground(background)) root.setAttribute(BACKGROUND_ATTR, background);
   else root.removeAttribute(BACKGROUND_ATTR);
 }

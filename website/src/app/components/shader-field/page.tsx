@@ -73,9 +73,9 @@ export default function ShaderFieldPage() {
               A WebGL2 canvas that sums soft Gaussian light sources into a field
               of colour. Each source reads a semantic colour token at runtime,
               so the whole thing re-themes with the page and with any scoped
-              custom-property override. It is this site&apos;s default background:
-              unless you have picked another from the header, what you are
-              looking at behind this page is this component.
+              custom-property override. It is one of this site&apos;s
+              backgrounds: pick Field from the header&apos;s background menu,
+              and what you are looking at behind this page is this component.
             </p>
             <p className={styles.introBody}>
               It is scenery, not interface. Nothing it does is a signal, so its

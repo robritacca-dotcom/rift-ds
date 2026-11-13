@@ -176,7 +176,7 @@ export function lookupComponent(name: string, exportName?: string) {
     if (!match) {
       return {
         error: `${entry.name} has no export named ${JSON.stringify(exportName)}.`,
-        exports: entry.exports.map((e) => e.component),
+        exportNames: entry.exports.map((e) => e.component),
       };
     }
     exportsOut = [match];

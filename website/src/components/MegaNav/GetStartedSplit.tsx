@@ -6,24 +6,25 @@ import { ToastProvider, useToast } from "rift-ds/components/Toast/Toast";
 import { SITE_EVENTS, trackEvent } from "@/lib/analytics";
 import { FIGMA_URL, NPM_URL, REPOSITORY_URL } from "@/config/brand.generated";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { MCP_ENDPOINT } from "@/lib/mcp-clients";
 import { FigmaIcon, GitHubIcon, NpmIcon } from "@/components/BrandIcons/BrandIcons";
 import styles from "./GetStartedSplit.module.css";
 
 /** The agent starter, served from website/public. */
 const AGENTS_MD_URL = "/AGENTS.md";
 
+/** The MCP endpoint, which a browser is shown as a page explaining how to connect. */
+const MCP_PAGE = "/api/mcp";
+
 /** Opens an off-site home of the system in a new tab. */
 const openExternal = (url: string) => () => window.open(url, "_blank", "noopener,noreferrer");
 
 /**
  * The header's primary action: Get started opens the setup guide, and the
- * menu copies the agent starter and the MCP endpoint for a coding agent,
- * then links to where
+ * menu copies the agent starter for a coding agent, opens the MCP
+ * endpoint's page, then links to where
  * the system lives off-site: the npm package, the repo and, while the
  * site links to Figma, the Figma kit. Without a clipboard
- * (or on a failed fetch) the file opens in a new tab instead, and the MCP
- * endpoint opens its own page, which explains how to connect. A copy
+ * (or on a failed fetch) the file opens in a new tab instead. A copy
  * confirms itself with a toast; the stack portals to the body and sits
  * bottom-centre, clear of the chat launcher in the corner.
  */
@@ -60,20 +61,6 @@ function GetStartedSplitButton({ onNavigate }: GetStartedSplitProps) {
     }
   };
 
-  const copyMcpEndpoint = async () => {
-    try {
-      await navigator.clipboard.writeText(MCP_ENDPOINT);
-      trackEvent(SITE_EVENTS.copyInstall, { snippet: "mcp", surface: "header" });
-      toast({
-        variant: "positive",
-        title: "MCP endpoint copied",
-        description: "Add it to your coding agent as a remote MCP server. No key needed.",
-      });
-    } catch {
-      window.open(MCP_ENDPOINT, "_blank", "noopener");
-    }
-  };
-
   return (
     <SplitButton
       label="Get started"
@@ -88,7 +75,7 @@ function GetStartedSplitButton({ onNavigate }: GetStartedSplitProps) {
       }}
       items={[
         { label: "Copy AGENTS.md", icon: "content_copy", onClick: copyAgentsMd },
-        { label: "Copy MCP endpoint", icon: "link", onClick: copyMcpEndpoint },
+        { label: "MCP endpoint", icon: "hub", iconRight: "open_in_new", onClick: openExternal(MCP_PAGE) },
         { type: "separator" },
         { label: "npm package", iconRight: "open_in_new", icon: <span className={styles.mark} aria-hidden="true"><NpmIcon /></span>, onClick: openExternal(NPM_URL) },
         { label: "GitHub repo", iconRight: "open_in_new", icon: <span className={styles.mark} aria-hidden="true"><GitHubIcon /></span>, onClick: openExternal(REPOSITORY_URL) },

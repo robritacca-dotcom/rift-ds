@@ -24,7 +24,7 @@ import { GA_ID } from "@/config/brand.generated";
  *    values here are the site's own vocabulary, and /privacy discloses them.
  */
 export const SITE_EVENTS = {
-  /** An install path copied: the npm line, the init bin, the shadcn command, the clone, a component page's strip, or the MCP endpoint from the header's Get started menu. */
+  /** An install path copied: the npm line, the init bin, the shadcn command, the clone, or a component page's strip. */
   copyInstall: "copy_install",
   /** The agent starter taken: copied from the header's Get started button or the get-started page, saved by curl, or exported themed from the playground. */
   copyAgentStarter: "copy_agent_starter",

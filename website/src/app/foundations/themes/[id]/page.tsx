@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import MegaNav from "@/components/MegaNav/MegaNav";
-import { pageOpenGraph } from "@/config/navigation";
+import { pageOpenGraph, TITLE_TEMPLATE } from "@/config/navigation";
 import {
   DEFAULT_THEME_LABEL,
   THEME_PRESETS,
@@ -34,7 +34,10 @@ export async function generateMetadata({
   const description = `The ${labelOf(id)} theme as a specimen: colour, type, shape, surfaces and controls, with its DESIGN.md to download.`;
   const href = `/foundations/themes/${id}`;
   return {
-    title,
+    // Absolute, because the themes layout above sets a plain string title,
+    // and Next only carries a title template one level down: without it the
+    // tab and search result would read without the site suffix.
+    title: { absolute: TITLE_TEMPLATE.replace("%s", title) },
     description,
     alternates: { canonical: href },
     openGraph: pageOpenGraph(title, description, href),

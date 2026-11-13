@@ -9,6 +9,7 @@ import {
 } from "@/config/navigation";
 import { SITE_URL } from "@/lib/structuredData";
 import { SKILL_GUIDE_HREFS } from "@/data/skill-guides";
+import { THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
 
 const baseUrl = SITE_URL;
 const appDir = path.join(process.cwd(), "src", "app");
@@ -45,8 +46,14 @@ function lastCommit(file: string): Date {
   return when;
 }
 
+const THEME_SPECIMEN_BASE = "/foundations/themes/";
+
 /** Every route maps to its `src/app/<route>/page.tsx` source file. */
 function fileForRoute(route: string): string {
+  // The theme specimens share one dynamic page, so they share its history.
+  if (route.startsWith(THEME_SPECIMEN_BASE)) {
+    return path.join(appDir, "foundations", "themes", "[id]", "page.tsx");
+  }
   const rel = route === "" ? "page.tsx" : `${route.replace(/^\//, "")}/page.tsx`;
   return path.join(appDir, rel);
 }
@@ -74,6 +81,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...docsSidebarLinks.map((l) => l.href),
     ...SKILL_GUIDE_HREFS,
     ...foundationsSidebarLinks.map((l) => l.href),
+    // One specimen per theme, from the same list generateStaticParams reads.
+    ...THEME_SELECTOR_ORDER.map((id) => `${THEME_SPECIMEN_BASE}${id}`),
     ...templatesSidebarLinks.map((l) => l.href),
     ...componentsSidebarLinks.map((l) => l.href),
   ];

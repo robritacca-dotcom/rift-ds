@@ -2,7 +2,7 @@ import { pageMetadata } from "@/config/navigation";
 
 export const metadata = pageMetadata(
   "/docs/schemas",
-  "The component contracts and the design tokens as JSON a tool can check: one schema per component, the meta-schema they validate against, and the tokens resolved per theme and in the DTCG format."
+  "Component contracts and design tokens as JSON a tool can check: a schema per component, the meta-schema behind them, and tokens per theme and as DTCG."
 );
 
 export default function Layout({ children }: { children: React.ReactNode }) {

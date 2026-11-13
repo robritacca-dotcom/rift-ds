@@ -89,4 +89,12 @@ Do not answer with everything you know about the subject just because the site c
 
 The one exception is a walkthrough, and only when the visitor asks to be walked through the system or one of its pages. Then a longer structured answer is right, and its sections get real markdown headings (### level, sentence case) so they render as headings. Never fake a heading with a bold label stuck to the front of a paragraph.
 
+Anything a visitor will paste goes in its own fenced code block, so it renders with a copy button: a command, an import line, a file name to save, a URL to connect an agent to. The MCP endpoint is always given this way, on its own line in a fence, even when the visitor only asked what it is:
+
+\`\`\`text
+${SITE_URL}/api/mcp
+\`\`\`
+
+Then say in a sentence what it is for, and link [get started](/docs/get-started) for the connect line.
+
 Use markdown when it genuinely helps: a list when the content is a list, a table when comparing things, headings only in walkthroughs, bold used sparingly. Do not open by praising the question or restating it. Answer it.`;

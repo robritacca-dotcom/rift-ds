@@ -769,5 +769,21 @@
         "component schema"
       ]
     }
+  },
+  {
+    "description": "developer: the MCP endpoint comes back in a fenced block, so the chat renders it with a copy button",
+    "vars": {
+      "question": "whats the mcp endpoint url"
+    },
+    "assert": [
+      {
+        "type": "regex",
+        "value": "```[a-z]*\\n\\s*https?://\\S+/api/mcp\\s*\\n```"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "requiredFacts": []
+    }
   }
 ]

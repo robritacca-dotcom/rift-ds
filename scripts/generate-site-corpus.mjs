@@ -764,6 +764,8 @@ const EXCLUDED_ROUTES = new Map([
     'the table bench\'s most complex table as a full page: the same fictional projects, a labs page outside the IA'],
   ['/labs/bento',
     'a noindex test page for feature banners that open into an overlay — a surface experiment whose prose restates facts the covered pages already carry'],
+  ['/labs/themes',
+    'the theme showcase lab: fictional example screens (music, workspace, travel, studio) staged to show one theme pick re-theming a product, a noindex surface experiment whose prose is fictional demo data'],
   ['/labs/raceway-chat',
     'the raceway chat lab: a chat-first construction platform over a generated MEP model drawn with xeokit, a noindex surface experiment whose prose is fictional demo data'],
   ['/templates/analytics',

@@ -1,0 +1,459 @@
+/*
+ * The theme showcase's example screens: the mosaic, its panels and the
+ * accent-drawn cover art. Every value is a semantic token, so a theme scope
+ * or a theme pick around the mosaic re-themes all of it.
+ */
+
+/* ---- Mosaic ------------------------------------------------------------- */
+
+.mosaic {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  animation: showcase-in var(--motion-duration-base) var(--motion-ease-entrance) both;
+}
+
+@keyframes showcase-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--gap-300));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mosaic {
+    animation: none;
+  }
+}
+
+.columns {
+  columns: 3 16rem;
+  column-gap: var(--gap-500);
+}
+
+.cell {
+  break-inside: avoid;
+  margin-block-end: var(--gap-500);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding: var(--padding-500);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background: var(--color-bg-container-primary);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+}
+
+.panelFlush {
+  padding: 0;
+  gap: 0;
+}
+
+.panelHead,
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.panelAside {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.panelTitle,
+.sectionTitle {
+  margin: 0;
+  color: var(--color-text-heading);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+}
+
+.body {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+}
+
+.eyebrowSmall {
+  color: var(--color-action-primary-text-tertiary);
+  font-family: var(--font-overline-family);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  line-height: var(--font-overline-line-height);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+}
+
+.list,
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.row,
+.setting {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.setting {
+  justify-content: space-between;
+}
+
+.rowText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rowTitle {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta {
+  overflow: hidden;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowEnd {
+  flex: none;
+}
+
+.inline,
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}
+
+/* ---- Covers and generated art ------------------------------------------ */
+
+.cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-secondary);
+}
+
+.cover img {
+  object-fit: cover;
+}
+
+.thumb {
+  flex: none;
+  width: var(--control-height-default);
+  border-radius: var(--radius-200);
+}
+
+.spotlightCover,
+.tall,
+.canvas {
+  border-radius: 0;
+}
+
+.tall {
+  aspect-ratio: 4 / 5;
+}
+
+/* Six arrangements of the theme's own accents: these covers are the part of
+   every grid that re-colours with the theme. */
+.art1 {
+  background:
+    radial-gradient(circle at 25% 30%, var(--color-core-accent-coral), transparent 55%),
+    radial-gradient(circle at 80% 75%, var(--color-core-accent-cobalt), transparent 60%),
+    var(--color-core-accent-violet);
+}
+
+.art2 {
+  background:
+    radial-gradient(ellipse at 10% 100%, var(--color-core-accent-mint), transparent 60%),
+    radial-gradient(ellipse at 90% 0%, var(--color-core-accent-violet), transparent 55%),
+    var(--color-action-primary-bg);
+}
+
+.art3 {
+  background:
+    conic-gradient(from 210deg at 60% 55%, var(--color-core-accent-amber), var(--color-core-accent-coral), var(--color-core-accent-gold), var(--color-core-accent-amber));
+}
+
+.art4 {
+  background:
+    radial-gradient(circle at 50% 50%, var(--color-core-accent-gold) 0 18%, transparent 19%),
+    radial-gradient(circle at 50% 50%, var(--color-core-accent-coral) 0 34%, transparent 35%),
+    radial-gradient(circle at 50% 50%, var(--color-core-accent-violet) 0 52%, transparent 53%),
+    var(--color-core-accent-cobalt);
+}
+
+.art5 {
+  background:
+    linear-gradient(135deg, var(--color-core-accent-cobalt), transparent 70%),
+    linear-gradient(315deg, var(--color-core-accent-mint), transparent 70%),
+    var(--color-bg-container-inverse);
+}
+
+.art6 {
+  background:
+    repeating-linear-gradient(45deg, var(--color-core-accent-violet) 0 12%, var(--color-core-accent-coral) 12% 24%),
+    var(--color-core-accent-violet);
+}
+
+/* ---- Music -------------------------------------------------------------- */
+
+.appBar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-400);
+  padding: var(--padding-300) var(--padding-500);
+  border-block-end: var(--border-025) solid var(--color-divider);
+}
+
+.dots {
+  display: flex;
+  gap: var(--gap-100);
+}
+
+.dots span {
+  width: var(--gap-300);
+  aspect-ratio: 1;
+  border-radius: var(--radius-pill);
+  background: var(--color-divider);
+}
+
+.appSearch {
+  flex: 1;
+  max-width: 22rem;
+  margin-inline: auto;
+}
+
+.appBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding: var(--padding-500);
+}
+
+.coverRow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--gap-400);
+}
+
+.coverItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.coverItem .cover {
+  margin-block-end: var(--gap-200);
+  box-shadow: var(--shadow-floating);
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-400);
+  padding: var(--padding-300) var(--padding-500);
+  border-block-start: var(--border-025) solid var(--color-divider);
+  background: var(--color-bg-container-secondary);
+}
+
+.playerTrack {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.spotlight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-300);
+  padding: var(--padding-500);
+}
+
+/* ---- Workspace ---------------------------------------------------------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--gap-500);
+}
+
+.statCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.statsTight {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-300);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 1.6;
+  padding: var(--padding-500);
+  border-radius: var(--radius-400);
+  color: var(--color-text-on-inverse);
+  box-shadow: var(--shadow-floating);
+}
+
+.cardName {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
+.cardNumber {
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  letter-spacing: var(--font-overline-letter-spacing);
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-300);
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  padding: var(--padding-300);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-secondary);
+}
+
+.price {
+  color: var(--color-text-heading);
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+}
+
+/* ---- Travel ------------------------------------------------------------- */
+
+.stays {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-400);
+}
+
+.stay {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.stayPhoto {
+  aspect-ratio: 4 / 5;
+  margin-block-end: var(--gap-200);
+}
+
+.stayHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.day {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--control-height-default);
+  aspect-ratio: 1;
+  border-radius: var(--radius-300);
+  background: var(--color-bg-container-secondary);
+  color: var(--color-action-primary-text-tertiary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+/* ---- Studio ------------------------------------------------------------- */
+
+.editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(14rem, 1fr);
+}
+
+.canvas {
+  aspect-ratio: auto;
+  min-height: 22rem;
+  height: 100%;
+}
+
+.editorSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding: var(--padding-500);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-200);
+}
+
+/* ---- Narrow ------------------------------------------------------------- */
+
+@media (max-width: 959px) {
+  .coverRow,
+  .stays {
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .canvas {
+    min-height: 14rem;
+  }
+}

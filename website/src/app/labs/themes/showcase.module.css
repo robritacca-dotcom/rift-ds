@@ -1,0 +1,177 @@
+/*
+ * Labs: the theme showcase. Every value is a semantic token, so the whole
+ * page, hero and mosaic alike, moves with the theme pick. The page paints no
+ * background of its own: the root layout's ambient field shows through, and
+ * it follows the theme's accents too.
+ */
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(20rem, 28rem) minmax(0, 1fr);
+  gap: var(--gap-1000);
+  min-height: 100dvh;
+  padding-inline: var(--padding-1000);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+}
+
+/* ---- Hero -------------------------------------------------------------- */
+
+.hero {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--gap-1000);
+  height: 100dvh;
+  padding-block: var(--padding-1500) var(--padding-1000);
+}
+
+.heroBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-500);
+  margin-block: auto;
+}
+
+.eyebrow {
+  padding: var(--padding-100) var(--padding-300);
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-primary-semi);
+  color: var(--color-action-primary-text-tertiary);
+  font: var(--font-paragraph-sm-emphasis-weight) var(--font-paragraph-sm-size) / var(--font-paragraph-sm-line-height) var(--font-paragraph-sm-family);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-display);
+  font-family: var(--font-display-2-family);
+  font-size: var(--font-display-2-size);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-line-height);
+  letter-spacing: var(--font-display-2-letter-spacing);
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+}
+
+.code {
+  align-self: stretch;
+  margin: 0;
+  padding: var(--padding-400);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-400);
+  background: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-code);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  white-space: pre-wrap;
+}
+
+.codeMuted {
+  color: var(--color-text-tertiary);
+}
+
+.codeAttr {
+  color: var(--color-core-accent-cobalt);
+}
+
+.codeValue {
+  color: var(--color-action-primary-text-tertiary);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.controls,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+/* ---- Example tabs ------------------------------------------------------- */
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.examplesLabel {
+  color: var(--color-text-primary);
+  font: var(--font-paragraph-sm-emphasis-weight) var(--font-paragraph-sm-size) / var(--font-paragraph-sm-line-height) var(--font-paragraph-sm-family);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+  gap: var(--gap-200);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  padding: 0 0 var(--padding-100);
+  border: 0;
+  background: none;
+  color: var(--color-text-tertiary);
+  font: var(--font-caption-weight) var(--font-caption-size) / var(--font-caption-line-height) var(--font-caption-family);
+  text-align: start;
+  cursor: pointer;
+}
+
+.tabBar {
+  display: block;
+  height: var(--gap-050);
+  border-radius: var(--radius-pill);
+  background: var(--color-divider);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.tab:hover .tabBar {
+  background: var(--color-text-tertiary);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--color-text-primary);
+}
+
+.tab[aria-selected="true"] .tabBar {
+  background: var(--color-action-primary-bg);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: var(--gap-100);
+  border-radius: var(--radius-100);
+}
+
+/* ---- Narrow ------------------------------------------------------------- */
+
+@media (max-width: 959px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-inline: var(--padding-500);
+  }
+
+  .hero {
+    position: static;
+    height: auto;
+    padding-block: var(--padding-1000) 0;
+  }
+}
+
+.stage {
+  padding-block: var(--padding-1000);
+}

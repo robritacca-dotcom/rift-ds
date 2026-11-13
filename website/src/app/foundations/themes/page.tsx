@@ -1,18 +1,18 @@
 "use client";
 
-import { useLayoutEffect, useSyncExternalStore } from "react";
+import { useLayoutEffect, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
+import { EXAMPLES, ShowcaseMosaic } from "@/components/ThemeShowcase/ThemeShowcase";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
-import {
-  THEME_PRESETS,
-  themeSelectorTiles,
-} from "@/lib/theme/presets";
-import { SHIPPED_ACCENTS, motionSpeedPercent } from "@/lib/theme/theme-overrides";
+import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
+import { THEME_PRESETS, themeSelectorTiles } from "@/lib/theme/presets";
+import { motionSpeedPercent } from "@/lib/theme/theme-overrides";
 import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
@@ -29,23 +29,45 @@ import 'rift-ds/tokens/presets/presets.css';
 
 <html data-brand="terminal">`;
 
+const EXAMPLE_ICONS: Record<string, string> = {
+  listening: "music_note",
+  workspace: "work",
+  travel: "luggage",
+  studio: "photo_camera",
+};
+
 /**
- * The theme gallery. Every card is drawn from the same tile builder the
- * header switcher and the playground picker read, and Apply goes through
- * the same shared brand helper — so this page, the switchers, and the
- * generated stylesheets can never disagree. Each card wears its own
- * theme, held there by a theme scope, so the gallery stays a stable
- * side-by-side while Apply rethemes the page around it.
+ * The theme gallery, led by what a theme does rather than its swatches: a
+ * stage of real example screens (from components/ThemeShowcase) wearing
+ * the staged theme, with a row of every shipped theme above it to swap
+ * through. The stage is a theme scope, so a swap re-themes only the stage
+ * and the page stays put; Apply to site then puts the staged theme on the
+ * whole site through the shared brand helper.
+ *
+ * The swap row is drawn from the same tile builder the header switcher and
+ * the playground picker read, so this page, the switchers and the
+ * generated stylesheets can never disagree. Each chip wears its theme's
+ * own heading face and swatch shape.
  */
 export default function ThemesPage() {
   const theme = useSiteTheme();
   const active = useSyncExternalStore(subscribeBrand, readBrand, getServerSnapshot);
   const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
 
-  /* Every card is a theme scope, so each one keeps its own look while the
-     page around it rethemes. Before paint, so the cards never show the
-     applied theme first. */
+  /* The stage opens on the theme the site is wearing, and follows a swap. */
+  const [picked, setPicked] = useState<string | null>(null);
+  const staged = picked ?? active;
+  const stagedTile = tiles.find((tile) => tile.value === staged) ?? tiles[0];
+  const stagedPreset = THEME_PRESETS[stagedTile.value];
+
+  const [exampleId, setExampleId] = useState(EXAMPLES[0].id);
+  const example = EXAMPLES.find((item) => item.id === exampleId) ?? EXAMPLES[0];
+
+  /* The stage is a theme scope, so it keeps its own look whatever the page
+     wears. Before paint, so it never shows the page's theme first. */
   useLayoutEffect(() => installScopedThemes(), []);
+
+  const isApplied = active === stagedTile.value;
 
   return (
     <>
@@ -56,13 +78,114 @@ export default function ThemesPage() {
 
         <main className={styles.dsContent} id="main-content">
           <PageBreadcrumb />
-          {/* Page Header */}
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Themes</h1>
           </div>
 
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
+          <section
+            className={`${styles.showcase} animate-in animate-delay-1`}
+            aria-label="Theme showcase"
+          >
+            <div className={styles.toolbar}>
+              <SegmentedControl
+                aria-label="Example screen"
+                collapse
+                size="compact"
+                tone="neutral"
+                value={exampleId}
+                onValueChange={setExampleId}
+                segments={EXAMPLES.map((item) => ({
+                  value: item.id,
+                  label: item.label,
+                  icon: EXAMPLE_ICONS[item.id],
+                }))}
+              />
+
+              <div className={styles.swap} role="group" aria-label="Theme">
+                {tiles.map((tile) => (
+                  <button
+                    key={tile.value}
+                    type="button"
+                    className={styles.swapChip}
+                    aria-pressed={tile.value === stagedTile.value}
+                    onClick={() => setPicked(tile.value)}
+                  >
+                    <span
+                      className={styles.swapSwatch}
+                      style={{ backgroundColor: tile.color, borderRadius: tile.swatchRadius }}
+                      aria-hidden="true"
+                    />
+                    <span style={{ fontFamily: tile.headingFont }}>{tile.label}</span>
+                    {tile.value === active && (
+                      <span className={styles.swapOn} title="On this site now">
+                        <span className="material-symbols-rounded" aria-hidden="true">
+                          check
+                        </span>
+                        <span className="ds-visually-hidden">, on this site now</span>
+                      </span>
+                    )}
+                  </button>
+                ))}
+                {/* The row ends where a new theme would begin, like the
+                    header switcher's menu: a dashed slot for the look that
+                    doesn't exist yet. */}
+                <Link href="/playground" className={`${styles.swapChip} ${styles.swapCreate}`}>
+                  <span className="material-symbols-rounded" aria-hidden="true">
+                    add
+                  </span>
+                  Make your own
+                </Link>
+              </div>
+            </div>
+
+            <div
+              className={styles.stage}
+              {...{ [THEME_SCOPE_ATTRIBUTE]: stagedTile.value }}
+            >
+              <ThemeBanner className={styles.stageBanner} />
+              <div className={styles.stageBar}>
+                <div className={styles.stageName}>
+                  <span className={styles.stageTitle}>{stagedTile.label}</span>
+                  <span className={styles.stageLevers}>
+                    {stagedTile.description}
+                    {stagedPreset
+                      ? `, radius ${stagedPreset.radiusScale}%, density ${stagedPreset.density}%, motion ${motionSpeedPercent(stagedPreset.motionScale)}%, ${stagedPreset.elevation} elevation`
+                      : ", the raw token files exactly as shipped"}
+                  </span>
+                </div>
+                <div className={styles.stageActions}>
+                  <Button
+                    label={isApplied ? "On this site" : "Apply to site"}
+                    size="compact"
+                    iconLeft={isApplied ? "check" : "brush"}
+                    disabled={isApplied}
+                    onClick={() => applyBrand(stagedTile.value)}
+                  />
+                  <CircularButton
+                    icon="description"
+                    variant="secondary"
+                    tone="neutral"
+                    size="compact"
+                    ariaLabel={`${stagedTile.label} DESIGN.md`}
+                    tooltip="DESIGN.md"
+                    href={`/foundations/themes/${stagedTile.value}`}
+                  />
+                  <CircularButton
+                    icon="tune"
+                    variant="secondary"
+                    tone="neutral"
+                    size="compact"
+                    ariaLabel={`Open ${stagedTile.label} in the playground`}
+                    tooltip="Playground"
+                    href={`/playground?preset=${stagedTile.value}`}
+                  />
+                </div>
+              </div>
+              <ShowcaseMosaic key={example.id} example={example} className={styles.stageMosaic} />
+            </div>
+          </section>
+
+          <div className={`${styles.introSection} animate-in animate-delay-2`}>
             <p className={styles.subDisplay}>
               {tiles.length} examples of how far the tokens can move
             </p>
@@ -73,133 +196,11 @@ export default function ThemesPage() {
               modes, a typeface or a heading and body pairing, with self-hosted fonts,
               type weight and tracking, the colour of the logo and of each type
               tier, icon weight, radius, density, motion, elevation, the ambient
-              background, and the chart palette. Apply one and this page rethemes around you,
-              which is the honest preview. Your own brand takes the same
-              path: the playground builds it live and copies out paste-ready
-              CSS.
+              background, and the chart palette. Apply one and this whole site
+              rethemes around you, which is the honest preview. Your own brand
+              takes the same path: the playground builds it live and copies out
+              paste-ready CSS.
             </p>
-          </div>
-
-          {/* Gallery */}
-          <div className={`${styles.grid} animate-in animate-delay-2`}>
-            {tiles.map((tile) => {
-              const preset = THEME_PRESETS[tile.value];
-              const accents = preset?.accents ?? SHIPPED_ACCENTS;
-              const isActive = active === tile.value;
-              return (
-                <article
-                  key={tile.value}
-                  className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
-                  {...{ [THEME_SCOPE_ATTRIBUTE]: tile.value }}
-                >
-                  <ThemeBanner className={styles.cardBanner} />
-                  <div className={styles.cardSwatches}>
-                    <span
-                      className={styles.brandSwatch}
-                      style={{
-                        backgroundColor: tile.color,
-                        borderRadius: tile.swatchRadius,
-                      }}
-                      aria-hidden="true"
-                    />
-                    <span className={styles.accentRow} aria-hidden="true">
-                      {Object.values(accents).map((hex, i) => (
-                        <span
-                          key={i}
-                          className={styles.accentDot}
-                          style={{ backgroundColor: hex }}
-                        />
-                      ))}
-                    </span>
-                  </div>
-
-                  <h2
-                    className={styles.cardName}
-                    style={{ fontFamily: tile.headingFont }}
-                  >
-                    {tile.label}
-                  </h2>
-                  <p
-                    className={styles.cardPairing}
-                    style={{ fontFamily: tile.bodyFont }}
-                  >
-                    {tile.description}
-                  </p>
-
-                  {preset && (
-                    <p className={styles.cardLevers}>
-                      radius {preset.radiusScale}% · density {preset.density}% ·
-                      motion {motionSpeedPercent(preset.motionScale)}% · {preset.elevation} elevation
-                    </p>
-                  )}
-                  {!preset && (
-                    <p className={styles.cardLevers}>
-                      the raw token files, exactly as shipped
-                    </p>
-                  )}
-
-                  <div className={styles.cardActions}>
-                    <Button
-                      label={isActive ? "Applied" : "Apply"}
-                      variant="primary"
-                      size="compact"
-                      iconLeft={isActive ? "check" : "brush"}
-                      disabled={isActive}
-                      onClick={() => applyBrand(tile.value)}
-                    />
-                    <div className={styles.cardLinks}>
-                      <CircularButton
-                        icon="description"
-                        variant="secondary"
-                        tone="neutral"
-                        size="compact"
-                        ariaLabel={`${tile.label} DESIGN.md`}
-                        tooltip="DESIGN.md"
-                        href={`/foundations/themes/${tile.value}`}
-                      />
-                      <CircularButton
-                        icon="tune"
-                        variant="secondary"
-                        tone="neutral"
-                        size="compact"
-                        ariaLabel={`Open ${tile.label} in the playground`}
-                        tooltip="Playground"
-                        href={`/playground?preset=${tile.value}`}
-                      />
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-
-            {/* The grid ends where a new theme would begin, like the hero
-                dot row and the switcher menu: a dashed slot for the look
-                that doesn't exist yet. */}
-            <article className={`${styles.card} ${styles.cardCreate}`}>
-              <div className={styles.cardSwatches}>
-                <span className={styles.createSwatch} aria-hidden="true">
-                  <span className="material-symbols-rounded">add</span>
-                </span>
-              </div>
-
-              <h2 className={styles.cardName}>Create your own</h2>
-              <p className={styles.cardPairing}>
-                Any colour, pairing, and shape over the same tokens
-              </p>
-              <p className={styles.cardLevers}>
-                every lever live, copied out as paste-ready CSS
-              </p>
-
-              <div className={styles.cardActions}>
-                <Button
-                  label="Open the playground"
-                  variant="primary"
-                  size="compact"
-                  iconRight="arrow_forward"
-                  href="/playground"
-                />
-              </div>
-            </article>
           </div>
 
           {/* Consumer setup, once a reader has seen what they would be setting up. */}

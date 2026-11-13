@@ -99,140 +99,13 @@ Where an attachment is in its life: usable, on its way, failed, or gone.
 type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';
 ```
 
-### AttachmentTileOwnProps
-
-Props owned by AttachmentTile itself — everything else falls through to the root element.
-
-```ts
-type AttachmentTileOwnProps = {
-  /** File name, extension included. Truncates in the middle so the extension stays visible. */
-  name: string;
-  /**
-   * What kind of file it is, which picks the type mark: a coloured lettered
-   * glyph for the well-known formats, a neutral extension badge for the
-   * rest. Derive it with `getFileKind`.
-   */
-  kind?: FileKind;
-  /** Short uppercase label on the type mark. Defaults from the kind and the extension. */
-  typeLabel?: string;
-  /** Where the file is in its life. Anything but `ready` shows the name with a status line. */
-  status?: AttachmentStatus;
-  /** Upload progress, 0 to 100, reported to assistive technology while `uploading`. */
-  progress?: number;
-  /**
-   * Image that fills the tile while `ready`: an object URL for a picture, or
-   * a first page the host rendered for a document. A non-image kind keeps
-   * its type mark over the corner.
-   */
-  previewSrc?: string;
-  /** Alt text for the preview. Defaults to the file name. */
-  previewAlt?: string;
-  /**
-   * Whether the type mark sits over the corner of a preview. Defaults to on
-   * for a document's first page, which still has to say what format it is,
-   * and off for a picture, which is its own description. A sent message
-   * turns it on for pictures too.
-   */
-  previewMark?: boolean;
-  /** First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`. */
-  excerpt?: string;
-  /** Secondary line under the name while `ready`, e.g. "1.2 MB". Callers keep their own formatting. */
-  meta?: string;
-  /** Why the file failed. Replaces `errorLabel` on the status line. */
-  error?: string;
-  /**
-   * Tile size. Compact shrinks the square and drops the secondary line of a
-   * ready file. Unrelated to any native `size` attribute: the root is a div.
-   */
-  size?: 'default' | 'compact';
-  /** Click handler. Its presence makes the tile body a button. */
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  /** Remove handler. Its presence renders the corner remove button. */
-  onRemove?: () => void;
-  /** Status line while `uploading`. */
-  uploadingLabel?: string;
-  /** Status line while `error`, when no `error` message is given. */
-  errorLabel?: string;
-  /** Status line while `unavailable`. */
-  unavailableLabel?: string;
-  /** Accessible label for the remove button. Defaults to "Remove" and the file name. */
-  removeLabel?: string;
-  /** Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. */
-  progressLabel?: (name: string) => string;
-  /** Additional CSS classes */
-  className?: string;
-};
-```
-
 ### AttachmentTileProps
 
-```ts
-interface AttachmentTileProps
-  extends AttachmentTileOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AttachmentTileOwnProps> {}
-```
-
-### AttachmentViewerOwnProps
-
-Props owned by AttachmentViewer itself — everything else falls through to the panel.
-
-```ts
-type AttachmentViewerOwnProps = {
-  /** Whether the viewer is open. */
-  open: boolean;
-  /** Fires when the viewer asks to close: the close button, Escape, or the backdrop. */
-  onOpenChange: (open: boolean) => void;
-  /** The files the viewer steps through, in order. */
-  items: AttachmentItem[];
-  /** Id of the file on show, for controlled use. Pair with `onActiveChange`. */
-  activeId?: string;
-  /** Id of the file shown first, for uncontrolled use. Defaults to the first item. */
-  defaultActiveId?: string;
-  /** Fires with the id of the file stepped to. */
-  onActiveChange?: (id: string) => void;
-  /**
-   * Draws a file the viewer cannot: the pages of a PDF, a media player, a
-   * rendered spreadsheet. Return nothing to fall back to the built-in view.
-   */
-  renderPreview?: (item: AttachmentItem) => React.ReactNode;
-  /** Fires with the file on show when Download is pressed. Its presence renders the buttons. */
-  onDownload?: (item: AttachmentItem) => void;
-  /** Fires with a file that failed to load when "Try again" is pressed. Its presence renders the button. */
-  onRetry?: (item: AttachmentItem) => void;
-  /** Whether Escape, the backdrop and the close button dismiss the viewer. */
-  dismissible?: boolean;
-  /** Text of the Download buttons. */
-  downloadLabel?: string;
-  /** Accessible label for the close button. */
-  closeLabel?: string;
-  /** Accessible label for the previous-file button. */
-  previousLabel?: string;
-  /** Accessible label for the next-file button. */
-  nextLabel?: string;
-  /** Text of the retry button. */
-  retryLabel?: string;
-  /** Headline when a file has nothing the viewer can draw. */
-  noPreviewLabel?: string;
-  /** Headline when a file failed to load or is no longer available. */
-  failedLabel?: string;
-  /** Sentence under `failedLabel`, when the file carries no error message of its own. */
-  failedDescription?: string;
-  /** Builds the position text, e.g. "2 of 5", from a one-based index and the total. */
-  formatPosition?: (position: number, total: number) => string;
-  /** The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. */
-  locale?: string;
-  /** Additional CSS classes — applied to the portal container, not the panel. */
-  className?: string;
-};
-```
+The props of AttachmentTile: `get_component("AttachmentTile")`.
 
 ### AttachmentViewerProps
 
-```ts
-interface AttachmentViewerProps
-  extends AttachmentViewerOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AttachmentViewerOwnProps> {}
-```
+The props of AttachmentViewer: `get_component("AttachmentViewer")`.
 
 ### FileKind
 
@@ -252,4 +125,4 @@ type FileKind =
   | 'generic';
 ```
 
-Types from other packages: `ComponentPropsWithoutRef` (react), `HTMLButtonElement` (typescript), `MouseEventHandler` (react), `Omit` (typescript), `Pick` (typescript), `ReactNode` (react).
+Types from other packages: `Pick` (typescript), `ReactNode` (react).

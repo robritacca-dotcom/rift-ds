@@ -42,7 +42,7 @@
         },
         {
           "name": "thresholds",
-          "type": "{ warning?: number; error?: number; } | undefined",
+          "type": "{ warning?: number; error?: number; }",
           "typeKind": "other",
           "required": false,
           "description": "Fractions of an item's max where its fill recolours to warning and then error"

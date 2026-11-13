@@ -52,9 +52,13 @@ const SITE_HOST = new URL(SITE_URL).host;
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-/** Every tool answers in one text block; JSON for data, markdown for prose. */
+/**
+ * Every tool answers in one text block; JSON for data, markdown for prose.
+ * JSON goes compact: the reader is an agent's parser, and indentation was a
+ * third of every response's bytes (and of the context an agent spends).
+ */
 const text = (value: string) => ({ content: [{ type: "text" as const, text: value }] });
-const json = (value: unknown) => text(JSON.stringify(value, null, 2));
+const json = (value: unknown) => text(JSON.stringify(value));
 
 // The tool implementations live in @/lib/site-tools, shared with the site
 // chat's Anthropic tools (/api/chat) so the two surfaces cannot drift. The
@@ -81,9 +85,13 @@ const handler = createMcpHandler(
             .string()
             .optional()
             .describe("A category id or label, e.g. ai or Data display; widget lists the widgets"),
+          fields: z
+            .enum(["full", "compact"])
+            .optional()
+            .describe("full (the default) or compact: name, slug, category and description, with the URL patterns given once"),
         }),
       },
-      async ({ category }) => json(listComponents(category))
+      async ({ category, fields }) => json(listComponents(category, fields))
     );
 
     server.registerTool(
@@ -131,7 +139,7 @@ const handler = createMcpHandler(
           theme: z
             .string()
             .optional()
-            .describe("A theme id to resolve the tokens in; the response without one lists the ids"),
+            .describe("A theme id or display name, in any case (mono or Smoke), to resolve the tokens in; the response without one lists every id with its name"),
           mode: z
             .enum(["light", "dark"])
             .optional()

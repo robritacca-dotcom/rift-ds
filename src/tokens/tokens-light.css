@@ -361,6 +361,8 @@
   --radius-400: var(--primitive-radius-400);
   --radius-600: var(--primitive-radius-600);
   --radius-1200: var(--primitive-radius-1200);
+  /* Fully round by default; a theme may cap it at its input corner (the
+     radius lever's pill switch), so a button and a field share one curve. */
   --radius-pill: var(--primitive-radius-pill);
 
   --padding-050: var(--primitive-padding-050);

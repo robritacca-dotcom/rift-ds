@@ -20,6 +20,13 @@
  *      refuses to write an over-budget corpus; this catches a file that was
  *      committed before the gate existed, or edited by hand.
  *
+ *   5. No empty-state copy — the title and description an EmptyState shows
+ *      only when a list is empty never reach the corpus (the releases page
+ *      once told the chat "The first entry lands with the first npm
+ *      publish." beside 27 releases). Read from the page sources directly,
+ *      apart from the generator's walk, so a change to the walk cannot
+ *      quietly let it back in.
+ *
  *   4. No holes — a value a page renders inline and the walk dropped leaves
  *      punctuation with nothing before it ("save it at your project root
  *      as .", "one mode per theme: , of the themes"). Generation already
@@ -31,6 +38,7 @@
  * Runs before every build via the validate-registry chain.
  */
 import { existsSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildSiteCorpus, assembleCorpus, sanctionedFacts, outputPath } from './generate-site-corpus.mjs';
@@ -111,6 +119,26 @@ try {
           `${JSON.stringify(corpus.slice(Math.max(0, at - 50), at + 10))}. ` +
           `Find the page line, and resolve its inline value in INLINE_VALUES in scripts/generate-site-corpus.mjs.`
       );
+    }
+  }
+} catch {
+  // Generation already failed above.
+}
+
+// 5. No empty-state copy.
+try {
+  const { corpus } = assembleCorpus();
+  const pages = execFileSync('git', ['ls-files', 'website/src/app/**/*.tsx'], { cwd: repoRoot, encoding: 'utf8' })
+    .split('\n')
+    .filter(Boolean);
+  for (const page of pages) {
+    const source = readFileSync(join(repoRoot, page), 'utf8').replace(/\r\n/g, '\n');
+    for (const block of source.matchAll(/<EmptyState\b[^>]*?\/?>/gs)) {
+      for (const [, , text] of block[0].matchAll(/\b(title|description)="([^"]{12,})"/g)) {
+        if (corpus.includes(text)) {
+          fail(`The corpus carries ${JSON.stringify(text)}, an EmptyState's copy in ${page}, which shows only when its list is empty.`);
+        }
+      }
     }
   }
 } catch {

@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 
 import { componentApi } from "@/data/component-api.generated";
 import { siteSearchSections } from "@/data/site-search.generated";
-import { listComponents, lookupComponent, lookupTokens, searchSite } from "./site-tools";
+import { listComponents, lookupComponent, lookupTokens, searchSite, themeNames } from "./site-tools";
 
 const firstHeading = (results: string[]) => results[0]?.split("\n")[0] ?? "";
 
@@ -127,5 +127,55 @@ describe("searchSite", () => {
   it("serves no maintainer documentation", () => {
     const text = ["Button tone", "release 1.27.0", "registries", "validator"].flatMap(searchSite).join("\n");
     expect(text).not.toMatch(/blueprints\/claude|blueprints\/content-design|\/skills\b|\/loops\b/);
+  });
+});
+
+describe("round 2", () => {
+  it("resolves a theme by its display name or id, in any case", () => {
+    const smoke = lookupTokens("radius", "Smoke");
+    expect("theme" in smoke && smoke.theme).toBe("mono");
+    expect("themeName" in smoke && smoke.themeName).toBe("Smoke");
+    const tide = lookupTokens("border", "Tide");
+    expect("theme" in tide && tide.theme).toBe("tide");
+  });
+
+  it("lists every theme with its name, in the error too", () => {
+    const names = themeNames();
+    expect(names.find((t) => t.id === "coral")?.name).toBe("Getaway");
+    const miss = lookupTokens("radius", "Aubergine");
+    expect(miss).toMatchObject({ error: expect.any(String), themeNames: names });
+    const all = lookupTokens();
+    expect("themeNames" in all && all.themeNames).toEqual(names);
+  });
+
+  it("points at another component's props rather than defining them", () => {
+    const chat = lookupComponent("ChatWidget");
+    const types = ("types" in chat && chat.types) || {};
+    expect(types.AiButtonProps).toMatchObject({ kind: "component-props", component: "AiButton", see: 'get_component("AiButton")' });
+    expect(JSON.stringify(chat).length).toBeLessThan(80_000);
+  });
+
+  it("keeps each search section to about 300 words, with its URL", () => {
+    for (const query of ["dark mode theming", "Button tone", "install"]) {
+      for (const result of searchSite(query)) {
+        const body = result.split("\n").slice(3).join(" ");
+        expect(body.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(320);
+      }
+    }
+  });
+
+  it("offers a compact listing", () => {
+    const full = JSON.stringify(listComponents());
+    const compact = listComponents(undefined, "compact");
+    expect(JSON.stringify(compact).length).toBeLessThan(full.length * 0.75);
+    expect("components" in compact && compact.components[0]).toEqual(
+      expect.objectContaining({ name: expect.any(String), slug: expect.any(String) })
+    );
+  });
+
+  it("gives an arithmetic default the number it comes to", () => {
+    const chat = lookupComponent("ChatWidget", "ChatWidget");
+    const prop = "exports" in chat ? chat.exports[0].props.find((p) => p.name === "maxAttachmentBytes") : undefined;
+    expect(prop?.defaultResolved).toBe(52428800);
   });
 });

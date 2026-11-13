@@ -588,42 +588,9 @@ One saved setup of a table: its sorts, filters, search, columns, pinning, widths
 type DataTableView = TableView;
 ```
 
-### EmptyStateOwnProps
-
-Props owned by EmptyState itself — everything else falls through to the root div.
-
-```ts
-type EmptyStateOwnProps = {
-  /** Material Symbol icon name, or a custom element (e.g. an illustration) */
-  icon?: string | React.ReactNode;
-  /**
-   * Short headline describing the empty condition.
-   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.
-   */
-  title: string;
-  /** Supporting copy — say what to do next, not just what is missing */
-  description?: string;
-  /** Action slot — typically one primary Button, optionally a secondary */
-  action?: React.ReactNode;
-  /** Component size */
-  size?: 'default' | 'compact';
-  /**
-   * Visual treatment. `plain` sits directly on the page; `bordered` draws a
-   * dashed container, which reads better inside a card, table, or panel.
-   */
-  variant?: 'plain' | 'bordered';
-  /** Additional CSS classes */
-  className?: string;
-};
-```
-
 ### EmptyStateProps
 
-```ts
-interface EmptyStateProps
-  extends EmptyStateOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}
-```
+The props of EmptyState: `get_component("EmptyState")`.
 
 ### Filter
 
@@ -744,55 +711,9 @@ are; a router whose link takes `to` instead needs a one-line adapter:
 type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 ```
 
-### PaginationOwnProps
-
-Props owned by Pagination itself — everything else falls through to the nav landmark.
-
-```ts
-type PaginationOwnProps = {
-  /**
-   * Current page (1-based), for a controlled pager. Leave it undefined to let
-   * the component keep its own page, seeded from `defaultPage`.
-   */
-  page?: number;
-  /** Page shown on first render when the pager is uncontrolled (1-based) */
-  defaultPage?: number;
-  /** Total number of pages */
-  pageCount: number;
-  /** Called with the page the user requests */
-  onPageChange?: (page: number) => void;
-  /** Pages shown on each side of the current page */
-  siblingCount?: number;
-  /** Component size — compact swaps the numbers for a "Page X of Y" readout */
-  size?: 'default' | 'compact';
-  /**
-   * Legacy accessible-name prop for the nav landmark.
-   *
-   * @deprecated Pass the native `aria-label` attribute instead.
-   */
-  ariaLabel?: string;
-  /** Accessible name of the previous-page arrow */
-  previousLabel?: string;
-  /** Accessible name of the next-page arrow */
-  nextLabel?: string;
-  /** Accessible name of a numbered page button, given its page number */
-  pageLabel?: (page: number) => string;
-  /** Text of the compact size's readout, given the current page and the page count */
-  readoutLabel?: (page: number, pageCount: number) => string;
-  /** The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
-  locale?: string;
-  /** Additional CSS classes */
-  className?: string;
-};
-```
-
 ### PaginationProps
 
-```ts
-interface PaginationProps
-  extends PaginationOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'nav'>, keyof PaginationOwnProps | 'children'> {}
-```
+The props of Pagination: `get_component("Pagination")`.
 
 ### StatusRole
 
@@ -841,4 +762,4 @@ Every calculation the totals footer offers, `none` included (Notion's Calculate 
 type Total = 'none' | 'count' | 'countDistinct' | 'empty' | 'filled' | 'percentEmpty' | 'sum' | 'avg' | 'min' | 'max' | 'range';
 ```
 
-Types from other packages: `ComponentPropsWithoutRef` (react), `ComponentPropsWithRef` (react), `ElementType` (react), `Omit` (typescript), `Partial` (typescript), `Pick` (typescript), `Promise` (typescript), `ReactNode` (react), `Record` (typescript).
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `Partial` (typescript), `Pick` (typescript), `Promise` (typescript), `ReactNode` (react), `Record` (typescript).

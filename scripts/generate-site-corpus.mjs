@@ -232,7 +232,61 @@ function hasBlockDescendant(node) {
  * block descendants are skipped so a page-level wrapper can't swallow the lot.
  */
 const isBlockElement = (node) =>
-  isBlockTag(node) || (ts.isJsxFragment(node) && !hasBlockDescendant(node));
+  isBlockTag(node) || (ts.isJsxFragment(node) && !hasBlockDescendant(node)) || isLinkCard(node);
+
+/** A JSX element's attribute by name, or undefined. */
+const jsxAttribute = (node, name) => {
+  const opening = ts.isJsxElement(node) ? node.openingElement : ts.isJsxSelfClosingElement(node) ? node : null;
+  return opening?.attributes.properties.find(
+    (attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === name
+  );
+};
+
+/** True when a block tag encloses the node, so it reads inside that block's line. */
+function hasBlockAncestor(node) {
+  for (let current = node.parent; current; current = current.parent) {
+    if (isBlockTag(current)) return true;
+  }
+  return false;
+}
+
+/**
+ * A link that stands as a card of its own (an <a> or <Link> with an href,
+ * outside any paragraph, holding no block). Its pieces are one unit: a
+ * stat's number, its title and its label, or a link's name and the line
+ * under it. Read piece by piece, the number was lost and the label stood
+ * alone ("Each with docs and stories"); read as one line, the pieces are
+ * joined with a middle dot ("178 · React components · Each with docs and
+ * stories").
+ */
+function isLinkCard(node) {
+  return (
+    ts.isJsxElement(node) &&
+    Boolean(jsxAttribute(node, 'href')) &&
+    !hasBlockDescendant(node) &&
+    !hasBlockAncestor(node)
+  );
+}
+
+/**
+ * Elements whose text a visitor never reads as the page's content, so the
+ * walk skips their whole subtree:
+ *   - aria-hidden content (an icon's ligature name, a decorative glyph)
+ *   - an EmptyState, which renders only when a list has nothing to show:
+ *     the releases page carried "The first entry lands with the first npm
+ *     publish." beside 27 releases
+ */
+const SKIPPED_ELEMENTS = new Set(['EmptyState']);
+function isSkippedElement(node) {
+  if (!ts.isJsxElement(node) && !ts.isJsxSelfClosingElement(node)) return false;
+  if (SKIPPED_ELEMENTS.has(jsxTagName(node))) return true;
+  const hidden = jsxAttribute(node, 'aria-hidden');
+  if (!hidden) return false;
+  const value = hidden.initializer;
+  if (!value) return true;
+  if (ts.isStringLiteral(value)) return value.text === 'true';
+  return ts.isJsxExpression(value) && value.expression?.kind === ts.SyntaxKind.TrueKeyword;
+}
 
 /**
  * JSX attributes that hold copy a visitor reads, rather than markup plumbing.
@@ -323,6 +377,10 @@ const INLINE_VALUES = new Map(Object.entries({
     return skills.displayed.length + skills.external.length;
   },
   'TOKEN_COUNTS.colour': () => jsonOf(join(repoRoot, 'src', 'tokens', 'registry.json')).categories.colour.length,
+  TOKEN_COUNT: () =>
+    Object.values(jsonOf(join(repoRoot, 'src', 'tokens', 'registry.json')).categories).reduce((sum, names) => sum + names.length, 0),
+  TOKEN_CATEGORY_COUNT: () => Object.keys(jsonOf(join(repoRoot, 'src', 'tokens', 'registry.json')).categories).length,
+  RELEASE_COUNT: () => releaseLog().releases.length,
   SYSTEM_THEME_COUNT: () => Object.keys(jsonOf(join(repoRoot, 'src', 'tokens', 'values.json')).themes).length,
   'themeList(KIT_THEME_LABELS)': (sourceFile) =>
     andList(literalValue(sourceFile, 'KIT_THEMES').map((theme) => theme.label)),
@@ -523,6 +581,7 @@ export function extractProse(source, fileName) {
   /** All text directly under a block element, skipping nested block elements. */
   const inlineText = (node, parts) => {
     node.forEachChild((child) => {
+      if (isSkippedElement(child)) return;
       if (ts.isJsxText(child)) {
         consumed.add(child);
         parts.push(decode(jsxText(child.text)));
@@ -549,8 +608,30 @@ export function extractProse(source, fileName) {
     return parts;
   };
 
+  /** A link card's pieces, each element's text on its own, joined with a middle dot. */
+  const cardText = (node) => {
+    const pieces = [];
+    const collect = (current) => {
+      current.forEachChild((child) => {
+        if (isSkippedElement(child)) return;
+        if (ts.isJsxElement(child) && !child.children.some((c) => ts.isJsxElement(c) || ts.isJsxSelfClosingElement(c))) {
+          pieces.push(inlineText(child, []).join(''));
+        } else if (ts.isJsxText(child) || ts.isJsxExpression(child)) {
+          pieces.push(inlineText({ forEachChild: (fn) => fn(child) }, []).join(''));
+        } else {
+          collect(child);
+        }
+      });
+    };
+    collect(node);
+    return pieces.map((piece) => piece.replace(/\s+/g, ' ').trim()).filter(Boolean).join(' · ');
+  };
+
   const visit = (node) => {
-    if (isBlockElement(node)) {
+    if (isSkippedElement(node)) return;
+    if (isLinkCard(node)) {
+      push(cardText(node));
+    } else if (isBlockElement(node)) {
       // Joined without a separator: JSX text nodes carry their own spacing, so
       // adding one puts a space before the punctuation after an inline <strong>.
       push(inlineText(node, []).join(''));

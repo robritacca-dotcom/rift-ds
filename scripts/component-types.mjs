@@ -17,6 +17,13 @@
  * comes from, so every name a reader meets is accounted for one way or
  * the other. validate-component-api.mjs holds that closure.
  *
+ * One kind of type is not expanded: a component's props interface (a name
+ * ending in Props or OwnProps whose stem is a documented component). It
+ * becomes a pointer, `{ kind: 'component-props', component, see }`, the
+ * call that returns that component's props, so the map stays the types a
+ * prop needs rather than every interface a composed child declares. The
+ * caller decides which names are components (pointerFor).
+ *
  * Two failures are the generator's own, so a gap never ships quietly:
  *   - a reference the checker cannot resolve at all
  *   - two different declarations with the same name in one component's
@@ -142,15 +149,31 @@ function propSymbols(checker, sourceFile, componentName) {
  * { types, externalTypes, propRefs }, where propRefs maps
  * `${component}.${prop}` to the sorted local names that prop's type mentions.
  */
-export function resolveComponentTypes(exportsList) {
+export function resolveComponentTypes(exportsList, pointerFor = () => null) {
   const { program: built, checker } = program();
   const types = new Map(); // name -> { declaration, entry }
   const externalTypes = new Map();
   const propRefs = new Map();
   const queue = [];
 
-  const visitRefs = (node, where) => {
+  const visitRefs = (node, where, seen = new Set()) => {
     const local = new Set();
+    // `ButtonGroupProps['buttons']` names a props interface that becomes a
+    // pointer, but the prop's real type is that one member's: walk the
+    // member's declared type too, so what it names is defined here.
+    const walkIndexed = (current) => {
+      if (ts.isIndexedAccessTypeNode(current) && ts.isLiteralTypeNode(current.indexType)) {
+        const key = current.indexType.literal.text;
+        const property = checker.getTypeFromTypeNode(current.objectType).getProperty(key);
+        for (const declaration of property?.declarations ?? []) {
+          if (seen.has(declaration) || !('type' in declaration) || !declaration.type) continue;
+          seen.add(declaration);
+          for (const ref of visitRefs(declaration.type, where, seen)) local.add(ref);
+        }
+      }
+      ts.forEachChild(current, walkIndexed);
+    };
+    walkIndexed(node);
     for (const nameNode of referenceNames(node)) {
       const resolved = resolve(checker, nameNode);
       if (resolved === null) continue;
@@ -210,6 +233,15 @@ export function resolveComponentTypes(exportsList) {
   while (queue.length > 0) {
     const name = queue.shift();
     const { declaration, symbol } = types.get(name);
+    // Another component's whole props interface is a pointer, never its
+    // definition: ChatWidget names a dozen of them (AiButtonOwnProps,
+    // ComposerOwnProps …), and their definitions made one response 166KB.
+    // The pointer names the component and the call that returns its props.
+    const pointer = pointerFor(name);
+    if (pointer) {
+      resolved.set(name, { kind: 'component-props', ...pointer });
+      continue;
+    }
     const refs = visitRefs(declaration, name).filter((ref) => ref !== name);
     const entry = { kind: kindOf(declaration), definition: definitionOf(declaration) };
     const description = descriptionOf(checker, symbol);

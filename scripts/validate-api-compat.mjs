@@ -168,10 +168,13 @@ function unionMembers(type) {
 /**
  * Docgen prints the same type differently depending on optionality: an
  * optional callback comes back wrapped in parentheses (`((page: number) =>
- * void)`). Unwrap redundant outer parentheses and collapse whitespace, so a
- * prop that only became optional does not read as a type change.
+ * void)`), and a wrapped optional type could carry a trailing `| undefined`
+ * that generate-component-api.mjs now drops (an optional prop accepts
+ * undefined either way; a required prop keeps it, so it is stripped only
+ * when the prop was optional). Strip that tail, unwrap redundant outer
+ * parentheses and collapse whitespace, so neither reads as a type change.
  */
-function normalizeType(type) {
+function normalizeType(type, optional = false) {
   // A run of string literals joined by `|` is the same union in any order:
   // docgen prints members in the order the checker meets them, which moves
   // when an unrelated edit touches the type (`"added" | "removed" | "failed"`
@@ -179,6 +182,7 @@ function normalizeType(type) {
   let t = type
     .replace(/\s+/g, ' ')
     .trim()
+    .replace(optional ? /(?: ?\| ?undefined)+$/ : /$^/, '')
     .replace(/"[^"]*"(?: \| "[^"]*")+/g, (run) => run.split(' | ').sort().join(' | '));
   for (;;) {
     if (!t.startsWith('(') || !t.endsWith(')')) return t;
@@ -253,7 +257,7 @@ for (const oldEntry of before) {
       if (!oldProp.required && newProp.required) {
         record({ component, prop, change: 'required' }, `${component}.${prop} became required; every call site omitting it breaks.`);
       }
-      if (normalizeType(oldProp.type) !== normalizeType(newProp.type)) {
+      if (normalizeType(oldProp.type, !oldProp.required) !== normalizeType(newProp.type, !oldProp.required)) {
         const oldMembers = unionMembers(oldProp.type);
         const newMembers = new Set(unionMembers(newProp.type));
         const lost = oldMembers.filter((m) => !newMembers.has(m));

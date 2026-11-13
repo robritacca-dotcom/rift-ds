@@ -25,6 +25,7 @@ import { componentApi, type ComponentApiEntry } from "@/data/component-api.gener
 import { componentTypes } from "@/data/component-types.generated";
 import { siteSearchSections, type SiteSearchSection } from "@/data/site-search.generated";
 import { SITE_URL } from "@/lib/structuredData";
+import { DEFAULT_THEME_LABEL, THEME_PRESETS } from "@/lib/theme/presets";
 
 /* ============================================
    listComponents: the library, by category
@@ -68,7 +69,7 @@ const listing = (entry: ComponentApiEntry) => ({
  * valid ids, the shape lookupTokens answers an unknown category with. With
  * a filter set, the categories table is left out: the caller already chose.
  */
-export function listComponents(category?: string) {
+export function listComponents(category?: string, fields?: string) {
   const wanted = category === undefined || category.trim() === "" ? null : resolveCategory(category);
   if (category !== undefined && category.trim() !== "" && wanted === null) {
     return {
@@ -76,20 +77,31 @@ export function listComponents(category?: string) {
       categories: categoryIds(),
     };
   }
+  // Opt-in compact rows: name, slug, category and description, with the URLs
+  // written once as patterns. The full rows stay the default so no caller
+  // reading docsUrl from a row breaks.
+  const compact = fields === "compact";
+  const row = (entry: ComponentApiEntry) =>
+    compact
+      ? { name: entry.name, slug: entry.slug, category: entry.category, description: entry.description }
+      : listing(entry);
   const components = componentApi
     .filter((entry) => entry.kind === "component")
     .filter((entry) => !wanted || entry.category === wanted)
-    .map(listing);
+    .map(row);
   const widgets = componentApi
     .filter((entry) => entry.kind === "widget")
     .filter(() => !wanted || wanted === WIDGET_CATEGORY.id)
-    .map(listing);
+    .map(row);
   return {
     package: pkg.name,
     version: pkg.version,
     ...(wanted ? { category: wanted } : { categories: [...componentCategoryMetadata, WIDGET_CATEGORY] }),
     count: components.length,
     schemaIndexUrl: `${SITE_URL}/schema/components.json`,
+    ...(compact
+      ? { urlPatterns: { docs: `${SITE_URL}/components/<slug>`, schema: `${SITE_URL}/schema/components/<slug>.json` } }
+      : {}),
     components,
     widgets,
   };
@@ -218,6 +230,20 @@ const TOKEN_CATEGORY_ALIASES: Readonly<Record<string, string>> = {
   control: "controls",
 };
 
+/**
+ * Every theme as the id the data keys by and the name the site shows
+ * (`mono` is shown as Smoke), in THEME_IDS order. The base theme has no
+ * preset entry; its name is DEFAULT_THEME_LABEL.
+ */
+export const themeNames = (): { id: string; name: string }[] =>
+  THEME_IDS.map((id) => ({ id, name: THEME_PRESETS[id]?.label ?? DEFAULT_THEME_LABEL }));
+
+/** A theme as an id or a display name, in any case, resolved to its id. */
+function resolveTheme(theme: string): string | null {
+  const wanted = theme.trim().toLowerCase();
+  return themeNames().find((t) => t.id === wanted || t.name.toLowerCase() === wanted)?.id ?? null;
+}
+
 export function lookupTokens(category?: string, theme?: string, mode?: string) {
   const folded = category?.trim().toLowerCase();
   const resolvedCategory = folded ? (TOKEN_CATEGORY_ALIASES[folded] ?? folded) : undefined;
@@ -231,8 +257,9 @@ export function lookupTokens(category?: string, theme?: string, mode?: string) {
   // answer a different question than the one asked.
   if (mode && !theme) {
     return {
-      error: "mode requires theme: pass a theme id to resolve the tokens in light or dark mode.",
+      error: "mode requires theme: pass a theme id or name to resolve the tokens in light or dark mode.",
       themes: THEME_IDS,
+      themeNames: themeNames(),
     };
   }
   const names = resolvedCategory
@@ -255,19 +282,29 @@ export function lookupTokens(category?: string, theme?: string, mode?: string) {
   // values, so "what colour is the action fill in the mono theme, dark
   // mode" is answered from data rather than guessed.
   if (theme) {
-    if (!THEME_IDS.includes(theme)) {
-      return { error: `No theme named ${JSON.stringify(theme)}.`, themes: THEME_IDS };
+    const themeId = resolveTheme(theme);
+    if (!themeId) {
+      return { error: `No theme named ${JSON.stringify(theme)}.`, themes: THEME_IDS, themeNames: themeNames() };
     }
+    theme = themeId;
     const resolvedMode: ThemeMode = mode === "dark" ? "dark" : "light";
     const wanted = Object.values(names).flat() as string[];
     const values = Object.fromEntries(
       wanted.map((name) => [name, tokenValue(name, theme, resolvedMode)])
     );
-    return { theme, mode: resolvedMode, total: wanted.length, values, ...published([theme]) };
+    const name = themeNames().find((t) => t.id === theme)!.name;
+    return { theme, themeName: name, mode: resolvedMode, total: wanted.length, values, ...published([theme]) };
   }
   // The summed total ships with the data: a model asked "how many tokens?"
   // will otherwise add eight numbers itself, and models miscount.
-  return { total: TOKEN_COUNT, counts: TOKEN_COUNTS, tokens: names, themes: THEME_IDS, ...published(THEME_IDS) };
+  return {
+    total: TOKEN_COUNT,
+    counts: TOKEN_COUNTS,
+    tokens: names,
+    themes: THEME_IDS,
+    themeNames: themeNames(),
+    ...published(THEME_IDS),
+  };
 }
 
 /* ============================================
@@ -281,12 +318,15 @@ export function lookupTokens(category?: string, theme?: string, mode?: string) {
      - a term in the heading or page title counts far more than in the body
      - every term present beats one term repeated, and body hits are capped
        so a long page cannot win on volume
+     - on a tie, the docs, components, foundations and release pages come
+       before the specs at /blueprints
+   Each section is held to about 300 words, ending with its URL.
    A term matches its compound spellings (DataTable, data table, data-table)
    and a crude stem (theming finds theme).
    ============================================ */
 
 const SEARCH_RESULTS = 3;
-const SEARCH_SECTION_CHARS = 6000;
+const SEARCH_SECTION_WORDS = 300;
 
 /** Words that carry no topic, dropped from a query before ranking. */
 const STOPWORDS = new Set([
@@ -325,15 +365,34 @@ function countHits(haystack: string, form: string): number {
   return hits;
 }
 
-/** The section's body cut at the last sentence or line end before the limit. */
+/**
+ * The section's body held to about SEARCH_SECTION_WORDS words, cut at the
+ * last sentence or line end inside them, with the URL that holds the rest.
+ * A whole design.md section ran past 800 words, which an agent pays for in
+ * context on every search.
+ */
 function excerpt(section: SiteSearchSection): string {
-  if (section.body.length <= SEARCH_SECTION_CHARS) return section.body;
-  const head = section.body.slice(0, SEARCH_SECTION_CHARS);
+  const words = section.body.split(/(?<=\s)/);
+  const wordCount = section.body.split(/\s+/).filter(Boolean).length;
+  if (wordCount <= SEARCH_SECTION_WORDS) return section.body;
+  let head = "";
+  let count = 0;
+  for (const piece of words) {
+    if (piece.trim()) count += 1;
+    if (count > SEARCH_SECTION_WORDS) break;
+    head += piece;
+  }
   const ends = [head.lastIndexOf("\n"), ...[". ", "! ", "? "].map((mark) => head.lastIndexOf(mark) + 1)];
   const cut = Math.max(...ends);
-  const kept = cut > SEARCH_SECTION_CHARS / 2 ? head.slice(0, cut) : head.slice(0, head.lastIndexOf(" "));
-  return `${kept.trimEnd()}\n[Section shortened. The full text is at ${section.url}]`;
+  const kept = cut > head.length / 2 ? head.slice(0, cut) : head;
+  return `${kept.trimEnd()}\n[Section shortened. Full text at ${section.url}]`;
 }
+
+/**
+ * Pages for people building with the package, preferred over the specs at
+ * /blueprints when the score is the same.
+ */
+const isDocsPage = (url: string) => /\/(docs|components|foundations|releases)(\/|$)/.test(new URL(url).pathname);
 
 export function searchSite(query: string): string[] {
   const terms = query
@@ -365,7 +424,7 @@ export function searchSite(query: string): string[] {
       return { section, score };
     })
     .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score);
+    .sort((a, b) => b.score - a.score || Number(isDocsPage(b.section.url)) - Number(isDocsPage(a.section.url)));
 
   return scored.slice(0, SEARCH_RESULTS).map(({ section }) =>
     [

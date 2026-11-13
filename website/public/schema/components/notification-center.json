@@ -223,17 +223,10 @@
     }
   ],
   "types": {
-    "EmptyStateOwnProps": {
-      "kind": "type",
-      "definition": "type EmptyStateOwnProps = {\n  /** Material Symbol icon name, or a custom element (e.g. an illustration) */\n  icon?: string | React.ReactNode;\n  /**\n   * Short headline describing the empty condition.\n   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.\n   */\n  title: string;\n  /** Supporting copy — say what to do next, not just what is missing */\n  description?: string;\n  /** Action slot — typically one primary Button, optionally a secondary */\n  action?: React.ReactNode;\n  /** Component size */\n  size?: 'default' | 'compact';\n  /**\n   * Visual treatment. `plain` sits directly on the page; `bordered` draws a\n   * dashed container, which reads better inside a card, table, or panel.\n   */\n  variant?: 'plain' | 'bordered';\n  /** Additional CSS classes */\n  className?: string;\n};",
-      "description": "Props owned by EmptyState itself — everything else falls through to the root div."
-    },
     "EmptyStateProps": {
-      "kind": "interface",
-      "definition": "interface EmptyStateProps\n  extends EmptyStateOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}",
-      "refs": [
-        "EmptyStateOwnProps"
-      ]
+      "kind": "component-props",
+      "component": "EmptyState",
+      "see": "get_component(\"EmptyState\")"
     },
     "NotificationCenterTab": {
       "kind": "interface",
@@ -241,8 +234,6 @@
     }
   },
   "externalTypes": {
-    "ComponentPropsWithoutRef": "react",
-    "Omit": "typescript",
     "Partial": "typescript",
     "Pick": "typescript",
     "ReactNode": "react"

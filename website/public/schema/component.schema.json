@@ -113,11 +113,22 @@
     "type": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "definition"],
+      "required": ["kind"],
       "properties": {
         "kind": {
           "type": "string",
-          "enum": ["interface", "type", "enum", "class"]
+          "enum": ["interface", "type", "enum", "class", "component-props"],
+          "description": "component-props marks another component's whole props interface, given as a pointer (component and see) rather than a definition."
+        },
+        "component": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9]*$",
+          "description": "On a pointer: the component whose props these are."
+        },
+        "see": {
+          "type": "string",
+          "minLength": 1,
+          "description": "On a pointer: the get_component call that returns those props."
         },
         "definition": {
           "type": "string",
@@ -136,7 +147,10 @@
           "items": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
           "description": "The other types in this file's types map that the definition mentions."
         }
-      }
+      },
+      "if": { "properties": { "kind": { "const": "component-props" } } },
+      "then": { "required": ["component", "see"], "not": { "required": ["definition"] } },
+      "else": { "required": ["definition"], "not": { "anyOf": [{ "required": ["component"] }, { "required": ["see"] }] } }
     },
     "export": {
       "type": "object",
@@ -205,6 +219,10 @@
           "type": "string",
           "minLength": 1,
           "description": "Set when the prop carries @deprecated: the replacement guidance. The prop still works; the published API only grows."
+        },
+        "defaultResolved": {
+          "type": "number",
+          "description": "The number a defaultExpression written as arithmetic comes to, so a reader need not work it out."
         },
         "typeRefs": {
           "type": "array",

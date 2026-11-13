@@ -136,7 +136,7 @@
         },
         {
           "name": "hintLabels",
-          "type": "{ navigate?: string; select?: string; close?: string | undefined; escapeKey?: string | undefined; } | undefined",
+          "type": "{ navigate?: string; select?: string; close?: string | undefined; escapeKey?: string | undefined; }",
           "typeKind": "other",
           "required": false,
           "description": "The words in the hint row, merged over the English defaults: the text\nbeside each key (\"to navigate\", \"to select\", \"to close\") and `escapeKey`,\nthe visible name on the Escape key cap (\"esc\")."

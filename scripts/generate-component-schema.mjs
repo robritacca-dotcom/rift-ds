@@ -161,6 +161,7 @@ function propSchema(prop) {
   Object.assign(out, defaultOf(prop, typeKind));
   if (prop.deprecated) out.deprecated = prop.deprecated;
   if (prop.typeRefs) out.typeRefs = prop.typeRefs;
+  if (prop.defaultResolved !== undefined) out.defaultResolved = prop.defaultResolved;
   return out;
 }
 

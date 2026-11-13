@@ -120,78 +120,9 @@ Where an attachment is in its life: usable, on its way, failed, or gone.
 type AttachmentStatus = 'ready' | 'uploading' | 'error' | 'unavailable';
 ```
 
-### AttachmentTileOwnProps
-
-Props owned by AttachmentTile itself — everything else falls through to the root element.
-
-```ts
-type AttachmentTileOwnProps = {
-  /** File name, extension included. Truncates in the middle so the extension stays visible. */
-  name: string;
-  /**
-   * What kind of file it is, which picks the type mark: a coloured lettered
-   * glyph for the well-known formats, a neutral extension badge for the
-   * rest. Derive it with `getFileKind`.
-   */
-  kind?: FileKind;
-  /** Short uppercase label on the type mark. Defaults from the kind and the extension. */
-  typeLabel?: string;
-  /** Where the file is in its life. Anything but `ready` shows the name with a status line. */
-  status?: AttachmentStatus;
-  /** Upload progress, 0 to 100, reported to assistive technology while `uploading`. */
-  progress?: number;
-  /**
-   * Image that fills the tile while `ready`: an object URL for a picture, or
-   * a first page the host rendered for a document. A non-image kind keeps
-   * its type mark over the corner.
-   */
-  previewSrc?: string;
-  /** Alt text for the preview. Defaults to the file name. */
-  previewAlt?: string;
-  /**
-   * Whether the type mark sits over the corner of a preview. Defaults to on
-   * for a document's first page, which still has to say what format it is,
-   * and off for a picture, which is its own description. A sent message
-   * turns it on for pictures too.
-   */
-  previewMark?: boolean;
-  /** First lines of a pasted block, drawn as a faded excerpt filling the tile while `ready`. */
-  excerpt?: string;
-  /** Secondary line under the name while `ready`, e.g. "1.2 MB". Callers keep their own formatting. */
-  meta?: string;
-  /** Why the file failed. Replaces `errorLabel` on the status line. */
-  error?: string;
-  /**
-   * Tile size. Compact shrinks the square and drops the secondary line of a
-   * ready file. Unrelated to any native `size` attribute: the root is a div.
-   */
-  size?: 'default' | 'compact';
-  /** Click handler. Its presence makes the tile body a button. */
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  /** Remove handler. Its presence renders the corner remove button. */
-  onRemove?: () => void;
-  /** Status line while `uploading`. */
-  uploadingLabel?: string;
-  /** Status line while `error`, when no `error` message is given. */
-  errorLabel?: string;
-  /** Status line while `unavailable`. */
-  unavailableLabel?: string;
-  /** Accessible label for the remove button. Defaults to "Remove" and the file name. */
-  removeLabel?: string;
-  /** Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. */
-  progressLabel?: (name: string) => string;
-  /** Additional CSS classes */
-  className?: string;
-};
-```
-
 ### AttachmentTileProps
 
-```ts
-interface AttachmentTileProps
-  extends AttachmentTileOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof AttachmentTileOwnProps> {}
-```
+The props of AttachmentTile: `get_component("AttachmentTile")`.
 
 ### FileKind
 
@@ -247,4 +178,4 @@ type MentionSource = {
 };
 ```
 
-Types from other packages: `ComponentPropsWithoutRef` (react), `File` (typescript), `HTMLButtonElement` (typescript), `MouseEventHandler` (react), `Omit` (typescript), `Pick` (typescript), `ReactNode` (react).
+Types from other packages: `File` (typescript), `Pick` (typescript), `ReactNode` (react).

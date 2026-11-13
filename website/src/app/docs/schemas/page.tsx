@@ -85,7 +85,8 @@ export default function SchemasPage() {
             <p className={s.sectionNote}>
               Every type a component&apos;s props name is in its schema: defined under{" "}
               <code>types</code>, nested types included, or listed under <code>externalTypes</code>{" "}
-              with the package that defines it, such as <code>ReactNode</code> from React.
+              with the package that defines it, such as <code>ReactNode</code> from React. Another
+              component&apos;s whole props are a pointer to that component&apos;s own schema instead.
             </p>
             <CodeBlock code={FETCH_SNIPPET} language="bash" showCopy />
             <Accordion

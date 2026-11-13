@@ -146,7 +146,7 @@
         },
         {
           "name": "periodLabels",
-          "type": "{ am?: string; pm?: string; } | undefined",
+          "type": "{ am?: string; pm?: string; }",
           "typeKind": "other",
           "required": false,
           "description": "The period suffixes a 12-hour time is written with, as \"2:30 PM\".\nWithout them a 12-hour time is written the way `locale` writes it,\nperiod words included (\"2:30 PM\" in `en-US`). A partial set is merged\nover the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat`\nis `'12'`."

@@ -77,6 +77,40 @@ export const typesOutputPath = join(
  */
 const lf = (value) => value.replace(/\r\n/g, '\n');
 
+/**
+ * The value of a default written as plain arithmetic on number literals
+ * (digits, + - * / and parentheses, with at least one operator), or
+ * undefined. Evaluated by a small parser, never by eval.
+ */
+export function arithmeticValue(text) {
+  if (!/^[\d\s+\-*/().]+$/.test(text) || !/\d\s*[+\-*/]\s*[\d(]/.test(text)) return undefined;
+  const tokens = text.match(/\d+(?:\.\d+)?|[+\-*/()]/g);
+  let at = 0;
+  const peek = () => tokens[at];
+  const factor = () => {
+    const token = tokens[at++];
+    if (token === '(') {
+      const value = sum();
+      at++;
+      return value;
+    }
+    if (token === '-') return -factor();
+    return Number(token);
+  };
+  const product = () => {
+    let value = factor();
+    while (peek() === '*' || peek() === '/') value = tokens[at++] === '*' ? value * factor() : value / factor();
+    return value;
+  };
+  const sum = () => {
+    let value = product();
+    while (peek() === '+' || peek() === '-') value = tokens[at++] === '+' ? value + product() : value - product();
+    return value;
+  };
+  const value = sum();
+  return at === tokens.length && Number.isFinite(value) ? value : undefined;
+}
+
 /** A copy of an object without the named keys. */
 const omit = (object, keys) =>
   Object.fromEntries(Object.entries(object).filter(([key]) => !keys.includes(key)));
@@ -117,6 +151,10 @@ export function assembleComponentApi() {
       if (!type.includes('|') && !Array.isArray(prop.type?.value)) {
         type = declaredUnionText(doc.filePath, doc.displayName, propName) ?? type;
       }
+      // An optional prop already says it may be left out; a trailing
+      // `| undefined` the checker printed on a wrapped type (a Pick, an
+      // indexed access) repeats it and buries the type an agent writes.
+      if (!prop.required) type = type.replace(/(?:\s*\|\s*undefined)+\s*$/, '');
       const entry = {
         name: propName,
         type,
@@ -147,6 +185,10 @@ export function assembleComponentApi() {
           literal !== undefined && literal === raw
             ? `'${raw.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
             : raw;
+        // A default written as arithmetic (`50 * 1024 * 1024`) also carries
+        // the number it comes to, so an agent need not work it out.
+        const resolved = arithmeticValue(entry.defaultValue);
+        if (resolved !== undefined) entry.defaultResolved = resolved;
       }
       if (prop.tags && 'deprecated' in prop.tags) {
         entry.deprecated = lf(String(prop.tags.deprecated || '').trim()) || 'Deprecated.';
@@ -175,9 +217,26 @@ export function assembleComponentApi() {
   // and the outside ones named with their package. Each prop lists the
   // local types it mentions in `typeRefs`, so a reader taking one export
   // can take only the types that export needs.
+  // Which `*Props` / `*OwnProps` names are a documented component's props,
+  // and the get_component call that returns them: a registry component by
+  // name, or one export of the chat widget.
+  const componentNames = new Set(registry.components.map((c) => c.name));
+  const widgetExports = new Map(
+    chatRegistry.widgets.flatMap((w) => w.documented.map((name) => [name, w.name]))
+  );
+  const pointerFor = (typeName) => {
+    const stem = typeName.match(/^([A-Z]\w*?)(?:Own)?Props$/)?.[1];
+    if (!stem) return null;
+    if (componentNames.has(stem)) return { component: stem, see: `get_component("${stem}")` };
+    const widget = widgetExports.get(stem);
+    if (widget) return { component: stem, see: `get_component("${widget}", { export: "${stem}" })` };
+    return null;
+  };
+
   const withTypes = (exportsList) => {
     const { types, externalTypes, propRefs } = resolveComponentTypes(
-      exportsList.map(({ file, component, props }) => ({ file, component, props }))
+      exportsList.map(({ file, component, props }) => ({ file, component, props })),
+      pointerFor
     );
     const exportsOut = exportsList.map((exported) => ({
       ...omit(exported, ['file']),
@@ -286,6 +345,8 @@ export interface ComponentPropApi {
   /** The prop's JSDoc description — present on every own prop, build-enforced. */
   description: string;
   defaultValue?: string;
+  /** The number a default written as arithmetic comes to (\`50 * 1024 * 1024\` is 52428800). */
+  defaultResolved?: number;
   /** Set when the prop carries an @deprecated tag; the replacement guidance. */
   deprecated?: string;
   /** The in-repo types the prop's declared type mentions, each a key of the entry's \`types\`. */
@@ -340,11 +401,19 @@ export function buildComponentTypesFile(entries = assembleComponentApi()) {
 // component's props by scripts/component-types.mjs.
 // Regenerate: node scripts/generate-component-api.mjs (runs via predev/prebuild).
 
-/** One in-repo type a prop reaches, as declared in the source. */
+/**
+ * One in-repo type a prop reaches, as declared in the source, or, for
+ * another component's props interface, a pointer to the call that returns
+ * them (kind \`component-props\`, with \`component\` and \`see\`).
+ */
 export interface ComponentTypeApi {
-  kind: 'interface' | 'type' | 'enum' | 'class';
-  /** The declaration as written in the source, keywords such as \`export\` dropped. */
-  definition: string;
+  kind: 'interface' | 'type' | 'enum' | 'class' | 'component-props';
+  /** The declaration as written in the source, keywords such as \`export\` dropped. Absent on a pointer. */
+  definition?: string;
+  /** On a pointer: the component whose props these are. */
+  component?: string;
+  /** On a pointer: the get_component call that returns them. */
+  see?: string;
   /** The declaration's JSDoc summary, when it has one. */
   description?: string;
   /** The other in-repo types the definition mentions, each a key of the entry's \`types\`. */

@@ -229,22 +229,13 @@
       "definition": "type ArtifactPanelView = 'preview' | 'code';",
       "description": "Which face of the artifact is on stage."
     },
-    "CodeBlockOwnProps": {
-      "kind": "type",
-      "definition": "type CodeBlockOwnProps = {\n  /** The code to display, as a plain string */\n  code: string;\n  /** Language tag shown in the header, e.g. \"tsx\", \"css\" */\n  language?: string;\n  /** Filename shown in the header, e.g. \"tokens-light.css\" */\n  filename?: string;\n  /** Show the copy-to-clipboard button */\n  showCopy?: boolean;\n  /** Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. */\n  onCopied?: () => void;\n  /** Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. */\n  maxHeight?: number | string;\n  /** Show a chevron beside the filename that collapses/expands the code area */\n  collapsible?: boolean;\n  /** Start collapsed (only applies when collapsible) */\n  defaultCollapsed?: boolean;\n  /** Accessible name for the copy button before it is pressed */\n  copyLabel?: string;\n  /** Visible text on the copy button before it is pressed */\n  copyText?: string;\n  /** Text and accessible name the copy button shows once the code is copied */\n  copiedLabel?: string;\n  /** Accessible name for the collapse toggle while the code is collapsed */\n  expandLabel?: string;\n  /** Accessible name for the collapse toggle while the code is showing */\n  collapseLabel?: string;\n  /**\n   * Accessible name for the scrollable code region. Defaults to\n   * \"Code: <filename>\", then \"Code: <language>\", then \"Code\".\n   */\n  codeLabel?: string;\n  /** Additional CSS classes */\n  className?: string;\n};",
-      "description": "Props owned by CodeBlock itself — everything else falls through to the root div."
-    },
     "CodeBlockProps": {
-      "kind": "interface",
-      "definition": "interface CodeBlockProps\n  extends CodeBlockOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof CodeBlockOwnProps | 'children'> {}",
-      "refs": [
-        "CodeBlockOwnProps"
-      ]
+      "kind": "component-props",
+      "component": "CodeBlock",
+      "see": "get_component(\"CodeBlock\")"
     }
   },
   "externalTypes": {
-    "ComponentPropsWithoutRef": "react",
-    "Omit": "typescript",
     "Pick": "typescript",
     "ReactNode": "react"
   }

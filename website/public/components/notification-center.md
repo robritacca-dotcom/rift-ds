@@ -49,42 +49,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 ## Types
 
-### EmptyStateOwnProps
-
-Props owned by EmptyState itself — everything else falls through to the root div.
-
-```ts
-type EmptyStateOwnProps = {
-  /** Material Symbol icon name, or a custom element (e.g. an illustration) */
-  icon?: string | React.ReactNode;
-  /**
-   * Short headline describing the empty condition.
-   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.
-   */
-  title: string;
-  /** Supporting copy — say what to do next, not just what is missing */
-  description?: string;
-  /** Action slot — typically one primary Button, optionally a secondary */
-  action?: React.ReactNode;
-  /** Component size */
-  size?: 'default' | 'compact';
-  /**
-   * Visual treatment. `plain` sits directly on the page; `bordered` draws a
-   * dashed container, which reads better inside a card, table, or panel.
-   */
-  variant?: 'plain' | 'bordered';
-  /** Additional CSS classes */
-  className?: string;
-};
-```
-
 ### EmptyStateProps
 
-```ts
-interface EmptyStateProps
-  extends EmptyStateOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}
-```
+The props of EmptyState: `get_component("EmptyState")`.
 
 ### NotificationCenterTab
 
@@ -99,4 +66,4 @@ interface NotificationCenterTab {
 }
 ```
 
-Types from other packages: `ComponentPropsWithoutRef` (react), `Omit` (typescript), `Partial` (typescript), `Pick` (typescript), `ReactNode` (react).
+Types from other packages: `Partial` (typescript), `Pick` (typescript), `ReactNode` (react).

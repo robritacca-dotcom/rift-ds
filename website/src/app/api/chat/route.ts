@@ -87,7 +87,7 @@ const CHAT_TOOLS: ChatTool[] = [
           },
           theme: {
             type: "string",
-            description: "A theme id to resolve the tokens in; the response without one lists the ids",
+            description: "A theme id or display name, in any case (mono or Smoke), to resolve the tokens in; the response without one lists every id with its name",
           },
           mode: {
             type: "string",

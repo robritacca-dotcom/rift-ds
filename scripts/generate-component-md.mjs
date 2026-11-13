@@ -143,6 +143,10 @@ export function buildComponentMarkdown(entry, origin) {
     lines.push('', '## Types', '');
     for (const [name, type] of types) {
       lines.push(`### ${name}`, '');
+      if (type.kind === 'component-props') {
+        lines.push(`The props of ${type.component}: \`${type.see}\`.`, '');
+        continue;
+      }
       if (type.description) lines.push(type.description, '');
       lines.push('```ts', type.definition, '```', '');
     }

@@ -1081,17 +1081,10 @@
         "TableView"
       ]
     },
-    "EmptyStateOwnProps": {
-      "kind": "type",
-      "definition": "type EmptyStateOwnProps = {\n  /** Material Symbol icon name, or a custom element (e.g. an illustration) */\n  icon?: string | React.ReactNode;\n  /**\n   * Short headline describing the empty condition.\n   * Note: this shadows the native `title` tooltip attribute, which EmptyState does not expose.\n   */\n  title: string;\n  /** Supporting copy — say what to do next, not just what is missing */\n  description?: string;\n  /** Action slot — typically one primary Button, optionally a secondary */\n  action?: React.ReactNode;\n  /** Component size */\n  size?: 'default' | 'compact';\n  /**\n   * Visual treatment. `plain` sits directly on the page; `bordered` draws a\n   * dashed container, which reads better inside a card, table, or panel.\n   */\n  variant?: 'plain' | 'bordered';\n  /** Additional CSS classes */\n  className?: string;\n};",
-      "description": "Props owned by EmptyState itself — everything else falls through to the root div."
-    },
     "EmptyStateProps": {
-      "kind": "interface",
-      "definition": "interface EmptyStateProps\n  extends EmptyStateOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'div'>, keyof EmptyStateOwnProps | 'children'> {}",
-      "refs": [
-        "EmptyStateOwnProps"
-      ]
+      "kind": "component-props",
+      "component": "EmptyState",
+      "see": "get_component(\"EmptyState\")"
     },
     "Filter": {
       "kind": "interface",
@@ -1133,17 +1126,10 @@
       "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
       "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
     },
-    "PaginationOwnProps": {
-      "kind": "type",
-      "definition": "type PaginationOwnProps = {\n  /**\n   * Current page (1-based), for a controlled pager. Leave it undefined to let\n   * the component keep its own page, seeded from `defaultPage`.\n   */\n  page?: number;\n  /** Page shown on first render when the pager is uncontrolled (1-based) */\n  defaultPage?: number;\n  /** Total number of pages */\n  pageCount: number;\n  /** Called with the page the user requests */\n  onPageChange?: (page: number) => void;\n  /** Pages shown on each side of the current page */\n  siblingCount?: number;\n  /** Component size — compact swaps the numbers for a \"Page X of Y\" readout */\n  size?: 'default' | 'compact';\n  /**\n   * Legacy accessible-name prop for the nav landmark.\n   *\n   * @deprecated Pass the native `aria-label` attribute instead.\n   */\n  ariaLabel?: string;\n  /** Accessible name of the previous-page arrow */\n  previousLabel?: string;\n  /** Accessible name of the next-page arrow */\n  nextLabel?: string;\n  /** Accessible name of a numbered page button, given its page number */\n  pageLabel?: (page: number) => string;\n  /** Text of the compact size's readout, given the current page and the page count */\n  readoutLabel?: (page: number, pageCount: number) => string;\n  /** The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */\n  locale?: string;\n  /** Additional CSS classes */\n  className?: string;\n};",
-      "description": "Props owned by Pagination itself — everything else falls through to the nav landmark."
-    },
     "PaginationProps": {
-      "kind": "interface",
-      "definition": "interface PaginationProps\n  extends PaginationOwnProps,\n    Omit<React.ComponentPropsWithoutRef<'nav'>, keyof PaginationOwnProps | 'children'> {}",
-      "refs": [
-        "PaginationOwnProps"
-      ]
+      "kind": "component-props",
+      "component": "Pagination",
+      "see": "get_component(\"Pagination\")"
     },
     "StatusRole": {
       "kind": "type",
@@ -1165,10 +1151,8 @@
     }
   },
   "externalTypes": {
-    "ComponentPropsWithoutRef": "react",
     "ComponentPropsWithRef": "react",
     "ElementType": "react",
-    "Omit": "typescript",
     "Partial": "typescript",
     "Pick": "typescript",
     "Promise": "typescript",

@@ -51,54 +51,8 @@ Which face of the artifact is on stage.
 type ArtifactPanelView = 'preview' | 'code';
 ```
 
-### CodeBlockOwnProps
-
-Props owned by CodeBlock itself — everything else falls through to the root div.
-
-```ts
-type CodeBlockOwnProps = {
-  /** The code to display, as a plain string */
-  code: string;
-  /** Language tag shown in the header, e.g. "tsx", "css" */
-  language?: string;
-  /** Filename shown in the header, e.g. "tokens-light.css" */
-  filename?: string;
-  /** Show the copy-to-clipboard button */
-  showCopy?: boolean;
-  /** Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. */
-  onCopied?: () => void;
-  /** Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. */
-  maxHeight?: number | string;
-  /** Show a chevron beside the filename that collapses/expands the code area */
-  collapsible?: boolean;
-  /** Start collapsed (only applies when collapsible) */
-  defaultCollapsed?: boolean;
-  /** Accessible name for the copy button before it is pressed */
-  copyLabel?: string;
-  /** Visible text on the copy button before it is pressed */
-  copyText?: string;
-  /** Text and accessible name the copy button shows once the code is copied */
-  copiedLabel?: string;
-  /** Accessible name for the collapse toggle while the code is collapsed */
-  expandLabel?: string;
-  /** Accessible name for the collapse toggle while the code is showing */
-  collapseLabel?: string;
-  /**
-   * Accessible name for the scrollable code region. Defaults to
-   * "Code: <filename>", then "Code: <language>", then "Code".
-   */
-  codeLabel?: string;
-  /** Additional CSS classes */
-  className?: string;
-};
-```
-
 ### CodeBlockProps
 
-```ts
-interface CodeBlockProps
-  extends CodeBlockOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof CodeBlockOwnProps | 'children'> {}
-```
+The props of CodeBlock: `get_component("CodeBlock")`.
 
-Types from other packages: `ComponentPropsWithoutRef` (react), `Omit` (typescript), `Pick` (typescript), `ReactNode` (react).
+Types from other packages: `Pick` (typescript), `ReactNode` (react).

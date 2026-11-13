@@ -36,6 +36,14 @@
  *      A prop not on it fails, and an entry whose prop now has a default
  *      (or is gone) fails too, so the list only shrinks.
  *
+ *   5. Every get_component response fits a client's budget: under
+ *      RESPONSE_BUDGET bytes of compact JSON, for the whole entry and for
+ *      each export fetched alone with only the types it reaches. An entry
+ *      too big whole is in RESPONSE_SANCTIONED with its reason (an entry of
+ *      several exports is read one export at a time); a single export over
+ *      budget has no sanction. One response once reached 166KB, past where
+ *      clients cut it off. The largest responses are printed on success.
+ *
  * Runs before every build via the validate-registry chain.
  */
 import { existsSync, readFileSync } from 'node:fs';
@@ -56,6 +64,21 @@ import { repoRoot } from './component-docgen.mjs';
  * JSDoc sentence saying so before they leave this list.
  */
 const ENUM_DEFAULT_BACKLOG = new Set(['AgentStatus.pattern', 'AgentStatusMark.pattern', 'AiButton.state', 'AlertDialog.tone', 'AppLayout.subNav', 'AppSidebar.layout', 'ArtifactPanel.view', 'ArtifactPanel.defaultView', 'Avatar.fill', 'Avatar.status', 'BentoTile.highlight', 'BentoTileArt.pattern', 'CircularButton.variant', 'CircularButton.tone', 'ContributionGraph.weekStartsOn', 'DataTable.size', 'DataTable.navigation', 'DataTable.defaultSize', 'DatePicker.weekStartsOn', 'DateRangePicker.weekStartsOn', 'EventCalendar.weekStartsOn', 'Heading.tier', 'Heading.align', 'PixelAvatar.ink', 'PromptSuggestions.layout', 'SegmentedControl.tone', 'Spinner.tone', 'SplitButton.tone', 'TableToolbar.size', 'TableToolbar.defaultSize', 'Text.align', 'ThemeToggle.value', 'ThemeToggle.defaultValue', 'TimePicker.hourFormat', 'Timeline.variant', 'ToggleGroup.tone', 'TopAppBar.align', 'TopAppBar.navigation', 'ChatWidget.layout']);
+
+/** The most a get_component response may weigh, in bytes of compact JSON. */
+const RESPONSE_BUDGET = 40_000;
+
+/**
+ * Entries whose whole response is over budget, with why. Each export of
+ * them still has to fit when fetched alone.
+ */
+const RESPONSE_SANCTIONED = new Map([
+  ['ChatWidget', 'eight exports and their types; an agent fetches the one it is building with the export argument'],
+  ['DataTable', 'one export whose own props and the types they need (columns, labels, filters, views) are the contract; nothing in it is another component\'s'],
+]);
+
+/** The URLs and usage line lookupComponent adds to an entry, as a byte allowance. */
+const RESPONSE_OVERHEAD = 600;
 
 const relative = (path) => path.replace(repoRoot + '/', '');
 const errors = [];
@@ -173,10 +196,48 @@ if (entries.length > 0) {
   }
 }
 
+// 5. Response budget.
+const reachable = (entry, refs) => {
+  const all = entry.types ?? {};
+  const seen = new Set();
+  const queue = [...refs];
+  while (queue.length > 0) {
+    const name = queue.shift();
+    if (seen.has(name) || !all[name]) continue;
+    seen.add(name);
+    queue.push(...(all[name].refs ?? []));
+  }
+  return Object.fromEntries([...seen].map((name) => [name, all[name]]));
+};
+const sizes = [];
+for (const entry of entries) {
+  const whole = JSON.stringify(entry).length + RESPONSE_OVERHEAD;
+  sizes.push([entry.name, whole]);
+  if (whole > RESPONSE_BUDGET && !RESPONSE_SANCTIONED.has(entry.name)) {
+    fail(
+      `get_component("${entry.name}") is ${whole} bytes, over the ${RESPONSE_BUDGET} budget. Trim what its types map pulls in ` +
+        `(a whole props interface should be a pointer), or sanction it in RESPONSE_SANCTIONED with the reason.`
+    );
+  }
+  if (whole <= RESPONSE_BUDGET && RESPONSE_SANCTIONED.has(entry.name)) {
+    fail(`get_component("${entry.name}") is ${whole} bytes, within budget: remove it from RESPONSE_SANCTIONED.`);
+  }
+  if (entry.exports.length > 1) {
+    for (const exported of entry.exports) {
+      const types = reachable(entry, exported.props.flatMap((prop) => prop.typeRefs ?? []));
+      const one = JSON.stringify({ ...entry, exports: [exported], types }).length + RESPONSE_OVERHEAD;
+      if (one > RESPONSE_BUDGET) {
+        fail(`get_component("${entry.name}", { export: "${exported.component}" }) is ${one} bytes, over the ${RESPONSE_BUDGET} budget.`);
+      }
+    }
+  }
+}
+const largest = sizes.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([name, bytes]) => `${name} ${Math.round(bytes / 1000)}KB`);
+
 if (errors.length > 0) {
   console.error('\n✗ Component API validation failed:\n');
   for (const error of errors) console.error(`  - ${error}\n`);
   process.exit(1);
 }
 
-console.log('✓ Component API and its types are current, closed, and free of leaked details.');
+console.log(`✓ Component API and its types are current, closed, within the response budget (largest: ${largest.join(', ')}), and free of leaked details.`);

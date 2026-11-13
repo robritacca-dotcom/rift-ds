@@ -16,6 +16,8 @@ export interface ComponentPropApi {
   /** The prop's JSDoc description — present on every own prop, build-enforced. */
   description: string;
   defaultValue?: string;
+  /** The number a default written as arithmetic comes to (`50 * 1024 * 1024` is 52428800). */
+  defaultResolved?: number;
   /** Set when the prop carries an @deprecated tag; the replacement guidance. */
   deprecated?: string;
   /** The in-repo types the prop's declared type mentions, each a key of the entry's `types`. */
@@ -5353,7 +5355,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "hintLabels",
-            "type": "{ navigate?: string; select?: string; close?: string | undefined; escapeKey?: string | undefined; } | undefined",
+            "type": "{ navigate?: string; select?: string; close?: string | undefined; escapeKey?: string | undefined; }",
             "required": false,
             "description": "The words in the hint row, merged over the English defaults: the text\nbeside each key (\"to navigate\", \"to select\", \"to close\") and `escapeKey`,\nthe visible name on the Escape key cap (\"esc\")."
           },
@@ -12384,7 +12386,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": true,
             "description": "Navigation buttons config — passed directly to ButtonGroup",
             "typeRefs": [
-              "ButtonGroupProps"
+              "ButtonGroupProps",
+              "ButtonProps"
             ]
           },
           {
@@ -18269,7 +18272,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "periodLabels",
-            "type": "{ am?: string; pm?: string; } | undefined",
+            "type": "{ am?: string; pm?: string; }",
             "required": false,
             "description": "The period suffixes a 12-hour time is written with, as \"2:30 PM\".\nWithout them a 12-hour time is written the way `locale` writes it,\nperiod words included (\"2:30 PM\" in `en-US`). A partial set is merged\nover the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat`\nis `'12'`."
           },
@@ -19336,7 +19339,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "thresholds",
-            "type": "{ warning?: number; error?: number; } | undefined",
+            "type": "{ warning?: number; error?: number; }",
             "required": false,
             "description": "Fractions of an item's max where its fill recolours to warning and then error"
           },
@@ -20037,7 +20040,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "number",
             "required": false,
             "description": "Largest file the visitor may queue, in bytes.",
-            "defaultValue": "50 * 1024 * 1024"
+            "defaultValue": "50 * 1024 * 1024",
+            "defaultResolved": 52428800
           },
           {
             "name": "mentions",
@@ -20149,7 +20153,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "attachHint",
             "type": "((maxSize: string, maxFiles: number, maxBytes: number) => string)",
             "required": false,
-            "description": "The second line of the drop overlay with attachments on, written from the limits: the largest file as text (\"50 MB\"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`.",
+            "description": "The second line of the drop overlay with attachments on, written from the limits: the largest file as text (\"50 MB\"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`, which reads the first two and leaves `maxBytes` to a custom hint.",
             "defaultValue": "(maxSize: string, maxFiles: number) =>\n  `Up to ${maxSize} each · ${maxFiles} files max`"
           },
           {
@@ -20423,7 +20427,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Draws a sent file in the viewer its tile opens, in place of the built-in view: a document renderer of the host's own, a spreadsheet. Return nothing to keep the built-in view, which shows pictures, pasted text, and a PDF or a text file that carries a `fileUrl`.",
             "typeRefs": [
-              "AttachmentGroupProps"
+              "AttachmentGroupProps",
+              "AttachmentItem"
             ]
           },
           {
@@ -20432,7 +20437,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Called with a sent file when the viewer's Download is pressed. Its presence renders the button.",
             "typeRefs": [
-              "AttachmentGroupProps"
+              "AttachmentGroupProps",
+              "AttachmentItem"
             ]
           },
           {
@@ -20500,7 +20506,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "codeBlockLabels",
-            "type": "(Pick<CodeBlockProps, \"copyLabel\" | \"copyText\" | \"copiedLabel\"> & { codeLabel?: ((language: string) => string); }) | undefined",
+            "type": "(Pick<CodeBlockProps, \"copyLabel\" | \"copyText\" | \"copiedLabel\"> & { codeLabel?: ((language: string) => string); })",
             "required": false,
             "description": "The words of a reply's fenced code, over CodeBlock's English defaults: the copy button (\"Copy code\", \"Copy\", \"Copied\"), and the code region's name, given the fence's language (\"Code: bash\", or \"Code\" with none).",
             "typeRefs": [
@@ -20843,6 +20849,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Spoken text for each tab's status, merged over ThreadTabs' English defaults (Working, Unread, Needs input, Failed).",
             "typeRefs": [
+              "ThreadTabStatus",
               "ThreadTabsProps"
             ]
           }

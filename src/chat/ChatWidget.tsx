@@ -253,7 +253,7 @@ export interface ChatWidgetProps {
   contextPlacement?: 'above' | 'inside';
   /** The composer's context note, written from `contextLabel`, for a host still on the label prop; `context` takes its `note` as a line. @deprecated Use `context` with its `note`. */
   contextNote?: (title: string) => string;
-  /** The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`. */
+  /** The second line of the drop overlay with attachments on, written from the limits: the largest file as text ("50 MB"), the most files per message, and the largest file in bytes for a host that formats sizes itself. Defaults to `Up to <maxSize> each · <maxFiles> files max`, which reads the first two and leaves `maxBytes` to a custom hint. */
   attachHint?: (maxSize: string, maxFiles: number, maxBytes: number) => string;
   /** The welcome greeting for each part of the visitor's day; a key left out keeps its English. Defaults to "Good morning", "Good afternoon" and "Good evening". */
   greetings?: Partial<GreetingCopy>;

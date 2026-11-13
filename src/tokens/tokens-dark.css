@@ -226,7 +226,9 @@
   --color-chart-series-7: var(--color-core-accent-cobalt);
 
   /* Pixel ink - The generated pixel avatar's six inks, high on each ramp
-     so the sprite holds its contrast on a dark page. */
+     so the sprite holds its contrast on a dark page. Blue takes step 04,
+     one above the others: the blue ramp runs darker per step, and its 05
+     would be the faintest of the six on the page (04 sits among them). */
   --color-pixel-ink-1: var(--primitive-red-05);
   --color-pixel-ink-2: var(--primitive-orange-05);
   --color-pixel-ink-3: var(--primitive-yellow-05);

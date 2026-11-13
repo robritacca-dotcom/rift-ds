@@ -31,5 +31,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected 24-hour "HH:MM" value |
-| periodLabels | `{ am?: string; pm?: string; } \| undefined` | no |  | The period suffixes a 12-hour time is written with, as "2:30 PM". Without them a 12-hour time is written the way `locale` writes it, period words included ("2:30 PM" in `en-US`). A partial set is merged over the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is `'12'`. |
+| periodLabels | `{ am?: string; pm?: string; }` | no |  | The period suffixes a 12-hour time is written with, as "2:30 PM". Without them a 12-hour time is written the way `locale` writes it, period words included ("2:30 PM" in `en-US`). A partial set is merged over the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is `'12'`. |
 | className | `string` | no | `''` | Additional CSS classes, applied to the Field wrapper around the label, trigger and helper text, not to the trigger button the ref and the other props reach. |

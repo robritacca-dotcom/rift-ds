@@ -286,14 +286,13 @@ export function lookupTokens(category?: string, theme?: string, mode?: string) {
     if (!themeId) {
       return { error: `No theme named ${JSON.stringify(theme)}.`, themes: THEME_IDS, themeNames: themeNames() };
     }
-    theme = themeId;
     const resolvedMode: ThemeMode = mode === "dark" ? "dark" : "light";
     const wanted = Object.values(names).flat() as string[];
     const values = Object.fromEntries(
-      wanted.map((name) => [name, tokenValue(name, theme, resolvedMode)])
+      wanted.map((name) => [name, tokenValue(name, themeId, resolvedMode)])
     );
-    const name = themeNames().find((t) => t.id === theme)!.name;
-    return { theme, themeName: name, mode: resolvedMode, total: wanted.length, values, ...published([theme]) };
+    const name = themeNames().find((t) => t.id === themeId)!.name;
+    return { theme: themeId, themeName: name, mode: resolvedMode, total: wanted.length, values, ...published([themeId]) };
   }
   // The summed total ships with the data: a model asked "how many tokens?"
   // will otherwise add eight numbers itself, and models miscount.

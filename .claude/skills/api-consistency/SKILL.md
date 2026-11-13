@@ -81,7 +81,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - If one component accepts `iconLeft`/`iconRight`, siblings in the same family should follow the same pattern
    - Default values: if `size` defaults to `"default"` on a Gadget, it should not default to `"medium"` on a related Sprocket
 
-5. **Then check the contract agrees with its description.** For each component in scope, read its entry in `website/src/data/component-api.generated.ts` (exactly what `/api/mcp`'s `get_component` serves, so this is the contract strangers' agents see), then read the two prose descriptions of it against that entry:
+5. **Then check the contract agrees with its description.** For each component in scope, read its entry in `website/src/data/component-api.generated.ts` and its types in `website/src/data/component-types.generated.ts` (together exactly what `/api/mcp`'s `get_component` serves, so this is the contract strangers' agents see, type JSDoc included), then read the two prose descriptions of it against that entry:
    - its registry `description` (`src/components/registry.json`, or `src/chat/registry.json` for the widget), which also ships through the site chat's corpus, the consumer agent skill and the page metadata
    - its `###` spec section in `design.md`
 

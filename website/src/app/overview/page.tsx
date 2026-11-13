@@ -258,8 +258,8 @@ export default function AboutDsPage() {
                     <code>/api/mcp</code> serves agents five tools with no key, no
                     account, and no model behind them: the component list,
                     prop APIs, tokens resolved per theme, install setup, and
-                    site search. Component and token answers cite the
-                    published file.
+                    a search of the docs. Component and token answers cite the
+                    published file, and every search result its page.
                   </li>
                 </ul>
                 <ArchitectureMap

@@ -83,8 +83,8 @@ export default function SchemasPage() {
               }))}
             />
             <p className={s.sectionNote}>
-              Each component schema is a closed contract. Every type its props name is defined under{" "}
-              <code>types</code>, nested types included, or named under <code>externalTypes</code>{" "}
+              Every type a component&apos;s props name is in its schema: defined under{" "}
+              <code>types</code>, nested types included, or listed under <code>externalTypes</code>{" "}
               with the package that defines it, such as <code>ReactNode</code> from React.
             </p>
             <CodeBlock code={FETCH_SNIPPET} language="bash" showCopy />

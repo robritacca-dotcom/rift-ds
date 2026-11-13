@@ -56,7 +56,7 @@ Read the analytics embed in `website/src/app/layout.tsx`. Check whether tracking
 
 ### 6. Existing self-defenses (credit them)
 
-The repo has build-time guards worth verifying and crediting: the corpus leak validator (`scripts/validate-site-corpus.mjs`), the component-API leak validator (`scripts/validate-component-api.mjs` — it screens the prop JSDoc served by `/api/mcp`, and a hit there is a leak in the published npm tarball too), and the token/CSS directive validators. Note where a good guard has a coverage gap (e.g. it scans the corpus but not the other files sent to the model as system prompts).
+The repo has build-time guards worth verifying and crediting: the corpus leak validator (`scripts/validate-site-corpus.mjs`), the component-API leak validator (`scripts/validate-component-api.mjs` — it screens the prop and type JSDoc served by `/api/mcp`, and a hit there is a leak in the published npm tarball too), the search-index leak screen (`scripts/validate-site-search.mjs`, over the documentation `/api/mcp` searches), and the token/CSS directive validators. Note where a good guard has a coverage gap (e.g. it scans the corpus but not the other files sent to the model as system prompts).
 
 ## Verify, then report
 

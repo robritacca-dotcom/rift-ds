@@ -109,7 +109,7 @@ npm run build           # type-check the library
 npm run build:lib       # build the publishable package into dist/
 npm run lint            # ESLint
 npm run build-storybook # export static Storybook
-npm run test            # every Storybook story as a render, axe and interaction test (headless Chromium), plus the unit tests (src/**/*.test.ts)
+npm run test            # every Storybook story as a render, axe and interaction test (headless Chromium), plus the unit tests (src/**/*.test.ts, and website/src/lib/**/*.test.ts for the MCP and chat tools)
 npm run verify          # the full local quality gate, mirroring CI
 npm run eval:chat       # site-chat answer-quality eval against a running dev server (real API calls, never in CI)
 npm run eval:starters   # the generated starter chips held neutral and broad, against a running dev server (real API calls, never in CI)

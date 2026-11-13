@@ -213,8 +213,7 @@ export default function HomeChatFrame({
   footprint = FOOTPRINT,
 }: {
   /** The chat card's shell mode (ChatWidget's `layout`); the home page
-      leaves it to the widget's own default. A recording or a lab can stage
-      another. */
+      stages it inset. A recording or a lab can stage another. */
   layout?: ChatLayout;
   /** Stand the card on the Horizon scene, frosted once the conversation
       starts, through the shaded-chat recipe the playground card and the

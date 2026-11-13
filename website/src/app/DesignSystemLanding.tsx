@@ -1498,7 +1498,7 @@ export default function DesignSystemLanding() {
           className={`${styles.chatFrame} animate-in animate-delay-1`}
           aria-label="The AI chat playground"
         >
-          <HomeChatFrame />
+          <HomeChatFrame layout="inset" />
         </section>
 
         {/* ---------- the collage's own header and its one call to action;

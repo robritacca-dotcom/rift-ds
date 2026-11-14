@@ -16,7 +16,7 @@ export const driftAuditMap: ArchMap = {
     /* 1 · The change */
     { id: "z-change", x: 60, y: 120, w: 400, h: 520, kind: "zone", title: "1 · The change", sub: "what is true right now" },
     { id: "route", x: 95, y: 200, w: 330, h: 76, title: "Renamed route", sub: "a page folder in website/src/app/", icon: "commit", chip: "info" },
-    { id: "chain", x: 95, y: 330, w: 330, h: 76, title: "Chain and scripts", sub: "npm run validate-registry · package.json", icon: "checklist", chip: "info" },
+    { id: "chain", x: 95, y: 330, w: 330, h: 76, title: "Chain and scripts", sub: "npm run validate-registry · scripts/chain.mjs", icon: "checklist", chip: "info" },
     { id: "playbook", x: 95, y: 460, w: 330, h: 76, title: "Change-type playbook", sub: "route change: the surfaces that must move", icon: "menu_book", chip: "info" },
 
     /* 2 · Every description */

@@ -46,9 +46,8 @@ const STEPS: TimelineItem[] = [
     meta: "Makes the chain entry",
     description: (
       <>
-        Add it to <GuideCode>validate-registry</GuideCode> in the root{" "}
-        <GuideCode>package.json</GuideCode>, generators ahead of validators. A website check also
-        joins <GuideCode>website/package.json</GuideCode>. A post-build check joins{" "}
+        Add a row to the chain in <GuideCode>scripts/chain.mjs</GuideCode>, generators ahead of
+        validators. A website check also takes the row’s site mark. A post-build check joins{" "}
         <GuideCode>verify</GuideCode> and CI in the same change.
       </>
     ),

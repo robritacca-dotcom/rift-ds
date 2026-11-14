@@ -31,6 +31,7 @@ import { fileURLToPath } from 'node:url';
 import { loadThemeSource } from './generate-preset-stylesheets.mjs';
 import { resolveTokenValues } from './token-values.mjs';
 import { PACKAGE_NAME, SITE_URL } from './brand.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const outputDir = join(repoRoot, 'website', 'public', 'themes');
@@ -390,8 +391,8 @@ export async function assembleThemeDesignMd() {
   return files;
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const files = await assembleThemeDesignMd();
   let written = 0;
   for (const [path, content] of files) {
@@ -417,3 +418,5 @@ if (isMain) {
       : `✓ Theme DESIGN.md files up to date: ${files.size}.`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

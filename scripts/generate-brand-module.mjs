@@ -10,6 +10,7 @@ import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as brand from './brand.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outputPath = join(
@@ -36,7 +37,10 @@ ${entries}
 `;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   writeFileSync(outputPath, buildBrandModule());
   console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')}`);
 }
+
+if (isEntryScript(import.meta.url)) await main();

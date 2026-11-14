@@ -38,7 +38,6 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import {
   chatRegistry,
   componentsDir,
@@ -52,7 +51,9 @@ import {
   resolveComponentTypes,
   stringLiteralDefaults,
 } from './component-types.mjs';
+import { memo } from './lib/memo.mjs';
 import { PACKAGE_NAME } from './package-manifest.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 export const outputPath = join(
   repoRoot, 'website', 'src', 'data', 'component-api.generated.ts'
@@ -115,8 +116,13 @@ export function arithmeticValue(text) {
 const omit = (object, keys) =>
   Object.fromEntries(Object.entries(object).filter(([key]) => !keys.includes(key)));
 
-/** Assemble the data structure — exported so the validator can rebuild it. */
-export function assembleComponentApi() {
+/**
+ * Assemble the data structure. Exported so the generators that write from
+ * it and the validators that rebuild it read one assembly: it is memoised
+ * and frozen (scripts/lib/memo.mjs), so every caller in a process shares
+ * it and none can change what the next one reads.
+ */
+export const assembleComponentApi = memo(() => {
   const parsed = parseLibrary();
 
   // Group docgen output by source file: a single file can export several
@@ -310,7 +316,7 @@ export function assembleComponentApi() {
   });
 
   return [...componentEntries, ...widgetEntries];
-}
+}, { freeze: true });
 
 /** The entries without their type maps: the prop reference file's shape. */
 const withoutTypes = (entries) => entries.map((entry) => omit(entry, ['types', 'externalTypes']));
@@ -433,9 +439,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = ${JSO
 `;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const entries = assembleComponentApi();
   writeFileSync(outputPath, buildComponentApiFile(entries));
   writeFileSync(typesOutputPath, buildComponentTypesFile(entries));
   console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')} and ${typesOutputPath.replace(repoRoot + '/', '')}`);
 }
+
+if (isEntryScript(import.meta.url)) await main();

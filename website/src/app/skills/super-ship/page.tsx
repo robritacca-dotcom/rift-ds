@@ -133,7 +133,7 @@ export default function SuperShipSkillPage() {
             This is the whole gate, in the order it runs: the{" "}
             <GuideCode>validate-registry</GuideCode> chain, the rest of{" "}
             <GuideCode>npm run verify</GuideCode>, then what CI adds. The list is built from{" "}
-            <GuideCode>package.json</GuideCode> and the CI workflow on every build, so a new
+            <GuideCode>scripts/chain.mjs</GuideCode>, <GuideCode>package.json</GuideCode> and the CI workflow on every build, so a new
             validator cannot join the chain without a line here. After the push, the hydration
             smoke runs once more against the live site.
           </>

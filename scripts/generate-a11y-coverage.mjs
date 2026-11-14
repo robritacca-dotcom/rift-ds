@@ -44,6 +44,7 @@
 import { readFileSync, readdirSync, writeFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isEntryScript } from './lib/report.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
@@ -154,9 +155,8 @@ export const a11yCoverage: A11yCoverage = ${JSON.stringify(coverage, null, 2)};
 `;
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const content = buildA11yCoverageFile();
   writeFileSync(outputPath, content);
   const coverage = collectA11yCoverage();
@@ -165,3 +165,5 @@ if (isMain) {
       `${coverage.layerComponents.length} on the dismissal stack (${coverage.modalOverlays.length} of them modal).`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

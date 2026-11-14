@@ -73,6 +73,7 @@ import {
   REPOSITORY_URL,
   STORYBOOK_URL,
 } from './brand.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const websiteApp = join(repoRoot, 'website', 'src', 'app');
@@ -1460,7 +1461,8 @@ export function corpusSizes() {
   });
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const args = process.argv.slice(2);
 
   if (args.includes('--sizes')) {
@@ -1478,3 +1480,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')}`);
   }
 }
+
+if (isEntryScript(import.meta.url)) await main();

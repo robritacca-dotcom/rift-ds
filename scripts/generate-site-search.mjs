@@ -43,6 +43,7 @@ import { fileURLToPath } from 'node:url';
 import { assembleAgentStarter } from './generate-agent-skill.mjs';
 import { AGENT_STARTER_FILE, SITE_URL } from './brand.mjs';
 import { pageProse, sectionSiteMap, sitePageBodies } from './generate-site-corpus.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -192,7 +193,10 @@ export const siteSearchSections: readonly SiteSearchSection[] = ${JSON.stringify
 `;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   writeFileSync(outputPath, buildSiteSearchFile());
   console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')}`);
 }
+
+if (isEntryScript(import.meta.url)) await main();

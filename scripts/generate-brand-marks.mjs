@@ -28,6 +28,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const outputPath = join(repoRoot, 'website', 'src', 'data', 'brand-marks.generated.ts');
@@ -119,8 +120,11 @@ export const BRAND_MARKS: BrandMarkData[] = ${JSON.stringify(marks, null, 2)};
 `;
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const output = assembleBrandMarks();
   writeFileSync(outputPath, output);
   console.log(`✓ Generated brand marks — ${BRANDS.length} brands from simple-icons.`);
 }
+
+if (isEntryScript(import.meta.url)) await main();

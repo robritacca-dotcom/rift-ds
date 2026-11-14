@@ -37,6 +37,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isEntryScript } from './lib/report.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const outputPath = join(root, 'website/src/data/google-fonts.generated.ts');
@@ -140,10 +141,12 @@ export function assembleGoogleFontIndex() {
   return lines.join('\n');
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const content = assembleGoogleFontIndex();
   writeFileSync(outputPath, content);
   const count = (content.match(/^ {2}".+": "[v\d]/gm) ?? []).length;
   console.log(`✓ Google font index written (${count} families)`);
 }
+
+if (isEntryScript(import.meta.url)) await main();

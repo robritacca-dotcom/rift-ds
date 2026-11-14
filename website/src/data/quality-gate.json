@@ -33,7 +33,7 @@
     {
       "id": "verify",
       "title": "Verify, after the chain",
-      "body": "The rest of verify, in the order it runs. The two builds each run the whole chain again first, and the website build runs its own subset of it."
+      "body": "The rest of verify, in the order it runs. The two builds each run the whole chain again first, and the website build runs the steps marked for the site."
     },
     {
       "id": "ci",

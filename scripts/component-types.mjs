@@ -37,10 +37,14 @@ import { dirname, join, relative } from 'node:path';
 import ts from 'typescript';
 
 import { repoRoot } from './component-docgen.mjs';
+import { onClearMemos } from './lib/memo.mjs';
 
 const lf = (value) => value.replace(/\r\n/g, '\n');
 
 let cached;
+onClearMemos(() => {
+  cached = undefined;
+});
 
 /** One program over tsconfig.app.json, the same config docgen reads. */
 function program() {

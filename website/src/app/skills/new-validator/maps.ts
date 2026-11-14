@@ -21,11 +21,11 @@ export const hexCodeMap: ArchMap = {
     { id: "allow", x: 95, y: 590, w: 350, h: 76, title: "ds-allow(color)", sub: "a deliberate exception, with its reason", icon: "flag" },
 
     /* 2 · The chain */
-    { id: "z-chain", x: 560, y: 120, w: 400, h: 820, kind: "zone", title: "2 · The chain", sub: "root package.json" },
+    { id: "z-chain", x: 560, y: 120, w: 400, h: 820, kind: "zone", title: "2 · The chain", sub: "scripts/chain.mjs" },
     { id: "refs", x: 595, y: 330, w: 330, h: 76, title: "Token references", sub: "scripts/validate-token-references.mjs", icon: "rule", chip: "warning" },
     { id: "raw", x: 595, y: 460, w: 330, h: 76, title: "Raw values", sub: "scripts/validate-raw-values.mjs", icon: "rule", chip: "warning" },
     { id: "registry", x: 595, y: 620, w: 330, h: 76, title: "validate-registry", sub: "prebuild · prestorybook · prebuild-storybook", icon: "account_tree" },
-    { id: "web", x: 595, y: 780, w: 330, h: 76, title: "Website prebuild", sub: "website/package.json · leaves both out", icon: "web" },
+    { id: "web", x: 595, y: 780, w: 330, h: 76, title: "Website prebuild", sub: "the site-marked steps · leaves both out", icon: "web" },
 
     /* 3 · What runs the chain */
     { id: "z-run", x: 1040, y: 120, w: 400, h: 820, kind: "zone", title: "3 · What runs the chain", sub: "every build starts here" },

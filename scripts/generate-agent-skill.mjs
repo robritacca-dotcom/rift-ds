@@ -66,9 +66,9 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { chatRegistry, registry, repoRoot } from './component-docgen.mjs';
 import { assembleComponentApi } from './generate-component-api.mjs';
+import { isEntryScript } from './lib/report.mjs';
 import { siteUrl } from './generate-component-md.mjs';
 import { CATEGORY_PREFIXES } from './generate-token-registry.mjs';
 import {
@@ -760,8 +760,8 @@ export function listFiles(dir, prefix = '') {
   );
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const files = assembleAgentSkill();
   const outputs = new Map([
     ...files.map((file) => [`${file.skill}/${file.path}`, file.content]),
@@ -811,3 +811,5 @@ if (isMain) {
       : `✓ Agent skills up to date — ${AGENT_SKILLS.length} skills, ${outputs.size} files match the registries.`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

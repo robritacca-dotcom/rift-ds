@@ -21,6 +21,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const skillsDir = join(repoRoot, '.claude', 'skills');
@@ -104,7 +105,10 @@ export const skillsContent: SkillContent[] = ${JSON.stringify(entries, null, 2)}
 `;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   writeFileSync(outputPath, buildSkillsContent());
   console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')}`);
 }
+
+if (isEntryScript(import.meta.url)) await main();

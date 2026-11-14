@@ -79,7 +79,7 @@ Never hand-edit these; edit the source, and commit what a build regenerates. Eac
 
 **Every fact has exactly one authoritative home**: all other mentions derive from it (generated), are checked against it (validated), or point at it.
 
-- **Point, don't enumerate.** "The `validate-registry` entry in the root `package.json` is the authoritative list" beats a hand-copied list.
+- **Point, don't enumerate.** "`CHAIN` in `scripts/chain.mjs` is the authoritative list" beats a hand-copied list.
 - **Self-descriptions stay in sync.** When a change makes a statement in README.md, design.md, this file or the overview and foundations pages false, fix that prose in the same change. If the fact is countable or mechanically checkable, route it through a registry and validator instead.
 - **A new countable collection** gets a registry file beside it, a small accessor module exporting the count, and a validator chained into `validate-registry` (the `new-validator` skill walks it).
 - **A new skill**: write `.claude/skills/<name>/SKILL.md` and register it in `.claude/skills/registry.json` (`displayed`, `unlisted`, or `external`, which also needs `website/src/data/external-skills/<name>.md`).
@@ -122,7 +122,7 @@ npm run graph           # regenerate the /graph data; `-- tree <name>` / `-- who
 
 ## CI & Local Verify
 
-`.github/workflows/ci.yml` runs on every push to `main` and every PR: the library (lint, build, the API compatibility gate, the package-publish lint, the dependency audit, the drift guard), the story tests, the Storybook build, and the website (lint, build, then the built-HTML checks and the served-site checks). The full chain (`npm run validate-registry`) runs before every root build via `prebuild`/`prestorybook`/`prebuild-storybook`; the website's own `prebuild` runs a subset, and `website/package.json` is authoritative for which.
+`.github/workflows/ci.yml` runs on every push to `main` and every PR: the library (lint, build, the API compatibility gate, the package-publish lint, the dependency audit, the drift guard), the story tests, the Storybook build, and the website (lint, build, then the built-HTML checks and the served-site checks). The build chain is one ordered list, `CHAIN` in `scripts/chain.mjs`, run by `scripts/run-chain.mjs`: it runs every step in one process, so the docgen parse happens once for the generators and once more for the validators that rebuild and compare, and it stops at the first failure. The full chain (`npm run validate-registry`) runs before every root build via `prebuild`/`prestorybook`/`prebuild-storybook`; the website's own `predev` and `prebuild` run the steps the manifest marks for the site. Every step still runs alone as `node scripts/<id>.mjs`. `scripts/chain-selftest.mjs` proves the validators can still fail (one planted break per check, from `scripts/fixtures/chain-plants.json`); run it by hand in a clean worktree after changing a validator, a generator or `scripts/lib/`.
 
 `npm run verify` is the **single local mirror of CI**. **When CI gains a check, add it to `verify` in the same change**; skills and docs reference `verify`, never individual commands. **Labs take a lighter path**: a change confined to `website/src/app/labs/` and the files a lab registers in (`scripts/labs-only-change.mjs` owns the allowlist) skips the story tests, the Storybook build, the package steps and the site-wide gesture and axe sweeps in CI, and `npm run verify:labs` mirrors that path locally; the validator chain, lint, both builds and the hydration smoke still run. Three deliberate exceptions stay CI-only:
 - **Chromatic** (`.github/workflows/chromatic.yml`): bills cloud snapshots, so it is dispatch-only and never proof the pixels are unchanged.
@@ -165,7 +165,7 @@ If asked to "merge and push" (a retired skill name), confirm the intended end st
 ## Project Structure
 
 - `design.md`, `content-design.md`, `SECURITY.md`: the specs and the security policy.
-- `scripts/`: generators and validators (the `validate-registry` chain) and release tooling. `evals/chat/`: the chat eval.
+- `scripts/`: generators and validators (the `validate-registry` chain, listed in `scripts/chain.mjs`), the helpers they share in `scripts/lib/`, and release tooling. `evals/chat/`: the chat eval.
 - `src/components/`: one folder per component, plus `registry.json`. `src/index.ts` and `src/charts.ts` are GENERATED barrels.
 - `src/chat/`: the chat widget over its engine, with its own registry and hand-written barrels. `src/cli/`: the init bin and its scaffold templates.
 - `src/format/`: `rift-ds/format`, the pure money (decimal string) and relative or zoned date helpers, with no React and a hand-written barrel; its `*.test.ts` run in the `unit` Vitest project.

@@ -66,6 +66,7 @@ import { loadThemeSource } from './generate-preset-stylesheets.mjs';
 import { parseCss, resolveTokenValues } from './token-values.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { SITE_URL } from './brand.mjs';
+import { failStep, isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
@@ -464,8 +465,8 @@ export async function assembleTokenValues() {
   return { values, dtcg };
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   try {
     const { values, dtcg } = await assembleTokenValues();
     let written = 0;
@@ -495,6 +496,8 @@ if (isMain) {
     );
   } catch (error) {
     console.error(`✗ ${error.message}`);
-    process.exit(1);
+    failStep();
   }
 }
+
+if (isEntryScript(import.meta.url)) await main();

@@ -16,7 +16,8 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { failStep, isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
@@ -112,8 +113,8 @@ export function summarize(categories) {
   return { total, perCategory };
 }
 
-const isMain = import.meta.url === pathToFileURL(process.argv[1]).href;
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   try {
     const { categories } = deriveTokenRegistry();
     const json =
@@ -142,6 +143,8 @@ if (isMain) {
     }
   } catch (error) {
     console.error(`✗ ${error.message}`);
-    process.exit(1);
+    failStep();
   }
 }
+
+if (isEntryScript(import.meta.url)) await main();

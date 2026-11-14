@@ -57,6 +57,7 @@ import ts from 'typescript';
 // The shared parser patch: each component's defaults come from its own
 // declaration only (the module's doc block owns the why).
 import './docgen-scoped-defaults.mjs';
+import { memo } from './lib/memo.mjs';
 
 export const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const componentsDir = join(repoRoot, 'src', 'components');
@@ -136,8 +137,10 @@ export function isComponentDoc(doc) {
  * Parse the whole library in one call and keep the components (see
  * isComponentDoc). One call builds a single TypeScript
  * program; parsing file-by-file rebuilds it each time and is far slower.
+ * Memoised (scripts/lib/memo.mjs): every caller in a process shares the
+ * one parse. Not frozen, since the docs hold TypeScript's own symbols.
  */
-export function parseLibrary() {
+export const parseLibrary = memo(() => {
   const parser = withCustomConfig(join(repoRoot, 'tsconfig.app.json'), {
     savePropValueAsString: true,
     shouldExtractLiteralValuesFromEnum: true,
@@ -151,4 +154,4 @@ export function parseLibrary() {
       !(prop.parent && prop.parent.fileName.includes('node_modules')),
   });
   return parser.parse(allSourceFiles()).filter(isComponentDoc);
-}
+});

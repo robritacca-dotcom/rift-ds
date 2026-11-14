@@ -45,6 +45,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { registerHooks } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isEntryScript } from './lib/report.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const outputDir = join(repoRoot, 'src', 'tokens', 'presets');
@@ -218,8 +219,8 @@ export async function assemblePresetStylesheets() {
   return files;
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const files = await assemblePresetStylesheets();
   mkdirSync(outputDir, { recursive: true });
 
@@ -248,3 +249,5 @@ if (isMain) {
       : `✓ Preset stylesheets up to date — ${files.size} files.`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

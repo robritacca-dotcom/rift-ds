@@ -57,11 +57,11 @@
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { repoRoot } from './component-docgen.mjs';
 import { SITE_URL } from './brand.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 export const schemaDir = join(repoRoot, 'website', 'public', 'schema');
 export const outputDir = join(schemaDir, 'components');
@@ -224,8 +224,8 @@ export function assembleComponentSchemaFiles() {
   return files;
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   mkdirSync(outputDir, { recursive: true });
   const files = assembleComponentSchemaFiles();
 
@@ -257,3 +257,5 @@ if (isMain) {
       : `✓ Component schemas up to date — ${files.length} files.`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

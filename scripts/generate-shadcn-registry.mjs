@@ -61,6 +61,7 @@ import { fileURLToPath } from 'node:url';
 import { AUTHOR_NAME, AUTHOR_URL, BRAND_SHORT, SITE_URL } from './brand.mjs';
 import { chatRegistry } from './component-docgen.mjs';
 import { OPTIONAL_PEER_PACKAGES } from './optional-peers.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 /* The package's runtime dependencies (TanStack under DataTable): an item
    whose source imports one declares it, as an optional peer is declared,
@@ -320,8 +321,8 @@ export function assembleShadcnRegistry() {
   return out;
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   const files = assembleShadcnRegistry();
   mkdirSync(join(outputDir, 'assets'), { recursive: true });
 
@@ -365,3 +366,5 @@ if (isMain) {
       : `✓ shadcn registry up to date — ${files.size} files.`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

@@ -23,11 +23,11 @@
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { SITE_URL } from './brand.mjs';
 import { chatRegistry, repoRoot } from './component-docgen.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 /** The component pages' folder, the chat widget's page included. */
 export const outputDir = join(repoRoot, 'website', 'public', 'components');
@@ -177,8 +177,8 @@ export function assembleComponentMdFiles() {
   }));
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   mkdirSync(outputDir, { recursive: true });
   const files = assembleComponentMdFiles();
 
@@ -209,3 +209,5 @@ if (isMain) {
       : `✓ Component markdown up to date — ${files.length} files.`
   );
 }
+
+if (isEntryScript(import.meta.url)) await main();

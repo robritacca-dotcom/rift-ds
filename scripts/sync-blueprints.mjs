@@ -23,7 +23,8 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { isEntryScript } from './lib/report.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -48,8 +49,8 @@ export const blueprintSlug = (name) => name.replace(/\.md$/, '').toLowerCase();
 
 // Side effects only when run directly, so validators can import FILES and
 // blueprintSlug without triggering a sync.
-const isMain = import.meta.url === pathToFileURL(process.argv[1]).href;
-if (isMain) {
+/** Write the generated files. The chain runner calls this; run alone, the script does. */
+export async function main() {
   let synced = 0;
   for (const name of FILES) {
     const src = path.join(root, name);
@@ -67,3 +68,5 @@ if (isMain) {
     console.log(`✓ Blueprints in sync — website/public copies match the root ${FILES.join(', ')}.`);
   }
 }
+
+if (isEntryScript(import.meta.url)) await main();

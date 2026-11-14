@@ -1,0 +1,64 @@
+/* The quick-install home. Layout only: every colour, size and space is a
+   semantic token, so the theme switcher re-skins it like the rest of the site. */
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--gap-500, 2rem);
+  padding: var(--gap-500, 2rem) 16px;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300, 1rem);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.lede {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.command {
+  margin-top: var(--gap-200, 0.5rem);
+  max-width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200, 0.5rem);
+  margin-top: var(--gap-200, 0.5rem);
+}
+
+.explore {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-300, 1rem);
+  font-size: 0.9375rem;
+}
+
+.explore a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.explore a:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}

@@ -221,6 +221,12 @@
   margin-top: var(--gap-400);
 }
 
+/* The one-line install under the tagline, before anything else on the page. */
+.heroInstall {
+  margin-top: var(--gap-300);
+  width: min(100%, 44rem);
+}
+
 /* Experiment: the maker's mark closing the page. A hairline pill, so
    it reads as a credit rather than another resource link. */
 .heroCredit {

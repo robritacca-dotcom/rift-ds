@@ -1427,7 +1427,7 @@ export default function DesignSystemLanding() {
   return (
     <>
       <ExtendedBackground />
-      <MegaNav />
+      <MegaNav githubUrl={REPOSITORY_URL} simpleStart />
 
       <main className={styles.page} id="main-content">
         {/* ---------- page header (deliberately light: this is the index of
@@ -1454,6 +1454,11 @@ export default function DesignSystemLanding() {
           {/* The tagline is the h1: the nav wordmark owns the name. */}
           <h1 className={styles.pageTitle}>The open source AI design system</h1>
           <RotatingSubtitle />
+          {/* Install first, then the options: one copyable command under the
+              tagline, ahead of the counts and the links. */}
+          <div className={styles.heroInstall}>
+            <CodeBlock code="npx rift-ds init" language="bash" showCopy />
+          </div>
           <FadeDivider className={styles.heroDivider} />
           {/* The counts, under a rule: every figure imports from the registry export that
               owns it, so the band can never overstate. */}

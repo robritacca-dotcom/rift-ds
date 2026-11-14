@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { Button } from "rift-ds/components/Button/Button";
 import { useChatWidget } from "rift-ds/chat";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
+import GitHubStarButton from "./GitHubStarButton";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import BackgroundSwitcher from "../BackgroundSwitcher/BackgroundSwitcher";
@@ -25,8 +27,14 @@ import styles from "./MegaNav.module.css";
  * the site's nav config onto it and wires the site chrome that lives
  * outside it.
  */
-export default function MegaNav() {
+export default function MegaNav({
+  githubUrl,
+  simpleStart,
+}: { githubUrl?: string; simpleStart?: boolean } = {}) {
   const pathname = usePathname() ?? "/";
+  // The repo link is an icon in the top row. It is passed only by a page that
+  // wants it (the home), so the rest of the site's header is unchanged.
+  const githubButton = githubUrl ? <GitHubStarButton href={githubUrl} /> : null;
   const [menuOpen, setMenuOpen] = useState(false);
   const { setOpen: setChatOpen, returnFocusRef } = useChatWidget();
 
@@ -139,7 +147,18 @@ export default function MegaNav() {
           <ThemeToggle size="compact" cycle className={styles.barOnly} />
         </>
       }
-      wideActions={<GetStartedSplit />}
+      // simpleStart: the repo's star button sits just left of one plain Get
+      // started button, not the split menu, so it never clips.
+      wideActions={
+        simpleStart ? (
+          <>
+            {githubButton}
+            <Button label="Get started" variant="primary" size="compact" href="/docs/get-started" />
+          </>
+        ) : (
+          <GetStartedSplit />
+        )
+      }
       drawerFooter={
         // The drawer floor carries Get started, which folds with the pills,
         // and at phone widths the look, background and mode controls the
@@ -150,6 +169,7 @@ export default function MegaNav() {
           <BrandSwitcher size="compact" placement="up" align="left" className={styles.drawerOnly} />
           <BackgroundSwitcher size="compact" align="start" className={styles.drawerOnly} />
           <ThemeToggle size="compact" className={styles.drawerOnly} />
+          {githubButton}
           <GetStartedSplit onNavigate={() => setMenuOpen(false)} />
         </div>
       }

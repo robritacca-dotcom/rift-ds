@@ -285,6 +285,332 @@
           }
         }
       }
+    },
+    {
+      "id": "underwater",
+      "label": "Underwater",
+      "description": "Light caustics over deep water",
+      "icon": "water",
+      "scene": "underwater",
+      "home": {
+        "params": {
+          "caustics": 1.1,
+          "shafts": 0.8,
+          "bubbles": 0.5,
+          "depth": 0.6
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "caustics": 0.8,
+          "shafts": 0.6,
+          "bubbles": 0.35,
+          "depth": 0.7
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "embers",
+      "label": "Embers",
+      "description": "Sparks rising off a hearth glow",
+      "icon": "local_fire_department",
+      "scene": "embers",
+      "home": {
+        "params": {
+          "heat": 1,
+          "bed": 0.2,
+          "sparks": 0.4
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.05,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "heat": 0.8,
+          "bed": 0.14,
+          "sparks": 0.3
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.05,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snow",
+      "label": "Snow",
+      "description": "Snow falling through a dark sky",
+      "icon": "snowing",
+      "scene": "snow",
+      "home": {
+        "params": {
+          "flakes": 0.5,
+          "flake": 1,
+          "fall": 1,
+          "wind": 0.4,
+          "haze": 0.45
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.05,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "flakes": 0.35,
+          "flake": 0.9,
+          "fall": 0.8,
+          "wind": 0.3,
+          "haze": 0.35
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.05,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "pastel",
+      "label": "Pastel",
+      "description": "Soft washes laid on in brushed strokes",
+      "icon": "palette",
+      "scene": "pastel",
+      "home": {
+        "params": {
+          "cover": 0.85,
+          "pastel": 0.45,
+          "brush": 1
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "cover": 0.7,
+          "pastel": 0.5,
+          "brush": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "rocket",
+      "label": "Rocket",
+      "description": "Stars streaking past a hot exhaust",
+      "icon": "rocket_launch",
+      "scene": "rocket",
+      "home": {
+        "params": {
+          "streaks": 0.6,
+          "star": 0.5,
+          "plume": 1
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.05,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "streaks": 0.45,
+          "star": 0.4,
+          "plume": 0.7
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.05,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "sunset",
+      "label": "Sunset",
+      "description": "A sun setting into a calm sea",
+      "icon": "sailing",
+      "scene": "sunset",
+      "home": {
+        "params": {
+          "set": 0.28,
+          "radius": 0.16,
+          "bands": 1,
+          "glow": 1
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "set": 0.22,
+          "radius": 0.12,
+          "bands": 0.8,
+          "glow": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
     }
   ]
 }

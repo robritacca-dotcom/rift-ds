@@ -125,6 +125,24 @@ export default function ShaderScenePage() {
               <Stage caption='scene="aurora"'>
                 <ShaderScene scene="aurora" passes={FULL_PASSES} speed={1} />
               </Stage>
+              <Stage caption='scene="underwater"'>
+                <ShaderScene scene="underwater" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="embers"'>
+                <ShaderScene scene="embers" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="snow"'>
+                <ShaderScene scene="snow" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="pastel"'>
+                <ShaderScene scene="pastel" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="rocket"'>
+                <ShaderScene scene="rocket" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="sunset"'>
+                <ShaderScene scene="sunset" passes={FULL_PASSES} speed={1} />
+              </Stage>
             </div>
           </section>
 

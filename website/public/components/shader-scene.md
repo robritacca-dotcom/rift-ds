@@ -1,6 +1,6 @@
 # Shader scene
 
-A WebGL2 scene, from a night horizon and a glowing rift to a meteor shower and an aurora, in the theme's field colours, with fades, a vignette and grain.
+A WebGL2 scene in the theme's field colours: a night horizon, rift, meteors, aurora, underwater, embers, snow or pastel, with fades and grain.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| scene | `ShaderSceneId` | no | `'horizon'` | The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. |
+| scene | `ShaderSceneId` | no | `'horizon'` | The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void, `underwater`, caustic light over deep water with sunbeams and rising bubbles, `embers`, sparks rising off a low hearth, `snow`, snow falling through a dark sky over a bank, `pastel`, soft washes laid on in slow brushed strokes, `rocket`, stars streaking out from a vanishing point over a hot exhaust, or `sunset`, a sun setting into a calm sea with its reflection on the water. |
 | params | `Partial<Record<string, number>>` | no |  | The scene's settings, merged over its defaults (`SHADER_SCENES` lists each scene's keys and ranges), so passing one changes one thing. Changing them never rebuilds the GL state. |
 | passes | `Partial<Record<string, ShaderScenePassSetting>>` | no |  | The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`, `grain`), each merged over its defaults. |
 | speed | `number` | no | `1.6` | Scene seconds per second: how fast it moves. 0 holds it still. |
@@ -31,7 +31,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 The scenes ShaderScene paints.
 
 ```ts
-type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora';
+type ShaderSceneId =
+  | 'horizon'
+  | 'rift'
+  | 'glyphs'
+  | 'prism'
+  | 'meteors'
+  | 'waves'
+  | 'aurora'
+  | 'underwater'
+  | 'embers'
+  | 'snow'
+  | 'pastel'
+  | 'rocket'
+  | 'sunset';
 ```
 
 ### ShaderScenePassSetting

@@ -22,7 +22,20 @@ const MAX_PIXEL_RATIO = 1;
 const FRAME_MS = 1000 / 30;
 
 /** The scenes ShaderScene paints. */
-export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora';
+export type ShaderSceneId =
+  | 'horizon'
+  | 'rift'
+  | 'glyphs'
+  | 'prism'
+  | 'meteors'
+  | 'waves'
+  | 'aurora'
+  | 'underwater'
+  | 'embers'
+  | 'snow'
+  | 'pastel'
+  | 'rocket'
+  | 'sunset';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -42,7 +55,7 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, or `aurora`, ribbons of colour round a void, `underwater`, caustic light over deep water with sunbeams and rising bubbles, `embers`, sparks rising off a low hearth, `snow`, snow falling through a dark sky over a bank, `pastel`, soft washes laid on in slow brushed strokes, `rocket`, stars streaking out from a vanishing point over a hot exhaust, or `sunset`, a sun setting into a calm sea with its reflection on the water. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each

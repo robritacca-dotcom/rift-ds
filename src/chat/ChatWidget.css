@@ -553,6 +553,13 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* The action row's buttons are padded, so the copy glyph sat one padding
+   step inside the text edge. Pull the row back by that padding so the glyph
+   lines up with the answer and its follow-up chips. */
+.ds-chat-message__actions:has(> .ds-chat-widget__action) {
+  margin-inline-start: calc(var(--padding-100) * -1);
+}
+
 .ds-chat-widget__action:hover {
   background-color: var(--color-action-passive-bg-hover);
 }

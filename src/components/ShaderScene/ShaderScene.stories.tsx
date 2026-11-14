@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'underwater', 'embers', 'snow', 'pastel', 'rocket', 'sunset'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -88,6 +88,54 @@ export const Waves: Story = {
 export const Aurora: Story = {
   args: {
     scene: 'aurora',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Underwater: caustic light over deep water, sunbeams from above and bubbles rising. */
+export const Underwater: Story = {
+  args: {
+    scene: 'underwater',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Embers: sparks rising off a low hearth glow, cooling as they climb. */
+export const Embers: Story = {
+  args: {
+    scene: 'embers',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Snow: snow falling through a dark sky, drifting on a wind over a bank of snow. */
+export const Snow: Story = {
+  args: {
+    scene: 'snow',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Pastel: soft washes laid on in slow, brushed strokes. */
+export const Pastel: Story = {
+  args: {
+    scene: 'pastel',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Rocket: stars streaking out from a vanishing point over a hot exhaust rising from the foot. */
+export const Rocket: Story = {
+  args: {
+    scene: 'rocket',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Sunset: a sun setting into a calm sea, warm bands across the sky and its reflection on the water. */
+export const Sunset: Story = {
+  args: {
+    scene: 'sunset',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
 };

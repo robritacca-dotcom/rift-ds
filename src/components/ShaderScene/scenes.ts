@@ -814,5 +814,422 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
+/**
+ * Underwater: light moving over deep water. Caustic light dances across the
+ * floor of the page, sunbeams slant down from the top, and bubbles rise
+ * through it. Lit from above, deeper toward the foot.
+ */
+export const underwater: Scene = {
+  id: "underwater",
+  label: "Underwater",
+  description: "Caustic light dancing over deep water, sunbeams from above and bubbles rising.",
+  mode: "dark",
+  colours: ["--color-ambient-4", "--color-ambient-6", "--color-ambient-5", "--color-ambient-1"],
+  params: [
+    { key: "caustics", label: "Caustics", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "shafts", label: "Sunbeams", min: 0, max: 2, step: 0.01, default: 0.8 },
+    { key: "bubbles", label: "Bubbles", min: 0, max: 1, step: 0.01, default: 0.5 },
+    { key: "depth", label: "Depth", min: 0, max: 1, step: 0.01, default: 0.6 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+/* Caustics: the light a moving surface throws on a floor, from a folded
+   sine field. */
+float caustic(vec2 p, float t) {
+  vec2 i = p;
+  float c = 1.0;
+  float inten = 0.005;
+  for (int n = 0; n < 4; n++) {
+    float tt = t * (1.0 - 3.5 / float(n + 1));
+    i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
+    c += 1.0 / length(vec2(p.x / (sin(i.x + tt) / inten), p.y / (cos(i.y + tt) / inten)));
+  }
+  c /= 4.0;
+  c = 1.17 - pow(c, 1.4);
+  return min(pow(abs(c), 8.0), 1.5);
+}
+
+vec2 rnd2(ivec2 c) {
+  return vec2(rnd(c), rnd(c + ivec2(57, 113)));
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 deep = u_col[0];
+  vec3 mid = u_col[1];
+  vec3 glint = u_col[2];
+  vec3 haze = u_col[3];
+
+  /* The water body: the foot of the page deeper than the top. */
+  float depth = 1.0 - uv.y;
+  vec3 light = mix(mid, deep, depth * u_depth) * 0.14 * (0.4 + 0.6 * uv.y);
+
+  /* Caustics, tiled, moving slowly. */
+  vec2 cp = mod(p * 2.4 * 6.2832, 6.2832) - 250.0;
+  light += glint * caustic(cp, t * 0.5) * 0.18 * u_caustics * (0.4 + 0.6 * uv.y);
+
+  /* Sunbeams: soft slanting shafts from the surface, brightest at the top. */
+  float sway = 0.25 * sin(t * 0.13);
+  float beam = smoothstep(0.35, 1.0, fbm(vec2(p.x * 2.2 + sway, t * 0.02)));
+  light += haze * beam * pow(uv.y, 1.8) * 0.22 * u_shafts;
+
+  /* Bubbles: two depths, rising, each a small soft point. */
+  for (int L = 0; L < 2; L++) {
+    float fl = float(L);
+    float s = 10.0 + fl * 8.0;
+    float speed = (0.05 + 0.03 * fl) * u_drift;
+    vec2 sp = vec2(p.x * s, (p.y - t * speed) * s);
+    vec2 cell = floor(sp);
+    for (int j = -1; j <= 1; j++) {
+      for (int i = -1; i <= 1; i++) {
+        ivec2 c = ivec2(cell) + ivec2(i, j) + ivec2(L * 197, 0);
+        if (rnd(c) > u_bubbles * 0.5) continue;
+        vec2 o = vec2(0.2, 0.1) + vec2(0.6, 0.8) * rnd2(c + 7);
+        float phase = 6.283 * rnd(c + 11);
+        o.x += 0.2 * sin(t * (0.5 + 0.6 * rnd(c + 13)) + phase);
+        vec2 d = (sp - (cell + vec2(i, j) + o)) / s;
+        float size = (0.0015 + 0.0025 * rnd(c + 17)) * (1.4 - 0.3 * fl);
+        float core = exp(-dot(d, d) / (2.0 * size * size));
+        light += haze * core * 0.9 * (1.0 - 0.3 * fl);
+      }
+    }
+  }
+
+  return u_ground + light;
+}
+`,
+};
+
+/**
+ * Embers, ported from the local theme-scenes lab as it stood: a low hearth
+ * glow along the foot of the page, heat haze rising off it, and sparks that
+ * rise in three depths, white-gold at birth and cooling to the key colour as
+ * they climb and go out.
+ */
+export const embers: Scene = {
+  id: "embers",
+  label: "Embers",
+  description: "Sparks rising off a low hearth glow, cooling as they climb.",
+  mode: "dark",
+  colours: ["--color-ambient-5", "--color-ambient-1", "--color-ambient-6", "--color-ambient-4"],
+  params: [
+    { key: "heat", label: "Heat", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "bed", label: "Hearth height", min: 0.04, max: 0.6, step: 0.01, default: 0.2 },
+    { key: "sparks", label: "Sparks", min: 0, max: 1, step: 0.01, default: 0.4 },
+    { key: "spark", label: "Spark size", min: 0.3, max: 3, step: 0.01, default: 1 },
+    { key: "reach", label: "Reach", min: 0.2, max: 2, step: 0.01, default: 0.8 },
+    { key: "rise", label: "Rise", min: 0, max: 2.5, step: 0.01, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec3 hue(vec3 c, float push) {
+  float grey = (c.r + c.g + c.b) / 3.0;
+  c = max(grey + (c - grey) * push, vec3(0.0));
+  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+}
+vec2 rnd2(ivec2 c) {
+  return vec2(rnd(c), rnd(c + ivec2(57, 113)));
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 hot = hue(u_col[0], 1.8);
+  vec3 gold = hue(u_col[1], 1.6);
+  vec3 pale = mix(hue(u_col[2], 1.4), vec3(1.0), 0.5);
+  vec3 cool = hue(u_col[3], 1.4);
+
+  /* The hearth: a glow along the foot whose top breathes and flickers. */
+  float flick = fbm(vec2(p.x * 1.4 + t * 0.12, t * 0.35));
+  float top = u_bed * (0.55 + 0.8 * flick);
+  float hearth = exp(-max(p.y, 0.0) / max(top, 0.02));
+  vec3 light = mix(hot, gold, exp(-p.y / 0.05) * 0.7) * hearth * (0.3 + 0.45 * flick) * u_heat;
+
+  /* Heat haze: faint warm columns rising, cooling to a blue smoke high up. */
+  vec2 hq = vec2(p.x * 2.6, p.y * 1.2 - t * 0.18);
+  float haze = fbm(hq + 1.3 * vec2(fbm(hq * 0.7 + t * 0.05), fbm(hq * 0.7 + 4.1)));
+  light += mix(hot, cool, smoothstep(0.2, 0.9, p.y)) * smoothstep(0.45, 0.85, haze)
+    * exp(-p.y / (0.35 + 0.4 * u_reach)) * 0.1 * u_heat;
+
+  /* The sparks: three depths, the nearest largest and fastest. */
+  for (int L = 0; L < 3; L++) {
+    float fl = float(L);
+    float s = 9.0 + fl * 7.0;
+    float speed = (0.07 + 0.035 * (2.0 - fl)) * u_rise;
+    vec2 sp = vec2(p.x * s, (p.y - t * speed) * s);
+    vec2 cell = floor(sp);
+    for (int j = -1; j <= 1; j++) {
+      for (int i = -1; i <= 1; i++) {
+        ivec2 c = ivec2(cell) + ivec2(i, j) + ivec2(L * 311, 0);
+        if (rnd(c) > u_sparks) continue;
+        vec2 o = vec2(0.2, 0.1) + vec2(0.6, 0.8) * rnd2(c + 7);
+        float phase = 6.283 * rnd(c + 11);
+        o.x += 0.35 * sin(t * (0.6 + 0.8 * rnd(c + 13)) + phase);
+        vec2 d = (sp - (cell + vec2(i, j) + o)) / s;
+        d.y *= 0.4;
+        float size = (0.0012 + 0.0022 * rnd(c + 17)) * (1.5 - 0.35 * fl) * u_spark;
+        float r2 = dot(d, d);
+        float core = exp(-r2 / (2.0 * size * size));
+        float halo = exp(-r2 / (2.0 * 16.0 * size * size)) * 0.12;
+        float life = exp(-p.y / (u_reach * (0.25 + 0.6 * rnd(c + 19))));
+        float twinkle = 0.65 + 0.35 * sin(t * (5.0 + 6.0 * rnd(c + 23)) + phase);
+        vec3 col = mix(pale, gold, smoothstep(0.0, 0.18, p.y));
+        col = mix(col, hot, smoothstep(0.12, 0.55, p.y));
+        light += col * (core * 1.6 + halo) * life * twinkle * (1.0 - 0.3 * fl);
+      }
+    }
+  }
+  return u_ground + light;
+}
+`,
+};
+
+/**
+ * Dark night snow: a dark sky with snow falling in three depths, the nearest
+ * flakes largest and fastest, drifting on a wind, over a bank of snow that
+ * lights the foot of the page.
+ */
+export const snow: Scene = {
+  id: "snow",
+  label: "Snow",
+  description: "Snow falling through a dark sky, drifting on a wind over a bank of snow.",
+  mode: "dark",
+  colours: ["--color-ambient-4", "--color-ambient-1", "--color-ambient-6", "--color-ambient-5"],
+  params: [
+    { key: "flakes", label: "Flakes", min: 0, max: 1, step: 0.01, default: 0.5 },
+    { key: "flake", label: "Flake size", min: 0.3, max: 3, step: 0.01, default: 1 },
+    { key: "fall", label: "Fall speed", min: 0, max: 2.5, step: 0.01, default: 1 },
+    { key: "wind", label: "Wind", min: -2, max: 2, step: 0.01, default: 0.4 },
+    { key: "haze", label: "Snow bank", min: 0, max: 1, step: 0.01, default: 0.45 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec2 rnd2(ivec2 c) {
+  return vec2(rnd(c), rnd(c + ivec2(57, 113)));
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 sky = u_col[0];
+  vec3 snow = u_col[1];
+  vec3 pale = u_col[2];
+  vec3 low = u_col[3];
+
+  /* The sky: a faint glow low on the horizon, the dark above it. */
+  vec3 light = low * exp(-uv.y / 0.35) * 0.08 + sky * 0.04;
+
+  /* The snow bank across the foot of the page, lit faintly. */
+  float bank = 0.12 + 0.07 * fbm(vec2(p.x * 1.6, t * 0.01));
+  float ground = smoothstep(bank + 0.02, bank - 0.02, uv.y);
+  light += mix(snow, pale, 0.4) * ground * 0.16 * u_haze;
+
+  /* The falling snow: three depths, moving down on the wind. */
+  for (int L = 0; L < 3; L++) {
+    float fl = float(L);
+    float s = 8.0 + fl * 6.0;
+    float speed = (0.05 + 0.03 * (2.0 - fl)) * u_fall;
+    vec2 sp = vec2((p.x - u_wind * 0.04 * t) * s, (p.y + t * speed) * s);
+    vec2 cell = floor(sp);
+    for (int j = -1; j <= 1; j++) {
+      for (int i = -1; i <= 1; i++) {
+        ivec2 c = ivec2(cell) + ivec2(i, j) + ivec2(L * 419, 0);
+        if (rnd(c) > u_flakes) continue;
+        vec2 o = vec2(0.2, 0.1) + vec2(0.6, 0.8) * rnd2(c + 7);
+        float phase = 6.283 * rnd(c + 11);
+        o.x += 0.25 * sin(t * (0.4 + 0.5 * rnd(c + 13)) + phase);
+        vec2 d = (sp - (cell + vec2(i, j) + o)) / s;
+        float size = (0.0025 + 0.004 * rnd(c + 17)) * (1.4 - 0.3 * fl) * u_flake;
+        float core = exp(-dot(d, d) / (2.0 * size * size));
+        float twinkle = 0.7 + 0.3 * sin(t * (2.0 + 3.0 * rnd(c + 23)) + phase);
+        vec3 col = mix(snow, pale, 0.3 * rnd(c + 29));
+        light += col * core * (1.0 - 0.25 * fl) * twinkle * 1.2;
+      }
+    }
+  }
+  return u_ground + light;
+}
+`,
+};
+
+/**
+ * Pastel painting: soft colour laid on in slow, domain-warped washes, with
+ * a faint brushed grain along one diagonal, the four ambient tones lifted
+ * toward white. It paints over the ground rather than adding to it, so it
+ * reads on a light page as well as a dark one.
+ */
+export const pastel: Scene = {
+  id: "pastel",
+  label: "Pastel",
+  description: "Soft pastel washes laid on in slow strokes, with a brushed grain.",
+  colours: ["--color-ambient-4", "--color-ambient-1", "--color-ambient-6", "--color-ambient-5"],
+  params: [
+    { key: "cover", label: "Coverage", min: 0, max: 1, step: 0.01, default: 0.85 },
+    { key: "pastel", label: "Lightness", min: 0, max: 1, step: 0.01, default: 0.45 },
+    { key: "brush", label: "Brush grain", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "scale", label: "Stroke scale", min: 0.3, max: 3, step: 0.01, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y) * u_scale;
+  t *= u_drift;
+
+  /* Domain warp: each wash bends the next, so the colour folds like paint. */
+  vec2 q = vec2(fbm(p * 1.3 + t * 0.03), fbm(p * 1.3 + vec2(4.1, 2.7) - t * 0.02));
+  vec2 r = vec2(
+    fbm(p * 1.1 + 2.0 * q + vec2(1.7, 9.2)),
+    fbm(p * 1.1 + 2.0 * q + vec2(8.3, 2.8))
+  );
+  float f = fbm(p + 2.0 * r);
+
+  vec3 c = mix(u_col[0], u_col[1], smoothstep(0.2, 0.8, q.x));
+  c = mix(c, u_col[2], smoothstep(0.3, 0.9, r.y) * 0.7);
+  c = mix(c, u_col[3], smoothstep(0.4, 0.8, f) * 0.5);
+  c = mix(c, vec3(1.0), u_pastel * 0.5);
+
+  /* Brushed grain: noise stretched along one diagonal, so strokes show. */
+  vec2 dir = normalize(vec2(0.8, 0.6));
+  float stroke = fbm(vec2(dot(p, dir) * 40.0, dot(p, vec2(-dir.y, dir.x)) * 2.5));
+  c *= 1.0 + (stroke - 0.5) * 0.25 * u_brush;
+
+  return mix(u_ground, c, u_cover);
+}
+`,
+};
+
+/**
+ * Rocket boost: stars streaking out from a vanishing point as the ship
+ * climbs, each stretched along its depth, with a hot exhaust plume rising
+ * from the foot of the page.
+ */
+export const rocket: Scene = {
+  id: "rocket",
+  label: "Rocket",
+  description: "Stars streaking out from a vanishing point, with a hot exhaust rising from the foot.",
+  mode: "dark",
+  colours: ["--color-ambient-4", "--color-ambient-5", "--color-ambient-1", "--color-ambient-6"],
+  params: [
+    { key: "streaks", label: "Star density", min: 0, max: 1, step: 0.01, default: 0.6 },
+    { key: "star", label: "Star brightness", min: 0, max: 1, step: 0.01, default: 0.5 },
+    { key: "plume", label: "Exhaust", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "drift", label: "Speed", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec2 rnd2(ivec2 c) {
+  return vec2(rnd(c), rnd(c + ivec2(57, 113)));
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 starTint = mix(u_col[0], vec3(1.0), 0.5);
+  vec3 outer = u_col[1];
+  vec3 hot = u_col[2];
+  vec3 haze = u_col[3];
+
+  /* Stars: a grid in (angle, depth) about a vanishing point, depth growing
+     with time so the stars move outward. Each cell holds at most one star,
+     stretched along depth into a streak. */
+  vec2 c0 = vec2(0.0, 0.5);
+  vec2 d = p - c0;
+  float r = length(d);
+  float a = atan(d.y, d.x);
+  float z = 1.0 / (r + 0.08) + t * 0.6;
+  vec2 g = vec2(a * 40.0, z * 3.0);
+  vec2 cell = floor(g);
+  vec3 light = haze * 0.05 * exp(-r * 2.0);
+  for (int j = -1; j <= 1; j++) {
+    for (int i = -1; i <= 1; i++) {
+      ivec2 c = ivec2(cell) + ivec2(i, j);
+      if (rnd(c) > u_streaks) continue;
+      vec2 pos = vec2(c) + rnd2(c + 7);
+      vec2 q = g - pos;
+      q.y *= 0.2;
+      float core = exp(-dot(q, q) * 40.0);
+      float fade = smoothstep(0.02, 0.5, r) * (0.5 + 0.5 * rnd(c + 13));
+      light += starTint * core * fade * u_star * 2.0;
+    }
+  }
+
+  /* Exhaust: a plume from the foot of the page, narrow at its heart and
+     spreading as it rises, flickering. */
+  float h = uv.y;
+  float w = 0.03 + 0.2 * h;
+  float flick = 0.8 + 0.2 * fbm(vec2(p.x * 6.0, t * 3.0));
+  float core = exp(-(p.x * p.x) / (w * w)) * exp(-h / 0.5);
+  light += mix(outer, hot, exp(-(p.x * p.x) / (w * w * 0.25))) * core * flick * 0.9 * u_plume;
+
+  return u_ground + light;
+}
+`,
+};
+
+/**
+ * Sunset: the sun half sunk into a calm sea, a warm band across the sky
+ * that fades up to a cooler top, a halo at the sun and its reflection
+ * shimmering on the water below the horizon.
+ */
+export const sunset: Scene = {
+  id: "sunset",
+  label: "Sunset",
+  description: "A sun setting into a calm sea, warm bands across the sky and its reflection on the water.",
+  mode: "dark",
+  colours: ["--color-ambient-4", "--color-ambient-5", "--color-ambient-1", "--color-ambient-6"],
+  params: [
+    { key: "set", label: "Horizon height", min: 0.1, max: 0.6, step: 0.01, default: 0.28 },
+    { key: "radius", label: "Sun size", min: 0.05, max: 0.4, step: 0.01, default: 0.16 },
+    { key: "bands", label: "Warm bands", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_drift;
+  vec3 top = u_col[0];
+  vec3 warm = u_col[1];
+  vec3 low = u_col[2];
+  vec3 sea = u_col[3];
+  float horizon = u_set;
+
+  /* The sky: low and warm at the line, cooling to the top. */
+  float sky = clamp((uv.y - horizon) / (1.0 - horizon), 0.0, 1.0);
+  vec3 col = mix(low, top, smoothstep(0.0, 0.8, sky));
+
+  /* Soft bands of warmth across the sky, drifting slowly. */
+  float band = fbm(vec2(p.x * 1.2 + t * 0.02, uv.y * 3.0 - t * 0.01));
+  col = mix(col, warm, u_bands * smoothstep(0.45, 0.8, band) * exp(-sky * 3.0) * 0.6);
+
+  /* The sea below the horizon, a soft mask so the line is not hard. */
+  float m = 1.0 - smoothstep(horizon - 0.002, horizon + 0.002, uv.y);
+
+  /* The sun: a disk on the line, its lower half hidden by the sea, with a halo. */
+  vec2 sp = p - vec2(0.0, horizon);
+  float d = length(sp);
+  float disk = smoothstep(u_radius, u_radius - 0.01, d) * (1.0 - m);
+  col += warm * exp(-d * d / (2.0 * 0.5 * 0.5)) * 0.35 * u_glow * (1.0 - m);
+  col = mix(col, mix(warm, vec3(1.0), 0.4), disk);
+
+  /* Sea, with the sun's reflection shimmering on it. */
+  float below = max(horizon - uv.y, 0.0);
+  float shimmer = fbm(vec2(p.x * 20.0, below * 60.0 - t * 0.8));
+  float spread = 0.08 + 0.5 * below;
+  vec3 refl = warm * exp(-(p.x * p.x) / (spread * spread)) * exp(-below * 4.0) * u_glow * (0.6 + 0.4 * shimmer);
+  vec3 seaCol = sea * (0.25 + 0.2 * uv.y) + refl;
+  col = mix(col, seaCol, m);
+
+  return col;
+}
+`,
+};
+
 /** Every scene, in picker order. */
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora];
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, underwater, embers, snow, pastel, rocket, sunset];

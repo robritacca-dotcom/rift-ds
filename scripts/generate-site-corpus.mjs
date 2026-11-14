@@ -195,7 +195,10 @@ const decode = (text) =>
 export function isProse(text) {
   if (text.length < 25) return false;
   if (text.split(/\s+/).length < 4) return false;
-  if (/^[/.#@]/.test(text)) return false;          // paths, selectors, imports
+  // Paths, selectors, imports. A sentence that opens on a path ("/api/mcp
+  // serves agents five tools…") is still a sentence: it has words after the
+  // path and ends like one.
+  if (/^[/.#@]/.test(text) && !/^\S+ (?:[a-z]+ ){3}.*[.!?]$/.test(text)) return false;
   if (/^https?:/.test(text)) return false;
   if (/^[\w-]+$/.test(text)) return false;         // bare identifiers
   if (/^[\d\s.,:%-]+$/.test(text)) return false;   // numeric noise

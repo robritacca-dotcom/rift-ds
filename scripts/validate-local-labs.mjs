@@ -18,7 +18,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import { isLocalPath } from './local-labs.mjs';
 import { repoRoot } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
@@ -70,7 +70,10 @@ for (const path of tracked) {
     continue;
   }
   for (const [, specifier] of source.matchAll(SPECIFIER)) {
-    if (LOCAL_SEGMENT.test(specifier)) {
+    // A relative specifier never spells the folder out from inside labs/ or
+    // api/ ("./local/x", "../local/x"), so it is resolved against the file.
+    const resolved = specifier.startsWith('.') ? posix.join(posix.dirname(path), specifier) : null;
+    if (LOCAL_SEGMENT.test(specifier) || (resolved !== null && isLocalPath(`${resolved}/`))) {
       errors.push(`${path}: imports "${specifier}", a gitignored local lab that CI does not have`);
     }
   }

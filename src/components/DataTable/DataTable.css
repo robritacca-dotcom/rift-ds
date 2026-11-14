@@ -630,7 +630,7 @@
 /* A save that failed rolled the value back; the cell says so until it is
    edited again (the message is its tooltip and was announced). */
 .ds-table__cell.ds-data-table__cell--failed {
-  box-shadow: inset 0 0 0 var(--border-025) var(--color-status-error-border);
+  box-shadow: inset 0 0 0 var(--border-025) var(--color-table-cell-failed);
 }
 
 /* Cell mode: an editable cell shows a pencil at its end edge, centred on

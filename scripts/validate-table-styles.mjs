@@ -42,7 +42,8 @@ const SANCTIONED = new Map([]);
 
 // TableToolbar's `ds-table-toolbar` classes share the prefix but draw the
 // control bar beside a table, never a table part, so they are left out.
-const TABLE_SELECTOR = /(^|[\s>+~,(])(table|thead|tbody|tfoot|tr|th|td)(?![\w-])|\.ds-table\b(?!-toolbar)/;
+// A part (`ds-table__row`) or a modifier (`ds-table--bordered`) is the table.
+const TABLE_SELECTOR = /(^|[\s>+~,(])(table|thead|tbody|tfoot|tr|th|td)(?![\w-])|\.ds-table(?:__[\w-]+|--[\w-]+)?(?![\w-])/;
 const COLOUR_PROPERTY = /^(background(-color)?|border(-(top|right|bottom|left|block|inline|block-start|block-end|inline-start|inline-end))?(-color)?|box-shadow|outline(-color)?)$/;
 
 const blankComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));

@@ -856,6 +856,18 @@ function checkSpatialPage() {
       errors.push(`${rel}: parsed no rows out of ${category}Tokens — the spatial-page guard needs them`);
       continue;
     }
+    // A row the pattern above cannot read (a mobilePx with no mobileValue,
+    // a value that is not whole pixels) would otherwise go unchecked.
+    const written = [...block[1].matchAll(/\{\s*label:\s*"([^"]*)"/g)].map((m) => m[1]);
+    const parsed = new Set(entries.map((entry) => entry.label));
+    for (const label of written) {
+      if (!parsed.has(label)) {
+        errors.push(
+          `${rel}: ${category}Tokens row "${label}" is not in the shape the guard reads ` +
+            '(label, value in px, px, variant, then mobileValue and mobilePx together or neither), so it is not checked'
+        );
+      }
+    }
 
     const seen = new Set();
     for (const entry of entries) {
@@ -887,7 +899,7 @@ function checkSpatialPage() {
     }
     /* Reverse direction: the page presents each category as complete. */
     for (const [name] of primitives) {
-      const m = name.match(new RegExp(`^--primitive-${category}-([a-z-]+)$`));
+      const m = name.match(new RegExp(`^--primitive-${category}-([a-z0-9-]+)$`));
       if (m && !seen.has(m[1])) {
         errors.push(`${rel}: ${category}Tokens has no row for ${name} — the page claims to document the ${category} tokens`);
       }

@@ -92,6 +92,7 @@
   --color-table-row-selected-bg: var(--color-bg-container-tertiary);
   --color-table-divider: var(--color-divider);
   --color-table-border: var(--color-divider);
+  --color-table-cell-failed: var(--color-status-error-border);
 
   /* Chat bubbles — sent (the person) and received (the agent). Both alias
      the container-secondary / text-primary pair today; they exist as their

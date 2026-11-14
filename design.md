@@ -95,6 +95,7 @@ Every table reads one family, so a markdown table in a doc page or a chat reply 
 - **Row selected** (`--color-table-row-selected-bg`): light `--color-bg-container-tertiary`, dark `--color-action-passive-bg-hover`; held while the checkbox is on.
 - **Divider** (`--color-table-divider` → `--color-divider`): The line between rows and under the header.
 - **Border** (`--color-table-border` → `--color-divider`): The bordered table's outline.
+- **Cell failed** (`--color-table-cell-failed` → `--color-status-error-border`): The ring an editable cell wears after a save failed and its value rolled back. It follows the error status role, so a theme that moves that role moves the ring with it.
 
 ### Chat surfaces
 Chat surfaces get their own colour roles so they can be re-themed without touching the container ramp. The four bubble roles currently alias the container-secondary / text-primary pair — deliberately identical today, separable later; the context fill is its own tint.

@@ -83,6 +83,7 @@
   --color-table-row-selected-bg: var(--color-action-passive-bg-hover);
   --color-table-divider: var(--color-divider);
   --color-table-border: var(--color-divider);
+  --color-table-cell-failed: var(--color-status-error-border);
 
   /* Chat bubbles — alias the same roles as light; the underlying container
      and text tokens carry the theme swap. */

@@ -611,6 +611,7 @@ export const SemanticColors: Story = {
         <ColorToken name="Row Selected" value="--color-table-row-selected-bg" />
         <ColorToken name="Divider" value="--color-table-divider" />
         <ColorToken name="Border" value="--color-table-border" />
+        <ColorToken name="Cell Failed" value="--color-table-cell-failed" />
       </TokenSection>
 
       <TokenSection title="Core Colors">

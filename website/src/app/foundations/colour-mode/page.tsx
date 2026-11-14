@@ -376,6 +376,11 @@ const tableColours: SwatchData[] = [
     dark: { primitive: "--neutral--08-a80--", hex: "rgba(35,35,35,0.8)", rgb: "35 / 35 / 35" },
     light: { primitive: "--neutral--02-a80--", hex: "rgba(214,214,214,0.8)", rgb: "214 / 214 / 214" },
   },
+  {
+    label: "Cell failed", cssVar: "--color-table-cell-failed",
+    dark: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+    light: { primitive: "--red--07--", hex: "#EF476F", rgb: "239 / 71 / 111" },
+  },
 ];
 
 /* --- Icon --- */

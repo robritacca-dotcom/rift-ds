@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (161)
+## Colour (162)
 
 Prefix: `--color-*`.
 
@@ -164,6 +164,7 @@ Prefix: `--color-*`.
 | `--color-status-warning-text` | `#8F4324` (`--primitive-orange-09`) | `#FFF3EC` (`--primitive-orange-01`) |
 | `--color-table-body-bg` | `#FFFFFF` (`--primitive-neutral-00`) | `#050505` (`--primitive-neutral-10`) |
 | `--color-table-border` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
+| `--color-table-cell-failed` | `#EF476F` (`--primitive-red-07`) | `#EF476F` (`--primitive-red-07`) |
 | `--color-table-divider` | `rgba(214, 214, 214, 0.8)` (`--primitive-neutral-02-a80`) | `rgba(35, 35, 35, 0.8)` (`--primitive-neutral-08-a80`) |
 | `--color-table-header-bg` | `rgba(214, 214, 214, 0.5)` (`--primitive-neutral-02-a50`) | `rgba(35, 35, 35, 0.5)` (`--primitive-neutral-08-a50`) |
 | `--color-table-row-hover-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `rgba(14, 14, 14, 0.8)` (`--primitive-neutral-09-a80`) |

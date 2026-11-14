@@ -2417,6 +2417,10 @@
       "$type": "color",
       "$value": "{color.divider}"
     },
+    "table-cell-failed": {
+      "$type": "color",
+      "$value": "{color.status-error-border}"
+    },
     "table-divider": {
       "$type": "color",
       "$value": "{color.divider}"

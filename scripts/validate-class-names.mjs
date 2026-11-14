@@ -19,6 +19,7 @@
  */
 import { readRel as read } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
+import { blankJsComments } from './lib/text.mjs';
 
 const kebab = (name) =>
   name
@@ -57,7 +58,8 @@ const writesClass = (source, cls) => new RegExp(`['"\`]${cls}(['"\` ]|--|__|\\$)
 const registry = JSON.parse(read('src/components/registry.json'));
 const errors = [];
 for (const c of registry.components) {
-  const source = read(`src/components/${c.folder ?? c.name}/${c.name}.tsx`);
+  // Comments are blanked: a class a JSDoc example mentions is not one the component writes.
+  const source = blankJsComments(read(`src/components/${c.folder ?? c.name}/${c.name}.tsx`));
   const expected = `ds-${kebab(c.name)}`;
   const sanction = SANCTIONED[c.name];
   if (writesClass(source, expected)) {

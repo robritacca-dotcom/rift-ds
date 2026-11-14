@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.28.0",
+      "date": "2026-11-14",
+      "title": "A keyboard contract for every component, and type-to-find",
+      "body": [
+        "Every component now says who owns its keys, and a test holds it. One that follows a WAI-ARIA keyboard pattern has that pattern’s keys pressed against it in both reading directions, and the same rows are on its page, in its markdown, in its schema as `keyboard`, and in the MCP endpoint’s `get_component`. Where no pattern covers them, `keys` says whether the component, the platform or no one owns them. Each schema and markdown page also carries `size`, the gzipped JavaScript the import costs.",
+        "Menus, TreeView and the select-only lists gain type-to-find: a letter moves to the next item whose name starts with it, several letters typed quickly narrow the match, and a closed Dropdown chooses the option as a native select does. `npx skills add robritacca-dotcom/rift-ds` installs the consumer agent skills for agents other than Claude Code, and Smoke now carries colour in its badges, alerts and chart series.",
+        "Nothing published was renamed or removed, but keyboard and focus behaviour changed in a few components. RadioGroup is one tab stop and moves with the arrow keys, so a test that tabbed through every radio should use the arrows. ColorPicker’s panel and a searchable EntitySwitcher take focus when they open, EntitySwitcher returns it to its trigger on close, and WorldMap’s zoom controls are a `group`, not a toolbar."
+      ]
+    },
+    {
       "version": "1.27.0",
       "date": "2026-11-12",
       "title": "Override one part of a shipped theme, and a scene that fades in over your fallback",

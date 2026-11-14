@@ -2,16 +2,12 @@
 /**
  * validate-token-values.mjs
  *
- * Holds the two surfaces generate-token-values.mjs writes to their
- * sources, the token CSS and the preset composer. Regenerates both in
- * memory and checks:
+ * Holds the DTCG files generate-token-values.mjs writes to the format.
+ * Whether the files are fresh (each one matches its generator, and nothing
+ * else sits in the folder) is scripts/validate-generated-files.mjs's check.
+ * This script rebuilds them in memory and checks:
  *
- *   1. Drift, in both directions: src/tokens/values.json and every
- *      website/public/schema/tokens/<theme>.<mode>.tokens.json byte-match
- *      the regeneration, a file the generator would write is on disk, and
- *      nothing else sits in the DTCG folder (an orphan means a theme left
- *      the selector order without taking its files along).
- *   2. DTCG shape, over every generated file: each leaf has a $value and a
+ *   1. DTCG shape, over every generated file: each leaf has a $value and a
  *      $type from DTCG_TYPES, every `{group.name}` alias resolves inside
  *      the same file (a DTCG consumer never sees another file), and no
  *      group or token name carries a `.`, `{` or `}`, which the alias
@@ -80,5 +76,5 @@ finish(
   '✗ Token values validation failed:',
   errors,
   () =>
-    `✓ Token values in sync: ${Object.keys(JSON.parse(values).themes).length} themes, ${dtcg.size} DTCG files match the token CSS and the preset composer.`
+    `✓ DTCG files well formed: ${Object.keys(JSON.parse(values).themes).length} themes, ${dtcg.size} files with valid types and aliases that resolve.`
 );

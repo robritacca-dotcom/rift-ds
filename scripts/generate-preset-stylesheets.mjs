@@ -34,7 +34,7 @@
  * hook below only supplies the `.ts` extension Node's ESM resolver does
  * not guess. Output is deterministic: preset ids and declaration names
  * are sorted, line endings are LF, and the composer is pure — so the
- * companion validate-preset-stylesheets.mjs can regenerate in memory and
+ * freshness check, validate-generated-files.mjs, can regenerate in memory and
  * byte-compare on every build. The files are committed, like every
  * generated surface (CI's drift guard covers them).
  *

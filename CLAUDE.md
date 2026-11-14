@@ -29,16 +29,16 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Loops | `website/src/data/loops.json` | `website/src/data/loops.ts` | `scripts/validate-loops.mjs` |
 | Page summaries | `website/src/data/page-summaries.json` | `website/src/data/page-summaries.ts` | `scripts/validate-page-summaries.mjs` |
 | Semantic tokens | `src/tokens/registry.json` (generated) | `src/tokens/registry.ts` | `scripts/validate-token-registry.mjs` |
-| Theme presets | `website/src/lib/theme/presets.ts` + `src/tokens/presets/` (generated) | `THEME_PRESETS` | `scripts/validate-preset-stylesheets.mjs`, `scripts/validate-theme-presets.mjs` |
+| Theme presets | `website/src/lib/theme/presets.ts` + `src/tokens/presets/` (generated) | `THEME_PRESETS` | `scripts/validate-generated-files.mjs`, `scripts/validate-preset-stylesheets.mjs`, `scripts/validate-theme-presets.mjs` |
 | Ambient background | `website/src/data/shader-background.json` | `website/src/data/shader-background.ts` | `scripts/validate-shader-background.mjs` |
 | Site backgrounds | `website/src/data/site-backgrounds.json` | `website/src/lib/shaders/background-storage.ts` | `scripts/validate-site-backgrounds.mjs` |
-| Dependency graph | `website/src/data/dependency-graph.generated.ts` | `website/src/data/dependency-graph.ts` | `scripts/validate-dependency-graph.mjs` |
-| Site chat corpus | `website/src/data/site-corpus.generated.ts` | same file | `scripts/validate-site-corpus.mjs`, `scripts/validate-chat-coverage.mjs`, `scripts/validate-corpus-coverage.mjs` |
-| Component prop API | `website/src/data/component-api.generated.ts` + the types its props name in `website/src/data/component-types.generated.ts` (server-only) | same files | `scripts/validate-component-api.mjs` |
-| MCP search index | `website/src/data/site-search.generated.ts` (consumer documentation only, every section with its URL) | same file | `scripts/validate-site-search.mjs` |
+| Dependency graph | `website/src/data/dependency-graph.generated.ts` | `website/src/data/dependency-graph.ts` | `scripts/validate-generated-files.mjs`, `scripts/validate-dependency-graph.mjs` |
+| Site chat corpus | `website/src/data/site-corpus.generated.ts` | same file | `scripts/validate-generated-files.mjs`, `scripts/validate-site-corpus.mjs`, `scripts/validate-chat-coverage.mjs`, `scripts/validate-corpus-coverage.mjs` |
+| Component prop API | `website/src/data/component-api.generated.ts` + the types its props name in `website/src/data/component-types.generated.ts` (server-only) | same files | `scripts/validate-generated-files.mjs`, `scripts/validate-component-api.mjs` |
+| MCP search index | `website/src/data/site-search.generated.ts` (consumer documentation only, every section with its URL) | same file | `scripts/validate-generated-files.mjs`, `scripts/validate-site-search.mjs` |
 | Component schemas | `website/public/schema/components/` + `components.json` (generated); the hand-written meta-schemas `component.schema.json` and `components-index.schema.json` beside them | (served as-is) | `scripts/validate-generated-files.mjs`, `scripts/validate-json-schemas.mjs` |
-| Token values | `src/tokens/values.json` (generated; resolved per theme and mode; the hand-written meta-schema `website/public/schema/token-values.schema.json`) + the DTCG files in `website/public/schema/tokens/` | `src/tokens/values.ts` (`rift-ds/tokens/values`) | `scripts/validate-token-values.mjs`, `scripts/validate-json-schemas.mjs` |
-| Consumer agent skills | `AGENT_SKILLS` in `scripts/brand.mjs` + `website/public/skill/manifest.json` (generated) | `website/src/data/agent-skills.ts` | `scripts/validate-agent-skill.mjs` |
+| Token values | `src/tokens/values.json` (generated; resolved per theme and mode; the hand-written meta-schema `website/public/schema/token-values.schema.json`) + the DTCG files in `website/public/schema/tokens/` | `src/tokens/values.ts` (`rift-ds/tokens/values`) | `scripts/validate-generated-files.mjs`, `scripts/validate-token-values.mjs`, `scripts/validate-json-schemas.mjs` |
+| Consumer agent skills | `AGENT_SKILLS` in `scripts/brand.mjs` + `website/public/skill/manifest.json` (generated) | `website/src/data/agent-skills.ts` | `scripts/validate-generated-files.mjs`, `scripts/validate-agent-skill.mjs` |
 | Chat widget | `src/chat/registry.json` | `src/chat/registry.ts` | `scripts/validate-chat-widget.mjs` |
 | Blocks | `src/cli/templates/blocks/registry.json` | `website/src/data/blocks.ts` | `scripts/validate-blocks.mjs` |
 | Figma frames | `website/src/data/figma-nodes.json` | `website/src/data/figma-nodes.ts` | `scripts/validate-figma-nodes.mjs` |
@@ -48,7 +48,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 
 Notes an agent needs while editing them:
 
-- **Generated files are never hand-edited.** Edit the source and rebuild; `scripts/validate-generated-files.mjs` rebuilds every generated surface from the `surface()` its generator exports and fails on a hand edit, a stale file or an orphan.
+- **Generated files are never hand-edited.** Edit the source and rebuild; `scripts/validate-generated-files.mjs` rebuilds every generated surface whose generator exports `surface()` (`UNCHECKED` there names the rest and what holds each) and fails on a stale file or an orphan; run alone it also fails a hand edit, and in CI the drift guard does.
 - **Release log**: one entry per published npm version, written by the `release` skill at publish time and never otherwise.
 - **Page summaries**: a new static page needs a summary and a starters pool, or must be chromeless; component pages derive theirs.
 - **Theme presets**: `presetOverrides` in `presets.ts` is the one composer the stylesheets and the playground export are written from; every preset sets every lever and passes the contrast gate.

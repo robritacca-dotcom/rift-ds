@@ -19,7 +19,8 @@
  *      purpose, so its system colours outrank every theme and, through the
  *      id in its selector, a consumer's own override (its header says why).
  *   -  The preset stylesheets are byte-compared to their generator by
- *      validate-preset-stylesheets.mjs, which also parses mono's layer, so
+ *      validate-generated-files.mjs, and validate-preset-stylesheets.mjs
+ *      parses mono's layer, so
  *      they are not re-checked here.
  *
  * Runs in the validate-registry chain beside the other token validators:

@@ -15,7 +15,7 @@
  * Claude Code needs, so a copied skill works as-is.
  *
  * Runs automatically before dev/build (predev/prebuild) — never edit the
- * generated file by hand. validate-skills-registry.mjs fails the build if
+ * generated file by hand. validate-generated-files.mjs fails the build if
  * the file on disk is stale.
  */
 import { readFileSync, writeFileSync } from 'node:fs';

@@ -2,19 +2,19 @@
 /**
  * validate-theme-design-md.mjs
  *
- * Holds website/public/themes/<id>/DESIGN.md to its generator and to the
- * importer that reads the format.
+ * Holds website/public/themes/<id>/DESIGN.md to the importer that reads
+ * the format.
+ * Whether the files are fresh (each one matches its generator, and nothing
+ * else sits in the folder) is scripts/validate-generated-files.mjs's check.
  *
- *   1. Drift: every file regenerates byte for byte, and the folder holds
- *      exactly the themes in THEME_SELECTOR_ORDER (an orphan fails).
- *   2. Round trip: each file, read by the playground's importer
+ *   1. Round trip: each file, read by the playground's importer
  *      (website/src/lib/theme/design-md.ts), lands on its own theme's
  *      levers: shape, density, depth, the tier weights, the display,
  *      heading and both logo colours, the type scale, tracking and both faces, and the action colour the file states. A
  *      theme that exports a file its own importer misreads is a bug in one
  *      of the two, and this is where it shows.
  *
- *   3. Every tone: a synthetic theme that sets all five tones, which no
+ *   2. Every tone: a synthetic theme that sets all five tones, which no
  *      shipped theme does, carries each of them through the file.
  *
  * A difference the format cannot carry is sanctioned in SANCTIONED_DRIFT
@@ -155,4 +155,4 @@ if (errors.length > 0) {
   console.error(`✗ Theme DESIGN.md files: ${errors.length} problem(s)\n  ${errors.join('\n  ')}`);
   failStep();
 }
-console.log(`✓ Theme DESIGN.md files: ${files.size} in sync, each reading back onto its own theme, and a synthetic theme carries all five tones through.`);
+console.log(`✓ Theme DESIGN.md files: ${files.size}, each reading back onto its own theme, and a synthetic theme carries all five tones through.`);

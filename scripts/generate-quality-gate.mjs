@@ -9,7 +9,7 @@
  *
  *   1. The build chain in scripts/chain.mjs, which `npm run
  *      validate-registry` runs: generators first and validators after.
- *   2. The rest of the `verify` entry in the same file: the builds, the
+ *   2. The `verify` entry in the root package.json: the builds, the
  *      tests, and the checks that need a finished build.
  *   3. The run steps of .github/workflows/ci.yml that verify does not
  *      mirror. Setup steps (`npm ci`, the browser install) are left out by
@@ -23,7 +23,7 @@
  * so adding a validator to the chain without a line for this page fails the
  * build, and so does retiring one without removing its line.
  *
- * Belongs at the head of the validate-registry chain, as a generator: it
+ * Belongs in the generator half of the validate-registry chain: it
  * reads source files only. validate-generated-files.mjs holds disk to it.
  */
 import { readFileSync, writeFileSync } from 'node:fs';

@@ -6,13 +6,10 @@
  * row of AGENT_SKILLS in scripts/brand.mjs, plus manifest.json) to their
  * source. Five checks:
  *
- *   1. Byte-compare, both directions: every file generate-agent-skill.mjs
- *      produces now is on disk and identical, so a registry, token or
- *      JSDoc change cannot ship with a stale skill beside it; and every
- *      file on disk is one the generator produces, so a skill or file
- *      that left the table cannot stay published as an orphan.
- *   2. The manifest matches the table: manifest.json byte-matches its
- *      builder, names exactly the AGENT_SKILLS rows in order, and lists
+ *   1. (Freshness, in both directions, is
+ *      scripts/validate-generated-files.mjs's check. The checks below read
+ *      what the generator builds.)
+ *   2. The manifest matches the table: manifest.json names exactly the AGENT_SKILLS rows in order, and lists
  *      exactly the files each skill's builder emits. The init bin
  *      installs whatever the manifest says, so a manifest that disagreed
  *      with the folders would install a broken skill for every consumer.
@@ -34,8 +31,7 @@
  *      is how the list drifted apart from the generator before.
  *
  *   6. The agent starter (website/public/<AGENT_STARTER_FILE>) and its
- *      module for the website (agent-starter.generated.ts) byte-match
- *      their builders, the file passes the same content screens, and each
+ *      module for the website (agent-starter.generated.ts): the file passes the same content screens, and each
  *      surface that offers it uses the accessor: get-started shows the
  *      full text in a copy frame (AGENT_STARTER), and llms.txt links the
  *      raw file (AGENT_STARTER_URL). None spells the file's URL by hand.
@@ -197,7 +193,7 @@ if (!read(join(repoRoot, 'README.md')).includes(starterUrl)) {
 finish(
   '✗ Agent skill validation failed:',
   errors,
-  `✓ Agent skills in sync — ${tableNames.length} skills, ${wanted.size} files match the registries, ` +
+  `✓ Agent skills sound — ${tableNames.length} skills, ${wanted.size} files, ` +
     `the manifest matches the table, ${advertisers.length} surfaces derive their list from it, ` +
-    `and the agent starter matches and is offered on ${starterOffers.length + 1} surfaces.`
+    `and the agent starter is offered on ${starterOffers.length + 1} surfaces.`
 );

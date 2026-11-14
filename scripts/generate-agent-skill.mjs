@@ -52,7 +52,8 @@
  * restating them, so it never becomes a second copy of the skill.
  *
  * Deterministic (version-stamped with PACKAGE_VERSION, no timestamps) and
- * byte-compared by validate-agent-skill.mjs. A file the builders stop
+ * byte-compared by validate-generated-files.mjs through the `surface()`
+ * this file exports. A file the builders stop
  * emitting is pruned on the next run. Runs via the validate-registry
  * chain and the website's predev/prebuild; never edit the output by hand.
  */

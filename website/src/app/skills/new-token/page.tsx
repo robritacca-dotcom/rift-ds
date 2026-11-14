@@ -109,7 +109,7 @@ export default function NewTokenSkillPage() {
           { id: "parity", cells: { home: "Light and dark values", held: "validate-token-registry.mjs", kind: build } },
           { id: "usage", cells: { home: "Button.css", held: "validate-token-usage.mjs", kind: build } },
           { id: "swatch", cells: { home: "Swatch and its caption", held: "validate-website-surfaces.mjs and validate-foundation-mirrors.mjs", kind: build } },
-          { id: "generated", cells: { home: "Values and DTCG files", held: "validate-token-values.mjs", kind: build } },
+          { id: "generated", cells: { home: "Values and DTCG files", held: "validate-generated-files.mjs and validate-token-values.mjs", kind: build } },
           { id: "docs", cells: { home: "Storybook doc and design.md", held: "The drift-audit skill", kind: audit } },
         ],
       }}

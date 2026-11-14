@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Validates .claude/skills/registry.json against the filesystem and the
- * generated /skills page data.
+ * Validates .claude/skills/registry.json against the skill folders on disk
+ * and the published copies of external skills.
  *
  * Every skill folder in .claude/skills (a directory holding a SKILL.md,
  * the layout Claude Code discovers) must appear in exactly one of the
@@ -10,7 +10,8 @@
  * folder — their published copy lives in website/src/data/external-skills.
  * The /skills page renders website/src/data/skills-content.generated.ts,
  * which scripts/generate-skills-content.mjs builds from the skill files;
- * this validator fails if that file is stale. Runs before every build so
+ * whether that file is fresh is scripts/validate-generated-files.mjs's
+ * check. Runs before every build so
  * the public skills list can never silently drift from reality.
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';

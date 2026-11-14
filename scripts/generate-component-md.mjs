@@ -9,7 +9,7 @@
  * props of every export, from the same assembleComponentApi() pass that
  * feeds Storybook's props tables, the shipped .d.ts and the /api/mcp
  * get_component tool. No hand-written facts live here, so the files cannot
- * drift from the source: validate-component-md.mjs regenerates in memory
+ * drift from the source: validate-generated-files.mjs regenerates in memory
  * and byte-compares on every build. Two consumers point at these files:
  * the "For agents" dialog on component pages
  * (website/src/components/PageLinks/PageAgentDocs.tsx) and the MCP

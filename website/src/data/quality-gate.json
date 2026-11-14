@@ -8,7 +8,7 @@
     {
       "id": "freshness",
       "title": "Generated files match their source",
-      "body": "The first of these rebuilds every generated file in memory and compares it byte for byte with the copy on disk, so a hand edit or a skipped generator fails the build. The rest hold what each generated surface must be."
+      "body": "The first of these rebuilds every generated file whose generator exports its surface and compares it byte for byte with the copy on disk, so a stale file, an orphan or a generator that writes differently each time fails the build, and the drift guard in CI fails a hand edit. The rest hold what each generated surface must be."
     },
     {
       "id": "registries",
@@ -62,9 +62,9 @@
     "generate-google-font-index": { "group": "generators", "text": "Writes the Google Fonts index the playground's importer reads." },
     "generate-brand-marks": { "group": "generators", "text": "Writes the brand marks the DESIGN.md importer can show." },
     "generate-a11y-coverage": { "group": "generators", "text": "Writes the figures on the accessibility foundations page." },
-    "generate-quality-gate": { "group": "generators", "text": "Writes this page's list from package.json and the CI workflow." },
+    "generate-quality-gate": { "group": "generators", "text": "Writes this page's list from scripts/chain.mjs, package.json and the CI workflow." },
 
-    "validate-generated-files": { "group": "freshness", "text": "Every generated file matches what its generator builds, with nothing left behind in a folder a generator owns." },
+    "validate-generated-files": { "group": "freshness", "text": "Every generated file whose generator exports its surface matches what that generator builds, with nothing left behind in a folder a generator owns." },
     "validate-site-corpus": { "group": "freshness", "text": "The chat corpus carries no leaked contact details, no dropped values and no empty-state copy." },
     "validate-site-search": { "group": "freshness", "text": "The MCP search index links every section and holds only documentation for people building with the package." },
     "validate-component-api": { "group": "freshness", "text": "The prop reference the MCP endpoint serves defines every type it names, gives every optional enum a default and fits its response budget." },
@@ -80,7 +80,7 @@
     "validate-component-registry": { "group": "registries", "text": "Every component folder is in exactly one registry list, and every entry has a folder." },
     "validate-website-surfaces": { "group": "registries", "text": "Every component has its site page, preview, design.md spec and nav entries." },
     "validate-page-titles": { "group": "registries", "text": "Every component page has a layout with a real browser tab title." },
-    "validate-skills-registry": { "group": "registries", "text": "Every skill folder is registered, and the /skills data agrees." },
+    "validate-skills-registry": { "group": "registries", "text": "Every skill folder is registered once, with the frontmatter Claude Code and the /skills page need, and no skill leaks a local detail." },
     "validate-release-log": { "group": "registries", "text": "One entry per npm version, newest first, with valid versions and dates." },
     "validate-loops": { "group": "registries", "text": "The loops registry is complete and names only skills that exist." },
     "validate-template-thumbnails": { "group": "registries", "text": "Every template has a still in every mode, and no still is left over." },
@@ -114,7 +114,7 @@
     "validate-foundation-mirrors": { "group": "tokens", "text": "The values the foundations pages print match the CSS." },
     "validate-theme-export": { "group": "tokens", "text": "The playground's exported AGENTS.md, CSS and THEME.md describe the system correctly." },
     "validate-design-md-import": { "group": "tokens", "text": "The DESIGN.md importer still reads files by its rules." },
-    "validate-theme-presets": { "group": "tokens", "text": "Every preset sets every lever and passes the contrast gate, and the six pixel inks hold a contrast band on the dark page." },
+    "validate-theme-presets": { "group": "tokens", "text": "Every preset sets every lever and passes the contrast gate, and the six pixel inks sit inside one contrast band on the dark page, or are pinned with a reason." },
     "validate-token-usage": { "group": "tokens", "text": "Every var(--…) a stylesheet references resolves." },
     "validate-action-colour": { "group": "tokens", "text": "The action colour appears only in the roles design.md reserves it for." },
     "validate-css-directives": { "group": "tokens", "text": "Every ds-allow directive follows the grammar and names a known category." },

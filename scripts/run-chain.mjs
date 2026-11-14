@@ -14,8 +14,8 @@
  * top level is the check. A generator is imported and its exported `main`
  * is called. That is what lets expensive work happen once: the docgen
  * parse and its TypeScript program are cached by the modules that build
- * them (scripts/lib/memo.mjs), so ten steps that each used to parse the
- * library in a process of their own now share one parse. A failing step
+ * them (scripts/lib/memo.mjs), so every step that used to parse the
+ * library in a process of its own now shares one parse. A failing step
  * ends through `finish` or `failStep` in scripts/lib/report.mjs, which
  * throw here instead of exiting.
  *

@@ -7,9 +7,8 @@
  * website/src/data/component-types.generated.ts, the types those props
  * reference. Three checks:
  *
- *   1. Freshness — regenerates in memory and byte-compares against disk, so
- *      a prop or registry change cannot land without the regenerated file.
- *      (CI also runs a drift guard after the generators.)
+ *   1. (Freshness is scripts/validate-generated-files.mjs's check. The
+ *      screens below read the two files as committed.)
  *
  *   2. No leaked details — the file is handed to strangers' agents, so it is
  *      held to the same non-sanctionable leak patterns as the site corpus: a
@@ -204,5 +203,5 @@ const largest = sizes.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([name, bytes]
 finish(
   '✗ Component API validation failed:',
   errors,
-  `✓ Component API and its types are current, closed, within the response budget (largest: ${largest.join(', ')}), and free of leaked details.`
+  `✓ Component API and its types are closed, within the response budget (largest: ${largest.join(', ')}), and free of leaked details.`
 );

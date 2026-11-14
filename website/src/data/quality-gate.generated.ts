@@ -103,18 +103,18 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "generate-quality-gate",
-        "text": "Writes this page's list from package.json and the CI workflow."
+        "text": "Writes this page's list from scripts/chain.mjs, package.json and the CI workflow."
       }
     ]
   },
   {
     "id": "freshness",
     "title": "Generated files match their source",
-    "body": "The first of these rebuilds every generated file in memory and compares it byte for byte with the copy on disk, so a hand edit or a skipped generator fails the build. The rest hold what each generated surface must be.",
+    "body": "The first of these rebuilds every generated file whose generator exports its surface and compares it byte for byte with the copy on disk, so a stale file, an orphan or a generator that writes differently each time fails the build, and the drift guard in CI fails a hand edit. The rest hold what each generated surface must be.",
     "checks": [
       {
         "name": "validate-generated-files",
-        "text": "Every generated file matches what its generator builds, with nothing left behind in a folder a generator owns."
+        "text": "Every generated file whose generator exports its surface matches what that generator builds, with nothing left behind in a folder a generator owns."
       },
       {
         "name": "validate-site-corpus",
@@ -181,7 +181,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-skills-registry",
-        "text": "Every skill folder is registered, and the /skills data agrees."
+        "text": "Every skill folder is registered once, with the frontmatter Claude Code and the /skills page need, and no skill leaks a local detail."
       },
       {
         "name": "validate-release-log",
@@ -323,7 +323,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-theme-presets",
-        "text": "Every preset sets every lever and passes the contrast gate, and the six pixel inks hold a contrast band on the dark page."
+        "text": "Every preset sets every lever and passes the contrast gate, and the six pixel inks sit inside one contrast band on the dark page, or are pinned with a reason."
       },
       {
         "name": "validate-token-usage",

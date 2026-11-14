@@ -23,7 +23,9 @@
  * Inside the chain the generators have just written, so what this catches
  * there is a generator whose output differs from one build to the next
  * (the runner drops the shared builds first, so this is a second build).
- * Run alone, or in CI before the drift guard, it catches the hand edit.
+ * Run alone, it catches the hand edit. In CI it runs inside the chain, after
+ * the generators have rewritten a hand edit, so the drift guard that follows
+ * the build is what fails it there.
  *
  * Belongs in the validate-registry chain, first among the validators: it
  * reads source files and generated data only, never build output.
@@ -38,7 +40,7 @@ import { finish } from './lib/report.mjs';
 const UNCHECKED = {
   'generate-readme-content': 'rewrites marked regions of README.md in place as it loads; CI\'s drift guard holds it',
   'generate-library-barrel': 'writes the barrels as it loads, with no builder to call; CI\'s drift guard holds it',
-  'sync-blueprints': 'copies three files; validate-website-surfaces holds its list, and CI\'s drift guard the copies',
+  'sync-blueprints': 'copies the files in its FILES list; validate-website-surfaces holds that list, and CI\'s drift guard the copies',
   'generate-token-registry':
     'validate-token-registry compares the categories it derives, which is the part of registry.json the generator owns',
 };

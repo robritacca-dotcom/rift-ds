@@ -59,13 +59,14 @@ node scripts/validate-theme-presets.mjs
 node scripts/validate-theme-export.mjs
 node scripts/generate-theme-design-md.mjs
 node scripts/validate-theme-design-md.mjs
+node scripts/validate-generated-files.mjs
 ```
 
 The generator writes the preset's `html[data-brand]` stylesheet and refreshes the `presets.css` aggregate; they ship in the npm package. Downstream generators re-embed the preset CSS too (the shadcn registry's base item among them — `scripts/chain.mjs` is the authoritative list), so commit every file the chain regenerates, not just the two named here. The completeness gate then holds every override to a real token, primitive or icon axis hook (the script's doc block owns the rule), requires the action family and all six accents, and checks **every action fill against what components draw on it, in every state and both themes**: labels at WCAG AA 4.5:1, icons and strokes at 3:1. `ACTION_PAIRINGS` in the script is the authoritative table, and each failure names the fill, the foreground, the ratio and the component that draws it. A failing pairing means the key or an override needs to move (deepen or lighten the key, step a hover or pressed fill away from its label, or lift the label through `extraOverrides`) — pinning a gap in `SANCTIONED_AA_GAPS` is deliberate acceptance with a written reason, never a shortcut, and needs the owner's sign-off.
 
 A face the presets have never shipped needs `node scripts/sync-preset-fonts.mjs` first — a deliberate by-hand fetch, never part of the build; its `FAMILIES` table is the download spec, and its doc block owns the contract (CLAUDE.md's Fonts entry points there). The stylesheet generator fails naming the script otherwise, and the downloaded woff2s commit with the preset.
 
-The last two write and check the theme's own DESIGN.md (`website/public/themes/<id>/DESIGN.md`), the file the specimen page offers for download: the validator reads it back through the playground's importer and fails when it does not land on the preset's own levers. A difference the format cannot carry goes in that script's `SANCTIONED_DRIFT` table with the reason; commit the generated file with the preset.
+The two DESIGN.md lines write and check the theme's own DESIGN.md (`website/public/themes/<id>/DESIGN.md`), the file the specimen page offers for download: the validator reads it back through the playground's importer and fails when it does not land on the preset's own levers. A difference the format cannot carry goes in that script's `SANCTIONED_DRIFT` table with the reason; commit the generated file with the preset.
 
 Then `npm run verify` — the mirror guards and the site build exercise everything those scripts do not.
 
@@ -79,6 +80,6 @@ The Figma kit's variables do not follow on their own. Ask the owner whether to r
 
 ## Guardrails
 
-- Never hand-edit `src/tokens/presets/*.css` — they are generated; the byte-compare validator rejects a hand edit anyway
+- Never hand-edit `src/tokens/presets/*.css` — they are generated; `scripts/validate-generated-files.mjs` rejects a hand edit anyway
 - Never pin `SANCTIONED_AA_GAPS` to pass the gate without the owner's explicit decision
 - A preset's portrait (swatch shape, faces) derives from its declaration — never restyle a picker row by hand

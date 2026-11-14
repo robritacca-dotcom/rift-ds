@@ -3,13 +3,11 @@
  * validate-dependency-graph.mjs
  *
  * Guards website/src/data/dependency-graph.generated.ts, the data behind the
- * /graph page. One check: freshness — regenerates in memory and byte-compares
- * against disk, so a token, component, or import change cannot land without
- * the regenerated graph. (CI's drift guard catches the uncommitted
- * regeneration.) No leak screen is needed beyond the standard patterns: every
- * node and edge derives from the registries and from source structure that
- * ships in the public repo — but the standard patterns run anyway, since the
- * file is served to every /graph visitor.
+ * /graph page. One check: the standard leak patterns, on the file as
+ * committed. Every node and edge derives from the registries and from
+ * source structure that ships in the public repo, but the file is served to
+ * every /graph visitor, so the screen runs anyway. Whether the file is fresh
+ * is scripts/validate-generated-files.mjs's check.
  *
  * Runs before every build via the validate-registry chain.
  */
@@ -37,4 +35,4 @@ if (onDisk !== null) {
   }
 }
 
-finish('✗ Dependency graph validation failed:', errors, '✓ Dependency graph is current.');
+finish('✗ Dependency graph validation failed:', errors, '✓ Dependency graph carries no leaked details.');

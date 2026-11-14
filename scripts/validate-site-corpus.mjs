@@ -6,9 +6,8 @@
  * sends to the model as its cached system block, and served by the MCP's
  * search_site through its search sections. Four checks:
  *
- *   1. Freshness — regenerates in memory and byte-compares against disk, so a
- *      page edit that changes the corpus can't land without the regenerated
- *      file. (CI also runs a drift guard after the generators.)
+ *   1. (Freshness is scripts/validate-generated-files.mjs's check. The
+ *      screens below read the corpus the generator builds.)
  *
  *   2. No leaked details — the corpus is read aloud by a model to strangers,
  *      so a local path or an analytics id in it is worse than the same string
@@ -16,9 +15,8 @@
  *      allowlisted against corpus-facts() blocks: a page may deliberately
  *      publish them, and nothing else may.
  *
- *   3. Budget — the corpus is billed on every chat message. Generation already
- *      refuses to write an over-budget corpus; this catches a file that was
- *      committed before the gate existed, or edited by hand.
+ *   3. (Budget: generation refuses to build an over-budget corpus, so the
+ *      generator step and the freshness check both fail on one.)
  *
  *   5. No empty-state copy — the title and description an EmptyState shows
  *      only when a list is empty never reach the corpus (the releases page
@@ -60,8 +58,8 @@ const fail = (message) => errors.push(message);
 let corpus = null;
 try {
   corpus = assembleCorpus().corpus;
-} catch {
-  // Generation already failed above; no need to report it twice.
+} catch (error) {
+  fail(`building the site corpus failed: ${error.message}`);
 }
 
 if (corpus !== null) {
@@ -125,5 +123,5 @@ for (const rel of promptFiles) {
 finish(
   '✗ Site corpus validation failed:',
   errors,
-  '✓ Site corpus is current, within budget, and free of leaked details.'
+  '✓ Site corpus is free of leaked details, holes and empty-state copy.'
 );

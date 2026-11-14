@@ -4,24 +4,22 @@
  *
  * Holds the generated preset stylesheets (src/tokens/presets/ — one
  * <id>.css per THEME_PRESETS entry plus the presets.css aggregate) to
- * their source. Four checks:
+ * what a preset must be.
+ * Whether the files are fresh (each one matches its generator, and nothing
+ * else sits in the folder) is scripts/validate-generated-files.mjs's check.
+ * Two checks here:
  *
- *   1. Every file byte-matches what generate-preset-stylesheets.mjs
- *      produces now (regenerated in memory), so a preset edit cannot ship
- *      with a stale stylesheet beside it — and every expected file exists.
- *   2. Every file in the folder is an expected one — an orphan means a
- *      preset left THEME_PRESETS without taking its stylesheet along.
- *   3. Parity proof, belt-and-braces on the shared-composer claim: for
+ *   1. Parity proof, belt-and-braces on the shared-composer claim: for
  *      one preset (mono), the CSS blocks are parsed back out of the disk
  *      file's rift.preset layer and compared, name for name and value for
  *      value, against presetOverrides(mono, theme): the light block is the
  *      light output exactly, and dark mode (the dark block over the light
  *      one) resolves to the dark output, with nothing repeated. The
- *      byte-compare already implies this through the generator; the parse
- *      goes around the generator, so a formatting bug that dropped or
- *      mangled a declaration on both sides of the byte-compare still
+ *      freshness check already implies this through the generator; the
+ *      parse goes around the generator, so a formatting bug that dropped
+ *      or mangled a declaration on both sides of that comparison still
  *      fails here.
- *   4. Every rebased primitive ramp keeps a distinct colour per step. A
+ *   2. Every rebased primitive ramp keeps a distinct colour per step. A
  *      preset that rebases a ramp around its own key rebuilt purple's 05,
  *      06 and 07 as one colour in ten presets (the ramp weights in
  *      theme-overrides.ts clamped a hue-drifted step to the key); two
@@ -123,5 +121,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✓ Preset stylesheets in sync — ${files.size} files match presetOverrides (mono parity proof included).`
+  `✓ Preset stylesheets sound — mono reads back as presetOverrides emits it, and no ramp step repeats across ${files.size} files.`
 );

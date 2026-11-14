@@ -27,9 +27,9 @@
  * presetOverrides, the one composer the preset stylesheets are written
  * from. generate-theme-design-md.mjs and generate-agent-skill.mjs keep
  * their own resolver calls on purpose: same resolver, same inputs, and the
- * byte-compare in validate-token-values.mjs proves the three agree on
- * every build. Nothing here reads the network or the clock, so the
- * validator can regenerate in memory and byte-compare. Every input is
+ * byte-compare in validate-generated-files.mjs holds each output to its
+ * generator on every build. Nothing here reads the network or the clock,
+ * so that check can regenerate in memory and byte-compare. Every input is
  * already published (the token CSS ships in the package), so the output
  * is public-only by construction.
  *

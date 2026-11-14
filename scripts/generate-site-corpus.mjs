@@ -9,7 +9,7 @@
  * Two properties this file must keep, or the build breaks:
  *
  *   1. Deterministic. No network, no timestamps, no directory-order
- *      dependence. validate-site-corpus.mjs regenerates in memory and
+ *      dependence. validate-generated-files.mjs regenerates in memory and
  *      byte-compares against disk, and CI runs a drift guard after the
  *      generators, so any nondeterminism fails the build.
  *

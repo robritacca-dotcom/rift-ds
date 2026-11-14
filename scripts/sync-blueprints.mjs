@@ -17,8 +17,8 @@
  * route's spec-download list to it in both directions (so an unpublished
  * spec cannot stay advertised as a link that 404s).
  *
- * Runs as part of the validate-registry chain (root package.json) and
- * the website prebuild.
+ * Runs in the validate-registry chain (scripts/chain.mjs) and, through its
+ * 'dev' mark, in the website's predev and prebuild.
  */
 
 import fs from 'node:fs';

@@ -42,9 +42,10 @@
  * through website/src/lib/registry-downloads.ts, whose doc block owns
  * what is stored.
  *
- * The whole surface is generated, committed, and byte-compared by
- * validate-shadcn-registry.mjs (both directions, plus a leak screen —
- * file contents ship verbatim to strangers, so corpus rules apply).
+ * The whole surface is generated, committed, and byte-compared in both
+ * directions by validate-generated-files.mjs; validate-shadcn-registry.mjs
+ * screens it for leaks and closure (file contents ship verbatim to
+ * strangers, so corpus rules apply).
  * Runs in the validate-registry chain and the website's predev/prebuild.
  * Never hand-edit the files.
  */

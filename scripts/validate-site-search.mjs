@@ -5,8 +5,8 @@
  * Guards website/src/data/site-search.generated.ts, the index the MCP
  * endpoint's search_site tool serves to any agent that asks. Four checks:
  *
- *   1. Freshness: regenerates in memory and byte-compares against disk, so a
- *      page or spec edit cannot land without the regenerated index.
+ *   1. (Freshness is scripts/validate-generated-files.mjs's check. The
+ *      checks below read the sections the generator builds.)
  *
  *   2. Every section can be cited: an absolute URL on the site, a heading
  *      and a body. A section with no URL once left an agent unable to say
@@ -63,5 +63,5 @@ for (const section of sections) {
 finish(
   '✗ Site search index validation failed:',
   errors,
-  `✓ Site search index is current: ${sections.length} consumer sections, each with its URL.`
+  `✓ Site search index holds ${sections.length} consumer sections, each with its URL, no holes and no leaks.`
 );

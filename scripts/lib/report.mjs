@@ -9,7 +9,9 @@
  * script exits 1, as it always has. Run inside scripts/run-chain.mjs,
  * which imports each step into one process so expensive work is shared, it
  * throws StepFailed instead, and the runner stops the chain there. A
- * script never calls process.exit itself: `failStep` is the one way out.
+ * step the runner imports never calls process.exit itself: `failStep` is the
+ * one way out. The generators in SPAWNED in scripts/run-chain.mjs run as
+ * processes of their own and may exit.
  *
  * A helper module, not a chain script: it checks nothing by itself.
  */

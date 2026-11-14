@@ -3,7 +3,7 @@
  * validate-theme-presets.mjs
  *
  * The completeness gate on the theme presets — separate from
- * validate-preset-stylesheets.mjs's byte-compare on purpose: that one
+ * the freshness check in validate-generated-files.mjs on purpose: that one
  * proves the shipped CSS matches the composer; this one proves the
  * composer's output actually delivers "one data-brand attribute, whole
  * site rethemed" for every preset in THEME_PRESETS
@@ -76,7 +76,7 @@
  *      and a reason, the way a contrast gap is.
  *
  * Belongs in the validate-registry chain (and the website prebuild),
- * right after validate-preset-stylesheets.mjs: it reads theme source and
+ * after validate-preset-stylesheets.mjs: it reads theme source and
  * token CSS, never build output.
  */
 import { join } from 'node:path';

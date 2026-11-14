@@ -2,18 +2,14 @@
 /**
  * validate-component-md.mjs
  *
- * Holds the generated markdown contract pages to their source: one
- * <slug>.md per public component under website/public/components/, the
- * chat widget's included. Regenerates the set in memory and checks three
- * things:
+ * Holds the generated markdown contract pages (one <slug>.md per public
+ * component under website/public/components/, the chat widget's included)
+ * to a readable shape.
+ * Whether the files are fresh (each one matches its generator, and nothing
+ * else sits in the folder) is scripts/validate-generated-files.mjs's check.
+ * One check here:
  *
- *   1. Every entry has its markdown page on disk.
- *   2. Every file in the components folder is a registered slug — an
- *      orphan means a component left the registry without taking its page
- *      along.
- *   3. Every page byte-matches what the generator produces now, so a prop
- *      or description change cannot ship with a stale contract beside it.
- *   4. Every props table row reads cleanly: no empty code span (an empty
+ *   1. Every props table row reads cleanly: no empty code span (an empty
  *      string default is written `''`, never as nothing in backticks) and no
  *      double space inside a cell (a folded JSDoc paragraph break). Both
  *      once shipped on button.md.
@@ -48,5 +44,5 @@ for (const file of files) {
 finish(
   '✗ Component markdown validation failed:',
   errors,
-  `✓ Component markdown in sync — ${files.length} pages match the registries and prop JSDoc.`
+  `✓ Component markdown reads cleanly — ${files.length} pages, no broken table row.`
 );

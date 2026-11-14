@@ -19,7 +19,7 @@
  * The component schemas, their index and the token values file are the
  * bindings today; a new published schema is one more row. Belongs in the
  * validate-registry chain, after every generator that writes a document
- * here: it reads disk, never regenerates (the byte-compare validators do).
+ * here: it reads disk, never regenerates (validate-generated-files.mjs does).
  */
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';

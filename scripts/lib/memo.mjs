@@ -2,7 +2,7 @@
  * lib/memo.mjs
  *
  * Builds that are expensive and pure (the docgen parse of the library, the
- * prop API assembled from it, the site corpus) are computed once per
+ * prop API assembled from it, and the type walk in component-types.mjs) are computed once per
  * process and shared by every step that asks. The source files do not
  * change while the chain runs, so the second answer would be the first.
  *

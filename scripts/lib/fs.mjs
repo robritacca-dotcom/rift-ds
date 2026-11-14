@@ -20,8 +20,8 @@ export const fromRoot = (...parts) => join(repoRoot, ...parts);
 
 /**
  * A text file, with CRLF normalised so a Windows checkout
- * (core.autocrlf=true) reads byte for byte what CI reads. Every read a
- * script parses, matches or byte-compares goes through this.
+ * (core.autocrlf=true) reads byte for byte what CI reads. A read a script
+ * parses, matches or byte-compares should go through this.
  */
 export const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 

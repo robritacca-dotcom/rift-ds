@@ -3,16 +3,15 @@
  * validate-shadcn-registry.mjs
  *
  * Holds website/public/r/ (the shadcn-compatible registry — see
- * generate-shadcn-registry.mjs) to its sources:
+ * generate-shadcn-registry.mjs) to what an installable registry must be.
+ * Whether the files are fresh (each one matches its generator, and nothing
+ * else sits in the folder) is scripts/validate-generated-files.mjs's check.
+ * Two checks here, on what the generator builds:
  *
- *   1. Regenerates in memory and byte-compares every file, both
- *      directions — a stale item, a missing one, and an orphan file all
- *      fail. Since the generator derives from the component registry,
- *      this also holds the item set to the registry.
- *   2. Leak screen — item files embed library source verbatim and are
+ *   1. Leak screen — item files embed library source verbatim and are
  *      handed to strangers' projects, so every text file is held to the
  *      corpus's non-sanctionable patterns.
- *   3. Closure integrity — every relative import inside every embedded
+ *   2. Closure integrity — every relative import inside every embedded
  *      file must resolve to a target somewhere in the registry, so an
  *      installed component can never import a file no item carries.
  */
@@ -70,5 +69,5 @@ for (const file of embedded) {
 finish(
   '✗ shadcn registry validation failed:',
   errors,
-  `✓ shadcn registry in sync — ${expected.size} files match the component registry, closure complete, no leaked details.`
+  `✓ shadcn registry sound — ${expected.size} files, closure complete, no leaked details.`
 );

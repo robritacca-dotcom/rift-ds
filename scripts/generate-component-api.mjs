@@ -19,7 +19,7 @@
  *
  * Two properties this file must keep, or the build breaks:
  *
- *   1. Deterministic. No network, no timestamps. validate-component-api.mjs
+ *   1. Deterministic. No network, no timestamps. validate-generated-files.mjs
  *      regenerates in memory and byte-compares against disk, and CI runs a
  *      drift guard after the generators.
  *

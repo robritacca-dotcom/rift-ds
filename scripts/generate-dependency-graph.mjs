@@ -12,8 +12,8 @@
  * `rift-ds` deep and barrel imports in site code.
  *
  * Output: website/src/data/dependency-graph.generated.ts (committed;
- * validate-dependency-graph.mjs byte-compares it, CI's drift guard catches a
- * stale commit). Edges ship as node-index triples to keep the file small.
+ * validate-generated-files.mjs byte-compares it, validate-dependency-graph.mjs
+ * screens it for leaks, and CI's drift guard catches a stale commit). Edges ship as node-index triples to keep the file small.
  *
  * Also the CLI behind the page's hint lines:
  *   npm run graph -- tree <name>       what <name> depends on, transitively

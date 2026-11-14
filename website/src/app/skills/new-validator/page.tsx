@@ -9,8 +9,8 @@ const STEPS: TimelineItem[] = [
     description: (
       <>
         Read the Registries section of <GuideCode>CLAUDE.md</GuideCode>, then one script of each
-        shape: <GuideCode>validate-doc-refs.mjs</GuideCode> on its own, the{" "}
-        <GuideCode>generate-component-md.mjs</GuideCode> pair, and{" "}
+        shape: <GuideCode>validate-doc-refs.mjs</GuideCode> on its own, <GuideCode>generate-component-md.mjs</GuideCode> with its{" "}
+        <GuideCode>surface()</GuideCode>, and{" "}
         <GuideCode>validate-rendered-spacing.mjs</GuideCode> for built HTML.
       </>
     ),
@@ -18,7 +18,7 @@ const STEPS: TimelineItem[] = [
   {
     title: "Decide the shape",
     description:
-      "A validator checks a rule and fails the build. A generator writes a derived file and gets a validator that holds the file to its source. A countable fact usually wants a registry as well.",
+      "A validator checks a rule and fails the build. A generator writes a derived file and exports its surface, which the one freshness check holds to its source. A countable fact usually wants a registry as well.",
   },
   {
     title: "Decide where it runs",
@@ -34,12 +34,12 @@ const STEPS: TimelineItem[] = [
   {
     title: "Follow the house conventions",
     description:
-      "Collect every error before exiting, and make each one name its fix. Normalise Windows line endings once, on the read. Build paths from the script’s own location and compare them with forward slashes.",
+      "Collect every error, then end through the shared finish helper, never by exiting the process, and make each error name its fix. Normalise Windows line endings once, on the read. Build paths from the script’s own location and compare them with forward slashes.",
   },
   {
-    title: "For a generator, compare bytes",
+    title: "For a generator, export its surface",
     description:
-      "The generator exports its assemble function and writes only when run directly. Its validator regenerates in memory and compares with the file on disk, so a hand edit or a stale file fails.",
+      "The generator exports its assemble function, writes from an exported main that runs only when the script is run directly, and exports a surface listing what it writes. One check, validate-generated-files.mjs, rebuilds every surface in memory and compares it with the disk, so a hand edit or a stale file fails.",
   },
   {
     title: "Wire it in",
@@ -56,7 +56,7 @@ const STEPS: TimelineItem[] = [
     title: "Close the loop and prove it fails",
     meta: "Makes the CLAUDE.md line",
     description:
-      "Give the rule its line in CLAUDE.md. Run the script, break the rule on purpose to see the message, restore it, then run the whole chain. A check that cannot be made to fail is not guarding anything.",
+      "Give the rule its line in CLAUDE.md. Run the script, break the rule on purpose to see the message, keep that break as a plant for the chain self-test, restore it, then run the whole chain. A check that cannot be made to fail is not guarding anything.",
   },
 ];
 

@@ -22,11 +22,11 @@
  *
  * Runs in the validate-registry chain.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const posix = (p) => p.split('\\').join('/');
 
 /** The stylesheets that draw tables. */
@@ -64,7 +64,7 @@ let checkedRules = 0;
 
 for (const full of files) {
   const rel = posix(relative(repoRoot, full));
-  const source = blankComments(readFileSync(full, 'utf8').replace(/\r\n/g, '\n'));
+  const source = blankComments(read(full));
   const owner = OWNERS.has(rel);
   for (const match of source.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const selector = match[1].trim();
@@ -98,10 +98,8 @@ for (const rel of SANCTIONED.keys()) {
   if (!files.some((f) => posix(relative(repoRoot, f)) === rel)) errors.push(`${rel} is SANCTIONED but does not exist`);
 }
 
-if (errors.length) {
-  console.error('\n✗ Table styles validation failed:\n');
-  for (const e of errors) console.error(`  - ${e}`);
-  console.error('');
-  process.exit(1);
-}
-console.log(`✓ Table styles in one family — ${checkedRules} table rules across ${files.length} stylesheets; only the drawing files colour a table, and only through --color-table-*.`);
+finish(
+  '✗ Table styles validation failed:',
+  errors,
+  `✓ Table styles in one family — ${checkedRules} table rules across ${files.length} stylesheets; only the drawing files colour a table, and only through --color-table-*.`
+);

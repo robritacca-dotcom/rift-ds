@@ -33,15 +33,9 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
+import { display, fromRoot, read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 // `ariaLabel` too: an inner CircularButton or PromptSuggestions given literal text
 // writes the same hard-coded name one level down.
@@ -50,14 +44,8 @@ const NAME_ATTRIBUTES = new Set(['aria-label', 'aria-roledescription', 'ariaLabe
 /** File (repo-relative) → literal text → why it stays literal. */
 const SANCTIONED = {};
 
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, files);
-    else if (/\.tsx$/.test(entry.name) && !/\.(stories|test)\.tsx$/.test(entry.name)) files.push(full);
-  }
-  return files;
-}
+/** Component modules, without stories and tests. */
+const isSource = (name) => /\.tsx$/.test(name) && !/\.(stories|test)\.tsx$/.test(name);
 
 /** The literal text of an attribute value, or null when the value reads anything. */
 function literalText(initializer) {
@@ -92,7 +80,7 @@ const errors = [];
 const usedSanctions = new Set();
 let checked = 0;
 
-for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(repoRoot, 'src', 'chat'))]) {
+for (const file of [...walk(fromRoot('src', 'components'), isSource), ...walk(fromRoot('src', 'chat'), isSource)]) {
   const path = display(file);
   // The scripted chat demo's English is fixture content (rift-ds/chat/demo).
   if (/^src\/chat\/(demo[^/]*|DemoWelcome)\.tsx$/.test(path)) continue;
@@ -135,10 +123,8 @@ for (const [path, texts] of Object.entries(SANCTIONED)) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Accessible name validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-
-console.log(`✓ Accessible names replaceable — ${checked} literal defaults checked, all overridable`);
+finish(
+  '✗ Accessible name validation failed:',
+  errors,
+  `✓ Accessible names replaceable — ${checked} literal defaults checked, all overridable`
+);

@@ -21,16 +21,16 @@
  * Belongs in the validate-registry chain, not post-build: the source is
  * generated data, not rendered HTML.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { assembleComponentMdFiles, outputDir } from './generate-component-md.mjs';
-
-import { repoRoot } from './component-docgen.mjs';
+import { display as displayPath, read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const errors = [];
 
 const files = assembleComponentMdFiles();
-const display = (file) => relative(repoRoot, join(file.dir, `${file.slug}.md`)).replaceAll('\\', '/');
+const display = (file) => displayPath(join(file.dir, `${file.slug}.md`));
 
 for (const file of files) {
   const dest = join(file.dir, `${file.slug}.md`);
@@ -38,7 +38,7 @@ for (const file of files) {
     errors.push(`missing ${display(file)} — run: node scripts/generate-component-md.mjs`);
     continue;
   }
-  if (readFileSync(dest, 'utf8').replace(/\r\n/g, '\n') !== file.content) {
+  if (read(dest) !== file.content) {
     errors.push(`${display(file)} is stale — run: node scripts/generate-component-md.mjs`);
   }
   // 4. Clean table rows, checked on what the generator writes.
@@ -65,10 +65,8 @@ for (const name of onDisk) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Component markdown validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log(`✓ Component markdown in sync — ${files.length} pages match the registries and prop JSDoc.`);
+finish(
+  '✗ Component markdown validation failed:',
+  errors,
+  `✓ Component markdown in sync — ${files.length} pages match the registries and prop JSDoc.`
+);

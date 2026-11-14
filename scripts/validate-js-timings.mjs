@@ -20,14 +20,9 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
+import { display, fromRoot, read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { blankJsComments, lineOf } from './lib/text.mjs';
 
 /** "file#NAME" → why the literal is not a motion timing. */
 const SANCTIONED = {
@@ -35,25 +30,16 @@ const SANCTIONED = {
   'src/chat/transport.ts#FIRST_BYTE_TIMEOUT_MS': 'a network timeout on the first streamed byte, not a motion timing',
 };
 
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, files);
-    else if (/\.tsx?$/.test(entry.name) && !/\.(stories|test)\.tsx?$/.test(entry.name)) files.push(full);
-  }
-  return files;
-}
-
-const strip = (src) => src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')).replace(/\/\/.*$/gm, (m) => ' '.repeat(m.length));
-const lineOf = (src, index) => src.slice(0, index).split('\n').length;
+/** Library source, without stories and tests. */
+const isSource = (name) => /\.tsx?$/.test(name) && !/\.(stories|test)\.tsx?$/.test(name);
 
 const errors = [];
 const used = new Set();
 let files = 0;
-for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(repoRoot, 'src', 'chat'))]) {
+for (const file of [...walk(fromRoot('src', 'components'), isSource), ...walk(fromRoot('src', 'chat'), isSource)]) {
   files += 1;
   const path = display(file);
-  const src = strip(read(file));
+  const src = blankJsComments(read(file));
   for (const m of src.matchAll(/\bset(Timeout|Interval)\([\s\S]*?,\s*([\d_]+)\s*\)/g)) {
     if (Number(m[2].replaceAll('_', '')) < 10) continue;
     errors.push(`${path}:${lineOf(src, m.index)} passes a literal ${m[2]}ms to set${m[1]}. Import the timing from src/tokens/motion.ts, or add a named constant there.`);
@@ -71,9 +57,8 @@ for (const key of Object.keys(SANCTIONED)) {
   if (!used.has(key)) errors.push(`SANCTIONED lists ${key}, which no longer defines that literal: remove the entry.`);
 }
 
-if (errors.length > 0) {
-  console.error('✗ JS timing validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-console.log(`✓ JS timings come from src/tokens/motion.ts — ${files} files scanned, ${used.size} sanctioned network timeouts`);
+finish(
+  '✗ JS timing validation failed:',
+  errors,
+  `✓ JS timings come from src/tokens/motion.ts — ${files} files scanned, ${used.size} sanctioned network timeouts`
+);

@@ -30,14 +30,9 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
+import { display, fromRoot, read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { blankJsComments, lineOf } from './lib/text.mjs';
 
 /** File (repo-relative) → check → why the hand-written form is right there. */
 const SANCTIONED = {
@@ -56,8 +51,6 @@ const NAMES = new RegExp(
   `['"\`](?:${MONTHS}|${WEEKDAYS})['"\`]|\\[\\s*['"\`](?:Su|Sun|Mo|Mon)['"\`]\\s*,\\s*['"\`](?:Mo|Mon|Tu|Tue)['"\`]|\\[\\s*['"\`](?:Jan)['"\`]\\s*,\\s*['"\`]Feb['"\`]`,
   'g',
 );
-
-const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')).replace(/\/\/.*$/gm, (m) => ' '.repeat(m.length));
 
 /** The text between the call's parentheses, from `start` (just past the open paren). */
 function argsOf(src, start) {
@@ -88,14 +81,8 @@ function argCount(args) {
 
 const noLocale = (args) => argCount(args) === 0 || /^\s*undefined\s*(,|$)/.test(args);
 
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, files);
-    else if (/\.tsx?$/.test(entry.name) && !/\.(stories|test)\.tsx?$/.test(entry.name)) files.push(full);
-  }
-  return files;
-}
+/** Source modules, without stories and tests. */
+const isSource = (name) => /\.tsx?$/.test(name) && !/\.(stories|test)\.tsx?$/.test(name);
 
 const errors = [];
 const matched = new Set();
@@ -110,34 +97,33 @@ const report = (path, check, line, message) => {
 };
 
 for (const dir of ['components', 'chat', 'behaviors']) {
-  for (const file of walk(join(repoRoot, 'src', dir))) {
+  for (const file of walk(fromRoot('src', dir), isSource)) {
     scanned += 1;
     const path = display(file);
     const raw = read(file);
-    const src = stripComments(raw);
-    const lineOf = (index) => src.slice(0, index).split('\n').length;
+    const src = blankJsComments(raw);
 
     for (const m of src.matchAll(TO_LOCALE)) {
       if (noLocale(argsOf(src, m.index + m[0].length))) {
-        report(path, 'format', lineOf(m.index), `calls ${m[1]}() without a locale. Pass the resolved locale (useLocale(localeProp) in a client component, the \`locale\` prop with DEFAULT_LOCALE in a server one).`);
+        report(path, 'format', lineOf(src, m.index), `calls ${m[1]}() without a locale. Pass the resolved locale (useLocale(localeProp) in a client component, the \`locale\` prop with DEFAULT_LOCALE in a server one).`);
       }
     }
     for (const m of src.matchAll(INTL_CALL)) {
       if (noLocale(argsOf(src, m.index + m[0].length))) {
-        report(path, 'format', lineOf(m.index), `constructs Intl.${m[1]} without a locale, which takes the runtime's default. Pass the resolved locale.`);
+        report(path, 'format', lineOf(src, m.index), `constructs Intl.${m[1]} without a locale, which takes the runtime's default. Pass the resolved locale.`);
       }
     }
     for (const m of src.matchAll(LOCALE_COMPARE)) {
       if (argCount(argsOf(src, m.index + m[0].length)) < 2) {
-        report(path, 'compare', lineOf(m.index), `calls localeCompare without a locale. Pass the resolved locale, use an Intl.Collator built with it, or compare code points when the order is not shown to anyone.`);
+        report(path, 'compare', lineOf(src, m.index), `calls localeCompare without a locale. Pass the resolved locale, use an Intl.Collator built with it, or compare code points when the order is not shown to anyone.`);
       }
     }
     const useLocaleCall = src.search(/\buseLocale\(/);
     if (useLocaleCall !== -1 && !/^\s*['"]use client['"]/.test(raw) && !path.endsWith('LocaleProvider.tsx')) {
-      report(path, 'server', lineOf(useLocaleCall), `calls useLocale() without 'use client': it can render on the server, where no LocaleProvider can be read. Take \`locale\` as a prop with DEFAULT_LOCALE behind it.`);
+      report(path, 'server', lineOf(src, useLocaleCall), `calls useLocale() without 'use client': it can render on the server, where no LocaleProvider can be read. Take \`locale\` as a prop with DEFAULT_LOCALE behind it.`);
     }
     for (const m of src.matchAll(NAMES)) {
-      report(path, 'names', lineOf(m.index), `writes a month or weekday name by hand (${m[0].trim()}). Read it from Intl in the resolved locale (weekdayNamesIn in src/behaviors/locale.ts, or Intl.DateTimeFormat), or sanction it in SANCTIONED with the reason.`);
+      report(path, 'names', lineOf(src, m.index), `writes a month or weekday name by hand (${m[0].trim()}). Read it from Intl in the resolved locale (weekdayNamesIn in src/behaviors/locale.ts, or Intl.DateTimeFormat), or sanction it in SANCTIONED with the reason.`);
     }
   }
 }
@@ -150,10 +136,8 @@ for (const [path, checks] of Object.entries(SANCTIONED)) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Locale formatting validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-
-console.log(`✓ Every locale is the consumer's — ${scanned} files scanned, ${matched.size} sanctioned hand-written forms`);
+finish(
+  '✗ Locale formatting validation failed:',
+  errors,
+  `✓ Every locale is the consumer's — ${scanned} files scanned, ${matched.size} sanctioned hand-written forms`
+);

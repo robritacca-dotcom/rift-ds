@@ -79,16 +79,12 @@
  * right after validate-preset-stylesheets.mjs: it reads theme source and
  * token CSS, never build output.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { loadThemeSource } from './generate-preset-stylesheets.mjs';
+import { read, readJson, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
-
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const parseDeclarations = (css) => {
   const declarations = new Map();
@@ -110,7 +106,7 @@ const iconHooks = new Set(
   )].map((m) => m[1])
 );
 const registryNames = new Set(
-  Object.values(JSON.parse(read(join(tokensDir, 'registry.json'))).categories).flat()
+  Object.values(readJson(join(tokensDir, 'registry.json')).categories).flat()
 );
 
 /** Every foreground the components draw on an action fill, per state:
@@ -475,15 +471,9 @@ for (const id of Object.keys(THEME_TAGLINES)) {
   }
 }
 
-if (errors.length > 0) {
-  console.error(
-    '✗ Theme preset validation failed — a preset does not deliver a complete data-brand theme:\n' +
-      errors.map((e) => `    - ${e}`).join('\n')
-  );
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Theme preset validation failed — a preset does not deliver a complete data-brand theme:',
+  errors,
   `✓ Theme presets complete — ${Object.keys(THEME_PRESETS).length} presets × 2 themes: every override names a real token, ` +
     `the action family and all ${REQUIRED_ACCENT_ROLES.length} ambient accents are covered, and all ${PAIRINGS.length} action ` +
     `and type-tier pairings hold contrast across ${cells} theme cells (${pairChecks} checks, ${SANCTIONED_AA_GAPS.size} pinned gaps, ` +

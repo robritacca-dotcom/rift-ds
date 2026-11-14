@@ -21,28 +21,25 @@
  *  - every `<FullBleedBackground />` marker sits in a page, never the layout —
  *    in the layout it would make the whole site full-bleed
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { join, relative, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { display, fromRoot, readRel } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const appDir = join(repoRoot, 'website', 'src', 'app');
+const appDir = fromRoot('website', 'src', 'app');
 const layoutRel = 'website/src/app/layout.tsx';
-
-/* Normalize CRLF so Windows checkouts validate identically to CI. */
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const errors = [];
 
 const tsxFiles = readdirSync(appDir, { withFileTypes: true, recursive: true })
   .filter((e) => e.isFile() && e.name.endsWith('.tsx'))
-  .map((e) => relative(repoRoot, join(e.parentPath ?? e.path, e.name)).replace(/\\/g, '/'));
+  .map((e) => display(join(e.parentPath ?? e.path, e.name)));
 
 const mounts = [];
 const markers = [];
 
 for (const file of tsxFiles) {
-  const source = read(join(repoRoot, file));
+  const source = readRel(file);
   // Strip comments so prose mentioning the component is not counted as a mount.
   const code = source
     .replace(/\/\*[\s\S]*?\*\//g, '')
@@ -83,13 +80,9 @@ if (markerInLayout.length > 0) {
   );
 }
 
-if (errors.length > 0) {
-  console.error('✗ Background mount validation failed:\n');
-  for (const e of errors) console.error(`  - ${e}`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Background mount validation failed:',
+  errors,
   `✓ Background mounted once — <BlurBackground /> in ${layoutRel} only, ` +
     `${markers.length} page(s) opting into the full-bleed variant.`
 );

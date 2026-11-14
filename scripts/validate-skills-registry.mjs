@@ -14,11 +14,12 @@
  * the public skills list can never silently drift from reality.
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { buildSkillsContent, outputPath } from './generate-skills-content.mjs';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
+import { leaksIn } from './lib/screens.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const skillsDir = join(repoRoot, '.claude', 'skills');
 const externalDir = join(repoRoot, 'website', 'src', 'data', 'external-skills');
 
@@ -43,7 +44,7 @@ const skillSources = [
   label,
   path,
   // Normalize CRLF so Windows checkouts lint identically to CI.
-  readFileSync(path, 'utf8').replace(/\r\n/g, '\n'),
+  read(path),
 ]);
 
 // Claude Code only discovers a skill if SKILL.md opens with YAML
@@ -62,16 +63,12 @@ for (const [label, , src] of skillSources) {
 }
 
 // The committed skill files and their published copies are public — they
-// must not leak local absolute paths (machine username) or a GA property id.
-const leakPatterns = [
-  [/\/Users\/[A-Za-z]/, 'local absolute path (/Users/…)'],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/i, 'GA property id'],
-];
+// must not leak a local absolute path (machine username), a GA property id,
+// an API key or an address: the shared screen in scripts/lib/screens.mjs.
 const leaks = [];
 for (const [label, , src] of skillSources) {
-  for (const [pattern, what] of leakPatterns) {
-    if (pattern.test(src)) leaks.push(`${label}: ${what}`);
-  }
+  const kinds = new Set(leaksIn(src).map((leak) => leak.what));
+  for (const what of kinds) leaks.push(`${label}: ${what}`);
 }
 
 // (Backticked-path existence used to be checked here; it lives in
@@ -82,7 +79,7 @@ let staleGenerated = null;
 try {
   const expected = buildSkillsContent();
   const onDisk = existsSync(outputPath)
-    ? readFileSync(outputPath, 'utf8').replace(/\r\n/g, '\n')
+    ? read(outputPath)
     : '';
   if (onDisk !== expected) {
     staleGenerated =
@@ -163,7 +160,7 @@ if (staleGenerated) {
 }
 
 if (failed) {
-  process.exit(1);
+  failStep();
 }
 
 console.log(

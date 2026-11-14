@@ -32,11 +32,10 @@
  *    remembered. The 2026-08 drift audit is why — `crop` landed, the specs
  *    were updated, and the README kept telling npm consumers there were seven.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { read, readRel, repoRoot } from './lib/fs.mjs';
+import { failStep, finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dataPath = join(
   repoRoot, 'website', 'src', 'data', 'shader-background.json'
 );
@@ -49,10 +48,10 @@ const errors = [];
 
 const readJson = (path, label) => {
   try {
-    return JSON.parse(readFileSync(path, 'utf8'));
+    return JSON.parse(read(path));
   } catch (err) {
     console.error(`✗ Could not read/parse ${label}: ${err.message}`);
-    process.exit(1);
+    failStep();
   }
 };
 
@@ -68,7 +67,7 @@ const knownTokens = new Set(
    from there rather than restating it — the shader owns that fact. */
 let blobCount = null;
 try {
-  const source = readFileSync(shaderPath, 'utf8').replace(/\r\n/g, '\n');
+  const source = read(shaderPath);
   const match = source.match(/export const BLOB_COUNT = (\d+)/);
   if (match) blobCount = Number(match[1]);
 } catch {
@@ -141,7 +140,7 @@ const hookPath = join(
 );
 let shipped = null;
 try {
-  const source = readFileSync(hookPath, 'utf8').replace(/\r\n/g, '\n');
+  const source = read(hookPath);
   const block = source.match(
     /export const DEFAULT_SHADER_PARAMS: ShaderParams = \{([\s\S]*?)\n\};/
   );
@@ -183,7 +182,7 @@ if (!shipped || shipped.length === 0) {
 const controlsPath = join(repoRoot, 'website', 'src', 'data', 'shader-background.ts');
 const controls = {};
 try {
-  const source = readFileSync(controlsPath, 'utf8').replace(/\r\n/g, '\n');
+  const source = read(controlsPath);
   for (const m of source.matchAll(
     /\{\s*key:\s*"(\w+)",[^}]*?min:\s*([\d.]+),\s*max:\s*([\d.]+)/g
   )) {
@@ -240,7 +239,7 @@ for (const doc of [
 ]) {
   let text;
   try {
-    text = readFileSync(join(repoRoot, doc), 'utf8').replace(/\r\n/g, '\n');
+    text = readRel(doc);
   } catch {
     errors.push(`could not read ${doc} to check its count claims`);
     continue;
@@ -310,17 +309,13 @@ if (!Array.isArray(blobs) || blobs.length === 0) {
 
 // -- report -------------------------------------------------------------
 
-if (errors.length > 0) {
-  console.error('✗ Shader background config validation failed:\n');
-  for (const e of errors) console.error(`  - ${e}`);
-  process.exit(1);
-}
-
-const tokenList = blobs.map((b) => b.token);
-const uniqueTokens = new Set(tokenList).size;
-console.log(
-  `✓ Shader background config valid — mode "${config.mode}", ` +
+finish('✗ Shader background config validation failed:', errors, () => {
+  const tokenList = blobs.map((b) => b.token);
+  const uniqueTokens = new Set(tokenList).size;
+  return (
+    `✓ Shader background config valid — mode "${config.mode}", ` +
     `${blobs.length} blobs across ${uniqueTokens} tokens, all resolving; ` +
     `${Object.keys(PARAM_RANGES).length} parameters in range` +
     (params.react === 0 ? ' (cursor wake off).' : '.')
-);
+  );
+});

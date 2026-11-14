@@ -39,25 +39,13 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
+import { display, fromRoot, read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { lineOf } from './lib/text.mjs';
 
 const WHOLE_LOOK = ['mockup', 'platform'];
 
-function cssFiles(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) cssFiles(full, files);
-    else if (entry.name.endsWith('.css')) files.push(full);
-  }
-  return files;
-}
+const cssFiles = (dir) => walk(dir, (name) => name.endsWith('.css'));
 
 /** Blank out arithmetic and fallbacks so their contents never count. */
 function stripExempt(value) {
@@ -123,7 +111,7 @@ const errors = [];
 let declarations = 0;
 let sanctioned = 0;
 
-for (const file of [...cssFiles(join(repoRoot, 'src', 'components')), ...cssFiles(join(repoRoot, 'src', 'chat'))]) {
+for (const file of [...cssFiles(fromRoot('src', 'components')), ...cssFiles(fromRoot('src', 'chat'))]) {
   const text = read(file);
   const fileWide = new Set([...text.matchAll(/ds-allow-file\(([a-z-]+)\)/g)].map((m) => m[1]));
   // A component's own reduced-motion query is the exception the motion
@@ -134,7 +122,7 @@ for (const file of [...cssFiles(join(repoRoot, 'src', 'components')), ...cssFile
     const before = text.slice(0, m.index).trimEnd();
     const comment = before.endsWith('*/') ? before.slice(before.lastIndexOf('/*')) : '';
     if (!/ds-allow\(motion\)/.test(comment) && !fileWide.has('motion')) {
-      const line = text.slice(0, m.index).split('\n').length;
+      const line = lineOf(text, m.index);
       errors.push(
         `${display(file)}:${line} writes its own prefers-reduced-motion query. The duration tokens already ` +
           `collapse under the preference; a component query is allowed only to park a looping animation or ` +
@@ -259,18 +247,11 @@ for (const file of [...cssFiles(join(repoRoot, 'src', 'components')), ...cssFile
  * (`readTokenPx('--font-caption-size', '12px')` from Chart/palette.ts for an SVG attribute, or
  * `'var(--font-caption-size)'` in a style).
  */
-function tsFiles(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) tsFiles(full, files);
-    else if (/\.tsx?$/.test(entry.name) && !/\.(stories|test)\.tsx?$/.test(entry.name)) files.push(full);
-  }
-  return files;
-}
-for (const file of [...tsFiles(join(repoRoot, 'src', 'components')), ...tsFiles(join(repoRoot, 'src', 'chat'))]) {
+const tsFiles = (dir) => walk(dir, (name) => /\.tsx?$/.test(name) && !/\.(stories|test)\.tsx?$/.test(name));
+for (const file of [...tsFiles(fromRoot('src', 'components')), ...tsFiles(fromRoot('src', 'chat'))]) {
   const text = read(file);
   for (const m of text.matchAll(/\bfont(Size|Weight):\s*['"]?\d/g)) {
-    const line = text.slice(0, m.index).split('\n').length;
+    const line = lineOf(text, m.index);
     errors.push(
       `${display(file)}:${line} sets font${m[1]} to a literal. Read the type token instead: ` +
         `readTokenPx('--font-caption-size', '12px') where recharts needs a number, 'var(--font-…)' in a style.`
@@ -278,11 +259,9 @@ for (const file of [...tsFiles(join(repoRoot, 'src', 'components')), ...tsFiles(
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Raw value validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  console.error(`  ${errors.length} raw value(s).`);
-  process.exit(1);
-}
-
-console.log(`✓ Library CSS on tokens — ${declarations} declarations checked, ${sanctioned} sanctioned off-scale values`);
+finish(
+  '✗ Raw value validation failed:',
+  errors,
+  `✓ Library CSS on tokens — ${declarations} declarations checked, ${sanctioned} sanctioned off-scale values`,
+  { hint: `  ${errors.length} raw value(s).` }
+);

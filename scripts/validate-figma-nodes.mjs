@@ -21,10 +21,10 @@
  * the validate-registry chain: it reads source files only.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = (path) => JSON.parse(readFileSync(join(repoRoot, path), 'utf8'));
 
 const MAP_PATH = 'website/src/data/figma-nodes.json';
@@ -69,11 +69,8 @@ for (const route of Object.keys(pages)) {
   }
 }
 
-if (errors.length) {
-  console.error(`✗ validate-figma-nodes: ${errors.length} problem${errors.length === 1 ? '' : 's'}`);
-  for (const e of errors) console.error(`  - ${e}`);
-  process.exit(1);
-}
-console.log(
+finish(
+  `✗ validate-figma-nodes: ${errors.length} problem${errors.length === 1 ? '' : 's'}`,
+  errors,
   `✓ Figma nodes: ${Object.keys(components).length} components and ${Object.keys(pages).length} pages mapped to the kit`,
 );

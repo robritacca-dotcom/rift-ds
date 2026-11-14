@@ -33,12 +33,11 @@
  * /foundations/layout renders both sets. Runs in the validate-registry
  * chain and the website's prebuild.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { readRel as read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (rel) => readFileSync(join(repoRoot, rel), 'utf8').replace(/\r\n/g, '\n');
 
 /** Comments blanked to spaces, so offsets and line numbers survive. */
 const blankComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
@@ -160,7 +159,7 @@ for (const dir of ['src', 'website/src']) {
 
 if (errors.length) {
   console.error('✗ Stacking:\n' + errors.map((e) => `    - ${e}`).join('\n'));
-  process.exit(1);
+  failStep();
 }
 
 console.log(

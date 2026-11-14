@@ -16,18 +16,17 @@
  *
  * Runs before every build via the validate-registry chain.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { buildA11yCoverageFile, outputPath } from './generate-a11y-coverage.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const errors = [];
 const fail = (message) => errors.push(message);
 
 try {
   const expected = buildA11yCoverageFile();
-  // Normalize CRLF so Windows checkouts validate identically to CI.
-  const onDisk = existsSync(outputPath)
-    ? readFileSync(outputPath, 'utf8').replace(/\r\n/g, '\n')
-    : null;
+  const onDisk = existsSync(outputPath) ? read(outputPath) : null;
 
   if (onDisk === null) {
     fail(
@@ -44,10 +43,4 @@ try {
   fail(`generating the a11y coverage figures failed: ${error.message}`);
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ A11y coverage validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log('✓ A11y coverage figures are current.');
+finish('✗ A11y coverage validation failed:', errors, '✓ A11y coverage figures are current.');

@@ -23,12 +23,13 @@
  * Belongs in the validate-registry chain and the website prebuild.
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { assembleThemeDesignMd, outputDir } from './generate-theme-design-md.mjs';
 import { loadThemeSource } from './generate-preset-stylesheets.mjs';
+import { repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
 
 /** theme id -> lever -> why the file reads back differently. */
@@ -164,6 +165,6 @@ for (const [id, levers] of Object.entries(SANCTIONED_DRIFT)) {
 
 if (errors.length > 0) {
   console.error(`✗ Theme DESIGN.md files: ${errors.length} problem(s)\n  ${errors.join('\n  ')}`);
-  process.exit(1);
+  failStep();
 }
 console.log(`✓ Theme DESIGN.md files: ${files.size} in sync, each reading back onto its own theme, and a synthetic theme carries all five tones through.`);

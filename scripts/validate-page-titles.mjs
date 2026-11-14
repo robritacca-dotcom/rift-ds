@@ -21,14 +21,12 @@
  * Guards the "stale title after a page move" drift class. Runs in the
  * validate-registry chain before every build. Mirrors validate-website-surfaces.mjs.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const registry = JSON.parse(
   read(join(repoRoot, 'src', 'components', 'registry.json'))
@@ -119,7 +117,7 @@ for (const [what, list] of [
 }
 
 if (failed) {
-  process.exit(1);
+  failStep();
 }
 
 console.log(

@@ -18,12 +18,10 @@
  *
  * Runs in the validate-registry chain.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { siteRoutes } from './site-routes.mjs';
+import { fromRoot, readJson } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
 const fail = (message) => errors.push(message);
 
@@ -38,9 +36,7 @@ try {
 }
 
 if (corpus !== null) {
-  const goldenSet = JSON.parse(
-    readFileSync(join(repoRoot, 'evals', 'chat', 'golden-set.json'), 'utf8')
-  );
+  const goldenSet = readJson(fromRoot('evals', 'chat', 'golden-set.json'));
   for (const test of goldenSet) {
     for (const factRaw of test.metadata?.requiredFacts ?? []) {
       const fact = String(factRaw);
@@ -82,10 +78,8 @@ if (typeof generator.routeCoverage !== 'function') {
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Chat context coverage failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log('✓ Chat context coverage: every golden-set fact is in the corpus, every route is covered or deliberately excluded.');
+finish(
+  '✗ Chat context coverage failed:',
+  errors,
+  '✓ Chat context coverage: every golden-set fact is in the corpus, every route is covered or deliberately excluded.'
+);

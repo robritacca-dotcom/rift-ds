@@ -21,16 +21,13 @@
  * validate-registry chain, after every generator that writes a document
  * here: it reads disk, never regenerates (the byte-compare validators do).
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { createAjv, schemaErrors } from './json-schema.mjs';
 import { SITE_URL } from './brand.mjs';
+import { display, read, readJson, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
 const schemaDir = join(repoRoot, 'website', 'public', 'schema');
 
 /**
@@ -82,7 +79,7 @@ for (const binding of BINDINGS) {
   }
   let schema;
   try {
-    schema = JSON.parse(read(binding.schema));
+    schema = readJson(binding.schema);
   } catch (error) {
     errors.push(`${display(binding.schema)} is not valid JSON: ${error.message}`);
     continue;
@@ -91,7 +88,7 @@ for (const binding of BINDINGS) {
     documents += 1;
     let data;
     try {
-      data = JSON.parse(read(target));
+      data = readJson(target);
     } catch (error) {
       errors.push(`${display(target)} is not valid JSON: ${error.message}`);
       continue;
@@ -131,7 +128,7 @@ if (!sanctionedBlock) {
 
 const metaPath = join(schemaDir, 'component.schema.json');
 if (existsSync(metaPath) && toneSet.size > 0) {
-  const meta = JSON.parse(read(metaPath));
+  const meta = readJson(metaPath);
   const toneRule = (meta.$defs?.prop?.allOf ?? []).find(
     (rule) => rule.if?.properties?.name?.const === 'tone'
   );
@@ -151,12 +148,8 @@ if (existsSync(metaPath) && toneSet.size > 0) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ JSON Schema validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ JSON Schema validation failed:',
+  errors,
   `✓ JSON schemas hold — ${documents} documents validate against ${BINDINGS.length} published schemas, and the tone vocabulary matches validate-prop-vocabulary.mjs.`
 );

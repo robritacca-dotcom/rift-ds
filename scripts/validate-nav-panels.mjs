@@ -19,8 +19,9 @@
  *
  * Runs in the validate-registry chain: it reads source files only.
  */
-import { readFileSync } from 'node:fs';
 import { NAVIGATION_FILE, navLinks } from './nav-links.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 /* Each icon table, and the sidebar array whose pages its panel shows. */
 const PANELS = [
@@ -28,7 +29,7 @@ const PANELS = [
   { table: 'FOUNDATION_ICONS', links: 'foundationsSidebarLinks' },
 ];
 
-const source = readFileSync(NAVIGATION_FILE, 'utf8');
+const source = read(NAVIGATION_FILE);
 
 /** The keys of `const <name>: Record<string, string> = { … };`. */
 function iconKeys(name) {
@@ -51,9 +52,4 @@ for (const { table, links } of PANELS) {
   }
 }
 
-if (errors.length) {
-  console.error('✗ Nav panels:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-console.log(`✓ Nav panels: ${checked} panel pages, each with an icon and no orphans.`);
+finish('✗ Nav panels:', errors, `✓ Nav panels: ${checked} panel pages, each with an icon and no orphans.`);

@@ -58,15 +58,12 @@
  *
  * Part of the validate-registry chain.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import ts from 'typescript';
 import { extractProse, isProse, PROSE_ATTRIBUTES } from './generate-site-corpus.mjs';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (p) => readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
-const rel = (p) => relative(repoRoot, p).split('\\').join('/');
+import { display as rel, read, readJson, readRel, repoRoot, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 /** The banned character, and the guide's suggested repairs. */
 const EM_DASH = '—';
@@ -101,18 +98,7 @@ function scan(label, text, note) {
 // --- Page prose -------------------------------------------------------------
 
 const appDir = join(repoRoot, 'website', 'src', 'app');
-const pageFiles = [];
-{
-  const stack = [appDir];
-  while (stack.length > 0) {
-    const dir = stack.pop();
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const full = join(dir, entry.name);
-      if (entry.isDirectory()) stack.push(full);
-      else if (entry.name === 'page.tsx') pageFiles.push(full);
-    }
-  }
-}
+const pageFiles = walk(appDir, (name) => name === 'page.tsx');
 
 /**
  * A route is out of scope when it, or a layout above it, declares noindex.
@@ -176,12 +162,12 @@ for (const file of pageFiles.sort()) {
 let surfacesChecked = 0;
 for (const doc of ['README.md', 'src/stories/Configure.mdx']) {
   surfacesChecked += 1;
-  scan(doc, read(join(repoRoot, doc)));
+  scan(doc, readRel(doc));
 }
 
 // --- Data registries whose fields render on the site ------------------------
 
-const json = (p) => JSON.parse(read(join(repoRoot, p)));
+const json = (p) => readJson(join(repoRoot, p));
 
 const registry = json('src/components/registry.json');
 surfacesChecked += 1;
@@ -224,7 +210,7 @@ for (const entry of readdirSync(skillsDir, { withFileTypes: true })) {
 // --- The npm package description (renders on npmjs.com) ---------------------
 
 surfacesChecked += 1;
-const manifest = read(join(repoRoot, 'scripts', 'package-manifest.mjs'));
+const manifest = readRel('scripts/package-manifest.mjs');
 const desc = manifest.match(/PACKAGE_DESCRIPTION\s*=\s*(['"`])([\s\S]*?)\1/);
 if (desc) scan('scripts/package-manifest.mjs (PACKAGE_DESCRIPTION)', desc[2]);
 
@@ -302,7 +288,7 @@ const STORY_MODULES = [
 function scanStringLiterals(relPath) {
   const sourceFile = ts.createSourceFile(
     relPath,
-    read(join(repoRoot, relPath)),
+    readRel(relPath),
     ts.ScriptTarget.Latest,
     /* setParentNodes */ true,
     relPath.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS
@@ -329,16 +315,10 @@ for (const mod of STORY_MODULES) {
 
 // --- Report -----------------------------------------------------------------
 
-if (findings.length > 0) {
-  console.error(
-    `✗ Em dashes in shipped prose (${findings.length}) — content-design.md bans ` +
-      `the character in shipped copy; ${REPAIR}:\n` +
-      findings.map((f) => `    - ${f}`).join('\n')
-  );
-  process.exit(1);
-}
-
-console.log(
+finish(
+  `✗ Em dashes in shipped prose (${findings.length}) — content-design.md bans ` +
+    `the character in shipped copy; ${REPAIR}:`,
+  findings,
   `✓ Shipped prose clean — no em dashes across ${pagesChecked} published page(s) ` +
     `and ${surfacesChecked} other shipped surface(s).`
 );

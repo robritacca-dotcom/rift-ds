@@ -141,17 +141,14 @@
  * output — so it belongs before the builds, next to
  * validate-token-references.mjs.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { CATEGORY_PREFIXES } from './generate-token-registry.mjs';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
 const themeDir = join(repoRoot, 'website', 'src', 'lib', 'theme');
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const stripCssComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
 const parseDeclarations = (css) => {
@@ -1041,7 +1038,7 @@ if (errors.length > 0) {
     `✗ Theme-mirror validation failed — hand-maintained token mirrors have drifted from the token CSS:\n` +
       errors.map((e) => `    - ${e}`).join('\n')
   );
-  process.exit(1);
+  failStep();
 }
 
 for (const summary of summaries) console.log(`✓ ${summary}`);

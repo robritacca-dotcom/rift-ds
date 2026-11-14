@@ -31,13 +31,15 @@
  * right after its generator: the source is TypeScript theme data, not
  * build output.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   assemblePresetStylesheets,
   loadThemeSource,
   outputDir,
 } from './generate-preset-stylesheets.mjs';
+import { read } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
 const REGENERATE = 'run: node scripts/generate-preset-stylesheets.mjs';
 const errors = [];
@@ -51,7 +53,7 @@ for (const [name, content] of files) {
     continue;
   }
   // Normalize CRLF so Windows checkouts validate identically to CI.
-  if (readFileSync(dest, 'utf8').replace(/\r\n/g, '\n') !== content) {
+  if (read(dest) !== content) {
     errors.push(`src/tokens/presets/${name} is stale — ${REGENERATE}`);
   }
 }
@@ -73,7 +75,7 @@ if (!THEME_PRESETS.mono) {
   errors.push('THEME_PRESETS has no "mono" preset — repoint the parity proof at another preset');
 } else if (existsSync(monoPath)) {
   // Normalize CRLF so Windows checkouts validate identically to CI.
-  const monoCss = readFileSync(monoPath, 'utf8').replace(/\r\n/g, '\n');
+  const monoCss = read(monoPath);
   /* The blocks sit inside the rift.preset layer, indented one level. */
   const layer = monoCss.match(/^@layer rift\.preset \{\n([\s\S]*?)\n\}$/m);
   if (!layer) errors.push(`mono.css has no @layer rift.preset block — ${REGENERATE}`);
@@ -142,7 +144,7 @@ if (errors.length > 0) {
   console.error(
     '✗ Preset stylesheet validation failed:\n' + errors.map((e) => `    - ${e}`).join('\n')
   );
-  process.exit(1);
+  failStep();
 }
 
 console.log(

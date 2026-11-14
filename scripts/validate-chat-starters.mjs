@@ -31,12 +31,12 @@
  * a name substituted into one can be any length, which is why starters.ts
  * falls back to the unnamed wording when the named one does not fit.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { fromRoot, read, readRel } from './lib/fs.mjs';
+import { failStep, finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const budgetPath = join(repoRoot, 'src', 'chat', 'suggestions.ts');
+const budgetPath = fromRoot('src', 'chat', 'suggestions.ts');
 
 /** `label: "…"` in any quote style — a suggestion written as an object. */
 const LABELLED = /label:\s*(?:"([^"]*)"|'([^']*)'|`([^`]*)`)/g;
@@ -116,7 +116,7 @@ const SOURCES = [
      scope keeps the check off the screens' other label: strings (nav items,
      buttons), which are not chips, and is optional because a template with
      no assistant at all has no chips. */
-  ...readdirSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'website', 'src', 'components', 'templates'), {
+  ...readdirSync(fromRoot('website', 'src', 'components', 'templates'), {
     withFileTypes: true,
   })
     .filter((entry) => entry.isDirectory() && entry.name !== 'TemplateAssistant')
@@ -132,18 +132,18 @@ const errors = [];
 /* The budget, read from the module that owns it. */
 let maxChars;
 try {
-  const source = readFileSync(budgetPath, 'utf8');
+  const source = read(budgetPath);
   const match = source.match(/export const SUGGESTION_MAX_CHARS\s*=\s*(\d+)/);
   if (!match) throw new Error('SUGGESTION_MAX_CHARS not found');
   maxChars = Number(match[1]);
 } catch (err) {
   console.error(`✗ Could not read the chip budget from src/chat/suggestions.ts: ${err.message}`);
-  process.exit(1);
+  failStep();
 }
 
 /* Theme-owned words, derived from the token files that own them. */
-const primitivesSource = readFileSync(join(repoRoot, 'src', 'tokens', 'tokens-primitives.css'), 'utf8');
-const typographySource = readFileSync(join(repoRoot, 'src', 'tokens', 'tokens-typography.css'), 'utf8');
+const primitivesSource = read(fromRoot('src', 'tokens', 'tokens-primitives.css'));
+const typographySource = read(fromRoot('src', 'tokens', 'tokens-typography.css'));
 const themeWords = new Set(
   [...primitivesSource.matchAll(/--primitive-([a-z]+)-07:/g)]
     .map((match) => match[1])
@@ -165,7 +165,7 @@ const LONG_DATE_NAME =
 for (const { path: relative, scope, pattern = LABELLED, optional = false, themed = false, budget = true } of SOURCES) {
   let source;
   try {
-    source = readFileSync(join(repoRoot, relative), 'utf8');
+    source = readRel(relative);
   } catch (err) {
     errors.push(`Could not read ${relative}: ${err.message}`);
     continue;
@@ -216,13 +216,8 @@ if (checked === 0) {
   );
 }
 
-if (errors.length > 0) {
-  console.error('✗ Chat suggestion validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}`);
-  console.error('');
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Chat suggestion validation failed:',
+  errors,
   `✓ Chat suggestions fit — ${checked} written labels within the ${maxChars}-character chip budget.`
 );

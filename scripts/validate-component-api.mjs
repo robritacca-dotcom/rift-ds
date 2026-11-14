@@ -46,7 +46,7 @@
  *
  * Runs before every build via the validate-registry chain.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import {
   assembleComponentApi,
   buildComponentApiFile,
@@ -55,6 +55,9 @@ import {
   typesOutputPath,
 } from './generate-component-api.mjs';
 import { repoRoot } from './component-docgen.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { leaksIn } from './lib/screens.mjs';
 
 /**
  * Optional enum props with no documented default, as `Component.prop`,
@@ -96,7 +99,7 @@ try {
   ];
   onDisk = '';
   for (const [path, expected] of files) {
-    const text = existsSync(path) ? readFileSync(path, 'utf8').replace(/\r\n/g, '\n') : null;
+    const text = existsSync(path) ? read(path) : null;
     if (text === null) {
       fail(
         `${relative(path)} is missing — run ` +
@@ -120,21 +123,12 @@ try {
 // files to. The email screen is a hard ban here, stricter than the corpus's
 // allowlist: prop JSDoc never reaches the corpus validator, and no
 // corpus-facts() mechanism exists to sanction an address in it.
-const leakPatterns = [
-  [/\/Users\/[A-Za-z]/g, 'local absolute path (/Users/…)'],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/gi, 'GA property id'],
-  [/sk-ant-[A-Za-z0-9-]/g, 'Anthropic API key'],
-  [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address'],
-];
-
 if (onDisk !== null) {
-  for (const [pattern, what] of leakPatterns) {
-    for (const match of onDisk.matchAll(pattern)) {
-      fail(
-        `The component API contains a ${what} (${JSON.stringify(match[0].slice(0, 40))}). ` +
-          `It is served to any MCP client — remove it from the prop JSDoc it came from.`
-      );
-    }
+  for (const leak of leaksIn(onDisk)) {
+    fail(
+      `The component API contains a ${leak.what} (${leak.shown}). ` +
+        `It is served to any MCP client — remove it from the prop JSDoc it came from.`
+    );
   }
 }
 
@@ -234,10 +228,9 @@ for (const entry of entries) {
 }
 const largest = sizes.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([name, bytes]) => `${name} ${Math.round(bytes / 1000)}KB`);
 
-if (errors.length > 0) {
-  console.error('\n✗ Component API validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
 
-console.log(`✓ Component API and its types are current, closed, within the response budget (largest: ${largest.join(', ')}), and free of leaked details.`);
+finish(
+  '✗ Component API validation failed:',
+  errors,
+  `✓ Component API and its types are current, closed, within the response budget (largest: ${largest.join(', ')}), and free of leaked details.`
+);

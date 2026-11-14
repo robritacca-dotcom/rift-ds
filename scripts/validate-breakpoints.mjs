@@ -43,12 +43,11 @@
  *
  * Runs in the validate-registry chain and the website's prebuild.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { readRel as read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (rel) => readFileSync(join(repoRoot, rel), 'utf8').replace(/\r\n/g, '\n');
 
 const LIBRARY_MODULE = 'src/tokens/breakpoints.ts';
 const SITE_MODULE = 'website/src/config/breakpoints.ts';
@@ -61,7 +60,7 @@ function parseModule(rel) {
   }
   if (out.size === 0) {
     console.error(`✗ ${rel} declares no BREAKPOINT_*_PX constants`);
-    process.exit(1);
+    failStep();
   }
   return out;
 }
@@ -273,7 +272,7 @@ if (!spec) {
 
 if (errors.length > 0) {
   console.error(`✗ Breakpoints:\n` + errors.map((e) => `    - ${e}`).join('\n'));
-  process.exit(1);
+  failStep();
 }
 
 console.log(

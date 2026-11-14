@@ -18,13 +18,9 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(join(repoRoot, path), 'utf8').replace(/\r\n/g, '\n');
+import { readRel as read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { lineOf } from './lib/text.mjs';
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const NUMBER = `(${WORDS.join('|')})`;
@@ -65,16 +61,14 @@ for (const claim of CLAIMS) {
     checked += 1;
     const stated = WORDS.indexOf(m[1].toLowerCase());
     if (stated !== claim.actual) {
-      const line = design.slice(0, m.index).split('\n').length;
+      const line = lineOf(design, m.index);
       errors.push(`design.md:${line} says "${m[0]}", but ${claim.what} has ${claim.actual}. Fix the number.`);
     }
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ design.md count validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-
-console.log(`✓ design.md counts hold — ${checked} stated counts match the token files`);
+finish(
+  '✗ design.md count validation failed:',
+  errors,
+  `✓ design.md counts hold — ${checked} stated counts match the token files`
+);

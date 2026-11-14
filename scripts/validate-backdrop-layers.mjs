@@ -36,11 +36,11 @@
  *
  * Runs in the validate-registry chain: it reads source stylesheets only.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const posix = (p) => p.split('\\').join('/');
 
 /** `path — selector` pairs allowed to break a rule, with the reason. */
@@ -72,7 +72,7 @@ let checkedRules = 0;
 for (const full of files) {
   const rel = posix(relative(repoRoot, full));
   // Normalize CRLF so Windows checkouts validate identically to CI.
-  const source = blankComments(readFileSync(full, 'utf8').replace(/\r\n/g, '\n'));
+  const source = blankComments(read(full));
   for (const match of source.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const selector = match[1].trim().replace(/\s+/g, ' ');
     const declarations = match[2]
@@ -108,7 +108,7 @@ if (errors.length > 0) {
   console.error('✗ Backdrop layer validation failed:');
   for (const error of errors) console.error(`    - ${error}`);
   console.error('  The rules and the incident behind them are in the doc block of scripts/validate-backdrop-layers.mjs.');
-  process.exit(1);
+  failStep();
 }
 
 console.log(`✓ Backdrop layers — ${checkedRules} blurs across ${files.length} stylesheets, each the size of its host and whole.`);

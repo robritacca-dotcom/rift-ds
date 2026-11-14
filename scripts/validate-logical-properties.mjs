@@ -43,23 +43,11 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { display, fromRoot, read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { lineOf } from './lib/text.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
-
-function cssFiles(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) cssFiles(full, files);
-    else if (entry.name.endsWith('.css')) files.push(full);
-  }
-  return files;
-}
+const cssFiles = (dir) => walk(dir, (name) => name.endsWith('.css'));
 
 const LOGICAL = {
   left: 'inset-inline-start',
@@ -128,7 +116,7 @@ const errors = [];
 let declarations = 0;
 let sanctioned = 0;
 
-const files = [...cssFiles(join(repoRoot, 'src', 'components')), ...cssFiles(join(repoRoot, 'src', 'chat'))];
+const files = [...cssFiles(fromRoot('src', 'components')), ...cssFiles(fromRoot('src', 'chat'))];
 for (const file of files) {
   const text = read(file);
   fileHasRtlRule = /:dir\(rtl\)/.test(text);
@@ -247,28 +235,21 @@ for (const file of files) {
  * glyph by name without the class, or that draws an icon a consumer passes
  * (`{icon}`, `{item.icon}`) without `mirrorClass`, which decides it per name.
  */
-const directionSource = read(join(repoRoot, 'src', 'behaviors', 'direction.ts'));
+const directionSource = read(fromRoot('src', 'behaviors', 'direction.ts'));
 const setBody = /DIRECTIONAL_ICONS = new Set\(\[([\s\S]*?)\]\)/.exec(directionSource)?.[1] ?? '';
 const DIRECTIONAL = [...setBody.matchAll(/'([a-z_]+)'/g)].map((m) => m[1]);
 if (DIRECTIONAL.length === 0) errors.push('src/behaviors/direction.ts — DIRECTIONAL_ICONS could not be read.');
 const glyph = new RegExp(`(^|[^a-z_])(${DIRECTIONAL.join('|')})([^a-z_]|$)`);
 let icons = 0;
-function tsxFiles(dir, found = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) tsxFiles(full, found);
-    else if (entry.name.endsWith('.tsx') && !/\.(stories|test)\.tsx$/.test(entry.name) && !/demo/.test(entry.name)) found.push(full);
-  }
-  return found;
-}
-for (const file of [...tsxFiles(join(repoRoot, 'src', 'components')), ...tsxFiles(join(repoRoot, 'src', 'chat'))]) {
+const tsxFiles = (dir) => walk(dir, (name) => name.endsWith('.tsx') && !/\.(stories|test)\.tsx$/.test(name) && !/demo/.test(name));
+for (const file of [...tsxFiles(fromRoot('src', 'components')), ...tsxFiles(fromRoot('src', 'chat'))]) {
   const text = read(file);
   for (const m of text.matchAll(/className=(\{\[?[^>]*?material-symbols-rounded[\s\S]*?|"[^"]*material-symbols-rounded[^"]*"[^>]*?)>/g)) {
     const cls = m[1];
     // The element's children, up to its closing tag.
     const close = text.indexOf('</', m.index + m[0].length);
     const children = text.slice(m.index + m[0].length, close === -1 ? undefined : close);
-    const line = text.slice(0, m.index).split('\n').length;
+    const line = lineOf(text, m.index);
     if (/ds-mirror-rtl|mirrorClass\(/.test(cls)) {
       icons += 1;
       continue;
@@ -281,13 +262,9 @@ for (const file of [...tsxFiles(join(repoRoot, 'src', 'components')), ...tsxFile
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Logical property validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  console.error(`  ${errors.length} problem(s).`);
-  process.exit(1);
-}
-
-console.log(
-  `✓ Layout follows the reading direction — ${declarations} declarations across ${files.length} stylesheets, ${sanctioned} sanctioned physical sides; ${icons} icon elements mirror their directional glyphs`
+finish(
+  '✗ Logical property validation failed:',
+  errors,
+  `✓ Layout follows the reading direction — ${declarations} declarations across ${files.length} stylesheets, ${sanctioned} sanctioned physical sides; ${icons} icon elements mirror their directional glyphs`,
+  { hint: `  ${errors.length} problem(s).` }
 );

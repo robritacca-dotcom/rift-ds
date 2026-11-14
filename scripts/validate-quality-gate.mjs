@@ -15,8 +15,10 @@
  * Belongs in the validate-registry chain: it reads package.json, the
  * workflow and a data file, never build output.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { outputPath, renderQualityGate } from './generate-quality-gate.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const errors = [];
 let expected = null;
@@ -29,16 +31,12 @@ try {
 if (expected !== null) {
   if (!existsSync(outputPath)) {
     errors.push('website/src/data/quality-gate.generated.ts is missing — run: node scripts/generate-quality-gate.mjs');
-  } else if (readFileSync(outputPath, 'utf8').replace(/\r\n/g, '\n') !== expected) {
+  } else if (read(outputPath) !== expected) {
     errors.push('website/src/data/quality-gate.generated.ts is stale — run: node scripts/generate-quality-gate.mjs');
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Quality gate list validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-const count = (expected.match(/"name":/g) || []).length;
-console.log(`✓ Quality gate list in sync — ${count} checks match package.json and ci.yml.`);
+finish('✗ Quality gate list validation failed:', errors, () => {
+  const count = (expected.match(/"name":/g) || []).length;
+  return `✓ Quality gate list in sync — ${count} checks match package.json and ci.yml.`;
+});

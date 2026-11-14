@@ -24,15 +24,13 @@
  * site chat's route (the same tools, offered to the chat model) must carry a
  * `description` with text.
  */
-import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { execSync } from 'node:child_process';
 import ts from 'typescript';
-
-const repoRoot = execSync('git rev-parse --show-toplevel').toString().trim();
+import { read, readRel, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const routePath = join(repoRoot, 'website/src/app/api/mcp/route.ts');
-const route = readFileSync(routePath, 'utf8');
+const route = read(routePath);
 
 const registered = [...route.matchAll(/server\.registerTool\(\s*["']([a-z_]+)["']/g)].map(
   (match) => match[1]
@@ -51,7 +49,7 @@ if (registered.length === 0) {
 // registrations in both directions, and require an example prompt per
 // entry: a new tool cannot ship without one.
 const rosterPath = join(repoRoot, 'website/src/lib/mcp-tools.ts');
-const roster = readFileSync(rosterPath, 'utf8');
+const roster = read(rosterPath);
 const toolsArray = roster.match(/const MCP_TOOLS[^=]*=\s*\[([\s\S]*?)\];/);
 if (!toolsArray) {
   errors.push(
@@ -95,7 +93,7 @@ const NUMBER_WORDS = {
 };
 
 for (const file of COUNTED_SURFACES) {
-  const content = readFileSync(join(repoRoot, file), 'utf8');
+  const content = readRel(file);
   const claims = [...content.matchAll(/\b([A-Za-z]+|\d+)\s+(?:deterministic\s+)?tools\b/gi)];
   let counted = 0;
   for (const claim of claims) {
@@ -171,7 +169,7 @@ visit(parse(routePath, route), (node) => {
 });
 
 const chatRoutePath = join(repoRoot, 'website/src/app/api/chat/route.ts');
-visit(parse(chatRoutePath, readFileSync(chatRoutePath, 'utf8')), (node) => {
+visit(parse(chatRoutePath, read(chatRoutePath)), (node) => {
   if (!ts.isPropertyAssignment(node) || nameOf(node) !== 'input_schema') return;
   const schema = node.initializer;
   const properties =
@@ -208,13 +206,9 @@ if (describedArguments === 0) {
   );
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ MCP tool count validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ MCP tool count validation failed:',
+  errors,
   `✓ MCP tool count in sync — ${registered.length} tools registered ` +
     `(${registered.join(', ')}), every stated count matches, and all ${describedArguments} tool arguments are described.`
 );

@@ -13,11 +13,10 @@
  * Reads installed package data only, so it runs in the validate-registry
  * chain and the website's prebuild.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { assembleGoogleFontIndex, outputPath } from './generate-google-font-index.mjs';
-
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const errors = [];
 let expected = '';
@@ -35,11 +34,9 @@ if (expected) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Google font index validation failed:');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-
 const count = (expected.match(/^ {2}".+": "[v\d]/gm) ?? []).length;
-console.log(`✓ Google font index matches its generator (${count} families)`);
+finish(
+  '✗ Google font index validation failed:',
+  errors,
+  `✓ Google font index matches its generator (${count} families)`
+);

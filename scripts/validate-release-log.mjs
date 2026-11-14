@@ -17,21 +17,19 @@
  * log. They are held to the same ordering rules and must all predate
  * the log's first entry.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fromRoot, readJson } from './lib/fs.mjs';
+import { failStep, finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dataPath = join(repoRoot, 'website', 'src', 'data', 'release-log.json');
+const dataPath = fromRoot('website', 'src', 'data', 'release-log.json');
 
 const errors = [];
 
 let data;
 try {
-  data = JSON.parse(readFileSync(dataPath, 'utf8'));
+  data = readJson(dataPath);
 } catch (err) {
   console.error(`✗ Could not read/parse release-log.json: ${err.message}`);
-  process.exit(1);
+  failStep();
 }
 
 const { releases } = data;
@@ -128,14 +126,9 @@ if (!Array.isArray(predecessorReleases)) {
   });
 }
 
-if (errors.length > 0) {
-  console.error(
-    `✗ release-log.json failed validation:\n` +
-      errors.map((e) => `    - ${e}`).join('\n')
-  );
-  process.exit(1);
-}
-
-console.log(
-  `✓ Release log valid — ${releases.length} release entr${releases.length === 1 ? 'y' : 'ies'}, 1:1 with npm, newest first; ${predecessorReleases.length} predecessor versions beneath.`
+finish(
+  '✗ release-log.json failed validation:',
+  errors,
+  () =>
+    `✓ Release log valid — ${releases.length} release entr${releases.length === 1 ? 'y' : 'ies'}, 1:1 with npm, newest first; ${predecessorReleases.length} predecessor versions beneath.`
 );

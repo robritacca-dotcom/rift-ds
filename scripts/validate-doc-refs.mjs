@@ -24,15 +24,13 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const skillsDir = join(repoRoot, '.claude', 'skills');
 const externalDir = join(repoRoot, 'website', 'src', 'data', 'external-skills');
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const sources = [
   ...readdirSync(skillsDir, { withFileTypes: true })
@@ -187,7 +185,7 @@ for (const [what, list] of [
 }
 
 if (failed) {
-  process.exit(1);
+  failStep();
 }
 
 console.log(

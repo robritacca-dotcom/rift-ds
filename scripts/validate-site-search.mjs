@@ -24,9 +24,7 @@
  * Runs before every build via the validate-registry chain, after the
  * corpus validator, whose generator this index reads through.
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 
 import { SITE_URL } from './brand.mjs';
 import {
@@ -35,9 +33,9 @@ import {
   isMaintainerRoute,
   outputPath,
 } from './generate-site-search.mjs';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const relative = (path) => path.replace(repoRoot + '/', '');
+import { display, read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { holesIn, leaksIn } from './lib/screens.mjs';
 
 const errors = [];
 const fail = (message) => errors.push(message);
@@ -45,24 +43,15 @@ const fail = (message) => errors.push(message);
 let sections = [];
 try {
   sections = assembleSearchSections();
-  // Normalize CRLF so Windows checkouts validate identically to CI.
-  const onDisk = existsSync(outputPath) ? readFileSync(outputPath, 'utf8').replace(/\r\n/g, '\n') : null;
+  const onDisk = existsSync(outputPath) ? read(outputPath) : null;
   if (onDisk === null) {
-    fail(`${relative(outputPath)} is missing. Run \`node scripts/generate-site-search.mjs\` and commit the result.`);
+    fail(`${display(outputPath)} is missing. Run \`node scripts/generate-site-search.mjs\` and commit the result.`);
   } else if (onDisk !== buildSiteSearchFile()) {
-    fail(`${relative(outputPath)} is stale. Run \`node scripts/generate-site-search.mjs\` and commit the result.`);
+    fail(`${display(outputPath)} is stale. Run \`node scripts/generate-site-search.mjs\` and commit the result.`);
   }
 } catch (error) {
   fail(`generating the search index failed: ${error.message}`);
 }
-
-const holes = [/[\w)\]`'"’] [,.;:](?=\s|$)/g, /: [,.;](?=\s|$)/g];
-const leaks = [
-  [/\/Users\/[A-Za-z]/g, 'local absolute path (/Users/…)'],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/gi, 'GA property id'],
-  [/sk-ant-[A-Za-z0-9-]/g, 'Anthropic API key'],
-  [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address'],
-];
 
 for (const section of sections) {
   const where = `${section.url} (${section.heading})`;
@@ -76,25 +65,16 @@ for (const section of sections) {
     fail(`${where}: the section comes from a maintainer source. MAINTAINER_SOURCES in scripts/generate-site-search.mjs keeps it out of the MCP's search.`);
   }
   // 4. Holes and leaks.
-  for (const pattern of holes) {
-    for (const match of section.body.matchAll(pattern)) {
-      fail(
-        `${where}: a dropped value left a hole: ${JSON.stringify(section.body.slice(Math.max(0, match.index - 50), match.index + 10))}. ` +
-          `Resolve it in INLINE_VALUES in scripts/generate-site-corpus.mjs.`
-      );
-    }
+  for (const hole of holesIn(section.body)) {
+    fail(`${where}: a dropped value left a hole: ${hole}. Resolve it in INLINE_VALUES in scripts/generate-site-corpus.mjs.`);
   }
-  for (const [pattern, what] of leaks) {
-    for (const match of section.body.matchAll(pattern)) {
-      fail(`${where}: the index contains a ${what} (${JSON.stringify(match[0].slice(0, 40))}). It is served to any MCP client; remove it at the source.`);
-    }
+  for (const leak of leaksIn(section.body)) {
+    fail(`${where}: the index contains a ${leak.what} (${leak.shown}). It is served to any MCP client; remove it at the source.`);
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Site search index validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log(`✓ Site search index is current: ${sections.length} consumer sections, each with its URL.`);
+finish(
+  '✗ Site search index validation failed:',
+  errors,
+  `✓ Site search index is current: ${sections.length} consumer sections, each with its URL.`
+);

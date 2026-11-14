@@ -40,14 +40,11 @@
  *
  * Runs in the validate-registry chain: it reads source files only.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { parseCss } from './token-values.mjs';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const tokenFile = (name) => read(join(repoRoot, 'src', 'tokens', name));
 const pageFile = (slug) => read(join(repoRoot, 'website', 'src', 'app', 'foundations', slug, 'page.tsx'));
@@ -275,6 +272,6 @@ if (errors.length) {
   console.error('✗ Foundation page mirror validation failed:');
   for (const e of errors) console.error(`  ${e}`);
   console.error('  Fix the page caption to match the token (the token CSS is the source of truth), or the token if the caption was the intent.');
-  process.exit(1);
+  failStep();
 }
 console.log(`✓ Foundation page captions match the token CSS — ${summaries.join(', ')}.`);

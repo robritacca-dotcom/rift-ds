@@ -28,13 +28,11 @@
  *
  * Reads source CSS and TSX only, so it runs in the validate-registry chain.
  */
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const RECIPE = 'src/behaviors/chat-card.css';
 const componentsDir = join(repoRoot, 'src', 'components');
@@ -142,11 +140,8 @@ for (const name of Object.keys(NOT_CARDS)) {
   }
 }
 
-if (errors.length) {
-  console.error('✗ Chat card validation failed:');
-  for (const e of errors) console.error(`  - ${e}`);
-  process.exit(1);
-}
-console.log(
+finish(
+  '✗ Chat card validation failed:',
+  errors,
   `✓ Chat cards on one recipe — ${members.size} cards read ${RECIPE}; ${checked} ai components checked for a shell of their own.`,
 );

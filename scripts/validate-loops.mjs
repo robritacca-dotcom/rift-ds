@@ -22,16 +22,11 @@
  * Runs in the validate-registry chain: it reads source registries only, no
  * build output.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fromRoot, readJson } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-
-const { loops } = JSON.parse(read(join(repoRoot, 'website', 'src', 'data', 'loops.json')));
-const skillsRegistry = JSON.parse(read(join(repoRoot, '.claude', 'skills', 'registry.json')));
+const { loops } = readJson(fromRoot('website', 'src', 'data', 'loops.json'));
+const skillsRegistry = readJson(fromRoot('.claude', 'skills', 'registry.json'));
 const registeredSkills = new Set([
   ...skillsRegistry.displayed,
   ...skillsRegistry.external,
@@ -74,8 +69,8 @@ for (const loop of loops) {
 
 }
 
-if (errors.length > 0) {
-  console.error(`✗ Loops registry validation failed:\n${errors.map((e) => `  ${e}`).join('\n')}`);
-  process.exit(1);
-}
-console.log(`✓ Loops registry valid — ${loops.length} loops, every referenced skill registered.`);
+finish(
+  '✗ Loops registry validation failed:',
+  errors,
+  `✓ Loops registry valid — ${loops.length} loops, every referenced skill registered.`
+);

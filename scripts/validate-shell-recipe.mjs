@@ -30,14 +30,14 @@
  *
  * Runs in the validate-registry chain: it reads source files only.
  */
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readdirSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isLocalPath } from './local-labs.mjs';
+import { read } from './lib/fs.mjs';
+import { failStep, finish } from './lib/report.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const rel = (path) => relative(root, path).replaceAll('\\', '/');
 
 const RECIPE = join(root, 'src', 'behaviors', 'shell.css');
@@ -83,7 +83,7 @@ function walk(dir, keep, out = []) {
 
 if (!existsSync(RECIPE)) {
   console.error('✗ Shell recipe validation failed:\n  - src/behaviors/shell.css is missing');
-  process.exit(1);
+  failStep();
 }
 const recipe = read(RECIPE);
 const declared = new Set([...recipe.matchAll(/(--ds-shell-[\w-]+)\s*:/g)].map((m) => m[1]));
@@ -151,11 +151,8 @@ for (const sheet of SHELL_STYLESHEETS) {
     });
 }
 
-if (errors.length) {
-  console.error('✗ Shell recipe validation failed:');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-console.log(
+finish(
+  '✗ Shell recipe validation failed:',
+  errors,
   `✓ Shell recipe holds — ${hosts} hosts mark data-ds-shell and read the recipe, ${reads} --ds-shell-* reads all declared, ${SHELL_STYLESHEETS.length} host stylesheets restate none of its tokens.`
 );

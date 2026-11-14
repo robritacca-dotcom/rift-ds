@@ -43,14 +43,9 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
+import { display, fromRoot, read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { blankJsComments, lineOf } from './lib/text.mjs';
 
 const EVENTS = ['keydown', 'keyup', 'pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'focusin', 'focusout', 'touchstart'];
 const LISTENER = new RegExp(`\\b(document|window)\\.addEventListener\\(\\s*['"\`](${EVENTS.join('|')})['"\`]`, 'g');
@@ -58,28 +53,20 @@ const LISTENER = new RegExp(`\\b(document|window)\\.addEventListener\\(\\s*['"\`
 /** File (repo-relative) → event → why a document listener is the right tool there. */
 const SANCTIONED = {};
 
-const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')).replace(/\/\/.*$/gm, (m) => ' '.repeat(m.length));
-
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, files);
-    else if (/\.tsx?$/.test(entry.name) && !/\.(stories|test)\.tsx?$/.test(entry.name)) files.push(full);
-  }
-  return files;
-}
+/** Source modules, without stories and tests. */
+const isSource = (name) => /\.tsx?$/.test(name) && !/\.(stories|test)\.tsx?$/.test(name);
 
 const errors = [];
 const matched = new Set();
 let scanned = 0;
 
-for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(repoRoot, 'src', 'chat'))]) {
+for (const file of [...walk(fromRoot('src', 'components'), isSource), ...walk(fromRoot('src', 'chat'), isSource)]) {
   scanned += 1;
   const path = display(file);
-  const src = stripComments(read(file));
+  const src = blankJsComments(read(file));
   for (const m of src.matchAll(LISTENER)) {
     const event = m[2];
-    const line = src.slice(0, m.index).split('\n').length;
+    const line = lineOf(src, m.index);
     if (SANCTIONED[path]?.[event]) {
       matched.add(`${path}#${event}`);
       continue;
@@ -94,14 +81,14 @@ for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(r
 }
 
 const KEY_EVENTS = new Set(['keydown', 'keyup']);
-for (const file of walk(join(repoRoot, 'website', 'src'))) {
+for (const file of walk(fromRoot('website', 'src'), isSource)) {
   scanned += 1;
   const path = display(file);
-  const src = stripComments(read(file));
+  const src = blankJsComments(read(file));
   for (const m of src.matchAll(LISTENER)) {
     const event = m[2];
     if (!KEY_EVENTS.has(event)) continue;
-    const line = src.slice(0, m.index).split('\n').length;
+    const line = lineOf(src, m.index);
     if (SANCTIONED[path]?.[event]) {
       matched.add(`${path}#${event}`);
       continue;
@@ -123,12 +110,8 @@ for (const [path, events] of Object.entries(SANCTIONED)) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Overlay listener validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Overlay listener validation failed:',
+  errors,
   `✓ Overlay and key listeners owned by the layer stack and the shortcut listener — ${scanned} files scanned, ${matched.size} sanctioned document listeners`
 );

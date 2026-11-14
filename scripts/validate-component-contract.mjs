@@ -51,15 +51,13 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync } from 'node:fs';
+import { join, relative, sep } from 'node:path';
 import ts from 'typescript';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const componentsDir = join(repoRoot, 'src', 'components');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 const CHECKS = ['takes a ref', 'displayName', 'native props', 'ref and rest'];
 
@@ -323,7 +321,7 @@ if (!skipMatch) {
 if (errors.length > 0) {
   console.error('✗ Component contract validation failed:');
   for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
+  failStep();
 }
 
 const sanctionedCount = Object.keys(SANCTIONED).length;

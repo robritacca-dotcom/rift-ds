@@ -50,13 +50,12 @@
  * Belongs in the validate-registry chain (and the website prebuild): it
  * loads TypeScript the way the preset stylesheet generator does.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { loadThemeSource } from './generate-preset-stylesheets.mjs';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (path) => readFileSync(join(repoRoot, path), 'utf8');
+import { readRel as read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 await loadThemeSource();
 const designMd = await import(pathToFileURL(join(repoRoot, 'website/src/lib/theme/design-md.ts')).href);
@@ -225,9 +224,8 @@ for (const [label, path] of all) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ DESIGN.md import validation failed:');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-console.log(`✓ DESIGN.md import: ${all.length - Object.keys(samples).length} fixtures read by their rule, ${Object.keys(samples).length} shipped samples keep their action and logo colours, every report line free of em dashes`);
+finish(
+  '✗ DESIGN.md import validation failed:',
+  errors,
+  `✓ DESIGN.md import: ${all.length - Object.keys(samples).length} fixtures read by their rule, ${Object.keys(samples).length} shipped samples keep their action and logo colours, every report line free of em dashes`
+);

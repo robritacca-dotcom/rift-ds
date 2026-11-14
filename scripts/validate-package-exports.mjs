@@ -36,7 +36,6 @@
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import {
   PACKAGE_NAME,
   PACKAGE_VERSION,
@@ -44,8 +43,9 @@ import {
   sourceExports,
 } from './package-manifest.mjs';
 import { AUTHOR_NAME, RETIRED_HOSTS, RETIRED_PACKAGE_NAMES } from './brand.mjs';
+import { repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
 
 const errors = [];
@@ -351,7 +351,7 @@ if (errors.length > 0) {
   console.error(
     `✗ Package exports invalid:\n` + errors.map((e) => `    - ${e}`).join('\n')
   );
-  process.exit(1);
+  failStep();
 }
 
 console.log(

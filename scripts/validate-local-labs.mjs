@@ -18,11 +18,11 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { isLocalPath } from './local-labs.mjs';
+import { repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const tracked = execFileSync('git', ['ls-files', '-z'], { cwd: repoRoot, encoding: 'utf8' })
   .split('\0')
@@ -76,9 +76,8 @@ for (const path of tracked) {
   }
 }
 
-if (errors.length) {
-  console.error('✗ Local-labs validation failed:');
-  for (const error of errors) console.error(`  ${error}`);
-  process.exit(1);
-}
-console.log(`✓ Local labs: no tracked file imports or names a local folder (${everyTracked.length} files checked)`);
+finish(
+  '✗ Local-labs validation failed:',
+  errors,
+  `✓ Local labs: no tracked file imports or names a local folder (${everyTracked.length} files checked)`
+);

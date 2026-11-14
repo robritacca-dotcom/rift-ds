@@ -20,16 +20,13 @@
  * Belongs in the validate-registry chain and the website prebuild: the
  * sources are the token CSS and a TypeScript module, not rendered HTML.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { assembleTokenValues, dtcgDir, valuesPath } from './generate-token-values.mjs';
+import { display, read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REGENERATE = 'run: node scripts/generate-token-values.mjs';
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
 
 /** The DTCG 2025.10 types the generator may emit. */
 const DTCG_TYPES = new Set([
@@ -103,13 +100,9 @@ for (const [name, content] of dtcg) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Token values validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-
-const themeCount = Object.keys(JSON.parse(values).themes).length;
-console.log(
-  `✓ Token values in sync: ${themeCount} themes, ${dtcg.size} DTCG files match the token CSS and the preset composer.`
+finish(
+  '✗ Token values validation failed:',
+  errors,
+  () =>
+    `✓ Token values in sync: ${Object.keys(JSON.parse(values).themes).length} themes, ${dtcg.size} DTCG files match the token CSS and the preset composer.`
 );

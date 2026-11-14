@@ -44,13 +44,12 @@
  * Runs as part of `npm run validate-registry` (every build, both
  * projects): it reads source only, nothing a build produces.
  */
-import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import ts from 'typescript';
 import { allSourceFiles, parseLibrary, repoRoot } from './component-docgen.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
 
 const parsed = parseLibrary();
@@ -182,13 +181,10 @@ for (const file of allSourceFiles()) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Prop docs validation failed:');
-  for (const error of errors) console.error(`    ${error}`);
-  process.exit(1);
-}
 
-console.log(
+finish(
+  '✗ Prop docs validation failed:',
+  errors,
   `✓ Prop docs complete — ${propCount} own props across ${parsed.length} ` +
     `exported components, all documented; ${ownPropsCount} declared props ` +
     `types all reach the parse; ${collisions} native-name props checked for a collision note.`

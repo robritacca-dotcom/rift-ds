@@ -38,11 +38,11 @@
  * the open — the third place a colour value lives outside CSS.
  */
 import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { resolveTokenValues } from './token-values.mjs';
+import { repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
 
 const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -338,7 +338,7 @@ if (errors.length > 0) {
     `✗ Semantic colour tokens must chain to primitives (see CLAUDE.md — Token Architecture):\n` +
       errors.map((e) => `    - ${e}`).join('\n')
   );
-  process.exit(1);
+  failStep();
 }
 
 console.log(

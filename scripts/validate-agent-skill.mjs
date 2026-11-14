@@ -45,7 +45,7 @@
  * Runs in the validate-registry chain: every input is source or generated
  * data, never build output.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   MANIFEST_FILE,
@@ -59,10 +59,10 @@ import {
   skillRoot,
 } from './generate-agent-skill.mjs';
 import { AGENT_SKILLS, AGENT_STARTER_FILE, SITE_URL } from './brand.mjs';
-import { repoRoot } from './component-docgen.mjs';
+import { read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { leaksIn } from './lib/screens.mjs';
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const REGENERATE = 'run: node scripts/generate-agent-skill.mjs';
 
 const errors = [];
@@ -146,21 +146,14 @@ for (const file of files) {
 
 // 4. Content screens. The leak list is validate-component-api.mjs's; the
 // email ban is hard because nothing here can sanction an address.
-const screens = [
-  [/\/Users\/[A-Za-z]/g, 'local absolute path (/Users/…)'],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/gi, 'GA property id'],
-  [/sk-ant-[A-Za-z0-9-]/g, 'Anthropic API key'],
-  [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address'],
-  [/\u2014/g, 'em dash (content-design.md bans it in shipped copy)'],
-];
+const EM_DASH = { what: 'em dash (content-design.md bans it in shipped copy)', shown: JSON.stringify('\u2014') };
 for (const [path, content] of [...wanted, [`../${AGENT_STARTER_FILE}`, starter]]) {
-  for (const [pattern, what] of screens) {
-    for (const match of content.matchAll(pattern)) {
-      errors.push(
-        `skill/${path} contains a ${what} (${JSON.stringify(match[0].slice(0, 40))}) — ` +
-          `it is copied into consumers' repos; remove it at the source.`
-      );
-    }
+  const emDashes = [...content.matchAll(/\u2014/g)].map(() => EM_DASH);
+  for (const hit of [...leaksIn(content), ...emDashes]) {
+    errors.push(
+      `skill/${path} contains a ${hit.what} (${hit.shown}) — ` +
+        `it is copied into consumers' repos; remove it at the source.`
+    );
   }
 }
 
@@ -231,13 +224,9 @@ if (!read(join(repoRoot, 'README.md')).includes(starterUrl)) {
   errors.push(`README.md no longer offers the agent starter at ${starterUrl}: its "Set up your agent" section links and curls that URL.`);
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Agent skill validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Agent skill validation failed:',
+  errors,
   `✓ Agent skills in sync — ${tableNames.length} skills, ${wanted.size} files match the registries, ` +
     `the manifest matches the table, ${advertisers.length} surfaces derive their list from it, ` +
     `and the agent starter matches and is offered on ${starterOffers.length + 1} surfaces.`

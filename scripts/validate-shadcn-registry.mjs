@@ -16,9 +16,12 @@
  *      file must resolve to a target somewhere in the registry, so an
  *      installed component can never import a file no item carries.
  */
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, posix, relative } from 'node:path';
 import { assembleShadcnRegistry, outputDir } from './generate-shadcn-registry.mjs';
+import { read, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { leaksIn } from './lib/screens.mjs';
 
 const errors = [];
 const REGENERATE = 'node scripts/generate-shadcn-registry.mjs';
@@ -26,15 +29,9 @@ const REGENERATE = 'node scripts/generate-shadcn-registry.mjs';
 const expected = assembleShadcnRegistry();
 
 /* 1. Byte-compare, both directions. */
-const onDisk = new Set();
-const walk = (dir) => {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const path = join(dir, entry.name);
-    if (entry.isDirectory()) walk(path);
-    else onDisk.add(relative(outputDir, path).replace(/\\/g, '/'));
-  }
-};
-if (existsSync(outputDir)) walk(outputDir);
+const onDisk = new Set(
+  (existsSync(outputDir) ? walk(outputDir) : []).map((path) => relative(outputDir, path).replace(/\\/g, '/'))
+);
 
 for (const [name, content] of expected) {
   if (!onDisk.has(name)) {
@@ -44,7 +41,7 @@ for (const [name, content] of expected) {
   // Normalize CRLF on text files so Windows checkouts validate identically to CI.
   const disk = Buffer.isBuffer(content)
     ? readFileSync(join(outputDir, name))
-    : Buffer.from(readFileSync(join(outputDir, name), 'utf8').replace(/\r\n/g, '\n'));
+    : Buffer.from(read(join(outputDir, name)));
   const next = Buffer.isBuffer(content) ? content : Buffer.from(content);
   if (!disk.equals(next)) errors.push(`website/public/r/${name} is stale — ${REGENERATE}`);
 }
@@ -53,18 +50,9 @@ for (const name of onDisk) {
 }
 
 /* 2. Leak screen — the corpus's non-sanctionable patterns. */
-const leakPatterns = [
-  [/\/Users\/[A-Za-z]/g, 'local absolute path (/Users/…)'],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/gi, 'GA property id'],
-  [/sk-ant-[A-Za-z0-9-]/g, 'Anthropic API key'],
-  [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address'],
-];
 for (const [name, content] of expected) {
   if (Buffer.isBuffer(content)) continue;
-  for (const [pattern, what] of leakPatterns) {
-    const match = content.match(pattern);
-    if (match) errors.push(`website/public/r/${name} leaks ${what}: "${match[0]}"`);
-  }
+  for (const leak of leaksIn(content)) errors.push(`website/public/r/${name} leaks ${leak.what}: "${leak.text}"`);
 }
 
 /* 3. Closure integrity: collect every target, then check every relative
@@ -103,11 +91,8 @@ for (const file of embedded) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ shadcn registry validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-console.log(
+finish(
+  '✗ shadcn registry validation failed:',
+  errors,
   `✓ shadcn registry in sync — ${expected.size} files match the component registry, closure complete, no leaked details.`
 );

@@ -30,12 +30,11 @@
  * installs every block into a scratch app and type-checks it. Runs in the validate-registry chain: it reads
  * source files only, no build output.
  */
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, posix, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync, statSync } from 'node:fs';
+import { join, posix, relative } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const toPosix = (p) => p.split('\\').join('/');
 
 const blocksDir = join(repoRoot, 'src', 'cli', 'templates', 'blocks');
@@ -140,10 +139,8 @@ for (const folder of routeFolders) {
   if (!names.has(folder)) errors.push(`website/src/app/docs/blocks/${folder}/ is the route of no registered block`);
 }
 
-if (errors.length) {
-  console.error('\n✗ Blocks validation failed:\n');
-  for (const e of errors) console.error(`  - ${e}`);
-  console.error('');
-  process.exit(1);
-}
-console.log(`✓ Blocks valid — ${blocks.length} blocks, ${claimed.size} files, previews and routes in step.`);
+finish(
+  '✗ Blocks validation failed:',
+  errors,
+  `✓ Blocks valid — ${blocks.length} blocks, ${claimed.size} files, previews and routes in step.`
+);

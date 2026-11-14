@@ -59,14 +59,13 @@
  * Part of the validate-registry chain.
  */
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { OPTIONAL_PEER_PACKAGES } from './optional-peers.mjs';
 import { PACKAGE_NAME, sourceExports } from './package-manifest.mjs';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const posix = (path) => path.split('\\').join('/');
 
 const registry = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json')));
@@ -450,7 +449,7 @@ for (const scaffoldName of ['chat', 'app', 'blocks']) {
 
 if (errors.length > 0) {
   console.error(`✗ Chat widget registry invalid:\n` + errors.map((e) => `    - ${e}`).join('\n'));
-  process.exit(1);
+  failStep();
 }
 
 const widget = registry.widgets[0];

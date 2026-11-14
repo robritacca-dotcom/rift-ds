@@ -28,28 +28,17 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { basename, dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, dirname } from 'node:path';
 import ts from 'typescript';
+import { display, fromRoot, read, readJson, walk } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
-
-const registry = JSON.parse(read(join(repoRoot, 'src', 'components', 'registry.json')));
+const registry = readJson(fromRoot('src', 'components', 'registry.json'));
 const docOnly = new Set(registry.docOnlyHelpers.map((h) => (typeof h === 'string' ? h : h.name)));
 const isDemo = (path) => /^src\/chat\/(demo[^/]*|DemoWelcome)\.tsx$/.test(path);
 
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, files);
-    else if (/\.tsx$/.test(entry.name) && !/\.(stories|test)\.tsx$/.test(entry.name)) files.push(full);
-  }
-  return files;
-}
+/** Component modules, without stories and tests. */
+const isSource = (name) => /\.tsx$/.test(name) && !/\.(stories|test)\.tsx$/.test(name);
 
 /** Whether a JSX text node sits directly inside an icon: the icon font's span, or an icon component. */
 function insideIcon(node) {
@@ -64,7 +53,7 @@ function insideIcon(node) {
 
 const errors = [];
 let files = 0;
-for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(repoRoot, 'src', 'chat'))]) {
+for (const file of [...walk(fromRoot('src', 'components'), isSource), ...walk(fromRoot('src', 'chat'), isSource)]) {
   const path = display(file);
   if (isDemo(path) || docOnly.has(basename(dirname(file)))) continue;
   files += 1;
@@ -85,9 +74,8 @@ for (const file of [...walk(join(repoRoot, 'src', 'components')), ...walk(join(r
   visit(source);
 }
 
-if (errors.length > 0) {
-  console.error('✗ Visible text validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-console.log(`✓ Visible text comes from props — ${files} component files hold no literal English`);
+finish(
+  '✗ Visible text validation failed:',
+  errors,
+  `✓ Visible text comes from props — ${files} component files hold no literal English`
+);

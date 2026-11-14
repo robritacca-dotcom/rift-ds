@@ -17,14 +17,12 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { fromRoot, read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const pagesDir = join(repoRoot, 'website', 'src', 'app', 'components');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+const pagesDir = fromRoot('website', 'src', 'app', 'components');
 
 /** "slug selector" → why the capped text is demo content, not page prose. */
 const SANCTIONED = {
@@ -66,9 +64,8 @@ for (const key of Object.keys(SANCTIONED)) {
   if (!used.has(key)) errors.push(`SANCTIONED lists "${key}", which is no longer a capped paragraph rule: remove the entry.`);
 }
 
-if (errors.length > 0) {
-  console.error('✗ Page prose width validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-console.log(`✓ Component page prose fills its column — ${rules} paragraph rules checked, ${used.size} sanctioned demo text`);
+finish(
+  '✗ Page prose width validation failed:',
+  errors,
+  `✓ Component page prose fills its column — ${rules} paragraph rules checked, ${used.size} sanctioned demo text`
+);

@@ -55,9 +55,9 @@
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(fileURLToPath(import.meta.url), '..', '..');
 const SCOPE = ['src/components', 'src/chat'];
 const VISUALLY_HIDDEN_SHEET = 'src/behaviors/visually-hidden.css';
 
@@ -257,12 +257,9 @@ for (const s of SANCTIONED) {
   }
 }
 
-if (errors.length) {
-  console.error('✗ Shared primitives validation failed:');
-  for (const e of errors) console.error(`  ${e}`);
-  process.exit(1);
-}
 
-console.log(
+finish(
+  '✗ Shared primitives validation failed:',
+  errors,
   `✓ Shared primitives drawn once — ${files.length} library modules checked; ${SANCTIONED.length} sanctioned departures, each still in use.`,
 );

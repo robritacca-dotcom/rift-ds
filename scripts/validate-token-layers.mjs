@@ -26,10 +26,10 @@
  * it reads source CSS only.
  */
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensDir = join(repoRoot, 'src', 'tokens');
 const ORDER = '@layer rift.tokens, rift.preset;';
 
@@ -98,11 +98,8 @@ for (const name of LAYERED) {
     errors.push(`src/tokens/${UNLAYERED} declares a cascade layer; it must stay unlayered so its system colours outrank every theme`);
 }
 
-if (errors.length > 0) {
-  console.error('✗ Token layer validation failed:');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-console.log(
+finish(
+  '✗ Token layer validation failed:',
+  errors,
   `✓ Token layers hold — ${LAYERED.length} base token files declare every token inside rift.tokens, tokens.css fixes the order first, and the forced-colors sheet stays unlayered.`
 );

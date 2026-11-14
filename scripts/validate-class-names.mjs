@@ -17,13 +17,8 @@
  *
  * Runs in the `validate-registry` chain: it reads source only.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(join(repoRoot, path), 'utf8').replace(/\r\n/g, '\n');
+import { readRel as read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const kebab = (name) =>
   name
@@ -79,13 +74,9 @@ for (const name of Object.keys(SANCTIONED)) {
   if (!registry.components.some((c) => c.name === name)) errors.push(`SANCTIONED lists ${name}, which is not a registered component.`);
 }
 
-if (errors.length > 0) {
-  console.error('✗ Class name validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Class name validation failed:',
+  errors,
   `✓ Class names follow ds-{component} — ${registry.components.length - Object.keys(SANCTIONED).length} by rule, ` +
     `${Object.keys(SANCTIONED).length} sanctioned`
 );

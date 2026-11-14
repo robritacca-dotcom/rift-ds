@@ -14,21 +14,20 @@
  * Runs before every build — library, Storybook, and website — so the
  * public token count can never silently drift from the CSS.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import {
   deriveTokenRegistry,
   parseTokenNames,
   summarize,
 } from './generate-token-registry.mjs';
+import { fromRoot, read, readJson } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const tokensDir = join(repoRoot, 'src', 'tokens');
+const tokensDir = fromRoot('src', 'tokens');
 
 let failed = false;
 
-const registry = JSON.parse(readFileSync(join(tokensDir, 'registry.json'), 'utf8'));
+const registry = readJson(join(tokensDir, 'registry.json'));
 const derived = deriveTokenRegistry();
 
 if (JSON.stringify(registry.categories) !== JSON.stringify(derived.categories)) {
@@ -41,7 +40,7 @@ if (JSON.stringify(registry.categories) !== JSON.stringify(derived.categories)) 
 
 const lightColors = new Set(derived.categories.colour);
 const darkColors = new Set(
-  parseTokenNames(readFileSync(join(tokensDir, 'tokens-dark.css'), 'utf8')).filter((n) =>
+  parseTokenNames(read(join(tokensDir, 'tokens-dark.css'))).filter((n) =>
     n.startsWith('--color-')
   )
 );
@@ -65,9 +64,7 @@ if (missingFromLight.length > 0) {
   );
 }
 
-if (failed) {
-  process.exit(1);
-}
+if (failed) failStep();
 
 const { total, perCategory } = summarize(registry.categories);
 console.log(

@@ -33,25 +33,23 @@
  * Runs in the validate-registry chain, after validate-shader-background.mjs,
  * because it reads only source files and the registry.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fromRoot, read as readText } from './lib/fs.mjs';
+import { failStep, finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dataPath = join(repoRoot, 'website', 'src', 'data', 'site-backgrounds.json');
-const scenesPath = join(repoRoot, 'src', 'components', 'ShaderScene', 'scenes.ts');
-const passesPath = join(repoRoot, 'src', 'components', 'ShaderScene', 'passes.ts');
-const tokenRegistryPath = join(repoRoot, 'src', 'tokens', 'registry.json');
+const dataPath = fromRoot('website', 'src', 'data', 'site-backgrounds.json');
+const scenesPath = fromRoot('src', 'components', 'ShaderScene', 'scenes.ts');
+const passesPath = fromRoot('src', 'components', 'ShaderScene', 'passes.ts');
+const tokenRegistryPath = fromRoot('src', 'tokens', 'registry.json');
 
 const DESCRIPTION_MAX = 40;
 
 const errors = [];
 const read = (path, label) => {
   try {
-    return readFileSync(path, 'utf8');
+    return readText(path);
   } catch (err) {
     console.error(`✗ Could not read ${label}: ${err.message}`);
-    process.exit(1);
+    failStep();
   }
 };
 
@@ -181,11 +179,8 @@ for (const [sceneId, scene] of scenes) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Site backgrounds validation failed:\n');
-  for (const e of errors) console.error(`  - ${e}`);
-  process.exit(1);
-}
-console.log(
-  `✓ Site backgrounds valid — ${rows.length} rows, ${rows.length - 1} on ${scenes.size} library scenes, every param, pass and colour role resolves.`,
+finish(
+  '✗ Site backgrounds validation failed:',
+  errors,
+  `✓ Site backgrounds valid — ${rows.length} rows, ${rows.length - 1} on ${scenes.size} library scenes, every param, pass and colour role resolves.`
 );

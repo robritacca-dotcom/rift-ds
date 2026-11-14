@@ -18,18 +18,17 @@
  *  - every member of the table has at least one call site
  *  - the privacy page's analytics section names each action in PRIVACY_PHRASES
  */
-import { readdirSync, readFileSync } from 'node:fs';
-import { join, relative, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { readRel as read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(repoRoot, 'website', 'src');
 const moduleRel = 'website/src/lib/analytics.ts';
 const layoutRel = 'website/src/app/layout.tsx';
 const privacyRel = 'website/src/app/privacy/page.tsx';
 
 /* Normalize CRLF so Windows checkouts validate identically to CI. */
-const read = (rel) => readFileSync(join(repoRoot, rel), 'utf8').replace(/\r\n/g, '\n');
 
 const errors = [];
 
@@ -42,7 +41,7 @@ const moduleSource = read(moduleRel);
 const tableMatch = moduleSource.match(/export const SITE_EVENTS = \{([\s\S]*?)\} as const;/);
 if (!tableMatch) {
   console.error(`✗ ${moduleRel} no longer declares \`export const SITE_EVENTS = { … } as const\``);
-  process.exit(1);
+  failStep();
 }
 const keys = [...tableMatch[1].matchAll(/^\s*(\w+):\s*"([a-z_]+)",?$/gm)].map(([, key, name]) => ({ key, name }));
 if (keys.length === 0) errors.push(`${moduleRel} — SITE_EVENTS is empty`);
@@ -108,7 +107,7 @@ if (errors.length > 0) {
   console.error('✗ validate-analytics-events found problems:\n');
   for (const e of errors) console.error(`  - ${e}`);
   console.error('');
-  process.exit(1);
+  failStep();
 }
 
 const total = [...uses.values()].reduce((n, callers) => n + callers.length, 0);

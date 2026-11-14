@@ -5,29 +5,27 @@
  * brand change that skipped the generator) fails the build instead of
  * shipping two versions of a brand fact.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { buildBrandModule } from './generate-brand-module.mjs';
+import { fromRoot, read } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const path = join(repoRoot, 'website', 'src', 'config', 'brand.generated.ts');
+const path = fromRoot('website', 'src', 'config', 'brand.generated.ts');
 
 let committed;
 try {
-  committed = readFileSync(path, 'utf8');
+  committed = read(path);
 } catch {
   console.error(
     '✗ website/src/config/brand.generated.ts is missing — run node scripts/generate-brand-module.mjs'
   );
-  process.exit(1);
+  failStep();
 }
 
 if (committed !== buildBrandModule()) {
   console.error(
     '✗ brand.generated.ts is stale — run node scripts/generate-brand-module.mjs and commit the result'
   );
-  process.exit(1);
+  failStep();
 }
 
 console.log('✓ Brand module in sync with scripts/brand.mjs.');

@@ -33,9 +33,9 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const componentsDir = join(repoRoot, 'src', 'components');
 
 /**
@@ -366,7 +366,7 @@ if (duplicates.length > 0) {
 }
 
 if (failed) {
-  process.exit(1);
+  failStep();
 }
 
 console.log(

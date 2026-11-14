@@ -34,12 +34,13 @@
  *
  * Runs in the validate-registry chain: it reads source only.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { display, fromRoot, read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { blankCssComments } from './lib/text.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const componentsDir = join(repoRoot, 'src', 'components');
+const componentsDir = fromRoot('src', 'components');
 
 /** Component folder → the design.md role its non-focus uses play. */
 export const SANCTIONED = {
@@ -69,13 +70,6 @@ export const SANCTIONED = {
 
 const TOKEN = /--color-action-primary-bg(?:-hover|-active)?(?![\w-])/;
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-
-/** Blank comments in place, keeping line numbers. */
-const stripComments = (src) =>
-  src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
-
 const files = readdirSync(componentsDir, { withFileTypes: true, recursive: true })
   .filter((e) => e.isFile() && /\.(css|tsx?)$/.test(e.name) && !/\.stories\./.test(e.name))
   .map((e) => join(e.parentPath ?? e.path, e.name));
@@ -85,9 +79,9 @@ const used = new Set();
 let checked = 0;
 
 for (const file of files) {
-  const rel = relative(repoRoot, file).replaceAll('\\', '/');
+  const rel = display(file);
   const component = relative(componentsDir, file).replaceAll('\\', '/').split('/')[0];
-  const lines = stripComments(read(file)).split('\n');
+  const lines = blankCssComments(read(file)).split('\n');
   lines.forEach((line, i) => {
     if (!TOKEN.test(line)) return;
     checked += 1;
@@ -116,12 +110,8 @@ for (const component of Object.keys(SANCTIONED)) {
   }
 }
 
-if (errors.length) {
-  console.error('✗ Action colour validation failed:');
-  for (const e of errors) console.error(`  ${e}`);
-  process.exit(1);
-}
-
-console.log(
+finish(
+  '✗ Action colour validation failed:',
+  errors,
   `✓ Action colour reserved — ${checked} references checked; every non-focus use sits in one of ${Object.keys(SANCTIONED).length} components with a sanctioned role.`
 );

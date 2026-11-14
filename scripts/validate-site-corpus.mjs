@@ -37,13 +37,14 @@
  *
  * Runs before every build via the validate-registry chain.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { buildSiteCorpus, assembleCorpus, sanctionedFacts, outputPath } from './generate-site-corpus.mjs';
+import { read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { holesIn, leaksIn } from './lib/screens.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const relative = (path) => path.replace(repoRoot + '/', '');
 
 const errors = [];
@@ -53,7 +54,7 @@ const fail = (message) => errors.push(message);
 try {
   const expected = buildSiteCorpus();
   const onDisk = existsSync(outputPath)
-    ? readFileSync(outputPath, 'utf8').replace(/\r\n/g, '\n')
+    ? read(outputPath)
     : null;
 
   if (onDisk === null) {
@@ -79,60 +80,41 @@ try {
 // pasted into prose, leaked through a new extraction path — still fails the
 // build. The boundary is "nothing reaches the model that a page did not
 // deliberately publish", enforced, not remembered.
-const leakPatterns = [
-  [/\/Users\/[A-Za-z]/g, 'local absolute path (/Users/…)', false],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/gi, 'GA property id', false],
-  [/sk-ant-[A-Za-z0-9-]/g, 'Anthropic API key', false],
-  [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address', true],
-];
-
+let corpus = null;
 try {
-  const { corpus } = assembleCorpus();
-  const sanctioned = [...sanctionedFacts()];
-  for (const [pattern, what, sanctionable] of leakPatterns) {
-    for (const match of corpus.matchAll(pattern)) {
-      if (sanctionable && sanctioned.some((value) => value.includes(match[0]))) continue;
-      fail(
-        `The site corpus contains a ${what} (${JSON.stringify(match[0].slice(0, 40))}) ` +
-          `that no corpus-facts() block sanctions.\n` +
-          `    It is sent to the model and can be repeated to any visitor — remove it at ` +
-          `the source, or publish it deliberately with a corpus-facts directive.`
-      );
-    }
-  }
+  corpus = assembleCorpus().corpus;
 } catch {
   // Generation already failed above; no need to report it twice.
 }
 
-// 4. No holes left by a dropped inline value.
-try {
-  const { corpus } = assembleCorpus();
-  const holes = [
-    /[\w)\]`'"’] [,.;:](?=\s|$)/g,
-    /: [,.;](?=\s|$)/g,
-  ];
-  for (const pattern of holes) {
-    for (const match of corpus.matchAll(pattern)) {
-      const at = match.index;
-      fail(
-        `The site corpus has a hole where a value was dropped: ` +
-          `${JSON.stringify(corpus.slice(Math.max(0, at - 50), at + 10))}. ` +
-          `Find the page line, and resolve its inline value in INLINE_VALUES in scripts/generate-site-corpus.mjs.`
-      );
-    }
+if (corpus !== null) {
+  const sanctioned = [...sanctionedFacts()];
+  for (const leak of leaksIn(corpus)) {
+    if (leak.id === 'email' && sanctioned.some((value) => value.includes(leak.text))) continue;
+    fail(
+      `The site corpus contains a ${leak.what} (${leak.shown}) ` +
+        `that no corpus-facts() block sanctions.\n` +
+        `    It is sent to the model and can be repeated to any visitor — remove it at ` +
+        `the source, or publish it deliberately with a corpus-facts directive.`
+    );
   }
-} catch {
-  // Generation already failed above.
+
+  // 4. No holes left by a dropped inline value.
+  for (const hole of holesIn(corpus)) {
+    fail(
+      `The site corpus has a hole where a value was dropped: ${hole}. ` +
+        `Find the page line, and resolve its inline value in INLINE_VALUES in scripts/generate-site-corpus.mjs.`
+    );
+  }
 }
 
 // 5. No empty-state copy.
-try {
-  const { corpus } = assembleCorpus();
+if (corpus !== null) {
   const pages = execFileSync('git', ['ls-files', 'website/src/app/**/*.tsx'], { cwd: repoRoot, encoding: 'utf8' })
     .split('\n')
     .filter(Boolean);
   for (const page of pages) {
-    const source = readFileSync(join(repoRoot, page), 'utf8').replace(/\r\n/g, '\n');
+    const source = read(join(repoRoot, page));
     for (const block of source.matchAll(/<EmptyState\b[^>]*?\/?>/gs)) {
       for (const [, , text] of block[0].matchAll(/\b(title|description)="([^"]{12,})"/g)) {
         if (corpus.includes(text)) {
@@ -141,8 +123,6 @@ try {
       }
     }
   }
-} catch {
-  // Generation already failed above.
 }
 
 // 2b. The other system block. persona.ts is sent to the model alongside the
@@ -159,22 +139,14 @@ for (const rel of promptFiles) {
     fail(`${rel} is missing — the prompt-file leak scan expects it.`);
     continue;
   }
-  const text = readFileSync(abs, 'utf8');
-  for (const [pattern, what, sanctionable] of leakPatterns) {
-    if (sanctionable) continue; // the email screen is corpus-only
-    for (const match of text.matchAll(pattern)) {
-      fail(
-        `${rel} contains a ${what} (${JSON.stringify(match[0].slice(0, 40))}) — ` +
-          `it is sent to the model as a system block; remove it at the source.`
-      );
-    }
+  // The email screen is corpus-only.
+  for (const leak of leaksIn(read(abs), { skip: ['email'] })) {
+    fail(`${rel} contains a ${leak.what} (${leak.shown}) — it is sent to the model as a system block; remove it at the source.`);
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Site corpus validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log('✓ Site corpus is current, within budget, and free of leaked details.');
+finish(
+  '✗ Site corpus validation failed:',
+  errors,
+  '✓ Site corpus is current, within budget, and free of leaked details.'
+);

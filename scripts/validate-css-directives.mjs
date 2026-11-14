@@ -23,11 +23,11 @@
  *
  * Runs in the validate-registry chain before every build.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+import { readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { readRel, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
+import { lineOf } from './lib/text.mjs';
 
 export const CATEGORIES = new Set([
   'icon-size',
@@ -64,9 +64,6 @@ export const CATEGORIES = new Set([
   'spacing',
 ]);
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-
 /** Recursively collect .css files under a repo-relative directory. */
 const cssFiles = (dir) =>
   readdirSync(join(repoRoot, dir), { withFileTypes: true, recursive: true })
@@ -86,13 +83,13 @@ const filesWithDirectives = new Set();
 const categoriesSeen = new Set();
 
 for (const file of files) {
-  const source = read(join(repoRoot, file));
+  const source = readRel(file);
   // Directives live only inside comments; scan comment bodies so a stray
   // "ds-allow" in a selector or content string can't count as one.
   for (const commentMatch of source.matchAll(/\/\*[\s\S]*?\*\//g)) {
     for (const match of commentMatch[0].matchAll(directiveRe)) {
       const [, , parens, category, colon, rest] = match;
-      const line = source.slice(0, commentMatch.index + match.index).split('\n').length;
+      const line = lineOf(source, commentMatch.index + match.index);
       const at = `${file}:${line}`;
       directiveCount += 1;
       filesWithDirectives.add(file);
@@ -135,9 +132,7 @@ for (const [what, list] of [
   }
 }
 
-if (failed) {
-  process.exit(1);
-}
+if (failed) failStep();
 
 console.log(
   `✓ CSS exception directives well-formed — ${directiveCount} ds-allow directive(s) across ` +

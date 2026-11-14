@@ -18,13 +18,13 @@
  * validate-json-schemas.mjs's check, not this one's. Belongs in the
  * validate-registry chain, not post-build: the source is generated data.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { assembleComponentSchemaFiles, outputDir } from './generate-component-schema.mjs';
-import { repoRoot } from './component-docgen.mjs';
+import { display, read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const errors = [];
-const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
 
 const files = assembleComponentSchemaFiles();
 for (const file of files) {
@@ -32,8 +32,7 @@ for (const file of files) {
     errors.push(`missing ${display(file.path)} — run: node scripts/generate-component-schema.mjs`);
     continue;
   }
-  // Normalize CRLF so Windows checkouts validate identically to CI.
-  if (readFileSync(file.path, 'utf8').replace(/\r\n/g, '\n') !== file.content) {
+  if (read(file.path) !== file.content) {
     errors.push(`${display(file.path)} is stale — run: node scripts/generate-component-schema.mjs`);
   }
 }
@@ -51,10 +50,8 @@ for (const name of onDisk) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Component schema validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log(`✓ Component schemas in sync — ${files.length} files match the registries and prop JSDoc.`);
+finish(
+  '✗ Component schema validation failed:',
+  errors,
+  `✓ Component schemas in sync — ${files.length} files match the registries and prop JSDoc.`
+);

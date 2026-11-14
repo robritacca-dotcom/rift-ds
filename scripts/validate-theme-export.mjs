@@ -43,14 +43,12 @@
  * sources are TypeScript theme data and the token files, not build output.
  * It runs after the preset stylesheet generator, whose loader it shares.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { loadThemeSource } from './generate-preset-stylesheets.mjs';
+import { readRel as read, repoRoot } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(join(repoRoot, path), 'utf8').replace(/\r\n/g, '\n');
 
 const errors = [];
 
@@ -283,11 +281,8 @@ for (const [id, preset] of Object.entries(fixtures)) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Theme export validation failed:');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-console.log(
+finish(
+  '✗ Theme export validation failed:',
+  errors,
   `✓ Theme export: ${Object.keys(THEME_PRESETS).length} presets round-trip through the export in both themes, ${levers.size} levers named, ${checked.size} token references resolve, the themed AGENTS.md carries the starter and the CSS`
 );

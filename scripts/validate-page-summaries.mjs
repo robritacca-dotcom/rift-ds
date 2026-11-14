@@ -39,15 +39,9 @@
  * Runs in the validate-registry chain: it reads registries and source only,
  * never build output.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { siteRoutes } from './site-routes.mjs';
-
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+import { fromRoot, read, readJson } from './lib/fs.mjs';
+import { failStep, finish } from './lib/report.mjs';
 
 const MAX_TEXT_CHARS = 160;
 
@@ -55,43 +49,35 @@ const errors = [];
 
 /* ---- Sources ---- */
 
-const summaries = JSON.parse(
-  read(join(repoRoot, 'website', 'src', 'data', 'page-summaries.json'))
-);
-const componentRegistry = JSON.parse(
-  read(join(repoRoot, 'src', 'components', 'registry.json'))
-);
+const summaries = readJson(fromRoot('website', 'src', 'data', 'page-summaries.json'));
+const componentRegistry = readJson(fromRoot('src', 'components', 'registry.json'));
 /* The chip budget has one home; read it the way validate-chat-starters does. */
-const suggestionsSource = read(
-  join(repoRoot, 'src', 'chat', 'suggestions.ts')
-);
+const suggestionsSource = read(fromRoot('src', 'chat', 'suggestions.ts'));
 const budgetMatch = suggestionsSource.match(/export const SUGGESTION_MAX_CHARS\s*=\s*(\d+)/);
 if (!budgetMatch) {
   console.error('✗ Could not read SUGGESTION_MAX_CHARS from src/chat/suggestions.ts');
-  process.exit(1);
+  failStep();
 }
 const maxChipChars = Number(budgetMatch[1]);
 
 /* How many starters the welcome screen draws, from the module that owns it. */
-const starterCountMatch = read(join(repoRoot, 'src', 'chat', 'starters.ts')).match(
+const starterCountMatch = read(fromRoot('src', 'chat', 'starters.ts')).match(
   /export const STARTER_COUNT\s*=\s*(\d+)/
 );
 if (!starterCountMatch) {
   console.error('✗ Could not read STARTER_COUNT from src/chat/starters.ts');
-  process.exit(1);
+  failStep();
 }
 const starterCount = Number(starterCountMatch[1]);
 
 /* The chromeless set has one home; parse the Set literal out of it. */
-const chromelessSource = read(
-  join(repoRoot, 'website', 'src', 'config', 'chromeless.ts')
-);
+const chromelessSource = read(fromRoot('website', 'src', 'config', 'chromeless.ts'));
 const chromelessBlock = chromelessSource.match(
   /CHROMELESS_ROUTES = new Set\(\[([\s\S]*?)\]\)/
 );
 if (!chromelessBlock) {
   console.error('✗ Could not read CHROMELESS_ROUTES from chromeless.ts');
-  process.exit(1);
+  failStep();
 }
 const chromeless = new Set(
   [...chromelessBlock[1].matchAll(/"([^"]+)"/g)].map((m) => m[1])
@@ -165,7 +151,7 @@ for (const [route, entry] of Object.entries(summaries.routes)) {
 
 const routes = siteRoutes();
 // The chat widget's page derives its summary like a component's (src/chat/registry.json).
-const widgetRegistry = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json')));
+const widgetRegistry = readJson(fromRoot('src', 'chat', 'registry.json'));
 const componentPages = [...componentRegistry.components, ...widgetRegistry.widgets];
 const componentSlugs = new Set(componentPages.map((c) => c.slug));
 
@@ -204,13 +190,9 @@ for (const c of componentPages) {
 
 /* ---- Report ---- */
 
-if (errors.length > 0) {
-  console.error('✗ Page-summaries validation failed:');
-  for (const error of errors) console.error(`  ${error}`);
-  process.exit(1);
-}
-
 const covered = Object.keys(summaries.routes).length + componentSlugs.size;
-console.log(
+finish(
+  '✗ Page-summaries validation failed:',
+  errors,
   `✓ Page summaries in sync — ${Object.keys(summaries.routes).length} written routes and ${componentSlugs.size} component pages derived (${covered} pages with a TLDR panel).`
 );

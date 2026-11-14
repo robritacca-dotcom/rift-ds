@@ -24,6 +24,7 @@ import {
   thumbnailFile,
   thumbnailTemplates,
 } from './template-thumbnails.mjs';
+import { finish } from './lib/report.mjs';
 
 const expected = new Set(
   thumbnailTemplates().flatMap(({ slug }) => THUMBNAIL_MODES.map((mode) => thumbnailFile(slug, mode))),
@@ -39,9 +40,8 @@ const errors = [
     .map((file) => `orphan ${file}: no listed template or mode owns it`),
 ];
 
-if (errors.length) {
-  console.error('✗ Template thumbnails:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
-console.log(`✓ Template thumbnails: ${expected.size} files, one per listed template per mode.`);
+finish(
+  '✗ Template thumbnails:',
+  errors,
+  `✓ Template thumbnails: ${expected.size} files, one per listed template per mode.`
+);

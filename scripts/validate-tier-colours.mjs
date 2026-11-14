@@ -15,11 +15,11 @@
  * the site (website/src). Runs in the validate-registry chain and the
  * website's prebuild.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { read, repoRoot } from './lib/fs.mjs';
+import { failStep } from './lib/report.mjs';
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ROOTS = ['src/components', 'src/chat', 'website/src'];
 
 const DISPLAY = /--font-(mega-[12]|display-[12]|sub-display)-/;
@@ -39,7 +39,7 @@ ROOTS.forEach((root) => walk(join(repoRoot, root)));
 const errors = [];
 let tierRules = 0;
 for (const file of files) {
-  const css = readFileSync(file, 'utf8').replace(/\r\n/g, '\n').replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
+  const css = read(file).replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
   /* Innermost blocks only: a declaration list never holds a brace. */
   for (const match of css.matchAll(/\{([^{}]*)\}/g)) {
     const body = match[1];
@@ -57,6 +57,6 @@ for (const file of files) {
 
 if (errors.length > 0) {
   console.error(`✗ Type-tier colours: ${errors.length} rule(s) bypass their tier's colour role\n  ${errors.join('\n  ')}`);
-  process.exit(1);
+  failStep();
 }
 console.log(`✓ Type-tier colours: ${tierRules} display and heading rules across ${files.length} stylesheets, none in the primary text.`);

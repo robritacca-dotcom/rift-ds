@@ -70,14 +70,14 @@
  * reads source through the shared docgen parse (scripts/component-docgen.mjs)
  * and nothing a build produces.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { parseLibrary, repoRoot } from './component-docgen.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const display = (path) => relative(repoRoot, path).replaceAll('\\', '/');
 
 const EMPHASIS = new Set(['primary', 'secondary', 'tertiary']);
@@ -705,13 +705,10 @@ for (const name of Object.keys(SANCTIONED_FORM_VARIANTS)) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Prop vocabulary validation failed:');
-  for (const error of errors) console.error(`    - ${error}`);
-  process.exit(1);
-}
 
-console.log(
+finish(
+  '✗ Prop vocabulary validation failed:',
+  errors,
   `✓ Prop vocabulary — ${parsed.length} components hold emphasis and colour apart, ` +
     `${callSites} internal call sites of components with deprecated spellings use the current ones, ` +
     `${statePairs} pieces of ownable state each come in a controlled/uncontrolled pair or are sanctioned, ` +

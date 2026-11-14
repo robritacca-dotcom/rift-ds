@@ -13,8 +13,11 @@
  *
  * Runs before every build via the validate-registry chain.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { buildDependencyGraphFile, outputPath } from './generate-dependency-graph.mjs';
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
+import { leaksIn } from './lib/screens.mjs';
 
 const errors = [];
 const fail = (message) => errors.push(message);
@@ -23,9 +26,7 @@ let onDisk = null;
 
 try {
   const expected = buildDependencyGraphFile();
-  onDisk = existsSync(outputPath)
-    ? readFileSync(outputPath, 'utf8').replace(/\r\n/g, '\n')
-    : null;
+  onDisk = existsSync(outputPath) ? read(outputPath) : null;
 
   if (onDisk === null) {
     fail(
@@ -42,29 +43,13 @@ try {
   fail(`generating the dependency graph failed: ${error.message}`);
 }
 
-const leakPatterns = [
-  [/\/Users\/[A-Za-z]/g, 'local absolute path (/Users/…)'],
-  [/[A-Za-z]:\\\\Users\\\\/g, 'local absolute path (drive letter)'],
-  [/property[\s_-]?(?:id)?\W{0,3}\d{6,}/gi, 'GA property id'],
-  [/sk-ant-[A-Za-z0-9-]/g, 'Anthropic API key'],
-  [/\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, 'email address'],
-];
-
 if (onDisk !== null) {
-  for (const [pattern, what] of leakPatterns) {
-    for (const match of onDisk.matchAll(pattern)) {
-      fail(
-        `The dependency graph contains a ${what} (${JSON.stringify(match[0].slice(0, 40))}). ` +
-          'It is served to every /graph visitor — remove it from the source it came from.'
-      );
-    }
+  for (const leak of leaksIn(onDisk)) {
+    fail(
+      `The dependency graph contains a ${leak.what} (${leak.shown}). ` +
+        'It is served to every /graph visitor — remove it from the source it came from.'
+    );
   }
 }
 
-if (errors.length > 0) {
-  console.error('\n✗ Dependency graph validation failed:\n');
-  for (const error of errors) console.error(`  - ${error}\n`);
-  process.exit(1);
-}
-
-console.log('✓ Dependency graph is current.');
+finish('✗ Dependency graph validation failed:', errors, '✓ Dependency graph is current.');

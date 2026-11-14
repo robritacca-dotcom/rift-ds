@@ -12,11 +12,10 @@
  * Reads installed package data only, so it runs in the validate-registry
  * chain and the website's prebuild.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { assembleBrandMarks, outputPath } from './generate-brand-marks.mjs';
-
-// Normalize CRLF so Windows checkouts validate identically to CI.
-const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+import { read } from './lib/fs.mjs';
+import { finish } from './lib/report.mjs';
 
 const errors = [];
 let expected = '';
@@ -34,10 +33,4 @@ if (expected) {
   }
 }
 
-if (errors.length > 0) {
-  console.error('✗ Brand marks validation failed:');
-  for (const error of errors) console.error(`  - ${error}`);
-  process.exit(1);
-}
-
-console.log('✓ Brand marks match simple-icons and the generator.');
+finish('✗ Brand marks validation failed:', errors, '✓ Brand marks match simple-icons and the generator.');

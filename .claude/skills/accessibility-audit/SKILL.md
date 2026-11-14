@@ -4,6 +4,8 @@ description: Audit a component or page for accessibility violations against WCAG
 icon: accessibility
 displayDescription: "Audits a component or page against WCAG 2.1 AA criteria. Checks semantic HTML, ARIA usage, keyboard navigation, focus styles, and colour contrast via both source code analysis and live screenshots. Reports file and line-level findings with WCAG criterion and severity."
 invoke: ["accessibility audit","a11y check on [component/page]","check WCAG compliance","is [X] accessible"]
+metadata:
+  internal: true
 ---
 
 # accessibility-audit
@@ -16,7 +18,7 @@ Use this skill when asked to check accessibility, run an a11y audit, or find WCA
 
 ## What is already automated — read this before auditing anything
 
-**Axe runs on every Storybook story and fails the build.** `.storybook/preview.ts` sets `a11y.test: 'error'`, so `npm run test` (and therefore CI and `npm run verify`) already enforces WCAG 2.1 AA across the whole library — and the same run executes any story `play` function, so behavior a story asserts (focus, dismissal, keyboard) is enforced too. Start by running it:
+**Axe runs on every Storybook story and fails the build.** `.storybook/preview.ts` sets `a11y.test: 'error'`, so `npm run test` (and therefore CI and `npm run verify`) already enforces WCAG 2.1 AA across the whole library — and the same run executes any story `play` function, so behavior a story asserts (focus, dismissal, keyboard) is enforced too. The same run holds the keyboard contract: `src/stories/KeyboardContract.stories.tsx` presses each WAI-ARIA pattern's keys against every component that names it in the registry, and checks the names, states and references the pattern needs, while `scripts/validate-keyboard-patterns.mjs` fails the build on a component whose keys are not classified. Start by running it:
 
 ```bash
 npm run test
@@ -54,7 +56,7 @@ Report a finding as **already-enforced** if `npm run test` or the page-level axe
 
    **Keyboard Navigation:**
    - **[manual]** All interactive elements are reachable by Tab, in an order that makes sense — axe cannot judge order
-   - Custom interactive components handle `onKeyDown` for Enter/Space (buttons) and arrow keys (any component with roving or list focus — radio groups, segmented controls, listboxes, tablists)
+   - Custom interactive components handle `onKeyDown` for Enter/Space (buttons) and arrow keys (any component with roving or list focus — radio groups, segmented controls, listboxes, tablists). The keyboard contract already presses these for every component that names a pattern in the registry (`src/stories/KeyboardContract.stories.tsx`, in both reading directions), so audit by hand what it cannot hold: the sentence in a component's `keys.note` against its handler, and keys outside its pattern's table
    - **[manual where no `play` function covers it]** Modal/dialog *actually* traps focus while open and restores it to the trigger on close — axe sees the attributes, not the behaviour. The modal overlays share one behavior implementation (design.md's Components intro owns the contract), so a real trap/restore defect there is a finding against all of them, not one. The site chat is modal only in some of its forms, and its floating card's move and size grips are pointer-only by a recorded decision: design.md's ChatWidget spec says which forms trap focus and why the grips are not a finding
    - Escape key closes dismissible overlays (any floating panel — tooltips, popovers, menus, dialogs, pickers), and **only the topmost**: a popover, menu or visible tooltip open inside a dialog closes before the dialog does, and a press on a dialog's backdrop with a menu open closes only the menu. Every overlay dismisses through the shared layer stack (`scripts/validate-overlay-listeners.mjs` keeps it so), and `Dialog.stories.tsx`'s nested-overlay stories assert the contract; a component handling Escape in its own keydown handler must mark it handled with `preventDefault()`, so check that on anything new
    - A literal English accessible name the consumer cannot replace is a finding: it cannot be localised. `scripts/validate-accessible-names.mjs` catches literal `aria-label`, `aria-roledescription` and `*Label` attributes, and `scripts/validate-visible-text.mjs` literal JSX text; **[manual]** check English built in string literals and arrays (a weekday list, a `${n} results` template), which neither can see

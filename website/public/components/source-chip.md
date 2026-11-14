@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SourceChip } from 'rift-ds';`
 - Deep import: `import { SourceChip } from 'rift-ds/components/SourceChip/SourceChip';`
 - Rendering: client component (declares 'use client')
+- Size: 3.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/source-chip
 - Schema: https://rift-ds.com/schema/components/source-chip.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | locale | `string` | no |  | The BCP 47 locale the index numeral is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The source preview follows the WAI-ARIA tooltip pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/).
+
+| Key | What it does |
+| --- | --- |
+| On focus | Focusing the trigger shows it. |
+| Escape | Hides it and leaves focus on the trigger. |
 
 ## Types
 

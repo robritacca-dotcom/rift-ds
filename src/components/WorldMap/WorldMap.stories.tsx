@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { WorldMap, type WorldMapPoint } from './WorldMap';
 import { MapCallout } from '../MapCallout/MapCallout';
 
@@ -91,5 +92,21 @@ export const NonInteractive: Story = {
   args: {
     interactive: false,
     graticuleStep: 0,
+  },
+};
+
+/** The map from the keyboard: with zoom on and the map focused, plus zooms in and the arrow keys pan. */
+export const Keyboard: Story = {
+  args: { ...ZoomControls.args },
+  play: async ({ canvasElement }) => {
+    const map = canvasElement.querySelector<HTMLElement>('.ds-world-map')!;
+    const view = () => map.querySelector('svg')!.getAttribute('viewBox');
+    map.focus();
+    const whole = view();
+    await userEvent.keyboard('+');
+    await waitFor(() => expect(view()).not.toBe(whole));
+    const zoomed = view();
+    await userEvent.keyboard('{ArrowRight}');
+    await waitFor(() => expect(view()).not.toBe(zoomed));
   },
 };

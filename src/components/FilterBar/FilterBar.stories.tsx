@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import { FilterBar } from './FilterBar';
 
 const filters = [
@@ -57,6 +58,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+/** Type-to-find: with a filter's list open, a letter moves to the next option named with it. */
+export const Typeahead: Story = {
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('button', { name: /Assignee/ });
+    trigger.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await userEvent.keyboard('g');
+    await waitFor(() =>
+      expect(document.getElementById(trigger.getAttribute('aria-activedescendant') ?? '')).toHaveTextContent(/Grace Hopper/),
+    );
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+  },
+};
 
 export const WithActiveFilters: Story = {
   args: {

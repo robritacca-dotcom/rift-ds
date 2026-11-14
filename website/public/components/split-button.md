@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SplitButton } from 'rift-ds';`
 - Deep import: `import { SplitButton } from 'rift-ds/components/SplitButton/SplitButton';`
 - Rendering: server-renderable (no 'use client')
+- Size: 11.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/split-button
 - Schema: https://rift-ds.com/schema/components/split-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,6 +28,29 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | align | `"start" \| "end"` | no | `'end'` | Horizontal alignment of the menu panel relative to the control |
 | menuLabel | `string` | no | `'More actions'` | Accessible name of the menu trigger segment |
 | className | `string` | no | `''` | Additional CSS classes, applied to the wrapper around both segments, not the primary button |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The main button follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
+
+The menu of other actions follows the WAI-ARIA menu pattern (https://www.w3.org/WAI/ARIA/apg/patterns/menubar/).
+
+| Key | What it does |
+| --- | --- |
+| On open | Opening the menu moves focus into it. |
+| Arrow Down | Moves to the next item. |
+| Arrow Up | Moves to the previous item. |
+| End | Moves to the last item. |
+| Home | Moves to the first item. |
+| A letter | Moves to the next item whose name starts with it. |
+| Escape | Closes the menu and returns focus to what opened it. |
 
 ## Types
 

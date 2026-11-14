@@ -13,6 +13,16 @@
  * whether that file is fresh is scripts/validate-generated-files.mjs's
  * check. Runs before every build so
  * the public skills list can never silently drift from reality.
+ *
+ * It also holds what `npx skills add` (the vercel-labs/skills CLI) finds
+ * when pointed at this repository. That CLI searches .claude/skills/ by
+ * default, so without a guard it offers a consumer the maintainer skills
+ * (ship, release, land) and misses the ones written for them. Two facts
+ * keep it to the consumer skills: every repo skill carries
+ * `metadata.internal: true` in its frontmatter, which hides it from the
+ * CLI, and skills.sh.json at the repo root names website/public/skill as
+ * a discovery path. Checked 2026-11-14 against skills@1.8.1, whose custom
+ * paths add to the default locations and never replace them.
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -62,6 +72,22 @@ for (const [label, , src] of skillSources) {
   if (missing.length > 0) badFrontmatter.push(`${label}: missing ${missing.join(', ')}`);
 }
 
+// Hidden from `npx skills add`: every repo skill is internal to that CLI,
+// and the one custom discovery path is the consumer skills' folder.
+const notInternal = files.filter(
+  (f) =>
+    !/^metadata:\n {2}internal: true$/m.test(
+      frontmatterOf(skillSources.find(([label]) => label === `.claude/skills/${f}/SKILL.md`)[2])
+    )
+);
+const CONSUMER_SKILLS_PATH = './website/public/skill';
+const skillsShPath = join(repoRoot, 'skills.sh.json');
+const skillsShPaths = existsSync(skillsShPath)
+  ? JSON.parse(readFileSync(skillsShPath, 'utf8')).paths
+  : null;
+const badDiscovery =
+  JSON.stringify(skillsShPaths) !== JSON.stringify([CONSUMER_SKILLS_PATH]);
+
 // The committed skill files and their published copies are public — they
 // must not leak a local absolute path (machine username), a GA property id,
 // an API key or an address: the shared screen in scripts/lib/screens.mjs.
@@ -103,6 +129,21 @@ if (badFrontmatter.length > 0) {
     `Skill files with incomplete frontmatter (name/description for Claude Code ` +
       `discovery; icon/displayDescription/invoke for the /skills page):\n` +
       badFrontmatter.map((f) => `    - ${f}`).join('\n')
+  );
+}
+
+if (notInternal.length > 0) {
+  fail(
+    `Repo skills visible to \`npx skills add\` (add "metadata:\\n  internal: true" ` +
+      `to the frontmatter):\n` +
+      notInternal.map((f) => `    - .claude/skills/${f}/SKILL.md`).join('\n')
+  );
+}
+
+if (badDiscovery) {
+  fail(
+    `skills.sh.json must exist at the repo root with "paths": ` +
+      `["${CONSUMER_SKILLS_PATH}"], so \`npx skills add\` finds the consumer skills.`
   );
 }
 

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { CircularButton } from 'rift-ds';`
 - Deep import: `import { CircularButton } from 'rift-ds/components/CircularButton/CircularButton';`
 - Rendering: server-renderable (no 'use client')
+- Size: 3.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/circular-button
 - Schema: https://rift-ds.com/schema/components/circular-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,6 +32,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | rel | `string` | no |  | Optional rel attribute for links |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

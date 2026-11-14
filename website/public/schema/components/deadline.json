@@ -161,5 +161,11 @@
   },
   "externalTypes": {
     "Date": "typescript"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 1738
   }
 }

@@ -99,7 +99,7 @@ type WorldMapOwnProps = {
   pointsLabel?: (count: number) => string;
   /** The keyboard and pointer instructions appended to the map's accessible name while zooming is on. */
   zoomHintLabel?: string;
-  /** Accessible name of the zoom toolbar. Defaults to "Map zoom controls". */
+  /** Accessible name of the group of zoom controls. Defaults to "Map zoom controls". */
   zoomControlsLabel?: string;
   /** Accessible name of the zoom-out button. Defaults to "Zoom out". */
   zoomOutLabel?: string;
@@ -639,7 +639,7 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
         </div>
 
         {zoomEnabled && (
-          <div className={`${baseClass}__zoom`} role="toolbar" aria-label={zoomControlsLabel}>
+          <div className={`${baseClass}__zoom`} role="group" aria-label={zoomControlsLabel}>
             <CircularButton
               icon="remove"
               variant="tertiary"

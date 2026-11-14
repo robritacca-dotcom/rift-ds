@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Combobox } from 'rift-ds';`
 - Deep import: `import { Combobox } from 'rift-ds/components/Combobox/Combobox';`
 - Rendering: client component (declares 'use client')
+- Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/combobox
 - Schema: https://rift-ds.com/schema/components/combobox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -40,6 +41,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onChange | `((value: string \| string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
 | name | `string` | no |  | Form field name. When set, the selection submits with an enclosing form under this name through hidden inputs: the selected option's `value` in single mode (nothing while no value is set), one entry per selected value in `multiple` mode, nothing while disabled. The search text the user types is never submitted. Also the fallback for the element id (`id \|\| name \|\| generated`). |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA combobox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Down | Opens the list of options. |
+| Arrow Down | With the list open, moves to the next option. |
+| Arrow Up | Moves to the previous option. |
+| Escape | Closes the list and keeps focus on the field. |
 
 ## Types
 

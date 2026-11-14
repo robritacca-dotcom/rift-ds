@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Rating } from 'rift-ds';`
 - Deep import: `import { Rating } from 'rift-ds/components/Rating/Rating';`
 - Rendering: client component (declares 'use client')
+- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/rating
 - Schema: https://rift-ds.com/schema/components/rating.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,5 +28,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | no | `'Rating'` | Accessible name for the group, and the base of each step's label |
 | valueLabel | `((value: number, max: number) => string)` | no | `` (value: number, max: number) => `${value} out of ${max}` `` | The spoken value, given a step (or, in `readOnly` mode, the current rating) and `max`. Defaults to "3 out of 5". It follows `label` and a colon, as in "Rating: 3 out of 5". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA radio group pattern (https://www.w3.org/WAI/ARIA/apg/patterns/radio/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the group at one option, and out of the group on the next press. |
+| Arrow Right | Moves to the next option and chooses it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous option and chooses it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last option and chooses it. |
+| Home | Moves to the first option and chooses it. |
 
 Types from other packages: `ReactNode` (react).

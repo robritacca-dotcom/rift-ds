@@ -3,6 +3,8 @@ name: security-audit
 description: "Independent security, privacy, and data-protection sweep of the repo and the live site: dependency and secret scans, API and AI-chat review against the OWASP LLM Top 10, HTTP hardening, CI/release posture, and analytics/privacy. Verifies findings against source or a live request, then reports — never fixes without a separate ask. Use when asked to run the security audit, check how secure the site is, or review privacy/data protection."
 icon: security
 invoke: ["run the security audit","/security-audit"]
+metadata:
+  internal: true
 ---
 
 # security-audit

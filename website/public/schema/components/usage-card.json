@@ -80,5 +80,11 @@
       "definition": "interface UsageItem {\n  /** What is being budgeted, e.g. the context window or a weekly limit */\n  label: string;\n  /** Current level */\n  value: number;\n  /** Upper bound of the budget; defaults to 100 */\n  max?: number;\n  /** Readout override replacing the default percentage, e.g. a token count */\n  valueText?: string;\n  /** Caption under the bar's trailing edge, e.g. when the limit resets */\n  resetLabel?: string;\n  /** Status override; left unset, the fill recolours through the card's thresholds */\n  variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';\n}",
       "description": "One budgeted quantity in the card — a meter row with an optional reset caption."
     }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 1180
   }
 }

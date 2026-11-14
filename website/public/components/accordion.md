@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Accordion } from 'rift-ds';`
 - Deep import: `import { Accordion } from 'rift-ds/components/Accordion/Accordion';`
 - Rendering: client component (declares 'use client')
+- Size: 0.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/accordion
 - Schema: https://rift-ds.com/schema/components/accordion.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,6 +22,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | defaultExpanded | `string[]` | no | `[]` | IDs of initially expanded items when the accordion is uncontrolled |
 | onExpandedChange | `((expanded: string[]) => void)` | no |  | Called with the IDs of the expanded items after the user opens or closes one |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA accordion pattern (https://www.w3.org/WAI/ARIA/apg/patterns/accordion/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Opens a closed section, and closes an open one. |
+| Space | Does the same as Enter. |
 
 ## Types
 

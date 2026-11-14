@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { EntityCard } from 'rift-ds';`
 - Deep import: `import { EntityCard } from 'rift-ds/components/EntityCard/EntityCard';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/entity-card
 - Schema: https://rift-ds.com/schema/components/entity-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,5 +21,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | imageSrc | `string` | no |  | Path to an image asset — used instead of icon when provided |
 | imageAlt | `string` | no |  | Alt text for the image |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Sparkline } from 'rift-ds';`
 - Deep import: `import { Sparkline } from 'rift-ds/components/Sparkline/Sparkline';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/sparkline
 - Schema: https://rift-ds.com/schema/components/sparkline.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -24,3 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | height | `number` | no | `32` | ViewBox height. Also the default rendered height; the SVG scales to its container when sized externally via CSS. Intentionally shadows the native SVG `height` attribute, which it sets. |
 | label | `string` | no |  | Accessible description of the trend, e.g. "Revenue, trending up". When omitted the SVG is decorative and hidden from assistive technology. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

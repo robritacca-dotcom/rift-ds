@@ -1,0 +1,622 @@
+{
+  "$comment": "The keyboard contract: one table of keys per WAI-ARIA pattern. A component joins a pattern through `pattern` in registry.json, or one of its parts does through `partPatterns`, and src/stories/KeyboardContract.stories.tsx presses every row here against every component that names the pattern, in both reading directions, so each row is a tested fact. The component pages, the per-component markdown and the published schemas print these rows; scripts/validate-keyboard-patterns.mjs holds the three together. A row's `id` is the check the story runs, `keys` are KeyboardEvent.key names (the space bar written Space), a row no key starts has empty `keys` and a `when` that says what does, and `inline: true` marks a pair that swaps in a right-to-left layout.",
+  "patterns": {
+    "tabs": {
+      "label": "Tabs",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+      "rows": [
+        {
+          "id": "tab-stop",
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the list at the selected tab, and out of the list on the next press."
+        },
+        {
+          "id": "next",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Moves to the next tab and selects it."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Moves to the previous tab and selects it."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last tab and selects it."
+        },
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first tab and selects it."
+        }
+      ]
+    },
+    "toolbar": {
+      "label": "Toolbar",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/",
+      "rows": [
+        {
+          "id": "next",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Moves to the next control."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Moves to the previous control."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last control."
+        },
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first control."
+        }
+      ]
+    },
+    "radio-group": {
+      "label": "Radio group",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
+      "rows": [
+        {
+          "id": "tab-stop",
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the group at one option, and out of the group on the next press."
+        },
+        {
+          "id": "next",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Moves to the next option and chooses it."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Moves to the previous option and chooses it."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last option and chooses it."
+        },
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first option and chooses it."
+        }
+      ]
+    },
+    "menu": {
+      "label": "Menu",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/menubar/",
+      "rows": [
+        {
+          "id": "open",
+          "keys": [],
+          "text": "Opening the menu moves focus into it.",
+          "when": "On open"
+        },
+        {
+          "id": "next",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next item."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous item."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last item."
+        },
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first item."
+        },
+        {
+          "id": "typeahead",
+          "keys": [],
+          "when": "A letter",
+          "text": "Moves to the next item whose name starts with it."
+        },
+        {
+          "id": "dismiss",
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes the menu and returns focus to what opened it."
+        }
+      ]
+    },
+    "combobox": {
+      "label": "Combobox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/combobox/",
+      "rows": [
+        {
+          "id": "open",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Opens the list of options."
+        },
+        {
+          "id": "next",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "With the list open, moves to the next option."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous option."
+        },
+        {
+          "id": "dismiss",
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes the list and keeps focus on the field."
+        }
+      ]
+    },
+    "dialog": {
+      "label": "Dialog",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "rows": [
+        {
+          "id": "enter",
+          "keys": [],
+          "text": "Opening moves focus inside.",
+          "when": "On open"
+        },
+        {
+          "id": "trap",
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves to the next control inside, and from the last back to the first. Focus never reaches the page behind."
+        },
+        {
+          "id": "trap-back",
+          "keys": [
+            "Shift",
+            "Tab"
+          ],
+          "text": "Moves to the previous control inside, and from the first to the last."
+        },
+        {
+          "id": "dismiss",
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes it and returns focus to what opened it."
+        }
+      ]
+    },
+    "tree": {
+      "label": "Tree view",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/treeview/",
+      "rows": [
+        {
+          "id": "next",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next visible row."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous visible row."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last visible row."
+        },
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first row."
+        },
+        {
+          "id": "expand",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Opens a closed branch."
+        },
+        {
+          "id": "collapse",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Closes an open branch."
+        },
+        {
+          "id": "typeahead",
+          "keys": [],
+          "when": "A letter",
+          "text": "Moves to the next visible row whose name starts with it."
+        }
+      ]
+    },
+    "slider": {
+      "label": "Slider",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/slider/",
+      "rows": [
+        {
+          "id": "increase",
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Raises the value by one step."
+        },
+        {
+          "id": "decrease",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Lowers the value by one step."
+        },
+        {
+          "id": "minimum",
+          "keys": [
+            "Home"
+          ],
+          "text": "Sets the lowest value."
+        },
+        {
+          "id": "maximum",
+          "keys": [
+            "End"
+          ],
+          "text": "Sets the highest value."
+        }
+      ]
+    },
+    "splitter": {
+      "label": "Window splitter",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/",
+      "rows": [
+        {
+          "id": "increase",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Grows the first pane by one step."
+        },
+        {
+          "id": "decrease",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Shrinks the first pane by one step."
+        },
+        {
+          "id": "minimum",
+          "keys": [
+            "Home"
+          ],
+          "text": "Shrinks the first pane to its smallest size."
+        },
+        {
+          "id": "maximum",
+          "keys": [
+            "End"
+          ],
+          "text": "Grows the first pane to its largest size."
+        }
+      ]
+    },
+    "calendar": {
+      "label": "Date grid",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/",
+      "rows": [
+        {
+          "id": "next-day",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Moves to the next day."
+        },
+        {
+          "id": "previous-day",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Moves to the previous day."
+        },
+        {
+          "id": "next-week",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the same weekday in the next week."
+        },
+        {
+          "id": "previous-week",
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the same weekday in the previous week."
+        },
+        {
+          "id": "week-start",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first day of the week."
+        },
+        {
+          "id": "week-end",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last day of the week."
+        },
+        {
+          "id": "next-month",
+          "keys": [
+            "PageDown"
+          ],
+          "text": "Moves to the same day in the next month."
+        },
+        {
+          "id": "previous-month",
+          "keys": [
+            "PageUp"
+          ],
+          "text": "Moves to the same day in the previous month."
+        }
+      ]
+    },
+    "listbox": {
+      "label": "Listbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+      "rows": [
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first option."
+        },
+        {
+          "id": "next",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next option."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous option."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last option."
+        }
+      ]
+    },
+    "accordion": {
+      "label": "Accordion",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+      "rows": [
+        {
+          "id": "toggle",
+          "keys": [
+            "Enter"
+          ],
+          "text": "Opens a closed section, and closes an open one."
+        },
+        {
+          "id": "toggle-space",
+          "keys": [
+            "Space"
+          ],
+          "text": "Does the same as Enter."
+        }
+      ]
+    },
+    "disclosure": {
+      "label": "Disclosure",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+      "rows": [
+        {
+          "id": "toggle",
+          "keys": [
+            "Enter"
+          ],
+          "text": "Opens what it controls, and closes it when it is open."
+        },
+        {
+          "id": "toggle-space",
+          "keys": [
+            "Space"
+          ],
+          "text": "Does the same as Enter."
+        }
+      ]
+    },
+    "tooltip": {
+      "label": "Tooltip",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/",
+      "rows": [
+        {
+          "id": "show",
+          "keys": [],
+          "when": "On focus",
+          "text": "Focusing the trigger shows it."
+        },
+        {
+          "id": "dismiss",
+          "keys": [
+            "Escape"
+          ],
+          "text": "Hides it and leaves focus on the trigger."
+        }
+      ]
+    },
+    "button": {
+      "label": "Button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "id": "activate",
+          "keys": [
+            "Enter"
+          ],
+          "text": "Activates the button."
+        },
+        {
+          "id": "activate-space",
+          "keys": [
+            "Space"
+          ],
+          "text": "Activates the button."
+        }
+      ]
+    },
+    "toggle-button": {
+      "label": "Toggle button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "id": "toggle",
+          "keys": [
+            "Enter"
+          ],
+          "text": "Changes whether the button is pressed."
+        },
+        {
+          "id": "toggle-space",
+          "keys": [
+            "Space"
+          ],
+          "text": "Does the same as Enter."
+        }
+      ]
+    },
+    "link": {
+      "label": "Link",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/link/",
+      "rows": [
+        {
+          "id": "follow",
+          "keys": [
+            "Enter"
+          ],
+          "text": "Follows the link."
+        }
+      ]
+    },
+    "checkbox": {
+      "label": "Checkbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
+      "rows": [
+        {
+          "id": "toggle-space",
+          "keys": [
+            "Space"
+          ],
+          "text": "Ticks the box, or clears it when it is ticked."
+        }
+      ]
+    },
+    "switch": {
+      "label": "Switch",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/switch/",
+      "rows": [
+        {
+          "id": "toggle-space",
+          "keys": [
+            "Space"
+          ],
+          "text": "Turns the switch on, or off when it is on."
+        }
+      ]
+    },
+    "textbox": {
+      "label": "Text field",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
+      "rows": [
+        {
+          "id": "type",
+          "keys": [],
+          "when": "Typing",
+          "text": "Enters text in the named field."
+        }
+      ]
+    }
+  }
+}

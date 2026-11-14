@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Card } from 'rift-ds';`
 - Deep import: `import { Card } from 'rift-ds/components/Card/Card';`
 - Rendering: client component (declares 'use client')
+- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/card
 - Schema: https://rift-ds.com/schema/components/card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,6 +30,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | dek | `string` | no |  | Subtitle / dek line below the title |
 | placeholder | `boolean` | no | `false` | Render as a disabled placeholder (no href, dimmed, not interactive) |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

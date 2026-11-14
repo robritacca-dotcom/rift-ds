@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { EntitySwitcher } from 'rift-ds';`
 - Deep import: `import { EntitySwitcher } from 'rift-ds/components/EntitySwitcher/EntitySwitcher';`
 - Rendering: client component (declares 'use client')
+- Size: 9.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/entity-switcher
 - Schema: https://rift-ds.com/schema/components/entity-switcher.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,6 +32,22 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | wholeBranchLabel | `string` | no | `'All of {name}'` | The description of the row that picks a whole branch, leading its level. `{name}` is the branch. |
 | emptyLabel | `string` | no | `'Nothing matches'` | Shown when a search finds nothing. |
 | className | `string` | no | `''` | Additional CSS classes on the root. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA menu pattern (https://www.w3.org/WAI/ARIA/apg/patterns/menubar/).
+
+| Key | What it does |
+| --- | --- |
+| On open | Opening the menu moves focus into it. |
+| Arrow Down | Moves to the next item. |
+| Arrow Up | Moves to the previous item. |
+| End | Moves to the last item. |
+| Home | Moves to the first item. |
+| A letter | Moves to the next item whose name starts with it. |
+| Escape | Closes the menu and returns focus to what opened it. |
 
 ## Types
 

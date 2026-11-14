@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, screen, waitFor } from 'storybook/test';
 import { Popover } from './Popover';
 
 const meta = {
@@ -51,6 +51,25 @@ export const Default: Story = {
         <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>This is the popover content area.</p>
       </div>
     ),
+  },
+};
+
+/**
+ * A click popover from the keyboard: Enter on the trigger opens it, Escape
+ * closes it, and focus stays on the trigger throughout.
+ */
+export const Keyboard: Story = {
+  args: { ...Default.args },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('button', { name: 'Click me' });
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    const panel = await screen.findByRole('dialog');
+    await waitFor(() => expect(panel).toBeVisible());
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    await expect(trigger).toHaveFocus();
   },
 };
 

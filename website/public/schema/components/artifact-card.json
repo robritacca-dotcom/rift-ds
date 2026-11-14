@@ -59,5 +59,29 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "toggle-button",
+      "label": "Toggle button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Changes whether the button is pressed."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Does the same as Enter."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 648
   }
 }

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Figure } from 'rift-ds';`
 - Deep import: `import { Figure } from 'rift-ds/components/Figure/Figure';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/figure
 - Schema: https://rift-ds.com/schema/components/figure.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,5 +20,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | caption | `ReactNode` | no |  | Caption rendered below the image |
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support. It is attached to the zoom button wrapping the image, not to the `<figure>`, so it replaces the native `onClick` on the root. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `HTMLButtonElement` (typescript), `MouseEventHandler` (react), `ReactNode` (react).

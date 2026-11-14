@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import './RichDropdown.css';
@@ -204,8 +205,18 @@ export const RichDropdown = React.forwardRef<HTMLDivElement, RichDropdownProps>(
       getElements: () => [rootRef.current],
     });
 
+    const typeahead = useTypeahead();
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
+
+      // Type-to-find: with the list open, a letter moves to the next option named with it.
+      const hit = typeahead(e, options.map((option) => (option.disabled ? null : option.label)), focusedIndex);
+      if (hit !== null && isOpen) {
+        e.preventDefault();
+        setFocusedIndex(hit);
+        return;
+      }
 
       switch (e.key) {
         case 'Enter':

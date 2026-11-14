@@ -72,5 +72,12 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "A focusable scroll region: the browser scrolls it with the arrow, Page, Home and End keys."
+  },
+  "size": {
+    "gzip": 1500
   }
 }

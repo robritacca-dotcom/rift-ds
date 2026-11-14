@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { CardStack } from 'rift-ds';`
 - Deep import: `import { CardStack } from 'rift-ds/components/CardStack/CardStack';`
 - Rendering: client component (declares 'use client')
+- Size: 1.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/card-stack
 - Schema: https://rift-ds.com/schema/components/card-stack.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,5 +26,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | no |  | Accessible name for the stack, e.g. "Open roles". |
 | positionLabel | `((position: number, count: number) => string)` | no | `` (position: number, total: number) => `Card ${position} of ${total}` `` | Visually hidden status announcing the top card's place in the deck, given its 1-based position and the card count. Defaults to "Card 2 of 5". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+With the stack focused, the arrow keys step to the next card and back, and Space and Enter also advance. The component's own stories test these keys.
 
 Types from other packages: `ReactNode` (react).

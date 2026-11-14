@@ -4,6 +4,8 @@ description: Commit and push the session's work to a branch, then return to a cl
 icon: local_parking
 displayDescription: "Shelves an experiment: commits the session's work, pushes it to a remote branch, then returns to a clean main. Nothing deploys and nothing merges; the report names the branch so the work is easy to resume later."
 invoke: ["park this","shelve this","set this aside","park it"]
+metadata:
+  internal: true
 ---
 
 # park

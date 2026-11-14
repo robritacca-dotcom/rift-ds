@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AppLayout } from 'rift-ds';`
 - Deep import: `import { AppLayout } from 'rift-ds/components/AppLayout/AppLayout';`
 - Rendering: client component (declares 'use client')
+- Size: 9.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-layout
 - Schema: https://rift-ds.com/schema/components/app-layout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,6 +30,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | theme | `"inherit" \| "dark"` | no | `'dark'` | Colour scheme: 'dark' pins the layout to the dark theme (the historical behaviour and the default); 'inherit' drops the pin so the layout follows the surrounding data-theme like any other component. |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to the AppSidebar rail. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | className | `string` | no | `''` | Additional CSS classes on outer wrapper |
+
+## Keyboard
+
+The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own. AppSidebar's stories test these keys.
 
 ## Types
 

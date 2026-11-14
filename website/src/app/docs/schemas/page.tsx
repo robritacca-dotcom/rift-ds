@@ -88,6 +88,13 @@ export default function SchemasPage() {
               with the package that defines it, such as <code>ReactNode</code> from React. Another
               component&apos;s whole props are a pointer to that component&apos;s own schema instead.
             </p>
+            <p className={s.sectionNote}>
+              Three properties sit beside the props. <code>keyboard</code> lists the keys the
+              component is tested against, one entry per WAI-ARIA pattern it follows.{" "}
+              <code>keys</code> says who owns its keys where no pattern covers them: the component
+              itself, the platform, or no one, because nothing takes focus. <code>size</code> is
+              what the import costs, as gzipped bytes.
+            </p>
             <CodeBlock code={FETCH_SNIPPET} language="bash" showCopy />
             <Accordion
               items={[

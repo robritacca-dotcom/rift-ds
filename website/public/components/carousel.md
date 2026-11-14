@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Carousel } from 'rift-ds';`
 - Deep import: `import { Carousel } from 'rift-ds/components/Carousel/Carousel';`
 - Rendering: client component (declares 'use client')
+- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/carousel
 - Schema: https://rift-ds.com/schema/components/carousel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,5 +32,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | dotsLabel | `string` | no | `'Slide indicators'` | Accessible name of the dot indicators' tab list |
 | dotLabel | `((position: number) => string)` | no | `` (position: number) => `Go to slide ${position}` `` | Accessible name of each dot indicator, given its slide's 1-based position |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The slide dots follows the WAI-ARIA tabs pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the list at the selected tab, and out of the list on the next press. |
+| Arrow Right | Moves to the next tab and selects it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous tab and selects it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last tab and selects it. |
+| Home | Moves to the first tab and selects it. |
 
 Types from other packages: `ReactNode` (react).

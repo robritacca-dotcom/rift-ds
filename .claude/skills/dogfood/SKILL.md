@@ -1,6 +1,8 @@
 ---
 name: dogfood
 description: "Run a dogfood round: send several agents out to build real apps from the published rift-ds package as a stranger would, each logging every place it got stuck, then verify the findings against the repo, merge them with the owner's own build report, compare who found what, and track the round in a ledger until rounds come back clean. Use when asked to dogfood rift-ds, run a dogfood round, send agents to build with the package, or find consumer-side gaps. Never fixes anything itself."
+metadata:
+  internal: true
 ---
 
 # dogfood

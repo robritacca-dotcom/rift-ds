@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { InspectorSegmentedControl } from 'rift-ds';`
 - Deep import: `import { InspectorSegmentedControl } from 'rift-ds/components/Inspector/InspectorSegmentedControl';`
 - Rendering: client component (declares 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/inspector-segmented-control
 - Schema: https://rift-ds.com/schema/components/inspector-segmented-control.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -24,6 +25,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly chosen value. |
 | className | `string` | no | `''` | Additional CSS classes, applied to the bar. |
+
+## Keyboard
+
+Native radio inputs: the browser moves between them with the arrow keys. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

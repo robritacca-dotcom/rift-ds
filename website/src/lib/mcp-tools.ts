@@ -29,7 +29,7 @@ export const MCP_TOOLS: McpTool[] = [
   },
   {
     name: "get_component",
-    blurb: "one component's full prop contract and every type its props name, generated from the same source as the published .d.ts",
+    blurb: "one component's full prop contract and every type its props name, generated from the same source as the published .d.ts, with the keys it is tested against where it follows a keyboard pattern",
     prompt: "What props does DataTable take?",
   },
   {

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ErrorSummary } from 'rift-ds';`
 - Deep import: `import { ErrorSummary } from 'rift-ds/components/ErrorSummary/ErrorSummary';`
 - Rendering: client component (declares 'use client')
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/error-summary
 - Schema: https://rift-ds.com/schema/components/error-summary.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -24,6 +25,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onErrorClick | `((id: string) => void)` | no |  | Called with a control's id after its link moves focus to it. |
 | locale | `string` | no |  | The BCP 47 locale the count is written in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The links to each field follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Follows the link. |
 
 ## Types
 

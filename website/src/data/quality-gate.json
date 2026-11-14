@@ -78,6 +78,7 @@
     "validate-theme-design-md": { "group": "freshness", "text": "The per-theme DESIGN.md files still read back through the importer." },
 
     "validate-component-registry": { "group": "registries", "text": "Every component folder is in exactly one registry list, and every entry has a folder." },
+    "validate-keyboard-patterns": { "group": "registries", "text": "Every component says who owns its keys: a pattern whose rows the contract story presses, keys of its own that its own stories press, the platform, or nothing to focus." },
     "validate-website-surfaces": { "group": "registries", "text": "Every component has its site page, preview, design.md spec and nav entries." },
     "validate-page-titles": { "group": "registries", "text": "Every component page has a layout with a real browser tab title." },
     "validate-skills-registry": { "group": "registries", "text": "Every skill folder is registered once, with the frontmatter Claude Code and the /skills page need, and no skill leaks a local detail." },
@@ -141,6 +142,7 @@
     "validate-api-compat": { "group": "verify", "text": "Against the latest release tag, no prop, export, subpath, file, bin or schema property vanished or narrowed." },
     "npm run build:lib": { "group": "verify", "text": "Builds the publishable package into dist/." },
     "validate-package-publish": { "group": "verify", "text": "publint and arethetypeswrong against dist/, so every subpath resolves for every kind of consumer." },
+    "validate-size-budget": { "group": "verify", "text": "Each component and subpath, bundled and gzipped the way a consumer's build would, stays under its ceiling." },
     "npm run test": { "group": "verify", "text": "Every Storybook story as a render, axe and interaction test in headless Chromium, plus the unit tests of the pure modules in Node." },
     "npm run build-storybook": { "group": "verify", "text": "Runs the chain again, then builds the static Storybook." },
     "npm --prefix website run lint": { "group": "verify", "text": "ESLint over the website." },

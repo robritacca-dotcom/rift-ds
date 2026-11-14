@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { InspectorInput } from 'rift-ds';`
 - Deep import: `import { InspectorInput } from 'rift-ds/components/Inspector/InspectorInput';`
 - Rendering: client component (declares 'use client')
+- Size: 0.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/inspector-input
 - Schema: https://rift-ds.com/schema/components/inspector-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,3 +22,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px (not the native character-width `size` attribute). |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
 | className | `string` | no | `''` | Additional CSS classes, applied to the bar rather than the <input>. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA text field pattern (https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
+
+| Key | What it does |
+| --- | --- |
+| Typing | Enters text in the named field. |

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Widget } from 'rift-ds';`
 - Deep import: `import { Widget } from 'rift-ds/components/Widget/Widget';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/widget
 - Schema: https://rift-ds.com/schema/components/widget.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -57,6 +58,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | href | `string` | no |  | Renders the row as a link to this URL. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

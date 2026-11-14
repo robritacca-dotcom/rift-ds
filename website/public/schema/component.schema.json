@@ -107,6 +107,100 @@
       "propertyNames": { "pattern": "^[A-Z][A-Za-z0-9]*$" },
       "additionalProperties": { "type": "string", "minLength": 1 },
       "description": "Every type the props or types mention that another package defines, mapped to that package (typescript for a built-in such as Record)."
+    },
+    "keys": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by"],
+      "description": "Who owns the component's keys where no keyboard pattern covers them. A component has a keyboard entry, this, or both.",
+      "properties": {
+        "by": {
+          "type": "string",
+          "enum": ["component", "platform", "none"],
+          "description": "component: keys of its own, pressed by its own tests. platform: the browser or the engine underneath owns them. none: nothing takes focus, which a test holds."
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What the keys do, as a sentence. Absent when by is none."
+        }
+      }
+    },
+    "size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gzip"],
+      "description": "What importing the component costs, measured from the built package.",
+      "properties": {
+        "gzip": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Gzipped JavaScript in bytes: the component bundled and minified with everything it imports, peer dependencies not counted."
+        }
+      }
+    },
+    "keyboard": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The keyboard contract the component is tested against: one entry per WAI-ARIA pattern it follows, the whole component's first, then any that only a part of it follows. Present only on a component that follows one. Every row is pressed by an automated test in a left-to-right and a right-to-left layout.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["pattern", "label", "apg", "rows"],
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "pattern": "^[a-z][a-z-]*$",
+            "description": "The pattern's id, shared by every component tested against the same rows."
+          },
+          "part": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The part of the component that follows the pattern. Absent when the whole component does."
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The pattern's display name."
+          },
+          "apg": {
+            "type": "string",
+            "format": "uri",
+            "description": "The pattern's page in the WAI-ARIA Authoring Practices Guide."
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 1,
+            "description": "The tested behaviours, in the order a person meets them.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["keys", "text"],
+              "properties": {
+                "keys": {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1 },
+                  "description": "KeyboardEvent.key names (the space bar written Space), pressed together when there is more than one. Empty for a behaviour no key starts, such as focus moving in on open."
+                },
+                "when": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "What starts the behaviour when no key does, such as On open. Present exactly when keys is empty."
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "What the press does."
+                },
+                "inline": {
+                  "const": true,
+                  "description": "The key belongs to the inline axis, so Left and Right trade places in a right-to-left layout."
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "$defs": {

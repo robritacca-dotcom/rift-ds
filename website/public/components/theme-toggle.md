@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ThemeToggle } from 'rift-ds';`
 - Deep import: `import { ThemeToggle } from 'rift-ds/components/ThemeToggle/ThemeToggle';`
 - Rendering: client component (declares 'use client')
+- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/theme-toggle
 - Schema: https://rift-ds.com/schema/components/theme-toggle.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,6 +28,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | lightLabel | `string` | no | `'Light'` | Label of the light setting. |
 | darkLabel | `string` | no | `'Dark'` | Label of the dark setting. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA tabs pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the list at the selected tab, and out of the list on the next press. |
+| Arrow Right | Moves to the next tab and selects it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous tab and selects it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last tab and selects it. |
+| Home | Moves to the first tab and selects it. |
 
 ## Types
 

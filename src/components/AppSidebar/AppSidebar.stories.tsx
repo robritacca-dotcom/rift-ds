@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AppSidebar } from './AppSidebar';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
@@ -106,6 +106,36 @@ type Story = StoryObj<typeof meta>;
 export const Expanded: Story = {
   args: {
     defaultExpanded: true,
+  },
+};
+
+/**
+ * Below the mobile breakpoint the rail is a modal drawer. From the keyboard:
+ * the trigger opens it and focus moves inside, Tab and Shift+Tab stay inside
+ * it, and Escape closes it with focus back on the trigger.
+ */
+export const MobileDrawer: Story = {
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const trigger = canvasElement.querySelector<HTMLElement>('.ds-app-sidebar__mobile-trigger')!;
+    const drawer = document.getElementById(trigger.getAttribute('aria-controls')!)!;
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await waitFor(() => expect(drawer.contains(document.activeElement)).toBe(true));
+
+    for (let step = 0; step < 12; step += 1) {
+      await userEvent.tab();
+      await expect(drawer.contains(document.activeElement)).toBe(true);
+    }
+    for (let step = 0; step < 12; step += 1) {
+      await userEvent.tab({ shift: true });
+      await expect(drawer.contains(document.activeElement)).toBe(true);
+    }
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 

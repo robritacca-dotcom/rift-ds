@@ -28,7 +28,7 @@ export default function CurrencyInputPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>An amount of money, never a float</p>
             <p className={styles.introBody}>
-              A currency input holds an amount as a decimal string, so a cent is never lost. It reads the locale’s own marks and a pasted amount in any convention, groups the digits once the reader moves on, and places the currency where the locale writes it.
+              A currency input holds an amount as a decimal string, so a cent is never lost. It reads the locale’s own marks and a pasted amount in any convention, groups the digits once the reader moves on, and places the currency where the locale writes it. Arrow Up and Arrow Down step the amount by <code>step</code>, held between <code>min</code> and <code>max</code>.
             </p>
           </div>
 

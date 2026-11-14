@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { DataTable } from 'rift-ds';`
 - Deep import: `import { DataTable } from 'rift-ds/components/DataTable/DataTable';`
 - Rendering: client component (declares 'use client')
+- Size: 70.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/data-table
 - Schema: https://rift-ds.com/schema/components/data-table.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -118,6 +119,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | rowActionsVisibility | `"hover" \| "always"` | no | `'hover'` | When the inline actions show: on row hover and focus (the default, and always on a touch screen), or always. The More button shows at rest either way, so the column never reads as empty. |
 | locale | `string` | no |  | The BCP 47 locale the table formats and sorts in, such as `de-DE`: every typed column without a `format.locale` of its own, and the order text sorts in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+In grid navigation the arrow keys move between cells, Enter or F2 starts an edit and Escape cancels it. The page has the full table of keys. The component's own stories test these keys.
 
 ## Types
 

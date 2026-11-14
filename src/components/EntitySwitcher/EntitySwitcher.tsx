@@ -6,6 +6,7 @@ import { Input } from '../Input/Input';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import type { AvatarFill } from '../Avatar/avatarFill';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
+import { useTypeahead } from '../../behaviors/typeahead';
 import './EntitySwitcher.css';
 import '../../behaviors/direction.css';
 import '../../fonts/material-symbols.css';
@@ -196,6 +197,10 @@ export function EntitySwitcher({
         collapsedProp ?? !!rootRef.current?.closest('[data-expanded="false"]');
       setBeside(isCollapsed);
       setWidth(isCollapsed ? undefined : rootRef.current?.getBoundingClientRect().width);
+    } else if (listRef.current?.closest('.ds-entity-switcher__panel')?.contains(document.activeElement)) {
+      // The panel leaves the page as it closes, and focus left inside it
+      // would drop to the body. Hand it back to the trigger.
+      rootRef.current?.querySelector<HTMLElement>('.ds-entity-switcher__trigger')?.focus();
     }
     if (openProp === undefined) setOwnOpen(next);
     onOpenChange?.(next);
@@ -224,12 +229,25 @@ export function EntitySwitcher({
     ? all.filter((l) => l.item.name.toLowerCase().includes(term))
     : (level?.children ?? items).map((item) => ({ item, path: trail }));
 
+  const typeahead = useTypeahead();
+
   const onListKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const rowEls = Array.from(
       listRef.current?.querySelectorAll<HTMLElement>('[data-row]:not([aria-disabled="true"])') ?? [],
     );
     const at = rowEls.indexOf(document.activeElement as HTMLElement);
     const key = logicalArrowKey(event.key, event.currentTarget);
+    // Type-to-find: a letter moves to the next row named with it.
+    const hit = typeahead(
+      event,
+      rowEls.map((row) => row.querySelector('.ds-entity-switcher__name')?.textContent),
+      at,
+    );
+    if (hit !== null) {
+      event.preventDefault();
+      rowEls[hit]?.focus();
+      return;
+    }
     if (key === 'ArrowDown' || key === 'ArrowUp') {
       event.preventDefault();
       const step = key === 'ArrowDown' ? 1 : -1;
@@ -378,9 +396,21 @@ export function EntitySwitcher({
     </div>
   );
 
-  // Rows take focus by arrow key, so the first one is reached on open.
+  // Opening moves focus inside: to the search field when there is one
+  // (Arrow Down steps from it into the rows), otherwise to the first row.
   React.useEffect(() => {
-    if (open && !searchable) focusFirstRow();
+    if (!open) return;
+    if (!searchable) {
+      focusFirstRow();
+      return;
+    }
+    const frame = requestAnimationFrame(() =>
+      listRef.current
+        ?.closest('.ds-entity-switcher__panel')
+        ?.querySelector<HTMLElement>('.ds-entity-switcher__search input')
+        ?.focus(),
+    );
+    return () => cancelAnimationFrame(frame);
   }, [open, searchable]);
 
   if (!selected) return null;

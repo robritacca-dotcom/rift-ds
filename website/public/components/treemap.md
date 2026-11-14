@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Treemap } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { Treemap } from 'rift-ds/components/Chart/Treemap';`
 - Rendering: client component (declares 'use client')
+- Size: 2.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/treemap
 - Schema: https://rift-ds.com/schema/components/treemap.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,6 +26,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | sizeLabel | `string` | no | `'Size'` | The tooltip's name for a tile's value. Defaults to "Size". |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

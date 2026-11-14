@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { DocumentViewer } from 'rift-ds';`
 - Deep import: `import { DocumentViewer } from 'rift-ds/components/DocumentViewer/DocumentViewer';`
 - Rendering: client component (declares 'use client')
+- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/document-viewer
 - Schema: https://rift-ds.com/schema/components/document-viewer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -36,6 +37,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | fallbackLabel | `string` | no | `'This file can’t be shown here.'` | The default fallback's line. Defaults to "This file can’t be shown here." |
 | locale | `string` | no |  | The BCP 47 locale the zoom is written in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+A focusable scroll region: the browser scrolls it with the arrow, Page, Home and End keys. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

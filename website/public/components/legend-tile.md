@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { LegendTile } from 'rift-ds';`
 - Deep import: `import { LegendTile } from 'rift-ds/components/LegendTile/LegendTile';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/legend-tile
 - Schema: https://rift-ds.com/schema/components/legend-tile.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,3 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | swatch | `string` | no |  | Any CSS colour for the series dot — consumers typically pass a chart palette token, e.g. `var(--color-chart-series-1)`. When omitted, no dot renders. |
 | locale | `string` | no | `'en-US'` | The BCP 47 locale a number `value` is written in, such as `de-DE`. Defaults to `en-US`. LegendTile can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

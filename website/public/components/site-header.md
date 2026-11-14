@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SiteHeader } from 'rift-ds';`
 - Deep import: `import { SiteHeader } from 'rift-ds/components/SiteHeader/SiteHeader';`
 - Rendering: client component (declares 'use client')
+- Size: 9.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/site-header
 - Schema: https://rift-ds.com/schema/components/site-header.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -34,6 +35,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | drawerTitle | `string` | no | `'Menu'` | The drawer's title, naming the dialog. Shown at its top when there is no `brand`; with one, the brand takes its place and the title is read only by assistive tech. |
 | drawerCloseLabel | `string` | no | `'Close menu'` | The accessible name of the drawer's close button. |
 | className | `string` | no | `''` | Additional CSS classes on the `<header>`. |
+
+## Keyboard
+
+Focusing a section opens its panel, Arrow Down moves into it, and Escape closes it. The component's own stories test these keys.
 
 ## Types
 

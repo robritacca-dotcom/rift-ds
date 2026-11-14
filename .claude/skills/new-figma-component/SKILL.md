@@ -4,6 +4,8 @@ description: Build a library component into the Rift DS Figma kit (a component s
 icon: draw
 displayDescription: "Builds a component that already exists in code into the Figma kit: a component set whose variants follow the props, bound to the kit's Theme and Mode variables, one sticker sheet in the default theme, and a page in the kit's recipe with links to the docs and Storybook. Then maps the frame so the docs page links straight to it. Runs apart from new-component, so the code and the design work can be split."
 invoke: ["add [Name] to Figma","build the Figma side of [Name]","draw [Name] in the kit"]
+metadata:
+  internal: true
 ---
 
 # new-figma-component

@@ -52,5 +52,23 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "switch",
+      "label": "Switch",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/switch/",
+      "rows": [
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Turns the switch on, or off when it is on."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 2431
+  }
 }

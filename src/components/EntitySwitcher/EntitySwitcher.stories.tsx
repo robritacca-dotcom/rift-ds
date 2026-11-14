@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { EntitySwitcher, type EntitySwitcherItem } from './EntitySwitcher';
 import { AppSidebar } from '../AppSidebar/AppSidebar';
 
@@ -110,6 +110,19 @@ export const Single: Story = {
 /** Past the threshold, a search across every level, each result with its path. */
 export const Searchable: Story = {
   args: { searchThreshold: 4 },
+  // Opening lands on the search field, Arrow Down steps into the rows, and
+  // Escape closes with focus back on the trigger.
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getAllByRole('button')[0];
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    const search = await canvas.findByRole('searchbox');
+    await waitFor(() => expect(search).toHaveFocus());
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(document.activeElement?.getAttribute('role')).toMatch(/^menuitem/));
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
 };
 
 /** Truncated, never wrapped. */

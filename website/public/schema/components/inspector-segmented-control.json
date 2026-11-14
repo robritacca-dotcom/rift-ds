@@ -98,5 +98,12 @@
       "definition": "interface InspectorSegment {\n  /** The value reported when this segment is chosen. */\n  value: string;\n  /** Visible text. */\n  label: string;\n  /** Takes this one choice out of the set. */\n  disabled?: boolean;\n}",
       "description": "One choice in an InspectorSegmentedControl."
     }
+  },
+  "keys": {
+    "by": "platform",
+    "note": "Native radio inputs: the browser moves between them with the arrow keys."
+  },
+  "size": {
+    "gzip": 955
   }
 }

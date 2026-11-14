@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { WorldMap } from 'rift-ds';`
 - Deep import: `import { WorldMap } from 'rift-ds/components/WorldMap/WorldMap';`
 - Rendering: client component (declares 'use client')
+- Size: 106.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/world-map
 - Schema: https://rift-ds.com/schema/components/world-map.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,11 +32,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | no | `'World map'` | Accessible name for the map, e.g. "Offices across the network". The point count is appended for screen readers. |
 | pointsLabel | `((count: number) => string)` | no | `` (count) => `${count} ${count === 1 ? 'point' : 'points'}` `` | The point count appended to the map's accessible name, given the count. Defaults to "<count> point" or "<count> points". |
 | zoomHintLabel | `string` | no | `'Zoom with the controls or the plus and minus keys; drag or use the arrow keys to move the map.'` | The keyboard and pointer instructions appended to the map's accessible name while zooming is on. |
-| zoomControlsLabel | `string` | no | `'Map zoom controls'` | Accessible name of the zoom toolbar. Defaults to "Map zoom controls". |
+| zoomControlsLabel | `string` | no | `'Map zoom controls'` | Accessible name of the group of zoom controls. Defaults to "Map zoom controls". |
 | zoomOutLabel | `string` | no | `'Zoom out'` | Accessible name of the zoom-out button. Defaults to "Zoom out". |
 | zoomInLabel | `string` | no | `'Zoom in'` | Accessible name of the zoom-in button. Defaults to "Zoom in". |
 | zoomResetLabel | `((percent: number) => string)` | no | `` (percent) => `Zoom ${percent}%. Reset the view` `` | Accessible name of the zoom readout that resets the view, given the zoom as a whole percentage. Defaults to "Zoom <percent>%. Reset the view". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+With zoom on and the map focused, plus and minus zoom and the arrow keys pan. Its zoom buttons are ordinary buttons. The component's own stories test these keys.
 
 ## Types
 

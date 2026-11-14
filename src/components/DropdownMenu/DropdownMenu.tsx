@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import './DropdownMenu.css';
@@ -453,8 +454,17 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
     getElements: () => [rootRef.current],
   });
 
+  const typeahead = useTypeahead();
+
   /* Keyboard navigation */
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Type-to-find: a letter moves to the next item named with it.
+    const hit = typeahead(e, flatItems.map((item) => (item.disabled ? null : item.label)), focusedIndex);
+    if (hit !== null && isOpen) {
+      e.preventDefault();
+      setFocusedIndex(hit);
+      return;
+    }
     switch (e.key) {
       case 'Enter':
       case ' ':
@@ -647,10 +657,14 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
   // cloneElement replaces props, so compose rather than overwrite.
   const triggerProps = React.isValidElement(trigger)
     ? (trigger.props as {
+        id?: string;
         onClick?: React.MouseEventHandler;
         onKeyDown?: React.KeyboardEventHandler;
       })
     : undefined;
+  // The menu takes its name from the trigger, so the trigger needs an id:
+  // the consumer's when it has one, a generated one otherwise.
+  const triggerId = triggerProps?.id ?? `${generatedId}-trigger`;
 
   return (
     <MenuKeyLabelsContext.Provider value={keyLabels}>
@@ -665,6 +679,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
         <div ref={triggerRef} className={`${baseClass}__trigger`}>
           {React.isValidElement(trigger) ? (
             React.cloneElement(trigger as React.ReactElement<Record<string, unknown>>, {
+              id: triggerId,
               'aria-haspopup': 'menu',
               'aria-expanded': isOpen,
               'aria-controls': isOpen ? menuId : undefined,
@@ -681,6 +696,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
           ) : (
             <button
               type="button"
+              id={triggerId}
               aria-haspopup="menu"
               aria-expanded={isOpen}
               aria-controls={isOpen ? menuId : undefined}
@@ -697,6 +713,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
             id={menuId}
             className={panelClasses}
             role="menu"
+            aria-labelledby={triggerId}
             ref={(el) => {
               panelRef.current = el;
             }}

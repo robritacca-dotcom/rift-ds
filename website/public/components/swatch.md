@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Swatch } from 'rift-ds';`
 - Deep import: `import { Swatch } from 'rift-ds/components/Swatch/Swatch';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/swatch
 - Schema: https://rift-ds.com/schema/components/swatch.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,3 +23,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | shape | `"circle" \| "square"` | no | `'circle'` | Corner treatment — circle matches the site's preset grids; square suits picker triggers |
 | disabled | `boolean` | no | `false` | Whether the swatch is disabled |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA toggle button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Changes whether the button is pressed. |
+| Space | Does the same as Enter. |

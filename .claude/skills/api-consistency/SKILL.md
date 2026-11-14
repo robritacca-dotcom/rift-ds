@@ -4,6 +4,8 @@ description: Review component prop interfaces across the design system, or scope
 icon: compare
 displayDescription: "Reads component Props interfaces, across the library or scoped to one component and its family, and flags inconsistencies: mixed boolean naming (disabled vs isDisabled), mismatched size enums, emphasis and colour mixed in one prop, missing standard props, structural mismatches within families, and registry descriptions or specs that name a prop the contract no longer carries. Produces a grouped findings report prioritised by breaking impact."
 invoke: ["review component APIs","prop consistency audit","are our component props consistent","check for API inconsistencies","check this component's API"]
+metadata:
+  internal: true
 ---
 
 # api-consistency
@@ -84,6 +86,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
 5. **Then check the contract agrees with its description.** For each component in scope, read its entry in `website/src/data/component-api.generated.ts` and its types in `website/src/data/component-types.generated.ts` (together exactly what `/api/mcp`'s `get_component` serves, so this is the contract strangers' agents see, type JSDoc included), then read the two prose descriptions of it against that entry:
    - its registry `description` (`src/components/registry.json`, or `src/chat/registry.json` for the widget), which also ships through the site chat's corpus, the consumer agent skill and the page metadata
    - its `###` spec section in `design.md`
+   - its `keys.note` in the registry, where it has one: a sentence about what its keys do, printed on its page, in its markdown, its schema and the MCP response. Read it against the key handler, and flag a key it names that the code does not handle
 
    Flag any prop or value a description names that the contract does not carry, or carries only as `@deprecated` (a description still saying "neutral and destructive variants" after those moved to `tone` is the classic case). A design.md spec is not a props list and is not expected to name every prop: the prop JSDoc is the one home of the full contract, and the generated component API, the per-component `.md` pages and the MCP endpoint all serve it, so restating it in design.md would be a second copy to drift. Flag a spec that omits a prop only when the prop changes what the component looks like or how it behaves (a variant, a size, a mode) and a reader of the spec would design wrongly without it. The fix goes in the source of the description, never in a generated file.
 

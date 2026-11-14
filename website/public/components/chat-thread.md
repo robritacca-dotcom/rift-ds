@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ChatThread } from 'rift-ds';`
 - Deep import: `import { ChatThread } from 'rift-ds/components/ChatThread/ChatThread';`
 - Rendering: client component (declares 'use client')
+- Size: 1.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/chat-thread
 - Schema: https://rift-ds.com/schema/components/chat-thread.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,5 +22,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | jumpLabel | `string` | no | `'Scroll to the latest message'` | Accessible name for the scroll-to-bottom control. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The conversation, in order: ChatMessages, ChatMarkers. |
+
+## Keyboard
+
+A focusable scroll region: the browser scrolls it with the arrow, Page, Home and End keys. Those keys belong to the platform, so no test of this library presses them.
 
 Types from other packages: `ReactNode` (react).

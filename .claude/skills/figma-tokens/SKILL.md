@@ -4,6 +4,8 @@ description: Carry a token or theme change into the Rift DS Figma kit's variable
 icon: palette
 displayDescription: "Carries a token or theme change into the Figma kit. It compares every token's resolved value, in every theme and in light and dark, with the kit's variables, then adds, updates or renames them in each mode, adds a new theme as a mode, rebinds the components that now read a new token, and refreshes the Colour, Typography and Themes pages. A rename keeps every binding, and nothing is removed without a yes."
 invoke: ["update the Figma tokens","sync the variables to Figma","add the [X] theme to Figma"]
+metadata:
+  internal: true
 ---
 
 # figma-tokens

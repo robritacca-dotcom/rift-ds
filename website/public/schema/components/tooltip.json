@@ -75,5 +75,28 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "tooltip",
+      "label": "Tooltip",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/",
+      "rows": [
+        {
+          "keys": [],
+          "when": "On focus",
+          "text": "Focusing the trigger shows it."
+        },
+        {
+          "keys": [
+            "Escape"
+          ],
+          "text": "Hides it and leaves focus on the trigger."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 2797
   }
 }

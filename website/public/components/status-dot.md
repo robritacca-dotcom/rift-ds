@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { StatusDot } from 'rift-ds';`
 - Deep import: `import { StatusDot } from 'rift-ds/components/StatusDot/StatusDot';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/status-dot
 - Schema: https://rift-ds.com/schema/components/status-dot.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,3 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | no |  | Visible text beside the dot. Omit it for a bare dot only when the meaning has another home — a row label, or an `aria-label` passed through — since a colour alone announces nothing. |
 | decorative | `boolean` | no | `false` | Renders the dot as decoration: no `role="status"`, hidden from assistive technology. For a dot repeated down a list, where the host announces the state in the row's own text and a live region per row would be noise. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

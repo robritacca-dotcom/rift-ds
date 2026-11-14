@@ -4,6 +4,8 @@ description: Library-wide audit of how components treat the same thing. Finds co
 icon: difference
 displayDescription: "Sweeps every component for the same thing done more than one way: a checkbox, radio, switch or chosen mark drawn by hand instead of the shared indicator, a visually-hidden recipe or close button copied rather than composed, and a surface family (option rows, cards, overlay rows, navigation rows) whose members split on fill, border, radius, hover, selected or disabled. Runs the shared-primitives validator for the mechanical half, builds the family tables fresh from the stylesheets for the rest, and lands the fixes on a local branch for approval."
 invoke: ["audit component consistency","consistency audit","are the components consistent","find redrawn controls","check the surface families"]
+metadata:
+  internal: true
 ---
 
 # component-consistency-audit

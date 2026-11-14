@@ -89,5 +89,12 @@
         }
       ]
     }
-  ]
+  ],
+  "keys": {
+    "by": "component",
+    "note": "It is ColorPicker in the inspector’s dress: opening moves focus onto the colour area, where the arrow keys move both axes, and Escape closes the panel with focus back on the swatch."
+  },
+  "size": {
+    "gzip": 4951
+  }
 }

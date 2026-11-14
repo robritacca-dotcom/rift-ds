@@ -161,5 +161,41 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "combobox",
+      "label": "Combobox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/combobox/",
+      "rows": [
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Opens the list of options."
+        },
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "With the list open, moves to the next option."
+        },
+        {
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous option."
+        },
+        {
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes the list and keeps focus on the field."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 6402
+  }
 }

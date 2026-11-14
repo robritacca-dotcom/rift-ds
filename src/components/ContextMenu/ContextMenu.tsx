@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback, useLayoutEffect, useId } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import type {
   DropdownMenuEntry,
@@ -358,7 +359,16 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
     }, [isOpen, position]);
 
     /* Keyboard navigation on the focused panel */
+    const typeahead = useTypeahead();
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
+      // Type-to-find: a letter moves to the next item named with it.
+      const hit = typeahead(e, flatItems.map((item) => (item.disabled ? null : item.label)), focusedIndex);
+      if (hit !== null) {
+        e.preventDefault();
+        setFocusedIndex(hit);
+        return;
+      }
       switch (e.key) {
         case 'Enter':
         case ' ': {

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AppSidebar } from 'rift-ds';`
 - Deep import: `import { AppSidebar } from 'rift-ds/components/AppSidebar/AppSidebar';`
 - Rendering: client component (declares 'use client')
+- Size: 9.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-sidebar
 - Schema: https://rift-ds.com/schema/components/app-sidebar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -45,6 +46,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | collapseLabel | `string` | no | `'Collapse sidebar'` | Accessible name of the toggle when it collapses the rail |
 | profileMoreLabel | `string` | no | `'Profile options'` | Accessible name of the profile block's more button |
 | menuLabel | `string` | no | `'Menu'` | Back-button text in the mobile drawer's drill-in when the open level has no parent row to name (a top-level item opened with `subNav="panel"`) |
+
+## Keyboard
+
+Below the mobile breakpoint the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it. The component's own stories test these keys.
 
 ## Types
 

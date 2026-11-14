@@ -28,6 +28,8 @@ import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { SITE_URL } from './brand.mjs';
 import { chatRegistry, repoRoot } from './component-docgen.mjs';
 import { isEntryScript } from './lib/report.mjs';
+import { keyboardFor, keyLabel, keysOf } from './keyboard-patterns.mjs';
+import { sizeOf } from './component-sizes.mjs';
 
 /** The component pages' folder, the chat widget's page included. */
 export const outputDir = join(repoRoot, 'website', 'public', 'components');
@@ -107,6 +109,9 @@ export function buildComponentMarkdown(entry, origin) {
   }
   lines.push(
     `- Rendering: ${rendering}`,
+    ...(sizeOf(entry.name) !== undefined
+      ? [`- Size: ${(sizeOf(entry.name) / 1000).toFixed(1)} kB gzipped with everything it imports, peer dependencies not counted`]
+      : []),
     `- Live docs: ${origin}${docsPath}`,
     `- Schema: ${origin}/schema/components/${entry.slug}.json (JSON, validates against ${origin}/schema/component.schema.json)`
   );
@@ -133,6 +138,46 @@ export function buildComponentMarkdown(entry, origin) {
           `${prop.defaultValue != null ? code(cell(prop.defaultValue)) : ''} | ${description} |`
       );
     }
+  }
+
+  // The keys the keyboard contract story presses against this component.
+  const keyboard = keyboardFor(entry.name);
+  if (keyboard.length > 0) {
+    lines.push(
+      '',
+      '## Keyboard',
+      '',
+      'Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.'
+    );
+    for (const pattern of keyboard) {
+      const subject = pattern.part ? `The ${pattern.part} follows` : 'Follows';
+      lines.push(
+        '',
+        `${subject} the WAI-ARIA ${pattern.label.toLowerCase()} pattern (${pattern.apg}).`,
+        '',
+        '| Key | What it does |',
+        '| --- | --- |'
+      );
+      for (const row of pattern.rows) {
+        const key = row.keys.length > 0 ? keyLabel(row.keys) : row.when;
+        const mirrored = row.inline ? ' The opposite arrow in a right-to-left layout.' : '';
+        lines.push(`| ${cell(key)} | ${cell(row.text + mirrored)} |`);
+      }
+    }
+  }
+
+  // Keys no pattern covers: the component's own, or the platform's.
+  const keys = keysOf(entry.name);
+  if (keys?.note) {
+    if (keyboard.length === 0) lines.push('', '## Keyboard');
+    lines.push(
+      '',
+      keys.by === 'platform'
+        ? `${keys.note} Those keys belong to the platform, so no test of this library presses them.`
+        : `${keys.note} ${keys.see ? `${keys.see}'s stories` : "The component's own stories"} test these keys.`
+    );
+  } else if (keys?.by === 'none') {
+    lines.push('', '## Keyboard', '', 'Nothing here takes focus, so there are no keys. A test holds that.');
   }
 
   // The types the props reference, so the page is a closed contract like

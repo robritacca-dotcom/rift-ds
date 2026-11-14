@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AttachmentGroup } from 'rift-ds';`
 - Deep import: `import { AttachmentGroup } from 'rift-ds/components/Attachment/AttachmentGroup';`
 - Rendering: client component (declares 'use client')
+- Size: 12.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/attachment-group
 - Schema: https://rift-ds.com/schema/components/attachment-group.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -34,6 +35,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | attachmentViewerLabels | `Pick<AttachmentViewerProps, "closeLabel" \| "downloadLabel" \| "previousLabel" \| "nextLabel" \| "retryLabel" \| "noPreviewLabel" \| "failedLabel" \| "failedDescription" \| "formatPosition">` | no |  | The words the built-in viewer writes, merged over its English defaults: its buttons ("Download", "Close", "Previous file", "Next file", "Try again"), its fallback headlines and the position text ("2 of 5"). |
 | locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The control that shows the rest of the files follows the WAI-ARIA disclosure pattern (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Opens what it controls, and closes it when it is open. |
+| Space | Does the same as Enter. |
 
 ## Types
 

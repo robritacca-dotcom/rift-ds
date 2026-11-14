@@ -55,6 +55,7 @@ export const CHAIN = [
   ['generate-quality-gate', 'dev'],
   ['validate-generated-files', 'build'],
   ['validate-component-registry', 'build'],
+  ['validate-keyboard-patterns', 'build'],
   ['validate-website-surfaces', 'build'],
   ['validate-page-titles', 'build'],
   ['validate-prop-docs', 'build'],

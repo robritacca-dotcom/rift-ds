@@ -167,5 +167,22 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "textbox",
+      "label": "Text field",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
+      "rows": [
+        {
+          "keys": [],
+          "when": "Typing",
+          "text": "Enters text in the named field."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 5127
   }
 }

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ShaderScene } from 'rift-ds';`
 - Deep import: `import { ShaderScene } from 'rift-ds/components/ShaderScene/ShaderScene';`
 - Rendering: client component (declares 'use client')
+- Size: 14.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/shader-scene
 - Schema: https://rift-ds.com/schema/components/shader-scene.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,6 +24,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | enabled | `boolean` | no | `true` | False never starts WebGL and reports `unavailable`, painting nothing: the kill switch, as on ShaderField. |
 | onStatusChange | `((status: ShaderSceneStatus) => void)` | no |  | Called whenever the status changes. Drive a fallback from this, or lay one under the scene: it paints nothing until it is `active`, so what shows while it is pending or cannot run is the caller's design decision. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

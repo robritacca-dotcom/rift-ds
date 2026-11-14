@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { PinInput } from 'rift-ds';`
 - Deep import: `import { PinInput } from 'rift-ds/components/PinInput/PinInput';`
 - Rendering: client component (declares 'use client')
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/pin-input
 - Schema: https://rift-ds.com/schema/components/pin-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,3 +30,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | name | `string` | no |  | Form field name. When set, the joined code submits with an enclosing form through a hidden input, nothing while disabled. The cells themselves carry no name. |
 | cellLabel | `((position: number, count: number) => string)` | no |  | Accessible name of each cell, given its 1-based position and the cell count. Defaults to "Digit <position> of <count>" for the numeric format and "Character <position> of <count>" for alphanumeric. |
 | className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the cells |
+
+## Keyboard
+
+Typing fills a cell and moves on, Backspace clears and steps back, and the arrow keys move between cells. The component's own stories test these keys.

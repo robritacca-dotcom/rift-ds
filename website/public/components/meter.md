@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Meter } from 'rift-ds';`
 - Deep import: `import { Meter } from 'rift-ds/components/Meter/Meter';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/meter
 - Schema: https://rift-ds.com/schema/components/meter.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,3 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size (bar height) |
 | locale | `string` | no | `'en-US'` | The BCP 47 locale the default percentage readout is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

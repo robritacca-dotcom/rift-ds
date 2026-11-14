@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { StreamingText } from 'rift-ds';`
 - Deep import: `import { StreamingText } from 'rift-ds/components/StreamingText/StreamingText';`
 - Rendering: client component (declares 'use client')
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/streaming-text
 - Schema: https://rift-ds.com/schema/components/streaming-text.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,3 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | cursor | `boolean` | no | `true` | Shows the blinking cursor while streaming or revealing. |
 | onRevealComplete | `(() => void)` | no |  | Fires once when the reveal catches up with `text` after `streaming` has ended — the moment the message is fully on screen. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { InspectorSlider } from 'rift-ds';`
 - Deep import: `import { InspectorSlider } from 'rift-ds/components/Inspector/InspectorSlider';`
 - Rendering: client component (declares 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/inspector-slider
 - Schema: https://rift-ds.com/schema/components/inspector-slider.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,3 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((value: number) => void)` | no |  | Convenience callback receiving the numeric value directly. Fires alongside `onChange`, which keeps the standard React event signature. |
 | locale | `string` | no |  | The BCP 47 locale the reading is written in when no `format` is given, such as `de-DE` (`0,5`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes, applied to the bar rather than the <input>. |
+
+## Keyboard
+
+A native range input: the browser’s own arrow, Home, End and Page keys move it. Those keys belong to the platform, so no test of this library presses them.

@@ -1,0 +1,39 @@
+{
+  "$comment": "Gzipped JavaScript ceilings, in bytes, for what an import of the published package costs. scripts/validate-size-budget.mjs owns the method and the rules. Each ceiling was set about a tenth over its measured size; raise one in the change that grows it.",
+  "componentCeiling": 12000,
+  "components": {
+    "AttachmentGroup": 15000,
+    "AttachmentViewer": 13000,
+    "BentoTile": 14000,
+    "DataTable": 77000,
+    "ShaderScene": 16000,
+    "TableToolbar": 44000,
+    "ThreadPanel": 15000,
+    "WorldMap": 117000
+  },
+  "subpaths": {
+    ".": 354300,
+    "./behaviors/LinkProvider": 600,
+    "./behaviors/LocaleProvider": 700,
+    "./behaviors/shortcuts": 2800,
+    "./behaviors/useScrollLock": 900,
+    "./charts": 8600,
+    "./chat": 76500,
+    "./chat/actions": 1200,
+    "./chat/demo": 28100,
+    "./chat/server": 10500,
+    "./chat/upstash": 2000,
+    "./components/Attachment/fileTypes": 2000,
+    "./components/Attachment/useAttachments": 2400,
+    "./components/Avatar/demoAvatars": 700,
+    "./components/Mention/mentions": 1200,
+    "./components/ShaderField/useShaderField": 6400,
+    "./components/StreamingText/useStreamReveal": 1100,
+    "./components/registry": 16000,
+    "./format": 3000,
+    "./tokens/breakpoints": 1100,
+    "./tokens/motion": 900,
+    "./tokens/registry": 2100,
+    "./tokens/values": 29000
+  }
+}

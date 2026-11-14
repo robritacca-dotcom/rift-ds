@@ -175,6 +175,10 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         target = loop ? (index + 1) % slideCount : Math.min(index + 1, slideCount - 1);
       } else if (key === 'ArrowLeft') {
         target = loop ? (index - 1 + slideCount) % slideCount : Math.max(index - 1, 0);
+      } else if (key === 'Home') {
+        target = 0;
+      } else if (key === 'End') {
+        target = slideCount - 1;
       }
       if (target === undefined) return;
       e.preventDefault();

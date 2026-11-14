@@ -190,5 +190,73 @@
     "Partial": "typescript",
     "ReactNode": "react",
     "Record": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "dialog",
+      "label": "Dialog",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "rows": [
+        {
+          "keys": [],
+          "when": "On open",
+          "text": "Opening moves focus inside."
+        },
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves to the next control inside, and from the last back to the first. Focus never reaches the page behind."
+        },
+        {
+          "keys": [
+            "Shift",
+            "Tab"
+          ],
+          "text": "Moves to the previous control inside, and from the first to the last."
+        },
+        {
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes it and returns focus to what opened it."
+        }
+      ]
+    },
+    {
+      "pattern": "listbox",
+      "part": "list of results",
+      "label": "Listbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+      "rows": [
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first option."
+        },
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next option."
+        },
+        {
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous option."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last option."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 8596
   }
 }

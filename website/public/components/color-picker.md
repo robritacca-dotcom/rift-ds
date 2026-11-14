@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ColorPicker } from 'rift-ds';`
 - Deep import: `import { ColorPicker } from 'rift-ds/components/ColorPicker/ColorPicker';`
 - Rendering: client component (declares 'use client')
+- Size: 4.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/color-picker
 - Schema: https://rift-ds.com/schema/components/color-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -35,3 +36,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | hexLabel | `string` | no | `'Hex colour value'` | Accessible name of the hex text field. |
 | triggerLabel | `((hex: string) => string)` | no | `` (hex: string) => `Choose colour, ${hex}` `` | Accessible name of the swatch trigger when there is no visible `label`, given the current hex value. Defaults to "Choose colour, " followed by the hex (`Choose colour, #118AB2`). A passed `aria-label` still wins. |
 | className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the trigger |
+
+## Keyboard
+
+Opening moves focus onto the colour area, where the arrow keys move both axes, Home and End take saturation to its ends, and Escape closes the panel. The component's own stories test these keys.

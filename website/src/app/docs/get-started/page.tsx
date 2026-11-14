@@ -244,6 +244,11 @@ const PRESET_OVERRIDE_SNIPPET = `/* Keep a shipped theme and change one part of 
 
 const INIT_SNIPPET = `npx rift-ds init`;
 
+/* The same skills through the skills CLI, for an agent other than Claude
+   Code: it reads them from the repository (skills.sh.json names the
+   folder) and writes them where that agent looks. */
+const SKILLS_CLI_SNIPPET = `npx skills add ${REPOSITORY_URL.replace("https://github.com/", "")}`;
+
 /* One curl per file of every skill, built from the generated manifest
    (the same list the init bin installs from), never restated here. */
 const SKILL_SNIPPET = skillCurlSnippet();
@@ -536,6 +541,11 @@ export default function GetStartedPage() {
                               refresh them. No npm nearby? The same files are one curl each:
                             </p>
                             <CodeBlock code={SKILL_SNIPPET} language="bash" showCopy />
+                            <p className={styles.sectionNote}>
+                              Using another agent? The skills CLI installs the same files where
+                              Cursor, Codex and the rest look for them:
+                            </p>
+                            <CodeBlock code={SKILLS_CLI_SNIPPET} language="bash" showCopy />
                           </div>
                         ),
                       },

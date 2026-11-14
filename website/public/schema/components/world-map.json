@@ -166,7 +166,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name of the zoom toolbar. Defaults to \"Map zoom controls\".",
+          "description": "Accessible name of the group of zoom controls. Defaults to \"Map zoom controls\".",
           "default": "Map zoom controls"
         },
         {
@@ -218,5 +218,12 @@
   },
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "component",
+    "note": "With zoom on and the map focused, plus and minus zoom and the arrow keys pan. Its zoom buttons are ordinary buttons."
+  },
+  "size": {
+    "gzip": 106019
   }
 }

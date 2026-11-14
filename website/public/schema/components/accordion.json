@@ -75,5 +75,29 @@
   },
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "accordion",
+      "label": "Accordion",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Opens a closed section, and closes an open one."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Does the same as Enter."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 598
   }
 }

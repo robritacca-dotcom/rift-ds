@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { CommandPaletteTrigger } from '../CommandPaletteTrigger/CommandPaletteTrigger';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
@@ -188,4 +189,21 @@ export const Sticky: Story = {
       </div>
     ),
   ],
+};
+
+/**
+ * The header from the keyboard: focusing a section opens its panel, Arrow
+ * Down moves into the panel's links, and Escape closes it.
+ */
+export const Keyboard: Story = {
+  play: async ({ canvasElement }) => {
+    const section = canvasElement.querySelector<HTMLElement>('a[aria-expanded]')!;
+    section.focus();
+    await waitFor(() => expect(section).toHaveAttribute('aria-expanded', 'true'));
+    const panel = document.getElementById(section.getAttribute('aria-controls')!)!;
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(panel.contains(document.activeElement)).toBe(true));
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(section).toHaveAttribute('aria-expanded', 'false'));
+  },
 };

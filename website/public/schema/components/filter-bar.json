@@ -104,5 +104,42 @@
   "externalTypes": {
     "ReactNode": "react",
     "Record": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "listbox",
+      "part": "list of options",
+      "label": "Listbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/listbox/",
+      "rows": [
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first option."
+        },
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next option."
+        },
+        {
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous option."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last option."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 6934
   }
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './ModelPicker.css';
 import '../../fonts/material-symbols.css';
@@ -178,8 +179,18 @@ export const ModelPicker = React.forwardRef<HTMLDivElement, ModelPickerProps>(
       getElements: () => [rootRef.current],
     });
 
+    const typeahead = useTypeahead();
+
     const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
+
+      // Type-to-find: with the list open, a letter moves to the next model named with it.
+      const hit = typeahead(e, models.map((model) => (model.disabled ? null : model.label)), focusedIndex);
+      if (hit !== null && isOpen) {
+        e.preventDefault();
+        setFocusedIndex(hit);
+        return;
+      }
 
       switch (e.key) {
         case 'Enter':

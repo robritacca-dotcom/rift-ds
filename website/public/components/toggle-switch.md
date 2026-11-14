@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ToggleSwitch } from 'rift-ds';`
 - Deep import: `import { ToggleSwitch } from 'rift-ds/components/ToggleSwitch/ToggleSwitch';`
 - Rendering: client component (declares 'use client')
+- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/toggle-switch
 - Schema: https://rift-ds.com/schema/components/toggle-switch.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -36,5 +37,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | checked | `boolean` | no | `false` | Whether the switch is on. |
 | size | `"default" \| "compact"` | no | `'default'` | Track size: `default` is 42×24px, `compact` 34×20px. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA switch pattern (https://www.w3.org/WAI/ARIA/apg/patterns/switch/).
+
+| Key | What it does |
+| --- | --- |
+| Space | Turns the switch on, or off when it is on. |
 
 Types from other packages: `ComponentPropsWithoutRef` (react).

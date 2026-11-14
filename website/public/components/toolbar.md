@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Toolbar } from 'rift-ds';`
 - Deep import: `import { Toolbar } from 'rift-ds/components/Toolbar/Toolbar';`
 - Rendering: client component (declares 'use client')
+- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/toolbar
 - Schema: https://rift-ds.com/schema/components/toolbar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -24,5 +25,18 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 ## ToolbarSeparator props
 
 No own props; native attributes pass through.
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA toolbar pattern (https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Right | Moves to the next control. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous control. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last control. |
+| Home | Moves to the first control. |
 
 Types from other packages: `ReactNode` (react).

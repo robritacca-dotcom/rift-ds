@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { NumberInput } from 'rift-ds';`
 - Deep import: `import { NumberInput } from 'rift-ds/components/NumberInput/NumberInput';`
 - Rendering: client component (declares 'use client')
+- Size: 1.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/number-input
 - Schema: https://rift-ds.com/schema/components/number-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,3 +29,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | decreaseLabel | `string` | no | `'Decrease value'` | Accessible name of the decrement stepper button. Defaults to "Decrease value". |
 | increaseLabel | `string` | no | `'Increase value'` | Accessible name of the increment stepper button. Defaults to "Increase value". |
 | className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The field follows the WAI-ARIA text field pattern (https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
+
+| Key | What it does |
+| --- | --- |
+| Typing | Enters text in the named field. |
+
+The step buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |

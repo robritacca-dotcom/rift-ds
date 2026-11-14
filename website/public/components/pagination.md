@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Pagination } from 'rift-ds';`
 - Deep import: `import { Pagination } from 'rift-ds/components/Pagination/Pagination';`
 - Rendering: client component (declares 'use client')
+- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/pagination
 - Schema: https://rift-ds.com/schema/components/pagination.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,3 +29,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | readoutLabel | `((page: number, pageCount: number) => string)` | no | `` (page: number, pageCount: number) => `Page ${page} of ${pageCount}` `` | Text of the compact size's readout, given the current page and the page count |
 | locale | `string` | no |  | The BCP 47 locale the page numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The page buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |

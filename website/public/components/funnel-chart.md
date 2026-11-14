@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { FunnelChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { FunnelChart } from 'rift-ds/components/FunnelChart/FunnelChart';`
 - Rendering: client component (declares 'use client')
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/funnel-chart
 - Schema: https://rift-ds.com/schema/components/funnel-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | emptyLabel | `string` | no | `'Funnel, no data'` | The chart's accessible name when `data` is empty. Defaults to "Funnel, no data". |
 | minStageShare | `number` | no |  | Floor percentage from the stepped-bar rendering this chart used to have. Deprecated: The funnel now draws true trapezoids sized by value, so a height floor no longer applies; the prop is ignored. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

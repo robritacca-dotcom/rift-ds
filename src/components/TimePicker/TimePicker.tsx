@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useId, useMemo } from 'react';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import { useLocale } from '../../behaviors/LocaleProvider';
@@ -264,8 +265,18 @@ export const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
       getElements: () => [rootRef.current],
     });
 
+    const typeahead = useTypeahead();
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
+
+      // Type-to-find: with the list open, typing the start of a time moves to it.
+      const hit = typeahead(e, timeOptions.map((option) => option.label), focusedIndex);
+      if (hit !== null && isOpen) {
+        e.preventDefault();
+        setFocusedIndex(hit);
+        return;
+      }
 
       switch (e.key) {
         case 'Enter':

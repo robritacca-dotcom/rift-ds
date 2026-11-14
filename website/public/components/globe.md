@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Globe } from 'rift-ds';`
 - Deep import: `import { Globe } from 'rift-ds/components/Globe/Globe';`
 - Rendering: client component (declares 'use client')
+- Size: 3.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/globe
 - Schema: https://rift-ds.com/schema/components/globe.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -34,6 +35,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | rotateHintLabel | `string` | no | `'Drag to rotate, or use the arrow keys when focused.'` | The pointer and keyboard instructions appended to the accessible name while `interactive`. |
 | roleDescription | `string` | no | `'globe'` | What assistive technology calls the globe in place of its role, applied whichever role it takes: `application` while `interactive`, `group` when only `onPointClick` makes the markers buttons, and `img` otherwise. Defaults to "globe". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+The arrow keys turn the globe while it has focus. The component's own stories test these keys.
 
 ## Types
 

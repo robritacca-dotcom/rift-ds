@@ -192,5 +192,12 @@
     "ComponentPropsWithRef": "react",
     "ElementType": "react",
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "component",
+    "note": "The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own."
+  },
+  "size": {
+    "gzip": 9620
   }
 }

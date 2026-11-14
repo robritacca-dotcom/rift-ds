@@ -32,7 +32,9 @@ export interface ToolbarProps
  * segmented controls, separated into clusters. Announces as `role="toolbar"`
  * and moves focus with the arrow keys (Home/End jump to the ends), following
  * the toolbar keyboard pattern, while every control keeps its natural tab
- * stop.
+ * stop. That departure from the pattern's single tab stop is deliberate: a
+ * control inside that owns the arrow keys (a segmented control's tabs)
+ * would otherwise cut the controls after it off from the keyboard.
  *
  * The `floating` variant is the glass pill for controls that hover over
  * content — a canvas's zoom cluster, a stage's own instruments. The shell is

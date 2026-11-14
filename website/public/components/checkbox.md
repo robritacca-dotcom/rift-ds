@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Checkbox } from 'rift-ds';`
 - Deep import: `import { Checkbox } from 'rift-ds/components/Checkbox/Checkbox';`
 - Rendering: client component (declares 'use client')
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/checkbox
 - Schema: https://rift-ds.com/schema/components/checkbox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -68,3 +69,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | className | `string` | no | `'ds-checkbox__icon'` | Additional CSS classes; the default is the checkbox icon's, which sizes and colours it. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA checkbox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/).
+
+| Key | What it does |
+| --- | --- |
+| Space | Ticks the box, or clears it when it is ticked. |

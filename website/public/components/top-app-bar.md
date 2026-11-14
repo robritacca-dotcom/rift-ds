@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { TopAppBar } from 'rift-ds';`
 - Deep import: `import { TopAppBar } from 'rift-ds/components/TopAppBar/TopAppBar';`
 - Rendering: client component (declares 'use client')
+- Size: 9.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/top-app-bar
 - Schema: https://rift-ds.com/schema/components/top-app-bar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -33,6 +34,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | sticky | `boolean` | no | `true` | Keeps the bar stuck to the top of its scroll container |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

@@ -51,5 +51,11 @@
       "definition": "type BentoTileArtPattern = 'dots' | 'lines' | 'rings' | 'grid' | 'waves' | 'rays';",
       "description": "One pattern of the BentoTile art set, listed in the order tiles rotate through them."
     }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 225
   }
 }

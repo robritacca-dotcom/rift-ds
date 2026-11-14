@@ -5,6 +5,7 @@ import { ChosenMark } from '../Dropdown/Dropdown';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import './ThemePicker.css';
 
 /** One theme on offer: its name, its swatch, and optionally the faces it sets. */
@@ -153,15 +154,29 @@ export const ThemePicker = React.forwardRef<HTMLDivElement, ThemePickerProps>(
     };
 
     /* Up and down move through the rows (and into the footer's links),
-       Home and End jump to the ends. */
+       Home and End jump to the ends, and a letter moves to the next row
+       named with it. */
+    const typeahead = useTypeahead();
+
     const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
       const items = [
         ...(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitemradio"], [role="menuitem"]') ?? []),
       ];
       if (!items.length) return;
-      event.preventDefault();
       const at = items.indexOf(document.activeElement as HTMLElement);
+      // Type-to-find: a letter moves to the next theme named with it.
+      const hit = typeahead(
+        event,
+        items.map((item) => (item.querySelector(`.${baseClass}__row-name`) ?? item).textContent),
+        at,
+      );
+      if (hit !== null) {
+        event.preventDefault();
+        items[hit]?.focus();
+        return;
+      }
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
       const next =
         event.key === 'Home'
           ? 0

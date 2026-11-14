@@ -91,7 +91,7 @@ references/components.md lists every component with its import line and descript
 
 ## Exact prop contracts
 
-Do not guess props. Equivalent sources, all generated from the same JSDoc that ships in the package:
+Do not guess props. These sources carry the same contract, generated from the JSDoc that ships in the package. The markdown, the schema and the MCP tool also carry the keys each component is tested against, and the markdown and schema its gzipped size:
 
 - The `.d.ts` files in `node_modules/rift-ds` once installed.
 - `https://rift-ds.com/components/<slug>.md`: one markdown contract per component, next to its live docs page.

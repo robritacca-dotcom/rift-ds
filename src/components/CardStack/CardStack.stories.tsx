@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { CardStack } from './CardStack';
 import { Card } from '../Card/Card';
 import { Badge } from '../Badge/Badge';
@@ -65,5 +66,18 @@ export const NoLoop: Story = {
 export const NoPeek: Story = {
   args: {
     peek: 0,
+  },
+};
+
+/** The stack from the keyboard: with the stack focused, the arrow keys step to the next card and back. */
+export const Keyboard: Story = {
+  args: { onIndexChange: fn() },
+  play: async ({ args, canvasElement }) => {
+    const stack = canvasElement.querySelector<HTMLElement>('[aria-roledescription="card stack"]')!;
+    stack.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    await waitFor(() => expect(args.onIndexChange).toHaveBeenLastCalledWith(1));
+    await userEvent.keyboard('{ArrowLeft}');
+    await waitFor(() => expect(args.onIndexChange).toHaveBeenLastCalledWith(0));
   },
 };

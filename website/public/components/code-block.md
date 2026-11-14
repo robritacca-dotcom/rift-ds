@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { CodeBlock } from 'rift-ds';`
 - Deep import: `import { CodeBlock } from 'rift-ds/components/CodeBlock/CodeBlock';`
 - Rendering: client component (declares 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/code-block
 - Schema: https://rift-ds.com/schema/components/code-block.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -30,3 +31,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | collapseLabel | `string` | no | `'Collapse code'` | Accessible name for the collapse toggle while the code is showing |
 | codeLabel | `string` | no |  | Accessible name for the scrollable code region. Defaults to "Code: <filename>", then "Code: <language>", then "Code". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The collapsible section follows the WAI-ARIA disclosure pattern (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Opens what it controls, and closes it when it is open. |
+| Space | Does the same as Enter. |

@@ -62,6 +62,8 @@ import { repoRoot } from './component-docgen.mjs';
 import { SITE_URL } from './brand.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { isEntryScript } from './lib/report.mjs';
+import { keyboardFor, keysOf } from './keyboard-patterns.mjs';
+import { sizeOf } from './component-sizes.mjs';
 
 export const schemaDir = join(repoRoot, 'website', 'public', 'schema');
 export const outputDir = join(schemaDir, 'components');
@@ -165,6 +167,9 @@ function propSchema(prop) {
   return out;
 }
 
+/** The published shape of `keys`: who owns them and what they do. `see` stays a repo fact. */
+const schemaKeys = ({ by, note }) => ({ by, ...(note ? { note } : {}) });
+
 function componentSchema(entry) {
   const docsUrl = `${SITE_URL}/components/${entry.slug}`;
   return {
@@ -189,6 +194,9 @@ function componentSchema(entry) {
     })),
     ...(entry.types ? { types: entry.types } : {}),
     ...(entry.externalTypes ? { externalTypes: entry.externalTypes } : {}),
+    ...(keyboardFor(entry.name).length > 0 ? { keyboard: keyboardFor(entry.name) } : {}),
+    ...(keysOf(entry.name) ? { keys: schemaKeys(keysOf(entry.name)) } : {}),
+    ...(sizeOf(entry.name) !== undefined ? { size: { gzip: sizeOf(entry.name) } } : {}),
   };
 }
 

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ThreadTabs } from 'rift-ds';`
 - Deep import: `import { ThreadTabs } from 'rift-ds/components/ThreadTabs/ThreadTabs';`
 - Rendering: client component (declares 'use client')
+- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/thread-tabs
 - Schema: https://rift-ds.com/schema/components/thread-tabs.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,6 +26,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | addLabel | `string` | no | `'New thread'` | Accessible name for the new-tab button. |
 | ariaLabel | `string` | no | `'Open threads'` | Accessible name for the tab strip. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The tabs follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

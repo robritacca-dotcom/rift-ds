@@ -149,5 +149,11 @@
       "definition": "interface GaugeThreshold {\n  /** Reading at which this tone takes over. */\n  value: number;\n  /** Tone applied from this reading upward. */\n  tone: 'accent' | 'positive' | 'warning' | 'error' | 'neutral';\n}",
       "description": "One colour switch point: at or above `value`, the dial takes `tone`."
     }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 1151
   }
 }

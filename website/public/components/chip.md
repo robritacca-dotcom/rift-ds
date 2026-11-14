@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Chip } from 'rift-ds';`
 - Deep import: `import { Chip } from 'rift-ds/components/Chip/Chip';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/chip
 - Schema: https://rift-ds.com/schema/components/chip.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,5 +26,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onRemove | `(() => void)` | no |  | Remove handler — renders a trailing close button (input-style chips) |
 | removeLabel | `string \| ((label: string) => string)` | no | `'Remove'` | Accessible label for the remove button. Defaults to "Remove". Pass a function to name each chip's button after its own label, so a row of chips does not announce one name for every button: it is given the label's text (a rich label's text content), e.g. `(label) => \`Remove ${label}\``. A plain string is used as given. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `HTMLButtonElement` (typescript), `MouseEventHandler` (react), `ReactNode` (react).

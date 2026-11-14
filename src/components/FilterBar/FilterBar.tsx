@@ -4,6 +4,7 @@ import React, { useCallback, useId, useRef, useState } from 'react';
 import { CheckboxIndicator } from '../Checkbox/Checkbox';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import './FilterBar.css';
 import '../../fonts/material-symbols.css';
@@ -165,8 +166,17 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       setOpenId((current) => (current === filter.id ? null : filter.id));
     };
 
+    const typeahead = useTypeahead();
+
     const handleTriggerKeyDown = (e: React.KeyboardEvent, filter: FilterBarFilter) => {
       const isOpen = openId === filter.id;
+      // Type-to-find: with the list open, a letter moves to the next option named with it.
+      const hit = typeahead(e, filter.options.map((option) => option.label), focusedIndex);
+      if (hit !== null && isOpen) {
+        e.preventDefault();
+        setFocusedIndex(hit);
+        return;
+      }
       switch (e.key) {
         case 'Enter':
         case ' ':

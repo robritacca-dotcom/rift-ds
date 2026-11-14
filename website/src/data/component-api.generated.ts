@@ -19805,7 +19805,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "zoomControlsLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name of the zoom toolbar. Defaults to \"Map zoom controls\".",
+            "description": "Accessible name of the group of zoom controls. Defaults to \"Map zoom controls\".",
             "defaultValue": "'Map zoom controls'"
           },
           {

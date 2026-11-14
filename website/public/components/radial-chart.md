@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { RadialChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { RadialChart } from 'rift-ds/components/Chart/RadialChart';`
 - Rendering: client component (declares 'use client')
+- Size: 2.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/radial-chart
 - Schema: https://rift-ds.com/schema/components/radial-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,6 +30,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | centerSublabel | `string` | no |  | Small caption under the centre headline |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Keyboard
+
+The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

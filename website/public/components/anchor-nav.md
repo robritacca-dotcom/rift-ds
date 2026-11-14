@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AnchorNav } from 'rift-ds';`
 - Deep import: `import { AnchorNav } from 'rift-ds/components/AnchorNav/AnchorNav';`
 - Rendering: client component (declares 'use client')
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/anchor-nav
 - Schema: https://rift-ds.com/schema/components/anchor-nav.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,6 +23,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | activeId | `string` | no |  | Controlled active item id — set it to drive the highlight yourself and skip scroll tracking |
 | onActiveChange | `((id: string) => void)` | no |  | Fires when the tracked (or clicked) active item changes |
 | offset | `number` | no | `96` | Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Follows the link. |
 
 ## Types
 

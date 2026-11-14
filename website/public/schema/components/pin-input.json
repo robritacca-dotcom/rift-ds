@@ -126,5 +126,12 @@
         }
       ]
     }
-  ]
+  ],
+  "keys": {
+    "by": "component",
+    "note": "Typing fills a cell and moves on, Backspace clears and steps back, and the arrow keys move between cells."
+  },
+  "size": {
+    "gzip": 1767
+  }
 }

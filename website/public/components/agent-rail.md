@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AgentRail } from 'rift-ds';`
 - Deep import: `import { AgentRail } from 'rift-ds/components/AgentRail/AgentRail';`
 - Rendering: server-renderable (no 'use client')
+- Size: 7.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/agent-rail
 - Schema: https://rift-ds.com/schema/components/agent-rail.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,6 +29,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | collapseVariant | `"chevron" \| "close"` | no | `'chevron'` | How the collapse affordance is drawn. `chevron` (the default) pins a chevron to the leading corner, clear of a host's own controls. `close` pins a cross to the trailing corner, for a rail that is its card's only way out or whose host wants the way out where a panel's close usually is. |
 | footer | `ReactNode` | no |  | Rendered under the pane, outside its scroll — a sign-out row, a quiet hint. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The tabs follows the WAI-ARIA tabs pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the list at the selected tab, and out of the list on the next press. |
+| Arrow Right | Moves to the next tab and selects it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous tab and selects it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last tab and selects it. |
+| Home | Moves to the first tab and selects it. |
 
 ## Types
 

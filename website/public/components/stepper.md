@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Stepper } from 'rift-ds';`
 - Deep import: `import { Stepper } from 'rift-ds/components/Stepper/Stepper';`
 - Rendering: client component (declares 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/stepper
 - Schema: https://rift-ds.com/schema/components/stepper.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,6 +23,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | completeLabel | `string` | no | `'Completed'` | Status read after a completed step's label. The check mark that draws the state is decorative, so this visually hidden text is what tells a screen reader a done step from an upcoming one. Defaults to "Completed". |
 | locale | `string` | no |  | The BCP 47 locale the step numbers is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

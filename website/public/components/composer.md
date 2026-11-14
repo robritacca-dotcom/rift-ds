@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Composer } from 'rift-ds';`
 - Deep import: `import { Composer } from 'rift-ds/components/Composer/Composer';`
 - Rendering: client component (declares 'use client')
+- Size: 10.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/composer
 - Schema: https://rift-ds.com/schema/components/composer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -55,6 +56,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | stopLabel | `string` | no | `'Stop generating'` | Accessible label for the stop button. |
 | locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes — applied to the shell, not the <textarea>. |
+
+## Keyboard
+
+Enter sends, Shift and Enter adds a line, and with a mention list open the arrow keys move through it, Enter or Tab writes the choice and Escape closes it. The component's own stories test these keys.
 
 ## Types
 

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { BentoTile } from 'rift-ds';`
 - Deep import: `import { BentoTile } from 'rift-ds/components/BentoTile/BentoTile';`
 - Rendering: client component (declares 'use client')
+- Size: 12.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/bento-tile
 - Schema: https://rift-ds.com/schema/components/bento-tile.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,5 +30,18 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | expandLabel | `string` | no |  | Accessible name of the expand control. Defaults to "Open" and the title, when the title is a string. |
 | closeLabel | `string` | no | `'Close'` | Accessible name of the overlay's close control. |
 | className | `string` | no | `''` | Additional CSS classes on the tile. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The expanded overlay follows the WAI-ARIA dialog pattern (https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
+
+| Key | What it does |
+| --- | --- |
+| On open | Opening moves focus inside. |
+| Tab | Moves to the next control inside, and from the last back to the first. Focus never reaches the page behind. |
+| Shift + Tab | Moves to the previous control inside, and from the first to the last. |
+| Escape | Closes it and returns focus to what opened it. |
 
 Types from other packages: `ReactNode` (react).

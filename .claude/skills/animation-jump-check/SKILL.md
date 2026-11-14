@@ -4,6 +4,8 @@ description: Check a page's animations frame by frame for what a screenshot cann
 icon: animation
 displayDescription: "Plays a page in a headless browser and records where every visible element sits on every animation frame, then reports what a still can never show: an element that snaps instead of gliding, neighbours drifting out of step, an open popover losing its anchor. Each finding is a lead until someone has stepped through that moment and watched it, so the report separates real faults from motion that is meant to step."
 invoke: ["run the animation jump check","/animation-jump-check","check this animation for jumps","find the snap in this motion"]
+metadata:
+  internal: true
 ---
 
 # animation-jump-check

@@ -62,6 +62,19 @@ describe("lookupComponent", () => {
     expect(props.find((p) => p.name === "tone")?.defaultValue).toBe("'default'");
   });
 
+  it("carries the tested keys of a component that follows a keyboard pattern, and who owns the keys otherwise", () => {
+    const palette = lookupComponent("CommandPalette") as { keyboard?: { pattern: string; part?: string; rows: unknown[] }[] };
+    expect(palette.keyboard?.map((entry) => entry.pattern)).toEqual(["dialog", "listbox"]);
+    expect(palette.keyboard?.[1].part).toBeTruthy();
+    expect(palette.keyboard?.every((entry) => entry.rows.length > 0)).toBe(true);
+    const badge = lookupComponent("Badge") as { keyboard?: unknown; keys?: { by: string } };
+    expect(badge.keyboard).toBeUndefined();
+    expect(badge.keys).toEqual({ by: "none" });
+    const slider = lookupComponent("Slider") as { keys?: { by: string; note?: string } };
+    expect(slider.keys?.by).toBe("platform");
+    expect(slider.keys?.note).toBeTruthy();
+  });
+
   it("suggests the nearest names on a miss", () => {
     const miss = lookupComponent("Buton");
     expect("didYouMean" in miss && miss.didYouMean).toContain("Button");

@@ -211,5 +211,11 @@
   "externalTypes": {
     "HTMLButtonElement": "typescript",
     "MouseEventHandler": "react"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 3071
   }
 }

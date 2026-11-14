@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ShaderField } from 'rift-ds';`
 - Deep import: `import { ShaderField } from 'rift-ds/components/ShaderField/ShaderField';`
 - Rendering: client component (declares 'use client')
+- Size: 6.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/shader-field
 - Schema: https://rift-ds.com/schema/components/shader-field.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,6 +21,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | enabled | `boolean` | no | `true` | False keeps WebGL entirely unmounted and reports `unavailable`, so the caller's fallback is the whole background. This is the kill switch: a config lever, or an A/B against the fallback. |
 | onStatusChange | `((status: ShaderFieldStatus) => void)` | no |  | Called whenever the renderer's status changes. Drive the fallback layer's visibility from this — the component deliberately does not own one, since what to paint instead is a design decision, not a rendering one. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

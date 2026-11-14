@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Skeleton } from 'rift-ds';`
 - Deep import: `import { Skeleton } from 'rift-ds/components/Skeleton/Skeleton';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/skeleton
 - Schema: https://rift-ds.com/schema/components/skeleton.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,3 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | lines | `number` | no | `1` | Number of text lines to render (only for text variant) |
 | loadingLabel | `string` | no | `'Loading'` | Accessible name announced while the placeholder shows. A passed `aria-label` takes precedence. |
 | className | `string` | no | `''` | Additional CSS classes. On a multi-line text skeleton they apply to each line, not the group. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

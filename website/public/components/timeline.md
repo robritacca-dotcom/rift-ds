@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Timeline } from 'rift-ds';`
 - Deep import: `import { Timeline } from 'rift-ds/components/Timeline/Timeline';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/timeline
 - Schema: https://rift-ds.com/schema/components/timeline.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,6 +23,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | locale | `string` | no | `'en-US'` | The BCP 47 locale the marker numbers are written in, such as `ar-EG`. Defaults to `en-US`. Timeline can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
 | presentLabel | `string` | no | `'Present'` | Text shown in place of the end date for a role marked `present` |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

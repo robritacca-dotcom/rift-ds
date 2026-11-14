@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AreaChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { AreaChart } from 'rift-ds/components/Chart/AreaChart';`
 - Rendering: client component (declares 'use client')
+- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/area-chart
 - Schema: https://rift-ds.com/schema/components/area-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,6 +28,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | showLegend | `boolean` | no | `true` | Show the legend under a multi-series chart |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Keyboard
+
+The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

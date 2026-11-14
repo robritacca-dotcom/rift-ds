@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AgentStatus } from 'rift-ds';`
 - Deep import: `import { AgentStatus } from 'rift-ds/components/AgentStatus/AgentStatus';`
 - Rendering: client component (declares 'use client')
+- Size: 0.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/agent-status
 - Schema: https://rift-ds.com/schema/components/agent-status.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -32,6 +33,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | state | `AgentStatusState` | no | `'working'` | What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply. |
 | pattern | `"braille" \| "orbit" \| "breathe" \| "snake" \| "fill-sweep" \| "pulse" \| "columns" \| "checkerboard" \| "scan" \| "rain" \| "cascade" \| "sparkle" \| "wave-rows" \| "helix" \| "diagonal-swipe" \| "twinkle"` | no |  | Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

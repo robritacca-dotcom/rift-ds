@@ -157,5 +157,12 @@
   },
   "externalTypes": {
     "Partial": "typescript"
+  },
+  "keys": {
+    "by": "component",
+    "note": "The digits pick an option by its position, and Enter or Space choose the focused one. A lone question answers on the pick, and a set or a multiple-choice question on its button."
+  },
+  "size": {
+    "gzip": 9155
   }
 }

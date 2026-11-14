@@ -220,5 +220,49 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "radio-group",
+      "label": "Radio group",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/radio/",
+      "rows": [
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the group at one option, and out of the group on the next press."
+        },
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next option and chooses it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous option and chooses it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last option and chooses it."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first option and chooses it."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 1764
+  }
 }

@@ -4,6 +4,8 @@ description: Compare the Rift DS Figma kit with the library and bring the kit ba
 icon: compare
 displayDescription: "Compares the Figma kit with the library on both sides: every component, its variant properties and description, every variable and its value in each theme and mode, every page link and the node map the docs pages link through. Then it fills the gaps and fixes what drifted on the Figma side, because the code is the source of truth. Anything that only exists in Figma is reported, never deleted unasked."
 invoke: ["check Figma parity","sync the Figma kit","what is Figma missing?"]
+metadata:
+  internal: true
 ---
 
 # figma-parity

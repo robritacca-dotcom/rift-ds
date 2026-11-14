@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AttachmentTile } from 'rift-ds';`
 - Deep import: `import { AttachmentTile } from 'rift-ds/components/Attachment/AttachmentTile';`
 - Rendering: server-renderable (no 'use client')
+- Size: 3.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/attachment-tile
 - Schema: https://rift-ds.com/schema/components/attachment-tile.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -35,6 +36,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | removeLabel | `string` | no |  | Accessible label for the remove button. Defaults to "Remove" and the file name. |
 | progressLabel | `((name: string) => string)` | no | `` (fileName: string) => `Uploading ${fileName}` `` | Accessible name of the upload progress spinner while `uploading`, given the file name. Defaults to "Uploading" followed by the name. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

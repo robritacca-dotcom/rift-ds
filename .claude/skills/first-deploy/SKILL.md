@@ -4,6 +4,8 @@ description: The one-time go-live checklist — everything between this repo bui
 icon: rocket_launch
 displayDescription: "The one-time path from a green private repo to a live public product: the Vercel projects, the placeholder URL becoming real, the parked uptime cron waking up, the npm Trusted Publishing registration, the first publish, and the wiring the chat and analytics wait on. Ordered so nothing ships pointing at a thing that does not exist yet. Nearly all of it is done: what remains is Chromatic."
 invoke: ["go live","first deploy","set up the public phase","take the site public"]
+metadata:
+  internal: true
 ---
 
 # first-deploy

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ToolCall } from 'rift-ds';`
 - Deep import: `import { ToolCall } from 'rift-ds/components/ToolCall/ToolCall';`
 - Rendering: client component (declares 'use client')
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/tool-call
 - Schema: https://rift-ds.com/schema/components/tool-call.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | actions | `ReactNode` | no |  | Controls for a call awaiting a decision — allow, deny, always allow. Rendered outside the collapsible panel, so approving never requires expanding the call first. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The call's arguments and result. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The collapsible section follows the WAI-ARIA disclosure pattern (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Opens what it controls, and closes it when it is open. |
+| Space | Does the same as Enter. |
 
 ## Types
 

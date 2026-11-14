@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SegmentedControl } from 'rift-ds';`
 - Deep import: `import { SegmentedControl } from 'rift-ds/components/SegmentedControl/SegmentedControl';`
 - Rendering: client component (declares 'use client')
+- Size: 6.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/segmented-control
 - Schema: https://rift-ds.com/schema/components/segmented-control.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,6 +32,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | cycle | `boolean` | no | `false` | Draw one circle in place of the strip, for a seat with room for a single control (a collapsed rail's foot, a condensed header's actions): it shows the current segment's glyph (a segment without an icon shows its label's first character), each press steps to the next enabled segment, round again, and the current label is its tooltip. Its accessible name comes from `cycleLabel`. ThemeToggle's `cycle` is this form. |
 | cycleLabel | `((current: string, next: string) => string)` | no |  | The cycle circle's accessible name, from the current segment's label and the next one's. Default: the control's `aria-label`, then both, as in "View: List. Switch to Grid". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA tabs pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the list at the selected tab, and out of the list on the next press. |
+| Arrow Right | Moves to the next tab and selects it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous tab and selects it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last tab and selects it. |
+| Home | Moves to the first tab and selects it. |
 
 ## Types
 

@@ -107,5 +107,29 @@
     "Partial": "typescript",
     "ReactNode": "react",
     "Record": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "button",
+      "label": "Button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Activates the button."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Activates the button."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 2010
   }
 }

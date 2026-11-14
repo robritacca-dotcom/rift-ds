@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ThreadPanel } from 'rift-ds';`
 - Deep import: `import { ThreadPanel } from 'rift-ds/components/ThreadPanel/ThreadPanel';`
 - Rendering: server-renderable (no 'use client')
+- Size: 13.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/thread-panel
 - Schema: https://rift-ds.com/schema/components/thread-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -56,6 +57,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | collapsedFooterSlot | `ReactNode` | no |  | Rendered above the profile row while the panel is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. AppSidebar's contract: the two forms share one cell and crossfade with the panel, and whichever is hidden is inert. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
+
+## Keyboard
+
+The rail’s toggle is an ordinary button, and its threads are a list of buttons. The component's own stories test these keys.
 
 ## Types
 

@@ -20,8 +20,15 @@ type Story = StoryObj<typeof DropdownMenu>;
    TRIGGER BUTTON (reused across stories)
    ============================================ */
 
-const TriggerButton = ({ label = 'Open menu' }: { label?: string }) => (
+/* The menu clones its handlers and ARIA onto the trigger, so a custom
+   trigger has to pass the props it is handed on to its button. */
+const TriggerButton = ({
+  label = 'Open menu',
+  ...props
+}: { label?: string } & React.ComponentPropsWithoutRef<'button'>) => (
   <button
+    type="button"
+    {...props}
     style={{
       padding: '8px 16px',
       borderRadius: '8px',

@@ -114,5 +114,12 @@
       "definition": "interface FunnelStage {\n  /** Stage name, shown beside the stage and read into the chart's accessible label. */\n  label: string;\n  /** Raw count for the stage — drives the stage's width as a share of the first stage. */\n  value: number;\n  /**\n   * Preformatted value (\"96.4K\") for the tooltip and the accessible label.\n   * Falls back to the raw `value`, locale-formatted.\n   */\n  displayValue?: string;\n}",
       "description": "One stage of the funnel, ordered widest first."
     }
+  },
+  "keys": {
+    "by": "platform",
+    "note": "The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer."
+  },
+  "size": {
+    "gzip": 1766
   }
 }

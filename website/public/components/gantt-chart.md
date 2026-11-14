@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { GanttChart } from 'rift-ds';`
 - Deep import: `import { GanttChart } from 'rift-ds/components/GanttChart/GanttChart';`
 - Rendering: server-renderable (no 'use client')
+- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/gantt-chart
 - Schema: https://rift-ds.com/schema/components/gantt-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -32,6 +33,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | progressLabel | `((percent: number) => string)` | no | `` (percent: number) => `${percent}% complete` `` | The completion in a bar's tooltip and accessible text, given the rounded percentage. Defaults to "<percent>% complete". |
 | projectedLabel | `string` | no | `'projected'` | The word a `projected` bar's tooltip and accessible text carries. Defaults to "projected". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

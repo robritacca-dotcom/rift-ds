@@ -12,7 +12,7 @@ import { Table } from "rift-ds/components/Table/Table";
 import { Button } from "rift-ds/components/Button/Button";
 import { Dialog } from "rift-ds/components/Dialog/Dialog";
 import { Input } from "rift-ds/components/Input/Input";
-import { COMPONENT_COUNT } from "rift-ds/components/registry";
+import { COMPONENT_COUNT, componentMetadata, keyboardPatterns } from "rift-ds/components/registry";
 import {
   BEHAVIOUR_MODULE_COUNT,
   STORIED_COMPONENT_COUNT,
@@ -68,6 +68,14 @@ const gateRows = [
       gate: "Behaviour assertions",
       runs: "Focus movement, Escape handling and overlay stacking, including a popover, a menu and a tooltip open inside a modal, asserted as story play functions rather than described in a doc.",
       when: "Story tests, on every change",
+    },
+  },
+  {
+    id: "keyboard",
+    cells: {
+      gate: "The keyboard contract",
+      runs: "Every component is classified by who owns its keys. One that follows a WAI-ARIA pattern has that pattern’s keys pressed against it in both reading directions, with its names, states and references checked first. One with keys of its own must press them in its own stories, and one with nothing to focus is checked for that.",
+      when: "Story tests and the validate-registry chain",
     },
   },
   {
@@ -130,6 +138,13 @@ const inheritedRows = [
     },
   },
   {
+    id: "typeahead",
+    cells: {
+      behaviour: "Type-to-find",
+      what: "In a menu, a tree or a select-only list, a letter moves to the next item whose name starts with it. Several letters typed quickly narrow the match, the same letter again steps through the names that share it, and any other key or a pause starts over.",
+    },
+  },
+  {
     id: "shortcuts",
     cells: {
       behaviour: "Keyboard shortcuts",
@@ -165,6 +180,40 @@ const inheritedRows = [
     },
   },
 ];
+
+/* The keyboard contract, read from the registry: each pattern, the keys
+   its table holds and the components tested against them. */
+const patternColumns = [
+  { key: "pattern", header: "Pattern", width: "18%", rowHeader: true },
+  { key: "keys", header: "Keys pressed", width: "34%" },
+  { key: "components", header: "Tested against" },
+];
+
+const keyName = (key: string) => key.replace(/^Arrow(?=[A-Z])/, "Arrow ");
+
+const patternRows = Object.entries(keyboardPatterns).map(([id, pattern]) => ({
+  id,
+  cells: {
+    pattern: pattern.label,
+    keys: [
+      ...new Set(
+        pattern.rows.filter((row) => row.keys.length > 0).map((row) => row.keys.map(keyName).join(" + ")),
+      ),
+    ].join(", "),
+    components: componentMetadata
+      .flatMap((component) => [
+        ...(component.pattern === id ? [component.label] : []),
+        ...(component.partPatterns ?? [])
+          .filter((entry) => entry.pattern === id)
+          .map((entry) => `${component.label} (${entry.part})`),
+      ])
+      .join(", "),
+  },
+}));
+
+/* How many components fall in each class of the contract, counted from the registry. */
+const inContract = componentMetadata.filter((c) => c.pattern || c.partPatterns?.length).length;
+const keyOwners = (by: string) => componentMetadata.filter((c) => c.keys?.by === by).length;
 
 const keyboardColumns = [
   { key: "key", header: "Key", width: "22%" },
@@ -374,6 +423,32 @@ export default function AccessibilityPage() {
             >
               <Input label="A field to tab through" placeholder="Type anything" />
             </Dialog>
+          </section>
+
+          {/* The keyboard contract */}
+          <section className={styles.section}>
+            <SectionTitle title="The keyboard contract" />
+            <p className={styles.sectionNote}>
+              A component that follows a WAI-ARIA pattern, or has a part that does, names
+              it in the registry, and one test presses that pattern’s keys against every component that names it,
+              in a left-to-right and a right-to-left layout. The same rows print on each
+              component’s page, in its markdown and in its schema, so a key is only
+              documented where a test presses it.
+            </p>
+            <p className={styles.sectionNote}>
+              Every component is accounted for. {inContract} are tested against a pattern below,
+              in whole or in part. {keyOwners("component")} have keys of their own, which their
+              own stories must press, or the stories of the component they are built on. {keyOwners("platform")} leave their keys to the browser or
+              the engine underneath, such as a native range input. {keyOwners("none")} have
+              nothing to focus, and a test holds that too.
+            </p>
+            <Table
+              columns={patternColumns}
+              rows={patternRows}
+              caption="Keyboard patterns and the components tested against each"
+              captionHidden
+              bordered
+            />
           </section>
 
           {/* What the build leaves to a person */}

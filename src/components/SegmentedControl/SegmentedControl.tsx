@@ -8,6 +8,7 @@ import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useTopLayer } from '../../behaviors/useTopLayer';
 import { CircularButton } from '../CircularButton/CircularButton';
+import { warnOnce } from '../../behaviors/devWarning';
 
 export interface Segment {
   /** Unique value for this segment */
@@ -144,6 +145,12 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
   ) => {
     // The strip's name: the native attribute, or the deprecated prop.
     const name = nativeAriaLabel ?? ariaLabel;
+    // A tab list is announced by its name, and the component cannot guess one.
+    if (!name && !rest['aria-labelledby']) {
+      warnOnce(
+        'SegmentedControl has no accessible name. Pass aria-label or aria-labelledby so a screen reader can announce what the set chooses.',
+      );
+    }
     // `activeSegment` is the deprecated spelling of `value`.
     const controlledValue = value ?? legacyActiveSegment;
     const isControlled = controlledValue !== undefined;

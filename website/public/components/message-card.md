@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { MessageCard } from 'rift-ds';`
 - Deep import: `import { MessageCard } from 'rift-ds/components/MessageCard/MessageCard';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/message-card
 - Schema: https://rift-ds.com/schema/components/message-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,5 +24,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | actions | `ReactNode` | no |  | Action row rendered in a footer outside the body — small secondary or tertiary Buttons, mirroring ToolCall's actions footer. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | Body content between the description and the footer — rich content, a Prose block, an AttachmentGroup. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

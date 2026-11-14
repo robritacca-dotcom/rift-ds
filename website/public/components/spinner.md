@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Spinner } from 'rift-ds';`
 - Deep import: `import { Spinner } from 'rift-ds/components/Spinner/Spinner';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/spinner
 - Schema: https://rift-ds.com/schema/components/spinner.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,3 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | variant | `"inherit" \| "neutral" \| "primary"` | no |  | Legacy name for `tone`, from before colour moved onto its own prop: `primary` is `tone="default"`. Deprecated: Use `tone` instead. |
 | label | `string` | no | `'Loading'` | Accessible label, announced as the spinner's name. A passed `aria-label` takes precedence. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

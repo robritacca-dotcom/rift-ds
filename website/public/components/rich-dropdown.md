@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { RichDropdown } from 'rift-ds';`
 - Deep import: `import { RichDropdown } from 'rift-ds/components/RichDropdown/RichDropdown';`
 - Rendering: client component (declares 'use client')
+- Size: 5.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/rich-dropdown
 - Schema: https://rift-ds.com/schema/components/rich-dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,6 +28,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((value: string) => void)` | no |  | Fires with the newly selected option's value. |
 | className | `string` | no | `''` | Additional CSS classes |
 | name | `string` | no |  | Form field name. When set, the selected option's `value` submits with an enclosing form through a hidden input (nothing while no value is set, nothing while disabled), as Combobox does. Also the fallback for the element id (`id \|\| name \|\| label`). |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA combobox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Down | Opens the list of options. |
+| Arrow Down | With the list open, moves to the next option. |
+| Arrow Up | Moves to the previous option. |
+| Escape | Closes the list and keeps focus on the field. |
 
 ## Types
 

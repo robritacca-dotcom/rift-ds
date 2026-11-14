@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ContextMenu } from 'rift-ds';`
 - Deep import: `import { ContextMenu } from 'rift-ds/components/ContextMenu/ContextMenu';`
 - Rendering: client component (declares 'use client')
+- Size: 7.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/context-menu
 - Schema: https://rift-ds.com/schema/components/context-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,6 +22,22 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | yes |  | The right-clickable area the menu is attached to |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA menu pattern (https://www.w3.org/WAI/ARIA/apg/patterns/menubar/).
+
+| Key | What it does |
+| --- | --- |
+| On open | Opening the menu moves focus into it. |
+| Arrow Down | Moves to the next item. |
+| Arrow Up | Moves to the previous item. |
+| End | Moves to the last item. |
+| Home | Moves to the first item. |
+| A letter | Moves to the next item whose name starts with it. |
+| Escape | Closes the menu and returns focus to what opened it. |
 
 ## Types
 

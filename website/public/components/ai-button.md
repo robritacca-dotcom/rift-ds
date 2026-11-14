@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AiButton } from 'rift-ds';`
 - Deep import: `import { AiButton } from 'rift-ds/components/AiButton/AiButton';`
 - Rendering: client component (declares 'use client')
+- Size: 6.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/ai-button
 - Schema: https://rift-ds.com/schema/components/ai-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -41,6 +42,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | suggestionsLabel | `string` | no | `'Suggested prompts'` | Accessible name of the summary panel's group of prompt chips. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The button that opens the request field follows the WAI-ARIA disclosure pattern (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Opens what it controls, and closes it when it is open. |
+| Space | Does the same as Enter. |
 
 ## Types
 

@@ -95,11 +95,9 @@ const deepTree: TreeViewNode[] = [
 ];
 
 const keyboardRows = [
-  { keys: ["Down", "Up"], effect: "Move through the visible rows" },
-  { keys: ["Right"], effect: "Expand a branch, then step into its first child" },
-  { keys: ["Left"], effect: "Collapse a branch, or move to the parent" },
+  { keys: ["Right"], effect: "On an open branch, steps into its first child" },
+  { keys: ["Left"], effect: "On a leaf or a closed branch, moves to the parent" },
   { keys: ["Enter", "Space"], effect: "Select the focused row" },
-  { keys: ["Home", "End"], effect: "Jump to the first or last visible row" },
 ];
 
 /* ============================================
@@ -219,9 +217,9 @@ export default function TreeViewPage() {
           <section className={styles.demoBlock}>
             <SectionTitle title="Keyboard" />
             <p className={styles.introBody}>
-              The tree follows the WAI-ARIA tree pattern with a roving
-              tabindex: Tab enters and leaves the tree once, and everything
-              else happens on the arrows.
+              The tree has a roving tabindex: Tab enters and leaves it once, and
+              everything else happens on the arrows. These keys are the tree’s own,
+              on top of the pattern’s under Tested keys.
             </p>
             <div className={styles.keyboardList}>
               {keyboardRows.map((row) => (

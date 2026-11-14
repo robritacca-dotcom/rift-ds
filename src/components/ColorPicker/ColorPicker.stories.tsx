@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, screen, waitFor } from 'storybook/test';
 import { ColorPicker } from './ColorPicker';
 
 const meta = {
@@ -27,6 +28,42 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+/**
+ * The picker from the keyboard: opening moves focus onto the colour area,
+ * the arrows move both of its axes, Home and End take saturation to its
+ * ends, and Escape closes the panel and hands focus back to the trigger.
+ */
+export const Keyboard: Story = {
+  args: { 'aria-label': 'Pick a colour' },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('button', { name: 'Pick a colour' });
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    const area = await screen.findByRole('slider', { name: 'Saturation and brightness' });
+    await waitFor(() => expect(area).toHaveFocus());
+
+    const brightness = () => Number(area.getAttribute('aria-valuenow'));
+    const text = () => area.getAttribute('aria-valuetext');
+    const before = { brightness: brightness(), text: text() };
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(brightness()).toBeLessThan(before.brightness));
+    await userEvent.keyboard('{ArrowUp}');
+    await waitFor(() => expect(brightness()).toBe(before.brightness));
+    await userEvent.keyboard('{ArrowLeft}');
+    await waitFor(() => expect(text()).not.toBe(before.text));
+    await userEvent.keyboard('{ArrowRight}');
+    await waitFor(() => expect(text()).toBe(before.text));
+    await userEvent.keyboard('{Home}');
+    const least = text();
+    await userEvent.keyboard('{End}');
+    await waitFor(() => expect(text()).not.toBe(least));
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('slider', { name: 'Saturation and brightness' })).toBeNull());
+    await expect(trigger).toHaveFocus();
+  },
+};
 
 export const WithText: Story = {
   args: {

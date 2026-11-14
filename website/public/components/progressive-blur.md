@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ProgressiveBlur } from 'rift-ds';`
 - Deep import: `import { ProgressiveBlur } from 'rift-ds/components/ProgressiveBlur/ProgressiveBlur';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/progressive-blur
 - Schema: https://rift-ds.com/schema/components/progressive-blur.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,3 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | side | `"top" \| "bottom"` | no | `'top'` | The side the blur is anchored to, as Drawer names its edge: fully frosted there, dissolving to clear toward the opposite side. `top` sits behind a header, `bottom` behind a toolbar or a footer bar. |
 | tinted | `boolean` | no | `false` | Whether the page-surface tint shows over the blur. It fades on change, so a header can bring it in once the page has scrolled; the blur itself never fades. |
 | className | `string` | no | `''` | Additional CSS classes on the root. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

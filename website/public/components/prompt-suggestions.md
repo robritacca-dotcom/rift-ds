@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { PromptSuggestions } from 'rift-ds';`
 - Deep import: `import { PromptSuggestions } from 'rift-ds/components/PromptSuggestions/PromptSuggestions';`
 - Rendering: client component (declares 'use client')
+- Size: 1.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/prompt-suggestions
 - Schema: https://rift-ds.com/schema/components/prompt-suggestions.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,6 +28,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | chosenLabel | `string` | no | `'(chosen)'` | Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". |
 | ariaLabel | `string` | no | `'Suggested prompts'` | Accessible name for the list. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The suggestions follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

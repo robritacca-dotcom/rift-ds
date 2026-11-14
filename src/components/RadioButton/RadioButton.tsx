@@ -2,6 +2,7 @@
 
 import React, { useId, useState } from 'react';
 import { Field } from '../Field/Field';
+import { logicalArrowKey } from '../../behaviors/direction';
 import './RadioButton.css';
 
 /** Props owned by RadioButton itself — everything else falls through to the wrapper. */
@@ -120,7 +121,8 @@ export const RadioButton = React.forwardRef<HTMLDivElement, RadioButtonProps>(
         aria-disabled={disabled}
         aria-label={rest['aria-label'] || ariaLabel || label}
         aria-describedby={describedBy}
-        tabIndex={disabled ? -1 : 0}
+        // A group makes its radios one tab stop by handing each its tabIndex.
+        tabIndex={disabled ? -1 : (rest.tabIndex ?? 0)}
       >
         <RadioIndicator checked={checked} />
         {/* Without a helper the label stays a bare span, so existing markup
@@ -236,6 +238,34 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       onChange?.(next);
     };
 
+    // The radio group pattern: the group is one tab stop (the checked
+    // option, or the first that can be chosen), and the arrow keys move to
+    // the next or previous option and choose it. Home and End reach the ends.
+    const enabledOptions = options.filter((option) => !option.disabled);
+    const tabStop = enabledOptions.some((option) => option.value === value) ? value : enabledOptions[0]?.value;
+    const handleOptionsKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const radios = Array.from(
+        event.currentTarget.querySelectorAll<HTMLElement>('[role="radio"]:not([aria-disabled="true"])'),
+      );
+      const at = radios.indexOf(document.activeElement as HTMLElement);
+      if (at === -1 || radios.length !== enabledOptions.length) return;
+      const key = logicalArrowKey(event.key, event.currentTarget);
+      const to =
+        key === 'ArrowRight' || key === 'ArrowDown'
+          ? (at + 1) % radios.length
+          : key === 'ArrowLeft' || key === 'ArrowUp'
+            ? (at - 1 + radios.length) % radios.length
+            : key === 'Home'
+              ? 0
+              : key === 'End'
+                ? radios.length - 1
+                : -1;
+      if (to === -1) return;
+      event.preventDefault();
+      radios[to].focus();
+      handleSelect(enabledOptions[to].value);
+    };
+
     return (
       <Field
         {...rest}
@@ -252,7 +282,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
         aria-describedby={describedBy}
         aria-invalid={error || undefined}
       >
-        <div className={`${baseClass}__options`}>
+        <div className={`${baseClass}__options`} onKeyDown={handleOptionsKeyDown}>
           {options.map((option) => (
             <RadioButton
               key={option.value}
@@ -261,6 +291,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
               value={option.value}
               checked={value === option.value}
               disabled={option.disabled}
+              tabIndex={option.value === tabStop ? 0 : -1}
               onValueChange={handleSelect}
             />
           ))}

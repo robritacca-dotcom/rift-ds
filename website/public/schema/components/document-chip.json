@@ -137,5 +137,11 @@
     "HTMLButtonElement": "typescript",
     "MouseEventHandler": "react",
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 1512
   }
 }

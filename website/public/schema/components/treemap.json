@@ -109,5 +109,11 @@
       "kind": "interface",
       "definition": "interface TreemapDataItem {\n  /** Display name for the node */\n  name: string;\n  /** Numeric size — determines rectangle area */\n  size: number;\n  /** Optional fill colour */\n  color?: string;\n  /** Nested children for hierarchical data */\n  children?: TreemapDataItem[];\n  [key: string]: unknown;\n}"
     }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 2487
   }
 }

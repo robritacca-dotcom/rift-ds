@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Panel } from 'rift-ds';`
 - Deep import: `import { Panel } from 'rift-ds/components/Panel/Panel';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/panel
 - Schema: https://rift-ds.com/schema/components/panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,5 +19,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | padding | `"none" \| "default" \| "compact"` | no | `'default'` | Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | Panel content |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { InspectorDropdown } from 'rift-ds';`
 - Deep import: `import { InspectorDropdown } from 'rift-ds/components/Inspector/InspectorDropdown';`
 - Rendering: client component (declares 'use client')
+- Size: 5.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/inspector-dropdown
 - Schema: https://rift-ds.com/schema/components/inspector-dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,6 +26,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size, matching Button: `default` is 40px tall, `compact` 32px. |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value. |
 | className | `string` | no | `''` | Additional CSS classes, applied to the wrapper. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA combobox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Down | Opens the list of options. |
+| Arrow Down | With the list open, moves to the next option. |
+| Arrow Up | Moves to the previous option. |
+| Escape | Closes the list and keeps focus on the field. |
 
 ## Types
 

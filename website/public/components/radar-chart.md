@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { RadarChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { RadarChart } from 'rift-ds/components/Chart/RadarChart';`
 - Rendering: client component (declares 'use client')
+- Size: 2.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/radar-chart
 - Schema: https://rift-ds.com/schema/components/radar-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,6 +26,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | height | `number` | no | `350` | Chart area height in pixels |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
+
+## Keyboard
+
+The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

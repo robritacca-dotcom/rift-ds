@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AnimatedNumber } from 'rift-ds';`
 - Deep import: `import { AnimatedNumber } from 'rift-ds/components/AnimatedNumber/AnimatedNumber';`
 - Rendering: client component (declares 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/animated-number
 - Schema: https://rift-ds.com/schema/components/animated-number.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,3 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | duration | `number` | no | `800` | Tween length in ms. Defaults to the shared `MOTION_COUNT_UP_MS` constant; an animation pace, so the tween is skipped entirely under reduced motion. |
 | animateOnMount | `boolean` | no | `true` | Counts up from zero on first render. Turn off to arrive settled and animate only on later changes. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

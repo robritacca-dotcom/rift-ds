@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Prose } from 'rift-ds';`
 - Deep import: `import { Prose } from 'rift-ds/components/Prose/Prose';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/prose
 - Schema: https://rift-ds.com/schema/components/prose.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,5 +20,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | tableSize | `"default" \| "compact"` | no | `'default'` | Density of the tables inside: `compact` tightens the cell padding to the library Table's compact step, for long or dense tables. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The rendered markup to style — the output of whatever markdown renderer the consumer uses. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The links follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Follows the link. |
 
 Types from other packages: `ReactNode` (react).

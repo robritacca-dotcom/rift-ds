@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Waveform } from 'rift-ds';`
 - Deep import: `import { Waveform } from 'rift-ds/components/Waveform/Waveform';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/waveform
 - Schema: https://rift-ds.com/schema/components/waveform.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,3 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Bar height scale — `default` sits on `--icon-size-600`, `compact` on `--icon-size-500`. |
 | label | `string` | no |  | What a screen reader hears the indicator say. Defaults per state ("Listening", "Speaking", "Microphone idle"). |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

@@ -60,5 +60,24 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "link",
+      "part": "links",
+      "label": "Link",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/link/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Follows the link."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 262
   }
 }

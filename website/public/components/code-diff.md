@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { CodeDiff } from 'rift-ds';`
 - Deep import: `import { CodeDiff } from 'rift-ds/components/CodeDiff/CodeDiff';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/code-diff
 - Schema: https://rift-ds.com/schema/components/code-diff.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,6 +23,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | changeLabels | `Partial<CodeDiffChangeLabels>` | no |  | Visually hidden text announced before each changed line, so the change type is not carried by colour and the marker alone. Merged over the English defaults: `added` "Added line:", `removed` "Removed line:". |
 | statsLabel | `((additions: number, deletions: number) => string)` | no | `` (additions: number, deletions: number) => `${additions} added, ${deletions} removed` `` | The header's additions and deletions summary as a screen reader hears it, given both counts; the visible `+3 -1` is hidden from assistive technology. Defaults to "3 added, 1 removed". |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+A focusable scroll region: the browser scrolls it with the arrow, Page, Home and End keys. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
 

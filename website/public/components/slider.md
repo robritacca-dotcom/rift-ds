@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Slider } from 'rift-ds';`
 - Deep import: `import { Slider } from 'rift-ds/components/Slider/Slider';`
 - Rendering: client component (declares 'use client')
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/slider
 - Schema: https://rift-ds.com/schema/components/slider.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,3 +30,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((value: number) => void)` | no |  | Convenience callback receiving the numeric value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
 | className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+
+## Keyboard
+
+A native range input: the browser’s own arrow, Home, End and Page keys move it. Those keys belong to the platform, so no test of this library presses them.

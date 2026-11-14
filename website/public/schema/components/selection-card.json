@@ -91,5 +91,24 @@
       "kind": "interface",
       "definition": "interface SelectionCardOption {\n  /** Unique value for this option */\n  value: string;\n  /** Primary label */\n  label: string;\n  /** Optional description text below the label */\n  description?: string;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
     }
+  },
+  "keyboard": [
+    {
+      "pattern": "checkbox",
+      "part": "cards",
+      "label": "Checkbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
+      "rows": [
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Ticks the box, or clears it when it is ticked."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 3428
   }
 }

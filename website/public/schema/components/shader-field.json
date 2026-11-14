@@ -85,5 +85,11 @@
   },
   "externalTypes": {
     "Partial": "typescript"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 6130
   }
 }

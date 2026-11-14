@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ChatMessage } from 'rift-ds';`
 - Deep import: `import { ChatMessage } from 'rift-ds/components/ChatMessage/ChatMessage';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/chat-message
 - Schema: https://rift-ds.com/schema/components/chat-message.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -32,5 +33,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | footer | `ReactNode` | no |  | Footer slot under the content — a sources row, an edited note. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The message content. The package ships no markdown renderer; render markdown yourself, ideally wrapped in Prose, and pass the result. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The action buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 Types from other packages: `ReactNode` (react).

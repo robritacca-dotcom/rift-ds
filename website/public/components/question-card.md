@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { QuestionCard } from 'rift-ds';`
 - Deep import: `import { QuestionCard } from 'rift-ds/components/QuestionCard/QuestionCard';`
 - Rendering: client component (declares 'use client')
+- Size: 9.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/question-card
 - Schema: https://rift-ds.com/schema/components/question-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,6 +32,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | missingLabel | `string` | no | `'No answer'` | What stands in the answer's place for a question left without one. |
 | variant | `"plain" \| "card"` | no | `'card'` | `card` draws the summary in its own hairline frame, as a set's record under the reply that asked it. `plain` drops the frame, for a surface that brings its own, such as the message bubble that sent the answers. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+The digits pick an option by its position, and Enter or Space choose the focused one. A lone question answers on the pick, and a set or a multiple-choice question on its button. The component's own stories test these keys.
 
 ## Types
 

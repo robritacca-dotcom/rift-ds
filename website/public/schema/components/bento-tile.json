@@ -150,5 +150,42 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "dialog",
+      "part": "expanded overlay",
+      "label": "Dialog",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
+      "rows": [
+        {
+          "keys": [],
+          "when": "On open",
+          "text": "Opening moves focus inside."
+        },
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves to the next control inside, and from the last back to the first. Focus never reaches the page behind."
+        },
+        {
+          "keys": [
+            "Shift",
+            "Tab"
+          ],
+          "text": "Moves to the previous control inside, and from the first to the last."
+        },
+        {
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes it and returns focus to what opened it."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 12587
   }
 }

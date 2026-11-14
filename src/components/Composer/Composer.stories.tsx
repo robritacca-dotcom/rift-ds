@@ -422,3 +422,18 @@ const FullChatFooterDemo = () => {
 export const FullChatFooter: Story = {
   render: () => <FullChatFooterDemo />,
 };
+
+/** The composer from the keyboard: Shift and Enter adds a line, and Enter alone sends. */
+export const Keyboard: Story = {
+  args: { onSubmit: fn() },
+  play: async ({ args, canvasElement }) => {
+    const field = within(canvasElement).getByRole('textbox');
+    await userEvent.click(field);
+    await userEvent.keyboard('Hello');
+    await userEvent.keyboard('{Shift>}{Enter}{/Shift}');
+    await expect(args.onSubmit).not.toHaveBeenCalled();
+    await userEvent.keyboard('there');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(args.onSubmit).toHaveBeenCalledWith('Hello\nthere'));
+  },
+};

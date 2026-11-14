@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { FilterBar } from 'rift-ds';`
 - Deep import: `import { FilterBar } from 'rift-ds/components/FilterBar/FilterBar';`
 - Rendering: client component (declares 'use client')
+- Size: 6.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/filter-bar
 - Schema: https://rift-ds.com/schema/components/filter-bar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,6 +24,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | clearFilterLabel | `((filterLabel: string) => string)` | no | `` (filterLabel: string) => `Clear ${filterLabel}` `` | Accessible name of an active filter's own clear button, given the filter's label. Defaults to "Clear" followed by the label. |
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The list of options follows the WAI-ARIA listbox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/listbox/).
+
+| Key | What it does |
+| --- | --- |
+| Home | Moves to the first option. |
+| Arrow Down | Moves to the next option. |
+| Arrow Up | Moves to the previous option. |
+| End | Moves to the last option. |
 
 ## Types
 

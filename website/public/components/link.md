@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Link } from 'rift-ds';`
 - Deep import: `import { Link } from 'rift-ds/components/Link/Link';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/link
 - Schema: https://rift-ds.com/schema/components/link.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | iconRight | `string \| ReactNode` | no |  | A Material Symbol name or a node after the text. A directional glyph mirrors in a right-to-left context. |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. An external link always renders a plain `<a>`. |
 | className | `string` | no | `''` | Additional CSS classes. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Follows the link. |
 
 ## Types
 

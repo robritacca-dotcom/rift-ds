@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ActionReadout } from 'rift-ds';`
 - Deep import: `import { ActionReadout } from 'rift-ds/components/ActionReadout/ActionReadout';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/action-readout
 - Schema: https://rift-ds.com/schema/components/action-readout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,6 +20,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | facts | `ActionReadoutFact[]` | yes |  | What it did, a line each: the status it moved, the money it touched, who it reached. |
 | icon | `string \| ReactNode` | no |  | A leading mark beside the title: a Material Symbol name, or your own element. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

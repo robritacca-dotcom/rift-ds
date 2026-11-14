@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { InterruptCard } from 'rift-ds';`
 - Deep import: `import { InterruptCard } from 'rift-ds/components/InterruptCard/InterruptCard';`
 - Rendering: server-renderable (no 'use client')
+- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/interrupt-card
 - Schema: https://rift-ds.com/schema/components/interrupt-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | Detail slot between the description and the options — typically a `<ToolCall status="pending">` showing what wants to run. |
 | bare | `boolean` | no | `false` | Strip the card chrome (fill, border, radius) when the card sits inside another panel that supplies the surface, such as AiButton's request panel. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

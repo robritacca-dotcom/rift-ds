@@ -271,5 +271,67 @@
   },
   "externalTypes": {
     "Date": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "calendar",
+      "label": "Date grid",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/",
+      "rows": [
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next day.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous day.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the same weekday in the next week."
+        },
+        {
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the same weekday in the previous week."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first day of the week."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last day of the week."
+        },
+        {
+          "keys": [
+            "PageDown"
+          ],
+          "text": "Moves to the same day in the next month."
+        },
+        {
+          "keys": [
+            "PageUp"
+          ],
+          "text": "Moves to the same day in the previous month."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 4458
   }
 }

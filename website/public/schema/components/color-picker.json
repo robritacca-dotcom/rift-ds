@@ -176,5 +176,12 @@
         }
       ]
     }
-  ]
+  ],
+  "keys": {
+    "by": "component",
+    "note": "Opening moves focus onto the colour area, where the arrow keys move both axes, Home and End take saturation to its ends, and Escape closes the panel."
+  },
+  "size": {
+    "gzip": 4753
+  }
 }

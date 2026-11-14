@@ -337,6 +337,8 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
           className={`${baseClass}__list`}
           role={!loading && filteredGroups.length > 0 ? 'listbox' : undefined}
           id={listboxId}
+          // Named as its field is, so the list announces what it is a list of.
+          aria-label={!loading && filteredGroups.length > 0 ? placeholder : undefined}
           ref={listRef}
         >
           {loading && (

@@ -88,5 +88,60 @@
   },
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "tree",
+      "label": "Tree view",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/treeview/",
+      "rows": [
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next visible row."
+        },
+        {
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous visible row."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last visible row."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first row."
+        },
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Opens a closed branch.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Closes an open branch.",
+          "inline": true
+        },
+        {
+          "keys": [],
+          "when": "A letter",
+          "text": "Moves to the next visible row whose name starts with it."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 2033
   }
 }

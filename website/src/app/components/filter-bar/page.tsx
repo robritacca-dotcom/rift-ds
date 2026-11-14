@@ -153,10 +153,11 @@ export default function FilterBarPage() {
           <section className={`${styles.section} animate-in animate-delay-5`}>
             <SectionTitle title="Keyboard" />
             <p className={styles.sectionBody}>
-              The popovers are real listboxes driven from the chip: arrows
-              move, Enter and Space toggle, Escape closes, and focus never
-              leaves the trigger. Single-select filters close as soon as a
-              choice lands.
+              The popovers are real listboxes driven from the chip, so focus never
+              leaves the trigger. Enter and Space toggle the highlighted option, and
+              Escape closes the list. Single-select filters close as soon as a choice
+              lands. The keys that move through the options are listed under Tested
+              keys.
             </p>
           </section>
 

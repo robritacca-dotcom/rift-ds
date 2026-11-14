@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ButtonGroup } from 'rift-ds';`
 - Deep import: `import { ButtonGroup } from 'rift-ds/components/ButtonGroup/ButtonGroup';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/button-group
 - Schema: https://rift-ds.com/schema/components/button-group.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,6 +20,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | buttons | `ButtonProps[]` | yes |  | Array of button configurations |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the group. Deprecated: Pass the native `aria-label` attribute instead. |
 | className | `string` | no | `''` | Additional CSS class |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

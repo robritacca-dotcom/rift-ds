@@ -71,5 +71,43 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "toolbar",
+      "label": "Toolbar",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/",
+      "rows": [
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next control.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous control.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last control."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first control."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 836
   }
 }

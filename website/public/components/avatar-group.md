@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AvatarGroup } from 'rift-ds';`
 - Deep import: `import { AvatarGroup } from 'rift-ds/components/AvatarGroup/AvatarGroup';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/avatar-group
 - Schema: https://rift-ds.com/schema/components/avatar-group.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,5 +21,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"sm" \| "md" \| "lg"` | no | `'md'` | Size applied to every avatar in the stack and to the overflow counter. Cloned onto the children so the group cannot render mixed sizes. |
 | overflowLabel | `string \| ((count: number) => string)` | no |  | Accessible label for the overflow counter. Defaults to "N more" (for example "4 more"), with N the number of hidden avatars. Pass a function given that count to localise or add context, e.g. `(count) => \`${count} more reviewers\``; a plain string replaces the label outright, whatever the count. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

@@ -393,6 +393,17 @@ const INLINE_VALUES = new Map(Object.entries({
       .map((id) => themeSource.THEME_PRESETS[id].label)
       .join(', '),
   BEHAVIOUR_MODULE_COUNT: () => a11yCoverage().behaviourModules,
+  // The keyboard contract's classes, counted as /foundations/accessibility counts them.
+  inContract: () =>
+    jsonOf(join(repoRoot, 'src', 'components', 'registry.json')).components.filter(
+      (c) => c.pattern || c.partPatterns?.length
+    ).length,
+  ...Object.fromEntries(
+    ['component', 'platform', 'none'].map((by) => [
+      `keyOwners("${by}")`,
+      () => jsonOf(join(repoRoot, 'src', 'components', 'registry.json')).components.filter((c) => c.keys?.by === by).length,
+    ])
+  ),
   'modalOverlays.slice(0, -1).join(", ")': () => a11yCoverage().modalOverlays.slice(0, -1).join(', '),
   'modalOverlays.at(-1)': () => a11yCoverage().modalOverlays.at(-1),
   'layerComponents.length': () => a11yCoverage().layerComponents.length,

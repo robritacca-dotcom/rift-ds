@@ -4,6 +4,8 @@ description: Cut a new npm release of rift-ds. Bump the version, dry-run, publis
 icon: rocket_launch
 displayDescription: "Cuts an npm release of the component library: bumps the single source-of-truth version, runs the Release workflow in dry-run to prove a real consumer can install and build the tarball, publishes with signed provenance, then tags and writes the GitHub Release against the exact commit that shipped. Knows the two things that bite on release day: a version number can never be reused, and the registry lags a green publish by minutes."
 invoke: ["cut a release","publish a new version","ship the package to npm","release [version]"]
+metadata:
+  internal: true
 ---
 
 # release

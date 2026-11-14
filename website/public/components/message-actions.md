@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { MessageActions } from 'rift-ds';`
 - Deep import: `import { MessageActions } from 'rift-ds/components/MessageActions/MessageActions';`
 - Rendering: server-renderable (no 'use client')
+- Size: 3.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/message-actions
 - Schema: https://rift-ds.com/schema/components/message-actions.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,6 +20,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onActionClick | `((id: string) => void)` | no |  | Fires with the pressed action's id. |
 | showTooltips | `boolean` | no | `true` | Wrap each button in a Tooltip showing its label. The label stays as `aria-label` either way. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

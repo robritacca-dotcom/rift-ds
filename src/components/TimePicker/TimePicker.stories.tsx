@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, waitFor } from 'storybook/test';
 import { TimePicker } from './TimePicker';
 
 const meta = {
@@ -43,6 +43,23 @@ export const Default: Story = {
   args: {
     label: 'Start time',
     placeholder: 'Select time',
+  },
+};
+
+/** Type-to-find: with the list open, typing the start of a time moves to it. */
+export const Typeahead: Story = {
+  args: { label: 'Start time', placeholder: 'Select time' },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox');
+    trigger.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await userEvent.keyboard('9');
+    await waitFor(() =>
+      expect(document.getElementById(trigger.getAttribute('aria-activedescendant') ?? '')).toHaveTextContent(/^9:/),
+    );
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
   },
 };
 

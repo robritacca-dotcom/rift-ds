@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { EmptyState } from 'rift-ds';`
 - Deep import: `import { EmptyState } from 'rift-ds/components/EmptyState/EmptyState';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/empty-state
 - Schema: https://rift-ds.com/schema/components/empty-state.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,5 +23,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
 | variant | `"plain" \| "bordered"` | no | `'plain'` | Visual treatment. `plain` sits directly on the page; `bordered` draws a dashed container, which reads better inside a card, table, or panel. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

@@ -51,5 +51,11 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 601
   }
 }

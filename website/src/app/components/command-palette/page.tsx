@@ -203,12 +203,10 @@ export default function CommandPalettePage() {
             <SectionTitle title="Keyboard" />
             <p className={styles.introBody}>
               <kbd className={styles.kbd}>↑</kbd>{" "}
-              <kbd className={styles.kbd}>↓</kbd> move through results and wrap
-              at the ends · <kbd className={styles.kbd}>Home</kbd> and{" "}
-              <kbd className={styles.kbd}>End</kbd> jump to the first and last ·{" "}
-              <kbd className={styles.kbd}>↵</kbd> runs the highlighted command ·{" "}
-              <kbd className={styles.kbd}>esc</kbd> closes. The same hints appear
-              in the palette footer, which hides on narrow screens.
+              <kbd className={styles.kbd}>↓</kbd> wrap at the ends of the list, and{" "}
+              <kbd className={styles.kbd}>↵</kbd> runs the highlighted command. The same
+              hints appear in the palette footer, which hides on narrow screens. The rest
+              of its keys are listed under Tested keys.
             </p>
           </section>
 

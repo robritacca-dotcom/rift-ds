@@ -179,5 +179,11 @@
         "GanttChartColor"
       ]
     }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 2073
   }
 }

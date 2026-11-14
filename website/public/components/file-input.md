@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { FileInput } from 'rift-ds';`
 - Deep import: `import { FileInput } from 'rift-ds/components/FileInput/FileInput';`
 - Rendering: client component (declares 'use client')
+- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/file-input
 - Schema: https://rift-ds.com/schema/components/file-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,6 +30,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | locale | `string` | no |  | The BCP 47 locale file sizes are written in, such as `de-DE` (`1,5 MB`). Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

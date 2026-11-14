@@ -4,6 +4,8 @@ description: Scan CSS files (and component TS/TSX colour literals) for hardcoded
 icon: manage_search
 displayDescription: "Scans CSS files for hardcoded hex colours, raw rgb() values, pixel values, and transition timings that should reference design tokens, plus component TS/TSX files for colour-shaped literals. Flags near-twins of existing tokens as their own finding class. Reports file, line number, offending value, and recommended token replacement. Accepts a single component, all-components, or website as scope."
 invoke: ["check for hardcoded values","token audit","audit [component] CSS","are there raw colours"]
+metadata:
+  internal: true
 ---
 
 # token-audit

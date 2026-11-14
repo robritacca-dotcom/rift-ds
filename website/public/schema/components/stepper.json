@@ -84,5 +84,11 @@
       "definition": "type StepperStep = {\n  /** Step label shown beside or below the indicator */\n  label: string;\n  /** Optional supporting line rendered under the label */\n  description?: string;\n};",
       "description": "A single step in a Stepper flow."
     }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 978
   }
 }

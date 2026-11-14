@@ -3,6 +3,8 @@ name: dependency-advisory
 description: "Respond to a dependency security advisory that has turned CI's npm audit step red. Read the advisory, pick the fix route (an in-range bump or a root override), apply it, prove it took with npm ls and a clean high-level audit, run the full verify, then hand off to ship. Use when asked to fix an npm audit failure, patch a vulnerable dependency, or respond to a security advisory. Never pushes or deploys."
 icon: shield
 invoke: ["fix the audit failure","patch the advisory","/dependency-advisory"]
+metadata:
+  internal: true
 ---
 
 # dependency-advisory

@@ -4,6 +4,8 @@ description: Add a new page to the website with the standard layout shell and co
 icon: insert_drive_file
 displayDescription: "Creates a new website page by mirroring a live exemplar page's layout shell, then wires it into every place the site tracks pages: the section sidebar and breadcrumbs, with the sitemap deriving automatically. Prevents the common mistake of adding a route without registering it."
 invoke: ["add a page for [X]","create a [section] page","add [X] to the site"]
+metadata:
+  internal: true
 ---
 
 # new-page

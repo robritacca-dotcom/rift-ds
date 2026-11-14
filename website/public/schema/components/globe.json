@@ -208,5 +208,12 @@
   },
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "component",
+    "note": "The arrow keys turn the globe while it has focus."
+  },
+  "size": {
+    "gzip": 3485
   }
 }

@@ -4,6 +4,8 @@ description: Rename or renumber a token family across every consumer, mirror, an
 icon: sync_alt
 displayDescription: "Carries a token rename through the whole system in one pass: a codemod over every stylesheet and component, the guarded hand mirrors, the validator regexes that parse the old shape, the foundations pages, the Storybook token docs, and design.md. The mirror guards turn the sweep into a build-error checklist, so a consumer the codemod missed fails the build instead of shipping half-renamed."
 invoke: ["rename a token family","renumber the [category] scale","token rename","change token naming"]
+metadata:
+  internal: true
 ---
 
 # token-rename

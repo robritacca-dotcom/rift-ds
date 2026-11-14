@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ToggleGroup } from 'rift-ds';`
 - Deep import: `import { ToggleGroup } from 'rift-ds/components/ToggleGroup/ToggleGroup';`
 - Rendering: client component (declares 'use client')
+- Size: 0.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/toggle-group
 - Schema: https://rift-ds.com/schema/components/toggle-group.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,6 +28,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((value: string \| string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop. Deprecated: Pass the native `aria-label` attribute instead. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA toggle button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Changes whether the button is pressed. |
+| Space | Does the same as Enter. |
 
 ## Types
 

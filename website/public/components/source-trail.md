@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SourceTrail } from 'rift-ds';`
 - Deep import: `import { SourceTrail } from 'rift-ds/components/SourceTrail/SourceTrail';`
 - Rendering: client component (declares 'use client')
+- Size: 4.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/source-trail
 - Schema: https://rift-ds.com/schema/components/source-trail.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onOpenChange | `((open: boolean) => void)` | no |  | Fires whenever the panel opens or closes. |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to each source's SourceChip. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The collapsible section follows the WAI-ARIA disclosure pattern (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Opens what it controls, and closes it when it is open. |
+| Space | Does the same as Enter. |
 
 ## Types
 

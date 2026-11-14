@@ -4,6 +4,8 @@ description: Make finished work live on the deployed site (SITE_URL in scripts/b
 icon: publish
 displayDescription: "Makes finished work live on the deployed site. Surveys the tree so unrelated files never get swept into a commit, runs the full local verify (the single script mirroring CI) before anything is committed, merges branch work into main when needed, pushes, confirms the CI run goes green, then loads the deployed site in a real browser to prove it renders (a deploy is not done at HTTP 200), and reports exactly what deployed."
 invoke: ["ship it","make it live","push to main","deploy this"]
+metadata:
+  internal: true
 ---
 
 # ship

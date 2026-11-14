@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Mention } from 'rift-ds';`
 - Deep import: `import { Mention } from 'rift-ds/components/Mention/Mention';`
 - Rendering: client component (declares 'use client')
+- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/mention
 - Schema: https://rift-ds.com/schema/components/mention.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -39,6 +40,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | text | `string` | yes |  | The plain text, exactly as it was typed or sent. |
 | sources | `MentionSource[]` | yes |  | The sources whose items count as mentions in this text. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+The list of suggestions is driven from the field it belongs to: the arrow keys move, Enter chooses and Escape closes. The component's own stories test these keys.
 
 ## Types
 

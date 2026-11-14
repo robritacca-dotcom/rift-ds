@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Badge } from 'rift-ds';`
 - Deep import: `import { Badge } from 'rift-ds/components/Badge/Badge';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/badge
 - Schema: https://rift-ds.com/schema/components/badge.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,3 +19,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | label | `string` | yes |  | Badge label text |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `'neutral'` | Badge variant determines colour |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.

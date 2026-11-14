@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { RadioButton } from 'rift-ds';`
 - Deep import: `import { RadioButton } from 'rift-ds/components/RadioButton/RadioButton';`
 - Rendering: client component (declares 'use client')
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/radio-button
 - Schema: https://rift-ds.com/schema/components/radio-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -50,3 +51,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | --- | --- | --- | --- | --- |
 | checked | `boolean` | no | `false` | Whether the circle shows its dot. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA radio group pattern (https://www.w3.org/WAI/ARIA/apg/patterns/radio/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the group at one option, and out of the group on the next press. |
+| Arrow Right | Moves to the next option and chooses it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous option and chooses it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last option and chooses it. |
+| Home | Moves to the first option and chooses it. |

@@ -144,5 +144,57 @@
     "Partial": "typescript",
     "ReactNode": "react",
     "Record": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "menu",
+      "label": "Menu",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/menubar/",
+      "rows": [
+        {
+          "keys": [],
+          "when": "On open",
+          "text": "Opening the menu moves focus into it."
+        },
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Moves to the next item."
+        },
+        {
+          "keys": [
+            "ArrowUp"
+          ],
+          "text": "Moves to the previous item."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last item."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first item."
+        },
+        {
+          "keys": [],
+          "when": "A letter",
+          "text": "Moves to the next item whose name starts with it."
+        },
+        {
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes the menu and returns focus to what opened it."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 8956
   }
 }

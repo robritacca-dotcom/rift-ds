@@ -255,6 +255,15 @@ export const ColorPicker = React.forwardRef<HTMLButtonElement, ColorPickerProps>
       getElements: () => [rootRef.current],
     });
 
+    // Opening moves focus into the panel, onto the colour area, so the keys
+    // that pick a colour work at once and Escape has somewhere to return
+    // from. A frame later: the panel is placed before it can take focus.
+    useEffect(() => {
+      if (!isOpen) return;
+      const frame = requestAnimationFrame(() => satRef.current?.focus());
+      return () => cancelAnimationFrame(frame);
+    }, [isOpen]);
+
     const handleRootKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         // Handled: the layer stack leaves a prevented Escape alone, so a

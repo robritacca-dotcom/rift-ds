@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useId } from 'react';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useLayer } from '../../behaviors/useLayer';
+import { useTypeahead } from '../../behaviors/typeahead';
 import { Field } from '../Field/Field';
 import './Dropdown.css';
 import './ChosenMark.css';
@@ -236,8 +237,25 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       getElements: () => [dropdownRef.current],
     });
 
+    const typeahead = useTypeahead();
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (disabled) return;
+
+      // Type-to-find, as a native select has it: a letter moves to the next
+      // option named with it. Open, it moves the highlight; closed, it
+      // chooses the option.
+      const hit = typeahead(
+        e,
+        flatOptions.map((option) => (option.disabled ? null : option.label)),
+        isOpen ? focusedIndex : selectedIndex,
+      );
+      if (hit !== null) {
+        e.preventDefault();
+        if (isOpen) setFocusedIndex(hit);
+        else if (flatOptions[hit].value !== value) handleSelect(flatOptions[hit].value);
+        return;
+      }
 
       switch (e.key) {
         case 'Enter':

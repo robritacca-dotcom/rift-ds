@@ -79,6 +79,10 @@ jobs:
       # consumers — resolution modes the Vite consumer smoke never exercises.
       - run: node scripts/validate-package-publish.mjs
         if: needs.changes.outputs.labs-only != 'true'
+      # What an import costs a consumer: each component and subpath bundled
+      # as their bundler would, gzipped, against scripts/size-budget.json.
+      - run: node scripts/validate-size-budget.mjs
+        if: needs.changes.outputs.labs-only != 'true'
       # validate-registry (run by prebuild) regenerates README/skills/barrel
       # content; a dirty tree here means committed generated content is stale.
       # CI-only: a local tree is dirty with the change in progress, so verify

@@ -25,6 +25,8 @@ const meta = {
   args: {
     onValueChange: fn(),
     size: 'default',
+    // A tab list is announced by its name, so every story carries one.
+    'aria-label': 'View',
   },
 } satisfies Meta<typeof SegmentedControl>;
 

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { Globe, type GlobeArc, type GlobePoint } from './Globe';
 import { MapCallout } from '../MapCallout/MapCallout';
 
@@ -81,5 +82,20 @@ export const NonInteractive: Story = {
 export const PointsOnly: Story = {
   args: {
     arcs: [],
+  },
+};
+
+/** The globe from the keyboard: focus stops its turning, and the arrow keys turn it by hand. */
+export const Keyboard: Story = {
+  play: async ({ canvasElement }) => {
+    const globe = canvasElement.querySelector<HTMLElement>('[role="application"]')!;
+    globe.focus();
+    const drawn = () => globe.querySelector('svg')!.innerHTML;
+    const before = drawn();
+    await userEvent.keyboard('{ArrowRight}');
+    await waitFor(() => expect(drawn()).not.toBe(before));
+    const turned = drawn();
+    await userEvent.keyboard('{ArrowUp}');
+    await waitFor(() => expect(drawn()).not.toBe(turned));
   },
 };

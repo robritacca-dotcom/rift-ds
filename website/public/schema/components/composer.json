@@ -387,5 +387,12 @@
     "File": "typescript",
     "Pick": "typescript",
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "component",
+    "note": "Enter sends, Shift and Enter adds a line, and with a mention list open the arrow keys move through it, Enter or Tab writes the choice and Escape closes it."
+  },
+  "size": {
+    "gzip": 10903
   }
 }

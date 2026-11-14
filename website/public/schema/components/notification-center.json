@@ -237,5 +237,49 @@
     "Partial": "typescript",
     "Pick": "typescript",
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "tabs",
+      "label": "Tabs",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+      "rows": [
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the list at the selected tab, and out of the list on the next press."
+        },
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next tab and selects it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous tab and selects it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last tab and selects it."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first tab and selects it."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 2276
   }
 }

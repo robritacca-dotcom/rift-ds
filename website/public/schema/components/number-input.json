@@ -119,5 +119,43 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "textbox",
+      "part": "field",
+      "label": "Text field",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/",
+      "rows": [
+        {
+          "keys": [],
+          "when": "Typing",
+          "text": "Enters text in the named field."
+        }
+      ]
+    },
+    {
+      "pattern": "button",
+      "part": "step buttons",
+      "label": "Button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Activates the button."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Activates the button."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 1416
+  }
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Swatch } from './Swatch';
 
@@ -56,6 +57,14 @@ export const Disabled: Story = {
 };
 
 /** A preset palette — swatches laid out by the consumer; one carries the selection. */
+/** A swatch that holds its own pressed state: a click, Enter or Space selects it and releases it. */
+export const Toggle: Story = {
+  render: function ToggleStory() {
+    const [selected, setSelected] = useState(false);
+    return <Swatch value="#118AB2" label="Teal 07" selected={selected} onClick={() => setSelected((on) => !on)} />;
+  },
+};
+
 export const PaletteRow: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '8px' }}>

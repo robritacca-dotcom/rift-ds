@@ -4,6 +4,8 @@ description: "Monthly loop that checks every external link the built site render
 icon: link_off
 displayDescription: "Collects every external link the built site renders, from docs references to footer profiles, and checks each one still resolves. The build already proves internal links can never break; the outside world offers no such guarantee. Failures are verified by hand before anything is called dead, because bot-blockers fake them, and real rot is fixed on a branch for approval. One of the loops described on the Loops page."
 invoke: ["run the link rot loop","/link-rot","check the external links"]
+metadata:
+  internal: true
 ---
 
 # link-rot

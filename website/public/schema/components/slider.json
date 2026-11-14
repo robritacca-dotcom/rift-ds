@@ -130,5 +130,12 @@
         }
       ]
     }
-  ]
+  ],
+  "keys": {
+    "by": "platform",
+    "note": "A native range input: the browser’s own arrow, Home, End and Page keys move it."
+  },
+  "size": {
+    "gzip": 1087
+  }
 }

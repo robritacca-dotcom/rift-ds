@@ -84,5 +84,23 @@
   "externalTypes": {
     "ComponentPropsWithRef": "react",
     "ElementType": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "link",
+      "label": "Link",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/link/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Follows the link."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 555
   }
 }

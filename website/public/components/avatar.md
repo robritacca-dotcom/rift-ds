@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Avatar } from 'rift-ds';`
 - Deep import: `import { Avatar } from 'rift-ds/components/Avatar/Avatar';`
 - Rendering: client component (declares 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/avatar
 - Schema: https://rift-ds.com/schema/components/avatar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,6 +24,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | status | `"online" \| "away" \| "offline" \| "busy"` | no |  | Online status indicator |
 | statusLabel | `string` | no |  | Accessible name for the status dot. Defaults to the `status` value itself (e.g. "online"). |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

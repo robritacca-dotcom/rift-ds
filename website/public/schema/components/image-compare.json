@@ -122,5 +122,41 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "slider",
+      "label": "Slider",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/slider/",
+      "rows": [
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Raises the value by one step."
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Lowers the value by one step."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Sets the lowest value."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Sets the highest value."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 1109
+  }
 }

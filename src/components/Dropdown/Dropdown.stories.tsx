@@ -71,6 +71,28 @@ export const Uncontrolled: Story = {
   },
 };
 
+/**
+ * Type-to-find, as a native select has it. Closed, a letter chooses the
+ * next option named with it; open, it moves the highlight and Enter chooses.
+ */
+export const Typeahead: Story = {
+  args: {
+    label: 'Colour',
+    defaultValue: 'teal',
+  },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Colour' });
+    trigger.focus();
+    await userEvent.keyboard('g');
+    await expect(trigger).toHaveTextContent('Green');
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.keyboard('pu');
+    await userEvent.keyboard('{Enter}');
+    await expect(trigger).toHaveTextContent('Purple');
+  },
+};
+
 export const WithHelperText: Story = {
   args: {
     label: 'Theme',

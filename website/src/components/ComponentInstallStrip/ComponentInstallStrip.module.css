@@ -4,3 +4,11 @@
   margin-top: var(--gap-500);
   width: 100%;
 }
+
+.size {
+  margin: var(--gap-200) 0 0;
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}

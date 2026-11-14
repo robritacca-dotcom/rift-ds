@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Gauge } from 'rift-ds';`
 - Deep import: `import { Gauge } from 'rift-ds/components/Gauge/Gauge';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/gauge
 - Schema: https://rift-ds.com/schema/components/gauge.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -30,6 +31,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | strokeWidth | `number` | no | `12` | Arc thickness in pixels. |
 | locale | `string` | no | `'en-US'` | The BCP 47 locale the value is written in when no `formatValue` is given, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

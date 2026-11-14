@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { LinkList } from 'rift-ds';`
 - Deep import: `import { LinkList } from 'rift-ds/components/LinkList/LinkList';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/link-list
 - Schema: https://rift-ds.com/schema/components/link-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,6 +19,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | items | `LinkListItem[]` | yes |  | Links to render, in display order |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Follows the link. |
 
 ## Types
 

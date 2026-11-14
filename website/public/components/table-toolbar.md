@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { TableToolbar } from 'rift-ds';`
 - Deep import: `import { TableToolbar } from 'rift-ds/components/TableToolbar/TableToolbar';`
 - Rendering: client component (declares 'use client')
+- Size: 40.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/table-toolbar
 - Schema: https://rift-ds.com/schema/components/table-toolbar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -59,6 +60,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | labels | `Partial<TableToolbarLabels>` | no |  | The bar's words, merged over their English defaults. |
 | filterLabels | `Partial<FilterLabels>` | no |  | The filters' words, merged over their English defaults (inside a DataTable, over the table's). |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Alt and the up or down arrow reorder a column or a sort row, and Escape closes a panel. The component's own stories test these keys.
 
 ## Types
 

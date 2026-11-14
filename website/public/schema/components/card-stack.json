@@ -97,5 +97,12 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keys": {
+    "by": "component",
+    "note": "With the stack focused, the arrow keys step to the next card and back, and Space and Enter also advance."
+  },
+  "size": {
+    "gzip": 1194
   }
 }

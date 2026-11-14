@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Button } from 'rift-ds';`
 - Deep import: `import { Button } from 'rift-ds/components/Button/Button';`
 - Rendering: client component (declares 'use client')
+- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/button
 - Schema: https://rift-ds.com/schema/components/button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -34,6 +35,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | state | `"default" \| "active" \| "disabled" \| "hover"` | no |  | Documentation-only interaction state. Deprecated: Use `disabled` for the disabled state. Documentation-only affordance for rendering a *static* interaction state in Storybook and the showcase site. Real hover/active styling comes from CSS pseudo-classes and needs no prop — for docs, prefer `className="ds-button--hover"`. |
 | icon | `string \| ReactNode` | no |  | Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode). Deprecated: Use `iconLeft` instead. |
 | text | `boolean` | no | `true` | Legacy toggle for showing the text label. Deprecated: Will be removed once `label` loses its default in the next major; an icon-only button will simply omit `label`. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

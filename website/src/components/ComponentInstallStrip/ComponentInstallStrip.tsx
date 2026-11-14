@@ -1,7 +1,9 @@
 import InstallSnippet from "./InstallSnippet";
+import ComponentKeyboard from "../ComponentKeyboard/ComponentKeyboard";
 import { componentPages, isWidgetSlug } from "@/data/component-pages";
 import { chatWidget } from "rift-ds/chat";
 import { SITE_URL } from "@/config/brand.generated";
+import componentSizes from "@/data/component-sizes.json";
 import styles from "./ComponentInstallStrip.module.css";
 
 /**
@@ -12,6 +14,12 @@ import styles from "./ComponentInstallStrip.module.css";
  * registry and the brand module — pages pass only their slug, and
  * validate-website-surfaces holds every component page to rendering
  * one, so the strip can neither drift nor go missing.
+ *
+ * Under the snippet it prints what the import costs, from
+ * website/src/data/component-sizes.json.
+ *
+ * It also carries the page's tested keys above it (ComponentKeyboard,
+ * which renders nothing for a component with nothing to focus), so that section reaches every component page the same way.
  */
 export default function ComponentInstallStrip({ slug }: { slug: string }) {
   const component = componentPages.find((c) => c.slug === slug);
@@ -26,6 +34,10 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
       ? "rift-ds/charts"
       : `rift-ds/components/${component.name}/${component.name}`;
 
+  // What the import costs, as scripts/validate-size-budget.mjs measured it
+  // from the built package. The chat widget has no figure here.
+  const size = (componentSizes.sizes as Record<string, number>)[component.name];
+
   const snippet = [
     `// From the npm package`,
     `import { ${component.name} } from '${importPath}';`,
@@ -35,8 +47,17 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
   ].join("\n");
 
   return (
-    <div className={styles.strip}>
-      <InstallSnippet code={snippet} slug={slug} />
-    </div>
+    <>
+      <ComponentKeyboard slug={slug} />
+      <div className={styles.strip}>
+        <InstallSnippet code={snippet} slug={slug} />
+        {size !== undefined && (
+          <p className={styles.size}>
+            {(size / 1000).toFixed(1)} kB gzipped, with everything it imports. Peer dependencies
+            are not counted.
+          </p>
+        )}
+      </div>
+    </>
   );
 }

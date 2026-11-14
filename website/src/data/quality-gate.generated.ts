@@ -172,6 +172,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Every component folder is in exactly one registry list, and every entry has a folder."
       },
       {
+        "name": "validate-keyboard-patterns",
+        "text": "Every component says who owns its keys: a pattern whose rows the contract story presses, keys of its own that its own stories press, the platform, or nothing to focus."
+      },
+      {
         "name": "validate-website-surfaces",
         "text": "Every component has its site page, preview, design.md spec and nav entries."
       },
@@ -434,6 +438,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-package-publish",
         "text": "publint and arethetypeswrong against dist/, so every subpath resolves for every kind of consumer."
+      },
+      {
+        "name": "validate-size-budget",
+        "text": "Each component and subpath, bundled and gzipped the way a consumer's build would, stays under its ceiling."
       },
       {
         "name": "npm run test",

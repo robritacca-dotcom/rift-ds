@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { PixelAvatar } from 'rift-ds';`
 - Deep import: `import { PixelAvatar } from 'rift-ds/components/PixelAvatar/PixelAvatar';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/pixel-avatar
 - Schema: https://rift-ds.com/schema/components/pixel-avatar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,6 +22,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | variant | `"plain" \| "tile"` | no | `'plain'` | `plain` draws the character alone; `tile` seats it on a rounded wash of its own ink, for a larger standalone mark. |
 | label | `string` | no |  | Accessible name. Omit it when the mark sits beside the name it was drawn from, which is the usual case: the character is then decorative and hidden from assistive technology. Given, the root becomes an image with this label. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

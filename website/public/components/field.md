@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Field } from 'rift-ds';`
 - Deep import: `import { Field } from 'rift-ds/components/Field/Field';`
 - Rendering: client component (declares 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/field
 - Schema: https://rift-ds.com/schema/components/field.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,5 +28,15 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | group | `boolean` | no | `false` | Group mode: renders the label as a `<span id>` instead of a `<label htmlFor>`, for scaffolding a set of controls (a checkbox or radio group) where no single labelable element exists — the group node points `aria-labelledby` at the span via `labelId`. |
 | id | `string` | no |  | id for the control. Generated when omitted, so the label/control/helper association works with no configuration. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA text field pattern (https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
+
+| Key | What it does |
+| --- | --- |
+| Typing | Enters text in the named field. |
 
 Types from other packages: `ReactNode` (react).

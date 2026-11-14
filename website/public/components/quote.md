@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Quote } from 'rift-ds';`
 - Deep import: `import { Quote } from 'rift-ds/components/Quote/Quote';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/quote
 - Schema: https://rift-ds.com/schema/components/quote.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,5 +21,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | detail | `string` | no |  | Context under the attribution, e.g. "Design Lead, Northlight" |
 | variant | `"default" \| "pull"` | no | `'default'` | `default` is an inline blockquote; `pull` is a large display pull-quote |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

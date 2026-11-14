@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { DateRangePicker } from 'rift-ds';`
 - Deep import: `import { DateRangePicker } from 'rift-ds/components/DateRangePicker/DateRangePicker';`
 - Rendering: client component (declares 'use client')
+- Size: 4.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/date-range-picker
 - Schema: https://rift-ds.com/schema/components/date-range-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -41,6 +42,23 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | locale | `string` | no |  | The BCP 47 locale the calendar is written and laid out in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | weekStartsOn | `Weekday` | no |  | The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA date grid pattern (https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Right | Moves to the next day. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous day. The opposite arrow in a right-to-left layout. |
+| Arrow Down | Moves to the same weekday in the next week. |
+| Arrow Up | Moves to the same weekday in the previous week. |
+| Home | Moves to the first day of the week. |
+| End | Moves to the last day of the week. |
+| PageDown | Moves to the same day in the next month. |
+| PageUp | Moves to the same day in the previous month. |
 
 ## Types
 

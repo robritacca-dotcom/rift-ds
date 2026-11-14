@@ -94,5 +94,43 @@
   ],
   "externalTypes": {
     "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "splitter",
+      "label": "Window splitter",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/",
+      "rows": [
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Grows the first pane by one step.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Shrinks the first pane by one step.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Shrinks the first pane to its smallest size."
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Grows the first pane to its largest size."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 1077
   }
 }

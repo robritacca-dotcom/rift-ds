@@ -4,6 +4,8 @@ description: Build a new template screen — a complete product screen composed 
 icon: space_dashboard
 displayDescription: "Builds a full-viewport template screen from the library alone, then registers it everywhere templates are tracked: the nav entry the index carousel and sitemap derive from, the chromeless list, and the chat-corpus exclusion. Owns the checklist so a screen never ships half-wired."
 invoke: ["add a [X] template","build a template screen for [X]","new template"]
+metadata:
+  internal: true
 ---
 
 # new-template

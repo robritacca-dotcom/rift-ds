@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SelectionCard } from 'rift-ds';`
 - Deep import: `import { SelectionCard } from 'rift-ds/components/SelectionCard/SelectionCard';`
 - Rendering: client component (declares 'use client')
+- Size: 3.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/selection-card
 - Schema: https://rift-ds.com/schema/components/selection-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,6 +24,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | name | `string` | no |  | Form field name, also the group's aria-label when none is given. When set, each selected option's `value` submits with an enclosing form through a hidden input, repeated in checkbox and toggle modes as a set of native checkboxes does; a disabled option submits nothing. In a form, name the group with `aria-label` too, so a field key is never what a screen reader announces. |
 | className | `string` | no | `''` | Additional CSS classes |
 | onChange | `((value: string \| string[]) => void)` | no |  | Legacy change handler, kept for backwards compatibility. Deprecated: Use `onValueChange` instead. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The cards follows the WAI-ARIA checkbox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/).
+
+| Key | What it does |
+| --- | --- |
+| Space | Ticks the box, or clears it when it is ticked. |
 
 ## Types
 

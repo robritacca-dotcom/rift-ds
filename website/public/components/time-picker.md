@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { TimePicker } from 'rift-ds';`
 - Deep import: `import { TimePicker } from 'rift-ds/components/TimePicker/TimePicker';`
 - Rendering: client component (declares 'use client')
+- Size: 6.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/time-picker
 - Schema: https://rift-ds.com/schema/components/time-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -33,3 +34,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected 24-hour "HH:MM" value |
 | periodLabels | `{ am?: string; pm?: string; }` | no |  | The period suffixes a 12-hour time is written with, as "2:30 PM". Without them a 12-hour time is written the way `locale` writes it, period words included ("2:30 PM" in `en-US`). A partial set is merged over the English `{ am: 'AM', pm: 'PM' }`. Only read when `hourFormat` is `'12'`. |
 | className | `string` | no | `''` | Additional CSS classes, applied to the Field wrapper around the label, trigger and helper text, not to the trigger button the ref and the other props reach. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA combobox pattern (https://www.w3.org/WAI/ARIA/apg/patterns/combobox/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Down | Opens the list of options. |
+| Arrow Down | With the list open, moves to the next option. |
+| Arrow Up | Moves to the previous option. |
+| Escape | Closes the list and keeps focus on the field. |

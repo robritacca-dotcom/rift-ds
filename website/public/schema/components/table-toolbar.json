@@ -541,5 +541,12 @@
     "Promise": "typescript",
     "ReactNode": "react",
     "Record": "typescript"
+  },
+  "keys": {
+    "by": "component",
+    "note": "Alt and the up or down arrow reorder a column or a sort row, and Escape closes a panel."
+  },
+  "size": {
+    "gzip": 40171
   }
 }

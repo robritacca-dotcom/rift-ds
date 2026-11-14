@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import { ModelPicker } from './ModelPicker';
 
 const models = [
@@ -46,6 +47,23 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+/** Type-to-find: with the list open, a letter moves to the next model named with it. */
+export const Typeahead: Story = {
+  args: { defaultValue: 'sonnet-5' },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox');
+    trigger.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await userEvent.keyboard('o');
+    await waitFor(() =>
+      expect(document.getElementById(trigger.getAttribute('aria-activedescendant') ?? '')).toHaveTextContent(/Opus 5/),
+    );
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+  },
+};
 
 export const Default: Story = {
   args: {

@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import './TreeView.css';
 import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
+import { useTypeahead } from '../../behaviors/typeahead';
 
 export interface TreeViewNode {
   /** Unique identifier for the node */
@@ -178,6 +179,8 @@ export const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
       itemRefs.current.get(id)?.focus();
     }, []);
 
+    const typeahead = useTypeahead();
+
     const handleKeyDown = (
       event: React.KeyboardEvent<HTMLLIElement>,
       node: TreeViewNode,
@@ -185,6 +188,17 @@ export const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
       const branch = isBranchNode(node);
       const expanded = expandedSet.has(node.id);
       const index = visibleNodes.findIndex((n) => n.id === node.id);
+      // Type-to-find: a letter moves to the next visible row named with it.
+      // Only for the row the key was pressed on: the event also bubbles
+      // through every ancestor row's handler.
+      const own = (event.target as Element).closest('[role="treeitem"]') === event.currentTarget;
+      const hit = own ? typeahead(event, visibleNodes.map((n) => n.label), index) : null;
+      if (hit !== null) {
+        event.preventDefault();
+        event.stopPropagation();
+        focusNode(visibleNodes[hit].id);
+        return;
+      }
       let handled = true;
 
       switch (logicalArrowKey(event.key, event.currentTarget)) {

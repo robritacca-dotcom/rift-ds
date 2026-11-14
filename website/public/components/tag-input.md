@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { TagInput } from 'rift-ds';`
 - Deep import: `import { TagInput } from 'rift-ds/components/TagInput/TagInput';`
 - Rendering: client component (declares 'use client')
+- Size: 1.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/tag-input
 - Schema: https://rift-ds.com/schema/components/tag-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,3 +27,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | removeLabel | `((tag: string) => string)` | no | `` (tag) => `Remove ${tag}` `` | Accessible name of a tag's remove button, given the tag. Defaults to "Remove <tag>". |
 | className | `string` | no | `''` | Additional CSS classes — applied to the wrapper, not the <input> |
 | name | `string` | no |  | Form field name. When set, the committed tags submit with an enclosing form through hidden inputs, one entry per tag, nothing while disabled. The draft text being typed is never submitted. Also the fallback for the element id (`id \|\| name \|\| label`). |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA text field pattern (https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
+
+| Key | What it does |
+| --- | --- |
+| Typing | Enters text in the named field. |

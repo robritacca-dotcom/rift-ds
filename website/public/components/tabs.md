@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Tabs } from 'rift-ds';`
 - Deep import: `import { Tabs } from 'rift-ds/components/Tabs/Tabs';`
 - Rendering: client component (declares 'use client')
+- Size: 1.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/tabs
 - Schema: https://rift-ds.com/schema/components/tabs.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -25,6 +26,20 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | fullWidth | `boolean` | no | `false` | Whether tabs fill the available width |
 | className | `string` | no | `''` | Additional CSS classes |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the tab list. Deprecated: Pass the native `aria-label` attribute instead. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA tabs pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the list at the selected tab, and out of the list on the next press. |
+| Arrow Right | Moves to the next tab and selects it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous tab and selects it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last tab and selects it. |
+| Home | Moves to the first tab and selects it. |
 
 ## Types
 

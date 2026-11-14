@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { BottomNav } from 'rift-ds';`
 - Deep import: `import { BottomNav } from 'rift-ds/components/BottomNav/BottomNav';`
 - Rendering: client component (declares 'use client')
+- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/bottom-nav
 - Schema: https://rift-ds.com/schema/components/bottom-nav.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | badgeLabel | `((badge: string \| number \| true) => string)` | no | `` (badge: number \| string \| true) => badge === true ? ', new' : `, ${badge} new` `` | Visually hidden text read after a destination's label when it carries a badge, given the item's `badge`. Defaults to ", new" for a dot (`true`) and ", 3 new" for a count; the leading comma and space are part of the text. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The destinations follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

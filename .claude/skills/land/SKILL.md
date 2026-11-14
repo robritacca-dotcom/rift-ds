@@ -4,6 +4,8 @@ description: Triage every piece of pending work in the repo and resolve all of i
 icon: flight_land
 displayDescription: "Resolves every piece of pending work in the repo in one pass. Sweeps worktrees, branches, uncommitted changes and stashes, reads each one to judge whether it is finished, superseded or abandoned, and proposes a disposition for all of it at once: land, keep, or delete. Approved work merges into a local main one branch at a time and the combined result runs the full verify; anything deleted is archived to a recoverable tag first, and nothing is ever pushed."
 invoke: ["land the work","combine my branches","clean up the branches","what's worth shipping"]
+metadata:
+  internal: true
 ---
 
 # land

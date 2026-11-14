@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Deadline } from 'rift-ds';`
 - Deep import: `import { Deadline } from 'rift-ds/components/Deadline/Deadline';`
 - Rendering: client component (declares 'use client')
+- Size: 1.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/deadline
 - Schema: https://rift-ds.com/schema/components/deadline.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,6 +29,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onStatusChange | `((status: DeadlineStatus) => void)` | no |  | Called when the deadline moves to a new status as time passes, so a host can react (sort, notify). |
 | locale | `string` | no |  | The BCP 47 locale the distance and the date are written in. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

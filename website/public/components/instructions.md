@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Instructions } from 'rift-ds';`
 - Deep import: `import { Instructions } from 'rift-ds/components/Instructions/Instructions';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/instructions
 - Schema: https://rift-ds.com/schema/components/instructions.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -21,6 +22,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | direction | `"horizontal" \| "vertical"` | no | `'vertical'` | Layout direction |
 | numbered | `boolean` | no | `true` | What a step without an `icon` shows in its badge: its number when true (the default), a small dot when false. A step's own `icon` always wins. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

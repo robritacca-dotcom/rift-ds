@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { SectionTitle } from 'rift-ds';`
 - Deep import: `import { SectionTitle } from 'rift-ds/components/SectionTitle/SectionTitle';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/section-title
 - Schema: https://rift-ds.com/schema/components/section-title.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,5 +20,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | trailing | `ReactNode` | no |  | Optional trailing content (count, badge, metadata) |
 | divider | `boolean` | no | `true` | Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone. |
 | className | `string` | no |  | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `ReactNode` (react).

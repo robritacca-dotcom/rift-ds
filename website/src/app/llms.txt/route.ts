@@ -74,7 +74,7 @@ export function GET() {
       "Components",
       `React component documentation with live examples. Index at ${SITE_URL}/components. ` +
         `Append .md to any component URL for its prop contract as markdown, ` +
-        `generated from the same JSDoc as the published .d.ts.`,
+        `generated from the same JSDoc as the published .d.ts, with the keys it is tested against and its size.`,
       componentsSidebarLinks
     ),
     "",
@@ -94,7 +94,7 @@ export function GET() {
     "Raw markdown sources and machine-readable indexes.",
     "",
     `- [MCP server](${SITE_URL}/api/mcp): a Model Context Protocol endpoint (Streamable HTTP, no auth). Tools cover the component list, per-component prop APIs, the design token registry, install setup, and full-text site search. Point any MCP client at this URL`,
-    `- [Agent skills](${AGENT_SKILL_MANIFEST_URL}): skills for consumers of the package, generated from the registries, listed with their files in this manifest. \`npx rift-ds init\` fetches every one into a project's .claude/skills/, where a coding agent loads them each session, and prints the MCP connect line`,
+    `- [Agent skills](${AGENT_SKILL_MANIFEST_URL}): skills for consumers of the package, generated from the registries, listed with their files in this manifest. \`npx rift-ds init\` fetches every one into a project's .claude/skills/, where a coding agent loads them each session, and prints the MCP connect line. For another agent, \`npx skills add ${REPOSITORY_URL.replace("https://github.com/", "")}\` installs the same skills where that agent looks`,
     ...AGENT_SKILLS.map(
       (skill) =>
         `- [${skill.name}](${skillFileUrl(skill, "SKILL.md")}): ${skill.summary} Files: ${skill.files.join(", ")}`
@@ -102,7 +102,7 @@ export function GET() {
     `- [Storybook](${STORYBOOK_URL}): the rendered API reference. Every component has a props table with types, defaults, and deprecations`,
     `- [npm package](${NPM_URL}): \`npm install rift-ds\` ships complete .d.ts type declarations for every component`,
     `- [shadcn registry](${SITE_URL}/r/registry.json): a shadcn-compatible registry serving every component as installable source. \`npx shadcn@latest add ${SITE_URL}/r/<slug>.json\` copies the component, its dependencies, and the shared base (tokens, presets, icon font, behaviors) into your project`,
-    `- [Component schemas](${SITE_URL}/schema/components.json): one JSON file per component with every prop, its allowed values and default, generated from the TypeScript. Each sits at ${SITE_URL}/schema/components/<slug>.json and validates against the meta-schema at ${SITE_URL}/schema/component.schema.json`,
+    `- [Component schemas](${SITE_URL}/schema/components.json): one JSON file per component with every prop, its allowed values and default, generated from the TypeScript, plus the keys the component is tested against and its gzipped size. Each sits at ${SITE_URL}/schema/components/<slug>.json and validates against the meta-schema at ${SITE_URL}/schema/component.schema.json`,
     `- [Design tokens (DTCG)](${SITE_URL}/docs/schemas#design-tokens): the tokens in the Design Tokens Community Group format, one file per theme and mode at ${SITE_URL}/schema/tokens/<theme>.<mode>.tokens.json (the MCP list_tokens tool returns every URL), with the primitive-to-semantic aliases intact; the same values resolved per theme ship in the package as \`${PACKAGE_NAME}/tokens/values\``,
     `- [CLAUDE.md](${SITE_URL}/CLAUDE.md): how this repository is *maintained* (architecture, registries, workflows). Written for contributors to the system itself, not for people using the package: for that, read design.md below and the README`,
     `- [GitHub source](${REPOSITORY_URL}): the full source, if you want to read the implementation`,

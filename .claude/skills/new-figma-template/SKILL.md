@@ -4,6 +4,8 @@ description: Recreate a screen or a flow in the Rift DS Figma kit from an existi
 icon: dashboard_customize
 displayDescription: "Takes a screen or a flow that already exists (a template on the site, a lab, a prototype, a mock image) and rebuilds it on the Figma kit's Templates page from the kit's own components, bound to its variables so a theme or mode switch still works. Lays it out at web and phone sizes, with the chat closed and open, gives each AI step its own frame, and wires the flow as a clickable prototype."
 invoke: ["put the [X] template in Figma","bring this prototype into Figma","draw the [X] flow in the kit"]
+metadata:
+  internal: true
 ---
 
 # new-figma-template

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { Button } from '../Button/Button';
 import { CircularButton } from '../CircularButton/CircularButton';
 import { ThreadPanel } from './ThreadPanel';
@@ -462,5 +462,16 @@ export const Selection: Story = {
 
     // Rest the pointer off the rows so hover styling stays out of snapshots.
     await userEvent.click(canvas.getByRole('navigation'));
+  },
+};
+
+/** The rail's toggle from the keyboard: Enter asks the host to collapse it, as a click does. */
+export const Keyboard: Story = {
+  args: { ...Default.args, onExpandedChange: fn() },
+  play: async ({ args, canvasElement }) => {
+    const toggle = canvasElement.querySelector<HTMLElement>('button[aria-expanded]')!;
+    toggle.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(args.onExpandedChange).toHaveBeenCalled());
   },
 };

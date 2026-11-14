@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { Text } from 'rift-ds';`
 - Deep import: `import { Text } from 'rift-ds/components/Text/Text';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/text
 - Schema: https://rift-ds.com/schema/components/text.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +27,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | htmlFor | `string` | no |  | The control this text names, when `as` is `label`. |
 | children | `ReactNode` | no |  | The text. |
 | className | `string` | no | `''` | Additional CSS classes. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

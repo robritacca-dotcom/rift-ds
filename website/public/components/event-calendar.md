@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Deep import: `import { EventCalendar } from 'rift-ds/components/EventCalendar/EventCalendar';`
 - Rendering: client component (declares 'use client')
+- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/event-calendar
 - Schema: https://rift-ds.com/schema/components/event-calendar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -33,6 +34,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | locale | `string` | no |  | The BCP 47 locale the calendar is written and laid out in, such as `de-DE`: the month heading, the weekday names, the spoken dates and the first day of the week. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | weekStartsOn | `Weekday` | no |  | The first column of the grid, 0 (Sunday) to 6 (Saturday). Defaults to the first day of the week in `locale`: Sunday in `en-US`, Monday in `de-DE`. |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The navigation buttons follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

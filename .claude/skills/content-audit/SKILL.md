@@ -4,6 +4,8 @@ description: Audit prose against content-design.md for AI-writing tells, voice v
 icon: spellcheck
 displayDescription: "Scans shipped prose against content-design.md: banned words, em dashes, promotional register, first person where the system should be the subject, and rhythm problems no word list catches. Reports each finding with its location, the offending text, and a suggested rewrite. Accepts a page, a data file, or a whole surface as scope."
 invoke: ["content audit","audit the copy on [page]","check this prose against the content guide","any AI slop in [file]"]
+metadata:
+  internal: true
 ---
 
 # content-audit

@@ -21,6 +21,7 @@ import {
 } from "rift-ds/tokens/registry";
 import { THEME_IDS, tokenValue, type ThemeMode } from "rift-ds/tokens/values";
 
+import { componentMetadata, keyboardFor } from "rift-ds/components/registry";
 import { componentApi, type ComponentApiEntry } from "@/data/component-api.generated";
 import { componentTypes } from "@/data/component-types.generated";
 import { siteSearchSections, type SiteSearchSection } from "@/data/site-search.generated";
@@ -198,6 +199,19 @@ export function lookupComponent(name: string, exportName?: string) {
   // page sits under /components with the rest; it imports from its own
   // subpath, and how to add it lives on /docs/chat.
   const path = `/components/${entry.slug}`;
+  const keyOwner = componentMetadata.find((component) => component.name === entry.name)?.keys;
+  const keyboard = keyboardFor(entry.name).map(({ id, part, label, apg, rows }) => ({
+    pattern: id,
+    ...(part ? { part } : {}),
+    label,
+    apg,
+    rows: rows.map(({ keys, when, text, inline }) => ({
+      keys,
+      ...(when ? { when } : {}),
+      text,
+      ...(inline ? { inline } : {}),
+    })),
+  }));
   return {
     ...entry,
     exports: exportsOut,
@@ -205,6 +219,10 @@ export function lookupComponent(name: string, exportName?: string) {
     // named with its package otherwise.
     ...(types && Object.keys(types).length > 0 ? { types } : {}),
     ...(typeMap && Object.keys(typeMap.externalTypes).length > 0 ? { externalTypes: typeMap.externalTypes } : {}),
+    // The keys the keyboard contract presses against it, as its schema
+    // prints them: the whole component's pattern, then any a part follows.
+    ...(keyboard.length > 0 ? { keyboard } : {}),
+    ...(keyOwner ? { keys: { by: keyOwner.by, ...(keyOwner.note ? { note: keyOwner.note } : {}) } } : {}),
     docsUrl: `${SITE_URL}${path}`,
     markdownUrl: `${SITE_URL}${path}.md`,
     schemaUrl: `${SITE_URL}/schema/components/${entry.slug}.json`,

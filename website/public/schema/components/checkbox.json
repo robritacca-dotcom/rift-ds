@@ -307,5 +307,23 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "checkbox",
+      "label": "Checkbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
+      "rows": [
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Ticks the box, or clears it when it is ticked."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 1755
+  }
 }

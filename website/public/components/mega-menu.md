@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { MegaMenu } from 'rift-ds';`
 - Deep import: `import { MegaMenu } from 'rift-ds/components/MegaMenu/MegaMenu';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/mega-menu
 - Schema: https://rift-ds.com/schema/components/mega-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,6 +23,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onNavigate | `(() => void)` | no |  | Called when any link in the panel is followed, so a host can close it. |
 | linkComponent | `LinkComponent` | no |  | The component every link renders through, so a router's link (Next.js `Link`) navigates without a reload. The panel is server-renderable, so it cannot read a `LinkProvider`; a client host resolves one and passes it here. Defaults to `<a>`. |
 | className | `string` | no | `''` | Additional CSS classes on the panel. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Follows the link. |
 
 ## Types
 

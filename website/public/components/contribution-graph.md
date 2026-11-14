@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ContributionGraph } from 'rift-ds';`
 - Deep import: `import { ContributionGraph } from 'rift-ds/components/ContributionGraph/ContributionGraph';`
 - Rendering: server-renderable (no 'use client')
+- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/contribution-graph
 - Schema: https://rift-ds.com/schema/components/contribution-graph.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -30,6 +31,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | monthLabels | `string[]` | no |  | The month labels above the grid: twelve entries, January first. Defaults to the short month names in `locale` ("Jan" to "Dec" in `en-US`); a list of any other length falls back to the default. |
 | cellLabel | `((count: number, date: Date) => string)` | no |  | A day cell's tooltip, given its count and date. Defaults to "No contributions", "1 contribution" or "N contributions", then "on" and the date in `locale`'s short form (e.g. "Jul 8, 2026"). |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 ## Types
 

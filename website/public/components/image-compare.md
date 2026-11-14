@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { ImageCompare } from 'rift-ds';`
 - Deep import: `import { ImageCompare } from 'rift-ds/components/ImageCompare/ImageCompare';`
 - Rendering: client component (declares 'use client')
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/image-compare
 - Schema: https://rift-ds.com/schema/components/image-compare.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -29,3 +30,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | onPositionChange | `((position: number) => void)` | no |  | Convenience callback receiving the divider position on every change |
 | aspectRatio | `string` | no | `'16 / 10'` | CSS aspect-ratio of the frame (both images are sized to cover it) |
 | className | `string` | no | `''` | Additional CSS classes |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+Follows the WAI-ARIA slider pattern (https://www.w3.org/WAI/ARIA/apg/patterns/slider/).
+
+| Key | What it does |
+| --- | --- |
+| Arrow Right | Raises the value by one step. |
+| Arrow Left | Lowers the value by one step. |
+| Home | Sets the lowest value. |
+| End | Sets the highest value. |

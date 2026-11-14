@@ -4,6 +4,8 @@ description: "Biweekly loop that turns real chat feedback into eval coverage. Re
 icon: reviews
 displayDescription: "Reads the site chat's own report card: every thumbs verdict a visitor left, joined back to the logged exchange it rates. Disliked answers become golden-set regression cases, the answer-quality eval runs against the updated set, and the fixes land on a branch with a plain-English report for approval. One of the loops described on the Loops page."
 invoke: ["run the chat quality loop","/chat-quality"]
+metadata:
+  internal: true
 ---
 
 # chat-quality

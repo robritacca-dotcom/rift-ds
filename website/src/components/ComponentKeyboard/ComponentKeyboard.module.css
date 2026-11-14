@@ -1,0 +1,43 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin-top: var(--gap-500);
+  width: 100%;
+}
+
+.note {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.note a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.keys {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--gap-050);
+}
+
+.pattern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+/* Two columns, one of them a sentence: on a phone this table wraps inside
+   the column instead of taking the scroll every wider table takes, which
+   would put each sentence on one line several screens wide. */
+@media (max-width: 768px) {
+  .section :global(.ds-table__wrapper .ds-table) {
+    min-width: 0;
+  }
+}

@@ -132,5 +132,30 @@
         }
       ]
     }
-  ]
+  ],
+  "keyboard": [
+    {
+      "pattern": "disclosure",
+      "part": "collapsible section",
+      "label": "Disclosure",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Opens what it controls, and closes it when it is open."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Does the same as Enter."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 1015
+  }
 }

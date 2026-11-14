@@ -65,6 +65,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Type-to-find: with the list open, a letter moves to the next option named with it. */
+export const Typeahead: Story = {
+  args: { label: 'Theme preset', defaultValue: 'editorial' },
+  play: async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole('combobox');
+    trigger.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await userEvent.keyboard('t');
+    await waitFor(() =>
+      expect(document.getElementById(trigger.getAttribute('aria-activedescendant') ?? '')).toHaveTextContent(/Terminal mono/),
+    );
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+  },
+};
+
 export const Default: Story = {
   args: {
     label: 'Theme preset',

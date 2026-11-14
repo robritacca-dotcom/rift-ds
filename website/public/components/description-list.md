@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { DescriptionList } from 'rift-ds';`
 - Deep import: `import { DescriptionList } from 'rift-ds/components/DescriptionList/DescriptionList';`
 - Rendering: server-renderable (no 'use client')
+- Size: 4.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/description-list
 - Schema: https://rift-ds.com/schema/components/description-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -39,6 +40,17 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | copyable | `string \| boolean` | no |  | Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). |
 | children | `ReactNode` | no |  | The value, as children. `details` wins when both are set. |
 | className | `string` | no | `''` | Additional CSS classes. |
+
+## Keyboard
+
+Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
+
+The copy button follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA/apg/patterns/button/).
+
+| Key | What it does |
+| --- | --- |
+| Enter | Activates the button. |
+| Space | Activates the button. |
 
 ## Types
 

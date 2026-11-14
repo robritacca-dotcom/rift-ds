@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 - Import: `import { AttachmentDropZone } from 'rift-ds';`
 - Deep import: `import { AttachmentDropZone } from 'rift-ds/components/Attachment/AttachmentDropZone';`
 - Rendering: client component (declares 'use client')
+- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/attachment-drop-zone
 - Schema: https://rift-ds.com/schema/components/attachment-drop-zone.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,5 +23,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.27.0. The same dat
 | hint | `string` | no |  | Second line of the overlay: what may be dropped, e.g. accepted types and limits. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | The surface that accepts drops: a chat panel, a thread and its composer. |
+
+## Keyboard
+
+Nothing here takes focus, so there are no keys. A test holds that.
 
 Types from other packages: `File` (typescript), `ReactNode` (react).

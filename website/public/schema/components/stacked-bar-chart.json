@@ -118,5 +118,12 @@
   },
   "externalTypes": {
     "Record": "typescript"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer."
+  },
+  "size": {
+    "gzip": 2017
   }
 }

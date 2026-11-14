@@ -3,7 +3,7 @@
  * Writes website/src/config/brand.generated.ts — the TypeScript mirror of
  * scripts/brand.mjs, so website code reads brand facts from a typed module
  * while the .mjs stays the single authored home. Byte-held by
- * scripts/validate-brand-module.mjs; CI's drift guard catches a stale
+ * scripts/validate-generated-files.mjs; CI's drift guard catches a stale
  * committed copy.
  */
 import { writeFileSync } from 'node:fs';
@@ -36,6 +36,12 @@ export function buildBrandModule() {
 ${entries}
 `;
 }
+
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-brand-module.mjs',
+  files: [[outputPath, buildBrandModule()]],
+});
 
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {

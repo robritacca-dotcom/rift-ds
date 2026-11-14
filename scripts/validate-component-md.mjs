@@ -21,10 +21,9 @@
  * Belongs in the validate-registry chain, not post-build: the source is
  * generated data, not rendered HTML.
  */
-import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { assembleComponentMdFiles, outputDir } from './generate-component-md.mjs';
-import { display as displayPath, read } from './lib/fs.mjs';
+import { assembleComponentMdFiles } from './generate-component-md.mjs';
+import { display as displayPath } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
 
 const errors = [];
@@ -33,14 +32,6 @@ const files = assembleComponentMdFiles();
 const display = (file) => displayPath(join(file.dir, `${file.slug}.md`));
 
 for (const file of files) {
-  const dest = join(file.dir, `${file.slug}.md`);
-  if (!existsSync(dest)) {
-    errors.push(`missing ${display(file)} — run: node scripts/generate-component-md.mjs`);
-    continue;
-  }
-  if (read(dest) !== file.content) {
-    errors.push(`${display(file)} is stale — run: node scripts/generate-component-md.mjs`);
-  }
   // 4. Clean table rows, checked on what the generator writes.
   for (const row of file.content.split('\n').filter((line) => line.startsWith('| '))) {
     const prop = row.slice(2, row.indexOf(' |'));
@@ -51,17 +42,6 @@ for (const file of files) {
     if (cells.some((text) => / {2,}/.test(text))) {
       errors.push(`${display(file)}: the ${prop} row has a double space. Fold the whitespace in generate-component-md.mjs.`);
     }
-  }
-}
-
-const wanted = new Set(files.filter((f) => f.dir === outputDir).map((file) => `${file.slug}.md`));
-const onDisk = existsSync(outputDir) ? readdirSync(outputDir) : [];
-for (const name of onDisk) {
-  if (!wanted.has(name)) {
-    errors.push(
-      `website/public/components/${name} matches no registered component — ` +
-        `run: node scripts/generate-component-md.mjs`
-    );
   }
 }
 

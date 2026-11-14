@@ -31,7 +31,7 @@
  * "3,4,7" lists static weights in hundreds. Only upright styles count.
  *
  * Runs in the validate-registry chain and the website's predev/prebuild;
- * scripts/validate-google-font-index.mjs holds the committed file to it.
+ * scripts/validate-generated-files.mjs holds the committed file to it.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -140,6 +140,12 @@ export function assembleGoogleFontIndex() {
   ];
   return lines.join('\n');
 }
+
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-google-font-index.mjs',
+  files: [[outputPath, assembleGoogleFontIndex()]],
+});
 
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {

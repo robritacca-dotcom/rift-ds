@@ -105,6 +105,12 @@ export const skillsContent: SkillContent[] = ${JSON.stringify(entries, null, 2)}
 `;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-skills-content.mjs',
+  files: [[outputPath, buildSkillsContent()]],
+});
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   writeFileSync(outputPath, buildSkillsContent());

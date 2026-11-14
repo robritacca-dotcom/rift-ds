@@ -465,6 +465,16 @@ export async function assembleTokenValues() {
   return { values, dtcg };
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export async function surface() {
+  const { values, dtcg } = await assembleTokenValues();
+  return {
+    regenerate: 'node scripts/generate-token-values.mjs',
+    files: [[valuesPath, values], ...[...dtcg].map(([name, content]) => [join(dtcgDir, name), content])],
+    folders: [{ dir: dtcgDir, entries: new Set(dtcg.keys()) }],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   try {

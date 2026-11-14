@@ -35,7 +35,7 @@
  * the folders on disk.
  *
  * Output: website/src/data/a11y-coverage.generated.ts (committed;
- * validate-a11y-coverage.mjs regenerates in memory and byte-compares, and
+ * validate-generated-files.mjs regenerates in memory and byte-compares, and
  * CI's drift guard catches a stale commit).
  *
  * Runs in the validate-registry chain: it reads source files only, so it
@@ -154,6 +154,12 @@ export interface A11yCoverage {
 export const a11yCoverage: A11yCoverage = ${JSON.stringify(coverage, null, 2)};
 `;
 }
+
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-a11y-coverage.mjs',
+  files: [[outputPath, buildA11yCoverageFile()]],
+});
 
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {

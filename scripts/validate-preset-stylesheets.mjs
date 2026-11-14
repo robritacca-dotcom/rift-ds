@@ -31,13 +31,9 @@
  * right after its generator: the source is TypeScript theme data, not
  * build output.
  */
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import {
-  assemblePresetStylesheets,
-  loadThemeSource,
-  outputDir,
-} from './generate-preset-stylesheets.mjs';
+import { assemblePresetStylesheets, loadThemeSource, outputDir } from './generate-preset-stylesheets.mjs';
 import { read } from './lib/fs.mjs';
 import { failStep } from './lib/report.mjs';
 
@@ -45,27 +41,6 @@ const REGENERATE = 'run: node scripts/generate-preset-stylesheets.mjs';
 const errors = [];
 
 const files = await assemblePresetStylesheets();
-
-for (const [name, content] of files) {
-  const dest = join(outputDir, name);
-  if (!existsSync(dest)) {
-    errors.push(`missing src/tokens/presets/${name} — ${REGENERATE}`);
-    continue;
-  }
-  // Normalize CRLF so Windows checkouts validate identically to CI.
-  if (read(dest) !== content) {
-    errors.push(`src/tokens/presets/${name} is stale — ${REGENERATE}`);
-  }
-}
-
-const onDisk = existsSync(outputDir) ? readdirSync(outputDir) : [];
-for (const name of onDisk) {
-  if (!files.has(name)) {
-    errors.push(
-      `src/tokens/presets/${name} matches no preset in THEME_PRESETS — ${REGENERATE}`
-    );
-  }
-}
 
 /* Parity proof (check 3): parse mono.css from disk and hold each block's
    declarations to the composer's output directly. */

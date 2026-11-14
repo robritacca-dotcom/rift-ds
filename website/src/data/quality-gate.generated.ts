@@ -110,55 +110,39 @@ export const QUALITY_GATE: QualityGateGroup[] = [
   {
     "id": "freshness",
     "title": "Generated files match their source",
-    "body": "Each of these regenerates a file in memory and compares it byte for byte with the copy on disk, so a hand edit or a skipped generator fails the build.",
+    "body": "The first of these rebuilds every generated file in memory and compares it byte for byte with the copy on disk, so a hand edit or a skipped generator fails the build. The rest hold what each generated surface must be.",
     "checks": [
       {
-        "name": "validate-google-font-index",
-        "text": "The playground's font index matches its generator."
-      },
-      {
-        "name": "validate-brand-marks",
-        "text": "The importer's brand marks match their generator."
-      },
-      {
-        "name": "validate-brand-module",
-        "text": "The typed brand module matches scripts/brand.mjs."
+        "name": "validate-generated-files",
+        "text": "Every generated file matches what its generator builds, with nothing left behind in a folder a generator owns."
       },
       {
         "name": "validate-site-corpus",
-        "text": "The chat corpus is fresh, carries no leaked contact details, no dropped values, and fits its token budget."
+        "text": "The chat corpus carries no leaked contact details, no dropped values and no empty-state copy."
       },
       {
         "name": "validate-site-search",
-        "text": "The MCP search index is fresh, links every section and holds only documentation for people building with the package."
+        "text": "The MCP search index links every section and holds only documentation for people building with the package."
       },
       {
         "name": "validate-component-api",
-        "text": "The prop reference the MCP endpoint serves is fresh, defines every type it names and gives every optional enum a default."
+        "text": "The prop reference the MCP endpoint serves defines every type it names, gives every optional enum a default and fits its response budget."
       },
       {
         "name": "validate-component-md",
-        "text": "Every component's markdown page matches its source, with no orphans."
-      },
-      {
-        "name": "validate-component-schema",
-        "text": "Every component's schema and the schema index match their source."
+        "text": "No component's markdown page has a broken table row."
       },
       {
         "name": "validate-shadcn-registry",
-        "text": "The shadcn registry matches its sources, with no stale, missing or orphan files."
+        "text": "The shadcn registry carries no leaked details, and every import inside it resolves to a file it ships."
       },
       {
         "name": "validate-agent-skill",
-        "text": "The consumer skills and their manifest match their source."
+        "text": "The consumer skills match the skill table, install cleanly and are advertised from one list."
       },
       {
         "name": "validate-dependency-graph",
-        "text": "The /graph data is fresh."
-      },
-      {
-        "name": "validate-a11y-coverage",
-        "text": "The accessibility page's figures are fresh."
+        "text": "The /graph data carries no leaked details."
       },
       {
         "name": "validate-token-registry",
@@ -166,15 +150,15 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-token-values",
-        "text": "values.json and the DTCG files match the token CSS and the preset composer."
+        "text": "The DTCG files hold only valid token types and aliases that resolve."
       },
       {
         "name": "validate-preset-stylesheets",
-        "text": "Every preset stylesheet and the aggregate match the composer."
+        "text": "The Mono stylesheet reads back as exactly what the composer emits, and no two ramp steps collapse."
       },
       {
         "name": "validate-theme-design-md",
-        "text": "The per-theme DESIGN.md files regenerate exactly and still read back through the importer."
+        "text": "The per-theme DESIGN.md files still read back through the importer."
       }
     ]
   },
@@ -399,10 +383,6 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-doc-refs",
         "text": "Every repo path, npm script and API symbol a doc or skill names exists."
-      },
-      {
-        "name": "validate-quality-gate",
-        "text": "This page's list matches package.json and the CI workflow."
       },
       {
         "name": "validate-chat-coverage",

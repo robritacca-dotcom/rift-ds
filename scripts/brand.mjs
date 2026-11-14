@@ -14,7 +14,7 @@
  * import it directly; website code reads the generated mirror
  * (website/src/config/brand.generated.ts, written by
  * scripts/generate-brand-module.mjs and byte-held by
- * scripts/validate-brand-module.mjs).
+ * scripts/validate-generated-files.mjs).
  */
 
 /** The product name, as prose and titles print it. */

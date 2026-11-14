@@ -28,6 +28,7 @@
  *   { step, check, file, append, expect }
  *   { step, check, create, content, expect }       a new file
  *   { step, check, remove, expect }                delete a file
+ * `was` records the step that caught a plant before its check moved.
  * `gitAdd: true` stages the planted path first, for steps that read
  * `git ls-files`. `command` replaces `node scripts/<step>.mjs`.
  */

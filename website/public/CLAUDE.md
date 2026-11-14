@@ -36,19 +36,19 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Site chat corpus | `website/src/data/site-corpus.generated.ts` | same file | `scripts/validate-site-corpus.mjs`, `scripts/validate-chat-coverage.mjs`, `scripts/validate-corpus-coverage.mjs` |
 | Component prop API | `website/src/data/component-api.generated.ts` + the types its props name in `website/src/data/component-types.generated.ts` (server-only) | same files | `scripts/validate-component-api.mjs` |
 | MCP search index | `website/src/data/site-search.generated.ts` (consumer documentation only, every section with its URL) | same file | `scripts/validate-site-search.mjs` |
-| Component schemas | `website/public/schema/components/` + `components.json` (generated); the hand-written meta-schemas `component.schema.json` and `components-index.schema.json` beside them | (served as-is) | `scripts/validate-component-schema.mjs`, `scripts/validate-json-schemas.mjs` |
+| Component schemas | `website/public/schema/components/` + `components.json` (generated); the hand-written meta-schemas `component.schema.json` and `components-index.schema.json` beside them | (served as-is) | `scripts/validate-generated-files.mjs`, `scripts/validate-json-schemas.mjs` |
 | Token values | `src/tokens/values.json` (generated; resolved per theme and mode; the hand-written meta-schema `website/public/schema/token-values.schema.json`) + the DTCG files in `website/public/schema/tokens/` | `src/tokens/values.ts` (`rift-ds/tokens/values`) | `scripts/validate-token-values.mjs`, `scripts/validate-json-schemas.mjs` |
 | Consumer agent skills | `AGENT_SKILLS` in `scripts/brand.mjs` + `website/public/skill/manifest.json` (generated) | `website/src/data/agent-skills.ts` | `scripts/validate-agent-skill.mjs` |
 | Chat widget | `src/chat/registry.json` | `src/chat/registry.ts` | `scripts/validate-chat-widget.mjs` |
 | Blocks | `src/cli/templates/blocks/registry.json` | `website/src/data/blocks.ts` | `scripts/validate-blocks.mjs` |
 | Figma frames | `website/src/data/figma-nodes.json` | `website/src/data/figma-nodes.ts` | `scripts/validate-figma-nodes.mjs` |
-| Accessibility coverage | `website/src/data/a11y-coverage.generated.ts` | `website/src/data/a11y-coverage.ts` | `scripts/validate-a11y-coverage.mjs` |
+| Accessibility coverage | `website/src/data/a11y-coverage.generated.ts` | `website/src/data/a11y-coverage.ts` | `scripts/validate-generated-files.mjs` |
 | Gestures | `scripts/gestures.json` (every drag grip a visitor can press) | (read by the script) | `scripts/validate-gestures.mjs` |
-| Quality gate list (/skills/super-ship) | order from `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-quality-gate.mjs` |
+| Quality gate list (/skills/super-ship) | order from `scripts/chain.mjs`, `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-generated-files.mjs` |
 
 Notes an agent needs while editing them:
 
-- **Generated files are never hand-edited.** Edit the source and rebuild; a byte-comparing validator fails on a hand edit.
+- **Generated files are never hand-edited.** Edit the source and rebuild; `scripts/validate-generated-files.mjs` rebuilds every generated surface from the `surface()` its generator exports and fails on a hand edit, a stale file or an orphan.
 - **Release log**: one entry per published npm version, written by the `release` skill at publish time and never otherwise.
 - **Page summaries**: a new static page needs a summary and a starters pool, or must be chromeless; component pages derive theirs.
 - **Theme presets**: `presetOverrides` in `presets.ts` is the one composer the stylesheets and the playground export are written from; every preset sets every lever and passes the contrast gate.

@@ -193,6 +193,12 @@ export const siteSearchSections: readonly SiteSearchSection[] = ${JSON.stringify
 `;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-site-search.mjs',
+  files: [[outputPath, buildSiteSearchFile()]],
+});
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   writeFileSync(outputPath, buildSiteSearchFile());

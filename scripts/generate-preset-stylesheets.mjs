@@ -219,6 +219,16 @@ export async function assemblePresetStylesheets() {
   return files;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export async function surface() {
+  const files = await assemblePresetStylesheets();
+  return {
+    regenerate: 'node scripts/generate-preset-stylesheets.mjs',
+    files: [...files].map(([name, content]) => [join(outputDir, name), content]),
+    folders: [{ dir: outputDir, entries: new Set(files.keys()) }],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const files = await assemblePresetStylesheets();

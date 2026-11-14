@@ -177,6 +177,16 @@ export function assembleComponentMdFiles() {
   }));
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export function surface() {
+  const files = assembleComponentMdFiles();
+  return {
+    regenerate: 'node scripts/generate-component-md.mjs',
+    files: files.map((file) => [join(file.dir, `${file.slug}.md`), file.content]),
+    folders: [{ dir: outputDir, entries: new Set(files.filter((f) => f.dir === outputDir).map((f) => `${f.slug}.md`)) }],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   mkdirSync(outputDir, { recursive: true });

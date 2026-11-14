@@ -120,6 +120,12 @@ export const BRAND_MARKS: BrandMarkData[] = ${JSON.stringify(marks, null, 2)};
 `;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-brand-marks.mjs',
+  files: [[outputPath, assembleBrandMarks()]],
+});
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const output = assembleBrandMarks();

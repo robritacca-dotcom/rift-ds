@@ -42,7 +42,7 @@
  *
  * Two properties this surface must keep, or the build breaks:
  *
- *   1. Deterministic. No network, no timestamps. validate-component-schema.mjs
+ *   1. Deterministic. No network, no timestamps. validate-generated-files.mjs
  *      regenerates in memory and byte-compares against disk, and CI runs a
  *      drift guard after the generators.
  *   2. Valid against its meta-schema. validate-json-schemas.mjs compiles
@@ -222,6 +222,21 @@ export function assembleComponentSchemaFiles() {
   };
   files.push({ path: indexPath, content: stringify(index) });
   return files;
+}
+
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export function surface() {
+  const files = assembleComponentSchemaFiles();
+  return {
+    regenerate: 'node scripts/generate-component-schema.mjs',
+    files: files.map((file) => [file.path, file.content]),
+    folders: [
+      {
+        dir: outputDir,
+        entries: new Set(files.filter((f) => f.path.startsWith(outputDir)).map((f) => relative(outputDir, f.path))),
+      },
+    ],
+  };
 }
 
 /** Write the generated files. The chain runner calls this; run alone, the script does. */

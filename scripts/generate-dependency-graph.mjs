@@ -335,6 +335,12 @@ export function buildDependencyGraphFile() {
 }
 
 // -------- CLI --------
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-dependency-graph.mjs',
+  files: [[outputPath, buildDependencyGraphFile()]],
+});
+
 const invokedDirectly = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (invokedDirectly) {
   const [, , command, ...queryParts] = process.argv;

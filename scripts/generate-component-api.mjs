@@ -439,6 +439,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = ${JSO
 `;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export function surface() {
+  const entries = assembleComponentApi();
+  return {
+    regenerate: 'node scripts/generate-component-api.mjs',
+    files: [
+      [outputPath, buildComponentApiFile(entries)],
+      [typesOutputPath, buildComponentTypesFile(entries)],
+    ],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const entries = assembleComponentApi();

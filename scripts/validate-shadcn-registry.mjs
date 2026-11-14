@@ -16,38 +16,14 @@
  *      file must resolve to a target somewhere in the registry, so an
  *      installed component can never import a file no item carries.
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { join, posix, relative } from 'node:path';
-import { assembleShadcnRegistry, outputDir } from './generate-shadcn-registry.mjs';
-import { read, walk } from './lib/fs.mjs';
+import { posix } from 'node:path';
+import { assembleShadcnRegistry } from './generate-shadcn-registry.mjs';
 import { finish } from './lib/report.mjs';
 import { leaksIn } from './lib/screens.mjs';
 
 const errors = [];
-const REGENERATE = 'node scripts/generate-shadcn-registry.mjs';
 
 const expected = assembleShadcnRegistry();
-
-/* 1. Byte-compare, both directions. */
-const onDisk = new Set(
-  (existsSync(outputDir) ? walk(outputDir) : []).map((path) => relative(outputDir, path).replace(/\\/g, '/'))
-);
-
-for (const [name, content] of expected) {
-  if (!onDisk.has(name)) {
-    errors.push(`website/public/r/${name} is missing — ${REGENERATE}`);
-    continue;
-  }
-  // Normalize CRLF on text files so Windows checkouts validate identically to CI.
-  const disk = Buffer.isBuffer(content)
-    ? readFileSync(join(outputDir, name))
-    : Buffer.from(read(join(outputDir, name)));
-  const next = Buffer.isBuffer(content) ? content : Buffer.from(content);
-  if (!disk.equals(next)) errors.push(`website/public/r/${name} is stale — ${REGENERATE}`);
-}
-for (const name of onDisk) {
-  if (!expected.has(name)) errors.push(`website/public/r/${name} is an orphan — ${REGENERATE} prunes it`);
-}
 
 /* 2. Leak screen — the corpus's non-sanctionable patterns. */
 for (const [name, content] of expected) {

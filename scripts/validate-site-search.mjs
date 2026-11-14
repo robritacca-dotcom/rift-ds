@@ -24,16 +24,9 @@
  * Runs before every build via the validate-registry chain, after the
  * corpus validator, whose generator this index reads through.
  */
-import { existsSync } from 'node:fs';
 
 import { SITE_URL } from './brand.mjs';
-import {
-  assembleSearchSections,
-  buildSiteSearchFile,
-  isMaintainerRoute,
-  outputPath,
-} from './generate-site-search.mjs';
-import { display, read } from './lib/fs.mjs';
+import { assembleSearchSections, isMaintainerRoute } from './generate-site-search.mjs';
 import { finish } from './lib/report.mjs';
 import { holesIn, leaksIn } from './lib/screens.mjs';
 
@@ -43,12 +36,6 @@ const fail = (message) => errors.push(message);
 let sections = [];
 try {
   sections = assembleSearchSections();
-  const onDisk = existsSync(outputPath) ? read(outputPath) : null;
-  if (onDisk === null) {
-    fail(`${display(outputPath)} is missing. Run \`node scripts/generate-site-search.mjs\` and commit the result.`);
-  } else if (onDisk !== buildSiteSearchFile()) {
-    fail(`${display(outputPath)} is stale. Run \`node scripts/generate-site-search.mjs\` and commit the result.`);
-  }
 } catch (error) {
   fail(`generating the search index failed: ${error.message}`);
 }

@@ -15,7 +15,6 @@
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { buildSkillsContent, outputPath } from './generate-skills-content.mjs';
 import { read, repoRoot } from './lib/fs.mjs';
 import { failStep } from './lib/report.mjs';
 import { leaksIn } from './lib/screens.mjs';
@@ -73,22 +72,6 @@ for (const [label, , src] of skillSources) {
 
 // (Backticked-path existence used to be checked here; it lives in
 // scripts/validate-doc-refs.mjs now, which covers the docs as well.)
-
-// The generated page data must match what the skill files produce.
-let staleGenerated = null;
-try {
-  const expected = buildSkillsContent();
-  const onDisk = existsSync(outputPath)
-    ? read(outputPath)
-    : '';
-  if (onDisk !== expected) {
-    staleGenerated =
-      'website/src/data/skills-content.generated.ts is stale — run ' +
-      '`node scripts/generate-skills-content.mjs` and commit the result.';
-  }
-} catch (err) {
-  staleGenerated = `generating skills content failed: ${err.message}`;
-}
 
 const repoRegistered = [...displayed, ...unlisted].sort();
 const missingFromRegistry = files.filter((f) => !repoRegistered.includes(f));
@@ -153,10 +136,6 @@ if (externalWithoutCopy.length > 0) {
 
 if (duplicates.length > 0) {
   fail(`Listed in more than one registry list: ${duplicates.join(', ')}`);
-}
-
-if (staleGenerated) {
-  fail(staleGenerated);
 }
 
 if (failed) {

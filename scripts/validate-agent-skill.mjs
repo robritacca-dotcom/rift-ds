@@ -52,51 +52,25 @@ import {
   assembleAgentSkill,
   assembleAgentStarter,
   assembleSkillManifest,
-  buildStarterModule,
-  starterModulePath,
-  starterPath,
-  listFiles,
-  skillRoot,
 } from './generate-agent-skill.mjs';
 import { AGENT_SKILLS, AGENT_STARTER_FILE, SITE_URL } from './brand.mjs';
 import { read, repoRoot } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
 import { leaksIn } from './lib/screens.mjs';
 
-const REGENERATE = 'run: node scripts/generate-agent-skill.mjs';
 
 const errors = [];
 
-// 1. Byte-compare, both directions.
+// 1. What the generator builds. Whether the disk matches it, in both
+// directions, is validate-generated-files.mjs's check; the checks below
+// read the build.
 const files = assembleAgentSkill();
 const manifestContent = assembleSkillManifest(files);
 const wanted = new Map([
   ...files.map((file) => [`${file.skill}/${file.path}`, file.content]),
   [MANIFEST_FILE, manifestContent],
 ]);
-for (const [path, content] of wanted) {
-  const dest = join(skillRoot, ...path.split('/'));
-  if (!existsSync(dest)) {
-    errors.push(`missing skill/${path} — ${REGENERATE}`);
-  } else if (read(dest) !== content) {
-    errors.push(`skill/${path} is stale — ${REGENERATE}`);
-  }
-}
-for (const path of listFiles(skillRoot)) {
-  if (!wanted.has(path)) {
-    errors.push(
-      `website/public/skill/${path} is produced by no skill builder — ${REGENERATE} ` +
-        `(it prunes the orphan), or add the file to a builder deliberately.`
-    );
-  }
-}
-
 const starter = assembleAgentStarter();
-if (!existsSync(starterPath)) {
-  errors.push(`missing website/public/${AGENT_STARTER_FILE} — ${REGENERATE}`);
-} else if (read(starterPath) !== starter) {
-  errors.push(`website/public/${AGENT_STARTER_FILE} is stale — ${REGENERATE}`);
-}
 
 // 2. The manifest matches the table.
 const manifest = JSON.parse(manifestContent);
@@ -195,10 +169,6 @@ for (const file of advertisers) {
 }
 
 // 6. The starter is shown on get-started, and offered, derived.
-const starterModule = buildStarterModule(starter);
-if (!existsSync(starterModulePath) || read(starterModulePath) !== starterModule) {
-  errors.push(`website/src/data/agent-starter.generated.ts is missing or stale — ${REGENERATE}`);
-}
 // Each surface, the accessor name it must use, and what that name does there.
 const starterOffers = [
   ['website/src/app/docs/get-started/page.tsx', 'AGENT_STARTER', 'shows the full text in a copy frame'],

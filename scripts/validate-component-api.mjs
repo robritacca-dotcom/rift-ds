@@ -47,14 +47,7 @@
  * Runs before every build via the validate-registry chain.
  */
 import { existsSync } from 'node:fs';
-import {
-  assembleComponentApi,
-  buildComponentApiFile,
-  buildComponentTypesFile,
-  outputPath,
-  typesOutputPath,
-} from './generate-component-api.mjs';
-import { repoRoot } from './component-docgen.mjs';
+import { assembleComponentApi, outputPath, typesOutputPath } from './generate-component-api.mjs';
 import { read } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
 import { leaksIn } from './lib/screens.mjs';
@@ -83,38 +76,17 @@ const RESPONSE_SANCTIONED = new Map([
 /** The URLs and usage line lookupComponent adds to an entry, as a byte allowance. */
 const RESPONSE_OVERHEAD = 600;
 
-const relative = (path) => path.replace(repoRoot + '/', '');
 const errors = [];
 const fail = (message) => errors.push(message);
 
 let onDisk = null;
 let entries = [];
 
-// 1. Freshness, of both files.
+// 1. The two files as committed. Whether they are fresh is
+// validate-generated-files.mjs's check; the screens below read the disk.
 try {
   entries = assembleComponentApi();
-  const files = [
-    [outputPath, buildComponentApiFile(entries)],
-    [typesOutputPath, buildComponentTypesFile(entries)],
-  ];
-  onDisk = '';
-  for (const [path, expected] of files) {
-    const text = existsSync(path) ? read(path) : null;
-    if (text === null) {
-      fail(
-        `${relative(path)} is missing — run ` +
-          `\`node scripts/generate-component-api.mjs\` and commit the result.`
-      );
-    } else {
-      onDisk += text;
-      if (text !== expected) {
-        fail(
-          `${relative(path)} is stale — run ` +
-            `\`node scripts/generate-component-api.mjs\` and commit the result.`
-        );
-      }
-    }
-  }
+  onDisk = [outputPath, typesOutputPath].filter((path) => existsSync(path)).map((path) => read(path)).join('');
 } catch (error) {
   fail(`generating the component API failed: ${error.message}`);
 }

@@ -5,7 +5,7 @@
  * The page states countable facts about the library's accessibility work, so
  * none of them may be typed into page copy: they are read out of the source
  * by scripts/generate-a11y-coverage.mjs (which runs via predev/prebuild), and
- * validate-a11y-coverage.mjs keeps the generated file honest.
+ * validate-generated-files.mjs keeps the generated file honest.
  */
 import { a11yCoverage } from "./a11y-coverage.generated";
 

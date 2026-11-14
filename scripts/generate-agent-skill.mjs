@@ -760,6 +760,25 @@ export function listFiles(dir, prefix = '') {
   );
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export function surface() {
+  const files = assembleAgentSkill();
+  const starter = assembleAgentStarter();
+  const wanted = new Map([
+    ...files.map((file) => [`${file.skill}/${file.path}`, file.content]),
+    [MANIFEST_FILE, assembleSkillManifest(files)],
+  ]);
+  return {
+    regenerate: 'node scripts/generate-agent-skill.mjs',
+    files: [
+      ...[...wanted].map(([path, content]) => [join(skillRoot, ...path.split('/')), content]),
+      [starterPath, starter],
+      [starterModulePath, buildStarterModule(starter)],
+    ],
+    folders: [{ dir: skillRoot, entries: new Set(wanted.keys()), recursive: true }],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const files = assembleAgentSkill();

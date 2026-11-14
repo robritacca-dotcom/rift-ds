@@ -391,6 +391,17 @@ export async function assembleThemeDesignMd() {
   return files;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export async function surface() {
+  const files = await assembleThemeDesignMd();
+  return {
+    regenerate: 'node scripts/generate-theme-design-md.mjs',
+    files: [...files].map(([path, content]) => [join(outputDir, ...path.split('/')), content]),
+    // One folder per theme id.
+    folders: [{ dir: outputDir, entries: new Set([...files.keys()].map((path) => path.split('/')[0])) }],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const files = await assembleThemeDesignMd();

@@ -1461,6 +1461,12 @@ export function corpusSizes() {
   });
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-site-corpus.mjs',
+  files: [[outputPath, buildSiteCorpus()]],
+});
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const args = process.argv.slice(2);

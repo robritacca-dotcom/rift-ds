@@ -321,6 +321,16 @@ export function assembleShadcnRegistry() {
   return out;
 }
 
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export function surface() {
+  const files = assembleShadcnRegistry();
+  return {
+    regenerate: 'node scripts/generate-shadcn-registry.mjs',
+    files: [...files].map(([name, content]) => [join(outputDir, ...name.split('/')), content]),
+    folders: [{ dir: outputDir, entries: new Set(files.keys()), recursive: true }],
+  };
+}
+
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {
   const files = assembleShadcnRegistry();

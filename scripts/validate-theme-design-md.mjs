@@ -22,10 +22,9 @@
  *
  * Belongs in the validate-registry chain and the website prebuild.
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { assembleThemeDesignMd, outputDir } from './generate-theme-design-md.mjs';
+import { assembleThemeDesignMd } from './generate-theme-design-md.mjs';
 import { loadThemeSource } from './generate-preset-stylesheets.mjs';
 import { repoRoot } from './lib/fs.mjs';
 import { failStep } from './lib/report.mjs';
@@ -49,17 +48,6 @@ const SANCTIONED_DRIFT = {
 /* ---------- 1. drift ---------- */
 
 const files = await assembleThemeDesignMd();
-for (const [path, content] of files) {
-  const dest = join(outputDir, path);
-  if (!existsSync(dest)) errors.push(`${path} is missing — run node scripts/generate-theme-design-md.mjs`);
-  else if (readFileSync(dest, 'utf8') !== content) errors.push(`${path} is stale — run node scripts/generate-theme-design-md.mjs`);
-}
-const ids = new Set([...files.keys()].map((p) => p.split('/')[0]));
-if (existsSync(outputDir)) {
-  for (const dir of readdirSync(outputDir)) {
-    if (!ids.has(dir)) errors.push(`website/public/themes/${dir} belongs to no theme — run the generator to prune it`);
-  }
-}
 
 /* ---------- 2. round trip ---------- */
 

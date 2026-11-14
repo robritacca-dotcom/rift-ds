@@ -20,13 +20,9 @@
  * Belongs in the validate-registry chain and the website prebuild: the
  * sources are the token CSS and a TypeScript module, not rendered HTML.
  */
-import { existsSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { assembleTokenValues, dtcgDir, valuesPath } from './generate-token-values.mjs';
-import { display, read } from './lib/fs.mjs';
+import { assembleTokenValues } from './generate-token-values.mjs';
 import { finish } from './lib/report.mjs';
 
-const REGENERATE = 'run: node scripts/generate-token-values.mjs';
 
 /** The DTCG 2025.10 types the generator may emit. */
 const DTCG_TYPES = new Set([
@@ -42,26 +38,6 @@ const DTCG_TYPES = new Set([
 
 const errors = [];
 const { values, dtcg } = await assembleTokenValues();
-
-/* 1. Drift. */
-if (!existsSync(valuesPath)) {
-  errors.push(`missing ${display(valuesPath)}; ${REGENERATE}`);
-} else if (read(valuesPath) !== values) {
-  errors.push(`${display(valuesPath)} is stale; ${REGENERATE}`);
-}
-for (const [name, content] of dtcg) {
-  const dest = join(dtcgDir, name);
-  if (!existsSync(dest)) {
-    errors.push(`missing ${display(dest)}; ${REGENERATE}`);
-  } else if (read(dest) !== content) {
-    errors.push(`${display(dest)} is stale; ${REGENERATE}`);
-  }
-}
-for (const name of existsSync(dtcgDir) ? readdirSync(dtcgDir) : []) {
-  if (!dtcg.has(name)) {
-    errors.push(`${display(join(dtcgDir, name))} matches no theme in the selector order (orphan); ${REGENERATE}`);
-  }
-}
 
 /* 2. DTCG shape. */
 const RESERVED = /[.{}]/;

@@ -24,7 +24,7 @@
  * build, and so does retiring one without removing its line.
  *
  * Belongs at the head of the validate-registry chain, as a generator: it
- * reads source files only. validate-quality-gate.mjs holds disk to it.
+ * reads source files only. validate-generated-files.mjs holds disk to it.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -162,6 +162,12 @@ export interface QualityGateGroup {
 export const QUALITY_GATE: QualityGateGroup[] = ${JSON.stringify(data, null, 2)};
 `;
 }
+
+/** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
+export const surface = () => ({
+  regenerate: 'node scripts/generate-quality-gate.mjs',
+  files: [[outputPath, renderQualityGate()]],
+});
 
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
 export async function main() {

@@ -40,37 +40,14 @@
 import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
-import { buildSiteCorpus, assembleCorpus, sanctionedFacts, outputPath } from './generate-site-corpus.mjs';
+import { assembleCorpus, sanctionedFacts } from './generate-site-corpus.mjs';
 import { read, repoRoot } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
 import { holesIn, leaksIn } from './lib/screens.mjs';
 
-const relative = (path) => path.replace(repoRoot + '/', '');
 
 const errors = [];
 const fail = (message) => errors.push(message);
-
-// 1. Freshness.
-try {
-  const expected = buildSiteCorpus();
-  const onDisk = existsSync(outputPath)
-    ? read(outputPath)
-    : null;
-
-  if (onDisk === null) {
-    fail(
-      `${relative(outputPath)} is missing — run ` +
-        `\`node scripts/generate-site-corpus.mjs\` and commit the result.`
-    );
-  } else if (onDisk !== expected) {
-    fail(
-      `${relative(outputPath)} is stale — run ` +
-        `\`node scripts/generate-site-corpus.mjs\` and commit the result.`
-    );
-  }
-} catch (error) {
-  fail(`generating the site corpus failed: ${error.message}`);
-}
 
 // 2. Leaked details. The corpus text itself, not the generated wrapper.
 //

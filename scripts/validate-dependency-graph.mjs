@@ -14,7 +14,7 @@
  * Runs before every build via the validate-registry chain.
  */
 import { existsSync } from 'node:fs';
-import { buildDependencyGraphFile, outputPath } from './generate-dependency-graph.mjs';
+import { outputPath } from './generate-dependency-graph.mjs';
 import { read } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
 import { leaksIn } from './lib/screens.mjs';
@@ -24,24 +24,9 @@ const fail = (message) => errors.push(message);
 
 let onDisk = null;
 
-try {
-  const expected = buildDependencyGraphFile();
-  onDisk = existsSync(outputPath) ? read(outputPath) : null;
-
-  if (onDisk === null) {
-    fail(
-      'website/src/data/dependency-graph.generated.ts is missing — run ' +
-        '`node scripts/generate-dependency-graph.mjs` and commit the result.'
-    );
-  } else if (onDisk !== expected) {
-    fail(
-      'website/src/data/dependency-graph.generated.ts is stale — run ' +
-        '`node scripts/generate-dependency-graph.mjs` and commit the result.'
-    );
-  }
-} catch (error) {
-  fail(`generating the dependency graph failed: ${error.message}`);
-}
+// The file as committed. Whether it is fresh is validate-generated-files.mjs's check.
+if (existsSync(outputPath)) onDisk = read(outputPath);
+else fail('website/src/data/dependency-graph.generated.ts is missing — run `node scripts/generate-dependency-graph.mjs` and commit the result.');
 
 if (onDisk !== null) {
   for (const leak of leaksIn(onDisk)) {

@@ -25,8 +25,8 @@ export const buttonMap: ArchMap = {
 
     /* 2 · Before every build */
     { id: "z-chain", x: 560, y: 340, w: 400, h: 400, kind: "zone", title: "2 · Before every build", sub: "a missing piece stops it here" },
-    { id: "validators", x: 595, y: 430, w: 330, h: 76, title: "Validators", sub: "folder ↔ registry · prop docs · tokens only", icon: "rule", chip: "warning" },
-    { id: "generators", x: 595, y: 590, w: 330, h: 76, title: "Generators", sub: "write every copy in step 3", icon: "auto_awesome", chip: "warning" },
+    { id: "validators", x: 595, y: 590, w: 330, h: 76, title: "Validators", sub: "folder ↔ registry · prop docs · tokens only", icon: "rule", chip: "warning" },
+    { id: "generators", x: 595, y: 430, w: 330, h: 76, title: "Generators", sub: "write every copy in step 3", icon: "auto_awesome", chip: "warning" },
 
     /* 3 · Generated */
     { id: "z-gen", x: 1040, y: 340, w: 400, h: 600, kind: "zone", title: "3 · Generated", sub: "never edited by hand" },
@@ -45,8 +45,8 @@ export const buttonMap: ArchMap = {
   edges: [
     { id: "folder-storybook", from: "folder", to: "storybook", label: "both read the folder live", kind: "accent" },
     { id: "folder-site", from: "folder", to: "site", kind: "accent", bend: -60 },
-    { id: "write-chain", from: "registry", to: "validators" },
-    { id: "val-gen", from: "validators", to: "generators" },
+    { id: "write-chain", from: "registry", to: "generators" },
+    { id: "gen-val", from: "generators", to: "validators" },
     { id: "gen-out", from: "generators", to: "schema" },
     { id: "exports-npm", from: "exports", to: "npm", label: "at release" },
     { id: "schema-agents", from: "schema", to: "agents" },

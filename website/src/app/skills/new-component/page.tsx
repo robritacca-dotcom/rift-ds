@@ -51,7 +51,7 @@ const STEPS: TimelineItem[] = [
     title: "Hand off the website page",
     meta: "Makes the page and preview",
     description:
-      "Offer to build the showcase page with the component-doc-page skill. Once it exists, the whole build chain passes for the first time.",
+      "Offer to build the showcase page with the component-doc-page skill. Once it exists, and the component has its frame in the Figma kit, the whole build chain passes for the first time.",
   },
 ];
 

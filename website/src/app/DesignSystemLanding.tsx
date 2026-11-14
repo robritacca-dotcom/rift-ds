@@ -16,6 +16,7 @@ import { THEME_SELECTOR_ORDER, themeSelectorTiles } from "@/lib/theme/presets";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
+import { STORY_COUNT } from "@/data/a11y-coverage";
 import { SITE_BACKGROUNDS, setSiteBackground, useSiteBackground } from "@/lib/shaders/background";
 import { loadShaderScene } from "@/lib/shaders/lazy-scene";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
@@ -654,6 +655,7 @@ const SUBTITLE_PHRASES = [
   "Drop in a DESIGN.md or any image to theme it.",
   "Agent skills and an MCP endpoint, no key needed.",
   "Free and MIT, by npm, the shadcn CLI or a clone.",
+  "Accessible by default, checked on every story.",
 ];
 
 function RotatingSubtitle() {
@@ -1462,6 +1464,7 @@ export default function DesignSystemLanding() {
             <Stat value={<AnimatedNumber value={TOKEN_COUNT} />} label="Semantic tokens" />
             <Stat value={<AnimatedNumber value={THEME_SELECTOR_ORDER.length} />} label="Themes" />
             <Stat value={<AnimatedNumber value={MCP_TOOLS.length} />} label="MCP tools" />
+            <Stat value={<AnimatedNumber value={STORY_COUNT} />} label="Accessibility tests" />
             <Stat
               value={<AnimatedNumber value={0} format={(v) => `$${Math.round(v)}`} />}
               label="Cost"

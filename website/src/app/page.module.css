@@ -13,9 +13,7 @@
      under the logo and the theme toggle. */
   width: 100%;
   min-width: 0; /* a flex-item main must not grow to the chart's intrinsic width */
-  /* Pulls the opening up 40px into the body's 80px row gap, so the space
-     above the swatches matches the space below the hero's buttons. */
-  margin: calc(var(--gap-1000) * -1) auto 0;
+  margin: 0 auto;
   /* A step tighter than the token every other page puts above its title:
      the hero is the one page whose opening has to land above the fold, so
      the whole stack rides up a touch. */
@@ -35,8 +33,10 @@
      including the wide monospace ones that broke the old 1080px cap. */
   max-width: 1440px;
   /* Section-rhythm token rather than a fixed margin: it steps down at
-     768px on its own, so the mobile override below isn't needed. */
-  margin: 0 auto var(--gap-1500);
+     768px on its own, so the mobile override below isn't needed. The step
+     that leaves about as much air under the buttons as the opening has
+     above the swatches. */
+  margin: 0 auto var(--gap-2000);
 }
 
 /* The animated inner wrapper mirrors the hero's own column layout. It

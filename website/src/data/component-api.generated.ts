@@ -3316,6 +3316,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Shows a spinner in the left icon slot and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\n`disabled`) and sets `aria-busy` on the rendered element."
           },
           {
+            "name": "glass",
+            "type": "boolean",
+            "required": false,
+            "description": "Frosts the button for a busy ground (a shader, a photo, a chart): the\npage behind it is blurred, an outlined or ghost button takes the glass\nfill at rest and a filled one lets a little of the ground through its\ncolour. Hover and press are the variant's own. Works on every `variant`\nand `tone`."
+          },
+          {
             "name": "href",
             "type": "string",
             "required": false,
@@ -14945,7 +14951,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Shader scene",
     "slug": "shader-scene",
     "category": "effects",
-    "description": "A WebGL2 scene, from a night horizon and a glowing rift to an aurora and a night highway, in the theme's field colours, with fades, a vignette and grain.",
+    "description": "A WebGL2 scene, from a night horizon and a glowing rift to an ocean seen from above, in the theme's field colours, with fades, a vignette and grain.",
     "client": true,
     "importPath": "rift-ds/components/ShaderScene/ShaderScene",
     "barrel": "main",
@@ -14957,13 +14963,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "scene",
             "type": "ShaderSceneId",
             "required": false,
-            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, or `aurora`, ribbons of colour round a void.",
+            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, or `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one.",
             "values": [
               "aurora",
               "glyphs",
               "highway",
               "horizon",
               "meteors",
+              "ocean",
               "prism",
               "rift",
               "waves"

@@ -25,6 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Button size |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | loading | `boolean` | no |  | Shows a spinner in the left icon slot and blocks interaction while an async action runs. Keeps the variant's full-colour appearance (unlike `disabled`) and sets `aria-busy` on the rendered element. |
+| glass | `boolean` | no |  | Frosts the button for a busy ground (a shader, a photo, a chart): the page behind it is blurred, an outlined or ghost button takes the glass fill at rest and a filled one lets a little of the ground through its colour. Hover and press are the variant's own. Works on every `variant` and `tone`. |
 | href | `string` | no |  | Optional href — renders as <a> instead of <button> |
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |

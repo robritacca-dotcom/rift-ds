@@ -100,6 +100,13 @@
           "description": "Shows a spinner in the left icon slot and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\n`disabled`) and sets `aria-busy` on the rendered element."
         },
         {
+          "name": "glass",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Frosts the button for a busy ground (a shader, a photo, a chart): the\npage behind it is blurred, an outlined or ghost button takes the glass\nfill at rest and a filled one lets a little of the ground through its\ncolour. Hover and press are the variant's own. Works on every `variant`\nand `tone`."
+        },
+        {
           "name": "href",
           "type": "string",
           "typeKind": "primitive",

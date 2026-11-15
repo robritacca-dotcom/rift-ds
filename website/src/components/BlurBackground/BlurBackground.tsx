@@ -100,7 +100,8 @@ export function HiddenBackground() {
  * from the SITE_BACKGROUNDS registry, whose row carries the scene and its
  * tuning for each band (`home` for the tall bands under a hero, `page`
  * for the standard band under a title; background-storage.ts owns each
- * row's reasons).
+ * row's reasons). The row marked `off` paints nothing: the component
+ * returns no band at all.
  *
  * Every tuneable value comes from website/src/data/shader-background.json.
  * Append `?tune=1` to any page in `npm run dev --workspace website` to adjust them live.
@@ -219,6 +220,10 @@ export default function BlurBackground() {
             : status === "unavailable"
               ? "off"
               : "pending";
+
+  /* The off row: nothing is painted and no context is held. Never inside a
+     frame, which keeps its still band as it does for every other pick. */
+  if (pick?.off && !embedded) return null;
 
   return (
     <>

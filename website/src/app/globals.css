@@ -405,6 +405,13 @@ html[data-chat="takeover"] body .blur-container {
    layer rather than unmounting it keeps the WebGL context alive, so a
    navigation back to an ambient page is instant instead of a fresh compile
    and fade. */
+/* The None background: the band is gone before the page hydrates, so a
+   stored pick never shows a frame of the field. BlurBackground then renders
+   no band at all. */
+html[data-background="none"]:not([data-embedded]) .blur-container {
+  display: none;
+}
+
 body:has([data-bg-hidden]) .blur-container {
   display: none;
 }

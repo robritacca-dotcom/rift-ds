@@ -13,7 +13,8 @@
  * tall bands, the extended one under the home hero and a full-bleed page,
  * and `page` for the standard band under every other page's title. The
  * field is the row with no scene: the site's own ShaderField, which an
- * absent attribute means. The registry's `default` names the row a visit
+ * absent attribute means. The row marked `off` paints nothing at all: no
+ * field, no scene and no GL context, the plain page floor. The registry's `default` names the row a visit
  * with no stored pick gets.
  */
 import type { ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
@@ -41,6 +42,8 @@ export type SiteBackgroundEntry = {
   icon: string;
   /** The library scene painted in the field's place; none means the field itself. */
   scene?: ShaderSceneId;
+  /** True on the one row that paints nothing: no field, no scene, the plain page. */
+  off?: boolean;
   /** The scene in the tall bands: low, under a hero. */
   home?: SceneTuning;
   /** The scene in the standard band: the top half of it, under a title. */
@@ -125,21 +128,36 @@ export type SiteBackgroundEntry = {
    eased further and a long bottom fade, so they give out before the
    content starts. Both bands take half as much grain again as the other
    scenes' lighter setting: the highway is a long exposure, and the grain is
-   part of that. */
+   part of that.
+
+   Ocean, both bands: the one background that is a day scene on a light
+   page, so it is water edge to edge in both modes and takes no top fade
+   and no grain, which would sit on clear water as dirt. In both the animals
+   are fainter and smaller than the scene's own and the glints fewer, since
+   they swim behind a headline or a title and the tall bands would
+   otherwise draw a shark across the whole hero; the wake is halved too,
+   since a school crossing the counts and the calls to action with a full
+   wake of characters behind it read as clutter. Home: the light on the
+   water is eased so it does not compete with the headline. Page: the net
+   of light is eased too, and a long bottom fade takes the water to the
+   page before the content starts. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;
 
-/** The field: the row with no scene, the one an absent attribute means. */
-export const FIELD_BACKGROUND = SITE_BACKGROUNDS.find((entry) => !entry.scene)?.id ?? "field";
+/** The field: the row with no scene that is not the off row, the one an absent attribute means. */
+export const FIELD_BACKGROUND =
+  SITE_BACKGROUNDS.find((entry) => !entry.scene && !entry.off)?.id ?? "field";
 
 /** The served default: the row a visit with no stored pick gets (the
     registry's `default`). A scene, so a first visit carries the attribute;
     the field, once picked, is stored by name and so survives the default. */
 export const DEFAULT_BACKGROUND: string = (data as { default?: string }).default ?? FIELD_BACKGROUND;
 
-/** The ids that paint a scene, the ones the attribute ever carries. */
-export const SCENE_BACKGROUND_IDS = SITE_BACKGROUNDS.filter((entry) => entry.scene).map(
+/** The ids the attribute ever carries: every row but the field, so the
+    rows that paint a scene and the off row, which the attribute must name
+    for the band to stay empty from the first paint. */
+export const SCENE_BACKGROUND_IDS = SITE_BACKGROUNDS.filter((entry) => entry.scene || entry.off).map(
   (entry) => entry.id,
 );
 
@@ -147,7 +165,7 @@ export const SCENE_BACKGROUND_IDS = SITE_BACKGROUNDS.filter((entry) => entry.sce
 export const backgroundEntry = (id: string | null | undefined): SiteBackgroundEntry | undefined =>
   SITE_BACKGROUNDS.find((entry) => entry.id === id);
 
-/** Whether a stored or attribute value names a background that paints a scene. */
+/** Whether a stored or attribute value names a background the attribute carries (a scene, or off). */
 export const isSceneBackground = (value: string | null | undefined): value is string =>
   typeof value === "string" && SCENE_BACKGROUND_IDS.includes(value);
 

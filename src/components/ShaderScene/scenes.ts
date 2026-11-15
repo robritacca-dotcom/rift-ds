@@ -1009,4 +1009,281 @@ vec3 scene(vec2 uv, float t) {
 };
 
 /** Every scene, in picker order. */
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway];
+/**
+ * The ocean: open water seen from straight above, with sea life drawn in
+ * type swimming through it. It is the one scene with a day of its own, told
+ * from the page ground: on a light page it is a shallow tropical sea, the
+ * ground showing through turquoise water under a net of sunlight, the
+ * animals dark against the sand; on a dark page it is deep water at night,
+ * deep blue with the net cut into it as shadow and a patch of moonlight, where the animals
+ * are bioluminescent: their characters pulse in their own colour and the
+ * water round each body glows with it. The water is drawn
+ * in square blocks with a few flat steps of light, as a pixel drawing is,
+ * and the animals are type, as are the loose characters that trace the
+ * crests of the net and travel with them; nothing in the scene sits still. The water answers the animals: each
+ * parts it at the nose and drags a rippled wake behind, the net of light
+ * carried along at the animal's own pace, and by night the stirred water
+ * glows. The animals wear the theme's accents, each its own and every
+ * fish of a school a different one. Each animal is a silhouette (a shark, a ray, a turtle,
+ * schools of small fish) read at the centre of every character cell, so it
+ * moves a cell at a time, and a cell prints a heavier character the deeper
+ * inside the body it lies. Every crossing takes a new heading and lane.
+ */
+export const ocean: Scene = {
+  id: "ocean",
+  label: "Ocean",
+  description: "Open water from above, sea life drawn in type swimming through it: a turquoise shallow by day, deep and moonlit by night.",
+  /* The water's green and its blue (turquoise is the two mixed), then the
+     rest of the ambient set, which with those two colours the animals. */
+  colours: [
+    "--color-ambient-2",
+    "--color-ambient-4",
+    "--color-ambient-1",
+    "--color-ambient-3",
+    "--color-ambient-5",
+    "--color-ambient-6",
+  ],
+  glyphs: ".:;~!il1][)(}{|/?jftrxnuvczXYUJCLQ0OZmwqpdb",
+  /* Type at 1x on a 2x screen is soft. */
+  pixelRatio: 2,
+  params: [
+    { key: "cell", label: "Type size", min: 6, max: 30, step: 1, default: 11 },
+    { key: "pixel", label: "Pixel size", min: 1, max: 24, step: 1, default: 7 },
+    { key: "life", label: "Sea life", min: 0, max: 1, step: 0.01, default: 0.9 },
+    { key: "scale", label: "Animal size", min: 0.4, max: 2.5, step: 0.05, default: 1 },
+    { key: "swim", label: "Swim speed", min: 0, max: 4, step: 0.05, default: 1 },
+    { key: "wake", label: "Wake", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "caustics", label: "Caustics", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "depth", label: "Depth", min: 0, max: 1.5, step: 0.01, default: 1 },
+    { key: "light", label: "Light", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "glints", label: "Glints", min: 0, max: 3, step: 0.05, default: 1 },
+    { key: "ripple", label: "Ripple", min: 0.4, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+/* A theme's ambient tone at full brightness, so it reads as a hue. */
+vec3 oceanHue(vec3 c) {
+  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+}
+
+/* Light through moving water: a net of bright lines, folded from a few
+   turns of one point round another. It tiles, so the caller warps it. */
+float oceanCaustic(vec2 p, float t) {
+  vec2 q = mod(p * 6.2831853, 6.2831853) - 250.0;
+  vec2 i = q;
+  float c = 1.0;
+  for (int n = 0; n < 4; n++) {
+    float s = t * (1.0 - 3.5 / float(n + 1));
+    i = q + vec2(cos(s - i.x) + sin(s + i.y), sin(s - i.y) + cos(s + i.x));
+    c += 1.0 / length(vec2(q.x / (sin(i.x + s) / 0.005), q.y / (cos(i.y + s) / 0.005)));
+  }
+  c = 1.17 - pow(c / 4.0, 1.4);
+  return pow(abs(c), 8.0);
+}
+
+/* The animals. Each returns how deep inside the body a point lies: 1 at
+   its core, 0 on its edge, and falling below that with distance outside,
+   which is what the night's glow is read from. q is in body lengths, the nose at +x. */
+float oceanBlob(vec2 d, vec2 r) {
+  return 1.0 - length(d / r);
+}
+
+/* A pair of swept fins: a chord that narrows to nothing at the tip. */
+float oceanFin(vec2 q, float root, float sweep, float chord, float span) {
+  float a = abs(q.y);
+  float c = chord * (1.0 - a / span);
+  return c > 0.0 ? 1.0 - abs(q.x - (root - sweep * a)) / c : -4.0;
+}
+
+float oceanShark(vec2 q) {
+  float w = 0.2 * pow(max(1.0 - q.x * q.x, 0.0), 0.55) * mix(0.25, 1.0, smoothstep(-1.0, 0.2, q.x));
+  float body = w > 0.0 ? 1.0 - abs(q.y) / w : -4.0;
+  float fins = max(oceanFin(q, 0.3, 1.0, 0.2, 0.5), oceanFin(q, -1.0, 0.9, 0.1, 0.28));
+  return max(body, fins > 0.0 ? 0.7 * fins : fins);
+}
+
+float oceanRay(vec2 q) {
+  float tail = q.x > -1.7 && q.x < -0.3 ? 0.5 * (1.0 - abs(q.y) / 0.06) : -4.0;
+  return max(oceanFin(q, 0.15, 0.4, 0.62, 1.0), tail);
+}
+
+float oceanTurtle(vec2 q, float w) {
+  vec2 h = vec2(q.x, abs(q.y));
+  float a = 1.0 + 0.35 * sin(w);
+  vec2 d = h - vec2(0.38, 0.42);
+  vec2 front = vec2(cos(a) * d.x + sin(a) * d.y, -sin(a) * d.x + cos(a) * d.y);
+  float limbs = max(oceanBlob(front - vec2(0.3, 0.0), vec2(0.42, 0.14)),
+                    oceanBlob(h - vec2(-0.62, 0.34), vec2(0.2, 0.1)));
+  return max(max(oceanBlob(q, vec2(0.62, 0.5)), oceanBlob(q - vec2(0.8, 0.0), vec2(0.22, 0.17))), limbs > 0.0 ? 0.7 * limbs : limbs);
+}
+
+/* A school: one small fish to a square of a grid, each off its centre,
+   about half the squares empty, all inside an oval. */
+float oceanSchool(vec2 q, float w, int k, out int tint) {
+  vec2 g = q * 6.0;
+  vec2 id = floor(g);
+  ivec2 at = ivec2(id) + ivec2(64 + k * 31, 64);
+  tint = int(rnd(at + 3) * 5.999);
+  if (length((id + 0.5) / vec2(6.0, 3.6)) > 1.0 || rnd(at) < 0.48) return -4.0;
+  vec2 f = fract(g) - 0.5 - 0.28 * (vec2(rnd(at + 7), rnd(at + 13)) - 0.5);
+  f.y += 0.05 * sin(f.x * 6.0 + w + rnd(at + 5) * 6.0);
+  float fish = max(oceanBlob(f, vec2(0.3, 0.13)), oceanBlob(f + vec2(0.3, 0.0), vec2(0.1, 0.12)));
+  /* Outside a fish the value falls away fast, so the night's glow hugs
+     each one instead of filling its square of the grid. */
+  return fish > 0.0 ? fish : fish * 5.0;
+}
+
+/* Six animals, each crossing the stage on a straight lane and coming back
+   on a new one: its heading, mostly along the stage, and its lane are
+   rolled again for every crossing. This is animal k's own frame: where p
+   lies along (x) and across (y) its lane, with its heading and its size. */
+vec2 oceanLane(int k, vec2 p, float aspect, float cells, float t, out float turn, out float size) {
+  float lap = length(vec2(aspect, 1.0)) + 1.4;
+  float s = t * u_swim * (0.04 + 0.025 * rnd(ivec2(k, 5))) / lap + rnd(ivec2(k, 9)) + float(k) * 0.37;
+  float along = (fract(s) - 0.5) * lap;
+  ivec2 seed = ivec2(k * 17 + 3, int(floor(s)) + 40);
+  turn = (rnd(seed) - 0.5) * 1.3 + (rnd(seed + 1) > 0.5 ? 3.14159265 : 0.0);
+  float lane = (rnd(seed + 2) - 0.5) * 0.75 + 0.04 * sin(along * 2.0 + float(k));
+  int kind = k < 4 ? k : 5 - k;
+  /* Half a body length in stage heights, and never fewer characters
+     than it takes to read as the animal on a short stage. */
+  size = max(kind == 0 ? 0.22 : kind == 1 ? 0.26 : kind == 2 ? 0.13 : 0.085,
+             cells * (kind == 0 ? 15.0 : kind == 1 ? 16.0 : kind == 2 ? 9.0 : 7.0)) * u_scale;
+  return vec2(cos(turn) * p.x + sin(turn) * p.y, -sin(turn) * p.x + cos(turn) * p.y) - vec2(along, lane);
+}
+
+/* tint: which of the scene's colours the nearest animal wears. Each fish
+   of a school takes its own; the others have one apiece. */
+float oceanLife(vec2 p, float aspect, float cells, float t, out int tint) {
+  float best = -4.0;
+  tint = 0;
+  for (int k = 0; k < 6; k++) {
+    float turn;
+    float size;
+    vec2 q = oceanLane(k, p, aspect, cells, t, turn, size) / size;
+    if (abs(q.x) > 2.6 || abs(q.y) > 2.0) continue;
+    int kind = k < 4 ? k : 5 - k;
+    float w = t * u_swim * 2.0 + float(k) * 1.7;
+    float v;
+    int wears = k == 0 ? 0 : k == 2 ? 3 : k == 3 ? 2 : 4;
+    if (kind == 0) {
+      q.y += 0.1 * sin(q.x * 2.4 + w) * smoothstep(0.5, -1.0, q.x);
+      v = oceanShark(q);
+    } else if (kind == 1) {
+      v = oceanSchool(q, w * 2.0, k, wears);
+    } else if (kind == 2) {
+      q.y *= 1.0 + 0.1 * sin(w);
+      v = oceanRay(q);
+    } else {
+      v = oceanTurtle(q, w);
+    }
+    if (v > best) {
+      best = v;
+      tint = wears;
+    }
+  }
+  return best;
+}
+
+/* What the animals do to the water. Each parts it at the nose and drags a
+   wake behind that opens and dies away over a few body lengths, with a
+   train of ripples along it. All of it is written in the animal's own
+   frame, so it travels at the animal's pace and turns with its heading.
+   xy: how far the water is carried; z: the wake's strength there. */
+vec3 oceanWake(vec2 p, float aspect, float cells, float t) {
+  vec3 wake = vec3(0.0);
+  for (int k = 0; k < 6; k++) {
+    float turn;
+    float size;
+    vec2 q = oceanLane(k, p, aspect, cells, t, turn, size) / size;
+    if (q.x > 1.8 || q.x < -7.0 || abs(q.y) > 3.0) continue;
+    float behind = max(-q.x, 0.0);
+    float width = 0.4 + 0.22 * behind;
+    float strength = exp(-q.y * q.y / (width * width)) * smoothstep(1.6, 0.4, q.x) * exp(-behind * 0.45);
+    /* Carried along with the animal, pushed out from its line, and rippled. */
+    vec2 carry = vec2(0.5, 0.45 * q.y / width + 0.25 * sin(q.x * 5.0 + abs(q.y) * 4.0)) * strength * size;
+    wake.xy += vec2(cos(turn) * carry.x - sin(turn) * carry.y, sin(turn) * carry.x + cos(turn) * carry.y);
+    wake.z += strength * (0.55 + 0.45 * sin(q.x * 7.0 + abs(q.y) * 6.0));
+  }
+  return wake;
+}
+
+/* The net of light at a point. The water keeps the animals' pace: the net
+   drifts across the stage about as fast as they swim and changes shape
+   more slowly still, so nothing in the water outruns them, and it is
+   carried and brightened where one passes. */
+float oceanNet(vec2 p, vec3 wake, float flow) {
+  vec2 wp = (p - wake.xy + vec2(0.022, 0.012) * flow) * u_ripple;
+  wp += 0.07 * (vec2(vnoise(wp * 1.3 + flow * 0.03), vnoise(wp * 1.3 + 5.2 - flow * 0.025)) - 0.5);
+  return min(1.0, oceanCaustic(wp * 0.9, flow * 0.03 + 23.0) + 0.45 * wake.z);
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  /* The water is drawn in square blocks, and the type in cells over it. */
+  float block = max(1.0, floor(u_pixel * u_ratio + 0.5));
+  vec2 p = ((floor(uv * u_size / block) + 0.5) * block / u_size - 0.5) * vec2(aspect, 1.0);
+  /* Day on a light page, night on a dark one. */
+  float day = smoothstep(0.1, 0.45, dot(u_ground, vec3(0.2126, 0.7152, 0.0722)));
+  vec3 green = oceanHue(u_col[0]);
+  vec3 blue = oceanHue(u_col[1]);
+  vec3 turquoise = mix(green, blue, 0.38);
+  vec3 silver = mix(mix(blue, turquoise, 0.3), vec3(1.0), 0.6);
+
+  float cells = max(4.0, floor(u_cell * u_ratio + 0.5)) * 0.6 / u_size.y;
+  vec3 wake = oceanWake(p, aspect, cells, t) * u_wake;
+  float flow = t * (0.4 + 0.6 * u_swim);
+  /* A few flat steps of light, as a pixel drawing has. */
+  float net = floor(oceanNet(p, wake, flow) * 5.0 + 0.5) / 5.0 * u_caustics;
+  float deep = smoothstep(0.3, 0.75, fbm(p * 0.8 + vec2(t * 0.012, 3.0))) * u_depth;
+  /* Where the sun or the moon lies on the water. */
+  vec2 dl = (p - vec2(0.26 * aspect, 0.2)) / vec2(0.6, 0.32);
+  float glow = exp(-dot(dl, dl)) * u_light;
+
+  vec3 shallow = mix(u_ground, turquoise, 0.88);
+  vec3 sea = mix(shallow, mix(turquoise, blue, 0.22) * 0.7, min(1.0, deep * 0.8));
+  sea += u_ground * net * (0.3 + 0.5 * glow) * (1.0 - 0.5 * min(1.0, deep));
+  /* By night the net is shadow, not light: the water is a deep blue and
+     the waves darken it towards the ground, so nothing pale lies on it but
+     the moon's own patch. */
+  vec3 night = u_ground + (blue * (0.02 + 0.016 * (1.0 - min(1.0, deep))) + silver * glow * 0.02)
+    * (1.0 - 0.85 * min(1.0, net));
+  vec3 col = mix(night, sea, day);
+
+  /* The type: the animals, and thin characters adrift between them. */
+  float cellH = max(4.0, floor(u_cell * u_ratio + 0.5));
+  vec2 size = vec2(cellH * 0.6, cellH);
+  vec2 cell = floor(uv * u_size / size);
+  vec2 local = fract(uv * u_size / size);
+  local.x = 0.06 + local.x * 0.88;
+  vec2 pc = ((cell + 0.5) * size / u_size - 0.5) * vec2(aspect, 1.0);
+  int tint;
+  float body = oceanLife(pc, aspect, size.x / u_size.y, t, tint);
+  vec3 accent = oceanHue(u_col[tint]);
+  float inside = smoothstep(0.0, 0.06, body);
+  ivec2 at = ivec2(cell) + 2048;
+  float g = floor(clamp(mix(rnd(at), pow(max(body, 0.0), 0.6), 0.5), 0.0, 0.999) * u_glyphCount);
+  float ink = texture(u_glyphs, vec2((g + local.x) / u_glyphCount, local.y)).r * inside;
+  /* Each animal wears one of the theme's accents. By day it is that
+     colour deepened, a dark shape over the sand. By night it makes its own
+     light in it: each character pulses, hot at the core, and the water
+     round the body glows with it. */
+  float pulse = 0.5 + 0.5 * sin(t * 0.9 + rnd(at) * 6.2831853 + pc.x * 9.0);
+  vec3 lure = mix(accent, mix(accent, vec3(1.0), 0.3), pulse);
+  vec3 lit = mix(lure, vec3(1.0), 0.55 * max(body, 0.0)) * (0.65 + 0.5 * pulse);
+  col += (1.0 - day) * u_life * (lure * 0.16 * pow(smoothstep(-1.6, 0.1, body), 2.0) + turquoise * 0.05 * min(1.0, wake.z)); 
+  col = mix(col, mix(lit, mix(mix(blue, turquoise, 0.25) * 0.11, accent * 0.5, 0.85), day),
+            u_life * (mix(0.14, 0.34, day) * smoothstep(0.0, 0.25, body) + 0.86 * ink));
+
+  /* The loose characters belong to the waves: a cell prints one only
+     while a bright line of the net lies over it, so they trace the crests
+     and travel with them, and gather in an animal's wake. */
+  float crest = smoothstep(0.22, 0.6, oceanNet(pc, wake, flow));
+  float on = step(rnd(at + ivec2(31, 17)), 0.3 * u_glints * crest * (1.0 + glow)) * (1.0 - inside);
+  float thin = floor(rnd(at + ivec2(3, 71)) * min(10.0, u_glyphCount));
+  float glint = texture(u_glyphs, vec2((thin + local.x) / u_glyphCount, local.y)).r * on * crest;
+  return mix(col, mix(mix(turquoise, vec3(1.0), 0.3), u_ground, day), glint * 0.8);
+}
+`,
+};
+
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean];

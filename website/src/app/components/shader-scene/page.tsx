@@ -44,6 +44,12 @@ const FULL_PASSES = {
   fadeBottom: { on: false },
   grain: { params: { amount: 0.08 } },
 };
+/* The ocean is clear water: no fade, and no grain over its type. */
+const OCEAN_PASSES = {
+  fadeTop: { on: false },
+  fadeBottom: { on: false },
+  grain: { on: false },
+};
 const SCRIM = {
   scrim: { on: true, params: { amount: 0.3 } },
   vignette: { on: true },
@@ -99,7 +105,9 @@ export default function ShaderScenePage() {
               larger and brighter on a crest. Aurora folds wide ribbons of
               colour through one another, round a deep void. Highway is a straight
               highway at night, drawn in light trails that all pull to one point
-              on the horizon. Every scene but the rift is also one of this
+              on the horizon. Ocean is open water seen from straight above,
+              with a shark, a ray, a turtle and schools of fish drawn in type
+              and swimming through it. Every scene but the rift is also one of this
               site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
               GL context.
             </p>
@@ -129,6 +137,9 @@ export default function ShaderScenePage() {
               </Stage>
               <Stage caption='scene="highway"'>
                 <ShaderScene scene="highway" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="ocean"'>
+                <ShaderScene scene="ocean" passes={OCEAN_PASSES} speed={1} />
               </Stage>
             </div>
           </section>
@@ -168,10 +179,12 @@ export default function ShaderScenePage() {
           <section className={styles.section}>
             <SectionTitle title="Light mode" />
             <p className={styles.demoText}>
-              Every scene is a night scene: it adds light to a dark ground. On
-              a light page each one works its light out against a dark ground
-              of its own and lays it onto the page as a pale tint, so it reads
-              as a soft dawn instead of a dark block. Switch the theme to see
+              Every scene but the ocean is a night scene: it adds light to a
+              dark ground. On a light page each one works its light out
+              against a dark ground of its own and lays it onto the page as a
+              pale tint, so it reads as a soft dawn instead of a dark block.
+              The ocean has a day of its own: a turquoise shallow on a light
+              page, deep moonlit water on a dark one. Switch the theme to see
               the stages above change. The scene never sets{" "}
               <code>data-theme</code> itself, which would hide a preset&rsquo;s
               colours.

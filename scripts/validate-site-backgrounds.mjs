@@ -9,9 +9,10 @@
  * to page, so it fails the build rather than reaching a deploy.
  *
  * Checks:
- *  1. ids are unique, and exactly one row has no scene: that row is the field
- *     (which an absent attribute means), and the menu needs exactly one of
- *     it; `default`, where given, names a row (the served default, the pick
+ *  1. ids are unique, and exactly one row has no scene and no `off`: that
+ *     row is the field (which an absent attribute means), and the menu
+ *     needs exactly one of it; at most one row is marked `off: true`, the
+ *     pick that paints nothing, and it takes no scene and no tuning; `default`, where given, names a row (the served default, the pick
  *     a visit with nothing stored gets; absent, the field is the default)
  *  2. every scene names one the library ships (the scene ids declared in
  *     src/components/ShaderScene/scenes.ts), since a row is handed straight
@@ -136,6 +137,7 @@ const checkTuning = (rowId, band, tuning, scene) => {
 
 const ids = new Set();
 let defaults = 0;
+let offs = 0;
 for (const row of rows) {
   const id = typeof row.id === 'string' ? row.id : '(no id)';
   if (ids.has(id)) errors.push(`duplicate id "${id}"`);
@@ -153,6 +155,14 @@ for (const row of rows) {
   }
   if (typeof row.icon !== 'string' || !/^[a-z0-9_]+$/.test(row.icon))
     errors.push(`"${id}".icon must be a Material Symbol name (snake_case)`);
+  if (row.off !== undefined && row.off !== true)
+    errors.push(`"${id}".off must be true where given (omit it on every other row)`);
+  if (row.off === true) {
+    offs += 1;
+    if (row.scene !== undefined || row.home !== undefined || row.page !== undefined)
+      errors.push(`"${id}" is the off row, which paints nothing; it takes no scene and no tuning`);
+    continue;
+  }
   if (row.scene === undefined) {
     defaults += 1;
     if (row.home !== undefined || row.page !== undefined)
@@ -169,6 +179,7 @@ for (const row of rows) {
 }
 if (rows.length > 0 && defaults !== 1)
   errors.push(`exactly one row must have no scene (the field); found ${defaults}`);
+if (offs > 1) errors.push(`at most one row may be marked off; found ${offs}`);
 if (data.default !== undefined && !ids.has(data.default))
   errors.push(`"default" is "${data.default}", which names no row (${[...ids].join(', ')})`);
 
@@ -182,5 +193,5 @@ for (const [sceneId, scene] of scenes) {
 finish(
   '✗ Site backgrounds validation failed:',
   errors,
-  `✓ Site backgrounds valid — ${rows.length} rows, ${rows.length - 1} on ${scenes.size} library scenes, every param, pass and colour role resolves.`
+  `✓ Site backgrounds valid — ${rows.length} rows, ${rows.length - 1 - offs} on ${scenes.size} library scenes, every param, pass and colour role resolves.`
 );

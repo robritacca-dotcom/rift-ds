@@ -92,6 +92,14 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
+  {
+    id: "ocean",
+    label: "Ocean",
+    description: "Open water from above, sea life drawn in type: turquoise by day, deep and moonlit by night.",
+    sceneId: "ocean",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { on: false } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

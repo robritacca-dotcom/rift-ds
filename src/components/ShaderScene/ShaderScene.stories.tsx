@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -97,6 +97,14 @@ export const Highway: Story = {
   args: {
     scene: 'highway',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Ocean: open water from above, sea life drawn in type swimming through it; a turquoise shallow on a light page, deep and moonlit on a dark one. */
+export const Ocean: Story = {
+  args: {
+    scene: 'ocean',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { on: false } },
   },
 };
 

@@ -294,7 +294,7 @@
       "scene": "highway",
       "home": {
         "params": {
-          "crown": 0.488,
+          "crown": 0.536,
           "trails": 0.9,
           "meet": 0.6,
           "side": 0.6

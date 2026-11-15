@@ -100,6 +100,14 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { on: false } },
   },
+  {
+    id: "sky",
+    label: "Sky",
+    description: "Cloud massed overhead and burning with a low sun: a golden hour by day, the last of a sunset under a night sky by night.",
+    sceneId: "sky",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.22 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

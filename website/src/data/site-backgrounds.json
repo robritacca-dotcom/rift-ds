@@ -382,6 +382,62 @@
       }
     },
     {
+      "id": "sky",
+      "label": "Sky",
+      "description": "Cloud burning with a low sun",
+      "icon": "cloud",
+      "scene": "sky",
+      "home": {
+        "params": {
+          "cover": 0.66,
+          "depth": 0.9,
+          "sun": 0.85,
+          "planeX": 0.65,
+          "planeY": 0.77,
+          "planeTurn": 0.89
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "grain": {
+            "params": {
+              "amount": 0.16
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "cover": 0.62,
+          "scale": 1,
+          "depth": 0.8,
+          "sun": 0.7,
+          "horizon": -0.1,
+          "sunX": 0.5,
+          "sunY": 0.55,
+          "planeY": 0.82,
+          "planeTurn": 0
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.6
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.16
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "none",
       "label": "None",
       "description": "No shader, the plain page",

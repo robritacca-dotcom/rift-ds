@@ -22,7 +22,7 @@ const MAX_PIXEL_RATIO = 1;
 const FRAME_MS = 1000 / 30;
 
 /** The scenes ShaderScene paints. */
-export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean';
+export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -42,7 +42,7 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, or `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, or `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each
@@ -87,17 +87,19 @@ const DEFAULT_SPEED = 1.6;
 
 /**
  * ShaderScene paints one of the system's shader scenes, a horizon, a rift,
- * a field of glyphs, a prism, a meteor shower, a sea of points, an aurora, a night highway or an ocean seen from above, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
+ * a field of glyphs, a prism, a meteor shower, a sea of points, an aurora, a night highway, an ocean seen from above or a sky of burning cloud, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
  * bottom fades to the page, film grain). Its colours are the background
  * field's roles (`--color-ambient-*`) read from the live cascade at the
  * scene, so it re-themes with `data-theme`, a preset or any scoped override,
  * and its fades melt into the page ground.
  *
- * Every scene but the ocean is a night scene: it adds light over a dark
+ * Every scene but the ocean and the sky is a night scene: it adds light over a dark
  * ground. On a light page each computes its light against a dark ground of
  * its own and lays it onto the page as a pale tint, so it reads as a soft
  * dawn rather than a dark block. The ocean paints both: a turquoise shallow
- * over a light page ground, deep moonlit water over a dark one. Nothing here
+ * over a light page ground, deep moonlit water over a dark one. The sky does
+ * too: a golden hour over a light ground, the last of a sunset under a night sky
+ * over a dark one. Nothing here
  * sets `data-theme`, which would hide a preset's colours.
  *
  * It is scenery, not interface. It fills its positioned ancestor and is inert

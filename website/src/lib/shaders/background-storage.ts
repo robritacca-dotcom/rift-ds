@@ -140,7 +140,32 @@ export type SiteBackgroundEntry = {
    wake of characters behind it read as clutter. Home: the light on the
    water is eased so it does not compete with the headline. Page: the net
    of light is eased too, and a long bottom fade takes the water to the
-   page before the content starts. */
+   page before the content starts.
+
+   Sky, both bands: the other background with a day of its own, so like
+   the ocean it is sky edge to edge in both modes and takes no top fade.
+   It takes twice the other scenes' lighter grain, which on a painted sky
+   is the paint's tooth and part of the look. In both the sun is eased,
+   which dims the burning cloud with it, the sky is a little shallower
+   than the scene's own and there is a little less cloud, since a headline
+   or a title is read against it: at full strength the cloud on a dark
+   page outshines the type, and a deep sky on a light page costs dark type
+   its contrast. The fire itself is left whole, since the drama is the
+   point of the pick. Home: the scene's own low sun and horizon, so the
+   hot cloud and the burning strip gather low in the band, under the
+   headline and the calls to action rather than behind them. Page: the
+   band is short and the content starts under it, so the horizon is
+   dropped out of the band, which a bottom fade would wash out anyway, and
+   the sun is raised to the middle of the band and moved out to the side,
+   clear of the title, with the cloud a little smaller so a short band
+   still holds a few masses, and a long bottom fade takes the sky to the
+   page before the content starts. The plane's path is laid clear of the
+   page's type in each band. Home: it climbs out of the right edge through
+   the open corner between the header and the headline, beside the theme
+   swatches, and leaves through the gap between the header's links and its
+   buttons. Page: it flies level through the strip between the header and
+   the breadcrumb. Both are fitted to the desktop layout; a narrow screen
+   has no such corridor, and the plane is a few pixels long. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

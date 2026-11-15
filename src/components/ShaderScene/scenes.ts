@@ -1286,4 +1286,296 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean];
+/**
+ * The sky: cloud massed overhead and lit by a low sun, painted more than
+ * observed. The clouds lie on one flat layer far above, so they are large
+ * and slow at the top of the frame and small, close-packed and hazed where
+ * the layer runs off to the horizon, and the layer is bent before it is
+ * read, so a cloud billows and curls as paint does rather than sitting as
+ * a puff. The drama is the light. The sun stands low and the cloud burns
+ * with it: each cloud is lit by comparing its thickness with the cloud a
+ * step towards the light, which gives it a hot side and a shaded one
+ * without a ray being marched, and the colour runs from the hot side
+ * through an ember middle to a cold shade; where cloud is thin in front of
+ * the sun the light comes through it, and the strip of sky on the horizon
+ * under the cloud burns hardest of all. Like the ocean it has a day of its own, told from the page
+ * ground: on a light page a golden hour, cream and rose cloud with a deep
+ * blue shade over a sky that warms to the horizon; on a dark page the
+ * last of a sunset with the night already overhead: the sky near black
+ * with stars, heavy cloud standing as silhouettes darker still, burning
+ * like coals only where it faces the sun, over a horizon on fire. The sky is the fourth ambient role cooled with a
+ * little of the second, the sun the first, the fire in the cloud the fifth
+ * and sixth and its shade the third, so a theme recolours it. Contrails
+ * cross the far sky low over the horizon, well above the weather, so
+ * every cloud stands in front of them, and they hold the sun's colour;
+ * one more is still being laid, high in the frame, by a plane a few pixels
+ * long. Deep blue shows through overhead in slow patches.
+ */
+export const sky: Scene = {
+  id: "sky",
+  label: "Sky",
+  description: "Cloud massed overhead and burning with a low sun: a golden hour on a light page, the last of a sunset under a night sky on a dark one.",
+  /* The sky's blue, the sun's gold, the tint in a cloud's shade, the green
+     that cools the blue towards slate, and the two tones of the fire. */
+  colours: [
+    "--color-ambient-4",
+    "--color-ambient-1",
+    "--color-ambient-3",
+    "--color-ambient-2",
+    "--color-ambient-5",
+    "--color-ambient-6",
+  ],
+  params: [
+    { key: "cover", label: "Cloud cover", min: 0, max: 1, step: 0.01, default: 0.72 },
+    { key: "scale", label: "Cloud size", min: 0.3, max: 3, step: 0.01, default: 1.4 },
+    { key: "soft", label: "Softness", min: 0.1, max: 2, step: 0.01, default: 0.6 },
+    { key: "warp", label: "Billow", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "wisps", label: "High cloud", min: 0, max: 1, step: 0.01, default: 0.5 },
+    { key: "trails", label: "Contrails", min: 0, max: 1.5, step: 0.01, default: 0.7 },
+    { key: "planeX", label: "Plane crosses at", min: -1, max: 1, step: 0.01, default: 0 },
+    { key: "planeY", label: "Plane height", min: 0, max: 1, step: 0.01, default: 0.7 },
+    { key: "planeTurn", label: "Plane heading", min: -1, max: 1, step: 0.01, default: 0.03 },
+    { key: "wind", label: "Wind", min: 0, max: 4, step: 0.05, default: 1 },
+    { key: "horizon", label: "Horizon", min: -0.6, max: 0.4, step: 0.01, default: 0.07 },
+    { key: "depth", label: "Sky depth", min: 0, max: 1.5, step: 0.01, default: 1 },
+    { key: "sun", label: "Sun", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "fire", label: "Fire", min: 0, max: 1.5, step: 0.01, default: 1 },
+    { key: "sunX", label: "Sun position", min: -1, max: 1, step: 0.01, default: 0.18 },
+    { key: "sunY", label: "Sun height", min: 0, max: 1, step: 0.01, default: 0.26 },
+    { key: "stars", label: "Stars", min: 0, max: 2, step: 0.01, default: 1 },
+  ],
+  glsl: /* glsl */ `
+/* A theme's ambient tone at full brightness, so it reads as a hue. A tone
+   with next to no hue (a monochrome theme's greys) keeps its own value:
+   lifted, a grey would come out white, and the sky would be the page. */
+vec3 skyHue(vec3 c) {
+  float hi = max(c.r, max(c.g, c.b));
+  float chroma = (hi - min(c.r, min(c.g, c.b))) / max(hi, 1e-3);
+  return mix(c, c / max(hi, 1e-3), smoothstep(0.04, 0.2, chroma));
+}
+
+/* How much cloud stands over a point of the layer. The fine octaves slide
+   over the broad ones, so a cloud boils slowly as it drifts. */
+float skyCloud(vec2 q, float t) {
+  float s = 0.0;
+  float a = 0.5;
+  for (int i = 0; i < 7; i++) {
+    s += a * vnoise(q + t * 0.012 * float(i) * vec2(1.0, 0.6));
+    q = q * 2.03 + vec2(17.0, 9.0);
+    a *= 0.54;
+  }
+  return s * 0.93;
+}
+
+/* A mix made by eye rather than by light, so a blue thinned with the page
+   stays blue instead of going to lilac. */
+vec3 skyMix(vec3 a, vec3 b, float k) {
+  return pow(mix(pow(a, vec3(1.0 / 2.2)), pow(b, vec3(1.0 / 2.2)), k), vec3(2.2));
+}
+
+/* Contrails: straight streaks far off and far above the cloud, low over
+   the horizon and small with the distance, each on a heading of its own, laid across one
+   another. A trail is thin and whole at its new
+   end and spreads and breaks up towards its old one, and all of them
+   slide slowly with the wind. */
+float skyTrails(vec2 p, float aspect, float w) {
+  float s = 0.0;
+  for (int i = 0; i < 7; i++) {
+    float a = rnd(ivec2(i, 91));
+    float b = rnd(ivec2(i, 17));
+    float c = rnd(ivec2(i, 53));
+    float ang = (a - 0.5) * 0.9;
+    vec2 dir = vec2(cos(ang), sin(ang));
+    vec2 at = vec2((b - 0.5) * aspect * 0.9, 0.1 + 0.26 * c) + vec2(0.0016, 0.0004) * w * (0.4 + b);
+    vec2 d = p - at;
+    float along = dot(d, dir);
+    float across = dot(d, vec2(-dir.y, dir.x));
+    float u = along / (0.22 + 0.4 * a) + 0.5;
+    float age = 1.0 - clamp(u, 0.0, 1.0);
+    float width = mix(0.0014, 0.0055, age * age) * (0.6 + 0.8 * c);
+    float body = exp(-across * across / (width * width));
+    float ends = smoothstep(0.0, 0.3, u) * smoothstep(1.0, 0.985, u);
+    float broken = mix(1.0, 0.35 + 0.65 * vnoise(vec2(along * 40.0 + float(i) * 9.0, float(i) * 3.0 + across * 40.0)), age);
+    s += body * ends * broken * mix(1.0, 0.45, age) * (0.45 + 0.55 * b);
+  }
+  return min(1.0, s);
+}
+
+/* One plane, very far off and high in the frame, well clear of the other
+   trails. Its path is the host's to lay: the point it flies through and
+   its heading are settings, so a page can route it clear of its type. It
+   crosses the sky on a straight line and
+   drawing a new trail as it goes: x is its silhouette, a fuselage, swept
+   wings and a tail a few pixels long, and y the streak behind it, thin and
+   bright at the plane and spreading and fading with age. */
+vec2 skyPlane(vec2 p, float aspect, float w) {
+  float turn = u_planeTurn * 3.14159265;
+  vec2 dir = vec2(cos(turn), sin(turn));
+  vec2 through = vec2(u_planeX * 0.5 * aspect, u_planeY);
+  float run = aspect + 1.8;
+  vec2 d = p - (through + dir * (fract(w * 0.003 + 0.46) - 0.5) * run);
+  float along = dot(d, dir);
+  float across = abs(dot(d, vec2(-dir.y, dir.x)));
+  float age = clamp((-along - 0.011) / 0.55, 0.0, 1.0);
+  float width = mix(0.0012, 0.0042, age);
+  float streak = exp(-across * across / (width * width)) * step(0.011, -along) * (1.0 - age) * (1.0 - age);
+  float body = 1.0 - smoothstep(0.7, 1.0, length(vec2(along / 0.008, across / 0.0012)));
+  float wing = (1.0 - smoothstep(0.7, 1.0, abs(along + 0.0006 + across * 0.4) / 0.0017))
+    * (1.0 - smoothstep(0.006, 0.007, across));
+  float tail = (1.0 - smoothstep(0.7, 1.0, abs(along + 0.0064 + across * 0.35) / 0.0011))
+    * (1.0 - smoothstep(0.0022, 0.0028, across));
+  return vec2(max(body, max(wing, tail)), streak);
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  /* Day on a light page, night on a dark one. */
+  float day = smoothstep(0.1, 0.45, dot(u_ground, vec3(0.2126, 0.7152, 0.0722)));
+  vec3 blue = mix(skyHue(u_col[0]), skyHue(u_col[3]), 0.35);
+  vec3 gold = skyHue(u_col[1]);
+  vec3 tint = skyHue(u_col[2]);
+  vec3 ember = skyHue(u_col[4]);
+  vec3 flame = mix(ember, skyHue(u_col[5]), 0.45);
+  /* The hottest tone: the sixth role warmed with the sun's. */
+  vec3 blazing = mix(skyHue(u_col[5]), gold, 0.2);
+  /* The dusk sky's own tone: the blue greyed towards slate. */
+  vec3 slate = mix(blue, vec3(dot(blue, vec3(0.2126, 0.7152, 0.0722))), 0.4);
+
+  /* Height above the horizon, and the point of the cloud layer this pixel
+     looks at: the layer is flat, so it runs away as the eye drops. It
+     closes up sideways only half as fast as it does in depth, or the cloud
+     at the edges of a wide frame would be sheared into streaks. */
+  float up = uv.y - u_horizon;
+  float rise = max(up, 0.0) + 0.22;
+  vec2 layer = vec2(p.x / mix(0.75, rise, 0.5), 1.3 / rise);
+  float far = smoothstep(0.0, 0.3, up);
+  float w = t * u_wind;
+  vec2 drift = vec2(0.022, 0.007) * w;
+
+  /* Where the sun stands, how far its light reaches, and the band of sky
+     along the horizon that takes its colour. */
+  vec2 sunAt = vec2(u_sunX * 0.5 * aspect, u_sunY);
+  vec2 toSun = sunAt - p;
+  float sunDist = length(toSun);
+  float reach = exp(-sunDist * sunDist / 0.7);
+  float glow = exp(-sunDist * sunDist / 0.1) * u_sun;
+  float disc = exp(-sunDist * sunDist / 0.005) * u_sun;
+  float facingSky = exp(-sunDist * sunDist / 0.2);
+  float low = exp(-max(up, 0.0) * max(up, 0.0) / 0.1);
+  /* The strip right on the horizon, under the cloud, where the sky burns. */
+  float band = exp(-max(up, 0.0) * max(up, 0.0) / 0.012);
+  float burn = u_fire * min(1.0, u_sun);
+
+  /* The open sky: warm along the horizon, deep overhead. */
+  float climb = pow(clamp(up, 0.0, 1.0), 0.65);
+  vec3 dayHaze = skyMix(skyMix(u_ground, blue, 0.14 * u_depth), mix(flame, gold, 0.4), min(1.0, burn * (0.3 + 0.5 * band) * (0.4 + 0.6 * reach)));
+  vec3 daySky = mix(dayHaze, skyMix(u_ground, mix(blue, tint, 0.12), min(1.0, 0.7 * u_depth)), climb);
+  daySky = skyMix(daySky, mix(gold, vec3(1.0), 0.6), min(1.0, glow * 0.7 + disc));
+  vec3 blaze = (mix(ember, tint, 0.3) * 0.07 * low + mix(blazing, ember, 0.25) * 0.75 * band) * burn * (0.12 + 0.88 * reach);
+  vec3 nightHaze = u_ground + slate * 0.012 * u_depth + blaze;
+  /* The night comes down from the top: the sky is all but the ground
+     overhead and keeps a little slate only towards the sunset. */
+  vec3 nightSky = u_ground + slate * (0.03 * low + 0.012) * (0.4 + 0.6 * reach) * u_depth + blaze
+    + mix(blazing, ember, 0.35) * glow * 0.32 + mix(gold, vec3(1.0), 0.3) * disc * 0.5;
+
+  /* Deep blue shows through overhead in slow patches, where the night has
+     not quite closed. */
+  vec3 deep = mix(skyHue(u_col[0]), tint, 0.18);
+  float open = smoothstep(0.3, 0.7, vnoise(layer * 0.45 + drift * 0.3 + 71.0));
+  nightSky += deep * (0.012 + 0.075 * open * climb) * u_depth;
+  daySky = mix(daySky, skyMix(u_ground, deep, min(1.0, 0.85 * u_depth)), 0.45 * open * climb);
+
+  /* Stars, a point to a cell, each with its own place, size and beat, and
+     only high up, clear of the fire. */
+  vec2 sc = uv * u_size / (13.0 * u_ratio);
+  ivec2 id = ivec2(floor(sc));
+  float pick = rnd(id + ivec2(3, 57));
+  vec2 at = 0.2 + 0.6 * vec2(rnd(id + ivec2(7, 3)), rnd(id + ivec2(13, 29)));
+  /* A light twinkle: each star swells and dims at a pace of its own, never
+     going out. */
+  float beat = rnd(id + ivec2(19, 41));
+  float star = step(pick, 0.12 * u_stars)
+    * smoothstep(0.11, 0.0, length(fract(sc) - at))
+    * (0.25 + 0.75 * rnd(id + ivec2(5, 11)))
+    * mix(0.4, 1.0, pow(0.5 + 0.5 * sin(t * (0.5 + 1.5 * beat) + beat * 44.0), 2.0))
+    * smoothstep(0.2, 0.6, up) * (1.0 - facingSky);
+  nightSky += mix(slate, vec3(1.0), 0.7) * star * 0.5;
+
+  /* Thin high cloud, combed along the wind and slower than the cloud
+     below; it catches the fire before anything else does. */
+  float comb = skyCloud(layer * vec2(0.5, 2.6) / u_scale + drift * 0.4 + 31.0, w * 0.5);
+  float wisp = smoothstep(0.42, 0.8, comb) * u_wisps * far;
+  daySky = skyMix(daySky, skyMix(vec3(1.0), flame, 0.45 * burn * reach), wisp * 0.6);
+  nightSky += mix(slate, mix(ember, blazing, 0.4), min(1.0, burn * reach * 1.4)) * wisp * (0.008 + 0.1 * facingSky * u_sun);
+
+  /* The layer is bent before it is read, so the cloud billows and curls.
+     Then the cloud here, and the cloud a step towards the light: thicker
+     there, and this point is in shade. */
+  vec2 q = layer * 1.7 / u_scale + drift;
+  q += u_warp * 0.55 * (vec2(
+    vnoise(q * 0.7 + vec2(3.1, w * 0.012)),
+    vnoise(q * 0.7 + vec2(9.4 - w * 0.01, 5.2))
+  ) - 0.5);
+  vec2 lightStep = normalize(vec2(toSun.x, -toSun.y) + vec2(1e-4, 0.0)) * 0.26;
+  float here = skyCloud(q, w);
+  float there = skyCloud(q + lightStep, w);
+  float edge = mix(0.66, 0.34, u_cover);
+  float cloud = smoothstep(edge, edge + 0.13 * u_soft, here) * far;
+  float lit = clamp(0.45 + (here - there) * 6.0, 0.0, 1.0);
+  float core = smoothstep(edge, edge + 0.3, here);
+  float shadow = clamp((1.0 - lit) * 0.85 + core * 0.45 - reach * 0.25, 0.0, 1.0);
+  /* The contrails. The planes fly well above the weather, so every cloud
+     stands in front of them: the cloud hides a trail wherever it stands,
+     at its full thickness even where distance has hazed it, and the high
+     cloud veils it. They hold the sun's colour long after the cloud has
+     lost it: hot towards the sun, rose and then violet away from it. */
+  float hidden = smoothstep(edge - 0.07, edge + 0.04, here);
+  float trail = skyTrails(vec2(p.x, up), aspect, w) * u_trails * smoothstep(0.02, 0.12, up)
+    * (1.0 - hidden) * (1.0 - 0.85 * min(1.0, wisp));
+  /* The one plane still flying, and the trail it is laying. */
+  vec2 plane = skyPlane(vec2(p.x, up), aspect, w) * step(0.01, u_trails) * (1.0 - hidden);
+  trail = min(1.0, trail + plane.y * 1.3 * (1.0 - 0.85 * min(1.0, wisp)));
+  vec3 trailHue = mix(mix(tint, ember, 0.6), mix(blazing, gold, 0.3), smoothstep(0.1, 0.8, reach));
+  daySky = skyMix(daySky, skyMix(vec3(1.0), trailHue, min(1.0, 0.75 * burn)), min(1.0, trail * 0.85));
+  nightSky += mix(mix(slate, vec3(1.0), 0.5) * 0.25, trailHue, min(1.0, burn)) * trail * u_sun * (0.14 + 0.9 * reach);
+  daySky = mix(daySky, mix(blue, tint, 0.5) * 0.06, plane.x);
+  nightSky = mix(nightSky, u_ground * 0.3, plane.x);
+
+  /* Thin cloud in front of the sun lets the light through. */
+  float through = min(1.0, glow * (1.0 - core) * 0.9);
+  float hot = 1.0 - smoothstep(0.0, 0.55, shadow);
+  float cold = smoothstep(0.45, 1.0, shadow);
+
+  /* By day: cream on the hot side, rose through the middle, and a deep
+     blue shade greyed with the third role. Far cloud takes the haze. */
+  vec3 cream = skyMix(vec3(1.0), gold, 0.35 * burn * (0.35 + 0.65 * reach));
+  vec3 rose = skyMix(vec3(1.0), mix(flame, ember, 0.3), min(1.0, 0.8 * burn * (0.5 + 0.5 * reach)));
+  vec3 shade = skyMix(mix(blue, tint, 0.5), u_ground, 0.15) * 0.42;
+  vec3 dayCloud = mix(mix(rose, cream, hot), shade, cold);
+  dayCloud = mix(dayCloud, mix(gold, vec3(1.0), 0.75), through);
+  dayCloud = mix(dayHaze, dayCloud, smoothstep(0.0, 0.4, up));
+  /* By night the cloud makes the light: coals on the hot side, embers
+     through the middle, and a shade darker than the sky behind it. With
+     no fire it is a moonlit cloud, silver on slate. */
+  /* Only the cloud that faces the sunset burns; the rest has gone to
+     night. */
+  float facing = facingSky;
+  float power = u_sun * (0.02 + 0.95 * facing);
+  vec3 silver = mix(slate, vec3(1.0), 0.6);
+  vec3 coal = mix(silver * 0.3, mix(blazing, ember, 0.35) * 0.85, min(1.0, burn)) * power;
+  vec3 embers = mix(slate * 0.1, mix(ember, tint, 0.5) * 0.2, min(1.0, burn)) * (0.1 * u_sun * reach + 0.9 * power);
+  /* The shade is a silhouette: darker than the sky it stands against. */
+  vec3 nightCloud = mix(u_ground * 0.75 + mix(embers, coal, hot), u_ground * 0.45 + tint * 0.004 * reach, cold);
+  nightCloud += mix(gold, vec3(1.0), 0.35) * through * 0.55;
+  nightCloud = mix(nightHaze, nightCloud, smoothstep(0.0, 0.4, up));
+
+  vec3 col = mix(mix(nightSky, nightCloud, cloud), mix(daySky, dayCloud, cloud), day);
+  /* Below the horizon the land is dark by night and haze by day. */
+  vec3 land = mix(u_ground + flame * burn * 0.03 * reach, dayHaze, day);
+  return mix(land, col, smoothstep(-0.012, 0.012, up));
+}
+`,
+};
+
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky];

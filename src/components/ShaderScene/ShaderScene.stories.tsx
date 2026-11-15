@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean', 'sky'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -105,6 +105,14 @@ export const Ocean: Story = {
   args: {
     scene: 'ocean',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { on: false } },
+  },
+};
+
+/** Sky: cloud massed overhead and burning with a low sun; a golden hour on a light page, the last of a sunset under a night sky on a dark one. */
+export const Sky: Story = {
+  args: {
+    scene: 'sky',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.22 } } },
   },
 };
 

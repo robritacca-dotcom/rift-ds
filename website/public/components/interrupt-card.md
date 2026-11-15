@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same dat
 - Import: `import { InterruptCard } from 'rift-ds';`
 - Deep import: `import { InterruptCard } from 'rift-ds/components/InterruptCard/InterruptCard';`
 - Rendering: server-renderable (no 'use client')
-- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/interrupt-card
 - Schema: https://rift-ds.com/schema/components/interrupt-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

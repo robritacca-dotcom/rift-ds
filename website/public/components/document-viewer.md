@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same dat
 - Import: `import { DocumentViewer } from 'rift-ds';`
 - Deep import: `import { DocumentViewer } from 'rift-ds/components/DocumentViewer/DocumentViewer';`
 - Rendering: client component (declares 'use client')
-- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/document-viewer
 - Schema: https://rift-ds.com/schema/components/document-viewer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

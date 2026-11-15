@@ -14951,7 +14951,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Shader scene",
     "slug": "shader-scene",
     "category": "effects",
-    "description": "A WebGL2 scene, from a night horizon and a glowing rift to an ocean seen from above, in the theme's field colours, with fades, a vignette and grain.",
+    "description": "A WebGL2 scene, from a night horizon and a glowing rift to an ocean from above and a burning sky, in the theme's field colours, with fades, vignette and grain.",
     "client": true,
     "importPath": "rift-ds/components/ShaderScene/ShaderScene",
     "barrel": "main",
@@ -14963,7 +14963,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "scene",
             "type": "ShaderSceneId",
             "required": false,
-            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, or `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one.",
+            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, or `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one.",
             "values": [
               "aurora",
               "glyphs",
@@ -14973,6 +14973,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "ocean",
               "prism",
               "rift",
+              "sky",
               "waves"
             ],
             "defaultValue": "'horizon'",

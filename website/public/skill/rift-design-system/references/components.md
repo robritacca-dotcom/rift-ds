@@ -793,7 +793,7 @@ An ambient WebGL2 field of soft light sources that sample colour tokens, with a 
 
 ### Shader scene
 
-A WebGL2 scene, from a night horizon and a glowing rift to an ocean seen from above, in the theme's field colours, with fades, a vignette and grain.
+A WebGL2 scene, from a night horizon and a glowing rift to an ocean from above and a burning sky, in the theme's field colours, with fades, vignette and grain.
 
 - Import: `import { ShaderScene } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

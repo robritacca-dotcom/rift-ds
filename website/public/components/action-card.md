@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same dat
 - Import: `import { ActionCard } from 'rift-ds';`
 - Deep import: `import { ActionCard } from 'rift-ds/components/ActionCard/ActionCard';`
 - Rendering: server-renderable (no 'use client')
-- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/action-card
 - Schema: https://rift-ds.com/schema/components/action-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

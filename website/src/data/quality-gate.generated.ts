@@ -495,6 +495,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Decides whether a change touches only labs, so story tests, the Storybook build, the package steps and the site-wide gesture and axe sweeps can stand down for it."
       },
       {
+        "name": "node scripts/site-only-change.mjs",
+        "text": "Decides whether a change touches only the website's own pages, site UI, config, data and static files, so story tests, the Storybook build and the package steps can stand down for it."
+      },
+      {
         "name": "npm audit --audit-level=high --omit=dev",
         "text": "Fails on a high-severity advisory in a production dependency."
       },

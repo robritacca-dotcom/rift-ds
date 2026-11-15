@@ -1,8 +1,8 @@
 ---
 name: ship
-description: Make finished work live on the deployed site (SITE_URL in scripts/brand.mjs is the authority). Commit, run the full verify, merge branch work into main when needed, push, watch CI go green, then prove the deployed site actually renders with the live hydration smoke. Use when asked to ship it, make it live, push to main, or deploy this. If asked to "merge and push" (a retired skill name), confirm the intended end state — ship, checkpoint, or land — before acting.
+description: Make finished work live on the deployed site (SITE_URL in scripts/brand.mjs is the authority). Triage the change, run the verify its tier needs (the full one unless the change is confined to the site or to labs and plainly safe), commit, merge branch work into main when needed, push, watch CI go green, then prove the deployed site actually renders with the live hydration smoke. Use when asked to ship it, make it live, push to main, or deploy this. If asked to "merge and push" (a retired skill name), confirm the intended end state — ship, checkpoint, or land — before acting.
 icon: publish
-displayDescription: "Makes finished work live on the deployed site. Surveys the tree so unrelated files never get swept into a commit, runs the full local verify (the single script mirroring CI) before anything is committed, merges branch work into main when needed, pushes, confirms the CI run goes green, then loads the deployed site in a real browser to prove it renders (a deploy is not done at HTTP 200), and reports exactly what deployed."
+displayDescription: "Makes finished work live on the deployed site. Surveys the tree so unrelated files never get swept into a commit, triages the change from its paths and its diff, runs the verify that tier needs before anything is committed (the full local verify mirroring CI, or a quicker run when the change is confined to the site and plainly safe), merges branch work into main when needed, pushes, confirms the CI run goes green, then loads the deployed site in a real browser to prove it renders (a deploy is not done at HTTP 200), and reports exactly what deployed."
 invoke: ["ship it","make it live","push to main","deploy this"]
 metadata:
   internal: true
@@ -10,7 +10,7 @@ metadata:
 
 # ship
 
-Make finished work live on the live site (`SITE_URL` in `scripts/brand.mjs` is the authority for where that is) — builds green first, no unrelated files swept in, a clear report after. The end state is always the same: the work is on `main`, pushed, and deployed.
+Make finished work live on the live site (`SITE_URL` in `scripts/brand.mjs` is the authority for where that is) — triaged and verified green first, no unrelated files swept in, a clear report after. The end state is always the same: the work is on `main`, pushed, and deployed.
 
 ## When invoked
 
@@ -30,13 +30,34 @@ Use this skill when asked to make completed work live — phrases like "ship it"
 
    **Never run `git add -A`, `git add .`, or `git add` on a directory** — always add explicit file paths. Out-of-scope files are excluded by default and named in the final report; if it's genuinely unclear whether something belongs, ask before including it.
 
-2. **Run the full verify before committing**:
-   ```bash
-   npm run verify   # the single local mirror of CI — the script entry in the root package.json is the step list
-   ```
-   This one script is the single source of truth for local checks and mirrors the CI jobs in `.github/workflows/ci.yml` — if CI gains a check (tests, a11y), it gets added to `verify`, never listed here separately, except the CI-only checks CLAUDE.md's **CI & Local Verify** section records as deliberate exceptions (its list is authoritative). The registry validators run automatically via the builds' `prebuild` hooks.
+2. **Triage the change, then run the verify its tier needs, before committing.**
 
-   **A labs-only change** (only `website/src/app/labs/` and the few files a lab registers in; `scripts/labs-only-change.mjs` owns the allowlist) may run `npm run verify:labs` instead: CI's lighter labs path, which drops the story tests, the Storybook build, the package steps and the site-wide gesture and axe sweeps. It opens with the allowlist check and fails if anything outside labs changed, so it cannot stand in for a change that needs the full verify.
+   **a. Read the ceiling.** The script sets the lightest tier the changed paths allow, and nothing may go below it:
+   ```bash
+   node scripts/site-only-change.mjs --triage
+   ```
+   It prints `labs`, `site` or `full`, with every changed file. `scripts/site-only-change.mjs` and `scripts/labs-only-change.mjs` own the allowlists and the reasoning for what each tier can skip; never restate or second-guess them here. **A ceiling of `full` ends the triage**: run the full verify and say nothing more about it.
+
+   **b. Read the diff, and only ever raise the tier.** On a `site` or `labs` ceiling, read the actual diff and ask whether anything in it could break what the lighter run skips. Go to `full` when any of these holds, or when there is any doubt at all:
+   - It adds or changes a drag grip, a pointer or keyboard handler, or anything in `scripts/gestures.json`'s reach (the gesture sweep is skipped).
+   - It changes markup that page-level axe would judge: landmarks, headings, the shared chrome (header, sidebar, footer, the root layout), a control's name or role (the axe sweep is skipped).
+   - It changes logic rather than presentation: state, effects, data flow, anything a page computes.
+   - It is large, or spread across unrelated parts of the site, or you cannot say in one sentence what it does.
+   - The session's work also touched something the diff does not show as site (a decision, a doc claim, a registry the pages print).
+
+   A change that stays at the lighter tier is one like a retuned value in a site registry, a spacing or position tweak in a page's CSS, a copy edit, or a swapped image: presentational, small, and readable in full.
+
+   **c. Say the verdict in two or three lines before running anything**: what changed, the tier, and for a lighter tier what is skipped and why this change cannot reach it. Then proceed without asking. The owner can stop it, and "ship full" (or any ask for the full verify) forces `full` whatever the triage says.
+
+   **d. Run that tier's verify**:
+   ```bash
+   npm run verify        # full: the single local mirror of CI
+   npm run verify:site   # site: the quick run
+   npm run verify:labs   # labs: CI's lighter labs path
+   ```
+   `verify` is the single source of truth for local checks and mirrors the CI jobs in `.github/workflows/ci.yml` — if CI gains a check (tests, a11y), it gets added to `verify`, never listed here separately, except the CI-only checks CLAUDE.md's **CI & Local Verify** section records as deliberate exceptions (its list is authoritative). The registry validators run in every tier.
+
+   Each lighter run opens with its allowlist check and fails if anything outside it changed, so neither can stand in for a change that needs the full verify. **The quick run is not a mirror of CI**: it also drops the served-site gesture and axe sweeps, which CI still runs after the push, beside the deploy. A break only they catch is therefore found minutes after it is live, which is the trade step b exists to judge, and step 7's CI watch is where it would show.
 
    **Run it plainly and let its own exit status be the verdict. Never pipe verify through `tail`, `head`, or `grep`** — a pipeline reports the last command's exit code, not verify's, and that exact mistake masked two red builds on 2026-07-26. **If any step fails, stop** — fix the failure if it was caused by this session's work, otherwise report it. Never push red.
 
@@ -84,7 +105,7 @@ Use this skill when asked to make completed work live — phrases like "ship it"
    The script's doc block owns what it asserts, and its passes are labelled in the output, so a red line names which one failed. **A red result means the deploy may have taken the site down — treat it as an active outage, not a report line**: diagnose immediately, and if the cause isn't quickly fixable, revert the deploy (`git revert` the pushed commits and push again) rather than leaving the site dark while investigating. Never skip this step because verify and CI were green — they were green during the outage too.
 
 9. **Report** in the final message:
-   - Each pushed commit (hash + subject), confirmation `npm run verify` passed locally, the CI run result, and the live smoke result (step 8)
+   - Each pushed commit (hash + subject), the triage tier and which verify passed locally (for a lighter tier, what it skipped), the CI run result, and the live smoke result (step 8)
    - Every file deliberately left out and why
    - Anything the deploy will visibly change on the live site
    - Branch case: the merge and the branch deletion

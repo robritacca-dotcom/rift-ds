@@ -29,8 +29,9 @@
  *
  * The allowlist below is the one home of what counts as labs.
  */
-import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
+import { localChange, pushedChange } from './lib/change-set.mjs';
+import { isEntryScript } from './lib/report.mjs';
 
 /** Paths a labs-only change may touch. */
 const LABS_ALLOWLIST = [
@@ -45,36 +46,15 @@ const LABS_ALLOWLIST = [
   /^website\/src\/data\/dependency-graph\.generated\.ts$/,
 ];
 
-const isLabs = (path) => LABS_ALLOWLIST.some((rule) => rule.test(path));
+export const isLabs = (path) => LABS_ALLOWLIST.some((rule) => rule.test(path));
 
-const git = (...args) =>
-  execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-
-const lines = (text) => text.split('\n').map((line) => line.trim()).filter(Boolean);
-
-function resolves(ref) {
-  if (!ref || /^0+$/.test(ref)) return false;
-  try {
-    git('rev-parse', '--verify', '--quiet', `${ref}^{commit}`);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-if (process.argv.includes('--check')) {
-  let base;
-  try {
-    base = git('merge-base', 'origin/main', 'HEAD');
-  } catch {
+function check() {
+  const changed = localChange();
+  if (changed === null) {
     console.error('✗ labs-only check: no merge base with origin/main (run git fetch first).');
     process.exit(1);
   }
-  const changed = [
-    ...lines(git('diff', '--name-only', base)),
-    ...lines(git('ls-files', '--others', '--exclude-standard')),
-  ];
-  const outside = [...new Set(changed)].filter((path) => !isLabs(path));
+  const outside = changed.filter((path) => !isLabs(path));
   if (changed.length === 0) {
     console.error('✗ labs-only check: nothing has changed against origin/main.');
     process.exit(1);
@@ -85,21 +65,27 @@ if (process.argv.includes('--check')) {
     process.exit(1);
   }
   console.log(`✓ Labs-only change — ${changed.length} file(s), all inside labs.`);
-  process.exit(0);
 }
 
-const { LABS_BASE: base, LABS_HEAD: head = 'HEAD', GITHUB_OUTPUT: output } = process.env;
-let labsOnly = false;
-let reason = 'the base commit could not be resolved, so the full path runs';
-if (resolves(base) && resolves(head)) {
-  const changed = lines(git('diff', '--name-only', base, head));
-  const outside = changed.filter((path) => !isLabs(path));
-  labsOnly = changed.length > 0 && outside.length === 0;
-  reason = labsOnly
-    ? `${changed.length} file(s), all inside labs`
-    : changed.length === 0
-      ? 'no files changed'
-      : `${outside.length} file(s) outside labs, first ${outside[0]}`;
+function detect() {
+  const { LABS_BASE: base, LABS_HEAD: head = 'HEAD', GITHUB_OUTPUT: output } = process.env;
+  const changed = pushedChange(base, head);
+  let labsOnly = false;
+  let reason = 'the base commit could not be resolved, so the full path runs';
+  if (changed !== null) {
+    const outside = changed.filter((path) => !isLabs(path));
+    labsOnly = changed.length > 0 && outside.length === 0;
+    reason = labsOnly
+      ? `${changed.length} file(s), all inside labs`
+      : changed.length === 0
+        ? 'no files changed'
+        : `${outside.length} file(s) outside labs, first ${outside[0]}`;
+  }
+  console.log(`labs-only=${labsOnly} (${reason})`);
+  if (output) appendFileSync(output, `labs-only=${labsOnly}\n`);
 }
-console.log(`labs-only=${labsOnly} (${reason})`);
-if (output) appendFileSync(output, `labs-only=${labsOnly}\n`);
+
+if (isEntryScript(import.meta.url)) {
+  if (process.argv.includes('--check')) check();
+  else detect();
+}

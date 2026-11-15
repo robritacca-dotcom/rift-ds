@@ -10,6 +10,13 @@ name: CI
 # steps marked `labs-only` below stand down, and everything else still runs.
 # scripts/labs-only-change.mjs owns the allowlist and the reasoning, and
 # `npm run verify:labs` is the local mirror of that path.
+#
+# A change confined to the website's own pages, site UI, config, data and
+# static files cannot reach the package or Storybook, so the jobs and steps
+# marked `site-only` stand down for it too. The served-site sweeps still
+# run. scripts/site-only-change.mjs owns the allowlist and the reasoning;
+# `npm run verify:site` is the ship skill's quick local run for that path,
+# and it is deliberately lighter than this one.
 
 on:
   push:
@@ -23,10 +30,13 @@ permissions:
 
 jobs:
   changes:
-    name: Detect a labs-only change
+    name: Detect a labs-only or site-only change
     runs-on: ubuntu-latest
     outputs:
       labs-only: ${{ steps.detect.outputs.labs-only }}
+      site-only: ${{ steps.site.outputs.site-only }}
+      # True when the change can reach the package, a story or Storybook.
+      package: ${{ steps.detect.outputs.labs-only != 'true' && steps.site.outputs.site-only != 'true' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -38,6 +48,11 @@ jobs:
         env:
           LABS_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
           LABS_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+      - id: site
+        run: node scripts/site-only-change.mjs
+        env:
+          SITE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          SITE_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
 
   library:
     name: Lint + build library
@@ -70,19 +85,20 @@ jobs:
       # vanish or narrow (props, export names, subpaths, deep-import files,
       # the published schema files and their meta-schema properties).
       - run: node scripts/validate-api-compat.mjs
-        # labs-only: a labs page publishes nothing, so the package steps stand down.
-        if: needs.changes.outputs.labs-only != 'true'
+        # labs-only, site-only: neither publishes anything, so the package
+        # steps stand down.
+        if: needs.changes.outputs.package == 'true'
       - run: npm run build:lib
-        if: needs.changes.outputs.labs-only != 'true'
+        if: needs.changes.outputs.package == 'true'
       # publint + arethetypeswrong against dist/: the manifest must match the
       # tarball and every export subpath must resolve for ESM and bundler
       # consumers — resolution modes the Vite consumer smoke never exercises.
       - run: node scripts/validate-package-publish.mjs
-        if: needs.changes.outputs.labs-only != 'true'
+        if: needs.changes.outputs.package == 'true'
       # What an import costs a consumer: each component and subpath bundled
       # as their bundler would, gzipped, against scripts/size-budget.json.
       - run: node scripts/validate-size-budget.mjs
-        if: needs.changes.outputs.labs-only != 'true'
+        if: needs.changes.outputs.package == 'true'
       # validate-registry (run by prebuild) regenerates README/skills/barrel
       # content; a dirty tree here means committed generated content is stale.
       # CI-only: a local tree is dirty with the change in progress, so verify
@@ -97,8 +113,9 @@ jobs:
   test:
     name: Story tests
     needs: changes
-    # labs-only: a labs page has no stories.
-    if: needs.changes.outputs.labs-only != 'true'
+    # labs-only, site-only: the website has no stories. (Its unit tests
+    # sit outside the site allowlist, so a change to one runs this job.)
+    if: needs.changes.outputs.package == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -117,8 +134,8 @@ jobs:
   storybook:
     name: Build Storybook
     needs: changes
-    # labs-only: a labs page is not in Storybook.
-    if: needs.changes.outputs.labs-only != 'true'
+    # labs-only, site-only: the website is not in Storybook.
+    if: needs.changes.outputs.package == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

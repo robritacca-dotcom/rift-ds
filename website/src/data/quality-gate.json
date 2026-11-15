@@ -155,6 +155,7 @@
     "validate-website-a11y": { "group": "verify", "text": "axe over the served pages in light, dark and forced colours." },
 
     "node scripts/labs-only-change.mjs": { "group": "ci", "text": "Decides whether a change touches only labs, so story tests, the Storybook build, the package steps and the site-wide gesture and axe sweeps can stand down for it." },
+    "node scripts/site-only-change.mjs": { "group": "ci", "text": "Decides whether a change touches only the website's own pages, site UI, config, data and static files, so story tests, the Storybook build and the package steps can stand down for it." },
     "npm audit --audit-level=high --omit=dev": { "group": "ci", "text": "Fails on a high-severity advisory in a production dependency." },
     "Check generated content is committed": { "group": "ci", "text": "After the generators run, the tree has no diff and no untracked file, so nothing regenerated was left uncommitted." }
   }

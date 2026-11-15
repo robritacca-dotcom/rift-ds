@@ -51,25 +51,6 @@
   color: var(--color-text-primary);
 }
 
-.logoMark {
-  width: var(--icon-size-600);
-  height: var(--icon-size-600);
-  flex-shrink: 0;
-}
-
-.logoText {
-  font-family: var(--font-title-body-family);
-  font-size: var(--font-title-body-size);
-  /* ds-allow(typography): the system's one weight-700 setting — the wordmark
-     reads a notch heavier than the nav pills beside it, one step above
-     title-body's 600; no token resolves to 700 (design.md's Site header
-     pattern records the exception), and the face is in the loaded set. */
-  font-weight: 700;
-  line-height: var(--font-title-body-line-height);
-  letter-spacing: var(--font-title-body-letter-spacing);
-  color: var(--color-text-primary);
-}
-
 /* ============================================
    SEARCH FIELD
    Opens the global command palette. Dressed as an
@@ -138,9 +119,9 @@
    ============================================ */
 /* The drawer floor: Get started, which folds with the pills, under the
    look switcher and the mode toggle at phone widths, where the bar gives
-   them up; stacked in the bar's order and stepped in by the logo's
-   lead-in so each starts on the nav labels' line, as globals.css steps
-   the drawer's list. */
+   them up; stacked in the bar's order and stepped in by one icon step
+   and its gap so each starts on the nav labels' line, as globals.css
+   steps the drawer's list. */
 .drawerFooter {
   display: flex;
   flex-direction: column;

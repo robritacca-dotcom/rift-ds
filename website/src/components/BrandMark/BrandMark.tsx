@@ -2,9 +2,10 @@ import { useId } from "react";
 import { BRAND_MARK_PATHS, BRAND_MARK_STROKE_WIDTH } from "@/config/brand-mark";
 
 /**
- * The brand mark, inline — the one component every chrome surface renders
- * (header wordmark, footer, drawer, and the immersive stages' toolbar pill,
- * which took it off the static file so a re-themed stage re-themes the mark). The favicon routes draw the same
+ * The brand mark, inline: the component the footer and the immersive
+ * stages' toolbar pill render (the pill took it off the static file so a
+ * re-themed stage re-themes the mark). The header bar and its drawer wear
+ * the logo instead, RiftLogo, which reads the same two tokens. The favicon routes draw the same
  * paths from @/config/brand-mark, so the mark cannot fork. The gradient
  * reads the brand mark tokens, which alias the action fill unless a theme
  * gives the logo a tone of its own, so the mark wears whichever theme is on:
@@ -19,8 +20,8 @@ export default function BrandMark({
   size?: number;
   className?: string;
 }) {
-  /* The mark renders several times per document (the header bar, the
-     drawer's brand row, the footer), so the gradient id must be per-instance. */
+  /* The mark renders several times per document (the footer, a
+     stage's toolbar pill), so the gradient id must be per-instance. */
   const gradientId = useId();
   return (
     <svg

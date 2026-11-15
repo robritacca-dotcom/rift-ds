@@ -285,6 +285,54 @@
           }
         }
       }
+    },
+    {
+      "id": "highway",
+      "label": "Highway",
+      "description": "A night highway in light trails",
+      "icon": "road",
+      "scene": "highway",
+      "home": {
+        "params": {
+          "crown": 0.552,
+          "trails": 0.9,
+          "meet": 0.6,
+          "side": 0.6
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "grain": {
+            "params": {
+              "amount": 0.12
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "crown": 0.648,
+          "trails": 0.8,
+          "meet": 0.5
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.12
+            }
+          }
+        }
+      }
     }
   ]
 }

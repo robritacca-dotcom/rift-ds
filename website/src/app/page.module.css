@@ -215,12 +215,6 @@
    per registry count export
    ============================================ */
 
-/* The hero's two rules frame the counts, each with air above it on top
-   of the hero's own gap. */
-.heroDivider {
-  margin-top: var(--gap-400);
-}
-
 /* Experiment: the maker's mark closing the page. A hairline pill, so
    it reads as a credit rather than another resource link. */
 .heroCredit {

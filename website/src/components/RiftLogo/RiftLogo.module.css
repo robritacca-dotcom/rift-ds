@@ -1,0 +1,22 @@
+/* The header logo. Its height is the default icon step, the size of the
+   mark it replaces, which puts the lettering a little taller than the nav
+   labels beside it. */
+.logo {
+  display: block;
+  height: var(--icon-size-600);
+  width: auto;
+  flex-shrink: 0;
+  color: var(--color-text-primary);
+}
+
+/* DS is set in the text colour, so it reads on either ground beside
+   lettering that wears the theme's logo tone. */
+.ds {
+  fill: currentColor;
+}
+
+/* On a light ground the white core of the beam has nothing to glow
+   against, so it goes. */
+:global(:root:not([data-theme="dark"])) .hot {
+  display: none;
+}

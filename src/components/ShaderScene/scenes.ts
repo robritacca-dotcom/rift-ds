@@ -814,5 +814,199 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
+/**
+ * The highway: a straight highway at night, seen from its shoulder, running to a
+ * low horizon. It is drawn in long-exposure light trails, every one a
+ * straight line to the single point where the road ends, with light
+ * streaming along them rather than the lines themselves moving. A cold haze
+ * sits on the horizon and drifts over the ground, and a hot point with a
+ * flare marks where the trails meet, and a city's lights lie along the
+ * horizon under slow clouds and drifting mist.
+ */
+export const highway: Scene = {
+  id: "highway",
+  label: "Highway",
+  description: "A straight highway at night, drawn in light trails that pull to one point on a hazy horizon.",
+  mode: "dark",
+  /* The haze, the tail lights nearest you, the light of the road's far end,
+     and the oncoming light on the far side. */
+  colours: [
+    "--color-ambient-4",
+    "--color-ambient-5",
+    "--color-ambient-6",
+    "--color-ambient-2",
+  ],
+  params: [
+    { key: "crown", label: "Horizon height", min: 0.15, max: 0.85, step: 0.01, default: 0.27 },
+    { key: "trails", label: "Trails", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "haze", label: "Haze", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "meet", label: "Vanishing light", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "city", label: "City lights", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "clouds", label: "Clouds", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "side", label: "Vanishing point", min: -0.8, max: 0.8, step: 0.01, default: 0.22 },
+    { key: "flow", label: "Flow", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+/* A theme's ambient tones can be muted, a monochrome theme's most of all.
+   As the prism does, each is pushed from its own grey and up to full
+   brightness, so it reads as colour once it is light, then taken to
+   display space, where the scene is composed. */
+vec3 highwayHue(vec3 c) {
+  float grey = (c.r + c.g + c.b) / 3.0;
+  c = max(grey + (c - grey) * 1.8, vec3(0.0));
+  return pow(c / max(max(c.r, max(c.g, c.b)), 1e-3), vec3(1.0 / 2.2));
+}
+
+/* One trail: a hot core, a halo round it, and a wide wash on the asphalt. */
+vec3 highwayTrail(float l, float at, float width, float px, vec3 tint, float flow) {
+  float s = sqrt(width * width + px * px);
+  float d = l - at;
+  float core = exp(-d * d / (s * s)) * (width / s);
+  float halo = exp(-d * d / (s * s * 34.0 + 0.0006)) * 0.29;
+  float wash = exp(-abs(d) / 0.45) * 0.045;
+  return (tint * (core * 1.7 + halo + wash) + vec3(1.0, 0.9, 0.86) * core * core * 0.6) * flow;
+}
+
+/* Light moves along a trail: a slow shimmer, and brighter heads that travel
+   it with their glow dragging behind. Each head fades in over its front, so
+   no hard edge crosses the road. */
+float highwayPulse(float d, float t, float seed, float dir) {
+  float n = vnoise(vec2(d * 4.6 - t * 0.5 * dir + seed * 7.3, seed * 3.1));
+  float u = fract(t * 0.3 - dir * d * 0.5 + seed * 0.37);
+  float v = fract(u + 0.45);
+  float heads = exp(-u * 3.2) * smoothstep(0.0, 0.09, u) + 0.7 * exp(-v * 4.5) * smoothstep(0.0, 0.09, v);
+  return 0.4 + 0.4 * smoothstep(0.22, 0.78, n) + 1.3 * heads;
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  t *= u_flow;
+  vec2 vp = vec2(u_side * aspect, u_crown);
+  float up = p.y - vp.y;
+  float side = (p.x - vp.x) / aspect;
+  /* The light comes from the road's far end and gives out with distance
+     from it: far to the other side, the haze, the horizon line and the
+     city all fade away into the dark. */
+  float reachOut = smoothstep(-1.12, -0.5, side);
+  float right = mix(0.14, 1.0, smoothstep(-1.5, 0.1, side)) * reachOut;
+
+  vec3 cool = highwayHue(u_col[0]);
+  vec3 tail = highwayHue(u_col[1]);
+  vec3 warm = highwayHue(u_col[2]);
+  vec3 oncoming = mix(highwayHue(u_col[3]), vec3(1.0), 0.35);
+  vec3 steel = mix(vec3(dot(cool, vec3(0.2126, 0.7152, 0.0722))), cool, 0.3) * 0.6;
+
+  vec3 col = vec3(0.0);
+  if (up > 0.0) {
+    /* Sky: a cold haze on the horizon, a shaft of it leaning away, and the
+       trails lighting it where the road runs in. */
+    /* Mist: two layers of it sliding past each other, the finer one hugging
+       the horizon, so the haze thickens and thins as it drifts. */
+    float drift = fbm(vec2(p.x * 1.4 - t * 0.06, up * 5.0 + t * 0.015));
+    drift = mix(drift, fbm(vec2(p.x * 3.1 + t * 0.045, up * 12.0 - t * 0.02)), 0.4);
+    drift = smoothstep(0.15, 0.85, drift);
+    vec3 haze = steel * right * (exp(-up / 0.07) * 1.3 + exp(-up / 0.3) * 0.58 + exp(-up / 0.7) * 0.05) * (0.22 + 1.35 * drift);
+    vec2 lean = normalize(vec2(-1.0, 0.34));
+    vec2 rel = p - vp;
+    float along = dot(rel, lean);
+    float across = dot(rel, vec2(-lean.y, lean.x));
+    float shaft = exp(-across * across / 0.03) * exp(-max(along, 0.0) / 1.2) * smoothstep(0.0, 0.25, along);
+    haze += steel * shaft * 0.72 * (0.5 + 1.0 * drift);
+    /* Clouds, seen from below and flattening towards the horizon, moving
+       slowly across. They catch the light from the road's far end on their
+       undersides and dim the haze behind them where they are thick. */
+    float lay = 1.0 / (up + 0.2);
+    vec2 cu = vec2((p.x - vp.x) * lay * 0.42 + t * 0.022, lay * 0.55 + t * 0.004);
+    float cloud = fbm(cu + 0.9 * vec2(fbm(cu * 0.6 + 3.1), fbm(cu * 0.6 + 8.4)));
+    cloud = smoothstep(0.42, 0.78, cloud) * smoothstep(0.0, 0.06, up) * u_clouds;
+    haze *= 1.0 - 0.6 * cloud;
+    haze += steel * cloud * (0.08 + 0.38 * right) * (exp(-up / 0.35) + 0.05);
+    float rise = exp(-up / 0.05) * exp(-pow((p.x - vp.x) / (0.2 * aspect), 2.0));
+    haze += tail * rise * 0.2 * u_trails * (0.6 + 0.8 * drift);
+    /* Keep the darks deep: the thin end of the haze is pulled down towards
+       black and only what is already bright is let through at strength. */
+    haze *= mix(0.4, 1.12, smoothstep(0.02, 0.36, dot(haze, vec3(0.3333))));
+    col += haze * u_haze;
+    float speck = step(0.9982, rnd(ivec2(gl_FragCoord.xy / 2.0)));
+    col += steel * 1.6 * speck * 0.25 * smoothstep(0.02, 0.3, up);
+  } else {
+    /* Ground: a plane seen in perspective. You stand on the right shoulder;
+       the road runs away to the left of you, its edge line just beside. */
+    float below = max(-up, 0.0005);
+    float d = log(u_crown / below);
+    float l = (p.x - vp.x) / below / 3.0;
+    float px = 1.6 / u_size.y / below / 3.0;
+
+    float on = smoothstep(1.06 + px, 0.98, abs(l + 0.72));
+    float grit = fbm(vec2(l * 5.0, d * 9.0));
+    vec3 asphalt = vec3(0.027, 0.034, 0.036) * (0.6 + 0.8 * grit);
+    vec3 verge = vec3(0.012, 0.019, 0.015) * (0.5 + 0.9 * fbm(vec2((p.x - vp.x) / below * 0.5, d * 6.0)));
+    col = mix(verge, asphalt, on);
+    float edge = exp(-pow((l - 0.22) / (0.011 + px), 2.0));
+    col += vec3(0.75, 0.8, 0.85) * edge * 0.3 * (1.0 - exp(-below / 0.02));
+
+    float fog = exp(-below / 0.035);
+    col += steel * right * fog * 0.46 * u_haze;
+    col += steel * on * exp(-below / 0.1) * 0.085 * u_haze;
+
+    /* Every trail is a straight line to the vanishing point. What moves is
+       the light along it: fine fibres streaming past, the way a long
+       exposure smears a moving lamp. */
+    float fibre = vnoise(vec2(l * 70.0, d * 1.4 - t * 0.7));
+    float reach = 1.0 - exp(-below / 0.007);
+    vec3 light = vec3(0.0);
+    light += highwayTrail(l, -0.24, 0.020, px, tail, highwayPulse(d, t, 1.0, 1.0));
+    light += highwayTrail(l, -0.50, 0.022, px, tail, highwayPulse(d, t, 2.0, 1.0));
+    light += highwayTrail(l, -0.66, 0.008, px, tail, highwayPulse(d, t, 6.0, 1.0)) * 0.4;
+    light += highwayTrail(l, -0.82, 0.020, px, tail, highwayPulse(d, t, 3.0, 1.0)) * 0.9;
+    light += highwayTrail(l, -1.06, 0.010, px, tail, highwayPulse(d, t, 7.0, 1.0)) * 0.5;
+    light += highwayTrail(l, -1.34, 0.013, px, oncoming, highwayPulse(d, t, 4.0, -1.0)) * 0.55;
+    light += highwayTrail(l, -1.52, 0.013, px, oncoming, highwayPulse(d, t, 5.0, -1.0)) * 0.45;
+    col += light * (0.7 + 0.6 * fibre) * reach * u_trails;
+
+    /* Fog lying on the ground, drifting, and catching the colour of the
+       trails that run through it. */
+    float bank = fbm(vec2(p.x * 2.2 + t * 0.06, d * 1.6 - t * 0.035));
+    float mist = exp(-below / 0.075) * (0.25 + 1.1 * bank);
+    vec3 scatter = tail * exp(-pow(l + 0.62, 2.0) / 0.5) + oncoming * exp(-pow(l + 1.43, 2.0) / 0.2) * 0.3;
+    col += scatter * mist * 0.3 * u_trails * u_haze;
+    col += steel * right * mist * 0.37 * u_haze;
+  }
+
+  /* The line where they meet, warm at the far end, and the hot point where
+     every trail ends, with a flare across the horizon. */
+  float line = exp(-pow(up / 0.0024, 2.0));
+  col += mix(steel * 1.8, warm, smoothstep(-0.25, 0.1, side)) * line * right * 0.55 * u_haze;
+  /* A city along the horizon: a low glow, and its lights in two rows, the
+     upper ones on buildings and the lower ones their reflections. */
+  float cx = p.x * 230.0;
+  ivec2 cell = ivec2(int(floor(cx)) + 4096, 0);
+  float inCell = exp(-pow((fract(cx) - 0.5) / 0.16, 2.0));
+  /* The lights gather into districts with dark gaps between them, and no
+     two burn alike. */
+  float district = smoothstep(0.3, 0.75, vnoise(vec2(p.x * 3.2, 7.0)));
+  float lit = step(0.9 - 0.5 * district, rnd(cell + ivec2(0, 3))) * (0.35 + 0.65 * rnd(cell + ivec2(0, 11)));
+  float lift = 0.002 + 0.013 * rnd(cell + ivec2(0, 9));
+  float lamp = exp(-pow((up - lift) / 0.0018, 2.0)) + 0.5 * exp(-pow((up + lift * 0.6) / 0.0024, 2.0));
+  /* Most lights shimmer, each at its own pace; about one in seven is a
+     beacon that blinks slowly on and off. */
+  float pace = rnd(cell + ivec2(0, 7));
+  float shimmer = 0.6 + 0.4 * sin(t * (1.2 + 2.6 * pace) + 6.283 * pace);
+  float beacon = smoothstep(0.35, 0.5, sin(t * (0.9 + 1.4 * pace) + 6.283 * pace) * 0.5 + 0.5);
+  float twinkle = mix(shimmer, beacon * 1.5, step(0.86, rnd(cell + ivec2(0, 13))));
+  col += mix(warm, tail, rnd(cell + ivec2(0, 5))) * inCell * lit * lamp * twinkle * 0.6 * u_city * reachOut;
+  col += mix(warm, steel * 1.6, 0.5) * exp(-abs(up) / (up > 0.0 ? 0.022 : 0.008)) * (0.35 + 0.65 * vnoise(vec2(p.x * 9.0, 1.0))) * 0.1 * u_city * reachOut;
+
+  vec2 away = p - vp;
+  float meet = exp(-dot(away, away) / 0.0016) * 0.9 + exp(-dot(away, away) / 0.02) * 0.22;
+  float flare = exp(-pow(away.y / 0.0035, 2.0)) * exp(-abs(away.x) / 0.22) * 0.5;
+  col += (mix(warm, vec3(1.0), 0.55) * meet + mix(warm, vec3(1.0), 0.3) * flare) * u_meet;
+
+  return u_ground + pow(max(col, vec3(0.0)), vec3(2.2));
+}
+`,
+};
+
 /** Every scene, in picker order. */
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora];
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway];

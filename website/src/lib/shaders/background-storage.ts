@@ -107,7 +107,25 @@ export type SiteBackgroundEntry = {
 
    Aurora, both bands: the one background that is colour edge to edge, so
    it is dimmed on the home page and a little further under a
-   title, and a long bottom fade takes it to the page. */
+   title, and a long bottom fade takes it to the page.
+
+   Highway, home: the horizon lies midway between the subtitle and the
+   counts, where the hero's divider used to sit (the horizon replaced it;
+   the crown is that midpoint's height in the band at desktop widths), and
+   the vanishing point
+   is pushed past the right edge of the page, so the trails cross the whole
+   hero from that side and their meeting point is only a glow at the edge.
+   They run behind the counts and the calls to action and into the chat
+   frame, and the vanishing light is eased so it does not compete with the
+   headline. No top fade: the sky is dark at its own top.
+   Highway, page: the horizon is raised to sit just above the sidebar and the
+   page title, so the title stands on the road rather than under the
+   horizon line and the trails run behind it (lower, the bottom fade takes
+   the trails out almost as they begin), with the trails and the vanishing light
+   eased further and a long bottom fade, so they give out before the
+   content starts. Both bands take half as much grain again as the other
+   scenes' lighter setting: the highway is a long exposure, and the grain is
+   part of that. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

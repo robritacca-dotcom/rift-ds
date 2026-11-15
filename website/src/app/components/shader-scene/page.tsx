@@ -97,7 +97,9 @@ export default function ShaderScenePage() {
               Meteors drops a shower past a planet&rsquo;s edge, where a sun
               flares on the limb. Waves is a sea drawn in points, each one
               larger and brighter on a crest. Aurora folds wide ribbons of
-              colour through one another, round a deep void. Every scene but the rift is also one of this
+              colour through one another, round a deep void. Highway is a straight
+              highway at night, drawn in light trails that all pull to one point
+              on the horizon. Every scene but the rift is also one of this
               site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
               GL context.
             </p>
@@ -124,6 +126,9 @@ export default function ShaderScenePage() {
               </Stage>
               <Stage caption='scene="aurora"'>
                 <ShaderScene scene="aurora" passes={FULL_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="highway"'>
+                <ShaderScene scene="highway" passes={FULL_PASSES} speed={1} />
               </Stage>
             </div>
           </section>

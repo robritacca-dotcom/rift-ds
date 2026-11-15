@@ -84,6 +84,14 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
+  {
+    id: "highway",
+    label: "Highway",
+    description: "A straight highway at night, drawn in light trails that pull to one point on a hazy horizon.",
+    sceneId: "highway",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

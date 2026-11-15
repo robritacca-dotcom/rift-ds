@@ -257,8 +257,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     },
     // The ambient field stays monochrome: every shader scene paints these
     // greys, so the washes (the field, aurora, waves) stay smoke. Only the
-    // prism takes the spectrum above, by a site rule in globals.css that
-    // re-points these roles at the accents on its band alone.
+    // prism and the highway take the spectrum above, by a site rule in
+    // globals.css that re-points these roles at the accents on their band
+    // alone.
     ambient: ["#C9C9C9", "#ADADAD", "#8F8F8F", "#5C5C5C", "#707070", "#A7A7A7"],
     // Hairlines carry Smoke's depth, so its dividers step ONE ramp
     // notch stronger than the base theme's (which they inherit as

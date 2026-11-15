@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
-import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
 import HomeBento from "@/components/HomeBento/HomeBento";
 import HomeFaq from "@/components/HomeFaq/HomeFaq";
@@ -1456,8 +1455,7 @@ export default function DesignSystemLanding() {
           {/* The tagline is the h1: the nav wordmark owns the name. */}
           <h1 className={styles.pageTitle}>The open source AI design system</h1>
           <RotatingSubtitle />
-          <FadeDivider className={styles.heroDivider} />
-          {/* The counts, under a rule: every figure imports from the registry export that
+          {/* The counts: every figure imports from the registry export that
               owns it, so the band can never overstate. */}
           <div className={styles.statStrip} role="group" aria-label="What the system counts today">
             <Stat value={<AnimatedNumber value={COMPONENT_COUNT} />} label="Components" />

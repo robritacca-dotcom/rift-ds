@@ -27,7 +27,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -88,6 +88,14 @@ export const Waves: Story = {
 export const Aurora: Story = {
   args: {
     scene: 'aurora',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Highway: a straight highway at night, drawn in light trails that pull to one point on a hazy horizon. */
+export const Highway: Story = {
+  args: {
+    scene: 'highway',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
 };

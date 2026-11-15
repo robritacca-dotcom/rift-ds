@@ -268,8 +268,8 @@ html[data-nav-drawer="open"] .ds-chat-launcher__fab {
 }
 
 /* The header drawer's rows already carry the Button's own text inset, so
-   the list steps in by whatever is left of the logo's lead-in (the mark
-   plus its gap), and every label starts on the wordmark's first letter. The
+   the list steps in by whatever is left of one icon step plus its gap,
+   which sets every label in from the logo's first letter by that much. The
    same step on the end keeps the rows centred in the panel. The drawer is
    portaled out of the header, so this lives here rather than in MegaNav's
    module. */
@@ -314,18 +314,30 @@ body:has([data-bg-extended]) .blur-container {
   height: 900px;
 }
 
-/* Smoke paints its shader scenes in greys, all but one: on the prism, the
-   ambient roles re-point at the theme's accent spectrum (the base look's
-   own pairing), so the beams split into colour at their edges while every
-   other scene and the field stay smoke. Scoped to the band, so nothing
-   else that reads the ambient roles changes. */
-:root[data-brand="mono"][data-background="prism"] .blur-container {
+/* Smoke paints its shader scenes in greys, all but two: on the prism and
+   the highway, the ambient roles re-point at the theme's accent spectrum (the
+   base look's own pairing), so the prism's beams split into colour at
+   their edges and the highway's trails run in colour, while every other scene
+   and the field stay smoke. Scoped to the band, so nothing else that reads
+   the ambient roles changes. */
+:root[data-brand="mono"][data-background="prism"] .blur-container,
+:root[data-brand="mono"][data-background="highway"] .blur-container {
   --color-ambient-1: var(--color-core-accent-gold);
   --color-ambient-2: var(--color-core-accent-mint);
   --color-ambient-3: var(--color-core-accent-violet);
   --color-ambient-4: var(--color-core-accent-cobalt);
   --color-ambient-5: var(--color-core-accent-coral);
   --color-ambient-6: var(--color-core-accent-amber);
+}
+
+/* The highway's sky stays closer to smoke than its trails: its haze role is
+   the cobalt cut with the theme's own grey, a little over half and half,
+   so the sky reads washed out and the colour belongs to the lights. The grey is
+   the third ambient role, which the highway does not paint with and which is
+   put back to the theme's value here for that reason. */
+:root[data-brand="mono"][data-background="highway"] .blur-container {
+  --color-ambient-3: inherit;
+  --color-ambient-4: color-mix(in srgb, var(--color-core-accent-cobalt) 58%, var(--color-ambient-3));
 }
 
 /* Scroll parallax on the band, whatever shader paints it: it sinks at 30%

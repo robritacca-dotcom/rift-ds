@@ -109,12 +109,12 @@ export type SiteBackgroundEntry = {
    it is dimmed on the home page and a little further under a
    title, and a long bottom fade takes it to the page.
 
-   Highway, home: the horizon lies midway between the subtitle and the
-   counts, where the hero's divider used to sit (the horizon replaced it;
-   the crown is that midpoint's height in the band at desktop widths), and
-   the vanishing point
-   is pushed past the right edge of the page, so the trails cross the whole
-   hero from that side and their meeting point is only a glow at the edge.
+   Highway, home: the horizon lies on the hero's own divider, the hairline
+   between the subtitle and the counts, so the scene's line and the page's
+   are one line (the crown is that rule's height in the band at desktop
+   widths), and the vanishing point is pushed past the right edge of the
+   page, so the trails cross the whole hero from that side and their
+   meeting point is only a glow at the edge.
    They run behind the counts and the calls to action and into the chat
    frame, and the vanishing light is eased so it does not compete with the
    headline. No top fade: the sky is dark at its own top.

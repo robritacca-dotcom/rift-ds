@@ -579,8 +579,12 @@
    is the floating surfaces' own. An outlined or ghost cell takes the glass
    fill at rest; a filled cell keeps its colour and lets a little of the
    ground through it. These sit after the cells' rest rules and match
-   their weight, so they win at rest, while every hover and press rule
-   above carries one more class and still fills the button solid.
+   their weight, so they win at rest (and on a disabled button, which
+   keeps its glass under the usual dimming), while every pointer hover and
+   press rule above carries one more class and still fills the button
+   solid. The documentation-only hover and active classes are left out
+   through :where(), which adds no weight, so a forced state shows the
+   cell's own fill too.
    ============================================ */
 
 .ds-button--glass {
@@ -588,22 +592,22 @@
   backdrop-filter: blur(24px);
 }
 
-.ds-button--glass.ds-button--secondary,
-.ds-button--glass.ds-button--secondary-neutral,
-.ds-button--glass.ds-button--tertiary,
-.ds-button--glass.ds-button--destructive {
+.ds-button--glass.ds-button--secondary:where(:not(.ds-button--hover, .ds-button--active)),
+.ds-button--glass.ds-button--secondary-neutral:where(:not(.ds-button--hover, .ds-button--active)),
+.ds-button--glass.ds-button--tertiary:where(:not(.ds-button--hover, .ds-button--active)),
+.ds-button--glass.ds-button--destructive:where(:not(.ds-button--hover, .ds-button--active)) {
   background-color: var(--color-bg-glass);
 }
 
-.ds-button--glass.ds-button--primary {
+.ds-button--glass.ds-button--primary:where(:not(.ds-button--hover, .ds-button--active)) {
   background-color: color-mix(in srgb, var(--color-action-primary-bg) 72%, transparent);
 }
 
-.ds-button--glass.ds-button--neutral {
+.ds-button--glass.ds-button--neutral:where(:not(.ds-button--hover, .ds-button--active)) {
   background-color: color-mix(in srgb, var(--color-action-neutral-bg) 72%, transparent);
 }
 
-.ds-button--glass.ds-button--primary-destructive {
+.ds-button--glass.ds-button--primary-destructive:where(:not(.ds-button--hover, .ds-button--active)) {
   background-color: color-mix(in srgb, var(--color-action-destructive-bg) 72%, transparent);
 }
 

@@ -4,8 +4,10 @@
    ============================================ */
 
 .page {
+  /* Positioned, and deliberately not a layer of its own (no z-index): the
+     hero's counts and rule blend with the background band behind the page,
+     and a stacking context here would cut them off from it. */
   position: relative;
-  z-index: 1;
   /* No page-level cap: the hero spans the banner's full width. The collage
      below re-caps itself at 1440px so its outer card edges still land
      under the logo and the theme toggle. */
@@ -37,15 +39,19 @@
   margin: 0 auto var(--gap-1500);
 }
 
-/* The animated inner wrapper mirrors the hero's own column layout; the
-   section stays untransformed so the theme tooltips' backdrop blur can
-   reach the page behind them. */
+/* The animated inner wrapper mirrors the hero's own column layout. It
+   enters by opacity alone, filling backwards only, as the theme row does:
+   once the animation ends the wrapper is no layer and no backdrop root, so
+   the counts' labels and the rule can blend with the background band, and
+   the glass buttons frost it. .animate-in's transform and will-change
+   would hold both off forever. */
 .heroInner {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--gap-400);
   width: 100%;
+  animation: heroThemesIn var(--motion-duration-slower) var(--motion-ease-entrance) backwards;
 }
 
 /* The theme row enters by opacity alone: a finished opacity animation
@@ -76,7 +82,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroThemes {
+  .heroThemes,
+  .heroInner {
     opacity: 1;
     animation: none;
   }
@@ -221,6 +228,22 @@
    of the hero's own gap. */
 .heroDivider {
   margin-top: var(--gap-400);
+  /* Over a scene the divider colour is a dark line on a dark picture. The
+     rule is drawn in a text colour and blended with the ground instead:
+     added to it in dark mode, multiplied into it in light, so it is always
+     a step lighter or darker than whatever the background paints there. At
+     about a third strength: a hairline, not a bar. */
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-text-tertiary) 35%, transparent),
+    transparent
+  );
+  mix-blend-mode: plus-lighter;
+}
+
+:global(html[data-theme="light"]) .heroDivider {
+  mix-blend-mode: multiply;
 }
 
 /* Experiment: the maker's mark closing the page. A hairline pill, so
@@ -271,6 +294,19 @@
    each value over its label. */
 .statStrip :global(.ds-stat) {
   align-items: center;
+}
+
+/* The counts' labels blend with the background band the same way the rule
+   does: the secondary text colour added to the ground in dark mode and
+   multiplied into it in light, so a label is always lighter or darker than
+   the scene behind it, where a fixed grey is lost on a bright patch. */
+.statStrip :global(.ds-stat__label) {
+  color: var(--color-text-secondary);
+  mix-blend-mode: plus-lighter;
+}
+
+:global(html[data-theme="light"]) .statStrip :global(.ds-stat__label) {
+  mix-blend-mode: multiply;
 }
 
 /* Over the Horizon scene the counts sit in the limb's glow, where the

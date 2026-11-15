@@ -1448,11 +1448,12 @@ export default function DesignSystemLanding() {
             <ThemeSwitcher />
             <SceneSwitcher />
           </div>
-          {/* The entrance animation lives on this wrapper, NOT the section:
-              .animate-in's will-change makes an ancestor a backdrop root,
-              which would stop the theme tooltips blurring the page behind
-              them. */}
-          <div className={`${styles.heroInner} animate-in`}>
+          {/* The entrance animation lives on this wrapper, NOT the section,
+              and is opacity alone (page.module.css): .animate-in's
+              will-change would make it a layer and a backdrop root, which
+              stops the labels and the rule blending with the background
+              and the glass buttons frosting it. */}
+          <div className={styles.heroInner}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
           <h1 className={styles.pageTitle}>The open source AI design system</h1>
           <RotatingSubtitle />
@@ -1474,13 +1475,14 @@ export default function DesignSystemLanding() {
             aria-label="Explore the system"
             buttons={[
               { label: "Playground", variant: "primary" as const, size: "compact" as const, href: "/playground", iconLeft: "palette", iconRight: "arrow_forward" },
-              { label: "Templates", variant: "secondary" as const, size: "compact" as const, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
+              { label: "Templates", variant: "secondary" as const, size: "compact" as const, glass: true, href: "/templates", iconLeft: "dashboard", iconRight: "arrow_forward" },
               ...(SHOW_FIGMA_LINKS
                 ? [
                     {
                       label: "Figma kit",
                       variant: "secondary" as const,
                       size: "compact" as const,
+                      glass: true,
                       iconLeft: <FigmaIcon />,
                       iconRight: "open_in_new",
                       href: FIGMA_URL,

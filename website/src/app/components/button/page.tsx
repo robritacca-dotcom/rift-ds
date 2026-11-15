@@ -179,6 +179,29 @@ export default function ButtonPage() {
             </div>
           </section>
 
+          {/* Glass: every cell over a busy ground */}
+          <section className={styles.variantBlock}>
+            <SectionTitle title="Glass" />
+            <p className={styles.introBody}>
+              Set <code>glass</code> when a button sits on a busy ground, such
+              as a shader scene or a photo. The ground behind it is blurred,
+              an outlined or ghost button takes the glass fill at rest, and a
+              filled one lets a little of the ground through its colour.
+              Hover and press are each variant’s own.
+            </p>
+            <div className={styles.glassGround}>
+              {variants.map((cell) => (
+                <Button
+                  key={cell.key}
+                  label={cell.label}
+                  variant={cell.variant}
+                  tone={cell.tone}
+                  glass
+                />
+              ))}
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="button" />
         </main>
       </div>

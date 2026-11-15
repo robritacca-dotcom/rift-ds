@@ -574,6 +574,40 @@
 }
 
 /* ============================================
+   GLASS
+   glass: the button frosts what is behind it, for a busy ground. The blur
+   is the floating surfaces' own. An outlined or ghost cell takes the glass
+   fill at rest; a filled cell keeps its colour and lets a little of the
+   ground through it. These sit after the cells' rest rules and match
+   their weight, so they win at rest, while every hover and press rule
+   above carries one more class and still fills the button solid.
+   ============================================ */
+
+.ds-button--glass {
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+.ds-button--glass.ds-button--secondary,
+.ds-button--glass.ds-button--secondary-neutral,
+.ds-button--glass.ds-button--tertiary,
+.ds-button--glass.ds-button--destructive {
+  background-color: var(--color-bg-glass);
+}
+
+.ds-button--glass.ds-button--primary {
+  background-color: color-mix(in srgb, var(--color-action-primary-bg) 72%, transparent);
+}
+
+.ds-button--glass.ds-button--neutral {
+  background-color: color-mix(in srgb, var(--color-action-neutral-bg) 72%, transparent);
+}
+
+.ds-button--glass.ds-button--primary-destructive {
+  background-color: color-mix(in srgb, var(--color-action-destructive-bg) 72%, transparent);
+}
+
+/* ============================================
    FOCUS
    ============================================ */
 

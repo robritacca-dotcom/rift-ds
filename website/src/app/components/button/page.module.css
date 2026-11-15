@@ -94,6 +94,23 @@
   grid-template-columns: auto repeat(7, 1fr);
 }
 
+/* The glass demo's ground: stripes of the ambient roles, busy enough that
+   the blur behind each button shows. */
+.glassGround {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-400);
+  padding: var(--padding-1000);
+  border-radius: var(--radius-400);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-ambient-2) 0 var(--gap-300),
+    var(--color-ambient-4) var(--gap-300) var(--gap-500),
+    var(--color-ambient-5) var(--gap-500) var(--gap-1000)
+  );
+}
+
 /* Empty corner cell (top-left of headers) */
 .gridCorner {
   /* Intentionally empty */

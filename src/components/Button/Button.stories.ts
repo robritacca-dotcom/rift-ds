@@ -298,6 +298,25 @@ export const PrimaryDestructiveDisabled: Story = {
 };
 
 // ============================================
+// Glass
+// ============================================
+
+/** `glass` frosts the ground behind an outlined button and gives it the glass fill at rest. */
+export const SecondaryGlass: Story = {
+  args: { variant: 'secondary', glass: true, label: 'Templates', iconRight: 'arrow_forward' },
+};
+
+/** A ghost button takes the same glass fill. */
+export const TertiaryGlass: Story = {
+  args: { variant: 'tertiary', glass: true, label: 'Templates' },
+};
+
+/** A filled button keeps its colour and lets a little of the ground through. */
+export const PrimaryGlass: Story = {
+  args: { variant: 'primary', glass: true, label: 'Playground' },
+};
+
+// ============================================
 // Loading
 // ============================================
 

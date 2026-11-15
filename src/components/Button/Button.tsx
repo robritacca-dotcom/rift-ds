@@ -53,6 +53,14 @@ type ButtonOwnProps = {
    * `disabled`) and sets `aria-busy` on the rendered element.
    */
   loading?: boolean;
+  /**
+   * Frosts the button for a busy ground (a shader, a photo, a chart): the
+   * page behind it is blurred, an outlined or ghost button takes the glass
+   * fill at rest and a filled one lets a little of the ground through its
+   * colour. Hover and press are the variant's own. Works on every `variant`
+   * and `tone`.
+   */
+  glass?: boolean;
   /** Optional href — renders as <a> instead of <button> */
   href?: string;
   /** Optional target attribute for links */
@@ -159,6 +167,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       size = 'default',
       disabled,
       loading,
+      glass,
       href,
       target,
       rel,
@@ -205,6 +214,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       `${baseClass}--${resolvedState}`,
       `${baseClass}--${size}`,
       isLoading && `${baseClass}--loading`,
+      glass && `${baseClass}--glass`,
       className,
     ]
       .filter(Boolean)

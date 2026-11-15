@@ -11,7 +11,9 @@
      under the logo and the theme toggle. */
   width: 100%;
   min-width: 0; /* a flex-item main must not grow to the chart's intrinsic width */
-  margin: 0 auto;
+  /* Pulls the opening up 40px into the body's 80px row gap, so the space
+     above the swatches matches the space below the hero's buttons. */
+  margin: calc(var(--gap-1000) * -1) auto 0;
   /* A step tighter than the token every other page puts above its title:
      the hero is the one page whose opening has to land above the fold, so
      the whole stack rides up a touch. */

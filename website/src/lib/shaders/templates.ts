@@ -27,7 +27,7 @@ export const TEMPLATES: Template[] = [
   {
     id: "field",
     label: "Field",
-    description: "The home page's ambient field: soft colour that flows and streams.",
+    description: "The site's ambient field: soft colour that flows and streams.",
     sceneId: "field",
     passes: { fadeTop: { on: false }, fadeBottom: { params: { from: 0, to: 0.45 } } },
   },

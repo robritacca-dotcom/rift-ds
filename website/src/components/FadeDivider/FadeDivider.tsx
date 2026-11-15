@@ -2,7 +2,8 @@ import styles from "./FadeDivider.module.css";
 
 /**
  * FadeDivider — the 1px hairline that fades out at both ends. One home
- * for the line the home hero, the DS landing, and the footer all draw.
+ * for the line the home hero, the DS landing, and the footer all draw; the
+ * home hero recolours and blends its own through `className`.
  */
 export default function FadeDivider({ className }: { className?: string }) {
   return (

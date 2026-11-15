@@ -1,8 +1,9 @@
 "use client";
 
 /**
- * The site's background pick: the field (the site's own ShaderField) or one
- * of the library's scenes in its place, from SITE_BACKGROUNDS. The header's
+ * The site's background pick: the field (the site's own ShaderField), one
+ * of the library's scenes in its place, or the off row, which paints
+ * nothing, from SITE_BACKGROUNDS. The header's
  * BackgroundSwitcher picks it, on every page, as do the home hero's scene
  * row and the playground's scene picks; all come here.
  *

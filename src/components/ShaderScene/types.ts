@@ -30,10 +30,11 @@ export type Scene = {
   colours: string[];
   /**
    * `dark` for a scene that only reads on a dark ground (it adds light).
-   * On a light page its surface paints a near-black ground of its own
-   * (coloursFor), rather than setting data-theme on itself: a nested
-   * [data-theme] matches the base dark tokens and would hide the theme
-   * preset's colours.
+   * On a light page its light is computed against a near-black ground of
+   * its own (coloursFor) and laid onto the page as a pale tint, rather than
+   * setting data-theme on itself: a nested [data-theme] matches the base
+   * dark tokens and would hide the theme preset's colours. A scene without
+   * it paints for both modes itself, from the page ground.
    */
   mode?: "dark";
   /**

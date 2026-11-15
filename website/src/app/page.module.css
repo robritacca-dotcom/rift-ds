@@ -224,8 +224,8 @@
    per registry count export
    ============================================ */
 
-/* The hero's two rules frame the counts, each with air above it on top
-   of the hero's own gap. */
+/* The hero's rule sits above the counts, with air above it on top of the
+   hero's own gap. */
 .heroDivider {
   margin-top: var(--gap-400);
   /* Over a scene the divider colour is a dark line on a dark picture. The

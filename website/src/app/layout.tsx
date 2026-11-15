@@ -133,9 +133,9 @@ ${colorModeScript()}
     if (brand === '${BASE_THEME_ID}' || brand === '${LEGACY_BASE_THEME_ID}') root.removeAttribute('data-brand');
     else if (brand) root.setAttribute('data-brand', brand);
     /* The background pick (the header's switcher) rides the same path, so
-       a visitor who chose a scene never sees the field first;
+       a visitor who chose a scene, or none, never sees the field first;
        lib/shaders/background-storage owns the key, the attribute and the
-       list of scenes. */
+       list of ids the attribute carries. */
     var background = localStorage.getItem('${BACKGROUND_STORAGE_KEY}');
   } catch (e) {}
   /* Nothing valid stored (a first visit, or private mode) is the served

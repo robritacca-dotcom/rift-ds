@@ -3,7 +3,7 @@
  * `createRenderer` compiles one scene with the passes into a program on a
  * WebGL2 context and returns a `draw` that sets every uniform from a values
  * object and paints one frame. `readColours` resolves a scene's tokens from
- * the live cascade. A scene that prints type (`glyphs`) also gets its ramp
+ * the live cascade. A scene that prints type (`glyphs`, `ocean`) also gets its ramp
  * as a strip texture, drawn in the theme's code face.
  */
 import { assemble, uniformNames, VERTEX } from "./assemble";

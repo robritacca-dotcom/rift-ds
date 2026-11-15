@@ -161,10 +161,18 @@ export function useThreads(
   const [groups, setGroups] = useState<ThreadPanelGroup[]>(initialGroups);
   const [activeThreadId, setActiveThreadId] = useState('');
   const [renamingId, setRenamingId] = useState<string | null>(null);
-  const [projects, setProjects] = useState<ThreadPanelProject[]>(options.projects ?? []);
-  const [activeProjectId, setActiveProjectId] = useState<string | undefined>(
-    options.projects?.[0]?.id
+  /* The host's projects follow its option on every render, so the rail's
+     toggle can hide or show them; only the projects a visitor creates are
+     held in state. */
+  const [addedProjects, setAddedProjects] = useState<ThreadPanelProject[]>([]);
+  const projects = useMemo(
+    () => [...(options.projects ?? []), ...addedProjects],
+    [options.projects, addedProjects]
   );
+  const [pickedProjectId, setActiveProjectId] = useState<string | undefined>(undefined);
+  const activeProjectId = projects.some((project) => project.id === pickedProjectId)
+    ? pickedProjectId
+    : projects[0]?.id;
   const [openTabs, setOpenTabs] = useState<string[]>([]);
 
   /* The naming simulation's clockwork: a sequence for fresh ids, a cursor
@@ -356,7 +364,7 @@ export function useThreads(
     projectSeq.current += 1;
     const id = `project-${projectSeq.current}`;
     const index = projectSeq.current;
-    setProjects((list) => [...list, { id, label: labels.newProject(index), meta: labels.newProjectMeta }]);
+    setAddedProjects((list) => [...list, { id, label: labels.newProject(index), meta: labels.newProjectMeta }]);
     setActiveProjectId(id);
   }, [labels]);
 

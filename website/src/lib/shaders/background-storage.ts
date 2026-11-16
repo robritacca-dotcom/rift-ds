@@ -165,7 +165,24 @@ export type SiteBackgroundEntry = {
    swatches, and leaves through the gap between the header's links and its
    buttons. Page: it flies level through the strip between the header and
    the breadcrumb. Both are fitted to the desktop layout; a narrow screen
-   has no such corridor, and the plane is a few pixels long. */
+   has no such corridor, and the plane is a few pixels long.
+
+   Galaxy, both bands: a night scene that is dark at its own top, so it
+   takes no top fade, and the lighter grain. The scene's own galaxy sits
+   in the middle of its box, which in either band is where the type is, so
+   in both it is moved up into the open corner on the
+   right, clear of a centred headline and of a page's title and links,
+   with the core eased so the brightest thing on the page is not the
+   background, and the stars thinned since type is read through them.
+   Home: under the header's buttons, beside the theme swatches, its lower
+   arm giving out before the headline. Page: in the strip between the
+   header and the page's links, with a long bottom fade so the stars are
+   gone before the content starts. The nebula is eased in both, since
+   type is read on it. Home: it falls from the upper left to the lower
+   right, through the hero and under the galaxy, at the scene's own
+   angle. Page: it is flattened and raised to cross the top of the band,
+   behind the header, and eased further, so the title sits under its
+   lower edge and the fade takes the rest. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

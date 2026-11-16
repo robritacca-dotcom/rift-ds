@@ -14,7 +14,8 @@ import './ShaderScene.css';
    and quadrupled the fill: the horizon runs fourteen layered noise lookups
    per pixel, and a full-width band at 2x was six million pixels a frame. A
    scene that prints type declares its own cap (`pixelRatio` in scenes.ts),
-   since type at 1x on a 2x screen is soft. */
+   since type at 1x on a 2x screen is soft, and so does the galaxy, whose
+   stars are points. */
 const MAX_PIXEL_RATIO = 1;
 /* 30fps, as ShaderField holds at rest: the scenes drift on cycles of
    tens of seconds, too slowly for 60fps to be visible, and every frame
@@ -22,7 +23,7 @@ const MAX_PIXEL_RATIO = 1;
 const FRAME_MS = 1000 / 30;
 
 /** The scenes ShaderScene paints. */
-export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky';
+export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -42,7 +43,7 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, or `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one. */
+  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, or `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars. */
   scene?: ShaderSceneId;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each
@@ -87,7 +88,7 @@ const DEFAULT_SPEED = 1.6;
 
 /**
  * ShaderScene paints one of the system's shader scenes, a horizon, a rift,
- * a field of glyphs, a prism, a meteor shower, a sea of points, an aurora, a night highway, an ocean seen from above or a sky of burning cloud, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
+ * a field of glyphs, a prism, a meteor shower, a sea of points, an aurora, a night highway, an ocean seen from above, a sky of burning cloud or a spiral galaxy, in WebGL2, with finishing passes over it (a scrim, a vignette, top and
  * bottom fades to the page, film grain). Its colours are the background
  * field's roles (`--color-ambient-*`) read from the live cascade at the
  * scene, so it re-themes with `data-theme`, a preset or any scoped override,

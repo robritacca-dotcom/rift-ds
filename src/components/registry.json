@@ -1317,7 +1317,7 @@
       "name": "ShaderScene",
       "label": "Shader scene",
       "slug": "shader-scene",
-      "description": "A WebGL2 scene, from a night horizon and a glowing rift to an ocean from above and a burning sky, in the theme's field colours, with fades, vignette and grain.",
+      "description": "A WebGL2 scene, from a night horizon and a glowing rift to a burning sky and a spiral galaxy, in the theme's field colours, with fades, vignette and grain.",
       "category": "effects",
       "client": true,
       "keys": { "by": "none" }

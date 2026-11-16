@@ -438,6 +438,63 @@
       }
     },
     {
+      "id": "galaxy",
+      "label": "Galaxy",
+      "description": "A spiral deep in a field of stars",
+      "icon": "cyclone",
+      "scene": "galaxy",
+      "home": {
+        "params": {
+          "x": 0.33,
+          "y": 0.29,
+          "scale": 1.15,
+          "core": 0.7,
+          "stars": 0.7,
+          "nebula": 0.9,
+          "band": -0.3,
+          "bandY": 0.04
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "x": 0.28,
+          "y": 0.14,
+          "scale": 1.55,
+          "core": 0.7,
+          "stars": 0.7,
+          "nebula": 0.7,
+          "band": -0.15,
+          "bandY": 0.22
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "none",
       "label": "None",
       "description": "No shader, the plain page",

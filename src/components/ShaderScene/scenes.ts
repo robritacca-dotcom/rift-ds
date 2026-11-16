@@ -1578,4 +1578,235 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky];
+/**
+ * The galaxy: a spiral seen at a slant, deep in a field of stars. A disc
+ * of light thins outwards from a hot core, wound into two arms. The arms
+ * are drawn on the disc unwound, where each lies straight, so the cloud
+ * in them, the dust lanes cut along their inner edges and the knots of
+ * young stars strung down them all run with the arm, in filaments, and
+ * the dust is heavier on the side of the disc tipped towards the eye. The
+ * core is a bulge rounder than the disc, standing out of it, near white
+ * at its heart in a wide halo of the theme's warm colours, and the disc
+ * cools through the theme's colours to its rim. Two companions keep it
+ * company, a small soft ellipse off the disc and a tight bright one
+ * beside the core. The stars are four depths of points, one to a cell at
+ * most, thick in some parts of the sky and thin in others: a dust of
+ * faint ones, two scatters of brighter ones and a few near ones with a
+ * glow of their own, all twinkling slowly. Behind it all a band of lit
+ * gas crosses the sky, billowed and creeping, with a rift of dust down
+ * its middle and the stars crowded into it. The arms turn, too slowly to
+ * see move. Stars are points, finer than soft light, so the scene draws
+ * at up to two pixels per CSS pixel and sizes everything in CSS pixels.
+ */
+export const galaxy: Scene = {
+  id: "galaxy",
+  label: "Galaxy",
+  description: "A spiral galaxy seen at a slant, a hot core in wound arms, deep in a field of stars.",
+  mode: "dark",
+  pixelRatio: 2,
+  /* The disc's rim, its middle, the halo round the core, and the core. */
+  colours: [
+    "--color-ambient-4",
+    "--color-ambient-3",
+    "--color-ambient-5",
+    "--color-ambient-1",
+  ],
+  params: [
+    { key: "x", label: "Position across", min: -0.6, max: 0.6, step: 0.01, default: 0 },
+    { key: "y", label: "Position up", min: -0.6, max: 0.6, step: 0.01, default: -0.03 },
+    { key: "scale", label: "Size", min: 0.2, max: 3, step: 0.01, default: 1.9 },
+    { key: "tilt", label: "Tilt", min: -1.57, max: 1.57, step: 0.01, default: 0.4 },
+    { key: "incline", label: "Openness", min: 0.08, max: 1, step: 0.01, default: 0.3 },
+    { key: "arms", label: "Arms", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "wind", label: "Winding", min: 0, max: 10, step: 0.1, default: 4 },
+    { key: "dust", label: "Dust", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "core", label: "Core", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "glow", label: "Glow", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "companions", label: "Companions", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "stars", label: "Stars", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "nebula", label: "Nebula", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "band", label: "Nebula angle", min: -1.57, max: 1.57, step: 0.01, default: -0.3 },
+    { key: "bandY", label: "Nebula height", min: -0.7, max: 0.7, step: 0.01, default: 0 },
+    { key: "spin", label: "Spin", min: -4, max: 4, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec3 galaxyHue(vec3 c) {
+  float grey = (c.r + c.g + c.b) / 3.0;
+  c = max(grey + (c - grey) * 1.8, vec3(0.0));
+  return c / max(max(c.r, max(c.g, c.b)), 1e-3);
+}
+
+/* One depth of stars, in CSS pixels: one to a cell at most, held clear of
+   the cell's edge so none is cut by it, on a grid turned its own way so
+   no two depths line up and none lines up with the screen. Most are
+   faint and a few are bright; thick is how full this part of the sky is.
+   x is the star's light, y a roll for its colour. */
+vec2 galaxyStars(vec2 at, float size, int seed, float thick, float sigma, float halo, float t) {
+  float turn = 0.6 + float(seed) * 0.37;
+  at = mat2(cos(turn), sin(turn), -sin(turn), cos(turn)) * at + 4096.0;
+  ivec2 cell = ivec2(floor(at / size));
+  ivec2 id = cell + ivec2(seed, seed * 3);
+  vec2 dd = at - (vec2(cell) + 0.16 + 0.68 * vec2(rnd(id + 37), rnd(id + 71))) * size;
+  float pick = rnd(id + 911);
+  float mag = 0.07 + 0.93 * pow(rnd(id + 5), 5.0);
+  /* Each star breathes at its own rate, deeply, and now and then one
+     flashes: a short glint well over its own light. */
+  float rate = 0.8 + 2.8 * rnd(id + 13);
+  float twinkle = 0.62 + 0.38 * sin(t * rate + 40.0 * pick)
+    + 0.8 * pow(max(sin(t * (0.35 + 0.5 * rnd(id + 17)) + 90.0 * pick), 0.0), 24.0);
+  /* The near stars, the ones with a glow, hold almost steady: a point
+     that flickers twinkles, a glowing bulb that does only pulses. */
+  twinkle = mix(twinkle, 0.9 + 0.1 * sin(t * 0.4 * rate + 40.0 * pick), smoothstep(0.6, 1.0, sigma));
+  float s = sigma * (0.8 + 0.5 * mag);
+  float point = exp(-dot(dd, dd) / (2.0 * s * s));
+  float bloom = halo * mag * (exp(-length(dd) / (2.2 * s)) + 0.25 * exp(-length(dd) / (7.0 * s)));
+  return vec2((point + bloom) * step(pick, thick) * mag * twinkle, rnd(id + 3));
+}
+
+/* Two octaves, for the shapes that only steer finer noise. */
+float galaxyDrift(vec2 p) {
+  return 0.65 * vnoise(p) + 0.35 * vnoise(p * 2.1 + vec2(17.0, 9.0));
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y - 0.5);
+  vec2 css = uv * u_size / u_ratio;
+
+  vec3 blue = galaxyHue(u_col[0]);
+  vec3 violet = galaxyHue(u_col[1]);
+  vec3 rose = galaxyHue(u_col[2]);
+  vec3 warm = galaxyHue(u_col[3]);
+
+  vec3 light = vec3(0.0);
+
+  /* ---- The galaxy's own frame: q runs along the disc's long axis and
+     across it, with the rim at 1; d is the same place on the disc's face,
+     the slant undone, and dr that face turned by the spin. */
+  vec2 g = p - vec2(u_x * aspect, u_y);
+  float ca = cos(u_tilt);
+  float sa = sin(u_tilt);
+  vec2 q = vec2(ca * g.x + sa * g.y, ca * g.y - sa * g.x) / (0.5 * u_scale);
+  vec2 d = vec2(q.x, q.y / u_incline);
+  float turn = t * u_spin * 0.012;
+  float ct = cos(turn);
+  float st = sin(turn);
+  vec2 dr = vec2(ct * d.x + st * d.y, ct * d.y - st * d.x);
+  float r = length(d);
+
+  vec3 glow = vec3(0.0);
+  if (r < 1.25) {
+    /* ---- The disc, unwound: turning each ring back by its own winding
+       lays the two arms out straight along one line, so noise laid on
+       it is cloud and dust that follow the arms, and the slant alone
+       draws them out along the disc. */
+    float w = 0.5 * u_wind * log(r + 0.05);
+    float cw = cos(w);
+    float sw = sin(w);
+    vec2 dw = vec2(cw * dr.x - sw * dr.y, sw * dr.x + cw * dr.y);
+    float cloud = fbm(dw * 3.6 + 7.0);
+    float fine = fbm(dw * vec2(12.0, 15.0) + 23.0);
+    float phase = 2.0 * atan(dw.y, dw.x) + 3.4 * (cloud - 0.5);
+    float arm = pow(0.5 + 0.5 * cos(phase), 1.25);
+    float outer = smoothstep(0.04, 0.26, r);
+    float disc = exp(-r / 0.27) * smoothstep(1.2, 0.4, r);
+    /* The outer disc thins out: its light drops, the gaps between the
+       arms go dark, and the arms themselves break into patches with
+       empty sky between them. */
+    float thin = smoothstep(0.2, 0.7, r);
+    float broken = mix(1.0, smoothstep(0.47, 0.7, fbm(dw * 5.5 + 80.0) + 0.12 * arm), thin);
+    disc *= mix(1.0, 0.3, thin) * broken;
+    float wound = mix(1.0, mix(0.3, 0.015, thin) + 1.5 * arm, min(1.0, u_arms) * outer) * (1.0 + max(u_arms - 1.0, 0.0) * arm * outer);
+    /* Dust: ragged lanes on each arm's inner edge, and heavier on the
+       near side of the disc, where it stands in front of the core's
+       light. That one-sidedness is what tips the disc back into depth. */
+    float nearSide = smoothstep(0.5, -0.5, d.y);
+    float ridge = 1.0 - abs(2.0 * fbm(dw * vec2(7.0, 9.0) + 41.0) - 1.0);
+    float lane = pow(0.5 + 0.5 * cos(phase - 1.5), 3.0) * smoothstep(0.45, 0.9, ridge + 0.25 * fine);
+    float veil = min(0.94, u_dust * lane * outer * smoothstep(1.1, 0.5, r) * (0.55 + 0.75 * nearSide));
+    /* The disc is stars too fine to tell apart: cloud, and a fine tooth. */
+    float tooth = 0.86 + 0.28 * vnoise(css * 1.7);
+    vec3 body = mix(mix(rose, violet, smoothstep(0.0, 0.2, r)), blue, smoothstep(0.06, 0.4, r));
+    glow += mix(body, vec3(1.0), 0.18) * disc * wound * (0.35 + 1.3 * fine) * tooth * 0.75 * u_glow;
+    /* Knots of young stars strung down the arms, blue-white, and the
+       rose of the gas between them. */
+    float knot = pow(fbm(dw * 19.0 + 60.0), 5.0) * arm * disc * outer;
+    glow += mix(blue, vec3(1.0), 0.6) * knot * 26.0 * u_glow * min(1.0, u_arms);
+    glow += rose * pow(fine, 4.0) * arm * disc * outer * 2.2 * u_glow * min(1.0, u_arms);
+    glow *= 1.0 - veil;
+    /* The lanes are not black: dust reddens what shines through it. */
+    glow += mix(rose, warm, 0.4) * veil * disc * 0.1 * u_glow;
+  }
+  /* A halo wider than the disc and rounder, so the disc sits in it. */
+  float rh = length(vec2(q.x, q.y / mix(u_incline, 1.0, 0.3)));
+  glow += mix(blue, violet, 0.3) * (exp(-rh / 0.3) * 0.028 + exp(-rh / 1.1) * 0.002) * u_glow;
+
+  /* ---- The core: a bulge rounder than the disc, standing out of it. */
+  vec2 b = vec2(q.x, q.y / mix(u_incline, 1.0, 0.5));
+  float rb = length(b);
+  glow += mix(rose, violet, 0.35) * (exp(-rb / 0.1) * 0.5 + exp(-rb / 0.28) * 0.1) * u_core;
+  glow += mix(mix(warm, rose, 0.4), vec3(1.0), 0.6) * (exp(-rb * rb / (2.0 * 0.035 * 0.035)) * 1.6 + exp(-rb / 0.05) * 0.8) * u_core;
+  /* Rolled off like film, so the core burns out to white with colour
+     held in its shoulder and the faint arms keep their place under it. */
+  light += 1.0 - exp(-1.5 * glow);
+  /* The disc's own stars: the sky's faint ones come up where it shines. */
+  float among = 1.0 + 3.0 * min(1.0, dot(glow, vec3(0.6)));
+
+  /* ---- Two companions: a soft ellipse off the disc, and a tight bright
+     one beside the core. */
+  vec2 e = q - vec2(0.03, -0.64);
+  e = vec2(0.8 * e.x + 0.6 * e.y, 0.8 * e.y - 0.6 * e.x) * vec2(1.0, 1.7);
+  float re = length(e);
+  light += mix(blue, vec3(1.0), 0.45) * (exp(-re / 0.03) * 0.5 + exp(-re * re / (2.0 * 0.012 * 0.012)) * 0.6 + exp(-re / 0.09) * 0.05) * u_companions;
+  float rc = length(q - vec2(-0.31, 0.27));
+  light += mix(blue, vec3(1.0), 0.8) * (exp(-rc * rc / (2.0 * 0.011 * 0.011)) + exp(-rc / 0.022) * 0.3 + exp(-rc / 0.07) * 0.04) * u_companions;
+
+  /* ---- The nebula: a band of lit gas across the whole sky, behind the
+     galaxy, as our own galaxy lies across a night sky. m runs along the
+     band and across it. The gas is noise pushed about by slower noise,
+     so it gathers into billows and pulls out into wisps, and that push
+     drifts, so the gas creeps like plasma. It is bright down the band's
+     middle, where a ragged rift of dust is cut back out of it, cools from
+     rose through violet to blue at its edges, and the stars crowd into it. */
+  float cb = cos(u_band);
+  float sb = sin(u_band);
+  vec2 m = vec2(cb * p.x + sb * (p.y - u_bandY), cb * (p.y - u_bandY) - sb * p.x);
+  vec2 mq = m * vec2(1.5, 3.0) + 11.0;
+  vec2 push = vec2(galaxyDrift(mq + vec2(0.0, t * 0.006)), galaxyDrift(mq + vec2(5.2, 1.3) - vec2(t * 0.005, 0.0)));
+  float gas = fbm(mq + 2.4 * push);
+  float wisp = fbm(m * vec2(4.5, 8.0) + 3.2 * push + 40.0);
+  /* Filaments: the bright seams where two billows meet. */
+  float seam = pow(1.0 - abs(2.0 * fbm(m * vec2(6.0, 11.0) + 4.0 * push + 90.0) - 1.0), 5.0);
+  float off = m.y + 0.16 * (push.x - 0.5);
+  float body = exp(-off * off / (2.0 * 0.19 * 0.19));
+  float heart = exp(-off * off / (2.0 * 0.07 * 0.07));
+  float rift = smoothstep(0.42, 0.8, 1.0 - abs(2.0 * galaxyDrift(m * vec2(3.0, 7.0) + 1.6 * push + 70.0) - 1.0)) * heart;
+  float billow = body * smoothstep(0.3, 0.68, gas);
+  vec3 gasHue = mix(mix(blue, violet, smoothstep(0.3, 0.65, wisp)), rose, smoothstep(0.5, 0.8, gas) * heart);
+  vec3 neb = gasHue * billow * (0.12 + 2.4 * wisp * wisp * wisp + 0.9 * seam) * 0.36;
+  neb += mix(warm, rose, 0.5) * heart * gas * gas * (0.6 * gas + 0.5 * seam) * 0.42;
+  neb *= 1.0 - 0.92 * rift;
+  light += (1.0 - exp(-2.0 * neb)) * u_nebula;
+
+  /* ---- The stars, four depths of them, thick where the sky's own
+     cloud and the nebula are and thin between, over a breath of that
+     cloud's colour. */
+  float mist = fbm(p * 1.7 + 3.0);
+  float thick = clamp(1.6 * mist - 0.46 + 0.75 * billow * (1.0 - rift) * min(1.0, u_nebula), 0.025, 0.85);
+  vec2 dust = galaxyStars(css, 4.0, 0, thick, 0.42, 0.0, t);
+  vec2 far = galaxyStars(css, 11.0, 3, thick, 0.55, 0.0, t);
+  vec2 mid = galaxyStars(css, 37.0, 7, 0.25 + 0.6 * thick, 0.75, 0.1, t);
+  vec2 near = galaxyStars(css, 150.0, 11, 0.45, 1.2, 0.4, t);
+  vec3 dustTint = mix(vec3(1.0), mix(blue, violet, dust.y), 0.55);
+  vec3 farTint = mix(vec3(1.0), mix(blue, violet, far.y), 0.45);
+  vec3 midTint = mix(vec3(1.0), mix(mix(blue, violet, mid.y), warm, step(0.9, mid.y)), 0.35);
+  vec3 nearTint = mix(vec3(1.0), mix(mix(blue, rose, near.y), warm, step(0.85, near.y)), 0.22);
+  light += (dustTint * dust.x * 0.42 * among + farTint * far.x * 0.85 * among + midTint * mid.x * 1.3 + nearTint * near.x * 1.8) * u_stars;
+  light += mix(blue, violet, 0.6 * mist) * mist * mist * mist * 0.018 * min(1.0, u_stars);
+
+  return u_ground + light;
+}
+`,
+};
+
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky, galaxy];

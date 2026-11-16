@@ -114,7 +114,8 @@ export default function ShaderScenePage() {
               on the horizon. Ocean is open water seen from straight above,
               with a shark, a ray, a turtle and schools of fish drawn in type
               and swimming through it. Sky is cloud massed overhead and burning
-              with a low sun, hot on its lit side and cold in its shade. Every scene but the rift is also one of this
+              with a low sun, hot on its lit side and cold in its shade. Galaxy is a spiral seen
+              at a slant, a hot core in wound arms, deep in a field of stars. Every scene but the rift is also one of this
               site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
               GL context.
             </p>
@@ -150,6 +151,9 @@ export default function ShaderScenePage() {
               </Stage>
               <Stage caption='scene="sky"'>
                 <ShaderScene scene="sky" passes={SKY_PASSES} speed={1} />
+              </Stage>
+              <Stage caption='scene="galaxy"'>
+                <ShaderScene scene="galaxy" passes={FULL_PASSES} speed={1} />
               </Stage>
             </div>
           </section>

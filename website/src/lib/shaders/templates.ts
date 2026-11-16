@@ -108,6 +108,14 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.22 } } },
   },
+  {
+    id: "galaxy",
+    label: "Galaxy",
+    description: "A spiral galaxy seen at a slant, a hot core in wound arms, deep in a field of stars.",
+    sceneId: "galaxy",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

@@ -823,7 +823,7 @@
       "name": "shader-scene",
       "type": "registry:ui",
       "title": "Shader scene",
-      "description": "A WebGL2 scene, from a night horizon and a glowing rift to a burning sky and a spiral galaxy, in the theme's field colours, with fades, vignette and grain."
+      "description": "A WebGL2 scene, from a night horizon to a spiral galaxy or one of your own in GLSL, in the theme's field colours, with fades, vignette and grain."
     },
     {
       "name": "sidebar-panel",

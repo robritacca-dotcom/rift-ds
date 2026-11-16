@@ -298,6 +298,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Every site background names a scene the library ships, with its tuning inside the scene's ranges and its colour roles in the token registry."
       },
       {
+        "name": "validate-shader-contract",
+        "text": "The uniforms and helpers a shader scene is documented to get are the ones the engine hands it."
+      },
+      {
         "name": "validate-single-background-mount",
         "text": "BlurBackground is mounted exactly once, in the root layout."
       },

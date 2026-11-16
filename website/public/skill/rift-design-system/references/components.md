@@ -1,6 +1,6 @@
 # rift-ds component catalog
 
-Generated from the component registry at version 1.28.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
+Generated from the component registry at version 1.29.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
 ## Actions (9)
 
@@ -793,7 +793,7 @@ An ambient WebGL2 field of soft light sources that sample colour tokens, with a 
 
 ### Shader scene
 
-A WebGL2 scene, from a night horizon and a glowing rift to a burning sky and a spiral galaxy, in the theme's field colours, with fades, vignette and grain.
+A WebGL2 scene, from a night horizon to a spiral galaxy or one of your own in GLSL, in the theme's field colours, with fades, vignette and grain.
 
 - Import: `import { ShaderScene } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

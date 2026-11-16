@@ -14951,7 +14951,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Shader scene",
     "slug": "shader-scene",
     "category": "effects",
-    "description": "A WebGL2 scene, from a night horizon and a glowing rift to a burning sky and a spiral galaxy, in the theme's field colours, with fades, vignette and grain.",
+    "description": "A WebGL2 scene, from a night horizon to a spiral galaxy or one of your own in GLSL, in the theme's field colours, with fades, vignette and grain.",
     "client": true,
     "importPath": "rift-ds/components/ShaderScene/ShaderScene",
     "barrel": "main",
@@ -14961,32 +14961,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "scene",
-            "type": "ShaderSceneId",
+            "type": "ShaderSceneSource | ShaderSceneId",
             "required": false,
-            "description": "The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, or `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars.",
-            "values": [
-              "aurora",
-              "galaxy",
-              "glyphs",
-              "highway",
-              "horizon",
-              "meteors",
-              "ocean",
-              "prism",
-              "rift",
-              "sky",
-              "waves"
-            ],
+            "description": "The scene to paint: one of the library's by id, or a scene of your own as\na `ShaderSceneSource` (its colour roles, its settings and the GLSL that\npaints it). The library's are `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, and `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars. A scene of your own is compared by content, so\nan object written inline rebuilds nothing until what it says changes.",
             "defaultValue": "'horizon'",
             "typeRefs": [
-              "ShaderSceneId"
+              "ShaderSceneId",
+              "ShaderSceneSource"
             ]
           },
           {
             "name": "params",
             "type": "Partial<Record<string, number>>",
             "required": false,
-            "description": "The scene's settings, merged over its defaults (`SHADER_SCENES` lists each\nscene's keys and ranges), so passing one changes one thing. Changing them\nnever rebuilds the GL state."
+            "description": "The scene's settings, merged over its defaults (`SHADER_SCENES` lists each\nlibrary scene's keys and ranges; your own scene declares its own), so\npassing one changes one thing. Changing them\nnever rebuilds the GL state."
           },
           {
             "name": "passes",
@@ -15028,6 +15016,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "typeRefs": [
               "ShaderSceneStatus"
             ]
+          },
+          {
+            "name": "onError",
+            "type": "((message: string) => void)",
+            "required": false,
+            "description": "Called with the compiler's log when the scene's GLSL fails to compile or\nlink, for a scene of your own. Its line numbers count from the first\nline of the scene's `glsl`, written `1:<line>`. The status becomes\n`unavailable` as well, and the log still reaches the console. Replaces\nthe native `onError` attribute, which a scene's root never fires."
           },
           {
             "name": "className",

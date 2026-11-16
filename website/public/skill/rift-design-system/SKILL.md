@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.28.0, alongside every deploy of https://rift-ds.com. The library is 178 React components across 13 categories, themed by 328 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.29.0, alongside every deploy of https://rift-ds.com. The library is 178 React components across 13 categories, themed by 328 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 
@@ -104,3 +104,4 @@ The other skills `npx rift-ds init` installs beside this one read this skill's r
 
 - `rift-apply-theme`: Restyles existing screens onto the tokens and components.
 - `rift-style-audit`: Audits a project's styles for hardcoded values that should be tokens.
+- `rift-shader-scene`: Writes a WebGL shader scene of your own for the Shader scene component.

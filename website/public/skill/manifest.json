@@ -23,6 +23,13 @@
       "files": [
         "SKILL.md"
       ]
+    },
+    {
+      "name": "rift-shader-scene",
+      "summary": "Writes a WebGL shader scene of your own for the Shader scene component.",
+      "files": [
+        "SKILL.md"
+      ]
     }
   ]
 }

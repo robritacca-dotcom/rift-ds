@@ -2052,7 +2052,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "ShaderSceneId": {
         "kind": "type",
-        "definition": "type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky';",
+        "definition": "type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy';",
         "description": "The scenes ShaderScene paints."
       },
       "ShaderScenePassSetting": {

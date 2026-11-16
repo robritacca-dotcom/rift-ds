@@ -1,6 +1,6 @@
 # Shader scene
 
-A WebGL2 scene, from a night horizon and a glowing rift to an ocean from above and a burning sky, in the theme's field colours, with fades, vignette and grain.
+A WebGL2 scene, from a night horizon and a glowing rift to a burning sky and a spiral galaxy, in the theme's field colours, with fades, vignette and grain.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same dat
 - Import: `import { ShaderScene } from 'rift-ds';`
 - Deep import: `import { ShaderScene } from 'rift-ds/components/ShaderScene/ShaderScene';`
 - Rendering: client component (declares 'use client')
-- Size: 25.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 28.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/shader-scene
 - Schema: https://rift-ds.com/schema/components/shader-scene.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.28.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| scene | `ShaderSceneId` | no | `'horizon'` | The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, or `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one. |
+| scene | `ShaderSceneId` | no | `'horizon'` | The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, or `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars. |
 | params | `Partial<Record<string, number>>` | no |  | The scene's settings, merged over its defaults (`SHADER_SCENES` lists each scene's keys and ranges), so passing one changes one thing. Changing them never rebuilds the GL state. |
 | passes | `Partial<Record<string, ShaderScenePassSetting>>` | no |  | The finishing passes (`scrim`, `vignette`, `fadeTop`, `fadeBottom`, `grain`), each merged over its defaults. |
 | speed | `number` | no | `1.6` | Scene seconds per second: how fast it moves. 0 holds it still. |
@@ -36,7 +36,7 @@ Nothing here takes focus, so there are no keys. A test holds that.
 The scenes ShaderScene paints.
 
 ```ts
-type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky';
+type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy';
 ```
 
 ### ShaderScenePassSetting

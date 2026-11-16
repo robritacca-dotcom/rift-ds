@@ -6,8 +6,8 @@
  * the live cascade. A scene that prints type (`glyphs`, `ocean`) also gets its ramp
  * as a strip texture, drawn in the theme's code face.
  */
-import { assemble, uniformNames, VERTEX } from "./assemble";
-import type { Pass, Scene, Values } from "./types";
+import { assemble, VERTEX } from "./assemble";
+import type { Pass, ShaderSceneSource, Values } from "./types";
 import { MAX_COLOURS } from "./types";
 
 export type Rgb = [number, number, number];
@@ -56,7 +56,7 @@ export function readColours(host: HTMLElement, tokens: string[]): Colours {
  * (u_lightMode), so its masks still fade to the page and the theme stays
  * light.
  */
-export function coloursFor(host: HTMLElement, scene: Scene): Colours {
+export function coloursFor(host: HTMLElement, scene: ShaderSceneSource): Colours {
   const colours = readColours(host, scene.colours);
   const pageIsDark = document.documentElement.getAttribute("data-theme") === "dark";
   if (scene.mode === "dark" && !pageIsDark) {
@@ -93,40 +93,55 @@ function drawGlyphs(ramp: string, font: string) {
   return { strip, count: glyphs.length };
 }
 
-function compile(gl: WebGL2RenderingContext, type: number, source: string) {
+/** A float uniform and where its value is read from. */
+type FloatSetter = [WebGLUniformLocation | null, (values: Values) => number];
+
+/** Where a compiler or linker log goes; the console by default. */
+type Report = (log: string) => void;
+
+function compile(gl: WebGL2RenderingContext, type: number, source: string, report: Report) {
   const shader = gl.createShader(type);
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.warn(gl.getShaderInfoLog(shader));
+    report(gl.getShaderInfoLog(shader) ?? "");
     gl.deleteShader(shader);
     return null;
   }
   return shader;
 }
 
-/** The value a uniform takes from a values object. */
-function valueOf(values: Values, passes: Pass[], name: string): number {
-  for (const pass of passes) {
-    const prefix = `u_${pass.id}_`;
-    if (!name.startsWith(prefix)) continue;
-    const state = values.passes[pass.id];
-    const key = name.slice(prefix.length);
-    if (key === "on") return state?.on ? 1 : 0;
-    return state?.params[key] ?? 0;
-  }
-  return values.scene[name.slice(2)] ?? 0;
-}
-
-export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes: Pass[]) {
-  const vs = compile(gl, gl.VERTEX_SHADER, VERTEX);
-  const fs = compile(gl, gl.FRAGMENT_SHADER, assemble(scene, passes));
+/**
+ * Compiles a scene with the passes. A scene that fails to compile or link
+ * hands its log to `report` and returns null with nothing left on the
+ * context; the log's line numbers are the scene's own (assemble.ts).
+ */
+export function createRenderer(
+  gl: WebGL2RenderingContext,
+  scene: ShaderSceneSource,
+  passes: Pass[],
+  report: Report = (log) => console.warn(log)
+) {
+  const vs = compile(gl, gl.VERTEX_SHADER, VERTEX, report);
+  const fs = compile(gl, gl.FRAGMENT_SHADER, assemble(scene, passes), report);
   const program = gl.createProgram();
-  if (!vs || !fs || !program) return null;
+  const discard = () => {
+    gl.deleteProgram(program);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+    return null;
+  };
+  if (!vs || !fs || !program) return discard();
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
   gl.linkProgram(program);
+  /* A program that compiled can still fail to link, and one that did would
+     draw nothing while every call succeeded. */
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    report(gl.getProgramInfoLog(program) ?? "");
+    return discard();
+  }
   gl.useProgram(program);
   const vao = gl.createVertexArray();
   gl.bindVertexArray(vao);
@@ -140,7 +155,22 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
   const uCols = at("u_col");
   const uRatio = at("u_ratio");
   const uGlyphCount = at("u_glyphCount");
-  const floats = uniformNames(scene, passes).map((name) => [name, at(name)] as const);
+  /* One setter per float uniform, each knowing where its value lives, so a
+     scene's key is never mistaken for a pass's setting by its name. */
+  const floats: FloatSetter[] = [
+    ...scene.params.map(
+      (param): FloatSetter => [at(`u_${param.key}`), (values) => values.scene[param.key] ?? 0]
+    ),
+    ...passes.flatMap((pass): FloatSetter[] => [
+      [at(`u_${pass.id}_on`), (values) => (values.passes[pass.id]?.on ? 1 : 0)],
+      ...pass.params.map(
+        (param): FloatSetter => [
+          at(`u_${pass.id}_${param.key}`),
+          (values) => values.passes[pass.id]?.params[param.key] ?? 0,
+        ]
+      ),
+    ]),
+  ];
   const glyphTexture = scene.glyphs ? gl.createTexture() : null;
   let glyphFont = "";
 
@@ -173,7 +203,7 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
       gl.uniform2f(uSize, width, height);
       gl.uniform1f(uRatio, ratio);
       gl.uniform1f(uTime, time);
-      for (const [name, location] of floats) gl.uniform1f(location, valueOf(values, passes, name));
+      for (const [location, read] of floats) gl.uniform1f(location, read(values));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     },
     dispose() {
@@ -193,7 +223,7 @@ export function createRenderer(gl: WebGL2RenderingContext, scene: Scene, passes:
  */
 export function bakeThumbnails(
   host: HTMLElement,
-  jobs: { scene: Scene; values: Values }[],
+  jobs: { scene: ShaderSceneSource; values: Values }[],
   passes: Pass[],
   width: number,
   height: number

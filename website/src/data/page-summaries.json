@@ -274,6 +274,52 @@
         }
       ]
     },
+    "/docs/shaders": {
+      "title": "Shaders",
+      "text": "How to paint a WebGL scene of your own with Shader scene: the GLSL it needs, the colours and helpers it is handed, and the passes over it.",
+      "chips": [
+        {
+          "id": "own",
+          "label": "How do I write my own scene?",
+          "prompt": "How do I write a shader scene of my own and pass it to the Shader scene component?"
+        },
+        {
+          "id": "gets",
+          "label": "What does my GLSL get?",
+          "prompt": "What uniforms and helper functions does a custom shader scene get?"
+        }
+      ],
+      "starters": [
+        {
+          "id": "own",
+          "label": "How do I write my own scene?"
+        },
+        {
+          "id": "gets",
+          "label": "What does my GLSL get?"
+        },
+        {
+          "id": "colours",
+          "label": "How does a scene get colours?"
+        },
+        {
+          "id": "block",
+          "label": "Is there a starter scene?"
+        },
+        {
+          "id": "errors",
+          "label": "Why is my scene blank?"
+        },
+        {
+          "id": "light",
+          "label": "Does it work in light mode?"
+        },
+        {
+          "id": "passes",
+          "label": "What are the finishing passes?"
+        }
+      ]
+    },
     "/docs/schemas": {
       "title": "Schemas",
       "text": "The component contracts and the design tokens as JSON a tool can check, generated from the source on every build.",

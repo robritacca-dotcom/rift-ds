@@ -93,6 +93,18 @@
       "axis": "x"
     },
     {
+      "label": "shader scene block: a setting's slider over the live scene",
+      "route": "/docs/blocks/shader-scene",
+      "grip": ".ds-slider__input",
+      "axis": "x"
+    },
+    {
+      "label": "shaders guide: a setting's slider over the live scene",
+      "route": "/docs/shaders",
+      "grip": "#try-it .ds-slider__input",
+      "axis": "x"
+    },
+    {
       "label": "site chat: docked widen grip",
       "route": "/overview",
       "ready": ".ds-chat-launcher__fab button",

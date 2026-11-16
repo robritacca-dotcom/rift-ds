@@ -12,7 +12,7 @@ import {
   type BackgroundMode,
   type ShaderParams,
 } from "@/data/shader-background";
-import type { ShaderSceneId, ShaderSceneStatus } from "rift-ds/components/ShaderScene/ShaderScene";
+import type { ShaderSceneStatus } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
 import { backgroundEntry, useSiteBackground } from "@/lib/shaders/background";
 import { useShaderSceneModule } from "@/lib/shaders/lazy-scene";
@@ -244,7 +244,7 @@ export default function BlurBackground() {
 
         {SceneComponent && stagedScene ? (
           <SceneComponent
-            scene={stagedScene.id as ShaderSceneId}
+            scene={stagedScene}
             liveRef={stagedValues}
             onStatusChange={setSceneStatus}
           />

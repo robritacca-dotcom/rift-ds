@@ -3,9 +3,11 @@
 import React from 'react';
 import { MOTION_RENDERER_WATCHDOG_MS } from '../../tokens/motion';
 import { PASSES } from './passes';
+import { warnOnce } from '../../behaviors/devWarning';
+import { sceneProblems } from './assemble';
 import { coloursFor, createRenderer, glyphFontFor } from './renderer';
 import { SCENES } from './scenes';
-import { defaultsFor, type Values } from './types';
+import { defaultsFor, type ShaderSceneSource, type Values } from './types';
 import './ShaderScene.css';
 
 /* At most one drawing-buffer pixel per CSS pixel, unless the scene asks for
@@ -22,7 +24,7 @@ const MAX_PIXEL_RATIO = 1;
    skipped is a whole scene's fill the GPU gives back to the page. */
 const FRAME_MS = 1000 / 30;
 
-/** The scenes ShaderScene paints. */
+/** The scenes the library ships, picked by id. */
 export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy';
 
 /**
@@ -43,11 +45,17 @@ export type ShaderScenePassSetting = {
 
 /** Props owned by ShaderScene itself; everything else falls through to the root. */
 type ShaderSceneOwnProps = {
-  /** The scene to paint: `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, or `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars. */
-  scene?: ShaderSceneId;
+  /**
+   * The scene to paint: one of the library's by id, or a scene of your own as
+   * a `ShaderSceneSource` (its colour roles, its settings and the GLSL that
+   * paints it). The library's are `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, and `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars. A scene of your own is compared by content, so
+   * an object written inline rebuilds nothing until what it says changes.
+   */
+  scene?: ShaderSceneId | ShaderSceneSource;
   /**
    * The scene's settings, merged over its defaults (`SHADER_SCENES` lists each
-   * scene's keys and ranges), so passing one changes one thing. Changing them
+   * library scene's keys and ranges; your own scene declares its own), so
+   * passing one changes one thing. Changing them
    * never rebuilds the GL state.
    */
   params?: Partial<Record<string, number>>;
@@ -76,6 +84,14 @@ type ShaderSceneOwnProps = {
    * decision.
    */
   onStatusChange?: (status: ShaderSceneStatus) => void;
+  /**
+   * Called with the compiler's log when the scene's GLSL fails to compile or
+   * link, for a scene of your own. Its line numbers count from the first
+   * line of the scene's `glsl`, written `1:<line>`. The status becomes
+   * `unavailable` as well, and the log still reaches the console. Replaces
+   * the native `onError` attribute, which a scene's root never fires.
+   */
+  onError?: (message: string) => void;
   /** Additional CSS classes */
   className?: string;
 };
@@ -93,6 +109,11 @@ const DEFAULT_SPEED = 1.6;
  * field's roles (`--color-ambient-*`) read from the live cascade at the
  * scene, so it re-themes with `data-theme`, a preset or any scoped override,
  * and its fades melt into the page ground.
+ *
+ * It paints a scene of your own the same way: pass `scene` a
+ * `ShaderSceneSource` and it gets the same uniforms, noise helpers, passes,
+ * light-mode handling and budget the library's scenes do. A scene that
+ * fails to compile reports `unavailable` and hands its log to `onError`.
  *
  * Every scene but the ocean and the sky is a night scene: it adds light over a dark
  * ground. On a light page each computes its light against a dark ground of
@@ -118,13 +139,42 @@ export function ShaderScene({
   liveRef,
   enabled = true,
   onStatusChange,
+  onError,
   className = '',
   ref,
   ...rest
 }: ShaderSceneProps) {
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-  const definition = SCENES.find((s) => s.id === scene) ?? SCENES[0];
+  /* What the scene says, as a string: an id for one of the library's, the
+     content for one of the caller's. The program is built from this, never
+     from the object's identity, so a scene written inline in a render
+     compiles once and again only when it changes. */
+  const sceneKey = React.useMemo(() => {
+    if (typeof scene === 'string') return scene;
+    const shipped = SCENES.find((s) => s === scene);
+    if (shipped) return shipped.id;
+    return JSON.stringify({
+      colours: scene.colours,
+      mode: scene.mode,
+      glyphs: scene.glyphs,
+      pixelRatio: scene.pixelRatio,
+      params: scene.params.map((param) => ({
+        key: param.key,
+        label: param.label,
+        min: param.min,
+        max: param.max,
+        step: param.step,
+        default: param.default,
+      })),
+      glsl: scene.glsl,
+    });
+  }, [scene]);
+  const custom = sceneKey.startsWith('{');
+  const definition = React.useMemo<ShaderSceneSource>(
+    () => (custom ? JSON.parse(sceneKey) : (SCENES.find((s) => s.id === sceneKey) ?? SCENES[0])),
+    [custom, sceneKey]
+  );
 
   /* The props merged over the defaults, kept in a ref the frame loop reads,
      so a new prop moves the scene without rebuilding the program. */
@@ -176,6 +226,10 @@ export function ShaderScene({
   React.useEffect(() => {
     notify.current?.(status);
   }, [status]);
+  const reportError = React.useRef(onError);
+  React.useEffect(() => {
+    reportError.current = onError;
+  }, [onError]);
 
   const setRef = (node: HTMLDivElement | null) => {
     hostRef.current = node;
@@ -188,7 +242,18 @@ export function ShaderScene({
     const host = hostRef.current;
     const canvas = canvasRef.current;
     const context = canvas?.getContext('webgl2', { antialias: false, alpha: false });
-    const renderer = context ? createRenderer(context, definition, PASSES) : null;
+    /* A scene of the caller's is checked for the mistakes a compiler log
+       would not explain, in development only. */
+    if (host && custom) {
+      const styles = getComputedStyle(host);
+      sceneProblems(definition, PASSES, (property) => styles.getPropertyValue(property).trim() !== '').forEach(warnOnce);
+    }
+    const renderer = context
+      ? createRenderer(context, definition, PASSES, (log) => {
+          console.warn(log);
+          reportError.current?.(log);
+        })
+      : null;
     if (!host || !canvas || !renderer) {
       /* Reported from a frame, not the effect body, so the effect never
          sets state synchronously. */
@@ -297,7 +362,7 @@ export function ShaderScene({
       themeObserver.disconnect();
       renderer.dispose();
     };
-  }, [definition, liveRef, enabled]);
+  }, [definition, custom, liveRef, enabled]);
 
   const classes = ['ds-shader-scene', className].filter(Boolean).join(' ');
 
@@ -312,7 +377,8 @@ export function ShaderScene({
    docs parser names the component after itself (see ShaderField.tsx), and
    so the barrel carries what a host needs to draw controls for a scene. */
 export type {
-  ParamSpec as ShaderSceneParamSpec,
+  ShaderSceneParamSpec,
+  ShaderSceneSource,
   Scene as ShaderSceneDefinition,
   Pass as ShaderScenePass,
   Values as ShaderSceneValues,

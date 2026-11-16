@@ -44,6 +44,7 @@ const PAGE_SECTIONS = [
   { id: "dark-mode", label: "Dark mode" },
   { id: "fonts", label: "Fonts" },
   { id: "icons", label: "Icons" },
+  { id: "shaders", label: "Shaders" },
   { id: "locale", label: "Locale and direction" },
   { id: "money", label: "Money and dates" },
   { id: "shortcuts", label: "Keyboard shortcuts" },
@@ -262,6 +263,19 @@ const [status, setStatus] = useState<ShaderFieldStatus>('pending');
   {status === 'unavailable' && <YourCssFallback />}
   <ShaderField params={{ streak: 0.4 }} onStatusChange={setStatus} />
 </div>`;
+
+const SCENE_SNIPPET = `// The scene prop takes one of the library's by id, or your own.
+<ShaderScene scene="horizon" />
+<ShaderScene scene={myScene} />
+
+// Your own is the colours it reads, its settings and its GLSL.
+const myScene: ShaderSceneSource = {
+  colours: ['--color-ambient-1'],
+  params: [{ key: 'glow', label: 'Glow', min: 0, max: 2, step: 0.01, default: 1 }],
+  glsl: \`vec3 scene(vec2 uv, float t) {
+    return u_ground + u_col[0] * u_glow * fbm(uv * 3.0 + t * 0.1);
+  }\`,
+};`;
 
 const FONT_SNIPPET = `/* The whole type scale chains to one token.
    Load any font (Google Fonts, next/font, self-hosted), then: */
@@ -758,6 +772,18 @@ export default function GetStartedPage() {
                   </p>
                   <CodeBlock code={ICON_SNIPPET} language="css" showCopy />
                   <CodeBlock code={ICON_NODE_SNIPPET} language="tsx" showCopy />
+                </div>
+
+                <div id="shaders" className={styles.subsection}>
+                  <h3 className={styles.subheading}>Shaders</h3>
+                  <p className={styles.sectionNote}>
+                    <Link href="/components/shader-scene" className={styles.inlineLink}>Shader scene</Link>{" "}
+                    paints a WebGL scene behind a page, in the theme&rsquo;s colours. Pick one the
+                    library ships or pass a scene of your own, written in GLSL;{" "}
+                    <Link href="/docs/shaders" className={styles.inlineLink}>Shaders</Link> is the
+                    guide.
+                  </p>
+                  <CodeBlock code={SCENE_SNIPPET} language="tsx" showCopy />
                 </div>
 
                 <div id="locale" className={styles.subsection}>

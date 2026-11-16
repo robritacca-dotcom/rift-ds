@@ -5,8 +5,11 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
+import Link from "next/link";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
+import { emberScene } from "../../../../../src/cli/templates/blocks/components/blocks/emberScene";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
@@ -27,6 +30,22 @@ function Stage({
 
 /* Held at module scope, so a re-render hands the scene the same objects and
    nothing downstream sees a change. */
+const NO_FADES = { fadeTop: { on: false }, fadeBottom: { on: false } };
+
+const OWN_SCENE_SNIPPET = `import { ShaderScene, type ShaderSceneSource } from 'rift-ds';
+
+const ember: ShaderSceneSource = {
+  mode: 'dark',
+  colours: ['--color-ambient-1', '--color-ambient-4'],
+  params: [{ key: 'glow', label: 'Glow', min: 0, max: 2, step: 0.01, default: 1 }],
+  glsl: \`vec3 scene(vec2 uv, float t) {
+    float rise = lobe(uv.y - 0.5 * fbm(uv * 2.4 - vec2(0.0, t * 0.12)), 0.22, 0.5);
+    return u_ground + (u_col[0] + u_col[1]) * rise * u_glow * 0.5;
+  }\`,
+};
+
+<ShaderScene scene={ember} params={{ glow: 1.4 }} onError={console.error} />`;
+
 const TUNED = { crown: 0.52, glow: 1.45, beam: 1.8, ocean: 0.55 };
 const RIFT_PASSES = {
   fadeTop: { on: false },
@@ -205,6 +224,27 @@ export default function ShaderScenePage() {
               <code>data-theme</code> itself, which would hide a preset&rsquo;s
               colours.
             </p>
+          </section>
+
+          {/* A scene of the caller's */}
+          <section className={styles.section}>
+            <SectionTitle title="Your own scene" />
+            <p className={styles.demoText}>
+              <code>scene</code> also takes a scene of your own: the colours it
+              reads, its settings and the GLSL that paints it. It gets what
+              the library&rsquo;s scenes get, the theme&rsquo;s colours, the
+              noise helpers, the passes, light mode and the same budget, and
+              it is compared by what it says, so an object written inline
+              compiles once. A scene that fails to compile reports{" "}
+              <code>unavailable</code> and hands the compiler&rsquo;s log to{" "}
+              <code>onError</code>, numbered from your own first line.{" "}
+              <Link href="/docs/shaders" className={styles.inlineLink}>Shaders</Link>{" "}
+              is the guide to writing one.
+            </p>
+            <Stage caption="scene={ember}">
+              <ShaderScene scene={emberScene} passes={NO_FADES} />
+            </Stage>
+            <CodeBlock code={OWN_SCENE_SNIPPET} language="tsx" showCopy />
           </section>
 
           {/* Live tuning */}

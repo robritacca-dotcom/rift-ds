@@ -176,6 +176,7 @@ export const AGENT_SKILLS = [
   { role: 'library', name: SKILL_NAME },
   { role: 'apply-theme', name: 'rift-apply-theme' },
   { role: 'style-audit', name: 'rift-style-audit' },
+  { role: 'shader-scene', name: 'rift-shader-scene' },
 ];
 
 /** The package's bin name (the `npx` entry). */

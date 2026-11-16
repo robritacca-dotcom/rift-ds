@@ -10,7 +10,7 @@
  */
 
 import type React from "react";
-import { SHADER_SCENES, ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
+import { SHADER_SCENES, ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
 import { useStagedFieldParams, useStagedSceneId, useStagedValues } from "@/lib/shaders/staged";
 
 export default function StagedShader({
@@ -29,7 +29,7 @@ export default function StagedShader({
   if (!scene) return <>{field(params)}</>;
   return (
     <div className={className}>
-      <ShaderScene scene={scene.id as ShaderSceneId} liveRef={values} />
+      <ShaderScene scene={scene} liveRef={values} />
     </div>
   );
 }

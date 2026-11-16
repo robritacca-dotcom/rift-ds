@@ -34,6 +34,17 @@
         "app/sign-in/page.tsx",
         "app/sign-in/page.module.css"
       ]
+    },
+    {
+      "name": "shader-scene",
+      "label": "Shader scene",
+      "description": "A shader scene of your own on a stage, written in GLSL from the theme's colour roles, with a slider for each setting it declares.",
+      "route": "/shader",
+      "files": [
+        "components/blocks/emberScene.ts",
+        "app/shader/page.tsx",
+        "app/shader/page.module.css"
+      ]
     }
   ]
 }

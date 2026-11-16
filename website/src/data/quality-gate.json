@@ -108,6 +108,7 @@
 
     "validate-shader-background": { "group": "tokens", "text": "The background config sits inside the tuner's ranges, and its blob colours exist." },
     "validate-site-backgrounds": { "group": "tokens", "text": "Every site background names a scene the library ships, with its tuning inside the scene's ranges and its colour roles in the token registry." },
+    "validate-shader-contract": { "group": "tokens", "text": "The uniforms and helpers a shader scene is documented to get are the ones the engine hands it." },
     "validate-single-background-mount": { "group": "tokens", "text": "BlurBackground is mounted exactly once, in the root layout." },
     "validate-token-references": { "group": "tokens", "text": "Semantic colours point at primitives through var(), never a hex value." },
     "validate-token-layers": { "group": "tokens", "text": "Every base token sits in the rift.tokens cascade layer, so a consumer's own CSS outranks it." },

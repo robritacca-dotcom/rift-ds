@@ -5,7 +5,7 @@
  * Builds the consumer agent skills: the folders a consumer of the package
  * drops into their own .claude/skills/ so their coding agent knows the
  * library, can restyle existing screens onto it, and can audit styles
- * against its tokens. Served from website/public/skill/<name>/ beside a
+ * against its tokens, and can write a shader scene for ShaderScene. Served from website/public/skill/<name>/ beside a
  * manifest.json that lists every skill and its files (the blueprints
  * precedent: generated, tracked, drift-guarded), advertised in llms.txt
  * and on the get-started page.
@@ -70,6 +70,7 @@ import { dirname, join } from 'node:path';
 import { chatRegistry, registry, repoRoot } from './component-docgen.mjs';
 import { assembleComponentApi } from './generate-component-api.mjs';
 import { isEntryScript } from './lib/report.mjs';
+import { parsePasses } from './lib/shader-sources.mjs';
 import { siteUrl } from './generate-component-md.mjs';
 import { CATEGORY_PREFIXES } from './generate-token-registry.mjs';
 import {
@@ -167,6 +168,7 @@ const SUMMARIES = {
     'Install, theming and dark mode rules, the component catalogue and the token reference.',
   'apply-theme': 'Restyles existing screens onto the tokens and components.',
   'style-audit': "Audits a project's styles for hardcoded values that should be tokens.",
+  'shader-scene': 'Writes a WebGL shader scene of your own for the Shader scene component.',
 };
 
 /** One markdown table cell: pipes escaped. */
@@ -555,6 +557,121 @@ ${catalogSections.join('\n\n')}
     '',
   ].join('\n');
 
+  /* The shader-scene skill. What a scene's GLSL is handed comes from the
+     library's one record of it (contract.json, held to the engine by
+     validate-shader-contract.mjs), the passes from passes.ts, and the
+     worked scene from the file the shader-scene block ships, so the skill
+     teaches exactly what the engine does and the scaffold writes. */
+  const sceneSkill = skillName('shader-scene');
+  const shaderDir = join(repoRoot, 'src', 'components', 'ShaderScene');
+  const contract = JSON.parse(readFileSync(join(shaderDir, 'contract.json'), 'utf8'));
+  const passes = parsePasses();
+  const starterSource = readFileSync(
+    join(repoRoot, 'src', 'cli', 'templates', 'blocks', 'components', 'blocks', 'emberScene.ts'),
+    'utf8'
+  ).replace(/\r\n/g, '\n');
+  const starterAt = starterSource.indexOf('import type');
+  if (starterAt < 0) {
+    throw new Error('generate-agent-skill.mjs: the shader-scene block\'s scene file no longer opens its code with its type import; update the slice here.');
+  }
+  const starterScene = starterSource.slice(starterAt).trim();
+  const blocksRegistry = JSON.parse(
+    readFileSync(join(repoRoot, 'src', 'cli', 'templates', 'blocks', 'registry.json'), 'utf8')
+  );
+  const shaderBlock = blocksRegistry.blocks.find((block) => block.name === 'shader-scene');
+  if (!shaderBlock) {
+    throw new Error('generate-agent-skill.mjs: the blocks registry has no "shader-scene" block for the shader skill to name.');
+  }
+  const sceneMd = [
+    '---',
+    `name: ${sceneSkill}`,
+    `description: Write a WebGL shader scene of your own for the ${PACKAGE_NAME} ShaderScene component, in GLSL, reading the theme's colour roles. Use when asked to make a shader, a shader background, an animated or generative background, a custom scene, or to change one the project already has.`,
+    '---',
+    '',
+    `# Writing a shader scene for ${PACKAGE_NAME}`,
+    '',
+    `Generated from the library's registries at version ${PACKAGE_VERSION}. ${component('ShaderScene')} paints a WebGL2 scene behind a page. Its ${c('scene')} prop takes the id of one the library ships or a scene of the project's own, a ${c('ShaderSceneSource')}. You write that source. The guide for people is ${origin}/docs/shaders, and the component's contract is ${origin}/components/shader-scene.md.`,
+    '',
+    '## Before you write one',
+    '',
+    `1. Check whether a shipped scene already fits. ${c('SHADER_SCENES')}, exported beside the component, lists every one with its settings, and ${origin}/components/shader-scene shows them. Picking one is ${c('<ShaderScene scene="horizon" />')}.`,
+    `2. In a Next.js app router project with no scene yet, start from the block: ${c(`npx ${BIN_NAME} init block ${shaderBlock.name}`)} writes a scene file and a page that stages it with a slider for each setting. It never overwrites a file. Then edit the scene it wrote.`,
+    '3. Otherwise write the scene in a file of its own, as below.',
+    '',
+    '## A scene',
+    '',
+    'A scene is three things: the colours it reads, its settings, and the GLSL that paints it. This is the one the block writes.',
+    '',
+    '```ts',
+    starterScene,
+    '```',
+    '',
+    'Use it by passing the object:',
+    '',
+    '```tsx',
+    `import { ShaderScene } from '${PACKAGE_NAME}/components/ShaderScene/ShaderScene';`,
+    '',
+    "<div style={{ position: 'relative', overflow: 'hidden', height: 360 }}>",
+    '  <ShaderScene scene={emberScene} params={{ glow: 1.4 }} onError={console.error} />',
+    '</div>',
+    '```',
+    '',
+    `The scene fills its positioned ancestor, so the ancestor places and clips it. It takes no pointer events and is hidden from assistive tech: it is scenery, and content goes over it. The source is compared by what it says, so an object written inline compiles once.`,
+    '',
+    '## What the GLSL gets',
+    '',
+    `Write one function, ${c(contract.entry)}, in ${contract.glsl}. ${contract.entryDescription} Everything below is declared before your code, so call it by name. Never declare a uniform yourself and never write ${c('main')}, ${c('#version')} or a ${c('precision')} line.`,
+    '',
+    '| Uniform | Type | What it holds |',
+    '|---|---|---|',
+    ...contract.uniforms.map(
+      (uniform) =>
+        `| ${c(uniform.name)} | ${c(uniform.type)} | ${cell(uniform.description)}${uniform.when ? ` Only for a scene that sets ${c(uniform.when)}.` : ''} |`
+    ),
+    '',
+    `Each entry in ${c('params')} also arrives as ${c(contract.paramUniform)}.`,
+    '',
+    '| Function | What it gives |',
+    '|---|---|',
+    ...contract.helpers.map((helper) => `| ${c(helper.signature)} | ${cell(helper.description)} |`),
+    '',
+    '## Rules',
+    '',
+    `- **Return the ground plus light.** End with ${c('return u_ground + light;')} in linear colour. The fades, the grain and light mode all work from that sum, and a scene that returns a colour of its own cuts a hard box into the page.`,
+    `- **Name colour roles, never values.** No ${c('vec3(1.0, 0.4, 0.1)')} for a colour. List custom properties in ${c('colours')} and read them as ${c('u_col[0]')}, ${c('u_col[1]')} and so on, in that order, ${contract.maxColours} at most. The ambient roles, ${token('--color-ambient-1')} onward, are made for this and follow the theme, the colour mode and any preset. A custom property of the project's own works too. Numbers that shape light (a falloff, a weight) are fine as literals.`,
+    `- **Correct the aspect yourself.** ${c('uv')} is 0 to 1 on both axes, so a circle drawn in it is an ellipse on a wide stage. Start with ${c('float aspect = u_size.x / u_size.y;')} and scale x by it.`,
+    `- **A param key is a GLSL identifier** and must not repeat a uniform in the table (so not ${c('time')}, ${c('size')}, ${c('ground')}, ${c('page')} or ${c('ratio')}) or start with a pass's name and an underscore.`,
+    `- **Say ${c("mode: 'dark'")} for a scene that only adds light**, which is most of them. On a light page the component then lays that light on as a pale tint. A scene that paints both modes leaves it out and reads the ground: ${c('float day = smoothstep(0.1, 0.45, dot(u_ground, vec3(0.2126, 0.7152, 0.0722)));')} is 0 on a dark ground and 1 on a light one.`,
+    `- **Keep a pixel cheap.** The component holds the frame rate and the resolution, so the cost left is yours. ${c('fbm')} is four noise lookups; a dozen calls a pixel is slow on a laptop across a full-width band. Loops need constant bounds.`,
+    `- **Raise ${c('pixelRatio')} only for fine detail** (type, points), to 2, and multiply anything sized in CSS pixels by ${c('u_ratio')}. Soft light does not need it.`,
+    `- **Move with ${c('t')}, slowly.** A background drifts on cycles of tens of seconds. Reduced motion holds ${c('t')} still for you, so never read a clock of your own.`,
+    `- **Hold the scene at module scope** when it does not change, and set values through ${c('params')}, which compiles nothing. For sliders, write to a ref and pass it as ${c('liveRef')}, so a drag renders nothing.`,
+    '',
+    '## The finishing passes',
+    '',
+    `These run over every scene, the project's included, each switched and tuned through the ${c('passes')} prop, as in ${c("passes={{ fadeTop: { on: false }, grain: { params: { amount: 0.1 } } }}")}. The fades melt the scene into the page at its top and bottom; turn them off for a scene in a framed stage. A project cannot add a pass of its own.`,
+    '',
+    '| Pass | What it does | By default | Settings |',
+    '|---|---|---|---|',
+    ...passes.map(
+      (pass) =>
+        `| ${c(pass.id)} | ${cell(pass.label)} | ${pass.on ? 'On' : 'Off'} | ${pass.params.map((param) => `${c(param.key)} (${param.min} to ${param.max})`).join(', ')} |`
+    ),
+    '',
+    '## Check your work',
+    '',
+    `1. Pass ${c('onError')} while you work. A scene that fails to compile paints nothing, reports ${c('unavailable')} through ${c('onStatusChange')} and ${c('data-status')}, and hands over the compiler's log. Its line numbers count from the first line of your ${c('glsl')}, written ${c('1:<line>')}.`,
+    '2. Read the browser console in development: a key that is not an identifier, a uniform declared twice, too many colours and a colour with no value are each warned about by name.',
+    `3. Look at it in light and dark (${c('data-theme')} on the root element), and in a preset if the project uses one. A scene that is right in one mode and a grey block in the other is missing ${c("mode: 'dark'")} or is not adding to ${c('u_ground')}.`,
+    '4. Look at it on a wide stage and a narrow one. A shape that stretches needs the aspect correction.',
+    `5. Leave a fallback. Where WebGL2 cannot run the scene stays empty and whatever sits under it shows, so the ancestor needs a background of its own, from a token.`,
+    '',
+    '## Report',
+    '',
+    'Say where the scene file is, which colour roles it reads, the settings it declares with their ranges, which passes you turned off and why, and what you checked in the browser and what you could not.',
+    '',
+  ].join('\n');
+
   const built = {
     library: [
       { path: 'SKILL.md', content: skillMd },
@@ -563,6 +680,7 @@ ${catalogSections.join('\n\n')}
     ],
     'apply-theme': [{ path: 'SKILL.md', content: applyMd }],
     'style-audit': [{ path: 'SKILL.md', content: auditMd }],
+    'shader-scene': [{ path: 'SKILL.md', content: sceneMd }],
   };
 
   // The table and the builders must agree in both directions.

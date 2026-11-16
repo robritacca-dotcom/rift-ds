@@ -36,10 +36,10 @@
  */
 import { fromRoot, read as readText } from './lib/fs.mjs';
 import { failStep, finish } from './lib/report.mjs';
+import { parsePasses, passesPath } from './lib/shader-sources.mjs';
 
 const dataPath = fromRoot('website', 'src', 'data', 'site-backgrounds.json');
 const scenesPath = fromRoot('src', 'components', 'ShaderScene', 'scenes.ts');
-const passesPath = fromRoot('src', 'components', 'ShaderScene', 'passes.ts');
 const tokenRegistryPath = fromRoot('src', 'tokens', 'registry.json');
 
 const DESCRIPTION_MAX = 40;
@@ -78,18 +78,11 @@ for (const block of scenesSource.split(/export const \w+: Scene = \{/).slice(1))
 }
 if (scenes.size === 0) errors.push(`found no scene declarations in ${scenesPath}`);
 
-/* The passes, the same way: `{ id: "...", ..., params: [{ key, min, max }] }`. */
+/* The passes, the same way, through the parser the shader scripts share. */
 const passesSource = read(passesPath, 'passes.ts');
-const passes = new Map();
-for (const block of passesSource.split(/\n\s*\{\s*\n\s*id:/).slice(1)) {
-  const id = block.match(/^\s*"([^"]+)"/)?.[1];
-  if (!id) continue;
-  const params = new Map();
-  for (const m of block.matchAll(/key:\s*"([^"]+)"[^}]*?min:\s*(-?[\d.]+)[^}]*?max:\s*(-?[\d.]+)/g)) {
-    params.set(m[1], { min: Number(m[2]), max: Number(m[3]) });
-  }
-  passes.set(id, params);
-}
+const passes = new Map(
+  parsePasses(passesSource).map((pass) => [pass.id, new Map(pass.params.map((p) => [p.key, { min: p.min, max: p.max }]))])
+);
 if (passes.size === 0) errors.push(`found no pass declarations in ${passesPath}`);
 
 /* Every token name in the registry, whatever its shape: the names are the

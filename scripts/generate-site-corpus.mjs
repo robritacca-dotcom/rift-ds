@@ -135,8 +135,13 @@ const CHARS_PER_TOKEN = 2.85;
  * against about 55 tokens of headroom. No section doubled: the room had gone
  * to the specs' ordinary growth (the blueprints are half the corpus) and to
  * one log entry a release, so this is the ordinary-growth case again.
+ *
+ * Raised to 160K on 2026-11-17, when the shaders guide (/docs/shaders, how
+ * to write a scene of your own for ShaderScene) took the corpus about 1,500
+ * tokens over from 850 of headroom. A new guide and its spec paragraph are
+ * the growth this corpus exists to carry, and no section doubled.
  */
-const TOKEN_BUDGET = 150_000;
+const TOKEN_BUDGET = 160_000;
 
 /** Normalize CRLF so Windows checkouts generate byte-identical output to CI. */
 const read = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
@@ -413,6 +418,18 @@ const INLINE_VALUES = new Map(Object.entries({
   'TAKEOVER_QUERY.replace(/[()]/g, "")': () => chatQueries.TAKEOVER_QUERY.replace(/[()]/g, ''),
   THREADS_RAIL_MIN_WIDTH: () => moduleConstant(join(repoRoot, 'src', 'chat', 'queries.ts'), 'THREADS_RAIL_MIN_WIDTH'),
   ASIDE_RAIL_MIN_WIDTH: () => moduleConstant(join(repoRoot, 'src', 'chat', 'queries.ts'), 'ASIDE_RAIL_MIN_WIDTH'),
+  // The shader contract, read where /docs/shaders reads it (@/data/shader-contract).
+  ...Object.fromEntries(
+    [
+      ['SHADER_ENTRY', 'entry'],
+      ['SHADER_ENTRY_DESCRIPTION', 'entryDescription'],
+      ['SHADER_GLSL_VERSION', 'glsl'],
+      ['SHADER_PARAM_UNIFORM', 'paramUniform'],
+    ].map(([name, key]) => [
+      name,
+      () => jsonOf(join(repoRoot, 'src', 'components', 'ShaderScene', 'contract.json'))[key],
+    ])
+  ),
   SUGGESTION_MAX_CHARS: () => moduleConstant(join(repoRoot, 'src', 'chat', 'suggestions.ts'), 'SUGGESTION_MAX_CHARS'),
   ARTIFACT_CARD_KIND: () => moduleConstant(join(repoRoot, 'src', 'chat', 'types.ts'), 'ARTIFACT_CARD_KIND'),
   'firstRelease.version': () => releaseLog().releases.at(-1).version,
@@ -1146,6 +1163,8 @@ const EXCLUDED_ROUTES = new Map([
     'the dashboard block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/sign-in',
     'the sign-in block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
+  ['/docs/blocks/shader-scene',
+    'the shader-scene block rendered full screen from the file the init bin ships: a starter scene and its sliders; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry, and writing a scene is the subject of /docs/shaders'],
   ['/templates/landing-page',
     'the landing page template rendered full viewport — its prose is a fictional payments product\'s marketing page; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
 ]);

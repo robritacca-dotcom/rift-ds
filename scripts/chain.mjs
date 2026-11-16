@@ -88,6 +88,7 @@ export const CHAIN = [
   ['validate-token-values', 'build'],
   ['validate-shader-background', 'build'],
   ['validate-site-backgrounds'],
+  ['validate-shader-contract', 'build'],
   ['validate-single-background-mount', 'build'],
   ['validate-analytics-events'],
   ['validate-token-references'],

@@ -29,7 +29,7 @@ import StageToolbar from "@/components/StageToolbar/StageToolbar";
 import { HiddenBackground } from "@/components/BlurBackground/BlurBackground";
 import DotBackground from "@/components/DotBackground/DotBackground";
 import { MOTION_ANNOUNCE_DEBOUNCE_MS } from "rift-ds/tokens/motion";
-import { ShaderScene, type ShaderSceneId } from "rift-ds/components/ShaderScene/ShaderScene";
+import { ShaderScene } from "rift-ds/components/ShaderScene/ShaderScene";
 import {
   DEFAULT_TEMPLATE as DEFAULT_SHADER,
   sceneOf,
@@ -1452,7 +1452,7 @@ export default function PlaygroundPage() {
   const stagedShader = () =>
     shaderTemplate && !shaderIsField ? (
       <ShaderScene
-        scene={shaderTemplate.sceneId as ShaderSceneId}
+        scene={sceneOf(shaderTemplate)}
         liveRef={shaderValuesRef}
       />
     ) : (

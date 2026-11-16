@@ -1,5 +1,36 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ShaderScene } from './ShaderScene';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { Button } from '../Button/Button';
+import { ShaderScene, type ShaderSceneSource } from './ShaderScene';
+
+/**
+ * A scene written outside the library, the way a consumer writes one: the
+ * colour roles it reads, two settings, and the GLSL that paints it from the
+ * uniforms and noise helpers every scene is handed.
+ */
+const ember: ShaderSceneSource = {
+  mode: 'dark',
+  colours: ['--color-ambient-1', '--color-ambient-4'],
+  params: [
+    { key: 'glow', label: 'Glow', min: 0, max: 2, step: 0.01, default: 1 },
+    { key: 'height', label: 'Height', min: 0.1, max: 1, step: 0.01, default: 0.55 },
+  ],
+  glsl: /* glsl */ `
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
+  float drift = fbm(vec2(p.x * 2.4, p.y * 1.4 - t * 0.12));
+  float rise = lobe(uv.y - u_height * drift, 0.22, 0.5);
+  float fine = fbm(p * 7.0 - vec2(0.0, t * 0.3));
+  vec3 light = (u_col[0] + u_col[1] * fine * 1.6) * rise * u_glow * 0.5;
+  return u_ground + light;
+}
+`,
+};
+
+/** Whether this browser can run a scene at all; a play function asserts less where it cannot. */
+const hasWebGL2 = () => Boolean(document.createElement('canvas').getContext('webgl2'));
 
 /**
  * The scene fills its positioned ancestor, so every story provides one: a
@@ -141,4 +172,82 @@ export const WithPasses: Story = {
 /** Speed 0 holds the scene still, as reduced motion does. */
 export const Still: Story = {
   args: { speed: 0 },
+};
+
+/** A scene of your own: `scene` takes a source in place of an id, and it gets the same passes, light-mode handling and budget. */
+export const CustomScene: Story = {
+  args: {
+    scene: ember,
+    passes: { fadeTop: { on: false } },
+  },
+};
+
+/**
+ * A scene written inline is compared by content, so a host that renders
+ * again with a new object rebuilds nothing: the program is linked once.
+ */
+export const InlineScene: Story = {
+  render: (args) => {
+    const Host = () => {
+      const [renders, setRenders] = useState(0);
+      return (
+        <div style={{ display: 'grid', gap: 'var(--gap-300)', justifyItems: 'start' }}>
+          <Stage>
+            <ShaderScene {...args} scene={{ ...ember }} data-testid="scene" data-renders={renders} />
+          </Stage>
+          <Button variant="secondary" onClick={() => setRenders((count) => count + 1)}>
+            Render again
+          </Button>
+        </div>
+      );
+    };
+    return <Host />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const scene = canvas.getByTestId('scene');
+    if (!hasWebGL2()) {
+      await waitFor(() => expect(scene).toHaveAttribute('data-status', 'unavailable'));
+      return;
+    }
+    await waitFor(() => expect(scene).toHaveAttribute('data-status', 'active'));
+    const original = WebGL2RenderingContext.prototype.linkProgram;
+    let links = 0;
+    WebGL2RenderingContext.prototype.linkProgram = function (program) {
+      links += 1;
+      return original.call(this, program);
+    };
+    try {
+      const again = canvas.getByRole('button', { name: 'Render again' });
+      await userEvent.click(again);
+      await userEvent.click(again);
+      await waitFor(() => expect(scene).toHaveAttribute('data-renders', '2'));
+      expect(links).toBe(0);
+    } finally {
+      WebGL2RenderingContext.prototype.linkProgram = original;
+    }
+  },
+};
+
+/**
+ * A scene whose GLSL does not compile reports `unavailable` and hands the
+ * compiler's log to `onError`, numbered from the scene's own first line.
+ */
+export const BrokenScene: Story = {
+  args: {
+    scene: {
+      colours: [],
+      params: [],
+      glsl: 'vec3 scene(vec2 uv, float t) {\n  return missing;\n}',
+    },
+    onError: fn(),
+    'data-testid': 'scene',
+  } as Story['args'],
+  play: async ({ args, canvasElement }) => {
+    const scene = within(canvasElement).getByTestId('scene');
+    await waitFor(() => expect(scene).toHaveAttribute('data-status', 'unavailable'));
+    if (!hasWebGL2()) return;
+    await waitFor(() => expect(args.onError).toHaveBeenCalled());
+    expect(args.onError).toHaveBeenCalledWith(expect.stringContaining('1:2'));
+  },
 };

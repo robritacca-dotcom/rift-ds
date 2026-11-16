@@ -1,0 +1,27 @@
+{
+  "$comment": "What a scene's GLSL is handed and must define: the one home of the authoring contract. The docs guide, the consumer skill and the maintainer skill read or point at this file, and scripts/validate-shader-contract.mjs holds it to assemble.ts, common.glsl.ts and types.ts in both directions. The library never imports it.",
+  "glsl": "GLSL ES 3.00 (WebGL2)",
+  "entry": "vec3 scene(vec2 uv, float t)",
+  "entryDescription": "Returns the pixel's colour in linear RGB over the ground. uv runs 0 to 1 on both axes from the bottom left, with no aspect correction; t is the scene's clock in seconds.",
+  "maxColours": 8,
+  "uniforms": [
+    { "name": "u_size", "type": "vec2", "description": "The drawing buffer's size in pixels. Divide its x by its y for the aspect ratio." },
+    { "name": "u_time", "type": "float", "description": "The scene's clock in seconds, the same value as t. It advances with speed and holds still under reduced motion." },
+    { "name": "u_ground", "type": "vec3", "description": "The ground the scene paints over, in linear RGB: the page ground, or a near-black of its own for a dark scene on a light page. Add light to it and return the sum." },
+    { "name": "u_page", "type": "vec3", "description": "The page ground itself, which the fades melt into." },
+    { "name": "u_lightMode", "type": "float", "description": "1 when a dark scene is being laid onto a light page as a pale tint, otherwise 0." },
+    { "name": "u_ratio", "type": "float", "description": "Drawing-buffer pixels per CSS pixel. Multiply a size meant in CSS pixels by it." },
+    { "name": "u_col", "type": "vec3[]", "description": "The scene's colours in linear RGB, in the order its colours list names them. Unused slots are black." },
+    { "name": "u_glyphs", "type": "sampler2D", "when": "glyphs", "description": "The scene's character ramp as one strip, a cell per character, white on black. Read its red channel." },
+    { "name": "u_glyphCount", "type": "float", "when": "glyphs", "description": "How many characters the ramp holds." }
+  ],
+  "paramUniform": "uniform float u_<key>",
+  "passUniforms": ["uniform float u_<pass>_on", "uniform float u_<pass>_<key>"],
+  "helpers": [
+    { "signature": "uint ihash(uvec2 p)", "description": "An integer hash with no visible pattern, the base of the others." },
+    { "signature": "float rnd(ivec2 p)", "description": "A random number from 0 to 1 for an integer cell." },
+    { "signature": "float vnoise(vec2 p)", "description": "Smooth value noise from 0 to 1." },
+    { "signature": "float fbm(vec2 p)", "description": "Four octaves of value noise, for cloud, smoke and water." },
+    { "signature": "float lobe(float d, float above, float below)", "description": "A soft falloff around zero with one width above it and another below, for a glow with a hard side and a soft one." }
+  ]
+}

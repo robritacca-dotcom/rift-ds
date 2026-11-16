@@ -78,6 +78,11 @@ const CONDENSED_ROUTES = new Map([
     'content-design.md is carried in full; the shortfall is its worked ' +
     'before/after examples, which read as sentence fragments once the markdown ' +
     'table around them is stripped'],
+  ['/docs/shaders',
+    'the shortfall is the worked scene\'s code (written out from the file the ' +
+    'shader-scene block ships) and the rows of the uniform, helper and pass ' +
+    'tables, printed from the shader contract and the passes; the corpus carries ' +
+    'every paragraph of the guide, and the consumer skill carries the tables for agents'],
   ['/docs/get-started',
     'the shortfall is the install and import code samples, which the page shows ' +
     'as code blocks — the chat links the page rather than reciting snippets'],

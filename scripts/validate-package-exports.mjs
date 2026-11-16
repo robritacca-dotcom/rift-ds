@@ -248,7 +248,7 @@ const INTERNAL_MODULES = new Map([
   ['src/components/ShaderScene/assemble.ts',
     'builds one fragment shader from a scene and the passes; the component is the public surface, and SHADER_SCENES and SHADER_PASSES are the published shapes it reads'],
   ['src/components/ShaderScene/common.glsl.ts',
-    'the noise, hash and lobe GLSL every scene calls; shader source with no meaning outside the scenes it is compiled into'],
+    'the noise, hash and lobe GLSL every scene calls, a consumer\'s own included; it is compiled into each scene ahead of its GLSL, so an author calls it by name and never imports it'],
   ['src/components/DataTable/editorKinds.ts',
     'the editor kinds DataTable and its cell editors share, with each compact field\'s floor; the table is the public surface, and its `DataTableEditorKind` and `DataTableValue` types are the kinds\' published names'],
 ]);

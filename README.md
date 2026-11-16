@@ -76,7 +76,7 @@ The quickest start is one file: save [AGENTS.md](https://rift-ds.com/AGENTS.md) 
 curl -o AGENTS.md https://rift-ds.com/AGENTS.md
 ```
 
-For the full setup, one command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line. The skills cover the library's rules, moving existing screens onto the tokens and components, and auditing styles against them.
+For the full setup, one command teaches a coding agent the system: it installs the generated agent skills into your project and prints the MCP connect line. The skills cover the library's rules, moving existing screens onto the tokens and components, auditing styles against them, and writing a shader scene of your own.
 
 ```bash
 npx rift-ds init

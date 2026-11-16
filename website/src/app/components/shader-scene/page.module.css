@@ -144,3 +144,9 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.inlineLink {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

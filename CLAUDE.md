@@ -32,6 +32,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Theme presets | `website/src/lib/theme/presets.ts` + `src/tokens/presets/` (generated) | `THEME_PRESETS` | `scripts/validate-generated-files.mjs`, `scripts/validate-preset-stylesheets.mjs`, `scripts/validate-theme-presets.mjs` |
 | Ambient background | `website/src/data/shader-background.json` | `website/src/data/shader-background.ts` | `scripts/validate-shader-background.mjs` |
 | Site backgrounds | `website/src/data/site-backgrounds.json` | `website/src/lib/shaders/background-storage.ts` | `scripts/validate-site-backgrounds.mjs` |
+| Shader scene contract | `src/components/ShaderScene/contract.json` (what a scene's GLSL is handed: the uniforms, the helpers, the entry point) | `website/src/data/shader-contract.ts` | `scripts/validate-shader-contract.mjs` |
 | Dependency graph | `website/src/data/dependency-graph.generated.ts` | `website/src/data/dependency-graph.ts` | `scripts/validate-generated-files.mjs`, `scripts/validate-dependency-graph.mjs` |
 | Site chat corpus | `website/src/data/site-corpus.generated.ts` | same file | `scripts/validate-generated-files.mjs`, `scripts/validate-site-corpus.mjs`, `scripts/validate-chat-coverage.mjs`, `scripts/validate-corpus-coverage.mjs` |
 | Component prop API | `website/src/data/component-api.generated.ts` + the types its props name in `website/src/data/component-types.generated.ts` (server-only) | same files | `scripts/validate-generated-files.mjs`, `scripts/validate-component-api.mjs` |

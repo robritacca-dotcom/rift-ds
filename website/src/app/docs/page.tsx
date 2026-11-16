@@ -108,6 +108,19 @@ export default function DocsPage() {
               </div>
             </TocCard>
 
+            <TocCard disc href="/docs/shaders" title="Shaders">
+              {/* A scene's GLSL: its one function, and the lines under it */}
+              <div className={kit.frame} aria-hidden="true">
+                <code className={kit.code}>{"scene()"}</code>
+                {[44, 30].map((w) => (
+                  <div key={w} className={`${kit.row} ${styles.schemaRow}`}>
+                    <span className={`${kit.bar} ${kit.barStrong}`} style={{ width: "12px" }} />
+                    <span className={kit.bar} style={{ width: `${w}px` }} />
+                  </div>
+                ))}
+              </div>
+            </TocCard>
+
             <TocCard disc href="/docs/schemas" title="Schemas">
               {/* A JSON object: keys and values */}
               <div className={kit.frame} aria-hidden="true">

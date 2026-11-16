@@ -88,6 +88,9 @@ export const MOTION_THREAD_NAMING_DELAY_MS = 1600;
 /** How long ShaderField waits for the browser to restore a lost WebGL context on its own before forcing a restore. A schedule timing. */
 export const MOTION_CONTEXT_RESTORE_WAIT_MS = 700;
 
+/** How often ShaderField and ShaderScene ask whether their colours still match what the tokens resolve to, so a change no attribute announces (a token stylesheet that lands after mount) cannot leave them painting stale colours. A polling schedule, not an animation pace. */
+export const MOTION_SHADER_COLOR_CHECK_MS = 1000;
+
 /** How long a table waits after the last keystroke or range step before it announces the new result or selection count, so typing a search or sweeping Shift+Down speaks once. A schedule timing. */
 export const MOTION_ANNOUNCE_DEBOUNCE_MS = 500;
 

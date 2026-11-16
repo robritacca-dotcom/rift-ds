@@ -126,8 +126,9 @@ type ShaderSceneSource = {
 
 How the scene resolved, the same three states ShaderField reports.
 `pending` while the GL context comes up (bounded by a watchdog), `active`
-once a frame has painted, `unavailable` when it is disabled or WebGL2
-cannot run it.
+once a frame has painted, `unavailable` when it is disabled, WebGL2
+cannot run it or its context is lost (it returns to `active` when the
+context comes back).
 
 ```ts
 type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';

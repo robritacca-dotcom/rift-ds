@@ -2076,7 +2076,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ShaderSceneStatus": {
         "kind": "type",
         "definition": "type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';",
-        "description": "How the scene resolved, the same three states ShaderField reports.\n`pending` while the GL context comes up (bounded by a watchdog), `active`\nonce a frame has painted, `unavailable` when it is disabled or WebGL2\ncannot run it."
+        "description": "How the scene resolved, the same three states ShaderField reports.\n`pending` while the GL context comes up (bounded by a watchdog), `active`\nonce a frame has painted, `unavailable` when it is disabled, WebGL2\ncannot run it or its context is lost (it returns to `active` when the\ncontext comes back)."
       },
       "Values": {
         "kind": "type",

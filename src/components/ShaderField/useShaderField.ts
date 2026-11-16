@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { BLOB_COUNT, fragmentSource, vertexSource } from "./field.glsl";
-import { MOTION_CONTEXT_RESTORE_WAIT_MS, MOTION_SHADER_COLOR_FADE_MS } from '../../tokens/motion';
+import { MOTION_CONTEXT_RESTORE_WAIT_MS, MOTION_SHADER_COLOR_CHECK_MS, MOTION_SHADER_COLOR_FADE_MS } from '../../tokens/motion';
 
 /** The eight tuneable properties of the field. */
 export interface ShaderParams {
@@ -163,6 +163,8 @@ const FRAME_MS_ACTIVE = 1000 / 60;
 const WAKE_IDLE = 0.015;
 /* Colour crossfade on theme change, matching --motion-duration-slow. */
 const COLOR_FADE_MS = MOTION_SHADER_COLOR_FADE_MS;
+/* How often the loop asks whether its colours still match the tokens. */
+const COLOR_CHECK_MS = MOTION_SHADER_COLOR_CHECK_MS;
 
 /* Token colour → linear RGB. Computed custom-property values arrive with the
    var() chain already resolved, so this only needs hex and rgb() forms. */
@@ -352,10 +354,26 @@ export function useShaderField(
     const colorTarget = new Float32Array(BLOB_COUNT * 3);
     let colorFadeT = COLOR_FADE_MS; // done
 
+    /* What the blob tokens resolve to right now, as text, so the loop can
+       ask whether the colours it holds have gone stale. The theme observer
+       below covers every change an attribute on the root announces; this
+       covers the ones nothing announces, such as a token stylesheet that
+       lands after the field mounted. */
+    let colorSignature = "";
+    let colorsChecked = 0;
+    function readSignature() {
+      const style = getComputedStyle(canvas as HTMLCanvasElement);
+      return paramsRef.current.blobs
+        .slice(0, BLOB_COUNT)
+        .map((b) => style.getPropertyValue(b.token).trim())
+        .join("|");
+    }
+
     function readColors(into: Float32Array) {
       // Read from the canvas, not documentElement, so scoped overrides
       // (custom properties written onto an ancestor) apply.
       const style = getComputedStyle(canvas as HTMLCanvasElement);
+      colorSignature = readSignature();
       into.fill(0);
       paramsRef.current.blobs.slice(0, BLOB_COUNT).forEach((b, i) => {
         const parsed = parseColor(style.getPropertyValue(b.token));
@@ -515,6 +533,10 @@ export function useShaderField(
       // Clamp so a backgrounded tab does not lurch on return.
       const dt = Math.min(elapsed, 100);
       lastDraw = now;
+      if (now - colorsChecked >= COLOR_CHECK_MS) {
+        colorsChecked = now;
+        if (readSignature() !== colorSignature) colorsDirty = true;
+      }
       fieldTime += (dt / 1000) * paramsRef.current.speed;
       draw(dt);
     }

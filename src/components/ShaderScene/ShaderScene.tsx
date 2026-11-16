@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MOTION_RENDERER_WATCHDOG_MS } from '../../tokens/motion';
+import { MOTION_RENDERER_WATCHDOG_MS, MOTION_SHADER_COLOR_CHECK_MS } from '../../tokens/motion';
 import { PASSES } from './passes';
 import { warnOnce } from '../../behaviors/devWarning';
 import { sceneProblems } from './assemble';
@@ -23,6 +23,13 @@ const MAX_PIXEL_RATIO = 1;
    tens of seconds, too slowly for 60fps to be visible, and every frame
    skipped is a whole scene's fill the GPU gives back to the page. */
 const FRAME_MS = 1000 / 30;
+/* How often the frame loop asks whether the scene's colours still resolve to
+   what it last uploaded. The theme observer covers every change an attribute
+   on the root announces; this covers the ones nothing announces (a token
+   stylesheet that lands after the scene mounted, a sheet swapped under it),
+   which would otherwise leave the scene painting the old colours, a white
+   band on a dark page, until a reload. */
+const COLOUR_CHECK_MS = MOTION_SHADER_COLOR_CHECK_MS;
 
 /** The scenes the library ships, picked by id. */
 export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy';
@@ -30,8 +37,9 @@ export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' 
 /**
  * How the scene resolved, the same three states ShaderField reports.
  * `pending` while the GL context comes up (bounded by a watchdog), `active`
- * once a frame has painted, `unavailable` when it is disabled or WebGL2
- * cannot run it.
+ * once a frame has painted, `unavailable` when it is disabled, WebGL2
+ * cannot run it or its context is lost (it returns to `active` when the
+ * context comes back).
  */
 export type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';
 
@@ -206,6 +214,9 @@ export function ShaderScene({
      context that never paints, so pending can never be terminal. */
   const [gl, setGl] = React.useState<'pending' | 'failed' | 'painted'>('pending');
   const [gaveUp, setGaveUp] = React.useState(false);
+  /* Bumped when a lost GL context comes back, which rebuilds the renderer:
+     everything made on the old context died with it. */
+  const [restored, setRestored] = React.useState(0);
   React.useEffect(() => {
     if (!enabled || gl !== 'pending') return;
     const timer = window.setTimeout(() => setGaveUp(true), MOTION_RENDERER_WATCHDOG_MS);
@@ -254,16 +265,56 @@ export function ShaderScene({
           reportError.current?.(log);
         })
       : null;
+    /* A context the browser takes back (a GPU reset, a driver update, too
+       many contexts on the page) leaves the canvas blank while every call
+       still succeeds. Report it, so the status stops saying `active` and the
+       caller's fallback shows, and ask for the context back: when it comes,
+       the effect runs again and builds a renderer on it. Listened for on a
+       scene that failed to start too, which may have been handed a context
+       that was already lost. */
+    let lost = false;
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      lost = true;
+      setGl('failed');
+    };
+    const onContextRestored = () => {
+      setGl('pending');
+      setRestored((count) => count + 1);
+    };
+    canvas?.addEventListener('webglcontextlost', onContextLost);
+    canvas?.addEventListener('webglcontextrestored', onContextRestored);
+    const unlisten = () => {
+      canvas?.removeEventListener('webglcontextlost', onContextLost);
+      canvas?.removeEventListener('webglcontextrestored', onContextRestored);
+    };
     if (!host || !canvas || !renderer) {
       /* Reported from a frame, not the effect body, so the effect never
          sets state synchronously. */
       const failed = requestAnimationFrame(() => setGl('failed'));
-      return () => cancelAnimationFrame(failed);
+      return () => {
+        cancelAnimationFrame(failed);
+        unlisten();
+      };
     }
 
+    /* What the scene's colours resolve to at the host right now, as text:
+       cheap to read and compare, so the loop can ask whether an upload has
+       gone stale without paying for a full read. */
+    const colourTokens = ['--color-bg-page-primary', ...definition.colours];
+    const colourSignature = () => {
+      const styles = getComputedStyle(host);
+      return [
+        document.documentElement.getAttribute('data-theme'),
+        ...colourTokens.map((token) => styles.getPropertyValue(token).trim()),
+      ].join('|');
+    };
+    let appliedColours = '';
+    let coloursChecked = 0;
     /* The colours, and for a type scene the face its ramp is drawn in: a
        preset can change both. */
     const applyColours = () => {
+      appliedColours = colourSignature();
       renderer.setColours(coloursFor(host, definition));
       renderer.setGlyphs(glyphFontFor(host));
     };
@@ -291,7 +342,12 @@ export function ShaderScene({
     let painted = false;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
+      if (lost) return;
       if (painted && now - last < FRAME_MS - 1) return;
+      if (now - coloursChecked >= COLOUR_CHECK_MS) {
+        coloursChecked = now;
+        if (colourSignature() !== appliedColours) applyColours();
+      }
       const values = liveRef?.current ?? mergedRef.current;
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
@@ -341,7 +397,7 @@ export function ShaderScene({
     /* A paused scene (scrolled away) still has to fill a box that changed:
        one frame at the time it stopped on, sized and painted together. */
     const sizeObserver = new ResizeObserver(() => {
-      if (frame) return;
+      if (frame || lost) return;
       fit();
       renderer.draw(liveRef?.current ?? mergedRef.current, time, canvas.width, canvas.height, ratio);
     });
@@ -353,16 +409,25 @@ export function ShaderScene({
       attributes: true,
       attributeFilter: ['data-theme', 'data-brand', 'style'],
     });
+    /* A stylesheet that finishes loading after the scene mounted changes
+       what the tokens resolve to and announces it only here: `load` does
+       not bubble, so it is caught on the way down. */
+    const onSheetLoad = (event: Event) => {
+      if (event.target instanceof HTMLLinkElement && colourSignature() !== appliedColours) applyColours();
+    };
+    document.addEventListener('load', onSheetLoad, true);
 
     return () => {
       mounted = false;
+      unlisten();
+      document.removeEventListener('load', onSheetLoad, true);
       stop();
       visibilityObserver?.disconnect();
       sizeObserver.disconnect();
       themeObserver.disconnect();
       renderer.dispose();
     };
-  }, [definition, custom, liveRef, enabled]);
+  }, [definition, custom, liveRef, enabled, restored]);
 
   const classes = ['ds-shader-scene', className].filter(Boolean).join(' ');
 

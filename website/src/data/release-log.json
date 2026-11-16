@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.29.0",
+      "date": "2026-11-16",
+      "title": "Bring your own shader scene, and four new ones",
+      "body": [
+        "Shader scene now paints a scene of your own. Its `scene` prop takes a library id, as before, or a scene you write: the colour roles it reads, its settings and the GLSL that paints it. Yours gets what the library’s scenes get, the theme’s colours, the noise helpers, the finishing passes, light mode and the same frame budget, and an object written inline compiles once. The guide is at /docs/shaders.",
+        "A scene that fails to compile reports `unavailable` and hands the compiler’s log to the new `onError`, numbered from your own first line. `npx rift-ds init block shader-scene` writes a starter scene with a slider for each setting, and `npx rift-ds init` installs a fourth agent skill that teaches a coding agent to write one.",
+        "Four library scenes join the set, `highway`, `ocean`, `sky` and `galaxy`, and Button gains `glass`, which frosts it for a busy ground such as a scene or a photo. Nothing published was renamed or removed, and nothing needs changing to upgrade."
+      ]
+    },
+    {
       "version": "1.28.0",
       "date": "2026-11-14",
       "title": "A keyboard contract for every component, and type-to-find",

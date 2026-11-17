@@ -47,6 +47,11 @@ export default defineConfig({
       })],
       test: {
         name: 'storybook',
+        // The keyboard contract presses one whole pattern per story, across
+        // every component that names it and in both directions. The dialog
+        // pattern takes about 16 seconds, past the browser default of 15, and
+        // a timed-out run leaves its dialog open for the next story to trip on.
+        testTimeout: 30_000,
         browser: {
           enabled: true,
           headless: true,
@@ -71,6 +76,7 @@ export default defineConfig({
       })],
       test: {
         name: 'storybook-rtl',
+        testTimeout: 30_000,
         browser: {
           enabled: true,
           headless: true,

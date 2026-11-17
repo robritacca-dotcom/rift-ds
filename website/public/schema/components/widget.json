@@ -231,6 +231,13 @@
           "description": "Renders the row as a link to this URL."
         },
         {
+          "name": "chevron",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on."
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

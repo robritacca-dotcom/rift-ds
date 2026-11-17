@@ -56,6 +56,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | leading | `ReactNode` | no |  | Leading mark — a StatusDot, a PixelAvatar, an Avatar, a Spinner, an icon. Decorative unless the element names itself. |
 | meta | `ReactNode` | no |  | Trailing fact in the caption face: a date, an amount, a state. |
 | href | `string` | no |  | Renders the row as a link to this URL. |
+| chevron | `boolean` | no |  | A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
 

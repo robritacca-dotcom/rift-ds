@@ -17,6 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | padding | `"none" \| "default" \| "compact"` | no | `'default'` | Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it |
+| bordered | `boolean` | no | `false` | Draws the container border the Widget tile wears, so the panel keeps a visible edge in a theme whose page fill matches the panel's. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | no |  | Panel content |
 

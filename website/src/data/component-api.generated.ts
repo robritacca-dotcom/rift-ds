@@ -948,6 +948,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'default'"
           },
           {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Actions under the description: one or two compact Buttons or a Link that act on what the alert says (retry, review, undo)."
+          },
+          {
             "name": "dismissible",
             "type": "boolean",
             "required": false,
@@ -1656,6 +1662,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "showLegend",
@@ -2552,6 +2564,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'md'"
           },
           {
+            "name": "shape",
+            "type": "\"circle\" | \"square\"",
+            "required": false,
+            "description": "`circle` for a person; `square` for an organisation (a company, a bank, a vendor, an integration): rounded corners on the radius scale, a logo fitted whole rather than cropped, and a building glyph when there is no image or name.",
+            "values": [
+              "circle",
+              "square"
+            ],
+            "defaultValue": "'circle'"
+          },
+          {
             "name": "fill",
             "type": "\"neutral\" | AvatarFill",
             "required": false,
@@ -2873,6 +2896,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "bare",
@@ -4566,6 +4595,33 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Optional rel attribute for links"
           },
           {
+            "name": "badge",
+            "type": "string | number | true",
+            "required": false,
+            "description": "A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number."
+          },
+          {
+            "name": "badgeMax",
+            "type": "number",
+            "required": false,
+            "description": "The highest count the badge spells out; a larger one reads \"99+\". Defaults to 99.",
+            "defaultValue": "99"
+          },
+          {
+            "name": "badgeLabel",
+            "type": "((badge: string | number | true) => string)",
+            "required": false,
+            "description": "Text read after `ariaLabel` while the button carries a badge, given the\nbadge. Defaults to \", new\" for a dot and \", 3 new\" for a count; the\nleading comma and space are part of the text. The tooltip keeps\n`ariaLabel` alone.",
+            "defaultValue": "(badge: number | string | true) => (badge === true ? ', new' : `, ${badge} new`)"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "'en-US'"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -5030,6 +5086,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "350"
           },
           {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Tick formatter for the bar series' axis, such as a currency. Defaults to a short number in the chart's locale."
+          },
+          {
+            "name": "secondaryAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Tick formatter for the line series' axis when `secondaryAxis` draws it, such as a percent. Defaults to a short number in the chart's locale."
+          },
+          {
             "name": "bare",
             "type": "boolean",
             "required": false,
@@ -5148,6 +5216,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Helper or error message displayed below the field"
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "loading",
@@ -6394,10 +6468,22 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
+            "description": "The link component a `link` column's cells and `rowHref` render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
             "typeRefs": [
               "LinkComponent"
             ]
+          },
+          {
+            "name": "rowHref",
+            "type": "((row: R) => string)",
+            "required": false,
+            "description": "Makes each row a link to the address it returns. The row header's content\n(the `rowHeader` column, else the first column shown) becomes the link,\nso a keyboard and a screen reader reach it as one, and a click anywhere\nelse on the row follows it, except on the row's own controls or while\ntext is being selected. A row it returns `undefined` for stays plain. A\nrow header's `render` should not draw a link of its own alongside it."
+          },
+          {
+            "name": "onRowClick",
+            "type": "((row: R) => void)",
+            "required": false,
+            "description": "Makes each row open something in place (a drawer, a dialog) instead of\nnavigating: the row header's content becomes a button that calls it, and\na click anywhere else on the row presses that button, except on the\nrow's own controls. `rowHref` wins on a row both give an action."
           },
           {
             "name": "virtualize",
@@ -7062,6 +7148,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Helper or error message"
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "min",
@@ -7741,6 +7833,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one)."
           },
           {
+            "name": "emphasis",
+            "type": "boolean",
+            "required": false,
+            "description": "Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule."
+          },
+          {
             "name": "children",
             "type": "ReactNode",
             "required": false,
@@ -8398,6 +8496,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Helper or error message"
           },
           {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
+          },
+          {
             "name": "onValueChange",
             "type": "((value: string) => void)",
             "required": false,
@@ -8957,6 +9061,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip\non its number, taking precedence over the today chip. Controlled by the\nconsumer; pair with `onDateClick` to move it."
+          },
+          {
+            "name": "today",
+            "type": "string",
+            "required": false,
+            "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
           },
           {
             "name": "actions",
@@ -11295,6 +11405,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "350"
           },
           {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
+          },
+          {
             "name": "bare",
             "type": "boolean",
             "required": false,
@@ -12782,6 +12898,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Helper or error message displayed below the input"
           },
           {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
+          },
+          {
             "name": "onValueChange",
             "type": "((value: number | null) => void)",
             "required": false,
@@ -12948,6 +13070,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'default'"
           },
           {
+            "name": "bordered",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the container border the Widget tile wears, so the panel keeps a visible edge in a theme whose page fill matches the panel's.",
+            "defaultValue": "false"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -13023,17 +13152,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "innerRadius",
-            "type": "number",
+            "type": "string | number",
             "required": false,
-            "description": "Inner radius for donut style (0 = solid pie)",
+            "description": "Inner radius for a donut (0 for a solid pie): pixels, or a percentage of the room the plot has, such as `'60%'`, so the hole scales with the chart.",
             "defaultValue": "0"
           },
           {
             "name": "outerRadius",
-            "type": "number",
+            "type": "string | number",
             "required": false,
-            "description": "Outer radius",
-            "defaultValue": "140"
+            "description": "Outer radius: pixels, or a percentage of the room the plot has once the header and legend take theirs. Defaults to `'90%'`, so the pie fits any `height` without running into its legend.",
+            "defaultValue": "'90%'"
           },
           {
             "name": "showLegend",
@@ -14607,6 +14736,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "bare",
@@ -16354,6 +16489,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'default'"
           },
           {
+            "name": "icon",
+            "type": "string | ReactNode",
+            "required": false,
+            "description": "A decorative mark in a round tile above the value, naming what the metric is about: a Material Symbol name (string) or a node."
+          },
+          {
+            "name": "caption",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A short note at the far end of the top row, in the caption face: the period the figure covers (\"Last 30 days\"), its source."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Shown after the value, label and delta, such as a Sparkline of the metric's recent history or an AvatarGroup of who it counts."
+          },
+          {
             "name": "locale",
             "type": "string",
             "required": false,
@@ -17172,6 +17325,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -17462,6 +17621,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Helper or error message displayed below"
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "resize",
@@ -19643,6 +19808,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Renders the row as a link to this URL."
           },
           {
+            "name": "chevron",
+            "type": "boolean",
+            "required": false,
+            "description": "A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on."
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -20682,6 +20853,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Render nothing at all: for routes that carry no chrome.\nNote: not the native `hidden` attribute, which keeps an element mounted and only hides it; the launcher unmounts its button and panel, and spreads no native attributes.",
             "defaultValue": "false"
+          },
+          {
+            "name": "fab",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the closed launcher shows its floating button. Defaults to true.\n`false` keeps the panel and drops only the button, for a host that opens\nthe chat from a control of its own, such as an AiButton in its top bar:\nthat control calls `setOpen(true)` from `useChatWidget()` and sets\n`returnFocusRef.current` to itself, so closing the panel hands focus back.",
+            "defaultValue": "true"
           },
           {
             "name": "panelId",

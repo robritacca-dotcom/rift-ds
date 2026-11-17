@@ -26,6 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below |
+| errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | resize | `"none" \| "both" \| "horizontal" \| "vertical"` | no | `'vertical'` | Whether the textarea is resizable |
 | maxLength | `number` | no |  | Max character count — shows counter when set |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
@@ -41,3 +42,5 @@ Follows the WAI-ARIA text field pattern (https://www.w3.org/WAI/ARIA/apg/practic
 | Key | What it does |
 | --- | --- |
 | Typing | Enters text in the named field. |
+
+Types from other packages: `ReactNode` (react).

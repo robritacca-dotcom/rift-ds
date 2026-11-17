@@ -24,6 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | onEventClick | `((event: EventCalendarEvent) => void)` | no |  | Fires with the clicked event. Pills only render as buttons when this is set. |
 | onDateClick | `((date: string) => void)` | no |  | Fires with the clicked day (YYYY-MM-DD) — from anywhere on the cell, the day number, and the "+N more" overflow row. The number and overflow row only become buttons when this is set, and cells only take their pointer cursor and hover feedback with it. |
 | selectedDate | `string` | no |  | Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip on its number, taking precedence over the today chip. Controlled by the consumer; pair with `onDateClick` to move it. |
+| today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
 | previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |

@@ -22,6 +22,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | trend | `"neutral" \| "up" \| "down"` | no | `'neutral'` | Direction of the delta — colours it and adds an arrow |
 | deltaPlacement | `"auto" \| "inline" \| "stacked"` | no | `'stacked'` | Where the delta sits: stacked below the label, inline to the right of the value (bottom-aligned), or `auto`: inline while the stat has room and stacked once it is narrow, such as a KPI tile in a two-up phone grid. `auto` fills its parent's width and reads its own, so it restacks wherever it sits, whatever the viewport. |
 | size | `"default" \| "large"` | no | `'default'` | Stat size |
+| icon | `string \| ReactNode` | no |  | A decorative mark in a round tile above the value, naming what the metric is about: a Material Symbol name (string) or a node. |
+| caption | `ReactNode` | no |  | A short note at the far end of the top row, in the caption face: the period the figure covers ("Last 30 days"), its source. |
+| children | `ReactNode` | no |  | Shown after the value, label and delta, such as a Sparkline of the metric's recent history or an AvatarGroup of who it counts. |
 | locale | `string` | no | `'en-US'` | The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
 

@@ -30,6 +30,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | subtitle | `string` | no |  | Description text below the title |
 | summaryItems | `ChartSummaryItem[]` | no |  | Summary stats displayed in the header |
 | height | `number` | no | `350` | Chart area height in pixels |
+| yAxisFormatter | `((value: number) => string)` | no |  | Tick formatter for the bar series' axis, such as a currency. Defaults to a short number in the chart's locale. |
+| secondaryAxisFormatter | `((value: number) => string)` | no |  | Tick formatter for the line series' axis when `secondaryAxis` draws it, such as a percent. Defaults to a short number in the chart's locale. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
 

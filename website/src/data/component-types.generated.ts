@@ -664,7 +664,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       }
     },
-    "externalTypes": {}
+    "externalTypes": {
+      "ReactNode": "react"
+    }
   },
   "command-palette": {
     "types": {
@@ -879,7 +881,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "ColumnFormat": {
         "kind": "interface",
-        "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to none for money and progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
+        "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to the currency's own minor units for money (two for USD, none for JPY), none for progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
         "description": "How a typed column formats its values."
       },
       "ColumnType": {
@@ -1126,6 +1128,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "Record": "typescript"
     }
   },
+  "date-input": {
+    "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "date-picker": {
     "types": {
       "Weekday": {
@@ -1191,7 +1199,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "DescriptionListEntry": {
         "kind": "type",
-        "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n};",
+        "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n  /** Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule. */\n  emphasis?: boolean;\n};",
         "description": "One term and its value, as `items` takes them."
       }
     },
@@ -1842,6 +1850,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "number-input": {
+    "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "panel": {
     "types": {},
     "externalTypes": {
@@ -2479,7 +2493,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "Tab": {
         "kind": "interface",
-        "definition": "interface Tab {\n  /** Unique tab identifier */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether this tab is disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
+        "definition": "interface Tab {\n  /** Unique tab identifier */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A count after the label (unread items, results), written in the resolved locale and read as part of the tab's name. */\n  count?: number;\n  /** Whether this tab is disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
       }
     },
     "externalTypes": {
@@ -2494,6 +2508,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "description": "A running-text type style, named as the type scale names it."
       }
     },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "textarea": {
+    "types": {},
     "externalTypes": {
       "ReactNode": "react"
     }

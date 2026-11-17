@@ -109,6 +109,13 @@
           "description": "Helper or error message"
         },
         {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
+        },
+        {
           "name": "onValueChange",
           "type": "((value: string) => void)",
           "typeKind": "function",

@@ -28,6 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | onTabChange | `((value: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
 | size | `"default" \| "compact"` | no | `'default'` | Visual size |
 | fullWidth | `boolean` | no | `false` | Whether tabs fill the available width |
+| locale | `string` | no |  | The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the tab list. Deprecated: Pass the native `aria-label` attribute instead. |
 
@@ -57,6 +58,8 @@ interface Tab {
   label: string;
   /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** A count after the label (unread items, results), written in the resolved locale and read as part of the tab's name. */
+  count?: number;
   /** Whether this tab is disabled */
   disabled?: boolean;
   /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */

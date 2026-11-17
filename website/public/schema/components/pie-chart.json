@@ -67,19 +67,19 @@
         },
         {
           "name": "innerRadius",
-          "type": "number",
-          "typeKind": "primitive",
+          "type": "string | number",
+          "typeKind": "other",
           "required": false,
-          "description": "Inner radius for donut style (0 = solid pie)",
+          "description": "Inner radius for a donut (0 for a solid pie): pixels, or a percentage of the room the plot has, such as `'60%'`, so the hole scales with the chart.",
           "default": 0
         },
         {
           "name": "outerRadius",
-          "type": "number",
-          "typeKind": "primitive",
+          "type": "string | number",
+          "typeKind": "other",
           "required": false,
-          "description": "Outer radius",
-          "default": 140
+          "description": "Outer radius: pixels, or a percentage of the room the plot has once the header and legend take theirs. Defaults to `'90%'`, so the pie fits any `height` without running into its legend.",
+          "default": "90%"
         },
         {
           "name": "showLegend",

@@ -33,6 +33,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | required | `boolean` | no | `false` | Whether the combobox is required |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below the field |
+| errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | loading | `boolean` | no | `false` | Show a loading affordance in the menu — for async option fetching |
 | emptyMessage | `string` | no | `'No results found'` | Message shown when the filter matches no options |
 | loadingMessage | `string` | no | `'Loading…'` | Status text shown in the menu while `loading` is set. Defaults to "Loading…". |
@@ -87,3 +88,5 @@ interface ComboboxOptionGroup {
   options: ComboboxOption[];
 }
 ```
+
+Types from other packages: `ReactNode` (react).

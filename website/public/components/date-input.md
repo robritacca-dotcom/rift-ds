@@ -21,6 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
+| errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | min | `string` | no |  | Minimum selectable date (YYYY-MM-DD) |
 | max | `string` | no |  | Maximum selectable date (YYYY-MM-DD) |
 | onValueChange | `((value: string) => void)` | no |  | Convenience callback receiving the value directly. Fires alongside `onChange`, which keeps the standard React event signature so form libraries work unmodified. |
@@ -30,3 +31,5 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 ## Keyboard
 
 A native date input: the browser owns its keys and its picker. Those keys belong to the platform, so no test of this library presses them.
+
+Types from other packages: `ReactNode` (react).

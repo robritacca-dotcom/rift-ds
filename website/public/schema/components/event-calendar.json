@@ -81,6 +81,13 @@
           "description": "Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip\non its number, taking precedence over the today chip. Controlled by the\nconsumer; pair with `onDateClick` to move it."
         },
         {
+          "name": "today",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
+        },
+        {
           "name": "actions",
           "type": "ReactNode",
           "typeKind": "reference",

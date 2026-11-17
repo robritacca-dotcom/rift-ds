@@ -34,6 +34,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | required | `boolean` | no | `false` | Whether the dropdown is required |
 | error | `boolean` | no | `false` | Error state |
 | helperText | `string` | no |  | Helper or error message |
+| errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | onValueChange | `((value: string) => void)` | no |  | Called with the newly selected value |
 | open | `boolean` | no |  | Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself. |
 | defaultOpen | `boolean` | no | `false` | Whether the list starts open when uncontrolled (`open` undefined). |

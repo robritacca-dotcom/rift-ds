@@ -51,6 +51,18 @@
           "default": "md"
         },
         {
+          "name": "shape",
+          "type": "\"circle\" | \"square\"",
+          "typeKind": "enum",
+          "values": [
+            "circle",
+            "square"
+          ],
+          "required": false,
+          "description": "`circle` for a person; `square` for an organisation (a company, a bank, a vendor, an integration): rounded corners on the radius scale, a logo fitted whole rather than cropped, and a building glyph when there is no image or name.",
+          "default": "circle"
+        },
+        {
           "name": "fill",
           "type": "\"neutral\" | AvatarFill",
           "typeKind": "enum",

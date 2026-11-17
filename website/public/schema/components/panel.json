@@ -30,6 +30,14 @@
           "default": "default"
         },
         {
+          "name": "bordered",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the container border the Widget tile wears, so the panel keeps a visible edge in a theme whose page fill matches the panel's.",
+          "default": false
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

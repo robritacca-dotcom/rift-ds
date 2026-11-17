@@ -38,6 +38,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | term | `ReactNode` | yes |  | The term: what the value is ("Account number", "Due date"). |
 | action | `ReactNode` | no |  | A trailing control for this value: an Edit button, a link. |
 | copyable | `string \| boolean` | no |  | Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). |
+| emphasis | `boolean` | no |  | Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule. |
 | children | `ReactNode` | no |  | The value, as children. `details` wins when both are set. |
 | className | `string` | no | `''` | Additional CSS classes. |
 
@@ -70,6 +71,8 @@ type DescriptionListEntry = {
   action?: React.ReactNode;
   /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */
   copyable?: boolean | string;
+  /** Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule. */
+  emphasis?: boolean;
 };
 ```
 

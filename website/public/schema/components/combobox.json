@@ -117,6 +117,13 @@
           "description": "Helper or error message displayed below the field"
         },
         {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
+        },
+        {
           "name": "loading",
           "type": "boolean",
           "typeKind": "primitive",
@@ -232,6 +239,9 @@
         "ComboboxOption"
       ]
     }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
   },
   "keyboard": [
     {

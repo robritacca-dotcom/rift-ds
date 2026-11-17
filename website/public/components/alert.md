@@ -20,6 +20,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | description | `string` | no |  | Alert description / body text |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `'info'` | Alert variant determines colour and icon |
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
+| action | `ReactNode` | no |  | Actions under the description: one or two compact Buttons or a Link that act on what the alert says (retry, review, undo). |
 | dismissible | `boolean` | no | `false` | Whether the alert can be dismissed |
 | icon | `string \| ReactNode` | no |  | Custom icon override — Material Symbol name (string) or custom element (ReactNode) |
 | onDismiss | `(() => void)` | no |  | Callback when dismiss button is clicked |

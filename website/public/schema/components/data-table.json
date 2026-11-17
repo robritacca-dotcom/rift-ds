@@ -196,10 +196,24 @@
           "type": "LinkComponent",
           "typeKind": "reference",
           "required": false,
-          "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
+          "description": "The link component a `link` column's cells and `rowHref` render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
           "typeRefs": [
             "LinkComponent"
           ]
+        },
+        {
+          "name": "rowHref",
+          "type": "((row: R) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Makes each row a link to the address it returns. The row header's content\n(the `rowHeader` column, else the first column shown) becomes the link,\nso a keyboard and a screen reader reach it as one, and a click anywhere\nelse on the row follows it, except on the row's own controls or while\ntext is being selected. A row it returns `undefined` for stays plain. A\nrow header's `render` should not draw a link of its own alongside it."
+        },
+        {
+          "name": "onRowClick",
+          "type": "((row: R) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Makes each row open something in place (a drawer, a dialog) instead of\nnavigating: the row header's content becomes a button that calls it, and\na click anywhere else on the row presses that button, except on the\nrow's own controls. `rowHref` wins on a row both give an action."
         },
         {
           "name": "virtualize",
@@ -913,7 +927,7 @@
     },
     "ColumnFormat": {
       "kind": "interface",
-      "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to none for money and progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
+      "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to the currency's own minor units for money (two for USD, none for JPY), none for progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
       "description": "How a typed column formats its values."
     },
     "ColumnType": {

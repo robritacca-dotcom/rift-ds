@@ -81,6 +81,13 @@
           "default": 350
         },
         {
+          "name": "yAxisFormatter",
+          "type": "((value: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
+        },
+        {
           "name": "bare",
           "type": "boolean",
           "typeKind": "primitive",

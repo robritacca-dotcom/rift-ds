@@ -41,7 +41,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | sorts | `DataTableSort[]` | no |  | Every sort, first sort first, for controlled use: the several-column form of `sort`, and wins over it when both are given. Pair with `onSortsChange`. |
 | defaultSorts | `DataTableSort[]` | no |  | Initial sorts for uncontrolled use. |
 | onSortsChange | `((sorts: DataTableSort[]) => void)` | no |  | Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. |
-| linkComponent | `LinkComponent` | no |  | The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. |
+| linkComponent | `LinkComponent` | no |  | The link component a `link` column's cells and `rowHref` render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. |
+| rowHref | `((row: R) => string)` | no |  | Makes each row a link to the address it returns. The row header's content (the `rowHeader` column, else the first column shown) becomes the link, so a keyboard and a screen reader reach it as one, and a click anywhere else on the row follows it, except on the row's own controls or while text is being selected. A row it returns `undefined` for stays plain. A row header's `render` should not draw a link of its own alongside it. |
+| onRowClick | `((row: R) => void)` | no |  | Makes each row open something in place (a drawer, a dialog) instead of navigating: the row header's content becomes a button that calls it, and a click anywhere else on the row presses that button, except on the row's own controls. `rowHref` wins on a row both give an action. |
 | virtualize | `boolean \| "auto"` | no | `'auto'` | Draws only the rows in view, so a table of thousands scrolls as smoothly as one of ten. `auto` (the default) does it for an unpaged, ungrouped table of more than 200 rows; `true` always; `false` never. A virtualised table scrolls inside its frame (`maxHeight`, 640px when unset), keeps its header in view, and still sends its first screen of rows in the server's HTML. |
 | onLoadMore | `(() => void)` | no |  | Called when the reader scrolls near the end of the rows while `hasMore` is set, to fetch the next batch. Called once per batch: append the rows and it can fire again. |
 | hasMore | `boolean` | no | `false` | Whether more rows can be fetched: shows a loading row at the end and calls `onLoadMore` as it comes into view. |
@@ -175,7 +177,7 @@ interface ColumnFormat {
   locale?: string;
   /** ISO 4217 code for a `currency` column. Defaults to `USD`. */
   currency?: string;
-  /** Digits after the point for `number`, `currency` and `progress`. Defaults to none for money and progress, and up to two for a number. */
+  /** Digits after the point for `number`, `currency` and `progress`. Defaults to the currency's own minor units for money (two for USD, none for JPY), none for progress, and up to two for a number. */
   fractionDigits?: number;
   /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */
   date?: 'short' | 'medium' | 'long' | 'relative';

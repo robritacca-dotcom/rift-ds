@@ -30,6 +30,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | href | `string` | no |  | Optional href — renders as <a> instead of <button> |
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |
+| badge | `string \| number \| true` | no |  | A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number. |
+| badgeMax | `number` | no | `99` | The highest count the badge spells out; a larger one reads "99+". Defaults to 99. |
+| badgeLabel | `((badge: string \| number \| true) => string)` | no | `` (badge: number \| string \| true) => (badge === true ? ', new' : `, ${badge} new`) `` | Text read after `ariaLabel` while the button carries a badge, given the badge. Defaults to ", new" for a dot and ", 3 new" for a count; the leading comma and space are part of the text. The tooltip keeps `ariaLabel` alone. |
+| locale | `string` | no | `'en-US'` | The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component the link renders with, such as Next.js's `Link`, so it navigates through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
 

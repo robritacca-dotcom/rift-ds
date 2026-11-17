@@ -55,7 +55,7 @@ export default function BlocksPage() {
             <CodeBlock code={SETUP_SNIPPET} language="bash" showCopy />
             <p className={s.sectionNote}>
               Then add a block by name. Run <code>npx {PACKAGE_NAME} init block</code> on its own to
-              list them. The app shell and the dashboard share one shell file, which the first of
+              list them. The app shell, dashboard and settings blocks share one shell file, which the first of
               them writes; see <Link href="/docs/get-started" className={s.inlineLink}>Get started</Link>{" "}
               for the tokens and theming the blocks read, and{" "}
               <Link href="/docs/shaders" className={s.inlineLink}>Shaders</Link> for writing the

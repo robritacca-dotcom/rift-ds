@@ -1,0 +1,143 @@
+/* ============================================
+   ORG CHART
+   Nested lists drawn top down: each item is a
+   card with its reports in a row beneath it.
+   The lines are borders on pseudo-elements on
+   --color-divider: a stem down from a card, a
+   rail across its reports and a stem up into
+   each, so the chart needs no measuring. The
+   rail stops at the first and last report's
+   centres, on logical sides, so it mirrors in a
+   right-to-left context.
+   ============================================ */
+
+/* Base */
+.ds-org-chart {
+  min-width: 0;
+}
+
+.ds-org-chart__scroll {
+  overflow-x: auto;
+  padding-block: var(--padding-200);
+}
+
+.ds-org-chart__tree,
+.ds-org-chart__reports {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-org-chart__tree {
+  min-width: max-content;
+}
+
+/* The reports sit a gap below their manager, with a stem down from it. */
+.ds-org-chart__reports {
+  position: relative;
+  padding-block-start: var(--gap-500);
+}
+
+.ds-org-chart__reports::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  block-size: calc(var(--gap-500) / 2);
+  border-inline-start: var(--border-025) solid var(--color-divider);
+}
+
+/* Items */
+.ds-org-chart__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: var(--padding-200);
+}
+
+/* Inside a list of reports: a stem up from each card to the rail, and the
+   rail across the item, cut back to the centre at either end of the row. */
+.ds-org-chart__reports > .ds-org-chart__item::before,
+.ds-org-chart__reports > .ds-org-chart__item::after {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(var(--gap-500) / -2);
+}
+
+.ds-org-chart__reports > .ds-org-chart__item::before {
+  inset-inline-start: 50%;
+  block-size: calc(var(--gap-500) / 2);
+  border-inline-start: var(--border-025) solid var(--color-divider);
+}
+
+.ds-org-chart__reports > .ds-org-chart__item::after {
+  inset-inline: 0;
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.ds-org-chart__reports > .ds-org-chart__item:first-child::after {
+  inset-inline-start: 50%;
+}
+
+.ds-org-chart__reports > .ds-org-chart__item:last-child::after {
+  inset-inline-end: 50%;
+}
+
+.ds-org-chart__reports > .ds-org-chart__item:only-child::after {
+  display: none;
+}
+
+/* The card: the Widget tile's edge on the primary container. */
+.ds-org-chart__card {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  min-width: 0;
+  padding: var(--padding-200) var(--padding-300);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  white-space: nowrap;
+}
+
+.ds-org-chart__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ds-org-chart__name {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-org-chart__name--link {
+  text-decoration: none;
+  border-radius: var(--radius-100);
+}
+
+.ds-org-chart__name--link:hover,
+.ds-org-chart__name--link:focus-visible {
+  text-decoration: underline;
+}
+
+.ds-org-chart__name--link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-org-chart__role {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}

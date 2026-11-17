@@ -1,0 +1,67 @@
+/* ============================================
+   WIZARD
+   The Stepper, the step under its heading, and
+   a footer: a running summary at the start, Back
+   and Continue at the end, above a rule.
+   ============================================ */
+
+/* Base */
+.ds-wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  min-width: 0;
+}
+
+/* Step */
+.ds-wizard__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 0;
+}
+
+.ds-wizard__title {
+  margin: 0;
+}
+
+/* Focus lands on the heading when the step changes; it is a target for the
+   reader, not a control, so it shows the ring only to the keyboard. */
+.ds-wizard__title:focus {
+  outline: none;
+}
+
+.ds-wizard__title:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-100);
+}
+
+/* Footer */
+.ds-wizard__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-400);
+  padding-block-start: var(--padding-400);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.ds-wizard__summary {
+  min-width: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-wizard__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  margin-inline-start: auto;
+}

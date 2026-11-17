@@ -1,0 +1,70 @@
+/* ============================================
+   FORM SECTION
+   A heading and its sentence, then the fields
+   in a Grid and the section's actions. The
+   section is its own size container, so the
+   aside layout stacks by the room it has.
+   ============================================ */
+
+/* Base */
+.ds-form-section {
+  container-type: inline-size;
+  min-width: 0;
+}
+
+.ds-form-section--divider {
+  padding-block-start: var(--padding-500);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.ds-form-section__layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.ds-form-section__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+}
+
+.ds-form-section__title {
+  margin: 0;
+}
+
+.ds-form-section__description {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+}
+
+.ds-form-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  min-width: 0;
+}
+
+/* The section's own actions, at the end of the line under the fields. */
+.ds-form-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gap-200);
+}
+
+/* Aside: the heading in a third of the row, the fields beside it, once the
+   section has the room. */
+@container (min-width: 721px) {
+  .ds-form-section--aside .ds-form-section__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--gap-1000);
+  }
+}

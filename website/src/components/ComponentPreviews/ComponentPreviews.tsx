@@ -54,6 +54,12 @@ import { Grid } from "rift-ds/components/Grid/Grid";
 import { Icon } from "rift-ds/components/Icon/Icon";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Checklist } from "rift-ds/components/Checklist/Checklist";
+import { Statement } from "rift-ds/components/Statement/Statement";
+import { Wizard } from "rift-ds/components/Wizard/Wizard";
+import { FormSection } from "rift-ds/components/FormSection/FormSection";
+import { DayTimeline } from "rift-ds/components/DayTimeline/DayTimeline";
+import { OrgChart } from "rift-ds/components/OrgChart/OrgChart";
+import { FileRow } from "rift-ds/components/Attachment/FileRow";
 import { Chip } from "rift-ds/components/Chip/Chip";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
@@ -1686,6 +1692,63 @@ const previews: Record<string, () => ReactNode> = {
           { id: "b", label: "Publish a page" },
         ]}
       />
+    </div>
+  ),
+  "statement": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <Statement
+        caption="Profit and loss"
+        size="compact"
+        periods={["Q1"]}
+        items={[
+          { kind: "section", id: "r", title: "Revenue", lines: [{ id: "s", label: "Sales", amounts: ["9400"] }] },
+          { kind: "section", id: "c", title: "Costs", sign: -1, lines: [{ id: "h", label: "Hosting", amounts: ["2100"] }] },
+          { kind: "subtotal", id: "n", label: "Net profit" },
+        ]}
+      />
+    </div>
+  ),
+  "wizard": () => (
+    <div style={{ width: "240px", transform: "scale(0.8)", transformOrigin: "center" }} aria-hidden="true" inert>
+      <Wizard
+        steps={[
+          { id: "a", label: "Details", content: null },
+          { id: "b", label: "Plan", content: null },
+          { id: "c", label: "Review", content: null },
+        ]}
+      />
+    </div>
+  ),
+  "form-section": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <FormSection title="Profile" description="How you appear to others." />
+    </div>
+  ),
+  "day-timeline": () => (
+    <div style={{ width: "240px" }} aria-hidden="true" inert>
+      <DayTimeline
+        label="Shifts"
+        startHour={8}
+        endHour={12}
+        rows={[
+          { id: "a", label: "Room A", bars: [{ id: "1", start: "08:30", end: "11:00", label: "Booked", color: "violet" }] },
+          { id: "b", label: "Room B", bars: [{ id: "2", start: "09:00", end: "10:00", label: "Stand-up", color: "cobalt" }] },
+        ]}
+      />
+    </div>
+  ),
+  "org-chart": () => (
+    <div style={{ width: "240px", transform: "scale(0.8)", transformOrigin: "center" }} aria-hidden="true" inert>
+      <OrgChart
+        label="Team"
+        root={{ id: "a", name: "Ada", reports: [{ id: "b", name: "Grace" }, { id: "c", name: "Alan" }] }}
+      />
+    </div>
+  ),
+  "file-row": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <FileRow name="Report.pdf" meta="2.4 MB" size="compact" />
+      <FileRow name="Budget.xlsx" meta="88 KB" size="compact" />
     </div>
   ),
   "panel": () => (

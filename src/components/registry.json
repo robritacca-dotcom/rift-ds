@@ -248,7 +248,10 @@
       "category": "ai",
       "client": false,
       "folder": "Attachment",
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "FileRow", "when": "the file is one of a list of documents, read as rows" }
+      ]
     },
     {
       "name": "AttachmentViewer",
@@ -625,6 +628,18 @@
       "pattern": "calendar"
     },
     {
+      "name": "DayTimeline",
+      "label": "Day timeline",
+      "slug": "day-timeline",
+      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
+      "category": "data-display",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "GanttChart", "when": "the bars run over days and months rather than hours within one day" }
+      ]
+    },
+    {
       "name": "Deadline",
       "label": "Deadline",
       "slug": "deadline",
@@ -791,6 +806,19 @@
       "pattern": "button"
     },
     {
+      "name": "FileRow",
+      "label": "File row",
+      "slug": "file-row",
+      "description": "One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.",
+      "category": "data-display",
+      "folder": "Attachment",
+      "client": false,
+      "keys": { "by": "platform", "note": "The name is a native link or button and the actions passed in are native controls, reached with Tab." },
+      "alternatives": [
+        { "name": "AttachmentTile", "when": "the file sits on a chat message or in a composer, shown as a square" }
+      ]
+    },
+    {
       "name": "FilterBar",
       "label": "Filter bar",
       "slug": "filter-bar",
@@ -798,6 +826,18 @@
       "category": "forms",
       "client": true,
       "partPatterns": [{ "pattern": "listbox", "part": "list of options" }]
+    },
+    {
+      "name": "FormSection",
+      "label": "Form section",
+      "slug": "form-section",
+      "description": "A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions.",
+      "category": "forms",
+      "client": false,
+      "keys": { "by": "platform", "note": "It holds the fields and actions passed in, each a native control reached with Tab." },
+      "alternatives": [
+        { "name": "Widget", "when": "the section is a dashboard tile rather than part of a form" }
+      ]
     },
     {
       "name": "FunnelChart",
@@ -816,7 +856,10 @@
       "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.",
       "category": "charts",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "DayTimeline", "when": "the bars run over hours within one day" }
+      ]
     },
     {
       "name": "Gauge",
@@ -1166,6 +1209,18 @@
       "category": "forms",
       "client": true,
       "partPatterns": [{ "pattern": "textbox", "part": "field" }, { "pattern": "button", "part": "step buttons" }]
+    },
+    {
+      "name": "OrgChart",
+      "label": "Org chart",
+      "slug": "org-chart",
+      "description": "Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath.",
+      "category": "data-display",
+      "client": false,
+      "keys": { "by": "platform", "note": "Each person whose name links to a profile is a native link, reached with Tab." },
+      "alternatives": [
+        { "name": "TreeView", "when": "the hierarchy is a list to navigate and fold rather than people drawn as a chart" }
+      ]
     },
     {
       "name": "PageHeader",
@@ -1554,6 +1609,18 @@
       "keys": { "by": "none" }
     },
     {
+      "name": "Statement",
+      "label": "Statement",
+      "slug": "statement",
+      "description": "A financial statement: titled sections of amounts with totals, and subtotals down to a bottom line, a column per period.",
+      "category": "data-display",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Table", "when": "the rows are records to read rather than sections of amounts that add up" }
+      ]
+    },
+    {
       "name": "StatusDot",
       "label": "Status dot",
       "slug": "status-dot",
@@ -1569,7 +1636,10 @@
       "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
       "category": "navigation",
       "client": true,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Wizard", "when": "the steps need their container, their heading and Back and Continue" }
+      ]
     },
     {
       "name": "StreamingText",
@@ -1598,7 +1668,8 @@
       "client": false,
       "keys": { "by": "none" },
       "alternatives": [
-        { "name": "DataTable", "when": "the rows need sorting, filtering, editing or loading from a server" }
+        { "name": "DataTable", "when": "the rows need sorting, filtering, editing or loading from a server" },
+        { "name": "Statement", "when": "the rows are sections of amounts with totals and subtotals" }
       ]
     },
     {
@@ -1779,7 +1850,10 @@
       "description": "Collapsible hierarchy for files, folders, and nested structures.",
       "category": "data-display",
       "client": true,
-      "pattern": "tree"
+      "pattern": "tree",
+      "alternatives": [
+        { "name": "OrgChart", "when": "the hierarchy is people, drawn as a chart of who reports to whom" }
+      ]
     },
     {
       "name": "Treemap",
@@ -1819,7 +1893,20 @@
       "client": false,
       "keys": { "by": "none" },
       "alternatives": [
-        { "name": "Grid", "when": "cells of any kind should sit in equal columns and share a row’s height" }
+        { "name": "Grid", "when": "cells of any kind should sit in equal columns and share a row’s height" },
+        { "name": "FormSection", "when": "the section holds a form’s fields and its own save" }
+      ]
+    },
+    {
+      "name": "Wizard",
+      "label": "Wizard",
+      "slug": "wizard",
+      "description": "A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.",
+      "category": "navigation",
+      "client": true,
+      "keys": { "by": "platform", "note": "Back, Continue and Finish are native buttons, as are the stepper’s completed steps, and focus moves to each step’s heading." },
+      "alternatives": [
+        { "name": "Stepper", "when": "only the progress is needed and the host lays out the steps and their buttons" }
       ]
     },
     {

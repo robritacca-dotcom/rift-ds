@@ -1160,6 +1160,8 @@ const EXCLUDED_ROUTES = new Map([
     'the app-shell block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/dashboard',
     'the dashboard block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
+  ['/docs/blocks/settings',
+    'the settings block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/sign-in',
     'the sign-in block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/shader-scene',

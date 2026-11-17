@@ -19,6 +19,10 @@ export interface DescriptionListCopyProps {
 /** Put text on the clipboard: the async API, else a selected textarea, for an embedded browser or a page served over http. */
 function writeClipboard(text: string) {
   const fallback = () => {
+    // Selecting the textarea takes focus, and removing it would leave focus
+    // on the page body: hand it back, so the next key still reaches the
+    // button that was pressed.
+    const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const textarea = document.createElement('textarea');
     textarea.value = text;
     textarea.setAttribute('readonly', '');
@@ -27,6 +31,7 @@ function writeClipboard(text: string) {
     textarea.select();
     document.execCommand('copy');
     document.body.removeChild(textarea);
+    focused?.focus({ preventScroll: true });
   };
   if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(fallback);
   else fallback();

@@ -1,3 +1,4 @@
+import ComponentPageLayout from "@/components/ComponentProps/ComponentPageLayout";
 import { componentPageMetadata } from "@/config/navigation";
 
 // Title and description come from src/components/registry.json — the single
@@ -5,5 +6,5 @@ import { componentPageMetadata } from "@/config/navigation";
 export const metadata = componentPageMetadata("avatar");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <ComponentPageLayout slug="avatar">{children}</ComponentPageLayout>;
 }

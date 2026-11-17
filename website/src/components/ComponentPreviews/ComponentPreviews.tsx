@@ -56,7 +56,7 @@ import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Checklist } from "rift-ds/components/Checklist/Checklist";
 import { Wizard } from "rift-ds/components/Wizard/Wizard";
 import { FormSection } from "rift-ds/components/FormSection/FormSection";
-import { DayTimeline } from "rift-ds/components/DayTimeline/DayTimeline";
+import { ResourceTimeline } from "rift-ds/components/ResourceTimeline/ResourceTimeline";
 import { OrgChart } from "rift-ds/components/OrgChart/OrgChart";
 import { FileRow } from "rift-ds/components/Attachment/FileRow";
 import { Chip } from "rift-ds/components/Chip/Chip";
@@ -1709,9 +1709,9 @@ const previews: Record<string, () => ReactNode> = {
       <FormSection title="Profile" description="How you appear to others." />
     </div>
   ),
-  "day-timeline": () => (
+  "resource-timeline": () => (
     <div style={{ width: "240px" }} aria-hidden="true" inert>
-      <DayTimeline
+      <ResourceTimeline
         label="Shifts"
         startHour={8}
         endHour={12}

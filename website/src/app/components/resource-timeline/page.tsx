@@ -3,12 +3,12 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
-import { DayTimeline } from "rift-ds/components/DayTimeline/DayTimeline";
+import { ResourceTimeline } from "rift-ds/components/ResourceTimeline/ResourceTimeline";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
-export default function DayTimelinePage() {
+export default function ResourceTimelinePage() {
   return (
     <>
       <MegaNav />
@@ -19,21 +19,21 @@ export default function DayTimelinePage() {
         <main className={styles.dsContent} id="main-content">
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Day timeline</h1>
-            <PageLinks storybookPath="/?path=/docs/components-daytimeline--docs" />
+            <h1 className={styles.pageTitle}>Resource timeline</h1>
+            <PageLinks storybookPath="/?path=/docs/components-resourcetimeline--docs" />
           </div>
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>Hours within one day</p>
             <p className={styles.introBody}>
-              Day timeline gives each person, room or machine a row and draws a bar from each start to its end on an axis of hours, written the reader’s way. Every bar is named with its row and its times, and its label sits on the calendar’s event fill, so it reads in every theme whatever its accent.
+              Resource timeline gives each person, room or machine a row and draws a bar from each start to its end on an axis of hours, written the reader’s way. Every bar is named with its row and its times, and its label sits on the calendar’s event fill, so it reads in every theme whatever its accent.
             </p>
           </div>
 
           <section className={styles.section}>
             <SectionTitle title="Bookings" />
             <div className={styles.demoSurface}>
-              <DayTimeline
+              <ResourceTimeline
                 label="Bookings, Tuesday"
                 startHour={7}
                 endHour={20}
@@ -47,7 +47,7 @@ export default function DayTimelinePage() {
             </div>
           </section>
 
-          <ComponentInstallStrip slug="day-timeline" />
+          <ComponentInstallStrip slug="resource-timeline" />
         </main>
       </div>
     </>

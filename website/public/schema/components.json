@@ -585,16 +585,6 @@
       "markdownUrl": "https://rift-ds.com/components/date-range-picker.md"
     },
     {
-      "name": "DayTimeline",
-      "label": "Day timeline",
-      "slug": "day-timeline",
-      "category": "data-display",
-      "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/day-timeline.json",
-      "docsUrl": "https://rift-ds.com/components/day-timeline",
-      "markdownUrl": "https://rift-ds.com/components/day-timeline.md"
-    },
-    {
       "name": "Deadline",
       "label": "Deadline",
       "slug": "deadline",
@@ -1373,6 +1363,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/reasoning.json",
       "docsUrl": "https://rift-ds.com/components/reasoning",
       "markdownUrl": "https://rift-ds.com/components/reasoning.md"
+    },
+    {
+      "name": "ResourceTimeline",
+      "label": "Resource timeline",
+      "slug": "resource-timeline",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/resource-timeline.json",
+      "docsUrl": "https://rift-ds.com/components/resource-timeline",
+      "markdownUrl": "https://rift-ds.com/components/resource-timeline.md"
     },
     {
       "name": "RichDropdown",

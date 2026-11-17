@@ -1185,32 +1185,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "Date": "typescript"
     }
   },
-  "day-timeline": {
-    "types": {
-      "DayTimelineBar": {
-        "kind": "interface",
-        "definition": "interface DayTimelineBar {\n  /** A stable id for the bar. */\n  id: string;\n  /** When it starts, as 24-hour `HH:MM`. */\n  start: string;\n  /** When it ends, as 24-hour `HH:MM`. */\n  end: string;\n  /** A short label on the bar (\"Front desk\", \"Break\"). */\n  label?: string;\n  /** The bar's accent. Defaults to `neutral`. */\n  color?: DayTimelineColor;\n}",
-        "description": "One stretch of time on a row: a shift, a booking, a meeting.",
-        "refs": [
-          "DayTimelineColor"
-        ]
-      },
-      "DayTimelineColor": {
-        "kind": "type",
-        "definition": "type DayTimelineColor =\n  \"neutral\" | \"coral\" | \"violet\" | \"cobalt\" | \"amber\" | \"gold\" | \"mint\";",
-        "description": "The accents a bar can take, the core accent roles the calendar's events use."
-      },
-      "DayTimelineRow": {
-        "kind": "interface",
-        "definition": "interface DayTimelineRow {\n  /** A stable id for the row. */\n  id: string;\n  /** What the row is, shown in the label column. */\n  label: string;\n  /** The row's bars, in any order. */\n  bars: DayTimelineBar[];\n}",
-        "description": "One row of the timeline: a person, a room, a machine.",
-        "refs": [
-          "DayTimelineBar"
-        ]
-      }
-    },
-    "externalTypes": {}
-  },
   "deadline": {
     "types": {
       "DateInput": {
@@ -2131,6 +2105,32 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ReactNode": "react"
     }
+  },
+  "resource-timeline": {
+    "types": {
+      "ResourceTimelineBar": {
+        "kind": "interface",
+        "definition": "interface ResourceTimelineBar {\n  /** A stable id for the bar. */\n  id: string;\n  /** When it starts, as 24-hour `HH:MM`. */\n  start: string;\n  /** When it ends, as 24-hour `HH:MM`. */\n  end: string;\n  /** A short label on the bar (\"Front desk\", \"Break\"). */\n  label?: string;\n  /** The bar's accent. Defaults to `neutral`. */\n  color?: ResourceTimelineColor;\n}",
+        "description": "One stretch of time on a row: a shift, a booking, a meeting.",
+        "refs": [
+          "ResourceTimelineColor"
+        ]
+      },
+      "ResourceTimelineColor": {
+        "kind": "type",
+        "definition": "type ResourceTimelineColor =\n  \"neutral\" | \"coral\" | \"violet\" | \"cobalt\" | \"amber\" | \"gold\" | \"mint\";",
+        "description": "The accents a bar can take, the core accent roles the calendar's events use."
+      },
+      "ResourceTimelineRow": {
+        "kind": "interface",
+        "definition": "interface ResourceTimelineRow {\n  /** A stable id for the row. */\n  id: string;\n  /** What the row is, shown in the label column. */\n  label: string;\n  /** The row's bars, in any order. */\n  bars: ResourceTimelineBar[];\n}",
+        "description": "One row of the timeline: a person, a room, a machine.",
+        "refs": [
+          "ResourceTimelineBar"
+        ]
+      }
+    },
+    "externalTypes": {}
   },
   "rich-dropdown": {
     "types": {

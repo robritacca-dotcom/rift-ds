@@ -188,9 +188,9 @@
   },
   "alternatives": [
     {
-      "name": "DayTimeline",
+      "name": "ResourceTimeline",
       "when": "the bars run over hours within one day",
-      "schemaUrl": "https://rift-ds.com/schema/components/day-timeline.json"
+      "schemaUrl": "https://rift-ds.com/schema/components/resource-timeline.json"
     }
   ]
 }

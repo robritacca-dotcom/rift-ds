@@ -619,14 +619,6 @@ The wired table: typed columns, sorting, filters, editing, grouping with totals,
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/data-table.md
 
-### Day timeline
-
-Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.
-
-- Import: `import { DayTimeline } from 'rift-ds';`
-- Rendering: server-renderable (no 'use client')
-- Contract: https://rift-ds.com/components/day-timeline.md
-
 ### Deadline
 
 A due date against now that turns from neutral to warning to error as it nears.
@@ -738,6 +730,14 @@ Blockquotes and pull-quotes with attribution.
 - Import: `import { Quote } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/quote.md
+
+### Resource timeline
+
+Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.
+
+- Import: `import { ResourceTimeline } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/resource-timeline.md
 
 ### Selection card
 

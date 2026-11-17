@@ -3,8 +3,8 @@ import { componentPageMetadata } from "@/config/navigation";
 
 // Title and description come from src/components/registry.json, the single
 // place a component's one-line summary lives.
-export const metadata = componentPageMetadata("day-timeline");
+export const metadata = componentPageMetadata("resource-timeline");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <ComponentPageLayout slug="day-timeline">{children}</ComponentPageLayout>;
+  return <ComponentPageLayout slug="resource-timeline">{children}</ComponentPageLayout>;
 }

@@ -358,12 +358,6 @@
       "description": "An inline calendar for choosing a range of days, one or two months wide, with presets."
     },
     {
-      "name": "day-timeline",
-      "type": "registry:ui",
-      "title": "Day timeline",
-      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours."
-    },
-    {
       "name": "deadline",
       "type": "registry:ui",
       "title": "Deadline",
@@ -830,6 +824,12 @@
       "type": "registry:ui",
       "title": "Reasoning",
       "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes."
+    },
+    {
+      "name": "resource-timeline",
+      "type": "registry:ui",
+      "title": "Resource timeline",
+      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours."
     },
     {
       "name": "rich-dropdown",

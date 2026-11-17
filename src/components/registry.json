@@ -628,18 +628,6 @@
       "pattern": "calendar"
     },
     {
-      "name": "DayTimeline",
-      "label": "Day timeline",
-      "slug": "day-timeline",
-      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
-      "category": "data-display",
-      "client": false,
-      "keys": { "by": "none" },
-      "alternatives": [
-        { "name": "GanttChart", "when": "the bars run over days and months rather than hours within one day" }
-      ]
-    },
-    {
       "name": "Deadline",
       "label": "Deadline",
       "slug": "deadline",
@@ -858,7 +846,7 @@
       "client": false,
       "keys": { "by": "none" },
       "alternatives": [
-        { "name": "DayTimeline", "when": "the bars run over hours within one day" }
+        { "name": "ResourceTimeline", "when": "the bars run over hours within one day" }
       ]
     },
     {
@@ -1399,6 +1387,18 @@
       "category": "ai",
       "client": true,
       "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
+    },
+    {
+      "name": "ResourceTimeline",
+      "label": "Resource timeline",
+      "slug": "resource-timeline",
+      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
+      "category": "data-display",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "GanttChart", "when": "the bars run over days and months rather than hours within one day" }
+      ]
     },
     {
       "name": "RichDropdown",

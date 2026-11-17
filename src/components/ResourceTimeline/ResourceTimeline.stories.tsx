@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
-import { DayTimeline } from './DayTimeline';
+import { ResourceTimeline } from './ResourceTimeline';
 
 const meta = {
-  title: 'Components/DayTimeline',
-  component: DayTimeline,
+  title: 'Components/ResourceTimeline',
+  component: ResourceTimeline,
   parameters: { layout: 'padded' },
   tags: ['autodocs'],
   args: {
@@ -19,7 +19,7 @@ const meta = {
       { id: 'd', label: 'Lab', bars: [] },
     ],
   },
-} satisfies Meta<typeof DayTimeline>;
+} satisfies Meta<typeof ResourceTimeline>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

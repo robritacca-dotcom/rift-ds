@@ -7665,90 +7665,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
-    "name": "DayTimeline",
-    "label": "Day timeline",
-    "slug": "day-timeline",
-    "category": "data-display",
-    "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
-    "client": false,
-    "importPath": "rift-ds/components/DayTimeline/DayTimeline",
-    "barrel": "main",
-    "exports": [
-      {
-        "component": "DayTimeline",
-        "props": [
-          {
-            "name": "rows",
-            "type": "DayTimelineRow[]",
-            "required": true,
-            "description": "The rows, top to bottom.",
-            "typeRefs": [
-              "DayTimelineRow"
-            ]
-          },
-          {
-            "name": "startHour",
-            "type": "number",
-            "required": false,
-            "description": "The first hour the axis shows, 0 to 23. Defaults to 6.",
-            "defaultValue": "6"
-          },
-          {
-            "name": "endHour",
-            "type": "number",
-            "required": false,
-            "description": "The hour the axis ends at, 1 to 24. Defaults to 22.",
-            "defaultValue": "22"
-          },
-          {
-            "name": "now",
-            "type": "string",
-            "required": false,
-            "description": "A line at this time (`HH:MM`), such as the time now."
-          },
-          {
-            "name": "label",
-            "type": "string",
-            "required": true,
-            "description": "The timeline's name, read before its rows (\"Shifts, Tuesday 4 March\")."
-          },
-          {
-            "name": "rowHeader",
-            "type": "string",
-            "required": false,
-            "description": "The header of the label column. Defaults to \"Name\".",
-            "defaultValue": "'Name'"
-          },
-          {
-            "name": "onBarClick",
-            "type": "((bar: DayTimelineBar, row: DayTimelineRow) => void)",
-            "required": false,
-            "description": "Called with the bar and its row when a bar is pressed; bars are buttons only when it is set.",
-            "typeRefs": [
-              "DayTimelineBar",
-              "DayTimelineRow"
-            ]
-          },
-          {
-            "name": "locale",
-            "type": "string",
-            "required": false,
-            "description": "The BCP 47 locale the times are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "'en-US'"
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "required": false,
-            "description": "Additional CSS classes",
-            "defaultValue": "''"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "kind": "component",
     "name": "Deadline",
     "label": "Deadline",
     "slug": "deadline",
@@ -15303,6 +15219,90 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "The reasoning trace."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "ResourceTimeline",
+    "label": "Resource timeline",
+    "slug": "resource-timeline",
+    "category": "data-display",
+    "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
+    "client": false,
+    "importPath": "rift-ds/components/ResourceTimeline/ResourceTimeline",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ResourceTimeline",
+        "props": [
+          {
+            "name": "rows",
+            "type": "ResourceTimelineRow[]",
+            "required": true,
+            "description": "The rows, top to bottom.",
+            "typeRefs": [
+              "ResourceTimelineRow"
+            ]
+          },
+          {
+            "name": "startHour",
+            "type": "number",
+            "required": false,
+            "description": "The first hour the axis shows, 0 to 23. Defaults to 6.",
+            "defaultValue": "6"
+          },
+          {
+            "name": "endHour",
+            "type": "number",
+            "required": false,
+            "description": "The hour the axis ends at, 1 to 24. Defaults to 22.",
+            "defaultValue": "22"
+          },
+          {
+            "name": "now",
+            "type": "string",
+            "required": false,
+            "description": "A line at this time (`HH:MM`), such as the time now."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The timeline's name, read before its rows (\"Shifts, Tuesday 4 March\")."
+          },
+          {
+            "name": "rowHeader",
+            "type": "string",
+            "required": false,
+            "description": "The header of the label column. Defaults to \"Name\".",
+            "defaultValue": "'Name'"
+          },
+          {
+            "name": "onBarClick",
+            "type": "((bar: ResourceTimelineBar, row: ResourceTimelineRow) => void)",
+            "required": false,
+            "description": "Called with the bar and its row when a bar is pressed; bars are buttons only when it is set.",
+            "typeRefs": [
+              "ResourceTimelineBar",
+              "ResourceTimelineRow"
+            ]
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the times are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "'en-US'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
           }
         ]
       }

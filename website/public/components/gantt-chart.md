@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 
 ## Alternatives
 
-- Use [Day timeline](https://rift-ds.com/components/day-timeline.md) instead when the bars run over hours within one day.
+- Use [Resource timeline](https://rift-ds.com/components/resource-timeline.md) instead when the bars run over hours within one day.
 
 ## GanttChart props
 

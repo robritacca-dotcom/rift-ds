@@ -1,5 +1,5 @@
 /* ============================================
-   DAY TIMELINE
+   RESOURCE TIMELINE
    A label column and a track of hours. Bars sit
    on the track by their start and length as a
    share of the day shown, on logical insets, so
@@ -11,31 +11,31 @@
    ============================================ */
 
 /* Base */
-.ds-day-timeline {
-  --ds-day-timeline-label: 9rem;
+.ds-resource-timeline {
+  --ds-resource-timeline-label: 9rem;
 
   min-width: 0;
 }
 
 /* A narrow column scrolls the day sideways; ScrollRegion makes it a
    keyboard stop only while it does. */
-.ds-day-timeline__scroll {
+.ds-resource-timeline__scroll {
   display: flex;
   flex-direction: column;
   overflow-x: auto;
 }
 
 /* Header: the label column's title and the hour ticks */
-.ds-day-timeline__head {
+.ds-resource-timeline__head {
   display: grid;
-  grid-template-columns: var(--ds-day-timeline-label) minmax(0, 1fr);
-  min-width: calc(var(--ds-day-timeline-label) + var(--ds-day-timeline-hours, 16) * var(--gap-1000));
+  grid-template-columns: var(--ds-resource-timeline-label) minmax(0, 1fr);
+  min-width: calc(var(--ds-resource-timeline-label) + var(--ds-resource-timeline-hours, 16) * var(--gap-1000));
   padding-block-end: var(--padding-200);
   border-block-end: var(--border-025) solid var(--color-divider);
 }
 
-.ds-day-timeline__row-header,
-.ds-day-timeline__tick {
+.ds-resource-timeline__row-header,
+.ds-resource-timeline__tick {
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);
@@ -44,12 +44,12 @@
   color: var(--color-text-tertiary);
 }
 
-.ds-day-timeline__axis {
+.ds-resource-timeline__axis {
   position: relative;
   min-height: var(--font-caption-line-height);
 }
 
-.ds-day-timeline__tick {
+.ds-resource-timeline__tick {
   position: absolute;
   inset-block-start: 0;
   transform: translateX(calc(-50% * var(--ds-inline-sign, 1)));
@@ -59,33 +59,33 @@
 
 /* The ticks centre on their hour; the first and last sit inside the axis
    so neither hangs past the track's ends. */
-.ds-day-timeline__tick:first-child {
+.ds-resource-timeline__tick:first-child {
   transform: none;
 }
 
-.ds-day-timeline__tick:last-child {
+.ds-resource-timeline__tick:last-child {
   transform: translateX(calc(-100% * var(--ds-inline-sign, 1)));
 }
 
 /* Rows */
-.ds-day-timeline__rows {
+.ds-resource-timeline__rows {
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
-  min-width: calc(var(--ds-day-timeline-label) + var(--ds-day-timeline-hours, 16) * var(--gap-1000));
+  min-width: calc(var(--ds-resource-timeline-label) + var(--ds-resource-timeline-hours, 16) * var(--gap-1000));
 }
 
-.ds-day-timeline__row {
+.ds-resource-timeline__row {
   display: grid;
-  grid-template-columns: var(--ds-day-timeline-label) minmax(0, 1fr);
+  grid-template-columns: var(--ds-resource-timeline-label) minmax(0, 1fr);
   align-items: center;
   min-height: var(--control-height-default);
   border-block-end: var(--border-025) solid var(--color-divider);
 }
 
-.ds-day-timeline__label {
+.ds-resource-timeline__label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -98,14 +98,14 @@
   color: var(--color-text-primary);
 }
 
-.ds-day-timeline__track {
+.ds-resource-timeline__track {
   position: relative;
   align-self: stretch;
 }
 
 /* Each hour's line sits on the hour, its width back over it, so the last
    one stays inside the track's end. */
-.ds-day-timeline__gridline {
+.ds-resource-timeline__gridline {
   position: absolute;
   inset-block: 0;
   margin-inline-start: calc(var(--border-025) * -1);
@@ -114,15 +114,15 @@
 
 /* The time now: a line across the row in the error role, the convention
    for a live marker on a schedule. */
-.ds-day-timeline__now {
+.ds-resource-timeline__now {
   position: absolute;
   inset-block: 0;
   border-inline-start: var(--border-050) solid var(--color-status-error-border);
 }
 
 /* Bars */
-.ds-day-timeline__bar {
-  --ds-day-timeline-accent: var(--color-status-neutral-border);
+.ds-resource-timeline__bar {
+  --ds-resource-timeline-accent: var(--color-status-neutral-border);
 
   position: absolute;
   inset-block: var(--padding-100);
@@ -134,26 +134,26 @@
   overflow: hidden;
   background-color: var(--color-calendar-event-bg);
   border: var(--border-025) solid var(--color-calendar-event-border);
-  border-inline-start: var(--border-050) solid var(--ds-day-timeline-accent);
+  border-inline-start: var(--border-050) solid var(--ds-resource-timeline-accent);
   border-radius: var(--radius-100);
   text-align: start;
 }
 
-button.ds-day-timeline__bar {
+button.ds-resource-timeline__bar {
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-button.ds-day-timeline__bar:hover {
+button.ds-resource-timeline__bar:hover {
   background-color: var(--color-calendar-event-bg-hover);
 }
 
-button.ds-day-timeline__bar:focus-visible {
+button.ds-resource-timeline__bar:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
 
-.ds-day-timeline__bar-label {
+.ds-resource-timeline__bar-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -166,26 +166,26 @@ button.ds-day-timeline__bar:focus-visible {
 }
 
 /* Accents: the core accent roles, never the action colour */
-.ds-day-timeline__bar--coral {
-  --ds-day-timeline-accent: var(--color-core-accent-coral);
+.ds-resource-timeline__bar--coral {
+  --ds-resource-timeline-accent: var(--color-core-accent-coral);
 }
 
-.ds-day-timeline__bar--violet {
-  --ds-day-timeline-accent: var(--color-core-accent-violet);
+.ds-resource-timeline__bar--violet {
+  --ds-resource-timeline-accent: var(--color-core-accent-violet);
 }
 
-.ds-day-timeline__bar--cobalt {
-  --ds-day-timeline-accent: var(--color-core-accent-cobalt);
+.ds-resource-timeline__bar--cobalt {
+  --ds-resource-timeline-accent: var(--color-core-accent-cobalt);
 }
 
-.ds-day-timeline__bar--amber {
-  --ds-day-timeline-accent: var(--color-core-accent-amber);
+.ds-resource-timeline__bar--amber {
+  --ds-resource-timeline-accent: var(--color-core-accent-amber);
 }
 
-.ds-day-timeline__bar--gold {
-  --ds-day-timeline-accent: var(--color-core-accent-gold);
+.ds-resource-timeline__bar--gold {
+  --ds-resource-timeline-accent: var(--color-core-accent-gold);
 }
 
-.ds-day-timeline__bar--mint {
-  --ds-day-timeline-accent: var(--color-core-accent-mint);
+.ds-resource-timeline__bar--mint {
+  --ds-resource-timeline-accent: var(--color-core-accent-mint);
 }

@@ -39,6 +39,23 @@ export type ColorModeOptions = {
   storageKey?: string;
 };
 
+/** The script's options: the colour mode's key, and optionally the key a host keeps its theme choice under. */
+export type ColorModeScriptOptions = ColorModeOptions & {
+  /**
+   * The localStorage key a host keeps its chosen theme under, as a preset id
+   * (`plum`, from `SHIPPED_THEMES` in `rift-ds/tokens/values`). When set, the
+   * script also applies it as `data-brand` on `<html>` before first paint, so a
+   * returning visitor never sees the default theme flash first; an empty
+   * value, the base theme's id or a value that is not an id leaves the
+   * attribute as the layout rendered it. The host writes the key when the
+   * visitor picks a theme. Unset by default: the script then never touches
+   * `data-brand`.
+   */
+  brandStorageKey?: string;
+  /** The base theme's id, which applies by removing `data-brand` rather than setting it. Default `tide`. */
+  baseThemeId?: string;
+};
+
 /**
  * The script that applies the stored choice before first paint: it sets
  * `data-theme-setting` and `data-theme` on `<html>` and, while the setting
@@ -56,8 +73,21 @@ export type ColorModeOptions = {
  * applies the stored choice again. A ThemeToggle change only ever replaces
  * the value, so it never trips the repair.
  */
-export function colorModeScript({ storageKey = DEFAULT_COLOR_MODE_STORAGE_KEY }: ColorModeOptions = {}): string {
+export function colorModeScript({
+  storageKey = DEFAULT_COLOR_MODE_STORAGE_KEY,
+  brandStorageKey,
+  baseThemeId = 'tide',
+}: ColorModeScriptOptions = {}): string {
   const key = JSON.stringify(storageKey);
+  // The brand half is written only when a host asks for it, so the default
+  // script stays byte-for-byte what it was.
+  const brand = brandStorageKey
+    ? `
+    var brand = null;
+    try { brand = localStorage.getItem(${JSON.stringify(brandStorageKey)}); } catch (e) {}
+    if (brand === ${JSON.stringify(baseThemeId)}) root.removeAttribute('data-brand');
+    else if (brand && /^[a-z0-9-]+$/.test(brand)) root.setAttribute('data-brand', brand);`
+    : '';
   return `(function () {
   var root = document.documentElement;
   var media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -66,7 +96,7 @@ export function colorModeScript({ storageKey = DEFAULT_COLOR_MODE_STORAGE_KEY }:
     try { saved = localStorage.getItem(${key}); } catch (e) {}
     var setting = saved === 'light' || saved === 'dark' ? saved : 'system';
     root.setAttribute('data-theme-setting', setting);
-    root.setAttribute('data-theme', setting === 'system' ? (media.matches ? 'dark' : 'light') : setting);
+    root.setAttribute('data-theme', setting === 'system' ? (media.matches ? 'dark' : 'light') : setting);${brand}
   }
   apply();
   media.addEventListener('change', function (event) {

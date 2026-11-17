@@ -13,7 +13,9 @@
   /* Sizing */
   flex: 1 1 0;
   min-width: 250px;
-  height: 360px;
+  /* A floor, not a fixed height: a long token name wraps onto more lines in
+     a narrow column, and the card grows rather than cutting its last row. */
+  min-height: 360px;
 
   /* Appearance */
   border: var(--border-025) solid var(--color-bg-container-border);

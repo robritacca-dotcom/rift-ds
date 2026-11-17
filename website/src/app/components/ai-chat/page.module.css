@@ -197,30 +197,8 @@
 }
 
 /* ============================================
-   REFERENCE: props, events, packages
+   REFERENCE: events, packages
    ============================================ */
-.propsBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-300);
-}
-
-/* A subheading inside a section opens a new run: it sits a step further
-   from what precedes it than from what follows. */
-.section > .propsHeading:not(:first-of-type) {
-  margin-top: var(--gap-500);
-}
-
-.propsHeading {
-  margin: 0;
-  font-family: var(--font-heading-3-family);
-  font-size: var(--font-heading-3-size);
-  font-weight: var(--font-heading-3-weight);
-  line-height: var(--font-heading-3-line-height);
-  letter-spacing: var(--font-heading-3-letter-spacing);
-  color: var(--color-text-heading);
-}
-
 .defList {
   margin: 0;
   display: flex;

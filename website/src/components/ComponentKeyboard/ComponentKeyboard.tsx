@@ -11,8 +11,10 @@ import styles from "./ComponentKeyboard.module.css";
  * `partPatterns` where only a part of it follows one, and the rows the
  * library's keyboard contract story presses against it): one table per
  * pattern. Where the registry says the component owns keys of its own, or
- * leaves them to the platform (`keys`), it prints that sentence. It renders
- * nothing for a component with nothing to focus.
+ * leaves them to the platform (`keys`), it prints that sentence. A component
+ * with nothing to focus says so in a sentence, the one its markdown contract
+ * carries (scripts/generate-component-md.mjs), so "no keys" is stated and
+ * never left to be inferred from a missing section.
  *
  * ComponentInstallStrip mounts it, so every component page gets the
  * section the moment its registry entry names a pattern, with no page
@@ -34,7 +36,18 @@ export default function ComponentKeyboard({ slug }: { slug: string }) {
   const patterns = component ? keyboardFor(component.name) : [];
   // Keys no pattern covers: the component's own, or the platform's.
   const keys = component?.keys;
-  if (!component || (patterns.length === 0 && !keys?.note)) return null;
+  if (!component) return null;
+
+  if (patterns.length === 0 && !keys?.note) {
+    // The chat widget carries no keyboard class of its own; its parts do.
+    if (keys?.by !== "none") return null;
+    return (
+      <section className={styles.section} id="tested-keys">
+        <SectionTitle title="Keys" />
+        <p className={styles.note}>Nothing here takes focus, so there are no keys. A test holds that.</p>
+      </section>
+    );
+  }
 
   if (patterns.length === 0) {
     return (

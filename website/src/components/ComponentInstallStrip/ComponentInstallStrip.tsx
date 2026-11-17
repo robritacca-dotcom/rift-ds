@@ -1,4 +1,10 @@
+"use client";
+
 import InstallSnippet from "./InstallSnippet";
+import { useComponentProps } from "../ComponentProps/ComponentPropsSlot";
+import Link from "next/link";
+import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
+import { alternativesFor } from "rift-ds/components/registry";
 import ComponentKeyboard from "../ComponentKeyboard/ComponentKeyboard";
 import { componentPages, isWidgetSlug } from "@/data/component-pages";
 import { chatWidget } from "rift-ds/chat";
@@ -18,10 +24,22 @@ import styles from "./ComponentInstallStrip.module.css";
  * Under the snippet it prints what the import costs, from
  * website/src/data/component-sizes.json.
  *
- * It also carries the page's tested keys above it (ComponentKeyboard,
- * which renders nothing for a component with nothing to focus), so that section reaches every component page the same way.
+ * It also carries the page's Props section (rendered on the server by
+ * ComponentPageLayout and read from ComponentPropsSlot) and its keys
+ * (ComponentKeyboard) above it, so both reach every component page the same
+ * way.
+ *
+ * Above both it prints the component's alternatives: the look-alikes its
+ * registry entry names, each with the condition that picks it, so the
+ * sentence that tells two similar components apart is on both pages.
+ *
+ * It closes with plain links to the component's generated contract, the
+ * markdown and the JSON schema. The For agents dialog shows the same two
+ * files, but only after a click and a fetch; a crawler or an agent reading
+ * the served HTML follows these.
  */
 export default function ComponentInstallStrip({ slug }: { slug: string }) {
+  const propsSection = useComponentProps();
   const component = componentPages.find((c) => c.slug === slug);
   if (!component) return null;
 
@@ -38,6 +56,8 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
   // from the built package. The chat widget has no figure here.
   const size = (componentSizes.sizes as Record<string, number>)[component.name];
 
+  const alternatives = alternativesFor(component.name);
+
   const snippet = [
     `// From the npm package`,
     `import { ${component.name} } from '${importPath}';`,
@@ -48,6 +68,19 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
 
   return (
     <>
+      {alternatives.length > 0 && (
+        <section className={styles.alternatives} id="alternatives">
+          <SectionTitle title="Alternatives" />
+          <ul className={styles.alternativeList}>
+            {alternatives.map((alt) => (
+              <li key={alt.name}>
+                Use <Link href={`/components/${alt.slug}`}>{alt.label}</Link> instead when {alt.when}.
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {propsSection}
       <ComponentKeyboard slug={slug} />
       <div className={styles.strip}>
         <InstallSnippet code={snippet} slug={slug} />
@@ -57,6 +90,11 @@ export default function ComponentInstallStrip({ slug }: { slug: string }) {
             are not counted.
           </p>
         )}
+        <p className={styles.size}>
+          For agents: the props, their allowed values and defaults, and the tested keys, as{" "}
+          <a href={`/components/${slug}.md`}>markdown</a> or as a{" "}
+          <a href={`/schema/components/${slug}.json`}>JSON schema</a>.
+        </p>
       </div>
     </>
   );

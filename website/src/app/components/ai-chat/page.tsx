@@ -6,7 +6,6 @@ import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "@/components/Sidebar/ComponentsSidebar";
 import PageLinks from "@/components/PageLinks/PageLinks";
-import PropsTable from "@/components/PropsTable/PropsTable";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
@@ -38,7 +37,6 @@ import {
   type DemoChartCard,
   type DemoPlanCard,
 } from "rift-ds/chat/demo";
-import { componentApi } from "@/data/component-api.generated";
 import { ChatStage, type ChatStageSetup } from "./ChatStage";
 import styles from "./page.module.css";
 
@@ -48,10 +46,8 @@ import styles from "./page.module.css";
    parts it is built from have pages of their own. The Desktop and Mobile
    tabs restage every example, the way the foundations pages switch their
    viewport. How to add it lives on /docs/chat. The placements and every
-   threshold derive from the package; the props from the generated
-   component API; nothing countable is typed here. */
-
-const widgetApi = componentApi.find((entry) => entry.kind === "widget" && entry.name === chatWidget.name);
+   threshold derive from the package; the props come from the layout's
+   Props section; nothing countable is typed here. */
 
 const parts = chatWidget.parts
   .map((name) => componentMetadata.find((component) => component.name === name))
@@ -624,20 +620,6 @@ export default function AiChatPage() {
               }}
               setup={stageDocuments}
             />
-          </section>
-
-          <section id="props" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Props" />
-            <p className={styles.sectionNote}>
-              Read from the same JSDoc that ships in the package&apos;s types. The For agents button hands
-              your coding agent the same contract.
-            </p>
-            {widgetApi?.exports.map((exported) => (
-              <div key={exported.component} className={styles.propsBlock}>
-                <h3 className={styles.propsHeading}>{exported.component}</h3>
-                <PropsTable exported={exported} />
-              </div>
-            ))}
           </section>
 
           <section id="parts" className={`${styles.section} animate-in animate-delay-3`}>

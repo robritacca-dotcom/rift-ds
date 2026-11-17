@@ -10,6 +10,9 @@
  *      so the title and description come from src/components/registry.json
  *      rather than a second copy living in the layout
  *      so the tab title can never drift from the sidebar label / breadcrumb.
+ *      It also wraps its children in <ComponentPageLayout slug="<slug>">,
+ *      which renders the page's Props section on the server; a layout
+ *      without it ships a component page with no props table.
  *   3. No website source hardcodes a spelled-out component count (e.g.
  *      "Forty-two React components") — counts must derive from COMPONENT_COUNT.
  *   4. No page module caps prose with a ch-based max-width (e.g.
@@ -36,6 +39,7 @@ const registry = JSON.parse(
 const componentsDir = join(repoRoot, 'website', 'src', 'app', 'components');
 
 const missingLayout = [];
+const noPropsLayout = [];
 const notCentralized = [];
 
 // slug and label are stored in the registry, so a name-to-slug exception is
@@ -57,6 +61,13 @@ for (const { name, slug } of [...registry.components, ...widgets]) {
   if (!read(layoutPath).includes(`componentPageMetadata("${slug}")`)) {
     notCentralized.push(
       `${name} → components/${slug}/layout.tsx should resolve its metadata via componentPageMetadata("${slug}")`
+    );
+  }
+  // The layout also renders the page's Props section on the server, through
+  // ComponentPageLayout; without it the page has no props table.
+  if (!read(layoutPath).includes(`<ComponentPageLayout slug="${slug}">`)) {
+    noPropsLayout.push(
+      `${name} → components/${slug}/layout.tsx should wrap its children in <ComponentPageLayout slug="${slug}">`
     );
   }
 }
@@ -108,6 +119,7 @@ const fail = (msg) => {
 for (const [what, list] of [
   ['Component pages with no layout.tsx (title falls back to the site default)', missingLayout],
   ['Component layouts not deriving their title from pageMetadata', notCentralized],
+  ['Component layouts not rendering the Props section of the page', noPropsLayout],
   ['Hardcoded spelled-out component counts (must use COMPONENT_COUNT)', hardcodedCounts],
   ['ch-based max-width caps on website CSS (early-wrapping prose)', chWidthCaps],
 ]) {

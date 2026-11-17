@@ -1,0 +1,41 @@
+/* The Props section on a component page, spaced like the Tested keys
+   section it sits above (ComponentKeyboard.module.css). */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin-top: var(--gap-500);
+  width: 100%;
+}
+
+.note {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+/* A component with several exports names each table. A heading after the
+   first sits a step further from the table above it than from its own. */
+.block + .block {
+  margin-top: var(--gap-200);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+  color: var(--color-text-heading);
+}

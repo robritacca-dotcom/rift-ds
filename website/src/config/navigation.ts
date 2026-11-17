@@ -708,7 +708,8 @@ export function pageMetadata(href: string, description?: string): Metadata {
  * Metadata for a component showcase page, resolved entirely from the registry.
  *
  * Replaces hand-writing the same one-line description in both registry.json and
- * the page's layout.tsx — the registry is the only place it lives now.
+ * the page's layout.tsx — the registry is the only place it lives now. Also
+ * names the page's markdown contract as its `text/markdown` alternate.
  */
 export function componentPageMetadata(slug: string): Metadata {
   const meta = componentPages.find((c) => c.slug === slug);
@@ -718,7 +719,17 @@ export function componentPageMetadata(slug: string): Metadata {
         `Add it to src/components/registry.json (or src/chat/registry.json for a widget).`
     );
   }
-  return pageMetadata(`/components/${slug}`, searchDescription(meta.description));
+  const metadata = pageMetadata(`/components/${slug}`, searchDescription(meta.description));
+  // The page's generated contract, announced in the head as its markdown
+  // twin (scripts/generate-component-md.mjs writes one per component page),
+  // so a reader that looks for an alternate finds it without the page body.
+  return {
+    ...metadata,
+    alternates: {
+      ...metadata.alternates,
+      types: { "text/markdown": `/components/${slug}.md` },
+    },
+  };
 }
 
 /* Search results show roughly 70 to 160 characters. A registry description

@@ -30,9 +30,9 @@ export default function PropsTable({ exported }: { exported: ComponentExportApi 
       caption={`${exported.component} props`}
       captionHidden
       columns={[
-        { key: "name", header: "Prop", width: "22%" },
-        { key: "type", header: "Type", width: "30%" },
-        { key: "default", header: "Default", width: "12%" },
+        { key: "name", header: "Prop", width: "20%" },
+        { key: "type", header: "Type", width: "28%" },
+        { key: "default", header: "Default", width: "16%" },
         { key: "description", header: "Description" },
       ]}
       rows={exported.props.map((prop) => ({

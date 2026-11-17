@@ -12,3 +12,37 @@
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-secondary);
 }
+
+.size a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* The alternatives section, spaced like the Props and Tested keys sections. */
+.alternatives {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  margin-top: var(--gap-500);
+  width: 100%;
+}
+
+.alternativeList {
+  margin: 0;
+  padding-inline-start: var(--padding-500);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-secondary);
+}
+
+.alternativeList a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

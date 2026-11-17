@@ -101,6 +101,7 @@ import 'rift-ds/tokens/presets/presets.css';
 ```
 
 - **Dark mode**: `data-theme="dark"` on the root element; light is the default.
+- **Theme names**: a preset's id is its `data-brand` value and stylesheet name, which can differ from the name a theme menu shows (Signal ships as `plum`). `SHIPPED_THEMES` from `rift-ds/tokens/values` lists every theme with its name and attribute, and `shippedThemeOptions()` hands ThemePicker the same list with each theme's swatch. To apply a stored theme before first paint, pass `colorModeScript({ brandStorageKey })` the key you keep it under.
 - **Page colours**: the token stylesheet defines custom properties and styles no element, so paint the page once: set `background: var(--color-bg-page-primary)`, `color: var(--color-text-primary)` and `font-family: var(--font-family-primary)` on `body`. Without it a dark theme lands as dark components on a white page.
 - **Your own brand**: every semantic token chains to a primitive, so overriding one primitive re-themes everything built on it. The [playground](https://rift-ds.com/playground) restyles the system live and copies out a complete, paste-ready override.
 - **One part of a shipped theme**: the token and theme stylesheets sit in cascade layers (`rift.tokens`, then `rift.preset`), so any rule of your own outranks them whatever its selector. A plain `:root { --font-family-primary: … }` keeps a preset's colours with your face, in light and dark alike. To set a default that a preset still replaces, declare it inside `@layer rift.tokens { … }`.

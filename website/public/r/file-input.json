@@ -7,8 +7,8 @@
   "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
-    "https://rift-ds.com/r/attachment-viewer.json",
-    "https://rift-ds.com/r/field.json"
+    "https://rift-ds.com/r/field.json",
+    "https://rift-ds.com/r/file-row.json"
   ],
   "files": [
     {

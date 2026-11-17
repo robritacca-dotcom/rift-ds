@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/tree-view
 - Schema: https://rift-ds.com/schema/components/tree-view.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Org chart](https://rift-ds.com/components/org-chart.md) instead when the hierarchy is people, drawn as a chart of who reports to whom.
+
 ## TreeView props
 
 | Prop | Type | Required | Default | Description |

@@ -105,6 +105,18 @@
           "description": "Trailing header slot, e.g. a \"New event\" Button."
         },
         {
+          "name": "view",
+          "type": "\"month\" | \"week\"",
+          "typeKind": "enum",
+          "values": [
+            "month",
+            "week"
+          ],
+          "required": false,
+          "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time.",
+          "default": "month"
+        },
+        {
           "name": "previousLabel",
           "type": "string",
           "typeKind": "primitive",
@@ -119,6 +131,30 @@
           "required": false,
           "description": "Accessible name of the next-month button.",
           "default": "Next month"
+        },
+        {
+          "name": "previousWeekLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-week button, in the week view.",
+          "default": "Previous week"
+        },
+        {
+          "name": "nextWeekLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-week button, in the week view.",
+          "default": "Next week"
+        },
+        {
+          "name": "showLessLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The visible text of the control that folds an expanded day back, when a day's \"+N more\" opens it in place (with no `onDateClick`).",
+          "default": "Show less"
         },
         {
           "name": "monthLabel",
@@ -239,6 +275,6 @@
     }
   ],
   "size": {
-    "gzip": 2537
+    "gzip": 2841
   }
 }

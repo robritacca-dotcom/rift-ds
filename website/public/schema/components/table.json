@@ -105,7 +105,7 @@
     },
     "TableRow": {
       "kind": "interface",
-      "definition": "interface TableRow {\n  /** Unique row identifier */\n  id: string;\n  /** Cell values keyed by column key — each accepts any React node */\n  cells: Record<string, React.ReactNode>;\n  /** Whether the row is selected, drawn with the table's selected-row tint. */\n  selected?: boolean;\n}"
+      "definition": "interface TableRow {\n  /** Unique row identifier */\n  id: string;\n  /** Cell values keyed by column key — each accepts any React node */\n  cells: Record<string, React.ReactNode>;\n  /** Whether the row is selected, drawn with the table's selected-row tint. */\n  selected?: boolean;\n  /** `heading` opens a group of rows in the emphasis weight; `total` is a row the ones above add up to, in the emphasis weight under a heavier rule. */\n  variant?: 'default' | 'heading' | 'total';\n}"
     }
   },
   "externalTypes": {
@@ -116,13 +116,18 @@
     "by": "none"
   },
   "size": {
-    "gzip": 1061
+    "gzip": 1091
   },
   "alternatives": [
     {
       "name": "DataTable",
       "when": "the rows need sorting, filtering, editing or loading from a server",
       "schemaUrl": "https://rift-ds.com/schema/components/data-table.json"
+    },
+    {
+      "name": "Statement",
+      "when": "the rows are sections of amounts with totals and subtotals",
+      "schemaUrl": "https://rift-ds.com/schema/components/statement.json"
     }
   ]
 }

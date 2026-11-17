@@ -7,9 +7,9 @@
   "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",
-    "https://rift-ds.com/r/attachment-viewer.json",
     "https://rift-ds.com/r/button.json",
     "https://rift-ds.com/r/circular-button.json",
+    "https://rift-ds.com/r/file-row.json",
     "https://rift-ds.com/r/spinner.json"
   ],
   "files": [

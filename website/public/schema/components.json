@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.29.0",
   "package": "rift-ds",
-  "count": 184,
+  "count": 190,
   "components": [
     {
       "name": "Accordion",
@@ -585,6 +585,16 @@
       "markdownUrl": "https://rift-ds.com/components/date-range-picker.md"
     },
     {
+      "name": "DayTimeline",
+      "label": "Day timeline",
+      "slug": "day-timeline",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/day-timeline.json",
+      "docsUrl": "https://rift-ds.com/components/day-timeline",
+      "markdownUrl": "https://rift-ds.com/components/day-timeline.md"
+    },
+    {
       "name": "Deadline",
       "label": "Deadline",
       "slug": "deadline",
@@ -755,6 +765,16 @@
       "markdownUrl": "https://rift-ds.com/components/file-input.md"
     },
     {
+      "name": "FileRow",
+      "label": "File row",
+      "slug": "file-row",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/file-row.json",
+      "docsUrl": "https://rift-ds.com/components/file-row",
+      "markdownUrl": "https://rift-ds.com/components/file-row.md"
+    },
+    {
       "name": "FilterBar",
       "label": "Filter bar",
       "slug": "filter-bar",
@@ -763,6 +783,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/filter-bar.json",
       "docsUrl": "https://rift-ds.com/components/filter-bar",
       "markdownUrl": "https://rift-ds.com/components/filter-bar.md"
+    },
+    {
+      "name": "FormSection",
+      "label": "Form section",
+      "slug": "form-section",
+      "category": "forms",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/form-section.json",
+      "docsUrl": "https://rift-ds.com/components/form-section",
+      "markdownUrl": "https://rift-ds.com/components/form-section.md"
     },
     {
       "name": "FunnelChart",
@@ -1155,6 +1185,16 @@
       "markdownUrl": "https://rift-ds.com/components/number-input.md"
     },
     {
+      "name": "OrgChart",
+      "label": "Org chart",
+      "slug": "org-chart",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/org-chart.json",
+      "docsUrl": "https://rift-ds.com/components/org-chart",
+      "markdownUrl": "https://rift-ds.com/components/org-chart.md"
+    },
+    {
       "name": "PageHeader",
       "label": "Page header",
       "slug": "page-header",
@@ -1545,6 +1585,16 @@
       "markdownUrl": "https://rift-ds.com/components/stat.md"
     },
     {
+      "name": "Statement",
+      "label": "Statement",
+      "slug": "statement",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/statement.json",
+      "docsUrl": "https://rift-ds.com/components/statement",
+      "markdownUrl": "https://rift-ds.com/components/statement.md"
+    },
+    {
       "name": "StatusDot",
       "label": "Status dot",
       "slug": "status-dot",
@@ -1823,6 +1873,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/widget.json",
       "docsUrl": "https://rift-ds.com/components/widget",
       "markdownUrl": "https://rift-ds.com/components/widget.md"
+    },
+    {
+      "name": "Wizard",
+      "label": "Wizard",
+      "slug": "wizard",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/wizard.json",
+      "docsUrl": "https://rift-ds.com/components/wizard",
+      "markdownUrl": "https://rift-ds.com/components/wizard.md"
     },
     {
       "name": "WorldMap",

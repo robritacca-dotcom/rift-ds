@@ -112,7 +112,7 @@
   "types": {
     "Tab": {
       "kind": "interface",
-      "definition": "interface Tab {\n  /** Unique tab identifier */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A count after the label (unread items, results), written in the resolved locale and read as part of the tab's name. */\n  count?: number;\n  /** Whether this tab is disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
+      "definition": "interface Tab {\n  /** Unique tab identifier */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A count after the label (unread items, results), written in the resolved locale and read as part of the tab's name. */\n  count?: number;\n  /** Whether this tab is disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this tab shows, written as the tab's `aria-controls`. Set it when you render the panels yourself; with `content`, Tabs names its own panel and this id is used for it. */\n  panelId?: string;\n  /** What the tab shows. When any tab has content, Tabs renders a `role=\"tabpanel\"` for each after the tab list, the selected one shown, each named by its tab. Leave it out to render the panels yourself. */\n  content?: React.ReactNode;\n}"
     }
   },
   "externalTypes": {
@@ -160,7 +160,7 @@
     }
   ],
   "size": {
-    "gzip": 1611
+    "gzip": 1761
   },
   "alternatives": [
     {

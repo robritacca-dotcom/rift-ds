@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (33)
+## Data display (37)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -619,6 +619,14 @@ The wired table: typed columns, sorting, filters, editing, grouping with totals,
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/data-table.md
 
+### Day timeline
+
+Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.
+
+- Import: `import { DayTimeline } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/day-timeline.md
+
 ### Deadline
 
 A due date against now that turns from neutral to warning to error as it nears.
@@ -667,6 +675,14 @@ Images with captions, in the case-study frame.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/figure.md
 
+### File row
+
+One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.
+
+- Import: `import { FileRow } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/file-row.md
+
 ### Image compare
 
 Before-and-after image comparison with a draggable divider, keyboard control, and corner labels.
@@ -699,6 +715,14 @@ Linked items with logo, label, and subtitle.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/link-list.md
 
+### Org chart
+
+Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath.
+
+- Import: `import { OrgChart } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/org-chart.md
+
 ### Pixel avatar
 
 A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink.
@@ -730,6 +754,14 @@ Headline metrics with labels and trend deltas.
 - Import: `import { Stat } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/stat.md
+
+### Statement
+
+A financial statement: titled sections of amounts with totals, and subtotals down to a bottom line, a column per period.
+
+- Import: `import { Statement } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/statement.md
 
 ### Table
 
@@ -899,7 +931,7 @@ Temporary notification with status variants, auto-dismiss, and stacking via Toas
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toast.md
 
-## Forms (25)
+## Forms (26)
 
 Inputs, pickers, and selection controls for collecting and editing values.
 
@@ -990,6 +1022,14 @@ A row of filter chips for narrowing a collection, each opening a popover of opti
 - Import: `import { FilterBar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/filter-bar.md
+
+### Form section
+
+A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions.
+
+- Import: `import { FormSection } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/form-section.md
 
 ### Input
 
@@ -1291,7 +1331,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (12)
+## Navigation (13)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -1391,6 +1431,14 @@ Mobile screen header with a menu or back button, title, and actions, in Rift, iO
 - Import: `import { TopAppBar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/top-app-bar.md
+
+### Wizard
+
+A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.
+
+- Import: `import { Wizard } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/wizard.md
 
 ## Overlays (10)
 

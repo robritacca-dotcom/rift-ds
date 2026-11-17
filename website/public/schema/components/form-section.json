@@ -1,0 +1,121 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "FormSection",
+  "label": "Form section",
+  "slug": "form-section",
+  "category": "forms",
+  "description": "A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions.",
+  "client": false,
+  "importPath": "rift-ds/components/FormSection/FormSection",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/form-section",
+  "markdownUrl": "https://rift-ds.com/components/form-section.md",
+  "exports": [
+    {
+      "component": "FormSection",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The section's heading.\nNote: this shadows the native `title` tooltip attribute, which FormSection does not expose."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A sentence on what the fields are for or what changing them does."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The fields, laid out in `columns`."
+        },
+        {
+          "name": "columns",
+          "type": "1 | 2 | 3",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "required": false,
+          "description": "How many columns the fields run to; they fold to one as the section narrows.",
+          "default": 1
+        },
+        {
+          "name": "layout",
+          "type": "\"aside\" | \"stacked\"",
+          "typeKind": "enum",
+          "values": [
+            "aside",
+            "stacked"
+          ],
+          "required": false,
+          "description": "`stacked` puts the heading above the fields; `aside` sets it in a column beside them, the settings page's layout, stacking when the section is narrow.",
+          "default": "stacked"
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The section's own controls, at the foot of the fields: a Save, a Cancel."
+        },
+        {
+          "name": "level",
+          "type": "2 | 4 | 3",
+          "typeKind": "enum",
+          "values": [
+            "2",
+            "3",
+            "4"
+          ],
+          "required": false,
+          "description": "The heading's place in the outline. Defaults to 2, a section of a page.",
+          "default": 2
+        },
+        {
+          "name": "divider",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws a rule above the section, for a column of sections.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "It holds the fields and actions passed in, each a native control reached with Tab."
+  },
+  "size": {
+    "gzip": 740
+  },
+  "alternatives": [
+    {
+      "name": "Widget",
+      "when": "the section is a dashboard tile rather than part of a form",
+      "schemaUrl": "https://rift-ds.com/schema/components/widget.json"
+    }
+  ]
+}

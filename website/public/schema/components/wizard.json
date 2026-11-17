@@ -1,0 +1,147 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "Wizard",
+  "label": "Wizard",
+  "slug": "wizard",
+  "category": "navigation",
+  "description": "A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.",
+  "client": true,
+  "importPath": "rift-ds/components/Wizard/Wizard",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/wizard",
+  "markdownUrl": "https://rift-ds.com/components/wizard.md",
+  "exports": [
+    {
+      "component": "Wizard",
+      "props": [
+        {
+          "name": "steps",
+          "type": "WizardStep[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The steps, in order.",
+          "typeRefs": [
+            "WizardStep"
+          ]
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The index of the step shown, for a controlled wizard. Leave it undefined to let the wizard keep its own, seeded from `defaultStep`."
+        },
+        {
+          "name": "defaultStep",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The step shown on first render when the wizard is uncontrolled. Defaults to 0.",
+          "default": 0
+        },
+        {
+          "name": "onStepChange",
+          "type": "((step: number) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the index of the step the reader moves to, by Back, Next or a completed step in the stepper."
+        },
+        {
+          "name": "onFinish",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called when the reader presses the last step's finish button."
+        },
+        {
+          "name": "canAdvance",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the reader can move on from the step shown: false holds Next and Finish, while the step's own fields say what is missing. Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "summary",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A running figure at the start of the footer, kept in view as the steps change: a total, a count of what is chosen."
+        },
+        {
+          "name": "allowStepClick",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lets the reader go back to a completed step from the stepper. Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "backLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The back button's text. Defaults to \"Back\".",
+          "default": "Back"
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The next button's text. Defaults to \"Continue\".",
+          "default": "Continue"
+        },
+        {
+          "name": "finishLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The last step's button text. Defaults to \"Finish\".",
+          "default": "Finish"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the stepper's step numbers are written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "WizardStep": {
+      "kind": "interface",
+      "definition": "interface WizardStep {\n  /** A stable id for the step. */\n  id: string;\n  /** The step's name, in the stepper and as the heading of its content. */\n  label: string;\n  /** A line under the label in the stepper. */\n  description?: string;\n  /** What the step asks for. */\n  content: React.ReactNode;\n}",
+      "description": "One step of a wizard."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "Back, Continue and Finish are native buttons, as are the stepper’s completed steps, and focus moves to each step’s heading."
+  },
+  "size": {
+    "gzip": 3097
+  },
+  "alternatives": [
+    {
+      "name": "Stepper",
+      "when": "only the progress is needed and the host lays out the steps and their buttons",
+      "schemaUrl": "https://rift-ds.com/schema/components/stepper.json"
+    }
+  ]
+}

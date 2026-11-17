@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/stepper
 - Schema: https://rift-ds.com/schema/components/stepper.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Wizard](https://rift-ds.com/components/wizard.md) instead when the steps need their container, their heading and Back and Continue.
+
 ## Stepper props
 
 | Prop | Type | Required | Default | Description |

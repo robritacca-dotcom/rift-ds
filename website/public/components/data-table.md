@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { DataTable } from 'rift-ds';`
 - Deep import: `import { DataTable } from 'rift-ds/components/DataTable/DataTable';`
 - Rendering: client component (declares 'use client')
-- Size: 71.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 71.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/data-table
 - Schema: https://rift-ds.com/schema/components/data-table.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -245,6 +245,14 @@ interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   align?: 'start' | 'center' | 'end' | 'left' | 'right';
   /** Render the cell for a row; defaults to the row's raw value for this key. */
   render?: (row: R) => React.ReactNode;
+  /**
+   * Derives the column's value from the row's other values, such as a week's
+   * total from its seven days (`(values) => days.reduce((sum, day) => sum + Number(values[day] ?? 0), 0)`).
+   * The table reads it wherever it reads a value, so it sorts, filters, totals
+   * and groups, and it follows an edit to the cells it reads as the edit is
+   * made. A computed column is never editable.
+   */
+  compute?: (values: R['values']) => DataTableValue;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
   rowHeader?: boolean;
   /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */

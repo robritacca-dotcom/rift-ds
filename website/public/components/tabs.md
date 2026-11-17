@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { Tabs } from 'rift-ds';`
 - Deep import: `import { Tabs } from 'rift-ds/components/Tabs/Tabs';`
 - Rendering: client component (declares 'use client')
-- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/tabs
 - Schema: https://rift-ds.com/schema/components/tabs.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -62,8 +62,10 @@ interface Tab {
   count?: number;
   /** Whether this tab is disabled */
   disabled?: boolean;
-  /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */
+  /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. Set it when you render the panels yourself; with `content`, Tabs names its own panel and this id is used for it. */
   panelId?: string;
+  /** What the tab shows. When any tab has content, Tabs renders a `role="tabpanel"` for each after the tab list, the selected one shown, each named by its tab. Leave it out to render the panels yourself. */
+  content?: React.ReactNode;
 }
 ```
 

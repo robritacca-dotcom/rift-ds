@@ -358,6 +358,12 @@
       "description": "An inline calendar for choosing a range of days, one or two months wide, with presets."
     },
     {
+      "name": "day-timeline",
+      "type": "registry:ui",
+      "title": "Day timeline",
+      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours."
+    },
+    {
       "name": "deadline",
       "type": "registry:ui",
       "title": "Deadline",
@@ -460,10 +466,22 @@
       "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors."
     },
     {
+      "name": "file-row",
+      "type": "registry:ui",
+      "title": "File row",
+      "description": "One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end."
+    },
+    {
       "name": "filter-bar",
       "type": "registry:ui",
       "title": "Filter bar",
       "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets."
+    },
+    {
+      "name": "form-section",
+      "type": "registry:ui",
+      "title": "Form section",
+      "description": "A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions."
     },
     {
       "name": "funnel-chart",
@@ -700,6 +718,12 @@
       "description": "Numeric field with increment and decrement steppers and min/max clamping."
     },
     {
+      "name": "org-chart",
+      "type": "registry:ui",
+      "title": "Org chart",
+      "description": "Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath."
+    },
+    {
       "name": "page-header",
       "type": "registry:ui",
       "title": "Page header",
@@ -934,6 +958,12 @@
       "description": "Headline metrics with labels and trend deltas."
     },
     {
+      "name": "statement",
+      "type": "registry:ui",
+      "title": "Statement",
+      "description": "A financial statement: titled sections of amounts with totals, and subtotals down to a bottom line, a column per period."
+    },
+    {
       "name": "status-dot",
       "type": "registry:ui",
       "title": "Status dot",
@@ -1100,6 +1130,12 @@
       "type": "registry:ui",
       "title": "Widget",
       "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns."
+    },
+    {
+      "name": "wizard",
+      "type": "registry:ui",
+      "title": "Wizard",
+      "description": "A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary."
     },
     {
       "name": "world-map",

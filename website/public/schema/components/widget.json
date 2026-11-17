@@ -224,6 +224,13 @@
           "description": "Trailing fact in the caption face: a date, an amount, a state."
         },
         {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controls at the row's end, after the meta: an Approve and a Decline button on a request, say. A row with actions is not itself a link or a button, since a control cannot hold others, so it takes no `href` or `onClick`."
+        },
+        {
           "name": "href",
           "type": "string",
           "typeKind": "primitive",
@@ -282,13 +289,18 @@
     "by": "none"
   },
   "size": {
-    "gzip": 1596
+    "gzip": 1781
   },
   "alternatives": [
     {
       "name": "Grid",
       "when": "cells of any kind should sit in equal columns and share a row’s height",
       "schemaUrl": "https://rift-ds.com/schema/components/grid.json"
+    },
+    {
+      "name": "FormSection",
+      "when": "the section holds a form’s fields and its own save",
+      "schemaUrl": "https://rift-ds.com/schema/components/form-section.json"
     }
   ]
 }

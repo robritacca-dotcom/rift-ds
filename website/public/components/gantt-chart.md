@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/gantt-chart
 - Schema: https://rift-ds.com/schema/components/gantt-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Day timeline](https://rift-ds.com/components/day-timeline.md) instead when the bars run over hours within one day.
+
 ## GanttChart props
 
 | Prop | Type | Required | Default | Description |

@@ -1,0 +1,140 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "Statement",
+  "label": "Statement",
+  "slug": "statement",
+  "category": "data-display",
+  "description": "A financial statement: titled sections of amounts with totals, and subtotals down to a bottom line, a column per period.",
+  "client": false,
+  "importPath": "rift-ds/components/Statement/Statement",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/statement",
+  "markdownUrl": "https://rift-ds.com/components/statement.md",
+  "exports": [
+    {
+      "component": "Statement",
+      "props": [
+        {
+          "name": "periods",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The periods the amounts are for, the column headers in order (\"Q1\", \"Q2\", \"Year to date\")."
+        },
+        {
+          "name": "items",
+          "type": "(StatementSection | StatementSubtotal)[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The sections and subtotals, top to bottom; the last subtotal is the bottom line.",
+          "typeRefs": [
+            "StatementSection",
+            "StatementSubtotal"
+          ]
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The ISO 4217 code the amounts are in. Defaults to `USD`.",
+          "default": "USD"
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The statement's name, read as the table's caption (\"Profit and loss, 2026\")."
+        },
+        {
+          "name": "captionVisible",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the caption above the table; it is read either way.",
+          "default": false
+        },
+        {
+          "name": "labelHeader",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The header of the label column. Defaults to \"Item\".",
+          "default": "Item"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the amounts are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Row density: `compact` for a statement in a side panel.",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "DecimalString": {
+      "kind": "type",
+      "definition": "type DecimalString = string;",
+      "description": "A decimal amount written with an optional leading minus, digits and an optional `.` fraction: `\"1234.50\"`, `\"-0.07\"`."
+    },
+    "StatementLine": {
+      "kind": "interface",
+      "definition": "interface StatementLine {\n  /** A stable id for the line. */\n  id: string;\n  /** What the amount is (\"Subscriptions\", \"Rent\"). */\n  label: string;\n  /** The amount in each period, as a decimal string (`\"1234.50\"`), in the order of `periods`. */\n  amounts: DecimalString[];\n}",
+      "description": "One line of a section: what it is, and its amount in each period.",
+      "refs": [
+        "DecimalString"
+      ]
+    },
+    "StatementSection": {
+      "kind": "interface",
+      "definition": "interface StatementSection {\n  /** Marks the entry as a section. */\n  kind: 'section';\n  /** A stable id for the section. */\n  id: string;\n  /** The section's heading (\"Revenue\", \"Operating expenses\"). */\n  title: string;\n  /** The section's lines. */\n  lines: StatementLine[];\n  /** The label of the section's total row; leave it out to show no total. */\n  totalLabel?: string;\n  /** How the section counts toward the subtotals below it: `1` adds (revenue), `-1` subtracts (costs entered as positive amounts). Defaults to 1. */\n  sign?: 1 | -1;\n}",
+      "description": "A titled group of lines, with an optional total under them.",
+      "refs": [
+        "StatementLine"
+      ]
+    },
+    "StatementSubtotal": {
+      "kind": "interface",
+      "definition": "interface StatementSubtotal {\n  /** Marks the entry as a subtotal. */\n  kind: 'subtotal';\n  /** A stable id for the subtotal. */\n  id: string;\n  /** What the subtotal is (\"Gross profit\", \"Net profit\"). */\n  label: string;\n}",
+      "description": "A running total of every section above it, each counted by its sign: a gross profit, a net profit."
+    }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 2695
+  },
+  "alternatives": [
+    {
+      "name": "Table",
+      "when": "the rows are records to read rather than sections of amounts that add up",
+      "schemaUrl": "https://rift-ds.com/schema/components/table.json"
+    }
+  ]
+}

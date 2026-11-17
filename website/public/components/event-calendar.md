@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Deep import: `import { EventCalendar } from 'rift-ds/components/EventCalendar/EventCalendar';`
 - Rendering: client component (declares 'use client')
-- Size: 2.5 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/event-calendar
 - Schema: https://rift-ds.com/schema/components/event-calendar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -27,8 +27,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. |
 | legend | `EventCalendarLegendItem[]` | no |  | What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
+| view | `"month" \| "week"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time. |
 | previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
+| previousWeekLabel | `string` | no | `'Previous week'` | Accessible name of the previous-week button, in the week view. |
+| nextWeekLabel | `string` | no | `'Next week'` | Accessible name of the next-week button, in the week view. |
+| showLessLabel | `string` | no | `'Show less'` | The visible text of the control that folds an expanded day back, when a day's "+N more" opens it in place (with no `onDateClick`). |
 | monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of the month in view: the visible title and the name of the day grid. Defaults to the month name and the year in `locale` ("January 2026" in `en-US`). |
 | overflowLabel | `((count: number, date: Date) => string)` | no |  | Accessible name of a day's "+N more" overflow button, given the number of hidden events and the day. Defaults to "N more events" followed by the full date in `locale`. |
 | moreLabel | `((count: number) => string)` | no | `` (count: number): string => `+${count} more` `` | The visible text of a day's overflow row, given the number of hidden events. Defaults to "+N more". The row's accessible name is `overflowLabel` when it is a button. |

@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 ## Alternatives
 
 - Use [Data table](https://rift-ds.com/components/data-table.md) instead when the rows need sorting, filtering, editing or loading from a server.
+- Use [Statement](https://rift-ds.com/components/statement.md) instead when the rows are sections of amounts with totals and subtotals.
 
 ## Table props
 
@@ -65,6 +66,8 @@ interface TableRow {
   cells: Record<string, React.ReactNode>;
   /** Whether the row is selected, drawn with the table's selected-row tint. */
   selected?: boolean;
+  /** `heading` opens a group of rows in the emphasis weight; `total` is a row the ones above add up to, in the emphasis weight under a heavier rule. */
+  variant?: 'default' | 'heading' | 'total';
 }
 ```
 

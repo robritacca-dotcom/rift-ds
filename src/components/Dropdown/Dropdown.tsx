@@ -66,6 +66,8 @@ type DropdownOwnProps = {
   error?: boolean;
   /** Helper or error message */
   helperText?: string;
+  /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
+  errorText?: React.ReactNode;
   /** Called with the newly selected value */
   onValueChange?: (value: string) => void;
   /** Whether the list is open, controlled. Leave undefined to let the dropdown open and close itself. */
@@ -129,6 +131,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       required = false,
       error = false,
       helperText,
+      errorText,
       onValueChange,
       open: openProp,
       defaultOpen = false,
@@ -194,11 +197,13 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     const baseClass = 'ds-dropdown';
     const isGrouped = groups && groups.length > 0;
 
+    const hasErrorText = errorText != null && errorText !== false && errorText !== '';
+    const invalid = error || hasErrorText;
     const classes = [
       baseClass,
       size === 'compact' ? `${baseClass}--compact` : '',
       isOpen ? `${baseClass}--open` : '',
-      error ? `${baseClass}--error` : '',
+      invalid ? `${baseClass}--error` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
     ]
@@ -341,6 +346,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         ref={setRootRef}
         label={label}
         helperText={helperText}
+        errorText={errorText}
         error={error}
         required={required}
         disabled={disabled}
@@ -362,11 +368,11 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           // The helper/error message is announced, joined to any description
           // the consumer passes rather than replacing it.
           aria-describedby={
-            [ariaDescribedBy, helperText ? `${inputId}-helper` : undefined]
+            [ariaDescribedBy, hasErrorText ? `${inputId}-error` : undefined, helperText ? `${inputId}-helper` : undefined]
               .filter(Boolean)
               .join(' ') || undefined
           }
-          aria-invalid={error || undefined}
+          aria-invalid={invalid || undefined}
           tabIndex={disabled ? -1 : 0}
           onClick={handleToggle}
           onKeyDown={handleKeyDown}

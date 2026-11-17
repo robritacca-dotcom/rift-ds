@@ -224,3 +224,18 @@ export const Disabled: Story = {
   },
   render: SingleTemplate,
 };
+
+const ERROR_MESSAGE = 'Choose a country to continue.';
+
+/** The error message under the control, with the helper text kept beside it. Setting `errorText` marks the control invalid on its own. */
+export const WithErrorText: Story = {
+  args: {
+    helperText: 'Start typing to narrow the list.',
+    errorText: ERROR_MESSAGE,
+  },
+  render: SingleTemplate,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-invalid', 'true');
+    await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
+  },
+};

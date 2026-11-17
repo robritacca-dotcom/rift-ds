@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { NumberInput } from './NumberInput';
 
 const meta = {
@@ -81,5 +82,22 @@ export const Disabled: Story = {
   args: {
     defaultValue: 3,
     disabled: true,
+  },
+};
+
+const ERROR_MESSAGE = 'Enter a quantity of at least 1.';
+
+/** The error message under the control, with the helper text kept beside it. Setting `errorText` marks the control invalid on its own. */
+export const WithErrorText: Story = {
+  args: {
+    label: 'Quantity',
+    defaultValue: 0,
+    helperText: 'Between 1 and 8 guests',
+    errorText: ERROR_MESSAGE,
+  },
+  play: async ({ canvas }) => {
+    const control = canvas.getByLabelText('Quantity');
+    await expect(control).toHaveAttribute('aria-invalid', 'true');
+    await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
   },
 };

@@ -231,3 +231,20 @@ export const FontPreview: Story = {
     trigger?.click();
   },
 };
+
+const ERROR_MESSAGE = 'Choose a theme to continue.';
+
+/** The error message under the control, with the helper text kept beside it. Setting `errorText` marks the control invalid on its own. */
+export const WithErrorText: Story = {
+  args: {
+    label: 'Theme',
+    placeholder: 'Choose a theme',
+    helperText: 'This sets the primary colour',
+    errorText: ERROR_MESSAGE,
+  },
+  play: async ({ canvas }) => {
+    const control = canvas.getByLabelText('Theme');
+    await expect(control).toHaveAttribute('aria-invalid', 'true');
+    await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
+  },
+};

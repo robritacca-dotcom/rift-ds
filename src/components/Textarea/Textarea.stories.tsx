@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { Textarea } from './Textarea';
 
 const meta = {
@@ -123,5 +123,21 @@ export const NoResize: Story = {
     placeholder: 'Cannot be resized...',
     resize: 'none',
     rows: 3,
+  },
+};
+
+const ERROR_MESSAGE = 'Write at least a few words.';
+
+/** The error message under the control, with the helper text kept beside it. Setting `errorText` marks the control invalid on its own. */
+export const WithErrorText: Story = {
+  args: {
+    label: 'Feedback',
+    helperText: 'Your feedback helps us improve',
+    errorText: ERROR_MESSAGE,
+  },
+  play: async ({ canvas }) => {
+    const control = canvas.getByLabelText('Feedback');
+    await expect(control).toHaveAttribute('aria-invalid', 'true');
+    await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
   },
 };

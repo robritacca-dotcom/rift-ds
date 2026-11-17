@@ -453,7 +453,7 @@ export const inlineValueKeys = () => [...INLINE_VALUES.keys()];
  * A line holding one is left out of the corpus, by decision, with the reason.
  */
 const RUNTIME_EXPRESSIONS = new Map([
-  ['docs/blocks/page.tsx::block.route', 'one line per block, drawn in a loop; the blocks section lists each block by name'],
+  ['docs/blocks/page.tsx::block.route', 'one line per block, drawn in a loop; the Block catalogue section lists each block with its command, route and description'],
   ['foundations/themes/page.tsx::preset.radiusScale', 'a per-theme readout drawn in a loop over the presets'],
   ['foundations/themes/page.tsx::preset.density', 'a per-theme readout drawn in a loop over the presets'],
   ['foundations/themes/page.tsx::motionSpeedPercent(preset.motionScale)', 'a per-theme readout drawn in a loop over the presets'],
@@ -1351,6 +1351,19 @@ ${registry.components.length} components published as ${PACKAGE_NAME}, grouped b
 ${groups}`;
 }
 
+/** The blocks, from their registry: each one's name, its init command, its preview route and what it holds. */
+function sectionBlocks() {
+  const registry = JSON.parse(read(join(repoRoot, 'src', 'cli', 'templates', 'blocks', 'registry.json')));
+  const lines = registry.blocks
+    .map((b) => `- ${b.label} (\`npx ${PACKAGE_NAME} init block ${b.name}\`, preview at /docs/blocks/${b.name}): ${b.description}`)
+    .join('\n');
+  return `## Block catalogue
+
+Whole starting pages the init bin copies into an app, documented at /docs/blocks. Once copied, the files are the app's own.
+
+${lines}`;
+}
+
 function sectionSkills() {
   const skillsDir = join(repoRoot, '.claude', 'skills');
   const registry = JSON.parse(read(join(skillsDir, 'registry.json')));
@@ -1420,6 +1433,7 @@ const SECTIONS = [
   ['Site pages', sectionSitePages],
   ['Blueprints', sectionBlueprints],
   ['Components', sectionComponents],
+  ['Blocks', sectionBlocks],
   ['Skills', sectionSkills],
   ['Releases', sectionReleases],
 ];

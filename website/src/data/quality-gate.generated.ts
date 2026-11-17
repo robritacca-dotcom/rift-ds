@@ -43,7 +43,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "generate-token-values",
-        "text": "Resolves every token per theme and mode into values.json and the DTCG files."
+        "text": "Resolves every token per theme and mode into values.json, the DTCG files and their index."
       },
       {
         "name": "generate-theme-design-md",
@@ -169,7 +169,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
     "checks": [
       {
         "name": "validate-component-registry",
-        "text": "Every component folder is in exactly one registry list, and every entry has a folder."
+        "text": "Every component folder is in exactly one registry list, every entry has a folder, and look-alike components name each other."
       },
       {
         "name": "validate-keyboard-patterns",
@@ -181,7 +181,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-page-titles",
-        "text": "Every component page has a layout with a real browser tab title."
+        "text": "Every component page has a layout with a real browser tab title and its props section."
       },
       {
         "name": "validate-skills-registry",

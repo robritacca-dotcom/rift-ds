@@ -43,7 +43,7 @@ This is a more thorough, component-specific version of `new-page`. The Button pa
      - All copy on the page (tagline, intro, section labels) follows `content-design.md` — neutral, sentence case, no em dashes
      - Import the component through the package, never a relative path into `src/`: `import { X } from "rift-ds/components/X/X"` (recharts-backed charts come from `rift-ds/charts`) — the website is an npm-workspace consumer of the published package's exports
      - Include `PageLinks` with the Storybook path. Its Figma link needs no prop: it reads the page's frame from `website/src/data/figma-nodes.json`, which the `new-figma-component` skill fills
-     - End the page with `<ComponentInstallStrip slug="<component-slug>" />` after the last section — the per-page install commands, rendered at the page floor across the content column's full width, with the component's published size under them. The strip also mounts the generated Tested keys section above itself (or a one-line Keys note where the component owns its keys or leaves them to the platform), so a page's own Keyboard section lists only the keys that belong to that component alone and points at Tested keys for the rest; never restate the pattern's keys by hand. `scripts/validate-website-surfaces.mjs` requires the mount with the page's own slug and fails the build without it
+     - End the page with `<ComponentInstallStrip slug="<component-slug>" />` after the last section — the per-page install commands, rendered at the page floor across the content column's full width, with the component's published size under them. The strip also mounts the generated Tested keys section above itself (or a one-line Keys note where the component owns its keys, leaves them to the platform, or has nothing to focus), and carries the Alternatives and Props sections and the contract links (step 6), so a page's own Keyboard section lists only the keys that belong to that component alone and points at Tested keys for the rest; never restate the pattern's keys by hand. `scripts/validate-website-surfaces.mjs` requires the mount with the page's own slug and fails the build without it
    - **Variant showcase grid**: render the component in every meaningful combination of its variants and states. For components with discrete variants × states (like Button), render a proper grid. For simpler components, render one example per meaningful state/variant.
      - If the component has a `tone` prop beside `variant` (emphasis × colour, per CLAUDE.md's Component Anatomy), the grid's columns are the emphasis × tone cells the component actually draws, built from one cell list the way the Button page does. Skip combinations the component renders identically rather than showing a duplicate, and never demo a deprecated single-axis value.
      - If a demo renders h2 headings of its own (a heading-bearing component like SectionTitle, or Prose sample content), wrap that demo container in `data-anchor-ignore` — the site-wide floating anchor rail reads every page's h2s, and demo headings are the demo's, not sections of the page. The discovery rules live in the doc block of `website/src/components/FloatingAnchorNav/SiteAnchorRail.tsx`.
@@ -59,14 +59,17 @@ This is a more thorough, component-specific version of `new-page`. The Button pa
 6. **Create `website/src/app/components/<component-slug>/layout.tsx`** — it is exactly this, with no description of its own:
 
    ```tsx
+   import ComponentPageLayout from "@/components/ComponentProps/ComponentPageLayout";
    import { componentPageMetadata } from "@/config/navigation";
 
    export const metadata = componentPageMetadata("<component-slug>");
 
    export default function Layout({ children }: { children: React.ReactNode }) {
-     return <>{children}</>;
+     return <ComponentPageLayout slug="<component-slug>">{children}</ComponentPageLayout>;
    }
    ```
+
+   `ComponentPageLayout` renders the page's Props section on the server, and `ComponentInstallStrip` shows it above the keys and the install snippet, with the component's alternatives and plain links to its markdown and schema. Never hand-write a props table, a keyboard table or a "use X instead" sentence on the page: the first two come from the prop JSDoc and the keyboard contract, the third from `alternatives` in the component registry.
 
    Both the title and the description resolve from the component's entry in `src/components/registry.json` (or, for the chat widget, `src/chat/registry.json`; `website/src/data/component-pages.ts` merges the two) — that is the only place the one-line description lives, so do **not** pass one here. `scripts/validate-page-titles.mjs` requires this exact call and fails the build otherwise; a slug with no registry entry fails the website build with a message naming the fix.
 

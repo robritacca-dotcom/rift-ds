@@ -162,10 +162,12 @@ let checked = 0;
 const LONG_DATE_NAME =
   /\b(January|February|March|April|June|July|August|September|October|November|December|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/;
 
-for (const { path: relative, scope, pattern = LABELLED, optional = false, themed = false, budget = true } of SOURCES) {
+for (const { path: sourcePath, scope, pattern = LABELLED, optional = false, themed = false, budget = true } of SOURCES) {
+  // The name a finding prints: forward slashes on every platform.
+  const relative = sourcePath.replaceAll('\\', '/');
   let source;
   try {
-    source = readRel(relative);
+    source = readRel(sourcePath);
   } catch (err) {
     errors.push(`Could not read ${relative}: ${err.message}`);
     continue;

@@ -43,7 +43,7 @@ import {
   sourceExports,
 } from './package-manifest.mjs';
 import { AUTHOR_NAME, RETIRED_HOSTS, RETIRED_PACKAGE_NAMES } from './brand.mjs';
-import { repoRoot } from './lib/fs.mjs';
+import { display, repoRoot } from './lib/fs.mjs';
 import { failStep } from './lib/report.mjs';
 
 const pkg = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
@@ -137,7 +137,7 @@ if (RETIRED.length > 0) {
       for (const { kind, text: retired } of RETIRED) {
         if (text.includes(retired)) {
           errors.push(
-            `${relative(repoRoot, path)} still mentions retired ${kind} "${retired}" — ` +
+            `${display(path)} still mentions retired ${kind} "${retired}" — ` +
               (kind === 'host'
                 ? `replace it with the current value from scripts/brand.mjs, then regenerate (npm run validate-registry)`
                 : `run \`node scripts/rename-package.mjs\`, then regenerate (npm run validate-registry)`)

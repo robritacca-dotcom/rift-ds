@@ -75,9 +75,13 @@ function apply(plant) {
     if (plant.append !== undefined) {
       writeFileSync(path, text + plant.append);
     } else {
-      const count = text.split(plant.find).length - 1;
+      // A plant is written with LF. A working copy an older checkout left
+      // with CRLF holds the same text, so the plant is matched in its endings.
+      const crlf = text.includes('\r\n');
+      const inFile = (value) => (crlf ? value.replaceAll('\n', '\r\n') : value);
+      const count = text.split(inFile(plant.find)).length - 1;
       if (count !== 1) throw new Error(`"find" occurs ${count} times in ${rel}, not once`);
-      writeFileSync(path, text.replace(plant.find, () => plant.replace));
+      writeFileSync(path, text.replace(inFile(plant.find), () => inFile(plant.replace)));
     }
   }
   if (plant.gitAdd) git('add', '--', rel);

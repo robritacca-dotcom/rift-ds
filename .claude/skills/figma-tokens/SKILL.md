@@ -4,6 +4,7 @@ description: Carry a token or theme change into the Rift DS Figma kit's variable
 icon: palette
 displayDescription: "Carries a token or theme change into the Figma kit. It compares every token's resolved value, in every theme and in light and dark, with the kit's variables, then adds, updates or renames them in each mode, adds a new theme as a mode, rebinds the components that now read a new token, and refreshes the Colour, Typography and Themes pages. A rename keeps every binding, and nothing is removed without a yes."
 invoke: ["update the Figma tokens","sync the variables to Figma","add the [X] theme to Figma"]
+category: figma
 metadata:
   internal: true
 ---
@@ -14,7 +15,7 @@ Bring the Figma kit's variables in step with the tokens after a change. The toke
 
 ## When invoked
 
-Use after a change that the `new-token`, `token-rename` or `new-preset` skill made (or any edit to the token CSS or a preset), or when asked to update the Figma tokens, sync the variables, or add a theme to Figma. It is the variables half of the `figma-parity` skill, run on its own: parity sends its variable findings here.
+Use after a change that the `new-token` or `new-preset` skill made (or any edit to the token CSS or a preset), or when asked to update the Figma tokens, sync the variables, or add a theme to Figma. It is the variables half of the `figma-parity` skill, run on its own: parity sends its variable findings here.
 
 Before the first Figma call, do what the `new-figma-component` skill's "Before the first Figma call" section says. Its "The kit's conventions" section owns how the kit's variables are organised and bound.
 
@@ -35,7 +36,7 @@ If the owner named the change, start from it. Otherwise diff the token CSS and `
 
 - **Added**: a token, a primitive, or a theme.
 - **Changed**: a value, in some theme or mode.
-- **Renamed**: a token or family (`token-rename`'s mapping is the list).
+- **Renamed**: a token or family (the rename's old-to-new mapping is the list).
 - **Removed**: a token or a theme.
 
 ### 2. Read the kit's variables

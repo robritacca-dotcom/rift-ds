@@ -10,7 +10,7 @@
  *   website predev                          the steps marked 'dev'
  *
  * scripts/generate-quality-gate.mjs reads it for the list on
- * /skills/super-ship, so a step added here needs its one line in
+ * /skills, so a step added here needs its one line in
  * website/src/data/quality-gate.json, and the build fails without it.
  *
  * A row is [id, site]. The id is the script's basename under scripts/.
@@ -68,7 +68,6 @@ export const CHAIN = [
   ['validate-skills-registry', 'build'],
   ['validate-doc-refs', 'build'],
   ['validate-release-log', 'build'],
-  ['validate-loops', 'build'],
   ['validate-template-thumbnails', 'build'],
   ['validate-nav-panels', 'build'],
   ['validate-site-corpus', 'build'],

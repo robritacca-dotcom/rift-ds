@@ -4,6 +4,7 @@ description: Comprehensive self-consistency audit after a structural or architec
 icon: fact_check
 displayDescription: "Sweeps every place the repo describes itself (skills, CLAUDE.md, design.md, the README that ships to npm, and the website's own explanations of how it is built) and flags anything that no longer matches reality. Executes the commands and recipes the docs prescribe rather than just reading them, so a skill that would break on the next run is caught before someone runs it. Reports findings grouped by severity."
 invoke: ["run a drift audit","are the docs and skills up to date","audit for gaps","check for structural drift"]
+category: review
 metadata:
   internal: true
 ---
@@ -63,7 +64,7 @@ These are checkable by grep and should be exhaustive. For each, the question is 
 For each surface, the test is: *if a stranger followed this exactly, would it work, and would what they believe afterwards be true?*
 
 - **README.md** — highest stakes: it ships inside the npm tarball, so its install and usage instructions reach every consumer. Verify the install command, import examples, customization recipes, and local-dev steps against the real package.
-- **Data registries that ship as prose** — the registry fields that reach readers verbatim: component and widget descriptions, page summaries, loops, release stories (CLAUDE.md's **Registries** table is the authoritative list of registries; read it to find which carry prose). They are read against reality like README, not merely validated for shape: a description can pass every structural check while naming a prop value the contract retired, and it ships word for word through the MCP endpoint, the site chat's corpus and the consumer agent skill.
+- **Data registries that ship as prose** — the registry fields that reach readers verbatim: component and widget descriptions, page summaries, skill categories, release stories (CLAUDE.md's **Registries** table is the authoritative list of registries; read it to find which carry prose). They are read against reality like README, not merely validated for shape: a description can pass every structural check while naming a prop value the contract retired, and it ships word for word through the MCP endpoint, the site chat's corpus and the consumer agent skill.
 - **CLAUDE.md** — the project's operating manual: structure diagram, quick start, command list, registries/generated surfaces, architecture invariants, infrastructure facts. Every generated surface must be listed with its generator, and every registry with its accessor and validator; the detail behind each lives in the script's doc block, which the audit reads against the code.
 - **design.md** — design language claims and per-component specs. Check that stated invariants are still enforced and that specs match the components.
 - **content-design.md** — the content style guide. Check that its Register by Surface table still lists every prose surface that exists, that its pointers at skill-owned standards still land, and that no rule in it duplicates one CLAUDE.md owns (fact-architecture rules live in CLAUDE.md, style rules here — a rule restated in both is drift).
@@ -78,7 +79,7 @@ The recent commits say what kind of change landed; each kind has surfaces that m
 
 - **Public API change** (a prop renamed, added, deprecated, or a value moved to another prop): the component's published schema (`website/public/schema/components/<slug>.json`, regenerated; a removed file or meta-schema property is check 6 of `scripts/validate-api-compat.mjs`), the registry description, the design.md spec section, the showcase page and the stories, internal callers of **every** deprecated spelling (older aliases included, not only the newest), the components that compose it, and the generated outputs (the retired-wording check in section 2). Run the `api-consistency` skill scoped to the component and its family.
 - **Keyboard or focus behaviour change** (a key added or removed, focus moving somewhere new, a role changed): the component's keyboard class in the registry (`pattern`, `partPatterns`, or the sentence in `keys.note`), the pattern's table in `src/components/keyboard-patterns.json` when the change is to a shared row, the design.md spec section, any hand-written Keyboard section on its page, and its JSDoc.
-- **Token change**: the homes the `new-token` skill lists (or `token-rename` for a rename), the foundations page captions, and the theme presets.
+- **Token change**: the homes the `new-token` skill lists, the foundations page captions, and the theme presets.
 - **Route change**: navigation config, cross-links in page prose, the sitemap, llms.txt, page summaries, and `EXCLUDED_ROUTES` or other route lists in the corpus generator.
 
 ### 4. Skills self-audit — the highest-yield section

@@ -4,6 +4,7 @@ description: Create a full-quality documentation page for a design system compon
 icon: article
 displayDescription: "Creates a full-quality documentation page for a design system component on the website. Reads the component's props to generate a variant showcase grid (the Button page is the benchmark), writes all three page files, and adds the component's preview entry (the one hand-maintained surface). The index card, sidebar, sitemap and breadcrumbs derive from the component registry, so there is no navigation to wire."
 invoke: ["document [X] on the website","add a docs page for [X]","create the website page for [X]"]
+category: build
 metadata:
   internal: true
 ---

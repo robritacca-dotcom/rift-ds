@@ -24,9 +24,8 @@ Each validator's doc block owns what it checks; read it before changing a regist
 |---|---|---|---|
 | Components | `src/components/registry.json` | `src/components/registry.ts` | `scripts/validate-component-registry.mjs` |
 | Component website surfaces | the component and chat registries | (derived nav) | `scripts/validate-website-surfaces.mjs` |
-| Skills | `.claude/skills/registry.json` | `website/src/data/skills-registry.ts` | `scripts/validate-skills-registry.mjs` |
+| Skills, and the categories /skills groups them under | `.claude/skills/registry.json` | `website/src/data/skills-registry.ts` | `scripts/validate-skills-registry.mjs` |
 | Release log | `website/src/data/release-log.json` | `website/src/data/release-log.ts` | `scripts/validate-release-log.mjs` |
-| Loops | `website/src/data/loops.json` | `website/src/data/loops.ts` | `scripts/validate-loops.mjs` |
 | Page summaries | `website/src/data/page-summaries.json` | `website/src/data/page-summaries.ts` | `scripts/validate-page-summaries.mjs` |
 | Semantic tokens | `src/tokens/registry.json` (generated) | `src/tokens/registry.ts` | `scripts/validate-token-registry.mjs` |
 | Theme presets | `website/src/lib/theme/presets.ts` + `src/tokens/presets/` (generated) | `THEME_PRESETS` | `scripts/validate-generated-files.mjs`, `scripts/validate-preset-stylesheets.mjs`, `scripts/validate-theme-presets.mjs` |
@@ -47,7 +46,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Gestures | `scripts/gestures.json` (every drag grip a visitor can press) | (read by the script) | `scripts/validate-gestures.mjs` |
 | Keyboard contract | `src/components/keyboard-patterns.json` + `pattern`, `partPatterns` and `keys` in the component registry | `keyboardPatterns` in `src/components/registry.ts` | `scripts/validate-keyboard-patterns.mjs` |
 | Size budget | `scripts/size-budget.json` (a gzipped ceiling for every component and published subpath) | (read by the script) | `scripts/validate-size-budget.mjs` |
-| Quality gate list (/skills/super-ship) | order from `scripts/chain.mjs`, `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-generated-files.mjs` |
+| Quality gate list (the closing section of /skills) | order from `scripts/chain.mjs`, `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-generated-files.mjs` |
 
 Notes an agent needs while editing them:
 
@@ -87,7 +86,7 @@ Never hand-edit these; edit the source, and commit what a build regenerates. Eac
 - **Point, don't enumerate.** "`CHAIN` in `scripts/chain.mjs` is the authoritative list" beats a hand-copied list.
 - **Self-descriptions stay in sync.** When a change makes a statement in README.md, design.md, this file or the overview and foundations pages false, fix that prose in the same change. If the fact is countable or mechanically checkable, route it through a registry and validator instead.
 - **A new countable collection** gets a registry file beside it, a small accessor module exporting the count, and a validator chained into `validate-registry` (the `new-validator` skill walks it).
-- **A new skill**: write `.claude/skills/<name>/SKILL.md` and register it in `.claude/skills/registry.json` (`displayed`, `unlisted`, or `external`, which also needs `website/src/data/external-skills/<name>.md`). Its frontmatter carries `metadata.internal: true`, which keeps it out of `npx skills add`: that CLI is pointed at the consumer skills by `skills.sh.json`, and `scripts/validate-skills-registry.mjs` holds both.
+- **A new skill**: write `.claude/skills/<name>/SKILL.md` and register it in `.claude/skills/registry.json` (`displayed`, `unlisted`, or `external`, which also needs `website/src/data/external-skills/<name>.md`). A skill shown on /skills names its `category` in its frontmatter, one of the ids in the registry's `categories` list, which owns the labels and the order; a skill in the `recurring` category also states its `cadence`. The page is one card per skill and nothing else: a skill gets no page of its own, because a hand-written walkthrough restates the SKILL.md and drifts from it. Its frontmatter carries `metadata.internal: true`, which keeps it out of `npx skills add`: that CLI is pointed at the consumer skills by `skills.sh.json`, and `scripts/validate-skills-registry.mjs` holds both.
 - **Examples in skills are fictional.** A factual claim about a real component inside an example rots silently.
 - **No counts outside registries; no machine-local paths.** Derive the repo root with `git rev-parse --show-toplevel`. Size claims in design.md are held by `scripts/validate-design-counts.mjs`.
 - **Off-token CSS values are sanctioned at the site**, never in a skill: `/* ds-allow(<category>): <reason> */` (file-wide: `ds-allow-file`), categories owned by `scripts/validate-css-directives.mjs`.

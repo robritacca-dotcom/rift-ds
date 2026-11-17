@@ -4,6 +4,7 @@ description: Author a new validator or generator script and chain it into the va
 icon: rule
 displayDescription: "Walks a new validator or generator script through the ritual the existing scripts follow: the doc block that records what it guards and why it runs where it runs, the CRLF and path conventions that keep Windows checkouts green, and the surface a generator exports so one check holds its files fresh. Ends with the wiring: the row in the chain manifest, its site mark, and the closing CLAUDE.md entry."
 invoke: ["add a validator","new validator script","add a generator","build-enforce this","chain a script into validate-registry"]
+category: build
 metadata:
   internal: true
 ---

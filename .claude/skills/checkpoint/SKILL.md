@@ -4,6 +4,7 @@ description: Save work in progress to a remote branch and keep working. Never to
 icon: save
 displayDescription: "Saves work in progress to a remote branch as a safety net, then stays on that branch so work continues. It never touches main and never deploys: if invoked on main it moves the work to a new branch first, because pushing main publishes the site. A quick lint runs before the push and failures are flagged without blocking the backup."
 invoke: ["checkpoint","save my progress","back this up","push to the branch"]
+category: ship
 metadata:
   internal: true
 ---

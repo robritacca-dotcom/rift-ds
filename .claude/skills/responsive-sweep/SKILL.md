@@ -4,6 +4,7 @@ description: Sweep every page of the built website at every breakpoint width for
 icon: devices
 displayDescription: "Loads every page of the site at every breakpoint width, from a small phone to a wide desktop, and measures what a person would otherwise have to spot: content running off the screen, text cut off or spilling out of its box, and controls stacked on top of each other. Each finding comes with a marked screenshot, is judged by eye before it is called a defect, and is fixed where it starts: in the component when the component breaks, with a story at the width that broke it."
 invoke: ["run the responsive sweep","/responsive-sweep","check every page at every size","sweep the site for layout breaks"]
+category: review
 metadata:
   internal: true
 ---

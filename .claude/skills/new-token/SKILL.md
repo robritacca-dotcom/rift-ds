@@ -4,6 +4,7 @@ description: Add a new design token (or token family) to the system, with every 
 icon: palette
 displayDescription: "Walks a new design token through every surface it must reach: the token file its category lives in (both theme files for colour), the generated registry, the foundations pages, the Storybook token docs, and design.md. Covers the extra packaging steps a TypeScript-side token needs, and the validators that hold each home in sync."
 invoke: ["add a token","add a [name] token","new token family","add a colour token"]
+category: build
 metadata:
   internal: true
 ---

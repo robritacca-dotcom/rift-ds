@@ -4,6 +4,7 @@ description: Add a shader scene to the library, or a site background the header 
 icon: landscape
 displayDescription: "Walks a new shader scene or site background through every home it has: the scene in the library with its params, passes and colour roles, the playground's Shaders view template, the site's background registry row with its per-band tuning, the shaded chats that stand on it, the gesture list, and the visual pass that proves it on every page and in every theme."
 invoke: ["add a shader scene","add a background","new background","add a shader preset","retune the horizon"]
+category: build
 metadata:
   internal: true
 ---

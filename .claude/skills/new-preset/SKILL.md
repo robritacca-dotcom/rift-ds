@@ -4,6 +4,7 @@ description: Add a complete theme preset to the system — every lever declared,
 icon: palette
 displayDescription: "Walks a new theme preset from a brand colour to a complete shipped look: every lever declared in the preset registry, the accent sextet curated, the stylesheet generated into the package, and the completeness gate passed, including the contrast check on every action fill and what sits on it, resting, hover and pressed, in both themes. Ends with the theme live behind one data-brand attribute, in the home page's selector and the playground's picker with no extra wiring, and with a specimen page of its own beside a downloadable DESIGN.md."
 invoke: ["add a theme preset","add a new theme","new preset","add a site look"]
+category: build
 metadata:
   internal: true
 ---

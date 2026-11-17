@@ -4,6 +4,7 @@ description: The bulletproof ship for structural work. Run the full drift audit 
 icon: rocket_launch
 displayDescription: "Chains the drift audit, an API consistency audit and the responsive sweep into the ship flow for structural work. Runs the full drift audit, then the API audit over the components the work touched, fixes the broken and stale findings both surface, stops to ask if any audit section was skipped, sweeps every page at every breakpoint width and fixes the layout breaks it finds, then ships the combined result: full verify, merge into main, push, CI watched to green, and the live site proven rendering. Gap findings and new-validator recommendations are reported as follow-ups, never built mid-ship."
 invoke: ["super ship","super ship it","audit and ship","bulletproof ship","audit the API and ship"]
+category: ship
 metadata:
   internal: true
 ---

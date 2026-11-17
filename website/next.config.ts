@@ -72,6 +72,11 @@ const nextConfig: NextConfig = {
       { source: "/templates/marketing-dashboard", destination: "/templates/merchant-sales", permanent: true },
       // The agent workbench template was retired; shared links land on the index.
       { source: "/templates/agent-workbench", destination: "/templates", permanent: true },
+      // The per-skill walkthrough pages and the loops page were folded into
+      // /skills in November 2026: a walkthrough lands on its skill's card,
+      // and the loops page on the recurring skills.
+      { source: "/skills/:slug", destination: "/skills#:slug", permanent: true },
+      { source: "/loops", destination: "/skills#recurring-skills", permanent: true },
       { source: "/blueprints", destination: "/docs", permanent: true },
       // The porting guide was unpublished from /blueprints in August 2026 and
       // its source deleted from the repo soon after. The URL was public, so

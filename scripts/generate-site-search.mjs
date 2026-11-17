@@ -13,8 +13,8 @@
  *
  *   1. Audience. The corpus is for a visitor asking the site about itself,
  *      so it carries how the repository is maintained (CLAUDE.md), the
- *      owner's writing rules (content-design.md), the repo's own agent
- *      skills and loops. An agent building with the package is served the
+ *      owner's writing rules (content-design.md) and the repo's own agent
+ *      skills. An agent building with the package is served the
  *      package's documentation instead, and those maintainer sources are
  *      left out here by construction (MAINTAINER_SOURCES says which and
  *      why). They are public, so this is about relevance, not secrecy.
@@ -61,7 +61,6 @@ export const MAINTAINER_SOURCES = new Map([
   ['/blueprints/claude', 'CLAUDE.md, how this repository is maintained: its registries, validators and release process'],
   ['/blueprints/content-design', "content-design.md, the owner's rules for writing the site's own copy"],
   ['/skills', "the repository's own agent skills, the procedures that build this site"],
-  ['/loops', "the scheduled loops that maintain this site"],
 ]);
 
 /** True for a route under one of the maintainer sources. */

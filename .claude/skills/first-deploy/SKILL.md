@@ -32,7 +32,7 @@ The Vercel project serves `SITE_URL`, Storybook serves `STORYBOOK_URL` (both in 
 
 ### 2. Monitoring wakes up — DONE
 
-The cron in `.github/workflows/uptime.yml` runs on schedule against production, and the "inoperable until first deploy" notes in `ship` and `pre-deploy` are retired.
+The cron in `.github/workflows/uptime.yml` runs on schedule against production, and the "inoperable until first deploy" notes in `ship` are retired.
 
 ### 3. The package exists — DONE
 

@@ -185,15 +185,11 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-skills-registry",
-        "text": "Every skill folder is registered once, with the frontmatter Claude Code and the /skills page need, and no skill leaks a local detail."
+        "text": "Every skill folder is registered once, with the frontmatter Claude Code and the /skills page need and a category the registry lists, and no skill leaks a local detail."
       },
       {
         "name": "validate-release-log",
         "text": "One entry per npm version, newest first, with valid versions and dates."
-      },
-      {
-        "name": "validate-loops",
-        "text": "The loops registry is complete and names only skills that exist."
       },
       {
         "name": "validate-template-thumbnails",

@@ -94,42 +94,26 @@
   gap: var(--primitive-gap-500);
 }
 
-.skillCard {
+/* ============================================
+   CATEGORY SECTIONS
+   ============================================ */
+.category {
   display: flex;
   flex-direction: column;
-  gap: var(--primitive-gap-400);
-  padding: var(--primitive-gap-1000);
-  border: 1px solid var(--color-bg-container-border);
-  border-radius: var(--primitive-radius-600);
-  background: var(--color-bg-container-primary);
+  gap: var(--primitive-gap-500);
   /* Anchor targets clear the sticky site header and its progressive
-     blur — the shared clearance in globals.css owns the geometry */
+     blur: the shared clearance in globals.css owns the geometry */
   scroll-margin-top: var(--layout-anchor-clearance);
 }
 
-/* ============================================
-   SKILL CARD HEADER
-   ============================================ */
-.skillCardHeader {
+.gateGroup {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--primitive-gap-400);
+  flex-direction: column;
+  gap: var(--gap-300);
 }
 
-.skillMeta {
-  display: flex;
-  align-items: center;
-  gap: var(--primitive-gap-200);
-}
-
-.skillIcon {
-  --icon-size: var(--icon-size-500);
-  color: var(--color-icon-primary);
-  flex-shrink: 0;
-}
-
-.skillName {
+.gateGroupTitle {
+  margin: 0;
   font-family: var(--font-heading-3-family);
   font-size: var(--font-heading-3-size);
   font-weight: var(--font-heading-3-weight);
@@ -137,39 +121,6 @@
   letter-spacing: var(--font-heading-3-letter-spacing);
   color: var(--color-text-heading);
 }
-
-/* ============================================
-   SKILL CARD BODY
-   ============================================ */
-.skillDescription {
-  font-size: var(--font-paragraph-size);
-  font-weight: var(--font-paragraph-weight);
-  line-height: var(--font-paragraph-line-height);
-  color: var(--color-text-secondary);
-}
-
-.skillInvoke {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--primitive-gap-200);
-}
-
-/* An invoke phrase is a sentence, not a status word: a long one wraps
-   inside its badge rather than running past the card on a phone. */
-.skillInvoke > :global(.ds-badge) {
-  max-width: 100%;
-  white-space: normal;
-}
-
-.skillInvokeLabel {
-  font-size: var(--font-paragraph-sm-size);
-  font-weight: var(--font-paragraph-sm-weight);
-  line-height: var(--font-paragraph-sm-line-height);
-  color: var(--color-text-tertiary);
-  flex-shrink: 0;
-}
-
 
 /* ============================================
    RESPONSIVE
@@ -190,10 +141,6 @@
     min-width: 0;
   }
 
-
-  .skillCardHeader {
-    flex-wrap: wrap;
-  }
 }
 
 /* Inline link in intro copy */

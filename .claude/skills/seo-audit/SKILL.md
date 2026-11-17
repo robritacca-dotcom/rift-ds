@@ -4,6 +4,7 @@ description: "Behind-the-scenes SEO sweep of the website: page metadata, canonic
 icon: travel_explore
 displayDescription: "Sweeps the technical SEO surface of the site: page titles and descriptions, canonical URLs, the sitemap and robots rules, social preview tags, and structured data. It checks the HTML the server actually sends rather than trusting the source, fixes what it finds on a branch for approval, and reports a clean pass when there is nothing worth changing."
 invoke: ["run the SEO audit","/seo-audit"]
+category: review
 metadata:
   internal: true
 ---

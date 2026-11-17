@@ -184,15 +184,6 @@ for (const e of releaseLog.predecessorReleases ?? []) {
   scan(`website/src/data/release-log.json (predecessor ${e.version ?? '?'})`, e.summary ?? '');
 }
 
-const loopsRegistry = json('website/src/data/loops.json');
-surfacesChecked += 1;
-for (const l of loopsRegistry.loops ?? []) {
-  scan(
-    `website/src/data/loops.json (${l.slug ?? '?'})`,
-    [l.description, l.cadence, l.trigger, ...(l.stages ?? []), ...(l.guardrails ?? [])].join('\n'),
-  );
-}
-
 // --- Skill display descriptions (they render on /skills) --------------------
 
 const skillsDir = join(repoRoot, '.claude', 'skills');
@@ -205,6 +196,13 @@ for (const entry of readdirSync(skillsDir, { withFileTypes: true })) {
   } catch { continue; }
   const match = source.match(/^displayDescription:\s*(.*)$/m);
   if (match) scan(`.claude/skills/${entry.name}/SKILL.md (displayDescription)`, match[1]);
+}
+// The category headings and their one-line descriptions render there too.
+for (const category of json('.claude/skills/registry.json').categories ?? []) {
+  scan(
+    `.claude/skills/registry.json (category ${category.id ?? '?'})`,
+    `${category.label ?? ''}\n${category.description ?? ''}`,
+  );
 }
 
 // --- The npm package description (renders on npmjs.com) ---------------------

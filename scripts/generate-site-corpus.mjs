@@ -1101,7 +1101,6 @@ Designed and built by ${AUTHOR_NAME} (${AUTHOR_URL}), who writes the specs Claud
 function coveredElsewhere() {
   return new Map([
     ['/components', 'Components'],
-    ['/loops', 'Loops'],
     ['/blueprints/claude', 'Blueprints'],
     ['/blueprints/design', 'Blueprints'],
     ['/blueprints/content-design', 'Blueprints'],
@@ -1208,7 +1207,7 @@ export function routeCoverage() {
  * when a page needs one.
  */
 const ROUTE_DATA = new Map([
-  ['/skills/super-ship', () =>
+  ['/skills', () =>
     'Every check a ship runs, in order (from the validate-registry and verify entries in package.json and the CI workflow; the page renders the same list):\n\n' +
     buildQualityGate()
       .map((group) => `${group.title}. ${group.body}\n` + group.checks.map((c) => `- ${c.name}: ${c.text}`).join('\n'))
@@ -1367,39 +1366,24 @@ function sectionSkills() {
     } catch {
       /* already a bare string */
     }
-    return `- ${line('name') ?? slug}: ${description}`;
+    const cadence = line('cadence');
+    return {
+      category: line('category'),
+      text: `- ${line('name') ?? slug}${cadence ? ` (${cadence.toLowerCase()})` : ''}: ${description}`,
+    };
   });
+
+  // Grouped the way the page groups them: the registry's categories, in order.
+  const groups = (registry.categories ?? []).map((category) =>
+    `### ${category.label}\n\n${category.description}\n\n` +
+    entries.filter((entry) => entry.category === category.id).map((entry) => entry.text).join('\n')
+  );
 
   return `## Agent skills
 
-Repeatable procedures the agents follow when working on this project. Documented at /skills.
+Repeatable procedures the agents follow when working on this project, grouped by what they do. Documented at /skills, one card per skill holding the whole skill file.
 
-${entries.join('\n')}`;
-}
-
-function sectionLoops() {
-  // The committed loops registry (website/src/data/loops.json) — the same
-  // committed-data pattern as the journal. The page renders this data
-  // verbatim, so carrying it here is what keeps the /loops route covered
-  // once its prose lives in JSON instead of the page source.
-  const { loops } = JSON.parse(
-    read(join(repoRoot, 'website', 'src', 'data', 'loops.json'))
-  );
-
-  const entries = loops
-    .map(
-      (l) =>
-        `### ${l.slug} (${l.cadence.toLowerCase()}, ${l.status})\n\n${l.description}\n\nEach run: ${l.stages.join(', ')}. Guardrails: ${l.guardrails.join('; ')}. Built on the ${l.skills.join(', ')} skill${l.skills.length > 1 ? 's' : ''}.`
-    )
-    .join('\n\n');
-
-  return `## Loops
-
-Recurring agent loops: skills that run on a schedule against real data and end in a branch for the owner to review. Documented at /loops.
-
-${pageProse('loops')}
-
-${entries}`;
+${groups.join('\n\n')}`;
 }
 
 function sectionReleases() {
@@ -1435,7 +1419,6 @@ const SECTIONS = [
   ['Blueprints', sectionBlueprints],
   ['Components', sectionComponents],
   ['Skills', sectionSkills],
-  ['Loops', sectionLoops],
   ['Releases', sectionReleases],
 ];
 

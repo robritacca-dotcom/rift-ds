@@ -10,7 +10,10 @@
  *     (skills that live outside the repo keep a published copy there)
  *
  * Card metadata (icon, card description, invoke phrases) lives in each
- * skill's frontmatter as `icon` / `displayDescription` / `invoke`.
+ * skill's frontmatter as `icon` / `displayDescription` / `invoke`, with
+ * the `category` the page groups it under (the registry's `categories`
+ * list owns the ids, labels and order) and, for a recurring skill, the
+ * `cadence` its card prints.
  * The published content keeps only the `name` + `description` frontmatter
  * Claude Code needs, so a copied skill works as-is.
  *
@@ -58,7 +61,9 @@ function parseSkillFile(path, slug) {
   const icon = line('icon');
   const displayDescription = json('displayDescription');
   const invoke = json('invoke');
-  for (const [key, value] of Object.entries({ name, description, icon, displayDescription, invoke })) {
+  const category = line('category');
+  const cadence = line('cadence');
+  for (const [key, value] of Object.entries({ name, description, icon, displayDescription, invoke, category })) {
     if (value === null) throw new Error(`${path}: frontmatter is missing "${key}"`);
   }
   if (!Array.isArray(invoke) || invoke.length === 0) {
@@ -71,6 +76,8 @@ function parseSkillFile(path, slug) {
     icon,
     description: displayDescription,
     invoke,
+    category,
+    ...(cadence ? { cadence } : {}),
     // Published copy: minimal frontmatter Claude Code needs + the body.
     content: `---\nname: ${name}\ndescription: ${description}\n---\n\n${body.trimEnd()}\n`,
   };
@@ -86,10 +93,16 @@ export function buildSkillsContent() {
       parseSkillFile(join(externalDir, `${slug}.md`), slug)
     ),
   ];
+  // Grouped for the page: the registry's category order, and within a
+  // category the order the registry lists the skills in.
+  const categories = registry.categories.map((category) => ({
+    ...category,
+    skills: entries.filter((entry) => entry.category === category.id).map((entry) => entry.slug),
+  }));
 
   return `// AUTO-GENERATED — do not edit by hand.
 // Source of truth: .claude/skills/*/SKILL.md and website/src/data/external-skills/*.md,
-// in the display order set by .claude/skills/registry.json.
+// grouped and ordered by .claude/skills/registry.json.
 // Regenerate: node scripts/generate-skills-content.mjs (runs automatically via predev/prebuild).
 
 export interface SkillContent {
@@ -98,10 +111,24 @@ export interface SkillContent {
   icon: string;
   description: string;
   invoke: string[];
+  /** The id of the category the page groups this skill under. */
+  category: string;
+  /** How often a recurring skill is meant to run; absent on every other skill. */
+  cadence?: string;
   content: string;
 }
 
+export interface SkillCategory {
+  id: string;
+  label: string;
+  description: string;
+  /** Slugs of the skills in this category, in display order. */
+  skills: string[];
+}
+
 export const skillsContent: SkillContent[] = ${JSON.stringify(entries, null, 2)};
+
+export const skillCategories: SkillCategory[] = ${JSON.stringify(categories, null, 2)};
 `;
 }
 

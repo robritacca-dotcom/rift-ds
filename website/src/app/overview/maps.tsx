@@ -12,7 +12,6 @@
  */
 
 import type { ArchMap } from "@/components/ArchitectureMap/types";
-import { LOOP_COUNT } from "@/data/loops";
 
 const VERCEL_LOGO = { logo: "/logos/vercel black.svg", logoDark: "/logos/vercel white.svg" };
 const NEXTJS_LOGO = { logo: "/logos/nextjs black.svg", logoDark: "/logos/nextjs white.svg" };
@@ -139,9 +138,8 @@ export const operatorsMap: ArchMap = {
   height: 920,
   nodes: [
     { id: "z-claude", x: 40, y: 60, w: 1820, h: 250, kind: "zone", title: "Claude Code · the operator layer", sub: "skills named for their end state" },
-    { id: "audits", x: 90, y: 160, w: 540, h: 110, title: "Audit skills", sub: "drift · token · content · api · seo · security · a11y · design-qa · …", logo: "/logos/Claude.svg" },
-    { id: "loops", x: 700, y: 160, w: 440, h: 110, title: "Recurring loops", sub: `${LOOP_COUNT} loops · every run ends in a report for approval`, icon: "autorenew", chip: "warning" },
-    { id: "pre-deploy", x: 1210, y: 160, w: 380, h: 110, title: "pre-deploy", sub: "the full verify, run locally · pushes nothing", icon: "checklist", chip: "positive" },
+    { id: "audits", x: 90, y: 160, w: 820, h: 110, title: "Audit skills", sub: "drift · token · content · api · seo · security · a11y · design-qa · …", logo: "/logos/Claude.svg" },
+    { id: "recurring", x: 990, y: 160, w: 820, h: 110, title: "Recurring skills", sub: "run on demand · every run ends in a report for approval", icon: "autorenew", chip: "warning" },
 
     { id: "working-tree", x: 60, y: 460, w: 300, h: 80, title: "Working tree", sub: "the session's changes", kind: "state", icon: "edit_note" },
     { id: "branches", x: 560, y: 460, w: 300, h: 80, title: "Branches", sub: "wip topics · worktrees · stashes", kind: "state", icon: "call_split" },
@@ -151,7 +149,6 @@ export const operatorsMap: ArchMap = {
   edges: [
     { id: "audits-wt", from: "audits", to: "working-tree", label: "fixes arrive as branch work" },
     { id: "live-audits", from: "live", to: "audits", fromSide: "top", toSide: "right", label: "several read the live site", kind: "external" },
-    { id: "predeploy-main", from: "pre-deploy", to: "main", label: "rehearses the gate" },
     { id: "checkpoint", from: "working-tree", to: "branches", label: "checkpoint · save, keep working", bend: -60 },
     { id: "park", from: "working-tree", to: "branches", label: "park · save, back to a clean main", bend: 110 },
     { id: "land", from: "branches", to: "main", label: "land · triage all, merge local, never push", bend: -60 },

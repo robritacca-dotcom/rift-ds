@@ -322,21 +322,3 @@
   inline-size: auto;
 }
 
-/* Loops: a ring with a dot riding it */
-.loopRing {
-  position: relative;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: var(--border-050) solid var(--color-text-tertiary);
-}
-
-.loopDot {
-  position: absolute;
-  inset-block-start: -7px;
-  inset-inline-start: calc(50% - 6px);
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--color-text-secondary);
-}

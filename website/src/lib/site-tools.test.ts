@@ -139,7 +139,7 @@ describe("searchSite", () => {
 
   it("serves no maintainer documentation", () => {
     const text = ["Button tone", "release 1.27.0", "registries", "validator"].flatMap(searchSite).join("\n");
-    expect(text).not.toMatch(/blueprints\/claude|blueprints\/content-design|\/skills\b|\/loops\b/);
+    expect(text).not.toMatch(/blueprints\/claude|blueprints\/content-design|\/skills\b/);
   });
 });
 

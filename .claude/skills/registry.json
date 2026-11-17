@@ -1,5 +1,32 @@
 {
-  "$comment": "SINGLE SOURCE OF TRUTH for the skills list. `displayed` + `external` appear on /skills, IN THIS ORDER (scripts/generate-skills-content.mjs builds the page data from the skill files in registry order); `unlisted` are internal-only. Every .claude/skills/<name>/SKILL.md must be registered here; external skills keep their published copy in website/src/data/external-skills/<name>.md. scripts/validate-skills-registry.mjs enforces all of this at build time.",
+  "$comment": "SINGLE SOURCE OF TRUTH for the skills list. `displayed` + `external` appear on /skills, grouped under `categories` IN THAT ORDER and, within a category, IN THE ORDER LISTED HERE (scripts/generate-skills-content.mjs builds the page data from the skill files). Each shown skill names its category in its frontmatter (`category: <id>`); a skill in the `recurring` category also carries a `cadence`. `unlisted` are internal-only. Every .claude/skills/<name>/SKILL.md must be registered here; external skills keep their published copy in website/src/data/external-skills/<name>.md. scripts/validate-skills-registry.mjs enforces all of this at build time.",
+  "categories": [
+    {
+      "id": "build",
+      "label": "Build",
+      "description": "Add something new to the system: a component, a token, a theme, a page, a validator. Each one names every file and registry the addition has to reach."
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "description": "Audits and sweeps. Each one reads the system against a rule set, reports what it found, and fixes what is plainly broken."
+    },
+    {
+      "id": "ship",
+      "label": "Ship",
+      "description": "Move work between a branch, main, the live site and npm. Each skill is named for where the work ends up."
+    },
+    {
+      "id": "figma",
+      "label": "Figma",
+      "description": "Keep the Figma kit in step with the code. The code is the source of truth, so every change lands on the Figma side."
+    },
+    {
+      "id": "recurring",
+      "label": "Recurring",
+      "description": "Checks worth repeating on a cadence. Nothing schedules them yet: each runs when asked, and ends with fixes on a local branch waiting for approval."
+    }
+  ],
   "displayed": [
     "new-component",
     "new-figma-component",
@@ -13,11 +40,8 @@
     "visual-review",
     "design-qa",
     "responsive-sweep",
-    "animation-jump-check",
     "token-audit",
-    "token-rename",
     "content-audit",
-    "pre-deploy",
     "ship",
     "super-ship",
     "checkpoint",

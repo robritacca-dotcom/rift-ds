@@ -59,9 +59,8 @@ export default function AboutDsPage() {
             <p className={styles.introBody}>
               The specs (<Link href="/blueprints/claude" className={styles.inlineLink}>CLAUDE.md</Link>,{" "}
               <Link href="/blueprints/design" className={styles.inlineLink}>design.md</Link>,{" "}
-              <Link href="/blueprints/content-design" className={styles.inlineLink}>content-design.md</Link>), the{" "}
-              <Link href="/skills" className={styles.inlineLink}>skills</Link>, and the{" "}
-              <Link href="/loops" className={styles.inlineLink}>loops</Link> are yours to lift into your own codebase or AI tooling. Agents read the same contracts through the MCP endpoint at <code>/api/mcp</code>, or as files: one JSON{" "}
+              <Link href="/blueprints/content-design" className={styles.inlineLink}>content-design.md</Link>) and the{" "}
+              <Link href="/skills" className={styles.inlineLink}>skills</Link> are yours to lift into your own codebase or AI tooling. Agents read the same contracts through the MCP endpoint at <code>/api/mcp</code>, or as files: one JSON{" "}
               <Link href="/docs/schemas" className={styles.inlineLink}>schema</Link> per component and the tokens in the DTCG format.
             </p>
             {/* The Figma kit, shown while the site links to Figma. */}

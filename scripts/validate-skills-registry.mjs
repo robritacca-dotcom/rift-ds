@@ -14,6 +14,12 @@
  * check. Runs before every build so
  * the public skills list can never silently drift from reality.
  *
+ * The page groups its cards by category. The registry's `categories` list
+ * is the one home of the ids, labels, descriptions and order; every skill
+ * shown on the page names one of those ids in its frontmatter, and no
+ * category is left empty. A skill in the `recurring` category states its
+ * `cadence`, which its card prints, and no other skill carries one.
+ *
  * It also holds what `npx skills add` (the vercel-labs/skills CLI) finds
  * when pointed at this repository. That CLI searches .claude/skills/ by
  * default, so without a guard it offers a consumer the maintainer skills
@@ -35,6 +41,9 @@ const externalDir = join(repoRoot, 'website', 'src', 'data', 'external-skills');
 
 const registry = JSON.parse(readFileSync(join(skillsDir, 'registry.json'), 'utf8'));
 const { displayed, external, unlisted } = registry;
+const categories = Array.isArray(registry.categories) ? registry.categories : [];
+/** The category whose skills run on a cadence. */
+const RECURRING = 'recurring';
 
 const files = readdirSync(skillsDir, { withFileTypes: true })
   .filter((e) => e.isDirectory() && existsSync(join(skillsDir, e.name, 'SKILL.md')))
@@ -63,13 +72,48 @@ const skillSources = [
 const frontmatterOf = (src) => src.match(/^---\n([\s\S]*?)\n---\n/)?.[1] ?? '';
 const shownOnSite = [...displayed, ...external];
 const badFrontmatter = [];
+const badCategory = [];
+const categoryIds = categories.map((category) => category.id);
+const usedCategories = new Set();
+const fieldOf = (fm, key) =>
+  fm.match(new RegExp(`^${key}:[ \\t]*(\\S.*)$`, 'm'))?.[1].trim() ?? null;
 for (const [label, , src] of skillSources) {
   const fm = frontmatterOf(src);
-  const slug = label.replace(/^.*\/([^/]+?)(?:\/SKILL)?\.md$/, '$1');
+  // `.claude/skills/<slug>/SKILL.md`, or `…/external-skills/<slug>.md`.
+  const slug = label.replace(/\/SKILL\.md$|\.md$/, '').split('/').pop();
   const required = ['name', 'description'];
-  if (shownOnSite.includes(slug)) required.push('icon', 'displayDescription', 'invoke');
+  if (shownOnSite.includes(slug)) required.push('icon', 'displayDescription', 'invoke', 'category');
   const missing = required.filter((k) => !new RegExp(`^${k}:\\s*\\S`, 'm').test(fm));
   if (missing.length > 0) badFrontmatter.push(`${label}: missing ${missing.join(', ')}`);
+  if (!shownOnSite.includes(slug)) continue;
+  const category = fieldOf(fm, 'category');
+  const cadence = fieldOf(fm, 'cadence');
+  if (category === null) continue;
+  usedCategories.add(category);
+  if (!categoryIds.includes(category)) {
+    badCategory.push(`${label}: category "${category}" is not in the registry's categories`);
+  } else if (category === RECURRING && cadence === null) {
+    badCategory.push(`${label}: a ${RECURRING} skill needs a cadence`);
+  } else if (category !== RECURRING && cadence !== null) {
+    badCategory.push(`${label}: only a ${RECURRING} skill carries a cadence`);
+  }
+}
+
+// The category list itself: complete rows, unique ids, none left empty.
+const badCategoryList = [];
+for (const category of categories) {
+  for (const key of ['id', 'label', 'description']) {
+    if (typeof category?.[key] !== 'string' || category[key].trim() === '') {
+      badCategoryList.push(`a category is missing "${key}": ${JSON.stringify(category)}`);
+    }
+  }
+}
+for (const id of categoryIds.filter((id, i) => categoryIds.indexOf(id) !== i)) {
+  badCategoryList.push(`category id listed twice: ${id}`);
+}
+if (categories.length === 0) badCategoryList.push('the registry has no "categories" list');
+for (const id of new Set(categoryIds.filter((id) => !usedCategories.has(id)))) {
+  badCategoryList.push(`category "${id}" has no skill`);
 }
 
 // Hidden from `npx skills add`: every repo skill is internal to that CLI,
@@ -127,8 +171,15 @@ if (leaks.length > 0) {
 if (badFrontmatter.length > 0) {
   fail(
     `Skill files with incomplete frontmatter (name/description for Claude Code ` +
-      `discovery; icon/displayDescription/invoke for the /skills page):\n` +
+      `discovery; icon/displayDescription/invoke/category for the /skills page):\n` +
       badFrontmatter.map((f) => `    - ${f}`).join('\n')
+  );
+}
+
+if (badCategory.length > 0 || badCategoryList.length > 0) {
+  fail(
+    `Skill categories out of step with .claude/skills/registry.json:\n` +
+      [...badCategoryList, ...badCategory].map((f) => `    - ${f}`).join('\n')
   );
 }
 
@@ -187,5 +238,5 @@ if (failed) {
 console.log(
   `✓ Skills registry in sync — ${shownOnSite.length} skills on /skills ` +
     `(${displayed.length} repo, ${external.length} external), ` +
-    `${unlisted.length} unlisted.`
+    `${unlisted.length} unlisted, ${categories.length} categories.`
 );

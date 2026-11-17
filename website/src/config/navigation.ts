@@ -187,7 +187,6 @@ export const DOC_ITEM_ICONS: Record<string, string> = {
   "/blueprints/design": "description",
   "/blueprints/content-design": "description",
   "/skills": "construction",
-  "/loops": "all_inclusive",
   "/releases": "new_releases",
 };
 
@@ -198,7 +197,7 @@ const DOCS_SHOWCASE_HREF = "/docs/figma";
 const FOUNDATIONS_SHOWCASE_HREF = "/foundations/themes";
 const isBlueprintDoc = (l: NavLink) => l.href.startsWith("/blueprints");
 const isSystemAtWorkDoc = (l: NavLink) =>
-  ["/skills", "/loops", "/releases"].includes(l.href);
+  ["/skills", "/releases"].includes(l.href);
 
 const linksToMegaItems = (
   links: NavLink[],
@@ -354,7 +353,6 @@ function buildNavSections(): NavSection[] {
         path === "/overview" ||
         path.startsWith("/blueprints") ||
         path.startsWith("/skills") ||
-        path.startsWith("/loops") ||
         path.startsWith("/releases"),
     },
   ];
@@ -465,7 +463,6 @@ export const docsSidebarLinks: NavLink[] = [
   { href: "/blueprints/design", label: "Design MD", description: "The design spec behind the system" },
   { href: "/blueprints/content-design", label: "Content MD", description: "The style guide behind the words" },
   { href: "/skills", label: "Skills", description: "The agent skills that maintain the site" },
-  { href: "/loops", label: "Loops", description: "The recurring loops that keep it current" },
   { href: "/releases", label: "Release log", description: "One entry per npm release" },
 ];
 
@@ -790,7 +787,7 @@ export function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
   if (docsLink) {
     return [{ label: "Docs", href: "/docs" }, { label: docsLink.label }];
   }
-  // A page beneath a docs page (e.g. /skills/new-component) keeps its parent
+  // A page beneath a docs page (a sub-route of one of the docs links) keeps its parent
   // in the trail, the way a section sub-page does below.
   const docsParent = docsSidebarLinks.find(
     (l) => l.href !== "/docs" && path.startsWith(l.href + "/")

@@ -8,7 +8,6 @@ import {
   templatesSidebarLinks,
 } from "@/config/navigation";
 import { SITE_URL } from "@/lib/structuredData";
-import { SKILL_GUIDE_HREFS } from "@/data/skill-guides";
 import { THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
 
 const baseUrl = SITE_URL;
@@ -60,7 +59,7 @@ function fileForRoute(route: string): string {
 
 function changeFrequency(route: string): ChangeFrequency {
   if (route === "") return "monthly";
-  if (route === "/releases" || route === "/loops") return "weekly";
+  if (route === "/releases") return "weekly";
   return "monthly";
 }
 
@@ -79,7 +78,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/playground",
     "/graph",
     ...docsSidebarLinks.map((l) => l.href),
-    ...SKILL_GUIDE_HREFS,
     ...foundationsSidebarLinks.map((l) => l.href),
     // One specimen per theme, from the same list generateStaticParams reads.
     ...THEME_SELECTOR_ORDER.map((id) => `${THEME_SPECIMEN_BASE}${id}`),

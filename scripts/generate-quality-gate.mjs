@@ -3,7 +3,7 @@
  * generate-quality-gate.mjs
  *
  * Writes website/src/data/quality-gate.generated.ts: every check a ship
- * runs, in the order it runs, for the list on /skills/super-ship.
+ * runs, in the order it runs, for the list on /skills.
  *
  * The list has three sources and this file copies none of them by hand:
  *

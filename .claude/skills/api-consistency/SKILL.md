@@ -4,6 +4,7 @@ description: Review component prop interfaces across the design system, or scope
 icon: compare
 displayDescription: "Reads component Props interfaces, across the library or scoped to one component and its family, and flags inconsistencies: mixed boolean naming (disabled vs isDisabled), mismatched size enums, emphasis and colour mixed in one prop, missing standard props, structural mismatches within families, and registry descriptions or specs that name a prop the contract no longer carries. Produces a grouped findings report prioritised by breaking impact."
 invoke: ["review component APIs","prop consistency audit","are our component props consistent","check for API inconsistencies","check this component's API"]
+category: review
 metadata:
   internal: true
 ---

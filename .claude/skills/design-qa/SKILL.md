@@ -4,6 +4,7 @@ description: Rigorous visual QA and polish pass over a component, a page, or a s
 icon: frame_inspect
 displayDescription: "Renders the target in both themes, magnifies its seams, corners, and states, and lines it up against its nearest rendered siblings. Judges the arrangement against the fundamental principles (proximity, alignment, repetition, contrast, spacing) and the parts against component-scale craft checks, fixes what has one right answer, and reports the taste calls that need a decision."
 invoke: ["design QA [Name]","polish the [Name] component","is [Name] good enough","design QA the [category] components"]
+category: review
 metadata:
   internal: true
 ---

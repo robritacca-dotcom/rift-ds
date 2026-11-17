@@ -2,8 +2,10 @@
 name: chat-quality
 description: "Biweekly loop that turns real chat feedback into eval coverage. Read the thumbs verdicts from the live Redis, join them to the logged exchanges, grow the golden set from actual failures, run the answer-quality eval, and land the fixes on a local branch for approval. Use when asked to run the chat quality loop. Never pushes, merges, or deploys."
 icon: reviews
-displayDescription: "Reads the site chat's own report card: every thumbs verdict a visitor left, joined back to the logged exchange it rates. Disliked answers become golden-set regression cases, the answer-quality eval runs against the updated set, and the fixes land on a branch with a plain-English report for approval. One of the loops described on the Loops page."
+displayDescription: "Reads the site chat's own report card: every thumbs verdict a visitor left, joined back to the logged exchange it rates. Disliked answers become golden-set regression cases, the answer-quality eval runs against the updated set, and the fixes land on a branch with a plain-English report for approval."
 invoke: ["run the chat quality loop","/chat-quality"]
+category: recurring
+cadence: Biweekly
 metadata:
   internal: true
 ---

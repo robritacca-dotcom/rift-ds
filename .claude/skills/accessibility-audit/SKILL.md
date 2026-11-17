@@ -4,6 +4,7 @@ description: Audit a component or page for accessibility violations against WCAG
 icon: accessibility
 displayDescription: "Audits a component or page against WCAG 2.1 AA criteria. Checks semantic HTML, ARIA usage, keyboard navigation, focus styles, and colour contrast via both source code analysis and live screenshots. Reports file and line-level findings with WCAG criterion and severity."
 invoke: ["accessibility audit","a11y check on [component/page]","check WCAG compliance","is [X] accessible"]
+category: review
 metadata:
   internal: true
 ---

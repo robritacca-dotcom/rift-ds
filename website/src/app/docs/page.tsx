@@ -193,14 +193,6 @@ export default function DocsPage() {
               </div>
             </TocCard>
 
-            {/* Loops */}
-            <TocCard disc href="/loops" title="Loops">
-              {/* A ring with a dot riding it */}
-              <div className={styles.loopRing} aria-hidden="true">
-                <span className={styles.loopDot} />
-              </div>
-            </TocCard>
-
             {/* Project journal */}
             <TocCard disc href="/releases" title="Release log">
               <div className={styles.journalGrid}>

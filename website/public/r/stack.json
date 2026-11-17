@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stack",
+  "type": "registry:ui",
+  "title": "Stack",
+  "description": "Children in one direction, a column or a row, with a gap from the scale between them.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
+  "registryDependencies": [
+    "https://rift-ds.com/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/Stack/Stack.css",
+      "type": "registry:file",
+      "target": "rift/components/Stack/Stack.css",
+      "content": "/* ============================================\n   STACK\n   Children in one direction, a gap from the\n   scale between them. The gap arrives as\n   --ds-stack-gap, set from the `gap` prop.\n   ============================================ */\n\n/* Base */\n.ds-stack {\n  display: flex;\n  gap: var(--ds-stack-gap, var(--gap-400));\n  min-width: 0;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  list-style: none;\n}\n\n/* Direction */\n.ds-stack--column {\n  flex-direction: column;\n}\n\n.ds-stack--row {\n  flex-direction: row;\n}\n\n.ds-stack--wrap {\n  flex-wrap: wrap;\n}\n\n/* Alignment across the stack */\n.ds-stack--align-start {\n  align-items: flex-start;\n}\n\n.ds-stack--align-center {\n  align-items: center;\n}\n\n.ds-stack--align-end {\n  align-items: flex-end;\n}\n\n.ds-stack--align-baseline {\n  align-items: baseline;\n}\n\n.ds-stack--align-stretch {\n  align-items: stretch;\n}\n\n/* Spread along the stack */\n.ds-stack--justify-start {\n  justify-content: flex-start;\n}\n\n.ds-stack--justify-center {\n  justify-content: center;\n}\n\n.ds-stack--justify-end {\n  justify-content: flex-end;\n}\n\n.ds-stack--justify-between {\n  justify-content: space-between;\n}\n"
+    },
+    {
+      "path": "src/components/Stack/Stack.tsx",
+      "type": "registry:file",
+      "target": "rift/components/Stack/Stack.tsx",
+      "content": "import React from 'react';\nimport './Stack.css';\n\n/** A step on the gap scale, as the `--gap-*` token it names. */\nexport type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';\n\n/** Props owned by Stack itself; everything else falls through to the root element. */\ntype StackOwnProps = {\n  /** `column` lays the children top to bottom; `row` lays them in the reading direction. */\n  direction?: 'column' | 'row';\n  /** The space between children, as a step on the gap scale (`--gap-400` by default). */\n  gap?: StackGap;\n  /**\n   * How children line up across the stack: `stretch` fills it, which keeps\n   * cards in a row the same height. A column stretches and a row centres\n   * unless it is set.\n   * @default 'stretch' in a column, 'center' in a row\n   */\n  align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch';\n  /** How children spread along the stack. `between` pushes the first and last to the ends. */\n  justify?: 'start' | 'center' | 'end' | 'between';\n  /** Lets a row wrap onto more lines when it runs out of room, keeping the gap between lines. */\n  wrap?: boolean;\n  /** The element the stack renders as, so it can be a list, a section or a form. */\n  as?: 'div' | 'section' | 'ul' | 'ol' | 'li' | 'form' | 'fieldset' | 'header' | 'footer' | 'nav' | 'span';\n  /** The stack's children. */\n  children?: React.ReactNode;\n  /** Additional CSS classes */\n  className?: string;\n};\n\nexport interface StackProps extends StackOwnProps, Omit<React.ComponentPropsWithRef<'div'>, keyof StackOwnProps> {}\n\n/**\n * Lays children out in one direction with a gap from the scale: the column\n * every page, panel and form is made of, or a row of controls or cards.\n * Presentational and server-renderable; it adds no semantics, so `as` picks\n * the element when the stack is a list or a section.\n */\nexport function Stack({\n  direction = 'column',\n  gap = '400',\n  align,\n  justify = 'start',\n  wrap = false,\n  as = 'div',\n  className = '',\n  style,\n  children,\n  ref,\n  ...rest\n}: StackProps) {\n  // `as` picks among elements that all take a div's props, so the root is typed loosely.\n  const Element = as as unknown as React.ElementType<React.ComponentPropsWithRef<'div'>>;\n  const classes = [\n    'ds-stack',\n    `ds-stack--${direction}`,\n    `ds-stack--align-${align ?? (direction === 'row' ? 'center' : 'stretch')}`,\n    `ds-stack--justify-${justify}`,\n    wrap ? 'ds-stack--wrap' : '',\n    className,\n  ]\n    .filter(Boolean)\n    .join(' ');\n  return (\n    <Element\n      {...rest}\n      ref={ref}\n      className={classes}\n      style={{ ...style, '--ds-stack-gap': `var(--gap-${gap})` } as React.CSSProperties}\n    >\n      {children}\n    </Element>\n  );\n}\n"
+    }
+  ]
+}

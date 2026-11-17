@@ -282,6 +282,13 @@
     "by": "none"
   },
   "size": {
-    "gzip": 1557
-  }
+    "gzip": 1596
+  },
+  "alternatives": [
+    {
+      "name": "Grid",
+      "when": "cells of any kind should sit in equal columns and share a row’s height",
+      "schemaUrl": "https://rift-ds.com/schema/components/grid.json"
+    }
+  ]
 }

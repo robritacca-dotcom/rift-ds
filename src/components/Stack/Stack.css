@@ -1,0 +1,68 @@
+/* ============================================
+   STACK
+   Children in one direction, a gap from the
+   scale between them. The gap arrives as
+   --ds-stack-gap, set from the `gap` prop.
+   ============================================ */
+
+/* Base */
+.ds-stack {
+  display: flex;
+  gap: var(--ds-stack-gap, var(--gap-400));
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+
+/* Direction */
+.ds-stack--column {
+  flex-direction: column;
+}
+
+.ds-stack--row {
+  flex-direction: row;
+}
+
+.ds-stack--wrap {
+  flex-wrap: wrap;
+}
+
+/* Alignment across the stack */
+.ds-stack--align-start {
+  align-items: flex-start;
+}
+
+.ds-stack--align-center {
+  align-items: center;
+}
+
+.ds-stack--align-end {
+  align-items: flex-end;
+}
+
+.ds-stack--align-baseline {
+  align-items: baseline;
+}
+
+.ds-stack--align-stretch {
+  align-items: stretch;
+}
+
+/* Spread along the stack */
+.ds-stack--justify-start {
+  justify-content: flex-start;
+}
+
+.ds-stack--justify-center {
+  justify-content: center;
+}
+
+.ds-stack--justify-end {
+  justify-content: flex-end;
+}
+
+.ds-stack--justify-between {
+  justify-content: space-between;
+}

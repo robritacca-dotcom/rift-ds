@@ -49,6 +49,11 @@ import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { Panel } from "rift-ds/components/Panel/Panel";
+import { Stack } from "rift-ds/components/Stack/Stack";
+import { Grid } from "rift-ds/components/Grid/Grid";
+import { Icon } from "rift-ds/components/Icon/Icon";
+import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
+import { Checklist } from "rift-ds/components/Checklist/Checklist";
 import { Chip } from "rift-ds/components/Chip/Chip";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
@@ -1638,6 +1643,50 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <Pagination page={2} pageCount={3} onPageChange={() => {}} size="compact" />
     </>
+  ),
+  "stack": () => (
+    <Stack gap="200" style={{ width: "160px" }} aria-hidden="true">
+      {["One", "Two", "Three"].map((label) => (
+        <Panel key={label} bordered padding="compact">
+          <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{label}</span>
+        </Panel>
+      ))}
+    </Stack>
+  ),
+  "grid": () => (
+    <Grid columns={3} minColumnWidth="3rem" gap="200" style={{ width: "180px" }} aria-hidden="true">
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <Panel key={n} bordered padding="compact">
+          <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{n}</span>
+        </Panel>
+      ))}
+    </Grid>
+  ),
+  "icon": () => (
+    <Stack direction="row" gap="300">
+      <Icon name="settings" />
+      <Icon name="star" filled />
+      <Icon name="payments" size="500" tile />
+    </Stack>
+  ),
+  "page-header": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <PageHeader level={2} title="Projects" description="What the team is working on." />
+    </div>
+  ),
+  "checklist": () => (
+    <div style={{ width: "200px" }} aria-hidden="true" inert>
+      <Checklist
+        size="compact"
+        showProgress={false}
+        readOnly
+        values={["a"]}
+        items={[
+          { id: "a", label: "Invite your team" },
+          { id: "b", label: "Publish a page" },
+        ]}
+      />
+    </div>
   ),
   "panel": () => (
     <>

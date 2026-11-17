@@ -1,0 +1,123 @@
+/* ============================================
+   CHECKLIST
+   A heading with the count done and a bar, then
+   one row per task: the Checkbox with its label
+   and description, and at the row's end the
+   owner's avatar and an action. Rows divide like
+   a WidgetRow list, on --color-divider.
+   ============================================ */
+
+/* Base */
+.ds-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  min-width: 0;
+}
+
+/* Header */
+.ds-checklist__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+}
+
+.ds-checklist__title {
+  margin: 0;
+}
+
+.ds-checklist__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+.ds-checklist__count {
+  flex-shrink: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-checklist__bar {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* List */
+.ds-checklist__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-checklist__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  padding-block: var(--padding-300);
+  border-block-end: var(--border-025) solid var(--color-divider);
+}
+
+.ds-checklist__item:last-child {
+  border-block-end: none;
+}
+
+.ds-checklist--compact .ds-checklist__item {
+  padding-block: var(--padding-200);
+}
+
+.ds-checklist__task {
+  min-width: 0;
+}
+
+/* Owner and action at the row's end */
+.ds-checklist__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  flex-shrink: 0;
+}
+
+/* Read-only rows: the shared box beside the label, in Checkbox's own type. */
+.ds-checklist__static {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-200);
+}
+
+.ds-checklist__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-checklist__label {
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+.ds-checklist--compact .ds-checklist__label,
+.ds-checklist__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-checklist__description {
+  color: var(--color-text-tertiary);
+}

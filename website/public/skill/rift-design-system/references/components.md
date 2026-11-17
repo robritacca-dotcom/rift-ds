@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (32)
+## Data display (33)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -578,6 +578,14 @@ Sliding content viewer with navigation arrows, dot indicators, auto-play, and ke
 - Import: `import { Carousel } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/carousel.md
+
+### Checklist
+
+Tasks with a done state each, an owner and an action, under a count done and a progress bar.
+
+- Import: `import { Checklist } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/checklist.md
 
 ### Chip
 
@@ -1155,7 +1163,7 @@ One-row switch for inspector panels, where the whole bar toggles and the track s
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/inspector-toggle-switch.md
 
-## Layout (8)
+## Layout (11)
 
 Page scaffolding: app shells, sidebars, dividers, and section headings.
 
@@ -1183,9 +1191,25 @@ A thin rule separating stacked content, with optional inline label and vertical 
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/divider.md
 
+### Grid
+
+Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.
+
+- Import: `import { Grid } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/grid.md
+
+### Page header
+
+The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.
+
+- Import: `import { PageHeader } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/page-header.md
+
 ### Panel
 
-The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.
+The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.
 
 - Import: `import { Panel } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -1214,6 +1238,14 @@ Two resizable regions with a draggable, keyboard-operable divider between them.
 - Import: `import { SplitPane } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/split-pane.md
+
+### Stack
+
+Children in one direction, a column or a row, with a gap from the scale between them.
+
+- Import: `import { Stack } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/stack.md
 
 ### Toolbar
 
@@ -1444,7 +1476,7 @@ Contextual text label that appears on hover or focus with position and delay opt
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/tooltip.md
 
-## Typography (4)
+## Typography (5)
 
 Headings, running text, links, and lists, each drawn from a tier of the type scale.
 
@@ -1455,6 +1487,14 @@ A heading whose outline level and type tier are chosen apart.
 - Import: `import { Heading } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/heading.md
+
+### Icon
+
+One Material Symbol on the icon scale, decorative or named, plain or on a round tile.
+
+- Import: `import { Icon } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/icon.md
 
 ### Link
 

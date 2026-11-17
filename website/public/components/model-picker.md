@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { ModelPicker } from 'rift-ds';`
 - Deep import: `import { ModelPicker } from 'rift-ds/components/ModelPicker/ModelPicker';`
 - Rendering: client component (declares 'use client')
-- Size: 9.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 9.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/model-picker
 - Schema: https://rift-ds.com/schema/components/model-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

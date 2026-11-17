@@ -103,6 +103,10 @@ const SANCTIONED_TONES = {
     values: ['default', 'error', 'inherit', 'neutral', 'positive', 'warning'],
     reason: 'running text that carries a status message (saved, declined) speaks the status roles, and `inherit` takes the colour of what it sits in',
   },
+  Icon: {
+    values: ['default', 'inherit', 'neutral'],
+    reason: '`inherit` draws the glyph in currentColor, so an icon in a line of status text takes the colour of that text',
+  },
   Spinner: {
     values: ['default', 'inherit', 'neutral'],
     reason: '`inherit` draws in currentColor so the spinner matches the control it sits in',
@@ -615,6 +619,7 @@ const SANCTIONED_SIZES = {
   Dialog: { values: ['sm', 'md', 'lg'], reason: 'panel widths, not density' },
   Drawer: { values: ['sm', 'md', 'lg'], reason: 'panel widths, not density' },
   Spinner: { values: ['sm', 'md', 'lg'], reason: 'glyph sizes, not density' },
+  Icon: { values: ['500', '600', '800', '1200'], reason: 'the steps of the --icon-size-* scale, named as the tokens they set, not density' },
   Chip: { values: ['large'], reason: 'one step beyond default for a prominent filter, alongside default and compact' },
   Stat: { values: ['large'], reason: 'a hero figure, one step beyond default' },
   Prose: { values: ['sm'], reason: 'a smaller reading measure for asides, alongside default' },

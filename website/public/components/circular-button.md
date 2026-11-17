@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { CircularButton } from 'rift-ds';`
 - Deep import: `import { CircularButton } from 'rift-ds/components/CircularButton/CircularButton';`
 - Rendering: server-renderable (no 'use client')
-- Size: 3.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/circular-button
 - Schema: https://rift-ds.com/schema/components/circular-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

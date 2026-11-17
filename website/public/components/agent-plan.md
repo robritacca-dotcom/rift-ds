@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/agent-plan
 - Schema: https://rift-ds.com/schema/components/agent-plan.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Checklist](https://rift-ds.com/components/checklist.md) instead when the tasks are the reader’s own to tick off, each with an owner.
+
 ## AgentPlan props
 
 | Prop | Type | Required | Default | Description |

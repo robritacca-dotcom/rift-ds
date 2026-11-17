@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { CurrencyInput } from 'rift-ds';`
 - Deep import: `import { CurrencyInput } from 'rift-ds/components/CurrencyInput/CurrencyInput';`
 - Rendering: client component (declares 'use client')
-- Size: 7.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 8.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/currency-input
 - Schema: https://rift-ds.com/schema/components/currency-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

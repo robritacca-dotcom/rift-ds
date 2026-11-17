@@ -1,0 +1,49 @@
+/* ============================================
+   ICON
+   One Material Symbol on the icon scale. The
+   size arrives as --ds-icon-size from the
+   `size` prop and is set on the glyph through
+   --icon-size, never as a font size.
+   ============================================ */
+
+/* Base */
+.ds-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.ds-icon__glyph {
+  --icon-size: var(--ds-icon-size, var(--icon-size-600));
+  color: inherit;
+}
+
+/* Tones */
+.ds-icon--default {
+  color: var(--color-icon-primary);
+}
+
+.ds-icon--neutral {
+  color: var(--color-icon-secondary);
+}
+
+.ds-icon--inherit {
+  color: inherit;
+}
+
+/* Filled */
+.ds-icon--filled .ds-icon__glyph {
+  --material-symbols-fill: 1;
+}
+
+/* Tile: the round mark at the head of a stat card or a list row, the
+   control height across on the icon fill. */
+.ds-icon--tile {
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-bg);
+}

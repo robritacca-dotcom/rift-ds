@@ -2,7 +2,7 @@ import React from 'react';
 import './Stat.css';
 import '../../fonts/material-symbols.css';
 import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
-import { mirrorClass } from '../../behaviors/direction';
+import { Icon } from '../Icon/Icon';
 
 /** Props owned by Stat itself — everything else falls through to the root div. */
 type StatOwnProps = {
@@ -106,15 +106,14 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
             so `auto` lays its parts out on an inner body the root measures. */}
         {hasHead && (
           <span className={`${baseClass}__head`}>
-            {hasIcon && (
-              <span className={`${baseClass}__icon`} aria-hidden="true">
-                {typeof icon === 'string' ? (
-                  <span className={`material-symbols-rounded ${mirrorClass(icon)}`}>{icon}</span>
-                ) : (
-                  icon
-                )}
-              </span>
-            )}
+            {hasIcon &&
+              (typeof icon === 'string' ? (
+                <Icon name={icon} size="500" tile className={`${baseClass}__icon`} />
+              ) : (
+                <span className={`${baseClass}__icon`} aria-hidden="true">
+                  {icon}
+                </span>
+              ))}
             {hasCaption && <span className={`${baseClass}__caption`}>{caption}</span>}
           </span>
         )}

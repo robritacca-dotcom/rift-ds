@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { Avatar } from 'rift-ds';`
 - Deep import: `import { Avatar } from 'rift-ds/components/Avatar/Avatar';`
 - Rendering: client component (declares 'use client')
-- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/avatar
 - Schema: https://rift-ds.com/schema/components/avatar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

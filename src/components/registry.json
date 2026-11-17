@@ -102,7 +102,10 @@
       "description": "A collapsible checklist of an agent's task, with live step states and a progress readout.",
       "category": "ai",
       "client": true,
-      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
+      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }],
+      "alternatives": [
+        { "name": "Checklist", "when": "the tasks are the reader’s own to tick off, each with an owner" }
+      ]
     },
     {
       "name": "AgentRail",
@@ -432,6 +435,18 @@
       "pattern": "checkbox",
       "alternatives": [
         { "name": "RadioButton", "when": "only one option can be chosen" }
+      ]
+    },
+    {
+      "name": "Checklist",
+      "label": "Checklist",
+      "slug": "checklist",
+      "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar.",
+      "category": "data-display",
+      "client": true,
+      "partPatterns": [{ "pattern": "checkbox", "part": "tasks" }],
+      "alternatives": [
+        { "name": "AgentPlan", "when": "the list is an agent’s plan that it works through itself, with live step states" }
       ]
     },
     {
@@ -822,6 +837,19 @@
       "keys": { "by": "component", "note": "The arrow keys turn the globe while it has focus." }
     },
     {
+      "name": "Grid",
+      "label": "Grid",
+      "slug": "grid",
+      "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.",
+      "category": "layout",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Stack", "when": "the children run in one line, a column or a row, rather than in equal columns" },
+        { "name": "Widget", "when": "the board is of Widget tiles of different heights that should pack without holes" }
+      ]
+    },
+    {
       "name": "Heading",
       "label": "Heading",
       "slug": "heading",
@@ -838,6 +866,15 @@
       "category": "overlays",
       "client": true,
       "pattern": "tooltip"
+    },
+    {
+      "name": "Icon",
+      "label": "Icon",
+      "slug": "icon",
+      "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile.",
+      "category": "typography",
+      "client": false,
+      "keys": { "by": "none" }
     },
     {
       "name": "ImageCompare",
@@ -1131,6 +1168,18 @@
       "partPatterns": [{ "pattern": "textbox", "part": "field" }, { "pattern": "button", "part": "step buttons" }]
     },
     {
+      "name": "PageHeader",
+      "label": "Page header",
+      "slug": "page-header",
+      "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.",
+      "category": "layout",
+      "client": false,
+      "keys": { "by": "platform", "note": "Its breadcrumb links and the actions passed in are native links and buttons, reached with Tab." },
+      "alternatives": [
+        { "name": "SectionTitle", "when": "the heading opens a section within a page rather than the page itself" }
+      ]
+    },
+    {
       "name": "Pagination",
       "label": "Pagination",
       "slug": "pagination",
@@ -1143,7 +1192,7 @@
       "name": "Panel",
       "label": "Panel",
       "slug": "panel",
-      "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+      "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.",
       "category": "layout",
       "client": false,
       "keys": { "by": "none" }
@@ -1326,7 +1375,10 @@
       "description": "Heading with a divider line and optional trailing content for organising page sections.",
       "category": "layout",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "PageHeader", "when": "the heading is the page’s own title, with its breadcrumb and actions" }
+      ]
     },
     {
       "name": "SegmentedControl",
@@ -1468,6 +1520,18 @@
       "category": "layout",
       "client": true,
       "pattern": "splitter"
+    },
+    {
+      "name": "Stack",
+      "label": "Stack",
+      "slug": "stack",
+      "description": "Children in one direction, a column or a row, with a gap from the scale between them.",
+      "category": "layout",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Grid", "when": "the children should sit in equal columns that fold by the room the grid has" }
+      ]
     },
     {
       "name": "StackedBarChart",
@@ -1753,7 +1817,10 @@
       "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
       "category": "data-display",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Grid", "when": "cells of any kind should sit in equal columns and share a row’s height" }
+      ]
     },
     {
       "name": "WorldMap",

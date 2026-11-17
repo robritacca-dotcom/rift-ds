@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.29.0",
   "package": "rift-ds",
-  "count": 179,
+  "count": 184,
   "components": [
     {
       "name": "Accordion",
@@ -393,6 +393,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/checkbox.json",
       "docsUrl": "https://rift-ds.com/components/checkbox",
       "markdownUrl": "https://rift-ds.com/components/checkbox.md"
+    },
+    {
+      "name": "Checklist",
+      "label": "Checklist",
+      "slug": "checklist",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/checklist.json",
+      "docsUrl": "https://rift-ds.com/components/checklist",
+      "markdownUrl": "https://rift-ds.com/components/checklist.md"
     },
     {
       "name": "Chip",
@@ -795,6 +805,16 @@
       "markdownUrl": "https://rift-ds.com/components/globe.md"
     },
     {
+      "name": "Grid",
+      "label": "Grid",
+      "slug": "grid",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/grid.json",
+      "docsUrl": "https://rift-ds.com/components/grid",
+      "markdownUrl": "https://rift-ds.com/components/grid.md"
+    },
+    {
       "name": "Heading",
       "label": "Heading",
       "slug": "heading",
@@ -813,6 +833,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/hover-card.json",
       "docsUrl": "https://rift-ds.com/components/hover-card",
       "markdownUrl": "https://rift-ds.com/components/hover-card.md"
+    },
+    {
+      "name": "Icon",
+      "label": "Icon",
+      "slug": "icon",
+      "category": "typography",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/icon.json",
+      "docsUrl": "https://rift-ds.com/components/icon",
+      "markdownUrl": "https://rift-ds.com/components/icon.md"
     },
     {
       "name": "ImageCompare",
@@ -1123,6 +1153,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/number-input.json",
       "docsUrl": "https://rift-ds.com/components/number-input",
       "markdownUrl": "https://rift-ds.com/components/number-input.md"
+    },
+    {
+      "name": "PageHeader",
+      "label": "Page header",
+      "slug": "page-header",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/page-header.json",
+      "docsUrl": "https://rift-ds.com/components/page-header",
+      "markdownUrl": "https://rift-ds.com/components/page-header.md"
     },
     {
       "name": "Pagination",
@@ -1473,6 +1513,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/split-pane.json",
       "docsUrl": "https://rift-ds.com/components/split-pane",
       "markdownUrl": "https://rift-ds.com/components/split-pane.md"
+    },
+    {
+      "name": "Stack",
+      "label": "Stack",
+      "slug": "stack",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/stack.json",
+      "docsUrl": "https://rift-ds.com/components/stack",
+      "markdownUrl": "https://rift-ds.com/components/stack.md"
     },
     {
       "name": "StackedBarChart",

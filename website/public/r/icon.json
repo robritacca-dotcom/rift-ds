@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon",
+  "type": "registry:ui",
+  "title": "Icon",
+  "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
+  "registryDependencies": [
+    "https://rift-ds.com/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/Icon/Icon.css",
+      "type": "registry:file",
+      "target": "rift/components/Icon/Icon.css",
+      "content": "/* ============================================\n   ICON\n   One Material Symbol on the icon scale. The\n   size arrives as --ds-icon-size from the\n   `size` prop and is set on the glyph through\n   --icon-size, never as a font size.\n   ============================================ */\n\n/* Base */\n.ds-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  line-height: 1;\n  vertical-align: middle;\n}\n\n.ds-icon__glyph {\n  --icon-size: var(--ds-icon-size, var(--icon-size-600));\n  color: inherit;\n}\n\n/* Tones */\n.ds-icon--default {\n  color: var(--color-icon-primary);\n}\n\n.ds-icon--neutral {\n  color: var(--color-icon-secondary);\n}\n\n.ds-icon--inherit {\n  color: inherit;\n}\n\n/* Filled */\n.ds-icon--filled .ds-icon__glyph {\n  --material-symbols-fill: 1;\n}\n\n/* Tile: the round mark at the head of a stat card or a list row, the\n   control height across on the icon fill. */\n.ds-icon--tile {\n  width: var(--control-height-default);\n  height: var(--control-height-default);\n  border-radius: var(--radius-pill);\n  background-color: var(--color-icon-bg);\n}\n"
+    },
+    {
+      "path": "src/components/Icon/Icon.tsx",
+      "type": "registry:file",
+      "target": "rift/components/Icon/Icon.tsx",
+      "content": "import React from 'react';\nimport { mirrorClass } from '../../behaviors/direction';\nimport '../../fonts/material-symbols.css';\nimport './Icon.css';\n\n/** Props owned by Icon itself; everything else falls through to the root span. */\ntype IconOwnProps = {\n  /** The Material Symbol's name (`settings`, `arrow_forward`). A glyph that points along the reading direction mirrors in a right-to-left context. */\n  name: string;\n  /** The size, as a step on the icon scale (`--icon-size-600`, the size beside body text, by default). */\n  size?: '500' | '600' | '800' | '1200';\n  /** The glyph's colour role. `inherit` takes the colour of the text around it. */\n  tone?: 'default' | 'neutral' | 'inherit';\n  /** Draws the filled form of the glyph, as a selected nav item does. */\n  filled?: boolean;\n  /** What the icon means, when it carries meaning no text beside it says. With a label the icon is an image with that name; without one it is decorative and hidden from assistive tech. */\n  label?: string;\n  /** Sets the glyph on a round tile of the icon fill, the mark at the head of a stat card or a list row. */\n  tile?: boolean;\n  /** Additional CSS classes */\n  className?: string;\n};\n\nexport interface IconProps extends IconOwnProps, Omit<React.ComponentPropsWithRef<'span'>, keyof IconOwnProps | 'children'> {}\n\n/**\n * One Material Symbol on the icon scale, for the places no other component\n * draws one: beside a heading, at the head of a stat card, in a row of text.\n * Decorative unless it has a `label`. Presentational and server-renderable.\n */\nexport function Icon({\n  name,\n  size = '600',\n  tone = 'default',\n  filled = false,\n  label,\n  tile = false,\n  className = '',\n  style,\n  ref,\n  ...rest\n}: IconProps) {\n  const named = Boolean(label);\n  const classes = [\n    'ds-icon',\n    `ds-icon--${tone}`,\n    filled ? 'ds-icon--filled' : '',\n    tile ? 'ds-icon--tile' : '',\n    className,\n  ]\n    .filter(Boolean)\n    .join(' ');\n  return (\n    <span\n      role={named ? 'img' : undefined}\n      aria-label={named ? label : undefined}\n      aria-hidden={named ? undefined : true}\n      {...rest}\n      ref={ref}\n      className={classes}\n      style={{ ...style, '--ds-icon-size': `var(--icon-size-${size})` } as React.CSSProperties}\n    >\n      <span className={`ds-icon__glyph material-symbols-rounded ${mirrorClass(name)}`} aria-hidden=\"true\">\n        {name}\n      </span>\n    </span>\n  );\n}\n"
+    }
+  ]
+}

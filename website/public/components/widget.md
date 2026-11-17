@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/widget
 - Schema: https://rift-ds.com/schema/components/widget.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Grid](https://rift-ds.com/components/grid.md) instead when cells of any kind should sit in equal columns and share a row’s height.
+
 ## Widget props
 
 | Prop | Type | Required | Default | Description |

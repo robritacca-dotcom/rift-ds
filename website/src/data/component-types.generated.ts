@@ -597,6 +597,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "checklist": {
+    "types": {
+      "ChecklistItem": {
+        "kind": "interface",
+        "definition": "interface ChecklistItem {\n  /** A stable id, which `values` holds while the task is done. */\n  id: string;\n  /** What the task is (\"Invite your team\"). */\n  label: string;\n  /** A line under the label on what doing it involves. */\n  description?: string;\n  /** Who the task is with: a name, and an image for their avatar. */\n  owner?: { name: string; src?: string };\n  /** A control at the end of the row that does the task or opens it, such as a compact Button or a Link. */\n  action?: React.ReactNode;\n  /** Holds the task as it is: it cannot be ticked or unticked. */\n  disabled?: boolean;\n}",
+        "description": "One task on a checklist."
+      }
+    },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "chip": {
     "types": {},
     "externalTypes": {
@@ -1499,6 +1511,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "grid": {
+    "types": {
+      "StackGap": {
+        "kind": "type",
+        "definition": "type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';",
+        "description": "A step on the gap scale, as the `--gap-*` token it names."
+      }
+    },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "heading": {
     "types": {
       "HeadingTier": {
@@ -1861,6 +1885,32 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   "number-input": {
     "types": {},
     "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "page-header": {
+    "types": {
+      "BreadcrumbItem": {
+        "kind": "interface",
+        "definition": "interface BreadcrumbItem {\n  /** Display label */\n  label: string;\n  /** Link href — omit for the current / last item */\n  href?: string;\n}"
+      },
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
       "ReactNode": "react"
     }
   },
@@ -2294,6 +2344,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "split-pane": {
     "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "stack": {
+    "types": {
+      "StackGap": {
+        "kind": "type",
+        "definition": "type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';",
+        "description": "A step on the gap scale, as the `--gap-*` token it names."
+      }
+    },
     "externalTypes": {
       "ReactNode": "react"
     }

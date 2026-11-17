@@ -4368,6 +4368,123 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Checklist",
+    "label": "Checklist",
+    "slug": "checklist",
+    "category": "data-display",
+    "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar.",
+    "client": true,
+    "importPath": "rift-ds/components/Checklist/Checklist",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Checklist",
+        "props": [
+          {
+            "name": "items",
+            "type": "ChecklistItem[]",
+            "required": true,
+            "description": "The tasks, in the order they are best done.",
+            "typeRefs": [
+              "ChecklistItem"
+            ]
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "The checklist's heading, which names its section.\nNote: this shadows the native `title` tooltip attribute, which Checklist does not expose."
+          },
+          {
+            "name": "values",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids of the done tasks, for a controlled list. Leave undefined to let the list keep its own, seeded from `defaultValues`."
+          },
+          {
+            "name": "defaultValues",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids done on first render when the list is uncontrolled."
+          },
+          {
+            "name": "onValuesChange",
+            "type": "((values: string[]) => void)",
+            "required": false,
+            "description": "Fires with every done id after a task is ticked or unticked."
+          },
+          {
+            "name": "readOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the done marks without letting them change, for a list that reports what the host already knows (a setup's steps, a review's checks).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "showProgress",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows how many tasks are done, as a count and a bar, under the heading. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "progressLabel",
+            "type": "((done: string, total: string) => string)",
+            "required": false,
+            "description": "The progress count, given the done and total tasks already written in the resolved locale. Defaults to \"3 of 5 done\".",
+            "defaultValue": "(done: string, total: string) => `${done} of ${total} done`"
+          },
+          {
+            "name": "ownerLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "The owner avatar's accessible name, given the owner's name. Defaults to \"Owner: <name>\".",
+            "defaultValue": "(name: string) => `Owner: ${name}`"
+          },
+          {
+            "name": "doneLabel",
+            "type": "string",
+            "required": false,
+            "description": "A read-only row's state, read after its label. Defaults to \"Done\".",
+            "defaultValue": "'Done'"
+          },
+          {
+            "name": "notDoneLabel",
+            "type": "string",
+            "required": false,
+            "description": "A read-only row's state when it is not done. Defaults to \"Not done\".",
+            "defaultValue": "'Not done'"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Row density: `compact` for a checklist in a side panel.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Chip",
     "label": "Chip",
     "slug": "chip",
@@ -10040,6 +10157,107 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Grid",
+    "label": "Grid",
+    "slug": "grid",
+    "category": "layout",
+    "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.",
+    "client": false,
+    "importPath": "rift-ds/components/Grid/Grid",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Grid",
+        "props": [
+          {
+            "name": "columns",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
+            "required": false,
+            "description": "How many equal columns the grid runs to at full width. It folds to fewer as its own width narrows, never below `minColumnWidth`.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "defaultValue": "3"
+          },
+          {
+            "name": "minColumnWidth",
+            "type": "string",
+            "required": false,
+            "description": "The narrowest a column may get before the grid drops one, as a CSS length (`16rem`). Defaults to `12rem`.",
+            "defaultValue": "'12rem'"
+          },
+          {
+            "name": "gap",
+            "type": "StackGap",
+            "required": false,
+            "description": "The space between cells, both ways, as a step on the gap scale (`--gap-500` by default).",
+            "values": [
+              "050",
+              "100",
+              "200",
+              "300",
+              "400",
+              "500",
+              "1000",
+              "1500",
+              "2000",
+              "3000"
+            ],
+            "defaultValue": "'500'",
+            "typeRefs": [
+              "StackGap"
+            ]
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\" | \"stretch\"",
+            "required": false,
+            "description": "How cells sit in their row: `stretch`, the default, makes every card in a row the same height.",
+            "values": [
+              "center",
+              "end",
+              "start",
+              "stretch"
+            ],
+            "defaultValue": "'stretch'"
+          },
+          {
+            "name": "as",
+            "type": "\"div\" | \"ol\" | \"section\" | \"ul\"",
+            "required": false,
+            "description": "The element the grid renders as, so a grid of cards can be a list.",
+            "values": [
+              "div",
+              "ol",
+              "section",
+              "ul"
+            ],
+            "defaultValue": "'div'"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The cells, in reading order."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Heading",
     "label": "Heading",
     "slug": "heading",
@@ -10194,6 +10412,82 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Delay before hiding (in ms)",
             "defaultValue": "150"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "Icon",
+    "label": "Icon",
+    "slug": "icon",
+    "category": "typography",
+    "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile.",
+    "client": false,
+    "importPath": "rift-ds/components/Icon/Icon",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Icon",
+        "props": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "The Material Symbol's name (`settings`, `arrow_forward`). A glyph that points along the reading direction mirrors in a right-to-left context."
+          },
+          {
+            "name": "size",
+            "type": "\"500\" | \"600\" | \"800\" | \"1200\"",
+            "required": false,
+            "description": "The size, as a step on the icon scale (`--icon-size-600`, the size beside body text, by default).",
+            "values": [
+              "500",
+              "600",
+              "800",
+              "1200"
+            ],
+            "defaultValue": "'600'"
+          },
+          {
+            "name": "tone",
+            "type": "\"inherit\" | \"default\" | \"neutral\"",
+            "required": false,
+            "description": "The glyph's colour role. `inherit` takes the colour of the text around it.",
+            "values": [
+              "default",
+              "inherit",
+              "neutral"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "filled",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the filled form of the glyph, as a selected nav item does.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "What the icon means, when it carries meaning no text beside it says. With a label the icon is an image with that name; without one it is decorative and hidden from assistive tech."
+          },
+          {
+            "name": "tile",
+            "type": "boolean",
+            "required": false,
+            "description": "Sets the glyph on a round tile of the icon fill, the mark at the head of a stat card or a list row.",
+            "defaultValue": "false"
           },
           {
             "name": "className",
@@ -12957,6 +13251,78 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "PageHeader",
+    "label": "Page header",
+    "slug": "page-header",
+    "category": "layout",
+    "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.",
+    "client": false,
+    "importPath": "rift-ds/components/PageHeader/PageHeader",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "PageHeader",
+        "props": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The page's title, its heading.\nNote: this shadows the native `title` tooltip attribute, which PageHeader does not expose."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A sentence under the title on what the page is for or what it holds."
+          },
+          {
+            "name": "breadcrumb",
+            "type": "BreadcrumbItem[]",
+            "required": false,
+            "description": "The trail above the title, from the top of the app to this page; the last item is this page and takes no `href`.",
+            "typeRefs": [
+              "BreadcrumbItem"
+            ]
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text."
+          },
+          {
+            "name": "level",
+            "type": "1 | 2",
+            "required": false,
+            "description": "The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`.",
+            "values": [
+              "1",
+              "2"
+            ],
+            "defaultValue": "1"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the breadcrumb's links render with, such as Next.js's\n`Link`, so they navigate through the app's router; a plain `<a>` when\nunset. This component can render on the server, so it never reads a\nLinkProvider: pass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Pagination",
     "label": "Pagination",
     "slug": "pagination",
@@ -13070,7 +13436,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Panel",
     "slug": "panel",
     "category": "layout",
-    "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+    "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.",
     "client": false,
     "importPath": "rift-ds/components/Panel/Panel",
     "barrel": "main",
@@ -16336,6 +16702,124 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible name for the resize handle.",
             "defaultValue": "'Resize panes'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "Stack",
+    "label": "Stack",
+    "slug": "stack",
+    "category": "layout",
+    "description": "Children in one direction, a column or a row, with a gap from the scale between them.",
+    "client": false,
+    "importPath": "rift-ds/components/Stack/Stack",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Stack",
+        "props": [
+          {
+            "name": "direction",
+            "type": "\"row\" | \"column\"",
+            "required": false,
+            "description": "`column` lays the children top to bottom; `row` lays them in the reading direction.",
+            "values": [
+              "column",
+              "row"
+            ],
+            "defaultValue": "'column'"
+          },
+          {
+            "name": "gap",
+            "type": "StackGap",
+            "required": false,
+            "description": "The space between children, as a step on the gap scale (`--gap-400` by default).",
+            "values": [
+              "050",
+              "100",
+              "200",
+              "300",
+              "400",
+              "500",
+              "1000",
+              "1500",
+              "2000",
+              "3000"
+            ],
+            "defaultValue": "'400'",
+            "typeRefs": [
+              "StackGap"
+            ]
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\" | \"baseline\" | \"stretch\"",
+            "required": false,
+            "description": "How children line up across the stack: `stretch` fills it, which keeps\ncards in a row the same height. A column stretches and a row centres\nunless it is set.",
+            "values": [
+              "baseline",
+              "center",
+              "end",
+              "start",
+              "stretch"
+            ],
+            "defaultValue": "'stretch' in a column, 'center' in a row"
+          },
+          {
+            "name": "justify",
+            "type": "\"center\" | \"start\" | \"end\" | \"between\"",
+            "required": false,
+            "description": "How children spread along the stack. `between` pushes the first and last to the ends.",
+            "values": [
+              "between",
+              "center",
+              "end",
+              "start"
+            ],
+            "defaultValue": "'start'"
+          },
+          {
+            "name": "wrap",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets a row wrap onto more lines when it runs out of room, keeping the gap between lines.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "as",
+            "type": "\"div\" | \"fieldset\" | \"footer\" | \"form\" | \"header\" | \"li\" | \"nav\" | \"ol\" | \"section\" | \"span\" | \"ul\"",
+            "required": false,
+            "description": "The element the stack renders as, so it can be a list, a section or a form.",
+            "values": [
+              "div",
+              "fieldset",
+              "footer",
+              "form",
+              "header",
+              "li",
+              "nav",
+              "ol",
+              "section",
+              "span",
+              "ul"
+            ],
+            "defaultValue": "'div'"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The stack's children."
           },
           {
             "name": "className",

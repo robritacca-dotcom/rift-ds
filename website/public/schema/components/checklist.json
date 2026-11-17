@@ -1,0 +1,171 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "Checklist",
+  "label": "Checklist",
+  "slug": "checklist",
+  "category": "data-display",
+  "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar.",
+  "client": true,
+  "importPath": "rift-ds/components/Checklist/Checklist",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/checklist",
+  "markdownUrl": "https://rift-ds.com/components/checklist.md",
+  "exports": [
+    {
+      "component": "Checklist",
+      "props": [
+        {
+          "name": "items",
+          "type": "ChecklistItem[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The tasks, in the order they are best done.",
+          "typeRefs": [
+            "ChecklistItem"
+          ]
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The checklist's heading, which names its section.\nNote: this shadows the native `title` tooltip attribute, which Checklist does not expose."
+        },
+        {
+          "name": "values",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The ids of the done tasks, for a controlled list. Leave undefined to let the list keep its own, seeded from `defaultValues`."
+        },
+        {
+          "name": "defaultValues",
+          "type": "string[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The ids done on first render when the list is uncontrolled."
+        },
+        {
+          "name": "onValuesChange",
+          "type": "((values: string[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with every done id after a task is ticked or unticked."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows the done marks without letting them change, for a list that reports what the host already knows (a setup's steps, a review's checks).",
+          "default": false
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Shows how many tasks are done, as a count and a bar, under the heading. Defaults to true.",
+          "default": true
+        },
+        {
+          "name": "progressLabel",
+          "type": "((done: string, total: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The progress count, given the done and total tasks already written in the resolved locale. Defaults to \"3 of 5 done\".",
+          "defaultExpression": "(done: string, total: string) => `${done} of ${total} done`"
+        },
+        {
+          "name": "ownerLabel",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The owner avatar's accessible name, given the owner's name. Defaults to \"Owner: <name>\".",
+          "defaultExpression": "(name: string) => `Owner: ${name}`"
+        },
+        {
+          "name": "doneLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A read-only row's state, read after its label. Defaults to \"Done\".",
+          "default": "Done"
+        },
+        {
+          "name": "notDoneLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A read-only row's state when it is not done. Defaults to \"Not done\".",
+          "default": "Not done"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Row density: `compact` for a checklist in a side panel.",
+          "default": "default"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "ChecklistItem": {
+      "kind": "interface",
+      "definition": "interface ChecklistItem {\n  /** A stable id, which `values` holds while the task is done. */\n  id: string;\n  /** What the task is (\"Invite your team\"). */\n  label: string;\n  /** A line under the label on what doing it involves. */\n  description?: string;\n  /** Who the task is with: a name, and an image for their avatar. */\n  owner?: { name: string; src?: string };\n  /** A control at the end of the row that does the task or opens it, such as a compact Button or a Link. */\n  action?: React.ReactNode;\n  /** Holds the task as it is: it cannot be ticked or unticked. */\n  disabled?: boolean;\n}",
+      "description": "One task on a checklist."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "checkbox",
+      "part": "tasks",
+      "label": "Checkbox",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
+      "rows": [
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Ticks the box, or clears it when it is ticked."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 3749
+  },
+  "alternatives": [
+    {
+      "name": "AgentPlan",
+      "when": "the list is an agent’s plan that it works through itself, with live step states",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-plan.json"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Panel
 
-The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.
+The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

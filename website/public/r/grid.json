@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "grid",
+  "type": "registry:ui",
+  "title": "Grid",
+  "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
+  "registryDependencies": [
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/stack.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/Grid/Grid.css",
+      "type": "registry:file",
+      "target": "rift/components/Grid/Grid.css",
+      "content": "/* ============================================\n   GRID\n   Equal columns that fold by the grid's own\n   width. Each column is at least --ds-grid-min\n   wide and the grid never runs to more than\n   --ds-grid-columns: the track minimum is the\n   larger of the floor and the share of the row\n   that many columns would take, so auto-fill\n   cannot add an extra column on a wide row.\n   ============================================ */\n\n/* Base */\n.ds-grid {\n  --ds-grid-gap-resolved: var(--ds-grid-gap, var(--gap-500));\n\n  display: grid;\n  grid-template-columns: repeat(\n    auto-fill,\n    minmax(\n      max(\n        min(var(--ds-grid-min, 12rem), 100%),\n        calc((100% - (var(--ds-grid-columns, 3) - 1) * var(--ds-grid-gap-resolved)) / var(--ds-grid-columns, 3))\n      ),\n      1fr\n    )\n  );\n  gap: var(--ds-grid-gap-resolved);\n  align-items: stretch;\n  min-width: 0;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n/* A cell's content may be wider than its track (a long word, a table): it\n   shrinks to the track rather than pushing the grid wider. */\n.ds-grid > * {\n  min-width: 0;\n}\n\n/* Alignment in the row */\n.ds-grid--align-start {\n  align-items: start;\n}\n\n.ds-grid--align-center {\n  align-items: center;\n}\n\n.ds-grid--align-end {\n  align-items: end;\n}\n"
+    },
+    {
+      "path": "src/components/Grid/Grid.tsx",
+      "type": "registry:file",
+      "target": "rift/components/Grid/Grid.tsx",
+      "content": "import React from 'react';\nimport type { StackGap } from '../Stack/Stack';\nimport './Grid.css';\n\n/** Props owned by Grid itself; everything else falls through to the root element. */\ntype GridOwnProps = {\n  /** How many equal columns the grid runs to at full width. It folds to fewer as its own width narrows, never below `minColumnWidth`. */\n  columns?: 1 | 2 | 3 | 4 | 5 | 6;\n  /** The narrowest a column may get before the grid drops one, as a CSS length (`16rem`). Defaults to `12rem`. */\n  minColumnWidth?: string;\n  /** The space between cells, both ways, as a step on the gap scale (`--gap-500` by default). */\n  gap?: StackGap;\n  /** How cells sit in their row: `stretch`, the default, makes every card in a row the same height. */\n  align?: 'stretch' | 'start' | 'center' | 'end';\n  /** The element the grid renders as, so a grid of cards can be a list. */\n  as?: 'div' | 'section' | 'ul' | 'ol';\n  /** The cells, in reading order. */\n  children?: React.ReactNode;\n  /** Additional CSS classes */\n  className?: string;\n};\n\nexport interface GridProps extends GridOwnProps, Omit<React.ComponentPropsWithRef<'div'>, keyof GridOwnProps> {}\n\n/**\n * Equal columns that fold by the room the grid has: a row of stat cards, a\n * board of panels, a field grid in a form. Cells in a row share its height by\n * default. It measures its own width, never the viewport, so it folds the same\n * beside an open sidebar or inside a dialog. Presentational and\n * server-renderable.\n */\nexport function Grid({\n  columns = 3,\n  minColumnWidth = '12rem',\n  gap = '500',\n  align = 'stretch',\n  as = 'div',\n  className = '',\n  style,\n  children,\n  ref,\n  ...rest\n}: GridProps) {\n  // `as` picks among elements that all take a div's props, so the root is typed loosely.\n  const Element = as as unknown as React.ElementType<React.ComponentPropsWithRef<'div'>>;\n  const classes = ['ds-grid', align !== 'stretch' ? `ds-grid--align-${align}` : '', className]\n    .filter(Boolean)\n    .join(' ');\n  return (\n    <Element\n      {...rest}\n      ref={ref}\n      className={classes}\n      style={\n        {\n          ...style,\n          '--ds-grid-columns': columns,\n          '--ds-grid-min': minColumnWidth,\n          '--ds-grid-gap': `var(--gap-${gap})`,\n        } as React.CSSProperties\n      }\n    >\n      {children}\n    </Element>\n  );\n}\n"
+    }
+  ]
+}

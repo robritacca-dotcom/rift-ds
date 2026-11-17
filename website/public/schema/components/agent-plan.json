@@ -133,5 +133,12 @@
   ],
   "size": {
     "gzip": 1194
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Checklist",
+      "when": "the tasks are the reader’s own to tick off, each with an owner",
+      "schemaUrl": "https://rift-ds.com/schema/components/checklist.json"
+    }
+  ]
 }

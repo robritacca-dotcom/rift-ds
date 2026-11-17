@@ -244,6 +244,12 @@
       "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions."
     },
     {
+      "name": "checklist",
+      "type": "registry:ui",
+      "title": "Checklist",
+      "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar."
+    },
+    {
       "name": "chip",
       "type": "registry:ui",
       "title": "Chip",
@@ -484,6 +490,12 @@
       "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin."
     },
     {
+      "name": "grid",
+      "type": "registry:ui",
+      "title": "Grid",
+      "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height."
+    },
+    {
       "name": "heading",
       "type": "registry:ui",
       "title": "Heading",
@@ -494,6 +506,12 @@
       "type": "registry:ui",
       "title": "Hover card",
       "description": "Rich preview panel that opens from hover or focus, with interactive content and position options."
+    },
+    {
+      "name": "icon",
+      "type": "registry:ui",
+      "title": "Icon",
+      "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile."
     },
     {
       "name": "image-compare",
@@ -682,6 +700,12 @@
       "description": "Numeric field with increment and decrement steppers and min/max clamping."
     },
     {
+      "name": "page-header",
+      "type": "registry:ui",
+      "title": "Page header",
+      "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow."
+    },
+    {
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
@@ -691,7 +715,7 @@
       "name": "panel",
       "type": "registry:ui",
       "title": "Panel",
-      "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap."
+      "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge."
     },
     {
       "name": "pie-chart",
@@ -890,6 +914,12 @@
       "type": "registry:ui",
       "title": "Split pane",
       "description": "Two resizable regions with a draggable, keyboard-operable divider between them."
+    },
+    {
+      "name": "stack",
+      "type": "registry:ui",
+      "title": "Stack",
+      "description": "Children in one direction, a column or a row, with a gap from the scale between them."
     },
     {
       "name": "stacked-bar-chart",

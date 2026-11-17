@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { ShaderField } from 'rift-ds';`
 - Deep import: `import { ShaderField } from 'rift-ds/components/ShaderField/ShaderField';`
 - Rendering: client component (declares 'use client')
-- Size: 6.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/shader-field
 - Schema: https://rift-ds.com/schema/components/shader-field.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

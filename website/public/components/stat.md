@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { Stat } from 'rift-ds';`
 - Deep import: `import { Stat } from 'rift-ds/components/Stat/Stat';`
 - Rendering: server-renderable (no 'use client')
-- Size: 0.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/stat
 - Schema: https://rift-ds.com/schema/components/stat.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "PageHeader",
+  "label": "Page header",
+  "slug": "page-header",
+  "category": "layout",
+  "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.",
+  "client": false,
+  "importPath": "rift-ds/components/PageHeader/PageHeader",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/page-header",
+  "markdownUrl": "https://rift-ds.com/components/page-header.md",
+  "exports": [
+    {
+      "component": "PageHeader",
+      "props": [
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The page's title, its heading.\nNote: this shadows the native `title` tooltip attribute, which PageHeader does not expose."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A sentence under the title on what the page is for or what it holds."
+        },
+        {
+          "name": "breadcrumb",
+          "type": "BreadcrumbItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The trail above the title, from the top of the app to this page; the last item is this page and takes no `href`.",
+          "typeRefs": [
+            "BreadcrumbItem"
+          ]
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text."
+        },
+        {
+          "name": "level",
+          "type": "1 | 2",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2"
+          ],
+          "required": false,
+          "description": "The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`.",
+          "default": 1
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the breadcrumb's links render with, such as Next.js's\n`Link`, so they navigate through the app's router; a plain `<a>` when\nunset. This component can render on the server, so it never reads a\nLinkProvider: pass the prop even under one.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "BreadcrumbItem": {
+      "kind": "interface",
+      "definition": "interface BreadcrumbItem {\n  /** Display label */\n  label: string;\n  /** Link href — omit for the current / last item */\n  href?: string;\n}"
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "Its breadcrumb links and the actions passed in are native links and buttons, reached with Tab."
+  },
+  "size": {
+    "gzip": 965
+  },
+  "alternatives": [
+    {
+      "name": "SectionTitle",
+      "when": "the heading opens a section within a page rather than the page itself",
+      "schemaUrl": "https://rift-ds.com/schema/components/section-title.json"
+    }
+  ]
+}

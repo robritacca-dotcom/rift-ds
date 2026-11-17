@@ -49,7 +49,7 @@ const rows = [
 const columns = [
   { key: "name", header: "المشروع", type: "text" as const, sortable: true },
   { key: "owner", header: "المالك", type: "text" as const },
-  { key: "budget", header: "الميزانية", type: "currency" as const, format: { currency: "EGP" }, sortable: true },
+  { key: "budget", header: "الميزانية", type: "currency" as const, format: { currency: "EGP", fractionDigits: 0 }, sortable: true },
   { key: "due", header: "الموعد", type: "date" as const, sortable: true },
   { key: "progress", header: "التقدم", type: "progress" as const },
 ];

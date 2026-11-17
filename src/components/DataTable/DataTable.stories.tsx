@@ -1,6 +1,6 @@
 import { Profiler, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { DataTable, type DataTableColumn, type DataTableProps, type DataTableRow } from './DataTable';
 import { Badge } from '../Badge/Badge';
 import { TableToolbar } from '../TableToolbar/TableToolbar';
@@ -378,6 +378,46 @@ export const RowActions: Story = {
   },
 };
 
+/** Each row links to its record: the customer's name is the link, and a click anywhere else on the row follows it, except on the row's own controls. */
+export const RowLinks: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 4),
+    rowHref: (row) => `#customer-${row.id}`,
+    selectable: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const link = canvas.getByRole('link', { name: 'John Clarkson' });
+    await expect(link).toHaveAttribute('href', '#customer-r1');
+    const followed = fn((event: Event) => event.preventDefault());
+    link.addEventListener('click', followed);
+    // A click on the row's plain text follows the link.
+    await userEvent.click(canvas.getByText('2026-09-05'));
+    await expect(followed).toHaveBeenCalledTimes(1);
+    // The row's own checkbox keeps its click.
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select John Clarkson' }));
+    await expect(followed).toHaveBeenCalledTimes(1);
+    link.removeEventListener('click', followed);
+  },
+};
+
+/** Each row opens something in place: the name is a button calling `onRowClick`, and a click on the rest of the row presses it. */
+export const RowClick: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 4),
+    onRowClick: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByText('2026-03-25'));
+    await expect(args.onRowClick).toHaveBeenCalledWith(expect.objectContaining({ id: 'r2' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Kianna Vaccaro' }));
+    await expect(args.onRowClick).toHaveBeenCalledWith(expect.objectContaining({ id: 'r4' }));
+  },
+};
+
 /** The header holds while the body scrolls inside the table's own frame. */
 export const StickyHeader: Story = {
   args: {
@@ -642,7 +682,7 @@ export const ColumnTypes: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
-    await expect(canvas.getByText('$48,000')).toBeInTheDocument();
+    await expect(canvas.getByText('$48,000.00')).toBeInTheDocument();
     await expect(canvas.getByText('80%')).toBeInTheDocument();
     await expect(canvas.getByText('Nov 4, 2026')).toBeInTheDocument();
     await expect(canvas.getByRole('link', { name: 'northwind.example' })).toHaveAttribute(
@@ -774,12 +814,12 @@ export const Grouped: Story = {
       'Waiting, 3 rows, expanded',
     ]);
     // Each group sums its prices; the footer sums them all.
-    await expect(canvas.getByText('$4,354')).toBeInTheDocument();
-    await expect(canvasElement.querySelector('tfoot')).toHaveTextContent('Sum$20,262');
+    await expect(canvas.getByText('$4,354.00')).toBeInTheDocument();
+    await expect(canvasElement.querySelector('tfoot')).toHaveTextContent('Sum$20,262.00');
     // In grid mode the group rows and the footer sit outside the arrows' reach, so each control is its own Tab stop.
     await expect(canvas.getByRole('grid')).toBeInTheDocument();
     await expect(toggles()[0]).toHaveAttribute('tabindex', '0');
-    await expect(canvas.getByRole('button', { name: 'Price, Sum $20,262' })).toHaveAttribute('tabindex', '0');
+    await expect(canvas.getByRole('button', { name: 'Price, Sum $20,262.00' })).toHaveAttribute('tabindex', '0');
     // A chevron folds its group.
     await userEvent.click(toggles()[0]);
     // Seven of the ten rows remain (each group's own header cell reads as a row header too, so count the rows).

@@ -28,7 +28,7 @@ export const ACCOUNT_COLUMNS: DataTableColumn[] = [
     ],
   },
   { key: "owner", header: "Owner", type: "person", sortable: true },
-  { key: "value", header: "Value", type: "currency", sortable: true },
+  { key: "value", header: "Value", type: "currency", format: { fractionDigits: 0 }, sortable: true },
   { key: "onboarded", header: "Onboarded", type: "progress" },
   { key: "renews", header: "Renews", type: "date", sortable: true },
   { key: "tags", header: "Tags", type: "tags" },

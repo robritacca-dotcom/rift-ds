@@ -608,8 +608,24 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   defaultSorts?: DataTableSort[];
   /** Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. */
   onSortsChange?: (sorts: DataTableSort[]) => void;
-  /** The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
+  /** The link component a `link` column's cells and `rowHref` render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
   linkComponent?: LinkComponent;
+  /**
+   * Makes each row a link to the address it returns. The row header's content
+   * (the `rowHeader` column, else the first column shown) becomes the link,
+   * so a keyboard and a screen reader reach it as one, and a click anywhere
+   * else on the row follows it, except on the row's own controls or while
+   * text is being selected. A row it returns `undefined` for stays plain. A
+   * row header's `render` should not draw a link of its own alongside it.
+   */
+  rowHref?: (row: R) => string | undefined;
+  /**
+   * Makes each row open something in place (a drawer, a dialog) instead of
+   * navigating: the row header's content becomes a button that calls it, and
+   * a click anywhere else on the row presses that button, except on the
+   * row's own controls. `rowHref` wins on a row both give an action.
+   */
+  onRowClick?: (row: R) => void;
   /**
    * Draws only the rows in view, so a table of thousands scrolls as
    * smoothly as one of ten. `auto` (the default) does it for an unpaged,
@@ -906,6 +922,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   defaultTotals,
   onTotalsChange,
   linkComponent,
+  rowHref,
+  onRowClick,
   searchable = false,
   searchPlaceholder = 'Search',
   toolbar,
@@ -2449,6 +2467,32 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
 
   const linkEl = useLinkComponent(linkComponent);
+  const RowLink = linkEl;
+  /* The column whose content carries a row's link or button: the row header, else the first column shown. */
+  const actionKey = rowHeaderKey ?? visibleKeys[0];
+  /* A click on a row's empty space or plain text follows its link or presses
+     its button, so the whole row reads as one target, while its own controls,
+     a text selection and an open editor keep their clicks. The forwarded
+     click carries the modifier keys, so a Cmd or Ctrl click still opens a
+     new tab. */
+  const followRowAction = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    if (event.defaultPrevented || editing) return;
+    const target = event.target as HTMLElement;
+    if (target.closest('a, button, input, select, textarea, label, [role="checkbox"], [role="switch"], [data-cell-control], [contenteditable="true"]'))
+      return;
+    if (window.getSelection()?.toString()) return;
+    const control = event.currentTarget.querySelector<HTMLElement>(`.${baseClass}__row-link`);
+    control?.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey,
+      }),
+    );
+  };
   const typedWords = { checked: labels.checkedValue, unchecked: labels.uncheckedValue, more: labels.moreValues };
   const optionLabel = (col: DataTableColumn<R>) => (v: string) =>
     col.options?.find((option) => option.value === v)?.label ?? v;
@@ -3097,6 +3141,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const name = rowName(row);
     const expandedHere = Boolean(renderDetail) && expandedState.includes(row.id);
     const detailId = `${tableId}-detail-${row.id}`;
+    const href = rowHref?.(rowView(row));
+    const rowAction = href !== undefined || Boolean(onRowClick);
     const record = (
       <tr
         key={row.id}
@@ -3105,8 +3151,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         data-index={slot && part === 'record' ? slot.index : undefined}
         aria-rowindex={slot && part === 'record' ? slot.index + 2 : undefined}
         role={stacked ? 'row' : undefined}
+        onClick={rowAction ? followRowAction : undefined}
         className={[
           'ds-table__row',
+          rowAction ? `${baseClass}__row--action` : '',
           isSelected ? 'ds-table__row--selected' : '',
           editMode === 'row' && editing?.row === row.id ? `${baseClass}__row--editing` : '',
         ]
@@ -3262,7 +3310,26 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   ) : (
                     displayOf(col, raw)
                   );
-                  if (fit === 'wrap') return content;
+                  const linked =
+                    rowAction && key === actionKey && !editingHere ? (
+                      href !== undefined ? (
+                        <RowLink href={href} className={`${baseClass}__row-link`} tabIndex={innerTab}>
+                          {content}
+                        </RowLink>
+                      ) : (
+                        <button
+                          type="button"
+                          className={`${baseClass}__row-link`}
+                          tabIndex={innerTab}
+                          onClick={() => onRowClick?.(rowView(row))}
+                        >
+                          {content}
+                        </button>
+                      )
+                    ) : (
+                      content
+                    );
+                  if (fit === 'wrap') return linked;
                   return (
                     <span
                       className={`${baseClass}__text ${baseClass}__text--${fit}`}
@@ -3276,7 +3343,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                           : undefined
                       }
                     >
-                      {content}
+                      {linked}
                     </span>
                   );
                 })()}

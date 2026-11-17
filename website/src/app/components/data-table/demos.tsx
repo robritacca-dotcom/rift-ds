@@ -39,7 +39,7 @@ export const accountColumns: DataTableColumn[] = [
     groupable: true,
     width: "170px",
   },
-  { key: "value", header: "Value", type: "currency", sortable: true, aggregate: "sum", width: "120px" },
+  { key: "value", header: "Value", type: "currency", format: { fractionDigits: 0 }, sortable: true, aggregate: "sum", width: "120px" },
   { key: "seats", header: "Seats", type: "number", sortable: true, aggregate: "sum", width: "90px" },
   { key: "onboarded", header: "Onboarded", type: "progress", sortable: true, aggregate: "avg", width: "180px" },
   { key: "renews", header: "Renews", type: "date", sortable: true, width: "130px" },

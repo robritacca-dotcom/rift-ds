@@ -385,6 +385,7 @@ export default function MarketingDashboard() {
       key: "spend",
       header: "Spend",
       type: "currency",
+      format: { fractionDigits: 0 },
       sortable: true,
     },
   ];

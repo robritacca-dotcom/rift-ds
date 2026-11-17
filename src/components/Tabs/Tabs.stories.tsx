@@ -109,6 +109,17 @@ export const Compact: Story = {
   },
 };
 
+export const WithCounts: Story = {
+  args: {
+    tabs: [
+      { label: 'Open', value: 'open', count: 12 },
+      { label: 'In review', value: 'review', count: 3 },
+      { label: 'Closed', value: 'closed', count: 1284 },
+    ],
+    defaultValue: 'open',
+  },
+};
+
 export const FullWidth: Story = {
   args: {
     tabs: [

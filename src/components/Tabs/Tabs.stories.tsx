@@ -120,6 +120,25 @@ export const WithCounts: Story = {
   },
 };
 
+/** Tabs that carry their content: each panel is rendered, named by its tab, and only the selected one shows. */
+export const WithContent: Story = {
+  args: {
+    tabs: [
+      { label: 'Overview', value: 'overview', content: <p>A summary of the project and its status.</p> },
+      { label: 'Activity', value: 'activity', count: 4, content: <p>The latest changes, newest first.</p> },
+      { label: 'Settings', value: 'settings', content: <p>Who can see the project, and what it is called.</p> },
+    ],
+    defaultValue: 'overview',
+  },
+  play: async ({ canvas, userEvent }) => {
+    await expect(canvas.getByRole('tabpanel', { name: 'Overview' })).toHaveTextContent('A summary');
+    await userEvent.click(canvas.getByRole('tab', { name: /Activity/ }));
+    await expect(canvas.getByRole('tabpanel', { name: /Activity/ })).toHaveTextContent('The latest changes');
+    await expect(canvas.queryByText('A summary of the project and its status.')).not.toBeVisible();
+    await userEvent.click(canvas.getByRole('tab', { name: 'Overview' }));
+  },
+};
+
 export const FullWidth: Story = {
   args: {
     tabs: [

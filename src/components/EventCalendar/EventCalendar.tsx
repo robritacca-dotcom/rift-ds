@@ -128,10 +128,18 @@ type EventCalendarOwnProps = {
   legend?: EventCalendarLegendItem[];
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
+  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time. */
+  view?: 'month' | 'week';
   /** Accessible name of the previous-month button. */
   previousLabel?: string;
   /** Accessible name of the next-month button. */
   nextLabel?: string;
+  /** Accessible name of the previous-week button, in the week view. */
+  previousWeekLabel?: string;
+  /** Accessible name of the next-week button, in the week view. */
+  nextWeekLabel?: string;
+  /** The visible text of the control that folds an expanded day back, when a day's "+N more" opens it in place (with no `onDateClick`). */
+  showLessLabel?: string;
   /**
    * The month heading, given the first day of the month in view: the visible
    * title and the name of the day grid. Defaults to the month name and the
@@ -201,8 +209,12 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       today: todayProp,
       legend,
       actions,
+      view = 'month',
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
+      previousWeekLabel = 'Previous week',
+      nextWeekLabel = 'Next week',
+      showLessLabel = 'Show less',
       monthLabel: monthLabelProp,
       overflowLabel: overflowLabelProp,
       moreLabel = defaultMoreLabel,
@@ -239,6 +251,35 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       if (!isControlled) setUncontrolledMonth(value);
       onMonthChange?.(value);
     };
+
+    /* The week view keeps its own place: the week holding the selected day,
+       else today, stepping seven days at a time. A step that crosses into
+       another month reports it, as the month view's arrows do. */
+    const isWeek = view === 'week';
+    const [weekAnchor, setWeekAnchor] = useState(() => parseDay(selectedDate) ?? today);
+    const weekStartDate = new Date(
+      weekAnchor.getFullYear(),
+      weekAnchor.getMonth(),
+      weekAnchor.getDate() - weekdayOffset(weekAnchor.getDay(), weekStart),
+    );
+    const stepWeek = (offset: number) => {
+      const next = new Date(weekAnchor.getFullYear(), weekAnchor.getMonth(), weekAnchor.getDate() + offset * 7);
+      setWeekAnchor(next);
+      const value = formatMonth(next.getFullYear(), next.getMonth());
+      if (value !== formatMonth(weekAnchor.getFullYear(), weekAnchor.getMonth())) {
+        if (!isControlled) setUncontrolledMonth(value);
+        onMonthChange?.(value);
+      }
+    };
+
+    /* With no onDateClick, a day's "+N more" opens that day in place. */
+    const [expandedDays, setExpandedDays] = useState<string[]>([]);
+    const toggleDay = (day: string) =>
+      setExpandedDays((current) => (current.includes(day) ? current.filter((d) => d !== day) : [...current, day]));
+    const weekRangeLabel = useMemo(() => {
+      const format = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
+      return (start: Date) => format.formatRange(start, new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6));
+    }, [locale]);
 
     // Group events by date, untimed first then by time text
     const eventsByDate = useMemo(() => {
@@ -289,13 +330,22 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     const weekCount = Math.ceil((firstDay + daysInMonth) / 7);
 
     const cells: { date: Date; inMonth: boolean }[] = [];
-    for (let i = 0; i < weekCount * 7; i++) {
-      const date = new Date(viewYear, viewMonth, i - firstDay + 1);
-      cells.push({ date, inMonth: date.getMonth() === viewMonth });
+    if (isWeek) {
+      for (let i = 0; i < 7; i++) {
+        cells.push({
+          date: new Date(weekStartDate.getFullYear(), weekStartDate.getMonth(), weekStartDate.getDate() + i),
+          inMonth: true,
+        });
+      }
+    } else {
+      for (let i = 0; i < weekCount * 7; i++) {
+        const date = new Date(viewYear, viewMonth, i - firstDay + 1);
+        cells.push({ date, inMonth: date.getMonth() === viewMonth });
+      }
     }
 
-    const classes = [baseClass, className].filter(Boolean).join(' ');
-    const monthTitle = monthLabel(new Date(viewYear, viewMonth, 1));
+    const classes = [baseClass, isWeek ? `${baseClass}--week` : '', className].filter(Boolean).join(' ');
+    const monthTitle = isWeek ? weekRangeLabel(weekStartDate) : monthLabel(new Date(viewYear, viewMonth, 1));
 
     return (
       <div {...rest} ref={ref} className={classes}>
@@ -305,16 +355,16 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
             <button
               type="button"
               className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
-              onClick={() => navigate(-1)}
-              aria-label={previousLabel}
+              onClick={() => (isWeek ? stepWeek(-1) : navigate(-1))}
+              aria-label={isWeek ? previousWeekLabel : previousLabel}
             >
               chevron_left
             </button>
             <button
               type="button"
               className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
-              onClick={() => navigate(1)}
-              aria-label={nextLabel}
+              onClick={() => (isWeek ? stepWeek(1) : navigate(1))}
+              aria-label={isWeek ? nextWeekLabel : nextLabel}
             >
               chevron_right
             </button>
@@ -340,7 +390,8 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
           {cells.map(({ date, inMonth }) => {
             const dateStr = formatDate(date);
             const dayEvents = eventsByDate.get(dateStr) ?? [];
-            const visible = dayEvents.slice(0, maxEventsPerDay);
+            const expanded = isWeek || expandedDays.includes(dateStr);
+            const visible = expanded ? dayEvents : dayEvents.slice(0, maxEventsPerDay);
             const overflow = dayEvents.length - visible.length;
             const isToday =
               date.getFullYear() === today.getFullYear() &&
@@ -441,6 +492,11 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                     );
                   })}
 
+                  {!isWeek && expandedDays.includes(dateStr) && dayEvents.length > maxEventsPerDay && (
+                    <button type="button" className={`${baseClass}__more`} onClick={() => toggleDay(dateStr)} aria-expanded="true">
+                      {showLessLabel}
+                    </button>
+                  )}
                   {overflow > 0 &&
                     (onDateClick ? (
                       <button
@@ -452,7 +508,15 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                         {moreLabel(overflow)}
                       </button>
                     ) : (
-                      <span className={`${baseClass}__more`}>{moreLabel(overflow)}</span>
+                      <button
+                        type="button"
+                        className={`${baseClass}__more`}
+                        onClick={() => toggleDay(dateStr)}
+                        aria-expanded="false"
+                        aria-label={overflowLabel(overflow, date)}
+                      >
+                        {moreLabel(overflow)}
+                      </button>
                     ))}
                 </div>
               </div>

@@ -497,6 +497,64 @@ function EditableTable(props: Partial<DataTableProps> & { failSaves?: boolean })
   );
 }
 
+const WEEK = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+const weekColumns: DataTableColumn[] = [
+  { key: 'name', header: 'Person', rowHeader: true, width: '160px' },
+  ...WEEK.map((day) => ({
+    key: day,
+    header: day.charAt(0).toUpperCase() + day.slice(1),
+    type: 'number' as const,
+    editable: true,
+    width: '72px',
+    aggregate: 'sum' as const,
+  })),
+  {
+    key: 'total',
+    header: 'Total',
+    type: 'number' as const,
+    width: '88px',
+    aggregate: 'sum' as const,
+    compute: (values) => WEEK.reduce((sum, day) => sum + Number(values[day] ?? 0), 0),
+  },
+];
+
+/** A week grid: days across, a person per row, each day's hours editable, and a computed total per row and per day. */
+function WeekGridTable() {
+  const [data, setData] = useState<DataTableRow[]>([
+    { id: 'w1', values: { name: 'Ada Lovelace', mon: 8, tue: 8, wed: 7.5, thu: 8, fri: 6, sat: 0, sun: 0 } },
+    { id: 'w2', values: { name: 'Grace Hopper', mon: 6, tue: 8, wed: 8, thu: 8, fri: 8, sat: 4, sun: 0 } },
+    { id: 'w3', values: { name: 'Alan Turing', mon: 0, tue: 7, wed: 7, thu: 7, fri: 7, sat: 0, sun: 0 } },
+  ]);
+  return (
+    <DataTable
+      columns={weekColumns}
+      rows={data}
+      caption="Hours this week"
+      totalsRow
+      defaultTotals={Object.fromEntries([...WEEK, 'total'].map((day) => [day, 'sum']))}
+      onCellEdit={({ row, key, value }) =>
+        setData((current) =>
+          current.map((r) => (r.id === row.id ? { ...r, values: { ...r.values, [key]: value } } : r)),
+        )
+      }
+    />
+  );
+}
+
+export const WeekGrid: Story = {
+  render: () => <WeekGridTable />,
+  play: async ({ canvasElement }) => {
+    await expect(cell(canvasElement, 'w3', 'total')).toHaveTextContent('28');
+    cell(canvasElement, 'w3', 'mon').focus();
+    await userEvent.keyboard('{Enter}');
+    const field = await within(canvasElement).findByRole('spinbutton', { name: /Mon, Alan Turing/ });
+    await userEvent.clear(field);
+    await userEvent.type(field, '8{Enter}');
+    // The row's total follows the edit.
+    await waitFor(() => expect(cell(canvasElement, 'w3', 'total')).toHaveTextContent('36'));
+  },
+};
+
 const cell = (root: HTMLElement, row: string, col: string) =>
   root.querySelector<HTMLElement>(`tbody tr[data-row="${row}"] [data-col="${col}"]`)!;
 

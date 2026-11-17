@@ -81,6 +81,14 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   align?: 'start' | 'center' | 'end' | 'left' | 'right';
   /** Render the cell for a row; defaults to the row's raw value for this key. */
   render?: (row: R) => React.ReactNode;
+  /**
+   * Derives the column's value from the row's other values, such as a week's
+   * total from its seven days (`(values) => days.reduce((sum, day) => sum + Number(values[day] ?? 0), 0)`).
+   * The table reads it wherever it reads a value, so it sorts, filters, totals
+   * and groups, and it follows an edit to the cells it reads as the edit is
+   * made. A computed column is never editable.
+   */
+  compute?: (values: R['values']) => DataTableValue;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
   rowHeader?: boolean;
   /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */
@@ -892,7 +900,7 @@ function withType<R extends DataTableRow>(col: DataTableColumn<R>, locale: strin
 
 export function DataTable<R extends DataTableRow = DataTableRow>({
   columns: columnsProp,
-  rows,
+  rows: rowsProp,
   pageSize: pageSizeProp,
   defaultPageSize,
   onPageSizeChange,
@@ -1006,6 +1014,17 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   ref,
   ...rest
 }: DataTableProps<R>) {
+  /* Computed columns join each row's values once per rows array, so every
+     read below (sort, search, filters, totals, groups) sees them. */
+  const rows = useMemo(() => {
+    const computed = columnsProp.filter((col) => col.compute);
+    if (computed.length === 0) return rowsProp;
+    return rowsProp.map((row) => {
+      const values = { ...row.values };
+      for (const col of computed) values[col.key] = col.compute!(values);
+      return { ...row, values } as R;
+    });
+  }, [rowsProp, columnsProp]);
   const baseClass = 'ds-data-table';
   const locale = useLocale(localeProp);
   const collator = useMemo(() => textCollator(locale), [locale]);
@@ -2316,9 +2335,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     return kind !== undefined && LIVE_KINDS.has(kind);
   };
   const canEdit = (col: DataTableColumn<R> | undefined, row: R) =>
-    Boolean(col?.editor) && (typeof col?.editable === 'function' ? col.editable(row) : (col?.editable ?? true));
-  const valueOf = (row: R, key: string): DataTableValue =>
-    pending[row.id] && key in pending[row.id] ? pending[row.id][key] : row.values[key];
+    !col?.compute &&
+    Boolean(col?.editor) &&
+    (typeof col?.editable === 'function' ? col.editable(row) : (col?.editable ?? true));
+  const valueOf = (row: R, key: string): DataTableValue => {
+    const compute = byKey.get(key)?.compute;
+    // A computed cell follows the edits pending on the cells it reads.
+    if (compute && pending[row.id]) return compute({ ...row.values, ...pending[row.id] });
+    return pending[row.id] && key in pending[row.id] ? pending[row.id][key] : row.values[key];
+  };
   const rowView = (row: R): R => (pending[row.id] ? { ...row, values: { ...row.values, ...pending[row.id] } } : row);
   const sameValue = (a: DataTableValue, b: DataTableValue) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
   const isThenable = (value: unknown): value is Promise<unknown> =>

@@ -109,6 +109,38 @@ export const SpansAndLegend: Story = {
   },
 };
 
+/** One week in tall cells, every event shown, stepping a week at a time; the heading is the week's range in the calendar's locale. */
+export const WeekView: Story = {
+  args: {
+    view: 'week',
+    selectedDate: '2026-08-20',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+  },
+  play: async ({ canvas, userEvent }) => {
+    await expect(canvas.getByRole('group', { name: 'August 16 – 22, 2026' })).toBeInTheDocument();
+    // Every event on the busiest day shows, with no overflow row.
+    await expect(canvas.queryByText(/more$/)).toBeNull();
+    await userEvent.click(canvas.getByRole('button', { name: 'Next week' }));
+    await expect(canvas.getByRole('group', { name: 'August 23 – 29, 2026' })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Previous week' }));
+  },
+};
+
+/** With no `onDateClick`, a full day's "+N more" opens the day in place, and "Show less" folds it back. */
+export const ExpandDay: Story = {
+  args: { maxEventsPerDay: 2 },
+  play: async ({ canvas, userEvent }) => {
+    const more = canvas.getAllByRole('button', { name: /more events?,/ })[0];
+    await expect(more).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(more);
+    const less = canvas.getByRole('button', { name: 'Show less' });
+    await expect(less).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(less);
+    await expect(canvas.queryByRole('button', { name: 'Show less' })).toBeNull();
+  },
+};
+
 export const WithActions: Story = {
   args: {
     actions: <Button variant="secondary" size="compact" label="New event" iconLeft="add" />,

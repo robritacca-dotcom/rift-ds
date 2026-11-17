@@ -94,6 +94,41 @@ export const InteractiveRows: Story = {
   },
 };
 
+/** Rows that ask for a decision: a summary of each request, its date, and Approve and Decline at the end. */
+export const ApprovalRows: Story = {
+  args: {
+    title: 'Requests',
+    count: undefined,
+    children: (
+      <>
+        {[
+          ['Juniper Health', 'Access to the reports folder', 'Today'],
+          ['Harbor & Vine', 'A second seat on the plan', 'Yesterday'],
+        ].map(([who, what, when]) => (
+          <WidgetRow
+            key={who}
+            leading={<PixelAvatar name={who} />}
+            title={who}
+            description={what}
+            meta={when}
+            actions={
+              <>
+                <Button label="Decline" size="compact" variant="tertiary" />
+                <Button label="Approve" size="compact" variant="secondary" />
+              </>
+            }
+          />
+        ))}
+      </>
+    ),
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getAllByRole('button', { name: 'Approve' })).toHaveLength(2);
+    // The rows themselves are not controls, so the buttons inside them are the only targets.
+    await expect(canvas.queryByRole('link')).toBeNull();
+  },
+};
+
 /** Groups split a tile's rows into labelled runs. */
 export const Grouped: Story = {
   args: {

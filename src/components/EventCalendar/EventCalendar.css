@@ -411,3 +411,14 @@ button.ds-event-calendar__more:focus-visible {
     text-align: center;
   }
 }
+
+/* ============================================
+   WEEK VIEW — one week, every event shown
+   The cells take the room a week has to give,
+   so a busy day lists everything without an
+   overflow row.
+   ============================================ */
+
+.ds-event-calendar--week .ds-event-calendar__cell {
+  min-height: calc(var(--control-height-default) * 5);
+}

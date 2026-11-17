@@ -7,22 +7,36 @@ import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Table } from "rift-ds/components/Table/Table";
 import { PACKAGE_NAME, SITE_URL } from "@/config/brand.generated";
+import { THEME_IDS } from "rift-ds/tokens/values";
+import { DEFAULT_THEME_LABEL, THEME_PRESETS } from "@/lib/theme/presets";
 import s from "./page.module.css";
 
 const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/schemas");
 
 /* The schemas page, a short reference: where each published file is, the
-   tokens' two forms. Every URL derives from SITE_URL; every count lives in the files themselves. */
+   tokens' two forms. Every URL derives from SITE_URL; every count lives in the files themselves.
+   A row that names one file links it, and the token files are linked theme
+   by theme, so a crawler reaches every file from this page; a row that is a
+   pattern (<slug>) stays text. */
 
 const SCHEMA_URLS = [
   { what: "One component", where: `${SITE_URL}/schema/components/<slug>.json` },
-  { what: "The index of every component schema", where: `${SITE_URL}/schema/components.json` },
-  { what: "The meta-schema each component schema validates against", where: `${SITE_URL}/schema/component.schema.json` },
-  { what: "The meta-schema the index validates against", where: `${SITE_URL}/schema/components-index.schema.json` },
+  { what: "The index of every component schema", where: `${SITE_URL}/schema/components.json`, href: "/schema/components.json" },
+  { what: "The meta-schema each component schema validates against", where: `${SITE_URL}/schema/component.schema.json`, href: "/schema/component.schema.json" },
+  { what: "The meta-schema the index validates against", where: `${SITE_URL}/schema/components-index.schema.json`, href: "/schema/components-index.schema.json" },
   { what: "The tokens, one file per theme and mode (DTCG)", where: `${SITE_URL}/schema/tokens/<theme>.<mode>.tokens.json` },
+  { what: "The list of every token file", where: `${SITE_URL}/schema/tokens/index.json`, href: "/schema/tokens/index.json" },
   { what: "The tokens resolved per theme, in the package", where: `${PACKAGE_NAME}/tokens/values` },
-  { what: "The meta-schema the token values validate against", where: `${SITE_URL}/schema/token-values.schema.json` },
-];
+  { what: "The meta-schema the token values validate against", where: `${SITE_URL}/schema/token-values.schema.json`, href: "/schema/token-values.schema.json" },
+] satisfies { what: string; where: string; href?: string }[];
+
+/* Every shipped theme with its two token files, in the selector's order. */
+const TOKEN_FILES = THEME_IDS.map((id) => ({
+  id,
+  label: THEME_PRESETS[id]?.label ?? DEFAULT_THEME_LABEL,
+  light: `/schema/tokens/${id}.light.tokens.json`,
+  dark: `/schema/tokens/${id}.dark.tokens.json`,
+}));
 
 const PROP_FIELDS = [
   { field: "name", what: "The prop name. Native attributes pass through every component and are not listed; only the component's own props are." },
@@ -79,7 +93,16 @@ export default function SchemasPage() {
               ]}
               rows={SCHEMA_URLS.map((row) => ({
                 id: row.what,
-                cells: { what: row.what, where: <code className={s.defKey}>{row.where}</code> },
+                cells: {
+                  what: row.what,
+                  where: row.href ? (
+                    <a href={row.href}>
+                      <code className={s.defKey}>{row.where}</code>
+                    </a>
+                  ) : (
+                    <code className={s.defKey}>{row.where}</code>
+                  ),
+                },
               }))}
             />
             <p className={s.sectionNote}>
@@ -89,11 +112,12 @@ export default function SchemasPage() {
               component&apos;s whole props are a pointer to that component&apos;s own schema instead.
             </p>
             <p className={s.sectionNote}>
-              Three properties sit beside the props. <code>keyboard</code> lists the keys the
+              These properties sit beside the props. <code>keyboard</code> lists the keys the
               component is tested against, one entry per WAI-ARIA pattern it follows.{" "}
               <code>keys</code> says who owns its keys where no pattern covers them: the component
               itself, the platform, or no one, because nothing takes focus. <code>size</code> is
-              what the import costs, as gzipped bytes.
+              what the import costs, as gzipped bytes. <code>alternatives</code> names the
+              components it could be mistaken for, each with when to pick it instead.
             </p>
             <CodeBlock code={FETCH_SNIPPET} language="bash" showCopy />
             <Accordion
@@ -132,8 +156,28 @@ export default function SchemasPage() {
             <p className={s.sectionNote}>
               For design tools such as Figma, Style Dictionary or Tokens Studio, the same tokens are
               DTCG files under <code>/schema/tokens/</code>, one per theme and mode, with semantic
-              tokens kept as aliases of their primitives.
+              tokens kept as aliases of their primitives.{" "}
+              <a href="/schema/tokens/index.json">index.json</a> lists them all.
             </p>
+            <Table
+              bordered
+              size="compact"
+              caption="The token files of each theme"
+              captionHidden
+              columns={[
+                { key: "theme", header: "Theme", width: "40%", rowHeader: true },
+                { key: "light", header: "Light" },
+                { key: "dark", header: "Dark" },
+              ]}
+              rows={TOKEN_FILES.map((theme) => ({
+                id: theme.id,
+                cells: {
+                  theme: theme.label,
+                  light: <a href={theme.light}>{theme.light.split("/").pop()}</a>,
+                  dark: <a href={theme.dark}>{theme.dark.split("/").pop()}</a>,
+                },
+              }))}
+            />
           </section>
         </main>
       </div>

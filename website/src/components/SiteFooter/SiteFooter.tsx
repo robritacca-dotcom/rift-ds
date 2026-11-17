@@ -16,9 +16,13 @@ import styles from "./SiteFooter.module.css";
  * Server component; column data resolves once at module scope.
  */
 
+/* For agents is /llms.txt, the index of the markdown contracts, the schemas,
+   the token files and the MCP endpoint, so every page carries one plain link
+   to it. It is a text file, not a page, so it is a plain anchor (`file`). */
 const siteLinks = [
   { href: "/", label: "Home" },
   { href: "/privacy", label: "Privacy" },
+  { href: "/llms.txt", label: "For agents", file: true },
 ];
 
 // The top-level sections, one row each — derived from the nav config.
@@ -55,7 +59,7 @@ function LinkColumn({
   links,
 }: {
   title: string;
-  links: { href: string; label: string; desktopOnly?: boolean }[];
+  links: { href: string; label: string; desktopOnly?: boolean; file?: boolean }[];
 }) {
   return (
     <div className={styles.column}>
@@ -66,9 +70,15 @@ function LinkColumn({
             key={link.href}
             className={link.desktopOnly ? styles.desktopOnly : undefined}
           >
-            <Link href={link.href} className={styles.link}>
-              {link.label}
-            </Link>
+            {link.file ? (
+              <a href={link.href} className={styles.link}>
+                {link.label}
+              </a>
+            ) : (
+              <Link href={link.href} className={styles.link}>
+                {link.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>

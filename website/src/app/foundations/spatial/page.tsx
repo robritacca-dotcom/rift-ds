@@ -136,6 +136,13 @@ export default function SemanticSpacingPage() {
             </p>
           </div>
 
+          {/* The names as text: a swatch shows only its step. */}
+          <p className={styles.viewportNote}>
+            A token is named for its group and its step: <code>--border-025</code>,{" "}
+            <code>--radius-300</code>, <code>--radius-pill</code>, <code>--gap-400</code>,{" "}
+            <code>--padding-200</code>.
+          </p>
+
           {/* Sections */}
           {spacingSections.map((section, idx) => (
             <section

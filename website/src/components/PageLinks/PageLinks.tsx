@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "rift-ds/components/Button/Button";
 import PageAgentDocs from "./PageAgentDocs";
 import PageFigmaLink from "./PageFigmaLink";
+import PageTokenLink from "./PageTokenLink";
 import styles from "./PageLinks.module.css";
 import { STORYBOOK_URL } from "@/config/brand.generated";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
@@ -88,6 +89,8 @@ export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substack
       {/* Self-gated: renders only on /components/<slug> pages, where the
           generated markdown contract and the JSON schema exist. */}
       <PageAgentDocs />
+      {/* Self-gated: renders only on the foundations pages. */}
+      <PageTokenLink />
 
       {linkedinUrl && (
         <Button

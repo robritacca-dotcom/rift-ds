@@ -97,7 +97,7 @@ export const StatusError: Story = {
   },
 };
 
-/** Primitive swatch — no Primitive row, only Hex and RGB */
+/** Primitive swatch — no Primitive row: Token, Hex and RGB */
 export const PrimitiveSwatch: Story = {
   args: {
     label: 'Teal 07',

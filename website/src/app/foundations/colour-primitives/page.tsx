@@ -17,7 +17,7 @@ const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/
 /* ============================================
    PRIMITIVE COLOUR DATA
    No "primitive" field — these ARE the primitives.
-   Only hex + RGB are shown.
+   Only the token name, hex and RGB are shown.
    ============================================ */
 
 interface PrimitiveSwatch {

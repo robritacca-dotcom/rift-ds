@@ -25,14 +25,16 @@ export interface ColourSwatchProps {
   status?: boolean;
   /** CSS custom property for the status left border colour */
   borderVar?: string;
+  /** The label of the row that prints the token's name, the value of `cssVar`, as text */
+  tokenLabel?: string;
   /** Additional CSS classes */
   className?: string;
 }
 
 /**
  * ColourSwatch component from Figma design system
- * Displays a colour swatch card with a values box showing
- * Primitive, Hex, and RGB. Values switch when theme changes.
+ * Displays a colour swatch card with a values box showing the
+ * token's name, then Primitive, Hex, and RGB. Values switch when theme changes.
  * Used on Semantic colours and Primitive colours pages.
  */
 export const ColourSwatch = ({
@@ -43,6 +45,7 @@ export const ColourSwatch = ({
   theme = 'dark',
   status = false,
   borderVar,
+  tokenLabel = 'Token',
   className = '',
 }: ColourSwatchProps) => {
   const baseClass = 'ds-colour-swatch';
@@ -62,6 +65,10 @@ export const ColourSwatch = ({
         <h3 className={`${baseClass}__title`}>{label}</h3>
       </div>
       <div className={`${baseClass}__values`}>
+        <div className={`${baseClass}__row`}>
+          <span className={`${baseClass}__label`}>{tokenLabel}</span>
+          <span className={`${baseClass}__data`}>{cssVar}</span>
+        </div>
         {values.primitive && (
           <div className={`${baseClass}__row`}>
             <span className={`${baseClass}__label`}>Primitive</span>

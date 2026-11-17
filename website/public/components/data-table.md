@@ -299,6 +299,14 @@ interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */
   groupable?: boolean;
   /**
+   * The order this column's groups take, as the values they gather by
+   * (`['Revenue', 'Cost of sales', 'Expenses']`): the groups listed come
+   * first, in this order whichever way the column sorts, and any others
+   * follow in the column's own order. A `status` column already groups in
+   * its options' order.
+   */
+  groupOrder?: string[];
+  /**
    * The calculation a group row shows in this column, and the totals
    * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,
    * `countDistinct` or `range`, formatted through the column's type, or a

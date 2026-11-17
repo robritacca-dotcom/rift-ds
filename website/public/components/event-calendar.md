@@ -25,6 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | onDateClick | `((date: string) => void)` | no |  | Fires with the clicked day (YYYY-MM-DD) — from anywhere on the cell, the day number, and the "+N more" overflow row. The number and overflow row only become buttons when this is set, and cells only take their pointer cursor and hover feedback with it. |
 | selectedDate | `string` | no |  | Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip on its number, taking precedence over the today chip. Controlled by the consumer; pair with `onDateClick` to move it. |
 | today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. |
+| legend | `EventCalendarLegendItem[]` | no |  | What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
 | previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
@@ -68,14 +69,29 @@ type EventCalendarColor =
 interface EventCalendarEvent {
   /** Unique event identifier. */
   id: string;
-  /** The day the event falls on (YYYY-MM-DD). */
+  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */
   date: string;
+  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */
+  endDate?: string;
   /** Short label shown in the event pill. */
   title: string;
   /** Start time as already-formatted text like "09:30". Untimed events sort first. */
   time?: string;
   /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
   color?: EventCalendarColor;
+}
+```
+
+### EventCalendarLegendItem
+
+A colour the calendar's events use, and what it means, for the legend.
+
+```ts
+interface EventCalendarLegendItem {
+  /** The accent, as an event's `color` names it. */
+  color: EventCalendarColor;
+  /** What events in this colour are ("Time away", "Deadlines"). */
+  label: string;
 }
 ```
 

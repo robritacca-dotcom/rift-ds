@@ -831,6 +831,28 @@ export const Grouped: Story = {
   },
 };
 
+/** Groups in an order of the host's choosing: the column's `groupOrder` lists them first, whichever way it sorts. */
+export const GroupOrder: Story = {
+  args: {
+    columns: columns.map((col) =>
+      col.key === 'name'
+        ? { ...col, rowHeader: true }
+        : col.key === 'status'
+          ? { ...col, groupable: true, groupOrder: ['Waiting', 'Shipped'] }
+          : col,
+    ),
+    rows,
+    defaultGrouping: ['status'],
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggles = canvas.getAllByRole('button', { name: /rows?, (expanded|collapsed)/ });
+    // The listed groups lead in their order; the unlisted one follows.
+    await expect(toggles.map((b) => b.getAttribute('aria-label')?.split(',')[0])).toEqual(['Waiting', 'Shipped', 'Failed']);
+  },
+};
+
 /** `renderDetail` adds a chevron per row; an opened row shows its details beneath it, across the table, rendered only once opened. */
 export const RowDetails: Story = {
   args: {

@@ -69,6 +69,19 @@
           "default": "plain"
         },
         {
+          "name": "tone",
+          "type": "\"default\" | \"error\" | \"positive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "error",
+            "positive"
+          ],
+          "required": false,
+          "description": "The icon tile's status colour. `default` is the quiet tile for nothing\nto show; `positive` is a result that worked (the end of a flow, with\nwhat happens next in the description and the action); `error` is a\nload or a step that failed.",
+          "default": "default"
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

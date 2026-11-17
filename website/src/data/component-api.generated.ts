@@ -8720,6 +8720,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'plain'"
           },
           {
+            "name": "tone",
+            "type": "\"default\" | \"error\" | \"positive\"",
+            "required": false,
+            "description": "The icon tile's status colour. `default` is the quiet tile for nothing\nto show; `positive` is a result that worked (the end of a flow, with\nwhat happens next in the description and the action); `error` is a\nload or a step that failed.",
+            "values": [
+              "default",
+              "error",
+              "positive"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -9067,6 +9079,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
+          },
+          {
+            "name": "legend",
+            "type": "EventCalendarLegendItem[]",
+            "required": false,
+            "description": "What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown.",
+            "typeRefs": [
+              "EventCalendarLegendItem"
+            ]
           },
           {
             "name": "actions",

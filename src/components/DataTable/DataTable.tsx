@@ -135,6 +135,14 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */
   groupable?: boolean;
   /**
+   * The order this column's groups take, as the values they gather by
+   * (`['Revenue', 'Cost of sales', 'Expenses']`): the groups listed come
+   * first, in this order whichever way the column sorts, and any others
+   * follow in the column's own order. A `status` column already groups in
+   * its options' order.
+   */
+  groupOrder?: string[];
+  /**
    * The calculation a group row shows in this column, and the totals
    * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,
    * `countDistinct` or `range`, formatted through the column's type, or a
@@ -1401,7 +1409,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const compare = typedComparator(groupCol.type, groupCol.options, compareValues);
     const desc = sortOf(groupKey)?.direction === 'desc';
     const first = (key: string) => byValue.get(key)![0].values[groupKey];
+    const listed = groupCol.groupOrder ?? [];
     const keys = [...byValue.keys()].sort((a, b) => {
+      // The groups the column lists come first, in its order, whichever way it sorts.
+      const ia = listed.indexOf(a);
+      const ib = listed.indexOf(b);
+      if (ia !== -1 || ib !== -1) return ia === -1 ? 1 : ib === -1 ? -1 : ia - ib;
       // The rows with no value come last, whichever way the column sorts.
       if (a === '' || b === '') return a === '' ? (b === '' ? 0 : 1) : -1;
       const order = compare(first(a), first(b));

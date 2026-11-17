@@ -87,6 +87,10 @@ const RETIRED_PROP_NAMES = ['priority', 'kind', 'intent'];
 
 /** Components whose `tone` deliberately speaks another vocabulary, with why. */
 const SANCTIONED_TONES = {
+  EmptyState: {
+    values: ['default', 'error', 'positive'],
+    reason: 'a state that reports a result: the quiet tile for nothing to show, and the status roles for a result that worked or a step that failed',
+  },
   Gauge: {
     values: ['accent', 'error', 'neutral', 'positive', 'warning'],
     reason: 'a data reading coloured by status role, with the chart accent as its default',

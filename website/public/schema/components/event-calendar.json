@@ -88,6 +88,16 @@
           "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
         },
         {
+          "name": "legend",
+          "type": "EventCalendarLegendItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown.",
+          "typeRefs": [
+            "EventCalendarLegendItem"
+          ]
+        },
+        {
           "name": "actions",
           "type": "ReactNode",
           "typeKind": "reference",
@@ -183,7 +193,15 @@
     },
     "EventCalendarEvent": {
       "kind": "interface",
-      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD). */\n  date: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+      "refs": [
+        "EventCalendarColor"
+      ]
+    },
+    "EventCalendarLegendItem": {
+      "kind": "interface",
+      "definition": "interface EventCalendarLegendItem {\n  /** The accent, as an event's `color` names it. */\n  color: EventCalendarColor;\n  /** What events in this colour are (\"Time away\", \"Deadlines\"). */\n  label: string;\n}",
+      "description": "A colour the calendar's events use, and what it means, for the legend.",
       "refs": [
         "EventCalendarColor"
       ]

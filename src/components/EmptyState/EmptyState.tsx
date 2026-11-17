@@ -23,6 +23,13 @@ type EmptyStateOwnProps = {
    * dashed container, which reads better inside a card, table, or panel.
    */
   variant?: 'plain' | 'bordered';
+  /**
+   * The icon tile's status colour. `default` is the quiet tile for nothing
+   * to show; `positive` is a result that worked (the end of a flow, with
+   * what happens next in the description and the action); `error` is a
+   * load or a step that failed.
+   */
+  tone?: 'default' | 'positive' | 'error';
   /** Additional CSS classes */
   className?: string;
 };
@@ -47,6 +54,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
       action,
       size = 'default',
       variant = 'plain',
+      tone = 'default',
       className = '',
       ...rest
     },
@@ -58,6 +66,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
       baseClass,
       `${baseClass}--${variant}`,
       size === 'compact' ? `${baseClass}--compact` : '',
+      tone !== 'default' ? `${baseClass}--${tone}` : '',
       className,
     ]
       .filter(Boolean)

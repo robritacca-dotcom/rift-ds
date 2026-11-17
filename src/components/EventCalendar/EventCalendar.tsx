@@ -24,8 +24,10 @@ export type EventCalendarColor =
 export interface EventCalendarEvent {
   /** Unique event identifier. */
   id: string;
-  /** The day the event falls on (YYYY-MM-DD). */
+  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */
   date: string;
+  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */
+  endDate?: string;
   /** Short label shown in the event pill. */
   title: string;
   /** Start time as already-formatted text like "09:30". Untimed events sort first. */
@@ -33,6 +35,23 @@ export interface EventCalendarEvent {
   /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
   color?: EventCalendarColor;
 }
+
+/** A colour the calendar's events use, and what it means, for the legend. */
+export interface EventCalendarLegendItem {
+  /** The accent, as an event's `color` names it. */
+  color: EventCalendarColor;
+  /** What events in this colour are ("Time away", "Deadlines"). */
+  label: string;
+}
+
+/** A `YYYY-MM-DD` string as a local date, or null when it is not one. */
+function parseDay(str: string | undefined): Date | null {
+  const match = str ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(str) : null;
+  return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null;
+}
+
+/** The longest span an event is drawn across, so a typo in `endDate` cannot loop for years. */
+const MAX_SPAN_DAYS = 366;
 
 /** A consumer's weekday list when it has the seven entries the grid needs, else the locale's. */
 const weekdaysOr = (labels: string[] | undefined, locale: string): string[] =>
@@ -105,6 +124,8 @@ type EventCalendarOwnProps = {
   selectedDate?: string;
   /** The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. */
   today?: string;
+  /** What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown. */
+  legend?: EventCalendarLegendItem[];
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
   /** Accessible name of the previous-month button. */
@@ -178,6 +199,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       onDateClick,
       selectedDate,
       today: todayProp,
+      legend,
       actions,
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
@@ -193,10 +215,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     ref,
   ) => {
     const baseClass = 'ds-event-calendar';
-    const today = useMemo(() => {
-      const match = todayProp && /^(\d{4})-(\d{2})-(\d{2})$/.exec(todayProp);
-      return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : new Date();
-    }, [todayProp]);
+    const today = useMemo(() => parseDay(todayProp) ?? new Date(), [todayProp]);
     const locale = useLocale(localeProp);
     const weekStart = weekStartsOn ?? weekStartOf(locale);
     const dayNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);
@@ -224,13 +243,29 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     // Group events by date, untimed first then by time text
     const eventsByDate = useMemo(() => {
       const map = new Map<string, EventCalendarEvent[]>();
-      for (const event of events) {
-        const list = map.get(event.date) ?? [];
+      const add = (day: string, event: EventCalendarEvent) => {
+        const list = map.get(day) ?? [];
         list.push(event);
-        map.set(event.date, list);
+        map.set(day, list);
+      };
+      for (const event of events) {
+        const start = parseDay(event.date);
+        const end = parseDay(event.endDate);
+        if (!start || !end || end <= start) {
+          add(event.date, event);
+          continue;
+        }
+        const day = new Date(start);
+        for (let i = 0; i < MAX_SPAN_DAYS && day <= end; i++) {
+          add(formatDate(day), event);
+          day.setDate(day.getDate() + 1);
+        }
       }
+      const spans = (event: EventCalendarEvent) => Boolean(event.endDate && event.endDate > event.date);
       for (const list of map.values()) {
         list.sort((a, b) => {
+          // Events that run over several days lead each day, so their pills line up across it.
+          if (spans(a) !== spans(b)) return spans(a) ? -1 : 1;
           if (!a.time && !b.time) return 0;
           if (!a.time) return -1;
           if (!b.time) return 1;
@@ -239,6 +274,14 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       }
       return map;
     }, [events, locale]);
+    const formatSpan = useMemo(() => {
+      const format = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
+      return (event: EventCalendarEvent) => {
+        const start = parseDay(event.date);
+        const end = parseDay(event.endDate);
+        return start && end && end > start ? format.formatRange(start, end) : null;
+      };
+    }, [locale]);
 
     // Build the grid — whole weeks only, trimmed to the month's span
     const firstDay = weekdayOffset(new Date(viewYear, viewMonth, 1).getDay(), weekStart);
@@ -358,10 +401,16 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
 
                 <div className={`${baseClass}__events`}>
                   {visible.map((event) => {
+                    const span = formatSpan(event);
                     const pillClasses = [
                       `${baseClass}__event`,
                       `${baseClass}__event--${event.color ?? 'neutral'}`,
-                    ].join(' ');
+                      span ? `${baseClass}__event--span` : '',
+                      span && dateStr !== event.date ? `${baseClass}__event--continued` : '',
+                      span && dateStr !== event.endDate ? `${baseClass}__event--continues` : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ');
                     const pillContent = (
                       <>
                         <span className={`${baseClass}__event-dot`} aria-hidden="true" />
@@ -377,7 +426,11 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                         type="button"
                         className={pillClasses}
                         onClick={() => onEventClick(event)}
-                        aria-label={`${event.title}${event.time ? `, ${event.time}` : ''}, ${dayLabel}`}
+                        aria-label={
+                          span
+                            ? `${event.title}, ${span}`
+                            : `${event.title}${event.time ? `, ${event.time}` : ''}, ${dayLabel}`
+                        }
                       >
                         {pillContent}
                       </button>
@@ -406,6 +459,16 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
             );
           })}
         </div>
+        {legend && legend.length > 0 && (
+          <ul className={`${baseClass}__legend`}>
+            {legend.map((item) => (
+              <li key={`${item.color}-${item.label}`} className={`${baseClass}__legend-item ${baseClass}__event--${item.color}`}>
+                <span className={`${baseClass}__event-dot`} aria-hidden="true" />
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   },

@@ -82,6 +82,23 @@ export const ErrorRecovery: Story = {
     title: 'Could not load your data',
     description: 'Something went wrong on our end. Try again in a moment.',
     action: <Button label="Retry" variant="primary" iconLeft="refresh" />,
+    tone: 'error',
+  },
+};
+
+/** The end of a flow that worked: what happened, what happens next, and where to go from here. */
+export const Success: Story = {
+  args: {
+    icon: 'check_circle',
+    tone: 'positive',
+    title: 'Your order is placed',
+    description: 'We have emailed the receipt. You can follow the delivery from your orders page.',
+    action: (
+      <>
+        <Button label="View orders" variant="primary" />
+        <Button label="Back to the shop" variant="secondary" />
+      </>
+    ),
   },
 };
 

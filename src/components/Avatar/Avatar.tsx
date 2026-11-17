@@ -15,6 +15,8 @@ type AvatarOwnProps = {
   name?: string;
   /** Avatar size */
   size?: 'sm' | 'md' | 'lg';
+  /** `circle` for a person; `square` for an organisation (a company, a bank, a vendor, an integration): rounded corners on the radius scale, a logo fitted whole rather than cropped, and a building glyph when there is no image or name. */
+  shape?: 'circle' | 'square';
   /**
    * Which of the six fills the initials sit on. Picked from the name when
    * unset, so a person keeps one colour everywhere; `neutral` keeps the
@@ -47,6 +49,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
       alt,
       name,
       size = 'md',
+      shape = 'circle',
       fill,
       status,
       statusLabel,
@@ -65,7 +68,9 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
     const fillIndex = name?.trim() && fill !== 'neutral' ? (fill ?? avatarFill(name.trim())) : null;
     const fillClass = fillIndex ? `${baseClass}--fill-${fillIndex}` : '';
 
-    const classes = [baseClass, sizeClass, fillClass, className].filter(Boolean).join(' ');
+    const classes = [baseClass, sizeClass, shape === 'square' ? `${baseClass}--square` : '', fillClass, className]
+      .filter(Boolean)
+      .join(' ');
 
     const getInitials = (fullName: string): string => {
       const parts = fullName.trim().split(/\s+/);
@@ -101,7 +106,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
             className={`${baseClass}__icon material-symbols-rounded`}
             aria-hidden="true"
           >
-            person
+            {shape === 'square' ? 'domain' : 'person'}
           </span>
         )}
 

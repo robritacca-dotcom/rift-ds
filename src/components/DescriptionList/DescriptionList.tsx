@@ -15,6 +15,8 @@ export type DescriptionListEntry = {
   action?: React.ReactNode;
   /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */
   copyable?: boolean | string;
+  /** Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule. */
+  emphasis?: boolean;
 };
 
 /** Props owned by DescriptionList itself; everything else falls through to the `<dl>`. */
@@ -58,7 +60,7 @@ const isEmpty = (value: React.ReactNode) => value == null || value === false || 
 const textOf = (value: React.ReactNode) => (typeof value === 'string' || typeof value === 'number' ? String(value) : null);
 
 function renderEntry(
-  { term, details, id, action, copyable }: DescriptionListEntry,
+  { term, details, id, action, copyable, emphasis }: DescriptionListEntry,
   settings: Required<Pick<EntrySettings, 'emptyValue' | 'copyLabel' | 'copiedLabel'>> & Pick<EntrySettings, 'onValueCopy'>,
   className = '',
   rest: React.ComponentPropsWithoutRef<'div'> = {},
@@ -67,7 +69,9 @@ function renderEntry(
   const empty = isEmpty(details);
   const copyText = empty ? null : typeof copyable === 'string' ? copyable : copyable ? textOf(details) : null;
   const termText = textOf(term);
-  const classes = ['ds-description-list__item', className].filter(Boolean).join(' ');
+  const classes = ['ds-description-list__item', emphasis && 'ds-description-list__item--emphasis', className]
+    .filter(Boolean)
+    .join(' ');
   return (
     <div {...rest} ref={ref} id={id ?? rest.id} className={classes}>
       <dt className="ds-description-list__term">{term}</dt>
@@ -176,6 +180,7 @@ export function DescriptionListItem({
   children,
   action,
   copyable,
+  emphasis,
   className = '',
   ref,
   ...rest
@@ -188,7 +193,7 @@ export function DescriptionListItem({
     onValueCopy: passed?.onValueCopy,
   };
   return renderEntry(
-    { term, details: details ?? children, action, copyable },
+    { term, details: details ?? children, action, copyable, emphasis },
     settings,
     className,
     divRest,

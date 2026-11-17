@@ -103,6 +103,8 @@ type EventCalendarOwnProps = {
    * consumer; pair with `onDateClick` to move it.
    */
   selectedDate?: string;
+  /** The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. */
+  today?: string;
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
   /** Accessible name of the previous-month button. */
@@ -175,6 +177,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       onEventClick,
       onDateClick,
       selectedDate,
+      today: todayProp,
       actions,
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
@@ -190,7 +193,10 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     ref,
   ) => {
     const baseClass = 'ds-event-calendar';
-    const today = useMemo(() => new Date(), []);
+    const today = useMemo(() => {
+      const match = todayProp && /^(\d{4})-(\d{2})-(\d{2})$/.exec(todayProp);
+      return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : new Date();
+    }, [todayProp]);
     const locale = useLocale(localeProp);
     const weekStart = weekStartsOn ?? weekStartOf(locale);
     const dayNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);

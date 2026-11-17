@@ -69,6 +69,19 @@ export const SelectedDay: Story = {
   },
 };
 
+/** Today pinned to a fixed date, for a demo, a test or a time zone the device is not in: the today chip and the month shown first follow it. */
+export const PinnedToday: Story = {
+  args: {
+    defaultMonth: undefined,
+    today: '2026-08-14',
+  },
+  play: async ({ canvasElement }) => {
+    const todayCell = canvasElement.querySelector('.ds-event-calendar__cell--today');
+    await expect(todayCell).not.toBeNull();
+    await expect(todayCell?.textContent).toContain('14');
+  },
+};
+
 export const WithActions: Story = {
   args: {
     actions: <Button variant="secondary" size="compact" label="New event" iconLeft="add" />,

@@ -34,6 +34,55 @@
 }
 
 /* ============================================
+   HEAD — an icon tile and a caption above the
+   value. A headed stat fills its tile's width,
+   so the caption reaches the far end.
+   ============================================ */
+
+.ds-stat--headed {
+  display: flex;
+  gap: var(--gap-050);
+}
+
+.ds-stat__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+  align-self: stretch;
+  margin-block-end: var(--gap-200);
+}
+
+.ds-stat__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--control-height-default);
+  height: var(--control-height-default);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-icon-bg);
+  color: var(--color-text-primary);
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-stat__caption {
+  margin-inline-start: auto;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* What follows the figures (a Sparkline, an AvatarGroup) runs the stat's width. */
+.ds-stat__extra {
+  display: block;
+  align-self: stretch;
+  margin-block-start: var(--gap-200);
+}
+
+/* ============================================
    LABEL
    ============================================ */
 

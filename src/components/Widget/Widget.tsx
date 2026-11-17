@@ -3,6 +3,7 @@ import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './Widget.css';
 import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 import { WidgetDisclosure } from './WidgetDisclosure';
+import '../../fonts/material-symbols.css';
 
 /* ============================================
    Widget — the tile
@@ -203,6 +204,8 @@ type WidgetRowOwnProps = {
   meta?: React.ReactNode;
   /** Renders the row as a link to this URL. */
   href?: string;
+  /** A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on. */
+  chevron?: boolean;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -225,7 +228,7 @@ export interface WidgetRowProps
  * list only offers a target where there is somewhere to go.
  */
 export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
-  ({ title, description, leading, meta, href, className = '', onClick, linkComponent, ...rest }, ref) => {
+  ({ title, description, leading, meta, href, chevron, className = '', onClick, linkComponent, ...rest }, ref) => {
     const baseClass = 'ds-widget-row';
     const Link = linkComponent ?? 'a';
     const interactive = Boolean(href || onClick);
@@ -243,6 +246,11 @@ export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
         </span>
         {meta !== undefined && meta !== null && (
           <span className={`${baseClass}__meta`}>{meta}</span>
+        )}
+        {(chevron ?? Boolean(href)) && (
+          <span className={`${baseClass}__chevron material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
+            chevron_right
+          </span>
         )}
       </>
     );

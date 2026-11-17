@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { CircularButton } from './CircularButton';
 
 const meta = {
@@ -239,4 +239,20 @@ export const Delete: Story = {
 
 export const Refresh: Story = {
   args: { variant: 'tertiary', icon: 'refresh', ariaLabel: 'Refresh' },
+};
+
+/** A count or a dot on the corner, such as a notification bell's unread. The count joins the accessible name; the tooltip keeps the label alone. */
+export const WithBadge: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+      <CircularButton {...args} icon="notifications" variant="tertiary" ariaLabel="Notifications" badge={3} />
+      <CircularButton {...args} icon="notifications" variant="tertiary" ariaLabel="Messages" badge={240} />
+      <CircularButton {...args} icon="notifications" variant="tertiary" ariaLabel="Updates" badge />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: 'Notifications, 3 new' })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Messages, 240 new' })).toHaveTextContent('99+');
+    await expect(canvas.getByRole('button', { name: 'Updates, new' })).toBeInTheDocument();
+  },
 };

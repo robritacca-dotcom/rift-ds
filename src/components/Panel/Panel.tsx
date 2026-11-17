@@ -8,6 +8,8 @@ import './Panel.css';
 type PanelOwnProps = {
   /** Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it */
   padding?: 'default' | 'compact' | 'none';
+  /** Draws the container border the Widget tile wears, so the panel keeps a visible edge in a theme whose page fill matches the panel's. */
+  bordered?: boolean;
   /** Additional CSS classes */
   className?: string;
   /** Panel content */
@@ -20,20 +22,22 @@ export interface PanelProps
 
 /**
  * Panel component: the plain dashboard surface.
- * A rounded container on the primary container background with no border and
- * no shadow: just the surface, ready for whatever a dashboard region holds.
+ * A rounded container on the primary container background with no shadow and,
+ * unless `bordered`, no border: just the surface, ready for whatever a
+ * dashboard region holds.
  * Content stacks vertically with a medium gap.
  *
  * Forwards a ref to the `<div>` element and spreads unrecognised props onto it.
  */
 export const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
-  ({ padding = 'default', className = '', children, ...rest }, ref) => {
+  ({ padding = 'default', bordered = false, className = '', children, ...rest }, ref) => {
     const baseClass = 'ds-panel';
 
     const classes = [
       baseClass,
       padding === 'compact' ? `${baseClass}--compact` : '',
       padding === 'none' ? `${baseClass}--flush` : '',
+      bordered ? `${baseClass}--bordered` : '',
       className,
     ]
       .filter(Boolean)

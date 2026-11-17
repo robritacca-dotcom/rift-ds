@@ -60,7 +60,7 @@ export const Receipt: Story = {
       { term: 'Subtotal', details: '$1,084.00' },
       { term: 'Delivery', details: '$200.00' },
       { term: 'Tax', details: '$0.00' },
-      { term: 'Total paid', details: <strong>$1,284.00</strong> },
+      { term: 'Total paid', details: '$1,284.00', emphasis: true },
     ],
   },
 };

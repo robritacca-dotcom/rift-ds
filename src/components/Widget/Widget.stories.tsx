@@ -88,6 +88,10 @@ export const InteractiveRows: Story = {
       </>
     ),
   },
+  play: async ({ canvasElement }) => {
+    // Only the row that links carries the chevron; the rows that act in place do not.
+    await expect(canvasElement.querySelectorAll('.ds-widget-row__chevron')).toHaveLength(1);
+  },
 };
 
 /** Groups split a tile's rows into labelled runs. */

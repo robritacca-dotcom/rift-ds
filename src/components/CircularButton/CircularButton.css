@@ -388,3 +388,42 @@
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
+
+/* ============================================
+   BADGE
+   A count or a dot on the top-end corner, in
+   BottomNav's count-badge treatment.
+   ============================================ */
+
+.ds-circular-button--badged {
+  position: relative;
+}
+
+.ds-circular-button__badge {
+  position: absolute;
+  inset-block-start: calc(var(--padding-100) * -1);
+  inset-inline-end: calc(var(--padding-100) * -1);
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--padding-100);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-count-badge-bg);
+  color: var(--color-count-badge-text);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-caption-line-height);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ds-circular-button__badge--dot {
+  inset-block-start: var(--padding-050);
+  inset-inline-end: var(--padding-050);
+  min-width: 0;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+}

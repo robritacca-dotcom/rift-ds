@@ -131,6 +131,9 @@ export default function StepperPage() {
           {/* Progress states */}
           <section className={styles.section}>
             <SectionTitle title="Progress states" />
+            <p className={styles.introBody}>
+              The first step of a flow, and a finished one. To show a flow as done, set <code>activeStep</code> to the number of steps: every step shows its check and none is current.
+            </p>
             <div className={styles.demoStack}>
               <div className={styles.demo}>
                 <Stepper steps={checkoutSteps} activeStep={0} />

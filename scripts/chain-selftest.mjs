@@ -33,9 +33,27 @@
  * `git ls-files`. `command` replaces `node scripts/<step>.mjs`.
  */
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync as rmOnce, writeFileSync as writeOnce } from 'node:fs';
 import { dirname } from 'node:path';
 import { fromRoot, readJson, repoRoot } from './lib/fs.mjs';
+
+/* On Windows a file another process has open for a moment (an indexer, a
+   virus scan, an editor watching the folder) refuses a write with EBUSY,
+   EPERM or UNKNOWN. A plant that cannot be put back is a dirty tree, so
+   every write and delete here waits and tries again before giving up. */
+const TRANSIENT = new Set(['EBUSY', 'EPERM', 'UNKNOWN']);
+const patiently = (run) => (...args) => {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return run(...args);
+    } catch (error) {
+      if (!TRANSIENT.has(error.code) || attempt === 20) throw error;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100);
+    }
+  }
+};
+const writeFileSync = patiently(writeOnce);
+const rmSync = patiently(rmOnce);
 
 const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'utf8' });
 

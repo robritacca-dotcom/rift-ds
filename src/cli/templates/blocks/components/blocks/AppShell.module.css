@@ -145,7 +145,8 @@
 }
 
 /* The folded search: shown only where the field does not fit. */
-.searchIcon {
+.searchIcon,
+.aiIcon {
   display: none;
 }
 
@@ -241,11 +242,13 @@
     justify-content: flex-end;
   }
 
-  .search {
+  .search,
+  .ai {
     display: none;
   }
 
-  .searchIcon {
+  .searchIcon,
+  .aiIcon {
     display: inline-flex;
   }
 

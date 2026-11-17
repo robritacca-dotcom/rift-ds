@@ -66,6 +66,14 @@ export interface ChatLauncherProps {
    * Note: not the native `hidden` attribute, which keeps an element mounted and only hides it; the launcher unmounts its button and panel, and spreads no native attributes.
    */
   hidden?: boolean;
+  /**
+   * Whether the closed launcher shows its floating button. Defaults to true.
+   * `false` keeps the panel and drops only the button, for a host that opens
+   * the chat from a control of its own, such as an AiButton in its top bar:
+   * that control calls `setOpen(true)` from `useChatWidget()` and sets
+   * `returnFocusRef.current` to itself, so closing the panel hands focus back.
+   */
+  fab?: boolean;
   /** The panel's DOM id, for a host control's `aria-controls`. */
   panelId?: string;
   /**
@@ -129,6 +137,7 @@ export function ChatLauncher({
   widget,
   children,
   surface = 'raised',
+  fab = true,
 }: ChatLauncherProps) {
   const { open, setOpen, panelPhase, view, side, floating, returnFocusRef, send } =
     useChatWidget();
@@ -439,6 +448,7 @@ export function ChatLauncher({
   /* Closed: the FAB is the persistent entry point, bottom right on every
      page, never remounting on navigation (so focus restore works everywhere). */
   if (!renderPanel) {
+    if (!fab) return null;
     return (
       <div className="ds-chat-launcher__fab">
         <AiButton

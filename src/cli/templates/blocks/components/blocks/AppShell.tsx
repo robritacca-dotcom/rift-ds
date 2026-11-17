@@ -122,9 +122,12 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
               <CommandPaletteTrigger className={styles.search} />
               <div className={styles.topBarActions}>
                 <CommandPaletteTrigger iconOnly className={styles.searchIcon} />
-                {/* The AI entry. Point it at your chat: `npx rift-ds init chat`
-                    scaffolds one, and ChatLauncher opens it. */}
-                <AiButton />
+                {/* The AI entry. Point both at your chat: `npx rift-ds init chat`
+                    scaffolds one, and ChatLauncher opens it. On a phone the
+                    labelled button gives way to the icon, as search does, so
+                    the bar keeps room for the actions you add. */}
+                <AiButton className={styles.ai} />
+                <AiButton iconOnly className={styles.aiIcon} />
                 <ThemeToggle showLabels={false} />
               </div>
             </header>

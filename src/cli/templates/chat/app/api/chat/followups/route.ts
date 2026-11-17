@@ -2,9 +2,6 @@ import { createFollowupsHandler } from 'rift-ds/chat/server';
 import { FOLLOWUP_MODEL } from '../../../../components/chat/models';
 import { guardrails } from '../guardrails';
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
-
 /**
  * The three follow-up questions offered under a finished answer, written by
  * a small model from the question-and-answer pair. Say what the chat is

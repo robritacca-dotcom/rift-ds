@@ -32,7 +32,7 @@ export default function InputPage() {
               Single-line text field for names, emails, and search queries
             </p>
             <p className={styles.introBody}>
-              Supports labels, placeholders, left/right icons, helper text, and error states. Use Textarea instead when the content needs more than one line.
+              Supports labels, placeholders, left/right icons, helper text, and error states.
             </p>
           </div>
 

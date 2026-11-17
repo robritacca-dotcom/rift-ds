@@ -32,7 +32,7 @@ export default function SegmentedControlPage() {
               Toggle between a small set of related options
             </p>
             <p className={styles.introBody}>
-              For view modes or filters where the active segment fills with the action colour, or a quiet grey with the neutral tone. Works well for 2 to 4 choices. Use Tabs instead when the options represent distinct content sections with their own panels.
+              For view modes or filters where the active segment fills with the action colour, or a quiet grey with the neutral tone. Works well for 2 to 4 choices.
             </p>
           </div>
 

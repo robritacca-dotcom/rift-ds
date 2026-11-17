@@ -45,8 +45,7 @@ export default function DialogPage() {
               A general-purpose modal that holds arbitrary content (forms,
               settings, previews) with an optional footer for actions. It
               traps focus, restores it on close, locks page scroll, and
-              dismisses via ESC, backdrop click, or the close button. For
-              simple confirm-or-cancel prompts, use AlertDialog instead.
+              dismisses via ESC, backdrop click, or the close button.
             </p>
           </div>
 

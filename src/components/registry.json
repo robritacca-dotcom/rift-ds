@@ -147,7 +147,10 @@
       "description": "Modal confirmation overlay with title, description, and confirm / cancel actions.",
       "category": "overlays",
       "client": true,
-      "pattern": "dialog"
+      "pattern": "dialog",
+      "alternatives": [
+        { "name": "Dialog", "when": "the task needs more than a confirm or a cancel" }
+      ]
     },
     {
       "name": "AnchorNav",
@@ -426,7 +429,10 @@
       "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions.",
       "category": "forms",
       "client": true,
-      "pattern": "checkbox"
+      "pattern": "checkbox",
+      "alternatives": [
+        { "name": "RadioButton", "when": "only one option can be chosen" }
+      ]
     },
     {
       "name": "Chip",
@@ -491,7 +497,11 @@
       "description": "A filterable select that narrows options as the user types, with multi-select chips, grouping, and async loading.",
       "category": "forms",
       "client": true,
-      "pattern": "combobox"
+      "pattern": "combobox",
+      "alternatives": [
+        { "name": "Dropdown", "when": "the option list is short and static" },
+        { "name": "TagInput", "when": "the entries are free text" }
+      ]
     },
     {
       "name": "CommandPalette",
@@ -537,7 +547,10 @@
       "description": "Right-click menu at the pointer with groups, sub-menus, and shortcut hints.",
       "category": "overlays",
       "client": true,
-      "pattern": "menu"
+      "pattern": "menu",
+      "alternatives": [
+        { "name": "DropdownMenu", "when": "the menu opens from a visible trigger" }
+      ]
     },
     {
       "name": "ContributionGraph",
@@ -564,7 +577,10 @@
       "description": "The wired table: typed columns, sorting, filters, editing, grouping with totals, row details, saved views, thousands of rows, and rows from a server.",
       "category": "data-display",
       "client": true,
-      "keys": { "by": "component", "note": "In grid navigation the arrow keys move between cells, Enter or F2 starts an edit and Escape cancels it. The page has the full table of keys." }
+      "keys": { "by": "component", "note": "In grid navigation the arrow keys move between cells, Enter or F2 starts an edit and Escape cancels it. The page has the full table of keys." },
+      "alternatives": [
+        { "name": "Table", "when": "the rows are static and only need laying out" }
+      ]
     },
     {
       "name": "DateInput",
@@ -618,7 +634,10 @@
       "description": "A general-purpose modal for focused tasks, with sizes, an optional footer, and full focus management.",
       "category": "overlays",
       "client": true,
-      "pattern": "dialog"
+      "pattern": "dialog",
+      "alternatives": [
+        { "name": "AlertDialog", "when": "the task is a simple confirm-or-cancel prompt" }
+      ]
     },
     {
       "name": "Divider",
@@ -663,7 +682,13 @@
       "description": "Custom select dropdown with keyboard navigation, disabled options, and error states.",
       "category": "forms",
       "client": true,
-      "pattern": "combobox"
+      "pattern": "combobox",
+      "alternatives": [
+        { "name": "Combobox", "when": "the option list is long, searchable or server-backed" },
+        { "name": "DropdownMenu", "when": "the options are actions, not a form value" },
+        { "name": "RadioButton", "when": "the options are few enough to show all at once" },
+        { "name": "RichDropdown", "when": "the whole look of each choice is the point, such as a theme preset or a brand kit" }
+      ]
     },
     {
       "name": "DropdownMenu",
@@ -672,7 +697,11 @@
       "description": "Action menu opened from a trigger, with groups, sub-menus, shortcuts, radio and checkbox items, placed to stay on screen.",
       "category": "overlays",
       "client": true,
-      "pattern": "menu"
+      "pattern": "menu",
+      "alternatives": [
+        { "name": "ContextMenu", "when": "the menu opens on the content itself" },
+        { "name": "Dropdown", "when": "the choice is a form value" }
+      ]
     },
     {
       "name": "EmptyState",
@@ -826,7 +855,10 @@
       "description": "Text input with label, placeholder, icons, a prefix or suffix, a clear button, helper text, and error states.",
       "category": "forms",
       "client": true,
-      "pattern": "textbox"
+      "pattern": "textbox",
+      "alternatives": [
+        { "name": "Textarea", "when": "the content needs more than one line" }
+      ]
     },
     {
       "name": "InspectorColorPicker",
@@ -1161,7 +1193,10 @@
       "description": "Horizontal bar indicating completion progress, with an optional percentage label.",
       "category": "feedback",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Spinner", "when": "the wait is indeterminate" }
+      ]
     },
     {
       "name": "ProgressiveBlur",
@@ -1237,7 +1272,11 @@
       "description": "Radio button and radio group with vertical and horizontal layouts, animated dot indicator.",
       "category": "forms",
       "client": true,
-      "pattern": "radio-group"
+      "pattern": "radio-group",
+      "alternatives": [
+        { "name": "Checkbox", "when": "users can select more than one" },
+        { "name": "Dropdown", "when": "the list of options is long" }
+      ]
     },
     {
       "name": "Rating",
@@ -1264,7 +1303,10 @@
       "description": "Dropdown's rich sibling: options preview their own heading face, body face, and key colour.",
       "category": "forms",
       "client": true,
-      "pattern": "combobox"
+      "pattern": "combobox",
+      "alternatives": [
+        { "name": "Dropdown", "when": "the label alone is enough to choose by" }
+      ]
     },
     {
       "name": "ScatterChart",
@@ -1293,7 +1335,10 @@
       "description": "Pill-style toggle between related views with keyboard navigation and icon support.",
       "category": "actions",
       "client": true,
-      "pattern": "tabs"
+      "pattern": "tabs",
+      "alternatives": [
+        { "name": "Tabs", "when": "the options are distinct content sections with their own panels" }
+      ]
     },
     {
       "name": "SelectionCard",
@@ -1401,7 +1446,10 @@
       "description": "Animated circular loading indicator in three sizes and a default, neutral or inherit tone.",
       "category": "feedback",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "ProgressBar", "when": "the completion fraction is known" }
+      ]
     },
     {
       "name": "SplitButton",
@@ -1484,7 +1532,10 @@
       "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
       "category": "data-display",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "DataTable", "when": "the rows need sorting, filtering, editing or loading from a server" }
+      ]
     },
     {
       "name": "TableToolbar",
@@ -1502,7 +1553,10 @@
       "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
       "category": "navigation",
       "client": true,
-      "pattern": "tabs"
+      "pattern": "tabs",
+      "alternatives": [
+        { "name": "SegmentedControl", "when": "the options switch a view mode or a filter" }
+      ]
     },
     {
       "name": "TagInput",
@@ -1511,7 +1565,10 @@
       "description": "Multi-value text input with entries held as removable tags.",
       "category": "forms",
       "client": true,
-      "pattern": "textbox"
+      "pattern": "textbox",
+      "alternatives": [
+        { "name": "Combobox", "when": "the values come from a known option list" }
+      ]
     },
     {
       "name": "Text",
@@ -1529,7 +1586,10 @@
       "description": "Multi-line text input with character counter, resize control, helper text, and error states.",
       "category": "forms",
       "client": true,
-      "pattern": "textbox"
+      "pattern": "textbox",
+      "alternatives": [
+        { "name": "Input", "when": "the value fits on a single line" }
+      ]
     },
     {
       "name": "ThemePicker",

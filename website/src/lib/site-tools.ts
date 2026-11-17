@@ -21,7 +21,7 @@ import {
 } from "rift-ds/tokens/registry";
 import { THEME_IDS, tokenValue, type ThemeMode } from "rift-ds/tokens/values";
 
-import { componentMetadata, keyboardFor } from "rift-ds/components/registry";
+import { alternativesFor, componentMetadata, keyboardFor } from "rift-ds/components/registry";
 import { componentApi, type ComponentApiEntry } from "@/data/component-api.generated";
 import { componentTypes } from "@/data/component-types.generated";
 import { siteSearchSections, type SiteSearchSection } from "@/data/site-search.generated";
@@ -200,6 +200,7 @@ export function lookupComponent(name: string, exportName?: string) {
   // subpath, and how to add it lives on /docs/chat.
   const path = `/components/${entry.slug}`;
   const keyOwner = componentMetadata.find((component) => component.name === entry.name)?.keys;
+  const alternatives = alternativesFor(entry.name).map(({ name, when }) => ({ name, when }));
   const keyboard = keyboardFor(entry.name).map(({ id, part, label, apg, rows }) => ({
     pattern: id,
     ...(part ? { part } : {}),
@@ -223,6 +224,8 @@ export function lookupComponent(name: string, exportName?: string) {
     // prints them: the whole component's pattern, then any a part follows.
     ...(keyboard.length > 0 ? { keyboard } : {}),
     ...(keyOwner ? { keys: { by: keyOwner.by, ...(keyOwner.note ? { note: keyOwner.note } : {}) } } : {}),
+    // The look-alikes, each with the condition that picks it instead.
+    ...(alternatives.length > 0 ? { alternatives } : {}),
     docsUrl: `${SITE_URL}${path}`,
     markdownUrl: `${SITE_URL}${path}.md`,
     schemaUrl: `${SITE_URL}/schema/components/${entry.slug}.json`,
@@ -294,6 +297,7 @@ export function lookupTokens(category?: string, theme?: string, mode?: string) {
   const published = (ids: readonly string[]) => ({
     valuesModule: `${pkg.name}/tokens/values`,
     dtcgUrls: Object.fromEntries(ids.map((id) => [id, dtcgFor(id)])),
+    dtcgIndexUrl: `${SITE_URL}/schema/tokens/index.json`,
     guideUrl: `${SITE_URL}/docs/schemas`,
   });
   // With a theme, the names come back resolved to that theme's literal

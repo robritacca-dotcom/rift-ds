@@ -19,6 +19,11 @@
  * `id`, `label` and `description`; the description reaches the chat corpus
  * and the MCP tools.
  *
+ * A component a reader could mistake for another carries `alternatives`:
+ * each names a registered component and `when` to pick it instead (a
+ * clause completing "Use <label> instead when …"), and every pair is named
+ * from both sides.
+ *
  * Beyond folder parity, this script checks: well-formed metadata
  * (kebab-case unique slugs that never collide with a category id, unique
  * labels, descriptions of at most 160 chars ending in a full stop, a
@@ -251,6 +256,39 @@ for (const c of registry.components) {
   }
   if (c.description && c.description.length > 160) {
     metaErrors.push(`${where}.description is ${c.description.length} chars — keep it under 160`);
+  }
+  // Alternatives: the look-alikes a component names, each with the condition
+  // that picks it. A pair is named from both sides, so a reader landing on
+  // either page finds the other.
+  if (c.alternatives !== undefined) {
+    if (!Array.isArray(c.alternatives) || c.alternatives.length === 0) {
+      metaErrors.push(`${where}.alternatives must be a non-empty list, or absent`);
+    }
+    const seenAlternatives = new Set();
+    for (const alt of Array.isArray(c.alternatives) ? c.alternatives : []) {
+      const other = registry.components.find((candidate) => candidate.name === alt?.name);
+      if (!other) {
+        metaErrors.push(`${where}.alternatives names "${alt?.name}", which is not a registered component`);
+        continue;
+      }
+      if (other.name === c.name) metaErrors.push(`${where}.alternatives names the component itself`);
+      if (seenAlternatives.has(other.name)) metaErrors.push(`${where}.alternatives names ${other.name} twice`);
+      seenAlternatives.add(other.name);
+      if (!(other.alternatives ?? []).some((back) => back?.name === c.name)) {
+        metaErrors.push(
+          `${where}.alternatives names ${other.name}, but ${other.name} does not name ${c.name} back: say on both sides when to pick which`
+        );
+      }
+      const when = alt.when;
+      if (typeof when !== 'string' || when.trim() === '') {
+        metaErrors.push(`${where}.alternatives["${other.name}"].when is missing or empty`);
+      } else if (!/^[a-z]/.test(when) || /[.\s]$/.test(when) || when.includes('—') || when.length > 120) {
+        metaErrors.push(
+          `${where}.alternatives["${other.name}"].when completes "Use ${other.label} instead when …": ` +
+            `start it lower case, end it without a full stop, keep it under 120 chars and free of em dashes`
+        );
+      }
+    }
   }
   if (c.category && !categoryIds.includes(c.category)) {
     metaErrors.push(

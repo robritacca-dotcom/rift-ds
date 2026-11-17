@@ -62,7 +62,7 @@ import { repoRoot } from './component-docgen.mjs';
 import { SITE_URL } from './brand.mjs';
 import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { isEntryScript } from './lib/report.mjs';
-import { keyboardFor, keysOf } from './keyboard-patterns.mjs';
+import { alternativesFor, keyboardFor, keysOf } from './keyboard-patterns.mjs';
 import { sizeOf } from './component-sizes.mjs';
 
 export const schemaDir = join(repoRoot, 'website', 'public', 'schema');
@@ -197,6 +197,15 @@ function componentSchema(entry) {
     ...(keyboardFor(entry.name).length > 0 ? { keyboard: keyboardFor(entry.name) } : {}),
     ...(keysOf(entry.name) ? { keys: schemaKeys(keysOf(entry.name)) } : {}),
     ...(sizeOf(entry.name) !== undefined ? { size: { gzip: sizeOf(entry.name) } } : {}),
+    ...(alternativesFor(entry.name).length > 0
+      ? {
+          alternatives: alternativesFor(entry.name).map(({ name, slug, when }) => ({
+            name,
+            when,
+            schemaUrl: `${SITE_URL}/schema/components/${slug}.json`,
+          })),
+        }
+      : {}),
   };
 }
 

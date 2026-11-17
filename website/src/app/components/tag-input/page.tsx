@@ -32,7 +32,7 @@ export default function TagInputPage() {
               Multi-value entry held as removable tags
             </p>
             <p className={styles.introBody}>
-              Type a value and press Enter or comma to commit it as a tag. Backspace on an empty draft removes the last tag, each tag has its own remove button, and maxTags caps the list. Use Combobox instead when the values come from a known option list.
+              Type a value and press Enter or comma to commit it as a tag. Backspace on an empty draft removes the last tag, each tag has its own remove button, and maxTags caps the list.
             </p>
           </div>
 

@@ -94,8 +94,7 @@ export default function ComboboxPage() {
               Combobox pairs a text field with a listbox that narrows as you
               type. Reach for it when the option list is long, searchable, or
               loaded from a server, and for anything that needs multiple
-              selections. Dropdown stays the right choice for short, static
-              lists.
+              selections.
             </p>
           </div>
 

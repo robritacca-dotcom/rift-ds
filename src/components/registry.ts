@@ -28,6 +28,11 @@ import keyboard from './keyboard-patterns.json';
  *               (recharts is an optional peer). Held to the actual imports
  *               by scripts/generate-library-barrel.mjs on every build.
  *
+ *   alternatives set where a reader could mistake the component for another:
+ *               each names the other component and the condition that picks
+ *               it instead. Printed on the page, in the markdown contract
+ *               and the schema, and served by the MCP get_component tool.
+ *
  * `docOnlyHelpers` names the internal documentation helpers that are
  * deliberately excluded from the public count.
  *
@@ -64,6 +69,10 @@ export interface ComponentMeta {
    * Who owns the component's keys where no pattern covers them: `component` (keys of its own, held by its own stories, or by the component `see` names), `platform` (the browser or the engine underneath) or `none` (nothing to focus). `note` says what the keys do, as a sentence. Every component names a pattern, has a part that does, or carries this.
    */
   keys?: { by: string; note?: string; see?: string };
+  /**
+   * The components a reader could mistake this one for, each with the condition that picks it instead. `when` completes the sentence "Use <label> instead when …", so it starts lower case and carries no full stop. Every pair is named from both sides.
+   */
+  alternatives?: { name: string; when: string }[];
 }
 
 /** One row of a keyboard pattern: the keys, and what pressing them does. */
@@ -139,6 +148,27 @@ export const keyboardFor = (name: string): ComponentKeyboard[] => {
     ...(component.pattern ? [{ pattern: component.pattern, part: undefined }] : []),
     ...(component.partPatterns ?? []),
   ].map(({ pattern, part }) => ({ id: pattern, ...(part ? { part } : {}), ...keyboardPatterns[pattern] }));
+};
+
+/** One alternative as a page prints it: the other component, where its page is, and when to pick it. */
+export interface ComponentAlternative {
+  /** The other component's exported name */
+  name: string;
+  /** Its display name */
+  label: string;
+  /** Its route segment under /components */
+  slug: string;
+  /** The condition that picks it, completing "Use <label> instead when …" */
+  when: string;
+}
+
+/** The components a reader could mistake `name` for, with the condition that picks each; empty when it names none. */
+export const alternativesFor = (name: string): ComponentAlternative[] => {
+  const component: ComponentMeta | undefined = registry.components.find((c: ComponentMeta) => c.name === name);
+  return (component?.alternatives ?? []).flatMap(({ name: other, when }) => {
+    const target: ComponentMeta | undefined = registry.components.find((c: ComponentMeta) => c.name === other);
+    return target ? [{ name: other, label: target.label, slug: target.slug, when }] : [];
+  });
 };
 
 /** The official public component count. */

@@ -32,7 +32,7 @@ export default function TextareaPage() {
               Multi-line text field for longer content
             </p>
             <p className={styles.introBody}>
-              For descriptions, comments, and messages. Includes an optional character counter and resize handle. Use Input instead when the value fits on a single line.
+              For descriptions, comments, and messages. Includes an optional character counter and resize handle.
             </p>
           </div>
 

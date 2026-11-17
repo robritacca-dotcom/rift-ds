@@ -32,7 +32,7 @@ export default function RadioButtonPage() {
               Choose exactly one option from a small set
             </p>
             <p className={styles.introBody}>
-              Can be used individually or grouped in vertical and horizontal layouts. Use Checkbox instead when users can select more than one, or Dropdown when the list of options is long.
+              Can be used individually or grouped in vertical and horizontal layouts.
             </p>
           </div>
 

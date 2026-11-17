@@ -5,15 +5,17 @@
  * Builds website/public/components/<slug>.md — one markdown page per public
  * component, served beside the live docs page (append .md to a component
  * URL), the chat widget's page under /components included. The content is the prop contract for an agent to read
- * or a visitor to copy: registry metadata, import lines, and the documented
- * props of every export, from the same assembleComponentApi() pass that
+ * or a visitor to copy: registry metadata, import lines, the component's
+ * alternatives, the documented props of every export and its tested keys, from the same assembleComponentApi() pass that
  * feeds Storybook's props tables, the shipped .d.ts and the /api/mcp
  * get_component tool. No hand-written facts live here, so the files cannot
  * drift from the source: validate-generated-files.mjs regenerates in memory
- * and byte-compares on every build. Two consumers point at these files:
- * the "For agents" dialog on component pages
- * (website/src/components/PageLinks/PageAgentDocs.tsx) and the MCP
- * get_component response's markdownUrl.
+ * and byte-compares on every build. These point at the files: the
+ * "For agents" dialog on component pages
+ * (website/src/components/PageLinks/PageAgentDocs.tsx), the plain link
+ * ComponentInstallStrip closes each page with, the page's text/markdown
+ * alternate (componentPageMetadata), the MCP get_component response's
+ * markdownUrl, and each file's own Alternatives links.
  *
  * Deterministic and public-only, like every generated surface: no network,
  * no timestamps (the version stamp is PACKAGE_VERSION, which only moves on
@@ -28,7 +30,7 @@ import { PACKAGE_NAME, PACKAGE_VERSION } from './package-manifest.mjs';
 import { SITE_URL } from './brand.mjs';
 import { chatRegistry, repoRoot } from './component-docgen.mjs';
 import { isEntryScript } from './lib/report.mjs';
-import { keyboardFor, keyLabel, keysOf } from './keyboard-patterns.mjs';
+import { alternativesFor, keyboardFor, keyLabel, keysOf } from './keyboard-patterns.mjs';
 import { sizeOf } from './component-sizes.mjs';
 
 /** The component pages' folder, the chat widget's page included. */
@@ -202,6 +204,24 @@ export function buildComponentMarkdown(entry, origin) {
     lines.push(
       '',
       `Types from other packages: ${external.map(([name, from]) => `\`${name}\` (${from})`).join(', ')}.`
+    );
+  }
+
+  // The look-alikes, each with the condition that picks it: the same
+  // sentences the component's page prints. They sit above the props, since
+  // "is this the right component" comes before "how do I use it".
+  const alternatives = alternativesFor(entry.name);
+  if (alternatives.length > 0) {
+    const firstSection = lines.findIndex((line) => line.startsWith('## '));
+    lines.splice(
+      firstSection === -1 ? lines.length : firstSection,
+      0,
+      '## Alternatives',
+      '',
+      ...alternatives.map(
+        (alt) => `- Use [${alt.label}](${origin}/components/${alt.slug}.md) instead when ${alt.when}.`
+      ),
+      ''
     );
   }
 

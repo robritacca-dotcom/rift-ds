@@ -31,6 +31,19 @@ export function keysOf(name) {
 }
 
 /**
+ * The components a reader could mistake `name` for, as `{ name, label,
+ * slug, when }`: the registry's `alternatives`, each joined to the other
+ * component's label and slug. Empty when it names none.
+ */
+export function alternativesFor(name) {
+  const component = registry.components.find((entry) => entry.name === name);
+  return (component?.alternatives ?? []).flatMap(({ name: other, when }) => {
+    const target = registry.components.find((entry) => entry.name === other);
+    return target ? [{ name: other, label: target.label, slug: target.slug, when }] : [];
+  });
+}
+
+/**
  * Every pattern a component is tested against, as `{ pattern, part?, label,
  * apg, rows }`: the whole component's first, then its parts'. Empty when
  * it names none.

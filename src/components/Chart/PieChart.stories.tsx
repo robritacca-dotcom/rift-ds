@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import { PieChart } from './PieChart';
 
 const browserData = [
@@ -49,6 +50,24 @@ export const Donut: Story = {
   args: {
     innerRadius: 80,
     title: 'Browser Share — Donut',
+  },
+};
+
+/** A short donut: the default radius is a share of the room the plot has, so the ring fits its height and stays clear of the legend. A percentage hole scales with it. */
+export const ShortDonut: Story = {
+  args: {
+    height: 240,
+    innerRadius: '60%',
+    outerRadius: undefined,
+    title: 'Browser share',
+  },
+  play: async ({ canvasElement }) => {
+    await waitFor(() => expect(canvasElement.querySelector('.recharts-pie')).not.toBeNull());
+    const pie = canvasElement.querySelector('.recharts-pie')!.getBoundingClientRect();
+    const legend = canvasElement.querySelector('.recharts-legend-wrapper')!.getBoundingClientRect();
+    const surface = canvasElement.querySelector('.recharts-wrapper > svg')!.getBoundingClientRect();
+    await expect(pie.top).toBeGreaterThanOrEqual(surface.top - 1);
+    await expect(pie.bottom).toBeLessThanOrEqual(legend.top + 1);
   },
 };
 

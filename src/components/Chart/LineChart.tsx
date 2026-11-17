@@ -65,6 +65,8 @@ type LineChartOwnProps = {
   summaryItems?: ChartSummaryItem[];
   /** Chart area height in pixels */
   height?: number;
+  /** Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale. */
+  yAxisFormatter?: (value: number) => string;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
@@ -115,6 +117,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  yAxisFormatter,
   locale: localeProp,
   ...rest
 }, ref) => {
@@ -190,7 +193,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(({
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tickFormatter={formatTick}
+              tickFormatter={yAxisFormatter ?? formatTick}
               tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}

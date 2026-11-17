@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/checkbox
 - Schema: https://rift-ds.com/schema/components/checkbox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Radio button](https://rift-ds.com/components/radio-button.md) instead when only one option can be chosen.
+
 ## Checkbox props
 
 | Prop | Type | Required | Default | Description |

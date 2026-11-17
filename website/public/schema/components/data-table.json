@@ -1165,5 +1165,12 @@
   },
   "size": {
     "gzip": 70421
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Table",
+      "when": "the rows are static and only need laying out",
+      "schemaUrl": "https://rift-ds.com/schema/components/table.json"
+    }
+  ]
 }

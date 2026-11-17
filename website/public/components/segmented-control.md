@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/segmented-control
 - Schema: https://rift-ds.com/schema/components/segmented-control.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Tabs](https://rift-ds.com/components/tabs.md) instead when the options are distinct content sections with their own panels.
+
 ## SegmentedControl props
 
 | Prop | Type | Required | Default | Description |

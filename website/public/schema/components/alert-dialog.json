@@ -143,5 +143,12 @@
   ],
   "size": {
     "gzip": 3838
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Dialog",
+      "when": "the task needs more than a confirm or a cancel",
+      "schemaUrl": "https://rift-ds.com/schema/components/dialog.json"
+    }
+  ]
 }

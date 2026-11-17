@@ -154,5 +154,12 @@
   ],
   "size": {
     "gzip": 1226
-  }
+  },
+  "alternatives": [
+    {
+      "name": "SegmentedControl",
+      "when": "the options switch a view mode or a filter",
+      "schemaUrl": "https://rift-ds.com/schema/components/segmented-control.json"
+    }
+  ]
 }

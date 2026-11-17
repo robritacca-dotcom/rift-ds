@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/progress-bar
 - Schema: https://rift-ds.com/schema/components/progress-bar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Spinner](https://rift-ds.com/components/spinner.md) instead when the wait is indeterminate.
+
 ## ProgressBar props
 
 | Prop | Type | Required | Default | Description |

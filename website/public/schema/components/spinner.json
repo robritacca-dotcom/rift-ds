@@ -78,5 +78,12 @@
   },
   "size": {
     "gzip": 426
-  }
+  },
+  "alternatives": [
+    {
+      "name": "ProgressBar",
+      "when": "the completion fraction is known",
+      "schemaUrl": "https://rift-ds.com/schema/components/progress-bar.json"
+    }
+  ]
 }

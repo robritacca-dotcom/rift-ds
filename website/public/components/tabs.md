@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/tabs
 - Schema: https://rift-ds.com/schema/components/tabs.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Segmented control](https://rift-ds.com/components/segmented-control.md) instead when the options switch a view mode or a filter.
+
 ## Tabs props
 
 | Prop | Type | Required | Default | Description |

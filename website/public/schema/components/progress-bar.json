@@ -75,5 +75,12 @@
   },
   "size": {
     "gzip": 715
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Spinner",
+      "when": "the wait is indeterminate",
+      "schemaUrl": "https://rift-ds.com/schema/components/spinner.json"
+    }
+  ]
 }

@@ -12,6 +12,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/dropdown-menu
 - Schema: https://rift-ds.com/schema/components/dropdown-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Context menu](https://rift-ds.com/components/context-menu.md) instead when the menu opens on the content itself.
+- Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when the choice is a form value.
+
 ## DropdownMenu props
 
 | Prop | Type | Required | Default | Description |

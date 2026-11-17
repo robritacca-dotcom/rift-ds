@@ -12,6 +12,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/dropdown
 - Schema: https://rift-ds.com/schema/components/dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Combobox](https://rift-ds.com/components/combobox.md) instead when the option list is long, searchable or server-backed.
+- Use [Dropdown menu](https://rift-ds.com/components/dropdown-menu.md) instead when the options are actions, not a form value.
+- Use [Radio button](https://rift-ds.com/components/radio-button.md) instead when the options are few enough to show all at once.
+- Use [Rich dropdown](https://rift-ds.com/components/rich-dropdown.md) instead when the whole look of each choice is the point, such as a theme preset or a brand kit.
+
 ## Dropdown props
 
 | Prop | Type | Required | Default | Description |

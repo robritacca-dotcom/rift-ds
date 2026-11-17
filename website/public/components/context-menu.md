@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/context-menu
 - Schema: https://rift-ds.com/schema/components/context-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Dropdown menu](https://rift-ds.com/components/dropdown-menu.md) instead when the menu opens from a visible trigger.
+
 ## ContextMenu props
 
 | Prop | Type | Required | Default | Description |

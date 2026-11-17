@@ -208,5 +208,12 @@
   ],
   "size": {
     "gzip": 5988
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Tabs",
+      "when": "the options are distinct content sections with their own panels",
+      "schemaUrl": "https://rift-ds.com/schema/components/tabs.json"
+    }
+  ]
 }

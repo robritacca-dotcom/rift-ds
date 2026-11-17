@@ -127,5 +127,12 @@
   ],
   "size": {
     "gzip": 1100
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Input",
+      "when": "the value fits on a single line",
+      "schemaUrl": "https://rift-ds.com/schema/components/input.json"
+    }
+  ]
 }

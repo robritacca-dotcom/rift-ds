@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/textarea
 - Schema: https://rift-ds.com/schema/components/textarea.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Input](https://rift-ds.com/components/input.md) instead when the value fits on a single line.
+
 ## Textarea props
 
 | Prop | Type | Required | Default | Description |

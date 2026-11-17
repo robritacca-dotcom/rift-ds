@@ -325,5 +325,12 @@
   ],
   "size": {
     "gzip": 1755
-  }
+  },
+  "alternatives": [
+    {
+      "name": "RadioButton",
+      "when": "only one option can be chosen",
+      "schemaUrl": "https://rift-ds.com/schema/components/radio-button.json"
+    }
+  ]
 }

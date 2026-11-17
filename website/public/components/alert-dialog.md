@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/alert-dialog
 - Schema: https://rift-ds.com/schema/components/alert-dialog.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Dialog](https://rift-ds.com/components/dialog.md) instead when the task needs more than a confirm or a cancel.
+
 ## AlertDialog props
 
 | Prop | Type | Required | Default | Description |

@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/table
 - Schema: https://rift-ds.com/schema/components/table.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Data table](https://rift-ds.com/components/data-table.md) instead when the rows need sorting, filtering, editing or loading from a server.
+
 ## Table props
 
 | Prop | Type | Required | Default | Description |

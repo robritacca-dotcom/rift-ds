@@ -169,5 +169,12 @@
   ],
   "size": {
     "gzip": 7607
-  }
+  },
+  "alternatives": [
+    {
+      "name": "DropdownMenu",
+      "when": "the menu opens from a visible trigger",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown-menu.json"
+    }
+  ]
 }

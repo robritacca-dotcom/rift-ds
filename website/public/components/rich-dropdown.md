@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/rich-dropdown
 - Schema: https://rift-ds.com/schema/components/rich-dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when the label alone is enough to choose by.
+
 ## RichDropdown props
 
 | Prop | Type | Required | Default | Description |

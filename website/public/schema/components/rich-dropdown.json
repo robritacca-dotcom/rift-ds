@@ -152,5 +152,12 @@
   ],
   "size": {
     "gzip": 5759
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Dropdown",
+      "when": "the label alone is enough to choose by",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown.json"
+    }
+  ]
 }

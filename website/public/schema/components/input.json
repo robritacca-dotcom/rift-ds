@@ -184,5 +184,12 @@
   ],
   "size": {
     "gzip": 5127
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Textarea",
+      "when": "the content needs more than one line",
+      "schemaUrl": "https://rift-ds.com/schema/components/textarea.json"
+    }
+  ]
 }

@@ -136,5 +136,12 @@
   ],
   "size": {
     "gzip": 5325
-  }
+  },
+  "alternatives": [
+    {
+      "name": "AlertDialog",
+      "when": "the task is a simple confirm-or-cancel prompt",
+      "schemaUrl": "https://rift-ds.com/schema/components/alert-dialog.json"
+    }
+  ]
 }

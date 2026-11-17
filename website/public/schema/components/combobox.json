@@ -268,5 +268,17 @@
   ],
   "size": {
     "gzip": 6509
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Dropdown",
+      "when": "the option list is short and static",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown.json"
+    },
+    {
+      "name": "TagInput",
+      "when": "the entries are free text",
+      "schemaUrl": "https://rift-ds.com/schema/components/tag-input.json"
+    }
+  ]
 }

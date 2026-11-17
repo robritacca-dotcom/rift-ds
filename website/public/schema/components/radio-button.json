@@ -264,5 +264,17 @@
   ],
   "size": {
     "gzip": 1764
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Checkbox",
+      "when": "users can select more than one",
+      "schemaUrl": "https://rift-ds.com/schema/components/checkbox.json"
+    },
+    {
+      "name": "Dropdown",
+      "when": "the list of options is long",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown.json"
+    }
+  ]
 }

@@ -120,5 +120,12 @@
   ],
   "size": {
     "gzip": 1459
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Combobox",
+      "when": "the values come from a known option list",
+      "schemaUrl": "https://rift-ds.com/schema/components/combobox.json"
+    }
+  ]
 }

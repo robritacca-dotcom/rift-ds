@@ -235,5 +235,27 @@
   ],
   "size": {
     "gzip": 4845
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Combobox",
+      "when": "the option list is long, searchable or server-backed",
+      "schemaUrl": "https://rift-ds.com/schema/components/combobox.json"
+    },
+    {
+      "name": "DropdownMenu",
+      "when": "the options are actions, not a form value",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown-menu.json"
+    },
+    {
+      "name": "RadioButton",
+      "when": "the options are few enough to show all at once",
+      "schemaUrl": "https://rift-ds.com/schema/components/radio-button.json"
+    },
+    {
+      "name": "RichDropdown",
+      "when": "the whole look of each choice is the point, such as a theme preset or a brand kit",
+      "schemaUrl": "https://rift-ds.com/schema/components/rich-dropdown.json"
+    }
+  ]
 }

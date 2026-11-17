@@ -12,6 +12,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/combobox
 - Schema: https://rift-ds.com/schema/components/combobox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when the option list is short and static.
+- Use [Tag input](https://rift-ds.com/components/tag-input.md) instead when the entries are free text.
+
 ## Combobox props
 
 | Prop | Type | Required | Default | Description |

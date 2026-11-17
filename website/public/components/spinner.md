@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/spinner
 - Schema: https://rift-ds.com/schema/components/spinner.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Progress bar](https://rift-ds.com/components/progress-bar.md) instead when the completion fraction is known.
+
 ## Spinner props
 
 | Prop | Type | Required | Default | Description |

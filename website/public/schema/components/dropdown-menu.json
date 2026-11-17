@@ -196,5 +196,17 @@
   ],
   "size": {
     "gzip": 8956
-  }
+  },
+  "alternatives": [
+    {
+      "name": "ContextMenu",
+      "when": "the menu opens on the content itself",
+      "schemaUrl": "https://rift-ds.com/schema/components/context-menu.json"
+    },
+    {
+      "name": "Dropdown",
+      "when": "the choice is a form value",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown.json"
+    }
+  ]
 }

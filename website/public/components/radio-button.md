@@ -12,6 +12,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/radio-button
 - Schema: https://rift-ds.com/schema/components/radio-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Checkbox](https://rift-ds.com/components/checkbox.md) instead when users can select more than one.
+- Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when the list of options is long.
+
 ## RadioButton props
 
 | Prop | Type | Required | Default | Description |

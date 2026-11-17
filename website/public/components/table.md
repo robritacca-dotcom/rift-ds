@@ -15,7 +15,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 ## Alternatives
 
 - Use [Data table](https://rift-ds.com/components/data-table.md) instead when the rows need sorting, filtering, editing or loading from a server.
-- Use [Statement](https://rift-ds.com/components/statement.md) instead when the rows are sections of amounts with totals and subtotals.
 
 ## Table props
 

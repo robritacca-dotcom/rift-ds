@@ -958,12 +958,6 @@
       "description": "Headline metrics with labels and trend deltas."
     },
     {
-      "name": "statement",
-      "type": "registry:ui",
-      "title": "Statement",
-      "description": "A financial statement: titled sections of amounts with totals, and subtotals down to a bottom line, a column per period."
-    },
-    {
       "name": "status-dot",
       "type": "registry:ui",
       "title": "Status dot",

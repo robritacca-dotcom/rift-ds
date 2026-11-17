@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (37)
+## Data display (36)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -754,14 +754,6 @@ Headline metrics with labels and trend deltas.
 - Import: `import { Stat } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/stat.md
-
-### Statement
-
-A financial statement: titled sections of amounts with totals, and subtotals down to a bottom line, a column per period.
-
-- Import: `import { Statement } from 'rift-ds';`
-- Rendering: server-renderable (no 'use client')
-- Contract: https://rift-ds.com/components/statement.md
 
 ### Table
 

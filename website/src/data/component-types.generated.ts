@@ -2465,37 +2465,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
-  "statement": {
-    "types": {
-      "DecimalString": {
-        "kind": "type",
-        "definition": "type DecimalString = string;",
-        "description": "A decimal amount written with an optional leading minus, digits and an optional `.` fraction: `\"1234.50\"`, `\"-0.07\"`."
-      },
-      "StatementLine": {
-        "kind": "interface",
-        "definition": "interface StatementLine {\n  /** A stable id for the line. */\n  id: string;\n  /** What the amount is (\"Subscriptions\", \"Rent\"). */\n  label: string;\n  /** The amount in each period, as a decimal string (`\"1234.50\"`), in the order of `periods`. */\n  amounts: DecimalString[];\n}",
-        "description": "One line of a section: what it is, and its amount in each period.",
-        "refs": [
-          "DecimalString"
-        ]
-      },
-      "StatementSection": {
-        "kind": "interface",
-        "definition": "interface StatementSection {\n  /** Marks the entry as a section. */\n  kind: 'section';\n  /** A stable id for the section. */\n  id: string;\n  /** The section's heading (\"Revenue\", \"Operating expenses\"). */\n  title: string;\n  /** The section's lines. */\n  lines: StatementLine[];\n  /** The label of the section's total row; leave it out to show no total. */\n  totalLabel?: string;\n  /** How the section counts toward the subtotals below it: `1` adds (revenue), `-1` subtracts (costs entered as positive amounts). Defaults to 1. */\n  sign?: 1 | -1;\n}",
-        "description": "A titled group of lines, with an optional total under them.",
-        "refs": [
-          "StatementLine"
-        ]
-      },
-      "StatementSubtotal": {
-        "kind": "interface",
-        "definition": "interface StatementSubtotal {\n  /** Marks the entry as a subtotal. */\n  kind: 'subtotal';\n  /** A stable id for the subtotal. */\n  id: string;\n  /** What the subtotal is (\"Gross profit\", \"Net profit\"). */\n  label: string;\n}",
-        "description": "A running total of every section above it, each counted by its sign: a gross profit, a net profit."
-      }
-    },
-    "externalTypes": {}
-  },
   "stepper": {
     "types": {
       "StepperStep": {

@@ -159,7 +159,6 @@ export * from './components/SplitButton/SplitButton';
 export * from './components/SplitPane/SplitPane';
 export * from './components/Stack/Stack';
 export * from './components/Stat/Stat';
-export * from './components/Statement/Statement';
 export * from './components/StatusDot/StatusDot';
 export * from './components/Stepper/Stepper';
 export * from './components/StreamingText/StreamingText';

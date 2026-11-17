@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.29.0",
   "package": "rift-ds",
-  "count": 190,
+  "count": 189,
   "components": [
     {
       "name": "Accordion",
@@ -1583,16 +1583,6 @@
       "schemaUrl": "https://rift-ds.com/schema/components/stat.json",
       "docsUrl": "https://rift-ds.com/components/stat",
       "markdownUrl": "https://rift-ds.com/components/stat.md"
-    },
-    {
-      "name": "Statement",
-      "label": "Statement",
-      "slug": "statement",
-      "category": "data-display",
-      "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/statement.json",
-      "docsUrl": "https://rift-ds.com/components/statement",
-      "markdownUrl": "https://rift-ds.com/components/statement.md"
     },
     {
       "name": "StatusDot",

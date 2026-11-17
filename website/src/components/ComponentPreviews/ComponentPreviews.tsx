@@ -54,7 +54,6 @@ import { Grid } from "rift-ds/components/Grid/Grid";
 import { Icon } from "rift-ds/components/Icon/Icon";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Checklist } from "rift-ds/components/Checklist/Checklist";
-import { Statement } from "rift-ds/components/Statement/Statement";
 import { Wizard } from "rift-ds/components/Wizard/Wizard";
 import { FormSection } from "rift-ds/components/FormSection/FormSection";
 import { DayTimeline } from "rift-ds/components/DayTimeline/DayTimeline";
@@ -1690,20 +1689,6 @@ const previews: Record<string, () => ReactNode> = {
         items={[
           { id: "a", label: "Invite your team" },
           { id: "b", label: "Publish a page" },
-        ]}
-      />
-    </div>
-  ),
-  "statement": () => (
-    <div style={{ width: "220px" }} aria-hidden="true" inert>
-      <Statement
-        caption="Profit and loss"
-        size="compact"
-        periods={["Q1"]}
-        items={[
-          { kind: "section", id: "r", title: "Revenue", lines: [{ id: "s", label: "Sales", amounts: ["9400"] }] },
-          { kind: "section", id: "c", title: "Costs", sign: -1, lines: [{ id: "h", label: "Hosting", amounts: ["2100"] }] },
-          { kind: "subtotal", id: "n", label: "Net profit" },
         ]}
       />
     </div>

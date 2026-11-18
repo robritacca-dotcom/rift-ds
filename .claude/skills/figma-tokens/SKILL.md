@@ -77,4 +77,4 @@ Run the step 2 read again and diff it against the sources: it must come back emp
 
 ### 7. Report
 
-What was added, changed, renamed and removed per collection, the components rebound, the pages refreshed, anything left for the owner (a removal awaiting a yes, a theme past the cap), and the screenshots. No repo file changes, unless a rebuilt frame moved a node in `website/src/data/figma-nodes.json`, which then gets updated and checked with `node scripts/validate-figma-nodes.mjs`. Nothing is committed.
+What was added, changed, renamed and removed per collection, the components rebound, the pages refreshed, anything left for the owner (a removal awaiting a yes, a theme past the cap), and the screenshots. No repo file changes, unless a rebuilt frame moved a node in `website/src/data/figma-nodes.json`, which then gets updated and checked with `node scripts/validate-figma-nodes.mjs`. Nothing is committed. Then offer the `figma-release-notes` skill to log the change on the kit's Release notes page; the owner decides whether and when.

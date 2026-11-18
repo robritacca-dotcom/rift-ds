@@ -15,7 +15,7 @@ Build one library component into the Rift DS Figma kit and wire its frame back t
 
 ## When invoked
 
-Use when asked to add a component to the Figma kit, build the Figma side of a component, or draw a component in the kit. It is the design half of adding a component, kept separate from the `new-component` skill so the two can run in different sessions. A component in code with no frame fails `scripts/validate-figma-nodes.mjs`, which runs before every root build, Storybook and `verify`, so until this skill runs for it nothing ships.
+Use when asked to add a component to the Figma kit, build the Figma side of a component, or draw a component in the kit. It is the design half of adding a component, kept separate from the `new-component` skill so the two can run in different sessions. It is optional and the owner decides when: a component in code with no frame only draws a nudge from `scripts/validate-figma-nodes.mjs`, which never fails a build or a ship, and its page links the Figma community page until the frame is mapped.
 
 If the component does not exist in `src/components/registry.json` (or `src/chat/registry.json` for a chat widget) yet, stop: the code comes first, through `new-component`. Figma never leads the code.
 
@@ -90,4 +90,4 @@ Add the component's slug to `components` in `website/src/data/figma-nodes.json`,
 
 ### 6. Report
 
-The page, the set's variant properties and the sticker sheet, with a screenshot. Name any prop the kit could not express and any token you had to add. Nothing is committed: the map change waits for the owner, like any other.
+The page, the set's variant properties and the sticker sheet, with a screenshot. Name any prop the kit could not express and any token you had to add. Nothing is committed: the map change waits for the owner, like any other. Then offer the `figma-release-notes` skill to log the change on the kit's Release notes page; the owner decides whether and when.

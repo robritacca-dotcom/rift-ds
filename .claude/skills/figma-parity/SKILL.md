@@ -63,4 +63,4 @@ If fixing Figma would mean changing the code (a prop the code should have, a tok
 
 ### 5. Re-check and report
 
-Run the step 2 inventory again and diff it once more: the Missing, Drifted and Convention buckets should be empty. Report what was fixed per bucket, what is left in Figma only, any questions about the code, and the map changes. Nothing is committed.
+Run the step 2 inventory again and diff it once more: the Missing, Drifted and Convention buckets should be empty. Report what was fixed per bucket, what is left in Figma only, any questions about the code, and the map changes. Nothing is committed. Then offer the `figma-release-notes` skill to log the change on the kit's Release notes page; the owner decides whether and when.

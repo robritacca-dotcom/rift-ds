@@ -1,5 +1,5 @@
 {
-  "$comment": "Where each docs page lives in the Rift DS Figma kit: a page route or component slug mapped to the node id of its frame, appended to FIGMA_FILE_URL in scripts/brand.mjs. Read by website/src/data/figma-nodes.ts and held to the component registry and the page folders by scripts/validate-figma-nodes.mjs. A page with no entry links the Figma community page (FIGMA_URL).",
+  "$comment": "Where each docs page lives in the Rift DS Figma kit: a page route or component slug mapped to the node id of its frame, appended to FIGMA_FILE_URL in scripts/brand.mjs. Read by website/src/data/figma-nodes.ts and checked against the component registry and the page folders by scripts/validate-figma-nodes.mjs, as advice that never fails a build. A page with no entry links the Figma community page (FIGMA_URL).",
   "components": {
     "accordion": "88-96",
     "action-card": "104-152",

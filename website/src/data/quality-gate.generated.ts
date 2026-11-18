@@ -213,7 +213,7 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       },
       {
         "name": "validate-figma-nodes",
-        "text": "Every component has its frame in the Figma kit's map, and every mapped page exists."
+        "text": "Advisory, never blocks: notes components with no frame in the Figma kit's map yet, and mapped pages that no longer exist."
       },
       {
         "name": "validate-package-exports",

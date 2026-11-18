@@ -28,7 +28,8 @@
 import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
-import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
+import { Icon } from "rift-ds/components/Icon/Icon";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import {
   DataTable,
@@ -483,18 +484,15 @@ export default function Analytics() {
           at the lower left, where no city's card opens. */}
       <div className={`${styles.stage} ${appFrame ? styles.stageApp : ""}`}>
         {!appFrame && (
-          <header className={styles.pageHead}>
-            <div className={styles.pageName}>
-              <Breadcrumb
-                items={[
-                  { label: productName, href: "#" },
-                  { label: "All sites", href: "#" },
-                  { label: "Realtime" },
-                ]}
-              />
-              <h1 className={styles.title}>Realtime</h1>
-            </div>
-          </header>
+          <PageHeader
+            className={styles.pageName}
+            breadcrumb={[
+              { label: productName, href: "#" },
+              { label: "All sites", href: "#" },
+              { label: "Realtime" },
+            ]}
+            title="Realtime"
+          />
         )}
 
         {!appFrame && (
@@ -544,9 +542,7 @@ export default function Analytics() {
             <ul className={styles.statList}>
               {OVERVIEW.map((stat) => (
                 <li key={stat.label} className={styles.statRow}>
-                  <span className={styles.statIcon} aria-hidden="true">
-                    <span className="material-symbols-rounded">{stat.icon}</span>
-                  </span>
+                  <Icon name={stat.icon} size="500" tile />
                   <Stat
                     value={stat.value}
                     label={stat.label}

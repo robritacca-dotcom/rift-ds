@@ -44,6 +44,7 @@
 
 import React from "react";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
+import { Icon } from "rift-ds/components/Icon/Icon";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { BentoTile } from "rift-ds/components/BentoTile/BentoTile";
 import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
@@ -284,14 +285,6 @@ const FOOTER = [
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
-function Icon({ name, className }: { name: string; className?: string }) {
-  return (
-    <span className={`material-symbols-rounded ${styles.icon} ${className ?? ""}`} aria-hidden="true">
-      {name}
-    </span>
-  );
-}
-
 const CONVERSION_TREND = [61, 62, 61, 63, 64, 63, 65, 66, 66, 68, 67, 69, 70, 71, 70, 72, 73, 74];
 const REVENUE_TREND = [280, 292, 301, 309, 322, 330, 346, 355, 371, 384, 398, 413];
 
@@ -521,7 +514,7 @@ function ProductDetail({ item }: { item: Product }) {
         <ul className={styles.points}>
           {item.points.map((p) => (
             <li key={p}>
-              <Icon name="check_circle" className={styles.pointIcon} />
+              <Icon name="check_circle" size="500" tone="inherit" className={styles.pointIcon} />
               {p}
             </li>
           ))}
@@ -546,7 +539,7 @@ function ProductDetail({ item }: { item: Product }) {
       <ul className={styles.features}>
         {item.features.map((f) => (
           <li key={f.title}>
-            <Icon name={f.icon} className={styles.featureIcon} />
+            <Icon name={f.icon} size="600" tone="inherit" className={styles.featureIcon} />
             <strong>{f.title}</strong>
             <span>{f.body}</span>
           </li>
@@ -563,7 +556,7 @@ function Checkout() {
       <div className={styles.checkoutHead}>
         <span className={styles.checkoutMerchant}>
           <span className={styles.merchantMark} aria-hidden="true">
-            <Icon name="local_cafe" />
+            <Icon name="local_cafe" size="500" tone="inherit" />
           </span>
           Ember Roasters
         </span>
@@ -891,7 +884,7 @@ export default function LandingPage() {
             <ul className={styles.points}>
               {DEV_POINTS.map((p) => (
                 <li key={p}>
-                  <Icon name="check_circle" className={styles.pointIcon} />
+                  <Icon name="check_circle" size="500" tone="inherit" className={styles.pointIcon} />
                   {p}
                 </li>
               ))}

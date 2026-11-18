@@ -18,8 +18,9 @@
 
 import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
+import { Icon } from "rift-ds/components/Icon/Icon";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
-import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import {
@@ -361,9 +362,7 @@ export default function MarketingDashboard() {
       options: Object.keys(OBJECTIVE_ICON).map((value) => ({ value, label: value })),
       render: (row: DataTableRow) => (
         <span className={styles.objectiveCell}>
-          <span className="material-symbols-rounded" aria-hidden="true">
-            {OBJECTIVE_ICON[String(row.values.objective)]}
-          </span>
+          <Icon name={OBJECTIVE_ICON[String(row.values.objective)]} size="500" tone="inherit" />
           {row.values.objective}
         </span>
       ),
@@ -402,6 +401,24 @@ export default function MarketingDashboard() {
       spend: c.spend,
     },
   }));
+
+  const headActions = (
+    <>
+      <Button
+        variant="secondary"
+        tone="neutral"
+        size="compact"
+        label="Filters"
+        iconLeft="filter_list"
+      />
+      <Button
+        variant="primary"
+        size="compact"
+        label="New campaign"
+        iconLeft="add"
+      />
+    </>
+  );
 
   return (
     <TemplateShell
@@ -480,43 +497,28 @@ export default function MarketingDashboard() {
         </StickyTopBar>
         </>
         )}
-        <header className={styles.pageHead}>
-          {!appFrame && (
-          <div>
-            <Breadcrumb
-              items={[
-                { label: productName, href: "#" },
-                { label: "Team space", href: "#" },
-                { label: "Marketing" },
-              ]}
-            />
-            <h1 className={styles.title}>Marketing</h1>
-          </div>
-          )}
-          <div className={styles.headActions}>
-            <Button
-              variant="secondary"
-              tone="neutral"
-              size="compact"
-              label="Filters"
-              iconLeft="filter_list"
-            />
-            <Button
-              variant="primary"
-              size="compact"
-              label="New campaign"
-              iconLeft="add"
-            />
-          </div>
-        </header>
+        {/* In the app frame the frame names the page, so only the actions stay. */}
+        {appFrame ? (
+          <header className={styles.pageHead}>
+            <div className={styles.headActions}>{headActions}</div>
+          </header>
+        ) : (
+          <PageHeader
+            breadcrumb={[
+              { label: productName, href: "#" },
+              { label: "Team space", href: "#" },
+              { label: "Marketing" },
+            ]}
+            title="Marketing"
+            actions={headActions}
+          />
+        )}
 
         <div className={styles.kpiGrid}>
           {KPIS.map((kpi) => (
             <div key={kpi.label} className={styles.kpi}>
-              <span className={styles.kpiIcon} aria-hidden="true">
-                <span className="material-symbols-rounded">{kpi.icon}</span>
-              </span>
               <Stat
+                icon={kpi.icon}
                 value={kpi.value}
                 label={kpi.label}
                 delta={kpi.delta}
@@ -626,12 +628,7 @@ export default function MarketingDashboard() {
                   <div key={channel.name} className={styles.channelRow}>
                     <div className={styles.channelMeta}>
                       <span className={styles.channelName}>
-                        <span
-                          className={`material-symbols-rounded ${styles.channelGlyph}`}
-                          aria-hidden="true"
-                        >
-                          {channel.icon}
-                        </span>
+                        <Icon name={channel.icon} size="500" tone="inherit" className={styles.channelGlyph} />
                         {channel.name}
                       </span>
                       <span className={styles.channelPct}>{channel.pct}%</span>

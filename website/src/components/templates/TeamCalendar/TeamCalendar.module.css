@@ -116,12 +116,6 @@
   color: var(--color-text-tertiary);
 }
 
-.todoList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-200);
-}
-
 /* ------------------------------------------------------------ day view */
 
 /* The selected date leads its section the way a stat leads a tile: the big

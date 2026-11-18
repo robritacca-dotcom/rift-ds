@@ -70,16 +70,6 @@
 
 /* The mock assistant panel lives in the shared TemplateAssistant module. */
 
-.title {
-  margin: var(--gap-100) 0 0;
-  font-family: var(--font-heading-1-family);
-  font-size: var(--font-heading-1-size);
-  font-weight: var(--font-heading-1-weight);
-  line-height: var(--font-heading-1-line-height);
-  letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-heading);
-}
-
 .headActions {
   display: flex;
   align-items: center;
@@ -149,18 +139,6 @@
   gap: var(--gap-300);
 }
 
-.kpiIcon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-icon-bg);
-  color: var(--color-text-primary);
-  --icon-size: var(--icon-size-500);
-}
-
 /* ------------------------------------------------------------ mid row */
 
 .midGrid {
@@ -228,7 +206,6 @@
 
 .channelGlyph {
   color: var(--color-text-secondary);
-  --icon-size: var(--icon-size-500);
 }
 
 /* --------------------------------------------------------------- table */
@@ -263,7 +240,6 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-200);
-  --icon-size: var(--icon-size-500);
 }
 
 .campaignText {

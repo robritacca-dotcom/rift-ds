@@ -59,16 +59,6 @@
   flex-wrap: wrap;
 }
 
-.title {
-  margin: var(--gap-100) 0 0;
-  font-family: var(--font-heading-1-family);
-  font-size: var(--font-heading-1-size);
-  font-weight: var(--font-heading-1-weight);
-  line-height: var(--font-heading-1-line-height);
-  letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-heading);
-}
-
 .headActions {
   display: flex;
   align-items: center;
@@ -94,35 +84,6 @@
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
   border-radius: var(--radius-600);
-}
-
-/* The card's top row: its icon, and the period it reports at the far end. */
-.kpiHead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-200);
-  align-self: stretch;
-}
-
-.kpiPeriod {
-  font-family: var(--font-caption-family);
-  font-size: var(--font-caption-size);
-  font-weight: var(--font-caption-weight);
-  line-height: var(--font-caption-line-height);
-  color: var(--color-text-tertiary);
-}
-
-.kpiIcon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-icon-bg);
-  color: var(--color-text-primary);
-  --icon-size: var(--icon-size-500);
 }
 
 /* The band reflows with its column, not the window: a docked chat or an

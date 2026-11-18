@@ -22,7 +22,7 @@ import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Button } from "rift-ds/components/Button/Button";
-import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
+import { Checklist } from "rift-ds/components/Checklist/Checklist";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Divider } from "rift-ds/components/Divider/Divider";
 import {
@@ -309,21 +309,21 @@ export default function TeamCalendar() {
               {TODO_GROUPS.map((group) => (
                 <div key={group.label} className={styles.group}>
                   <span className={styles.groupLabel}>{group.label}</span>
-                  <div className={styles.todoList}>
-                    {group.items.map((todo) => (
-                      <Checkbox
-                        key={todo.id}
-                        label={todo.label}
-                        checked={Boolean(done[todo.id])}
-                        onCheckedChange={(checked) =>
-                          setDone((current) => ({
-                            ...current,
-                            [todo.id]: checked,
-                          }))
-                        }
-                      />
-                    ))}
-                  </div>
+                  {/* The rail's header counts both groups, so each list leaves its own progress off. */}
+                  <Checklist
+                    size="compact"
+                    showProgress={false}
+                    aria-label={group.label}
+                    items={group.items}
+                    values={group.items.filter((todo) => done[todo.id]).map((todo) => todo.id)}
+                    onValuesChange={(values) =>
+                      setDone((current) => {
+                        const next = { ...current };
+                        for (const todo of group.items) next[todo.id] = values.includes(todo.id);
+                        return next;
+                      })
+                    }
+                  />
                 </div>
               ))}
 

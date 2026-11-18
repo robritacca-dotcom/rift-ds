@@ -50,7 +50,9 @@
   justify-content: space-between;
   gap: var(--gap-200);
   align-self: stretch;
-  margin-block-end: var(--gap-200);
+  /* The head sits --gap-300 above the value: the stat's own row gap
+     (--gap-050) plus this margin. */
+  margin-block-end: calc(var(--gap-300) - var(--gap-050));
 }
 
 /* A node passed as the icon sits where Icon's tile would. */
@@ -137,6 +139,22 @@
   row-gap: var(--gap-050);
 }
 
+/* A head and the extras run the grid's full width, above and below. */
+.ds-stat--delta-inline.ds-stat--headed {
+  grid-template-areas:
+    'head head'
+    'value delta'
+    'label label';
+}
+
+.ds-stat--delta-inline .ds-stat__head {
+  grid-area: head;
+}
+
+.ds-stat--delta-inline .ds-stat__extra {
+  grid-column: 1 / -1;
+}
+
 .ds-stat--delta-inline .ds-stat__value {
   grid-area: value;
 }
@@ -165,6 +183,11 @@
   width: 100%;
   min-width: 0;
   container: ds-stat / inline-size;
+}
+
+/* The auto root is a block, with no row gap: the margin is the whole space. */
+.ds-stat--delta-auto .ds-stat__head {
+  margin-block-end: var(--gap-300);
 }
 
 .ds-stat__body {

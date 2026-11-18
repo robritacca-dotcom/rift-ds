@@ -12,7 +12,7 @@
   container-type: inline-size;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-300);
+  gap: var(--gap-100);
   min-width: 0;
 }
 

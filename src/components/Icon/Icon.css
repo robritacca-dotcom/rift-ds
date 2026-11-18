@@ -47,3 +47,9 @@
   border-radius: var(--radius-pill);
   background-color: var(--color-icon-bg);
 }
+
+/* On the tile's fill the default glyph takes the primary text colour, the
+   mark's established ink, so it holds its weight against the disc. */
+.ds-icon--tile.ds-icon--default {
+  color: var(--color-text-primary);
+}

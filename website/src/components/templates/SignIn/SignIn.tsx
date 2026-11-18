@@ -50,6 +50,7 @@
 
 import React from "react";
 import { Button } from "rift-ds/components/Button/Button";
+import { Icon } from "rift-ds/components/Icon/Icon";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { Divider } from "rift-ds/components/Divider/Divider";
 import { Input } from "rift-ds/components/Input/Input";
@@ -168,12 +169,7 @@ export default function SignIn() {
         <div className={styles.formWell}>
           {signedIn ? (
             <section className={styles.confirmation} aria-live="polite">
-              <span
-                className={`material-symbols-rounded ${styles.confirmationIcon}`}
-                aria-hidden="true"
-              >
-                check_circle
-              </span>
+              <Icon name="check_circle" size="800" tone="inherit" className={styles.confirmationIcon} />
               <h1 className={styles.confirmationTitle}>You&rsquo;re in</h1>
               <p className={styles.subhead}>
                 {signedIn.kind === "email"

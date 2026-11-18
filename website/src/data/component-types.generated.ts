@@ -597,6 +597,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "checklist": {
+    "types": {
+      "ChecklistItem": {
+        "kind": "interface",
+        "definition": "interface ChecklistItem {\n  /** A stable id, which `values` holds while the task is done. */\n  id: string;\n  /** What the task is (\"Invite your team\"). */\n  label: string;\n  /** A line under the label on what doing it involves. */\n  description?: string;\n  /** Who the task is with: a name, and an image for their avatar. */\n  owner?: { name: string; src?: string };\n  /** A control at the end of the row that does the task or opens it, such as a compact Button or a Link. */\n  action?: React.ReactNode;\n  /** Holds the task as it is: it cannot be ticked or unticked. */\n  disabled?: boolean;\n}",
+        "description": "One task on a checklist."
+      }
+    },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "chip": {
     "types": {},
     "externalTypes": {
@@ -664,7 +676,9 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         ]
       }
     },
-    "externalTypes": {}
+    "externalTypes": {
+      "ReactNode": "react"
+    }
   },
   "command-palette": {
     "types": {
@@ -879,7 +893,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "ColumnFormat": {
         "kind": "interface",
-        "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to none for money and progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
+        "definition": "interface ColumnFormat {\n  /** BCP 47 locale for numbers, money and dates. Defaults to the table's `locale` (else the nearest LocaleProvider's, else `en-US`), never the browser's, so the server and the browser agree. */\n  locale?: string;\n  /** ISO 4217 code for a `currency` column. Defaults to `USD`. */\n  currency?: string;\n  /** Digits after the point for `number`, `currency` and `progress`. Defaults to the currency's own minor units for money (two for USD, none for JPY), none for progress, and up to two for a number. */\n  fractionDigits?: number;\n  /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */\n  date?: 'short' | 'medium' | 'long' | 'relative';\n}",
         "description": "How a typed column formats its values."
       },
       "ColumnType": {
@@ -911,7 +925,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "DataTableColumn": {
         "kind": "interface",
-        "definition": "interface DataTableColumn<R extends DataTableRow = DataTableRow> {\n  /** Unique column identifier, used as the key into each row's values. */\n  key: string;\n  /** Header label displayed in the column header. */\n  header: React.ReactNode;\n  /** Whether clicking this header sorts by the column. */\n  sortable?: boolean;\n  /** Optional column width (CSS value like '200px', '30%', 'auto'). */\n  width?: string;\n  /** Text alignment for cells in this column. `start` and `end` follow the reading direction (a typed column defaults to its type's: `end` for numbers, money and progress, `start` for text); `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** Render the cell for a row; defaults to the row's raw value for this key. */\n  render?: (row: R) => React.ReactNode;\n  /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox (\"Select Ada Lovelace\"). One column per table. */\n  rowHeader?: boolean;\n  /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */\n  minWidth?: number;\n  /** Widest width a resize can reach, in pixels. */\n  maxWidth?: number;\n  /** Starts the column pinned to the start or end edge (logical, so right-to-left correct), where it stays while the rest scroll sideways. */\n  pin?: 'start' | 'end';\n  /** Whether this column can be resized. Defaults to the table's `resizableColumns`. */\n  resizable?: boolean;\n  /** Whether this column can be moved. Defaults to the table's `reorderableColumns`. */\n  reorderable?: boolean;\n  /** Whether this column can be hidden from its header menu. Defaults to true. */\n  hideable?: boolean;\n  /** Starts the column hidden, seeding `defaultHiddenColumns`. */\n  defaultHidden?: boolean;\n  /** Holds the column where it is: it cannot be resized, moved, hidden or unpinned, whatever the table allows. The row header is the usual one. */\n  locked?: boolean;\n  /** How this column's cell text fits. Defaults to the table's `cellText`. */\n  cellText?: DataTableCellText;\n  /**\n   * Makes the column's cells editable, with one of the library's fields\n   * (`text`, `textarea`, `number`, `select`, `multiselect`, `combobox`,\n   * `tags`, `date`, `time`, `checkbox`, `switch`) or a function that renders\n   * your own editor. A cell reads as text until it is edited; `checkbox` and\n   * `switch` are live controls in the cell, saved as they toggle.\n   */\n  editor?: DataTableEditorKind | ((context: DataTableEditorContext<R>) => React.ReactNode);\n  /** The choices of a `select`, `multiselect` or `combobox` editor. A cell shows the chosen option's label. */\n  options?: DataTableOption[];\n  /** Checks a new value before it is saved: return the message to show, or nothing when it passes. An error keeps the editor open. */\n  validate?: (value: DataTableValue, row: R) => string | null | undefined;\n  /** Whether a row's cell in this column can be edited, given the row. Defaults to true when the column has an `editor`. */\n  editable?: boolean | ((row: R) => boolean);\n  /** Whether the column can be filtered, from its header menu or a TableToolbar. Defaults to true. */\n  filterable?: boolean;\n  /**\n   * What the column holds, which sets everything the column does not set\n   * itself: how a cell is drawn (`render` still wins), its alignment, its\n   * sort, its filter's conditions, and the editor it opens when `editable`\n   * is set. `text`, `number`, `currency`, `date` (a `YYYY-MM-DD` value),\n   * `status` (a Badge in the option's `status` role, sorted in the options'\n   * order), `person` (an Avatar and the name, or a stack for a list),\n   * `tags` (a list, the first two shown), `progress` (0 to 100),\n   * `checkbox` (a check, or a live checkbox when editable) and `link` (a\n   * URL, shown without its scheme). An untyped column reads as text and\n   * filters by what its values look like.\n   */\n  type?: DataTableColumnType;\n  /** How a typed column formats its values: the locale, the currency, the digits after the point, the date style. */\n  format?: DataTableColumnFormat;\n  /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */\n  groupable?: boolean;\n  /**\n   * The calculation a group row shows in this column, and the totals\n   * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,\n   * `countDistinct` or `range`, formatted through the column's type, or a\n   * function of the column's values returning what to show.\n   */\n  aggregate?: DataTableAggregate | ((values: DataTableValue[], rows: R[]) => React.ReactNode);\n}",
+        "definition": "interface DataTableColumn<R extends DataTableRow = DataTableRow> {\n  /** Unique column identifier, used as the key into each row's values. */\n  key: string;\n  /** Header label displayed in the column header. */\n  header: React.ReactNode;\n  /** Whether clicking this header sorts by the column. */\n  sortable?: boolean;\n  /** Optional column width (CSS value like '200px', '30%', 'auto'). */\n  width?: string;\n  /** Text alignment for cells in this column. `start` and `end` follow the reading direction (a typed column defaults to its type's: `end` for numbers, money and progress, `start` for text); `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** Render the cell for a row; defaults to the row's raw value for this key. */\n  render?: (row: R) => React.ReactNode;\n  /**\n   * Derives the column's value from the row's other values, such as a line's\n   * total from its quantity and unit price (`(values) => Number(values.quantity) * Number(values.price)`).\n   * The table reads it wherever it reads a value, so it sorts, filters, totals\n   * and groups, and it follows an edit to the cells it reads as the edit is\n   * made. A computed column is never editable.\n   */\n  compute?: (values: R['values']) => DataTableValue;\n  /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox (\"Select Ada Lovelace\"). One column per table. */\n  rowHeader?: boolean;\n  /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */\n  minWidth?: number;\n  /** Widest width a resize can reach, in pixels. */\n  maxWidth?: number;\n  /** Starts the column pinned to the start or end edge (logical, so right-to-left correct), where it stays while the rest scroll sideways. */\n  pin?: 'start' | 'end';\n  /** Whether this column can be resized. Defaults to the table's `resizableColumns`. */\n  resizable?: boolean;\n  /** Whether this column can be moved. Defaults to the table's `reorderableColumns`. */\n  reorderable?: boolean;\n  /** Whether this column can be hidden from its header menu. Defaults to true. */\n  hideable?: boolean;\n  /** Starts the column hidden, seeding `defaultHiddenColumns`. */\n  defaultHidden?: boolean;\n  /** Holds the column where it is: it cannot be resized, moved, hidden or unpinned, whatever the table allows. The row header is the usual one. */\n  locked?: boolean;\n  /** How this column's cell text fits. Defaults to the table's `cellText`. */\n  cellText?: DataTableCellText;\n  /**\n   * Makes the column's cells editable, with one of the library's fields\n   * (`text`, `textarea`, `number`, `select`, `multiselect`, `combobox`,\n   * `tags`, `date`, `time`, `checkbox`, `switch`) or a function that renders\n   * your own editor. A cell reads as text until it is edited; `checkbox` and\n   * `switch` are live controls in the cell, saved as they toggle.\n   */\n  editor?: DataTableEditorKind | ((context: DataTableEditorContext<R>) => React.ReactNode);\n  /** The choices of a `select`, `multiselect` or `combobox` editor. A cell shows the chosen option's label. */\n  options?: DataTableOption[];\n  /** Checks a new value before it is saved: return the message to show, or nothing when it passes. An error keeps the editor open. */\n  validate?: (value: DataTableValue, row: R) => string | null | undefined;\n  /** Whether a row's cell in this column can be edited, given the row. Defaults to true when the column has an `editor`. */\n  editable?: boolean | ((row: R) => boolean);\n  /** Whether the column can be filtered, from its header menu or a TableToolbar. Defaults to true. */\n  filterable?: boolean;\n  /**\n   * What the column holds, which sets everything the column does not set\n   * itself: how a cell is drawn (`render` still wins), its alignment, its\n   * sort, its filter's conditions, and the editor it opens when `editable`\n   * is set. `text`, `number`, `currency`, `date` (a `YYYY-MM-DD` value),\n   * `status` (a Badge in the option's `status` role, sorted in the options'\n   * order), `person` (an Avatar and the name, or a stack for a list),\n   * `tags` (a list, the first two shown), `progress` (0 to 100),\n   * `checkbox` (a check, or a live checkbox when editable) and `link` (a\n   * URL, shown without its scheme). An untyped column reads as text and\n   * filters by what its values look like.\n   */\n  type?: DataTableColumnType;\n  /** How a typed column formats its values: the locale, the currency, the digits after the point, the date style. */\n  format?: DataTableColumnFormat;\n  /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */\n  groupable?: boolean;\n  /**\n   * The order this column's groups take, as the values they gather by\n   * (`['Revenue', 'Cost of sales', 'Expenses']`): the groups listed come\n   * first, in this order whichever way the column sorts, and any others\n   * follow in the column's own order. A `status` column already groups in\n   * its options' order.\n   */\n  groupOrder?: string[];\n  /**\n   * The calculation a group row shows in this column, and the totals\n   * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,\n   * `countDistinct` or `range`, formatted through the column's type, or a\n   * function of the column's values returning what to show.\n   */\n  aggregate?: DataTableAggregate | ((values: DataTableValue[], rows: R[]) => React.ReactNode);\n}",
         "refs": [
           "DataTableAggregate",
           "DataTableCellText",
@@ -1126,6 +1140,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "Record": "typescript"
     }
   },
+  "date-input": {
+    "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "date-picker": {
     "types": {
       "Weekday": {
@@ -1191,7 +1211,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "DescriptionListEntry": {
         "kind": "type",
-        "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n};",
+        "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n  /** Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule. */\n  emphasis?: boolean;\n};",
         "description": "One term and its value, as `items` takes them."
       }
     },
@@ -1353,7 +1373,15 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "EventCalendarEvent": {
         "kind": "interface",
-        "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD). */\n  date: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+        "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+        "refs": [
+          "EventCalendarColor"
+        ]
+      },
+      "EventCalendarLegendItem": {
+        "kind": "interface",
+        "definition": "interface EventCalendarLegendItem {\n  /** The accent, as an event's `color` names it. */\n  color: EventCalendarColor;\n  /** What events in this colour are (\"Offsites\", \"Deadlines\"). */\n  label: string;\n}",
+        "description": "A colour the calendar's events use, and what it means, for the legend.",
         "refs": [
           "EventCalendarColor"
         ]
@@ -1394,6 +1422,32 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "File": "typescript"
     }
   },
+  "file-row": {
+    "types": {
+      "FileKind": {
+        "kind": "type",
+        "definition": "type FileKind =\n  | 'pdf'\n  | 'document'\n  | 'spreadsheet'\n  | 'presentation'\n  | 'image'\n  | 'audio'\n  | 'video'\n  | 'archive'\n  | 'code'\n  | 'text'\n  | 'pasted'\n  | 'generic';"
+      },
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
+      "ReactNode": "react"
+    }
+  },
   "filter-bar": {
     "types": {
       "FilterBarFilter": {
@@ -1413,6 +1467,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ReactNode": "react",
       "Record": "typescript"
+    }
+  },
+  "form-section": {
+    "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
     }
   },
   "funnel-chart": {
@@ -1477,6 +1537,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "type",
         "definition": "type GlobeRotation = [number, number];",
         "description": "Where the globe is looking: `[longitude, latitude]` of the centre, in degrees."
+      }
+    },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "grid": {
+    "types": {
+      "StackGap": {
+        "kind": "type",
+        "definition": "type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';",
+        "description": "A step on the gap scale, as the `--gap-*` token it names."
       }
     },
     "externalTypes": {
@@ -1842,6 +1914,64 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "number-input": {
+    "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "org-chart": {
+    "types": {
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "OrgChartNode": {
+        "kind": "interface",
+        "definition": "interface OrgChartNode {\n  /** A stable id for the person. */\n  id: string;\n  /** Their name. */\n  name: string;\n  /** Their role (\"Head of design\"). */\n  role?: string;\n  /** An image for their avatar; their initials show without one. */\n  avatarSrc?: string;\n  /** Makes the person's name a link to their profile. */\n  href?: string;\n  /** The people who report to them, in order. */\n  reports?: OrgChartNode[];\n}",
+        "description": "One person in the chart, and the people who report to them."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react"
+    }
+  },
+  "page-header": {
+    "types": {
+      "BreadcrumbItem": {
+        "kind": "interface",
+        "definition": "interface BreadcrumbItem {\n  /** Display label */\n  label: string;\n  /** Link href — omit for the current / last item */\n  href?: string;\n}"
+      },
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
+      "ReactNode": "react"
+    }
+  },
   "panel": {
     "types": {},
     "externalTypes": {
@@ -1975,6 +2105,32 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ReactNode": "react"
     }
+  },
+  "resource-timeline": {
+    "types": {
+      "ResourceTimelineBar": {
+        "kind": "interface",
+        "definition": "interface ResourceTimelineBar {\n  /** A stable id for the bar. */\n  id: string;\n  /** When it starts, as 24-hour `HH:MM`. */\n  start: string;\n  /** When it ends, as 24-hour `HH:MM`. */\n  end: string;\n  /** A short label on the bar (\"Front desk\", \"Break\"). */\n  label?: string;\n  /** The bar's accent. Defaults to `neutral`. */\n  color?: ResourceTimelineColor;\n}",
+        "description": "One stretch of time on a row: a booking, a meeting, a run.",
+        "refs": [
+          "ResourceTimelineColor"
+        ]
+      },
+      "ResourceTimelineColor": {
+        "kind": "type",
+        "definition": "type ResourceTimelineColor =\n  \"neutral\" | \"coral\" | \"violet\" | \"cobalt\" | \"amber\" | \"gold\" | \"mint\";",
+        "description": "The accents a bar can take, the core accent roles the calendar's events use."
+      },
+      "ResourceTimelineRow": {
+        "kind": "interface",
+        "definition": "interface ResourceTimelineRow {\n  /** A stable id for the row. */\n  id: string;\n  /** What the row is, shown in the label column. */\n  label: string;\n  /** The row's bars, in any order. */\n  bars: ResourceTimelineBar[];\n}",
+        "description": "One row of the timeline: a person, a room, a machine.",
+        "refs": [
+          "ResourceTimelineBar"
+        ]
+      }
+    },
+    "externalTypes": {}
   },
   "rich-dropdown": {
     "types": {
@@ -2276,6 +2432,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "stack": {
+    "types": {
+      "StackGap": {
+        "kind": "type",
+        "definition": "type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';",
+        "description": "A step on the gap scale, as the `--gap-*` token it names."
+      }
+    },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "stacked-bar-chart": {
     "types": {
       "BarSeriesConfig": {
@@ -2315,7 +2483,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "TableRow": {
         "kind": "interface",
-        "definition": "interface TableRow {\n  /** Unique row identifier */\n  id: string;\n  /** Cell values keyed by column key — each accepts any React node */\n  cells: Record<string, React.ReactNode>;\n  /** Whether the row is selected, drawn with the table's selected-row tint. */\n  selected?: boolean;\n}"
+        "definition": "interface TableRow {\n  /** Unique row identifier */\n  id: string;\n  /** Cell values keyed by column key — each accepts any React node */\n  cells: Record<string, React.ReactNode>;\n  /** Whether the row is selected, drawn with the table's selected-row tint. */\n  selected?: boolean;\n  /** `heading` opens a group of rows in the emphasis weight; `total` is a row the ones above add up to, in the emphasis weight under a heavier rule. */\n  variant?: 'default' | 'heading' | 'total';\n}"
       }
     },
     "externalTypes": {
@@ -2479,7 +2647,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "Tab": {
         "kind": "interface",
-        "definition": "interface Tab {\n  /** Unique tab identifier */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether this tab is disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
+        "definition": "interface Tab {\n  /** Unique tab identifier */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A count after the label (unread items, results), written in the resolved locale; the tab's name carries it through `countLabel`. */\n  count?: number;\n  /** Whether this tab is disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this tab shows, written as the tab's `aria-controls`. Set it when you render the panels yourself; with `content`, Tabs names its own panel and this id is used for it. */\n  panelId?: string;\n  /** What the tab shows. When any tab has content, Tabs renders a `role=\"tabpanel\"` for each after the tab list, the selected one shown, each named by its tab. The panels are the tab list's siblings, with no wrapper, and the ref and `className` stay on the tab list. Leave it out to render the panels yourself. */\n  content?: React.ReactNode;\n}"
       }
     },
     "externalTypes": {
@@ -2494,6 +2662,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "description": "A running-text type style, named as the type scale names it."
       }
     },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "textarea": {
+    "types": {},
     "externalTypes": {
       "ReactNode": "react"
     }
@@ -2767,6 +2941,18 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
+      "ReactNode": "react"
+    }
+  },
+  "wizard": {
+    "types": {
+      "WizardStep": {
+        "kind": "interface",
+        "definition": "interface WizardStep {\n  /** A stable id for the step. */\n  id: string;\n  /** The step's name, in the stepper and as the heading of its content. */\n  label: string;\n  /** A line under the label in the stepper. */\n  description?: string;\n  /** What the step asks for. */\n  content: React.ReactNode;\n}",
+        "description": "One step of a wizard."
+      }
+    },
+    "externalTypes": {
       "ReactNode": "react"
     }
   },

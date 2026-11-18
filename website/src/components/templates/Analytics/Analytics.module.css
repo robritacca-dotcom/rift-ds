@@ -114,16 +114,6 @@
   min-height: max(440px, 55cqw);
 }
 
-.title {
-  margin: var(--gap-100) 0 0;
-  font-family: var(--font-heading-1-family);
-  font-size: var(--font-heading-1-size);
-  font-weight: var(--font-heading-1-weight);
-  line-height: var(--font-heading-1-line-height);
-  letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-heading);
-}
-
 .liveStats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -202,18 +192,6 @@
 
 .statRow:last-child {
   border-block-end: none;
-}
-
-.statIcon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-icon-bg);
-  color: var(--color-text-primary);
-  --icon-size: var(--icon-size-500);
 }
 
 .halvesGrid {

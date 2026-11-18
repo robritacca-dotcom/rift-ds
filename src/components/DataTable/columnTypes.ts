@@ -26,7 +26,7 @@ export interface ColumnFormat {
   locale?: string;
   /** ISO 4217 code for a `currency` column. Defaults to `USD`. */
   currency?: string;
-  /** Digits after the point for `number`, `currency` and `progress`. Defaults to none for money and progress, and up to two for a number. */
+  /** Digits after the point for `number`, `currency` and `progress`. Defaults to the currency's own minor units for money (two for USD, none for JPY), none for progress, and up to two for a number. */
   fractionDigits?: number;
   /** How a `date` column reads: `short` (11/04/26), `medium` (Nov 4, 2026), `long` (November 4, 2026) or `relative` (in 3 days). Defaults to `medium`; the full date shows on hover either way. */
   date?: 'short' | 'medium' | 'long' | 'relative';
@@ -83,7 +83,7 @@ export const formatNumber = (type: ColumnType, value: number, format: ColumnForm
   const locale = format?.locale ?? DEFAULT_LOCALE;
   const digits = format?.fractionDigits;
   if (type === 'currency')
-    return formatMoney(value, { currency: format?.currency ?? 'USD', locale, fractionDigits: digits ?? 0 });
+    return formatMoney(value, { currency: format?.currency ?? 'USD', locale, fractionDigits: digits });
   if (type === 'progress')
     return new Intl.NumberFormat(locale, {
       style: 'percent',

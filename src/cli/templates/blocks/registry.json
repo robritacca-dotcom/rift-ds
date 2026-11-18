@@ -26,6 +26,19 @@
       ]
     },
     {
+      "name": "settings",
+      "label": "Settings",
+      "description": "The app shell with a column of settings sections, each saving on its own, and a profile form checked in one pass.",
+      "route": "/settings",
+      "files": [
+        "components/blocks/AppShell.tsx",
+        "components/blocks/AppShell.module.css",
+        "app/settings/page.tsx",
+        "app/settings/page.module.css",
+        "app/settings/ProfileForm.tsx"
+      ]
+    },
+    {
       "name": "sign-in",
       "label": "Sign in",
       "description": "A centred sign-in card with email and password, remember me and a single sign-on route.",

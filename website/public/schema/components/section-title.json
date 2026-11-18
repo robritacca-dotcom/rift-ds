@@ -56,5 +56,12 @@
   },
   "size": {
     "gzip": 299
-  }
+  },
+  "alternatives": [
+    {
+      "name": "PageHeader",
+      "when": "the heading is the page’s own title, with its breadcrumb and actions",
+      "schemaUrl": "https://rift-ds.com/schema/components/page-header.json"
+    }
+  ]
 }

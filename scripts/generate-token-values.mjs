@@ -424,7 +424,9 @@ export async function assembleTokenValues() {
     };
     const resolved = resolveTokenValues(names, preset ? overrides : {});
 
-    const theme = {};
+    // The display name rides with the values, so a host's theme menu reads
+    // "Signal" without knowing it ships as the `plum` preset.
+    const theme = { label };
     for (const mode of MODES) {
       theme[mode] = sortedObject(semantic.map((name) => [name, resolved.get(name)[mode].value]));
     }

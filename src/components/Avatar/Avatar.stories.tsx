@@ -70,6 +70,17 @@ export const Sizes: Story = {
   ),
 };
 
+/** An organisation rather than a person: rounded corners, a logo fitted whole, a building glyph with no name. */
+export const Square: Story = {
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <Avatar shape="square" size="sm" name="Northwind Trading" />
+      <Avatar shape="square" name="Harbor Freight Lines" />
+      <Avatar shape="square" size="lg" aria-label="Unnamed organisation" />
+    </div>
+  ),
+};
+
 export const SizesWithImage: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

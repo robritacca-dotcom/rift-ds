@@ -89,6 +89,13 @@
           "default": 350
         },
         {
+          "name": "yAxisFormatter",
+          "type": "((value: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
+        },
+        {
           "name": "showLegend",
           "type": "boolean",
           "typeKind": "primitive",
@@ -133,6 +140,6 @@
     "note": "The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer."
   },
   "size": {
-    "gzip": 2137
+    "gzip": 2146
   }
 }

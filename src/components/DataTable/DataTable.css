@@ -847,6 +847,41 @@
 }
 
 /* ============================================
+   ROW ACTION (rowHref / onRowClick)
+   ============================================ */
+
+/* The whole row is one target: the pointer says so, and the row's name
+   takes its underline while the row is hovered, the way a link answers. */
+.ds-data-table__row--action {
+  cursor: pointer;
+}
+
+.ds-data-table__row-link {
+  /* Body text in the cell's own type, as the rest of the row reads: the
+     row's hover and the underline mark it, not the action colour. */
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: var(--radius-100);
+}
+
+.ds-data-table__row--action:hover .ds-data-table__row-link,
+.ds-data-table__row-link:focus-visible {
+  text-decoration: underline;
+}
+
+.ds-data-table__row-link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
    STACKED
    `phoneLayout="stack"` narrower than a phone:
    each row a card, its row header the title

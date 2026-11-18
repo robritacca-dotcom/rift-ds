@@ -153,6 +153,37 @@
           "description": "Optional rel attribute for links"
         },
         {
+          "name": "badge",
+          "type": "string | number | true",
+          "typeKind": "other",
+          "required": false,
+          "description": "A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number."
+        },
+        {
+          "name": "badgeMax",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The highest count the badge spells out; a larger one reads \"99+\". Defaults to 99.",
+          "default": 99
+        },
+        {
+          "name": "badgeLabel",
+          "type": "((badge: string | number | true) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Text read after `ariaLabel` while the button carries a badge, given the\nbadge. Defaults to \", new\" for a dot and \", 3 new\" for a count; the\nleading comma and space are part of the text. The tooltip keeps\n`ariaLabel` alone.",
+          "defaultExpression": "(badge: number | string | true) => (badge === true ? ', new' : `, ${badge} new`)"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",
@@ -215,6 +246,6 @@
     }
   ],
   "size": {
-    "gzip": 3816
+    "gzip": 4307
   }
 }

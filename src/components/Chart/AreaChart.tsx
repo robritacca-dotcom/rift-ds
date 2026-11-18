@@ -68,6 +68,8 @@ type AreaChartOwnProps = {
   summaryItems?: ChartSummaryItem[];
   /** Chart area height in pixels */
   height?: number;
+  /** Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale. */
+  yAxisFormatter?: (value: number) => string;
   /** Show the legend under a multi-series chart */
   showLegend?: boolean;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
@@ -122,6 +124,7 @@ export const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(({
   showLegend = true,
   bare = false,
   className = '',
+  yAxisFormatter,
   locale: localeProp,
   ...rest
 }, ref) => {
@@ -208,7 +211,7 @@ export const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(({
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tickFormatter={formatTick}
+              tickFormatter={yAxisFormatter ?? formatTick}
               tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
               axisLine={false}

@@ -6,7 +6,7 @@
   "label": "Panel",
   "slug": "panel",
   "category": "layout",
-  "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+  "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.",
   "client": false,
   "importPath": "rift-ds/components/Panel/Panel",
   "barrel": "main",
@@ -28,6 +28,14 @@
           "required": false,
           "description": "Interior padding: 'default' uses --padding-500, 'compact' uses --padding-400, 'none' removes it",
           "default": "default"
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the container border the Widget tile wears, so the panel keeps a visible edge in a theme whose page fill matches the panel's.",
+          "default": false
         },
         {
           "name": "className",
@@ -54,6 +62,6 @@
     "by": "none"
   },
   "size": {
-    "gzip": 255
+    "gzip": 273
   }
 }

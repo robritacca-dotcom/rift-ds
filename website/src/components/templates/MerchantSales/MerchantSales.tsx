@@ -26,7 +26,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { CHAT_SOURCE_ATTRIBUTE, describeSelection, useChatAgentState, useChatWidget, useSelectionFocus } from "rift-ds/chat";
-import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
+import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Input } from "rift-ds/components/Input/Input";
@@ -307,6 +307,27 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
   /* The store switcher under the brand row, its tree picked with ?entities=. */
   const stores = useSampleEntities("merchant");
 
+  const headActions = (
+    <>
+      {/* The demo's edits live for the visit; this starts it over without a reload. */}
+      {Object.keys(edits).length > 0 && (
+        <Button variant="tertiary" size="compact" label="Reset demo data" iconLeft="restart_alt" onClick={resetDemo} />
+      )}
+      <Button
+        variant="secondary"
+        size="compact"
+        label="Export"
+        iconLeft="download"
+      />
+      <Button
+        variant="primary"
+        size="compact"
+        label="New order"
+        iconLeft="add"
+      />
+    </>
+  );
+
   return (
     <TemplateShell
       sidebar={{
@@ -384,37 +405,21 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
           )}
 
           {/* --------------------------------------------- page head */}
-          <header className={styles.pageHead}>
-            {!appFrame && (
-            <div>
-              <Breadcrumb
-                items={[
-                  { label: "Larkspur", href: "#" },
-                  { label: "Sales" },
-                ]}
-              />
-              <h1 className={styles.title}>Sales</h1>
-            </div>
-            )}
-            <div className={styles.headActions}>
-              {/* The demo's edits live for the visit; this starts it over without a reload. */}
-              {Object.keys(edits).length > 0 && (
-                <Button variant="tertiary" size="compact" label="Reset demo data" iconLeft="restart_alt" onClick={resetDemo} />
-              )}
-              <Button
-                variant="secondary"
-                size="compact"
-                label="Export"
-                iconLeft="download"
-              />
-              <Button
-                variant="primary"
-                size="compact"
-                label="New order"
-                iconLeft="add"
-              />
-            </div>
-          </header>
+          {/* In the app frame the frame names the page, so only the actions stay. */}
+          {appFrame ? (
+            <header className={styles.pageHead}>
+              <div className={styles.headActions}>{headActions}</div>
+            </header>
+          ) : (
+            <PageHeader
+              breadcrumb={[
+                { label: "Larkspur", href: "#" },
+                { label: "Sales" },
+              ]}
+              title="Sales"
+              actions={headActions}
+            />
+          )}
 
           {/* -------------------------------------------- the month */}
           <section className={styles.kpiGrid} aria-label="October against September">
@@ -422,13 +427,9 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
               /* data-chat-source (CHAT_SOURCE_ATTRIBUTE) names the figure a highlight inside the card is about. */
               <div key={kpi.label} className={styles.kpi} data-chat-source={kpi.label}>
                 {/* The period rides the card's top row, opposite the icon, so the label stays one short line at every width. */}
-                <div className={styles.kpiHead}>
-                  <span className={styles.kpiIcon} aria-hidden="true">
-                    <span className="material-symbols-rounded">{kpi.icon}</span>
-                  </span>
-                  <span className={styles.kpiPeriod}>{MERCHANT_KPI_PERIOD}</span>
-                </div>
                 <Stat
+                  icon={kpi.icon}
+                  caption={MERCHANT_KPI_PERIOD}
                   value={kpi.value}
                   label={kpi.label}
                   delta={kpi.delta}

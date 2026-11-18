@@ -1,0 +1,153 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "Stack",
+  "label": "Stack",
+  "slug": "stack",
+  "category": "layout",
+  "description": "Children in one direction, a column or a row, with a gap from the scale between them.",
+  "client": false,
+  "importPath": "rift-ds/components/Stack/Stack",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/stack",
+  "markdownUrl": "https://rift-ds.com/components/stack.md",
+  "exports": [
+    {
+      "component": "Stack",
+      "props": [
+        {
+          "name": "direction",
+          "type": "\"row\" | \"column\"",
+          "typeKind": "enum",
+          "values": [
+            "column",
+            "row"
+          ],
+          "required": false,
+          "description": "`column` lays the children top to bottom; `row` lays them in the reading direction.",
+          "default": "column"
+        },
+        {
+          "name": "gap",
+          "type": "StackGap",
+          "typeKind": "enum",
+          "values": [
+            "050",
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "1000",
+            "1500",
+            "2000",
+            "3000"
+          ],
+          "required": false,
+          "description": "The space between children, as a step on the gap scale (`--gap-400` by default).",
+          "default": "400",
+          "typeRefs": [
+            "StackGap"
+          ]
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"start\" | \"end\" | \"baseline\" | \"stretch\"",
+          "typeKind": "enum",
+          "values": [
+            "baseline",
+            "center",
+            "end",
+            "start",
+            "stretch"
+          ],
+          "required": false,
+          "description": "How children line up across the stack: `stretch` fills it, which keeps\ncards in a row the same height. A column stretches and a row centres\nunless it is set.",
+          "defaultExpression": "'stretch' in a column, 'center' in a row"
+        },
+        {
+          "name": "justify",
+          "type": "\"center\" | \"start\" | \"end\" | \"between\"",
+          "typeKind": "enum",
+          "values": [
+            "between",
+            "center",
+            "end",
+            "start"
+          ],
+          "required": false,
+          "description": "How children spread along the stack. `between` pushes the first and last to the ends.",
+          "default": "start"
+        },
+        {
+          "name": "wrap",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Lets a row wrap onto more lines when it runs out of room, keeping the gap between lines.",
+          "default": false
+        },
+        {
+          "name": "as",
+          "type": "\"div\" | \"fieldset\" | \"footer\" | \"form\" | \"header\" | \"li\" | \"nav\" | \"ol\" | \"section\" | \"span\" | \"ul\"",
+          "typeKind": "enum",
+          "values": [
+            "div",
+            "fieldset",
+            "footer",
+            "form",
+            "header",
+            "li",
+            "nav",
+            "ol",
+            "section",
+            "span",
+            "ul"
+          ],
+          "required": false,
+          "description": "The element the stack renders as, so it can be a list, a section or a form.",
+          "default": "div"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The stack's children."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "StackGap": {
+      "kind": "type",
+      "definition": "type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';",
+      "description": "A step on the gap scale, as the `--gap-*` token it names."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 327
+  },
+  "alternatives": [
+    {
+      "name": "Grid",
+      "when": "the children should sit in equal columns that fold by the room the grid has",
+      "schemaUrl": "https://rift-ds.com/schema/components/grid.json"
+    }
+  ]
+}

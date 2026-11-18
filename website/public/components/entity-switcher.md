@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { EntitySwitcher } from 'rift-ds';`
 - Deep import: `import { EntitySwitcher } from 'rift-ds/components/EntitySwitcher/EntitySwitcher';`
 - Rendering: client component (declares 'use client')
-- Size: 9.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/entity-switcher
 - Schema: https://rift-ds.com/schema/components/entity-switcher.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

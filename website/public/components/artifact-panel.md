@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { ArtifactPanel } from 'rift-ds';`
 - Deep import: `import { ArtifactPanel } from 'rift-ds/components/ArtifactPanel/ArtifactPanel';`
 - Rendering: client component (declares 'use client')
-- Size: 7.4 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 7.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/artifact-panel
 - Schema: https://rift-ds.com/schema/components/artifact-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

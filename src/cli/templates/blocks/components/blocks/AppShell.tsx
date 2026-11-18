@@ -25,7 +25,8 @@ import {
   type AppSidebarProfile,
   type AppSidebarSection,
 } from 'rift-ds/components/AppSidebar/AppSidebar';
-import { Breadcrumb, type BreadcrumbItem } from 'rift-ds/components/Breadcrumb/Breadcrumb';
+import type { BreadcrumbItem } from 'rift-ds/components/Breadcrumb/Breadcrumb';
+import { PageHeader } from 'rift-ds/components/PageHeader/PageHeader';
 import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger';
 import { ProgressiveBlur } from 'rift-ds/components/ProgressiveBlur/ProgressiveBlur';
 import { ThemeToggle } from 'rift-ds/components/ThemeToggle/ThemeToggle';
@@ -122,21 +123,18 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
               <CommandPaletteTrigger className={styles.search} />
               <div className={styles.topBarActions}>
                 <CommandPaletteTrigger iconOnly className={styles.searchIcon} />
-                {/* The AI entry. Point it at your chat: `npx rift-ds init chat`
-                    scaffolds one, and ChatLauncher opens it. */}
-                <AiButton />
+                {/* The AI entry. Point both at your chat: `npx rift-ds init chat`
+                    scaffolds one, and ChatLauncher opens it. On a phone the
+                    labelled button gives way to the icon, as search does, so
+                    the bar keeps room for the actions you add. */}
+                <AiButton className={styles.ai} />
+                <AiButton iconOnly className={styles.aiIcon} />
                 <ThemeToggle showLabels={false} />
               </div>
             </header>
 
             <main className={styles.page}>
-              <div className={styles.pageHead}>
-                <div className={styles.pageHeadText}>
-                  {breadcrumb && <Breadcrumb items={breadcrumb} />}
-                  <h1 className={styles.title}>{title}</h1>
-                </div>
-                {actions && <div className={styles.pageActions}>{actions}</div>}
-              </div>
+              <PageHeader className={styles.pageHead} breadcrumb={breadcrumb} title={title} actions={actions} />
               {children}
             </main>
           </div>

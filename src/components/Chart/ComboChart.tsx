@@ -67,6 +67,10 @@ type ComboChartOwnProps = {
   summaryItems?: ChartSummaryItem[];
   /** Chart area height in pixels */
   height?: number;
+  /** Tick formatter for the bar series' axis, such as a currency. Defaults to a short number in the chart's locale. */
+  yAxisFormatter?: (value: number) => string;
+  /** Tick formatter for the line series' axis when `secondaryAxis` draws it, such as a percent. Defaults to a short number in the chart's locale. */
+  secondaryAxisFormatter?: (value: number) => string;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
@@ -135,6 +139,8 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  yAxisFormatter,
+  secondaryAxisFormatter,
   locale: localeProp,
   ...rest
 }, ref) => {
@@ -218,7 +224,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tickFormatter={formatTick}
+              tickFormatter={yAxisFormatter ?? formatTick}
               yAxisId="bar"
               tick={{ fill: textSecondary, fontSize: textSize }}
               tickLine={false}
@@ -226,7 +232,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
             />
             {secondaryAxis && (
               <YAxis
-                tickFormatter={formatTick}
+                tickFormatter={secondaryAxisFormatter ?? formatTick}
                 yAxisId="line"
                 orientation="right"
                 tick={{ fill: textSecondary, fontSize: textSize }}

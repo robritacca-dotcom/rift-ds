@@ -21,10 +21,12 @@ type NumberInputOwnProps = {
   step?: number;
   /** Component size (not the native character-width `size` attribute) */
   size?: 'default' | 'compact';
-  /** Error state — shows error styling and message */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
-  /** Helper or error message displayed below the input */
+  /** Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. */
   helperText?: string;
+  /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
+  errorText?: React.ReactNode;
   /**
    * Convenience callback receiving the numeric value directly — `null` when
    * the field is empty or unparseable. Fires on typing alongside `onChange`
@@ -79,6 +81,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       required = false,
       error = false,
       helperText,
+      errorText,
       onChange,
       onValueChange,
       decreaseLabel = 'Decrease value',
@@ -99,10 +102,12 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     const currentValue = isControlled ? value : internalValue;
     const currentNumber = parseValue(currentValue);
 
+    const hasErrorText = errorText != null && errorText !== false && errorText !== '';
+    const invalid = error || hasErrorText;
     const classes = [
       baseClass,
       size === 'compact' ? `${baseClass}--compact` : '',
-      error ? `${baseClass}--error` : '',
+      invalid ? `${baseClass}--error` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
     ]
@@ -148,13 +153,18 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     // fallback, so an explicit id/name/label still wins and existing markup
     // (and any consumer's own htmlFor) is unchanged.
     const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
-    const describedBy = helperText ? `${inputId}-helper` : rest['aria-describedby'];
+    /* A consumer's aria-describedby joins the error and helper ids rather than losing to them. */
+    const describedBy =
+      [rest['aria-describedby'], hasErrorText ? `${inputId}-error` : undefined, helperText ? `${inputId}-helper` : undefined]
+        .filter(Boolean)
+        .join(' ') || undefined;
 
     return (
       <Field
         className={classes}
         label={label}
         helperText={helperText}
+        errorText={errorText}
         error={error}
         required={required}
         disabled={disabled}
@@ -187,7 +197,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             disabled={disabled}
             required={required}
             aria-label={rest['aria-label'] || label}
-            aria-invalid={error}
+            aria-invalid={invalid}
             aria-describedby={describedBy}
             onChange={handleChange}
             onBlur={handleBlur}

@@ -121,7 +121,7 @@ init chat
 
 init block [<name>]
   Copies a block into a Next.js app router project: a whole starting page
-  (an app shell, a dashboard, a sign-in, a shader scene) built from the
+  (an app shell, a dashboard, a settings page and more) built from the
   library, its page under app/ and any shared parts under
   components/blocks/. The files are yours from then on. With no name,
   lists the blocks. Run init app first. Existing files are never

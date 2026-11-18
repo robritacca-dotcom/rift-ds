@@ -40,6 +40,7 @@
 import Link from "next/link";
 import React from "react";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
+import { Icon } from "rift-ds/components/Icon/Icon";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
 import { Button } from "rift-ds/components/Button/Button";
@@ -522,12 +523,8 @@ export default function MobileDashboard() {
                             padding="compact"
                             className={styles.kpi}
                           >
-                            <span className={styles.kpiIcon} aria-hidden="true">
-                              <span className="material-symbols-rounded">
-                                {kpi.icon}
-                              </span>
-                            </span>
                             <Stat
+                              icon={kpi.icon}
                               value={kpi.value}
                               label={kpi.label}
                               delta={kpi.delta}
@@ -581,12 +578,7 @@ export default function MobileDashboard() {
                             >
                               <div className={styles.channelMeta}>
                                 <span className={styles.channelName}>
-                                  <span
-                                    className={`material-symbols-rounded ${styles.channelGlyph}`}
-                                    aria-hidden="true"
-                                  >
-                                    {channel.icon}
-                                  </span>
+                                  <Icon name={channel.icon} size="500" tone="inherit" className={styles.channelGlyph} />
                                   {channel.name}
                                 </span>
                                 <span className={styles.channelPct}>

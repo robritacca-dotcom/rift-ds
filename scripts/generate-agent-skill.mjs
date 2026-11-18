@@ -155,6 +155,13 @@ function presetIds() {
     .sort();
 }
 
+/** Each preset's display name by id, from the generated token values, so a
+    reader told "use Signal" finds the id it ships under. */
+function presetLabels() {
+  const { themes } = JSON.parse(readFileSync(join(repoRoot, 'src', 'tokens', 'values.json'), 'utf8'));
+  return Object.fromEntries(Object.entries(themes).map(([id, theme]) => [id, theme.label]));
+}
+
 /** Inline code in markdown. */
 const c = (text) => `\`${text}\``;
 
@@ -400,6 +407,7 @@ ${catalogSections.join('\n\n')}
     .map((name) => name.match(/^--font-(.+)-size$/)?.[1])
     .filter((style) => style && tokenNames.has(`--font-${style}-weight`));
   const presets = presetIds();
+  const labels = presetLabels();
 
   const applyMd = [
     '---',
@@ -419,7 +427,9 @@ ${catalogSections.join('\n\n')}
     '',
     '## Order of work',
     '',
-    `1. Wire the theme. ${c('theme.css')}, when there is one, is imported after ${c('tokens.css')}. A shipped preset needs ${c(`${PACKAGE_NAME}/tokens/presets/presets.css`)} imported once and ${c('data-brand')} on the root element set to one of: ${presets.map(c).join(', ')}. To change one part of a preset, override that token in the project's own CSS: it outranks the preset in both modes. Dark mode is ${c('data-theme="dark"')} on the root element.`,
+    `1. Wire the theme. ${c('theme.css')}, when there is one, is imported after ${c('tokens.css')}. A shipped preset needs ${c(`${PACKAGE_NAME}/tokens/presets/presets.css`)} imported once and ${c('data-brand')} on the root element set to one of these ids (each theme's display name in brackets, where it differs): ${presets
+      .map((id) => (labels[id] && labels[id].toLowerCase() !== id ? `${c(id)} (${labels[id]})` : c(id)))
+      .join(', ')}. The same list, with each name, is ${c('SHIPPED_THEMES')} in ${c(`${PACKAGE_NAME}/tokens/values`)}. To change one part of a preset, override that token in the project's own CSS: it outranks the preset in both modes. Dark mode is ${c('data-theme="dark"')} on the root element.`,
     `2. Swap components first. Where the screen hand-builds a control the library ships (a button, an input, a dialog, a table), replace it with the library component. Find it in the catalogue, then read its prop contract before you write the JSX: do not guess props. Once a component is in place, do not restyle it from outside to recover the old look. If it looks wrong, the theme is wrong, and the fix is a token.`,
     '3. Then move what is left onto tokens. Every remaining raw colour, radius, spacing value, shadow, font value and timing becomes a semantic token, chosen by the rules below.',
     `4. Remove the duplicate dark styles. Each colour token already holds a light and a dark value, so a ${c('prefers-color-scheme')} branch or a second set of dark colours for a tokenised value is dead weight. Delete it.`,

@@ -49,6 +49,16 @@ import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { Panel } from "rift-ds/components/Panel/Panel";
+import { Stack } from "rift-ds/components/Stack/Stack";
+import { Grid } from "rift-ds/components/Grid/Grid";
+import { Icon } from "rift-ds/components/Icon/Icon";
+import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
+import { Checklist } from "rift-ds/components/Checklist/Checklist";
+import { Wizard } from "rift-ds/components/Wizard/Wizard";
+import { FormSection } from "rift-ds/components/FormSection/FormSection";
+import { ResourceTimeline } from "rift-ds/components/ResourceTimeline/ResourceTimeline";
+import { OrgChart } from "rift-ds/components/OrgChart/OrgChart";
+import { FileRow } from "rift-ds/components/Attachment/FileRow";
 import { Chip } from "rift-ds/components/Chip/Chip";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
@@ -1638,6 +1648,93 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <Pagination page={2} pageCount={3} onPageChange={() => {}} size="compact" />
     </>
+  ),
+  "stack": () => (
+    <Stack gap="200" style={{ width: "160px" }} aria-hidden="true">
+      {["One", "Two", "Three"].map((label) => (
+        <Panel key={label} bordered padding="compact">
+          <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{label}</span>
+        </Panel>
+      ))}
+    </Stack>
+  ),
+  "grid": () => (
+    <Grid columns={3} minColumnWidth="3rem" gap="200" style={{ width: "180px" }} aria-hidden="true">
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <Panel key={n} bordered padding="compact">
+          <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{n}</span>
+        </Panel>
+      ))}
+    </Grid>
+  ),
+  "icon": () => (
+    <Stack direction="row" gap="300">
+      <Icon name="settings" />
+      <Icon name="star" filled />
+      <Icon name="payments" size="500" tile />
+    </Stack>
+  ),
+  "page-header": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <PageHeader headingLevel={2} title="Projects" description="What the team is working on." />
+    </div>
+  ),
+  "checklist": () => (
+    <div style={{ width: "200px" }} aria-hidden="true" inert>
+      <Checklist
+        size="compact"
+        showProgress={false}
+        readOnly
+        values={["a"]}
+        items={[
+          { id: "a", label: "Invite your team" },
+          { id: "b", label: "Publish a page" },
+        ]}
+      />
+    </div>
+  ),
+  "wizard": () => (
+    <div style={{ width: "240px", transform: "scale(0.8)", transformOrigin: "center" }} aria-hidden="true" inert>
+      <Wizard
+        steps={[
+          { id: "a", label: "Details", content: null },
+          { id: "b", label: "Plan", content: null },
+          { id: "c", label: "Review", content: null },
+        ]}
+      />
+    </div>
+  ),
+  "form-section": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <FormSection title="Profile" description="How you appear to others." />
+    </div>
+  ),
+  "resource-timeline": () => (
+    <div style={{ width: "240px" }} aria-hidden="true" inert>
+      <ResourceTimeline
+        label="Bookings"
+        startHour={8}
+        endHour={12}
+        rows={[
+          { id: "a", label: "Room A", bars: [{ id: "1", start: "08:30", end: "11:00", label: "Booked", color: "violet" }] },
+          { id: "b", label: "Room B", bars: [{ id: "2", start: "09:00", end: "10:00", label: "Stand-up", color: "cobalt" }] },
+        ]}
+      />
+    </div>
+  ),
+  "org-chart": () => (
+    <div style={{ width: "240px", transform: "scale(0.8)", transformOrigin: "center" }} aria-hidden="true" inert>
+      <OrgChart
+        label="Team"
+        root={{ id: "a", name: "Ada", reports: [{ id: "b", name: "Grace" }, { id: "c", name: "Alan" }] }}
+      />
+    </div>
+  ),
+  "file-row": () => (
+    <div style={{ width: "220px" }} aria-hidden="true" inert>
+      <FileRow name="Report.pdf" meta="2.4 MB" size="compact" />
+      <FileRow name="Budget.xlsx" meta="88 KB" size="compact" />
+    </div>
   ),
   "panel": () => (
     <>

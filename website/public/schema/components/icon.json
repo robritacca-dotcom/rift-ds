@@ -1,0 +1,93 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "Icon",
+  "label": "Icon",
+  "slug": "icon",
+  "category": "typography",
+  "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile.",
+  "client": false,
+  "importPath": "rift-ds/components/Icon/Icon",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/icon",
+  "markdownUrl": "https://rift-ds.com/components/icon.md",
+  "exports": [
+    {
+      "component": "Icon",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The Material Symbol's name (`settings`, `arrow_forward`). A glyph that points along the reading direction mirrors in a right-to-left context."
+        },
+        {
+          "name": "size",
+          "type": "\"500\" | \"600\" | \"800\" | \"1200\"",
+          "typeKind": "enum",
+          "values": [
+            "500",
+            "600",
+            "800",
+            "1200"
+          ],
+          "required": false,
+          "description": "The size, as a step on the icon scale (`--icon-size-600`, the size beside body text, by default).",
+          "default": "600"
+        },
+        {
+          "name": "tone",
+          "type": "\"inherit\" | \"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "inherit",
+            "neutral"
+          ],
+          "required": false,
+          "description": "The glyph's colour role. `inherit` takes the colour of the text around it.",
+          "default": "default"
+        },
+        {
+          "name": "filled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the filled form of the glyph, as a selected nav item does.",
+          "default": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What the icon means, when it carries meaning no text beside it says. With a label the icon is an image with that name; without one it is decorative and hidden from assistive tech."
+        },
+        {
+          "name": "tile",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Sets the glyph on a round tile of the icon fill, the mark at the head of a stat card or a list row.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 633
+  }
+}

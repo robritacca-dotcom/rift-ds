@@ -183,9 +183,9 @@ export default function ChartsSection({ brand }: { brand: string }) {
           ]}
           title="Time spent"
           subtitle="A donut on the brand ramp"
-          /* The component's outerRadius default (140) assumes its 350px
-             default height — at 240 with a legend the donut must fit a
-             ~210px plot, so size both radii to match. */
+          /* The component's default outerRadius is a share of the plot, so
+             it would fit at 240 on its own; these fixed radii keep the
+             donut's ring the width this section was designed at. */
           innerRadius={52}
           outerRadius={84}
           height={240}

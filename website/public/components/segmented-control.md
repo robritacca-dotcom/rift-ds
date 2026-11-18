@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { SegmentedControl } from 'rift-ds';`
 - Deep import: `import { SegmentedControl } from 'rift-ds/components/SegmentedControl/SegmentedControl';`
 - Rendering: client component (declares 'use client')
-- Size: 6.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/segmented-control
 - Schema: https://rift-ds.com/schema/components/segmented-control.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

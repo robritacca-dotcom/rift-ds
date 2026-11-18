@@ -32,7 +32,7 @@ export default function PanelPage() {
               The plain dashboard surface
             </p>
             <p className={styles.introBody}>
-              A rounded container on the primary container background with no border and no shadow. Where Card carries a title and its own look, Panel is just the surface: content stacks vertically with a medium gap, and the padding steps down or disappears when a region needs it.
+              A rounded container on the primary container background with no shadow, and no border unless it needs an edge. Where Card carries a title and its own look, Panel is just the surface: content stacks vertically with a medium gap, and the padding steps down or disappears when a region needs it.
             </p>
           </div>
 
@@ -64,6 +64,27 @@ export default function PanelPage() {
                   <h3 className={styles.panelHeading}>Error rate</h3>
                   <p className={styles.panelBody}>
                     Holding at 0.2 percent over the last hour.
+                  </p>
+                </Panel>
+              </div>
+            </div>
+          </section>
+
+          {/* Bordered */}
+          <section className={styles.section}>
+            <SectionTitle title="Bordered" />
+            <div className={styles.demoSurface}>
+              <div className={styles.panelRow}>
+                <Panel bordered padding="compact">
+                  <h3 className={styles.panelHeading}>Active members</h3>
+                  <p className={styles.panelBody}>
+                    The edge a Widget tile wears, for a theme whose page matches the panel.
+                  </p>
+                </Panel>
+                <Panel bordered padding="compact">
+                  <h3 className={styles.panelHeading}>Open issues</h3>
+                  <p className={styles.panelBody}>
+                    Side by side with bordered tiles, every card keeps a visible edge.
                   </p>
                 </Panel>
               </div>

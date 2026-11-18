@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/attachment-tile
 - Schema: https://rift-ds.com/schema/components/attachment-tile.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [File row](https://rift-ds.com/components/file-row.md) instead when the file is one of a list of documents, read as rows.
+
 ## AttachmentTile props
 
 | Prop | Type | Required | Default | Description |

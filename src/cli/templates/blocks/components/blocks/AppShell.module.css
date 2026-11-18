@@ -145,7 +145,8 @@
 }
 
 /* The folded search: shown only where the field does not fit. */
-.searchIcon {
+.searchIcon,
+.aiIcon {
   display: none;
 }
 
@@ -164,37 +165,10 @@
   min-width: 0;
 }
 
+/* PageHeader draws the breadcrumb, the title and the actions, and folds the
+   actions under the title when it is narrow; the shell only spaces it. */
 .pageHead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--gap-400);
   padding-top: var(--padding-400);
-}
-
-.pageHeadText {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-100);
-  min-width: 0;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--font-heading-1-family);
-  font-size: var(--font-heading-1-size);
-  font-weight: var(--font-heading-1-weight);
-  line-height: var(--font-heading-1-line-height);
-  letter-spacing: var(--font-heading-1-letter-spacing);
-  color: var(--color-text-primary);
-}
-
-.pageActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-200);
 }
 
 /* -------------------------------------------------------- responsive */
@@ -241,24 +215,17 @@
     justify-content: flex-end;
   }
 
-  .search {
+  .search,
+  .ai {
     display: none;
   }
 
-  .searchIcon {
+  .searchIcon,
+  .aiIcon {
     display: inline-flex;
   }
 
   .pageHead {
     padding-top: 0;
-  }
-
-  /* The actions take the full row under the title, sharing it evenly. */
-  .pageActions {
-    width: 100%;
-  }
-
-  .pageActions > * {
-    flex: 1;
   }
 }

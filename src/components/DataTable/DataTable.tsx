@@ -81,6 +81,14 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   align?: 'start' | 'center' | 'end' | 'left' | 'right';
   /** Render the cell for a row; defaults to the row's raw value for this key. */
   render?: (row: R) => React.ReactNode;
+  /**
+   * Derives the column's value from the row's other values, such as a line's
+   * total from its quantity and unit price (`(values) => Number(values.quantity) * Number(values.price)`).
+   * The table reads it wherever it reads a value, so it sorts, filters, totals
+   * and groups, and it follows an edit to the cells it reads as the edit is
+   * made. A computed column is never editable.
+   */
+  compute?: (values: R['values']) => DataTableValue;
   /** Whether this column names each row: its cells render as row headers, and its value names the row's checkbox ("Select Ada Lovelace"). One column per table. */
   rowHeader?: boolean;
   /** Narrowest width a resize can reach, in pixels. Defaults to what the header needs (its padding, two letters of label, and its sort glyph and menu button) or, for an editable column, its editor, whichever is wider. */
@@ -134,6 +142,14 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   format?: DataTableColumnFormat;
   /** Whether the table can be grouped by this column, from its header menu or a TableToolbar. Defaults to false. */
   groupable?: boolean;
+  /**
+   * The order this column's groups take, as the values they gather by
+   * (`['Revenue', 'Cost of sales', 'Expenses']`): the groups listed come
+   * first, in this order whichever way the column sorts, and any others
+   * follow in the column's own order. A `status` column already groups in
+   * its options' order.
+   */
+  groupOrder?: string[];
   /**
    * The calculation a group row shows in this column, and the totals
    * footer's starting pick: `sum`, `avg`, `min`, `max`, `count`,
@@ -608,8 +624,24 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   defaultSorts?: DataTableSort[];
   /** Fires with every sort after one changes, first sort first. `onSortChange` fires too, with the first or `null`. */
   onSortsChange?: (sorts: DataTableSort[]) => void;
-  /** The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
+  /** The link component a `link` column's cells and `rowHref` render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor. */
   linkComponent?: LinkComponent;
+  /**
+   * Makes each row a link to the address it returns. The row header's content
+   * (the `rowHeader` column, else the first column shown) becomes the link,
+   * so a keyboard and a screen reader reach it as one, and a click anywhere
+   * else on the row follows it, except on the row's own controls or while
+   * text is being selected. A row it returns `undefined` for stays plain. A
+   * row header's `render` should not draw a link of its own alongside it.
+   */
+  rowHref?: (row: R) => string | undefined;
+  /**
+   * Makes each row open something in place (a drawer, a dialog) instead of
+   * navigating: the row header's content becomes a button that calls it, and
+   * a click anywhere else on the row presses that button, except on the
+   * row's own controls. `rowHref` wins on a row both give an action.
+   */
+  onRowClick?: (row: R) => void;
   /**
    * Draws only the rows in view, so a table of thousands scrolls as
    * smoothly as one of ten. `auto` (the default) does it for an unpaged,
@@ -868,7 +900,7 @@ function withType<R extends DataTableRow>(col: DataTableColumn<R>, locale: strin
 
 export function DataTable<R extends DataTableRow = DataTableRow>({
   columns: columnsProp,
-  rows,
+  rows: rowsProp,
   pageSize: pageSizeProp,
   defaultPageSize,
   onPageSizeChange,
@@ -906,6 +938,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   defaultTotals,
   onTotalsChange,
   linkComponent,
+  rowHref,
+  onRowClick,
   searchable = false,
   searchPlaceholder = 'Search',
   toolbar,
@@ -980,6 +1014,17 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   ref,
   ...rest
 }: DataTableProps<R>) {
+  /* Computed columns join each row's values once per rows array, so every
+     read below (sort, search, filters, totals, groups) sees them. */
+  const rows = useMemo(() => {
+    const computed = columnsProp.filter((col) => col.compute);
+    if (computed.length === 0) return rowsProp;
+    return rowsProp.map((row) => {
+      const values = { ...row.values };
+      for (const col of computed) values[col.key] = col.compute!(values);
+      return { ...row, values } as R;
+    });
+  }, [rowsProp, columnsProp]);
   const baseClass = 'ds-data-table';
   const locale = useLocale(localeProp);
   const collator = useMemo(() => textCollator(locale), [locale]);
@@ -1383,7 +1428,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const compare = typedComparator(groupCol.type, groupCol.options, compareValues);
     const desc = sortOf(groupKey)?.direction === 'desc';
     const first = (key: string) => byValue.get(key)![0].values[groupKey];
+    const listed = groupCol.groupOrder ?? [];
     const keys = [...byValue.keys()].sort((a, b) => {
+      // The groups the column lists come first, in its order, whichever way it sorts.
+      const ia = listed.indexOf(a);
+      const ib = listed.indexOf(b);
+      if (ia !== -1 || ib !== -1) return ia === -1 ? 1 : ib === -1 ? -1 : ia - ib;
       // The rows with no value come last, whichever way the column sorts.
       if (a === '' || b === '') return a === '' ? (b === '' ? 0 : 1) : -1;
       const order = compare(first(a), first(b));
@@ -2285,9 +2335,15 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     return kind !== undefined && LIVE_KINDS.has(kind);
   };
   const canEdit = (col: DataTableColumn<R> | undefined, row: R) =>
-    Boolean(col?.editor) && (typeof col?.editable === 'function' ? col.editable(row) : (col?.editable ?? true));
-  const valueOf = (row: R, key: string): DataTableValue =>
-    pending[row.id] && key in pending[row.id] ? pending[row.id][key] : row.values[key];
+    !col?.compute &&
+    Boolean(col?.editor) &&
+    (typeof col?.editable === 'function' ? col.editable(row) : (col?.editable ?? true));
+  const valueOf = (row: R, key: string): DataTableValue => {
+    const compute = byKey.get(key)?.compute;
+    // A computed cell follows the edits pending on the cells it reads.
+    if (compute && pending[row.id]) return compute({ ...row.values, ...pending[row.id] });
+    return pending[row.id] && key in pending[row.id] ? pending[row.id][key] : row.values[key];
+  };
   const rowView = (row: R): R => (pending[row.id] ? { ...row, values: { ...row.values, ...pending[row.id] } } : row);
   const sameValue = (a: DataTableValue, b: DataTableValue) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
   const isThenable = (value: unknown): value is Promise<unknown> =>
@@ -2449,6 +2505,32 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   };
 
   const linkEl = useLinkComponent(linkComponent);
+  const RowLink = linkEl;
+  /* The column whose content carries a row's link or button: the row header, else the first column shown. */
+  const actionKey = rowHeaderKey ?? visibleKeys[0];
+  /* A click on a row's empty space or plain text follows its link or presses
+     its button, so the whole row reads as one target, while its own controls,
+     a text selection and an open editor keep their clicks. The forwarded
+     click carries the modifier keys, so a Cmd or Ctrl click still opens a
+     new tab. */
+  const followRowAction = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    if (event.defaultPrevented || editing) return;
+    const target = event.target as HTMLElement;
+    if (target.closest('a, button, input, select, textarea, label, [role="checkbox"], [role="switch"], [data-cell-control], [contenteditable="true"]'))
+      return;
+    if (window.getSelection()?.toString()) return;
+    const control = event.currentTarget.querySelector<HTMLElement>(`.${baseClass}__row-link`);
+    control?.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey,
+      }),
+    );
+  };
   const typedWords = { checked: labels.checkedValue, unchecked: labels.uncheckedValue, more: labels.moreValues };
   const optionLabel = (col: DataTableColumn<R>) => (v: string) =>
     col.options?.find((option) => option.value === v)?.label ?? v;
@@ -3097,6 +3179,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     const name = rowName(row);
     const expandedHere = Boolean(renderDetail) && expandedState.includes(row.id);
     const detailId = `${tableId}-detail-${row.id}`;
+    const href = rowHref?.(rowView(row));
+    const rowAction = href !== undefined || Boolean(onRowClick);
     const record = (
       <tr
         key={row.id}
@@ -3105,8 +3189,10 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
         data-index={slot && part === 'record' ? slot.index : undefined}
         aria-rowindex={slot && part === 'record' ? slot.index + 2 : undefined}
         role={stacked ? 'row' : undefined}
+        onClick={rowAction ? followRowAction : undefined}
         className={[
           'ds-table__row',
+          rowAction ? `${baseClass}__row--action` : '',
           isSelected ? 'ds-table__row--selected' : '',
           editMode === 'row' && editing?.row === row.id ? `${baseClass}__row--editing` : '',
         ]
@@ -3262,7 +3348,26 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   ) : (
                     displayOf(col, raw)
                   );
-                  if (fit === 'wrap') return content;
+                  const linked =
+                    rowAction && key === actionKey && !editingHere ? (
+                      href !== undefined ? (
+                        <RowLink href={href} className={`${baseClass}__row-link`} tabIndex={innerTab}>
+                          {content}
+                        </RowLink>
+                      ) : (
+                        <button
+                          type="button"
+                          className={`${baseClass}__row-link`}
+                          tabIndex={innerTab}
+                          onClick={() => onRowClick?.(rowView(row))}
+                        >
+                          {content}
+                        </button>
+                      )
+                    ) : (
+                      content
+                    );
+                  if (fit === 'wrap') return linked;
                   return (
                     <span
                       className={`${baseClass}__text ${baseClass}__text--${fit}`}
@@ -3276,7 +3381,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                           : undefined
                       }
                     >
-                      {content}
+                      {linked}
                     </span>
                   );
                 })()}

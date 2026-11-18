@@ -1,0 +1,164 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "FileRow",
+  "label": "File row",
+  "slug": "file-row",
+  "category": "data-display",
+  "description": "One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.",
+  "client": false,
+  "importPath": "rift-ds/components/Attachment/FileRow",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/file-row",
+  "markdownUrl": "https://rift-ds.com/components/file-row.md",
+  "exports": [
+    {
+      "component": "FileRow",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The file's name with its extension (`Q3 report.pdf`), which also picks its type mark."
+        },
+        {
+          "name": "mimeType",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The file's MIME type, when its name has no telling extension."
+        },
+        {
+          "name": "kind",
+          "type": "FileKind",
+          "typeKind": "enum",
+          "values": [
+            "archive",
+            "audio",
+            "code",
+            "document",
+            "generic",
+            "image",
+            "pasted",
+            "pdf",
+            "presentation",
+            "spreadsheet",
+            "text",
+            "video"
+          ],
+          "required": false,
+          "description": "The file's kind, when neither its name nor its MIME type says it.",
+          "defaultExpression": "picked from the name and the MIME type",
+          "typeRefs": [
+            "FileKind"
+          ]
+        },
+        {
+          "name": "typeLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The type mark's lettering, in place of the one derived from the name."
+        },
+        {
+          "name": "meta",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A quiet second line: the size, who added it, when."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Makes the name a link to the file or its preview page."
+        },
+        {
+          "name": "onOpen",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Makes the name a button that opens the file in place, such as in a DocumentViewer dialog. `href` wins when both are set."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controls at the row's end: a download, a share, a menu."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Row density: `compact` for a list in a side panel.",
+          "default": "default"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the name's link renders with, such as Next.js's `Link`, so\nit navigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "FileKind": {
+      "kind": "type",
+      "definition": "type FileKind =\n  | 'pdf'\n  | 'document'\n  | 'spreadsheet'\n  | 'presentation'\n  | 'image'\n  | 'audio'\n  | 'video'\n  | 'archive'\n  | 'code'\n  | 'text'\n  | 'pasted'\n  | 'generic';"
+    },
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "The name is a native link or button and the actions passed in are native controls, reached with Tab."
+  },
+  "size": {
+    "gzip": 1842
+  },
+  "alternatives": [
+    {
+      "name": "AttachmentTile",
+      "when": "the file sits on a chat message or in a composer, shown as a square",
+      "schemaUrl": "https://rift-ds.com/schema/components/attachment-tile.json"
+    }
+  ]
+}

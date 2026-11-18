@@ -29,7 +29,7 @@
     "./components/Mention/mentions": 1200,
     "./components/ShaderField/useShaderField": 6400,
     "./components/StreamingText/useStreamReveal": 1100,
-    "./components/registry": 16000,
+    "./components/registry": 17500,
     "./format": 3000,
     "./tokens/breakpoints": 1100,
     "./tokens/motion": 900,

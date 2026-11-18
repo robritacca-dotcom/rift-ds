@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (32)
+## Data display (36)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -525,7 +525,7 @@ A number that counts to its value: count-up on mount, eased tweens on change, ta
 
 ### Avatar
 
-User profile image with initials and icon fallback, status indicator, and multiple sizes.
+A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.
 
 - Import: `import { Avatar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -578,6 +578,14 @@ Sliding content viewer with navigation arrows, dot indicators, auto-play, and ke
 - Import: `import { Carousel } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/carousel.md
+
+### Checklist
+
+Tasks with a done state each, an owner and an action, under a count done and a progress bar.
+
+- Import: `import { Checklist } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/checklist.md
 
 ### Chip
 
@@ -645,7 +653,7 @@ Compact display-only card with a centred icon or image and a label, used in the 
 
 ### Event calendar
 
-A month grid with event pills, overflow counts, and month navigation.
+A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.
 
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -658,6 +666,14 @@ Images with captions, in the case-study frame.
 - Import: `import { Figure } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/figure.md
+
+### File row
+
+One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.
+
+- Import: `import { FileRow } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/file-row.md
 
 ### Image compare
 
@@ -691,6 +707,14 @@ Linked items with logo, label, and subtitle.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/link-list.md
 
+### Org chart
+
+Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath.
+
+- Import: `import { OrgChart } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/org-chart.md
+
 ### Pixel avatar
 
 A generated character mark drawn from a name: the same name is always the same pixel creature in the same ink.
@@ -707,6 +731,14 @@ Blockquotes and pull-quotes with attribution.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/quote.md
 
+### Resource timeline
+
+Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.
+
+- Import: `import { ResourceTimeline } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/resource-timeline.md
+
 ### Selection card
 
 Large option cards for high-visibility choices like settings and onboarding, with radio, checkbox or per-card toggle indicators.
@@ -717,7 +749,7 @@ Large option cards for high-visibility choices like settings and onboarding, wit
 
 ### Stat
 
-Headline metrics with labels and trend deltas.
+Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.
 
 - Import: `import { Stat } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -757,7 +789,7 @@ Collapsible hierarchy for files, folders, and nested structures.
 
 ### Widget
 
-A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.
+A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.
 
 - Import: `import { Widget } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -821,7 +853,7 @@ Full-width status strip for page-level announcements, with an action slot and op
 
 ### Empty state
 
-The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.
+The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.
 
 - Import: `import { EmptyState } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -891,7 +923,7 @@ Temporary notification with status variants, auto-dismiss, and stacking via Toas
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toast.md
 
-## Forms (25)
+## Forms (26)
 
 Inputs, pickers, and selection controls for collecting and editing values.
 
@@ -982,6 +1014,14 @@ A row of filter chips for narrowing a collection, each opening a popover of opti
 - Import: `import { FilterBar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/filter-bar.md
+
+### Form section
+
+A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions.
+
+- Import: `import { FormSection } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/form-section.md
 
 ### Input
 
@@ -1155,7 +1195,7 @@ One-row switch for inspector panels, where the whole bar toggles and the track s
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/inspector-toggle-switch.md
 
-## Layout (8)
+## Layout (11)
 
 Page scaffolding: app shells, sidebars, dividers, and section headings.
 
@@ -1183,9 +1223,25 @@ A thin rule separating stacked content, with optional inline label and vertical 
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/divider.md
 
+### Grid
+
+Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.
+
+- Import: `import { Grid } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/grid.md
+
+### Page header
+
+The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.
+
+- Import: `import { PageHeader } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/page-header.md
+
 ### Panel
 
-The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.
+The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.
 
 - Import: `import { Panel } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -1214,6 +1270,14 @@ Two resizable regions with a draggable, keyboard-operable divider between them.
 - Import: `import { SplitPane } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/split-pane.md
+
+### Stack
+
+Children in one direction, a column or a row, with a gap from the scale between them.
+
+- Import: `import { Stack } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/stack.md
 
 ### Toolbar
 
@@ -1259,7 +1323,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (12)
+## Navigation (13)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -1346,7 +1410,7 @@ Step-by-step progress indicator for wizards and multi-stage flows.
 
 ### Tabs
 
-Tab navigation with underline indicator, icon support, compact size, and full-width mode.
+Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.
 
 - Import: `import { Tabs } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -1359,6 +1423,14 @@ Mobile screen header with a menu or back button, title, and actions, in Rift, iO
 - Import: `import { TopAppBar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/top-app-bar.md
+
+### Wizard
+
+A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.
+
+- Import: `import { Wizard } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/wizard.md
 
 ## Overlays (10)
 
@@ -1444,7 +1516,7 @@ Contextual text label that appears on hover or focus with position and delay opt
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/tooltip.md
 
-## Typography (4)
+## Typography (5)
 
 Headings, running text, links, and lists, each drawn from a tier of the type scale.
 
@@ -1455,6 +1527,14 @@ A heading whose outline level and type tier are chosen apart.
 - Import: `import { Heading } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/heading.md
+
+### Icon
+
+One Material Symbol on the icon scale, decorative or named, plain or on a round tile.
+
+- Import: `import { Icon } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/icon.md
 
 ### Link
 

@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { SignaturePad } from 'rift-ds';`
 - Deep import: `import { SignaturePad } from 'rift-ds/components/SignaturePad/SignaturePad';`
 - Rendering: client component (declares 'use client')
-- Size: 10.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/signature-pad
 - Schema: https://rift-ds.com/schema/components/signature-pad.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

@@ -6,7 +6,7 @@
   "label": "Widget",
   "slug": "widget",
   "category": "data-display",
-  "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
+  "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
   "client": false,
   "importPath": "rift-ds/components/Widget/Widget",
   "barrel": "main",
@@ -224,11 +224,25 @@
           "description": "Trailing fact in the caption face: a date, an amount, a state."
         },
         {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Controls at the row's end, after the meta: an Approve and a Decline button on a request, say. A row with actions is not itself a link or a button, since a control cannot hold others, so it takes no `href` or `onClick`."
+        },
+        {
           "name": "href",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
           "description": "Renders the row as a link to this URL."
+        },
+        {
+          "name": "chevron",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on."
         },
         {
           "name": "className",
@@ -275,6 +289,18 @@
     "by": "none"
   },
   "size": {
-    "gzip": 1557
-  }
+    "gzip": 1781
+  },
+  "alternatives": [
+    {
+      "name": "Grid",
+      "when": "cells of any kind should sit in equal columns and share a row’s height",
+      "schemaUrl": "https://rift-ds.com/schema/components/grid.json"
+    },
+    {
+      "name": "FormSection",
+      "when": "the section holds a form’s fields and its own save",
+      "schemaUrl": "https://rift-ds.com/schema/components/form-section.json"
+    }
+  ]
 }

@@ -90,5 +90,12 @@
   },
   "size": {
     "gzip": 978
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Wizard",
+      "when": "the steps need their container, their heading and Back and Continue",
+      "schemaUrl": "https://rift-ds.com/schema/components/wizard.json"
+    }
+  ]
 }

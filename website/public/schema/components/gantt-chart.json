@@ -185,5 +185,12 @@
   },
   "size": {
     "gzip": 2073
-  }
+  },
+  "alternatives": [
+    {
+      "name": "ResourceTimeline",
+      "when": "the bars run over hours within one day",
+      "schemaUrl": "https://rift-ds.com/schema/components/resource-timeline.json"
+    }
+  ]
 }

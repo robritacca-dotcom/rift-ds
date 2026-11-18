@@ -1,0 +1,11 @@
+/* The settings column: one section under another, held to a reading width
+   so a row of fields never stretches across a wide screen. Each section
+   lays its heading beside its fields once it has the room, and stacks them
+   on a phone. */
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+  max-width: 880px;
+}

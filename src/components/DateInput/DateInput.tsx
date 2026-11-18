@@ -13,10 +13,12 @@ type DateInputOwnProps = {
   value?: string;
   /** Component size (not the native character-width `size` attribute) */
   size?: 'default' | 'compact';
-  /** Error state */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
-  /** Helper or error message */
+  /** Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. */
   helperText?: string;
+  /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
+  errorText?: React.ReactNode;
   /** Minimum selectable date (YYYY-MM-DD) */
   min?: string;
   /** Maximum selectable date (YYYY-MM-DD) */
@@ -60,6 +62,7 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
       required = false,
       error = false,
       helperText,
+      errorText,
       min,
       max,
       onChange,
@@ -74,10 +77,12 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
   ) => {
     const baseClass = 'ds-date-input';
 
+    const hasErrorText = errorText != null && errorText !== false && errorText !== '';
+    const invalid = error || hasErrorText;
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
-      error ? `${baseClass}--error` : '',
+      invalid ? `${baseClass}--error` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
     ]
@@ -96,6 +101,7 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
         className={classes}
         label={label}
         helperText={helperText}
+        errorText={errorText}
         error={error}
         required={required}
         disabled={disabled}
@@ -120,9 +126,9 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
             min={min}
             max={max}
             aria-label={rest['aria-label'] ?? ariaLabel ?? label}
-            aria-invalid={error}
+            aria-invalid={invalid}
             aria-describedby={
-              [rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined]
+              [rest['aria-describedby'], hasErrorText ? `${inputId}-error` : undefined, helperText ? `${inputId}-helper` : undefined]
                 .filter(Boolean)
                 .join(' ') || undefined
             }

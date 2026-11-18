@@ -9,6 +9,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import './CircularButton.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
+import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 
 /** Props owned by CircularButton itself — everything else falls through to the DOM node. */
 type CircularButtonOwnProps = {
@@ -74,6 +75,19 @@ type CircularButtonOwnProps = {
   target?: string;
   /** Optional rel attribute for links */
   rel?: string;
+  /** A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number. */
+  badge?: number | string | true;
+  /** The highest count the badge spells out; a larger one reads "99+". Defaults to 99. */
+  badgeMax?: number;
+  /**
+   * Text read after `ariaLabel` while the button carries a badge, given the
+   * badge. Defaults to ", new" for a dot and ", 3 new" for a count; the
+   * leading comma and space are part of the text. The tooltip keeps
+   * `ariaLabel` alone.
+   */
+  badgeLabel?: (badge: number | string | true) => string;
+  /** The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -139,6 +153,10 @@ export const CircularButton = React.forwardRef<
       href,
       target,
       rel,
+      badge,
+      badgeMax = 99,
+      badgeLabel = defaultBadgeLabel,
+      locale = DEFAULT_LOCALE,
       className = '',
       linkComponent,
       ...rest
@@ -162,12 +180,13 @@ export const CircularButton = React.forwardRef<
       `${baseClass}--${resolvedState}`,
       `${baseClass}--${size}`,
       isLoading && `${baseClass}--loading`,
+      badge !== undefined && `${baseClass}--badged`,
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const children = isLoading ? (
+    const glyph = isLoading ? (
       <span className={`${baseClass}__icon`} aria-hidden="true">
         <Spinner size={size === 'compact' ? 'sm' : 'md'} tone="inherit" />
       </span>
@@ -176,6 +195,26 @@ export const CircularButton = React.forwardRef<
         {icon}
       </span>
     );
+    const badgeText =
+      badge === undefined || badge === true
+        ? null
+        : typeof badge === 'number'
+          ? badge > badgeMax
+            ? `${formatNumber(badgeMax, locale)}+`
+            : formatNumber(badge, locale)
+          : badge;
+    const children = (
+      <>
+        {glyph}
+        {badge === true && <span className={`${baseClass}__badge ${baseClass}__badge--dot`} aria-hidden="true" />}
+        {badgeText !== null && (
+          <span className={`${baseClass}__badge`} aria-hidden="true">
+            {badgeText}
+          </span>
+        )}
+      </>
+    );
+    const accessibleName = badge === undefined ? ariaLabel : `${ariaLabel}${badgeLabel(badge)}`;
 
     // A loading link renders the button branch so interaction is truly blocked.
     const control =
@@ -187,7 +226,7 @@ export const CircularButton = React.forwardRef<
           href={href}
           target={target}
           rel={rel}
-          aria-label={ariaLabel}
+          aria-label={accessibleName}
         >
           {children}
         </Link>
@@ -199,7 +238,7 @@ export const CircularButton = React.forwardRef<
           className={classes}
           disabled={isDisabled || isLoading}
           aria-busy={isLoading || undefined}
-          aria-label={ariaLabel}
+          aria-label={accessibleName}
         >
           {children}
         </button>
@@ -218,3 +257,5 @@ export const CircularButton = React.forwardRef<
 );
 
 CircularButton.displayName = 'CircularButton';
+
+const defaultBadgeLabel = (badge: number | string | true) => (badge === true ? ', new' : `, ${badge} new`);

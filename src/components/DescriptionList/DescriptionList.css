@@ -97,6 +97,34 @@
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
 }
 
+/* Emphasis: the entry the others add up to, under a rule, its term and
+   value in the emphasis weight and the primary text colour. With dividers
+   the entry above already draws the rule. */
+.ds-description-list__item--emphasis {
+  padding-block-start: var(--padding-300);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.ds-description-list--dividers .ds-description-list__item--emphasis {
+  border-block-start: none;
+}
+
+.ds-description-list__item--emphasis .ds-description-list__term {
+  color: var(--color-text-primary);
+}
+
+.ds-description-list--default .ds-description-list__item--emphasis .ds-description-list__term,
+.ds-description-list--default .ds-description-list__item--emphasis .ds-description-list__details {
+  font-family: var(--font-paragraph-emphasis-family);
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.ds-description-list--compact .ds-description-list__item--emphasis .ds-description-list__term,
+.ds-description-list--compact .ds-description-list__item--emphasis .ds-description-list__details {
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+}
+
 /* Inline: term and value in two columns, the term a quarter, a third or a half */
 .ds-description-list--inline .ds-description-list__item {
   display: grid;

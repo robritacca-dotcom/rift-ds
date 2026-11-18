@@ -2,9 +2,7 @@ import { createChatHandler } from 'rift-ds/chat/server';
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from '../../../components/chat/models';
 import { guardrails } from './guardrails';
 
-export const runtime = 'nodejs';
 export const maxDuration = 60;
-export const dynamic = 'force-dynamic';
 
 /**
  * What the assistant knows and how it behaves. Replace this with your own

@@ -269,6 +269,27 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Controls at the row's end, after the meta: a request's Approve and Decline. */
+.ds-widget-row__actions {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+/* The chevron on a row that goes somewhere: a quiet glyph at the end of the
+   line, after the meta, that brightens with the row's hover. */
+.ds-widget-row__chevron {
+  flex-shrink: 0;
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-secondary);
+  transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-widget-row--interactive:hover .ds-widget-row__chevron {
+  color: var(--color-icon-primary);
+}
+
 /* A row that goes somewhere: the hover fill bleeds past the text into the
    tile's padding, so the whole line reads as one target. */
 

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "OrgChart",
+  "label": "Org chart",
+  "slug": "org-chart",
+  "category": "data-display",
+  "description": "Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath.",
+  "client": false,
+  "importPath": "rift-ds/components/OrgChart/OrgChart",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/org-chart",
+  "markdownUrl": "https://rift-ds.com/components/org-chart.md",
+  "exports": [
+    {
+      "component": "OrgChart",
+      "props": [
+        {
+          "name": "root",
+          "type": "OrgChartNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The person at the top, with everyone under them.",
+          "typeRefs": [
+            "OrgChartNode"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The chart's name, read before the people in it (\"Design team\")."
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component the people's links render with, such as Next.js's `Link`,\nso they navigate through the app's router; a plain `<a>` when unset.\nThis component can render on the server, so it never reads a\nLinkProvider: pass the prop even under one.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "OrgChartNode": {
+      "kind": "interface",
+      "definition": "interface OrgChartNode {\n  /** A stable id for the person. */\n  id: string;\n  /** Their name. */\n  name: string;\n  /** Their role (\"Head of design\"). */\n  role?: string;\n  /** An image for their avatar; their initials show without one. */\n  avatarSrc?: string;\n  /** Makes the person's name a link to their profile. */\n  href?: string;\n  /** The people who report to them, in order. */\n  reports?: OrgChartNode[];\n}",
+      "description": "One person in the chart, and the people who report to them."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "Each person whose name links to a profile is a native link, reached with Tab."
+  },
+  "size": {
+    "gzip": 1350
+  },
+  "alternatives": [
+    {
+      "name": "TreeView",
+      "when": "the hierarchy is a list to navigate and fold rather than people drawn as a chart",
+      "schemaUrl": "https://rift-ds.com/schema/components/tree-view.json"
+    }
+  ]
+}

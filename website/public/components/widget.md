@@ -1,6 +1,6 @@
 # Widget
 
-A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.
+A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -8,9 +8,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { Widget } from 'rift-ds';`
 - Deep import: `import { Widget } from 'rift-ds/components/Widget/Widget';`
 - Rendering: server-renderable (no 'use client')
-- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/widget
 - Schema: https://rift-ds.com/schema/components/widget.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+
+## Alternatives
+
+- Use [Grid](https://rift-ds.com/components/grid.md) instead when cells of any kind should sit in equal columns and share a row’s height.
+- Use [Form section](https://rift-ds.com/components/form-section.md) instead when the section holds a form’s fields and its own save.
 
 ## Widget props
 
@@ -55,7 +60,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | description | `string` | no |  | A quiet second line under the title: who, where, or how much. |
 | leading | `ReactNode` | no |  | Leading mark — a StatusDot, a PixelAvatar, an Avatar, a Spinner, an icon. Decorative unless the element names itself. |
 | meta | `ReactNode` | no |  | Trailing fact in the caption face: a date, an amount, a state. |
+| actions | `ReactNode` | no |  | Controls at the row's end, after the meta: an Approve and a Decline button on a request, say. A row with actions is not itself a link or a button, since a control cannot hold others, so it takes no `href` or `onClick`. |
 | href | `string` | no |  | Renders the row as a link to this URL. |
+| chevron | `boolean` | no |  | A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
 

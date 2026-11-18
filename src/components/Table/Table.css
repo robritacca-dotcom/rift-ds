@@ -52,6 +52,17 @@
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
+/* A row that heads a group, and a row the ones above add up to: both in
+   the emphasis weight, the total under a heavier rule. */
+.ds-table__row--heading .ds-table__cell,
+.ds-table__row--total .ds-table__cell {
+  font-weight: var(--font-paragraph-emphasis-weight);
+}
+
+.ds-table__row--total {
+  border-top: var(--border-050) solid var(--color-table-divider);
+}
+
 /* ============================================
    HEADER CELL
    ============================================ */

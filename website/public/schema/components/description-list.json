@@ -178,6 +178,13 @@
           "description": "Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one)."
         },
         {
+          "name": "emphasis",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule."
+        },
+        {
           "name": "children",
           "type": "ReactNode",
           "typeKind": "reference",
@@ -198,7 +205,7 @@
   "types": {
     "DescriptionListEntry": {
       "kind": "type",
-      "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n};",
+      "definition": "type DescriptionListEntry = {\n  /** The term: what the value is (\"Account number\", \"Due date\"). */\n  term: React.ReactNode;\n  /** The value. Empty (null, undefined or an empty string) shows the list's `emptyValue`. */\n  details?: React.ReactNode;\n  /** A stable key for the entry; also its element id. */\n  id?: string;\n  /** A trailing control for this value: an Edit button, a link. */\n  action?: React.ReactNode;\n  /** Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one). */\n  copyable?: boolean | string;\n  /** Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule. */\n  emphasis?: boolean;\n};",
       "description": "One term and its value, as `items` takes them."
     }
   },
@@ -228,6 +235,6 @@
     }
   ],
   "size": {
-    "gzip": 4820
+    "gzip": 5367
   }
 }

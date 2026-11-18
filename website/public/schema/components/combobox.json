@@ -106,7 +106,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Error state — shows error styling and message",
+          "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
           "default": false
         },
         {
@@ -114,7 +114,14 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Helper or error message displayed below the field"
+          "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
+        },
+        {
+          "name": "errorText",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
         },
         {
           "name": "loading",
@@ -233,6 +240,9 @@
       ]
     }
   },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
   "keyboard": [
     {
       "pattern": "combobox",
@@ -267,7 +277,7 @@
     }
   ],
   "size": {
-    "gzip": 6509
+    "gzip": 6581
   },
   "alternatives": [
     {

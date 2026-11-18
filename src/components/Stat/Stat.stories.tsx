@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Stat } from './Stat';
+import { Panel } from '../Panel/Panel';
+import { Sparkline } from '../Sparkline/Sparkline';
 
 const meta = {
   title: 'Components/Stat',
@@ -97,6 +99,24 @@ export const Large: Story = {
     label: 'Reduction in modelling effort',
     size: 'large',
   },
+};
+
+/** A KPI tile: an icon and the period on top, the figures, then the metric's recent history. The tile's surface is a bordered Panel. */
+export const KpiTile: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', maxWidth: '760px' }}>
+      <Panel bordered>
+        <Stat icon="shopping_bag" caption="Last 30 days" value="1,284" label="Orders" trend="up" delta="+12% vs prior period">
+          <Sparkline data={[8, 9, 7, 11, 12, 10, 14, 13, 16]} tone="positive" />
+        </Stat>
+      </Panel>
+      <Panel bordered>
+        <Stat icon="schedule" caption="Last 30 days" value="2.4 days" label="Average lead time" trend="down" delta="-0.3 days">
+          <Sparkline data={[3.1, 2.9, 3, 2.8, 2.6, 2.7, 2.5, 2.4]} tone="neutral" />
+        </Stat>
+      </Panel>
+    </div>
+  ),
 };
 
 // A metrics band as used on case-study pages

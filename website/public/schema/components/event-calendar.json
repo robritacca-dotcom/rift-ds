@@ -6,7 +6,7 @@
   "label": "Event calendar",
   "slug": "event-calendar",
   "category": "data-display",
-  "description": "A month grid with event pills, overflow counts, and month navigation.",
+  "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
   "client": true,
   "importPath": "rift-ds/components/EventCalendar/EventCalendar",
   "barrel": "main",
@@ -81,11 +81,40 @@
           "description": "Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip\non its number, taking precedence over the today chip. Controlled by the\nconsumer; pair with `onDateClick` to move it."
         },
         {
+          "name": "today",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
+        },
+        {
+          "name": "legend",
+          "type": "EventCalendarLegendItem[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown.",
+          "typeRefs": [
+            "EventCalendarLegendItem"
+          ]
+        },
+        {
           "name": "actions",
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
           "description": "Trailing header slot, e.g. a \"New event\" Button."
+        },
+        {
+          "name": "view",
+          "type": "\"month\" | \"week\"",
+          "typeKind": "enum",
+          "values": [
+            "month",
+            "week"
+          ],
+          "required": false,
+          "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount.",
+          "default": "month"
         },
         {
           "name": "previousLabel",
@@ -104,11 +133,35 @@
           "default": "Next month"
         },
         {
+          "name": "previousWeekLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the previous-week button, in the week view.",
+          "default": "Previous week"
+        },
+        {
+          "name": "nextWeekLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the next-week button, in the week view.",
+          "default": "Next week"
+        },
+        {
+          "name": "showLessLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The visible text of the control that folds an expanded day back, when a day's \"+N more\" opens it in place (with no `onDateClick`).",
+          "default": "Show less"
+        },
+        {
           "name": "monthLabel",
           "type": "((month: Date) => string)",
           "typeKind": "function",
           "required": false,
-          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`)."
+          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is the week's range in `locale`."
         },
         {
           "name": "overflowLabel",
@@ -176,7 +229,15 @@
     },
     "EventCalendarEvent": {
       "kind": "interface",
-      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD). */\n  date: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\". Untimed events sort first. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+      "refs": [
+        "EventCalendarColor"
+      ]
+    },
+    "EventCalendarLegendItem": {
+      "kind": "interface",
+      "definition": "interface EventCalendarLegendItem {\n  /** The accent, as an event's `color` names it. */\n  color: EventCalendarColor;\n  /** What events in this colour are (\"Offsites\", \"Deadlines\"). */\n  label: string;\n}",
+      "description": "A colour the calendar's events use, and what it means, for the legend.",
       "refs": [
         "EventCalendarColor"
       ]
@@ -214,6 +275,6 @@
     }
   ],
   "size": {
-    "gzip": 2176
+    "gzip": 2841
   }
 }

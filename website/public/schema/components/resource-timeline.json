@@ -1,0 +1,133 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "ResourceTimeline",
+  "label": "Resource timeline",
+  "slug": "resource-timeline",
+  "category": "data-display",
+  "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
+  "client": false,
+  "importPath": "rift-ds/components/ResourceTimeline/ResourceTimeline",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/resource-timeline",
+  "markdownUrl": "https://rift-ds.com/components/resource-timeline.md",
+  "exports": [
+    {
+      "component": "ResourceTimeline",
+      "props": [
+        {
+          "name": "rows",
+          "type": "ResourceTimelineRow[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The rows, top to bottom.",
+          "typeRefs": [
+            "ResourceTimelineRow"
+          ]
+        },
+        {
+          "name": "startHour",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The first hour the axis shows, 0 to 23. Defaults to 6.",
+          "default": 6
+        },
+        {
+          "name": "endHour",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The hour the axis ends at, 1 to 24. Defaults to 22.",
+          "default": 22
+        },
+        {
+          "name": "now",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A line at this time (`HH:MM`), such as the time now."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "The timeline's name, read before its rows (\"Bookings, Tuesday 4 March\")."
+        },
+        {
+          "name": "rowHeaderLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The header of the label column. Defaults to \"Name\".",
+          "default": "Name"
+        },
+        {
+          "name": "onBarClick",
+          "type": "((bar: ResourceTimelineBar, row: ResourceTimelineRow) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the bar and its row when a bar is pressed; bars are buttons only when it is set.",
+          "typeRefs": [
+            "ResourceTimelineBar",
+            "ResourceTimelineRow"
+          ]
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the times are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+          "default": "en-US"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "ResourceTimelineBar": {
+      "kind": "interface",
+      "definition": "interface ResourceTimelineBar {\n  /** A stable id for the bar. */\n  id: string;\n  /** When it starts, as 24-hour `HH:MM`. */\n  start: string;\n  /** When it ends, as 24-hour `HH:MM`. */\n  end: string;\n  /** A short label on the bar (\"Front desk\", \"Break\"). */\n  label?: string;\n  /** The bar's accent. Defaults to `neutral`. */\n  color?: ResourceTimelineColor;\n}",
+      "description": "One stretch of time on a row: a booking, a meeting, a run.",
+      "refs": [
+        "ResourceTimelineColor"
+      ]
+    },
+    "ResourceTimelineColor": {
+      "kind": "type",
+      "definition": "type ResourceTimelineColor =\n  \"neutral\" | \"coral\" | \"violet\" | \"cobalt\" | \"amber\" | \"gold\" | \"mint\";",
+      "description": "The accents a bar can take, the core accent roles the calendar's events use."
+    },
+    "ResourceTimelineRow": {
+      "kind": "interface",
+      "definition": "interface ResourceTimelineRow {\n  /** A stable id for the row. */\n  id: string;\n  /** What the row is, shown in the label column. */\n  label: string;\n  /** The row's bars, in any order. */\n  bars: ResourceTimelineBar[];\n}",
+      "description": "One row of the timeline: a person, a room, a machine.",
+      "refs": [
+        "ResourceTimelineBar"
+      ]
+    }
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 1553
+  },
+  "alternatives": [
+    {
+      "name": "GanttChart",
+      "when": "the bars run over days and months rather than hours within one day",
+      "schemaUrl": "https://rift-ds.com/schema/components/gantt-chart.json"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { Profiler, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { DataTable, type DataTableColumn, type DataTableProps, type DataTableRow } from './DataTable';
 import { Badge } from '../Badge/Badge';
 import { TableToolbar } from '../TableToolbar/TableToolbar';
@@ -378,6 +378,46 @@ export const RowActions: Story = {
   },
 };
 
+/** Each row links to its record: the customer's name is the link, and a click anywhere else on the row follows it, except on the row's own controls. */
+export const RowLinks: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 4),
+    rowHref: (row) => `#customer-${row.id}`,
+    selectable: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const link = canvas.getByRole('link', { name: 'John Clarkson' });
+    await expect(link).toHaveAttribute('href', '#customer-r1');
+    const followed = fn((event: Event) => event.preventDefault());
+    link.addEventListener('click', followed);
+    // A click on the row's plain text follows the link.
+    await userEvent.click(canvas.getByText('2026-09-05'));
+    await expect(followed).toHaveBeenCalledTimes(1);
+    // The row's own checkbox keeps its click.
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select John Clarkson' }));
+    await expect(followed).toHaveBeenCalledTimes(1);
+    link.removeEventListener('click', followed);
+  },
+};
+
+/** Each row opens something in place: the name is a button calling `onRowClick`, and a click on the rest of the row presses it. */
+export const RowClick: Story = {
+  args: {
+    columns: columns.map((col) => (col.key === 'name' ? { ...col, rowHeader: true } : col)),
+    rows: rows.slice(0, 4),
+    onRowClick: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByText('2026-03-25'));
+    await expect(args.onRowClick).toHaveBeenCalledWith(expect.objectContaining({ id: 'r2' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Kianna Vaccaro' }));
+    await expect(args.onRowClick).toHaveBeenCalledWith(expect.objectContaining({ id: 'r4' }));
+  },
+};
+
 /** The header holds while the body scrolls inside the table's own frame. */
 export const StickyHeader: Story = {
   args: {
@@ -456,6 +496,64 @@ function EditableTable(props: Partial<DataTableProps> & { failSaves?: boolean })
     />
   );
 }
+
+const WEEK = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+const weekColumns: DataTableColumn[] = [
+  { key: 'name', header: 'Room', rowHeader: true, width: '160px' },
+  ...WEEK.map((day) => ({
+    key: day,
+    header: day.charAt(0).toUpperCase() + day.slice(1),
+    type: 'number' as const,
+    editable: true,
+    width: '72px',
+    aggregate: 'sum' as const,
+  })),
+  {
+    key: 'total',
+    header: 'Total',
+    type: 'number' as const,
+    width: '88px',
+    aggregate: 'sum' as const,
+    compute: (values) => WEEK.reduce((sum, day) => sum + Number(values[day] ?? 0), 0),
+  },
+];
+
+/** A week grid: days across, a room per row, each day's bookings editable, and a computed total per row and per day. */
+function WeekGridTable() {
+  const [data, setData] = useState<DataTableRow[]>([
+    { id: 'w1', values: { name: 'Studio A', mon: 8, tue: 8, wed: 7, thu: 8, fri: 6, sat: 0, sun: 0 } },
+    { id: 'w2', values: { name: 'Studio B', mon: 6, tue: 8, wed: 8, thu: 8, fri: 8, sat: 4, sun: 0 } },
+    { id: 'w3', values: { name: 'Studio C', mon: 0, tue: 7, wed: 7, thu: 7, fri: 7, sat: 0, sun: 0 } },
+  ]);
+  return (
+    <DataTable
+      columns={weekColumns}
+      rows={data}
+      caption="Bookings this week"
+      totalsRow
+      defaultTotals={Object.fromEntries([...WEEK, 'total'].map((day) => [day, 'sum']))}
+      onCellEdit={({ row, key, value }) =>
+        setData((current) =>
+          current.map((r) => (r.id === row.id ? { ...r, values: { ...r.values, [key]: value } } : r)),
+        )
+      }
+    />
+  );
+}
+
+export const WeekGrid: Story = {
+  render: () => <WeekGridTable />,
+  play: async ({ canvasElement }) => {
+    await expect(cell(canvasElement, 'w3', 'total')).toHaveTextContent('28');
+    cell(canvasElement, 'w3', 'mon').focus();
+    await userEvent.keyboard('{Enter}');
+    const field = await within(canvasElement).findByRole('spinbutton', { name: /Mon, Studio C/ });
+    await userEvent.clear(field);
+    await userEvent.type(field, '8{Enter}');
+    // The row's total follows the edit.
+    await waitFor(() => expect(cell(canvasElement, 'w3', 'total')).toHaveTextContent('36'));
+  },
+};
 
 const cell = (root: HTMLElement, row: string, col: string) =>
   root.querySelector<HTMLElement>(`tbody tr[data-row="${row}"] [data-col="${col}"]`)!;
@@ -642,7 +740,7 @@ export const ColumnTypes: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const names = () => canvas.getAllByRole('rowheader').map((cell) => cell.textContent);
-    await expect(canvas.getByText('$48,000')).toBeInTheDocument();
+    await expect(canvas.getByText('$48,000.00')).toBeInTheDocument();
     await expect(canvas.getByText('80%')).toBeInTheDocument();
     await expect(canvas.getByText('Nov 4, 2026')).toBeInTheDocument();
     await expect(canvas.getByRole('link', { name: 'northwind.example' })).toHaveAttribute(
@@ -774,12 +872,12 @@ export const Grouped: Story = {
       'Waiting, 3 rows, expanded',
     ]);
     // Each group sums its prices; the footer sums them all.
-    await expect(canvas.getByText('$4,354')).toBeInTheDocument();
-    await expect(canvasElement.querySelector('tfoot')).toHaveTextContent('Sum$20,262');
+    await expect(canvas.getByText('$4,354.00')).toBeInTheDocument();
+    await expect(canvasElement.querySelector('tfoot')).toHaveTextContent('Sum$20,262.00');
     // In grid mode the group rows and the footer sit outside the arrows' reach, so each control is its own Tab stop.
     await expect(canvas.getByRole('grid')).toBeInTheDocument();
     await expect(toggles()[0]).toHaveAttribute('tabindex', '0');
-    await expect(canvas.getByRole('button', { name: 'Price, Sum $20,262' })).toHaveAttribute('tabindex', '0');
+    await expect(canvas.getByRole('button', { name: 'Price, Sum $20,262.00' })).toHaveAttribute('tabindex', '0');
     // A chevron folds its group.
     await userEvent.click(toggles()[0]);
     // Seven of the ten rows remain (each group's own header cell reads as a row header too, so count the rows).
@@ -788,6 +886,28 @@ export const Grouped: Story = {
     // A group row's checkbox selects the group.
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select every row in Shipped' }));
     await expect(canvas.getByRole('checkbox', { name: 'Select Michael Ekstrom' })).toBeChecked();
+  },
+};
+
+/** Groups in an order of the host's choosing: the column's `groupOrder` lists them first, whichever way it sorts. */
+export const GroupOrder: Story = {
+  args: {
+    columns: columns.map((col) =>
+      col.key === 'name'
+        ? { ...col, rowHeader: true }
+        : col.key === 'status'
+          ? { ...col, groupable: true, groupOrder: ['Waiting', 'Shipped'] }
+          : col,
+    ),
+    rows,
+    defaultGrouping: ['status'],
+    caption: 'Orders',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggles = canvas.getAllByRole('button', { name: /rows?, (expanded|collapsed)/ });
+    // The listed groups lead in their order; the unlisted one follows.
+    await expect(toggles.map((b) => b.getAttribute('aria-label')?.split(',')[0])).toEqual(['Waiting', 'Shipped', 'Failed']);
   },
 };
 

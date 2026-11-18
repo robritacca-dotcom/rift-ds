@@ -15,6 +15,8 @@ type AlertOwnProps = {
   variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';
   /** Component size */
   size?: 'default' | 'compact';
+  /** Actions under the description: one or two compact Buttons or a Link that act on what the alert says (retry, review, undo). */
+  action?: React.ReactNode;
   /** Whether the alert can be dismissed */
   dismissible?: boolean;
   /** Custom icon override — Material Symbol name (string) or custom element (ReactNode) */
@@ -51,6 +53,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
     {
       title,
       description,
+      action,
       variant = 'info',
       size = 'default',
       dismissible = false,
@@ -91,6 +94,9 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
           {title && <p className={`${baseClass}__title`}>{title}</p>}
           {description && (
             <p className={`${baseClass}__description`}>{description}</p>
+          )}
+          {action != null && action !== false && (
+            <div className={`${baseClass}__actions`}>{action}</div>
           )}
         </div>
 

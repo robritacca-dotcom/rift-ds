@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { WorldMap } from 'rift-ds';`
 - Deep import: `import { WorldMap } from 'rift-ds/components/WorldMap/WorldMap';`
 - Rendering: client component (declares 'use client')
-- Size: 106.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 106.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/world-map
 - Schema: https://rift-ds.com/schema/components/world-map.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

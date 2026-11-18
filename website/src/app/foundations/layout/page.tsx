@@ -1,6 +1,7 @@
 import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import PageLinks from "@/components/PageLinks/PageLinks";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Badge } from "rift-ds/components/Badge/Badge";
@@ -163,6 +164,8 @@ export default function LayoutPage() {
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Layout</h1>
+            {/* No Storybook story to point at; the link row carries the token files. */}
+            <PageLinks />
           </div>
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>

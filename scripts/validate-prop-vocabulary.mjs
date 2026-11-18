@@ -87,6 +87,10 @@ const RETIRED_PROP_NAMES = ['priority', 'kind', 'intent'];
 
 /** Components whose `tone` deliberately speaks another vocabulary, with why. */
 const SANCTIONED_TONES = {
+  EmptyState: {
+    values: ['default', 'error', 'positive'],
+    reason: 'a state that reports a result: the quiet tile for nothing to show, and the status roles for a result that worked or a step that failed',
+  },
   Gauge: {
     values: ['accent', 'error', 'neutral', 'positive', 'warning'],
     reason: 'a data reading coloured by status role, with the chart accent as its default',
@@ -98,6 +102,10 @@ const SANCTIONED_TONES = {
   Text: {
     values: ['default', 'error', 'inherit', 'neutral', 'positive', 'warning'],
     reason: 'running text that carries a status message (saved, declined) speaks the status roles, and `inherit` takes the colour of what it sits in',
+  },
+  Icon: {
+    values: ['default', 'inherit', 'neutral'],
+    reason: '`inherit` draws the glyph in currentColor, so an icon in a line of status text takes the colour of that text',
   },
   Spinner: {
     values: ['default', 'inherit', 'neutral'],
@@ -611,6 +619,7 @@ const SANCTIONED_SIZES = {
   Dialog: { values: ['sm', 'md', 'lg'], reason: 'panel widths, not density' },
   Drawer: { values: ['sm', 'md', 'lg'], reason: 'panel widths, not density' },
   Spinner: { values: ['sm', 'md', 'lg'], reason: 'glyph sizes, not density' },
+  Icon: { values: ['500', '600', '800', '1200'], reason: 'the steps of the --icon-size-* scale, named as the tokens they set, not density' },
   Chip: { values: ['large'], reason: 'one step beyond default for a prominent filter, alongside default and compact' },
   Stat: { values: ['large'], reason: 'a hero figure, one step beyond default' },
   Prose: { values: ['sm'], reason: 'a smaller reading measure for asides, alongside default' },

@@ -30,9 +30,14 @@
     },
     "theme": {
       "type": "object",
-      "required": ["light", "dark"],
+      "required": ["label", "light", "dark"],
       "additionalProperties": false,
       "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The theme's display name, as a theme menu shows it. It can differ from the id, which is the preset's data-brand value and stylesheet name."
+        },
         "light": {
           "$ref": "#/$defs/valueMap",
           "description": "Every semantic token's value in light mode."

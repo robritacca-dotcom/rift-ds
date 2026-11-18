@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { CommandPalette } from 'rift-ds';`
 - Deep import: `import { CommandPalette } from 'rift-ds/components/CommandPalette/CommandPalette';`
 - Rendering: client component (declares 'use client')
-- Size: 8.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 9.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/command-palette
 - Schema: https://rift-ds.com/schema/components/command-palette.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

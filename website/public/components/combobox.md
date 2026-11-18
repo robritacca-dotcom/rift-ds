@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { Combobox } from 'rift-ds';`
 - Deep import: `import { Combobox } from 'rift-ds/components/Combobox/Combobox';`
 - Rendering: client component (declares 'use client')
-- Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/combobox
 - Schema: https://rift-ds.com/schema/components/combobox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -31,8 +31,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
 | disabled | `boolean` | no | `false` | Whether the combobox is disabled |
 | required | `boolean` | no | `false` | Whether the combobox is required |
-| error | `boolean` | no | `false` | Error state — shows error styling and message |
-| helperText | `string` | no |  | Helper or error message displayed below the field |
+| error | `boolean` | no | `false` | Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. |
+| helperText | `string` | no |  | Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. |
+| errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | loading | `boolean` | no | `false` | Show a loading affordance in the menu — for async option fetching |
 | emptyMessage | `string` | no | `'No results found'` | Message shown when the filter matches no options |
 | loadingMessage | `string` | no | `'Loading…'` | Status text shown in the menu while `loading` is set. Defaults to "Loading…". |
@@ -87,3 +88,5 @@ interface ComboboxOptionGroup {
   options: ComboboxOption[];
 }
 ```
+
+Types from other packages: `ReactNode` (react).

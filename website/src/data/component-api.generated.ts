@@ -948,6 +948,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'default'"
           },
           {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Actions under the description: one or two compact Buttons or a Link that act on what the alert says (retry, review, undo)."
+          },
+          {
             "name": "dismissible",
             "type": "boolean",
             "required": false,
@@ -1656,6 +1662,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "showLegend",
@@ -2513,7 +2525,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Avatar",
     "slug": "avatar",
     "category": "data-display",
-    "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+    "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.",
     "client": true,
     "importPath": "rift-ds/components/Avatar/Avatar",
     "barrel": "main",
@@ -2531,7 +2543,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "alt",
             "type": "string",
             "required": false,
-            "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence."
+            "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. An organisation's avatar (`shape=\"square\"`) should pass it, or it is announced as a user's."
           },
           {
             "name": "name",
@@ -2550,6 +2562,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "sm"
             ],
             "defaultValue": "'md'"
+          },
+          {
+            "name": "shape",
+            "type": "\"circle\" | \"square\"",
+            "required": false,
+            "description": "`circle` for a person; `square` for an organisation (a company, a bank, a vendor, an integration): rounded corners on the radius scale, a logo fitted whole rather than cropped, and a building glyph when there is no image or name.",
+            "values": [
+              "circle",
+              "square"
+            ],
+            "defaultValue": "'circle'"
           },
           {
             "name": "fill",
@@ -2873,6 +2896,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "bare",
@@ -4339,6 +4368,135 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Checklist",
+    "label": "Checklist",
+    "slug": "checklist",
+    "category": "data-display",
+    "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar.",
+    "client": true,
+    "importPath": "rift-ds/components/Checklist/Checklist",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Checklist",
+        "props": [
+          {
+            "name": "items",
+            "type": "ChecklistItem[]",
+            "required": true,
+            "description": "The tasks, in the order they are best done.",
+            "typeRefs": [
+              "ChecklistItem"
+            ]
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "The checklist's heading, which names its section.\nNote: this shadows the native `title` tooltip attribute, which Checklist does not expose."
+          },
+          {
+            "name": "values",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids of the done tasks, for a controlled list. Leave undefined to let the list keep its own, seeded from `defaultValues`."
+          },
+          {
+            "name": "defaultValues",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids done on first render when the list is uncontrolled."
+          },
+          {
+            "name": "onValuesChange",
+            "type": "((values: string[]) => void)",
+            "required": false,
+            "description": "Fires with every done id after a task is ticked or unticked."
+          },
+          {
+            "name": "readOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows the done marks without letting them change, for a list that reports what the host already knows (a setup's steps, a review's checks).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "showProgress",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows how many tasks are done, as a count and a bar, under the heading. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "progressLabel",
+            "type": "((done: string, total: string) => string)",
+            "required": false,
+            "description": "The progress count, given the done and total tasks already written in the resolved locale. Defaults to \"3 of 5 done\".",
+            "defaultValue": "(done: string, total: string) => `${done} of ${total} done`"
+          },
+          {
+            "name": "ownerLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "The owner avatar's accessible name, given the owner's name. Defaults to \"Owner: <name>\".",
+            "defaultValue": "(name: string) => `Owner: ${name}`"
+          },
+          {
+            "name": "doneLabel",
+            "type": "string",
+            "required": false,
+            "description": "A read-only row's state, read after its label. Defaults to \"Done\".",
+            "defaultValue": "'Done'"
+          },
+          {
+            "name": "notDoneLabel",
+            "type": "string",
+            "required": false,
+            "description": "A read-only row's state when it is not done. Defaults to \"Not done\".",
+            "defaultValue": "'Not done'"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Row density: `compact` for a checklist in a side panel.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "headingLevel",
+            "type": "2 | 4 | 3",
+            "required": false,
+            "description": "The title's place in the outline. Defaults to 3, a part of a section.",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "3"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Chip",
     "label": "Chip",
     "slug": "chip",
@@ -4564,6 +4722,33 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Optional rel attribute for links"
+          },
+          {
+            "name": "badge",
+            "type": "string | number | true",
+            "required": false,
+            "description": "A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number."
+          },
+          {
+            "name": "badgeMax",
+            "type": "number",
+            "required": false,
+            "description": "The highest count the badge spells out; a larger one reads \"99+\". Defaults to 99.",
+            "defaultValue": "99"
+          },
+          {
+            "name": "badgeLabel",
+            "type": "((badge: string | number | true) => string)",
+            "required": false,
+            "description": "Text read after `ariaLabel` while the button carries a badge, given the\nbadge. Defaults to \", new\" for a dot and \", 3 new\" for a count; the\nleading comma and space are part of the text. The tooltip keeps\n`ariaLabel` alone.",
+            "defaultValue": "(badge: number | string | true) => (badge === true ? ', new' : `, ${badge} new`)"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "'en-US'"
           },
           {
             "name": "className",
@@ -5030,6 +5215,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "350"
           },
           {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Tick formatter for the bar series' axis, such as a currency. Defaults to a short number in the chart's locale."
+          },
+          {
+            "name": "secondaryAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Tick formatter for the line series' axis when `secondaryAxis` draws it, such as a percent. Defaults to a short number in the chart's locale."
+          },
+          {
             "name": "bare",
             "type": "boolean",
             "required": false,
@@ -5140,14 +5337,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — shows error styling and message",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below the field"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "loading",
@@ -6394,10 +6597,22 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "linkComponent",
             "type": "LinkComponent",
             "required": false,
-            "description": "The link component a `link` column's cells render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
+            "description": "The link component a `link` column's cells and `rowHref` render through, so the app's router handles them. Defaults to the nearest `LinkProvider`'s, else a plain anchor.",
             "typeRefs": [
               "LinkComponent"
             ]
+          },
+          {
+            "name": "rowHref",
+            "type": "((row: R) => string)",
+            "required": false,
+            "description": "Makes each row a link to the address it returns. The row header's content\n(the `rowHeader` column, else the first column shown) becomes the link,\nso a keyboard and a screen reader reach it as one, and a click anywhere\nelse on the row follows it, except on the row's own controls or while\ntext is being selected. A row it returns `undefined` for stays plain. A\nrow header's `render` should not draw a link of its own alongside it."
+          },
+          {
+            "name": "onRowClick",
+            "type": "((row: R) => void)",
+            "required": false,
+            "description": "Makes each row open something in place (a drawer, a dialog) instead of\nnavigating: the row header's content becomes a button that calls it, and\na click anywhere else on the row presses that button, except on the\nrow's own controls. `rowHref` wins on a row both give an action."
           },
           {
             "name": "virtualize",
@@ -7054,14 +7269,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "min",
@@ -7741,6 +7962,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Offer a copy button: `true` copies the value when it is text, a string copies that string (the unformatted account number behind a formatted one)."
           },
           {
+            "name": "emphasis",
+            "type": "boolean",
+            "required": false,
+            "description": "Sets the entry apart as the one the others add up to (a total, a balance due): its term and value in the emphasis weight and the primary text colour, under a rule."
+          },
+          {
             "name": "children",
             "type": "ReactNode",
             "required": false,
@@ -8388,14 +8615,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "onValueChange",
@@ -8561,7 +8794,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Empty state",
     "slug": "empty-state",
     "category": "feedback",
-    "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+    "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.",
     "client": false,
     "importPath": "rift-ds/components/EmptyState/EmptyState",
     "barrel": "main",
@@ -8614,6 +8847,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "plain"
             ],
             "defaultValue": "'plain'"
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"error\" | \"positive\"",
+            "required": false,
+            "description": "The icon tile's status colour. `default` is the quiet tile for nothing\nto show; `positive` is a result that worked (the end of a flow, with\nwhat happens next in the description and the action); `error` is a\nload or a step that failed.",
+            "values": [
+              "default",
+              "error",
+              "positive"
+            ],
+            "defaultValue": "'default'"
           },
           {
             "name": "className",
@@ -8894,7 +9139,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Event calendar",
     "slug": "event-calendar",
     "category": "data-display",
-    "description": "A month grid with event pills, overflow counts, and month navigation.",
+    "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
     "client": true,
     "importPath": "rift-ds/components/EventCalendar/EventCalendar",
     "barrel": "main",
@@ -8959,10 +9204,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip\non its number, taking precedence over the today chip. Controlled by the\nconsumer; pair with `onDateClick` to move it."
           },
           {
+            "name": "today",
+            "type": "string",
+            "required": false,
+            "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
+          },
+          {
+            "name": "legend",
+            "type": "EventCalendarLegendItem[]",
+            "required": false,
+            "description": "What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown.",
+            "typeRefs": [
+              "EventCalendarLegendItem"
+            ]
+          },
+          {
             "name": "actions",
             "type": "ReactNode",
             "required": false,
             "description": "Trailing header slot, e.g. a \"New event\" Button."
+          },
+          {
+            "name": "view",
+            "type": "\"month\" | \"week\"",
+            "required": false,
+            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount.",
+            "values": [
+              "month",
+              "week"
+            ],
+            "defaultValue": "'month'"
           },
           {
             "name": "previousLabel",
@@ -8979,10 +9250,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'Next month'"
           },
           {
+            "name": "previousWeekLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-week button, in the week view.",
+            "defaultValue": "'Previous week'"
+          },
+          {
+            "name": "nextWeekLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-week button, in the week view.",
+            "defaultValue": "'Next week'"
+          },
+          {
+            "name": "showLessLabel",
+            "type": "string",
+            "required": false,
+            "description": "The visible text of the control that folds an expanded day back, when a day's \"+N more\" opens it in place (with no `onDateClick`).",
+            "defaultValue": "'Show less'"
+          },
+          {
             "name": "monthLabel",
             "type": "((month: Date) => string)",
             "required": false,
-            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`)."
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is the week's range in `locale`."
           },
           {
             "name": "overflowLabel",
@@ -9301,6 +9593,117 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "FileRow",
+    "label": "File row",
+    "slug": "file-row",
+    "category": "data-display",
+    "description": "One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.",
+    "client": false,
+    "importPath": "rift-ds/components/Attachment/FileRow",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "FileRow",
+        "props": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "The file's name with its extension (`Q3 report.pdf`), which also picks its type mark."
+          },
+          {
+            "name": "mimeType",
+            "type": "string",
+            "required": false,
+            "description": "The file's MIME type, when its name has no telling extension."
+          },
+          {
+            "name": "kind",
+            "type": "FileKind",
+            "required": false,
+            "description": "The file's kind, when neither its name nor its MIME type says it.",
+            "values": [
+              "archive",
+              "audio",
+              "code",
+              "document",
+              "generic",
+              "image",
+              "pasted",
+              "pdf",
+              "presentation",
+              "spreadsheet",
+              "text",
+              "video"
+            ],
+            "defaultValue": "picked from the name and the MIME type",
+            "typeRefs": [
+              "FileKind"
+            ]
+          },
+          {
+            "name": "typeLabel",
+            "type": "string",
+            "required": false,
+            "description": "The type mark's lettering, in place of the one derived from the name."
+          },
+          {
+            "name": "meta",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A quiet second line: the size, who added it, when."
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Makes the name a link to the file or its preview page."
+          },
+          {
+            "name": "onOpen",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Makes the name a button that opens the file in place, such as in a DocumentViewer dialog. `href` wins when both are set."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Controls at the row's end: a download, a share, a menu."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Row density: `compact` for a list in a side panel.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the name's link renders with, such as Next.js's `Link`, so\nit navigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "FilterBar",
     "label": "Filter bar",
     "slug": "filter-bar",
@@ -9364,6 +9767,97 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "default"
             ],
             "defaultValue": "'default'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "FormSection",
+    "label": "Form section",
+    "slug": "form-section",
+    "category": "forms",
+    "description": "A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions.",
+    "client": false,
+    "importPath": "rift-ds/components/FormSection/FormSection",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "FormSection",
+        "props": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "The section's heading.\nNote: this shadows the native `title` tooltip attribute, which FormSection does not expose."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A sentence on what the fields are for or what changing them does."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The fields, laid out in `columns`."
+          },
+          {
+            "name": "columns",
+            "type": "1 | 2 | 3",
+            "required": false,
+            "description": "How many columns the fields run to; they fold to one as the section narrows.",
+            "values": [
+              "1",
+              "2",
+              "3"
+            ],
+            "defaultValue": "1"
+          },
+          {
+            "name": "layout",
+            "type": "\"aside\" | \"stacked\"",
+            "required": false,
+            "description": "`stacked` puts the heading above the fields; `aside` sets it in a column beside them, the settings page's layout, stacking when the section is narrow.",
+            "values": [
+              "aside",
+              "stacked"
+            ],
+            "defaultValue": "'stacked'"
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The section's own controls, at the foot of the fields: a Save, a Cancel."
+          },
+          {
+            "name": "headingLevel",
+            "type": "2 | 4 | 3",
+            "required": false,
+            "description": "The heading's place in the outline. Defaults to 2, a section of a page.",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "2"
+          },
+          {
+            "name": "divider",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws a rule above the section, for a column of sections.",
+            "defaultValue": "false"
           },
           {
             "name": "className",
@@ -9909,6 +10403,107 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Grid",
+    "label": "Grid",
+    "slug": "grid",
+    "category": "layout",
+    "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.",
+    "client": false,
+    "importPath": "rift-ds/components/Grid/Grid",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Grid",
+        "props": [
+          {
+            "name": "columns",
+            "type": "1 | 2 | 4 | 3 | 5 | 6",
+            "required": false,
+            "description": "How many equal columns the grid runs to at full width. It folds to fewer as its own width narrows, never below `minColumnWidth`.",
+            "values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ],
+            "defaultValue": "3"
+          },
+          {
+            "name": "minColumnWidth",
+            "type": "string",
+            "required": false,
+            "description": "The narrowest a column may get before the grid drops one, as a CSS length (`16rem`). Defaults to `12rem`.",
+            "defaultValue": "'12rem'"
+          },
+          {
+            "name": "gap",
+            "type": "StackGap",
+            "required": false,
+            "description": "The space between cells, both ways, as a step on the gap scale (`--gap-500` by default).",
+            "values": [
+              "050",
+              "100",
+              "200",
+              "300",
+              "400",
+              "500",
+              "1000",
+              "1500",
+              "2000",
+              "3000"
+            ],
+            "defaultValue": "'500'",
+            "typeRefs": [
+              "StackGap"
+            ]
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\" | \"stretch\"",
+            "required": false,
+            "description": "How cells sit in their row: `stretch`, the default, makes every card in a row the same height.",
+            "values": [
+              "center",
+              "end",
+              "start",
+              "stretch"
+            ],
+            "defaultValue": "'stretch'"
+          },
+          {
+            "name": "as",
+            "type": "\"div\" | \"ol\" | \"section\" | \"ul\"",
+            "required": false,
+            "description": "The element the grid renders as, so a grid of cards can be a list.",
+            "values": [
+              "div",
+              "ol",
+              "section",
+              "ul"
+            ],
+            "defaultValue": "'div'"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The cells, in reading order."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Heading",
     "label": "Heading",
     "slug": "heading",
@@ -10063,6 +10658,82 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Delay before hiding (in ms)",
             "defaultValue": "150"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "Icon",
+    "label": "Icon",
+    "slug": "icon",
+    "category": "typography",
+    "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile.",
+    "client": false,
+    "importPath": "rift-ds/components/Icon/Icon",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Icon",
+        "props": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": "The Material Symbol's name (`settings`, `arrow_forward`). A glyph that points along the reading direction mirrors in a right-to-left context."
+          },
+          {
+            "name": "size",
+            "type": "\"500\" | \"600\" | \"800\" | \"1200\"",
+            "required": false,
+            "description": "The size, as a step on the icon scale (`--icon-size-600`, the size beside body text, by default).",
+            "values": [
+              "500",
+              "600",
+              "800",
+              "1200"
+            ],
+            "defaultValue": "'600'"
+          },
+          {
+            "name": "tone",
+            "type": "\"inherit\" | \"default\" | \"neutral\"",
+            "required": false,
+            "description": "The glyph's colour role. `inherit` takes the colour of the text around it.",
+            "values": [
+              "default",
+              "inherit",
+              "neutral"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "filled",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the filled form of the glyph, as a selected nav item does.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "What the icon means, when it carries meaning no text beside it says. With a label the icon is an image with that name; without one it is decorative and hidden from assistive tech."
+          },
+          {
+            "name": "tile",
+            "type": "boolean",
+            "required": false,
+            "description": "Sets the glyph on a round tile of the icon fill, the mark at the head of a stat card or a list row.",
+            "defaultValue": "false"
           },
           {
             "name": "className",
@@ -11293,6 +11964,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "bare",
@@ -12772,14 +13449,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — shows error styling and message",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below the input"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "onValueChange",
@@ -12806,6 +13489,127 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes — applied to the wrapper, not the <input>",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "OrgChart",
+    "label": "Org chart",
+    "slug": "org-chart",
+    "category": "data-display",
+    "description": "Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath.",
+    "client": false,
+    "importPath": "rift-ds/components/OrgChart/OrgChart",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "OrgChart",
+        "props": [
+          {
+            "name": "root",
+            "type": "OrgChartNode",
+            "required": true,
+            "description": "The person at the top, with everyone under them.",
+            "typeRefs": [
+              "OrgChartNode"
+            ]
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The chart's name, read before the people in it (\"Design team\")."
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the people's links render with, such as Next.js's `Link`,\nso they navigate through the app's router; a plain `<a>` when unset.\nThis component can render on the server, so it never reads a\nLinkProvider: pass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "PageHeader",
+    "label": "Page header",
+    "slug": "page-header",
+    "category": "layout",
+    "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.",
+    "client": false,
+    "importPath": "rift-ds/components/PageHeader/PageHeader",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "PageHeader",
+        "props": [
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The page's title, its heading.\nNote: this shadows the native `title` tooltip attribute, which PageHeader does not expose."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A sentence under the title on what the page is for or what it holds."
+          },
+          {
+            "name": "breadcrumb",
+            "type": "BreadcrumbItem[]",
+            "required": false,
+            "description": "The trail above the title, from the top of the app to this page; the last item is this page and takes no `href`.",
+            "typeRefs": [
+              "BreadcrumbItem"
+            ]
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text."
+          },
+          {
+            "name": "headingLevel",
+            "type": "1 | 2",
+            "required": false,
+            "description": "The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`.",
+            "values": [
+              "1",
+              "2"
+            ],
+            "defaultValue": "1"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the breadcrumb's links render with, such as Next.js's\n`Link`, so they navigate through the app's router; a plain `<a>` when\nunset. This component can render on the server, so it never reads a\nLinkProvider: pass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
             "defaultValue": "''"
           }
         ]
@@ -12927,7 +13731,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Panel",
     "slug": "panel",
     "category": "layout",
-    "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+    "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.",
     "client": false,
     "importPath": "rift-ds/components/Panel/Panel",
     "barrel": "main",
@@ -12946,6 +13750,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "none"
             ],
             "defaultValue": "'default'"
+          },
+          {
+            "name": "bordered",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the container border the Widget tile wears, so the panel keeps a visible edge in a theme whose page fill matches the panel's.",
+            "defaultValue": "false"
           },
           {
             "name": "className",
@@ -13023,17 +13834,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "innerRadius",
-            "type": "number",
+            "type": "string | number",
             "required": false,
-            "description": "Inner radius for donut style (0 = solid pie)",
+            "description": "Inner radius for a donut (0 for a solid pie): pixels, or a percentage of the room the plot has, such as `'60%'`, so the hole scales with the chart.",
             "defaultValue": "0"
           },
           {
             "name": "outerRadius",
-            "type": "number",
+            "type": "string | number",
             "required": false,
-            "description": "Outer radius",
-            "defaultValue": "140"
+            "description": "Outer radius: pixels, or a percentage of the room the plot has once the header and legend take theirs. Defaults to `'90%'`, so the pie fits any `height` without running into its legend.",
+            "defaultValue": "'90%'"
           },
           {
             "name": "showLegend",
@@ -14427,6 +15238,90 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "ResourceTimeline",
+    "label": "Resource timeline",
+    "slug": "resource-timeline",
+    "category": "data-display",
+    "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
+    "client": false,
+    "importPath": "rift-ds/components/ResourceTimeline/ResourceTimeline",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ResourceTimeline",
+        "props": [
+          {
+            "name": "rows",
+            "type": "ResourceTimelineRow[]",
+            "required": true,
+            "description": "The rows, top to bottom.",
+            "typeRefs": [
+              "ResourceTimelineRow"
+            ]
+          },
+          {
+            "name": "startHour",
+            "type": "number",
+            "required": false,
+            "description": "The first hour the axis shows, 0 to 23. Defaults to 6.",
+            "defaultValue": "6"
+          },
+          {
+            "name": "endHour",
+            "type": "number",
+            "required": false,
+            "description": "The hour the axis ends at, 1 to 24. Defaults to 22.",
+            "defaultValue": "22"
+          },
+          {
+            "name": "now",
+            "type": "string",
+            "required": false,
+            "description": "A line at this time (`HH:MM`), such as the time now."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The timeline's name, read before its rows (\"Bookings, Tuesday 4 March\")."
+          },
+          {
+            "name": "rowHeaderLabel",
+            "type": "string",
+            "required": false,
+            "description": "The header of the label column. Defaults to \"Name\".",
+            "defaultValue": "'Name'"
+          },
+          {
+            "name": "onBarClick",
+            "type": "((bar: ResourceTimelineBar, row: ResourceTimelineRow) => void)",
+            "required": false,
+            "description": "Called with the bar and its row when a bar is pressed; bars are buttons only when it is set.",
+            "typeRefs": [
+              "ResourceTimelineBar",
+              "ResourceTimelineRow"
+            ]
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the times are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "'en-US'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "RichDropdown",
     "label": "Rich dropdown",
     "slug": "rich-dropdown",
@@ -14607,6 +15502,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Chart area height in pixels",
             "defaultValue": "350"
+          },
+          {
+            "name": "yAxisFormatter",
+            "type": "((value: number) => string)",
+            "required": false,
+            "description": "Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale."
           },
           {
             "name": "bare",
@@ -16194,6 +17095,124 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Stack",
+    "label": "Stack",
+    "slug": "stack",
+    "category": "layout",
+    "description": "Children in one direction, a column or a row, with a gap from the scale between them.",
+    "client": false,
+    "importPath": "rift-ds/components/Stack/Stack",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Stack",
+        "props": [
+          {
+            "name": "direction",
+            "type": "\"row\" | \"column\"",
+            "required": false,
+            "description": "`column` lays the children top to bottom; `row` lays them in the reading direction.",
+            "values": [
+              "column",
+              "row"
+            ],
+            "defaultValue": "'column'"
+          },
+          {
+            "name": "gap",
+            "type": "StackGap",
+            "required": false,
+            "description": "The space between children, as a step on the gap scale (`--gap-400` by default).",
+            "values": [
+              "050",
+              "100",
+              "200",
+              "300",
+              "400",
+              "500",
+              "1000",
+              "1500",
+              "2000",
+              "3000"
+            ],
+            "defaultValue": "'400'",
+            "typeRefs": [
+              "StackGap"
+            ]
+          },
+          {
+            "name": "align",
+            "type": "\"center\" | \"start\" | \"end\" | \"baseline\" | \"stretch\"",
+            "required": false,
+            "description": "How children line up across the stack: `stretch` fills it, which keeps\ncards in a row the same height. A column stretches and a row centres\nunless it is set.",
+            "values": [
+              "baseline",
+              "center",
+              "end",
+              "start",
+              "stretch"
+            ],
+            "defaultValue": "'stretch' in a column, 'center' in a row"
+          },
+          {
+            "name": "justify",
+            "type": "\"center\" | \"start\" | \"end\" | \"between\"",
+            "required": false,
+            "description": "How children spread along the stack. `between` pushes the first and last to the ends.",
+            "values": [
+              "between",
+              "center",
+              "end",
+              "start"
+            ],
+            "defaultValue": "'start'"
+          },
+          {
+            "name": "wrap",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets a row wrap onto more lines when it runs out of room, keeping the gap between lines.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "as",
+            "type": "\"div\" | \"fieldset\" | \"footer\" | \"form\" | \"header\" | \"li\" | \"nav\" | \"ol\" | \"section\" | \"span\" | \"ul\"",
+            "required": false,
+            "description": "The element the stack renders as, so it can be a list, a section or a form.",
+            "values": [
+              "div",
+              "fieldset",
+              "footer",
+              "form",
+              "header",
+              "li",
+              "nav",
+              "ol",
+              "section",
+              "span",
+              "ul"
+            ],
+            "defaultValue": "'div'"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The stack's children."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "StackedBarChart",
     "label": "Stacked bar chart",
     "slug": "stacked-bar-chart",
@@ -16292,7 +17311,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Stat",
     "slug": "stat",
     "category": "data-display",
-    "description": "Headline metrics with labels and trend deltas.",
+    "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.",
     "client": false,
     "importPath": "rift-ds/components/Stat/Stat",
     "barrel": "main",
@@ -16352,6 +17371,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "large"
             ],
             "defaultValue": "'default'"
+          },
+          {
+            "name": "icon",
+            "type": "string | ReactNode",
+            "required": false,
+            "description": "A decorative mark in a round tile above the value, naming what the metric is about: a Material Symbol name (string) or a node."
+          },
+          {
+            "name": "caption",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A short note at the far end of the top row, in the caption face: the period the figure covers (\"Last 30 days\"), its source."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Shown after the value, label and delta, such as a Sparkline of the metric's recent history or an AvatarGroup of who it counts."
           },
           {
             "name": "locale",
@@ -17104,7 +18141,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Tabs",
     "slug": "tabs",
     "category": "navigation",
-    "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
+    "description": "Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.",
     "client": true,
     "importPath": "rift-ds/components/Tabs/Tabs",
     "barrel": "main",
@@ -17170,6 +18207,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether tabs fill the available width",
             "defaultValue": "false"
+          },
+          {
+            "name": "countLabel",
+            "type": "((count: string) => string)",
+            "required": false,
+            "description": "What a screen reader hears after a tab's label for its count, given the count already written in the resolved locale. Defaults to \", 3\"; say what it counts (\", 3 unread\") when the label does not.",
+            "defaultValue": "(count: string) => `, ${count}`"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`."
           },
           {
             "name": "className",
@@ -17454,14 +18504,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — shows error styling and message",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
+          },
+          {
+            "name": "errorText",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring."
           },
           {
             "name": "resize",
@@ -19445,7 +20501,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Widget",
     "slug": "widget",
     "category": "data-display",
-    "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
+    "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
     "client": false,
     "importPath": "rift-ds/components/Widget/Widget",
     "barrel": "main",
@@ -19637,10 +20693,22 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Trailing fact in the caption face: a date, an amount, a state."
           },
           {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Controls at the row's end, after the meta: an Approve and a Decline button on a request, say. A row with actions is not itself a link or a button, since a control cannot hold others, so it takes no `href` or `onClick`."
+          },
+          {
             "name": "href",
             "type": "string",
             "required": false,
             "description": "Renders the row as a link to this URL."
+          },
+          {
+            "name": "chevron",
+            "type": "boolean",
+            "required": false,
+            "description": "A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on."
           },
           {
             "name": "className",
@@ -19657,6 +20725,124 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "typeRefs": [
               "LinkComponent"
             ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "Wizard",
+    "label": "Wizard",
+    "slug": "wizard",
+    "category": "navigation",
+    "description": "A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.",
+    "client": true,
+    "importPath": "rift-ds/components/Wizard/Wizard",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Wizard",
+        "props": [
+          {
+            "name": "steps",
+            "type": "WizardStep[]",
+            "required": true,
+            "description": "The steps, in order.",
+            "typeRefs": [
+              "WizardStep"
+            ]
+          },
+          {
+            "name": "step",
+            "type": "number",
+            "required": false,
+            "description": "The index of the step shown, for a controlled wizard. Leave it undefined to let the wizard keep its own, seeded from `defaultStep`."
+          },
+          {
+            "name": "defaultStep",
+            "type": "number",
+            "required": false,
+            "description": "The step shown on first render when the wizard is uncontrolled. Defaults to 0.",
+            "defaultValue": "0"
+          },
+          {
+            "name": "onStepChange",
+            "type": "((step: number) => void)",
+            "required": false,
+            "description": "Fires with the index of the step the reader moves to, by Back, Continue or a completed step in the stepper."
+          },
+          {
+            "name": "onFinish",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Called when the reader presses the last step's finish button."
+          },
+          {
+            "name": "canAdvance",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the reader can move on from the step shown: false holds Continue and Finish, while the step's own fields say what is missing. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "summary",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A running figure at the start of the footer, kept in view as the steps change: a total, a count of what is chosen."
+          },
+          {
+            "name": "allowStepClick",
+            "type": "boolean",
+            "required": false,
+            "description": "Lets the reader go back to a completed step from the stepper. Defaults to true.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "backLabel",
+            "type": "string",
+            "required": false,
+            "description": "The back button's text. Defaults to \"Back\".",
+            "defaultValue": "'Back'"
+          },
+          {
+            "name": "nextLabel",
+            "type": "string",
+            "required": false,
+            "description": "The next button's text. Defaults to \"Continue\".",
+            "defaultValue": "'Continue'"
+          },
+          {
+            "name": "finishLabel",
+            "type": "string",
+            "required": false,
+            "description": "The last step's button text. Defaults to \"Finish\".",
+            "defaultValue": "'Finish'"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the stepper's step numbers are written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "headingLevel",
+            "type": "2 | 4 | 3",
+            "required": false,
+            "description": "The step heading's place in the outline. Defaults to 2, a section of a page.",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "2"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
           }
         ]
       }
@@ -20682,6 +21868,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Render nothing at all: for routes that carry no chrome.\nNote: not the native `hidden` attribute, which keeps an element mounted and only hides it; the launcher unmounts its button and panel, and spreads no native attributes.",
             "defaultValue": "false"
+          },
+          {
+            "name": "fab",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the closed launcher shows its floating button. Defaults to true.\n`false` keeps the panel and drops only the button, for a host that opens\nthe chat from a control of its own, such as an AiButton in its top bar:\nthat control calls `setOpen(true)` from `useChatWidget()` and sets\n`returnFocusRef.current` to itself, so closing the panel hands focus back.",
+            "defaultValue": "true"
           },
           {
             "name": "panelId",

@@ -71,6 +71,8 @@ type ScatterChartOwnProps = {
   summaryItems?: ChartSummaryItem[];
   /** Chart area height in pixels */
   height?: number;
+  /** Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale. */
+  yAxisFormatter?: (value: number) => string;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
   /** Additional CSS classes on the wrapper */
@@ -130,6 +132,7 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
   height = 350,
   bare = false,
   className = '',
+  yAxisFormatter,
   locale: localeProp,
   ...rest
 }, ref) => {
@@ -208,7 +211,7 @@ export const ScatterChart = React.forwardRef<HTMLDivElement, ScatterChartProps>(
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tickFormatter={formatTick}
+              tickFormatter={yAxisFormatter ?? formatTick}
               type="number"
               dataKey={yKey}
               name={yLabel}

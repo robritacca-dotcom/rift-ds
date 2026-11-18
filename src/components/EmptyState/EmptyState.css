@@ -40,6 +40,18 @@
   --icon-size: var(--icon-size-600);
 }
 
+/* Tones: the icon tile takes a status role, for a result that worked or a
+   step that failed; the copy stays in the page's text colours. */
+.ds-empty-state--positive .ds-empty-state__icon {
+  background-color: var(--color-status-positive-bg);
+  color: var(--color-status-positive-icon);
+}
+
+.ds-empty-state--error .ds-empty-state__icon {
+  background-color: var(--color-status-error-bg);
+  color: var(--color-status-error-icon);
+}
+
 /* ============================================
    CONTENT
    ============================================ */

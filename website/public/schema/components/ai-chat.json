@@ -944,6 +944,14 @@
           "default": false
         },
         {
+          "name": "fab",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the closed launcher shows its floating button. Defaults to true.\n`false` keeps the panel and drops only the button, for a host that opens\nthe chat from a control of its own, such as an AiButton in its top bar:\nthat control calls `setOpen(true)` from `useChatWidget()` and sets\n`returnFocusRef.current` to itself, so closing the panel hands focus back.",
+          "default": true
+        },
+        {
           "name": "panelId",
           "type": "string",
           "typeKind": "primitive",

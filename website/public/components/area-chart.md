@@ -25,6 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | subtitle | `string` | no |  | Description text below the title |
 | summaryItems | `ChartSummaryItem[]` | no |  | Summary stats displayed in the header |
 | height | `number` | no | `350` | Chart area height in pixels |
+| yAxisFormatter | `((value: number) => string)` | no |  | Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale. |
 | showLegend | `boolean` | no | `true` | Show the legend under a multi-series chart |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |

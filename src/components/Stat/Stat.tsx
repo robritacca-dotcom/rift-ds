@@ -2,6 +2,7 @@ import React from 'react';
 import './Stat.css';
 import '../../fonts/material-symbols.css';
 import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
+import { Icon } from '../Icon/Icon';
 
 /** Props owned by Stat itself — everything else falls through to the root div. */
 type StatOwnProps = {
@@ -23,6 +24,12 @@ type StatOwnProps = {
   deltaPlacement?: 'stacked' | 'inline' | 'auto';
   /** Stat size */
   size?: 'default' | 'large';
+  /** A decorative mark in a round tile above the value, naming what the metric is about: a Material Symbol name (string) or a node. */
+  icon?: string | React.ReactNode;
+  /** A short note at the far end of the top row, in the caption face: the period the figure covers ("Last 30 days"), its source. */
+  caption?: React.ReactNode;
+  /** Shown after the value, label and delta, such as a Sparkline of the metric's recent history or an AvatarGroup of who it counts. */
+  children?: React.ReactNode;
   /** The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
   locale?: string;
   /** Additional CSS classes */
@@ -31,7 +38,7 @@ type StatOwnProps = {
 
 export interface StatProps
   extends StatOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'div'>, keyof StatOwnProps | 'children'> {}
+    Omit<React.ComponentPropsWithoutRef<'div'>, keyof StatOwnProps> {}
 
 const TREND_ICONS: Record<NonNullable<StatOwnProps['trend']>, string> = {
   up: 'arrow_upward',
@@ -53,6 +60,9 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
       trend = 'neutral',
       deltaPlacement = 'stacked',
       size = 'default',
+      icon,
+      caption,
+      children,
       locale = DEFAULT_LOCALE,
       className = '',
       ...rest
@@ -60,12 +70,16 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
     ref,
   ) => {
     const baseClass = 'ds-stat';
+    const hasIcon = icon != null && icon !== false && icon !== '';
+    const hasCaption = caption != null && caption !== false && caption !== '';
+    const hasHead = hasIcon || hasCaption;
 
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
       deltaPlacement === 'inline' ? `${baseClass}--delta-inline` : '',
       deltaPlacement === 'auto' ? `${baseClass}--delta-auto` : '',
+      hasHead ? `${baseClass}--headed` : '',
       className,
     ]
       .filter(Boolean)
@@ -90,7 +104,21 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
       <div {...rest} ref={ref} className={classes}>
         {/* A container query styles only what sits inside the container,
             so `auto` lays its parts out on an inner body the root measures. */}
+        {hasHead && (
+          <span className={`${baseClass}__head`}>
+            {hasIcon &&
+              (typeof icon === 'string' ? (
+                <Icon name={icon} size="500" tile className={`${baseClass}__icon`} />
+              ) : (
+                <span className={`${baseClass}__icon`} aria-hidden="true">
+                  {icon}
+                </span>
+              ))}
+            {hasCaption && <span className={`${baseClass}__caption`}>{caption}</span>}
+          </span>
+        )}
         {deltaPlacement === 'auto' ? <span className={`${baseClass}__body`}>{parts}</span> : parts}
+        {children != null && children !== false && <span className={`${baseClass}__extra`}>{children}</span>}
       </div>
     );
   },

@@ -1,9 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
+import '../../behaviors/visually-hidden.css';
 import './Tabs.css';
 import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
+import { formatNumber } from '../../behaviors/locale';
+import { useLocale } from '../../behaviors/LocaleProvider';
 
 export interface Tab {
   /** Unique tab identifier */
@@ -12,10 +15,14 @@ export interface Tab {
   label: string;
   /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
+  /** A count after the label (unread items, results), written in the resolved locale; the tab's name carries it through `countLabel`. */
+  count?: number;
   /** Whether this tab is disabled */
   disabled?: boolean;
-  /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. The consumer renders the panels. */
+  /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. Set it when you render the panels yourself; with `content`, Tabs names its own panel and this id is used for it. */
   panelId?: string;
+  /** What the tab shows. When any tab has content, Tabs renders a `role="tabpanel"` for each after the tab list, the selected one shown, each named by its tab. The panels are the tab list's siblings, with no wrapper, and the ref and `className` stay on the tab list. Leave it out to render the panels yourself. */
+  content?: React.ReactNode;
 }
 
 /** Props owned by Tabs itself — everything else falls through to the tablist. */
@@ -50,6 +57,10 @@ type TabsOwnProps = {
   size?: 'default' | 'compact';
   /** Whether tabs fill the available width */
   fullWidth?: boolean;
+  /** What a screen reader hears after a tab's label for its count, given the count already written in the resolved locale. Defaults to ", 3"; say what it counts (", 3 unread") when the label does not. */
+  countLabel?: (count: string) => string;
+  /** The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
+  locale?: string;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -71,6 +82,8 @@ export interface TabsProps
  * only wrapper, and spreads unrecognised props onto it. The list is named
  * "Tabs" unless a native `aria-label` or `aria-labelledby` says otherwise.
  */
+const defaultCountLabel = (count: string) => `, ${count}`;
+
 export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
   (
     {
@@ -82,6 +95,8 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
       onTabChange,
       size = 'default',
       fullWidth = false,
+      locale: localeProp,
+      countLabel = defaultCountLabel,
       className = '',
       ariaLabel,
       ...rest
@@ -89,6 +104,11 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
     ref,
   ) => {
     const baseClass = 'ds-tabs';
+    const baseId = useId();
+    const ownsPanels = tabs.some((tab) => tab.content !== undefined);
+    const tabId = (index: number) => `${baseId}-tab-${index}`;
+    const panelIdOf = (tab: Tab, index: number) => tab.panelId ?? (ownsPanels ? `${baseId}-panel-${index}` : undefined);
+    const locale = useLocale(localeProp);
     const sizeClass = `${baseClass}--${size}`;
     const fullWidthClass = fullWidth ? `${baseClass}--full-width` : '';
 
@@ -146,7 +166,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
       }
     };
 
-    return (
+    const list = (
       <div
         aria-label={ariaLabel ?? 'Tabs'}
         {...rest}
@@ -172,7 +192,8 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
               role="tab"
               aria-selected={isActive}
               aria-disabled={tab.disabled}
-              aria-controls={tab.panelId}
+              id={ownsPanels ? tabId(index) : undefined}
+              aria-controls={panelIdOf(tab, index)}
               tabIndex={isActive ? 0 : -1}
               data-tab-value={tab.value}
               onClick={() => !tab.disabled && select(tab.value)}
@@ -188,11 +209,41 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
                     {tab.icon}
                   </span>
                 ))}
-              <span className={`${baseClass}__label`}>{tab.label}</span>
+              <span className={`${baseClass}__label`}>
+                {tab.label}
+                {tab.count !== undefined && (
+                  <span className="ds-visually-hidden">{countLabel(formatNumber(tab.count, locale))}</span>
+                )}
+              </span>
+              {tab.count !== undefined && (
+                <span className={`${baseClass}__count`} aria-hidden="true">
+                  {formatNumber(tab.count, locale)}
+                </span>
+              )}
             </button>
           );
         })}
       </div>
+    );
+
+    if (!ownsPanels) return list;
+    return (
+      <>
+        {list}
+        {tabs.map((tab, index) => (
+          <div
+            key={tab.value}
+            id={panelIdOf(tab, index)}
+            role="tabpanel"
+            aria-labelledby={tabId(index)}
+            hidden={tab.value !== selectedValue}
+            tabIndex={0}
+            className={`${baseClass}__panel`}
+          >
+            {tab.content}
+          </div>
+        ))}
+      </>
     );
   },
 );

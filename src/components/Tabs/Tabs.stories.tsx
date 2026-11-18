@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { Tabs } from './Tabs';
 
 const meta = {
@@ -106,6 +106,41 @@ export const Compact: Story = {
     ],
     defaultValue: 'all',
     size: 'compact',
+  },
+};
+
+export const WithCounts: Story = {
+  args: {
+    tabs: [
+      { label: 'Open', value: 'open', count: 12 },
+      { label: 'In review', value: 'review', count: 3 },
+      { label: 'Closed', value: 'closed', count: 1284 },
+    ],
+    defaultValue: 'open',
+    countLabel: (count) => `, ${count} items`,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('tab', { name: /^Closed ?, 1,284 items$/ })).toBeInTheDocument();
+  },
+};
+
+/** Tabs that carry their content: each panel is rendered, named by its tab, and only the selected one shows. */
+export const WithContent: Story = {
+  args: {
+    tabs: [
+      { label: 'Overview', value: 'overview', content: <p>A summary of the project and its status.</p> },
+      { label: 'Activity', value: 'activity', count: 4, content: <p>The latest changes, newest first.</p> },
+      { label: 'Settings', value: 'settings', content: <p>Who can see the project, and what it is called.</p> },
+    ],
+    defaultValue: 'overview',
+  },
+  play: async ({ canvas, userEvent }) => {
+    await expect(canvas.getByRole('tabpanel', { name: 'Overview' })).toHaveTextContent('A summary');
+    await userEvent.click(canvas.getByRole('tab', { name: /Activity/ }));
+    await expect(canvas.getByRole('tabpanel', { name: /Activity/ })).toHaveTextContent('The latest changes');
+    await expect(canvas.queryByText('A summary of the project and its status.')).not.toBeVisible();
+    await userEvent.click(canvas.getByRole('tab', { name: 'Overview' }));
   },
 };
 

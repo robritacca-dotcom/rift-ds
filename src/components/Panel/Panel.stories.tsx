@@ -68,6 +68,14 @@ export const Compact: Story = {
   },
 };
 
+/** A visible edge, for a theme whose page fill matches the panel's, or a panel beside bordered Widget tiles. */
+export const Bordered: Story = {
+  args: {
+    bordered: true,
+    children: sampleContent,
+  },
+};
+
 export const Flush: Story = {
   args: {
     padding: 'none',

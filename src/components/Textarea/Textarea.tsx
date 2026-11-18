@@ -17,10 +17,12 @@ type TextareaOwnProps = {
   defaultValue?: string;
   /** Component size */
   size?: 'default' | 'compact';
-  /** Error state — shows error styling and message */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
-  /** Helper or error message displayed below */
+  /** Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. */
   helperText?: string;
+  /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
+  errorText?: React.ReactNode;
   /** Whether the textarea is resizable */
   resize?: 'none' | 'vertical' | 'horizontal' | 'both';
   /** Max character count — shows counter when set */
@@ -65,6 +67,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       required = false,
       error = false,
       helperText,
+      errorText,
       resize = 'vertical',
       maxLength,
       onChange,
@@ -80,10 +83,12 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) => {
     const baseClass = 'ds-textarea';
 
+    const hasErrorText = errorText != null && errorText !== false && errorText !== '';
+    const invalid = error || hasErrorText;
     const classes = [
       baseClass,
       size === 'compact' ? `${baseClass}--compact` : '',
-      error ? `${baseClass}--error` : '',
+      invalid ? `${baseClass}--error` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
     ]
@@ -104,7 +109,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const charCount = currentValue.length;
     /* A consumer's aria-describedby joins the helper id rather than losing to it. */
     const describedBy =
-      [rest['aria-describedby'], helperText ? `${inputId}-helper` : undefined]
+      [rest['aria-describedby'], hasErrorText ? `${inputId}-error` : undefined, helperText ? `${inputId}-helper` : undefined]
         .filter(Boolean)
         .join(' ') || undefined;
 
@@ -113,6 +118,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         className={classes}
         label={label}
         helperText={helperText}
+        errorText={errorText}
         error={error}
         required={required}
         disabled={disabled}
@@ -139,7 +145,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           required={required}
           maxLength={maxLength}
           aria-label={rest['aria-label'] ?? ariaLabel ?? label}
-          aria-invalid={error}
+          aria-invalid={invalid}
           aria-describedby={describedBy}
           onChange={handleChange}
           style={{ resize, ...style }}

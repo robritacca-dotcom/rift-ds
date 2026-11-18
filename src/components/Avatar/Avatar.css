@@ -33,6 +33,20 @@
 }
 
 /* ============================================
+   SQUARE (an organisation)
+   A logo is fitted whole, never cropped to the box.
+   ============================================ */
+
+.ds-avatar--square,
+.ds-avatar--square .ds-avatar__image {
+  border-radius: var(--radius-300);
+}
+
+.ds-avatar--square .ds-avatar__image {
+  object-fit: contain;
+}
+
+/* ============================================
    IMAGE
    ============================================ */
 

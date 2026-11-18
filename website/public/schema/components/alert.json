@@ -58,6 +58,13 @@
           "default": "default"
         },
         {
+          "name": "action",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Actions under the description: one or two compact Buttons or a Link that act on what the alert says (retry, review, undo)."
+        },
+        {
           "name": "dismissible",
           "type": "boolean",
           "typeKind": "primitive",
@@ -124,6 +131,6 @@
     }
   ],
   "size": {
-    "gzip": 531
+    "gzip": 561
   }
 }

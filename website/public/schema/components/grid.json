@@ -1,0 +1,140 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.29.0",
+  "kind": "component",
+  "name": "Grid",
+  "label": "Grid",
+  "slug": "grid",
+  "category": "layout",
+  "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.",
+  "client": false,
+  "importPath": "rift-ds/components/Grid/Grid",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/grid",
+  "markdownUrl": "https://rift-ds.com/components/grid.md",
+  "exports": [
+    {
+      "component": "Grid",
+      "props": [
+        {
+          "name": "columns",
+          "type": "1 | 2 | 4 | 3 | 5 | 6",
+          "typeKind": "enum",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "required": false,
+          "description": "How many equal columns the grid runs to at full width. It folds to fewer as its own width narrows, never below `minColumnWidth`.",
+          "default": 3
+        },
+        {
+          "name": "minColumnWidth",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The narrowest a column may get before the grid drops one, as a CSS length (`16rem`). Defaults to `12rem`.",
+          "default": "12rem"
+        },
+        {
+          "name": "gap",
+          "type": "StackGap",
+          "typeKind": "enum",
+          "values": [
+            "050",
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "1000",
+            "1500",
+            "2000",
+            "3000"
+          ],
+          "required": false,
+          "description": "The space between cells, both ways, as a step on the gap scale (`--gap-500` by default).",
+          "default": "500",
+          "typeRefs": [
+            "StackGap"
+          ]
+        },
+        {
+          "name": "align",
+          "type": "\"center\" | \"start\" | \"end\" | \"stretch\"",
+          "typeKind": "enum",
+          "values": [
+            "center",
+            "end",
+            "start",
+            "stretch"
+          ],
+          "required": false,
+          "description": "How cells sit in their row: `stretch`, the default, makes every card in a row the same height.",
+          "default": "stretch"
+        },
+        {
+          "name": "as",
+          "type": "\"div\" | \"ol\" | \"section\" | \"ul\"",
+          "typeKind": "enum",
+          "values": [
+            "div",
+            "ol",
+            "section",
+            "ul"
+          ],
+          "required": false,
+          "description": "The element the grid renders as, so a grid of cards can be a list.",
+          "default": "div"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The cells, in reading order."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "StackGap": {
+      "kind": "type",
+      "definition": "type StackGap = '050' | '100' | '200' | '300' | '400' | '500' | '1000' | '1500' | '2000' | '3000';",
+      "description": "A step on the gap scale, as the `--gap-*` token it names."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 302
+  },
+  "alternatives": [
+    {
+      "name": "Stack",
+      "when": "the children run in one line, a column or a row, rather than in equal columns",
+      "schemaUrl": "https://rift-ds.com/schema/components/stack.json"
+    },
+    {
+      "name": "Widget",
+      "when": "the board is of Widget tiles of different heights that should pack without holes",
+      "schemaUrl": "https://rift-ds.com/schema/components/widget.json"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { Alert } from './Alert';
+import { Button } from '../Button/Button';
 
 const meta = {
   title: 'Components/Alert',
@@ -137,6 +138,20 @@ export const CustomIconNode: Story = {
         <path d="M22 2 11 13" />
         <path d="M22 2 15 22l-4-9-9-4 20-7z" />
       </svg>
+    ),
+  },
+};
+
+export const WithAction: Story = {
+  args: {
+    variant: 'warning',
+    title: 'Your session expires soon',
+    description: 'Save your changes or extend the session to keep working.',
+    action: (
+      <>
+        <Button size="compact">Extend session</Button>
+        <Button size="compact" variant="tertiary">Sign out</Button>
+      </>
     ),
   },
 };

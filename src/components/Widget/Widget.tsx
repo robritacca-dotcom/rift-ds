@@ -3,6 +3,8 @@ import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './Widget.css';
 import { DEFAULT_LOCALE, formatNumber } from '../../behaviors/locale';
 import { WidgetDisclosure } from './WidgetDisclosure';
+import { warnOnce } from '../../behaviors/devWarning';
+import '../../fonts/material-symbols.css';
 
 /* ============================================
    Widget — the tile
@@ -201,8 +203,12 @@ type WidgetRowOwnProps = {
   leading?: React.ReactNode;
   /** Trailing fact in the caption face: a date, an amount, a state. */
   meta?: React.ReactNode;
+  /** Controls at the row's end, after the meta: an Approve and a Decline button on a request, say. A row with actions is not itself a link or a button, since a control cannot hold others, so it takes no `href` or `onClick`. */
+  actions?: React.ReactNode;
   /** Renders the row as a link to this URL. */
   href?: string;
+  /** A trailing chevron saying the row goes somewhere, mirrored in a right-to-left context. Defaults to on for a row with `href` and off otherwise; a row whose `onClick` opens a page of its own can turn it on. */
+  chevron?: boolean;
   /** Additional CSS classes */
   className?: string;
   /**
@@ -225,10 +231,14 @@ export interface WidgetRowProps
  * list only offers a target where there is somewhere to go.
  */
 export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
-  ({ title, description, leading, meta, href, className = '', onClick, linkComponent, ...rest }, ref) => {
+  ({ title, description, leading, meta, actions, href, chevron, className = '', onClick, linkComponent, ...rest }, ref) => {
     const baseClass = 'ds-widget-row';
     const Link = linkComponent ?? 'a';
-    const interactive = Boolean(href || onClick);
+    const hasActions = actions != null && actions !== false;
+    if (hasActions && (href || onClick)) {
+      warnOnce('WidgetRow: a row with `actions` takes no `href` or `onClick`, since a control cannot hold others. They are ignored.');
+    }
+    const interactive = !hasActions && Boolean(href || onClick);
 
     const classes = [baseClass, interactive ? `${baseClass}--interactive` : '', className]
       .filter(Boolean)
@@ -244,10 +254,16 @@ export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
         {meta !== undefined && meta !== null && (
           <span className={`${baseClass}__meta`}>{meta}</span>
         )}
+        {hasActions && <span className={`${baseClass}__actions`}>{actions}</span>}
+        {interactive && (chevron ?? Boolean(href)) && (
+          <span className={`${baseClass}__chevron material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
+            chevron_right
+          </span>
+        )}
       </>
     );
 
-    if (href) {
+    if (interactive && href) {
       return (
         <Link
           {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
@@ -261,7 +277,7 @@ export const WidgetRow = React.forwardRef<HTMLElement, WidgetRowProps>(
       );
     }
 
-    if (onClick) {
+    if (interactive && onClick) {
       return (
         <button
           {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}

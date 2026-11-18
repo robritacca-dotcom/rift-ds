@@ -143,5 +143,12 @@
   ],
   "size": {
     "gzip": 2033
-  }
+  },
+  "alternatives": [
+    {
+      "name": "OrgChart",
+      "when": "the hierarchy is people, drawn as a chart of who reports to whom",
+      "schemaUrl": "https://rift-ds.com/schema/components/org-chart.json"
+    }
+  ]
 }

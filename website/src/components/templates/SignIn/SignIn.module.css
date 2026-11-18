@@ -169,7 +169,6 @@
 }
 
 .confirmationIcon {
-  --icon-size: var(--icon-size-800);
   color: var(--color-action-primary-bg);
 }
 

@@ -102,7 +102,10 @@
       "description": "A collapsible checklist of an agent's task, with live step states and a progress readout.",
       "category": "ai",
       "client": true,
-      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
+      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }],
+      "alternatives": [
+        { "name": "Checklist", "when": "the tasks are the reader’s own to tick off, each with an owner" }
+      ]
     },
     {
       "name": "AgentRail",
@@ -245,7 +248,10 @@
       "category": "ai",
       "client": false,
       "folder": "Attachment",
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "FileRow", "when": "the file is one of a list of documents, read as rows" }
+      ]
     },
     {
       "name": "AttachmentViewer",
@@ -261,7 +267,7 @@
       "name": "Avatar",
       "label": "Avatar",
       "slug": "avatar",
-      "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+      "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.",
       "category": "data-display",
       "client": true,
       "keys": { "by": "none" }
@@ -432,6 +438,18 @@
       "pattern": "checkbox",
       "alternatives": [
         { "name": "RadioButton", "when": "only one option can be chosen" }
+      ]
+    },
+    {
+      "name": "Checklist",
+      "label": "Checklist",
+      "slug": "checklist",
+      "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar.",
+      "category": "data-display",
+      "client": true,
+      "partPatterns": [{ "pattern": "checkbox", "part": "tasks" }],
+      "alternatives": [
+        { "name": "AgentPlan", "when": "the list is an agent’s plan that it works through itself, with live step states" }
       ]
     },
     {
@@ -707,7 +725,7 @@
       "name": "EmptyState",
       "label": "Empty state",
       "slug": "empty-state",
-      "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+      "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.",
       "category": "feedback",
       "client": false,
       "keys": { "by": "none" }
@@ -743,7 +761,7 @@
       "name": "EventCalendar",
       "label": "Event calendar",
       "slug": "event-calendar",
-      "description": "A month grid with event pills, overflow counts, and month navigation.",
+      "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
       "category": "data-display",
       "client": true,
       "partPatterns": [{ "pattern": "button", "part": "navigation buttons" }]
@@ -776,6 +794,19 @@
       "pattern": "button"
     },
     {
+      "name": "FileRow",
+      "label": "File row",
+      "slug": "file-row",
+      "description": "One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.",
+      "category": "data-display",
+      "folder": "Attachment",
+      "client": false,
+      "keys": { "by": "platform", "note": "The name is a native link or button and the actions passed in are native controls, reached with Tab." },
+      "alternatives": [
+        { "name": "AttachmentTile", "when": "the file sits on a chat message or in a composer, shown as a square" }
+      ]
+    },
+    {
       "name": "FilterBar",
       "label": "Filter bar",
       "slug": "filter-bar",
@@ -783,6 +814,18 @@
       "category": "forms",
       "client": true,
       "partPatterns": [{ "pattern": "listbox", "part": "list of options" }]
+    },
+    {
+      "name": "FormSection",
+      "label": "Form section",
+      "slug": "form-section",
+      "description": "A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions.",
+      "category": "forms",
+      "client": false,
+      "keys": { "by": "platform", "note": "It holds the fields and actions passed in, each a native control reached with Tab." },
+      "alternatives": [
+        { "name": "Widget", "when": "the section is a dashboard tile rather than part of a form" }
+      ]
     },
     {
       "name": "FunnelChart",
@@ -801,7 +844,10 @@
       "description": "Phases and tasks as bars on a shared timeline, with milestones, progress, and a today rule.",
       "category": "charts",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "ResourceTimeline", "when": "the bars run over hours within one day" }
+      ]
     },
     {
       "name": "Gauge",
@@ -822,6 +868,19 @@
       "keys": { "by": "component", "note": "The arrow keys turn the globe while it has focus." }
     },
     {
+      "name": "Grid",
+      "label": "Grid",
+      "slug": "grid",
+      "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.",
+      "category": "layout",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Stack", "when": "the children run in one line, a column or a row, rather than in equal columns" },
+        { "name": "Widget", "when": "the board is of Widget tiles of different heights that should pack without holes" }
+      ]
+    },
+    {
       "name": "Heading",
       "label": "Heading",
       "slug": "heading",
@@ -838,6 +897,15 @@
       "category": "overlays",
       "client": true,
       "pattern": "tooltip"
+    },
+    {
+      "name": "Icon",
+      "label": "Icon",
+      "slug": "icon",
+      "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile.",
+      "category": "typography",
+      "client": false,
+      "keys": { "by": "none" }
     },
     {
       "name": "ImageCompare",
@@ -1131,6 +1199,30 @@
       "partPatterns": [{ "pattern": "textbox", "part": "field" }, { "pattern": "button", "part": "step buttons" }]
     },
     {
+      "name": "OrgChart",
+      "label": "Org chart",
+      "slug": "org-chart",
+      "description": "Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath.",
+      "category": "data-display",
+      "client": false,
+      "keys": { "by": "platform", "note": "Each person whose name links to a profile is a native link, reached with Tab." },
+      "alternatives": [
+        { "name": "TreeView", "when": "the hierarchy is a list to navigate and fold rather than people drawn as a chart" }
+      ]
+    },
+    {
+      "name": "PageHeader",
+      "label": "Page header",
+      "slug": "page-header",
+      "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow.",
+      "category": "layout",
+      "client": false,
+      "keys": { "by": "platform", "note": "Its breadcrumb links and the actions passed in are native links and buttons, reached with Tab." },
+      "alternatives": [
+        { "name": "SectionTitle", "when": "the heading opens a section within a page rather than the page itself" }
+      ]
+    },
+    {
       "name": "Pagination",
       "label": "Pagination",
       "slug": "pagination",
@@ -1143,7 +1235,7 @@
       "name": "Panel",
       "label": "Panel",
       "slug": "panel",
-      "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap.",
+      "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge.",
       "category": "layout",
       "client": false,
       "keys": { "by": "none" }
@@ -1297,6 +1389,18 @@
       "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
     },
     {
+      "name": "ResourceTimeline",
+      "label": "Resource timeline",
+      "slug": "resource-timeline",
+      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.",
+      "category": "data-display",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "GanttChart", "when": "the bars run over days and months rather than hours within one day" }
+      ]
+    },
+    {
       "name": "RichDropdown",
       "label": "Rich dropdown",
       "slug": "rich-dropdown",
@@ -1326,7 +1430,10 @@
       "description": "Heading with a divider line and optional trailing content for organising page sections.",
       "category": "layout",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "PageHeader", "when": "the heading is the page’s own title, with its breadcrumb and actions" }
+      ]
     },
     {
       "name": "SegmentedControl",
@@ -1470,6 +1577,18 @@
       "pattern": "splitter"
     },
     {
+      "name": "Stack",
+      "label": "Stack",
+      "slug": "stack",
+      "description": "Children in one direction, a column or a row, with a gap from the scale between them.",
+      "category": "layout",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Grid", "when": "the children should sit in equal columns that fold by the room the grid has" }
+      ]
+    },
+    {
       "name": "StackedBarChart",
       "label": "Stacked bar chart",
       "slug": "stacked-bar-chart",
@@ -1484,7 +1603,7 @@
       "name": "Stat",
       "label": "Stat",
       "slug": "stat",
-      "description": "Headline metrics with labels and trend deltas.",
+      "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.",
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" }
@@ -1505,7 +1624,10 @@
       "description": "Step-by-step progress indicator for wizards and multi-stage flows.",
       "category": "navigation",
       "client": true,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Wizard", "when": "the steps need their container, their heading and Back and Continue" }
+      ]
     },
     {
       "name": "StreamingText",
@@ -1550,7 +1672,7 @@
       "name": "Tabs",
       "label": "Tabs",
       "slug": "tabs",
-      "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
+      "description": "Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.",
       "category": "navigation",
       "client": true,
       "pattern": "tabs",
@@ -1715,7 +1837,10 @@
       "description": "Collapsible hierarchy for files, folders, and nested structures.",
       "category": "data-display",
       "client": true,
-      "pattern": "tree"
+      "pattern": "tree",
+      "alternatives": [
+        { "name": "OrgChart", "when": "the hierarchy is people, drawn as a chart of who reports to whom" }
+      ]
     },
     {
       "name": "Treemap",
@@ -1750,10 +1875,26 @@
       "name": "Widget",
       "label": "Widget",
       "slug": "widget",
-      "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
+      "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
       "category": "data-display",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Grid", "when": "cells of any kind should sit in equal columns and share a row’s height" },
+        { "name": "FormSection", "when": "the section holds a form’s fields and its own save" }
+      ]
+    },
+    {
+      "name": "Wizard",
+      "label": "Wizard",
+      "slug": "wizard",
+      "description": "A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.",
+      "category": "navigation",
+      "client": true,
+      "keys": { "by": "platform", "note": "Back, Continue and Finish are native buttons, as are the stepper’s completed steps, and focus moves to each step’s heading." },
+      "alternatives": [
+        { "name": "Stepper", "when": "only the progress is needed and the host lays out the steps and their buttons" }
+      ]
     },
     {
       "name": "WorldMap",

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn } from 'storybook/test';
 import { DateInput } from './DateInput';
 
 const meta = {
@@ -118,5 +118,21 @@ export const CompactError: Story = {
     error: true,
     helperText: 'Invalid date',
     value: '2020-01-01',
+  },
+};
+
+const ERROR_MESSAGE = 'Choose a date in the next 30 days.';
+
+/** The error message under the control, with the helper text kept beside it. Setting `errorText` marks the control invalid on its own. */
+export const WithErrorText: Story = {
+  args: {
+    label: 'Event date',
+    helperText: 'Select a date within the next 30 days',
+    errorText: ERROR_MESSAGE,
+  },
+  play: async ({ canvas }) => {
+    const control = canvas.getByLabelText('Event date');
+    await expect(control).toHaveAttribute('aria-invalid', 'true');
+    await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
   },
 };

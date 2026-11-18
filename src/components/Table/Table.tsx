@@ -30,6 +30,8 @@ export interface TableRow {
   cells: Record<string, React.ReactNode>;
   /** Whether the row is selected, drawn with the table's selected-row tint. */
   selected?: boolean;
+  /** `heading` opens a group of rows in the emphasis weight; `total` is a row the ones above add up to, in the emphasis weight under a heavier rule. */
+  variant?: 'default' | 'heading' | 'total';
 }
 
 /** Props owned by Table itself — everything else falls through to the <table>. */
@@ -141,7 +143,13 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
           {rows.map((row) => (
             <tr
               key={row.id}
-              className={row.selected ? `${baseClass}__row ${baseClass}__row--selected` : `${baseClass}__row`}
+              className={[
+                `${baseClass}__row`,
+                row.selected ? `${baseClass}__row--selected` : '',
+                row.variant && row.variant !== 'default' ? `${baseClass}__row--${row.variant}` : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
             >
               {columns.map((col) => {
                 const content = (

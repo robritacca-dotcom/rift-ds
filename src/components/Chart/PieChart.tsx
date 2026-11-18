@@ -56,10 +56,10 @@ type PieChartOwnProps = {
   summaryItems?: ChartSummaryItem[];
   /** Chart area height in pixels */
   height?: number;
-  /** Inner radius for donut style (0 = solid pie) */
-  innerRadius?: number;
-  /** Outer radius */
-  outerRadius?: number;
+  /** Inner radius for a donut (0 for a solid pie): pixels, or a percentage of the room the plot has, such as `'60%'`, so the hole scales with the chart. */
+  innerRadius?: number | string;
+  /** Outer radius: pixels, or a percentage of the room the plot has once the header and legend take theirs. Defaults to `'90%'`, so the pie fits any `height` without running into its legend. */
+  outerRadius?: number | string;
   /** Show legend */
   showLegend?: boolean;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
@@ -110,7 +110,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(({
   summaryItems,
   height = 350,
   innerRadius = 0,
-  outerRadius = 140,
+  outerRadius = '90%',
   showLegend = true,
   bare = false,
   className = '',

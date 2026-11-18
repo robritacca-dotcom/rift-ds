@@ -75,6 +75,15 @@
 }
 
 /* ============================================
+   COUNT
+   ============================================ */
+
+.ds-tabs__count {
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
    ICON
    ============================================ */
 
@@ -137,4 +146,18 @@
 .ds-tabs__tab--disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+/* ============================================
+   PANELS — rendered when the tabs carry content
+   ============================================ */
+
+.ds-tabs__panel {
+  padding-block-start: var(--padding-500);
+}
+
+.ds-tabs__panel:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-200);
 }

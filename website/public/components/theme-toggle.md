@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { ThemeToggle } from 'rift-ds';`
 - Deep import: `import { ThemeToggle } from 'rift-ds/components/ThemeToggle/ThemeToggle';`
 - Rendering: client component (declares 'use client')
-- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 7.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/theme-toggle
 - Schema: https://rift-ds.com/schema/components/theme-toggle.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

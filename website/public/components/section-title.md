@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Live docs: https://rift-ds.com/components/section-title
 - Schema: https://rift-ds.com/schema/components/section-title.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Page header](https://rift-ds.com/components/page-header.md) instead when the heading is the page’s own title, with its breadcrumb and actions.
+
 ## SectionTitle props
 
 | Prop | Type | Required | Default | Description |

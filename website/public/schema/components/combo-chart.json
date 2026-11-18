@@ -121,6 +121,20 @@
           "default": 350
         },
         {
+          "name": "yAxisFormatter",
+          "type": "((value: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Tick formatter for the bar series' axis, such as a currency. Defaults to a short number in the chart's locale."
+        },
+        {
+          "name": "secondaryAxisFormatter",
+          "type": "((value: number) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Tick formatter for the line series' axis when `secondaryAxis` draws it, such as a percent. Defaults to a short number in the chart's locale."
+        },
+        {
           "name": "bare",
           "type": "boolean",
           "typeKind": "primitive",
@@ -153,6 +167,6 @@
     "note": "The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer."
   },
   "size": {
-    "gzip": 2136
+    "gzip": 2155
   }
 }

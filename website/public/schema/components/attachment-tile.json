@@ -217,5 +217,12 @@
   },
   "size": {
     "gzip": 3071
-  }
+  },
+  "alternatives": [
+    {
+      "name": "FileRow",
+      "when": "the file is one of a list of documents, read as rows",
+      "schemaUrl": "https://rift-ds.com/schema/components/file-row.json"
+    }
+  ]
 }

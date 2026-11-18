@@ -1042,3 +1042,95 @@ button.ds-attachment-group__single:focus-visible {
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-secondary);
 }
+
+/* ============================================
+   FILE ROW — one file in a list
+   The family's type mark, the name over a line
+   of detail, controls at the end. Rows sit in a
+   list on --color-divider, as a WidgetRow list.
+   ============================================ */
+
+.ds-file-row {
+  --ds-attachment-mark-size: var(--icon-size-800);
+
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  min-width: 0;
+  padding-block: var(--padding-300);
+}
+
+.ds-file-row--compact {
+  --ds-attachment-mark-size: var(--icon-size-600);
+
+  gap: var(--gap-200);
+  padding-block: var(--padding-200);
+}
+
+.ds-file-row + .ds-file-row {
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.ds-file-row__main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-file-row__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-primary);
+}
+
+/* The name that opens the file reads as the row's own text, underlined on
+   hover and focus the way a link answers. */
+.ds-file-row__name--action {
+  display: block;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-100);
+}
+
+.ds-file-row__name--action:hover,
+.ds-file-row__name--action:focus-visible {
+  text-decoration: underline;
+}
+
+.ds-file-row__name--action:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-file-row__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-file-row__actions {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--gap-100);
+}

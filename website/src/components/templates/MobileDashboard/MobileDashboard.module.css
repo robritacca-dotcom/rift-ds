@@ -308,19 +308,6 @@
   gap: var(--gap-300);
 }
 
-/* design.md's icon tile pattern, at the stat-header size. */
-.kpiIcon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-icon-bg);
-  color: var(--color-text-primary);
-  --icon-size: var(--icon-size-500);
-}
-
 /* ------------------------------------------------------------- legends */
 
 .legendRow {
@@ -368,7 +355,6 @@
 
 .channelGlyph {
   color: var(--color-text-secondary);
-  --icon-size: var(--icon-size-500);
 }
 
 /* ------------------------------------------------------- campaign list */

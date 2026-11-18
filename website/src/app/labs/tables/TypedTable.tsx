@@ -55,7 +55,7 @@ export const typedColumns: DataTableColumn[] = [
     options: PEOPLE.map((person) => ({ value: person, label: person })),
   },
   { key: "team", header: "Team", type: "person", width: "120px" },
-  { key: "value", header: "Value", type: "currency", sortable: true, editable: true, width: "120px" },
+  { key: "value", header: "Value", type: "currency", format: { fractionDigits: 0 }, sortable: true, editable: true, width: "120px" },
   { key: "seats", header: "Seats", type: "number", sortable: true, width: "100px" },
   { key: "onboarded", header: "Onboarded", type: "progress", sortable: true, width: "180px" },
   { key: "renews", header: "Renews", type: "date", sortable: true, editable: true, width: "140px" },

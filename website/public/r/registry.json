@@ -133,7 +133,7 @@
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
-      "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes."
+      "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes."
     },
     {
       "name": "avatar-group",
@@ -242,6 +242,12 @@
       "type": "registry:ui",
       "title": "Checkbox",
       "description": "Custom checkbox with check and indeterminate states, keyboard accessible with animated transitions."
+    },
+    {
+      "name": "checklist",
+      "type": "registry:ui",
+      "title": "Checklist",
+      "description": "Tasks with a done state each, an owner and an action, under a count done and a progress bar."
     },
     {
       "name": "chip",
@@ -409,7 +415,7 @@
       "name": "empty-state",
       "type": "registry:ui",
       "title": "Empty state",
-      "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action."
+      "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action."
     },
     {
       "name": "entity-card",
@@ -433,7 +439,7 @@
       "name": "event-calendar",
       "type": "registry:ui",
       "title": "Event calendar",
-      "description": "A month grid with event pills, overflow counts, and month navigation."
+      "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week."
     },
     {
       "name": "field",
@@ -454,10 +460,22 @@
       "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors."
     },
     {
+      "name": "file-row",
+      "type": "registry:ui",
+      "title": "File row",
+      "description": "One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end."
+    },
+    {
       "name": "filter-bar",
       "type": "registry:ui",
       "title": "Filter bar",
       "description": "A row of filter chips for narrowing a collection, each opening a popover of options, with per-filter and clear-all resets."
+    },
+    {
+      "name": "form-section",
+      "type": "registry:ui",
+      "title": "Form section",
+      "description": "A part of a form or a settings page: a heading and its sentence, the fields in a grid, and the section’s own actions."
     },
     {
       "name": "funnel-chart",
@@ -484,6 +502,12 @@
       "description": "An orthographic globe with markers and great-circle arcs, rotated by drag, keys, or a slow spin."
     },
     {
+      "name": "grid",
+      "type": "registry:ui",
+      "title": "Grid",
+      "description": "Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height."
+    },
+    {
       "name": "heading",
       "type": "registry:ui",
       "title": "Heading",
@@ -494,6 +518,12 @@
       "type": "registry:ui",
       "title": "Hover card",
       "description": "Rich preview panel that opens from hover or focus, with interactive content and position options."
+    },
+    {
+      "name": "icon",
+      "type": "registry:ui",
+      "title": "Icon",
+      "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile."
     },
     {
       "name": "image-compare",
@@ -682,6 +712,18 @@
       "description": "Numeric field with increment and decrement steppers and min/max clamping."
     },
     {
+      "name": "org-chart",
+      "type": "registry:ui",
+      "title": "Org chart",
+      "description": "Who reports to whom: each person a card with their avatar, name and role, their reports in a row beneath."
+    },
+    {
+      "name": "page-header",
+      "type": "registry:ui",
+      "title": "Page header",
+      "description": "The top of a page: its breadcrumb, title, description and actions, folding the actions under the text when narrow."
+    },
+    {
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
@@ -691,7 +733,7 @@
       "name": "panel",
       "type": "registry:ui",
       "title": "Panel",
-      "description": "The plain dashboard surface: a rounded container with no border or shadow, just padding and a gap."
+      "description": "The plain dashboard surface: a rounded container with padding and a gap, borderless unless it needs an edge."
     },
     {
       "name": "pie-chart",
@@ -782,6 +824,12 @@
       "type": "registry:ui",
       "title": "Reasoning",
       "description": "A model's thinking, disclosed behind a one-line summary and collapsed once it finishes."
+    },
+    {
+      "name": "resource-timeline",
+      "type": "registry:ui",
+      "title": "Resource timeline",
+      "description": "Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours."
     },
     {
       "name": "rich-dropdown",
@@ -892,6 +940,12 @@
       "description": "Two resizable regions with a draggable, keyboard-operable divider between them."
     },
     {
+      "name": "stack",
+      "type": "registry:ui",
+      "title": "Stack",
+      "description": "Children in one direction, a column or a row, with a gap from the scale between them."
+    },
+    {
       "name": "stacked-bar-chart",
       "type": "registry:ui",
       "title": "Stacked bar chart",
@@ -901,7 +955,7 @@
       "name": "stat",
       "type": "registry:ui",
       "title": "Stat",
-      "description": "Headline metrics with labels and trend deltas."
+      "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline."
     },
     {
       "name": "status-dot",
@@ -943,7 +997,7 @@
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode."
+      "description": "Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself."
     },
     {
       "name": "tag-input",
@@ -1069,7 +1123,13 @@
       "name": "widget",
       "type": "registry:ui",
       "title": "Widget",
-      "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns."
+      "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns."
+    },
+    {
+      "name": "wizard",
+      "type": "registry:ui",
+      "title": "Wizard",
+      "description": "A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary."
     },
     {
       "name": "world-map",

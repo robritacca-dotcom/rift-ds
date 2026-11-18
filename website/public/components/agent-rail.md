@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 - Import: `import { AgentRail } from 'rift-ds';`
 - Deep import: `import { AgentRail } from 'rift-ds/components/AgentRail/AgentRail';`
 - Rendering: server-renderable (no 'use client')
-- Size: 7.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 7.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/agent-rail
 - Schema: https://rift-ds.com/schema/components/agent-rail.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

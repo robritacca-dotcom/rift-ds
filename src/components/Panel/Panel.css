@@ -13,6 +13,13 @@
   padding: var(--padding-500);
 }
 
+/* The Widget tile's edge, for a theme whose page fill matches the panel's.
+   Box-sizing keeps a bordered panel the size of a plain one beside it. */
+.ds-panel--bordered {
+  box-sizing: border-box;
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
 /* ============================================
    PADDING VARIANTS
    ============================================ */

@@ -56,10 +56,12 @@ type ComboboxOwnProps = {
   disabled?: boolean;
   /** Whether the combobox is required */
   required?: boolean;
-  /** Error state — shows error styling and message */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
-  /** Helper or error message displayed below the field */
+  /** Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. */
   helperText?: string;
+  /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
+  errorText?: React.ReactNode;
   /** Show a loading affordance in the menu — for async option fetching */
   loading?: boolean;
   /** Message shown when the filter matches no options */
@@ -134,6 +136,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
   required = false,
   error = false,
   helperText,
+  errorText,
   loading = false,
   emptyMessage = 'No results found',
   loadingMessage = 'Loading…',
@@ -372,11 +375,13 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
       ? `${inputId}-option-${filteredOptions[focusedIndex].value}`
       : undefined;
 
+  const hasErrorText = errorText != null && errorText !== false && errorText !== '';
+  const invalid = error || hasErrorText;
   const classes = [
     baseClass,
     size === 'compact' ? `${baseClass}--compact` : '',
     isOpen ? `${baseClass}--open` : '',
-    error ? `${baseClass}--error` : '',
+    invalid ? `${baseClass}--error` : '',
     disabled ? `${baseClass}--disabled` : '',
     multiple ? `${baseClass}--multiple` : '',
     className,
@@ -427,6 +432,7 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
       ref={setRootRef}
       label={label}
       helperText={helperText}
+      errorText={errorText}
       error={error}
       required={required}
       disabled={disabled}
@@ -478,11 +484,11 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
             aria-label={ariaLabelAttr ?? ariaLabel ?? (!label ? placeholder : undefined)}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={
-              [ariaDescribedBy, helperText ? `${inputId}-helper` : undefined]
+              [ariaDescribedBy, hasErrorText ? `${inputId}-error` : undefined, helperText ? `${inputId}-helper` : undefined]
                 .filter(Boolean)
                 .join(' ') || undefined
             }
-            aria-invalid={error || undefined}
+            aria-invalid={invalid || undefined}
             aria-required={required || undefined}
             placeholder={multiple && hasSelection ? '' : placeholder}
             value={inputValue}

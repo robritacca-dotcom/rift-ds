@@ -29,12 +29,6 @@
   padding-inline: var(--padding-1000);
 }
 
-.icon {
-  --icon-size: var(--icon-size-500);
-  font-size: var(--icon-size);
-  line-height: 1;
-}
-
 /* ------------------------------------------------------------ header */
 
 /* The site header's recipe: no fill at the top of the page, then the
@@ -529,7 +523,6 @@
 }
 
 .featureIcon {
-  --icon-size: var(--icon-size-600);
   color: var(--color-text-primary);
 }
 

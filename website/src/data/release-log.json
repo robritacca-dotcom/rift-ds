@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.30.0",
+      "date": "2026-11-18",
+      "title": "Components for the screens of an app",
+      "body": [
+        "Ten components join the library for the parts of an app that pages kept drawing by hand: Stack and Grid for layout, Page header for the top of a page, Icon for a symbol on the icon scale or on a round tile, Checklist, Wizard and Form section for tasks, steps and settings, Resource timeline for a day’s bookings, Org chart for who reports to whom, and File row for one file in a list. `npx rift-ds init block settings` writes a settings page built from them.",
+        "The existing components gained what a whole app asks of them: `errorText` on every field control, rows that open something and computed columns on DataTable, an icon, a caption and a sparkline on Stat, a week view, a legend and multi-day events on EventCalendar, counts on Tabs, heading and total rows on Table, a badge on CircularButton, and a formatter for every chart’s axis. `rift-ds/tokens/values` now names every shipped theme.",
+        "Nothing published was renamed or removed. Three defaults moved, each with a one-prop opt-out: currency columns show cents unless `fractionDigits` says otherwise, a pie fills 90% of its chart, and a WidgetRow with an `href` shows a chevron."
+      ]
+    },
+    {
       "version": "1.29.0",
       "date": "2026-11-16",
       "title": "Bring your own shader scene, and four new ones",

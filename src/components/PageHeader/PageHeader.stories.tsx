@@ -9,7 +9,7 @@ const meta = {
   parameters: { layout: 'padded' },
   tags: ['autodocs'],
   argTypes: {
-    level: { control: 'inline-radio', options: [1, 2] },
+    headingLevel: { control: 'inline-radio', options: [1, 2] },
   },
   args: {
     title: 'Projects',
@@ -59,5 +59,5 @@ export const Narrow: Story = {
 
 /** A header inside a tab or a pane, one level down the outline. */
 export const SecondLevel: Story = {
-  args: { level: 2, breadcrumb: undefined, title: 'Members', description: 'People with access to this project.' },
+  args: { headingLevel: 2, breadcrumb: undefined, title: 'Members', description: 'People with access to this project.' },
 };

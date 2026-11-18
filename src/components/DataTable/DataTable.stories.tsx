@@ -499,7 +499,7 @@ function EditableTable(props: Partial<DataTableProps> & { failSaves?: boolean })
 
 const WEEK = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 const weekColumns: DataTableColumn[] = [
-  { key: 'name', header: 'Person', rowHeader: true, width: '160px' },
+  { key: 'name', header: 'Room', rowHeader: true, width: '160px' },
   ...WEEK.map((day) => ({
     key: day,
     header: day.charAt(0).toUpperCase() + day.slice(1),
@@ -518,18 +518,18 @@ const weekColumns: DataTableColumn[] = [
   },
 ];
 
-/** A week grid: days across, a person per row, each day's hours editable, and a computed total per row and per day. */
+/** A week grid: days across, a room per row, each day's bookings editable, and a computed total per row and per day. */
 function WeekGridTable() {
   const [data, setData] = useState<DataTableRow[]>([
-    { id: 'w1', values: { name: 'Ada Lovelace', mon: 8, tue: 8, wed: 7.5, thu: 8, fri: 6, sat: 0, sun: 0 } },
-    { id: 'w2', values: { name: 'Grace Hopper', mon: 6, tue: 8, wed: 8, thu: 8, fri: 8, sat: 4, sun: 0 } },
-    { id: 'w3', values: { name: 'Alan Turing', mon: 0, tue: 7, wed: 7, thu: 7, fri: 7, sat: 0, sun: 0 } },
+    { id: 'w1', values: { name: 'Studio A', mon: 8, tue: 8, wed: 7, thu: 8, fri: 6, sat: 0, sun: 0 } },
+    { id: 'w2', values: { name: 'Studio B', mon: 6, tue: 8, wed: 8, thu: 8, fri: 8, sat: 4, sun: 0 } },
+    { id: 'w3', values: { name: 'Studio C', mon: 0, tue: 7, wed: 7, thu: 7, fri: 7, sat: 0, sun: 0 } },
   ]);
   return (
     <DataTable
       columns={weekColumns}
       rows={data}
-      caption="Hours this week"
+      caption="Bookings this week"
       totalsRow
       defaultTotals={Object.fromEntries([...WEEK, 'total'].map((day) => [day, 'sum']))}
       onCellEdit={({ row, key, value }) =>
@@ -547,7 +547,7 @@ export const WeekGrid: Story = {
     await expect(cell(canvasElement, 'w3', 'total')).toHaveTextContent('28');
     cell(canvasElement, 'w3', 'mon').focus();
     await userEvent.keyboard('{Enter}');
-    const field = await within(canvasElement).findByRole('spinbutton', { name: /Mon, Alan Turing/ });
+    const field = await within(canvasElement).findByRole('spinbutton', { name: /Mon, Studio C/ });
     await userEvent.clear(field);
     await userEvent.type(field, '8{Enter}');
     // The row's total follows the edit.

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { Tabs } from './Tabs';
 
 const meta = {
@@ -117,6 +117,11 @@ export const WithCounts: Story = {
       { label: 'Closed', value: 'closed', count: 1284 },
     ],
     defaultValue: 'open',
+    countLabel: (count) => `, ${count} items`,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('tab', { name: 'Closed, 1,284 items' })).toBeInTheDocument();
   },
 };
 

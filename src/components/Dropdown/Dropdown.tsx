@@ -62,9 +62,9 @@ type DropdownOwnProps = {
   disabled?: boolean;
   /** Whether the dropdown is required */
   required?: boolean;
-  /** Error state */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
-  /** Helper or error message */
+  /** Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. */
   helperText?: string;
   /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
   errorText?: React.ReactNode;

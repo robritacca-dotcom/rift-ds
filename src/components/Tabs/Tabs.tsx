@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useId, useState } from 'react';
+import '../../behaviors/visually-hidden.css';
 import './Tabs.css';
 import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
@@ -14,13 +15,13 @@ export interface Tab {
   label: string;
   /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
-  /** A count after the label (unread items, results), written in the resolved locale and read as part of the tab's name. */
+  /** A count after the label (unread items, results), written in the resolved locale; the tab's name carries it through `countLabel`. */
   count?: number;
   /** Whether this tab is disabled */
   disabled?: boolean;
   /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. Set it when you render the panels yourself; with `content`, Tabs names its own panel and this id is used for it. */
   panelId?: string;
-  /** What the tab shows. When any tab has content, Tabs renders a `role="tabpanel"` for each after the tab list, the selected one shown, each named by its tab. Leave it out to render the panels yourself. */
+  /** What the tab shows. When any tab has content, Tabs renders a `role="tabpanel"` for each after the tab list, the selected one shown, each named by its tab. The panels are the tab list's siblings, with no wrapper, and the ref and `className` stay on the tab list. Leave it out to render the panels yourself. */
   content?: React.ReactNode;
 }
 
@@ -56,6 +57,8 @@ type TabsOwnProps = {
   size?: 'default' | 'compact';
   /** Whether tabs fill the available width */
   fullWidth?: boolean;
+  /** What a screen reader hears after a tab's label for its count, given the count already written in the resolved locale. Defaults to ", 3"; say what it counts (", 3 unread") when the label does not. */
+  countLabel?: (count: string) => string;
   /** The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. */
   locale?: string;
   /** Additional CSS classes */
@@ -79,6 +82,8 @@ export interface TabsProps
  * only wrapper, and spreads unrecognised props onto it. The list is named
  * "Tabs" unless a native `aria-label` or `aria-labelledby` says otherwise.
  */
+const defaultCountLabel = (count: string) => `, ${count}`;
+
 export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
   (
     {
@@ -91,6 +96,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
       size = 'default',
       fullWidth = false,
       locale: localeProp,
+      countLabel = defaultCountLabel,
       className = '',
       ariaLabel,
       ...rest
@@ -205,7 +211,12 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
                 ))}
               <span className={`${baseClass}__label`}>{tab.label}</span>
               {tab.count !== undefined && (
-                <span className={`${baseClass}__count`}>{formatNumber(tab.count, locale)}</span>
+                <>
+                  <span className={`${baseClass}__count`} aria-hidden="true">
+                    {formatNumber(tab.count, locale)}
+                  </span>
+                  <span className="ds-visually-hidden">{countLabel(formatNumber(tab.count, locale))}</span>
+                </>
               )}
             </button>
           );

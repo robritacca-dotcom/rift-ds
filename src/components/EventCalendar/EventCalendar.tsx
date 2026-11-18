@@ -40,7 +40,7 @@ export interface EventCalendarEvent {
 export interface EventCalendarLegendItem {
   /** The accent, as an event's `color` names it. */
   color: EventCalendarColor;
-  /** What events in this colour are ("Time away", "Deadlines"). */
+  /** What events in this colour are ("Offsites", "Deadlines"). */
   label: string;
 }
 
@@ -128,7 +128,7 @@ type EventCalendarOwnProps = {
   legend?: EventCalendarLegendItem[];
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
-  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time. */
+  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount. */
   view?: 'month' | 'week';
   /** Accessible name of the previous-month button. */
   previousLabel?: string;
@@ -143,7 +143,8 @@ type EventCalendarOwnProps = {
   /**
    * The month heading, given the first day of the month in view: the visible
    * title and the name of the day grid. Defaults to the month name and the
-   * year in `locale` ("January 2026" in `en-US`).
+   * year in `locale` ("January 2026" in `en-US`). Month view only; the week
+   * view's heading is the week's range in `locale`.
    */
   monthLabel?: (month: Date) => string;
   /**

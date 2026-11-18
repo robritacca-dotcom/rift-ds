@@ -18,7 +18,7 @@ type PageHeaderOwnProps = {
   /** The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text. */
   actions?: React.ReactNode;
   /** The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`. */
-  level?: 1 | 2;
+  headingLevel?: 1 | 2;
   /**
    * The component the breadcrumb's links render with, such as Next.js's
    * `Link`, so they navigate through the app's router; a plain `<a>` when
@@ -46,7 +46,7 @@ export function PageHeader({
   description,
   breadcrumb,
   actions,
-  level = 1,
+  headingLevel = 1,
   linkComponent,
   className = '',
   ref,
@@ -62,7 +62,7 @@ export function PageHeader({
       )}
       <div className="ds-page-header__row">
         <div className="ds-page-header__text">
-          <Heading level={level} className="ds-page-header__title">
+          <Heading level={headingLevel} className="ds-page-header__title">
             {title}
           </Heading>
           {hasDescription && <p className="ds-page-header__description">{description}</p>}

@@ -36,7 +36,7 @@ export default function PageHeaderPage() {
             <SectionTitle title="Default" />
             <div className={styles.demoSurface}>
               <PageHeader
-                level={2}
+                headingLevel={2}
                 title="Projects"
                 description="Everything your team is working on, with who owns it and when it is due."
                 breadcrumb={[{ label: "Workspace", href: "/components" }, { label: "Projects" }]}
@@ -56,7 +56,7 @@ export default function PageHeaderPage() {
             <div className={styles.demoSurface}>
               <div className={styles.narrow}>
                 <PageHeader
-                  level={2}
+                  headingLevel={2}
                   title="Members"
                   description="People with access to this project."
                   actions={

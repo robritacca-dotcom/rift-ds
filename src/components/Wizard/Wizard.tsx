@@ -26,11 +26,11 @@ type WizardOwnProps = {
   step?: number;
   /** The step shown on first render when the wizard is uncontrolled. Defaults to 0. */
   defaultStep?: number;
-  /** Fires with the index of the step the reader moves to, by Back, Next or a completed step in the stepper. */
+  /** Fires with the index of the step the reader moves to, by Back, Continue or a completed step in the stepper. */
   onStepChange?: (step: number) => void;
   /** Called when the reader presses the last step's finish button. */
   onFinish?: () => void;
-  /** Whether the reader can move on from the step shown: false holds Next and Finish, while the step's own fields say what is missing. Defaults to true. */
+  /** Whether the reader can move on from the step shown: false holds Continue and Finish, while the step's own fields say what is missing. Defaults to true. */
   canAdvance?: boolean;
   /** A running figure at the start of the footer, kept in view as the steps change: a total, a count of what is chosen. */
   summary?: React.ReactNode;
@@ -44,6 +44,8 @@ type WizardOwnProps = {
   finishLabel?: string;
   /** The BCP 47 locale the stepper's step numbers are written in. Defaults to the nearest LocaleProvider's, else `en-US`. */
   locale?: string;
+  /** The step heading's place in the outline. Defaults to 2, a section of a page. */
+  headingLevel?: 2 | 3 | 4;
   /** Additional CSS classes */
   className?: string;
 };
@@ -70,6 +72,7 @@ export function Wizard({
   nextLabel = 'Continue',
   finishLabel = 'Finish',
   locale,
+  headingLevel = 2,
   className = '',
   ref,
   ...rest
@@ -109,7 +112,7 @@ export function Wizard({
       />
       {shown && (
         <div className="ds-wizard__body">
-          <Heading ref={headingRef} level={2} tier="heading-3" tabIndex={-1} className="ds-wizard__title">
+          <Heading ref={headingRef} level={headingLevel} tier="heading-3" tabIndex={-1} className="ds-wizard__title">
             {shown.label}
           </Heading>
           <div className="ds-wizard__content">{shown.content}</div>

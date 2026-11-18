@@ -267,7 +267,7 @@
       "name": "Avatar",
       "label": "Avatar",
       "slug": "avatar",
-      "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+      "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.",
       "category": "data-display",
       "client": true,
       "keys": { "by": "none" }
@@ -725,7 +725,7 @@
       "name": "EmptyState",
       "label": "Empty state",
       "slug": "empty-state",
-      "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+      "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.",
       "category": "feedback",
       "client": false,
       "keys": { "by": "none" }
@@ -761,7 +761,7 @@
       "name": "EventCalendar",
       "label": "Event calendar",
       "slug": "event-calendar",
-      "description": "A month grid with event pills, overflow counts, and month navigation.",
+      "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
       "category": "data-display",
       "client": true,
       "partPatterns": [{ "pattern": "button", "part": "navigation buttons" }]
@@ -1603,7 +1603,7 @@
       "name": "Stat",
       "label": "Stat",
       "slug": "stat",
-      "description": "Headline metrics with labels and trend deltas.",
+      "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.",
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" }
@@ -1672,7 +1672,7 @@
       "name": "Tabs",
       "label": "Tabs",
       "slug": "tabs",
-      "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
+      "description": "Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.",
       "category": "navigation",
       "client": true,
       "pattern": "tabs",
@@ -1875,7 +1875,7 @@
       "name": "Widget",
       "label": "Widget",
       "slug": "widget",
-      "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
+      "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" },

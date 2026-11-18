@@ -52,7 +52,7 @@ export type ColorModeScriptOptions = ColorModeOptions & {
    * `data-brand`.
    */
   brandStorageKey?: string;
-  /** The base theme's id, which applies by removing `data-brand` rather than setting it. Default `tide`. */
+  /** The base theme's id, which applies by removing `data-brand` rather than setting it. Defaults to `tide`, the value of `BASE_THEME_ID` in `rift-ds/tokens/values`. */
   baseThemeId?: string;
 };
 

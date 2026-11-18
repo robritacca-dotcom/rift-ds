@@ -9,7 +9,7 @@ import "./ResourceTimeline.css";
 export type ResourceTimelineColor =
   "neutral" | "coral" | "violet" | "cobalt" | "amber" | "gold" | "mint";
 
-/** One stretch of time on a row: a shift, a booking, a meeting. */
+/** One stretch of time on a row: a booking, a meeting, a run. */
 export interface ResourceTimelineBar {
   /** A stable id for the bar. */
   id: string;
@@ -43,10 +43,10 @@ type ResourceTimelineOwnProps = {
   endHour?: number;
   /** A line at this time (`HH:MM`), such as the time now. */
   now?: string;
-  /** The timeline's name, read before its rows ("Shifts, Tuesday 4 March"). */
+  /** The timeline's name, read before its rows ("Bookings, Tuesday 4 March"). */
   label: string;
   /** The header of the label column. Defaults to "Name". */
-  rowHeader?: string;
+  rowHeaderLabel?: string;
   /** Called with the bar and its row when a bar is pressed; bars are buttons only when it is set. */
   onBarClick?: (bar: ResourceTimelineBar, row: ResourceTimelineRow) => void;
   /** The BCP 47 locale the times are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
@@ -72,8 +72,8 @@ const minutesOf = (time: string): number | null => {
 
 /**
  * Hours within one day: a row per person or resource, a bar from each
- * start to its end, on an axis of hours in the reader's locale. Shifts, room
- * bookings, a machine's runs. Each bar is named with its row and its times,
+ * start to its end, on an axis of hours in the reader's locale. Room
+ * bookings, a team's meetings, a machine's runs. Each bar is named with its row and its times,
  * and its label sits on the calendar's event fill, so it reads in every
  * theme whatever the accent. Server-renderable.
  */
@@ -83,7 +83,7 @@ export function ResourceTimeline({
   endHour = 22,
   now,
   label,
-  rowHeader = "Name",
+  rowHeaderLabel = "Name",
   onBarClick,
   locale = DEFAULT_LOCALE,
   className = "",
@@ -128,7 +128,7 @@ export function ResourceTimeline({
     >
       <ScrollRegion className="ds-resource-timeline__scroll">
         <div className="ds-resource-timeline__head" aria-hidden="true">
-          <span className="ds-resource-timeline__row-header">{rowHeader}</span>
+          <span className="ds-resource-timeline__row-header">{rowHeaderLabel}</span>
           <div className="ds-resource-timeline__axis">
             {hours.map((h) => (
               <span

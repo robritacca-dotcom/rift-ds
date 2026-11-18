@@ -21,7 +21,7 @@ type FormSectionOwnProps = {
   /** The section's own controls, at the foot of the fields: a Save, a Cancel. */
   actions?: React.ReactNode;
   /** The heading's place in the outline. Defaults to 2, a section of a page. */
-  level?: 2 | 3 | 4;
+  headingLevel?: 2 | 3 | 4;
   /** Draws a rule above the section, for a column of sections. */
   divider?: boolean;
   /** Additional CSS classes */
@@ -45,7 +45,7 @@ export function FormSection({
   columns = 1,
   layout = 'stacked',
   actions,
-  level = 2,
+  headingLevel = 2,
   divider = false,
   className = '',
   ref,
@@ -60,7 +60,7 @@ export function FormSection({
     <section {...rest} ref={ref} className={classes}>
       <div className="ds-form-section__layout">
         <div className="ds-form-section__intro">
-          <Heading level={level} tier="title-body" className="ds-form-section__title">
+          <Heading level={headingLevel} tier="title-body" className="ds-form-section__title">
             {title}
           </Heading>
           {hasDescription && <p className="ds-form-section__description">{description}</p>}

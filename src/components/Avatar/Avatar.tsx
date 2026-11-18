@@ -9,7 +9,7 @@ import { avatarFill, type AvatarFill } from './avatarFill';
 type AvatarOwnProps = {
   /** Image source URL */
   src?: string;
-  /** Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. */
+  /** Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. An organisation's avatar (`shape="square"`) should pass it, or it is announced as a user's. */
   alt?: string;
   /** User's name — used for initials fallback */
   name?: string;

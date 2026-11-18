@@ -57,6 +57,8 @@ type ChecklistOwnProps = {
   locale?: string;
   /** Row density: `compact` for a checklist in a side panel. */
   size?: 'default' | 'compact';
+  /** The title's place in the outline. Defaults to 3, a part of a section. */
+  headingLevel?: 2 | 3 | 4;
   /** Additional CSS classes */
   className?: string;
 };
@@ -89,6 +91,7 @@ export function Checklist({
   notDoneLabel = 'Not done',
   locale: localeProp,
   size = 'default',
+  headingLevel = 3,
   className = '',
   ref,
   ...rest
@@ -117,7 +120,7 @@ export function Checklist({
       {(title || showProgress) && (
         <div className="ds-checklist__header">
           {title && (
-            <Heading id={headingId} level={3} tier="title-body" className="ds-checklist__title">
+            <Heading id={headingId} level={headingLevel} tier="title-body" className="ds-checklist__title">
               {title}
             </Heading>
           )}

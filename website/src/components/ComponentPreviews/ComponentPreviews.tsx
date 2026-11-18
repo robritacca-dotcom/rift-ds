@@ -1676,7 +1676,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "page-header": () => (
     <div style={{ width: "220px" }} aria-hidden="true" inert>
-      <PageHeader level={2} title="Projects" description="What the team is working on." />
+      <PageHeader headingLevel={2} title="Projects" description="What the team is working on." />
     </div>
   ),
   "checklist": () => (
@@ -1712,7 +1712,7 @@ const previews: Record<string, () => ReactNode> = {
   "resource-timeline": () => (
     <div style={{ width: "240px" }} aria-hidden="true" inert>
       <ResourceTimeline
-        label="Shifts"
+        label="Bookings"
         startHour={8}
         endHour={12}
         rows={[

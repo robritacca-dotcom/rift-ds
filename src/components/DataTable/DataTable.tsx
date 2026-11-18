@@ -82,8 +82,8 @@ export interface DataTableColumn<R extends DataTableRow = DataTableRow> {
   /** Render the cell for a row; defaults to the row's raw value for this key. */
   render?: (row: R) => React.ReactNode;
   /**
-   * Derives the column's value from the row's other values, such as a week's
-   * total from its seven days (`(values) => days.reduce((sum, day) => sum + Number(values[day] ?? 0), 0)`).
+   * Derives the column's value from the row's other values, such as a line's
+   * total from its quantity and unit price (`(values) => Number(values.quantity) * Number(values.price)`).
    * The table reads it wherever it reads a value, so it sorts, filters, totals
    * and groups, and it follows an edit to the cells it reads as the edit is
    * made. A computed column is never editable.

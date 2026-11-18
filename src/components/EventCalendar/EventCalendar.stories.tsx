@@ -92,7 +92,7 @@ export const SpansAndLegend: Story = {
       { id: 's4', date: '2026-08-27', title: 'Launch', color: 'mint' },
     ],
     legend: [
-      { color: 'violet', label: 'Team away' },
+      { color: 'violet', label: 'Offsites' },
       { color: 'coral', label: 'Freezes' },
       { color: 'cobalt', label: 'Reviews' },
       { color: 'mint', label: 'Milestones' },
@@ -105,7 +105,7 @@ export const SpansAndLegend: Story = {
     await expect(canvasElement.querySelectorAll('.ds-event-calendar__event.ds-event-calendar__event--violet:not(.ds-event-calendar__event--continued)')).toHaveLength(1);
     // Its name says the whole range, written by Intl in the calendar's locale.
     await expect(canvas.getAllByRole('button', { name: 'Offsite, August 10 – 14, 2026' })).toHaveLength(5);
-    await expect(canvas.getByRole('list')).toHaveTextContent('Team away');
+    await expect(canvas.getByRole('list')).toHaveTextContent('Offsites');
   },
 };
 

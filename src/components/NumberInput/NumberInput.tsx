@@ -21,9 +21,9 @@ type NumberInputOwnProps = {
   step?: number;
   /** Component size (not the native character-width `size` attribute) */
   size?: 'default' | 'compact';
-  /** Error state — shows error styling and message */
+  /** Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. */
   error?: boolean;
-  /** Helper or error message displayed below the input */
+  /** Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. */
   helperText?: string;
   /** The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. */
   errorText?: React.ReactNode;

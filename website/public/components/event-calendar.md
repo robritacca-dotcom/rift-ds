@@ -2,7 +2,7 @@
 
 A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { EventCalendar } from 'rift-ds';`

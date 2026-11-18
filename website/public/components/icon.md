@@ -2,7 +2,7 @@
 
 One Material Symbol on the icon scale, decorative or named, plain or on a round tile.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: typography
 - Import: `import { Icon } from 'rift-ds';`

@@ -2,7 +2,7 @@
 
 A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { Widget } from 'rift-ds';`

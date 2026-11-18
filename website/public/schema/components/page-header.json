@@ -48,7 +48,7 @@
           "description": "The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text."
         },
         {
-          "name": "level",
+          "name": "headingLevel",
           "type": "1 | 2",
           "typeKind": "enum",
           "values": [

@@ -1,6 +1,6 @@
 # Avatar
 
-User profile image with initials and icon fallback, status indicator, and multiple sizes.
+A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | src | `string` | no |  | Image source URL |
-| alt | `string` | no |  | Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. |
+| alt | `string` | no |  | Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. An organisation's avatar (`shape="square"`) should pass it, or it is announced as a user's. |
 | name | `string` | no |  | User's name — used for initials fallback |
 | size | `"sm" \| "md" \| "lg"` | no | `'md'` | Avatar size |
 | shape | `"circle" \| "square"` | no | `'circle'` | `circle` for a person; `square` for an organisation (a company, a bank, a vendor, an integration): rounded corners on the radius scale, a logo fitted whole rather than cropped, and a building glyph when there is no image or name. |

@@ -6,7 +6,7 @@
   "label": "Empty state",
   "slug": "empty-state",
   "category": "feedback",
-  "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+  "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.",
   "client": false,
   "importPath": "rift-ds/components/EmptyState/EmptyState",
   "barrel": "main",

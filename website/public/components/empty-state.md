@@ -1,6 +1,6 @@
 # Empty state
 
-The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.
+The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

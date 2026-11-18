@@ -26,7 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | columns | `1 \| 2 \| 3` | no | `1` | How many columns the fields run to; they fold to one as the section narrows. |
 | layout | `"aside" \| "stacked"` | no | `'stacked'` | `stacked` puts the heading above the fields; `aside` sets it in a column beside them, the settings page's layout, stacking when the section is narrow. |
 | actions | `ReactNode` | no |  | The section's own controls, at the foot of the fields: a Save, a Cancel. |
-| level | `2 \| 4 \| 3` | no | `2` | The heading's place in the outline. Defaults to 2, a section of a page. |
+| headingLevel | `2 \| 4 \| 3` | no | `2` | The heading's place in the outline. Defaults to 2, a section of a page. |
 | divider | `boolean` | no | `false` | Draws a rule above the section, for a column of sections. |
 | className | `string` | no | `''` | Additional CSS classes |
 

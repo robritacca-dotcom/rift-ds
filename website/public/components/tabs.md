@@ -1,6 +1,6 @@
 # Tabs
 
-Tab navigation with underline indicator, icon support, compact size, and full-width mode.
+Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -28,6 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | onTabChange | `((value: string) => void)` | no |  | Legacy change callback; fires alongside `onValueChange`. Deprecated: Use `onValueChange` instead. |
 | size | `"default" \| "compact"` | no | `'default'` | Visual size |
 | fullWidth | `boolean` | no | `false` | Whether tabs fill the available width |
+| countLabel | `((count: string) => string)` | no | `` (count: string) => `, ${count}` `` | What a screen reader hears after a tab's label for its count, given the count already written in the resolved locale. Defaults to ", 3"; say what it counts (", 3 unread") when the label does not. |
 | locale | `string` | no |  | The BCP 47 locale the tab counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | className | `string` | no | `''` | Additional CSS classes |
 | ariaLabel | `string` | no |  | Legacy accessible-name prop for the tab list. Deprecated: Pass the native `aria-label` attribute instead. |
@@ -58,13 +59,13 @@ interface Tab {
   label: string;
   /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
-  /** A count after the label (unread items, results), written in the resolved locale and read as part of the tab's name. */
+  /** A count after the label (unread items, results), written in the resolved locale; the tab's name carries it through `countLabel`. */
   count?: number;
   /** Whether this tab is disabled */
   disabled?: boolean;
   /** The id of the `role="tabpanel"` element this tab shows, written as the tab's `aria-controls`. Set it when you render the panels yourself; with `content`, Tabs names its own panel and this id is used for it. */
   panelId?: string;
-  /** What the tab shows. When any tab has content, Tabs renders a `role="tabpanel"` for each after the tab list, the selected one shown, each named by its tab. Leave it out to render the panels yourself. */
+  /** What the tab shows. When any tab has content, Tabs renders a `role="tabpanel"` for each after the tab list, the selected one shown, each named by its tab. The panels are the tab list's siblings, with no wrapper, and the ref and `className` stay on the tab list. Leave it out to render the panels yourself. */
   content?: React.ReactNode;
 }
 ```

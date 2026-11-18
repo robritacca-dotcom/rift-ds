@@ -6,7 +6,7 @@
   "label": "Event calendar",
   "slug": "event-calendar",
   "category": "data-display",
-  "description": "A month grid with event pills, overflow counts, and month navigation.",
+  "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
   "client": true,
   "importPath": "rift-ds/components/EventCalendar/EventCalendar",
   "barrel": "main",
@@ -113,7 +113,7 @@
             "week"
           ],
           "required": false,
-          "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time.",
+          "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount.",
           "default": "month"
         },
         {
@@ -161,7 +161,7 @@
           "type": "((month: Date) => string)",
           "typeKind": "function",
           "required": false,
-          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`)."
+          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is the week's range in `locale`."
         },
         {
           "name": "overflowLabel",
@@ -236,7 +236,7 @@
     },
     "EventCalendarLegendItem": {
       "kind": "interface",
-      "definition": "interface EventCalendarLegendItem {\n  /** The accent, as an event's `color` names it. */\n  color: EventCalendarColor;\n  /** What events in this colour are (\"Time away\", \"Deadlines\"). */\n  label: string;\n}",
+      "definition": "interface EventCalendarLegendItem {\n  /** The accent, as an event's `color` names it. */\n  color: EventCalendarColor;\n  /** What events in this colour are (\"Offsites\", \"Deadlines\"). */\n  label: string;\n}",
       "description": "A colour the calendar's events use, and what it means, for the legend.",
       "refs": [
         "EventCalendarColor"

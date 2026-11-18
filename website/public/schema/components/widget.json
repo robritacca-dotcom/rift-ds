@@ -6,7 +6,7 @@
   "label": "Widget",
   "slug": "widget",
   "category": "data-display",
-  "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
+  "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
   "client": false,
   "importPath": "rift-ds/components/Widget/Widget",
   "barrel": "main",

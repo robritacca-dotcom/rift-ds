@@ -24,8 +24,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | value | `string` | no |  | Current value (controlled). Leave it undefined for an uncontrolled textarea, which keeps its own state seeded from `defaultValue`. |
 | defaultValue | `string` | no |  | Initial value when uncontrolled (`value` undefined). |
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
-| error | `boolean` | no | `false` | Error state — shows error styling and message |
-| helperText | `string` | no |  | Helper or error message displayed below |
+| error | `boolean` | no | `false` | Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. |
+| helperText | `string` | no |  | Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. |
 | errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | resize | `"none" \| "both" \| "horizontal" \| "vertical"` | no | `'vertical'` | Whether the textarea is resizable |
 | maxLength | `number` | no |  | Max character count — shows counter when set |

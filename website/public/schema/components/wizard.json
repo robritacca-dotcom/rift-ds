@@ -46,7 +46,7 @@
           "type": "((step: number) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Fires with the index of the step the reader moves to, by Back, Next or a completed step in the stepper."
+          "description": "Fires with the index of the step the reader moves to, by Back, Continue or a completed step in the stepper."
         },
         {
           "name": "onFinish",
@@ -60,7 +60,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Whether the reader can move on from the step shown: false holds Next and Finish, while the step's own fields say what is missing. Defaults to true.",
+          "description": "Whether the reader can move on from the step shown: false holds Continue and Finish, while the step's own fields say what is missing. Defaults to true.",
           "default": true
         },
         {
@@ -108,6 +108,19 @@
           "typeKind": "primitive",
           "required": false,
           "description": "The BCP 47 locale the stepper's step numbers are written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 4 | 3",
+          "typeKind": "enum",
+          "values": [
+            "2",
+            "3",
+            "4"
+          ],
+          "required": false,
+          "description": "The step heading's place in the outline. Defaults to 2, a section of a page.",
+          "default": 2
         },
         {
           "name": "className",

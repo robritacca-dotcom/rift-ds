@@ -23,8 +23,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | max | `number` | no |  | Maximum allowed value — steppers stop here, and typed values clamp to it on blur |
 | step | `number` | no | `1` | Amount each stepper click (or arrow key) changes the value by |
 | size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
-| error | `boolean` | no | `false` | Error state — shows error styling and message |
-| helperText | `string` | no |  | Helper or error message displayed below the input |
+| error | `boolean` | no | `false` | Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message. |
+| helperText | `string` | no |  | Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message. |
 | errorText | `ReactNode` | no |  | The error message, shown under the control while the helper text keeps its place. Setting it marks the control invalid, so `error` is not needed alongside it; Field's spec owns the wiring. |
 | onValueChange | `((value: number \| null) => void)` | no |  | Convenience callback receiving the numeric value directly — `null` when the field is empty or unparseable. Fires on typing alongside `onChange` (which keeps the standard React event signature so form libraries work unmodified) and also on stepper clicks, where no native change event exists. |
 | decreaseLabel | `string` | no | `'Decrease value'` | Accessible name of the decrement stepper button. Defaults to "Decrease value". |

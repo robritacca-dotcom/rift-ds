@@ -2525,7 +2525,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Avatar",
     "slug": "avatar",
     "category": "data-display",
-    "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+    "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.",
     "client": true,
     "importPath": "rift-ds/components/Avatar/Avatar",
     "barrel": "main",
@@ -2543,7 +2543,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "alt",
             "type": "string",
             "required": false,
-            "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence."
+            "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. An organisation's avatar (`shape=\"square\"`) should pass it, or it is announced as a user's."
           },
           {
             "name": "name",
@@ -4473,6 +4473,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'default'"
           },
           {
+            "name": "headingLevel",
+            "type": "2 | 4 | 3",
+            "required": false,
+            "description": "The title's place in the outline. Defaults to 3, a part of a section.",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "3"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -5325,14 +5337,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — shows error styling and message",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below the field"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
           },
           {
             "name": "errorText",
@@ -7257,14 +7269,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
           },
           {
             "name": "errorText",
@@ -8603,14 +8615,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
           },
           {
             "name": "errorText",
@@ -8782,7 +8794,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Empty state",
     "slug": "empty-state",
     "category": "feedback",
-    "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.",
+    "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.",
     "client": false,
     "importPath": "rift-ds/components/EmptyState/EmptyState",
     "barrel": "main",
@@ -9127,7 +9139,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Event calendar",
     "slug": "event-calendar",
     "category": "data-display",
-    "description": "A month grid with event pills, overflow counts, and month navigation.",
+    "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
     "client": true,
     "importPath": "rift-ds/components/EventCalendar/EventCalendar",
     "barrel": "main",
@@ -9216,7 +9228,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "view",
             "type": "\"month\" | \"week\"",
             "required": false,
-            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time.",
+            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount.",
             "values": [
               "month",
               "week"
@@ -9262,7 +9274,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "monthLabel",
             "type": "((month: Date) => string)",
             "required": false,
-            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`)."
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is the week's range in `locale`."
           },
           {
             "name": "overflowLabel",
@@ -9829,7 +9841,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The section's own controls, at the foot of the fields: a Save, a Cancel."
           },
           {
-            "name": "level",
+            "name": "headingLevel",
             "type": "2 | 4 | 3",
             "required": false,
             "description": "The heading's place in the outline. Defaults to 2, a section of a page.",
@@ -13437,14 +13449,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — shows error styling and message",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below the input"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
           },
           {
             "name": "errorText",
@@ -13574,7 +13586,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text."
           },
           {
-            "name": "level",
+            "name": "headingLevel",
             "type": "1 | 2",
             "required": false,
             "description": "The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`.",
@@ -15271,10 +15283,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": true,
-            "description": "The timeline's name, read before its rows (\"Shifts, Tuesday 4 March\")."
+            "description": "The timeline's name, read before its rows (\"Bookings, Tuesday 4 March\")."
           },
           {
-            "name": "rowHeader",
+            "name": "rowHeaderLabel",
             "type": "string",
             "required": false,
             "description": "The header of the label column. Defaults to \"Name\".",
@@ -17299,7 +17311,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Stat",
     "slug": "stat",
     "category": "data-display",
-    "description": "Headline metrics with labels and trend deltas.",
+    "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.",
     "client": false,
     "importPath": "rift-ds/components/Stat/Stat",
     "barrel": "main",
@@ -18129,7 +18141,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Tabs",
     "slug": "tabs",
     "category": "navigation",
-    "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode.",
+    "description": "Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.",
     "client": true,
     "importPath": "rift-ds/components/Tabs/Tabs",
     "barrel": "main",
@@ -18195,6 +18207,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether tabs fill the available width",
             "defaultValue": "false"
+          },
+          {
+            "name": "countLabel",
+            "type": "((count: string) => string)",
+            "required": false,
+            "description": "What a screen reader hears after a tab's label for its count, given the count already written in the resolved locale. Defaults to \", 3\"; say what it counts (\", 3 unread\") when the label does not.",
+            "defaultValue": "(count: string) => `, ${count}`"
           },
           {
             "name": "locale",
@@ -18485,14 +18504,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "error",
             "type": "boolean",
             "required": false,
-            "description": "Error state — shows error styling and message",
+            "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
             "defaultValue": "false"
           },
           {
             "name": "helperText",
             "type": "string",
             "required": false,
-            "description": "Helper or error message displayed below"
+            "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
           },
           {
             "name": "errorText",
@@ -20482,7 +20501,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Widget",
     "slug": "widget",
     "category": "data-display",
-    "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
+    "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.",
     "client": false,
     "importPath": "rift-ds/components/Widget/Widget",
     "barrel": "main",
@@ -20751,7 +20770,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onStepChange",
             "type": "((step: number) => void)",
             "required": false,
-            "description": "Fires with the index of the step the reader moves to, by Back, Next or a completed step in the stepper."
+            "description": "Fires with the index of the step the reader moves to, by Back, Continue or a completed step in the stepper."
           },
           {
             "name": "onFinish",
@@ -20763,7 +20782,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "canAdvance",
             "type": "boolean",
             "required": false,
-            "description": "Whether the reader can move on from the step shown: false holds Next and Finish, while the step's own fields say what is missing. Defaults to true.",
+            "description": "Whether the reader can move on from the step shown: false holds Continue and Finish, while the step's own fields say what is missing. Defaults to true.",
             "defaultValue": "true"
           },
           {
@@ -20805,6 +20824,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "The BCP 47 locale the stepper's step numbers are written in. Defaults to the nearest LocaleProvider's, else `en-US`."
+          },
+          {
+            "name": "headingLevel",
+            "type": "2 | 4 | 3",
+            "required": false,
+            "description": "The step heading's place in the outline. Defaults to 2, a section of a page.",
+            "values": [
+              "2",
+              "3",
+              "4"
+            ],
+            "defaultValue": "2"
           },
           {
             "name": "className",

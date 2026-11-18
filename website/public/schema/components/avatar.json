@@ -6,7 +6,7 @@
   "label": "Avatar",
   "slug": "avatar",
   "category": "data-display",
-  "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes.",
+  "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.",
   "client": true,
   "importPath": "rift-ds/components/Avatar/Avatar",
   "barrel": "main",
@@ -28,7 +28,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence."
+          "description": "Alt text for the image, also the avatar's accessible name. A passed `aria-label` takes precedence. An organisation's avatar (`shape=\"square\"`) should pass it, or it is announced as a user's."
         },
         {
           "name": "name",

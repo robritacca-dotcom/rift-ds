@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | description | `ReactNode` | no |  | A sentence under the title on what the page is for or what it holds. |
 | breadcrumb | `BreadcrumbItem[]` | no |  | The trail above the title, from the top of the app to this page; the last item is this page and takes no `href`. |
 | actions | `ReactNode` | no |  | The page's own actions at the end of the title row: one primary Button, a secondary or two. On a narrow page they take the row under the text. |
-| level | `1 \| 2` | no | `1` | The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`. |
+| headingLevel | `1 \| 2` | no | `1` | The heading's place in the outline. The page's title is its `h1`; a header inside a tab or a pane can be an `h2`. |
 | linkComponent | `LinkComponent` | no |  | The component the breadcrumb's links render with, such as Next.js's `Link`, so they navigate through the app's router; a plain `<a>` when unset. This component can render on the server, so it never reads a LinkProvider: pass the prop even under one. |
 | className | `string` | no | `''` | Additional CSS classes |
 

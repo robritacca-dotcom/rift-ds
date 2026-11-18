@@ -70,7 +70,7 @@
           "description": "The section's own controls, at the foot of the fields: a Save, a Cancel."
         },
         {
-          "name": "level",
+          "name": "headingLevel",
           "type": "2 | 4 | 3",
           "typeKind": "enum",
           "values": [

@@ -54,10 +54,10 @@
           "type": "string",
           "typeKind": "primitive",
           "required": true,
-          "description": "The timeline's name, read before its rows (\"Shifts, Tuesday 4 March\")."
+          "description": "The timeline's name, read before its rows (\"Bookings, Tuesday 4 March\")."
         },
         {
-          "name": "rowHeader",
+          "name": "rowHeaderLabel",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
@@ -98,7 +98,7 @@
     "ResourceTimelineBar": {
       "kind": "interface",
       "definition": "interface ResourceTimelineBar {\n  /** A stable id for the bar. */\n  id: string;\n  /** When it starts, as 24-hour `HH:MM`. */\n  start: string;\n  /** When it ends, as 24-hour `HH:MM`. */\n  end: string;\n  /** A short label on the bar (\"Front desk\", \"Break\"). */\n  label?: string;\n  /** The bar's accent. Defaults to `neutral`. */\n  color?: ResourceTimelineColor;\n}",
-      "description": "One stretch of time on a row: a shift, a booking, a meeting.",
+      "description": "One stretch of time on a row: a booking, a meeting, a run.",
       "refs": [
         "ResourceTimelineColor"
       ]

@@ -24,8 +24,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | startHour | `number` | no | `6` | The first hour the axis shows, 0 to 23. Defaults to 6. |
 | endHour | `number` | no | `22` | The hour the axis ends at, 1 to 24. Defaults to 22. |
 | now | `string` | no |  | A line at this time (`HH:MM`), such as the time now. |
-| label | `string` | yes |  | The timeline's name, read before its rows ("Shifts, Tuesday 4 March"). |
-| rowHeader | `string` | no | `'Name'` | The header of the label column. Defaults to "Name". |
+| label | `string` | yes |  | The timeline's name, read before its rows ("Bookings, Tuesday 4 March"). |
+| rowHeaderLabel | `string` | no | `'Name'` | The header of the label column. Defaults to "Name". |
 | onBarClick | `((bar: ResourceTimelineBar, row: ResourceTimelineRow) => void)` | no |  | Called with the bar and its row when a bar is pressed; bars are buttons only when it is set. |
 | locale | `string` | no | `'en-US'` | The BCP 47 locale the times are written in, such as `de-DE`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |
@@ -38,7 +38,7 @@ Nothing here takes focus, so there are no keys. A test holds that.
 
 ### ResourceTimelineBar
 
-One stretch of time on a row: a shift, a booking, a meeting.
+One stretch of time on a row: a booking, a meeting, a run.
 
 ```ts
 interface ResourceTimelineBar {

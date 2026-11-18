@@ -23,15 +23,16 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | steps | `WizardStep[]` | yes |  | The steps, in order. |
 | step | `number` | no |  | The index of the step shown, for a controlled wizard. Leave it undefined to let the wizard keep its own, seeded from `defaultStep`. |
 | defaultStep | `number` | no | `0` | The step shown on first render when the wizard is uncontrolled. Defaults to 0. |
-| onStepChange | `((step: number) => void)` | no |  | Fires with the index of the step the reader moves to, by Back, Next or a completed step in the stepper. |
+| onStepChange | `((step: number) => void)` | no |  | Fires with the index of the step the reader moves to, by Back, Continue or a completed step in the stepper. |
 | onFinish | `(() => void)` | no |  | Called when the reader presses the last step's finish button. |
-| canAdvance | `boolean` | no | `true` | Whether the reader can move on from the step shown: false holds Next and Finish, while the step's own fields say what is missing. Defaults to true. |
+| canAdvance | `boolean` | no | `true` | Whether the reader can move on from the step shown: false holds Continue and Finish, while the step's own fields say what is missing. Defaults to true. |
 | summary | `ReactNode` | no |  | A running figure at the start of the footer, kept in view as the steps change: a total, a count of what is chosen. |
 | allowStepClick | `boolean` | no | `true` | Lets the reader go back to a completed step from the stepper. Defaults to true. |
 | backLabel | `string` | no | `'Back'` | The back button's text. Defaults to "Back". |
 | nextLabel | `string` | no | `'Continue'` | The next button's text. Defaults to "Continue". |
 | finishLabel | `string` | no | `'Finish'` | The last step's button text. Defaults to "Finish". |
 | locale | `string` | no |  | The BCP 47 locale the stepper's step numbers are written in. Defaults to the nearest LocaleProvider's, else `en-US`. |
+| headingLevel | `2 \| 4 \| 3` | no | `2` | The step heading's place in the outline. Defaults to 2, a section of a page. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

@@ -3,7 +3,7 @@
   "name": "stat",
   "type": "registry:ui",
   "title": "Stat",
-  "description": "Headline metrics with labels and trend deltas.",
+  "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.",
   "author": "Robert Ritacca <https://robertritacca.com>",
   "registryDependencies": [
     "https://rift-ds.com/r/base.json",

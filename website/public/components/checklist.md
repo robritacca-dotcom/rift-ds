@@ -33,6 +33,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same dat
 | notDoneLabel | `string` | no | `'Not done'` | A read-only row's state when it is not done. Defaults to "Not done". |
 | locale | `string` | no |  | The BCP 47 locale the counts are written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, else `en-US`. |
 | size | `"default" \| "compact"` | no | `'default'` | Row density: `compact` for a checklist in a side panel. |
+| headingLevel | `2 \| 4 \| 3` | no | `3` | The title's place in the outline. Defaults to 3, a part of a section. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

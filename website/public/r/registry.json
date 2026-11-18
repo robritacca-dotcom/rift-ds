@@ -133,7 +133,7 @@
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
-      "description": "User profile image with initials and icon fallback, status indicator, and multiple sizes."
+      "description": "A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes."
     },
     {
       "name": "avatar-group",
@@ -415,7 +415,7 @@
       "name": "empty-state",
       "type": "registry:ui",
       "title": "Empty state",
-      "description": "The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action."
+      "description": "The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action."
     },
     {
       "name": "entity-card",
@@ -439,7 +439,7 @@
       "name": "event-calendar",
       "type": "registry:ui",
       "title": "Event calendar",
-      "description": "A month grid with event pills, overflow counts, and month navigation."
+      "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week."
     },
     {
       "name": "field",
@@ -955,7 +955,7 @@
       "name": "stat",
       "type": "registry:ui",
       "title": "Stat",
-      "description": "Headline metrics with labels and trend deltas."
+      "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline."
     },
     {
       "name": "status-dot",
@@ -997,7 +997,7 @@
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "Tab navigation with underline indicator, icon support, compact size, and full-width mode."
+      "description": "Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself."
     },
     {
       "name": "tag-input",
@@ -1123,7 +1123,7 @@
       "name": "widget",
       "type": "registry:ui",
       "title": "Widget",
-      "description": "A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns."
+      "description": "A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns."
     },
     {
       "name": "wizard",

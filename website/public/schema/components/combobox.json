@@ -106,7 +106,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Error state — shows error styling and message",
+          "description": "Error state: marks the control invalid and, in the older form without `errorText`, recolours the helper text as the error message.",
           "default": false
         },
         {
@@ -114,7 +114,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Helper or error message displayed below the field"
+          "description": "Helper text displayed below the control. With the older `error` flag and no `errorText`, it doubles as the error message."
         },
         {
           "name": "errorText",

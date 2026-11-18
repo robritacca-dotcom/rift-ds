@@ -122,6 +122,19 @@
           "default": "default"
         },
         {
+          "name": "headingLevel",
+          "type": "2 | 4 | 3",
+          "typeKind": "enum",
+          "values": [
+            "2",
+            "3",
+            "4"
+          ],
+          "required": false,
+          "description": "The title's place in the outline. Defaults to 3, a part of a section.",
+          "default": 3
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

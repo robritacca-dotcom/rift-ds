@@ -6,7 +6,7 @@
   "label": "Stat",
   "slug": "stat",
   "category": "data-display",
-  "description": "Headline metrics with labels and trend deltas.",
+  "description": "Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.",
   "client": false,
   "importPath": "rift-ds/components/Stat/Stat",
   "barrel": "main",

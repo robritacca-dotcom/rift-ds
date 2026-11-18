@@ -1,6 +1,6 @@
 # Stat
 
-Headline metrics with labels and trend deltas.
+Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.29.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

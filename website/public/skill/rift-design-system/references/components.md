@@ -525,7 +525,7 @@ A number that counts to its value: count-up on mount, eased tweens on change, ta
 
 ### Avatar
 
-User profile image with initials and icon fallback, status indicator, and multiple sizes.
+A person's or an organisation's image, with initials and icon fallback, a status indicator, and multiple sizes.
 
 - Import: `import { Avatar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -653,7 +653,7 @@ Compact display-only card with a centred icon or image and a label, used in the 
 
 ### Event calendar
 
-A month grid with event pills, overflow counts, and month navigation.
+A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.
 
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -749,7 +749,7 @@ Large option cards for high-visibility choices like settings and onboarding, wit
 
 ### Stat
 
-Headline metrics with labels and trend deltas.
+Headline metrics with labels, trend deltas, an optional icon tile and caption, and a slot for a sparkline.
 
 - Import: `import { Stat } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -789,7 +789,7 @@ Collapsible hierarchy for files, folders, and nested structures.
 
 ### Widget
 
-A titled section for a dashboard, a form, or settings, with rows, groups, a footer, an optional fold, and a board of columns.
+A titled section for a dashboard or settings, with rows, groups, a footer, an optional fold, and a board of columns.
 
 - Import: `import { Widget } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -853,7 +853,7 @@ Full-width status strip for page-level announcements, with an action slot and op
 
 ### Empty state
 
-The placeholder for a list, table, or search with nothing to show: icon, headline, guidance, and a next action.
+The placeholder for a list, table, or search with nothing to show, or the result at the end of a flow: icon, headline, guidance, and a next action.
 
 - Import: `import { EmptyState } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -1410,7 +1410,7 @@ Step-by-step progress indicator for wizards and multi-stage flows.
 
 ### Tabs
 
-Tab navigation with underline indicator, icon support, compact size, and full-width mode.
+Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.
 
 - Import: `import { Tabs } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

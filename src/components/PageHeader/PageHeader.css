@@ -66,7 +66,9 @@
     justify-content: stretch;
   }
 
+  /* Each action starts at its own width and grows to share the row, so a
+     label never squeezes: actions that cannot fit side by side wrap. */
   .ds-page-header__actions > * {
-    flex: 1;
+    flex: 1 1 auto;
   }
 }

@@ -86,6 +86,11 @@
   max-width: 360px;
 }
 
+/* The equal-heights cards share the row and wrap before a card is too narrow to read. */
+.card {
+  flex: 1 1 calc(var(--gap-3000) + var(--gap-1000));
+}
+
 .cellText {
   margin: 0;
   font-size: var(--font-paragraph-size);

@@ -13,6 +13,9 @@
 /* Base */
 .ds-resource-timeline {
   --ds-resource-timeline-label: 9rem;
+  /* The narrowest an hour gets before the timeline scrolls: wide enough that
+     the first tick, held inside the axis, clears the centred one after it. */
+  --ds-resource-timeline-hour: calc(var(--gap-1000) + var(--gap-500));
 
   min-width: 0;
 }
@@ -29,7 +32,7 @@
 .ds-resource-timeline__head {
   display: grid;
   grid-template-columns: var(--ds-resource-timeline-label) minmax(0, 1fr);
-  min-width: calc(var(--ds-resource-timeline-label) + var(--ds-resource-timeline-hours, 16) * var(--gap-1000));
+  min-width: calc(var(--ds-resource-timeline-label) + var(--ds-resource-timeline-hours, 16) * var(--ds-resource-timeline-hour));
   padding-block-end: var(--padding-200);
   border-block-end: var(--border-025) solid var(--color-divider);
 }
@@ -74,7 +77,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  min-width: calc(var(--ds-resource-timeline-label) + var(--ds-resource-timeline-hours, 16) * var(--gap-1000));
+  min-width: calc(var(--ds-resource-timeline-label) + var(--ds-resource-timeline-hours, 16) * var(--ds-resource-timeline-hour));
 }
 
 .ds-resource-timeline__row {

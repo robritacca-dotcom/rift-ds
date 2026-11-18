@@ -59,10 +59,10 @@ export default function StackPage() {
           <section className={styles.section}>
             <SectionTitle title="Equal heights" />
             <div className={styles.demoSurface}>
-              <Stack direction="row" align="stretch" gap="500">
-                <Panel bordered><p className={styles.cellText}>A short card.</p></Panel>
-                <Panel bordered><p className={styles.cellText}>A card with more to say, running over several lines, sets the height for the cards beside it.</p></Panel>
-                <Panel bordered><p className={styles.cellText}>Another short one.</p></Panel>
+              <Stack direction="row" align="stretch" gap="500" wrap>
+                <Panel bordered className={styles.card}><p className={styles.cellText}>A short card.</p></Panel>
+                <Panel bordered className={styles.card}><p className={styles.cellText}>A card with more to say, running over several lines, sets the height for the cards beside it.</p></Panel>
+                <Panel bordered className={styles.card}><p className={styles.cellText}>Another short one.</p></Panel>
               </Stack>
             </div>
           </section>

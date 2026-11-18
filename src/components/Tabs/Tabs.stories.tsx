@@ -121,7 +121,7 @@ export const WithCounts: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('tab', { name: 'Closed, 1,284 items' })).toBeInTheDocument();
+    await expect(canvas.getByRole('tab', { name: /^Closed ?, 1,284 items$/ })).toBeInTheDocument();
   },
 };
 

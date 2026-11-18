@@ -209,14 +209,16 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
                     {tab.icon}
                   </span>
                 ))}
-              <span className={`${baseClass}__label`}>{tab.label}</span>
-              {tab.count !== undefined && (
-                <>
-                  <span className={`${baseClass}__count`} aria-hidden="true">
-                    {formatNumber(tab.count, locale)}
-                  </span>
+              <span className={`${baseClass}__label`}>
+                {tab.label}
+                {tab.count !== undefined && (
                   <span className="ds-visually-hidden">{countLabel(formatNumber(tab.count, locale))}</span>
-                </>
+                )}
+              </span>
+              {tab.count !== undefined && (
+                <span className={`${baseClass}__count`} aria-hidden="true">
+                  {formatNumber(tab.count, locale)}
+                </span>
               )}
             </button>
           );

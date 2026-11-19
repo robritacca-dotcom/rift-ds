@@ -87,9 +87,11 @@ export default function EventCalendarPage() {
             <p className={styles.introBody}>
               Date picker selects a date, this one shows a schedule: a full
               month grid with event pills on their days, an overflow row once
-              a day is full, and month navigation. It places what it is
-              given, so fetching, filtering, and what a click means stay with
-              you.
+              a day is full, and month navigation, or one week or one day at
+              a time. A legend can toggle the colours, and a panel can list
+              the selected day. On a phone the month draws each event as its
+              dot. It places what it is given, so fetching, filtering, and
+              what a click means stay with you.
             </p>
           </div>
 
@@ -110,7 +112,8 @@ export default function EventCalendarPage() {
             <p className={styles.demoText}>
               Past maxEventsPerDay, here two, the rest collapse into an
               overflow row. With onDateClick set it becomes a button, as in
-              the demo above, so a day view is one handler away.
+              the demo above, so a click can open the day, in the day view or
+              a panel of your own.
             </p>
             <EventCalendar
               events={events}

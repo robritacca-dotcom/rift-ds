@@ -3,10 +3,14 @@
 import { useState } from "react";
 import {
   DataTable,
+  periodColumns,
+  totalOf,
   type DataTableCellEdit,
   type DataTableColumn,
   type DataTableRow,
+  type DataTableView,
 } from "rift-ds/components/DataTable/DataTable";
+import { Button } from "rift-ds/components/Button/Button";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { TableToolbar, type TableToolbarCommand, type TableToolbarView  } from "rift-ds/components/TableToolbar/TableToolbar";
 import styles from "./page.module.css";
@@ -333,5 +337,69 @@ export function ServerDemo() {
       pageSize={5}
       caption="Accounts from a server"
     />
+  );
+}
+
+/* Stock counted across four weeks: one editable, summed column a week,
+   a total across each row, a subtotal per site and the sum down. */
+const WEEKS = periodColumns({
+  start: "2026-03-02",
+  count: 4,
+  unit: "week",
+  keyPrefix: "w:",
+  column: { type: "number", align: "end", editable: true, aggregate: "sum", minWidth: 96 },
+});
+const WEEK_KEYS = WEEKS.map((column) => column.key);
+const STOCK_COLUMNS: DataTableColumn[] = [
+  { key: "site", header: "Site", rowHeader: true, groupable: true, pin: "start" },
+  { key: "range", header: "Range" },
+  ...WEEKS,
+  { key: "total", header: "Total", type: "number", align: "end", compute: totalOf(WEEK_KEYS), aggregate: "sum", pin: "end" },
+];
+const STOCK_ROWS: DataTableRow[] = (
+  [
+    ["North depot", "Ambient", [120, 132, 118, 140]],
+    ["North depot", "Chilled", [64, 58, 71, 66]],
+    ["South depot", "Ambient", [98, 104, 110, 101]],
+    ["South depot", "Chilled", [40, 45, 39, 52]],
+  ] as const
+).map(([site, range, counts], index) => ({
+  id: `s${index + 1}`,
+  values: { site, range, ...Object.fromEntries(WEEK_KEYS.map((key, i) => [key, counts[i]])) },
+}));
+
+/** A run of periods as columns, with totals across, by group and down. */
+export function PeriodsDemo() {
+  const [rows, setRows] = useState(STOCK_ROWS);
+  return (
+    <DataTable
+      caption="Stock counted by week"
+      columns={STOCK_COLUMNS}
+      rows={rows}
+      defaultGrouping={["site"]}
+      totalsRow
+      onCellEdit={({ row: edited, key, value }: DataTableCellEdit) =>
+        setRows((current) => current.map((row) => (row.id === edited.id ? { ...row, values: { ...row.values, [key]: value } } : row)))
+      }
+    />
+  );
+}
+
+/** The whole setup held outside the table, set from buttons and handed back. */
+export function ControlledViewDemo() {
+  const [view, setView] = useState<DataTableView>({ version: 1 });
+  return (
+    <div className={styles.controlledView}>
+      <div className={styles.controlledViewButtons}>
+        <Button
+          variant="secondary"
+          size="compact"
+          label="Highest value first"
+          onClick={() => setView({ version: 1, sorts: [{ key: "value", direction: "desc" }], search: "" })}
+        />
+        <Button variant="secondary" size="compact" label="Reset" onClick={() => setView({ version: 1 })} />
+      </div>
+      <DataTable columns={accountColumns} rows={makeAccounts(12)} caption="Accounts, view held outside" view={view} onViewChange={setView} />
+    </div>
   );
 }

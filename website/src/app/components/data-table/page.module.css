@@ -138,3 +138,17 @@
     min-width: 0;
   }
 }
+
+/* The controlled-view demo: its buttons above the table. */
+.controlledView {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  min-width: 0;
+}
+
+.controlledViewButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-200);
+}

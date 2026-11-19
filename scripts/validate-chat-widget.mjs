@@ -5,7 +5,9 @@
  * Holds the chat widget's registry (src/chat/registry.json) to the things it
  * describes, so the one widget the package ships can never be documented as
  * something other than what it is. The widget sits between the components
- * and the templates and has registries on both sides to agree with:
+ * and the templates and has registries on both sides to agree with. Its
+ * own description and each subpath's are non-empty and end in a full stop
+ * (they ship as prose: content-design.md's register row).
  *
  *   1. `parts` is exactly the set of registered components the widget's own
  *      modules import (src/components/registry.json names, read from the
@@ -99,6 +101,12 @@ for (const widget of registry.widgets ?? []) {
   if (!/^[a-z0-9-]+$/.test(widget.slug ?? '')) errors.push(`${at}: slug must be kebab-case`);
   if (widget.description && !widget.description.endsWith('.')) {
     errors.push(`${at}: description must end with a full stop`);
+  }
+  // Each subpath's description ships the same way (content-design.md's
+  // register row for them), so it holds to the same shape.
+  for (const [key, text] of Object.entries(widget.subpaths ?? {})) {
+    if (typeof text !== 'string' || !text.trim()) errors.push(`${at}: subpath "${key}" needs a description`);
+    else if (!text.endsWith('.')) errors.push(`${at}: subpath "${key}"'s description must end with a full stop`);
   }
 
   /* 1. Parts are the registered components the widget's modules import,

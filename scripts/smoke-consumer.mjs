@@ -2,8 +2,8 @@
 /**
  * Pre-publish consumer smoke test. Packs dist/ into a tarball, scaffolds
  * minimal Vite + React + TypeScript apps in a temp directory, installs the
- * tarball, and runs `tsc` + `vite build`. Two scenarios, because the package
- * has two kinds of consumer:
+ * tarball, and runs `tsc` + `vite build`. Three scenarios, for the package's
+ * kinds of consumer:
  *
  *   1. The plain consumer: no optional peer installed. The main barrel, a
  *      deep import and the tokens stylesheet must build with none of

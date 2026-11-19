@@ -12,10 +12,12 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 import {
   ColumnsDemo,
   CommandDemo,
+  ControlledViewDemo,
   DetailsDemo,
   EditingDemo,
   GroupingDemo,
   OverviewDemo,
+  PeriodsDemo,
   PhoneDemo,
   ScaleDemo,
   ServerDemo,
@@ -149,6 +151,28 @@ export default function DataTablePage() {
               it holds, each one a tick that can be let go and taken back.
             </p>
             <ViewsDemo />
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="A view held outside" />
+            <p className={styles.demoText}>
+              With view and onViewChange the setup lives with you: set it
+              from anywhere, a chat&apos;s card or a saved link, and the
+              table takes it, while the reader&apos;s own changes come back
+              through the callback, so both stay.
+            </p>
+            <ControlledViewDemo />
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Periods as columns" />
+            <p className={styles.demoText}>
+              periodColumns writes one column per day, week or month, keyed
+              by its first day and headed in the locale. Here each week is
+              editable and summed, totalOf adds a row across, the group rows
+              give each site&apos;s subtotal and the totals row the sum down.
+            </p>
+            <PeriodsDemo />
           </section>
 
           <section className={styles.section}>

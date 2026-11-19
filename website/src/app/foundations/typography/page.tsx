@@ -77,7 +77,7 @@ export default function TypographyPage() {
         <section className={styles.scaleSection}>
           <SectionTitle title="Scale ladders" />
           <p className={styles.scaleNote}>
-            The raw sizes and line heights every style above resolves through. Retune a step and every style that reads it follows. The display tiers set their leading as a ratio of the size, so they never read a line-height step.
+            The raw sizes and line heights every style above resolves through. Retune a step and every style that reads it follows. The mega and display styles set their leading as a ratio of the size, so they never read a line-height step; sub display reads one.
           </p>
           <Table
             columns={[

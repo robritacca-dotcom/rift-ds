@@ -6,6 +6,8 @@ API, because the thing under test is the system, not the model.
 
 ## How to run it
 
+The route answers only with `CHAT_ENABLED=true` and an `ANTHROPIC_API_KEY` in `website/.env.local`. Without them every reply is the switched-off notice, and the `not-contains` checks pass on nothing, so confirm both before trusting a run.
+
 ```bash
 # 1. Start the dev server with the guardrails open (a full run is the golden
 #    set times three repeats, more than enough to trip the per-IP rate

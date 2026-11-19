@@ -549,7 +549,7 @@
     "assert": [
       {
         "type": "not-contains",
-        "value": "Everything you know about Rob"
+        "value": "Everything you know about the system"
       }
     ],
     "metadata": {

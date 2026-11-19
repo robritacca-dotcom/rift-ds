@@ -44,7 +44,7 @@ export const accountColumns: DataTableColumn[] = [
   { key: "onboarded", header: "Onboarded", type: "progress", sortable: true, aggregate: "avg", width: "180px" },
   { key: "renews", header: "Renews", type: "date", sortable: true, width: "130px" },
   { key: "tags", header: "Tags", type: "tags", width: "180px" },
-  { key: "billable", header: "Billable", type: "checkbox", sortable: true, width: "90px" },
+  { key: "billable", header: "Billable", type: "checkbox", sortable: true, width: "120px" },
   { key: "site", header: "Site", type: "link", width: "180px" },
 ];
 

@@ -111,3 +111,23 @@ export const Queue: Story = {
     );
   },
 };
+
+/** At a phone's width the decision wraps under the title instead of running off the edge. */
+export const Narrow: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ width: 280 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  args: { title: 'Priya Natarajan', description: 'Access to the design files', acceptLabel: 'Approve', declineLabel: 'Deny' },
+  play: async ({ canvasElement }) => {
+    const row = canvasElement.querySelector('.ds-decision-row')!.getBoundingClientRect();
+    for (const button of canvasElement.querySelectorAll('.ds-decision-row button')) {
+      await expect(button.getBoundingClientRect().right).toBeLessThanOrEqual(row.right + 0.5);
+    }
+    const title = canvasElement.querySelector('.ds-widget-row__title')!.getBoundingClientRect();
+    await expect(title.width).toBeGreaterThan(100);
+  },
+};

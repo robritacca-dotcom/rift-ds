@@ -345,3 +345,18 @@ export const EdgeToEdge: Story = {
 export const CollapsedByDefault: Story = {
   args: { collapsible: true, defaultOpen: false, children: invoices },
 };
+
+/** An unbroken name in a tile's description wraps inside the tile on a phone. */
+export const LongDescription: Story = {
+  render: () => (
+    <div style={{ width: 280 }}>
+      <Widget title="Model" description="Quarterly_Forecast_Model_Final_Revision_07.xlsx · generation 4">
+        <WidgetRow title="Opened" meta="Mon" />
+      </Widget>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const description = canvasElement.querySelector<HTMLElement>('.ds-widget__description')!;
+    await expect(description.scrollWidth).toBeLessThanOrEqual(description.clientWidth + 1);
+  },
+};

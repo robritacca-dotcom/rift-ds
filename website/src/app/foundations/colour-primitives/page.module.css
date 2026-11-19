@@ -275,6 +275,15 @@
     gap: var(--gap-200);
   }
 
+  /* A phone: two columns, so each swatch has room for its own label, as
+     the swatch rule above promises (the full name is only in a hover
+     tooltip, which touch never shows). */
+  @media (max-width: 480px) {
+    .alphaCells {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   .dsLayout {
     padding-left: 0;
     min-width: 0;

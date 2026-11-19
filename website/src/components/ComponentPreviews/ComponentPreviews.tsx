@@ -1863,7 +1863,7 @@ const previews: Record<string, () => ReactNode> = {
   ),
   "reasoning": () => (
     <>
-      <div style={{ width: "fit-content", maxWidth: "160px" }}>
+      <div style={{ width: "fit-content", maxWidth: "220px" }}>
         {/* The collapsed body still sets the block's width, so it stays
             shorter than the trigger and the trigger centres in the tile. */}
         <Reasoning duration={12}>Done.</Reasoning>

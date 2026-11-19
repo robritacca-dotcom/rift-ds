@@ -28,3 +28,19 @@
 .ds-decision-row__outcome {
   display: inline-flex;
 }
+
+/* Narrow rows: the title keeps a floor, stated on the icon scale, and the
+   decision wraps to its own line under it, set to the row's end, rather
+   than squeezing the title to nothing and running off the edge. */
+.ds-decision-row .ds-widget-row {
+  flex-wrap: wrap;
+  row-gap: var(--gap-200);
+}
+
+.ds-decision-row .ds-widget-row__main {
+  flex-basis: calc(var(--icon-size-1200) * 3);
+}
+
+.ds-decision-row .ds-widget-row__actions {
+  margin-inline-start: auto;
+}

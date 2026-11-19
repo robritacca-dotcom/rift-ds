@@ -83,6 +83,8 @@
   line-height: var(--font-paragraph-sm-line-height);
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-secondary);
+  /* An unbroken name (a file, an id) wraps rather than running out of the tile. */
+  overflow-wrap: anywhere;
 }
 
 /* Footer — behind the family's divider, a step below the body */

@@ -63,7 +63,8 @@
 /* Mono caption inside a frame (a command, a brace) */
 .code {
   font-family: var(--font-family-code);
-  font-size: var(--font-paragraph-sm-size);
+  /* The caption size, so the whole command fits the illustration's frame. */
+  font-size: var(--font-caption-size);
   line-height: 1;
   white-space: nowrap;
   color: var(--color-text-secondary);

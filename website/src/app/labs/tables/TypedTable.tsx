@@ -61,7 +61,7 @@ export const typedColumns: DataTableColumn[] = [
   { key: "renews", header: "Renews", type: "date", sortable: true, editable: true, width: "140px" },
   { key: "contacted", header: "Last contact", type: "date", format: { date: "relative" }, sortable: true, width: "140px" },
   { key: "tags", header: "Tags", type: "tags", width: "200px" },
-  { key: "billable", header: "Billable", type: "checkbox", sortable: true, editable: true, width: "100px" },
+  { key: "billable", header: "Billable", type: "checkbox", sortable: true, editable: true, width: "120px" },
   { key: "site", header: "Site", type: "link", width: "180px" },
 ];
 

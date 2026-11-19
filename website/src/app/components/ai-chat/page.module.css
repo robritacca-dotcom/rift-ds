@@ -126,6 +126,14 @@
   gap: var(--gap-500);
 }
 
+/* At a laptop's width two cells are too short for the tallest welcome, and
+   its fit layout never scrolls, so the stages stack from the stack step. */
+@media (max-width: 1151px) {
+  .stageGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .stageCell {
   margin: 0;
   min-width: 0;

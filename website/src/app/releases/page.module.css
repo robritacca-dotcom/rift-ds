@@ -138,6 +138,8 @@
 
 .entryParagraph {
   margin: 0 0 var(--primitive-gap-200);
+  /* A long inline name (a constant, a path) wraps on a phone instead of running off the screen. */
+  overflow-wrap: anywhere;
 }
 
 .entryParagraph:last-child {

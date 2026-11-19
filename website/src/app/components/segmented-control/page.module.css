@@ -86,6 +86,9 @@
   flex-direction: column;
   gap: var(--primitive-gap-1000);
   align-items: flex-start;
+  /* A demo wider than a phone scrolls inside the stack, never the page. */
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 @media (max-width: 959px) {

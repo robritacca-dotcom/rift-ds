@@ -86,6 +86,9 @@
   gap: var(--gap-1000);
   /* The glow needs a little room to breathe in the demo. */
   padding: var(--padding-400) 0;
+  /* A labelled toggle wider than a phone scrolls inside the row, never the page. */
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .demoText {

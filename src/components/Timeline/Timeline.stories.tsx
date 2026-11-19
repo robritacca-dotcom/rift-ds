@@ -179,3 +179,20 @@ export const CompanyNarrow: Story = {
     }
   },
 };
+
+/** At a phone's width a horizontal stepper's long words wrap inside their steps rather than drawing over the next one. */
+export const HorizontalNarrow: Story = {
+  ...HorizontalStepper,
+  decorators: [
+    (Story) => (
+      <div style={{ width: 300 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    for (const title of canvasElement.querySelectorAll<HTMLElement>('.ds-timeline__title')) {
+      await expect(title.scrollWidth).toBeLessThanOrEqual(title.clientWidth + 1);
+    }
+  },
+};

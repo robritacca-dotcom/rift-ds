@@ -369,3 +369,11 @@
     var(--color-bg-container-primary-transparent)
   );
 }
+
+/* A horizontal stepper's steps share the row equally, so a long word in a
+   title or description wraps inside its step rather than drawing over the
+   next one. */
+.ds-timeline--horizontal .ds-timeline__title,
+.ds-timeline--horizontal .ds-timeline__description {
+  overflow-wrap: break-word;
+}

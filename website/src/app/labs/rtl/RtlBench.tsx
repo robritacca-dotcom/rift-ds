@@ -113,7 +113,7 @@ export function RtlBench() {
               value={tab}
               onValueChange={setTab}
             />
-            <Pagination page={page} onPageChange={setPage} pageCount={8} />
+            <Pagination page={page} onPageChange={setPage} pageCount={8} size="compact" />
           </Station>
 
           <Station title="النماذج">

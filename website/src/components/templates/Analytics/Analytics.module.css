@@ -365,9 +365,13 @@
   z-index: 2;
 }
 
-/* Only as wide as its words, so the row's empty end is never over a card. */
+/* Only as wide as its words, so the row's empty end is never over a card.
+   The header is a size container (PageHeader.css), whose intrinsic width is
+   zero, so fit-content folded the title to a letter a line; this header has
+   no actions to fold, so it needs no container. */
 .pageName {
   width: fit-content;
+  container-type: normal;
 }
 
 /* The marker with the open card rises above its neighbours, as a hovered one

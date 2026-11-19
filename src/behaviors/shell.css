@@ -117,3 +117,36 @@
   background-color: var(--ds-shell-backdrop-fill);
   backdrop-filter: var(--ds-shell-backdrop-filter);
 }
+
+/* Room for a docked chat. ChatLauncher marks <html> with data-chat="docked"
+   (or "docked-left") while its panel is docked, and keeps the panel's width
+   in --ds-chat-width and its gap off the window edge in --ds-chat-inset
+   (src/chat/ChatWidget.css). The outermost app shell gives up that width
+   plus that gap on the docked side, so in every mode the content ends one
+   gap short of the panel, as the panel ends one gap short of the window,
+   and no host writes its own rule. The plane still runs under the panel,
+   so the gap shows the plane. A chat seated as the page (its rails carry
+   the marker too) never pads for itself. A host that already makes room
+   on its own (a site that pads its body) sets --ds-shell-chat-room to 0px
+   on <html> to opt out. The dock is a screen edge the reader picks, not a
+   reading direction. */
+:root {
+  --ds-shell-chat-room: calc(var(--ds-chat-width, 420px) + var(--ds-chat-inset, 20px));
+}
+
+html[data-chat='docked'] :where([data-ds-shell]:not(.ds-chat-widget__rails)):not(:where([data-ds-shell] *)) {
+  padding-right: var(--ds-shell-chat-room); /* ds-allow(physical): the panel docks to the screen edge the reader picked */
+}
+
+html[data-chat='docked-left'] :where([data-ds-shell]:not(.ds-chat-widget__rails)):not(:where([data-ds-shell] *)) {
+  padding-left: var(--ds-shell-chat-room); /* ds-allow(physical): the panel docks to the screen edge the reader picked */
+}
+
+:where([data-ds-shell]) {
+  transition: padding var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* The widen grip drives the width frame by frame, so the room follows it at once. */
+html[data-chat-resizing] :where([data-ds-shell]) {
+  transition: none;
+}

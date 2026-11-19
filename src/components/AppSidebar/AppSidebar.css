@@ -82,6 +82,18 @@
   border-inline-end-color: transparent;
 }
 
+/* The inset rail and its side panel are the plane's own colour, so on a
+   wide screen they are drawn clear and the plane shows through. Filled,
+   they stack above the page and paint over the side of the raised
+   surface's shadow that falls on them, leaving a straight cut beside the
+   surface. The phone drawer keeps its fill (its own rule below). */
+@media not (max-width: 768px) {
+  .ds-app-sidebar--inset:not(.ds-app-sidebar--mobile-open),
+  .ds-app-sidebar__panel--inset {
+    background-color: transparent;
+  }
+}
+
 /* ============================================
    TOP SECTION — logo + nav
    ============================================ */

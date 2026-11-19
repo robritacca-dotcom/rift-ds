@@ -123,7 +123,10 @@ export interface ChatLauncherProps {
  * writes the chosen dock width to `--ds-chat-width` there; a host's
  * stylesheet pads the page beside a docked panel and hides it behind a
  * takeover from those two facts (the package's own stylesheet does not
- * touch the host's body). The panel's geometry reads `--ds-chat-width`,
+ * touch the host's body). An app shell needs no rule of its own: the shell
+ * recipe (src/behaviors/shell.css) gives the outermost `data-ds-shell` host,
+ * AppLayout and the app-shell block among them, the panel's width plus its
+ * edge gap on the docked side. The panel's geometry reads `--ds-chat-width`,
  * `--ds-chat-inset` and `--ds-chat-float-height`, defaulted on `:root`.
  */
 export function ChatLauncher({

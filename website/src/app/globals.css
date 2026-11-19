@@ -178,6 +178,13 @@ body {
    cover it — zero per-page layout changes. The sticky header sits in the
    body too, so the same padding narrows it, and its measured fold follows.
    Reduced motion zeroes the glide via the motion tokens. */
+/* The body makes the room here, so the shell recipe's own room for a docked
+   chat (src/behaviors/shell.css) stands down, or a template screen would
+   give it up twice. */
+html:root {
+  --ds-shell-chat-room: 0px;
+}
+
 html[data-chat="docked"] body {
   padding-right: calc(
     var(--primitive-padding-1000) + var(--layout-chat-width) + var(--layout-chat-inset)

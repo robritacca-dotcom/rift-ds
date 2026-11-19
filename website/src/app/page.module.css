@@ -331,13 +331,71 @@
   margin-top: var(--gap-200);
 }
 
-/* On a phone the row would run edge to edge with a lone dot wrapped
-   beneath it. Capping it at seven dots (and their gaps) splits it into
-   two even rows that sit inside the hero's gutter. */
+/* On a phone the hero keeps one line of choices. The theme row stays a
+   single line that scrolls sideways, fading out at both edges, instead
+   of wrapping into a block of dots; the cards are dropped there, since a
+   scrolling row would cut them off. The background row leaves the hero
+   altogether: the header's drawer carries the same pick
+   (BackgroundSwitcher), so nothing is lost. */
 @media (max-width: 600px) {
+  .heroThemes {
+    margin-bottom: 0;
+  }
+
   .accentRow {
-    max-width: calc(7 * 24px + 7 * var(--gap-200));
-    margin-inline: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Room for a dot's hover scale and its ring, which the scroller
+       would otherwise clip. */
+    padding: var(--gap-100) var(--gap-500);
+    margin-top: 0;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--gap-500),
+      black calc(100% - var(--gap-500)),
+      transparent
+    );
+  }
+
+  .accentRow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .accentRow .swatchTip {
+    display: none;
+  }
+
+  .sceneRow {
+    display: none;
+  }
+
+  /* Six counts as an even three by two, closer together. */
+  .statStrip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-400) var(--gap-200);
+    width: 100%;
+  }
+
+  /* Each label holds to one line at caption size, so the two rows of
+     counts stay as short as the figures. */
+  .statStrip :global(.ds-stat__label) {
+    font-family: var(--font-caption-family);
+    font-size: var(--font-caption-size);
+    font-weight: var(--font-caption-weight);
+    line-height: var(--font-caption-line-height);
+    letter-spacing: var(--font-caption-letter-spacing);
+    white-space: nowrap;
+  }
+
+  /* The phone keeps two of the section links; the rest live in the
+     resources strip below the collage. */
+  .phoneHidden {
+    display: none;
   }
 }
 

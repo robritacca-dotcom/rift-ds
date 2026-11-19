@@ -1480,6 +1480,7 @@ export default function DesignSystemLanding() {
                 ? [
                     {
                       label: "Figma kit",
+                      className: styles.phoneHidden,
                       variant: "secondary" as const,
                       size: "compact" as const,
                       glass: true,

@@ -90,7 +90,7 @@ export default function DecisionRowPage() {
                   declineLabel="Keep"
                   acceptedLabel="Removed"
                   declinedLabel="Kept"
-                  destructive
+                  tone="destructive"
                 />
               </Widget>
             </div>

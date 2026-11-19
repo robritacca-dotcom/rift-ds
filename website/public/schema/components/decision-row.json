@@ -108,12 +108,16 @@
           "description": "Offers Undo on a settled row, which returns it to pending and fires this. Leave it unset where a decision cannot be reversed."
         },
         {
-          "name": "destructive",
-          "type": "boolean",
-          "typeKind": "primitive",
+          "name": "tone",
+          "type": "\"default\" | \"destructive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "destructive"
+          ],
           "required": false,
-          "description": "Draws the accept button as destructive, for a decision whose yes takes something away (remove a member, delete a draft).",
-          "default": false
+          "description": "The accept button's colour: `destructive` for a decision whose yes takes something away (remove a member, delete a draft), as ActionCard's `tone` does for a change.",
+          "default": "default"
         },
         {
           "name": "acceptLabel",

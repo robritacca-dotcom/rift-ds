@@ -7917,11 +7917,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Offers Undo on a settled row, which returns it to pending and fires this. Leave it unset where a decision cannot be reversed."
           },
           {
-            "name": "destructive",
-            "type": "boolean",
+            "name": "tone",
+            "type": "\"default\" | \"destructive\"",
             "required": false,
-            "description": "Draws the accept button as destructive, for a decision whose yes takes something away (remove a member, delete a draft).",
-            "defaultValue": "false"
+            "description": "The accept button's colour: `destructive` for a decision whose yes takes something away (remove a member, delete a draft), as ActionCard's `tone` does for a change.",
+            "values": [
+              "default",
+              "destructive"
+            ],
+            "defaultValue": "'default'"
           },
           {
             "name": "acceptLabel",

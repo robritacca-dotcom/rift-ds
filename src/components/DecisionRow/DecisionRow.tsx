@@ -35,8 +35,8 @@ type DecisionRowOwnProps = {
   onDecline?: () => void;
   /** Offers Undo on a settled row, which returns it to pending and fires this. Leave it unset where a decision cannot be reversed. */
   onUndo?: () => void;
-  /** Draws the accept button as destructive, for a decision whose yes takes something away (remove a member, delete a draft). */
-  destructive?: boolean;
+  /** The accept button's colour: `destructive` for a decision whose yes takes something away (remove a member, delete a draft), as ActionCard's `tone` does for a change. */
+  tone?: 'default' | 'destructive';
   /** The accept button's words. */
   acceptLabel?: string;
   /** The decline button's words. */
@@ -81,7 +81,7 @@ export function DecisionRow({
   onAccept,
   onDecline,
   onUndo,
-  destructive = false,
+  tone = 'default',
   acceptLabel = 'Accept',
   declineLabel = 'Decline',
   acceptedLabel = 'Accepted',
@@ -145,7 +145,7 @@ export function DecisionRow({
       <Button
         className={`${baseClass}__accept`}
         variant="secondary"
-        tone={destructive ? 'destructive' : 'default'}
+        tone={tone}
         size="compact"
         label={acceptLabel}
         onClick={() => decide('accepted')}

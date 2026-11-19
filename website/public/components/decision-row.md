@@ -31,7 +31,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 | onAccept | `(() => void)` | no |  | Fires when the reader accepts. |
 | onDecline | `(() => void)` | no |  | Fires when the reader declines. |
 | onUndo | `(() => void)` | no |  | Offers Undo on a settled row, which returns it to pending and fires this. Leave it unset where a decision cannot be reversed. |
-| destructive | `boolean` | no | `false` | Draws the accept button as destructive, for a decision whose yes takes something away (remove a member, delete a draft). |
+| tone | `"default" \| "destructive"` | no | `'default'` | The accept button's colour: `destructive` for a decision whose yes takes something away (remove a member, delete a draft), as ActionCard's `tone` does for a change. |
 | acceptLabel | `string` | no | `'Accept'` | The accept button's words. |
 | declineLabel | `string` | no | `'Decline'` | The decline button's words. |
 | acceptedLabel | `string` | no | `'Accepted'` | The settled mark's words once accepted. |

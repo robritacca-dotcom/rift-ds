@@ -56,7 +56,7 @@ export const OwnWords: Story = {
   },
 };
 
-/** A yes that takes something away draws its button as destructive. */
+/** A yes that takes something away takes `tone="destructive"` on its accept button. */
 export const Destructive: Story = {
   args: {
     title: 'Remove Sam from the workspace',
@@ -65,7 +65,7 @@ export const Destructive: Story = {
     declineLabel: 'Keep',
     acceptedLabel: 'Removed',
     declinedLabel: 'Kept',
-    destructive: true,
+    tone: 'destructive',
   },
 };
 

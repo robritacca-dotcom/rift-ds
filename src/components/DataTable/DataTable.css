@@ -1066,16 +1066,22 @@
   rotate: 90deg;
 }
 
+/* The group's value gives way first in a narrow column (a pinned row
+   header on a phone): it ends in an ellipsis rather than running under its
+   count and past the column's edge. The group toggle names it in full. */
 .ds-data-table__group-value {
-  display: inline-flex;
-  align-items: center;
+  display: block;
+  flex: 0 1 auto;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: var(--font-paragraph-emphasis-family);
   font-weight: var(--font-paragraph-emphasis-weight);
 }
 
 .ds-data-table__group-count,
 .ds-data-table__group-total {
+  flex: none;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
   font-weight: var(--font-caption-weight);

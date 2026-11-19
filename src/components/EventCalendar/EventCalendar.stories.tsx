@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { EventCalendar, type EventCalendarEvent } from './EventCalendar';
+import React from 'react';
 import { Button } from '../Button/Button';
+import { List, ListItem } from '../List/List';
 
 const events: EventCalendarEvent[] = [
   { id: 'e1', date: '2026-08-01', title: 'Brunch', time: '11:00', color: 'amber' },
@@ -170,5 +172,71 @@ export const NarrowWithActions: Story = {
   play: async ({ canvasElement }) => {
     const month = canvasElement.querySelector<HTMLElement>('.ds-event-calendar__month')!;
     await expect(month.scrollWidth).toBeLessThanOrEqual(month.clientWidth + 1);
+  },
+};
+
+/** One day, the week view's cell alone: every event, stepping a day at a time, headed with the full date. */
+export const DayView: Story = {
+  args: {
+    view: 'day',
+    selectedDate: '2026-08-20',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+  },
+  play: async ({ canvas, userEvent }) => {
+    await expect(canvas.getByRole('group', { name: 'Thursday, August 20, 2026' })).toBeInTheDocument();
+    await expect(canvas.getByText('Portfolio review')).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Next day' }));
+    await expect(canvas.getByRole('group', { name: 'Friday, August 21, 2026' })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Previous day' }));
+  },
+};
+
+/** `legendToggles` makes each legend entry a Chip that shows or hides its colour's events, in every view. */
+export const LegendToggles: Story = {
+  args: {
+    legendToggles: true,
+    legend: [
+      { color: 'cobalt', label: 'Meetings' },
+      { color: 'amber', label: 'Meals' },
+      { color: 'mint', label: 'Exercise' },
+    ],
+  },
+  play: async ({ canvas, userEvent }) => {
+    await expect(canvas.getAllByText('Stand-up')).toHaveLength(2);
+    const meetings = canvas.getByRole('button', { name: 'Meetings' });
+    await expect(meetings).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.click(meetings);
+    await expect(meetings).toHaveAttribute('aria-pressed', 'false');
+    await expect(canvas.queryByText('Stand-up')).toBeNull();
+    await userEvent.click(meetings);
+  },
+};
+
+/** `renderSelectedDay` draws the host's panel for the chosen day under the grid, handed the day and its events. */
+export const SelectedDayPanel: Story = {
+  render: function Render(args) {
+    const [day, setDay] = React.useState('2026-08-20');
+    return (
+      <EventCalendar
+        {...args}
+        selectedDate={day}
+        onDateClick={setDay}
+        renderSelectedDay={(date, dayEvents) => (
+          <List variant="plain" spacing="compact">
+            {dayEvents.length === 0 ? (
+              <ListItem>Nothing on {date}.</ListItem>
+            ) : (
+              dayEvents.map((event) => (
+                <ListItem key={event.id}>
+                  {event.time ? `${event.time} ` : ''}
+                  {event.title}
+                </ListItem>
+              ))
+            )}
+          </List>
+        )}
+      />
+    );
   },
 };

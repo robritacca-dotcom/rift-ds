@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import { Chip } from '../Chip/Chip';
 import './EventCalendar.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
@@ -124,12 +125,29 @@ type EventCalendarOwnProps = {
   selectedDate?: string;
   /** The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. */
   today?: string;
-  /** What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown. */
+  /** What each event colour means, shown as a row of dots and labels under the grid. With `legendToggles`, each entry also shows and hides its colour's events. */
   legend?: EventCalendarLegendItem[];
+  /** Makes each legend entry a selectable Chip that shows or hides the events of its colour, so a reader can narrow a busy calendar by kind. */
+  legendToggles?: boolean;
+  /** The colours whose events are hidden, for controlled use. Pair with `onHiddenColorsChange`. */
+  hiddenColors?: EventCalendarColor[];
+  /** The colours hidden to begin with, for uncontrolled use. */
+  defaultHiddenColors?: EventCalendarColor[];
+  /** Fires with the hidden colours after a legend entry is switched. */
+  onHiddenColorsChange?: (colors: EventCalendarColor[]) => void;
+  /** The name of the legend's set of toggles, when `legendToggles` is on. */
+  legendLabel?: string;
+  /**
+   * Draws a panel for the selected day under the grid, in every view: handed
+   * the day (YYYY-MM-DD) and its events as shown, it returns what the panel
+   * holds (a list of the day's events, a form to add one). Shown only while
+   * `selectedDate` is set.
+   */
+  renderSelectedDay?: (date: string, events: EventCalendarEvent[]) => React.ReactNode;
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
-  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount. */
-  view?: 'month' | 'week';
+  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time. */
+  view?: 'month' | 'week' | 'day';
   /** Accessible name of the previous-month button. */
   previousLabel?: string;
   /** Accessible name of the next-month button. */
@@ -138,6 +156,10 @@ type EventCalendarOwnProps = {
   previousWeekLabel?: string;
   /** Accessible name of the next-week button, in the week view. */
   nextWeekLabel?: string;
+  /** Accessible name of the previous-day button, in the day view. */
+  previousDayLabel?: string;
+  /** Accessible name of the next-day button, in the day view. */
+  nextDayLabel?: string;
   /** The visible text of the control that folds an expanded day back, when a day's "+N more" opens it in place (with no `onDateClick`). */
   showLessLabel?: string;
   /**
@@ -209,12 +231,20 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       selectedDate,
       today: todayProp,
       legend,
+      legendToggles = false,
+      hiddenColors: hiddenColorsProp,
+      defaultHiddenColors = [],
+      onHiddenColorsChange,
+      legendLabel = 'Show events by kind',
+      renderSelectedDay,
       actions,
       view = 'month',
       previousLabel = 'Previous month',
       nextLabel = 'Next month',
       previousWeekLabel = 'Previous week',
       nextWeekLabel = 'Next week',
+      previousDayLabel = 'Previous day',
+      nextDayLabel = 'Next day',
       showLessLabel = 'Show less',
       monthLabel: monthLabelProp,
       overflowLabel: overflowLabelProp,
@@ -256,15 +286,20 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     /* The week view keeps its own place: the week holding the selected day,
        else today, stepping seven days at a time. A step that crosses into
        another month reports it, as the month view's arrows do. */
-    const isWeek = view === 'week';
+    /* The day view is the week view's cell alone: the same anchor, one day
+       at a time. */
+    const isDay = view === 'day';
+    const isWeek = view === 'week' || isDay;
     const [weekAnchor, setWeekAnchor] = useState(() => parseDay(selectedDate) ?? today);
-    const weekStartDate = new Date(
-      weekAnchor.getFullYear(),
-      weekAnchor.getMonth(),
-      weekAnchor.getDate() - weekdayOffset(weekAnchor.getDay(), weekStart),
-    );
+    const weekStartDate = isDay
+      ? weekAnchor
+      : new Date(
+          weekAnchor.getFullYear(),
+          weekAnchor.getMonth(),
+          weekAnchor.getDate() - weekdayOffset(weekAnchor.getDay(), weekStart),
+        );
     const stepWeek = (offset: number) => {
-      const next = new Date(weekAnchor.getFullYear(), weekAnchor.getMonth(), weekAnchor.getDate() + offset * 7);
+      const next = new Date(weekAnchor.getFullYear(), weekAnchor.getMonth(), weekAnchor.getDate() + offset * (isDay ? 1 : 7));
       setWeekAnchor(next);
       const value = formatMonth(next.getFullYear(), next.getMonth());
       if (value !== formatMonth(weekAnchor.getFullYear(), weekAnchor.getMonth())) {
@@ -282,6 +317,16 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       return (start: Date) => format.formatRange(start, new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6));
     }, [locale]);
 
+    /* The colours the legend has switched off. Applied here, so every view
+       and the selected day's panel show the same events. */
+    const [ownHidden, setOwnHidden] = useState<EventCalendarColor[]>(defaultHiddenColors);
+    const hiddenColors = hiddenColorsProp ?? ownHidden;
+    const toggleColor = (color: EventCalendarColor) => {
+      const next = hiddenColors.includes(color) ? hiddenColors.filter((c) => c !== color) : [...hiddenColors, color];
+      if (hiddenColorsProp === undefined) setOwnHidden(next);
+      onHiddenColorsChange?.(next);
+    };
+
     // Group events by date, untimed first then by time text
     const eventsByDate = useMemo(() => {
       const map = new Map<string, EventCalendarEvent[]>();
@@ -291,6 +336,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
         map.set(day, list);
       };
       for (const event of events) {
+        if (hiddenColors.includes(event.color ?? 'neutral')) continue;
         const start = parseDay(event.date);
         const end = parseDay(event.endDate);
         if (!start || !end || end <= start) {
@@ -315,7 +361,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
         });
       }
       return map;
-    }, [events, locale]);
+    }, [events, locale, hiddenColors]);
     const formatSpan = useMemo(() => {
       const format = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
       return (event: EventCalendarEvent) => {
@@ -332,7 +378,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
 
     const cells: { date: Date; inMonth: boolean }[] = [];
     if (isWeek) {
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < (isDay ? 1 : 7); i++) {
         cells.push({
           date: new Date(weekStartDate.getFullYear(), weekStartDate.getMonth(), weekStartDate.getDate() + i),
           inMonth: true,
@@ -345,8 +391,16 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       }
     }
 
-    const classes = [baseClass, isWeek ? `${baseClass}--week` : '', className].filter(Boolean).join(' ');
-    const monthTitle = isWeek ? weekRangeLabel(weekStartDate) : monthLabel(new Date(viewYear, viewMonth, 1));
+    const classes = [baseClass, isWeek ? `${baseClass}--week` : '', isDay ? `${baseClass}--day` : '', className]
+      .filter(Boolean)
+      .join(' ');
+    const monthTitle = isDay
+      ? formatDayLabel(weekStartDate)
+      : isWeek
+        ? weekRangeLabel(weekStartDate)
+        : monthLabel(new Date(viewYear, viewMonth, 1));
+    const previousName = isDay ? previousDayLabel : isWeek ? previousWeekLabel : previousLabel;
+    const nextName = isDay ? nextDayLabel : isWeek ? nextWeekLabel : nextLabel;
 
     return (
       <div {...rest} ref={ref} className={classes}>
@@ -357,7 +411,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
               type="button"
               className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
               onClick={() => (isWeek ? stepWeek(-1) : navigate(-1))}
-              aria-label={isWeek ? previousWeekLabel : previousLabel}
+              aria-label={previousName}
             >
               chevron_left
             </button>
@@ -365,7 +419,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
               type="button"
               className={`${baseClass}__nav-btn material-symbols-rounded ds-mirror-rtl`}
               onClick={() => (isWeek ? stepWeek(1) : navigate(1))}
-              aria-label={isWeek ? nextWeekLabel : nextLabel}
+              aria-label={nextName}
             >
               chevron_right
             </button>
@@ -373,13 +427,16 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
           {actions && <div className={`${baseClass}__actions`}>{actions}</div>}
         </div>
 
-        <div className={`${baseClass}__weekdays`} aria-hidden="true">
-          {rotateWeek(weekdaysOr(weekdayLabels, locale), weekStart).map((day, index) => (
-            <div key={index} className={`${baseClass}__weekday`}>
-              {day}
-            </div>
-          ))}
-        </div>
+        {/* The day view's heading already names its weekday. */}
+        {!isDay && (
+          <div className={`${baseClass}__weekdays`} aria-hidden="true">
+            {rotateWeek(weekdaysOr(weekdayLabels, locale), weekStart).map((day, index) => (
+              <div key={index} className={`${baseClass}__weekday`}>
+                {day}
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Deliberately NOT role="grid": unlike DatePicker's day grid there
             is no 2D arrow-key model here, so claiming the role would be a lie. */}
@@ -524,7 +581,25 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
             );
           })}
         </div>
-        {legend && legend.length > 0 && (
+        {selectedDate && renderSelectedDay && (
+          <div className={`${baseClass}__selected-day`}>{renderSelectedDay(selectedDate, eventsByDate.get(selectedDate) ?? [])}</div>
+        )}
+        {legend && legend.length > 0 && legendToggles && (
+          <div className={`${baseClass}__legend`} role="group" aria-label={legendLabel}>
+            {legend.map((item) => (
+              <Chip
+                key={`${item.color}-${item.label}`}
+                size="compact"
+                className={`${baseClass}__event--${item.color}`}
+                icon={<span className={`${baseClass}__event-dot`} aria-hidden="true" />}
+                label={item.label}
+                selected={!hiddenColors.includes(item.color)}
+                onClick={() => toggleColor(item.color)}
+              />
+            ))}
+          </div>
+        )}
+        {legend && legend.length > 0 && !legendToggles && (
           <ul className={`${baseClass}__legend`}>
             {legend.map((item) => (
               <li key={`${item.color}-${item.label}`} className={`${baseClass}__legend-item ${baseClass}__event--${item.color}`}>

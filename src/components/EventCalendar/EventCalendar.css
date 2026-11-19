@@ -422,3 +422,35 @@ button.ds-event-calendar__more:focus-visible {
 .ds-event-calendar--week .ds-event-calendar__cell {
   min-height: calc(var(--control-height-default) * 5);
 }
+
+/* ============================================
+   DAY VIEW — one day, the week view's cell alone
+   ============================================ */
+
+.ds-event-calendar--day .ds-event-calendar__grid {
+  grid-template-columns: 1fr;
+}
+
+/* ============================================
+   SELECTED DAY — the host's panel for the chosen day
+   ============================================ */
+
+.ds-event-calendar__selected-day {
+  margin-block-start: var(--gap-300);
+  padding-block-start: var(--padding-300);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+/* A legend entry that switches its colour: the shared Chip, its dot in the
+   entry's accent (an uncoloured entry takes the neutral one, at no weight,
+   so the accent class on the chip always wins). */
+:where(.ds-event-calendar__legend .ds-chip) {
+  --ds-event-accent: var(--color-status-neutral-border);
+}
+
+/* In a chip the dot is the entry's whole mark, so it takes the larger step. */
+.ds-event-calendar__legend .ds-chip .ds-event-calendar__event-dot {
+  display: block;
+  width: var(--gap-200);
+  height: var(--gap-200);
+}

@@ -777,7 +777,7 @@
       "name": "EventCalendar",
       "label": "Event calendar",
       "slug": "event-calendar",
-      "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
+      "description": "A month, a week or a day of events: pills on their days, overflow counts in the month, a legend that can filter, and a panel for the chosen day.",
       "category": "data-display",
       "client": true,
       "partPatterns": [{ "pattern": "button", "part": "navigation buttons" }]

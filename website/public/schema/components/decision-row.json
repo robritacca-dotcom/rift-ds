@@ -215,6 +215,9 @@
       ]
     }
   ],
+  "size": {
+    "gzip": 3779
+  },
   "alternatives": [
     {
       "name": "ActionCard",

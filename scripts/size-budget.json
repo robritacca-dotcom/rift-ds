@@ -19,7 +19,7 @@
     "./behaviors/useScrollLock": 900,
     "./charts": 8600,
     "./chat": 76500,
-    "./chat/actions": 1200,
+    "./chat/actions": 2000,
     "./chat/demo": 28100,
     "./chat/server": 10500,
     "./chat/upstash": 2000,

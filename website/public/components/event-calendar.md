@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Deep import: `import { EventCalendar } from 'rift-ds/components/EventCalendar/EventCalendar';`
 - Rendering: client component (declares 'use client')
-- Size: 2.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 3.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/event-calendar
 - Schema: https://rift-ds.com/schema/components/event-calendar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

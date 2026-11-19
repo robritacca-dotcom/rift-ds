@@ -351,9 +351,12 @@ function inspect() {
   ]
     // An inline link that wraps has a bounding box spanning both lines, so
     // links in running prose are left out rather than reported as stacked.
+    // A control that takes no pointer (a globe marker on the far side) can
+    // be reached only by keyboard, so it cannot be pressed in error under
+    // another, and is left out too.
     .filter((el) => {
       const cs = getComputedStyle(el);
-      return shown(el) && !el.disabled && !floats(cs) && cs.display !== 'inline';
+      return shown(el) && !el.disabled && !floats(cs) && cs.display !== 'inline' && cs.pointerEvents !== 'none';
     })
     .map((el) => ({ el, r: visibleRect(el) }))
     .filter(({ r }) => r);

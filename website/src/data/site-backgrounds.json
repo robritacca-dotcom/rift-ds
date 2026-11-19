@@ -89,6 +89,13 @@
       }
     },
     {
+      "id": "rift",
+      "label": "Rift",
+      "description": "A glowing tear, light streaming in",
+      "icon": "bolt",
+      "scene": "rift"
+    },
+    {
       "id": "glyphs",
       "label": "Glyphs",
       "description": "Soft light printed in type",

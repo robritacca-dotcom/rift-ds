@@ -68,6 +68,9 @@ export type SiteBackgroundEntry = {
    inside the scene (the fadeBottom pass) before the band's own fade
    finishes the job; the beam is softened as on the home page.
 
+   Rift, both bands: the library scene exactly as it ships, with no tuning
+   and no passes, so the site shows the tear at its own defaults.
+
    Glyphs, home: the whole composition dropped (rise), so the streak and
    its core land under the hero's calls to action and over the top of the
    chat frame rather than behind the headline and the counts, with the

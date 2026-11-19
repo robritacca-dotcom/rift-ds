@@ -49,23 +49,85 @@
 
 /* ----------------------------------------------------------- statement */
 
-/* A statement is read down its lines, so the header and the statement hold
-   one reading width rather than stretching the figures across a wide
-   screen, and the Export button ends where the figures do. */
 .page {
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);
   width: 100%;
-  max-width: 960px; /* the statement's reading width */
   min-width: 0;
+}
+
+/* The statement takes the room, and the summary column beside it holds the
+   quarter at a glance: three figures, then the months and the spend. */
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); /* the summary's card width */
+  gap: var(--gap-500);
+  align-items: start;
 }
 
 /* A narrow screen scrolls the table sideways inside this box. */
 .statement {
-  flex-shrink: 0;
   min-width: 0;
   overflow-x: auto;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  min-width: 0;
+}
+
+/* The four figures in a band across the column. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-500);
+}
+
+/* The family's stat and chart card, as merchant sales draws it. */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gap-300);
+  min-width: 0;
+  padding: var(--padding-500);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid color-mix(in srgb, var(--color-bg-container-border) 60%, transparent);
+  border-radius: var(--radius-600);
+}
+
+/* Each slice's amount under the donut, in tiles that wrap before a label is cut. */
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+  gap: var(--gap-200);
+}
+
+/* Below the room for both, the charts go under the statement, side by side,
+   and the band folds to two figures a row. By the column's room, so an open
+   chat or an expanded rail restacks it too. */
+@container template-content (max-width: 1100px) {
+  .spread {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container template-content (max-width: 640px) {
+  .summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ---------------------------------------------------------- responsive */
@@ -96,5 +158,12 @@
 
   .searchIconMobile {
     display: inline-flex;
+  }
+}
+
+/* A phone: a full amount needs the card's whole width. */
+@container template-content (max-width: 480px) {
+  .stats {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

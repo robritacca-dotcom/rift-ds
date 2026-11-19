@@ -4,8 +4,13 @@
  * The profit and loss template: the quarterly statement screen for
  * Tallyfold, a fictional bookkeeping product, showing an invented company's
  * quarter. The shell is the family's (TemplateShell's switchable rail and
- * surface, slim top bar, docked mock assistant); the stage is the statement
- * itself, so there is no KPI band (design.md's Template screens rule 3).
+ * surface, slim top bar, docked mock assistant). The statement is the stage
+ * and takes the room; a band of four figures over it (revenue, the two
+ * margins, net profit, each against the quarter before) and two charts
+ * beside it (net profit by month, where the operating money went) read its
+ * shape at a glance, in merchant sales' stat and chart card. Every figure
+ * there is worked out from the statement's own lines, so the band, the
+ * charts and the table always agree.
  *
  * The statement is one bordered Table: each section opens on a `heading` row
  * and closes on a `total` row, and the lines between subtract down to the
@@ -28,7 +33,10 @@ import { Button } from "rift-ds/components/Button/Button";
 import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
 import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
+import { Stat } from "rift-ds/components/Stat/Stat";
+import { BarChart, PieChart } from "rift-ds/charts";
 import {
   Table,
   type TableColumn,
@@ -244,6 +252,59 @@ const ROWS: TableRow[] = [
   resultRow("net", "Net profit", netNow, netBefore),
 ];
 
+/* ------------------------------------------------------- the summary */
+
+/* Margins are a share of revenue, for display only: the amounts behind
+   them stay decimal strings. */
+const share = (part: DecimalString, whole: DecimalString) => Number(part) / Number(whole);
+const plainPercent = new Intl.NumberFormat(LOCALE, { style: "percent", maximumFractionDigits: 1 });
+const points = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1, signDisplay: "exceptZero" });
+const trendOf = (delta: number) => (delta > 0 ? "up" : delta < 0 ? "down" : "neutral") as "up" | "down" | "neutral";
+
+const grossMarginNow = share(grossNow, revenueNow);
+const grossMarginBefore = share(grossBefore, revenueBefore);
+const operatingMarginNow = share(operatingProfitNow, revenueNow);
+const operatingMarginBefore = share(operatingProfitBefore, revenueBefore);
+/* A margin's move in points, its arrow read from the figure as written, so
+   "0 pts" never wears an arrow. */
+const pointsMove = (now: number, before: number) => {
+  const written = Number(((now - before) * 100).toFixed(1));
+  return { delta: `${points.format(written)} pts`, trend: trendOf(written) };
+};
+const amountMove = (now: DecimalString, before: DecimalString) => ({
+  delta: change(now, before),
+  trend: trendOf(compareDecimal(now, before)),
+});
+
+const SUMMARY = [
+  { id: "revenue", icon: "payments", label: "Revenue", value: money(revenueNow), ...amountMove(revenueNow, revenueBefore) },
+  { id: "gross", icon: "percent", label: "Gross margin", value: plainPercent.format(grossMarginNow), ...pointsMove(grossMarginNow, grossMarginBefore) },
+  { id: "operating", icon: "trending_up", label: "Operating margin", value: plainPercent.format(operatingMarginNow), ...pointsMove(operatingMarginNow, operatingMarginBefore) },
+  { id: "net", icon: "account_balance_wallet", label: "Net profit", value: money(netNow), ...amountMove(netNow, netBefore) },
+];
+
+/* Net profit by month: July and August as booked, September what is left
+   of the quarter, so the three bars add up to the statement's bottom line. */
+const JULY = "33120.40";
+const AUGUST = "35904.15";
+const SEPTEMBER = subtractDecimal(netNow, sumDecimal([JULY, AUGUST]));
+const compactMoney = (value: number) => formatMoney(value, { currency: CURRENCY, locale: LOCALE, notation: "compact" });
+/* The month the quarter's profit averaged, for the chart's header. */
+const MONTHLY_AVERAGE = money(String((Number(netNow) / 3).toFixed(2)));
+const NET_BY_MONTH = [
+  { month: "Jul", net: Number(JULY) },
+  { month: "Aug", net: Number(AUGUST) },
+  { month: "Sep", net: Number(SEPTEMBER) },
+];
+
+/* Where the operating money went: each line's share of the section. */
+const seriesSwatch = (series: number) => `var(--color-chart-series-${series})`;
+const SPEND = OPERATING.lines.map((line, index) => ({
+  name: line.label,
+  value: Number(line.now),
+  color: seriesSwatch(index + 1),
+}));
+
 const CHAT_SUGGESTIONS = [
   { id: "net", label: "How did the quarter end?" },
   { id: "margin", label: "What is the gross margin?" },
@@ -345,14 +406,52 @@ export default function ProfitAndLoss() {
           />
         )}
 
-        <div className={styles.statement}>
-          <Table
-            caption="Profit and loss, July to September 2026"
-            captionHidden
-            bordered
-            columns={COLUMNS}
-            rows={ROWS}
-          />
+        {/* The quarter in four figures, each against the quarter before. */}
+        <section className={styles.stats} aria-label="The quarter at a glance">
+          {SUMMARY.map((stat) => (
+            <div key={stat.id} className={styles.card}>
+              <Stat
+                icon={stat.icon}
+                caption="Jul to Sep"
+                value={stat.value}
+                label={stat.label}
+                delta={stat.delta}
+                trend={stat.trend}
+                deltaPlacement="auto"
+              />
+            </div>
+          ))}
+        </section>
+
+        <div className={styles.spread}>
+          {/* The statement is the stage; the charts beside it show its shape. */}
+          <div className={styles.statement}>
+            <Table
+              caption="Profit and loss, July to September 2026"
+              captionHidden
+              bordered
+              columns={COLUMNS}
+              rows={ROWS}
+            />
+          </div>
+
+          <aside className={styles.summary} aria-label="The quarter's shape">
+            <section className={styles.card} aria-label="Net profit by month">
+              <Stat value={MONTHLY_AVERAGE} label="Net profit, monthly average" />
+              <BarChart data={NET_BY_MONTH} xKey="month" yKey="net" dataLabel="Net profit" yAxisFormatter={compactMoney} height={180} bare />
+            </section>
+
+            <section className={styles.card} aria-label="Operating expenses">
+              {/* No arrow: a cost that rises is not good news, and the statement beside it says by how much. */}
+              <Stat value={money(operatingNow)} label="Operating expenses" />
+              <PieChart data={SPEND} innerRadius="62%" height={200} showLegend={false} bare />
+              <div className={styles.legend}>
+                {SPEND.map((slice) => (
+                  <LegendTile key={slice.name} swatch={slice.color} label={slice.name} value={compactMoney(slice.value)} />
+                ))}
+              </div>
+            </section>
+          </aside>
         </div>
       </div>
     </TemplateShell>

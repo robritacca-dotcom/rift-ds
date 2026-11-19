@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.31.0",
+      "date": "2026-11-19",
+      "title": "A chat that changes the page, and a row for a decision",
+      "body": [
+        "The chat can now change the page it sits on. A tool result carries actions the browser runs through `pageActions`, a reply can open with lead cards, and `rift-ds/chat/actions` adds sequences confirmed as one and `defineContext`, one schema for the context a page sends its route. `npx rift-ds init chat --actions` scaffolds a chat that proposes changes and applies one only when the reader confirms it, and `npx rift-ds init block planner` writes a planning page.",
+        "Decision row joins the library for an item waiting on a yes or a no. DataTable takes a whole view from outside the table and writes a column per day, week or month with totals across, EventCalendar gains a day view, a legend that toggles and a panel for the chosen day, every theme answers to its shown name, and an app shell leaves room for a docked chat.",
+        "Nothing published was renamed or removed. Components fit narrow screens better: tabs scroll, button groups wrap, the date picker shrinks to its container, and the calendar draws a phone’s month as dots. A plain Table now sits in a scroll container, so a style on its table element as a grid or flex item moves to that wrapper."
+      ]
+    },
+    {
       "version": "1.30.0",
       "date": "2026-11-18",
       "title": "Components for the screens of an app",

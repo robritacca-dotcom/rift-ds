@@ -160,10 +160,12 @@ export function Preview() {
   );
 }`;
 
-const HOST_SNIPPET = `/* Make room for the panel only when it docks. */
+const HOST_SNIPPET = `/* Make room for the panel only when it docks: its width, plus the gap it
+   keeps off the window's edge, so the page ends one gap short of it.
+   An AppLayout or the app-shell block makes this room itself. */
 @media ${DOCK_QUERY} {
-  html[data-chat="docked"] body { padding-right: var(--ds-chat-width); }
-  html[data-chat="docked-left"] body { padding-left: var(--ds-chat-width); }
+  html[data-chat="docked"] body { padding-right: calc(var(--ds-chat-width) + var(--ds-chat-inset)); }
+  html[data-chat="docked-left"] body { padding-left: calc(var(--ds-chat-width) + var(--ds-chat-inset)); }
 }
 
 /* On a phone the chat is the page. Hide what is behind it. */
@@ -548,9 +550,13 @@ export default function ChatInstallPage() {
             <p className={s.sectionNote}>
               The launcher marks the page while the panel is open. Your stylesheet makes room, and
               only when it docks: beside the page at {DOCK_QUERY.replace(/[()]/g, "")}, the whole
-              screen under {TAKEOVER_QUERY.replace(/[()]/g, "")}. The rails sit inline from{" "}
+              screen under {TAKEOVER_QUERY.replace(/[()]/g, "")}. An{" "}
+              <Link href="/components/app-layout">App layout</Link> or the app-shell block makes
+              the docked room itself; set <code>--ds-shell-chat-room: 0px</code> on the root if
+              your own stylesheet already does. The rails sit inline from{" "}
               {THREADS_RAIL_MIN_WIDTH}px and {ASIDE_RAIL_MIN_WIDTH}px of panel width. A suggestion
-              chip holds {SUGGESTION_MAX_CHARS} characters, and a longer one is dropped.
+              chip holds {SUGGESTION_MAX_CHARS} characters, and a longer one is dropped, with a warning in
+              development.
             </p>
             <CodeBlock code={HOST_SNIPPET} language="css" showCopy />
             <h3 className={s.propsHeading}>In your language</h3>

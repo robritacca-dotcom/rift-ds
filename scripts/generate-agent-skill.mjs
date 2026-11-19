@@ -325,6 +325,8 @@ ${widget.description} It is the package's one widget, separate from the componen
 npx ${BIN_NAME} ${widget.command}
 \`\`\`
 
+Add \`--actions\` for a chat that proposes changes the reader confirms: the same files with a propose-and-confirm example in place of the plain route and mount, the actions defined once for the page and the route, the tool that proposes them on an ActionCard, the card that confirms them and the record each reply opens with. The route still writes nothing.
+
 Its subpaths, each with the optional peers it needs:
 
 ${Object.entries(widget.subpaths)
@@ -817,7 +819,7 @@ import { Button } from '${PACKAGE_NAME}';
 
 ## AI chat
 
-Do not build a chat UI by hand. \`npx ${BIN_NAME} ${widget.command}\` scaffolds the package's chat widget into a Next.js app router project: the routes, the mount and an env example. It never overwrites a file, and it ends by printing the optional peers to install and the steps to wire it in. Follow that output. In any other framework, use the panel over your own endpoint or the headless engine instead: ${origin}/docs/chat covers both and the protocol, and every prop is on ${origin}/components/${widget.slug}.
+Do not build a chat UI by hand. \`npx ${BIN_NAME} ${widget.command}\` scaffolds the package's chat widget into a Next.js app router project: the routes, the mount and an env example. It never overwrites a file, and it ends by printing the optional peers to install and the steps to wire it in. Follow that output. For a chat that proposes changes the reader confirms, add \`--actions\` and build on the example it writes rather than inventing the flow. In any other framework, use the panel over your own endpoint or the headless engine instead: ${origin}/docs/chat covers both and the protocol, and every prop is on ${origin}/components/${widget.slug}.
 
 ## Rules
 

@@ -360,14 +360,20 @@ function initChat({ app, dryRun, actions }) {
       : `\n✓ Chat scaffolded: ${written.length} files written, ${skipped.length} left alone.`
   );
   console.log(`\nNext:`);
-  console.log(`  1. Install the peers the chat imports:\n       npm install ${CHAT_PEERS.join(' ')}`);
+  /* The actions mount plays no demo, so it needs no recharts. */
+  const peers = actions ? CHAT_PEERS.filter((peer) => peer !== 'recharts') : CHAT_PEERS;
+  console.log(`  1. Install the peers the chat imports:\n       npm install ${peers.join(' ')}`);
   console.log(
     `  2. Render <ChatMount /> at the end of your root layout's body, after the page content:\n` +
       `       import { ChatMount } from '${relative(appDir, join(dirname(appDir), 'components', 'chat', 'ChatMount')).split('\\').join('/')}';`
   );
   console.log(
-    `  3. Copy .env.chat.example into .env.local. With NEXT_PUBLIC_CHAT_DEMO=true the widget plays a scripted\n` +
-      `     conversation and needs no key; set ANTHROPIC_API_KEY and CHAT_ENABLED=true to go live.`
+    actions
+      ? `  3. Copy .env.chat.example into .env.local and set ANTHROPIC_API_KEY and CHAT_ENABLED=true: the\n` +
+          `     propose-and-confirm mount talks to the route, with no scripted demo. Then replace the sample\n` +
+          `     records and applyPlan in components/chat/proposals/ with your own.`
+      : `  3. Copy .env.chat.example into .env.local. With NEXT_PUBLIC_CHAT_DEMO=true the widget plays a scripted\n` +
+          `     conversation and needs no key; set ANTHROPIC_API_KEY and CHAT_ENABLED=true to go live.`
   );
   if (ignoresEnvExample()) {
     console.log(

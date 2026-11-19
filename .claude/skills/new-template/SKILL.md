@@ -37,6 +37,7 @@ The live implementations under `website/src/components/templates/` are the sourc
 - An assistant home (the real chat as the page, a board of tiles under the composer) — the chat home
 - An instrument with one subject in two projections (a map or globe stage, a stage-mounted toolbar, full-width content) — the relay console
 - A phone-only app screen (platform chrome, drawn as a framed device on the dotted stage at wider widths) — the mobile dashboard
+- A report read down its lines (a statement of heading and total rows, a figures band over it, charts beside it), with every amount a decimal string through rift-ds/format — the profit and loss
 - A single centred form with no app shell — the sign-in screen
 - A marketing page with no app shell (a hero, sections and a footer, a hamburger drawer at narrow widths and a bottom tab bar on a phone) — the landing page
 

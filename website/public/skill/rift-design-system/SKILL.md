@@ -52,11 +52,13 @@ The whole AI chat: the panel, or the page itself in an app shell mode, the strea
 npx rift-ds init chat
 ```
 
+Add `--actions` for a chat that proposes changes the reader confirms: the same files with a propose-and-confirm example in place of the plain route and mount, the actions defined once for the page and the route, the tool that proposes them on an ActionCard, the card that confirms them and the record each reply opens with. The route still writes nothing.
+
 Its subpaths, each with the optional peers it needs:
 
 - `rift-ds/chat`: The widget, the provider, the launcher and the engine under them, with the hooks that let it follow the reader and write starters for what they picked. Peers: react-markdown, remark-gfm.
-- `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, its follow-ups, starters and feedback siblings, and the checks for what a reader highlighted, for any web-standard route. Peers: @anthropic-ai/sdk.
-- `rift-ds/chat/actions`: The action definitions a page and its route share, their dry run and the mark that says a change was confirmed on its card, with no dependencies.
+- `rift-ds/chat/server`: The streaming chat handler, with an opt-in tool for asking the visitor questions, the cards a reply opens with, the page actions a tool returns, its follow-ups, starters and feedback siblings, and the checks for what a reader highlighted, for any web-standard route. Peers: @anthropic-ai/sdk.
+- `rift-ds/chat/actions`: The action definitions a page and its route share, their dry run alone or in a sequence, the mark that says a change was confirmed on its card, and the declared shape of a page's context, with no dependencies.
 - `rift-ds/chat/upstash`: Rate limits, a daily budget and the exchange log over Upstash Redis, as the handlers' guardrails. Peers: @upstash/ratelimit, @upstash/redis.
 - `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Peers: recharts.
 - `rift-ds/chat/chat.css`: The widget's stylesheet.

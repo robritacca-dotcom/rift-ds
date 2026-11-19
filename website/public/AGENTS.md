@@ -49,7 +49,7 @@ import { Button } from 'rift-ds';
 
 ## AI chat
 
-Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's chat widget into a Next.js app router project: the routes, the mount and an env example. It never overwrites a file, and it ends by printing the optional peers to install and the steps to wire it in. Follow that output. In any other framework, use the panel over your own endpoint or the headless engine instead: https://rift-ds.com/docs/chat covers both and the protocol, and every prop is on https://rift-ds.com/components/ai-chat.
+Do not build a chat UI by hand. `npx rift-ds init chat` scaffolds the package's chat widget into a Next.js app router project: the routes, the mount and an env example. It never overwrites a file, and it ends by printing the optional peers to install and the steps to wire it in. Follow that output. For a chat that proposes changes the reader confirms, add `--actions` and build on the example it writes rather than inventing the flow. In any other framework, use the panel over your own endpoint or the headless engine instead: https://rift-ds.com/docs/chat covers both and the protocol, and every prop is on https://rift-ds.com/components/ai-chat.
 
 ## Rules
 

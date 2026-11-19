@@ -409,7 +409,17 @@ async function sweepRoute(context, origin, route, widths) {
     for (const width of widths) {
       await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
       await page.waitForTimeout(SETTLE_MS);
-      for (const f of await page.evaluate(inspect)) found.push({ ...f, route, width });
+      let seen = await page.evaluate(inspect);
+      /* A layout a ResizeObserver sets (a toolbar's fold, a chart's width)
+         can land after the settle on a heavy page, so a first measure can
+         see the last width's layout. A layout finding is kept only when a
+         second measure, after a longer wait, still finds it. */
+      if (seen.some((f) => f.kind !== 'truncated')) {
+        await page.waitForTimeout(SETTLE_MS * 4);
+        const again = new Set((await page.evaluate(inspect)).map((f) => `${f.kind}|${f.label}|${f.path}`));
+        seen = seen.filter((f) => f.kind === 'truncated' || again.has(`${f.kind}|${f.label}|${f.path}`));
+      }
+      for (const f of seen) found.push({ ...f, route, width });
     }
   } catch (err) {
     found.push({ kind: 'error', label: 'page', path: '', detail: err.message.split('\n')[0], route, width: 0 });

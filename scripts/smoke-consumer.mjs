@@ -18,6 +18,14 @@
  *      subpaths the tarball resolves, the route files must type-check
  *      against the shipped server types, and the mount must bundle.
  *
+ *   3. The actions consumer: the same, with `init chat --actions` in a fresh
+ *      project (the bin never overwrites, so it cannot share scenario 2's),
+ *      so the propose-and-confirm route, mount and proposal cards are held
+ *      to the tarball too.
+ *
+ * Neither chat scenario is a Next app, so the Next modules the templates
+ * import are declared for tsc and aliased to small stubs for Vite.
+ *
  * Run by the release workflow before `npm publish`, and runnable locally
  * after `npm run build:lib`.
  */
@@ -59,7 +67,52 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({ plugins: [react()] });
 `;
 
-const INDEX_HTML = `<!doctype html><html><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>`;
+/* The chat scenarios bundle a mount that reads the route through Next's
+   usePathname; this consumer has no Next, so Vite resolves it to a stub. */
+const CHAT_VITE_CONFIG = `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
+export default defineConfig({
+  plugins: [react()],
+  resolve: { alias: { 'next/navigation': fileURLToPath(new URL('./src/next-navigation.ts', import.meta.url)) } },
+});
+`;
+
+const NEXT_NAVIGATION_STUB = `export function usePathname(): string {
+  return '/';
+}
+`;
+
+/* What the templates need from Next and the platform, declared for tsc. */
+const CHAT_ENV_D_TS =
+  `declare const process: { env: Record<string, string | undefined> };\n` +
+  // The app scaffold's root wrapper imports Next's Link; this Vite consumer
+  // has no Next, so its shape is declared for the type-check alone.
+  `declare module 'next/link' {\n  const Link: import('react').ComponentType<\n    import('react').ComponentPropsWithRef<'a'> & { href: string }\n  >;\n  export default Link;\n}\n` +
+  // The chat mount reads the route for its page context.
+  `declare module 'next/navigation' {\n  export function usePathname(): string;\n}\n` +
+  // The blocks style themselves with CSS modules, which Next types for
+  // an app; this consumer declares them the same way.
+  `declare module '*.module.css' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n` +
+  // And the app scaffold's font loads through next/font, declared at the
+  // shape its call returns.
+  `declare module 'next/font/google' {\n  export function Nunito_Sans(options: Record<string, unknown>): { className: string; variable: string };\n}\n`;
+
+const CHAT_MAIN = `import { createRoot } from 'react-dom/client';
+import '${PACKAGE_NAME}/tokens/tokens.css';
+import { ChatMount } from '../components/chat/ChatMount';
+import { scriptChat, type ChatEvent } from '${PACKAGE_NAME}/chat';
+
+// The scripted transport is the no-key path; one exchange proves the type.
+const transport = scriptChat().user('Hello').assistant('Hi there.').transport();
+void transport;
+const kinds: ChatEvent['type'][] = ['status', 'delta', 'done'];
+void kinds;
+
+createRoot(document.getElementById('root')!).render(<ChatMount />);
+`;
+
+const INDEX_HTML =`<!doctype html><html><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>`;
 
 function scaffold(app, tarball, { peers }) {
   mkdirSync(join(app, 'src'), { recursive: true });
@@ -91,6 +144,19 @@ function scaffold(app, tarball, { peers }) {
   writeFileSync(join(app, 'tsconfig.json'), JSON.stringify(TSCONFIG, null, 2));
   writeFileSync(join(app, 'vite.config.ts'), VITE_CONFIG);
   writeFileSync(join(app, 'index.html'), INDEX_HTML);
+}
+
+/* A chat consumer: every optional peer, an app-router shape for the bin to
+   find (the templates land under app/ and components/ beside it), and the
+   Next declarations and stubs. */
+function scaffoldChat(app, tarball) {
+  scaffold(app, tarball, { peers: OPTIONAL_PEERS });
+  writeFileSync(join(app, 'vite.config.ts'), CHAT_VITE_CONFIG);
+  mkdirSync(join(app, 'app'), { recursive: true });
+  writeFileSync(join(app, 'app', 'layout.tsx'), `export default function Layout({ children }: { children: React.ReactNode }) { return <>{children}</>; }\n`);
+  writeFileSync(join(app, 'src', 'env.d.ts'), CHAT_ENV_D_TS);
+  writeFileSync(join(app, 'src', 'next-navigation.ts'), NEXT_NAVIGATION_STUB);
+  run('npm install --no-fund --no-audit', app);
 }
 
 const work = mkdtempSync(join(tmpdir(), 'ds-smoke-'));
@@ -130,12 +196,7 @@ createRoot(document.getElementById('root')!).render(
 
   /* ---- 2. The chat consumer: every peer, plus `init chat` --------------- */
   const chat = join(work, 'chat');
-  scaffold(chat, tarball, { peers: OPTIONAL_PEERS });
-  // An app-router shape for the bin to find: the templates land under app/
-  // and components/ beside it.
-  mkdirSync(join(chat, 'app'), { recursive: true });
-  writeFileSync(join(chat, 'app', 'layout.tsx'), `export default function Layout({ children }: { children: React.ReactNode }) { return <>{children}</>; }\n`);
-  run('npm install --no-fund --no-audit', chat);
+  scaffoldChat(chat, tarball);
   // The packed bin, exactly as npx would run it, writing into the scaffold.
   run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init chat`, chat);
   // And the app scaffold, written into the same project: its root wrapper and
@@ -151,42 +212,25 @@ createRoot(document.getElementById('root')!).render(
   for (const block of blocks) {
     run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init block ${block.name}`, chat);
   }
-  writeFileSync(
-    join(chat, 'src', 'main.tsx'),
-    `import { createRoot } from 'react-dom/client';
-import '${PACKAGE_NAME}/tokens/tokens.css';
-import { ChatMount } from '../components/chat/ChatMount';
-import { scriptChat, type ChatEvent } from '${PACKAGE_NAME}/chat';
-
-// The scripted transport is the no-key path; one exchange proves the type.
-const transport = scriptChat().user('Hello').assistant('Hi there.').transport();
-void transport;
-const kinds: ChatEvent['type'][] = ['status', 'delta', 'done'];
-void kinds;
-
-createRoot(document.getElementById('root')!).render(<ChatMount />);
-`
-  );
   // Next's route segment exports and process.env are plain TypeScript; the
   // handlers behind them are the package's. tsc covers the whole scaffold,
   // vite bundles the client half.
-  writeFileSync(
-    join(chat, 'src', 'env.d.ts'),
-    `declare const process: { env: Record<string, string | undefined> };\n` +
-      // The app scaffold's root wrapper imports Next's Link; this Vite consumer
-      // has no Next, so its shape is declared for the type-check alone.
-      `declare module 'next/link' {\n  const Link: import('react').ComponentType<\n    import('react').ComponentPropsWithRef<'a'> & { href: string }\n  >;\n  export default Link;\n}\n` +
-      // The blocks style themselves with CSS modules, which Next types for
-      // an app; this consumer declares them the same way.
-      `declare module '*.module.css' {\n  const classes: Record<string, string>;\n  export default classes;\n}\n` +
-      // And the app scaffold's font loads through next/font, declared at the
-      // shape its call returns.
-      `declare module 'next/font/google' {\n  export function Nunito_Sans(options: Record<string, unknown>): { className: string; variable: string };\n}\n`
-  );
+  writeFileSync(join(chat, 'src', 'main.tsx'), CHAT_MAIN);
   run('npx tsc -p tsconfig.json', chat);
   run('npx vite build', chat);
   console.log(
     `✓ Chat consumer: \`${BIN_NAME} init chat\`, \`${BIN_NAME} init app\` and \`${BIN_NAME} init block\` (${blocks.length} blocks) scaffold against the tarball; the routes, the mount, the root wrapper, the colour-mode script and every block type-check, and the chat builds.`
+  );
+
+  /* ---- 3. The actions consumer: `init chat --actions` ----------------- */
+  const actions = join(work, 'actions');
+  scaffoldChat(actions, tarball);
+  run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init chat --actions`, actions);
+  writeFileSync(join(actions, 'src', 'main.tsx'), CHAT_MAIN);
+  run('npx tsc -p tsconfig.json', actions);
+  run('npx vite build', actions);
+  console.log(
+    `✓ Actions consumer: \`${BIN_NAME} init chat --actions\` scaffolds against the tarball; the propose-and-confirm route, the mount and the proposal cards type-check, and the chat builds.`
   );
 } finally {
   rmSync(work, { recursive: true, force: true });

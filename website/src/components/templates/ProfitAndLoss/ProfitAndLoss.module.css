@@ -1,0 +1,100 @@
+/* Templates: the Tallyfold profit and loss statement. Every colour, space,
+   radius and type style is a semantic token; the only raw values are
+   structural (the search field's width, the statement's reading width, the
+   hamburger's footprint), which pages own everywhere else on the site. The
+   shell is TemplateShell's; the page is the statement under its header. */
+
+.content {
+  width: 100%;
+  max-width: 1680px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1000);
+}
+
+/* ------------------------------------------------------------- top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its end padding; it is
+   decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  inset-inline-end: var(--padding-200);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-050);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+/* ----------------------------------------------------------- statement */
+
+/* A statement is read down its lines, so the header and the statement hold
+   one reading width rather than stretching the figures across a wide
+   screen, and the Export button ends where the figures do. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  width: 100%;
+  max-width: 960px; /* the statement's reading width */
+  min-width: 0;
+}
+
+/* A narrow screen scrolls the table sideways inside this box. */
+.statement {
+  flex-shrink: 0;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+/* ---------------------------------------------------------- responsive */
+
+.searchIconMobile {
+  display: none;
+}
+
+@media (max-width: 1080px) {
+  .content {
+    padding: var(--padding-400);
+  }
+}
+
+/* Mobile: AppSidebar's fixed hamburger (40px at a 20px viewport inset)
+   overlays this row's start, so the row clears its footprint, the search
+   field folds to its icon, and the actions keep the end: one 40px row. */
+@media (max-width: 768px) {
+  .topBar {
+    padding-inline-start: 56px;
+    justify-content: flex-end;
+    min-height: 40px;
+  }
+
+  .search {
+    display: none;
+  }
+
+  .searchIconMobile {
+    display: inline-flex;
+  }
+}

@@ -508,6 +508,11 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A month view with the sprint's to-dos on a rail beside it",
   },
   {
+    href: "/templates/profit-and-loss",
+    label: "Profit and loss",
+    description: "A quarterly statement down to the bottom line, against the last",
+  },
+  {
     href: "/templates/roadmap-planner",
     label: "Roadmap planner",
     description: "A planning tool around the Gantt timeline and its detail rail",

@@ -1,7 +1,8 @@
 import { Profiler, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { DataTable, type DataTableColumn, type DataTableProps, type DataTableRow } from './DataTable';
+import { DataTable, periodColumns, totalOf, type DataTableColumn, type DataTableProps, type DataTableRow, type DataTableView } from './DataTable';
+import { Button } from '../Button/Button';
 import { Badge } from '../Badge/Badge';
 import { TableToolbar } from '../TableToolbar/TableToolbar';
 
@@ -1308,5 +1309,96 @@ export const RefetchFailed: Story = {
   play: async ({ canvasElement }) => {
     await expect(canvasElement.querySelectorAll('tbody tr')).toHaveLength(5);
     await expect(within(canvasElement).getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  },
+};
+
+/* ---- Periods across, and a view set from outside --------------------- */
+
+const weeks = periodColumns({
+  start: '2026-03-02',
+  count: 4,
+  unit: 'week',
+  keyPrefix: 'w:',
+  column: { type: 'number', align: 'end', editable: true, aggregate: 'sum', minWidth: 96 },
+});
+const weekKeys = weeks.map((column) => column.key);
+
+const stockRows: DataTableRow[] = [
+  ['North depot', 'Ambient', [120, 132, 118, 140]],
+  ['North depot', 'Chilled', [64, 58, 71, 66]],
+  ['South depot', 'Ambient', [98, 104, 110, 101]],
+  ['South depot', 'Chilled', [40, 45, 39, 52]],
+].map(([site, range, counts], index) => ({
+  id: `s${index + 1}`,
+  values: {
+    site: site as string,
+    range: range as string,
+    ...Object.fromEntries(weekKeys.map((key, i) => [key, (counts as number[])[i]])),
+  },
+}));
+
+const stockColumns: DataTableColumn[] = [
+  { key: 'site', header: 'Site', rowHeader: true, groupable: true, pin: 'start' },
+  { key: 'range', header: 'Range' },
+  ...weeks,
+  { key: 'total', header: 'Total', type: 'number', align: 'end', compute: totalOf(weekKeys), aggregate: 'sum', pin: 'end' },
+];
+
+/**
+ * Rows measured across a run of periods: `periodColumns` writes one column
+ * per week, keyed by its first day and headed in the locale, each editable
+ * and summed; `totalOf` adds a row across, the group rows give each site's
+ * subtotal and the totals row the sum down. Days and months work the same way.
+ */
+export const PeriodColumns: Story = {
+  render: () => {
+    const [data, setData] = useState(stockRows);
+    return (
+      <DataTable
+        caption="Stock counted by week"
+        columns={stockColumns}
+        rows={data}
+        defaultGrouping={['site']}
+        totalsRow
+        onCellEdit={({ row: edited, key, value }) =>
+          setData((current) => current.map((row) => (row.id === edited.id ? { ...row, values: { ...row.values, [key]: value } } : row)))
+        }
+      />
+    );
+  },
+};
+
+/**
+ * The whole setup as one value: `view` sets the sort, the search, the
+ * grouping and the rest at once, from state outside the table (a chat's
+ * card, a saved link), and `onViewChange` hands the reader's own changes
+ * back, so both stay.
+ */
+export const ControlledView: Story = {
+  render: () => {
+    const [view, setView] = useState<DataTableView>({ version: 1 });
+    return (
+      <div style={{ display: 'grid', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Button variant="secondary" size="compact" onClick={() => setView({ version: 1, sorts: [{ key: 'price', direction: 'desc' }], search: '' })}>
+            Highest price first
+          </Button>
+          <Button variant="secondary" size="compact" onClick={() => setView({ version: 1, search: 'Lubin', sorts: [] })}>
+            Search “Lubin”
+          </Button>
+          <Button variant="secondary" size="compact" onClick={() => setView({ version: 1 })}>
+            Reset
+          </Button>
+        </div>
+        <DataTable caption="Orders" columns={columns} rows={rows} view={view} onViewChange={setView} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Search “Lubin”' }));
+    await waitFor(() => expect(canvas.getAllByRole('row').length).toBe(3));
+    await userEvent.click(canvas.getByRole('button', { name: 'Reset' }));
+    await waitFor(() => expect(canvas.getAllByRole('row').length).toBeGreaterThan(3));
   },
 };

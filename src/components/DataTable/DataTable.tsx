@@ -687,6 +687,18 @@ type DataTableOwnProps<R extends DataTableRow = DataTableRow> = {
   expandMode?: 'multiple' | 'single';
   /** Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view. */
   onViewChange?: (view: DataTableView) => void;
+  /**
+   * The whole setup in one value (sorts, filters, search, grouping, hidden and
+   * ordered columns, pins, widths, density, page size), for controlled use:
+   * whenever it changes the table shows it, so one piece of state outside the
+   * table, a chat's card or a saved link, can set every part at once. A part it
+   * leaves out falls back to the table's opening setup. Pair with
+   * `onViewChange`, and hand back what it reports, so the reader's own changes
+   * stay.
+   */
+  view?: DataTableView;
+  /** The setup to start with, for uncontrolled use: the table's first render, the server's HTML too, is already this view. */
+  defaultView?: DataTableView;
   /** The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. */
   grouping?: string[];
   /** The grouping to start with, for uncontrolled use. */
@@ -922,6 +934,8 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
   onSortsChange,
   multiSort = false,
   onViewChange,
+  view: viewProp,
+  defaultView,
   virtualize = 'auto',
   onLoadMore,
   hasMore = false,
@@ -1034,7 +1048,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
      table opens on, so its first render (the server's HTML too) is already
      that view. Its parts lay over the table's own defaults; the defaults
      stay the base a view that leaves a part out falls back to. */
-  const [startingView] = useState(() => slotStartingView(toolbar));
+  const [startingView] = useState(() => viewProp ?? defaultView ?? slotStartingView(toolbar));
   const startsWith = <K extends keyof DataTableView>(key: K, controlled: unknown) =>
     controlled === undefined && startingView?.[key] !== undefined;
   const [size, setSize] = useControllable<'default' | 'compact'>(
@@ -2133,6 +2147,19 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     if (next.pageSize !== undefined) setPageSize(next.pageSize);
     setPage(1);
   };
+  /* A controlled view: whenever the value handed in changes, the table
+     shows it. Compared by content, so a host handing back what onViewChange
+     reported (the same view, a new object) changes nothing, and a view the
+     table already shows is never applied again. */
+  const viewPropKey = viewProp ? viewKey(fullView(viewProp)) : null;
+  const appliedViewKey = useRef(viewPropKey);
+  useEffect(() => {
+    if (!viewProp || viewPropKey === appliedViewKey.current) return;
+    appliedViewKey.current = viewPropKey;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the table follows a view handed in from outside, once per new value
+    if (viewPropKey !== currentKey) applyView(viewProp);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the key stands for the view
+  }, [viewPropKey]);
   /* A host listening for the view hears it once per change of setup. */
   const viewCallback = useRef(onViewChange);
   useEffect(() => {
@@ -2555,9 +2582,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
     return String(result.value);
   };
   /** What a group row shows in a column: its `aggregate` over the group's rows. */
+  /* A group's subtotal: the calculation the reader picked in the totals
+     row, over the group's rows alone, else the column's own aggregate. */
   const groupTotal = (col: DataTableColumn<R>, groupRows: R[]): React.ReactNode => {
-    if (!col.aggregate) return null;
     const values = groupRows.map((row) => row.values[col.key]);
+    const picked = totalsState[col.key];
+    if (picked && picked !== 'none') return resultText(col, calculate(picked, values));
+    if (!col.aggregate) return null;
     if (typeof col.aggregate === 'function') return col.aggregate(values, groupRows);
     return resultText(col, calculate(col.aggregate, values));
   };
@@ -3873,3 +3904,6 @@ export function reconcileDataTableView<R extends DataTableRow = DataTableRow>(
     })),
   );
 }
+
+// eslint-disable-next-line react-refresh/only-export-components -- the period helpers build this table's columns and belong to its API
+export { periodColumns, periodsOf, totalOf, type PeriodColumnsOptions, type PeriodUnit, type Period } from './periodColumns';

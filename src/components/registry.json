@@ -84,7 +84,10 @@
       "description": "A change an assistant proposes and the reader confirms, then the record of what happened, with Undo while it can be reversed.",
       "category": "ai",
       "client": false,
-      "partPatterns": [{ "pattern": "button", "part": "buttons" }]
+      "partPatterns": [{ "pattern": "button", "part": "buttons" }],
+      "alternatives": [
+        { "name": "DecisionRow", "when": "the item sits in a list on the page, waiting on the reader’s yes or no" }
+      ]
     },
     {
       "name": "ActionReadout",
@@ -635,6 +638,19 @@
       "category": "data-display",
       "client": true,
       "keys": { "by": "none" }
+    },
+    {
+      "name": "DecisionRow",
+      "label": "Decision row",
+      "slug": "decision-row",
+      "description": "One item waiting on a yes or a no, as a list row that settles to the decision taken, with Undo while it can be reversed.",
+      "category": "data-display",
+      "client": true,
+      "partPatterns": [{ "pattern": "button", "part": "buttons" }],
+      "alternatives": [
+        { "name": "ActionCard", "when": "an assistant proposes the change in a chat reply" },
+        { "name": "Widget", "when": "the rows only report or link, with no decision to take" }
+      ]
     },
     {
       "name": "DescriptionList",
@@ -1881,7 +1897,8 @@
       "keys": { "by": "none" },
       "alternatives": [
         { "name": "Grid", "when": "cells of any kind should sit in equal columns and share a row’s height" },
-        { "name": "FormSection", "when": "the section holds a form’s fields and its own save" }
+        { "name": "FormSection", "when": "the section holds a form’s fields and its own save" },
+        { "name": "DecisionRow", "when": "each row waits on a yes or a no and settles to the answer" }
       ]
     },
     {

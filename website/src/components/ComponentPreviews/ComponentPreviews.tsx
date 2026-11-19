@@ -54,6 +54,7 @@ import { Grid } from "rift-ds/components/Grid/Grid";
 import { Icon } from "rift-ds/components/Icon/Icon";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Checklist } from "rift-ds/components/Checklist/Checklist";
+import { DecisionRow } from "rift-ds/components/DecisionRow/DecisionRow";
 import { Wizard } from "rift-ds/components/Wizard/Wizard";
 import { FormSection } from "rift-ds/components/FormSection/FormSection";
 import { ResourceTimeline } from "rift-ds/components/ResourceTimeline/ResourceTimeline";
@@ -1677,6 +1678,11 @@ const previews: Record<string, () => ReactNode> = {
   "page-header": () => (
     <div style={{ width: "220px" }} aria-hidden="true" inert>
       <PageHeader headingLevel={2} title="Projects" description="What the team is working on." />
+    </div>
+  ),
+  "decision-row": () => (
+    <div style={{ width: "240px" }} aria-hidden="true" inert>
+      <DecisionRow title="Edit rights" description="Lena Fischer" acceptLabel="Approve" declineLabel="Deny" />
     </div>
   ),
   "checklist": () => (

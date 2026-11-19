@@ -1,0 +1,30 @@
+/* ============================================
+   DECISION ROW
+   WidgetRow with a decision's lifecycle: the row's own layout, faces and
+   gaps are WidgetRow's (Widget.css), so a decision sits in a Widget beside
+   plain rows with nothing restated here. This file only adds the root and
+   the focus ring the row takes when it settles with nowhere else for focus
+   to go.
+   ============================================ */
+
+/* Base */
+
+.ds-decision-row {
+  display: block;
+  min-width: 0;
+  border-radius: var(--radius-300);
+}
+
+/* States */
+
+/* A settled row with no Undo holds focus itself after the reader's press,
+   so the ring is the row's, in the focus colour every control uses. */
+.ds-decision-row:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* The settled mark sits in the actions slot as one item. */
+.ds-decision-row__outcome {
+  display: inline-flex;
+}

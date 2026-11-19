@@ -116,6 +116,8 @@ const FIXTURES: Record<string, Fixture> = {
   // A part of a component, keyed `Name:pattern` (partPatterns in the registry).
   'BentoTile:dialog': { story: 'Expandable', open: clickFirst('button[aria-haspopup="dialog"]') },
   'Carousel:tabs': { story: 'Default' },
+  // With Undo, a press always leaves a button behind: Undo after a decision, the two choices after Undo.
+  'DecisionRow:button': { story: 'WithUndo' },
   'FilterBar:listbox': { story: 'Default', open: enterOn('button[aria-haspopup="listbox"]') },
   'CommandPalette:listbox': { story: 'Default', open: clickFirst('button') },
   Accordion: { story: 'Default' },

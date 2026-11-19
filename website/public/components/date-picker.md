@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 - Import: `import { DatePicker } from 'rift-ds';`
 - Deep import: `import { DatePicker } from 'rift-ds/components/DatePicker/DatePicker';`
 - Rendering: client component (declares 'use client')
-- Size: 3.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 3.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/date-picker
 - Schema: https://rift-ds.com/schema/components/date-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

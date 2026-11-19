@@ -1,6 +1,6 @@
 # Event calendar
 
-A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.
+A month, a week or a day of events: pills on their days, overflow counts in the month, a legend that can filter, and a panel for the chosen day.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -25,13 +25,21 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 | onDateClick | `((date: string) => void)` | no |  | Fires with the clicked day (YYYY-MM-DD) — from anywhere on the cell, the day number, and the "+N more" overflow row. The number and overflow row only become buttons when this is set, and cells only take their pointer cursor and hover feedback with it. |
 | selectedDate | `string` | no |  | Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip on its number, taking precedence over the today chip. Controlled by the consumer; pair with `onDateClick` to move it. |
 | today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. |
-| legend | `EventCalendarLegendItem[]` | no |  | What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown. |
+| legend | `EventCalendarLegendItem[]` | no |  | What each event colour means, shown as a row of dots and labels under the grid. With `legendToggles`, each entry also shows and hides its colour's events. |
+| legendToggles | `boolean` | no | `false` | Makes each legend entry a selectable Chip that shows or hides the events of its colour, so a reader can narrow a busy calendar by kind. |
+| hiddenColors | `EventCalendarColor[]` | no |  | The colours whose events are hidden, for controlled use. Pair with `onHiddenColorsChange`. |
+| defaultHiddenColors | `EventCalendarColor[]` | no | `[]` | The colours hidden to begin with, for uncontrolled use. |
+| onHiddenColorsChange | `((colors: EventCalendarColor[]) => void)` | no |  | Fires with the hidden colours after a legend entry is switched. |
+| legendLabel | `string` | no | `'Show events by kind'` | The name of the legend's set of toggles, when `legendToggles` is on. |
+| renderSelectedDay | `((date: string, events: EventCalendarEvent[]) => ReactNode)` | no |  | Draws a panel for the selected day under the grid, in every view: handed the day (YYYY-MM-DD) and its events as shown, it returns what the panel holds (a list of the day's events, a form to add one). Shown only while `selectedDate` is set. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
-| view | `"week" \| "month"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount. |
+| view | `"day" \| "week" \| "month"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time. |
 | previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
 | previousWeekLabel | `string` | no | `'Previous week'` | Accessible name of the previous-week button, in the week view. |
 | nextWeekLabel | `string` | no | `'Next week'` | Accessible name of the next-week button, in the week view. |
+| previousDayLabel | `string` | no | `'Previous day'` | Accessible name of the previous-day button, in the day view. |
+| nextDayLabel | `string` | no | `'Next day'` | Accessible name of the next-day button, in the day view. |
 | showLessLabel | `string` | no | `'Show less'` | The visible text of the control that folds an expanded day back, when a day's "+N more" opens it in place (with no `onDateClick`). |
 | monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of the month in view: the visible title and the name of the day grid. Defaults to the month name and the year in `locale` ("January 2026" in `en-US`). Month view only; the week view's heading is the week's range in `locale`. |
 | overflowLabel | `((count: number, date: Date) => string)` | no |  | Accessible name of a day's "+N more" overflow button, given the number of hidden events and the day. Defaults to "N more events" followed by the full date in `locale`. |

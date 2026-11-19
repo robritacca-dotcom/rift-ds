@@ -9318,7 +9318,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Event calendar",
     "slug": "event-calendar",
     "category": "data-display",
-    "description": "A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.",
+    "description": "A month, a week or a day of events: pills on their days, overflow counts in the month, a legend that can filter, and a panel for the chosen day.",
     "client": true,
     "importPath": "rift-ds/components/EventCalendar/EventCalendar",
     "barrel": "main",
@@ -9392,9 +9392,60 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "legend",
             "type": "EventCalendarLegendItem[]",
             "required": false,
-            "description": "What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown.",
+            "description": "What each event colour means, shown as a row of dots and labels under the grid. With `legendToggles`, each entry also shows and hides its colour's events.",
             "typeRefs": [
               "EventCalendarLegendItem"
+            ]
+          },
+          {
+            "name": "legendToggles",
+            "type": "boolean",
+            "required": false,
+            "description": "Makes each legend entry a selectable Chip that shows or hides the events of its colour, so a reader can narrow a busy calendar by kind.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "hiddenColors",
+            "type": "EventCalendarColor[]",
+            "required": false,
+            "description": "The colours whose events are hidden, for controlled use. Pair with `onHiddenColorsChange`.",
+            "typeRefs": [
+              "EventCalendarColor"
+            ]
+          },
+          {
+            "name": "defaultHiddenColors",
+            "type": "EventCalendarColor[]",
+            "required": false,
+            "description": "The colours hidden to begin with, for uncontrolled use.",
+            "defaultValue": "[]",
+            "typeRefs": [
+              "EventCalendarColor"
+            ]
+          },
+          {
+            "name": "onHiddenColorsChange",
+            "type": "((colors: EventCalendarColor[]) => void)",
+            "required": false,
+            "description": "Fires with the hidden colours after a legend entry is switched.",
+            "typeRefs": [
+              "EventCalendarColor"
+            ]
+          },
+          {
+            "name": "legendLabel",
+            "type": "string",
+            "required": false,
+            "description": "The name of the legend's set of toggles, when `legendToggles` is on.",
+            "defaultValue": "'Show events by kind'"
+          },
+          {
+            "name": "renderSelectedDay",
+            "type": "((date: string, events: EventCalendarEvent[]) => ReactNode)",
+            "required": false,
+            "description": "Draws a panel for the selected day under the grid, in every view: handed\nthe day (YYYY-MM-DD) and its events as shown, it returns what the panel\nholds (a list of the day's events, a form to add one). Shown only while\n`selectedDate` is set.",
+            "typeRefs": [
+              "EventCalendarEvent"
             ]
           },
           {
@@ -9405,10 +9456,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "view",
-            "type": "\"week\" | \"month\"",
+            "type": "\"day\" | \"week\" | \"month\"",
             "required": false,
-            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount.",
+            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time.",
             "values": [
+              "day",
               "month",
               "week"
             ],
@@ -9441,6 +9493,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Accessible name of the next-week button, in the week view.",
             "defaultValue": "'Next week'"
+          },
+          {
+            "name": "previousDayLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the previous-day button, in the day view.",
+            "defaultValue": "'Previous day'"
+          },
+          {
+            "name": "nextDayLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the next-day button, in the day view.",
+            "defaultValue": "'Next day'"
           },
           {
             "name": "showLessLabel",

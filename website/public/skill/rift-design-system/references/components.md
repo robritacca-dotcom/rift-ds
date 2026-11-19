@@ -661,7 +661,7 @@ Compact display-only card with a centred icon or image and a label, used in the 
 
 ### Event calendar
 
-A month or a week of events: pills on their days, overflow counts in the month, a legend, and navigation by month or week.
+A month, a week or a day of events: pills on their days, overflow counts in the month, a legend that can filter, and a panel for the chosen day.
 
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

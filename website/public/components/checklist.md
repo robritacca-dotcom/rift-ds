@@ -2,7 +2,7 @@
 
 Tasks with a done state each, an owner and an action, under a count done and a progress bar.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { Checklist } from 'rift-ds';`

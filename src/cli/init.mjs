@@ -67,8 +67,17 @@ const MANIFEST_URL = `${SITE_ORIGIN}/skill/manifest.json`;
 const DEFAULT_DIR = join('.claude', 'skills');
 const TEMPLATES_ROOT = join(dirname(fileURLToPath(import.meta.url)), 'templates');
 const TEMPLATES_DIR = join(TEMPLATES_ROOT, 'chat');
-/* `init chat --actions` lays these over the chat templates: a file here replaces the one of the same path. */
-const ACTIONS_TEMPLATES_DIR = join(TEMPLATES_ROOT, 'chat-actions');
+/*
+ * The chat templates' propose-and-confirm files, written only by
+ * `init chat --actions`: a `<name>.actions.<ext>` file takes the place of
+ * `<name>.<ext>`, and the proposals/ folder is added. They live beside the
+ * plain chat's so their imports resolve and the library build type-checks
+ * them; scripts/validate-chat-widget.mjs holds them to the docs page's
+ * ACTIONS_SCAFFOLD_FILES.
+ */
+const ACTIONS_VARIANT = /\.actions(?=\.[a-z]+$)/;
+const ACTIONS_FOLDER = 'components/chat/proposals/';
+const isActionsOnly = (file) => ACTIONS_VARIANT.test(file) || file.startsWith(ACTIONS_FOLDER);
 const APP_TEMPLATES_DIR = join(TEMPLATES_ROOT, 'app');
 const BLOCKS_DIR = join(TEMPLATES_ROOT, 'blocks');
 
@@ -239,11 +248,11 @@ function findAppDir(app) {
  * Writes every template under `base` (or only `files`, paths relative to
  * it) that does not exist yet; returns what was written and skipped.
  */
-function scaffold(base, appDir, dryRun, files = templateFiles(base)) {
+function scaffold(base, appDir, dryRun, files = templateFiles(base), targetOf = (file) => file) {
   const written = [];
   const skipped = [];
   for (const file of files) {
-    const dest = destinationFor(file, appDir);
+    const dest = destinationFor(targetOf(file), appDir);
     if (existsSync(dest)) {
       skipped.push(dest);
       continue;
@@ -334,15 +343,16 @@ function ignoresEnvExample() {
 }
 
 function initChat({ app, dryRun, actions }) {
-  if (!existsSync(TEMPLATES_DIR) || (actions && !existsSync(ACTIONS_TEMPLATES_DIR))) {
+  if (!existsSync(TEMPLATES_DIR)) {
     fail('this copy carries no chat templates: run the published bin (npx ' + PACKAGE_NAME + ' init chat).');
   }
   const appDir = findAppDir(app);
-  const overlay = actions ? templateFiles(ACTIONS_TEMPLATES_DIR) : [];
-  const first = actions ? scaffold(ACTIONS_TEMPLATES_DIR, appDir, dryRun, overlay) : { written: [], skipped: [] };
-  const rest = scaffold(TEMPLATES_DIR, appDir, dryRun, templateFiles(TEMPLATES_DIR).filter((file) => !overlay.includes(file)));
-  const written = [...first.written, ...rest.written];
-  const skipped = [...first.skipped, ...rest.skipped];
+  const all = templateFiles(TEMPLATES_DIR);
+  const plainName = (file) => file.replace(ACTIONS_VARIANT, '');
+  /* With --actions, a variant replaces its plain file and the proposals are added; without it, neither is written. */
+  const replaced = new Set(actions ? all.filter((file) => ACTIONS_VARIANT.test(file)).map(plainName) : []);
+  const files = all.filter((file) => (actions ? !replaced.has(file) : !isActionsOnly(file)));
+  const { written, skipped } = scaffold(TEMPLATES_DIR, appDir, dryRun, files, plainName);
 
   console.log(
     dryRun

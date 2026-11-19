@@ -53,6 +53,16 @@ const SCAFFOLD_FILES = [
   ".env.chat.example",
 ];
 
+/* What --actions writes in place of the plain route and mount, and adds. */
+const ACTIONS_SCAFFOLD_FILES = [
+  "app/api/chat/route.ts",
+  "components/chat/ChatMount.tsx",
+  "components/chat/proposals/actions.ts",
+  "components/chat/proposals/confirmation.ts",
+  "components/chat/proposals/ProposalCard.tsx",
+  "components/chat/proposals/renderers.tsx",
+];
+
 const MOUNT_SNIPPET = `// app/layout.tsx
 import { ChatMount } from '../components/chat/ChatMount';
 
@@ -438,6 +448,7 @@ export default function ChatInstallPage() {
               them, and the record each reply opens with. The route still writes nothing; replace the
               sample records and <code>applyPlan</code> with your own.
             </p>
+            <CodeBlock code={ACTIONS_SCAFFOLD_FILES.join("\n")} language="text" />
 
             <h3 className={s.propsHeading}>Mount it once</h3>
             <p className={s.sectionNote}>

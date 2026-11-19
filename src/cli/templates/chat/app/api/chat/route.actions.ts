@@ -8,7 +8,7 @@ import {
   type ChatTool,
 } from 'rift-ds/chat/server';
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from '../../../components/chat/models';
-import { ACTIONS, SAMPLE_ITEMS, itemNoun, type ActionId } from '../../../components/chat/actions';
+import { ACTIONS, SAMPLE_ITEMS, itemNoun, type ActionId } from '../../../components/chat/proposals/actions';
 import { guardrails } from './guardrails';
 
 export const maxDuration = 60;

@@ -334,7 +334,7 @@ function optionalPeersInClosure(entry) {
    the init bin's scaffolds rides beside it the same way, `init chat`'s,
    `init app`'s and the blocks `init block` copies, so all are held here
    (the blocks' own registry and closure are validate-blocks.mjs's). */
-for (const scaffoldName of ['chat', 'chat-actions', 'app', 'blocks']) {
+for (const scaffoldName of ['chat', 'app', 'blocks']) {
   const templatesDir = join(repoRoot, 'src', 'cli', 'templates', scaffoldName);
   if (!existsSync(templatesDir)) {
     errors.push(`src/cli/templates/${scaffoldName}/ does not exist (the init bin's ${scaffoldName} scaffold)`);
@@ -401,15 +401,27 @@ for (const scaffoldName of ['chat', 'chat-actions', 'app', 'blocks']) {
       }
     };
     collect(templatesDir);
-    const listMatch = page.match(/SCAFFOLD_FILES\s*=\s*\[([^\]]*)\]/);
-    const listed = listMatch ? [...listMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]) : [];
-    if (!listMatch) errors.push('docs/chat/page.tsx has no SCAFFOLD_FILES list');
-    for (const file of templateFiles) {
-      if (!listed.includes(file)) errors.push(`docs/chat/page.tsx SCAFFOLD_FILES is missing template "${file}"`);
-    }
-    for (const file of listed) {
-      if (!templateFiles.includes(file)) errors.push(`docs/chat/page.tsx SCAFFOLD_FILES lists "${file}", which src/cli/templates/chat/ does not hold`);
-    }
+    /* The propose-and-confirm files (init chat --actions, src/cli/init.mjs):
+       a <name>.actions.<ext> variant written over <name>.<ext>, and the
+       proposals/ folder. The page lists them apart, by where they land. */
+    const variant = /\.actions(?=\.[a-z]+$)/;
+    const actionsOnly = (file) => variant.test(file) || file.startsWith('components/chat/proposals/');
+    const listOf = (name) => {
+      const match = page.match(new RegExp(`\\b${name}\\s*=\\s*\\[([^\\]]*)\\]`));
+      if (!match) errors.push(`docs/chat/page.tsx has no ${name} list`);
+      return match ? [...match[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]) : [];
+    };
+    const compare = (name, files) => {
+      const listed = listOf(name);
+      for (const file of files) {
+        if (!listed.includes(file)) errors.push(`docs/chat/page.tsx ${name} is missing template "${file}"`);
+      }
+      for (const file of listed) {
+        if (!files.includes(file)) errors.push(`docs/chat/page.tsx ${name} lists "${file}", which src/cli/templates/chat/ does not write`);
+      }
+    };
+    compare('SCAFFOLD_FILES', templateFiles.filter((file) => !actionsOnly(file)));
+    compare('ACTIONS_SCAFFOLD_FILES', templateFiles.filter(actionsOnly).map((file) => file.replace(variant, '')));
     const envExample = read(join(templatesDir, '.env.chat.example'));
     const envNames = [...envExample.matchAll(/^([A-Z][A-Z0-9_]*)=/gm)].map((m) => m[1]);
     const envMatch = page.match(/ENV_VARS\s*=\s*\[([\s\S]*?)\n\];/);

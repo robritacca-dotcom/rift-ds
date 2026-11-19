@@ -8,7 +8,7 @@
  * CHAT_ENABLED=true in .env.local.
  *
  * Each request carries the page's path and, once, the confirmation a card's
- * Confirm marked (confirmation.ts), which the route rebuilds as untrusted
+ * Confirm marked (proposals/confirmation.ts), which the route rebuilds as untrusted
  * input. The cards are drawn by ACTION_RENDERERS.
  */
 import { useCallback } from 'react';
@@ -16,8 +16,8 @@ import { usePathname } from 'next/navigation';
 import { ChatLauncher, ChatProvider } from 'rift-ds/chat';
 import 'rift-ds/chat/chat.css';
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from './models';
-import { confirmation } from './confirmation';
-import { ACTION_RENDERERS } from './renderers';
+import { confirmation } from './proposals/confirmation';
+import { ACTION_RENDERERS } from './proposals/renderers';
 
 /** What the widget says about itself. Edit freely. */
 const WIDGET = {

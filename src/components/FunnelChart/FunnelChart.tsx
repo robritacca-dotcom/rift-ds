@@ -189,7 +189,18 @@ export const FunnelChart = React.forwardRef<HTMLDivElement, FunnelChartProps>(
         )}
         <div className={`${chartClass}__body`} role="img" aria-label={ariaLabel}>
           <ResponsiveContainer width="100%" height={height}>
-            <RechartsFunnelChart margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
+            {/* The labels sit beyond each stage's right edge, and the first
+                stage spans the whole width, so the chart keeps room on the
+                right for the longest label (an estimate at the label size:
+                about 0.6em a character) rather than letting it run off. */}
+            <RechartsFunnelChart
+              margin={{
+                top: 4,
+                right: showLabels ? Math.ceil(Math.max(0, ...stages.map((s) => s.name.length)) * 12 * 0.6) + 12 : 4,
+                bottom: 4,
+                left: 4,
+              }}
+            >
               <Tooltip content={renderTooltip} />
               {/* The shared hook keeps the sweep-in to mount and new data, on
                   recharts' 'auto' guard, which already turns itself off under

@@ -202,7 +202,10 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       );
     }
 
-    return table;
+    // The plain table scrolls in a borderless container of its own, the
+    // same region as the bordered one, so a wide table scrolls inside its
+    // column rather than running off the page.
+    return <ScrollRegion className={`${baseClass}__scroll`}>{table}</ScrollRegion>;
   },
 );
 

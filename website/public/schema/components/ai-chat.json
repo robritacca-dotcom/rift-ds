@@ -424,7 +424,7 @@
             "scroll"
           ],
           "required": false,
-          "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the composer holds dead centre as it does over the\nstarters, the widgets hanging below it, and rides up only when they\nneed more than half the room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
+          "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the composer holds dead centre as it does over the\nstarters, the widgets hanging below it, and rides up only when they\nneed more than half the room; widgets taller than the whole widget\nscroll with the welcome rather than being cut off. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
           "default": "fit"
         },
         {

@@ -3,12 +3,13 @@
 import React, { useMemo, useState } from 'react';
 import { Chip } from '../Chip/Chip';
 import './EventCalendar.css';
+import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
 import {
   rotateWeek,
   weekStartOf,
-  weekdayNamesIn,
+  weekdayHeadersIn,
   weekdayOffset,
   type Weekday,
 } from '../../behaviors/locale';
@@ -56,7 +57,7 @@ const MAX_SPAN_DAYS = 366;
 
 /** A consumer's weekday list when it has the seven entries the grid needs, else the locale's. */
 const weekdaysOr = (labels: string[] | undefined, locale: string): string[] =>
-  labels && labels.length === 7 ? labels : weekdayNamesIn(locale, 'short');
+  labels && labels.length === 7 ? labels : weekdayHeadersIn(locale);
 /** Parse "YYYY-MM" into [year, monthIndex]. */
 function parseMonth(str: string): [number, number] {
   const [y, m] = str.split('-').map(Number);
@@ -184,8 +185,9 @@ type EventCalendarOwnProps = {
   /**
    * The weekday headers above the grid: seven entries, Sunday first, laid
    * out from `weekStartsOn`. Defaults to the short weekday names in `locale`
-   * ("Sun" to "Sat" in `en-US`); a list of any other length falls back to
-   * the default.
+   * ("Sun" to "Sat" in `en-US`), or its narrow names where the short ones
+   * are whole words (Arabic); a list of any other length falls back to the
+   * default.
    */
   weekdayLabels?: string[];
   /**
@@ -520,12 +522,25 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                     ]
                       .filter(Boolean)
                       .join(' ');
+                    /* The visible title and time are hidden from assistive
+                       technology and said once instead (the button's name, or
+                       hidden text on a plain pill), because a phone's month
+                       grid draws each event as its dot alone. */
                     const pillContent = (
                       <>
                         <span className={`${baseClass}__event-dot`} aria-hidden="true" />
-                        <span className={`${baseClass}__event-title`}>{event.title}</span>
+                        <span className={`${baseClass}__event-title`} aria-hidden="true">
+                          {event.title}
+                        </span>
                         {event.time && (
-                          <span className={`${baseClass}__event-time`}>{event.time}</span>
+                          <span className={`${baseClass}__event-time`} aria-hidden="true">
+                            {event.time}
+                          </span>
+                        )}
+                        {!onEventClick && (
+                          <span className="ds-visually-hidden">
+                            {event.time ? `${event.title}, ${event.time}` : event.title}
+                          </span>
                         )}
                       </>
                     );

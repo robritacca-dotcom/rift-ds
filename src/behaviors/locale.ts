@@ -78,6 +78,17 @@ export function weekdayNamesIn(locale: string, width: 'long' | 'short' | 'narrow
   return Array.from({ length: 7 }, (_, day) => format.format(Date.UTC(2023, 0, 1 + day)));
 }
 
+/**
+ * The weekday names a seven-column calendar heads its columns with: the
+ * locale's short names where they are abbreviations (`Mo.`, `lun.`, `пн`),
+ * and its narrow ones where its short names are whole words (Arabic's
+ * `الأربعاء`), which would widen a column past the day under it on a phone.
+ */
+export function weekdayHeadersIn(locale: string): string[] {
+  const short = weekdayNamesIn(locale, 'short');
+  return short.some((name) => Array.from(name).length > 4) ? weekdayNamesIn(locale, 'narrow') : short;
+}
+
 /** Whether `locale` is written in English, the language every built-in label defaults to. */
 export function isEnglish(locale: string): boolean {
   try {

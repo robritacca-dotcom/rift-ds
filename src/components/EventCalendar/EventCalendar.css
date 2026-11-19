@@ -412,6 +412,28 @@ button.ds-event-calendar__more:focus-visible {
   }
 }
 
+/* On a phone a month cell is too narrow for any title: a pill cut to one
+   letter says nothing. The month grid draws each event as its dot, the
+   dots of a day wrapping in a row under the date, and a day's events read
+   in full from the selected-day panel or the pill's own name. The week
+   and day views have the room, and keep their pills. */
+@media (max-width: 480px) {
+  .ds-event-calendar:not(.ds-event-calendar--week):not(.ds-event-calendar--day) .ds-event-calendar__events {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ds-event-calendar:not(.ds-event-calendar--week):not(.ds-event-calendar--day) .ds-event-calendar__event {
+    padding: var(--padding-050);
+    background-color: transparent;
+  }
+
+  .ds-event-calendar:not(.ds-event-calendar--week):not(.ds-event-calendar--day) .ds-event-calendar__event-title {
+    display: none;
+  }
+}
+
 /* ============================================
    WEEK VIEW — one week, every event shown
    The cells take the room a week has to give,

@@ -3,11 +3,25 @@
    Horizontal tab navigation with underline
    ============================================ */
 
+/* A row that does not fit its container scrolls inline rather than running
+   off the page: the tabs never wrap or shrink, the scrollbar is hidden (a
+   swipe, a trackpad or the arrow keys, whose focus scrolls the tab into
+   view, all move it), and the baseline is drawn as a background so the
+   scroll container's clipping cannot cut the active underline that sits
+   on it. */
 .ds-tabs {
   display: inline-flex;
   align-items: stretch;
   gap: 0;
-  border-bottom: var(--border-025) solid var(--color-bg-container-border);
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  background: linear-gradient(var(--color-bg-container-border), var(--color-bg-container-border)) bottom / 100% var(--border-025) no-repeat;
+}
+
+.ds-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 /* ============================================
@@ -20,7 +34,7 @@
 }
 
 .ds-tabs--full-width .ds-tabs__tab {
-  flex: 1;
+  flex: 1 0 auto;
 }
 
 /* ============================================
@@ -34,8 +48,9 @@
   gap: var(--gap-200); /* 8px */
   padding: var(--padding-200) var(--padding-400); /* 8px 16px */
   border: none;
+  flex: none;
+  white-space: nowrap;
   border-bottom: var(--border-050) solid transparent;
-  margin-bottom: calc(var(--border-025) * -1); /* Overlap the container border */
   background: none;
   cursor: pointer;
   position: relative;

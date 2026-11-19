@@ -154,9 +154,12 @@
 }
 
 /* A word wider than its fixed column wraps before the clip, so it is never
-   cut mid-word with nothing to say so. */
+   cut mid-word with nothing to say so. `anywhere` rather than
+   `break-word`: the cell content is a flex box, and its text's automatic
+   minimum is the longest word unless the break counts toward it. The
+   widths here are already fixed, so nothing else is resized by it. */
 .ds-data-table__grid--fixed .ds-table__cell-content {
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .ds-data-table__filler {

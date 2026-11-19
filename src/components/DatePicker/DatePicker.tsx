@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './DatePicker.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
-import { isEnglish, rotateWeek, weekStartOf, weekdayNamesIn, type Weekday } from '../../behaviors/locale';
+import { isEnglish, rotateWeek, weekStartOf, weekdayHeadersIn, weekdayNamesIn, type Weekday } from '../../behaviors/locale';
 import { MonthGrid } from './MonthGrid';
 import {
   EN_DAYS,
@@ -51,7 +51,8 @@ type DatePickerOwnProps = {
   /**
    * The visible weekday column headers: seven entries, Sunday first, laid
    * out from `weekStartsOn`. Defaults to the two-letter abbreviations ("Su"
-   * to "Sa") in English and the short weekday names in `locale` otherwise; a
+   * to "Sa") in English and the short weekday names in `locale` otherwise,
+   * or its narrow names where the short ones are whole words (Arabic); a
    * list of any other length falls back to the default.
    */
   weekdayLabels?: string[];
@@ -128,7 +129,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
     const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
     const dayLabel = useMemo(() => dayLabelProp ?? dayLabelIn(locale), [dayLabelProp, locale]);
     const weekdays = rotateWeek(
-      weekdaysOr(weekdayLabels, isEnglish(locale) ? EN_DAYS : weekdayNamesIn(locale, 'short')),
+      weekdaysOr(weekdayLabels, isEnglish(locale) ? EN_DAYS : weekdayHeadersIn(locale)),
       weekStart,
     );
     const weekdayFullNames = rotateWeek(

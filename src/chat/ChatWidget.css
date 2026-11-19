@@ -329,6 +329,16 @@
   flex-shrink: 0;
 }
 
+/* Widgets taller than the whole widget (a board stacked to one column in a
+   narrow panel) have no room to ride up into, so the welcome scrolls
+   rather than letting its host's edge cut the board off. While they fit
+   there is nothing to scroll, and the layout above is unchanged. */
+.ds-chat-widget[data-widgets="fit"]:has(.ds-chat-widget__welcome) {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
 /* The widgets claim their height first, so on a short window an even split
    of what is left would crowd the greeting into the header. The top region
    keeps room for the header and the greeting. A phone never centres, so it

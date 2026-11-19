@@ -124,6 +124,13 @@
 /* The ring sits on the hit circle itself, with no offset: the callout opens
    beside the marker with its text one padding step from the centre, and an
    offset ring reached into that text. */
+/* A marker on the far hemisphere is drawn faint behind the sphere, so its
+   button never takes the pointer from a front marker it shares a spot
+   with. It stays in the tab order: the keyboard reaches every point. */
+.ds-globe__marker--back {
+  pointer-events: none;
+}
+
 .ds-globe__marker:focus-visible {
   outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: 0;

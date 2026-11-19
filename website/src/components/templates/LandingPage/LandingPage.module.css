@@ -1031,6 +1031,48 @@
   }
 }
 
+/* The smallest phones: the header's start button drops its arrow and the
+   brand steps down to the title face, so the whole row fits at 320px. */
+@media (max-width: 480px) {
+  .headerActions .start :global(.ds-button__icon--right) {
+    display: none;
+  }
+
+  /* Two wordmarks no longer fit side by side, so they stack one a row. */
+  .customerList {
+    grid-template-columns: auto;
+    justify-content: center;
+    row-gap: var(--gap-400);
+  }
+
+  .brand {
+    gap: var(--gap-200);
+    font-family: var(--font-title-body-family);
+    font-size: var(--font-title-body-size);
+    font-weight: var(--font-title-body-weight);
+    line-height: var(--font-title-body-line-height);
+  }
+
+  .headerInner {
+    gap: var(--gap-200);
+  }
+}
+
+/* A desktop window dragged that narrow keeps the header's search (a phone
+   hands it to the tab bar), so the brand keeps only its mark, with the
+   name still read out. */
+/* ds-allow(breakpoint): the header row with search was measured to fit from 376px, so 480 would drop the name where it fits */
+@media (max-width: 375px) and (pointer: fine) {
+  .brand span:last-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* Phone chrome: the tab bar, and the header's search stepping aside for
    the tab bar's own. Shown for a phone preview (data-phone, from the
    app-frame flag) or a real touch phone, never a narrow desktop window. */

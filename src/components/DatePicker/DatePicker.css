@@ -12,6 +12,10 @@
   border-radius: var(--radius-300); /* 12px */
   background-color: var(--color-input-bg-primary);
   user-select: none;
+  /* Never wider than its container: in a column narrower than seven full
+     days, the days shrink with it (below) rather than running off it. */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* ============================================
@@ -76,7 +80,7 @@
 
 .ds-date-picker__grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--gap-050); /* 2px */
 }
 
@@ -90,7 +94,7 @@
 .ds-date-picker__row {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-columns: subgrid;
   column-gap: var(--gap-050); /* 2px, the grid's own gap */
 }
@@ -119,8 +123,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  /* The full 36px day, shrinking square with its column when the picker is
+     squeezed, so seven days always fit and never overlap. */
+  margin-inline: auto;
+  width: 100%;
+  max-width: 36px;
+  aspect-ratio: 1;
   padding: 0;
   border: none;
   border-radius: var(--radius-pill);
@@ -198,9 +206,17 @@
 }
 
 .ds-date-picker--compact .ds-date-picker__cell {
-  width: 28px;
-  height: 28px;
+  max-width: 28px;
   font-size: var(--font-caption-size);
+}
+
+/* On a phone the picker gives up some of its own padding before its days
+   give up size, so a squeezed picker keeps each day at least a 24px
+   target. */
+@media (max-width: 480px) {
+  .ds-date-picker {
+    padding: var(--padding-300);
+  }
 }
 
 /* ============================================

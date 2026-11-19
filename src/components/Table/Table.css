@@ -154,7 +154,14 @@
    (design.md's responsive contract). Natural column widths below the
    mobile breakpoint force the overflow the wrapper exists to catch —
    without this the table crushes to the viewport and cells clip. */
+/* The plain table's scroll container: no surface of its own. */
+.ds-table__scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
+  .ds-table__scroll .ds-table,
   .ds-table__wrapper .ds-table {
     min-width: max-content;
   }

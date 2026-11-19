@@ -305,7 +305,7 @@ const COVERAGE_CITIES = [
 ];
 
 const COVERAGE_POINTS: WorldMapPoint[] = [
-  { id: "toronto", lat: 43.65, lng: -79.38, label: "Toronto", kind: "anchor" },
+  { id: "vancouver", lat: 49.28, lng: -123.12, label: "Vancouver", kind: "anchor" },
   ...COVERAGE_CITIES.map(
     (c): WorldMapPoint => ({
       id: c.id,

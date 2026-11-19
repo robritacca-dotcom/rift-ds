@@ -466,9 +466,11 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
     // hidden (it can be neither seen nor pressed there, so it leaves the tab
     // order too), and a label that would run past the root's edge or under
     // the pill moves to the dot's other side, or hides when neither fits.
-    // Written straight onto the nodes: nothing here re-renders.
+    // Written straight onto the nodes: nothing here re-renders. It runs
+    // again when the root or the frame resizes and when a web font loads,
+    // since a label measured in the fallback face is the wrong width.
     const zoomPillRef = useRef<HTMLDivElement | null>(null);
-    useIsomorphicLayoutEffect(() => {
+    const fitMarkers = () => {
       const root = rootRef.current;
       const frameEl = frameElRef.current;
       if (!root || !frameEl) return;
@@ -504,7 +506,34 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
         label.dataset.side = fitsEnd || !fitsStart ? 'end' : 'start';
         label.toggleAttribute('data-offstage', !fitsEnd && !fitsStart);
       });
-    });
+    };
+    const fitMarkersRef = useRef(fitMarkers);
+    fitMarkersRef.current = fitMarkers;
+    useIsomorphicLayoutEffect(() => fitMarkersRef.current());
+    useEffect(() => {
+      const root = rootRef.current;
+      if (!root) return;
+      const refit = () => fitMarkersRef.current();
+      // The root and the frame: the frame resizes once it is measured,
+      // and the next frame is one more chance for a layout that settles
+      // after the first commit (a container-sized ancestor).
+      const observer = new ResizeObserver(refit);
+      observer.observe(root);
+      if (frameElRef.current) observer.observe(frameElRef.current);
+      const raf = requestAnimationFrame(refit);
+      const fonts = typeof document !== 'undefined' ? document.fonts : undefined;
+      let live = true;
+      fonts?.ready.then(() => {
+        if (live) refit();
+      });
+      fonts?.addEventListener('loadingdone', refit);
+      return () => {
+        live = false;
+        cancelAnimationFrame(raf);
+        observer.disconnect();
+        fonts?.removeEventListener('loadingdone', refit);
+      };
+    }, []);
 
     // ── Drawing ──────────────────────────────────────────────────────────
     /* The graticule covers the whole window, not just the world: meridians

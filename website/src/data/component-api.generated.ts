@@ -7430,7 +7430,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "weekdayLabels",
             "type": "string[]",
             "required": false,
-            "description": "The visible weekday column headers: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the two-letter abbreviations (\"Su\"\nto \"Sa\") in English and the short weekday names in `locale` otherwise; a\nlist of any other length falls back to the default."
+            "description": "The visible weekday column headers: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the two-letter abbreviations (\"Su\"\nto \"Sa\") in English and the short weekday names in `locale` otherwise,\nor its narrow names where the short ones are whole words (Arabic); a\nlist of any other length falls back to the default."
           },
           {
             "name": "weekdayNames",
@@ -9542,7 +9542,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "weekdayLabels",
             "type": "string[]",
             "required": false,
-            "description": "The weekday headers above the grid: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the short weekday names in `locale`\n(\"Sun\" to \"Sat\" in `en-US`); a list of any other length falls back to\nthe default."
+            "description": "The weekday headers above the grid: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the short weekday names in `locale`\n(\"Sun\" to \"Sat\" in `en-US`), or its narrow names where the short ones\nare whole words (Arabic); a list of any other length falls back to the\ndefault."
           },
           {
             "name": "locale",
@@ -21651,7 +21651,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "widgetsLayout",
             "type": "\"scroll\" | \"fit\"",
             "required": false,
-            "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the composer holds dead centre as it does over the\nstarters, the widgets hanging below it, and rides up only when they\nneed more than half the room. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
+            "description": "How the widget slot takes its room. `fit` keeps the welcome screen to\none viewport: the composer holds dead centre as it does over the\nstarters, the widgets hanging below it, and rides up only when they\nneed more than half the room; widgets taller than the whole widget\nscroll with the welcome rather than being cut off. `scroll` turns the welcome screen into a page: the\ngreeting and composer take the opening of the viewport, the widgets\nrun on below the fold, and the whole welcome scrolls as one.",
             "values": [
               "fit",
               "scroll"

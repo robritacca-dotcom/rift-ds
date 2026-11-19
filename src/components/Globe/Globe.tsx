@@ -692,7 +692,7 @@ export const Globe = React.forwardRef<HTMLDivElement, GlobeProps>(
             <button
               key={point.id}
               type="button"
-              className={`${baseClass}__marker`}
+              className={`${baseClass}__marker${at.visible ? '' : ` ${baseClass}__marker--back`}`}
               style={{
                 left: pct((at.x / VIEW) * 100),
                 top: pct((at.y / VIEW) * 100),

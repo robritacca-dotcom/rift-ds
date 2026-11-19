@@ -257,7 +257,7 @@
           "type": "string[]",
           "typeKind": "array",
           "required": false,
-          "description": "The weekday headers above the grid: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the short weekday names in `locale`\n(\"Sun\" to \"Sat\" in `en-US`); a list of any other length falls back to\nthe default."
+          "description": "The weekday headers above the grid: seven entries, Sunday first, laid\nout from `weekStartsOn`. Defaults to the short weekday names in `locale`\n(\"Sun\" to \"Sat\" in `en-US`), or its narrow names where the short ones\nare whole words (Arabic); a list of any other length falls back to the\ndefault."
         },
         {
           "name": "locale",

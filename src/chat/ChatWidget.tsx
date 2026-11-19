@@ -276,7 +276,8 @@ export interface ChatWidgetProps {
   /** How the widget slot takes its room. `fit` keeps the welcome screen to
       one viewport: the composer holds dead centre as it does over the
       starters, the widgets hanging below it, and rides up only when they
-      need more than half the room. `scroll` turns the welcome screen into a page: the
+      need more than half the room; widgets taller than the whole widget
+      scroll with the welcome rather than being cut off. `scroll` turns the welcome screen into a page: the
       greeting and composer take the opening of the viewport, the widgets
       run on below the fold, and the whole welcome scrolls as one. */
   widgetsLayout?: 'fit' | 'scroll';

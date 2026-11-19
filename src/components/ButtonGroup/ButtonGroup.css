@@ -7,7 +7,12 @@
   /* Layout */
   display: inline-flex; /* Hug content instead of stretch */
   width: auto; /* Don't stretch to full width */
-  overflow: hidden;
+  max-width: 100%;
+}
+
+/* A button never shrinks to fit: a label cut mid-word is unreadable. */
+.ds-button-group > * {
+  flex: none;
 }
 
 /* ============================================
@@ -19,6 +24,10 @@
   flex-direction: row;
   gap: var(--gap-500); /* Figma: --gap/lg (20px) */
   align-items: flex-start;
+  /* A row wider than its container wraps onto a second line at the tight
+     step, so it still reads as one group. */
+  flex-wrap: wrap;
+  row-gap: var(--gap-200);
 }
 
 /* ============================================

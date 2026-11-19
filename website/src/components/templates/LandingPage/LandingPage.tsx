@@ -735,7 +735,7 @@ export default function LandingPage() {
               className={styles.headerSearch}
             />
             <Button label="Sign in" variant="tertiary" size="compact" iconLeft="account_circle" className={styles.signIn} />
-            <Button label="Start now" variant="primary" size="compact" iconRight="arrow_forward" />
+            <Button label="Start now" variant="primary" size="compact" iconRight="arrow_forward" className={styles.start} />
           </div>
         </div>
       </header>

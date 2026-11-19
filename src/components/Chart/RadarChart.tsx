@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useId } from 'react';
+import React, { useCallback, useId, useState } from 'react';
 import {
   Radar,
   RadarChart as RechartsRadarChart,
@@ -144,6 +144,49 @@ export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
   const gridColor = getCSSVar('--color-divider', 'rgba(214, 214, 214, 0.8)');
   const seriesColors = getChartSeriesColors();
 
+  /* The category labels sit outside the outer ring, so a narrow card leaves
+     them no room at the sides at the usual 70% radius. Once the body is
+     measured, the radius gives way toward the longest label (estimated at
+     about 0.6em a character at the tick size), down to 45% so the chart
+     stays readable, and a label that still has no room ends in an
+     ellipsis at the chart's edge, its full name in the tooltip. */
+  const [bodyWidth, setBodyWidth] = useState(0);
+  const charWidth = textSize * 0.6;
+  const labelRoom =
+    Math.ceil(Math.max(0, ...data.map((d) => String(d[categoryKey] ?? '').length)) * charWidth) + 12;
+  const half = Math.min(bodyWidth, height) / 2;
+  const outerRadius =
+    bodyWidth > 0 ? Math.min(half * 0.7, Math.max(half * 0.45, bodyWidth / 2 - labelRoom)) : '70%';
+  const renderAngleTick = useCallback(
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    (props: any) => {
+      const { x, y, payload, textAnchor } = props as {
+        x: number;
+        y: number;
+        payload: { value: unknown };
+        textAnchor: 'start' | 'middle' | 'end';
+      };
+      const full = String(payload?.value ?? '');
+      const room =
+        bodyWidth <= 0
+          ? Infinity
+          : textAnchor === 'end'
+            ? x - 2
+            : textAnchor === 'start'
+              ? bodyWidth - x - 2
+              : 2 * Math.min(x, bodyWidth - x) - 4;
+      const fits = Math.max(1, Math.floor(room / charWidth));
+      const text = full.length > fits ? `${full.slice(0, Math.max(1, fits - 1))}…` : full;
+      return (
+        <text x={x} y={y} textAnchor={textAnchor} dominantBaseline="central" fill={textSecondary} fontSize={textSize}>
+          {text !== full && <title>{full}</title>}
+          {text}
+        </text>
+      );
+    },
+    [bodyWidth, charWidth, textSecondary, textSize],
+  );
+
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (props: any) => <RadarTooltip {...props} locale={locale} />,
@@ -181,13 +224,10 @@ export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(({
       )}
 
       <div className={`${baseClass}__body`}>
-        <ResponsiveContainer width="100%" height={height}>
-          <RechartsRadarChart data={data} cx="50%" cy="50%" outerRadius="70%">
+        <ResponsiveContainer width="100%" height={height} onResize={(width) => setBodyWidth(width)}>
+          <RechartsRadarChart data={data} cx="50%" cy="50%" outerRadius={outerRadius}>
             <PolarGrid stroke={gridColor} />
-            <PolarAngleAxis
-              dataKey={categoryKey}
-              tick={{ fill: textSecondary, fontSize: textSize }}
-            />
+            <PolarAngleAxis dataKey={categoryKey} tick={renderAngleTick} />
             <PolarRadiusAxis
               tickFormatter={formatTick}
               tick={{ fill: textSecondary, fontSize: textSize }}

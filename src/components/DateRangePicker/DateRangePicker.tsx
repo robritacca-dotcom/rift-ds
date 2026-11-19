@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocale } from '../../behaviors/LocaleProvider';
-import { isEnglish, rotateWeek, weekStartOf, weekdayNamesIn, type Weekday } from '../../behaviors/locale';
+import { isEnglish, rotateWeek, weekStartOf, weekdayHeadersIn, weekdayNamesIn, type Weekday } from '../../behaviors/locale';
 import { MonthGrid } from '../DatePicker/MonthGrid';
 import {
   EN_DAYS,
@@ -152,7 +152,7 @@ export function DateRangePicker({
   const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
   const fullDate = useMemo(() => fullDateIn(locale), [locale]);
   const weekdays = rotateWeek(
-    weekdaysOr(weekdayLabels, isEnglish(locale) ? EN_DAYS : weekdayNamesIn(locale, 'short')),
+    weekdaysOr(weekdayLabels, isEnglish(locale) ? EN_DAYS : weekdayHeadersIn(locale)),
     weekStart,
   );
   const weekdayFullNames = rotateWeek(weekdaysOr(weekdayNames, weekdayNamesIn(locale, 'long')), weekStart);

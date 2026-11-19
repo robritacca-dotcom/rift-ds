@@ -167,6 +167,21 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
   pointer-events: none;
 }
 
+/* A label that would run past the map's edge (or under the zoom pill) sits
+   on the dot's other side; the component measures and writes data-side. */
+.ds-world-map__label[data-side='start'] {
+  left: auto;
+  right: 100%;
+  padding-left: 0;
+  padding-right: var(--padding-100);
+}
+
+/* A marker the crop or the zoom pill hides, or a label with room on
+   neither side, is hidden outright rather than shown cut. */
+.ds-world-map [data-offstage] {
+  visibility: hidden;
+}
+
 .ds-world-map__marker--active .ds-world-map__label {
   color: var(--color-text-primary);
 }

@@ -459,6 +459,53 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
       onPointHover?.(null);
     };
 
+    // ── Fitting markers to what shows ────────────────────────────────────
+    // A `cover` crop, a pan or a zoom can leave a marker outside the root,
+    // and the zoom pill floats over the bottom of the map. After every
+    // render, a marker whose dot is outside the root or under the pill is
+    // hidden (it can be neither seen nor pressed there, so it leaves the tab
+    // order too), and a label that would run past the root's edge or under
+    // the pill moves to the dot's other side, or hides when neither fits.
+    // Written straight onto the nodes: nothing here re-renders.
+    const zoomPillRef = useRef<HTMLDivElement | null>(null);
+    useIsomorphicLayoutEffect(() => {
+      const root = rootRef.current;
+      const frameEl = frameElRef.current;
+      if (!root || !frameEl) return;
+      const box = root.getBoundingClientRect();
+      const pill = zoomPillRef.current?.getBoundingClientRect();
+      const underPill = (l: number, t: number, r: number, b: number) =>
+        !!pill && r > pill.left && l < pill.right && b > pill.top && t < pill.bottom;
+      const points = frameEl.querySelectorAll<HTMLElement>(
+        `:scope > .${baseClass}__marker, :scope > .${baseClass}__marker-slot`,
+      );
+      points.forEach((el) => {
+        const dot = el.querySelector<HTMLElement>(`.${baseClass}__dot`);
+        if (!dot) return;
+        const d = dot.getBoundingClientRect();
+        const cx = d.left + d.width / 2;
+        const cy = d.top + d.height / 2;
+        const shown =
+          cx >= box.left &&
+          cx <= box.right &&
+          cy >= box.top &&
+          cy <= box.bottom &&
+          !underPill(d.left, d.top, d.right, d.bottom);
+        el.toggleAttribute('data-offstage', !shown);
+        const label = el.querySelector<HTMLElement>(`.${baseClass}__label`);
+        if (!label || !shown || !label.parentElement) return;
+        // The label hangs off the marker's hit box, not the dot inside it.
+        const m = label.parentElement.getBoundingClientRect();
+        const w = label.offsetWidth;
+        const h = label.offsetHeight;
+        const t = cy - h / 2;
+        const fitsEnd = m.right + w <= box.right && !underPill(m.right, t, m.right + w, t + h);
+        const fitsStart = m.left - w >= box.left && !underPill(m.left - w, t, m.left, t + h);
+        label.dataset.side = fitsEnd || !fitsStart ? 'end' : 'start';
+        label.toggleAttribute('data-offstage', !fitsEnd && !fitsStart);
+      });
+    });
+
     // ── Drawing ──────────────────────────────────────────────────────────
     /* The graticule covers the whole window, not just the world: meridians
        continue at the same spacing past the antimeridian, and parallels
@@ -639,7 +686,7 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
         </div>
 
         {zoomEnabled && (
-          <div className={`${baseClass}__zoom`} role="group" aria-label={zoomControlsLabel}>
+          <div ref={zoomPillRef} className={`${baseClass}__zoom`} role="group" aria-label={zoomControlsLabel}>
             <CircularButton
               icon="remove"
               variant="tertiary"

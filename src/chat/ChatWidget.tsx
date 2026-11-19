@@ -721,6 +721,11 @@ export function ChatWidget({
      keeps the artifact across a remount) does not come back as a sheet
      nobody asked for, and `defaultOpen` stays an inline-only promise. */
   const wasAsideWideRef = useRef(true);
+  /* No sheet shows before the first measurement: until then the seat is
+     assumed narrow, and a panel asked open at mount (`defaultOpen`) would
+     paint one frame as a sheet over the conversation before the measure
+     closes it. */
+  const [seatMeasured, setSeatMeasured] = useState(false);
   useEffect(() => {
     if (!hasRails) return;
     const host = railsHostRef.current;
@@ -746,6 +751,7 @@ export function ChatWidget({
         closeArtifact();
       }
       wasAsideWideRef.current = asideRoom;
+      setSeatMeasured(true);
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -1460,14 +1466,14 @@ export function ChatWidget({
       {artifacts && !asideWide && (
         <div
           className={`ds-chat-widget__aside-overlay ${
-            artifactShown ? 'ds-chat-widget__aside-overlay--open' : ''
+            artifactShown && seatMeasured ? 'ds-chat-widget__aside-overlay--open' : ''
           }`}
         >
           <button
             type="button"
             className="ds-chat-widget__rail-scrim"
             aria-label={closeArtifactLabel}
-            tabIndex={artifactShown ? 0 : -1}
+            tabIndex={artifactShown && seatMeasured ? 0 : -1}
             onClick={closeArtifactPanel}
           />
           <div
@@ -1509,14 +1515,14 @@ export function ChatWidget({
       {renderAside && !asideWide && (
         <div
           className={`ds-chat-widget__aside-overlay ${
-            asideShown ? 'ds-chat-widget__aside-overlay--open' : ''
+            asideShown && seatMeasured ? 'ds-chat-widget__aside-overlay--open' : ''
           }`}
         >
           <button
             type="button"
             className="ds-chat-widget__rail-scrim"
             aria-label={closeAgentLabel}
-            tabIndex={asideShown ? 0 : -1}
+            tabIndex={asideShown && seatMeasured ? 0 : -1}
             onClick={closeAside}
           />
           <div className="ds-chat-widget__aside-sheet" id={asideId}>

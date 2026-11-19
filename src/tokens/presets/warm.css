@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="warm" on <html>.
+ * Import after tokens.css, then set data-brand="warm" on <html> (or "ember", its shown name, which ember.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -46,7 +46,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="warm"] {
+  html[data-brand="warm"], html[data-brand="ember"] {
     --color-action-primary-bg: var(--primitive-orange-07);
     --color-action-primary-bg-active: var(--primitive-orange-05);
     --color-action-primary-bg-hover: var(--primitive-orange-06);
@@ -194,7 +194,7 @@
     --primitive-yellow-11: #322A1A;
   }
 
-  html[data-brand="warm"][data-theme="dark"] {
+  html[data-brand="warm"][data-theme="dark"], html[data-brand="ember"][data-theme="dark"] {
     --color-action-primary-border: var(--primitive-orange-07);
     --color-action-primary-border-secondary: var(--primitive-orange-08);
     --color-action-primary-text-tertiary: var(--primitive-orange-07);

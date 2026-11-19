@@ -1,0 +1,9 @@
+/*
+ * AUTO-GENERATED. Do not edit.
+ * Theme preset "plum" under its shown name, Signal.
+ * The same stylesheet as plum.css, which it imports.
+ * Regenerate: node scripts/generate-preset-stylesheets.mjs
+ * Import after tokens.css, then set data-brand="signal" (or "plum") on <html>.
+ */
+@layer rift.tokens, rift.preset;
+@import url("./plum.css");

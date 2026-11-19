@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="pink" on <html>.
+ * Import after tokens.css, then set data-brand="pink" on <html> (or "bubblegum", its shown name, which bubblegum.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -46,7 +46,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="pink"] {
+  html[data-brand="pink"], html[data-brand="bubblegum"] {
     --color-action-primary-bg: var(--primitive-red-07);
     --color-action-primary-bg-active: var(--primitive-red-09);
     --color-action-primary-bg-hover: var(--primitive-red-08);
@@ -252,7 +252,7 @@
     --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.12);
   }
 
-  html[data-brand="pink"][data-theme="dark"] {
+  html[data-brand="pink"][data-theme="dark"], html[data-brand="bubblegum"][data-theme="dark"] {
     --color-action-primary-border: var(--primitive-red-07);
     --color-action-primary-border-secondary: var(--primitive-red-08);
     --color-action-primary-text-tertiary: var(--primitive-red-07);

@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="violet" on <html>.
+ * Import after tokens.css, then set data-brand="violet" on <html> (or "velvet", its shown name, which velvet.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -46,7 +46,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="violet"] {
+  html[data-brand="violet"], html[data-brand="velvet"] {
     --color-action-primary-bg: var(--primitive-purple-08);
     --color-action-primary-bg-active: var(--primitive-purple-10);
     --color-action-primary-bg-hover: var(--primitive-purple-09);
@@ -237,7 +237,7 @@
     --shadow-table-pinned: 0 0 16px rgba(0, 0, 0, 0.12);
   }
 
-  html[data-brand="violet"][data-theme="dark"] {
+  html[data-brand="violet"][data-theme="dark"], html[data-brand="velvet"][data-theme="dark"] {
     --color-action-primary-border: var(--primitive-purple-08);
     --color-action-primary-border-secondary: var(--primitive-purple-09);
     --color-action-primary-text-active: var(--primitive-purple-02);

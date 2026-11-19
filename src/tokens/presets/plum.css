@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="plum" on <html>.
+ * Import after tokens.css, then set data-brand="plum" on <html> (or "signal", its shown name, which signal.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -46,7 +46,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="plum"] {
+  html[data-brand="plum"], html[data-brand="signal"] {
     --color-action-primary-bg: var(--primitive-orange-07);
     --color-action-primary-bg-active: var(--primitive-orange-03);
     --color-action-primary-bg-hover: var(--primitive-orange-04);
@@ -231,7 +231,7 @@
     --shadow-table-pinned: none;
   }
 
-  html[data-brand="plum"][data-theme="dark"] {
+  html[data-brand="plum"][data-theme="dark"], html[data-brand="signal"][data-theme="dark"] {
     --color-action-primary-border: var(--primitive-orange-07);
     --color-action-primary-border-secondary: var(--primitive-orange-08);
     --color-action-primary-text-tertiary: var(--primitive-orange-07);

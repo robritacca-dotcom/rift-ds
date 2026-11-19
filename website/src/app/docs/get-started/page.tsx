@@ -729,7 +729,7 @@ export default function GetStartedPage() {
                     {THEME_SELECTOR_ORDER.filter((id) => id !== BASE_THEME_ID)
                       .map((id) => THEME_PRESETS[id].label)
                       .join(", ")}
-                    . Each also loads alone from <code>tokens/presets/&lt;id&gt;.css</code>.
+                    . Each also loads alone from <code>tokens/presets/&lt;name&gt;.css</code>, and answers to its name in lowercase as the attribute, as well as to its id.
                   </p>
                   <CodeBlock code={PRESET_SNIPPET} language="tsx" showCopy />
                   <p className={styles.sectionNote}>

@@ -162,6 +162,23 @@ function fontFaceBlocks(preset, source) {
   return blocks;
 }
 
+/**
+ * The name a theme also answers to: its shown label as a lowercase slug
+ * ("Signal" -> "signal"), or null when that is already its id. A theme's
+ * id is the key its stylesheet, the values module and the site use, and
+ * some ids predate the names people see; the alias lets a reader who only
+ * knows the shown name import `<name>.css` and set `data-brand="<name>"`.
+ */
+export function brandAliasOf(id, preset) {
+  const slug = String(preset.label ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return slug && slug !== id ? slug : null;
+}
+
 /** The layer order every token stylesheet states, so whichever loads first fixes it. */
 export const LAYER_ORDER = '@layer rift.tokens, rift.preset;';
 
@@ -178,9 +195,14 @@ export function buildPresetCss(id, preset, presetOverrides, source) {
   const darkNames = Object.keys(dark)
     .filter((name) => dark[name] !== light[name])
     .sort();
-  const blocks = [block(`html[data-brand="${id}"]`, light, lightNames)];
+  /* The shown name selects the same block, at the same specificity, so a
+     consumer's override reaches the theme under either name. */
+  const alias = brandAliasOf(id, preset);
+  const both = (suffix) =>
+    [`html[data-brand="${id}"]${suffix}`, ...(alias ? [`html[data-brand="${alias}"]${suffix}`] : [])].join(', ');
+  const blocks = [block(both(''), light, lightNames)];
   if (darkNames.length > 0) {
-    blocks.push(block(`html[data-brand="${id}"][data-theme="dark"]`, dark, darkNames));
+    blocks.push(block(both('[data-theme="dark"]'), dark, darkNames));
   }
   const fonts = fontFaceBlocks(preset, source);
   return (
@@ -189,7 +211,8 @@ export function buildPresetCss(id, preset, presetOverrides, source) {
       'Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).',
       'Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).',
       `Regenerate: ${REGENERATE}`,
-      'Import after tokens.css, then set data-brand="' + id + '" on <html>.',
+      'Import after tokens.css, then set data-brand="' + id + '" on <html>' +
+        (alias ? ` (or "${alias}", its shown name, which ${alias}.css imports under).` : '.'),
       'Layered (rift.preset): any unlayered rule of yours outranks it.',
     ]) +
     `${LAYER_ORDER}\n\n` +
@@ -206,6 +229,24 @@ export async function assemblePresetStylesheets() {
   const files = new Map();
   for (const id of ids) {
     files.set(`${id}.css`, buildPresetCss(id, THEME_PRESETS[id], presetOverrides, source));
+  }
+  /* A theme whose shown name is not its id ships under that name too: a
+     file that imports the theme's own, so there is one copy of every rule. */
+  for (const id of ids) {
+    const alias = brandAliasOf(id, THEME_PRESETS[id]);
+    if (!alias) continue;
+    if (THEME_PRESETS[alias] || files.has(`${alias}.css`)) {
+      throw new Error(`Theme preset "${id}" is shown as "${THEME_PRESETS[id].label}", whose name "${alias}" is already taken. Rename one of them.`);
+    }
+    files.set(
+      `${alias}.css`,
+      header([
+        `Theme preset "${id}" under its shown name, ${THEME_PRESETS[id].label}.`,
+        `The same stylesheet as ${id}.css, which it imports.`,
+        `Regenerate: ${REGENERATE}`,
+        `Import after tokens.css, then set data-brand="${alias}" (or "${id}") on <html>.`,
+      ]) + `${LAYER_ORDER}\n@import url("./${id}.css");\n`
+    );
   }
   files.set(
     'presets.css',

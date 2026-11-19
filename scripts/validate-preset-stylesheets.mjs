@@ -54,7 +54,8 @@ if (!THEME_PRESETS.mono) {
   if (!layer) errors.push(`mono.css has no @layer rift.preset block — ${REGENERATE}`);
   const parse = (selector) => {
     const escaped = selector.replace(/[[\]"]/g, '\\$&');
-    const block = (layer?.[1] ?? '').match(new RegExp(`^  ${escaped} \\{\\n([\\s\\S]*?)\\n  \\}`, 'm'));
+    /* A theme known by a second name lists it after its id, in one selector list. */
+    const block = (layer?.[1] ?? '').match(new RegExp(`^  ${escaped}(?:, [^{\\n]+)? \\{\\n([\\s\\S]*?)\\n  \\}`, 'm'));
     return block
       ? Object.fromEntries([...block[1].matchAll(/^ {4}(--[a-z0-9-]+): (.+);$/gm)].map((m) => [m[1], m[2]]))
       : null;

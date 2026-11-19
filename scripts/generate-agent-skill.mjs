@@ -427,7 +427,7 @@ ${catalogSections.join('\n\n')}
     '',
     '## Order of work',
     '',
-    `1. Wire the theme. ${c('theme.css')}, when there is one, is imported after ${c('tokens.css')}. A shipped preset needs ${c(`${PACKAGE_NAME}/tokens/presets/presets.css`)} imported once and ${c('data-brand')} on the root element set to one of these ids (each theme's display name in brackets, where it differs): ${presets
+    `1. Wire the theme. ${c('theme.css')}, when there is one, is imported after ${c('tokens.css')}. A shipped preset needs ${c(`${PACKAGE_NAME}/tokens/presets/presets.css`)} imported once and ${c('data-brand')} on the root element set to one of these ids (each theme's display name in brackets, where it differs; that name in lowercase works as well, as an attribute and as its own stylesheet): ${presets
       .map((id) => (labels[id] && labels[id].toLowerCase() !== id ? `${c(id)} (${labels[id]})` : c(id)))
       .join(', ')}. The same list, with each name, is ${c('SHIPPED_THEMES')} in ${c(`${PACKAGE_NAME}/tokens/values`)}. To change one part of a preset, override that token in the project's own CSS: it outranks the preset in both modes. Dark mode is ${c('data-theme="dark"')} on the root element.`,
     `2. Swap components first. Where the screen hand-builds a control the library ships (a button, an input, a dialog, a table), replace it with the library component. Find it in the catalogue, then read its prop contract before you write the JSX: do not guess props. Once a component is in place, do not restyle it from outside to recover the old look. If it looks wrong, the theme is wrong, and the fix is a token.`,

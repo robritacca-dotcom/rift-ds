@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="contrast" on <html>.
+ * Import after tokens.css, then set data-brand="contrast" on <html> (or "blueprint", its shown name, which blueprint.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -28,7 +28,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="contrast"] {
+  html[data-brand="contrast"], html[data-brand="blueprint"] {
     --color-action-primary-bg: var(--primitive-blue-07);
     --color-action-primary-bg-active: var(--primitive-blue-09);
     --color-action-primary-bg-hover: var(--primitive-blue-08);
@@ -174,7 +174,7 @@
     --primitive-yellow-11: #372B0A;
   }
 
-  html[data-brand="contrast"][data-theme="dark"] {
+  html[data-brand="contrast"][data-theme="dark"], html[data-brand="blueprint"][data-theme="dark"] {
     --color-action-primary-border: var(--primitive-blue-07);
     --color-action-primary-border-secondary: var(--primitive-blue-08);
     --color-action-primary-text-active: var(--primitive-blue-02);

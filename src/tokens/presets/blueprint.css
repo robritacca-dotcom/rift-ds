@@ -1,0 +1,9 @@
+/*
+ * AUTO-GENERATED. Do not edit.
+ * Theme preset "contrast" under its shown name, Blueprint.
+ * The same stylesheet as contrast.css, which it imports.
+ * Regenerate: node scripts/generate-preset-stylesheets.mjs
+ * Import after tokens.css, then set data-brand="blueprint" (or "contrast") on <html>.
+ */
+@layer rift.tokens, rift.preset;
+@import url("./contrast.css");

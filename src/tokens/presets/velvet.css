@@ -1,0 +1,9 @@
+/*
+ * AUTO-GENERATED. Do not edit.
+ * Theme preset "violet" under its shown name, Velvet.
+ * The same stylesheet as violet.css, which it imports.
+ * Regenerate: node scripts/generate-preset-stylesheets.mjs
+ * Import after tokens.css, then set data-brand="velvet" (or "violet") on <html>.
+ */
+@layer rift.tokens, rift.preset;
+@import url("./violet.css");

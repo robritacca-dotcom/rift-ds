@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="gold" on <html>.
+ * Import after tokens.css, then set data-brand="gold" on <html> (or "volt", its shown name, which volt.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -46,7 +46,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="gold"] {
+  html[data-brand="gold"], html[data-brand="volt"] {
     --color-action-primary-bg: var(--primitive-neutral-08);
     --color-action-primary-bg-active: var(--primitive-neutral-10);
     --color-action-primary-bg-hover: var(--primitive-neutral-09);
@@ -243,7 +243,7 @@
     --primitive-teal-11: #06252B;
   }
 
-  html[data-brand="gold"][data-theme="dark"] {
+  html[data-brand="gold"][data-theme="dark"], html[data-brand="volt"][data-theme="dark"] {
     --color-action-primary-bg: var(--primitive-yellow-07);
     --color-action-primary-bg-active: var(--primitive-yellow-03);
     --color-action-primary-bg-hover: var(--primitive-yellow-04);

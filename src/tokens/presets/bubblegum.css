@@ -1,0 +1,9 @@
+/*
+ * AUTO-GENERATED. Do not edit.
+ * Theme preset "pink" under its shown name, Bubblegum.
+ * The same stylesheet as pink.css, which it imports.
+ * Regenerate: node scripts/generate-preset-stylesheets.mjs
+ * Import after tokens.css, then set data-brand="bubblegum" (or "pink") on <html>.
+ */
+@layer rift.tokens, rift.preset;
+@import url("./pink.css");

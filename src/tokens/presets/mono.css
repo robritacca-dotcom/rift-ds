@@ -4,7 +4,7 @@
  * Source of truth: website/src/lib/theme/presets.ts (THEME_PRESETS + presetOverrides).
  * Fonts: self-hosted from src/fonts/presets/ (scripts/sync-preset-fonts.mjs; OFL-1.1).
  * Regenerate: node scripts/generate-preset-stylesheets.mjs
- * Import after tokens.css, then set data-brand="mono" on <html>.
+ * Import after tokens.css, then set data-brand="mono" on <html> (or "smoke", its shown name, which smoke.css imports under).
  * Layered (rift.preset): any unlayered rule of yours outranks it.
  */
 @layer rift.tokens, rift.preset;
@@ -46,7 +46,7 @@
 }
 
 @layer rift.preset {
-  html[data-brand="mono"] {
+  html[data-brand="mono"], html[data-brand="smoke"] {
     --color-action-primary-bg: var(--primitive-neutral-08);
     --color-action-primary-bg-active: var(--primitive-neutral-10);
     --color-action-primary-bg-hover: var(--primitive-neutral-09);
@@ -179,7 +179,7 @@
     --shadow-table-pinned: none;
   }
 
-  html[data-brand="mono"][data-theme="dark"] {
+  html[data-brand="mono"][data-theme="dark"], html[data-brand="smoke"][data-theme="dark"] {
     --color-action-primary-bg: var(--primitive-neutral-01);
     --color-action-primary-bg-active: var(--primitive-neutral-03);
     --color-action-primary-bg-hover: var(--primitive-neutral-02);

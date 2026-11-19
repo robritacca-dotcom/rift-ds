@@ -334,7 +334,7 @@ function optionalPeersInClosure(entry) {
    the init bin's scaffolds rides beside it the same way, `init chat`'s,
    `init app`'s and the blocks `init block` copies, so all are held here
    (the blocks' own registry and closure are validate-blocks.mjs's). */
-for (const scaffoldName of ['chat', 'app', 'blocks']) {
+for (const scaffoldName of ['chat', 'chat-actions', 'app', 'blocks']) {
   const templatesDir = join(repoRoot, 'src', 'cli', 'templates', scaffoldName);
   if (!existsSync(templatesDir)) {
     errors.push(`src/cli/templates/${scaffoldName}/ does not exist (the init bin's ${scaffoldName} scaffold)`);

@@ -9,6 +9,7 @@ import type { ComponentType } from "react";
 import AppShellBlock from "../../../src/cli/templates/blocks/app/starter/page";
 import DashboardBlock from "../../../src/cli/templates/blocks/app/dashboard/page";
 import SettingsBlock from "../../../src/cli/templates/blocks/app/settings/page";
+import PlannerBlock from "../../../src/cli/templates/blocks/app/planner/page";
 import SignInBlock from "../../../src/cli/templates/blocks/app/sign-in/page";
 import ShaderSceneBlock from "../../../src/cli/templates/blocks/app/shader/page";
 
@@ -16,6 +17,7 @@ export const BLOCK_PREVIEWS: Record<string, ComponentType> = {
   "app-shell": AppShellBlock,
   dashboard: DashboardBlock,
   settings: SettingsBlock,
+  planner: PlannerBlock,
   "sign-in": SignInBlock,
   "shader-scene": ShaderSceneBlock,
 };

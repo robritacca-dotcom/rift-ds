@@ -1,0 +1,17 @@
+/* The plan takes the column's whole width, so as many weeks show as the
+   screen has room for before the table scrolls; the queue sits under it at
+   a reading width, where a name, a fact and two buttons fit on one line. */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+}
+
+.plan {
+  min-width: 0;
+}
+
+.queue {
+  max-width: 560px; /* the queue's reading width */
+}

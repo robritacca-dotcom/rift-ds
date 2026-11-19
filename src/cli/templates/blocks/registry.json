@@ -39,6 +39,20 @@
       ]
     },
     {
+      "name": "planner",
+      "label": "Planner",
+      "description": "The app shell with a plan across weeks, each cell editable with totals down and across, over a queue of requests to decide.",
+      "route": "/planner",
+      "files": [
+        "components/blocks/AppShell.tsx",
+        "components/blocks/AppShell.module.css",
+        "app/planner/page.tsx",
+        "app/planner/page.module.css",
+        "app/planner/PlannerGrid.tsx",
+        "app/planner/Requests.tsx"
+      ]
+    },
+    {
       "name": "sign-in",
       "label": "Sign in",
       "description": "A centred sign-in card with email and password, remember me and a single sign-on route.",

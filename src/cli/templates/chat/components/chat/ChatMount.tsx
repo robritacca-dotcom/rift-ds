@@ -15,6 +15,7 @@
  * peer for its chart cards. Once you are live for good, delete the demo
  * import and the peer with it.
  */
+import { usePathname } from 'next/navigation';
 import { ChatLauncher, ChatProvider } from 'rift-ds/chat';
 import { DEMO_RENDERERS, DEMO_STARTERS, createDemoTransport } from 'rift-ds/chat/demo';
 import 'rift-ds/chat/chat.css';
@@ -26,6 +27,9 @@ const DEMO = process.env.NEXT_PUBLIC_CHAT_DEMO === 'true';
 const WIDGET = {
   title: 'Assistant',
   tagline: 'How can I help you today?',
+  /* Each starter is one chip, and a chip never wraps: a label longer than 30
+     characters (SUGGESTION_MAX_CHARS) is dropped, with a warning in
+     development. Write a month or weekday short ("Oct", "Mon"). */
   starters: DEMO
     ? DEMO_STARTERS
     : [
@@ -39,6 +43,15 @@ const WIDGET = {
 };
 
 export function ChatMount() {
+  /* The note over the composer says what the chat is looking at. Here it is
+     the page; a host whose chat follows more (a highlighted passage, the
+     rows ticked in a table) names that instead, and sends the same through
+     ChatProvider's getContext. useSelectionFocus and useHeldHighlight, from
+     rift-ds/chat, follow a highlight and keep it painted while the reader
+     types. */
+  const pathname = usePathname();
+  const context = { label: pathname === '/' ? 'Home' : pathname };
+
   return (
     <ChatProvider
       transport={DEMO ? createDemoTransport() : undefined}
@@ -46,7 +59,7 @@ export function ChatMount() {
       followups={DEMO ? false : '/api/chat/followups'}
       feedback={DEMO ? false : '/api/chat/feedback'}
     >
-      <ChatLauncher label={`Ask ${WIDGET.title}`} widget={WIDGET} />
+      <ChatLauncher label={`Ask ${WIDGET.title}`} widget={{ ...WIDGET, context }} />
     </ChatProvider>
   );
 }

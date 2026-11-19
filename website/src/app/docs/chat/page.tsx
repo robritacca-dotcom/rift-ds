@@ -195,6 +195,7 @@ const EVENT_LINES: Record<ChatEvent["type"], string> = {
   content: "Rich content as a React node. Only a transport in the browser can send one.",
   card: "Rich content as data, drawn by your renderers by kind. What a server sends. A reply can carry several, or be one with no text. Set lead on the host's own opening and it draws first, under a status line that keeps running.",
   question: "Questions the agent asks with answers to pick, drawn in place of the follow-ups.",
+  action: "Something for the page to do in the browser, run once by the provider's pageActions as it arrives, never again on a redraw.",
   notice: "A limit's reply, shown as an ordinary message.",
   error: "A failure the person should see. Only before the first delta.",
   done: "The reply is complete. Always last.",
@@ -429,6 +430,14 @@ export default function ChatInstallPage() {
               <code>.env*</code>, as a fresh <code>create-next-app</code> does, the env example is
               ignored too; the command says so, and <code>git add -f</code> commits it.
             </p>
+            <p className={s.sectionNote}>
+              Add <code>--actions</code> for a chat that proposes changes the reader confirms: it
+              writes the same files with the propose and confirm flow below in place of the plain
+              chat, the actions defined once for the page and the route, a tool that proposes them
+              on an <Link href="/components/action-card">Action card</Link>, the card that confirms
+              them, and the record each reply opens with. The route still writes nothing; replace the
+              sample records and <code>applyPlan</code> with your own.
+            </p>
 
             <h3 className={s.propsHeading}>Mount it once</h3>
             <p className={s.sectionNote}>
@@ -645,8 +654,11 @@ export default function ChatInstallPage() {
               structure: a heading brings its section, words their paragraph, a piece of code the
               whole example, a table cell its column and row. Typing moves the browser&apos;s
               selection into the composer, so <code>useHeldHighlight</code> keeps the passage
-              painted in the note&apos;s own fill. <code>ChatProvider</code>&apos;s{" "}
-              <code>getContext</code> sends the focus with every request; on the server,{" "}
+              painted in the note&apos;s own fill; its style comes with the import, so your
+              stylesheet needs no rule for it. <code>ChatProvider</code>&apos;s{" "}
+              <code>getContext</code> sends the focus with every request, and{" "}
+              <code>defineContext</code> declares what else it may carry (ids from a pattern, words
+              from a list, numbers in a range) once, for the page to write and the route to sanitise; on the server,{" "}
               <code>sanitiseSelection</code> checks it and <code>selectionLines</code> writes it
               for the model, and you look its source up, so &ldquo;$32.8M&rdquo; reaches the model
               as the figure it belongs to, not as a bare number. Highlighted text is data from the page, and a page
@@ -687,6 +699,30 @@ export default function ChatInstallPage() {
               the reply, so a filter one tool sets is the one a later tool acts on.
             </p>
             <CodeBlock code={ACTIONS_SNIPPET} language="ts" showCopy />
+            <p className={s.sectionNote}>
+              A change of several steps in order, each acting on the records as the one before
+              left them, is a sequence: <code>planSequence</code> dry-runs the steps over one set of
+              records, the reader confirms it once, <code>confirmSequence</code> marks every step,
+              and <code>confirmationLine</code> tells the model each of them in order. Rather than
+              wrapping the transport to open a reply with its record, give the handler a{" "}
+              <code>lead</code> function: it is handed the sanitised context and returns the cards
+              the reply opens with, before the model is called.
+            </p>
+
+            <h3 className={s.propsHeading}>Change the page</h3>
+            <p className={s.sectionNote}>
+              Navigation, a table&apos;s view, the open tab and the theme live in the browser, where a
+              server tool cannot reach. A tool returns <code>actions</code> beside its text, each a{" "}
+              <code>name</code> and an <code>input</code>, and the handler streams them as{" "}
+              <code>action</code> events. <code>ChatProvider</code>&apos;s <code>pageActions</code>{" "}
+              runs the handler of that name once, as the event arrives, never again when the thread
+              redraws or the panel reopens. The input came from the model, so the handler checks it
+              before acting. A DataTable&apos;s <code>view</code> takes its whole setup as one
+              value, so one action can set its sort, search, grouping and filters at once. To add to
+              the stream yourself and keep the reader&apos;s model pick, pass{" "}
+              <code>wrapTransport</code>, which is handed the default transport, rather than a{" "}
+              <code>transport</code> of your own.
+            </p>
           </section>
 
           {/* -------------------------------------------------- packages */}

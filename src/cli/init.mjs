@@ -67,6 +67,8 @@ const MANIFEST_URL = `${SITE_ORIGIN}/skill/manifest.json`;
 const DEFAULT_DIR = join('.claude', 'skills');
 const TEMPLATES_ROOT = join(dirname(fileURLToPath(import.meta.url)), 'templates');
 const TEMPLATES_DIR = join(TEMPLATES_ROOT, 'chat');
+/* `init chat --actions` lays these over the chat templates: a file here replaces the one of the same path. */
+const ACTIONS_TEMPLATES_DIR = join(TEMPLATES_ROOT, 'chat-actions');
 const APP_TEMPLATES_DIR = join(TEMPLATES_ROOT, 'app');
 const BLOCKS_DIR = join(TEMPLATES_ROOT, 'blocks');
 
@@ -84,7 +86,7 @@ const CHAT_PEERS = [
 
 const USAGE = `Usage: npx ${PACKAGE_NAME} init [--skill <name>] [--dir <dir>]
        npx ${PACKAGE_NAME} init app [--app <dir>] [--dry-run]
-       npx ${PACKAGE_NAME} init chat [--app <dir>] [--dry-run]
+       npx ${PACKAGE_NAME} init chat [--actions] [--app <dir>] [--dry-run]
        npx ${PACKAGE_NAME} init block [<name>] [--app <dir>] [--dry-run]
 
 init
@@ -116,6 +118,10 @@ init chat
   them, the mount and its model list under components/chat/, and an
   .env.chat.example. Existing files are never overwritten.
 
+  --actions       Write the propose-and-confirm example instead of a plain
+                  chat: changes defined once for the page and the route, a
+                  tool that proposes them on a card, the card that confirms,
+                  and the record the reply opens with
   --app <dir>     The app router folder (default: app/ or src/app/, whichever exists)
   --dry-run       Print what would be written and write nothing
 
@@ -327,12 +333,16 @@ function ignoresEnvExample() {
   return ignored;
 }
 
-function initChat({ app, dryRun }) {
-  if (!existsSync(TEMPLATES_DIR)) {
+function initChat({ app, dryRun, actions }) {
+  if (!existsSync(TEMPLATES_DIR) || (actions && !existsSync(ACTIONS_TEMPLATES_DIR))) {
     fail('this copy carries no chat templates: run the published bin (npx ' + PACKAGE_NAME + ' init chat).');
   }
   const appDir = findAppDir(app);
-  const { written, skipped } = scaffold(TEMPLATES_DIR, appDir, dryRun);
+  const overlay = actions ? templateFiles(ACTIONS_TEMPLATES_DIR) : [];
+  const first = actions ? scaffold(ACTIONS_TEMPLATES_DIR, appDir, dryRun, overlay) : { written: [], skipped: [] };
+  const rest = scaffold(TEMPLATES_DIR, appDir, dryRun, templateFiles(TEMPLATES_DIR).filter((file) => !overlay.includes(file)));
+  const written = [...first.written, ...rest.written];
+  const skipped = [...first.skipped, ...rest.skipped];
 
   console.log(
     dryRun
@@ -415,7 +425,7 @@ function option(flag, what) {
 if (args[1] === 'chat' || args[1] === 'app' || args[1] === 'block') {
   const appFlag = option('--app', 'a directory');
   const scaffoldArgs = { app: appFlag ? resolve(appFlag) : undefined, dryRun: args.includes('--dry-run') };
-  if (args[1] === 'chat') initChat(scaffoldArgs);
+  if (args[1] === 'chat') initChat({ ...scaffoldArgs, actions: args.includes('--actions') });
   else if (args[1] === 'app') initApp(scaffoldArgs);
   else initBlock({ ...scaffoldArgs, name: args[2] && !args[2].startsWith('--') ? args[2] : undefined });
 } else {

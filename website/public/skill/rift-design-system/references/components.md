@@ -503,7 +503,7 @@ Nested rectangles sized by value for part-to-whole breakdowns.
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/treemap.md
 
-## Data display (36)
+## Data display (37)
 
 Cards, tables, lists, and badges for presenting structured content.
 
@@ -626,6 +626,14 @@ A due date against now that turns from neutral to warning to error as it nears.
 - Import: `import { Deadline } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/deadline.md
+
+### Decision row
+
+One item waiting on a yes or a no, as a list row that settles to the decision taken, with Undo while it can be reversed.
+
+- Import: `import { DecisionRow } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/decision-row.md
 
 ### Description list
 

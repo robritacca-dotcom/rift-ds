@@ -6720,6 +6720,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             ]
           },
           {
+            "name": "view",
+            "type": "TableView",
+            "required": false,
+            "description": "The whole setup in one value (sorts, filters, search, grouping, hidden and\nordered columns, pins, widths, density, page size), for controlled use:\nwhenever it changes the table shows it, so one piece of state outside the\ntable, a chat's card or a saved link, can set every part at once. A part it\nleaves out falls back to the table's opening setup. Pair with\n`onViewChange`, and hand back what it reports, so the reader's own changes\nstay.",
+            "typeRefs": [
+              "DataTableView"
+            ]
+          },
+          {
+            "name": "defaultView",
+            "type": "TableView",
+            "required": false,
+            "description": "The setup to start with, for uncontrolled use: the table's first render, the server's HTML too, is already this view.",
+            "typeRefs": [
+              "DataTableView"
+            ]
+          },
+          {
             "name": "grouping",
             "type": "string[]",
             "required": false,
@@ -7798,6 +7816,167 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "DecisionRow",
+    "label": "Decision row",
+    "slug": "decision-row",
+    "category": "data-display",
+    "description": "One item waiting on a yes or a no, as a list row that settles to the decision taken, with Undo while it can be reversed.",
+    "client": true,
+    "importPath": "rift-ds/components/DecisionRow/DecisionRow",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "DecisionRow",
+        "props": [
+          {
+            "name": "title",
+            "type": "string",
+            "required": true,
+            "description": "What is waiting on a decision: who asked and for what. Collides with the native `title` tooltip attribute on purpose: the row shows it."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "A quiet second line: the dates, the amount, the reason given."
+          },
+          {
+            "name": "leading",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A leading mark: an Avatar, a StatusDot, an icon. Decorative unless the element names itself."
+          },
+          {
+            "name": "meta",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A trailing fact before the decision: when it was asked, how long it has waited."
+          },
+          {
+            "name": "status",
+            "type": "DecisionRowStatus",
+            "required": false,
+            "description": "Where the decision stands, for controlled use. Pair with `onStatusChange`. Unset, the row keeps its own, starting at `defaultStatus`.",
+            "values": [
+              "accepted",
+              "declined",
+              "pending"
+            ],
+            "defaultValue": "\"pending\"",
+            "typeRefs": [
+              "DecisionRowStatus"
+            ]
+          },
+          {
+            "name": "defaultStatus",
+            "type": "DecisionRowStatus",
+            "required": false,
+            "description": "Where it stands to begin with, for uncontrolled use.",
+            "values": [
+              "accepted",
+              "declined",
+              "pending"
+            ],
+            "defaultValue": "'pending'",
+            "typeRefs": [
+              "DecisionRowStatus"
+            ]
+          },
+          {
+            "name": "onStatusChange",
+            "type": "((status: DecisionRowStatus) => void)",
+            "required": false,
+            "description": "Fires with the new status when the reader accepts, declines or undoes.",
+            "typeRefs": [
+              "DecisionRowStatus"
+            ]
+          },
+          {
+            "name": "onAccept",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the reader accepts."
+          },
+          {
+            "name": "onDecline",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Fires when the reader declines."
+          },
+          {
+            "name": "onUndo",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Offers Undo on a settled row, which returns it to pending and fires this. Leave it unset where a decision cannot be reversed."
+          },
+          {
+            "name": "destructive",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the accept button as destructive, for a decision whose yes takes something away (remove a member, delete a draft).",
+            "defaultValue": "false"
+          },
+          {
+            "name": "acceptLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accept button's words.",
+            "defaultValue": "'Accept'"
+          },
+          {
+            "name": "declineLabel",
+            "type": "string",
+            "required": false,
+            "description": "The decline button's words.",
+            "defaultValue": "'Decline'"
+          },
+          {
+            "name": "acceptedLabel",
+            "type": "string",
+            "required": false,
+            "description": "The settled mark's words once accepted.",
+            "defaultValue": "'Accepted'"
+          },
+          {
+            "name": "declinedLabel",
+            "type": "string",
+            "required": false,
+            "description": "The settled mark's words once declined.",
+            "defaultValue": "'Declined'"
+          },
+          {
+            "name": "undoLabel",
+            "type": "string",
+            "required": false,
+            "description": "The undo button's words.",
+            "defaultValue": "'Undo'"
+          },
+          {
+            "name": "settledAnnouncement",
+            "type": "((title: string, outcome: string) => string)",
+            "required": false,
+            "description": "What is announced when the row settles, given its title and the settled mark's words: \"Accepted: Room booking\".",
+            "defaultValue": "(rowTitle, outcome) => `${outcome}: ${rowTitle}`"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          },
+          {
+            "name": "ref",
+            "type": "Ref<HTMLDivElement>",
+            "required": false,
+            "description": "A ref onto the row's root `<div>`."
           }
         ]
       }
@@ -9226,7 +9405,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "view",
-            "type": "\"month\" | \"week\"",
+            "type": "\"week\" | \"month\"",
             "required": false,
             "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount.",
             "values": [
@@ -21724,6 +21903,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Where the conversation goes. Defaults to the fetch transport against\n`endpoint`, carrying the visitor's model pick. A script from\n`scriptChat()` runs the widget with no backend at all.",
             "typeRefs": [
               "ChatTransport"
+            ]
+          },
+          {
+            "name": "wrapTransport",
+            "type": "((base: ChatTransport) => ChatTransport)",
+            "required": false,
+            "description": "Wraps the default transport instead of replacing it: handed the fetch\ntransport, which carries the reader's model pick and `getContext`, it\nreturns the transport the chat uses, so a host can add to the stream (a\ncard the reply opens with, a log) and keep that wiring. Pass a stable\nfunction, declared outside the component or memoised, that reads what it\nneeds when it runs rather than from render. Ignored with a `transport`.",
+            "typeRefs": [
+              "ChatTransport"
+            ]
+          },
+          {
+            "name": "pageActions",
+            "type": "Record<string, (input: unknown, action: ChatPageAction) => void>",
+            "required": false,
+            "description": "What the page does when a reply sends an `action` event, by the action's\n`name`: go to a page, set a table's view, open a tab. Each runs once, as\nthe event arrives, never again on a redraw. The input came from the model,\nso a handler checks it before acting on it. A name with no handler is\nignored, with a warning in development.",
+            "typeRefs": [
+              "ChatPageAction"
             ]
           },
           {

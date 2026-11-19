@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 - Live docs: https://rift-ds.com/components/action-card
 - Schema: https://rift-ds.com/schema/components/action-card.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Decision row](https://rift-ds.com/components/decision-row.md) instead when the item sits in a list on the page, waiting on the reader’s yes or no.
+
 ## ActionCard props
 
 | Prop | Type | Required | Default | Description |

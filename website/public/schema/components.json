@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.30.0",
   "package": "rift-ds",
-  "count": 189,
+  "count": 190,
   "components": [
     {
       "name": "Accordion",
@@ -593,6 +593,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/deadline.json",
       "docsUrl": "https://rift-ds.com/components/deadline",
       "markdownUrl": "https://rift-ds.com/components/deadline.md"
+    },
+    {
+      "name": "DecisionRow",
+      "label": "Decision row",
+      "slug": "decision-row",
+      "category": "data-display",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/decision-row.json",
+      "docsUrl": "https://rift-ds.com/components/decision-row",
+      "markdownUrl": "https://rift-ds.com/components/decision-row.md"
     },
     {
       "name": "DescriptionList",

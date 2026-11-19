@@ -336,6 +336,26 @@
           ]
         },
         {
+          "name": "view",
+          "type": "TableView",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The whole setup in one value (sorts, filters, search, grouping, hidden and\nordered columns, pins, widths, density, page size), for controlled use:\nwhenever it changes the table shows it, so one piece of state outside the\ntable, a chat's card or a saved link, can set every part at once. A part it\nleaves out falls back to the table's opening setup. Pair with\n`onViewChange`, and hand back what it reports, so the reader's own changes\nstay.",
+          "typeRefs": [
+            "DataTableView"
+          ]
+        },
+        {
+          "name": "defaultView",
+          "type": "TableView",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The setup to start with, for uncontrolled use: the table's first render, the server's HTML too, is already this view.",
+          "typeRefs": [
+            "DataTableView"
+          ]
+        },
+        {
           "name": "grouping",
           "type": "string[]",
           "typeKind": "array",

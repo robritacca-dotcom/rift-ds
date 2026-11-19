@@ -301,6 +301,11 @@
       "name": "FormSection",
       "when": "the section holds a form’s fields and its own save",
       "schemaUrl": "https://rift-ds.com/schema/components/form-section.json"
+    },
+    {
+      "name": "DecisionRow",
+      "when": "each row waits on a yes or a no and settles to the answer",
+      "schemaUrl": "https://rift-ds.com/schema/components/decision-row.json"
     }
   ]
 }

@@ -1,0 +1,230 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.30.0",
+  "kind": "component",
+  "name": "DecisionRow",
+  "label": "Decision row",
+  "slug": "decision-row",
+  "category": "data-display",
+  "description": "One item waiting on a yes or a no, as a list row that settles to the decision taken, with Undo while it can be reversed.",
+  "client": true,
+  "importPath": "rift-ds/components/DecisionRow/DecisionRow",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/decision-row",
+  "markdownUrl": "https://rift-ds.com/components/decision-row.md",
+  "exports": [
+    {
+      "component": "DecisionRow",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": true,
+          "description": "What is waiting on a decision: who asked and for what. Collides with the native `title` tooltip attribute on purpose: the row shows it."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A quiet second line: the dates, the amount, the reason given."
+        },
+        {
+          "name": "leading",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A leading mark: an Avatar, a StatusDot, an icon. Decorative unless the element names itself."
+        },
+        {
+          "name": "meta",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A trailing fact before the decision: when it was asked, how long it has waited."
+        },
+        {
+          "name": "status",
+          "type": "DecisionRowStatus",
+          "typeKind": "enum",
+          "values": [
+            "accepted",
+            "declined",
+            "pending"
+          ],
+          "required": false,
+          "description": "Where the decision stands, for controlled use. Pair with `onStatusChange`. Unset, the row keeps its own, starting at `defaultStatus`.",
+          "default": "pending",
+          "typeRefs": [
+            "DecisionRowStatus"
+          ]
+        },
+        {
+          "name": "defaultStatus",
+          "type": "DecisionRowStatus",
+          "typeKind": "enum",
+          "values": [
+            "accepted",
+            "declined",
+            "pending"
+          ],
+          "required": false,
+          "description": "Where it stands to begin with, for uncontrolled use.",
+          "default": "pending",
+          "typeRefs": [
+            "DecisionRowStatus"
+          ]
+        },
+        {
+          "name": "onStatusChange",
+          "type": "((status: DecisionRowStatus) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires with the new status when the reader accepts, declines or undoes.",
+          "typeRefs": [
+            "DecisionRowStatus"
+          ]
+        },
+        {
+          "name": "onAccept",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the reader accepts."
+        },
+        {
+          "name": "onDecline",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Fires when the reader declines."
+        },
+        {
+          "name": "onUndo",
+          "type": "(() => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Offers Undo on a settled row, which returns it to pending and fires this. Leave it unset where a decision cannot be reversed."
+        },
+        {
+          "name": "destructive",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the accept button as destructive, for a decision whose yes takes something away (remove a member, delete a draft).",
+          "default": false
+        },
+        {
+          "name": "acceptLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The accept button's words.",
+          "default": "Accept"
+        },
+        {
+          "name": "declineLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The decline button's words.",
+          "default": "Decline"
+        },
+        {
+          "name": "acceptedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The settled mark's words once accepted.",
+          "default": "Accepted"
+        },
+        {
+          "name": "declinedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The settled mark's words once declined.",
+          "default": "Declined"
+        },
+        {
+          "name": "undoLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The undo button's words.",
+          "default": "Undo"
+        },
+        {
+          "name": "settledAnnouncement",
+          "type": "((title: string, outcome: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "What is announced when the row settles, given its title and the settled mark's words: \"Accepted: Room booking\".",
+          "defaultExpression": "(rowTitle, outcome) => `${outcome}: ${rowTitle}`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        },
+        {
+          "name": "ref",
+          "type": "Ref<HTMLDivElement>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A ref onto the row's root `<div>`."
+        }
+      ]
+    }
+  ],
+  "types": {
+    "DecisionRowStatus": {
+      "kind": "type",
+      "definition": "type DecisionRowStatus = 'pending' | 'accepted' | 'declined';",
+      "description": "Where a decision stands: waiting on the reader, or settled one way or the other."
+    }
+  },
+  "externalTypes": {
+    "HTMLDivElement": "typescript",
+    "ReactNode": "react",
+    "Ref": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "button",
+      "part": "buttons",
+      "label": "Button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Activates the button."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Activates the button."
+        }
+      ]
+    }
+  ],
+  "alternatives": [
+    {
+      "name": "ActionCard",
+      "when": "an assistant proposes the change in a chat reply",
+      "schemaUrl": "https://rift-ds.com/schema/components/action-card.json"
+    },
+    {
+      "name": "Widget",
+      "when": "the rows only report or link, with no decision to take",
+      "schemaUrl": "https://rift-ds.com/schema/components/widget.json"
+    }
+  ]
+}

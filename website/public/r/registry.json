@@ -364,6 +364,12 @@
       "description": "A due date against now that turns from neutral to warning to error as it nears."
     },
     {
+      "name": "decision-row",
+      "type": "registry:ui",
+      "title": "Decision row",
+      "description": "One item waiting on a yes or a no, as a list row that settles to the decision taken, with Undo while it can be reversed."
+    },
+    {
       "name": "description-list",
       "type": "registry:ui",
       "title": "Description list",

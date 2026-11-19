@@ -106,7 +106,7 @@
         },
         {
           "name": "view",
-          "type": "\"month\" | \"week\"",
+          "type": "\"week\" | \"month\"",
           "typeKind": "enum",
           "values": [
             "month",

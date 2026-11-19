@@ -27,7 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 | today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. |
 | legend | `EventCalendarLegendItem[]` | no |  | What each event colour means, shown as a row of dots and labels under the grid. Filtering by kind stays with the host, which passes the events it wants shown. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
-| view | `"month" \| "week"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount. |
+| view | `"week" \| "month"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount. |
 | previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
 | previousWeekLabel | `string` | no | `'Previous week'` | Accessible name of the previous-week button, in the week view. |

@@ -1207,6 +1207,20 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "Date": "typescript"
     }
   },
+  "decision-row": {
+    "types": {
+      "DecisionRowStatus": {
+        "kind": "type",
+        "definition": "type DecisionRowStatus = 'pending' | 'accepted' | 'declined';",
+        "description": "Where a decision stands: waiting on the reader, or settled one way or the other."
+      }
+    },
+    "externalTypes": {
+      "HTMLDivElement": "typescript",
+      "ReactNode": "react",
+      "Ref": "react"
+    }
+  },
   "description-list": {
     "types": {
       "DescriptionListEntry": {
@@ -3074,9 +3088,10 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "ChatEvent": {
         "kind": "type",
-        "definition": "type ChatEvent =\n  /** A live status step: the AgentStatus label, with an optional reasoning trace point. */\n  | { type: 'status'; label: string; point?: string }\n  /** The model serving this exchange, as a display label (\"Sonnet 5\").\n      The server's per-answer ground truth; kept in state but not rendered\n      by the widget today, whose picker follows the `models` offer event. */\n  | { type: 'model'; label: string }\n  /** What the server is offering right now: the wire value it defaults to,\n      and any values the day's budget has locked out. The picker follows\n      this: the server owns the default and the lock, the client only\n      expresses a preference. */\n  | { type: 'models'; default: string; locked: string[] }\n  /** A chunk of response text. The first delta ends the thinking phase. */\n  | { type: 'delta'; text: string }\n  /** The server-side log id for this exchange. Feedback references it, so a\n      thumbs verdict can be joined back to the logged question and answer.\n      A transport that never sends one hides the thumbs, which is what a\n      script does. */\n  | { type: 'exchange'; id: string }\n  /** Follow-up questions to offer under the finished answer. A transport that\n      can produce them yields this before `done`; the fetch transport cannot\n      (they are written from the completed answer, so waiting for them would\n      hold the turn open) and the provider fetches them after the turn\n      commits instead. */\n  | { type: 'followups'; items: string[] }\n  /** Rich content, as a React node, drawn on the live reply as it arrives\n      and kept with the committed turn. Only an in-browser transport can\n      yield one (a script, or `injectTurn`); the network form is `card`. */\n  | { type: 'content'; node: ReactNode }\n  /** Rich content as serialisable data the provider's `renderers` draw,\n      on the live reply as it arrives and with the committed turn. The form\n      a server can send. */\n  | { type: 'card'; card: ChatCard }\n  /** Questions the agent asks with answers to pick, drawn under the committed\n      turn in place of follow-ups: a turn that asks is never asked about. */\n  | { type: 'question'; set: ChatQuestionSet }\n  /** Terminal: the response is complete. */\n  | { type: 'done' }\n  /** A guardrail response (rate limit, circuit breaker): rendered as a normal assistant message. */\n  | { type: 'notice'; text: string }\n  /** A failure the user should see, phrased for humans. */\n  | { type: 'error'; message: string };",
+        "definition": "type ChatEvent =\n  /** A live status step: the AgentStatus label, with an optional reasoning trace point. */\n  | { type: 'status'; label: string; point?: string }\n  /** The model serving this exchange, as a display label (\"Sonnet 5\").\n      The server's per-answer ground truth; kept in state but not rendered\n      by the widget today, whose picker follows the `models` offer event. */\n  | { type: 'model'; label: string }\n  /** What the server is offering right now: the wire value it defaults to,\n      and any values the day's budget has locked out. The picker follows\n      this: the server owns the default and the lock, the client only\n      expresses a preference. */\n  | { type: 'models'; default: string; locked: string[] }\n  /** A chunk of response text. The first delta ends the thinking phase. */\n  | { type: 'delta'; text: string }\n  /** The server-side log id for this exchange. Feedback references it, so a\n      thumbs verdict can be joined back to the logged question and answer.\n      A transport that never sends one hides the thumbs, which is what a\n      script does. */\n  | { type: 'exchange'; id: string }\n  /** Follow-up questions to offer under the finished answer. A transport that\n      can produce them yields this before `done`; the fetch transport cannot\n      (they are written from the completed answer, so waiting for them would\n      hold the turn open) and the provider fetches them after the turn\n      commits instead. */\n  | { type: 'followups'; items: string[] }\n  /** Rich content, as a React node, drawn on the live reply as it arrives\n      and kept with the committed turn. Only an in-browser transport can\n      yield one (a script, or `injectTurn`); the network form is `card`. */\n  | { type: 'content'; node: ReactNode }\n  /** Rich content as serialisable data the provider's `renderers` draw,\n      on the live reply as it arrives and with the committed turn. The form\n      a server can send. */\n  | { type: 'card'; card: ChatCard }\n  /** Questions the agent asks with answers to pick, drawn under the committed\n      turn in place of follow-ups: a turn that asks is never asked about. */\n  | { type: 'question'; set: ChatQuestionSet }\n  /** Something for the page to do in the browser (go to a page, set a\n      table's view, open a tab), run once by the provider's `pageActions` as\n      it arrives. Never re-run when the thread redraws or the panel reopens. */\n  | { type: 'action'; action: ChatPageAction }\n  /** Terminal: the response is complete. */\n  | { type: 'done' }\n  /** A guardrail response (rate limit, circuit breaker): rendered as a normal assistant message. */\n  | { type: 'notice'; text: string }\n  /** A failure the user should see, phrased for humans. */\n  | { type: 'error'; message: string };",
         "refs": [
           "ChatCard",
+          "ChatPageAction",
           "ChatQuestionSet"
         ]
       },
@@ -3099,6 +3114,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "interface",
         "definition": "interface ChatModelOption {\n  /** Stable wire value: what the picker holds and the client sends. */\n  value: string;\n  /** The provider's model id the server calls. */\n  id: string;\n  /** Display name in the picker. */\n  label: string;\n  /** One line under the name in the picker. */\n  description: string;\n  /**\n   * Whether the model takes adaptive thinking and the effort dial. A model\n   * that predates them rejects both, so the handler sends it a plain request.\n   */\n  adaptiveThinking: boolean;\n}",
         "description": "One model the widget can offer in its picker and the server handler can\nserve. Shared by both halves so the wire value the client sends is one the\nserver knows."
+      },
+      "ChatPageAction": {
+        "kind": "interface",
+        "definition": "interface ChatPageAction {\n  /** Unique within the conversation: the provider runs each id once. */\n  id: string;\n  /** Which of the provider's `pageActions` runs it. An unknown name is ignored. */\n  name: string;\n  /** What the handler is handed. Must survive JSON. */\n  input?: unknown;\n}",
+        "description": "A change for the page itself, which lives in the browser where a server\ntool cannot reach: navigation, a table's view, the open tab, the theme. A\ntool returns it and the handler streams it; the provider runs the\n`pageActions` handler of the same `name` once, as the event arrives. The\npage owns what each name may do and checks `input` itself, since it came\nfrom the model."
       },
       "ChatPlaceholderCopy": {
         "kind": "interface",

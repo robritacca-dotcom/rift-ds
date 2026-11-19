@@ -59,6 +59,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 | onExpandedIdsChange | `((ids: string[]) => void)` | no |  | Fires with the open rows' ids after one opens or closes. |
 | expandMode | `"multiple" \| "single"` | no | `'multiple'` | Whether several rows' details can be open at once (`multiple`, the default) or opening one closes the rest (`single`). |
 | onViewChange | `((view: TableView) => void)` | no |  | Fires with the table's setup as a view whenever any part of it changes, so a host can keep the reader's last view. |
+| view | `TableView` | no |  | The whole setup in one value (sorts, filters, search, grouping, hidden and ordered columns, pins, widths, density, page size), for controlled use: whenever it changes the table shows it, so one piece of state outside the table, a chat's card or a saved link, can set every part at once. A part it leaves out falls back to the table's opening setup. Pair with `onViewChange`, and hand back what it reports, so the reader's own changes stay. |
+| defaultView | `TableView` | no |  | The setup to start with, for uncontrolled use: the table's first render, the server's HTML too, is already this view. |
 | grouping | `string[]` | no |  | The column keys the rows are grouped by, for controlled use; this milestone draws the first. Pair with `onGroupingChange`. |
 | defaultGrouping | `string[]` | no |  | The grouping to start with, for uncontrolled use. |
 | onGroupingChange | `((grouping: string[]) => void)` | no |  | Fires with the new grouping, from a header menu or a TableToolbar. |

@@ -113,6 +113,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | transport | `ChatTransport` | no |  | Where the conversation goes. Defaults to the fetch transport against `endpoint`, carrying the visitor's model pick. A script from `scriptChat()` runs the widget with no backend at all. |
+| wrapTransport | `((base: ChatTransport) => ChatTransport)` | no |  | Wraps the default transport instead of replacing it: handed the fetch transport, which carries the reader's model pick and `getContext`, it returns the transport the chat uses, so a host can add to the stream (a card the reply opens with, a log) and keep that wiring. Pass a stable function, declared outside the component or memoised, that reads what it needs when it runs rather than from render. Ignored with a `transport`. |
+| pageActions | `Record<string, (input: unknown, action: ChatPageAction) => void>` | no |  | What the page does when a reply sends an `action` event, by the action's `name`: go to a page, set a table's view, open a tab. Each runs once, as the event arrives, never again on a redraw. The input came from the model, so a handler checks it before acting on it. A name with no handler is ignored, with a warning in development. |
 | endpoint | `string` | no | `'/api/chat'` | The endpoint the default transport posts to. |
 | getContext | `(() => string \| null)` | no |  | What the default transport sends as the request's context, read at each send: the page by default (`window.location.pathname`). A host whose chat follows more than the page (a highlight, a selection) returns its own string, which its handler's `sanitiseContext` checks. Pass a stable function (one that reads the latest state itself), since a new one makes a new transport. Ignored with a `transport`, which carries its own. |
 | defaultPlacement | `ChatPlacement` | no | `'right'` | The seat the panel opens in. |
@@ -501,6 +503,10 @@ type ChatEvent =
   /** Questions the agent asks with answers to pick, drawn under the committed
       turn in place of follow-ups: a turn that asks is never asked about. */
   | { type: 'question'; set: ChatQuestionSet }
+  /** Something for the page to do in the browser (go to a page, set a
+      table's view, open a tab), run once by the provider's `pageActions` as
+      it arrives. Never re-run when the thread redraws or the panel reopens. */
+  | { type: 'action'; action: ChatPageAction }
   /** Terminal: the response is complete. */
   | { type: 'done' }
   /** A guardrail response (rate limit, circuit breaker): rendered as a normal assistant message. */
@@ -559,6 +565,26 @@ interface ChatModelOption {
    * that predates them rejects both, so the handler sends it a plain request.
    */
   adaptiveThinking: boolean;
+}
+```
+
+### ChatPageAction
+
+A change for the page itself, which lives in the browser where a server
+tool cannot reach: navigation, a table's view, the open tab, the theme. A
+tool returns it and the handler streams it; the provider runs the
+`pageActions` handler of the same `name` once, as the event arrives. The
+page owns what each name may do and checks `input` itself, since it came
+from the model.
+
+```ts
+interface ChatPageAction {
+  /** Unique within the conversation: the provider runs each id once. */
+  id: string;
+  /** Which of the provider's `pageActions` runs it. An unknown name is ignored. */
+  name: string;
+  /** What the handler is handed. Must survive JSON. */
+  input?: unknown;
 }
 ```
 

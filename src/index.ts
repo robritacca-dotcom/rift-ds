@@ -66,6 +66,7 @@ export * from './components/DateInput/DateInput';
 export * from './components/DatePicker/DatePicker';
 export * from './components/DateRangePicker/DateRangePicker';
 export * from './components/Deadline/Deadline';
+export * from './components/DecisionRow/DecisionRow';
 export * from './components/DescriptionList/DescriptionList';
 export * from './components/Dialog/Dialog';
 export * from './components/Divider/Divider';

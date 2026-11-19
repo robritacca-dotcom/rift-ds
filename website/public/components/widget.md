@@ -16,6 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.30.0. The same dat
 
 - Use [Grid](https://rift-ds.com/components/grid.md) instead when cells of any kind should sit in equal columns and share a row’s height.
 - Use [Form section](https://rift-ds.com/components/form-section.md) instead when the section holds a form’s fields and its own save.
+- Use [Decision row](https://rift-ds.com/components/decision-row.md) instead when each row waits on a yes or a no and settles to the answer.
 
 ## Widget props
 

@@ -202,5 +202,12 @@
   ],
   "size": {
     "gzip": 2253
-  }
+  },
+  "alternatives": [
+    {
+      "name": "DecisionRow",
+      "when": "the item sits in a list on the page, waiting on the reader’s yes or no",
+      "schemaUrl": "https://rift-ds.com/schema/components/decision-row.json"
+    }
+  ]
 }

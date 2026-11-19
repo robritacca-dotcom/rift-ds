@@ -33,8 +33,11 @@
   width: 100%;
 }
 
+/* Equal shares of the row, but never narrower than a label: past that the
+   row scrolls like any other. */
 .ds-tabs--full-width .ds-tabs__tab {
-  flex: 1 0 auto;
+  flex: 1 1 0;
+  min-width: max-content;
 }
 
 /* ============================================

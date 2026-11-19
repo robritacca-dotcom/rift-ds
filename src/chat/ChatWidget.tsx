@@ -56,7 +56,7 @@ import {
   ASIDE_WITH_THREADS_MIN_WIDTH,
   THREADS_RAIL_MIN_WIDTH,
 } from './queries';
-import { fitsChip } from './suggestions';
+import { keepFittingSuggestions } from './suggestions';
 import { TurnCard } from './TurnContent';
 import { isBlockingQuestion } from './questions';
 import { ReplyBody } from './TurnQuestion';
@@ -577,7 +577,7 @@ export function ChatWidget({
 
   /* Filtered, not truncated: a chip is a question the visitor is about to
      ask, and half a question is not one. */
-  const starters = (startersInput ?? []).filter((starter) => fitsChip(starter.label));
+  const starters = keepFittingSuggestions(startersInput ?? [], (starter) => starter.label, 'ChatWidget starters');
   // Unused seed on this side: the host draws from its pools with it.
   void starterSeed;
 

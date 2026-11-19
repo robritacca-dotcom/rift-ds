@@ -23,7 +23,9 @@ import {
 import type { ChatPlacement, ChatSide } from './placement';
 import { useThreads, type ThreadsOptions } from './threads';
 import { createFetchTransport } from './transport';
-import type { ChatArtifact, ChatFeedbackVerdict, ChatTransport } from './types';
+import { keepFittingSuggestions } from './suggestions';
+import type { ChatArtifact, ChatFeedbackVerdict, ChatPageAction, ChatTransport } from './types';
+import { warnOnce } from '../behaviors/devWarning';
 import { DEFAULT_PLACEHOLDER_COPY, useChat, type ChatPlaceholderCopy } from './useChat';
 import { useLinkComponent } from '../behaviors/LinkProvider';
 
@@ -52,6 +54,23 @@ export interface ChatProviderProps {
    * `scriptChat()` runs the widget with no backend at all.
    */
   transport?: ChatTransport;
+  /**
+   * Wraps the default transport instead of replacing it: handed the fetch
+   * transport, which carries the reader's model pick and `getContext`, it
+   * returns the transport the chat uses, so a host can add to the stream (a
+   * card the reply opens with, a log) and keep that wiring. Pass a stable
+   * function, declared outside the component or memoised, that reads what it
+   * needs when it runs rather than from render. Ignored with a `transport`.
+   */
+  wrapTransport?: (base: ChatTransport) => ChatTransport;
+  /**
+   * What the page does when a reply sends an `action` event, by the action's
+   * `name`: go to a page, set a table's view, open a tab. Each runs once, as
+   * the event arrives, never again on a redraw. The input came from the model,
+   * so a handler checks it before acting on it. A name with no handler is
+   * ignored, with a warning in development.
+   */
+  pageActions?: Record<string, (input: unknown, action: ChatPageAction) => void>;
   /** The endpoint the default transport posts to. */
   endpoint?: string;
   /**
@@ -109,6 +128,8 @@ export interface ChatProviderProps {
  */
 export function ChatProvider({
   transport,
+  wrapTransport,
+  pageActions,
   endpoint = '/api/chat',
   getContext,
   defaultPlacement = 'right',
@@ -140,7 +161,22 @@ export function ChatProvider({
     () => ({ ...DEFAULT_PLACEHOLDER_COPY, ...placeholders }),
     [placeholders]
   );
-  const chat = useChat(transport ?? fallbackTransport, placeholderCopy);
+  const wrappedTransport = useMemo(
+    () => (wrapTransport ? wrapTransport(fallbackTransport) : fallbackTransport),
+    [wrapTransport, fallbackTransport]
+  );
+  const runPageAction = useCallback(
+    (action: ChatPageAction) => {
+      const handler = pageActions?.[action.name];
+      if (!handler) {
+        warnOnce(`ChatProvider: no pageActions handler named "${action.name}", so the action was ignored.`);
+        return;
+      }
+      handler(action.input, action);
+    },
+    [pageActions]
+  );
+  const chat = useChat(transport ?? wrappedTransport, placeholderCopy, runPageAction);
   const threads = useThreads(chat, threadsOptions);
 
   /* Follow-up chips for the answer that just landed. Fired here rather than
@@ -167,7 +203,11 @@ export function ChatProvider({
       const offered =
         suggestions.length > 0
           ? suggestions
-          : pickFallbackFollowups(fallbackFollowups, target.id, target.question);
+          : pickFallbackFollowups(
+              keepFittingSuggestions(fallbackFollowups, (label) => label, 'ChatProvider fallbackFollowups'),
+              target.id,
+              target.question
+            );
       setTurnFollowups(target.id, offered);
       setFreshFollowupsId(target.id);
     };

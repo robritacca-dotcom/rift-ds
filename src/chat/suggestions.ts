@@ -1,3 +1,5 @@
+import { warnOnce } from '../behaviors/devWarning';
+
 /**
  * The chip budget for chat suggestions, in one place.
  *
@@ -39,4 +41,21 @@ export const SUGGESTION_MAX_CHARS = 30;
 export function fitsChip(label: string): boolean {
   const trimmed = label.trim();
   return trimmed !== '' && trimmed.length <= SUGGESTION_MAX_CHARS;
+}
+
+/**
+ * Keeps the suggestions a host wrote that fit the chip row, and warns once in
+ * development about each one it drops, naming where it came from. A host's
+ * own copy running long is a mistake worth pointing at; a model's suggestion
+ * running long is not, so the producers of model output call `fitsChip` alone.
+ */
+export function keepFittingSuggestions<T>(items: readonly T[], labelOf: (item: T) => string, where: string): T[] {
+  return items.filter((item) => {
+    const label = labelOf(item);
+    if (fitsChip(label)) return true;
+    warnOnce(
+      `${where}: "${label}" was dropped. A suggestion is one chip and a chip never wraps, so it must fit in ${SUGGESTION_MAX_CHARS} characters (SUGGESTION_MAX_CHARS).`,
+    );
+    return false;
+  });
 }

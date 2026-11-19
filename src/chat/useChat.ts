@@ -6,6 +6,7 @@ import type { AttachmentItem } from '../components/Attachment/fileTypes';
 import { createStreamReveal } from '../components/StreamingText/useStreamReveal';
 import { describeAnswers, sanitizeQuestionSet, serializeReply } from './questions';
 import type {
+  ChatPageAction,
   ChatQuestionAnswer,
   ChatReply,
   ChatTransport,
@@ -121,7 +122,8 @@ export interface ChatState {
  */
 export function useChat(
   transport: ChatTransport,
-  placeholders: ChatPlaceholderCopy = DEFAULT_PLACEHOLDER_COPY
+  placeholders: ChatPlaceholderCopy = DEFAULT_PLACEHOLDER_COPY,
+  onAction?: (action: ChatPageAction) => void
 ): ChatState {
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [live, setLive] = useState<LiveResponse | null>(null);
@@ -138,6 +140,15 @@ export function useChat(
 
   const abortRef = useRef<AbortController | null>(null);
   const busyRef = useRef(false);
+  /* Page actions run from the stream loop alone, as each event arrives, and
+     once per id: a redraw, a reopened panel or a replayed event never runs
+     one again. The handler is read through a ref so a new one never makes a
+     new send. */
+  const onActionRef = useRef(onAction);
+  useEffect(() => {
+    onActionRef.current = onAction;
+  }, [onAction]);
+  const ranActionsRef = useRef<Set<string>>(new Set());
   /* The transport-facing history, maintained in event handlers only so it
      can be read synchronously when a send starts. UI-only placeholder text
      (stop/error/empty fallbacks) never enters it: the real model must not
@@ -308,6 +319,21 @@ export function useChat(
                 if (set) current = { ...current, question: set };
                 break;
               }
+              case 'action':
+                /* Off the wire, so its shape is checked before anything reads it. */
+                if (
+                  typeof event.action?.id === 'string' &&
+                  typeof event.action.name === 'string' &&
+                  !ranActionsRef.current.has(event.action.id)
+                ) {
+                  ranActionsRef.current.add(event.action.id);
+                  try {
+                    onActionRef.current?.(event.action);
+                  } catch {
+                    /* The page's handler failing is the page's problem, never the reply's. */
+                  }
+                }
+                break;
               case 'status':
                 update({
                   ...current,

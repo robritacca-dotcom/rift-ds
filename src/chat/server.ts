@@ -24,7 +24,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { ASK_USER_INPUT_SCHEMA, sanitizeQuestionSet } from './questions';
 import { SUGGESTION_MAX_CHARS, fitsChip } from './suggestions';
-import type { ChatCard, ChatEvent, ChatFeedbackVerdict, ChatModelOption, ChatTransportMessage } from './types';
+import type { ChatCard, ChatEvent, ChatFeedbackVerdict, ChatModelOption, ChatPageAction, ChatTransportMessage } from './types';
 
 /* ============================================
    Tools
@@ -40,12 +40,22 @@ export {
   createConfirmationMark,
   sanitiseConfirmation,
   confirmationLine,
+  planSequence,
+  confirmSequence,
+  defineContext,
   type ChatAction,
   type ActionPlan,
   type ActionConfirmation,
   type ConfirmationMark,
   type SanitiseConfirmationOptions,
   type ConfirmationLineOptions,
+  type SequenceStep,
+  type SequencePlan,
+  type ConfirmedStep,
+  type ContextField,
+  type ContextShape,
+  type ContextValues,
+  type ContextSchema,
 } from './actions';
 export { sanitiseSelection, selectionLines, DEFAULT_SELECTION_LIMITS, type ChatSelection, type SelectionKind, type SelectionLimits, type SelectionLinesOptions } from './selectionContext';
 export interface ChatToolResult {
@@ -53,6 +63,12 @@ export interface ChatToolResult {
   text: string;
   /** Rich content streamed to the widget as a `card` event, drawn by the provider's renderers. */
   card?: ChatCard;
+  /**
+   * Changes for the page to make in the browser, streamed as `action` events
+   * after the card and run once each by the provider's `pageActions`. An
+   * action with no `id` is given one.
+   */
+  actions?: (Omit<ChatPageAction, 'id'> & { id?: string })[];
 }
 
 /** What a tool is told about the request it runs in. */
@@ -264,6 +280,14 @@ export interface ChatHandlerOptions {
   copy?: Partial<ChatHandlerCopy>;
   /** Turns the request's raw `path` into context, or null to drop it. The default accepts lowercase slug paths only. */
   sanitiseContext?: (value: unknown) => string | null;
+  /**
+   * Cards the reply opens with, sent before the model is called and marked
+   * `lead`, so they hold still under the thinking line: the record of a
+   * change the reader just confirmed, worked out from the sanitised context.
+   * Return none for a request that needs none. A failure sends no lead and
+   * the reply goes on.
+   */
+  lead?: (context: ChatToolContext) => ChatCard[] | Promise<ChatCard[]>;
   /** Keeps a fire-and-forget promise alive on platforms that end work with the response. */
   waitUntil?: (promise: Promise<unknown>) => void;
 }
@@ -565,6 +589,8 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
           send({ type: 'status', label: copy.reading });
           send({ type: 'model', label: serving.label });
           send({ type: 'models', default: tierDefault, locked: lockedValues });
+          const leads = options.lead ? await Promise.resolve(options.lead(toolContext)).catch(() => [] as ChatCard[]) : [];
+          for (const card of leads) send({ type: 'card', card: { ...card, lead: true } });
 
           const reasoning = createReasoningBuffer(limits.maxTracePoints, (point) =>
             send({ type: 'status', label: copy.thinking, point })
@@ -683,6 +709,9 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
               });
               const result = await runTool(block.name, block.input, toolContext);
               if (result.card) send({ type: 'card', card: result.card });
+              for (const action of result.actions ?? []) {
+                send({ type: 'action', action: { ...action, id: action.id ?? crypto.randomUUID() } });
+              }
               results.push({ type: 'tool_result', tool_use_id: block.id, content: result.text });
             }
             working.push(

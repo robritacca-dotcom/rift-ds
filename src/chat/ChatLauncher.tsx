@@ -14,6 +14,7 @@ import {
   isFloatDragStart,
 } from './placement';
 import { TAKEOVER_QUERY, useDockViewport } from './queries';
+import { keepFittingSuggestions } from './suggestions';
 import './ChatWidget.css';
 
 /** The id the panel carries, for a host control's `aria-controls`. */
@@ -466,8 +467,11 @@ export function ChatLauncher({
                   caption: summary.caption,
                   text: summary.text,
                   suggestions:
-                    summary.suggestions ??
-                    summary.chips?.map(({ id, label: chipLabel }) => ({ id, label: chipLabel })),
+                    keepFittingSuggestions(
+                      summary.suggestions ?? summary.chips?.map(({ id, label: chipLabel }) => ({ id, label: chipLabel })) ?? [],
+                      (chip) => chip.label,
+                      'ChatLauncher summary chips',
+                    ),
                 }
               : undefined
           }

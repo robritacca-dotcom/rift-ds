@@ -93,6 +93,23 @@ export interface ChatReply {
   items: { prompt: string; answers: string[] }[];
 }
 
+/**
+ * A change for the page itself, which lives in the browser where a server
+ * tool cannot reach: navigation, a table's view, the open tab, the theme. A
+ * tool returns it and the handler streams it; the provider runs the
+ * `pageActions` handler of the same `name` once, as the event arrives. The
+ * page owns what each name may do and checks `input` itself, since it came
+ * from the model.
+ */
+export interface ChatPageAction {
+  /** Unique within the conversation: the provider runs each id once. */
+  id: string;
+  /** Which of the provider's `pageActions` runs it. An unknown name is ignored. */
+  name: string;
+  /** What the handler is handed. Must survive JSON. */
+  input?: unknown;
+}
+
 export type ChatEvent =
   /** A live status step: the AgentStatus label, with an optional reasoning trace point. */
   | { type: 'status'; label: string; point?: string }
@@ -129,6 +146,10 @@ export type ChatEvent =
   /** Questions the agent asks with answers to pick, drawn under the committed
       turn in place of follow-ups: a turn that asks is never asked about. */
   | { type: 'question'; set: ChatQuestionSet }
+  /** Something for the page to do in the browser (go to a page, set a
+      table's view, open a tab), run once by the provider's `pageActions` as
+      it arrives. Never re-run when the thread redraws or the panel reopens. */
+  | { type: 'action'; action: ChatPageAction }
   /** Terminal: the response is complete. */
   | { type: 'done' }
   /** A guardrail response (rate limit, circuit breaker): rendered as a normal assistant message. */

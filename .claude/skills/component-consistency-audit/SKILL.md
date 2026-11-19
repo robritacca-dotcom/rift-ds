@@ -54,7 +54,7 @@ Grep is enough to locate the candidates: `aria-checked`, `aria-selected`, `role=
 
 ### 3. Build the surface family tables
 
-For every stylesheet in scope, record the root or row rule that is a bordered or filled surface: background token, border token, radius token, hover background, selected or active background, and the disabled rule. Group the rows into families by role, not by name, and for each family state the dominant treatment and list the outliers. The families the library has today, and the convention each one holds, are in `design.md`'s "Surfaces by family"; a new family is a new paragraph there, not a private rule in one stylesheet. The shape of the table:
+For every stylesheet in scope, record the root or row rule that is a bordered or filled surface: background token, border token, radius token, hover background, selected or active background, and the disabled rule. Group the rows into families by role, not by name, and for each family state the dominant treatment and list the outliers. One family has a recipe file instead of a convention: the chat cards read every shared value from `src/behaviors/chat-card.css` (`scripts/validate-chat-cards.mjs` holds the mechanical half), so judge a card against that file, and treat a value a card sets for itself where the recipe has one as an outlier. The families the library has today, and the convention each one holds, are in `design.md`'s "Surfaces by family"; a new family is a new paragraph there, not a private rule in one stylesheet. The shape of the table:
 
 | Family | Fill | Border | Radius | Hover | Selected | Disabled |
 |---|---|---|---|---|---|---|

@@ -54,6 +54,8 @@ The whole AI chat ships as one widget: the panel with its docked, overlay and ta
 npx rift-ds init chat
 ```
 
+Add `--actions` for a chat that proposes changes to the page's records and applies one only when the reader confirms it on the card.
+
 The panel alone, with no route behind it, is three imports:
 
 ```tsx

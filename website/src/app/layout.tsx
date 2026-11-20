@@ -184,9 +184,11 @@ export default async function RootLayout({
             Google Fonts request at runtime — the playground's typeface
             picker is the one surface that still loads its wider roster
             from Google, on mount, for faces the presets do not ship. */}
-        {/* Material Symbols is served from the design system's own bundled
-            @font-face (src/fonts/material-symbols.css, imported above) — the
-            woff2 is emitted into the build, so the font was being shipped twice.
+        {/* Material Symbols is self-hosted, never fetched from Google: the
+            site draws icons from its own cut of the font, declared in
+            globals.css (scripts/generate-site-icons.mjs writes it), with the
+            design system's bundled @font-face (src/fonts/material-symbols.css,
+            imported above) behind it as the fallback.
 
             The Google Fonts <link> that used to sit here is deliberately gone.
             Besides the duplicate request, that stylesheet ships its own

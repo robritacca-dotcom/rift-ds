@@ -22140,7 +22140,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "fab",
             "type": "boolean",
             "required": false,
-            "description": "Whether the closed launcher shows its floating button. Defaults to true.\n`false` keeps the panel and drops only the button, for a host that opens\nthe chat from a control of its own, such as an AiButton in its top bar:\nthat control calls `setOpen(true)` from `useChatWidget()` and sets\n`returnFocusRef.current` to itself, so closing the panel hands focus back.",
+            "description": "Whether the closed launcher shows its floating button. Defaults to true.\n`false` keeps the panel and drops only the button, for a host that opens\nthe chat from a control of its own, such as an AiButton in its top bar:\nthat control calls `setOpen(true)` from `useChatWidget()` and sets\n`returnFocusRef.current` to itself, so closing the panel hands focus back.\nIt also calls `preloadChatWidget` on hover and focus, as the floating\nbutton does.",
             "defaultValue": "true"
           },
           {
@@ -22177,7 +22177,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "loadingLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name of the spinner the panel shows while the chat's code is\nstill arriving, which happens only when the panel is opened before the\npage has had a moment to preload it.",
+            "description": "Accessible name of the spinner the panel shows while the chat's code is\nstill arriving: the panel was opened before the preload finished, or the\nvisitor asked to save data and nothing was preloaded.",
             "defaultValue": "'Loading chat'"
           },
           {

@@ -63,4 +63,4 @@ A patched transitive dependency can still change behaviour, and the site build e
 
 ### 6. Commit and hand off
 
-Commit only the manifest and lockfile changes as `chore(deps): <what was bumped> for the <package> advisory`, naming the advisory id, its severity, why it reached this repo, and whether the change was lockfile only. Then hand off: **saying `ship` makes it live.** Report the advisory, the route taken, the `npm ls` and audit results, and the verify result.
+Commit only the manifest and lockfile changes (and, when the bump was to `harfbuzzjs` or `wawoff2`, the site icon font the next chain run re-cuts with them: `scripts/generate-site-icons.mjs` owns why) as `chore(deps): <what was bumped> for the <package> advisory`, naming the advisory id, its severity, why it reached this repo, and whether the change was lockfile only. Then hand off: **saying `ship` makes it live.** Report the advisory, the route taken, the `npm ls` and audit results, and the verify result.

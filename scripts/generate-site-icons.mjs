@@ -20,7 +20,10 @@
  *
  * Which icons: every single-word string literal, and every single word
  * that is the whole text of an element, anywhere in the library and site
- * source, that the full font draws as one glyph. That is deliberately
+ * source (stories, tests and generated files apart), plus the `icon:` a
+ * skill's or a markdown page's frontmatter names, since /skills draws
+ * those. Of those words, the ones the full font draws as one glyph are
+ * icons. That is deliberately
  * generous. A word that happens to be an icon name is included whether or
  * not it is drawn, so a name written as a literal can never be missed;
  * the cost is a few kilobytes of unused outlines. A name assembled at run

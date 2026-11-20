@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
-import { useChatWidget } from "rift-ds/chat";
+import { preloadChatWidget, useChatWidget } from "rift-ds/chat";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
@@ -109,6 +109,10 @@ export default function MegaNav() {
       icon="forum"
       iconOnly
       label={`Ask ${ASSISTANT_NAME}`}
+      // The chat's code loads on first open; this button is an opener too,
+      // so it starts the load on intent, as the floating one does.
+      onPointerEnter={preloadChatWidget}
+      onFocus={preloadChatWidget}
       onClick={(event) => {
         returnFocusRef.current = event.currentTarget;
         setChatOpen(true);

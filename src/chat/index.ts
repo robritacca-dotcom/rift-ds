@@ -43,6 +43,7 @@ export {
   type ContextSchema,
 } from './actions';
 export { ChatLauncher, CHAT_PANEL_ID, type ChatLauncherProps } from './ChatLauncher';
+export { preloadChatWidget } from './deferredChatWidget';
 export { useChatAgentState } from './agentState';
 export { ChatThreads, type ChatThreadsProps } from './ChatThreads';
 export { ChatTabs, type ChatTabsProps } from './ChatTabs';

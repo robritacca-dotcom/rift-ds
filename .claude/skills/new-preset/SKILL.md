@@ -49,7 +49,7 @@ Existing entries in the file are the reference implementations; read two before 
 
 ### 2. Decide where it appears
 
-Add the id to `HUE_ORDER` (same file) in its curated position — the array's own comment owns the ordering rule, so read it rather than guessing where the entry belongs. `THEME_SELECTOR_ORDER` is derived from it (the served theme first, then the rest in hue order), and every theme-picking surface walks that list — the home hero's tile row and the header's theme switcher, the playground's preset picker, the theme gallery, get-started's preset list, Storybook's Theme toolbar — so one edit places it everywhere; there is nothing to wire. The theme's specimen page, `/foundations/themes/<id>`, is generated from the same list (`generateStaticParams` in `website/src/app/foundations/themes/[id]/page.tsx`), and the gallery card links to it.
+Add the id to `HUE_ORDER` (same file) in its curated position — the array's own comment owns the ordering rule, so read it rather than guessing where the entry belongs. `THEME_SELECTOR_ORDER` is derived from it (the served theme first, then the rest in hue order), and every theme-picking surface walks that list — the home hero's tile row and the header's theme switcher, the playground's preset picker, the theme gallery, get-started's preset list, Storybook's Theme toolbar — so one edit places it everywhere; there is nothing to wire. (The header's switcher reads the list ahead of time, from `website/src/lib/theme/theme-tiles.generated.ts`; step 3 regenerates it.) The theme's specimen page, `/foundations/themes/<id>`, is generated from the same list (`generateStaticParams` in `website/src/app/foundations/themes/[id]/page.tsx`), and the gallery card links to it.
 
 **Making it the served theme** (the look every visitor gets before choosing one) is a separate decision for the owner. Its one home is `SERVED_THEME_ID` in `website/src/lib/theme/brand.ts`: change it there and never restate the id elsewhere, since the root layout and Storybook's preview both read the constant. The selector order leads with the served theme by derivation, so there is no second edit; then run `npm run verify`.
 
@@ -61,6 +61,7 @@ node scripts/validate-preset-stylesheets.mjs
 node scripts/validate-theme-presets.mjs
 node scripts/validate-theme-export.mjs
 node scripts/generate-theme-design-md.mjs
+node scripts/generate-theme-tiles.mjs
 node scripts/validate-theme-design-md.mjs
 node scripts/validate-generated-files.mjs
 ```

@@ -93,7 +93,7 @@ const SUBPATHS = [
   // it, so it is published; design.md's Components intro owns the contract.
   { key: './behaviors/shortcuts', srcJs: './src/behaviors/shortcuts.ts', dist: './behaviors/shortcuts' },
   // Deferred surfaces: deferComponent and usePreloadWhenIdle, so a panel a
-  // person has to ask for (a chat, a palette, an editor behind a menu)
+  // person has to ask for (a chat, an editor behind a menu, a drawing inside a menu)
   // loads when it is first wanted and is preloaded ahead of the press. The
   // library's own ChatLauncher uses it, and an app's own panels follow the
   // same rule with it, so it is published; design.md's Performance section

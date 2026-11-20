@@ -33,7 +33,7 @@ CLAUDE.md's **How to Add a New Token** section is the authoritative checklist â€
    - A sentence in `design.md` recording the role and how it relates to its neighbours (never a colour value: design.md is theme-agnostic), in the section that owns the token's subject. If that section states the family's size in words ("a four-step size scale"), `scripts/validate-design-counts.mjs` holds the words to the token files, so a new step fails the build until the sentence moves with it.
 
 5. **A TypeScript-side token** (a shared constant, like the JS timing constants in `src/tokens/motion.ts`) has packaging steps CSS tokens do not:
-   - A subpath entry in `SUBPATHS` in `scripts/package-manifest.mjs`, mirrored by hand into the root `package.json` `exports` (`scripts/validate-package-exports.mjs` fails the build if they drift), plus a matching entry in `vite.lib.config.ts`.
+   - A subpath entry in `SUBPATHS` in `scripts/package-manifest.mjs`, mirrored by hand into the root `package.json` `exports` (`scripts/validate-package-exports.mjs` fails the build if they drift), plus a matching entry in `vite.lib.config.ts` and a row under `subpaths` in `scripts/size-budget.json`, set close to its measure (`scripts/validate-size-budget.mjs` fails a subpath with no row, and a ceiling far above its measure).
    - Or, if it is internal-only, an entry in `INTERNAL_MODULES` in `scripts/validate-package-exports.mjs` with the reason.
    - If component code mirrors the token's value outside CSS (a `var()` fallback, a serialized config), route the mirror through a validator so it cannot drift â€” the chart palette guard in `scripts/validate-token-references.mjs` is the pattern to copy.
 

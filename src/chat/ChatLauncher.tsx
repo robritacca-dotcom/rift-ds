@@ -1,13 +1,14 @@
 'use client';
 
 import { Suspense, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { deferComponent, usePreloadWhenIdle } from '../behaviors/deferComponent';
+import { usePreloadWhenIdle } from '../behaviors/deferComponent';
 import { useScrollLock } from '../behaviors/useScrollLock';
 import { AiButton, type AiButtonProps, type AiButtonSummary } from '../components/AiButton/AiButton';
 import { Spinner } from '../components/Spinner/Spinner';
 import type { ChatWidgetProps } from './ChatWidget';
 import { useChatAgentState } from './agentState';
 import { useChatWidget } from './context';
+import { DeferredChatWidget } from './deferredChatWidget';
 import {
   FLOAT_EDGE_GAP,
   FLOAT_MAX_SCALE,
@@ -18,16 +19,6 @@ import {
 import { TAKEOVER_QUERY, useDockViewport } from './queries';
 import { keepFittingSuggestions } from './suggestions';
 import './ChatWidget.css';
-
-/* A closed panel costs nothing: the widget, and the markdown renderer it
-   brings, load when the panel first opens. They are preloaded as the page
-   goes idle and again from the button's hover and focus, so the panel does
-   not open empty (src/behaviors/deferComponent.ts owns the pattern). The
-   stylesheet stays a static import: it is small, and the panel's own frame
-   is drawn from it before the widget arrives. */
-const DeferredChatWidget = deferComponent<ChatWidgetProps>(() =>
-  import('./ChatWidget').then((module) => module.ChatWidget)
-);
 
 /** The id the panel carries, for a host control's `aria-controls`. */
 export const CHAT_PANEL_ID = 'ds-chat-panel';
@@ -85,6 +76,8 @@ export interface ChatLauncherProps {
    * the chat from a control of its own, such as an AiButton in its top bar:
    * that control calls `setOpen(true)` from `useChatWidget()` and sets
    * `returnFocusRef.current` to itself, so closing the panel hands focus back.
+   * It also calls `preloadChatWidget` on hover and focus, as the floating
+   * button does.
    */
   fab?: boolean;
   /** The panel's DOM id, for a host control's `aria-controls`. */
@@ -101,8 +94,8 @@ export interface ChatLauncherProps {
   aiButtonLabels?: Pick<AiButtonProps, 'summaryRegionLabel' | 'dismissLabel' | 'suggestionsLabel'>;
   /**
    * Accessible name of the spinner the panel shows while the chat's code is
-   * still arriving, which happens only when the panel is opened before the
-   * page has had a moment to preload it.
+   * still arriving: the panel was opened before the preload finished, or the
+   * visitor asked to save data and nothing was preloaded.
    */
   loadingLabel?: string;
   /** Everything the widget takes. The launcher sets the responsive ones itself. */

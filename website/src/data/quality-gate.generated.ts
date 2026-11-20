@@ -411,6 +411,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-page-prose-width",
         "text": "No width cap on a component page's prose."
+      },
+      {
+        "name": "validate-demo-images",
+        "text": "Every demo picture comes from the sample set, never a drawn or remote stand-in."
       }
     ]
   },

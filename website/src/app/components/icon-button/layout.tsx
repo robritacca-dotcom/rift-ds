@@ -3,8 +3,8 @@ import { componentPageMetadata } from "@/config/navigation";
 
 // Title and description come from src/components/registry.json — the single
 // place a component's one-line summary lives.
-export const metadata = componentPageMetadata("circular-button");
+export const metadata = componentPageMetadata("icon-button");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <ComponentPageLayout slug="circular-button">{children}</ComponentPageLayout>;
+  return <ComponentPageLayout slug="icon-button">{children}</ComponentPageLayout>;
 }

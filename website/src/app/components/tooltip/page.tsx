@@ -6,7 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Tooltip } from "rift-ds/components/Tooltip/Tooltip";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -62,16 +62,16 @@ export default function TooltipPage() {
             <SectionTitle title="On icon buttons" />
             <div className={styles.variantRow} style={{ gap: "20px", padding: "20px 0" }}>
               <Tooltip content="Search" position="bottom">
-                <CircularButton icon="search" ariaLabel="Search" variant="secondary" tone="neutral" tooltip={false} />
+                <IconButton icon="search" label="Search" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
               <Tooltip content="Settings" position="bottom">
-                <CircularButton icon="settings" ariaLabel="Settings" variant="secondary" tone="neutral" tooltip={false} />
+                <IconButton icon="settings" label="Settings" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
               <Tooltip content="Notifications" position="bottom">
-                <CircularButton icon="notifications" ariaLabel="Notifications" variant="secondary" tone="neutral" tooltip={false} />
+                <IconButton icon="notifications" label="Notifications" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
               <Tooltip content="Profile" position="bottom">
-                <CircularButton icon="person" ariaLabel="Profile" variant="secondary" tone="neutral" tooltip={false} />
+                <IconButton icon="person" label="Profile" variant="secondary" tone="neutral" tooltip={false} />
               </Tooltip>
             </div>
           </section>

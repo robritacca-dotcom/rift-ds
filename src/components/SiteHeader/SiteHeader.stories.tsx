@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor } from 'storybook/test';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { CommandPaletteTrigger } from '../CommandPaletteTrigger/CommandPaletteTrigger';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
@@ -90,7 +90,7 @@ const meta = {
     brand: <Brand />,
     sections: SECTIONS,
     currentHref: '#/docs/api',
-    actions: <CircularButton icon="search" variant="secondary" tone="neutral" ariaLabel="Search" tooltip={false} />,
+    actions: <IconButton icon="search" variant="secondary" tone="neutral" label="Search" tooltip={false} />,
     wideActions: <ModeSwitch />,
     drawerFooter: <ModeSwitch />,
     sticky: false,

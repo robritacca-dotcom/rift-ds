@@ -1,21 +1,21 @@
 /* ============================================
-   CIRCULAR BUTTON (ICON BUTTON)
-   Round button with a single icon
+   ICON BUTTON
+   A button holding a single icon, shaped by the theme's button radius
    ============================================ */
 
-.ds-circular-button {
+.ds-icon-button {
   /* Layout */
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  /* Size — default: the row height (--control-height-*), as a circle */
+  /* Size — default: the row height (--control-height-*), as an even box */
   box-sizing: border-box;
   width: var(--control-height-default);
   height: var(--control-height-default);
 
   /* Shape */
-  border-radius: var(--radius-pill); /* 999px — perfect circle */
+  border-radius: var(--radius-pill); /* the button radius: a circle in a round theme, a square in a square one */
 
   /* Transitions */
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard), opacity var(--motion-duration-base) var(--motion-ease-standard);
@@ -32,7 +32,7 @@
    SIZE — DEFAULT
    ============================================ */
 
-.ds-circular-button--default {
+.ds-icon-button--default {
   width: var(--control-height-default);
   height: var(--control-height-default);
 }
@@ -41,12 +41,12 @@
    SIZE — COMPACT
    ============================================ */
 
-.ds-circular-button--compact {
+.ds-icon-button--compact {
   width: var(--control-height-compact);
   height: var(--control-height-compact);
 }
 
-.ds-circular-button--compact .ds-circular-button__icon {
+.ds-icon-button--compact .ds-icon-button__icon {
   --icon-size: var(--icon-size-500);
 }
 
@@ -54,7 +54,7 @@
    ICON
    ============================================ */
 
-.ds-circular-button__icon {
+.ds-icon-button__icon {
   flex-shrink: 0;
   --icon-size: var(--icon-size-600);
   line-height: 1;
@@ -63,8 +63,8 @@
 /* A node icon (an avatar, a spinner, an SVG) is laid out as a flex item:
    inline in a block slot it would sit on the text baseline, and the room
    left under it for descenders made the slot taller than the node and
-   lifted the node off the circle's centre. */
-.ds-circular-button__icon:not(.material-symbols-rounded) {
+   lifted the node off the button's centre. */
+.ds-icon-button__icon:not(.material-symbols-rounded) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,50 +74,50 @@
    PRIMARY VARIANT (SOLID)
    ============================================ */
 
-.ds-circular-button--primary {
+.ds-icon-button--primary {
   background-color: var(--color-action-primary-bg);
   border: none;
 }
 
-.ds-circular-button--primary .ds-circular-button__icon {
+.ds-icon-button--primary .ds-icon-button__icon {
   color: var(--color-action-primary-text);
 }
 
-.ds-circular-button--primary.ds-circular-button--hover {
+.ds-icon-button--primary.ds-icon-button--hover {
   background-color: var(--color-action-primary-bg-hover);
 }
 
-.ds-circular-button--primary.ds-circular-button--hover .ds-circular-button__icon {
+.ds-icon-button--primary.ds-icon-button--hover .ds-icon-button__icon {
   color: var(--color-action-primary-text-active);
 }
 
-.ds-circular-button--primary.ds-circular-button--active {
+.ds-icon-button--primary.ds-icon-button--active {
   background-color: var(--color-action-primary-bg-active);
 }
 
-.ds-circular-button--primary.ds-circular-button--active .ds-circular-button__icon {
+.ds-icon-button--primary.ds-icon-button--active .ds-icon-button__icon {
   color: var(--color-action-primary-text-active);
 }
 
-.ds-circular-button--primary.ds-circular-button--disabled {
+.ds-icon-button--primary.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Interactive hover/active */
-.ds-circular-button--primary:not(.ds-circular-button--disabled):hover {
+.ds-icon-button--primary:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-action-primary-bg-hover);
 }
 
-.ds-circular-button--primary:not(.ds-circular-button--disabled):hover .ds-circular-button__icon {
+.ds-icon-button--primary:not(.ds-icon-button--disabled):hover .ds-icon-button__icon {
   color: var(--color-action-primary-text-active);
 }
 
-.ds-circular-button--primary:not(.ds-circular-button--disabled):active {
+.ds-icon-button--primary:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-primary-bg-active);
 }
 
-.ds-circular-button--primary:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+.ds-icon-button--primary:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-primary-text-active);
 }
 
@@ -125,50 +125,50 @@
    SECONDARY VARIANT (OUTLINED)
    ============================================ */
 
-.ds-circular-button--secondary {
+.ds-icon-button--secondary {
   border: var(--border-025) solid var(--color-action-primary-border);
   background-color: transparent;
 }
 
-.ds-circular-button--secondary .ds-circular-button__icon {
+.ds-icon-button--secondary .ds-icon-button__icon {
   color: var(--color-action-icon-default);
 }
 
-.ds-circular-button--secondary.ds-circular-button--hover {
+.ds-icon-button--secondary.ds-icon-button--hover {
   background-color: var(--color-action-primary-bg-hover);
 }
 
-.ds-circular-button--secondary.ds-circular-button--hover .ds-circular-button__icon {
+.ds-icon-button--secondary.ds-icon-button--hover .ds-icon-button__icon {
   color: var(--color-action-icon-active);
 }
 
-.ds-circular-button--secondary.ds-circular-button--active {
+.ds-icon-button--secondary.ds-icon-button--active {
   background-color: var(--color-action-primary-bg-active);
 }
 
-.ds-circular-button--secondary.ds-circular-button--active .ds-circular-button__icon {
+.ds-icon-button--secondary.ds-icon-button--active .ds-icon-button__icon {
   color: var(--color-action-icon-active);
 }
 
-.ds-circular-button--secondary.ds-circular-button--disabled {
+.ds-icon-button--secondary.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Interactive hover/active */
-.ds-circular-button--secondary:not(.ds-circular-button--disabled):hover {
+.ds-icon-button--secondary:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-action-primary-bg-hover);
 }
 
-.ds-circular-button--secondary:not(.ds-circular-button--disabled):hover .ds-circular-button__icon {
+.ds-icon-button--secondary:not(.ds-icon-button--disabled):hover .ds-icon-button__icon {
   color: var(--color-action-icon-active);
 }
 
-.ds-circular-button--secondary:not(.ds-circular-button--disabled):active {
+.ds-icon-button--secondary:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-primary-bg-active);
 }
 
-.ds-circular-button--secondary:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+.ds-icon-button--secondary:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-icon-active);
 }
 
@@ -176,34 +176,34 @@
    TERTIARY VARIANT (PASSIVE / GHOST)
    ============================================ */
 
-.ds-circular-button--tertiary {
+.ds-icon-button--tertiary {
   background-color: var(--color-action-passive-bg);
   border: none;
 }
 
-.ds-circular-button--tertiary .ds-circular-button__icon {
+.ds-icon-button--tertiary .ds-icon-button__icon {
   color: var(--color-icon-primary);
 }
 
-.ds-circular-button--tertiary.ds-circular-button--hover {
+.ds-icon-button--tertiary.ds-icon-button--hover {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-circular-button--tertiary.ds-circular-button--active {
+.ds-icon-button--tertiary.ds-icon-button--active {
   background-color: var(--color-action-passive-bg-active);
 }
 
-.ds-circular-button--tertiary.ds-circular-button--disabled {
+.ds-icon-button--tertiary.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Interactive hover/active */
-.ds-circular-button--tertiary:not(.ds-circular-button--disabled):hover {
+.ds-icon-button--tertiary:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-circular-button--tertiary:not(.ds-circular-button--disabled):active {
+.ds-icon-button--tertiary:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-passive-bg-active);
 }
 
@@ -214,34 +214,34 @@
    unlike tertiary, the background is always shown.
    ============================================ */
 
-.ds-circular-button--neutral {
+.ds-icon-button--neutral {
   background-color: var(--color-action-neutral-bg);
   border: none;
 }
 
-.ds-circular-button--neutral .ds-circular-button__icon {
+.ds-icon-button--neutral .ds-icon-button__icon {
   color: var(--color-action-neutral-text);
 }
 
-.ds-circular-button--neutral.ds-circular-button--hover {
+.ds-icon-button--neutral.ds-icon-button--hover {
   background-color: var(--color-action-neutral-bg-hover);
 }
 
-.ds-circular-button--neutral.ds-circular-button--active {
+.ds-icon-button--neutral.ds-icon-button--active {
   background-color: var(--color-action-neutral-bg-active);
 }
 
-.ds-circular-button--neutral.ds-circular-button--disabled {
+.ds-icon-button--neutral.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Interactive hover/active */
-.ds-circular-button--neutral:not(.ds-circular-button--disabled):hover {
+.ds-icon-button--neutral:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-action-neutral-bg-hover);
 }
 
-.ds-circular-button--neutral:not(.ds-circular-button--disabled):active {
+.ds-icon-button--neutral:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-neutral-bg-active);
 }
 
@@ -251,44 +251,44 @@
    press fill with the solid neutral fills.
    ============================================ */
 
-.ds-circular-button--secondary-neutral {
+.ds-icon-button--secondary-neutral {
   border: var(--border-025) solid var(--color-action-neutral-border);
   background-color: transparent;
 }
 
-.ds-circular-button--secondary-neutral .ds-circular-button__icon {
+.ds-icon-button--secondary-neutral .ds-icon-button__icon {
   color: var(--color-action-icon-default);
 }
 
-.ds-circular-button--secondary-neutral.ds-circular-button--hover {
+.ds-icon-button--secondary-neutral.ds-icon-button--hover {
   background-color: var(--color-action-neutral-bg-hover);
 }
 
-.ds-circular-button--secondary-neutral.ds-circular-button--active {
+.ds-icon-button--secondary-neutral.ds-icon-button--active {
   background-color: var(--color-action-neutral-bg-active);
 }
 
-.ds-circular-button--secondary-neutral.ds-circular-button--hover .ds-circular-button__icon,
-.ds-circular-button--secondary-neutral.ds-circular-button--active .ds-circular-button__icon {
+.ds-icon-button--secondary-neutral.ds-icon-button--hover .ds-icon-button__icon,
+.ds-icon-button--secondary-neutral.ds-icon-button--active .ds-icon-button__icon {
   color: var(--color-action-neutral-text);
 }
 
-.ds-circular-button--secondary-neutral.ds-circular-button--disabled {
+.ds-icon-button--secondary-neutral.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Interactive hover/active */
-.ds-circular-button--secondary-neutral:not(.ds-circular-button--disabled):hover {
+.ds-icon-button--secondary-neutral:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-action-neutral-bg-hover);
 }
 
-.ds-circular-button--secondary-neutral:not(.ds-circular-button--disabled):active {
+.ds-icon-button--secondary-neutral:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-neutral-bg-active);
 }
 
-.ds-circular-button--secondary-neutral:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
-.ds-circular-button--secondary-neutral:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+.ds-icon-button--secondary-neutral:not(.ds-icon-button--disabled):hover .ds-icon-button__icon,
+.ds-icon-button--secondary-neutral:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-neutral-text);
 }
 
@@ -297,33 +297,33 @@
    variant="primary" tone="destructive".
    ============================================ */
 
-.ds-circular-button--primary-destructive {
+.ds-icon-button--primary-destructive {
   background-color: var(--color-action-destructive-bg);
   border: none;
 }
 
-.ds-circular-button--primary-destructive .ds-circular-button__icon {
+.ds-icon-button--primary-destructive .ds-icon-button__icon {
   color: var(--color-action-destructive-text);
 }
 
-.ds-circular-button--primary-destructive.ds-circular-button--hover {
+.ds-icon-button--primary-destructive.ds-icon-button--hover {
   background-color: var(--color-action-destructive-bg-hover);
 }
 
-.ds-circular-button--primary-destructive.ds-circular-button--active {
+.ds-icon-button--primary-destructive.ds-icon-button--active {
   background-color: var(--color-action-destructive-bg-active);
 }
 
-.ds-circular-button--primary-destructive.ds-circular-button--disabled {
+.ds-icon-button--primary-destructive.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.ds-circular-button--primary-destructive:not(.ds-circular-button--disabled):hover {
+.ds-icon-button--primary-destructive:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-action-destructive-bg-hover);
 }
 
-.ds-circular-button--primary-destructive:not(.ds-circular-button--disabled):active {
+.ds-icon-button--primary-destructive:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-destructive-bg-active);
 }
 
@@ -331,42 +331,42 @@
    DESTRUCTIVE TONE (OUTLINED DANGER)
    tone="destructive" at secondary or tertiary
    emphasis: Button's outlined danger look on the
-   circle, filling with the danger colour on hover
+   button, filling with the danger colour on hover
    and press.
    ============================================ */
 
-.ds-circular-button--destructive {
+.ds-icon-button--destructive {
   border: var(--border-025) solid var(--color-action-destructive-border);
   background-color: transparent;
 }
 
-.ds-circular-button--destructive .ds-circular-button__icon {
+.ds-icon-button--destructive .ds-icon-button__icon {
   color: var(--color-action-destructive-text-secondary);
 }
 
-.ds-circular-button--destructive.ds-circular-button--hover,
-.ds-circular-button--destructive.ds-circular-button--active {
+.ds-icon-button--destructive.ds-icon-button--hover,
+.ds-icon-button--destructive.ds-icon-button--active {
   background-color: var(--color-action-destructive-bg);
 }
 
-.ds-circular-button--destructive.ds-circular-button--hover .ds-circular-button__icon,
-.ds-circular-button--destructive.ds-circular-button--active .ds-circular-button__icon {
+.ds-icon-button--destructive.ds-icon-button--hover .ds-icon-button__icon,
+.ds-icon-button--destructive.ds-icon-button--active .ds-icon-button__icon {
   color: var(--color-action-destructive-text);
 }
 
-.ds-circular-button--destructive.ds-circular-button--disabled {
+.ds-icon-button--destructive.ds-icon-button--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Interactive hover/active */
-.ds-circular-button--destructive:not(.ds-circular-button--disabled):hover,
-.ds-circular-button--destructive:not(.ds-circular-button--disabled):active {
+.ds-icon-button--destructive:not(.ds-icon-button--disabled):hover,
+.ds-icon-button--destructive:not(.ds-icon-button--disabled):active {
   background-color: var(--color-action-destructive-bg);
 }
 
-.ds-circular-button--destructive:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
-.ds-circular-button--destructive:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+.ds-icon-button--destructive:not(.ds-icon-button--disabled):hover .ds-icon-button__icon,
+.ds-icon-button--destructive:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-destructive-text);
 }
 
@@ -376,7 +376,7 @@
    the spinner replaces the icon and inherits its colour.
    ============================================ */
 
-.ds-circular-button--loading {
+.ds-icon-button--loading {
   cursor: progress;
   pointer-events: none;
 }
@@ -384,7 +384,7 @@
 /* The spinner is a box, not a glyph: left inline, it sits on the text
    baseline and the strut's descender pushes it ~1px above the button's
    centre. Flex centres it geometrically. */
-.ds-circular-button--loading .ds-circular-button__icon {
+.ds-icon-button--loading .ds-icon-button__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -394,7 +394,7 @@
    FOCUS
    ============================================ */
 
-.ds-circular-button:focus-visible {
+.ds-icon-button:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
@@ -405,11 +405,11 @@
    BottomNav's count-badge treatment.
    ============================================ */
 
-.ds-circular-button--badged {
+.ds-icon-button--badged {
   position: relative;
 }
 
-.ds-circular-button__badge {
+.ds-icon-button__badge {
   position: absolute;
   inset-block-start: calc(var(--padding-100) * -1);
   inset-inline-end: calc(var(--padding-100) * -1);
@@ -429,7 +429,7 @@
   pointer-events: none;
 }
 
-.ds-circular-button__badge--dot {
+.ds-icon-button__badge--dot {
   inset-block-start: var(--padding-050);
   inset-inline-end: var(--padding-050);
   min-width: 0;

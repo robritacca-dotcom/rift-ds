@@ -22,7 +22,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-050);
-  /* The row height (--control-height-*), CircularButton's too, so the pill
+  /* The row height (--control-height-*), IconButton's too, so the pill
      and the composer's round icon buttons read as one row of equals. */
   box-sizing: border-box;
   height: var(--control-height-default);

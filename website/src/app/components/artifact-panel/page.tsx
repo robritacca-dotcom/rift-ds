@@ -6,7 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ArtifactPanel } from "rift-ds/components/ArtifactPanel/ArtifactPanel";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -220,7 +220,7 @@ export default function ArtifactPanelPage() {
             <p className={styles.demoText}>
               The actions slot seats extra controls ahead of the expand and
               close buttons: a download, a share, a version menu. Tertiary
-              Circular buttons match the two the panel draws itself. When the
+              Icon buttons match the two the panel draws itself. When the
               row runs short the meta line gives way first, then the title
               truncates, and the controls keep their place.
             </p>
@@ -236,16 +236,16 @@ export default function ArtifactPanelPage() {
                 onClose={() => {}}
                 actions={
                   <>
-                    <CircularButton
+                    <IconButton
                       icon="download"
                       variant="tertiary"
-                      ariaLabel="Download the report"
+                      label="Download the report"
                       tooltipPosition="bottom"
                     />
-                    <CircularButton
+                    <IconButton
                       icon="ios_share"
                       variant="tertiary"
-                      ariaLabel="Share the report"
+                      label="Share the report"
                       tooltipPosition="bottom"
                     />
                   </>

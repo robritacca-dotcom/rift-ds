@@ -37,9 +37,11 @@ import ts from 'typescript';
 import { display, fromRoot, read, walk } from './lib/fs.mjs';
 import { finish } from './lib/report.mjs';
 
-// `ariaLabel` too: an inner CircularButton or PromptSuggestions given literal text
-// writes the same hard-coded name one level down.
+// `ariaLabel` too: an inner PromptSuggestions or deprecated CircularButton
+// given literal text writes the same hard-coded name one level down.
 const NAME_ATTRIBUTES = new Set(['aria-label', 'aria-roledescription', 'ariaLabel']);
+// Components whose plain `label` is an accessible name with no visible text.
+const LABEL_IS_NAME = new Set(['IconButton']);
 
 /** File (repo-relative) → literal text → why it stays literal. */
 const SANCTIONED = {};
@@ -92,7 +94,8 @@ for (const file of [...walk(fromRoot('src', 'components'), isSource), ...walk(fr
         // Any `*Label` attribute too: literal text handed to a child component's
         // label prop (`closeLabel="Close chat"`) is the same hard-coded name.
         const attrName = ts.isJsxAttribute(attr) ? attr.name.getText() : '';
-        if (!ts.isJsxAttribute(attr) || !(NAME_ATTRIBUTES.has(attrName) || attrName.endsWith('Label'))) return;
+        const labelIsName = attrName === 'label' && LABEL_IS_NAME.has(node.tagName.getText());
+        if (!ts.isJsxAttribute(attr) || !(NAME_ATTRIBUTES.has(attrName) || attrName.endsWith('Label') || labelIsName)) return;
         const text = literalText(attr.initializer);
         if (text === null || !/[A-Za-z]/.test(text)) return;
         checked += 1;

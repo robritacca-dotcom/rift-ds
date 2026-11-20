@@ -2,7 +2,7 @@
 
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Input } from '../Input/Input';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { MOTION_SENSITIVE_HIDE_MS } from '../../tokens/motion';
 import {
   applyMask,
@@ -166,11 +166,11 @@ export function MaskedInput({
 
   const revealButton =
     sensitive && revealable ? (
-      <CircularButton
+      <IconButton
         icon={revealed ? 'visibility_off' : 'visibility'}
         variant="tertiary"
         size="compact"
-        ariaLabel={revealed ? hideLabel : showLabel}
+        label={revealed ? hideLabel : showLabel}
         aria-pressed={revealed}
         disabled={disabled}
         onClick={() => setRevealed(!revealed)}

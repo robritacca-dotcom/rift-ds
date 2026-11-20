@@ -3,7 +3,7 @@
 import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
 import ReactDOM, { flushSync } from 'react-dom';
 import './BentoTile.css';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { ShaderField, type ShaderBlob, type ShaderParams } from '../ShaderField/ShaderField';
 import { BentoTileArt } from './BentoTileArt';
 import { useMounted } from '../../behaviors/useMounted';
@@ -326,13 +326,13 @@ export const BentoTile = React.forwardRef<HTMLElement, BentoTileProps>(
             <>
               {/* The whole tile opens the overlay; the button is the accessible handle. */}
               <span className={`${base}__hit`} onClick={openOverlay} aria-hidden="true" />
-              <CircularButton
+              <IconButton
                 ref={triggerRef}
                 icon="open_in_full"
                 variant={awake ? 'primary' : 'secondary'}
                 tone={awake ? undefined : 'neutral'}
                 size="compact"
-                ariaLabel={label}
+                label={label}
                 tooltip={false}
                 aria-haspopup="dialog"
                 aria-expanded={open}
@@ -431,13 +431,13 @@ function BentoTileOverlay({ title, titleId, panelName, toggleName, closeLabel, o
           aria-labelledby={titleId}
           style={{ viewTransitionName: panelName } as React.CSSProperties}
         >
-          <CircularButton
+          <IconButton
             ref={closeRef}
             icon="close_fullscreen"
             variant="secondary"
             tone="neutral"
             size="compact"
-            ariaLabel={closeLabel}
+            label={closeLabel}
             tooltip={false}
             className="ds-bento-tile-overlay__close"
             onClick={onClose}

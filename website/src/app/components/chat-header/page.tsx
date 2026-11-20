@@ -5,7 +5,7 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -21,21 +21,21 @@ function ViewSwitchDemo() {
         title="Assistant"
         actions={
           <>
-            <CircularButton
+            <IconButton
               icon="edit_square"
               variant="tertiary"
-              ariaLabel="New chat"
+              label="New chat"
             />
-            <CircularButton
+            <IconButton
               icon={fullscreen ? "close_fullscreen" : "open_in_full"}
               variant="tertiary"
-              ariaLabel={fullscreen ? "Exit full screen" : "Enter full screen"}
+              label={fullscreen ? "Exit full screen" : "Enter full screen"}
               onClick={() => setFullscreen((v) => !v)}
             />
-            <CircularButton
+            <IconButton
               icon="close"
               variant="tertiary"
-              ariaLabel="Close chat"
+              label="Close chat"
             />
           </>
         }
@@ -82,10 +82,10 @@ export default function ChatHeaderPage() {
               <ChatHeader
                 title="Assistant"
                 actions={
-                  <CircularButton
+                  <IconButton
                     icon="close"
                     variant="tertiary"
-                    ariaLabel="Close chat"
+                    label="Close chat"
                   />
                 }
               />
@@ -114,10 +114,10 @@ export default function ChatHeaderPage() {
               <ChatHeader
                 title="Planning the northern lights trip with the extended family"
                 actions={
-                  <CircularButton
+                  <IconButton
                     icon="close"
                     variant="tertiary"
-                    ariaLabel="Close chat"
+                    label="Close chat"
                   />
                 }
               />

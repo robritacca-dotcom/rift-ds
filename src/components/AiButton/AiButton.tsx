@@ -9,6 +9,7 @@ import type { AgentStatusState } from '../AgentStatus/AgentStatusPatterns';
 import { PromptSuggestions, type PromptSuggestion } from '../PromptSuggestions/PromptSuggestions';
 import { Skeleton } from '../Skeleton/Skeleton';
 import { StreamingText } from '../StreamingText/StreamingText';
+import { Tooltip } from '../Tooltip/Tooltip';
 import {
   MOTION_HOVER_SHOW_DELAY_MS,
   MOTION_HOVER_EXIT_GRACE_MS,
@@ -54,8 +55,17 @@ type AiButtonOwnProps = {
   label?: string;
   /** Leading icon — Material Symbol name (string) or custom element (ReactNode) */
   icon?: string | React.ReactNode;
-  /** Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name. */
+  /** Draws the button holding only its icon, on an even box, for a tight bar. The label stays as its accessible name. */
   iconOnly?: boolean;
+  /**
+   * The hover and focus tooltip of the icon-only form, which names itself as
+   * IconButton does: by default it carries `label`. Pass a string to show
+   * different wording, or `false` to opt out. A button with a `summary`
+   * shows none, since its panel opens on the same hover.
+   */
+  tooltip?: string | false;
+  /** Which side the tooltip opens on. `start` and `end` follow the reading direction. */
+  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Button size */
   size?: 'default' | 'compact';
   /** Whether the button is disabled */
@@ -166,6 +176,8 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       label = 'Ask AI',
       icon = 'auto_awesome',
       iconOnly = false,
+      tooltip,
+      tooltipPosition = 'top',
       size = 'default',
       disabled,
       state: status,
@@ -381,7 +393,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       </>
     );
 
-    const control =
+    const bareControl =
       href && !disabled ? (
         <Link
           {...(rest as React.ComponentPropsWithoutRef<'a'>)}
@@ -410,6 +422,17 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
           {content}
         </button>
       );
+
+    /* Self-labelling, as IconButton is: the icon-only form wears a tooltip
+       carrying its name unless the host words it differently or opts out. */
+    const tooltipContent = !iconOnly || summary || tooltip === false ? null : (tooltip ?? label);
+    const control = tooltipContent ? (
+      <Tooltip content={tooltipContent} position={tooltipPosition}>
+        {bareControl}
+      </Tooltip>
+    ) : (
+      bareControl
+    );
 
     /* A polite region beside the control, never inside it: text inside the
        button would join its accessible name. Mounted whenever the host

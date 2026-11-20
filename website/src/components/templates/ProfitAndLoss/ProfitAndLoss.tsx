@@ -30,7 +30,7 @@ import React from "react";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Input } from "rift-ds/components/Input/Input";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
@@ -376,19 +376,19 @@ export default function ProfitAndLoss() {
               </span>
             </div>
             <div className={styles.topBarActions}>
-              <CircularButton
+              <IconButton
                 icon="search"
                 variant="secondary"
                 tone="neutral"
-                ariaLabel="Search accounts"
+                label="Search accounts"
                 className={styles.searchIconMobile}
               />
               <AiButton label="Ask AI" onClick={() => setChatOpen(true)} />
-              <CircularButton
+              <IconButton
                 icon="notifications"
                 variant="secondary"
                 tone="neutral"
-                ariaLabel="Notifications"
+                label="Notifications"
               />
             </div>
           </div>

@@ -4,7 +4,7 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -21,7 +21,7 @@ const states: { label: string; value: string; state?: "hover" | "active"; disabl
 
 const icons = ["add", "close", "edit", "delete"];
 
-export default function CircularButtonPage() {
+export default function IconButtonPage() {
   return (
     <>
       <MegaNav />
@@ -32,15 +32,15 @@ export default function CircularButtonPage() {
         <main className={styles.dsContent} id="main-content">
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Circular button</h1>
+            <h1 className={styles.pageTitle}>Icon button</h1>
             <PageLinks
-              storybookPath="/?path=/docs/components-circularbutton--docs"
+              storybookPath="/?path=/docs/components-iconbutton--docs"
             />
           </div>
 
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>
-              An icon-only button in a circular shape
+              An icon-only button in the theme’s button shape
             </p>
             <p className={styles.introBody}>
               For actions where a label is not needed, like close, menu, or navigation arrows. Uses the same two props as Button: <code>variant</code> for the emphasis (primary, secondary, tertiary) and <code>tone</code> for the colour (default, neutral or destructive). Good for toolbars and compact UI where space is tight.
@@ -60,7 +60,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="primary" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="primary" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -81,7 +81,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="secondary" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="secondary" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -102,7 +102,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="tertiary" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="tertiary" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -128,7 +128,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="primary" tone="neutral" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="primary" tone="neutral" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -154,7 +154,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="secondary" tone="neutral" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="secondary" tone="neutral" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -166,7 +166,7 @@ export default function CircularButtonPage() {
           <section className={styles.section}>
             <SectionTitle title="Primary, destructive" />
             <p className={styles.introBody}>
-              The filled circle in the danger colour, for the one
+              The filled button in the danger colour, for the one
               irreversible action a surface leads with.
             </p>
             <div className={styles.stateGrid}>
@@ -179,7 +179,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="primary" tone="destructive" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="primary" tone="destructive" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -204,7 +204,7 @@ export default function CircularButtonPage() {
                   <span className={styles.gridRowHeader}>{icon}</span>
                   {states.map((s) => (
                     <div key={s.value} className={styles.gridCell}>
-                      <CircularButton icon={icon} variant="secondary" tone="destructive" state={s.state} disabled={s.disabled} ariaLabel={icon} />
+                      <IconButton icon={icon} variant="secondary" tone="destructive" state={s.state} disabled={s.disabled} label={icon} />
                     </div>
                   ))}
                 </React.Fragment>
@@ -216,7 +216,7 @@ export default function CircularButtonPage() {
           <section className={styles.section}>
             <SectionTitle title="Tooltip" />
             <p className={styles.introBody}>
-              An icon-only control names itself: every circular button shows a
+              An icon-only control names itself: every icon button shows a
               tooltip with its accessible label on hover and focus. Pass{" "}
               <code>tooltip</code> a string for different wording,{" "}
               <code>false</code> to opt out when the host labels the control
@@ -224,9 +224,9 @@ export default function CircularButtonPage() {
               when an edge would clip the default placement above.
             </p>
             <div className={styles.variantRow}>
-              <CircularButton icon="download" variant="secondary" ariaLabel="Download" tooltip="Download the report" />
-              <CircularButton icon="settings" variant="tertiary" ariaLabel="Settings" tooltipPosition="bottom" />
-              <CircularButton icon="close" variant="tertiary" ariaLabel="Close" tooltip={false} />
+              <IconButton icon="download" variant="secondary" label="Download" tooltip="Download the report" />
+              <IconButton icon="settings" variant="tertiary" label="Settings" tooltipPosition="bottom" />
+              <IconButton icon="close" variant="tertiary" label="Close" tooltip={false} />
             </div>
           </section>
 
@@ -239,13 +239,13 @@ export default function CircularButtonPage() {
               is blocked, without the dimmed disabled look.
             </p>
             <div className={styles.variantRow}>
-              <CircularButton icon="add" variant="primary" loading ariaLabel="Saving" />
-              <CircularButton icon="edit" variant="secondary" loading ariaLabel="Saving" />
-              <CircularButton icon="refresh" variant="tertiary" loading ariaLabel="Refreshing" />
-              <CircularButton icon="tune" variant="primary" tone="neutral" loading ariaLabel="Applying filters" />
-              <CircularButton icon="add" variant="primary" size="compact" loading ariaLabel="Saving" />
-              <CircularButton icon="edit" variant="secondary" size="compact" loading ariaLabel="Saving" />
-              <CircularButton icon="refresh" variant="tertiary" size="compact" loading ariaLabel="Refreshing" />
+              <IconButton icon="add" variant="primary" loading label="Saving" />
+              <IconButton icon="edit" variant="secondary" loading label="Saving" />
+              <IconButton icon="refresh" variant="tertiary" loading label="Refreshing" />
+              <IconButton icon="tune" variant="primary" tone="neutral" loading label="Applying filters" />
+              <IconButton icon="add" variant="primary" size="compact" loading label="Saving" />
+              <IconButton icon="edit" variant="secondary" size="compact" loading label="Saving" />
+              <IconButton icon="refresh" variant="tertiary" size="compact" loading label="Refreshing" />
             </div>
           </section>
 
@@ -253,21 +253,21 @@ export default function CircularButtonPage() {
           <section className={styles.section}>
             <SectionTitle title="Compact" />
             <div className={styles.variantRow}>
-              <CircularButton icon="add" variant="primary" size="compact" ariaLabel="Add" />
-              <CircularButton icon="delete" variant="primary" size="compact" ariaLabel="Delete" />
-              <CircularButton icon="add" variant="secondary" size="compact" ariaLabel="Add" />
-              <CircularButton icon="close" variant="secondary" size="compact" ariaLabel="Close" />
-              <CircularButton icon="edit" variant="tertiary" size="compact" ariaLabel="Edit" />
-              <CircularButton icon="more_vert" variant="tertiary" size="compact" ariaLabel="More" />
-              <CircularButton icon="search" variant="tertiary" size="compact" ariaLabel="Search" />
-              <CircularButton icon="settings" variant="tertiary" size="compact" ariaLabel="Settings" />
-              <CircularButton icon="tune" variant="primary" tone="neutral" size="compact" ariaLabel="Filters" />
-              <CircularButton icon="sort" variant="primary" tone="neutral" size="compact" ariaLabel="Sort" />
-              <CircularButton icon="filter_list" variant="secondary" tone="neutral" size="compact" ariaLabel="Filter" />
+              <IconButton icon="add" variant="primary" size="compact" label="Add" />
+              <IconButton icon="delete" variant="primary" size="compact" label="Delete" />
+              <IconButton icon="add" variant="secondary" size="compact" label="Add" />
+              <IconButton icon="close" variant="secondary" size="compact" label="Close" />
+              <IconButton icon="edit" variant="tertiary" size="compact" label="Edit" />
+              <IconButton icon="more_vert" variant="tertiary" size="compact" label="More" />
+              <IconButton icon="search" variant="tertiary" size="compact" label="Search" />
+              <IconButton icon="settings" variant="tertiary" size="compact" label="Settings" />
+              <IconButton icon="tune" variant="primary" tone="neutral" size="compact" label="Filters" />
+              <IconButton icon="sort" variant="primary" tone="neutral" size="compact" label="Sort" />
+              <IconButton icon="filter_list" variant="secondary" tone="neutral" size="compact" label="Filter" />
             </div>
           </section>
 
-          <ComponentInstallStrip slug="circular-button" />
+          <ComponentInstallStrip slug="icon-button" />
         </main>
       </div>
 

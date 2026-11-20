@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import type { ImageThemeSource } from "@/lib/theme/image-palette";
 import { isDesignMdFile } from "@/lib/theme/design-md";
 import styles from "./ImageThemeDrop.module.css";
@@ -207,14 +207,14 @@ export function ThemeSourceFrame({
         </div>
 
         <div className={styles.actions}>
-          {/* Narrow, each is its icon alone: CircularButton, which names
+          {/* Narrow, each is its icon alone: IconButton, which names
               itself with a tooltip carrying the same words. */}
           {SOURCE_ACTIONS.map(({ key, label, icon, variant, tone }) => {
             const onClick = { reset: onReset, replace: onReplace, export: onExport }[key];
             return narrow ? (
-              <CircularButton
+              <IconButton
                 key={key}
-                ariaLabel={label}
+                label={label}
                 icon={icon}
                 variant={variant}
                 tone={tone}

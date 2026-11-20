@@ -335,7 +335,7 @@ export const BulkBarNarrow: Story = {
     // Every action as an icon, nothing folded.
     const icons = await waitFor(() => {
       const found = ['Mark done', 'Start', 'Assign to me', 'Cancel'].map((name) => inBar.getByRole('button', { name }));
-      for (const icon of found) expect(icon.className).toContain('ds-circular-button');
+      for (const icon of found) expect(icon.className).toContain('ds-icon-button');
       return found;
     });
     await expect(inBar.queryByRole('button', { name: 'More actions' })).not.toBeInTheDocument();

@@ -2,7 +2,7 @@
 
 import React, { useId, useRef, useState } from 'react';
 import { Field } from '../Field/Field';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import './Input.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
@@ -230,12 +230,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           {hasAction && <span className={`${baseClass}__action`}>{action}</span>}
           {showClear && (
-            <CircularButton
+            <IconButton
               className={`${baseClass}__clear`}
               icon="close"
               variant="tertiary"
               size="compact"
-              ariaLabel={clearLabel}
+              label={clearLabel}
               onClick={handleClear}
             />
           )}

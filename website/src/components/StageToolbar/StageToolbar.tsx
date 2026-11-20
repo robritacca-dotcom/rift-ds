@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { getBreadcrumbs } from "@/config/navigation";
 import { buildBreadcrumbJsonLd } from "@/lib/structuredData";
@@ -159,10 +159,10 @@ export default function StageToolbar({
             label="Back to home"
           />
         ) : (
-          <CircularButton
+          <IconButton
             icon="close"
             variant="tertiary"
-            ariaLabel="Close this view"
+            label="Close this view"
             /* The toolbar hugs the viewport's top right corner: a top
                tooltip clips above, and the full label clips right. */
             tooltip="Close"

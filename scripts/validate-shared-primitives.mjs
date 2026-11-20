@@ -11,7 +11,7 @@
  * DOM by hand; seven list and menu components each styled their own
  * "chosen" check, in three colours; twenty-one stylesheets carried the same
  * visually-hidden recipe; and three overlays drew their own close button
- * beside a CircularButton that already existed for it. design.md's
+ * beside a IconButton that already existed for it. design.md's
  * Components intro ("Shared primitives, never redrawn") now names the one
  * drawing of each, and this script holds the library to it:
  *
@@ -35,7 +35,7 @@
  *      `clip-path: inset(50%)` live in src/behaviors/visually-hidden.css
  *      and nowhere else; components use `ds-visually-hidden`.
  *   5. No self-drawn close button. A `<button>` carrying a `__close` class
- *      fails: a header's close is a compact tertiary CircularButton.
+ *      fails: a header's close is a compact tertiary IconButton.
  *   6. No hand-built radiogroup. `role="radiogroup"` is written by
  *      RadioButton's group and SelectionCard; a set of exclusive pills is a
  *      SegmentedControl.
@@ -112,13 +112,13 @@ const SANCTIONED = [
     file: 'src/components/ThreadTabs/ThreadTabs.tsx',
     match: '__close',
     reason:
-      'a 24px close seated inside a 32px tab, geometry-stable and fading in with the tab; CircularButton\'s compact size is the tab\'s whole height',
+      'a 24px close seated inside a 32px tab, geometry-stable and fading in with the tab; IconButton\'s compact size is the tab\'s whole height',
   },
   {
     file: 'src/components/Lightbox/Lightbox.tsx',
     match: '__close',
     reason:
-      'one of the lightbox\'s media controls (close, prev, next), which share a translucent treatment over the image that no CircularButton variant carries',
+      'one of the lightbox\'s media controls (close, prev, next), which share a translucent treatment over the image that no IconButton variant carries',
   },
   {
     file: 'src/components/Rating/Rating.tsx',
@@ -199,7 +199,7 @@ for (const file of files) {
     }
     // 5. Self-drawn close buttons.
     for (const m of text.matchAll(/<button\b[^>]*__close/g)) {
-      report(file, m[0], 'draws its own close <button> — the header close is a compact tertiary CircularButton (Dialog is the reference).');
+      report(file, m[0], 'draws its own close <button> — the header close is a compact tertiary IconButton (Dialog is the reference).');
     }
     // 6. Hand-built radiogroups.
     if (

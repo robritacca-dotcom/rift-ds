@@ -5,7 +5,7 @@ import { Composer } from './Composer';
 import type { ComposerProps } from './Composer';
 import { useAttachments } from '../Attachment/useAttachments';
 import type { AttachmentItem } from '../Attachment/fileTypes';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { ModelPicker } from '../ModelPicker/ModelPicker';
 import { DOCUMENT_FIRST_PAGE, PHOTO_LANDSCAPE } from '../../stories/attachment-fixtures';
 import { PromptSuggestions } from '../PromptSuggestions/PromptSuggestions';
@@ -364,8 +364,8 @@ export const LongPaste: Story = {
  */
 export const WithActions: Story = {
   args: {
-    actions: <CircularButton icon="tune" variant="tertiary" ariaLabel="Options" />,
-    trailingActions: <CircularButton icon="mic" variant="tertiary" ariaLabel="Dictate" />,
+    actions: <IconButton icon="tune" variant="tertiary" label="Options" />,
+    trailingActions: <IconButton icon="mic" variant="tertiary" label="Dictate" />,
   },
 };
 

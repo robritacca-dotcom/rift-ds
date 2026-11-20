@@ -4,7 +4,7 @@ import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'reac
 import { AttachmentTile, type AttachmentTileProps } from '../Attachment/AttachmentTile';
 import { formatBytes } from '../Attachment/fileTypes';
 import type { AttachmentItem } from '../Attachment/fileTypes';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import {
   MentionMenu,
   MentionText,
@@ -724,12 +724,12 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
         )}
         <span className={`${baseClass}__context-text`}>{context}</span>
         {onContextClear && (
-          <CircularButton
+          <IconButton
             icon="close"
             variant="tertiary"
             tone="neutral"
             size="compact"
-            ariaLabel={contextClearLabel}
+            label={contextClearLabel}
             tooltip={false}
             className={`${baseClass}__context-clear`}
             onClick={(event) => {
@@ -846,11 +846,11 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
           {(actions || (armed && attachButton)) && (
             <div className={`${baseClass}__actions`}>
               {armed && attachButton && (
-                <CircularButton
+                <IconButton
                   icon="add"
                   variant="tertiary"
                   size={size}
-                  ariaLabel={attachLabel}
+                  label={attachLabel}
                   disabled={disabled}
                   onClick={() => fileInputRef.current?.click()}
                 />
@@ -861,20 +861,20 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
           <div className={`${baseClass}__trailing`}>
             {trailingActions}
             {streaming ? (
-              <CircularButton
+              <IconButton
                 icon="stop"
                 variant="primary"
                 size={size}
-                ariaLabel={stopLabel}
+                label={stopLabel}
                 disabled={disabled}
                 onClick={onStop}
               />
             ) : (
-              <CircularButton
+              <IconButton
                 icon="arrow_upward"
                 variant="primary"
                 size={size}
-                ariaLabel={sendLabel}
+                label={sendLabel}
                 disabled={!canSend}
                 onClick={submit}
               />

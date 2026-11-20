@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { HoverCard } from '../HoverCard/HoverCard';
 import './WorldMap.css';
 import { LAND_PATH } from './land';
@@ -716,11 +716,11 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
 
         {zoomEnabled && (
           <div ref={zoomPillRef} className={`${baseClass}__zoom`} role="group" aria-label={zoomControlsLabel}>
-            <CircularButton
+            <IconButton
               icon="remove"
               variant="tertiary"
               size="compact"
-              ariaLabel={zoomOutLabel}
+              label={zoomOutLabel}
               disabled={zoom <= minZoom + 0.001}
               onClick={() => stepZoom(-1)}
             />
@@ -732,11 +732,11 @@ export const WorldMap = React.forwardRef<HTMLDivElement, WorldMapProps>(
             >
               {Math.round(zoom * 100)}%
             </button>
-            <CircularButton
+            <IconButton
               icon="add"
               variant="tertiary"
               size="compact"
-              ariaLabel={zoomInLabel}
+              label={zoomInLabel}
               disabled={zoom >= maxZoom}
               onClick={() => stepZoom(1)}
             />

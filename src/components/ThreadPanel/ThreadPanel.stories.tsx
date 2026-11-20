@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { Button } from '../Button/Button';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { ThreadPanel } from './ThreadPanel';
 
 /* All data here is fictional: Skylark is a made-up product, atlas-* are
@@ -113,7 +113,7 @@ export const CollapsedFooter: Story = {
     newThreadLabel: 'New thread',
     profile: { name: 'Robin Vale', meta: 'Team' },
     footerSlot: <Button variant="secondary" size="compact" iconLeft="dark_mode" label="Dark mode" />,
-    collapsedFooterSlot: <CircularButton icon="dark_mode" variant="secondary" size="compact" ariaLabel="Dark mode" />,
+    collapsedFooterSlot: <IconButton icon="dark_mode" variant="secondary" size="compact" label="Dark mode" />,
   },
   play: async ({ canvasElement }) => {
     const slots = [...canvasElement.querySelectorAll<HTMLElement>('.ds-thread-panel__footer-slot')];
@@ -122,7 +122,7 @@ export const CollapsedFooter: Story = {
     // Collapsed: the small form is live and the full form is inert.
     await expect(mini?.hasAttribute('inert')).toBe(false);
     await expect(full?.hasAttribute('inert')).toBe(true);
-    await expect(mini?.querySelector('.ds-circular-button')).not.toBeNull();
+    await expect(mini?.querySelector('.ds-icon-button')).not.toBeNull();
     // The two share one cell, so the footer keeps one height.
     await expect(mini?.parentElement).toBe(full?.parentElement);
   },

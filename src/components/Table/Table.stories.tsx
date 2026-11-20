@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Table } from './Table';
 import { Button } from '../Button/Button';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { Input } from '../Input/Input';
 import { Checkbox } from '../Checkbox/Checkbox';
 import '../../fonts/material-symbols.css';
@@ -215,8 +215,8 @@ export const WithButtons: Story = {
   },
 };
 
-// With circular buttons
-export const WithCircularButtons: Story = {
+// With icon buttons
+export const WithIconButtons: Story = {
   args: {
     columns: [
       { key: 'name', header: 'Name', width: '30%' },
@@ -231,9 +231,9 @@ export const WithCircularButtons: Story = {
           role: 'Designer',
           actions: (
             <span style={{ display: 'inline-flex', gap: '4px' }}>
-              <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-              <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
-              <CircularButton icon="more_vert" ariaLabel="More" variant="tertiary" size="compact" />
+              <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+              <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
+              <IconButton icon="more_vert" label="More" variant="tertiary" size="compact" />
             </span>
           ),
         },
@@ -245,9 +245,9 @@ export const WithCircularButtons: Story = {
           role: 'Engineer',
           actions: (
             <span style={{ display: 'inline-flex', gap: '4px' }}>
-              <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-              <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
-              <CircularButton icon="more_vert" ariaLabel="More" variant="tertiary" size="compact" />
+              <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+              <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
+              <IconButton icon="more_vert" label="More" variant="tertiary" size="compact" />
             </span>
           ),
         },
@@ -259,9 +259,9 @@ export const WithCircularButtons: Story = {
           role: 'Product Manager',
           actions: (
             <span style={{ display: 'inline-flex', gap: '4px' }}>
-              <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-              <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
-              <CircularButton icon="more_vert" ariaLabel="More" variant="tertiary" size="compact" />
+              <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+              <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
+              <IconButton icon="more_vert" label="More" variant="tertiary" size="compact" />
             </span>
           ),
         },
@@ -328,8 +328,8 @@ export const MixedContent: Story = {
           email: 'alice@example.com',
           actions: (
             <span style={{ display: 'inline-flex', gap: '4px' }}>
-              <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-              <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
+              <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+              <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
             </span>
           ),
         },
@@ -348,8 +348,8 @@ export const MixedContent: Story = {
           email: 'bob@example.com',
           actions: (
             <span style={{ display: 'inline-flex', gap: '4px' }}>
-              <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-              <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
+              <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+              <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
             </span>
           ),
         },

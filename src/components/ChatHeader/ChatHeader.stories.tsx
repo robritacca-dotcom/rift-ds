@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ChatHeader } from './ChatHeader';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 
 const meta = {
   title: 'Components/ChatHeader',
@@ -34,7 +34,7 @@ export const Default: Story = {
       <ChatHeader
         {...args}
         actions={
-          <CircularButton icon="close" variant="tertiary" ariaLabel="Close chat" />
+          <IconButton icon="close" variant="tertiary" label="Close chat" />
         }
       />
     </div>
@@ -48,17 +48,17 @@ export const FullControls: Story = {
         {...args}
         actions={
           <>
-            <CircularButton
+            <IconButton
               icon="edit_square"
               variant="tertiary"
-              ariaLabel="New chat"
+              label="New chat"
             />
-            <CircularButton
+            <IconButton
               icon="open_in_full"
               variant="tertiary"
-              ariaLabel="Enter full screen"
+              label="Enter full screen"
             />
-            <CircularButton icon="close" variant="tertiary" ariaLabel="Close chat" />
+            <IconButton icon="close" variant="tertiary" label="Close chat" />
           </>
         }
       />

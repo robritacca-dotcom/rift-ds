@@ -2,7 +2,7 @@ import type { ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { Toolbar, ToolbarSeparator } from './Toolbar';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import { Button } from '../Button/Button';
 
@@ -35,12 +35,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => (
     <Toolbar {...args}>
-      <CircularButton icon="remove" variant="tertiary" ariaLabel="Zoom out" />
+      <IconButton icon="remove" variant="tertiary" label="Zoom out" />
       <Button label="100%" variant="tertiary" size="compact" />
-      <CircularButton icon="add" variant="tertiary" ariaLabel="Zoom in" />
+      <IconButton icon="add" variant="tertiary" label="Zoom in" />
       <ToolbarSeparator />
-      <CircularButton icon="fit_screen" variant="tertiary" ariaLabel="Fit to screen" />
-      <CircularButton icon="open_in_full" variant="tertiary" ariaLabel="Expand" />
+      <IconButton icon="fit_screen" variant="tertiary" label="Fit to screen" />
+      <IconButton icon="open_in_full" variant="tertiary" label="Expand" />
     </Toolbar>
   ),
   // The toolbar keyboard pattern: arrows walk the controls, Home/End jump
@@ -86,8 +86,8 @@ export const Floating: Story = {
 
 const FloatingToolbar = (args: Omit<ComponentProps<typeof Toolbar>, 'children'>) => (
   <Toolbar {...args} variant="floating">
-      <CircularButton icon="undo" variant="tertiary" ariaLabel="Undo" />
-      <CircularButton icon="redo" variant="tertiary" ariaLabel="Redo" />
+      <IconButton icon="undo" variant="tertiary" label="Undo" />
+      <IconButton icon="redo" variant="tertiary" label="Redo" />
       <ToolbarSeparator />
       <SegmentedControl
         size="compact"
@@ -99,18 +99,18 @@ const FloatingToolbar = (args: Omit<ComponentProps<typeof Toolbar>, 'children'>)
         value="select"
       />
       <ToolbarSeparator />
-      <CircularButton icon="delete" variant="tertiary" ariaLabel="Delete selection" />
+      <IconButton icon="delete" variant="tertiary" label="Delete selection" />
   </Toolbar>
 );
 
 export const Vertical: Story = {
   render: (args) => (
     <Toolbar {...args} orientation="vertical" label="Drawing tools">
-      <CircularButton icon="near_me" variant="tertiary" ariaLabel="Select tool" />
-      <CircularButton icon="edit" variant="tertiary" ariaLabel="Draw tool" />
-      <CircularButton icon="crop_square" variant="tertiary" ariaLabel="Shape tool" />
+      <IconButton icon="near_me" variant="tertiary" label="Select tool" />
+      <IconButton icon="edit" variant="tertiary" label="Draw tool" />
+      <IconButton icon="crop_square" variant="tertiary" label="Shape tool" />
       <ToolbarSeparator />
-      <CircularButton icon="delete" variant="tertiary" ariaLabel="Delete" />
+      <IconButton icon="delete" variant="tertiary" label="Delete" />
     </Toolbar>
   ),
 };
@@ -121,7 +121,7 @@ export const MixedControls: Story = {
       <Button label="Share" variant="primary" size="compact" />
       <Button label="Preview" variant="tertiary" size="compact" />
       <ToolbarSeparator />
-      <CircularButton icon="more_horiz" variant="tertiary" ariaLabel="More actions" />
+      <IconButton icon="more_horiz" variant="tertiary" label="More actions" />
     </Toolbar>
   ),
 };

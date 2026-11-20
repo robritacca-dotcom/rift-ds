@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Button } from '../Button/Button';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { ArtifactPanel } from './ArtifactPanel';
 
 /* All content here is fictional: Acme is a made-up company, and the page,
@@ -118,7 +118,7 @@ export const CodeOnly: Story = {
 export const WithActions: Story = {
   args: {
     children: SUMMARY,
-    actions: <CircularButton icon="download" variant="tertiary" ariaLabel="Download the artifact" tooltipPosition="bottom" />,
+    actions: <IconButton icon="download" variant="tertiary" label="Download the artifact" tooltipPosition="bottom" />,
     onClose: fn(),
   },
 };

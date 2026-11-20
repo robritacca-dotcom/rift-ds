@@ -9,7 +9,7 @@ import { Breadcrumb } from "rift-ds/components/Breadcrumb/Breadcrumb";
 import { Button } from "rift-ds/components/Button/Button";
 import { Carousel } from "rift-ds/components/Carousel/Carousel";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { DataTable } from "rift-ds/components/DataTable/DataTable";
 import { DatePicker } from "rift-ds/components/DatePicker/DatePicker";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
@@ -137,7 +137,7 @@ export function RtlBench() {
             <div className={styles.row}>
               <Button label="التالي" iconRight="arrow_forward" />
               <Button label="رجوع" iconLeft="arrow_back" variant="secondary" />
-              <CircularButton icon="send" ariaLabel="إرسال" tooltip="إرسال" tooltipPosition="end" />
+              <IconButton icon="send" label="إرسال" tooltip="إرسال" tooltipPosition="end" />
               <DropdownMenu
                 trigger="المزيد"
                 items={[

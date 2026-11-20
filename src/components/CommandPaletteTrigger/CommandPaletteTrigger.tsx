@@ -1,7 +1,9 @@
 // No 'use client' directive: the trigger defines no hooks or handlers of its
 // own (the host passes onClick), so it renders from a Server Component too.
+// The icon-only form's Tooltip wrapper is the client island, as IconButton's is.
 import React from 'react';
 import { Kbd } from '../Kbd/Kbd';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { shortcutAriaAnyPlatform, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcut-keys';
 import './CommandPaletteTrigger.css';
 import '../../fonts/material-symbols.css';
@@ -26,8 +28,16 @@ type CommandPaletteTriggerOwnProps = {
   icon?: string | React.ReactNode;
   /** Control size, on the row-control scale: `default` is 40px, `compact` 32px. */
   size?: 'default' | 'compact';
-  /** Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name. */
+  /** Fold to the icon alone, an even box the row height across, for a row with no room for the field. The label stays the accessible name. */
   iconOnly?: boolean;
+  /**
+   * The hover and focus tooltip of the icon-only form, which names itself as
+   * IconButton does: by default it carries `label`. Pass a string to show
+   * different wording, or `false` to opt out.
+   */
+  tooltip?: string | false;
+  /** Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction. */
+  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Additional CSS classes */
   className?: string;
 };
@@ -40,7 +50,7 @@ export interface CommandPaletteTriggerProps
  * The entry point to a command palette: a button dressed as a search field
  * (icon, prompt and the shortcut's keycaps), because typing happens in the
  * palette itself. It sits on the row-control height, so it lines up with
- * the buttons and pickers beside it, and folds to an icon circle with
+ * the buttons and pickers beside it, and folds to its icon alone with
  * `iconOnly`. Pair it with CommandPalette: the trigger's `onClick` opens
  * the palette, and the palette owns the shortcut. `aria-keyshortcuts`
  * defaults to the shortcut it draws.
@@ -57,6 +67,8 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
       icon = 'search',
       size = 'default',
       iconOnly = false,
+      tooltip,
+      tooltipPosition = 'bottom',
       className = '',
       ...rest
     },
@@ -81,11 +93,10 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
          platforms rather than guessing which one the reader is on. */
       announced = shortcutAriaAnyPlatform(keys) ?? '';
     }
-    return (
+    const control = (
       <button
         aria-label={label}
         aria-keyshortcuts={announced || undefined}
-        title={iconOnly ? label : undefined}
         {...rest}
         ref={ref}
         type="button"
@@ -125,6 +136,14 @@ export const CommandPaletteTrigger = React.forwardRef<HTMLButtonElement, Command
           </>
         )}
       </button>
+    );
+    // Self-labelling, as IconButton is: the folded form has no visible prompt.
+    const tooltipContent = !iconOnly || tooltip === false ? null : (tooltip ?? label);
+    if (!tooltipContent) return control;
+    return (
+      <Tooltip content={tooltipContent} position={tooltipPosition}>
+        {control}
+      </Tooltip>
     );
   },
 );

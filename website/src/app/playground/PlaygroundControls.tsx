@@ -6,7 +6,7 @@ import { FloatingRail } from "./FloatingRail";
 import { Button } from "rift-ds/components/Button/Button";
 import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { MOTION_FEEDBACK_RESET_MS } from "rift-ds/tokens/motion";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Swatch } from "rift-ds/components/Swatch/Swatch";
 import {
   ACTION_COLOR_PRESETS,
@@ -423,12 +423,12 @@ export default function PlaygroundControls({
               <span className={styles.imageSourceName} title={imageName}>
                 {imageName}
               </span>
-              <CircularButton
+              <IconButton
                 icon="close"
                 variant="primary"
                 tone="neutral"
                 size="compact"
-                ariaLabel="Remove the theme source file"
+                label="Remove the theme source file"
                 onClick={onClearImage}
               />
             </div>

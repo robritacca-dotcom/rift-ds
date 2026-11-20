@@ -3,7 +3,7 @@
 import React, { useId, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from '../Button/Button';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { formatBytes } from './fileTypes';
 import { DocumentViewer } from '../DocumentViewer/DocumentViewer';
 import type { AttachmentItem } from './fileTypes';
@@ -289,11 +289,11 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
               />
             )}
             {dismissible && (
-              <CircularButton
+              <IconButton
                 icon="close"
                 variant="tertiary"
                 size="compact"
-                ariaLabel={closeLabel}
+                label={closeLabel}
                 tooltip={false}
                 onClick={() => onOpenChange(false)}
               />
@@ -304,24 +304,24 @@ export const AttachmentViewer = React.forwardRef<HTMLDivElement, AttachmentViewe
 
           {total > 1 && (
             <div className={`${baseClass}__footer`}>
-              <CircularButton
+              <IconButton
                 icon="chevron_left"
                 variant="secondary"
                 tone="neutral"
                 size="compact"
-                ariaLabel={previousLabel}
+                label={previousLabel}
                 tooltip={false}
                 onClick={() => step(-1)}
               />
               <span className={`${baseClass}__position`} aria-live="polite">
                 {positionText}
               </span>
-              <CircularButton
+              <IconButton
                 icon="chevron_right"
                 variant="secondary"
                 tone="neutral"
                 size="compact"
-                ariaLabel={nextLabel}
+                label={nextLabel}
                 tooltip={false}
                 onClick={() => step(1)}
               />

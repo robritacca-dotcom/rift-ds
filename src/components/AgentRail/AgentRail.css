@@ -18,7 +18,7 @@
      header rather than sitting in it: the header is a centred identity
      block, and a control in that column would push the portrait off axis. */
   position: relative;
-  /* CircularButton's default footprint, named because two rules need it:
+  /* IconButton's default footprint, named because two rules need it:
      the control itself, and the row the rail reserves for it when there is
      no header underneath it to float over. */
   --ds-agent-rail-control: 40px;
@@ -48,7 +48,7 @@
 
 .ds-agent-rail__collapse {
   position: absolute;
-  /* CircularButton's default footprint and glyph, so the control sits in
+  /* IconButton's default footprint and glyph, so the control sits in
      the same row of controls the host puts along the card's top edge —
      `--ds-agent-rail-collapse-top` is the seat, which a host overrides to
      line the chevron up with its own header row. */
@@ -63,7 +63,7 @@
   padding: 0;
   border: none;
   border-radius: var(--radius-pill);
-  /* A tertiary CircularButton's exact resting treatment, because that is
+  /* A tertiary IconButton's exact resting treatment, because that is
      what it sits in a row with: the host's own controls line up opposite it
      on the same baseline, and a dimmer icon tier beside them would read as a
      lesser control rather than the same kind of one. */

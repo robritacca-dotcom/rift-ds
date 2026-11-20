@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../Button/Button';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
 import './SplitButton.css';
 import '../../behaviors/direction.css';
@@ -113,14 +113,14 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
           size={size}
           items={items}
           trigger={
-            <CircularButton
+            <IconButton
               className={`${baseClass}__trigger`}
               icon="keyboard_arrow_down"
               /* No self-labelling tooltip: the trigger must stay a direct flex
                  child of the split so align-self: stretch can size it to the
                  main segment — the tooltip wrapper would sit between them. */
               tooltip={false}
-              ariaLabel={menuLabel}
+              label={menuLabel}
               variant={emphasis}
               tone={resolvedTone}
               size={size}

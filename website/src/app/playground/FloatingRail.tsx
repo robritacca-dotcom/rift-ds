@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import styles from "./page.module.css";
 
 /**
@@ -45,7 +45,7 @@ export function FloatingRail({
   const glyph = (state: "open" | "close") => `${side}_panel_${state}`;
 
   const toggle = (
-    <CircularButton
+    <IconButton
       className={styles.railToggle}
       /* Both glyphs stay mounted and crossfade, so the swap reads as the
          panel mark turning over rather than a hard cut. */
@@ -59,7 +59,7 @@ export function FloatingRail({
           </span>
         </span>
       }
-      ariaLabel={collapsed ? `Show ${label.toLowerCase()}` : `Hide ${label.toLowerCase()}`}
+      label={collapsed ? `Show ${label.toLowerCase()}` : `Hide ${label.toLowerCase()}`}
       aria-expanded={!collapsed}
       variant="tertiary"
       size="compact"
@@ -69,9 +69,9 @@ export function FloatingRail({
   );
 
   const reset = (
-    <CircularButton
+    <IconButton
       icon="restart_alt"
-      ariaLabel={resetLabel}
+      label={resetLabel}
       variant="tertiary"
       size="compact"
       /* Inward: the header clips, and this sits at its edge. */

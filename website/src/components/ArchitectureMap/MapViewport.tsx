@@ -14,7 +14,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { resolveEdges } from "./geometry";
 import { MapEdgeLayer, MapEdgeLabels } from "./MapEdges";
 import { MapNode } from "./MapNode";
@@ -205,11 +205,11 @@ export function MapViewport({ map, expanded, onExpand }: MapViewportProps) {
       </div>
 
       <div className={styles.controls} role="toolbar" aria-label={`${map.title} map controls`}>
-        <CircularButton
+        <IconButton
           icon="remove"
           variant="tertiary"
           size="compact"
-          ariaLabel="Zoom out"
+          label="Zoom out"
           onClick={() => zoomBy(1 / 1.25)}
         />
         <button
@@ -220,27 +220,27 @@ export function MapViewport({ map, expanded, onExpand }: MapViewportProps) {
         >
           {Math.round(view.s * 100)}%
         </button>
-        <CircularButton
+        <IconButton
           icon="add"
           variant="tertiary"
           size="compact"
-          ariaLabel="Zoom in"
+          label="Zoom in"
           onClick={() => zoomBy(1.25)}
         />
         <span className={styles.separator} aria-hidden="true" />
-        <CircularButton
+        <IconButton
           icon="fit_screen"
           variant="tertiary"
           size="compact"
-          ariaLabel="Fit the whole map"
+          label="Fit the whole map"
           onClick={refit}
         />
         {onExpand ? (
-          <CircularButton
+          <IconButton
             icon="open_in_full"
             variant="tertiary"
             size="compact"
-            ariaLabel="Expand the map"
+            label="Expand the map"
             onClick={onExpand}
           />
         ) : null}

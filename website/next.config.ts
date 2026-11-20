@@ -58,6 +58,12 @@ const nextConfig: NextConfig = {
       // The DS landing was promoted to the home page when the site became
       // the design system's own; the old URL keeps resolving.
       { source: "/design-system", destination: "/", permanent: true },
+      // CircularButton was renamed IconButton; its page, markdown, schema and
+      // registry item keep resolving at the old URLs.
+      { source: "/components/circular-button", destination: "/components/icon-button", permanent: true },
+      { source: "/components/circular-button.md", destination: "/components/icon-button.md", permanent: true },
+      { source: "/schema/components/circular-button.json", destination: "/schema/components/icon-button.json", permanent: true },
+      { source: "/r/circular-button.json", destination: "/r/icon-button.json", permanent: true },
       // The journal became the release log when entries moved to 1:1 with
       // npm releases; the old URL keeps resolving.
       { source: "/project-journal", destination: "/releases", permanent: true },

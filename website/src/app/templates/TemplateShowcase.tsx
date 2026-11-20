@@ -19,7 +19,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { templatesSidebarLinks } from "@/config/navigation";
 import {
@@ -150,20 +150,20 @@ export default function TemplateShowcase() {
           ))}
         </div>
         <div className={styles.arrows}>
-          <CircularButton
+          <IconButton
             icon="chevron_left"
             variant="primary"
             tone="neutral"
-            ariaLabel="Previous template"
+            label="Previous template"
             tooltip={false}
             disabled={active === 0}
             onClick={() => scrollToSlide(active - 1)}
           />
-          <CircularButton
+          <IconButton
             icon="chevron_right"
             variant="primary"
             tone="neutral"
-            ariaLabel="Next template"
+            label="Next template"
             tooltip={false}
             disabled={active === SLIDE_COUNT - 1}
             onClick={() => scrollToSlide(active + 1)}

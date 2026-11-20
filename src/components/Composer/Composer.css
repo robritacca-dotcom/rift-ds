@@ -20,8 +20,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* The send button's diameter — CircularButton's default size, which is
-     a raw value in CircularButton.css too (icon-button sizes are not on
+  /* The send button's diameter — IconButton's default size, which is
+     a raw value in IconButton.css too (icon-button sizes are not on
      a token scale). Everything concentric derives from it. */
   --ds-composer-send-size: 40px;
   /* The shell's concentric corner, derived rather than frozen: the send
@@ -748,7 +748,7 @@
   padding: var(--padding-050);
 }
 
-.ds-composer--inline .ds-composer__footer .ds-circular-button {
+.ds-composer--inline .ds-composer__footer .ds-icon-button {
   width: var(--ds-composer-send-size);
   height: var(--ds-composer-send-size);
 }

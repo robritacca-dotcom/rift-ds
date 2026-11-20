@@ -42,8 +42,8 @@
  *      implementation files are exempt, because they read the alias in order
  *      to honour it; its stories are not, because stories teach the API.
  *      SANCTIONED_DEPRECATED_USES records the deliberate survivors with their
- *      exact values: `state` drawing a static hover or active look, and
- *      Button's `text={false}` for an icon-only button until the next major.
+ *      exact values: `state` drawing a static hover or active look.
+ *      Button's `text={false}` is no survivor: `iconOnly` is the spelling.
  *      `state="default"` (a no-op), any `"disabled"` (use `disabled`) and
  *      `text` (true, the default) still fail. This is the check that would
  *      have caught AlertDialog calling Button with the deprecated `priority`
@@ -129,20 +129,14 @@ const STATIC_STATE = {
 const SANCTIONED_DEPRECATED_USES = {
   Button: {
     state: STATIC_STATE,
-    text: {
-      values: [false],
-      reason:
-        'an icon-only button has no other spelling until `label` loses its default in the next major; ' +
-        '`text` (true) is already the default and never needs passing',
-    },
   },
-  CircularButton: { state: STATIC_STATE },
+  IconButton: { state: STATIC_STATE },
 };
 
 /** Single values a prop still accepts only as aliases for a newer spelling. */
 const LEGACY_VALUES = {
   Button: { variant: ['destructive', 'neutral'] },
-  CircularButton: { variant: ['neutral'] },
+  IconButton: { variant: ['neutral'] },
   SplitButton: { variant: ['neutral'] },
   Sparkline: { tone: ['negative'] },
   AgentStatus: { size: ['sm', 'md'] },

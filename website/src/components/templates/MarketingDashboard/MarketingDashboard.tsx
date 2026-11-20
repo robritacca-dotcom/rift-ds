@@ -22,7 +22,7 @@ import { Icon } from "rift-ds/components/Icon/Icon";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import {
   DataTable,
   type DataTableColumn,
@@ -475,22 +475,22 @@ export default function MarketingDashboard() {
             <div className={styles.topBarActions}>
               {/* Mobile: the full search field folds to this icon, riding
                   with the other actions on the right. */}
-              <CircularButton
+              <IconButton
                 icon="search"
                 variant="secondary"
                 tone="neutral"
-                ariaLabel="Search campaigns"
+                label="Search campaigns"
                 className={styles.searchIconMobile}
               />
               <AiButton
                 label="Ask AI"
                 onClick={() => setChatOpen(true)}
               />
-              <CircularButton
+              <IconButton
                 icon="notifications"
                 variant="secondary"
                 tone="neutral"
-                ariaLabel="Notifications"
+                label="Notifications"
               />
             </div>
           </div>

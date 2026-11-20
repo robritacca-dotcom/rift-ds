@@ -35,7 +35,7 @@
 .ds-split-button .ds-split-button__trigger {
   border-start-start-radius: var(--radius-050);
   border-end-start-radius: var(--radius-050);
-  /* Standalone, CircularButton is a fixed circle; inside the split its
+  /* Standalone, IconButton is a fixed even box; inside the split its
      explicit height would block the wrapper's align-items: stretch, and
      the main segment's height moves (secondary's border adds to it, a
      loading spinner grows it) — so the flat edges overhang at the seam.
@@ -43,17 +43,17 @@
   height: auto;
   align-self: stretch;
   /* Icon side padding, as Button's: the chevron's cap side takes one step
-     less than a full circle would give it, so the trigger is a padding
+     less than the even box would give it, so the trigger is a padding
      step narrower than the row height and the chevron sits centred in it,
      6px either side. This replaces the old optical nudge toward the seam,
      which reached the same seam-side gap by moving the glyph instead of
-     trimming the cap. The compact trigger keeps its full circle: its
+     trimming the cap. The compact trigger keeps its even box: its
      chevron already sits 6px from either side, and trimming it would put
      the glyph in the cap's curve. */
   width: calc(var(--control-height-default) - var(--padding-100));
 }
 
-.ds-split-button .ds-split-button__trigger.ds-circular-button--compact {
+.ds-split-button .ds-split-button__trigger.ds-icon-button--compact {
   width: var(--control-height-compact);
 }
 
@@ -61,7 +61,7 @@
    LOADING
    The trigger is inert while the main segment
    runs its async action, but it is busy, not
-   broken: Button and CircularButton both define
+   broken: Button and IconButton both define
    loading as full-colour appearance with a
    progress cursor, and the disabled dim on one
    half would split the pill into two unrelated
@@ -70,7 +70,7 @@
    this rule deliberately stands down.
    ============================================ */
 
-.ds-split-button:has(.ds-button--loading:not(.ds-button--disabled)) .ds-split-button__trigger.ds-circular-button--disabled {
+.ds-split-button:has(.ds-button--loading:not(.ds-button--disabled)) .ds-split-button__trigger.ds-icon-button--disabled {
   opacity: 1;
   cursor: progress;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo, useCallback, useId } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import ReactDOM from 'react-dom';
 import { Kbd } from '../Kbd/Kbd';
 import './CommandPalette.css';
@@ -319,13 +319,13 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
             onChange={(e) => handleQueryChange(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <CircularButton
+          <IconButton
             className={`${baseClass}__close`}
             icon="close"
             variant="tertiary"
             size="compact"
             tooltip={false}
-            ariaLabel={closeLabel}
+            label={closeLabel}
             onClick={() => onOpenChange(false)}
           />
         </div>

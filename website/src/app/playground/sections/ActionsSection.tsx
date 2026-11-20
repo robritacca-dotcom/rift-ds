@@ -5,7 +5,7 @@ import styles from "../page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Button } from "rift-ds/components/Button/Button";
 import { ButtonGroup } from "rift-ds/components/ButtonGroup/ButtonGroup";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { ToggleGroup } from "rift-ds/components/ToggleGroup/ToggleGroup";
@@ -61,10 +61,10 @@ export default function ActionsSection() {
             { label: "Next", variant: "primary", iconRight: "arrow_forward" },
           ]}
         />
-        <CircularButton icon="add" variant="primary" ariaLabel="Add item" />
-        <CircularButton icon="edit" variant="secondary" ariaLabel="Edit item" />
-        <CircularButton icon="share" variant="primary" tone="neutral" ariaLabel="Share item" />
-        <CircularButton icon="favorite" variant="tertiary" ariaLabel="Favourite item" />
+        <IconButton icon="add" variant="primary" label="Add item" />
+        <IconButton icon="edit" variant="secondary" label="Edit item" />
+        <IconButton icon="share" variant="primary" tone="neutral" label="Share item" />
+        <IconButton icon="favorite" variant="tertiary" label="Favourite item" />
       </div>
 
       <div className={styles.demoRow}>

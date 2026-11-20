@@ -5,7 +5,7 @@ import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvid
 import { useLayer } from '../../behaviors/useLayer';
 import { isRtl } from '../../behaviors/direction';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { Drawer } from '../Drawer/Drawer';
 import { MegaMenu, type MegaMenuItem, type MegaMenuShowcase } from '../MegaMenu/MegaMenu';
 import { NavList, type NavListItem } from '../NavList/NavList';
@@ -491,7 +491,7 @@ export function SiteHeader({
               {wideActions}
             </div>
           )}
-          <CircularButton
+          <IconButton
             ref={menuButtonRef}
             className={[`${baseClass}__menu-button`, drawerOpen && `${baseClass}__menu-button--hidden`]
               .filter(Boolean)
@@ -500,7 +500,7 @@ export function SiteHeader({
             size="compact"
             variant="secondary"
             tone="neutral"
-            ariaLabel={drawerOpenLabel}
+            label={drawerOpenLabel}
             tooltip={false}
             aria-expanded={drawerOpen}
             aria-haspopup="dialog"

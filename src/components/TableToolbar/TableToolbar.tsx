@@ -7,7 +7,7 @@ import { Button } from '../Button/Button';
 import { Chip } from '../Chip/Chip';
 import { Composer } from '../Composer/Composer';
 import { Dropdown } from '../Dropdown/Dropdown';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { DropdownMenu } from '../DropdownMenu/DropdownMenu';
 import { Input } from '../Input/Input';
 import { Drawer } from '../Drawer/Drawer';
@@ -17,7 +17,6 @@ import { SplitButton } from '../SplitButton/SplitButton';
 import { Tabs } from '../Tabs/Tabs';
 import { ToastProvider, useOptionalToast, useToast, type ToastData } from '../Toast/Toast';
 import { ToggleSwitch } from '../ToggleSwitch/ToggleSwitch';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { FilterEditor } from '../DataTable/FilterEditor';
 import { startDrag } from '../DataTable/dragGesture';
 import { absoluteDate, parseDate } from '../DataTable/columnTypes';
@@ -636,12 +635,12 @@ function CommandRow({ command, table, labels, size, open, onClose, state, onStat
         onClose();
       }}
     >
-      <CircularButton
+      <IconButton
         className="ds-table-toolbar__command-close"
         icon="close"
         variant="tertiary"
         size={size}
-        ariaLabel={labels.commandClose}
+        label={labels.commandClose}
         tooltip={false}
         onClick={onClose}
       />
@@ -1120,8 +1119,9 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         onClick={() => setCommandOpen(true)}
       />
     );
-    /* Folded to its icon, it says its name on hover, as the bar's other icons do. */
-    const commandTrigger = narrow ? <Tooltip content={labels.command}>{commandButtonDrawn}</Tooltip> : commandButtonDrawn;
+    /* Folded to its icon, it says its name on hover, as the bar's other
+       icons do: the button's own icon-only tooltip. */
+    const commandTrigger = commandButtonDrawn;
     const matching = table?.matchingIds ?? [];
     const matchingCount = table?.matchingCount ?? matching.length;
     const selectedSet = new Set(table?.selectedIds);
@@ -1184,11 +1184,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         ref={bulkRef}
       >
         <div className="ds-table-toolbar__bulk-start">
-          <CircularButton
+          <IconButton
             icon="close"
             variant="tertiary"
             size={size}
-            ariaLabel={labels.clearSelection}
+            label={labels.clearSelection}
             tooltip={labels.clearSelection}
             onClick={clearSelection}
           />
@@ -1210,13 +1210,13 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           {orderedActions.map(bulkButton)}
           {actionFit.icons &&
             iconFirst.slice(0, shownActions).map((action) => (
-              <CircularButton
+              <IconButton
                 key={action.id}
                 icon={action.icon}
                 variant="secondary"
                 tone={action.destructive ? 'destructive' : 'neutral'}
                 size={size}
-                ariaLabel={action.label}
+                label={action.label}
                 tooltip={action.label}
                 disabled={action.disabled}
                 onClick={() => action.onSelect(selection)}
@@ -1234,11 +1234,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                 onClick: () => action.onSelect(selection),
               }))}
               trigger={
-                <CircularButton
+                <IconButton
                   icon="more_horiz"
                   variant="tertiary"
                   size={size}
-                  ariaLabel={labels.moreBulkActions}
+                  label={labels.moreBulkActions}
                   tooltip={labels.moreBulkActions}
                 />
               }
@@ -1291,12 +1291,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
       />
     );
     const filterIcon = (
-      <CircularButton
+      <IconButton
         icon="filter_list"
         variant="secondary"
         tone="neutral"
         size={size}
-        ariaLabel={labels.filters(activeFilters)}
+        label={labels.filters(activeFilters)}
         tooltip={labels.filters(activeFilters)}
       />
     );
@@ -1338,12 +1338,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             <div key={filter.id} className="ds-table-toolbar__filter-item">
               <div className="ds-table-toolbar__menu-heading">
                 <span>{column.label}</span>
-                <CircularButton
+                <IconButton
                   icon="close"
                   variant="tertiary"
                   size="compact"
                   tooltip={false}
-                  ariaLabel={filterLabels.remove(chipText(filter))}
+                  label={filterLabels.remove(chipText(filter))}
                   onClick={() => removeFilter(filter.id)}
                 />
               </div>
@@ -1424,12 +1424,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           >
             <Chip size={size === 'compact' ? 'default' : 'large'} label={text} onClick={() => {}} />
           </Popover>
-          <CircularButton
+          <IconButton
             icon="close"
             variant="tertiary"
             size={size}
             tooltip={false}
-            ariaLabel={filterLabels.remove(text)}
+            label={filterLabels.remove(text)}
             onClick={() => removeFilter(filter.id)}
           />
         </span>
@@ -1587,12 +1587,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                             )
                           }
                         />
-                        <CircularButton
+                        <IconButton
                           icon="close"
                           variant="tertiary"
                           size={size}
                           tooltip={false}
-                          ariaLabel={labels.removeSort(label)}
+                          label={labels.removeSort(label)}
                           onClick={() => setSorts(sorts.filter((s) => s.key !== entry.key))}
                         />
                       </div>
@@ -1610,12 +1610,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
             </div>
           }
         >
-          <CircularButton
+          <IconButton
             icon="swap_vert"
             variant="secondary"
             tone="neutral"
             size={size}
-            ariaLabel={labels.sort(sorts.length)}
+            label={labels.sort(sorts.length)}
             tooltip={labels.sort(sorts.length)}
           />
         </ToolbarPanel>
@@ -1704,11 +1704,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           },
         ]}
         trigger={
-          <CircularButton
+          <IconButton
             icon="more_horiz"
             variant="tertiary"
             size="compact"
-            ariaLabel={labels.viewMenu(active.label, dirty)}
+            label={labels.viewMenu(active.label, dirty)}
             tooltip={labels.viewMenu(active.label, dirty)}
           />
         }
@@ -1769,11 +1769,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
         )}
         {renaming === null && viewMenu}
         {renaming === null && (
-          <CircularButton
+          <IconButton
             icon="add"
             variant="tertiary"
             size="compact"
-            ariaLabel={labels.newView}
+            label={labels.newView}
             tooltip={labels.newView}
             onClick={addView}
           />
@@ -1821,12 +1821,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           position="bottom"
           content={groupPanel}
         >
-          <CircularButton
+          <IconButton
             icon="view_agenda"
             variant="secondary"
             tone="neutral"
             size={size}
-            ariaLabel={labels.group(Boolean(groupedBy))}
+            label={labels.group(Boolean(groupedBy))}
             tooltip={labels.group(Boolean(groupedBy))}
           />
         </ToolbarPanel>
@@ -1855,12 +1855,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           </div>
         }
       >
-        <CircularButton
+        <IconButton
           icon="view_column"
           variant="secondary"
           tone="neutral"
           size={size}
-          ariaLabel={labels.columns}
+          label={labels.columns}
           tooltip={labels.columns}
         />
       </ToolbarPanel>
@@ -1921,12 +1921,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
           </div>
         }
       >
-        <CircularButton
+        <IconButton
           icon="more_horiz"
           variant="secondary"
           tone="neutral"
           size={size}
-          ariaLabel={labels.more}
+          label={labels.more}
           tooltip={labels.more}
         />
       </ToolbarPanel>
@@ -2047,12 +2047,12 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                     </div>
                   }
                 >
-                  <CircularButton
+                  <IconButton
                     icon="search"
                     variant="secondary"
                     tone="neutral"
                     size={size}
-                    ariaLabel={labels.search}
+                    label={labels.search}
                     tooltip={labels.search}
                   />
                 </ToolbarPanel>
@@ -2069,13 +2069,13 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   {!narrow &&
                     secondaryActions.map((action) =>
                       typeof action.icon === 'string' ? (
-                        <CircularButton
+                        <IconButton
                           key={action.id}
                           icon={action.icon}
                           variant="secondary"
                           tone="neutral"
                           size={size}
-                          ariaLabel={action.label}
+                          label={action.label}
                           tooltip={action.label}
                           disabled={action.disabled}
                           onClick={action.onSelect}
@@ -2095,11 +2095,11 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                     )}
                   {primaryAction &&
                     (narrow ? (
-                      <CircularButton
+                      <IconButton
                         icon={typeof primaryAction.icon === 'string' ? primaryAction.icon : 'add'}
                         variant="primary"
                         size={size}
-                        ariaLabel={primaryAction.label}
+                        label={primaryAction.label}
                         tooltip={primaryAction.label}
                         disabled={primaryAction.disabled}
                         onClick={primaryAction.onSelect}

@@ -688,11 +688,11 @@
 }
 
 /* Save and Cancel say which is which by colour as well as by shape. */
-.ds-data-table__save .ds-circular-button__icon {
+.ds-data-table__save .ds-icon-button__icon {
   color: var(--color-status-positive-icon);
 }
 
-.ds-data-table__cancel .ds-circular-button__icon {
+.ds-data-table__cancel .ds-icon-button__icon {
   color: var(--color-status-error-icon);
 }
 

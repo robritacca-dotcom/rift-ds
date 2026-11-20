@@ -99,9 +99,19 @@
   display: none;
 }
 
+/* The icon-only button wears a Tooltip, which wraps it: the wrapper leaves
+   the row with the button, or it would hold a gap open beside the search. */
+.header :global(.ds-tooltip):has(> .chatBtn) {
+  display: none;
+}
+
 /* The takeover width, where the floating launcher stands down for this.
    Doubled for the production stylesheet order noted on the condensed set. */
 @media (max-width: 719px) {
+  .header :global(.ds-tooltip):has(> .chatBtn) {
+    display: inline-flex;
+  }
+
   .chatBtn.chatBtn {
     /* The even box is the button's own icon-only form (`iconOnly`), so the
        glyph stays centred whatever the icon side padding rule does. */

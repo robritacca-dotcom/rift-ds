@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tooltip } from './Tooltip';
 import { Button } from '../Button/Button';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 
 const meta = {
   title: 'Components/Tooltip',
@@ -85,7 +85,7 @@ export const OnIconButton: Story = {
   },
   render: (args) => (
     <Tooltip {...args}>
-      <CircularButton icon="settings" ariaLabel="Settings" variant="tertiary" />
+      <IconButton icon="settings" label="Settings" variant="tertiary" />
     </Tooltip>
   ),
 };

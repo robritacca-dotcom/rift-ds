@@ -7,7 +7,7 @@ import { Badge } from "rift-ds/components/Badge/Badge";
 import { Button } from "rift-ds/components/Button/Button";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { Chip } from "rift-ds/components/Chip/Chip";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Input } from "rift-ds/components/Input/Input";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { RadioButton } from "rift-ds/components/RadioButton/RadioButton";
@@ -290,8 +290,8 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
               <Tile name="compact and circular">
                 <div className={styles.row}>
                   <Button label="Save" variant="primary" size="compact" />
-                  <CircularButton icon="add" variant="primary" ariaLabel="Add" />
-                  <CircularButton icon="more_horiz" variant="secondary" ariaLabel="More" />
+                  <IconButton icon="add" variant="primary" label="Add" />
+                  <IconButton icon="more_horiz" variant="secondary" label="More" />
                 </div>
               </Tile>
               <Tile name="badges and chips" wide>

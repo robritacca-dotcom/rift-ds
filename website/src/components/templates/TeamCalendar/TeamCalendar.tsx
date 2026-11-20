@@ -23,7 +23,7 @@ import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { Button } from "rift-ds/components/Button/Button";
 import { Checklist } from "rift-ds/components/Checklist/Checklist";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Divider } from "rift-ds/components/Divider/Divider";
 import {
   EventCalendar,
@@ -274,22 +274,22 @@ export default function TeamCalendar() {
               <div className={styles.topBarActions}>
                 {/* Mobile: the full search field folds to this icon, riding
                     with the other actions on the right. */}
-                <CircularButton
+                <IconButton
                   icon="search"
                   variant="secondary"
                   tone="neutral"
-                  ariaLabel="Search events"
+                  label="Search events"
                   className={styles.searchIconMobile}
                 />
                 <AiButton
                   label="Ask AI"
                   onClick={() => setChatOpen(true)}
                 />
-                <CircularButton
+                <IconButton
                   icon="notifications"
                   variant="secondary"
                   tone="neutral"
-                  ariaLabel="Notifications"
+                  label="Notifications"
                 />
               </div>
             </div>

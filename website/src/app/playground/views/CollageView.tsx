@@ -30,7 +30,7 @@ import { Badge } from "rift-ds/components/Badge/Badge";
 import { Button } from "rift-ds/components/Button/Button";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { Chip } from "rift-ds/components/Chip/Chip";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Dropdown } from "rift-ds/components/Dropdown/Dropdown";
 import { Gauge } from "rift-ds/components/Gauge/Gauge";
 import { Input } from "rift-ds/components/Input/Input";
@@ -205,9 +205,9 @@ export function CollageView({
           <Button label="Delete" variant="secondary" tone="destructive" iconLeft="delete" />
         </div>
         <div className={styles.row}>
-          <CircularButton icon="add" variant="primary" ariaLabel="Add" />
-          <CircularButton icon="edit" variant="secondary" tone="neutral" ariaLabel="Edit" />
-          <CircularButton icon="favorite" variant="tertiary" ariaLabel="Favourite" />
+          <IconButton icon="add" variant="primary" label="Add" />
+          <IconButton icon="edit" variant="secondary" tone="neutral" label="Edit" />
+          <IconButton icon="favorite" variant="tertiary" label="Favourite" />
           <SplitButton label="Publish" iconLeft="send" items={PUBLISH_ITEMS} />
         </div>
       </div>

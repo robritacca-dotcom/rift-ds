@@ -3,7 +3,7 @@ import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { ThemeToggle } from "rift-ds/components/ThemeToggle/ThemeToggle";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -50,7 +50,7 @@ const brand = (
   </span>
 );
 
-const search = <CircularButton icon="search" variant="secondary" tone="neutral" ariaLabel="Search" tooltip={false} />;
+const search = <IconButton icon="search" variant="secondary" tone="neutral" label="Search" tooltip={false} />;
 
 /* The condensed demo's two sets: the same controls, then their narrower forms. */
 const fullActions = (

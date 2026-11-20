@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '../Button/Button';
 import { CheckboxIndicator } from '../Checkbox/Checkbox';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { RadioIndicator } from '../RadioButton/RadioButton';
 import './QuestionCard.css';
 import '../../behaviors/chat-card.css';
@@ -470,10 +470,10 @@ export const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
                       question sends from its own button instead. */}
                   {showSubmit && <Mark base={baseClass} chosen={draft.other.trim() !== ''} multi={multi} />}
                   {!showSubmit && (
-                    <CircularButton
+                    <IconButton
                       icon="arrow_upward"
                       size="compact"
-                      ariaLabel={labels.submit}
+                      label={labels.submit}
                       disabled={!draft.other.trim()}
                       onClick={submitDraft}
                     />

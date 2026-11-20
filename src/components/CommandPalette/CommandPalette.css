@@ -114,7 +114,7 @@
   color: var(--color-input-text-placeholder);
 }
 
-/* The close is the library's CircularButton (tertiary, compact); the
+/* The close is the library's IconButton (tertiary, compact); the
    header only seats it. */
 .ds-command-palette__close {
   flex-shrink: 0;

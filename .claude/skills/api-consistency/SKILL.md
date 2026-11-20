@@ -23,7 +23,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
 
 1. **Determine scope.** Accept one of:
    - **Scoped** (the cheap mode other skills call): one component, or a family. A family is the component's shared folder (the registry entry's `folder`) or its `category` in `src/components/registry.json`, plus any component that composes it or that it composes. Every check below runs, but only over these components, and the family is the comparison set for the family checks.
-   - A list of specific components (e.g. `Button, CircularButton, ButtonGroup`) → compare those
+   - A list of specific components (e.g. `Button, IconButton, ButtonGroup`) → compare those
    - `all` → scan all components in `src/components/`, plus the chat widget's documented exports in `src/chat/` (they ride the same generated API with `importPath` `rift-ds/chat`)
    - A category description (e.g. "all button-like components", "all form inputs") → infer the relevant components
 
@@ -80,7 +80,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
    - A form control's `name` must reach `FormData`, whatever element it renders: on the native input, or through a hidden input when the control is a `div` or `button` with an ARIA role (design.md, "A control reaches a form through `name`"). Flag a `name` that a form never reads, including one spread onto a `button` or a `div`. The controls design.md lists as taking no `name` are not missing one.
 
    **Family consistency:**
-   - Components in the same family (e.g. Button / CircularButton / ButtonGroup) should share `size` enum values
+   - Components in the same family (e.g. Button / IconButton / ButtonGroup) should share `size` enum values
    - If one component accepts `iconLeft`/`iconRight`, siblings in the same family should follow the same pattern
    - Default values: if `size` defaults to `"default"` on a Gadget, it should not default to `"medium"` on a related Sprocket
 

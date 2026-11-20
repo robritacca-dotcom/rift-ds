@@ -72,7 +72,11 @@ for (const c of registry.components) {
 // recharts wrapper set in Chart/) contribute that folder's modules
 // exactly once.
 const componentFolders = [
-  ...new Set(registry.components.map((c) => c.folder ?? c.name)),
+  ...new Set([
+    ...registry.components.map((c) => c.folder ?? c.name),
+    // A renamed component's old name, still exported (deprecated) so imports of it resolve.
+    ...(registry.deprecatedAliases ?? []).map((a) => a.name),
+  ]),
 ].sort((a, b) => a.localeCompare(b));
 for (const name of componentFolders) {
   const modules = readdirSync(join(componentsDir, name))

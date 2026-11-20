@@ -61,7 +61,7 @@ import { ResourceTimeline } from "rift-ds/components/ResourceTimeline/ResourceTi
 import { OrgChart } from "rift-ds/components/OrgChart/OrgChart";
 import { FileRow } from "rift-ds/components/Attachment/FileRow";
 import { Chip } from "rift-ds/components/Chip/Chip";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { Quote } from "rift-ds/components/Quote/Quote";
@@ -837,8 +837,8 @@ const previews: Record<string, () => ReactNode> = {
           title="Assistant"
           actions={
             <>
-              <CircularButton icon="edit_square" variant="tertiary" ariaLabel="New chat" />
-              <CircularButton icon="close" variant="tertiary" ariaLabel="Close chat" />
+              <IconButton icon="edit_square" variant="tertiary" label="New chat" />
+              <IconButton icon="close" variant="tertiary" label="Close chat" />
             </>
           }
         />
@@ -918,11 +918,11 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
-  "circular-button": () => (
+  "icon-button": () => (
     <>
       <div className={styles.previewRow} style={{ gap: "12px" }}>
-        <CircularButton icon="search" ariaLabel="Search" variant="secondary" tone="neutral" />
-        <CircularButton icon="settings" ariaLabel="Settings" variant="tertiary" />
+        <IconButton icon="search" label="Search" variant="secondary" tone="neutral" />
+        <IconButton icon="settings" label="Settings" variant="tertiary" />
       </div>
     </>
   ),
@@ -1618,7 +1618,7 @@ const previews: Record<string, () => ReactNode> = {
             tabIndex={-1}
             style={{ flex: "1 1 auto", justifyContent: "flex-start" }}
           />
-          <CircularButton icon="expand_more" variant="tertiary" ariaLabel="Expand" tabIndex={-1} />
+          <IconButton icon="expand_more" variant="tertiary" label="Expand" tabIndex={-1} />
         </div>
       </div>
     </>
@@ -2246,11 +2246,11 @@ const previews: Record<string, () => ReactNode> = {
   "toolbar": () => (
     <>
       <Toolbar label="Zoom controls preview">
-        <CircularButton icon="remove" variant="tertiary" size="compact" ariaLabel="Zoom out" tooltip={false} />
+        <IconButton icon="remove" variant="tertiary" size="compact" label="Zoom out" tooltip={false} />
         <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-primary)" }}>100%</span>
-        <CircularButton icon="add" variant="tertiary" size="compact" ariaLabel="Zoom in" tooltip={false} />
+        <IconButton icon="add" variant="tertiary" size="compact" label="Zoom in" tooltip={false} />
         <ToolbarSeparator />
-        <CircularButton icon="fit_screen" variant="tertiary" size="compact" ariaLabel="Fit to screen" tooltip={false} />
+        <IconButton icon="fit_screen" variant="tertiary" size="compact" label="Fit to screen" tooltip={false} />
       </Toolbar>
     </>
   ),

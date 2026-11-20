@@ -90,6 +90,22 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `schema` + `property` (a JSON pointer) for a meta-schema property.
  */
 const SANCTIONED_BREAKS = [
+  // CircularButton was renamed IconButton. No import breaks: the old name is
+  // still exported from the barrel and its deep path (a deprecated alias, see
+  // `deprecatedAliases` in src/components/registry.json). What goes is its
+  // documentation under the old name, which the site redirects.
+  {
+    since: '1.32.0',
+    component: 'CircularButton',
+    change: 'removed',
+    reason: 'Renamed IconButton; the old name stays exported as a deprecated alias with no documented API of its own.',
+  },
+  {
+    since: '1.32.0',
+    schema: 'website/public/schema/components/circular-button.json',
+    change: 'removed',
+    reason: 'Renamed with the component to icon-button.json; the site redirects the old URL to it.',
+  },
 ];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */

@@ -43,6 +43,9 @@ const meta = {
     iconRight: {
       control: 'text',
     },
+    iconOnly: {
+      control: 'boolean',
+    },
   },
   args: {
     onClick: fn(),
@@ -425,7 +428,7 @@ export const WithIconLeftAndRight: Story = {
 export const PrimaryIconOnly: Story = {
   args: {
     variant: 'primary',
-    text: false,
+    iconOnly: true,
     iconLeft: 'add',
     iconRight: undefined,
   },
@@ -434,7 +437,7 @@ export const PrimaryIconOnly: Story = {
 export const SecondaryIconOnly: Story = {
   args: {
     variant: 'secondary',
-    text: false,
+    iconOnly: true,
     iconLeft: 'close',
     iconRight: undefined,
   },
@@ -443,7 +446,7 @@ export const SecondaryIconOnly: Story = {
 export const TertiaryIconOnly: Story = {
   args: {
     variant: 'tertiary',
-    text: false,
+    iconOnly: true,
     iconLeft: 'close',
     iconRight: undefined,
   },
@@ -672,7 +675,7 @@ export const DestructiveIconOnly: Story = {
   args: {
     variant: 'secondary',
     tone: 'destructive',
-    text: false,
+    iconOnly: true,
     iconLeft: 'delete',
     iconRight: undefined,
   },

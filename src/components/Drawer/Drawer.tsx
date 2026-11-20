@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useId } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import ReactDOM from 'react-dom';
 import './Drawer.css';
 import '../../behaviors/direction.css';
@@ -156,13 +156,13 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
             </div>
 
             {dismissible && (
-              <CircularButton
+              <IconButton
                 className={`${baseClass}__close`}
                 icon="close"
                 variant="tertiary"
                 size="compact"
                 tooltip={false}
-                ariaLabel={closeLabel}
+                label={closeLabel}
                 onClick={() => onOpenChange(false)}
               />
             )}

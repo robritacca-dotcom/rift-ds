@@ -336,20 +336,20 @@
   background: none;
 }
 
-.ds-segmented-control--cycle .ds-circular-button {
+.ds-segmented-control--cycle .ds-icon-button {
   background-color: var(--color-bg-container-primary);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: calc(var(--radius-pill) + var(--padding-100));
 }
 
-.ds-segmented-control--cycle .ds-circular-button:not(.ds-circular-button--disabled):hover {
+.ds-segmented-control--cycle .ds-icon-button:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-bg-container-secondary);
 }
 
 /* The glyph holds the icon colour in every state, as the family's glyphs
    do: only the fill steps on hover. */
-.ds-segmented-control--cycle .ds-circular-button .ds-circular-button__icon,
-.ds-segmented-control--cycle .ds-circular-button:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
-.ds-segmented-control--cycle .ds-circular-button:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+.ds-segmented-control--cycle .ds-icon-button .ds-icon-button__icon,
+.ds-segmented-control--cycle .ds-icon-button:not(.ds-icon-button--disabled):hover .ds-icon-button__icon,
+.ds-segmented-control--cycle .ds-icon-button:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-icon-default);
 }

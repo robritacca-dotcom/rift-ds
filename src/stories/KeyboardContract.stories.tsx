@@ -139,7 +139,7 @@ const FIXTURES: Record<string, Fixture> = {
   ArtifactCard: { story: 'Toggle' },
   ToggleGroup: { story: 'Uncontrolled' },
   Swatch: { story: 'Toggle' },
-  CircularButton: { story: 'PrimaryDefault' },
+  IconButton: { story: 'PrimaryDefault' },
   'AgentRail:tabs': { story: 'Switching' },
   'SplitButton:menu': { story: 'Default', open: enterOn('button[aria-haspopup="menu"]') },
   'AiButton:disclosure': { story: 'WithRequest' },

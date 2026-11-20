@@ -51,8 +51,8 @@ export default function CommandPaletteTriggerPage() {
           <section className={styles.section}>
             <SectionTitle title="Sizes and the icon form" />
             <p className={styles.demoText}>
-              Two sizes on the row-control scale. With iconOnly it folds to a
-              circle the row height across, for a row with no room for the
+              Two sizes on the row-control scale. With iconOnly it folds to its
+              icon alone, the row height across, for a row with no room for the
               field; the prompt stays its accessible name and its tooltip.
             </p>
             <div className={styles.row}>

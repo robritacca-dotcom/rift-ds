@@ -22,7 +22,7 @@ import { DocumentChip } from '../components/DocumentChip/DocumentChip';
 import { ChatMessage } from '../components/ChatMessage/ChatMessage';
 import { ChatThread, type ChatThreadProps } from '../components/ChatThread/ChatThread';
 import type { CodeBlockProps } from '../components/CodeBlock/CodeBlock';
-import { CircularButton } from '../components/CircularButton/CircularButton';
+import { IconButton } from '../components/IconButton/IconButton';
 import { PixelAvatar } from '../components/PixelAvatar/PixelAvatar';
 import { Composer, type ComposerProps } from '../components/Composer/Composer';
 import { DropdownMenu } from '../components/DropdownMenu/DropdownMenu';
@@ -998,10 +998,10 @@ export function ChatWidget({
   const headerActions = (
     <>
       {showNewChat && (
-        <CircularButton
+        <IconButton
           icon="edit_square"
           variant="tertiary"
-          ariaLabel={newChatLabel}
+          label={newChatLabel}
           tooltipPosition="bottom"
           onClick={() => {
             reset();
@@ -1014,13 +1014,13 @@ export function ChatWidget({
           says which. A control that vanishes when it is on is a control
           nobody learns. */}
       {renderAside && (
-        <CircularButton
+        <IconButton
           /* The agent's own mark, the same seed the pane's portrait uses, so
              the toggle and the panel it opens read as one character. */
           icon={<PixelAvatar name={title} size="sm" />}
           variant="tertiary"
           className={asideShown ? 'ds-chat-widget__agent-toggle--on' : undefined}
-          ariaLabel={asideShown ? hideAgentLabel : showAgentLabel}
+          label={asideShown ? hideAgentLabel : showAgentLabel}
           tooltipPosition="bottom"
           aria-expanded={asideShown}
           aria-controls={asideShown ? asideId : undefined}
@@ -1032,11 +1032,11 @@ export function ChatWidget({
           newest artifact (or, before there is one, on the empty state) and
           closes whatever is up. */}
       {artifacts && (
-        <CircularButton
+        <IconButton
           icon={artifactShown ? 'right_panel_close' : 'right_panel_open'}
           variant="tertiary"
           className={artifactShown ? 'ds-chat-widget__agent-toggle--on' : undefined}
-          ariaLabel={artifactShown ? hideArtifactLabel : showArtifactLabel}
+          label={artifactShown ? hideArtifactLabel : showArtifactLabel}
           tooltipPosition="bottom"
           aria-expanded={artifactShown}
           aria-controls={artifactShown ? artifactId : undefined}
@@ -1055,10 +1055,10 @@ export function ChatWidget({
           <DropdownMenu
             align="end"
             trigger={
-              <CircularButton
+              <IconButton
                 icon={chatPlacement(placement).icon}
                 variant="tertiary"
-                ariaLabel={placementLabel}
+                label={placementLabel}
                 tooltipPosition="bottom"
                 disabled={isFull}
               />
@@ -1079,19 +1079,19 @@ export function ChatWidget({
         </span>
       )}
       {fullscreenEnabled && (
-        <CircularButton
+        <IconButton
           icon={isFull ? 'close_fullscreen' : 'open_in_full'}
           variant="tertiary"
-          ariaLabel={isFull ? exitFullscreenLabel : enterFullscreenLabel}
+          label={isFull ? exitFullscreenLabel : enterFullscreenLabel}
           tooltipPosition="bottom"
           onClick={() => setView(isFull ? 'panel' : 'full')}
         />
       )}
       {closeEnabled && (
-        <CircularButton
+        <IconButton
           icon="close"
           variant="tertiary"
-          ariaLabel={closeLabel}
+          label={closeLabel}
           tooltipPosition="bottom"
           onClick={() => setOpen(false)}
         />
@@ -1185,10 +1185,10 @@ export function ChatWidget({
           title={
             <span className="ds-chat-widget__brand">
               {renderThreads && !threadsInline && (
-                <CircularButton
+                <IconButton
                   icon="menu"
                   variant="tertiary"
-                  ariaLabel={openThreadsLabel}
+                  label={openThreadsLabel}
                   tooltipPosition="bottom"
                   onClick={() => setThreadsOpen(true)}
                 />

@@ -43,7 +43,7 @@
         "ChatHeader",
         "ChatMessage",
         "ChatThread",
-        "CircularButton",
+        "IconButton",
         "CodeBlock",
         "Composer",
         "DocumentChip",

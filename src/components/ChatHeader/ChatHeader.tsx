@@ -10,7 +10,7 @@ type ChatHeaderOwnProps = {
    */
   title?: React.ReactNode;
   /**
-   * Trailing controls: a new-chat CircularButton, a view switcher, a close
+   * Trailing controls: a new-chat IconButton, a view switcher, a close
    * button. The slot only lays them out — each control owns its behaviour.
    */
   actions?: React.ReactNode;

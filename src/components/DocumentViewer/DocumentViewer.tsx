@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { Button } from '../Button/Button';
 import { Spinner } from '../Spinner/Spinner';
 import { useLocale } from '../../behaviors/LocaleProvider';
@@ -129,13 +129,13 @@ export function DocumentViewer({
   const downloadName = typeof download === 'string' ? download : name || undefined;
   const downloadButton = download ? (
     onDownload ? (
-      <CircularButton icon="download" variant="tertiary" size="compact" ariaLabel={downloadLabel} onClick={onDownload} />
+      <IconButton icon="download" variant="tertiary" size="compact" label={downloadLabel} onClick={onDownload} />
     ) : (
-      <CircularButton
+      <IconButton
         icon="download"
         variant="tertiary"
         size="compact"
-        ariaLabel={downloadLabel}
+        label={downloadLabel}
         href={src}
         {...({ download: downloadName } as Record<string, string | undefined>)}
       />
@@ -224,11 +224,11 @@ export function DocumentViewer({
           <div className="ds-document-viewer__actions">
             {resolved === 'image' && (
               <>
-                <CircularButton
+                <IconButton
                   icon="zoom_out"
                   variant="tertiary"
                   size="compact"
-                  ariaLabel={zoomOutLabel}
+                  label={zoomOutLabel}
                   disabled={zoom === 0}
                   onClick={() => setZoom((z) => Math.max(0, z - 1))}
                 />
@@ -240,11 +240,11 @@ export function DocumentViewer({
                 >
                   {percent}
                 </button>
-                <CircularButton
+                <IconButton
                   icon="zoom_in"
                   variant="tertiary"
                   size="compact"
-                  ariaLabel={zoomInLabel}
+                  label={zoomInLabel}
                   disabled={zoom === ZOOMS.length - 1}
                   onClick={() => setZoom((z) => Math.min(ZOOMS.length - 1, z + 1))}
                 />
@@ -252,11 +252,11 @@ export function DocumentViewer({
             )}
             {toolbar}
             {openInNewTab && (
-              <CircularButton
+              <IconButton
                 icon="open_in_new"
                 variant="tertiary"
                 size="compact"
-                ariaLabel={openLabel}
+                label={openLabel}
                 href={src}
                 target="_blank"
                 rel="noopener noreferrer"

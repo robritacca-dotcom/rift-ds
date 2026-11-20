@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useId, useState } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { CodeBlock, type CodeBlockProps } from '../CodeBlock/CodeBlock';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import './ArtifactPanel.css';
@@ -173,20 +173,20 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
             )}
             {actions}
             {onExpandedChange && (
-              <CircularButton
+              <IconButton
                 icon={expanded ? 'collapse_content' : 'expand_content'}
                 variant="tertiary"
-                ariaLabel={expanded ? collapseLabel : expandLabel}
+                label={expanded ? collapseLabel : expandLabel}
                 tooltipPosition="bottom"
                 aria-pressed={expanded}
                 onClick={() => onExpandedChange(!expanded)}
               />
             )}
             {onClose && (
-              <CircularButton
+              <IconButton
                 icon="close"
                 variant="tertiary"
-                ariaLabel={closeLabel}
+                label={closeLabel}
                 tooltipPosition="bottom"
                 onClick={onClose}
               />

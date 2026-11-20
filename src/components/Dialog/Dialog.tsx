@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useId } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import ReactDOM from 'react-dom';
 import './Dialog.css';
 import '../../fonts/material-symbols.css';
@@ -134,13 +134,13 @@ export const Dialog = React.forwardRef<HTMLDivElement, DialogProps>(
             </div>
 
             {dismissible && (
-              <CircularButton
+              <IconButton
                 className={`${baseClass}__close`}
                 icon="close"
                 variant="tertiary"
                 size="compact"
                 tooltip={false}
-                ariaLabel={closeLabel}
+                label={closeLabel}
                 onClick={() => onOpenChange(false)}
               />
             )}

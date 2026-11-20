@@ -6,7 +6,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
   THEME_PRESETS,
@@ -148,21 +148,21 @@ export default function ThemesPage() {
                       onClick={() => applyBrand(tile.value)}
                     />
                     <div className={styles.cardLinks}>
-                      <CircularButton
+                      <IconButton
                         icon="description"
                         variant="secondary"
                         tone="neutral"
                         size="compact"
-                        ariaLabel={`${tile.label} DESIGN.md`}
+                        label={`${tile.label} DESIGN.md`}
                         tooltip="DESIGN.md"
                         href={`/foundations/themes/${tile.value}`}
                       />
-                      <CircularButton
+                      <IconButton
                         icon="tune"
                         variant="secondary"
                         tone="neutral"
                         size="compact"
-                        ariaLabel={`Open ${tile.label} in the playground`}
+                        label={`Open ${tile.label} in the playground`}
                         tooltip="Playground"
                         href={`/playground?preset=${tile.value}`}
                       />

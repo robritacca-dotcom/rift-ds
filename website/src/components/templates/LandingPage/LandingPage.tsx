@@ -50,7 +50,7 @@ import { BentoTile } from "rift-ds/components/BentoTile/BentoTile";
 import { BottomNav } from "rift-ds/components/BottomNav/BottomNav";
 import { Button } from "rift-ds/components/Button/Button";
 import { Chip } from "rift-ds/components/Chip/Chip";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
   CommandPalette,
@@ -676,11 +676,11 @@ export default function LandingPage() {
         <div className={styles.headerInner}>
           {/* The dashboards' pattern: under the full layout, the menu sits
               top left, before the brand, and opens a drawer from that edge. */}
-          <CircularButton
+          <IconButton
             icon="menu"
             variant="tertiary"
             size="compact"
-            ariaLabel="Open menu"
+            label="Open menu"
             tooltip={false}
             onClick={() => setMenuOpen(true)}
             className={styles.menuButton}
@@ -725,11 +725,11 @@ export default function LandingPage() {
                 onClick: () => setLanguageId(l.id),
               }))}
             />
-            <CircularButton
+            <IconButton
               icon="search"
               variant="tertiary"
               size="compact"
-              ariaLabel="Search"
+              label="Search"
               tooltip="Search (⌘K)"
               onClick={() => setPaletteOpen(true)}
               className={styles.headerSearch}

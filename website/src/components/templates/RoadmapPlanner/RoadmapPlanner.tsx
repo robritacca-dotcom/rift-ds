@@ -27,7 +27,7 @@ import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Divider } from "rift-ds/components/Divider/Divider";
 import {
   Dropdown,
@@ -547,22 +547,22 @@ export default function RoadmapPlanner() {
               <div className={styles.topBarActions}>
                 {/* Mobile: the full search field folds to this icon, riding
                     with the other actions on the right. */}
-                <CircularButton
+                <IconButton
                   icon="search"
                   variant="secondary"
                   tone="neutral"
-                  ariaLabel="Search initiatives"
+                  label="Search initiatives"
                   className={styles.searchIconMobile}
                 />
                 <AiButton
                   label="Ask AI"
                   onClick={() => setChatOpen(true)}
                 />
-                <CircularButton
+                <IconButton
                   icon="notifications"
                   variant="secondary"
                   tone="neutral"
-                  ariaLabel="Notifications"
+                  label="Notifications"
                 />
               </div>
             </div>

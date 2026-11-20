@@ -7,7 +7,7 @@ import '../../fonts/material-symbols.css';
 import { logicalArrowKey, mirrorClass } from '../../behaviors/direction';
 import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { useTopLayer } from '../../behaviors/useTopLayer';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { warnOnce } from '../../behaviors/devWarning';
 
 export interface Segment {
@@ -498,7 +498,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
             .join(' ')}
         >
           {current && (
-            <CircularButton
+            <IconButton
               icon={
                 current.icon ?? (
                   <span aria-hidden="true">{current.label.charAt(0)}</span>
@@ -507,7 +507,7 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
               size={size}
               variant="secondary"
               tone="neutral"
-              ariaLabel={label}
+              label={label}
               tooltip={current.label}
               disabled={next === current}
               onClick={() => select(next.value)}

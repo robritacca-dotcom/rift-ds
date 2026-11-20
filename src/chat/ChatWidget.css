@@ -78,8 +78,8 @@
   display: none;
 }
 
-.ds-chat-widget__placement-menu .ds-circular-button[aria-expanded="true"],
-.ds-chat-widget__placement-menu .ds-circular-button[aria-expanded="true"]:hover {
+.ds-chat-widget__placement-menu .ds-icon-button[aria-expanded="true"],
+.ds-chat-widget__placement-menu .ds-icon-button[aria-expanded="true"]:hover {
   background-color: var(--color-action-passive-bg-hover);
 }
 
@@ -1025,8 +1025,8 @@
 /* The agent toggle's on-state: the passive wash, held down while the panel
    is up. Paired with the library class so it beats the variant's resting
    background whatever order the stylesheets load in. */
-.ds-circular-button.ds-chat-widget__agent-toggle--on,
-.ds-circular-button.ds-chat-widget__agent-toggle--on:hover {
+.ds-icon-button.ds-chat-widget__agent-toggle--on,
+.ds-icon-button.ds-chat-widget__agent-toggle--on:hover {
   background-color: var(--color-action-passive-bg-hover);
 }
 

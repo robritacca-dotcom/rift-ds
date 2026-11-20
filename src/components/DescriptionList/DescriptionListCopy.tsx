@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { MOTION_FEEDBACK_RESET_MS } from '../../tokens/motion';
 
 /** Props owned by DescriptionListCopy. */
@@ -40,7 +40,7 @@ function writeClipboard(text: string) {
 /**
  * The copy button beside a description list value. Internal: DescriptionList
  * renders it for a `copyable` item, so the list itself stays
- * server-renderable. A compact tertiary CircularButton whose glyph and name
+ * server-renderable. A compact tertiary IconButton whose glyph and name
  * turn to "Copied" for a moment after a press.
  */
 export function DescriptionListCopy({ value, label, copiedLabel, onCopied }: DescriptionListCopyProps) {
@@ -55,12 +55,12 @@ export function DescriptionListCopy({ value, label, copiedLabel, onCopied }: Des
     timer.current = window.setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
   };
   return (
-    <CircularButton
+    <IconButton
       className="ds-description-list__copy"
       icon={copied ? 'check' : 'content_copy'}
       variant="tertiary"
       size="compact"
-      ariaLabel={copied ? copiedLabel : label}
+      label={copied ? copiedLabel : label}
       onClick={copy}
     />
   );

@@ -3,7 +3,8 @@
  * Validates src/components/registry.json against the filesystem.
  *
  * Every folder in src/components must appear in exactly one of the
- * registry's two lists (`components` or `docOnlyHelpers`), and every
+ * registry's lists (`components`, `docOnlyHelpers`, or `deprecatedAliases`
+ * for a renamed component's old name, kept as one re-exporting module), and every
  * registry entry must have a folder. Runs before every build — library,
  * Storybook, and website — so the public component count can never
  * silently drift from reality.
@@ -171,10 +172,38 @@ function clientNeeds(entry) {
   }
   return needs;
 }
+// A renamed component keeps its old folder as a deprecated alias: one module
+// that re-exports the new component under the old name, so imports of the
+// old name and its deep path still resolve (the published API only grows).
+// It has no page, story or schema of its own; the barrel generator exports it.
+const deprecatedAliases = registry.deprecatedAliases ?? [];
+const aliasProblems = [];
+for (const alias of deprecatedAliases) {
+  const file = join(componentsDir, alias.name, `${alias.name}.tsx`);
+  if (!registry.components.some((c) => c.name === alias.replacedBy)) {
+    aliasProblems.push(`${alias.name}: replacedBy names "${alias.replacedBy}", which is not a registered component`);
+  }
+  if (registry.components.some((c) => c.name === alias.name)) {
+    aliasProblems.push(`${alias.name} is both a component and a deprecated alias`);
+  }
+  if (!existsSync(file)) continue; // folder parity below reports the missing folder
+  const source = readFileSync(file, 'utf8');
+  if (!source.includes('@deprecated') || !source.includes(`/${alias.replacedBy}/${alias.replacedBy}'`)) {
+    aliasProblems.push(`${alias.name}: src/components/${alias.name}/${alias.name}.tsx must import ${alias.replacedBy} and mark its exports @deprecated`);
+  }
+}
+if (aliasProblems.length > 0) {
+  console.error(
+    `✗ Deprecated aliases in src/components/registry.json are wrong:\n` +
+      aliasProblems.map((p) => `    - ${p}`).join('\n'),
+  );
+  process.exit(1);
+}
 const registered = [
   ...new Set([
     ...registry.components.map(componentFolder),
     ...registry.docOnlyHelpers,
+    ...deprecatedAliases.map((a) => a.name),
   ]),
 ].sort();
 

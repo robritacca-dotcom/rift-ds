@@ -6,7 +6,7 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { AlertDialog } from "rift-ds/components/AlertDialog/AlertDialog";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import {
   CommandPalette,
   type CommandPaletteGroup,
@@ -113,7 +113,7 @@ export default function OverlaysSection() {
           <Button label="@ada" variant="tertiary" />
         </HoverCard>
         <Tooltip content="Tooltips follow the same surfaces">
-          <CircularButton icon="help" variant="tertiary" ariaLabel="Tooltip demo" tooltip={false} />
+          <IconButton icon="help" variant="tertiary" label="Tooltip demo" tooltip={false} />
         </Tooltip>
       </div>
 

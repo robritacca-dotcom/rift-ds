@@ -45,6 +45,12 @@ type ButtonOwnProps = {
   tone?: 'default' | 'neutral' | 'destructive';
   /** Button size */
   size?: 'default' | 'compact';
+  /**
+   * Draws the button holding only its icon, on an even box. The label stays
+   * as its accessible name. For an icon action that also names itself on
+   * hover, use IconButton, which wears a tooltip.
+   */
+  iconOnly?: boolean;
   /** Whether the button is disabled */
   disabled?: boolean;
   /**
@@ -102,8 +108,7 @@ type ButtonOwnProps = {
   /**
    * Legacy toggle for showing the text label.
    *
-   * @deprecated Will be removed once `label` loses its default in the next major;
-   * an icon-only button will simply omit `label`.
+   * @deprecated Use `iconOnly`, the spelling the button family shares.
    */
   text?: boolean;
 };
@@ -165,6 +170,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       variant,
       tone,
       size = 'default',
+      iconOnly = false,
       disabled,
       loading,
       glass,
@@ -177,7 +183,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       priority,
       state,
       icon,
-      text = true,
+      text: textProp = true,
       ...rest
     },
     ref,
@@ -199,6 +205,8 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       );
     }
     const label = labelProp ?? childText ?? 'Button';
+    // `iconOnly` is the real prop; `text={false}` is the deprecated spelling.
+    const text = textProp && !iconOnly;
 
     // `priority` is the deprecated spelling of `variant`; `variant` wins when both are set.
     const resolvedVariant = resolveButtonCell(variant ?? priority ?? 'primary', tone);
@@ -255,7 +263,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       );
     };
 
-    // An icon-only button (text={false}, or no label) renders nothing a screen
+    // An icon-only button (iconOnly, or no label) renders nothing a screen
     // reader can announce. Fall back to the label as the accessible name
     // unless the consumer supplied one explicitly.
     const needsAccessibleName = !text || !label;

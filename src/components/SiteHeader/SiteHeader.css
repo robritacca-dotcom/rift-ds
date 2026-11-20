@@ -174,13 +174,13 @@
   border-radius: calc(var(--radius-pill) + var(--padding-100));
 }
 
-.ds-site-header .ds-site-header__menu-button:not(.ds-circular-button--disabled):hover {
+.ds-site-header .ds-site-header__menu-button:not(.ds-icon-button--disabled):hover {
   background-color: var(--color-bg-container-secondary);
 }
 
-.ds-site-header .ds-site-header__menu-button .ds-circular-button__icon,
-.ds-site-header .ds-site-header__menu-button:not(.ds-circular-button--disabled):hover .ds-circular-button__icon,
-.ds-site-header .ds-site-header__menu-button:not(.ds-circular-button--disabled):active .ds-circular-button__icon {
+.ds-site-header .ds-site-header__menu-button .ds-icon-button__icon,
+.ds-site-header .ds-site-header__menu-button:not(.ds-icon-button--disabled):hover .ds-icon-button__icon,
+.ds-site-header .ds-site-header__menu-button:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-icon-default);
 }
 
@@ -328,7 +328,7 @@
    turning into another. */
 .ds-site-header__drawer .ds-drawer__close .material-symbols-rounded {
   --icon-size: var(--icon-size-600);
-  /* The glyph takes the close's on-scrim white, not CircularButton's
+  /* The glyph takes the close's on-scrim white, not IconButton's
      icon colour, which is dark in light mode and vanished on the scrim. */
   color: inherit;
 }

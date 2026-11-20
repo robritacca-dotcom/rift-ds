@@ -16,7 +16,7 @@ import {
 } from '@tanstack/react-table';
 import { DropdownMenu, type DropdownMenuEntry } from '../DropdownMenu/DropdownMenu';
 import { Dropdown } from '../Dropdown/Dropdown';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 import { Button } from '../Button/Button';
 import { Spinner } from '../Spinner/Spinner';
 import { VirtualRows } from './VirtualRows';
@@ -2920,12 +2920,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 onOpenChange={(open) => setMenuKey(open ? key : null)}
                 items={menuItems(key)}
                 trigger={
-                  <CircularButton
+                  <IconButton
                     icon="more_horiz"
                     variant="tertiary"
                     size="compact"
                     tooltip={false}
-                    ariaLabel={labels.menu(text)}
+                    label={labels.menu(text)}
                     tabIndex={innerTab}
                   />
                 }
@@ -3418,12 +3418,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 })()}
               </div>
               {editMode === 'cell' && editable && !isLive(col) && !editingHere && (
-                <CircularButton
+                <IconButton
                   className={`${baseClass}__edit-hint${alignsEnd(col.align) ? ` ${baseClass}__edit-hint--start` : ''}`}
                   icon="edit"
                   variant="tertiary"
                   size="compact"
-                  ariaLabel={labels.editCell(headerText(col), name)}
+                  label={labels.editCell(headerText(col), name)}
                   tooltip={false}
                   tabIndex={-1}
                   onClick={() => startEdit(row.id, key)}
@@ -3487,23 +3487,23 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
             <div className={`ds-table__cell-content ${baseClass}__actions-row`}>
               {editMode === 'row' && editing?.row === row.id ? (
                 <>
-                  <CircularButton
+                  <IconButton
                     className={`${baseClass}__save`}
                     icon="check"
                     variant="tertiary"
                     size="compact"
-                    ariaLabel={labels.saveRow(name)}
+                    label={labels.saveRow(name)}
                     tooltip={labels.saveRow(name)}
                     tooltipPosition="start"
                     onClick={() => commitEdit('stay')}
                     tabIndex={innerTab}
                   />
-                  <CircularButton
+                  <IconButton
                     className={`${baseClass}__cancel`}
                     icon="close"
                     variant="tertiary"
                     size="compact"
-                    ariaLabel={labels.cancelRow(name)}
+                    label={labels.cancelRow(name)}
                     tooltip={labels.cancelRow(name)}
                     tooltipPosition="start"
                     onClick={cancelEdit}
@@ -3513,12 +3513,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
               ) : (
                 editMode === 'row' &&
                 visibleKeys.some((k) => canEdit(byKey.get(k), row) && !isLive(byKey.get(k))) && (
-                  <CircularButton
+                  <IconButton
                     className={`${baseClass}__inline-action`}
                     icon="edit"
                     variant="tertiary"
                     size="compact"
-                    ariaLabel={labels.editRow(name)}
+                    label={labels.editRow(name)}
                     tooltip={labels.editRow(name)}
                     tooltipPosition="start"
                     disabled={editing !== null}
@@ -3531,13 +3531,13 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                 actionsFor(row)
                   .filter((action) => action.inline)
                   .map((action) => (
-                    <CircularButton
+                    <IconButton
                       key={action.id}
                       className={`${baseClass}__inline-action`}
                       icon={action.icon ?? 'bolt'}
                       variant="tertiary"
                       size="compact"
-                      ariaLabel={action.label}
+                      label={action.label}
                       tooltip={action.label}
                       tooltipPosition="start"
                       disabled={action.disabled}
@@ -3559,12 +3559,12 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                       onClick: action.onSelect,
                     }))}
                   trigger={
-                    <CircularButton
+                    <IconButton
                       icon="more_horiz"
                       variant="tertiary"
                       size="compact"
                       tooltip={false}
-                      ariaLabel={labels.moreActions(name)}
+                      label={labels.moreActions(name)}
                       tabIndex={innerTab}
                     />
                   }

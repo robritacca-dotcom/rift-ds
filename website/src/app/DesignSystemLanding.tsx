@@ -52,7 +52,7 @@ import { Card } from "rift-ds/components/Card/Card";
 import { CardStack } from "rift-ds/components/CardStack/CardStack";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { Chip } from "rift-ds/components/Chip/Chip";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import {
   ContributionGraph,
@@ -821,7 +821,7 @@ export default function DesignSystemLanding() {
       <ChatHeader
         title="Money copilot"
         actions={
-          <CircularButton icon="edit_square" variant="tertiary" ariaLabel="New chat" />
+          <IconButton icon="edit_square" variant="tertiary" label="New chat" />
         }
       />
       <ChatThread ariaLabel="Example conversation" className={styles.chatDemoThread}>
@@ -1017,23 +1017,23 @@ export default function DesignSystemLanding() {
 
     <DemoCard
       heading="Quick actions"
-      links={[{ label: "Circular button", href: "/components/circular-button" }]}
+      links={[{ label: "Icon button", href: "/components/icon-button" }]}
     >
       <div className={styles.quickActions}>
         <div className={styles.quickAction}>
-          <CircularButton icon="arrow_upward" variant="primary" ariaLabel="Send money" />
+          <IconButton icon="arrow_upward" variant="primary" label="Send money" />
           <span className={styles.quickActionLabel}>Send</span>
         </div>
         <div className={styles.quickAction}>
-          <CircularButton icon="arrow_downward" variant="secondary" tone="neutral" ariaLabel="Request money" />
+          <IconButton icon="arrow_downward" variant="secondary" tone="neutral" label="Request money" />
           <span className={styles.quickActionLabel}>Request</span>
         </div>
         <div className={styles.quickAction}>
-          <CircularButton icon="add" variant="secondary" tone="neutral" ariaLabel="Top up balance" />
+          <IconButton icon="add" variant="secondary" tone="neutral" label="Top up balance" />
           <span className={styles.quickActionLabel}>Top up</span>
         </div>
         <div className={styles.quickAction}>
-          <CircularButton icon="more_horiz" variant="tertiary" ariaLabel="More actions" />
+          <IconButton icon="more_horiz" variant="tertiary" label="More actions" />
           <span className={styles.quickActionLabel}>More</span>
         </div>
       </div>

@@ -30,7 +30,7 @@ import { AiButton } from "rift-ds/components/AiButton/AiButton";
 import type { AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
 import { PageHeader } from "rift-ds/components/PageHeader/PageHeader";
 import { Icon } from "rift-ds/components/Icon/Icon";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import {
   DataTable,
   type DataTableColumn,
@@ -460,19 +460,19 @@ export default function Analytics() {
               </span>
             </div>
             <div className={styles.topBarActions}>
-              <CircularButton
+              <IconButton
                 icon="search"
                 variant="secondary"
                 tone="neutral"
-                ariaLabel="Search reports"
+                label="Search reports"
                 className={styles.searchIconMobile}
               />
               <AiButton label="Ask AI" onClick={() => setChatOpen(true)} />
-              <CircularButton
+              <IconButton
                 icon="notifications"
                 variant="secondary"
                 tone="neutral"
-                ariaLabel="Notifications"
+                label="Notifications"
               />
             </div>
           </div>

@@ -4,7 +4,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { FileRow } from "rift-ds/components/Attachment/FileRow";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -41,7 +41,7 @@ export default function FileRowPage() {
                     name={name}
                     meta={meta}
                     href="#"
-                    actions={<CircularButton icon="download" variant="tertiary" size="compact" ariaLabel={`Download ${name}`} />}
+                    actions={<IconButton icon="download" variant="tertiary" size="compact" label={`Download ${name}`} />}
                   />
                 ))}
               </div>

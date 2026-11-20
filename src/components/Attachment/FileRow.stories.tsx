@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 import { FileRow } from './FileRow';
-import { CircularButton } from '../CircularButton/CircularButton';
+import { IconButton } from '../IconButton/IconButton';
 
 const meta = {
   title: 'Components/FileRow',
@@ -52,7 +52,7 @@ export const DocumentList: Story = {
           name={name}
           meta={detail}
           onOpen={args.onOpen}
-          actions={<CircularButton icon="download" variant="tertiary" size="compact" ariaLabel={`Download ${name}`} />}
+          actions={<IconButton icon="download" variant="tertiary" size="compact" label={`Download ${name}`} />}
         />
       ))}
     </div>

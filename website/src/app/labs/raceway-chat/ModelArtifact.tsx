@@ -15,7 +15,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "rift-ds/components/Button/Button";
 import { Chip } from "rift-ds/components/Chip/Chip";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { DropdownMenu, type DropdownMenuEntry } from "rift-ds/components/DropdownMenu/DropdownMenu";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
@@ -274,17 +274,17 @@ export default function ModelArtifact() {
         />
         <span className={styles.zoomGroup}>
           <ToolbarSeparator />
-          <CircularButton icon="remove" variant="tertiary" size="compact" ariaLabel="Zoom out" disabled={!ready} onClick={() => controls.current?.zoomOut()} />
+          <IconButton icon="remove" variant="tertiary" size="compact" label="Zoom out" disabled={!ready} onClick={() => controls.current?.zoomOut()} />
           <span className={styles.zoomValue} aria-live="polite">{integer.format(zoom)}%</span>
-          <CircularButton icon="add" variant="tertiary" size="compact" ariaLabel="Zoom in" disabled={!ready} onClick={() => controls.current?.zoomIn()} />
+          <IconButton icon="add" variant="tertiary" size="compact" label="Zoom in" disabled={!ready} onClick={() => controls.current?.zoomIn()} />
         </span>
         <ToolbarSeparator />
-        <CircularButton icon="fit_screen" variant="tertiary" size="compact" ariaLabel="Frame the building" disabled={!ready} onClick={() => run(command("frame_building"))} />
-        <CircularButton
+        <IconButton icon="fit_screen" variant="tertiary" size="compact" label="Frame the building" disabled={!ready} onClick={() => run(command("frame_building"))} />
+        <IconButton
           icon={view?.architecture === false ? "domain_disabled" : "domain"}
           variant={view?.architecture === false ? "tertiary" : "secondary"}
           size="compact"
-          ariaLabel="Show the architecture"
+          label="Show the architecture"
           aria-pressed={view?.architecture !== false}
           disabled={!ready}
           onClick={() => run(command("set_architecture", { visible: view?.architecture === false }))}

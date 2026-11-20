@@ -6,7 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Table } from "rift-ds/components/Table/Table";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Input } from "rift-ds/components/Input/Input";
 import { Checkbox } from "rift-ds/components/Checkbox/Checkbox";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -165,8 +165,8 @@ export default function TablePage() {
                       email: "alice@example.com",
                       actions: (
                         <span style={{ display: "inline-flex", gap: "4px" }}>
-                          <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-                          <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
+                          <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+                          <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
                         </span>
                       ),
                     },
@@ -185,8 +185,8 @@ export default function TablePage() {
                       email: "bob@example.com",
                       actions: (
                         <span style={{ display: "inline-flex", gap: "4px" }}>
-                          <CircularButton icon="edit" ariaLabel="Edit" variant="tertiary" size="compact" />
-                          <CircularButton icon="delete" ariaLabel="Delete" variant="tertiary" size="compact" />
+                          <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+                          <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
                         </span>
                       ),
                     },

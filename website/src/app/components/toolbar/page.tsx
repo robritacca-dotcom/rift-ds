@@ -6,7 +6,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Toolbar, ToolbarSeparator } from "rift-ds/components/Toolbar/Toolbar";
 import { Button } from "rift-ds/components/Button/Button";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -48,22 +48,22 @@ export default function ToolbarPage() {
             </p>
             <div className={styles.variantRow}>
               <Toolbar label="Zoom controls">
-                <CircularButton
+                <IconButton
                   icon="remove"
                   variant="tertiary"
-                  ariaLabel="Zoom out"
+                  label="Zoom out"
                   onClick={() => setZoom((z) => Math.max(z - 25, 25))}
                 />
                 <Button label={`${zoom}%`} variant="tertiary" size="compact" onClick={() => setZoom(100)} />
-                <CircularButton
+                <IconButton
                   icon="add"
                   variant="tertiary"
-                  ariaLabel="Zoom in"
+                  label="Zoom in"
                   onClick={() => setZoom((z) => Math.min(z + 25, 400))}
                 />
                 <ToolbarSeparator />
-                <CircularButton icon="fit_screen" variant="tertiary" ariaLabel="Fit to screen" onClick={() => setZoom(100)} />
-                <CircularButton icon="open_in_full" variant="tertiary" ariaLabel="Expand" />
+                <IconButton icon="fit_screen" variant="tertiary" label="Fit to screen" onClick={() => setZoom(100)} />
+                <IconButton icon="open_in_full" variant="tertiary" label="Expand" />
               </Toolbar>
             </div>
           </section>
@@ -76,8 +76,8 @@ export default function ToolbarPage() {
             </p>
             <div className={styles.stage}>
               <Toolbar label="Canvas controls" variant="floating">
-                <CircularButton icon="undo" variant="tertiary" ariaLabel="Undo" />
-                <CircularButton icon="redo" variant="tertiary" ariaLabel="Redo" />
+                <IconButton icon="undo" variant="tertiary" label="Undo" />
+                <IconButton icon="redo" variant="tertiary" label="Redo" />
                 <ToolbarSeparator />
                 <SegmentedControl
                   size="compact"
@@ -90,7 +90,7 @@ export default function ToolbarPage() {
                   onValueChange={setMode}
                 />
                 <ToolbarSeparator />
-                <CircularButton icon="delete" variant="tertiary" ariaLabel="Delete selection" />
+                <IconButton icon="delete" variant="tertiary" label="Delete selection" />
               </Toolbar>
             </div>
           </section>
@@ -100,11 +100,11 @@ export default function ToolbarPage() {
             <SectionTitle title="Vertical" />
             <div className={styles.variantRow}>
               <Toolbar label="Drawing tools" orientation="vertical">
-                <CircularButton icon="near_me" variant="tertiary" ariaLabel="Select tool" />
-                <CircularButton icon="edit" variant="tertiary" ariaLabel="Draw tool" />
-                <CircularButton icon="crop_square" variant="tertiary" ariaLabel="Shape tool" />
+                <IconButton icon="near_me" variant="tertiary" label="Select tool" />
+                <IconButton icon="edit" variant="tertiary" label="Draw tool" />
+                <IconButton icon="crop_square" variant="tertiary" label="Shape tool" />
                 <ToolbarSeparator />
-                <CircularButton icon="delete" variant="tertiary" ariaLabel="Delete" />
+                <IconButton icon="delete" variant="tertiary" label="Delete" />
               </Toolbar>
             </div>
           </section>
@@ -120,7 +120,7 @@ export default function ToolbarPage() {
                 <Button label="Share" variant="primary" size="compact" />
                 <Button label="Preview" variant="tertiary" size="compact" />
                 <ToolbarSeparator />
-                <CircularButton icon="more_horiz" variant="tertiary" ariaLabel="More actions" />
+                <IconButton icon="more_horiz" variant="tertiary" label="More actions" />
               </Toolbar>
             </div>
           </section>

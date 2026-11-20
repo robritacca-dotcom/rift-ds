@@ -364,7 +364,7 @@
 
 /* The handle sits on the content inset, centred on the heading's first
    line, so it reads as part of the heading row whatever the type scale.
-   32px is CircularButton's compact size. */
+   32px is IconButton's compact size. */
 .ds-bento-tile__toggle {
   position: absolute;
   top: calc(var(--_inset) + (var(--font-heading-2-line-height) - 32px) / 2);

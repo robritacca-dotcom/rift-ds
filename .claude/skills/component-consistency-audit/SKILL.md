@@ -76,7 +76,7 @@ A deliberate departure needs a sentence in the component's `design.md` spec sayi
 The things every component needs and must not redraw. For each, the one home is named in `design.md`'s Components intro; confirm every use composes it:
 
 - Visually hidden text → `ds-visually-hidden` from `src/behaviors/visually-hidden.css`.
-- A header's close button → a compact tertiary `CircularButton`.
+- A header's close button → a compact tertiary `IconButton`.
 - The check and minus glyphs → `CheckIcon` and `MinusIcon`, exported beside Checkbox.
 - A focus ring on a control → the 2px action ring on the indicator; a host that is itself the target rings its own edge.
 - A label-and-description text column, a helper line, a disabled treatment → the same tokens and the same structure as the nearest sibling (Checkbox and RadioButton are the pair to line up).

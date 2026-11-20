@@ -50,7 +50,7 @@ export const SANCTIONED = {
   Carousel: 'selected item (the active slide dot)',
   Checkbox: 'checked state of a form control',
   Chip: 'selected item (a filter chip toggled on)',
-  CircularButton: 'primary CTA',
+  IconButton: 'primary CTA',
   DatePicker: 'selected item (the chosen day)',
   Dropdown: 'the chosen mark (ChosenMark, the selected-row check every listbox and menu draws)',
   EventCalendar: 'selected item (the selected day)',

@@ -123,7 +123,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* The send button's exact footprint — CircularButton's default size,
+  /* The send button's exact footprint — IconButton's default size,
      a raw value there too (icon-button sizes are not on a token scale). */
   width: 40px;
   height: 40px;

@@ -357,7 +357,10 @@
       "description": "Primary, secondary and tertiary emphasis, each in a default, neutral or destructive tone, with icons, loading, and default and compact sizes.",
       "category": "actions",
       "client": true,
-      "pattern": "button"
+      "pattern": "button",
+      "alternatives": [
+        { "name": "IconButton", "when": "the action is an icon alone and should name itself on hover" }
+      ]
     },
     {
       "name": "ButtonGroup",
@@ -463,15 +466,6 @@
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" }
-    },
-    {
-      "name": "CircularButton",
-      "label": "Circular button",
-      "slug": "circular-button",
-      "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
-      "category": "actions",
-      "client": false,
-      "pattern": "button"
     },
     {
       "name": "CodeBlock",
@@ -922,6 +916,18 @@
       "category": "typography",
       "client": false,
       "keys": { "by": "none" }
+    },
+    {
+      "name": "IconButton",
+      "label": "Icon button",
+      "slug": "icon-button",
+      "description": "Icon-only button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
+      "category": "actions",
+      "client": false,
+      "pattern": "button",
+      "alternatives": [
+        { "name": "Button", "when": "the action needs its words on show, with or without an icon beside them" }
+      ]
     },
     {
       "name": "ImageCompare",
@@ -1922,6 +1928,9 @@
       "client": true,
       "keys": { "by": "component", "note": "With zoom on and the map focused, plus and minus zoom and the arrow keys pan. Its zoom buttons are ordinary buttons." }
     }
+  ],
+  "deprecatedAliases": [
+    { "name": "CircularButton", "replacedBy": "IconButton" }
   ],
   "docOnlyHelpers": [
     "ColourSwatch",

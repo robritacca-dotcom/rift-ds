@@ -585,7 +585,7 @@
 
 /* The spinner is a box, not a glyph: left inline in the icon slot, it sits
    on the text baseline and the strut's descender pushes it above centre.
-   Flex centres it geometrically — the same fix as CircularButton's loading
+   Flex centres it geometrically — the same fix as IconButton's loading
    icon. */
 .ds-button--loading .ds-button__icon {
   display: inline-flex;

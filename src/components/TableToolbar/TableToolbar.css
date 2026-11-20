@@ -120,8 +120,8 @@
 /* A trigger whose panel is open (the More panel's columns, the Filter menu, a
    chip's editor) holds its pressed fill until the panel closes, so the
    bar says which control the open panel belongs to. */
-.ds-table-toolbar .ds-circular-button--tertiary[aria-expanded='true'],
-.ds-table-toolbar .ds-circular-button--secondary-neutral[aria-expanded='true'],
+.ds-table-toolbar .ds-icon-button--tertiary[aria-expanded='true'],
+.ds-table-toolbar .ds-icon-button--secondary-neutral[aria-expanded='true'],
 .ds-table-toolbar .ds-chip[aria-expanded='true'],
 .ds-table-toolbar .ds-button[aria-expanded='true'] {
   background-color: var(--color-action-passive-bg-active);

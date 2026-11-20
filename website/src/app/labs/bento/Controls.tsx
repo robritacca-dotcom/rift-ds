@@ -10,7 +10,7 @@
 import React, { useState } from "react";
 import type { BentoTileProps } from "rift-ds/components/BentoTile/BentoTile";
 import type { BentoTileArtPattern } from "rift-ds/components/BentoTile/BentoTileArt";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { InspectorSection } from "rift-ds/components/Inspector/InspectorSection";
 import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
 import { InspectorSegmentedControl } from "rift-ds/components/Inspector/InspectorSegmentedControl";
@@ -90,7 +90,7 @@ export function Controls({
   if (!open) {
     return (
       <div className={styles.controlsDock}>
-        <CircularButton icon="tune" ariaLabel="Show props" variant="secondary" onClick={() => setOpen(true)} />
+        <IconButton icon="tune" label="Show props" variant="secondary" onClick={() => setOpen(true)} />
       </div>
     );
   }
@@ -100,8 +100,8 @@ export function Controls({
       <div className={styles.controlsHead}>
         <strong>BentoTile props</strong>
         <span className={styles.controlsActions}>
-          <CircularButton icon="restart_alt" ariaLabel="Reset" variant="tertiary" size="compact" onClick={onReset} />
-          <CircularButton icon="close" ariaLabel="Hide props" variant="tertiary" size="compact" onClick={() => setOpen(false)} />
+          <IconButton icon="restart_alt" label="Reset" variant="tertiary" size="compact" onClick={onReset} />
+          <IconButton icon="close" label="Hide props" variant="tertiary" size="compact" onClick={() => setOpen(false)} />
         </span>
       </div>
 

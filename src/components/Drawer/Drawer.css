@@ -213,7 +213,7 @@
 }
 
 /* Close button — ghost icon button */
-/* The close is the library's CircularButton (tertiary, compact); the
+/* The close is the library's IconButton (tertiary, compact); the
    header only seats it. */
 .ds-drawer__close {
   flex-shrink: 0;

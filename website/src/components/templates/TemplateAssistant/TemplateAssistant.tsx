@@ -50,7 +50,7 @@ import { dockWidthFromDrag, readGreeting, serverGreeting, subscribeClock, useDoc
 import { ChatHeader } from "rift-ds/components/ChatHeader/ChatHeader";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
-import { CircularButton } from "rift-ds/components/CircularButton/CircularButton";
+import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Composer } from "rift-ds/components/Composer/Composer";
 import { PromptSuggestions } from "rift-ds/components/PromptSuggestions/PromptSuggestions";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
@@ -359,10 +359,10 @@ export default function TemplateAssistant({
             title={title}
             actions={
               <>
-                <CircularButton
+                <IconButton
                   icon="edit_square"
                   variant="tertiary"
-                  ariaLabel="New chat"
+                  label="New chat"
                   tooltipPosition="bottom"
                   onClick={() => {
                     setTurns([]);
@@ -370,10 +370,10 @@ export default function TemplateAssistant({
                     focusComposer();
                   }}
                 />
-                <CircularButton
+                <IconButton
                   icon="close"
                   variant="tertiary"
-                  ariaLabel="Close chat"
+                  label="Close chat"
                   tooltipPosition="bottom"
                   onClick={onClose}
                 />

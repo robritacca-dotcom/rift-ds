@@ -150,6 +150,13 @@
   display: none;
 }
 
+/* An icon-only control wears a tooltip, which wraps it: the wrapper leaves
+   the row with the control, or it would hold a gap open. */
+.topBarActions :global(.ds-tooltip):has(> .searchIcon),
+.topBarActions :global(.ds-tooltip):has(> .aiIcon) {
+  display: none;
+}
+
 .topBarActions {
   display: flex;
   align-items: center;
@@ -221,7 +228,9 @@
   }
 
   .searchIcon,
-  .aiIcon {
+  .aiIcon,
+  .topBarActions :global(.ds-tooltip):has(> .searchIcon),
+  .topBarActions :global(.ds-tooltip):has(> .aiIcon) {
     display: inline-flex;
   }
 

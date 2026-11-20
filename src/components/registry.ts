@@ -34,7 +34,9 @@ import keyboard from './keyboard-patterns.json';
  *               and the schema, and served by the MCP get_component tool.
  *
  * `docOnlyHelpers` names the internal documentation helpers that are
- * deliberately excluded from the public count.
+ * deliberately excluded from the public count. `deprecatedAliases` names a
+ * renamed component's old name and what replaced it: the old folder keeps
+ * one re-exporting module, counted nowhere (the validator owns its shape).
  *
  * scripts/validate-component-registry.mjs compares the registry against the
  * filesystem on every build (library, Storybook, and website), so it cannot

@@ -36,7 +36,7 @@ For each high or critical finding, note: the vulnerable package, the patched ran
 
 In order of preference:
 
-1. **In-range, lockfile only.** The patched version satisfies every range that declares the package, so only `package-lock.json` changes. `npm audit fix` (no `--force`) handles most of these; for a single named package, `npm update <pkg>` in the workspace that declares it does the same. This is the usual case: every advisory fix so far in `git log --oneline -- package-lock.json` took this route.
+1. **In-range, lockfile only.** The patched version satisfies every range that declares the package, so only `package-lock.json` changes. `npm audit fix` (no `--force`) handles most of these; for a single named package, `npm update <pkg>` in the workspace that declares it does the same. This is the usual case: most advisory fixes so far in `git log --oneline -- package-lock.json` took this route.
 2. **Bump a direct dependency's range.** The patched version sits outside the declared range of a package this repo depends on directly. Edit that range in the `package.json` that declares it, then install.
 3. **Root `overrides`.** A transitive parent pins the vulnerable version exactly and has not released a fix. Add the override to the **root** `package.json`: npm honours `overrides` only in the workspace root, so a copy in `website/package.json` is silently ignored. Record why in the `$comment-overrides` note beside it, including the condition under which the pin can retire, and read that note first, since an existing pin may already be the thing to adjust.
 

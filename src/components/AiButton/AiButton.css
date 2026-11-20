@@ -755,3 +755,10 @@
 .ds-ai-button--compact:not(.ds-ai-button--icon-only):has(.ds-ai-button__icon) {
   padding-inline-start: var(--padding-200);
 }
+
+/* The icon-only form's tooltip names the button; while a panel it opened is
+   showing (its own request, a Popover, a sheet) the panel says it all, and
+   the bubble would sit on the side the panel takes. */
+.ds-tooltip:has(> .ds-ai-button[aria-expanded='true']) .ds-tooltip__panel {
+  display: none;
+}

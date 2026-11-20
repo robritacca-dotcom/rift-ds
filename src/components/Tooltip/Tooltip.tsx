@@ -154,10 +154,14 @@ export const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
     });
 
     // Associate the trigger with the tooltip for screen readers. When the
-    // child is a single element, put aria-describedby directly on it.
-    const trigger = isValidElement(children)
-      ? cloneElement(children as ReactElement<{ 'aria-describedby'?: string }>, {
-          'aria-describedby': tooltipId,
+    // child is a single element, put aria-describedby directly on it, after
+    // any description the caller already gave it.
+    const describedChild = isValidElement(children)
+      ? (children as ReactElement<{ 'aria-describedby'?: string }>)
+      : null;
+    const trigger = describedChild
+      ? cloneElement(describedChild, {
+          'aria-describedby': [describedChild.props['aria-describedby'], tooltipId].filter(Boolean).join(' '),
         })
       : children;
 

@@ -13,7 +13,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 - Subpath `rift-ds/chat/demo`: A scripted conversation with rich cards and fixtures, for a preview that needs no key. Optional peers: recharts.
 - Subpath `rift-ds/chat/chat.css`: The widget's stylesheet.
 - Scaffold: `npx rift-ds init chat`
-- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DocumentChip, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, QuestionCard, Reasoning, ThreadPanel, ThreadTabs
+- Composes: AgentRail, AgentStatus, AiButton, ArtifactCard, ArtifactPanel, AttachmentDropZone, AttachmentGroup, ChatHeader, ChatMessage, ChatThread, CircularButton, CodeBlock, Composer, DocumentChip, DropdownMenu, EmptyState, Mention, ModelPicker, PixelAvatar, PromptSuggestions, Prose, QuestionCard, Reasoning, Spinner, ThreadPanel, ThreadTabs
 - Rendering: client component (declares 'use client')
 - Live docs: https://rift-ds.com/components/ai-chat
 - Schema: https://rift-ds.com/schema/components/ai-chat.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
@@ -141,6 +141,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 | hostAttribute | `string \| false` | no | `'data-chat'` | The attribute the launcher writes on `<html>` to say how the panel sits (`docked`, `docked-left`, `takeover`), so the host's stylesheet can pad the page or hide it. `false` writes none. |
 | panelLabel | `string` | no | `'Chat'` | Accessible name for the panel. |
 | aiButtonLabels | `Pick<AiButtonProps, "dismissLabel" \| "summaryRegionLabel" \| "suggestionsLabel">` | no |  | The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title ("Summary: <title>"), its dismiss button ("Dismiss summary") and its chips' group ("Suggested prompts"). |
+| loadingLabel | `string` | no | `'Loading chat'` | Accessible name of the spinner the panel shows while the chat's code is still arriving, which happens only when the panel is opened before the page has had a moment to preload it. |
 | widget | `Omit<ChatWidgetProps, "compact" \| "fullscreenEnabled" \| "placementEnabled" \| "phone">` | no |  | Everything the widget takes. The launcher sets the responsive ones itself. |
 | children | `ReactNode` | no |  | Rendered inside the panel after the widget: for a host's extra chrome. |
 | surface | `"inset" \| "raised"` | no | `'raised'` | How the docked panel sits on the page. `raised` (the default) is a glass card with the floating shadow, inset by `--ds-chat-inset`. `inset` is AppLayout's `inset` content surface beside it, solid on the app surface colour with the same raised edge (the hairline and the floating shadow), no blur, and the `--ds-shell-inset` gap. The overlay below the dock threshold takes the same gap but keeps its shadow, since it still covers the page; the floating card and the takeover keep their own look. |

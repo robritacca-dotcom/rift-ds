@@ -49,6 +49,7 @@ export default defineConfig({
         'behaviors/LinkProvider': 'src/behaviors/LinkProvider.tsx',
         'behaviors/LocaleProvider': 'src/behaviors/LocaleProvider.tsx',
         'behaviors/shortcuts': 'src/behaviors/shortcuts.ts',
+        'behaviors/deferComponent': 'src/behaviors/deferComponent.ts',
         // The chat widget's four subpaths (scripts/package-manifest.mjs owns
         // the list; each carries its own optional peers, externalised below).
         'chat/index': 'src/chat/index.ts',

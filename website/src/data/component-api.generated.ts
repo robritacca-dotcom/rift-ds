@@ -22174,6 +22174,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             ]
           },
           {
+            "name": "loadingLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the spinner the panel shows while the chat's code is\nstill arriving, which happens only when the panel is opened before the\npage has had a moment to preload it.",
+            "defaultValue": "'Loading chat'"
+          },
+          {
             "name": "widget",
             "type": "Omit<ChatWidgetProps, \"compact\" | \"fullscreenEnabled\" | \"placementEnabled\" | \"phone\">",
             "required": false,

@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { ThemePicker } from "rift-ds/components/ThemePicker/ThemePicker";
-import { themeSelectorTiles } from "@/lib/theme/presets";
+import { themeTiles } from "@/lib/theme/theme-tiles.generated";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { applyBrand, readBrand, SERVED_THEME_ID, subscribeBrand } from "@/lib/theme/brand";
 import styles from "./BrandSwitcher.module.css";
@@ -35,7 +35,7 @@ export default function BrandSwitcher({
 }) {
   const active = useSyncExternalStore(subscribeBrand, readBrand, getServerSnapshot);
   const theme = useSiteTheme();
-  const tiles = themeSelectorTiles(theme === "dark" ? "dark" : "light");
+  const tiles = themeTiles(theme === "dark" ? "dark" : "light");
 
   return (
     <ThemePicker

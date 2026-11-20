@@ -1,98 +1,109 @@
 {
   "$comment": "Ceilings, in bytes, for what a first visit to each page of the website costs: gzipped scripts, stylesheets and document per prerendered route, and the file size of each picture under website/public/images. scripts/validate-route-budget.mjs owns the method and the rules. A ceiling only moves in the change that moves its page.",
   "default": {
-    "js": 612000,
-    "css": 138000,
-    "html": 32000
+    "js": 445000,
+    "css": 110000,
+    "html": 30000
   },
   "routes": {
     "/": {
-      "js": 828000,
-      "css": 176000,
+      "js": 785000,
+      "css": 175000,
       "html": 285000
     },
     "/blueprints/claude": {
       "html": 83000
     },
     "/blueprints/content-design": {
-      "html": 86000
+      "html": 84000
     },
     "/blueprints/design": {
       "html": 597000
     },
     "/components": {
-      "js": 740000,
-      "css": 207000,
-      "html": 180000
+      "js": 619000,
+      "css": 196000,
+      "html": 179000
     },
     "/components/ai-chat": {
+      "js": 581000,
+      "css": 146000,
       "html": 74000
     },
     "/components/composer": {
-      "html": 37000
+      "html": 35000
     },
     "/components/data-table": {
-      "html": 72000
+      "css": 128000,
+      "html": 71000
     },
     "/components/globe": {
-      "html": 50000
+      "html": 49000
     },
     "/components/table-toolbar": {
-      "html": 40000
+      "css": 129000,
+      "html": 39000
     },
     "/components/world-map": {
-      "html": 353000
+      "html": 351000
     },
     "/docs/blocks/app-shell": {
-      "css": 153000
+      "css": 129000
     },
     "/docs/blocks/dashboard": {
-      "css": 153000
+      "css": 129000
     },
     "/docs/blocks/planner": {
-      "css": 153000
+      "css": 129000
     },
     "/docs/blocks/settings": {
-      "css": 153000
+      "css": 129000
     },
     "/docs/blocks/shader-scene": {
-      "css": 153000
+      "css": 129000
     },
     "/docs/blocks/sign-in": {
-      "css": 153000
+      "css": 129000
+    },
+    "/labs/bento": {
+      "js": 497000
     },
     "/labs/marketing": {
-      "js": 744000,
-      "css": 159000
+      "js": 586000,
+      "css": 140000
     },
     "/labs/raceway-chat": {
+      "js": 542000,
       "html": 53000
     },
     "/labs/tables": {
-      "html": 67000
+      "html": 66000
     },
     "/overview": {
-      "html": 59000
+      "html": 58000
     },
     "/playground": {
-      "js": 986000,
-      "css": 197000,
-      "html": 37000
+      "js": 942000,
+      "css": 195000,
+      "html": 38000
     },
     "/releases": {
-      "html": 61000
+      "html": 59000
     },
     "/skills": {
-      "html": 180000
+      "html": 181000
     },
     "/templates/analytics": {
-      "js": 860000,
-      "css": 163000,
+      "js": 697000,
+      "css": 144000,
       "html": 133000
     },
+    "/templates/chat-home": {
+      "js": 592000
+    },
     "/templates/merchant-sales": {
-      "js": 746000,
-      "css": 159000
+      "js": 657000,
+      "css": 157000
     }
   },
   "images": {

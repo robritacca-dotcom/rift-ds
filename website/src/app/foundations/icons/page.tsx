@@ -151,7 +151,7 @@ const iconCategories: IconCategory[] = [
       "loyalty", "card_giftcard", "redeem", "receipt", "receipt_long",
       "payment", "credit_card", "account_balance", "savings",
       "currency_exchange", "point_of_sale", "shopping_basket", "sell",
-      "price_check", "discount", "local_offer", "new_releases",
+      "price_check", "percent", "local_offer", "new_releases",
     ],
   },
   {
@@ -177,7 +177,7 @@ const iconCategories: IconCategory[] = [
     icons: [
       "flight", "flight_takeoff", "flight_land", "local_airport",
       "connecting_airports", "directions_car", "directions_bus",
-      "directions_subway", "directions_train", "directions_bike",
+      "directions_subway", "train", "directions_bike",
       "directions_walk", "directions_run", "local_shipping", "local_taxi",
       "departure_board", "commute", "emoji_transportation", "ev_station",
       "local_gas_station", "traffic",
@@ -247,7 +247,7 @@ const iconCategories: IconCategory[] = [
     icons: [
       "sports_esports", "videogame_asset", "casino", "nightlife",
       "theater_comedy", "local_movies", "music_note", "library_music",
-      "album", "audiotrack", "piano", "guitar", "mic_external_on",
+      "album", "audiotrack", "piano", "graphic_eq", "mic_external_on",
     ],
   },
   {

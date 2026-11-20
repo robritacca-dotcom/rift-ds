@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
@@ -11,11 +11,19 @@ import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import BackgroundSwitcher from "../BackgroundSwitcher/BackgroundSwitcher";
 import { openSitePalette } from "../SitePalette/palette-bus";
-import { getNavSections } from "@/config/navigation";
-import { ShowcaseCover } from "./ShowcaseCover";
+import { deferComponent, usePreloadWhenIdle } from "rift-ds/behaviors/deferComponent";
+import { getNavSections, type MegaShowcase } from "@/config/navigation";
 import SiteLogo from "./SiteLogo";
 import GetStartedSplit from "./GetStartedSplit";
 import styles from "./MegaNav.module.css";
+
+/* A closed panel costs nothing: a mega menu's cover is a live drawing (a
+   shader scene, theme tiles read from every theme's token values), and the
+   header is on every page. It loads once the page is idle, ahead of the
+   first hover that could open a menu. */
+const DeferredShowcaseCover = deferComponent<{ graphic: MegaShowcase["graphic"] }>(() =>
+  import("./ShowcaseCover").then((module) => module.ShowcaseCover),
+);
 
 /**
  * The site header: the library's SiteHeader configured with this site's
@@ -29,6 +37,7 @@ export default function MegaNav() {
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const { setOpen: setChatOpen, returnFocusRef } = useChatWidget();
+  usePreloadWhenIdle(DeferredShowcaseCover.preload);
 
   // A navigation closes the drawer, including one the drawer did not start
   // (the back button). The setState reacts to external navigation, which is
@@ -71,7 +80,11 @@ export default function MegaNav() {
                 overline: showcase.overline,
                 label: showcase.label,
                 description: showcase.description,
-                cover: <ShowcaseCover graphic={showcase.graphic} />,
+                cover: (
+                  <Suspense fallback={null}>
+                    <DeferredShowcaseCover.Component graphic={showcase.graphic} />
+                  </Suspense>
+                ),
               },
             },
             // Pages that need a pointer and a wide screen stay out of the

@@ -687,6 +687,30 @@ html[data-embedded] *::after {
   color: var(--color-text-primary);
 }
 
+/* The site draws its icons from its own cut of the icon font: the same
+   outlines with the icons no page draws removed, a small fraction of the
+   download. scripts/generate-site-icons.mjs writes the file and owns which
+   icons it holds; scripts/validate-site-icons.mjs fails a build that
+   renders one it lacks. The library's full font stays second in the
+   stack, so it is fetched only if the cut fails to load, and the package
+   still ships it whole for consumers.
+
+   The `html` in front outranks the library's single-class rule wherever
+   the two stylesheets land in the page, so the order they load in cannot
+   decide which font draws. */
+@font-face {
+  font-family: 'Material Symbols Site';
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('../fonts/material-symbols-site.woff2') format('woff2');
+  font-display: block;
+}
+
+html .material-symbols-rounded,
+html .ds-list--marker-icon .ds-list__item::before {
+  font-family: 'Material Symbols Site', 'Material Symbols Rounded';
+}
+
 /* Every doc page's title block carries a pull-up margin sized to tuck the
    heading under its breadcrumb row. Section indexes render no breadcrumb
    (PageBreadcrumb returns null for top-level routes), which makes the

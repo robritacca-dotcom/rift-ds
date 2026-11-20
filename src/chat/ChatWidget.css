@@ -1076,6 +1076,15 @@
 
 /* The widen grip drives --ds-chat-width frame by frame; the width glide
    above would rubber-band behind the pointer, so resizing suspends it. */
+/* The panel while the widget's code is still arriving (it loads on first
+   open; src/behaviors/deferComponent.ts): the frame above is already
+   drawn, and a spinner holds its centre. */
+.ds-chat-launcher__loading {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+
 html[data-chat-resizing] .ds-chat-launcher__panel {
   transition: none;
 }

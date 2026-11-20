@@ -50,6 +50,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Writes a DESIGN.md file for every shipped theme."
       },
       {
+        "name": "generate-theme-tiles",
+        "text": "Writes the header theme switcher's tiles from the presets, so no page loads every preset to draw them."
+      },
+      {
         "name": "generate-library-barrel",
         "text": "Writes src/index.ts and src/charts.ts from the component registry."
       },
@@ -100,6 +104,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "generate-a11y-coverage",
         "text": "Writes the figures on the accessibility foundations page."
+      },
+      {
+        "name": "generate-site-icons",
+        "text": "Cuts the website's icon font down to the icons the source names, from the full font the package ships."
       },
       {
         "name": "generate-quality-gate",
@@ -478,6 +486,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-route-budget",
         "text": "Each page's gzipped scripts, stylesheets and document, and each picture, stay under their ceilings, and no ceiling sits far above its measure."
+      },
+      {
+        "name": "validate-site-icons",
+        "text": "Every icon the built pages draw is in the website's cut of the icon font, and the pages load that cut."
       },
       {
         "name": "smoke-hydration",

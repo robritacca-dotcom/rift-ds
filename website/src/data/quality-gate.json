@@ -62,6 +62,8 @@
     "generate-google-font-index": { "group": "generators", "text": "Writes the Google Fonts index the playground's importer reads." },
     "generate-brand-marks": { "group": "generators", "text": "Writes the brand marks the DESIGN.md importer can show." },
     "generate-a11y-coverage": { "group": "generators", "text": "Writes the figures on the accessibility foundations page." },
+    "generate-theme-tiles": { "group": "generators", "text": "Writes the header theme switcher's tiles from the presets, so no page loads every preset to draw them." },
+    "generate-site-icons": { "group": "generators", "text": "Cuts the website's icon font down to the icons the source names, from the full font the package ships." },
     "generate-quality-gate": { "group": "generators", "text": "Writes this page's list from scripts/chain.mjs, package.json and the CI workflow." },
 
     "validate-generated-files": { "group": "freshness", "text": "Every generated file whose generator exports its surface matches what that generator builds, with nothing left behind in a folder a generator owns." },
@@ -152,6 +154,7 @@
     "validate-corpus-coverage": { "group": "verify", "text": "Each covered page's rendered prose actually reached the chat corpus." },
     "validate-internal-links": { "group": "verify", "text": "Every internal link leads to a page, a route handler, a public file or a redirect." },
     "validate-route-budget": { "group": "verify", "text": "Each page's gzipped scripts, stylesheets and document, and each picture, stay under their ceilings, and no ceiling sits far above its measure." },
+    "validate-site-icons": { "group": "verify", "text": "Every icon the built pages draw is in the website's cut of the icon font, and the pages load that cut." },
     "smoke-hydration": { "group": "verify", "text": "Serves the build in a real browser: hydration succeeds and every sampled page shows real content." },
     "validate-gestures": { "group": "verify", "text": "Drives every drag grip with a fast pointer flood under CPU throttling, and fails if the page breaks." },
     "validate-website-a11y": { "group": "verify", "text": "axe over the served pages in light, dark and forced colours." },

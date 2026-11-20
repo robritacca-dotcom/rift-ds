@@ -175,6 +175,9 @@ jobs:
       # stylesheets and document, and each picture's file size) against
       # scripts/route-budget.json, the website's twin of the size budget.
       - run: node scripts/validate-route-budget.mjs
+      # The site loads its own cut of the icon font; an icon a page draws
+      # that the cut lacks would show as its name in plain letters.
+      - run: node scripts/validate-site-icons.mjs
       # Serves the build and loads it in a real browser: hydration must
       # succeed and the page must be visible with content. HTTP 200 and a
       # green build prove neither — the 2026-09-06 outage served 200 while

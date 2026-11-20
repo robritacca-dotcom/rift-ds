@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { deferComponent, usePreloadWhenIdle } from '../behaviors/deferComponent';
 import { useScrollLock } from '../behaviors/useScrollLock';
 import { AiButton, type AiButtonProps, type AiButtonSummary } from '../components/AiButton/AiButton';
-import { ChatWidget, type ChatWidgetProps } from './ChatWidget';
+import { Spinner } from '../components/Spinner/Spinner';
+import type { ChatWidgetProps } from './ChatWidget';
 import { useChatAgentState } from './agentState';
 import { useChatWidget } from './context';
 import {
@@ -16,6 +18,16 @@ import {
 import { TAKEOVER_QUERY, useDockViewport } from './queries';
 import { keepFittingSuggestions } from './suggestions';
 import './ChatWidget.css';
+
+/* A closed panel costs nothing: the widget, and the markdown renderer it
+   brings, load when the panel first opens. They are preloaded as the page
+   goes idle and again from the button's hover and focus, so the panel does
+   not open empty (src/behaviors/deferComponent.ts owns the pattern). The
+   stylesheet stays a static import: it is small, and the panel's own frame
+   is drawn from it before the widget arrives. */
+const DeferredChatWidget = deferComponent<ChatWidgetProps>(() =>
+  import('./ChatWidget').then((module) => module.ChatWidget)
+);
 
 /** The id the panel carries, for a host control's `aria-controls`. */
 export const CHAT_PANEL_ID = 'ds-chat-panel';
@@ -87,6 +99,12 @@ export interface ChatLauncherProps {
   panelLabel?: string;
   /** The words of the floating button's summary panel, over AiButton's English defaults: the panel's name, given the summary's title ("Summary: <title>"), its dismiss button ("Dismiss summary") and its chips' group ("Suggested prompts"). */
   aiButtonLabels?: Pick<AiButtonProps, 'summaryRegionLabel' | 'dismissLabel' | 'suggestionsLabel'>;
+  /**
+   * Accessible name of the spinner the panel shows while the chat's code is
+   * still arriving, which happens only when the panel is opened before the
+   * page has had a moment to preload it.
+   */
+  loadingLabel?: string;
   /** Everything the widget takes. The launcher sets the responsive ones itself. */
   widget?: Omit<ChatWidgetProps, 'fullscreenEnabled' | 'placementEnabled' | 'compact' | 'phone'>;
   /** Rendered inside the panel after the widget: for a host's extra chrome. */
@@ -138,6 +156,7 @@ export function ChatLauncher({
   hostAttribute = 'data-chat',
   panelLabel = 'Chat',
   aiButtonLabels,
+  loadingLabel = 'Loading chat',
   widget,
   children,
   surface = 'raised',
@@ -149,6 +168,8 @@ export function ChatLauncher({
   /* Read up here, where it outlives the button: the button unmounts while the
      panel is open, and a reply that ended back then is not news on its return. */
   const agentState = useChatAgentState();
+
+  usePreloadWhenIdle(DeferredChatWidget.preload);
 
   const launchSuggestion = (id: string) => {
     const chip = summary?.chips?.find((c) => c.id === id);
@@ -454,7 +475,11 @@ export function ChatLauncher({
   if (!renderPanel) {
     if (!fab) return null;
     return (
-      <div className="ds-chat-launcher__fab">
+      <div
+        className="ds-chat-launcher__fab"
+        onPointerEnter={DeferredChatWidget.preload}
+        onFocusCapture={DeferredChatWidget.preload}
+      >
         <AiButton
           {...aiButtonLabels}
           label={label}
@@ -564,13 +589,23 @@ export function ChatLauncher({
       >
         {/* compact tracks the host's width, not the view: a takeover on a
             phone still wants phone insets, where one on a desktop does not. */}
-        <ChatWidget
-          {...widget}
-          fullscreenEnabled={!takeover}
-          placementEnabled={!takeover}
-          compact={takeover || !isFull}
-          phone={takeover}
-        />
+        {/* Seen only when the panel opens before its code has arrived: the
+            frame is already drawn, and the spinner says the rest is coming. */}
+        <Suspense
+          fallback={
+            <div className="ds-chat-launcher__loading">
+              <Spinner size="lg" tone="neutral" label={loadingLabel} />
+            </div>
+          }
+        >
+          <DeferredChatWidget.Component
+            {...widget}
+            fullscreenEnabled={!takeover}
+            placementEnabled={!takeover}
+            compact={takeover || !isFull}
+            phone={takeover}
+          />
+        </Suspense>
         {children}
         {/* The size grips, inside the card's edge rather than straddling it,
             because the panel clips its own overflow. Pointer-only, like the

@@ -15,12 +15,16 @@ import photo6 from './assets/attachments/photo-6.jpg';
 import photo7 from './assets/attachments/photo-7.jpg';
 import photoTall from './assets/attachments/photo-tall.jpg';
 import photoWide from './assets/attachments/photo-wide.jpg';
+import photoWideMono from './assets/attachments/photo-wide-mono.jpg';
 
 /** Seven square pictures, for grids and galleries. */
 export const PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6, photo7];
 
 /** A wide picture, 768 by 480, for the aspect-ratio cases. */
 export const PHOTO_LANDSCAPE = photoWide;
+
+/** The wide picture in black and white, the other half of a before-and-after pair. */
+export const PHOTO_LANDSCAPE_MONO = photoWideMono;
 
 /** A tall picture, 549 by 768. */
 export const PHOTO_PORTRAIT = photoTall;

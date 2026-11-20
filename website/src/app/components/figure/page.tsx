@@ -10,6 +10,7 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+import { PHOTO_LANDSCAPE, PHOTOS } from "@/lib/attachment-demo";
 
 export default function FigurePage() {
   return (
@@ -43,12 +44,12 @@ export default function FigurePage() {
           {/* With caption */}
           <section className={styles.section}>
             <SectionTitle title="With caption" />
-            <Figure caption="A demo cover illustration standing in for a real photograph.">
+            <Figure caption="A lone figure at the mouth of a glowing canyon.">
               <Image
-                src="/images/demo-cover-light.svg"
-                alt="Abstract demo cover illustration"
-                width={1600}
-                height={1000}
+                src={PHOTO_LANDSCAPE}
+                alt="A figure in a glowing canyon below snowy peaks"
+                width={768}
+                height={480}
               />
             </Figure>
           </section>
@@ -65,10 +66,10 @@ export default function FigurePage() {
               onClick={() => window.alert("In an article layout this opens the lightbox.")}
             >
               <Image
-                src="/images/demo-cover-dark.svg"
-                alt="Zoomable figure demo"
-                width={1600}
-                height={1000}
+                src={PHOTOS[1]}
+                alt="A green mountain split by a long crack"
+                width={768}
+                height={768}
               />
             </Figure>
           </section>

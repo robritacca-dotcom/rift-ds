@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { Carousel } from './Carousel';
+import { PHOTOS } from '../../stories/attachment-fixtures';
 
 const slideStyle: React.CSSProperties = {
   display: 'flex',
@@ -148,11 +149,11 @@ export const ImageSlides: Story = {
   },
   render: (args) => (
     <Carousel {...args}>
-      {[1, 2, 3].map((n) => (
+      {PHOTOS.slice(0, 3).map((src, n) => (
         <img
-          key={n}
-          src={`https://picsum.photos/seed/${n}/480/240`}
-          alt={`Sample ${n}`}
+          key={src}
+          src={src}
+          alt={`Sample picture ${n + 1}`}
           style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }}
         />
       ))}

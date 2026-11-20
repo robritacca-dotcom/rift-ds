@@ -108,6 +108,7 @@ export const CHAIN = [
   ['validate-class-names'],
   ['validate-js-timings'],
   ['validate-page-prose-width'],
+  ['validate-demo-images'],
   ['validate-breakpoints', 'build'],
   ['validate-stacking', 'build'],
   ['validate-tier-colours', 'build'],

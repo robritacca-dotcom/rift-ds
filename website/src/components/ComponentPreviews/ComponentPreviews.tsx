@@ -74,7 +74,7 @@ import { ContributionGraph, type ContributionDay } from "rift-ds/components/Cont
 import { Divider } from "rift-ds/components/Divider/Divider";
 import { AttachmentGroup } from "rift-ds/components/Attachment/AttachmentGroup";
 import { AttachmentTile } from "rift-ds/components/Attachment/AttachmentTile";
-import { PHOTO_LANDSCAPE, PHOTOS } from "@/lib/attachment-demo";
+import { PHOTO_LANDSCAPE, PHOTO_LANDSCAPE_MONO, PHOTOS } from "@/lib/attachment-demo";
 import { DocumentChip } from "rift-ds/components/DocumentChip/DocumentChip";
 import { NumberInput } from "rift-ds/components/NumberInput/NumberInput";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
@@ -1484,10 +1484,10 @@ const previews: Record<string, () => ReactNode> = {
     <>
       <div style={{ width: "140px" }}>
         <ImageCompare
-          beforeSrc={`data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="#d8d8d8"/><circle cx="620" cy="120" r="60" fill="#c2c2c2"/><path d="M0 340 Q200 240 400 330 T800 310 V500 H0 Z" fill="#a8a8a8"/></svg>')}`}
-          afterSrc={`data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="#8ecae6"/><circle cx="620" cy="120" r="60" fill="#ffb703"/><path d="M0 340 Q200 240 400 330 T800 310 V500 H0 Z" fill="#2a9d8f"/></svg>')}`}
-          beforeAlt="Greyscale landscape"
-          afterAlt="Colour landscape"
+          beforeSrc={PHOTO_LANDSCAPE_MONO}
+          afterSrc={PHOTO_LANDSCAPE}
+          beforeAlt="A canyon below snowy peaks, in black and white"
+          afterAlt="The same canyon in colour"
           showLabels={false}
         />
       </div>

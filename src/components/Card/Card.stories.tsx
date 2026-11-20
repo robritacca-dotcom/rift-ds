@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { Card } from './Card';
+import { PHOTO_LANDSCAPE } from '../../stories/attachment-fixtures';
 
 const meta = {
   title: 'Components/Card',
@@ -81,8 +82,8 @@ export const CaseStudyWithCover: Story = {
     dek: "What the team learned shipping Northlight's embedded AI experiences",
     companyName: 'Northlight',
     companyLogo: '/logos/Claude.svg',
-    coverSrc: '/images/demo-cover-light.svg',
-    coverAlt: 'Northlight embedded AI cover',
+    coverSrc: PHOTO_LANDSCAPE,
+    coverAlt: 'A figure in a glowing canyon below snowy peaks',
     href: '#',
   },
 };

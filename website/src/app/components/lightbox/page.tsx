@@ -9,34 +9,24 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+import { PHOTO_LANDSCAPE, PHOTO_PORTRAIT, PHOTOS } from "@/lib/attachment-demo";
 
-/** Offline demo image: a labelled gradient drawn as SVG, no asset to fetch. */
-const demoImage = (label: string, from: string, to: string) =>
-  `data:image/svg+xml;utf8,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750">` +
-      `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
-      `<stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/>` +
-      `</linearGradient></defs>` +
-      `<rect width="1200" height="750" fill="url(#g)"/>` +
-      `<text x="600" y="390" font-family="sans-serif" font-size="64" fill="rgba(255,255,255,0.85)" text-anchor="middle">${label}</text>` +
-      `</svg>`,
-  )}`;
-
+/** The sample pictures every attachment and media demo draws from. */
 const SHOTS = [
   {
-    src: demoImage("Dashboard", "#0E6E8F", "#052F3E"),
-    alt: "Dashboard overview",
-    caption: "The dashboard after the redesign.",
+    src: PHOTO_LANDSCAPE,
+    alt: "A figure in a glowing canyon below snowy peaks",
+    caption: "A lone figure at the mouth of the canyon.",
   },
   {
-    src: demoImage("Detail view", "#9E47EF", "#1E47B0"),
-    alt: "Record detail view",
-    caption: "One record, fully expanded.",
+    src: PHOTOS[3],
+    alt: "A blue beam of light rising over dark cliffs",
+    caption: "A beam of light over the falls at night.",
   },
   {
-    src: demoImage("Mobile", "#EF476F", "#552716"),
-    alt: "Mobile layout",
-    caption: "The same flow at phone width.",
+    src: PHOTO_PORTRAIT,
+    alt: "A green mountain split by a long crack",
+    caption: "A fault running up a green peak, at its own tall shape.",
   },
 ];
 

@@ -13,6 +13,9 @@ export const PHOTOS = ["1", "2", "3", "4", "5", "6", "7"].map(photo);
 /** A wide picture, 768 by 480, for the aspect-ratio cases. */
 export const PHOTO_LANDSCAPE = photo("wide");
 
+/** The wide picture in black and white, the other half of a before-and-after pair. */
+export const PHOTO_LANDSCAPE_MONO = photo("wide-mono");
+
 /** A tall picture, 549 by 768. */
 export const PHOTO_PORTRAIT = photo("tall");
 

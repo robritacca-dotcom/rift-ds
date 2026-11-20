@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Figure } from './Figure';
 
-/* Inline SVG placeholder so stories don't depend on network images */
-const placeholder = (label: string) =>
-  `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="800" height="450" fill="#D6D6D6"/><text x="400" y="230" font-family="sans-serif" font-size="28" fill="#6D6D6D" text-anchor="middle">${label}</text></svg>`
-  )}`;
+import { PHOTO_LANDSCAPE, PHOTO_PORTRAIT, PHOTOS } from '../../stories/attachment-fixtures';
+
+// The sample pictures every media story draws from, bundled files, so the
+// stories never touch the network.
 
 const meta = {
   title: 'Components/Figure',
@@ -18,7 +17,7 @@ const meta = {
     caption: { control: 'text' },
   },
   args: {
-    children: <img src={placeholder('Process image')} alt="Process placeholder" />,
+    children: <img src={PHOTO_LANDSCAPE} alt="A figure in a glowing canyon below snowy peaks" />,
   },
 } satisfies Meta<typeof Figure>;
 
@@ -27,13 +26,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: <img src={placeholder('Process image')} alt="Process placeholder" />,
+    children: <img src={PHOTO_LANDSCAPE} alt="A figure in a glowing canyon below snowy peaks" />,
   },
 };
 
 export const WithCaption: Story = {
   args: {
-    children: <img src={placeholder('Generated output in 3D')} alt="Generated output" />,
+    children: <img src={PHOTOS[2]} alt="A blue beam falling into a lake below a dark moon" />,
     caption:
       'Generated output rendered in 3D — the full spatial result of a successful run.',
   },
@@ -41,7 +40,7 @@ export const WithCaption: Story = {
 
 export const Zoomable: Story = {
   args: {
-    children: <img src={placeholder('Click to zoom')} alt="Zoomable" />,
+    children: <img src={PHOTO_PORTRAIT} alt="A green mountain split by a long crack" />,
     caption: 'Zoomable figure — clicking would open a lightbox.',
     onClick: () => {},
   },
@@ -49,6 +48,6 @@ export const Zoomable: Story = {
 
 export const NoCaption: Story = {
   args: {
-    children: <img src={placeholder('Bare image')} alt="Bare" />,
+    children: <img src={PHOTOS[4]} alt="Red light running through a dark valley" />,
   },
 };

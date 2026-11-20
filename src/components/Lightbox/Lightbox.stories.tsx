@@ -3,23 +3,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, screen, waitFor } from 'storybook/test';
 import { Lightbox } from './Lightbox';
 import { Button } from '../Button/Button';
+import { PHOTO_LANDSCAPE, PHOTO_PORTRAIT, PHOTOS } from '../../stories/attachment-fixtures';
 
-/** Offline demo image — a labelled gradient, so story tests never touch the network. */
-const demoImage = (label: string, from: string, to: string) =>
-  `data:image/svg+xml;utf8,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750">` +
-      `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
-      `<stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/>` +
-      `</linearGradient></defs>` +
-      `<rect width="1200" height="750" fill="url(#g)"/>` +
-      `<text x="600" y="390" font-family="sans-serif" font-size="64" fill="rgba(255,255,255,0.85)" text-anchor="middle">${label}</text>` +
-      `</svg>`,
-  )}`;
-
+// The sample pictures every attachment and media story draws from, bundled
+// files, so the stories never touch the network.
 const SHOTS = [
-  { src: demoImage('Dashboard', '#0E6E8F', '#052F3E'), alt: 'Dashboard overview', caption: 'The dashboard after the redesign.' },
-  { src: demoImage('Detail view', '#9E47EF', '#1E47B0'), alt: 'Record detail view', caption: 'One record, fully expanded.' },
-  { src: demoImage('Mobile', '#EF476F', '#552716'), alt: 'Mobile layout', caption: 'The same flow at phone width.' },
+  { src: PHOTO_LANDSCAPE, alt: 'A figure in a glowing canyon below snowy peaks', caption: 'A lone figure at the mouth of the canyon.' },
+  { src: PHOTOS[3], alt: 'A blue beam of light rising over dark cliffs', caption: 'A beam of light over the falls at night.' },
+  { src: PHOTO_PORTRAIT, alt: 'A green mountain split by a long crack', caption: 'A fault running up a green peak, at its own tall shape.' },
 ];
 
 const meta = {
@@ -64,7 +55,7 @@ export const Default: Story = {
     const trigger = await canvas.findByRole('button', { name: 'View image' });
     await userEvent.click(trigger);
 
-    const viewer = await screen.findByRole('dialog', { name: 'Dashboard overview' });
+    const viewer = await screen.findByRole('dialog', { name: 'A figure in a glowing canyon below snowy peaks' });
     await expect(viewer).toBeVisible();
 
     const storyRoot = canvasElement.closest<HTMLElement>('body > *');
@@ -72,7 +63,7 @@ export const Default: Story = {
 
     await userEvent.keyboard('{Escape}');
     await waitFor(() =>
-      expect(screen.queryByRole('dialog', { name: 'Dashboard overview' })).toBeNull(),
+      expect(screen.queryByRole('dialog', { name: 'A figure in a glowing canyon below snowy peaks' })).toBeNull(),
     );
     await expect(storyRoot?.inert).toBe(false);
     await expect(trigger).toHaveFocus();
@@ -113,20 +104,20 @@ export const Gallery: Story = {
   // Gallery stepping: the chevrons and the arrow keys both walk the set.
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(await canvas.findByRole('button', { name: 'Open gallery' }));
-    await screen.findByRole('dialog', { name: 'Dashboard overview' });
+    await screen.findByRole('dialog', { name: 'A figure in a glowing canyon below snowy peaks' });
 
     await userEvent.click(screen.getByRole('button', { name: 'Next' }));
-    await screen.findByRole('dialog', { name: 'Record detail view' });
+    await screen.findByRole('dialog', { name: 'A blue beam of light rising over dark cliffs' });
 
     await userEvent.keyboard('{ArrowRight}');
-    await screen.findByRole('dialog', { name: 'Mobile layout' });
+    await screen.findByRole('dialog', { name: 'A green mountain split by a long crack' });
 
     await userEvent.keyboard('{ArrowLeft}');
-    await screen.findByRole('dialog', { name: 'Record detail view' });
+    await screen.findByRole('dialog', { name: 'A blue beam of light rising over dark cliffs' });
 
     await userEvent.keyboard('{Escape}');
     await waitFor(() =>
-      expect(screen.queryByRole('dialog', { name: 'Record detail view' })).toBeNull(),
+      expect(screen.queryByRole('dialog', { name: 'A blue beam of light rising over dark cliffs' })).toBeNull(),
     );
   },
 };
@@ -137,7 +128,7 @@ export const CustomMedia: Story = {
       <video
         controls
         muted
-        poster={demoImage('Poster frame', '#118AB2', '#052F3E')}
+        poster={PHOTOS[5]}
         style={{ borderRadius: '12px' }}
         aria-label="Product walkthrough"
       />

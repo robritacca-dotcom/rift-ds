@@ -135,6 +135,7 @@
     "validate-page-summaries": { "group": "site", "text": "Every static page has a summary and starters, or is chromeless." },
     "validate-shipped-prose": { "group": "site", "text": "No em dash in shipped copy." },
     "validate-page-prose-width": { "group": "site", "text": "No width cap on a component page's prose." },
+    "validate-demo-images": { "group": "site", "text": "Every demo picture comes from the sample set, never a drawn or remote stand-in." },
     "validate-doc-refs": { "group": "site", "text": "Every repo path, npm script and API symbol a doc or skill names exists." },
 
     "npm run lint": { "group": "verify", "text": "ESLint over the library." },

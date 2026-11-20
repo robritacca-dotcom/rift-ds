@@ -15,6 +15,7 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+import { PHOTO_LANDSCAPE, PHOTOS } from "@/lib/attachment-demo";
 /* ============================================
    PAGE
    ============================================ */
@@ -87,7 +88,7 @@ export default function CardPage() {
                 dek="How a fictional team assembled a docs site from the system's templates"
                 companyName="Northlight"
                 companyLogo="/logos/storybook.svg"
-                coverSrc="/images/demo-cover-light.svg"
+                coverSrc={PHOTO_LANDSCAPE}
                 href="/templates"
               />
               <Card
@@ -96,7 +97,7 @@ export default function CardPage() {
                 dek="A fictional rebrand riding the primitive layer: swap the ramps, keep the semantics"
                 companyName="Fieldnote"
                 companyLogo="/logos/vite.svg"
-                coverSrc="/images/demo-cover-dark.svg"
+                coverSrc={PHOTOS[0]}
                 href="/playground"
               />
             </div>
@@ -116,9 +117,9 @@ export default function CardPage() {
                 companyName="Acme"
                 companyLogo="/logos/Figma.svg"
                 cover={
-                  /* eslint-disable-next-line @next/next/no-img-element -- SVG demo asset; next/image would need dangerouslyAllowSVG for no gain here. */
+                  /* eslint-disable-next-line @next/next/no-img-element -- a sample picture shown as a plain node, which is the point of the cover slot. */
                   <img
-                    src="/images/demo-cover-light.svg"
+                    src={PHOTOS[4]}
                     alt=""
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />

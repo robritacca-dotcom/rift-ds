@@ -10,10 +10,12 @@ import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
-// A demo cover drawn twice, once for each theme. A light/dark pair of the
-// same composition is exactly what a compare slider is for.
-const coverLight = "/images/demo-cover-light.svg";
-const coverDark = "/images/demo-cover-dark.svg";
+import { PHOTO_LANDSCAPE, PHOTO_LANDSCAPE_MONO } from "@/lib/attachment-demo";
+
+// The wide sample picture and its black-and-white copy: one photograph
+// before and after an edit, which is what a compare slider is for.
+const colour = PHOTO_LANDSCAPE;
+const mono = PHOTO_LANDSCAPE_MONO;
 
 export default function ImageComparePage() {
   return (
@@ -37,7 +39,7 @@ export default function ImageComparePage() {
               Before and after, behind one divider
             </p>
             <p className={styles.introBody}>
-              Two images share a frame and a draggable split. Drag anywhere, or put focus on the handle and use the arrow keys. The pair below is one composition drawn once for daylight and once for dusk.
+              Two images share a frame and a draggable split. Drag anywhere, or put focus on the handle and use the arrow keys. The pair below is one photograph in colour and in black and white.
             </p>
           </div>
 
@@ -46,12 +48,12 @@ export default function ImageComparePage() {
             <SectionTitle title="Default" />
             <div className={styles.variantStack} style={{ alignItems: "stretch" }}>
               <ImageCompare
-                beforeSrc={coverLight}
-                afterSrc={coverDark}
-                beforeAlt="Demo cover illustration, daylight version"
-                afterAlt="Demo cover illustration, dusk version"
-                beforeLabel="Daylight"
-                afterLabel="Dusk"
+                beforeSrc={colour}
+                afterSrc={mono}
+                beforeAlt="A figure in a glowing canyon below snowy peaks, in colour"
+                afterAlt="The same canyon in black and white"
+                beforeLabel="Colour"
+                afterLabel="Mono"
               />
             </div>
           </section>
@@ -61,12 +63,12 @@ export default function ImageComparePage() {
             <SectionTitle title="Start position" />
             <div className={styles.variantStack} style={{ alignItems: "stretch" }}>
               <ImageCompare
-                beforeSrc={coverLight}
-                afterSrc={coverDark}
-                beforeAlt="Demo cover illustration, daylight version"
-                afterAlt="Demo cover illustration, dusk version"
-                beforeLabel="Daylight"
-                afterLabel="Dusk"
+                beforeSrc={colour}
+                afterSrc={mono}
+                beforeAlt="A figure in a glowing canyon below snowy peaks, in colour"
+                afterAlt="The same canyon in black and white"
+                beforeLabel="Colour"
+                afterLabel="Mono"
                 defaultPosition={25}
               />
             </div>
@@ -77,10 +79,10 @@ export default function ImageComparePage() {
             <SectionTitle title="Without labels" />
             <div className={styles.variantStack} style={{ alignItems: "stretch" }}>
               <ImageCompare
-                beforeSrc={coverLight}
-                afterSrc={coverDark}
-                beforeAlt="Demo cover illustration, daylight version"
-                afterAlt="Demo cover illustration, dusk version"
+                beforeSrc={colour}
+                afterSrc={mono}
+                beforeAlt="A figure in a glowing canyon below snowy peaks, in colour"
+                afterAlt="The same canyon in black and white"
                 showLabels={false}
                 aspectRatio="21 / 9"
               />

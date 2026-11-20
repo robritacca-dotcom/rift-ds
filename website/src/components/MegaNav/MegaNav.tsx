@@ -94,8 +94,8 @@ export default function MegaNav() {
       className={styles.chatBtn}
       size="compact"
       icon="forum"
-      label=""
-      aria-label={`Ask ${ASSISTANT_NAME}`}
+      iconOnly
+      label={`Ask ${ASSISTANT_NAME}`}
       onClick={(event) => {
         returnFocusRef.current = event.currentTarget;
         setChatOpen(true);

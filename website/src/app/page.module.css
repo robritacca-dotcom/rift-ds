@@ -1324,6 +1324,15 @@
   }
 }
 
+/* On a phone the body's own gap under the header is the whole space above
+   the theme row: the page's top padding on top of it pushed the headline
+   down the first screen. */
+@media (max-width: 600px) {
+  .page {
+    padding-top: 0;
+  }
+}
+
 /* No hand ramp for the tagline: display-2's own 768px token collapse
    (64px to 40px) is enough at this size. */
 

@@ -207,7 +207,10 @@ export default async function RootLayout({
         />
         {/* Analytics runs only while GA_ID has a value; emptying it in the
             brand module is the off switch. A framed page (a template preview,
-            which iframes a site page) skips the config, so a visit counts once. */}
+            which iframes a site page) skips the config, so a visit counts once.
+            The advertising consents are denied before the tag starts, and Google
+            signals and ad personalisation are off: /privacy promises no
+            advertising, and the policy in next.config.ts blocks the ad hosts. */}
         {GA_ID && (
           <>
             <Script
@@ -218,8 +221,10 @@ export default async function RootLayout({
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
+                gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' });
+                gtag('set', 'allow_google_signals', false);
                 gtag('js', new Date());
-                if (window.self === window.top) gtag('config', '${GA_ID}');
+                if (window.self === window.top) gtag('config', '${GA_ID}', { allow_google_signals: false, allow_ad_personalization_signals: false });
               `}
             </Script>
           </>

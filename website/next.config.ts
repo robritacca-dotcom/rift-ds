@@ -21,7 +21,11 @@ const contentSecurityPolicy = [
   // created and holds. It reaches no network and no other origin, and it is
   // a narrower source than the data: already allowed beside it.
   "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com",
-  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+  // Google Analytics collects on its own hosts, the bare analytics.google.com
+  // among them (a wildcard does not match the apex). Google's advertising
+  // hosts (doubleclick, the google.<tld> audience pings) stay out: /privacy
+  // promises no advertising, and the tag is configured not to call them.
+  "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com",
   "frame-src 'self'",
   // Same-origin only: the site may frame its own pages (the canvas board
   // pattern), and no other origin may, which is all the clickjacking

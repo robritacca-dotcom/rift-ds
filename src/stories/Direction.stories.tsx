@@ -207,6 +207,10 @@ export const CarouselMovesRight: Story = {
   ),
   play: async ({ canvasElement, userEvent }) => {
     const track = canvasElement.querySelector<HTMLElement>('.ds-carousel__track')!;
+    // The test asserts where the track comes to rest, not the slide between:
+    // with its transition on, the transform only moves as frames paint, and a
+    // test page starved of frames read the start value until the wait ran out.
+    track.style.transition = 'none';
     // The dots are the carousel's tab stop; ArrowLeft is the next slide.
     canvasElement.querySelector<HTMLElement>('[role="tab"][tabindex="0"]')!.focus();
     await userEvent.keyboard('{ArrowLeft}');

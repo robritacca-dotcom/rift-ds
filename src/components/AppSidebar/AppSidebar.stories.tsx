@@ -133,6 +133,19 @@ export const MobileDrawer: Story = {
       await expect(drawer.contains(document.activeElement)).toBe(true);
     }
 
+    // A control with a tooltip opens it a hover-intent delay after focus
+    // lands, as a layer of its own above the drawer, and Escape closes the
+    // topmost layer only (WCAG 1.4.13). When focus rests on one, wait for the
+    // tooltip and let the first Escape take it, so the run never depends on
+    // whether the delay passed before the key.
+    const tip = document.activeElement?.closest('.ds-tooltip')?.querySelector('[role="tooltip"]');
+    if (tip) {
+      await waitFor(() => expect(tip).toHaveClass('ds-tooltip__panel--visible'));
+      await userEvent.keyboard('{Escape}');
+      await waitFor(() => expect(tip).not.toHaveClass('ds-tooltip__panel--visible'));
+      await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    }
+
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
     await waitFor(() => expect(trigger).toHaveFocus());

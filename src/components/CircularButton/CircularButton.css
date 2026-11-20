@@ -60,6 +60,16 @@
   line-height: 1;
 }
 
+/* A node icon (an avatar, a spinner, an SVG) is laid out as a flex item:
+   inline in a block slot it would sit on the text baseline, and the room
+   left under it for descenders made the slot taller than the node and
+   lifted the node off the circle's centre. */
+.ds-circular-button__icon:not(.material-symbols-rounded) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ============================================
    PRIMARY VARIANT (SOLID)
    ============================================ */

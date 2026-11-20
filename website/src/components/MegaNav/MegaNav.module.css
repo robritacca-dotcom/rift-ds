@@ -103,14 +103,10 @@
    Doubled for the production stylesheet order noted on the condensed set. */
 @media (max-width: 719px) {
   .chatBtn.chatBtn {
+    /* The even box is the button's own icon-only form (`iconOnly`), so the
+       glyph stays centred whatever the icon side padding rule does. */
     display: inline-flex;
-    width: var(--control-height-compact);
-    padding: 0;
     border-radius: calc(var(--radius-pill) + var(--padding-100));
-  }
-
-  .chatBtn :global(.ds-ai-button__text) {
-    display: none;
   }
 }
 

@@ -1,5 +1,5 @@
 {
-  "$comment": "Gzipped JavaScript ceilings, in bytes, for what an import of the published package costs. scripts/validate-size-budget.mjs owns the method and the rules. Each ceiling was set about a tenth over its measured size; raise one in the change that grows it.",
+  "$comment": "Gzipped JavaScript ceilings, in bytes, for what an import of the published package costs. scripts/validate-size-budget.mjs owns the method and the rules. Each ceiling was set about a tenth over its measured size; raise one in the change that grows it, and lower one in the change that shrinks it, since a ceiling far above its measure fails too.",
   "componentCeiling": 12000,
   "components": {
     "AttachmentGroup": 15000,

@@ -27,6 +27,15 @@
  * same change, where the diff shows it. `--report` prints every measured
  * size against its ceiling, largest first, and changes nothing.
  *
+ * A budget only ratchets down. A ceiling more than SLACK above its measure
+ * fails, so a saving is locked in by lowering the number in the change
+ * that made it; `componentCeiling` is held the same way to the heaviest
+ * component with no row of its own.
+ *
+ * `--why <entry>` (a component name or a subpath key) prints what that
+ * entry's bundle is made of, module by module, largest first, and checks
+ * nothing. It is where trimming an entry starts.
+ *
  * The measured component sizes are also published: each component's page,
  * markdown and schema print the figure in
  * website/src/data/component-sizes.json. That file is written by
@@ -67,8 +76,8 @@ const registry = JSON.parse(
 const peers = Object.keys(manifest.peerDependencies ?? {});
 const external = peers.flatMap((name) => [name, `${name}/*`]);
 
-const measure = async (file) => {
-  const result = await build({
+const bundle = (file, options = {}) =>
+  build({
     entryPoints: [file],
     bundle: true,
     minify: true,
@@ -80,9 +89,15 @@ const measure = async (file) => {
     external: [...external, 'node:*'],
     define: { 'process.env.NODE_ENV': '"production"' },
     loader: { '.css': 'empty', '.woff2': 'empty' },
+    ...options,
   });
-  return gzipSync(result.outputFiles[0].contents).length;
-};
+
+const measure = async (file) => gzipSync((await bundle(file)).outputFiles[0].contents).length;
+
+/** How far a ceiling may sit above its measure: the larger of the two. */
+const SLACK_RATIO = 0.15;
+const SLACK_BYTES = 500;
+const tooLoose = (ceiling, size) => ceiling > size + Math.max(size * SLACK_RATIO, SLACK_BYTES);
 
 // The JavaScript target of an exports value: a string, or the `import`
 // condition of a conditions object. Assets and wildcards are not entries.
@@ -104,6 +119,35 @@ for (const [key, value] of Object.entries(distExports())) {
   const target = jsTarget(value);
   if (key.includes('*') || !target) continue;
   entries.push({ kind: 'subpath', key, file: join(dist, target), ceiling: budget.subpaths[key] });
+}
+
+const whyAt = process.argv.indexOf('--why');
+if (whyAt !== -1) {
+  const key = process.argv[whyAt + 1];
+  const entry = entries.find((e) => e.key === key);
+  if (!entry) {
+    console.error(`validate-size-budget: --why needs a component name or a subpath key; "${key ?? ''}" is neither.`);
+    process.exit(1);
+  }
+  const result = await bundle(entry.file, { metafile: true, absWorkingDir: repoRoot });
+  const output = Object.values(result.metafile.outputs)[0];
+  const parts = Object.entries(output.inputs)
+    .map(([path, { bytesInOutput }]) => ({ path: path.replaceAll('\\', '/'), bytes: bytesInOutput }))
+    .filter((part) => part.bytes > 0)
+    .sort((a, b) => b.bytes - a.bytes);
+  const total = parts.reduce((all, part) => all + part.bytes, 0);
+  console.log(
+    `${entry.key}: ${gzipSync(result.outputFiles[0].contents).length} bytes gzipped, ` +
+      `${total} minified, from ${parts.length} modules. Minified bytes per module:\n`
+  );
+  for (const part of parts.slice(0, 40)) {
+    console.log(`${String(part.bytes).padStart(8)}  ${String(Math.round((part.bytes / total) * 100)).padStart(3)}%  ${part.path}`);
+  }
+  if (parts.length > 40) {
+    const rest = parts.slice(40).reduce((all, part) => all + part.bytes, 0);
+    console.log(`${String(rest).padStart(8)}  ${String(Math.round((rest / total) * 100)).padStart(3)}%  (${parts.length - 40} more modules)`);
+  }
+  process.exit(0);
 }
 
 const errors = [];
@@ -133,6 +177,27 @@ for (const entry of entries) {
         `Trim it, or raise the ceiling in scripts/size-budget.json in this change.`
     );
   }
+}
+
+// The ratchet: a ceiling far above its measure holds nothing.
+for (const row of rows) {
+  const own = row.kind === 'subpath' || row.key in budget.components;
+  if (own && row.ceiling !== undefined && tooLoose(row.ceiling, row.size)) {
+    errors.push(
+      `${row.key}: its ceiling is ${row.ceiling}, and it now measures ${row.size} bytes gzipped. ` +
+        `Lower the ceiling in scripts/size-budget.json in this change so the saving holds.`
+    );
+  }
+}
+const heaviestDefaulted = Math.max(
+  0,
+  ...rows.filter((row) => row.kind === 'component' && !(row.key in budget.components)).map((row) => row.size)
+);
+if (tooLoose(budget.componentCeiling, heaviestDefaulted)) {
+  errors.push(
+    `componentCeiling is ${budget.componentCeiling}, and the heaviest component held to it measures ${heaviestDefaulted}. ` +
+      `Lower it in scripts/size-budget.json in this change so the saving holds.`
+  );
 }
 
 const measured = (kind) => new Set(entries.filter((e) => e.kind === kind).map((e) => e.key));

@@ -46,6 +46,7 @@ Each validator's doc block owns what it checks; read it before changing a regist
 | Gestures | `scripts/gestures.json` (every drag grip a visitor can press) | (read by the script) | `scripts/validate-gestures.mjs` |
 | Keyboard contract | `src/components/keyboard-patterns.json` + `pattern`, `partPatterns` and `keys` in the component registry | `keyboardPatterns` in `src/components/registry.ts` | `scripts/validate-keyboard-patterns.mjs` |
 | Size budget | `scripts/size-budget.json` (a gzipped ceiling for every component and published subpath) | (read by the script) | `scripts/validate-size-budget.mjs` |
+| Route budget | `scripts/route-budget.json` (gzipped script, stylesheet and document ceilings for every prerendered route, and a file ceiling for every picture in `website/public/images`) | (read by the script) | `scripts/validate-route-budget.mjs` |
 | Quality gate list (the closing section of /skills) | order from `scripts/chain.mjs`, `package.json` and `ci.yml`, one line per check in `website/src/data/quality-gate.json`, written to `website/src/data/quality-gate.generated.ts` | same file | `scripts/validate-generated-files.mjs` |
 
 Notes an agent needs while editing them:
@@ -60,7 +61,7 @@ Notes an agent needs while editing them:
 - **Gestures**: every new drag grip on the site needs an entry with the setup that reaches it. No validator notices a missing one.
 - **Blocks** are source the consumer owns, never components; design.md's Blocks section owns the conventions.
 
-**Built-HTML and served-site checks** (`validate-rendered-spacing`, `validate-corpus-coverage`, `validate-internal-links`, the hydration smoke, the gesture check, the page-level axe pass) need the finished build, so they run in `verify` and CI after the website build, never in `validate-registry`.
+**Built-HTML and served-site checks** (`validate-rendered-spacing`, `validate-corpus-coverage`, `validate-internal-links`, `validate-route-budget`, the hydration smoke, the gesture check, the page-level axe pass) need the finished build, so they run in `verify` and CI after the website build, never in `validate-registry`.
 
 ### Generated surfaces
 
@@ -140,6 +141,8 @@ npm run graph           # regenerate the /graph data; `-- tree <name>` / `-- who
 **The served-site checks** exist because a green build and an HTTP 200 have both held while the live site was blank: `scripts/smoke-hydration.mjs` (also the `ship` skill's post-deploy check, and run against production every four hours by `.github/workflows/uptime.yml`), `scripts/validate-gestures.mjs` (every grip in `scripts/gestures.json` under a throttled pointer flood), and `scripts/validate-website-a11y.mjs` (axe on the served pages in both themes, plus forced colors). Each doc block owns its details.
 
 **An import's cost is budgeted.** `scripts/validate-size-budget.mjs` bundles every component and every published subpath from `dist/` the way a consumer's bundler would and holds the gzipped JavaScript to `scripts/size-budget.json`. A new subpath needs a row, and growing past a ceiling means raising it in the same change. It runs in `verify` and CI after `build:lib`, never in `validate-registry`. The measured component sizes are published too (each component's page, markdown and schema print them from `website/src/data/component-sizes.json`): when a component moves more than 5% from its published figure the check fails, and `node scripts/validate-size-budget.mjs --write` refreshes the file.
+
+**A page's cost is budgeted too, and a budget only ratchets down.** `scripts/validate-route-budget.mjs` reads the finished website build and holds every prerendered route's gzipped scripts, stylesheets and document, and every picture under `website/public/images`, to `scripts/route-budget.json`. Both budgets fail in two directions: a measure over its ceiling, and a ceiling far above its measure, so a saving is locked in by lowering the number in the change that made it (`--write` rewrites the route budget when a change moves many pages). `node scripts/validate-size-budget.mjs --why <entry>` prints what a component's or subpath's bundle is made of, which is where trimming one starts. Two by-hand tools give a change its before and after and gate nothing: `scripts/measure-perf.mjs` times first visits in a real browser under a throttled phone profile, and `scripts/compare-screens.mjs` photographs every static page and diffs two shoots pixel by pixel, the proof behind a claim of no visual change.
 
 **The published API only grows.** `scripts/validate-api-compat.mjs` compares the working tree with the latest `v*` tag: no prop, export, wildcard file or bin may vanish or narrow, and no file under `website/public/schema/` or property of a meta-schema there may disappear. A deliberate break is a row in its `SANCTIONED_BREAKS` table. It runs in `verify` and CI, never in `validate-registry`.
 

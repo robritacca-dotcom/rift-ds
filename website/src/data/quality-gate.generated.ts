@@ -476,6 +476,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Every internal link leads to a page, a route handler, a public file or a redirect."
       },
       {
+        "name": "validate-route-budget",
+        "text": "Each page's gzipped scripts, stylesheets and document, and each picture, stay under their ceilings, and no ceiling sits far above its measure."
+      },
+      {
         "name": "smoke-hydration",
         "text": "Serves the build in a real browser: hydration succeeds and every sampled page shows real content."
       },

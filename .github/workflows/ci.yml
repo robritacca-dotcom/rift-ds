@@ -171,6 +171,10 @@ jobs:
       # Every internal href in the prerendered HTML must lead to a page,
       # route handler, public file, or redirect that exists.
       - run: node scripts/validate-internal-links.mjs
+      # What a first visit to each prerendered page costs (gzipped scripts,
+      # stylesheets and document, and each picture's file size) against
+      # scripts/route-budget.json, the website's twin of the size budget.
+      - run: node scripts/validate-route-budget.mjs
       # Serves the build and loads it in a real browser: hydration must
       # succeed and the page must be visible with content. HTTP 200 and a
       # green build prove neither — the 2026-09-06 outage served 200 while

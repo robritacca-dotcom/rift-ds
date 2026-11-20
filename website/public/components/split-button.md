@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 - Import: `import { SplitButton } from 'rift-ds';`
 - Deep import: `import { SplitButton } from 'rift-ds/components/SplitButton/SplitButton';`
 - Rendering: server-renderable (no 'use client')
-- Size: 11.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 11.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/split-button
 - Schema: https://rift-ds.com/schema/components/split-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

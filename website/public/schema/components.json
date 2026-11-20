@@ -415,16 +415,6 @@
       "markdownUrl": "https://rift-ds.com/components/chip.md"
     },
     {
-      "name": "CircularButton",
-      "label": "Circular button",
-      "slug": "circular-button",
-      "category": "actions",
-      "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/circular-button.json",
-      "docsUrl": "https://rift-ds.com/components/circular-button",
-      "markdownUrl": "https://rift-ds.com/components/circular-button.md"
-    },
-    {
       "name": "CodeBlock",
       "label": "Code block",
       "slug": "code-block",
@@ -873,6 +863,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/icon.json",
       "docsUrl": "https://rift-ds.com/components/icon",
       "markdownUrl": "https://rift-ds.com/components/icon.md"
+    },
+    {
+      "name": "IconButton",
+      "label": "Icon button",
+      "slug": "icon-button",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/icon-button.json",
+      "docsUrl": "https://rift-ds.com/components/icon-button",
+      "markdownUrl": "https://rift-ds.com/components/icon-button.md"
     },
     {
       "name": "ImageCompare",

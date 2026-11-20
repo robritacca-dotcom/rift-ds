@@ -23,7 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 | heading | `ReactNode` | no |  | Content shown in place of the title text, such as a site's logo. The `title` still names the dialog, read by assistive tech from a visually hidden heading. |
 | children | `ReactNode` | no |  | Drawer body content |
 | footer | `ReactNode` | no |  | Optional footer slot — typically a row of Buttons |
-| side | `"top" \| "bottom" \| "start" \| "end" \| "left" \| "right"` | no | `'right'` | Edge the panel slides in from. `left` and `right` are the screen's edges in any reading direction; `start` and `end` follow it, so a `start` drawer opens on the left in English and on the right in Arabic. |
+| side | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'right'` | Edge the panel slides in from. `left` and `right` are the screen's edges in any reading direction; `start` and `end` follow it, so a `start` drawer opens on the left in English and on the right in Arabic. |
 | size | `"sm" \| "md" \| "lg"` | no | `'md'` | Panel size along the axis it slides on |
 | dismissible | `boolean` | no | `true` | Whether ESC, scrim click, and the close button can dismiss |
 | closeLabel | `string` | no | `'Close drawer'` | Accessible name of the close button. |

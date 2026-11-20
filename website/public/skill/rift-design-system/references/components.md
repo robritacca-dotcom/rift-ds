@@ -22,14 +22,6 @@ Horizontal and vertical button group layouts for related actions and navigation 
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/button-group.md
 
-### Circular button
-
-Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.
-
-- Import: `import { CircularButton } from 'rift-ds';`
-- Rendering: server-renderable (no 'use client')
-- Contract: https://rift-ds.com/components/circular-button.md
-
 ### Command palette trigger
 
 The entry point to a command palette: a button dressed as a search field, with the shortcut's keycaps, at the row-control height.
@@ -37,6 +29,14 @@ The entry point to a command palette: a button dressed as a search field, with t
 - Import: `import { CommandPaletteTrigger } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/command-palette-trigger.md
+
+### Icon button
+
+Icon-only button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.
+
+- Import: `import { IconButton } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/icon-button.md
 
 ### Segmented control
 

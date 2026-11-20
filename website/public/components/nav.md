@@ -10,7 +10,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 - Import: `import { Nav } from 'rift-ds';`
 - Deep import: `import { Nav } from 'rift-ds/components/Nav/Nav';`
 - Rendering: server-renderable (no 'use client')
-- Size: 1.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/nav
 - Schema: https://rift-ds.com/schema/components/nav.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

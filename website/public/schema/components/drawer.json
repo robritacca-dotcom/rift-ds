@@ -67,7 +67,7 @@
         },
         {
           "name": "side",
-          "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+          "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
           "typeKind": "enum",
           "values": [
             "bottom",
@@ -158,6 +158,6 @@
     }
   ],
   "size": {
-    "gzip": 5882
+    "gzip": 5874
   }
 }

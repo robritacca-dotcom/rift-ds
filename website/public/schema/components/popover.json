@@ -56,7 +56,7 @@
         },
         {
           "name": "position",
-          "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+          "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
           "typeKind": "enum",
           "values": [
             "bottom",

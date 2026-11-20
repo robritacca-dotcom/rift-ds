@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 - Import: `import { CommandPaletteTrigger } from 'rift-ds';`
 - Deep import: `import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger';`
 - Rendering: server-renderable (no 'use client')
-- Size: 2.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/command-palette-trigger
 - Schema: https://rift-ds.com/schema/components/command-palette-trigger.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -22,7 +22,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 | keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend `keys` is drawn with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | icon | `string \| ReactNode` | no | `'search'` | Leading icon — Material Symbol name (string) or custom element (ReactNode). |
 | size | `"default" \| "compact"` | no | `'default'` | Control size, on the row-control scale: `default` is 40px, `compact` 32px. |
-| iconOnly | `boolean` | no | `false` | Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name. |
+| iconOnly | `boolean` | no | `false` | Fold to the icon alone, an even box the row height across, for a row with no room for the field. The label stays the accessible name. |
+| tooltip | `string \| false` | no |  | The hover and focus tooltip of the icon-only form, which names itself as IconButton does: by default it carries `label`. Pass a string to show different wording, or `false` to opt out. |
+| tooltipPosition | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'bottom'` | Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

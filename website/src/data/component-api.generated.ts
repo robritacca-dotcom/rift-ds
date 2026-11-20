@@ -709,8 +709,29 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "iconOnly",
             "type": "boolean",
             "required": false,
-            "description": "Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name.",
+            "description": "Draws the button holding only its icon, on an even box, for a tight bar. The label stays as its accessible name.",
             "defaultValue": "false"
+          },
+          {
+            "name": "tooltip",
+            "type": "string | false",
+            "required": false,
+            "description": "The hover and focus tooltip of the icon-only form, which names itself as\nIconButton does: by default it carries `label`. Pass a string to show\ndifferent wording, or `false` to opt out. A button with a `summary`\nshows none, since its panel opens on the same hover."
+          },
+          {
+            "name": "tooltipPosition",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
+            "defaultValue": "'top'"
           },
           {
             "name": "size",
@@ -3333,6 +3354,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'default'"
           },
           {
+            "name": "iconOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the button holding only its icon, on an even box. The label stays\nas its accessible name. For an icon action that also names itself on\nhover, use IconButton, which wears a tooltip.",
+            "defaultValue": "false"
+          },
+          {
             "name": "disabled",
             "type": "boolean",
             "required": false,
@@ -3429,7 +3457,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Legacy toggle for showing the text label.",
             "defaultValue": "true",
-            "deprecated": "Will be removed once `label` loses its default in the next major;\nan icon-only button will simply omit `label`."
+            "deprecated": "Use `iconOnly`, the spelling the button family shares."
           }
         ]
       }
@@ -3835,7 +3863,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "actions",
             "type": "ReactNode",
             "required": false,
-            "description": "Trailing controls: a new-chat CircularButton, a view switcher, a close\nbutton. The slot only lays them out — each control owns its behaviour."
+            "description": "Trailing controls: a new-chat IconButton, a view switcher, a close\nbutton. The slot only lays them out — each control owns its behaviour."
           },
           {
             "name": "className",
@@ -4582,189 +4610,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": "''"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "kind": "component",
-    "name": "CircularButton",
-    "label": "Circular button",
-    "slug": "circular-button",
-    "category": "actions",
-    "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
-    "client": false,
-    "importPath": "rift-ds/components/CircularButton/CircularButton",
-    "barrel": "main",
-    "exports": [
-      {
-        "component": "CircularButton",
-        "props": [
-          {
-            "name": "icon",
-            "type": "string | ReactNode",
-            "required": true,
-            "description": "The icon — Material Symbol name (string) or custom element (ReactNode)"
-          },
-          {
-            "name": "variant",
-            "type": "\"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
-            "required": false,
-            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` is the legacy value from\nbefore the split and renders as `variant=\"primary\" tone=\"neutral\"`.",
-            "values": [
-              "neutral",
-              "primary",
-              "secondary",
-              "tertiary"
-            ]
-          },
-          {
-            "name": "tone",
-            "type": "\"default\" | \"destructive\" | \"neutral\"",
-            "required": false,
-            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
-            "values": [
-              "default",
-              "destructive",
-              "neutral"
-            ]
-          },
-          {
-            "name": "priority",
-            "type": "\"primary\" | \"secondary\" | \"tertiary\"",
-            "required": false,
-            "description": "Legacy alias for `variant`.",
-            "values": [
-              "primary",
-              "secondary",
-              "tertiary"
-            ],
-            "deprecated": "Use `variant` instead."
-          },
-          {
-            "name": "disabled",
-            "type": "boolean",
-            "required": false,
-            "description": "Whether the button is disabled"
-          },
-          {
-            "name": "state",
-            "type": "\"default\" | \"active\" | \"disabled\" | \"hover\"",
-            "required": false,
-            "description": "Documentation-only interaction state.",
-            "values": [
-              "active",
-              "default",
-              "disabled",
-              "hover"
-            ],
-            "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer\n`className=\"ds-circular-button--hover\"`."
-          },
-          {
-            "name": "size",
-            "type": "\"default\" | \"compact\"",
-            "required": false,
-            "description": "Button size",
-            "values": [
-              "compact",
-              "default"
-            ],
-            "defaultValue": "'default'"
-          },
-          {
-            "name": "loading",
-            "type": "boolean",
-            "required": false,
-            "description": "Shows a spinner in place of the icon and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\nthe disabled state) and sets `aria-busy` on the rendered element."
-          },
-          {
-            "name": "ariaLabel",
-            "type": "string",
-            "required": true,
-            "description": "Accessible label — required, because the button has no visible text"
-          },
-          {
-            "name": "tooltip",
-            "type": "string | false",
-            "required": false,
-            "description": "The hover/focus tooltip. An icon-only control names itself: by default\nthe button wears a Tooltip carrying `ariaLabel`. Pass a string to show\ndifferent wording, or `false` to opt out — for a host that labels the\ncontrol another way, or one that owns the button's box directly\n(SplitButton's trigger stretches to its sibling segment, which the\ntooltip wrapper would block)."
-          },
-          {
-            "name": "tooltipPosition",
-            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
-            "required": false,
-            "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
-            "values": [
-              "bottom",
-              "end",
-              "left",
-              "right",
-              "start",
-              "top"
-            ],
-            "defaultValue": "'top'"
-          },
-          {
-            "name": "href",
-            "type": "string",
-            "required": false,
-            "description": "Optional href — renders as <a> instead of <button>"
-          },
-          {
-            "name": "target",
-            "type": "string",
-            "required": false,
-            "description": "Optional target attribute for links"
-          },
-          {
-            "name": "rel",
-            "type": "string",
-            "required": false,
-            "description": "Optional rel attribute for links"
-          },
-          {
-            "name": "badge",
-            "type": "string | number | true",
-            "required": false,
-            "description": "A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number."
-          },
-          {
-            "name": "badgeMax",
-            "type": "number",
-            "required": false,
-            "description": "The highest count the badge spells out; a larger one reads \"99+\". Defaults to 99.",
-            "defaultValue": "99"
-          },
-          {
-            "name": "badgeLabel",
-            "type": "((badge: string | number | true) => string)",
-            "required": false,
-            "description": "Text read after `ariaLabel` while the button carries a badge, given the\nbadge. Defaults to \", new\" for a dot and \", 3 new\" for a count; the\nleading comma and space are part of the text. The tooltip keeps\n`ariaLabel` alone.",
-            "defaultValue": "(badge: number | string | true) => (badge === true ? ', new' : `, ${badge} new`)"
-          },
-          {
-            "name": "locale",
-            "type": "string",
-            "required": false,
-            "description": "The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
-            "defaultValue": "'en-US'"
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "required": false,
-            "description": "Additional CSS classes",
-            "defaultValue": "''"
-          },
-          {
-            "name": "linkComponent",
-            "type": "LinkComponent",
-            "required": false,
-            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
-            "typeRefs": [
-              "LinkComponent"
-            ]
           }
         ]
       }
@@ -5654,8 +5499,29 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "iconOnly",
             "type": "boolean",
             "required": false,
-            "description": "Fold to the icon alone, a circle the row height across, for a row with no room for the field. The label stays the accessible name.",
+            "description": "Fold to the icon alone, an even box the row height across, for a row with no room for the field. The label stays the accessible name.",
             "defaultValue": "false"
+          },
+          {
+            "name": "tooltip",
+            "type": "string | false",
+            "required": false,
+            "description": "The hover and focus tooltip of the icon-only form, which names itself as\nIconButton does: by default it carries `label`. Pass a string to show\ndifferent wording, or `false` to opt out."
+          },
+          {
+            "name": "tooltipPosition",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
+            "defaultValue": "'bottom'"
           },
           {
             "name": "className",
@@ -8662,7 +8528,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "side",
-            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
             "required": false,
             "description": "Edge the panel slides in from. `left` and `right` are the screen's\nedges in any reading direction; `start` and `end` follow it, so a\n`start` drawer opens on the left in English and on the right in Arabic.",
             "values": [
@@ -10881,7 +10747,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "values": [
@@ -10990,6 +10856,189 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "IconButton",
+    "label": "Icon button",
+    "slug": "icon-button",
+    "category": "actions",
+    "description": "Icon-only button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes.",
+    "client": false,
+    "importPath": "rift-ds/components/IconButton/IconButton",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "IconButton",
+        "props": [
+          {
+            "name": "icon",
+            "type": "string | ReactNode",
+            "required": true,
+            "description": "The icon — Material Symbol name (string) or custom element (ReactNode)"
+          },
+          {
+            "name": "variant",
+            "type": "\"neutral\" | \"primary\" | \"secondary\" | \"tertiary\"",
+            "required": false,
+            "description": "Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary`\n(ghost). The colour is `tone`'s job. `neutral` is the legacy value from\nbefore the split and renders as `variant=\"primary\" tone=\"neutral\"`.",
+            "values": [
+              "neutral",
+              "primary",
+              "secondary",
+              "tertiary"
+            ]
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"destructive\" | \"neutral\"",
+            "required": false,
+            "description": "Colour, independent of emphasis: `default` carries the action colour,\n`neutral` the greys, `destructive` the danger colour. Tertiary is\nalready grey, so `neutral` leaves it unchanged; a tertiary\n`destructive` takes the outlined look, since a danger action needs a\nvisible edge.",
+            "values": [
+              "default",
+              "destructive",
+              "neutral"
+            ]
+          },
+          {
+            "name": "priority",
+            "type": "\"primary\" | \"secondary\" | \"tertiary\"",
+            "required": false,
+            "description": "Legacy alias for `variant`.",
+            "values": [
+              "primary",
+              "secondary",
+              "tertiary"
+            ],
+            "deprecated": "Use `variant` instead."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the button is disabled"
+          },
+          {
+            "name": "state",
+            "type": "\"default\" | \"active\" | \"disabled\" | \"hover\"",
+            "required": false,
+            "description": "Documentation-only interaction state.",
+            "values": [
+              "active",
+              "default",
+              "disabled",
+              "hover"
+            ],
+            "deprecated": "Use `disabled` for the disabled state.\n\nDocumentation-only affordance for rendering a *static* interaction state in\nStorybook and the showcase site. Real hover/active styling comes from CSS\npseudo-classes and needs no prop — for docs, prefer\n`className=\"ds-icon-button--hover\"`."
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Button size",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "required": false,
+            "description": "Shows a spinner in place of the icon and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\nthe disabled state) and sets `aria-busy` on the rendered element."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": "The button's name: what a screen reader announces and, by default, what\nthe tooltip shows. Required, because the button has no visible text.\nNamed as Button's and AiButton's text is, so the family spells it one way."
+          },
+          {
+            "name": "tooltip",
+            "type": "string | false",
+            "required": false,
+            "description": "The hover/focus tooltip. An icon-only control names itself: by default\nthe button wears a Tooltip carrying `label`. Pass a string to show\ndifferent wording, or `false` to opt out — for a host that labels the\ncontrol another way, or one that owns the button's box directly\n(SplitButton's trigger stretches to its sibling segment, which the\ntooltip wrapper would block)."
+          },
+          {
+            "name": "tooltipPosition",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
+            "defaultValue": "'top'"
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Optional href — renders as <a> instead of <button>"
+          },
+          {
+            "name": "target",
+            "type": "string",
+            "required": false,
+            "description": "Optional target attribute for links"
+          },
+          {
+            "name": "rel",
+            "type": "string",
+            "required": false,
+            "description": "Optional rel attribute for links"
+          },
+          {
+            "name": "badge",
+            "type": "string | number | true",
+            "required": false,
+            "description": "A mark on the button's top-end corner, as BottomNav draws one: a count (a notification bell's unread), or `true` for a dot with no number."
+          },
+          {
+            "name": "badgeMax",
+            "type": "number",
+            "required": false,
+            "description": "The highest count the badge spells out; a larger one reads \"99+\". Defaults to 99.",
+            "defaultValue": "99"
+          },
+          {
+            "name": "badgeLabel",
+            "type": "((badge: string | number | true) => string)",
+            "required": false,
+            "description": "Text read after `label` while the button carries a badge, given the\nbadge. Defaults to \", new\" for a dot and \", 3 new\" for a count; the\nleading comma and space are part of the text. The tooltip keeps\n`label` alone.",
+            "defaultValue": "(badge: number | string | true) => (badge === true ? ', new' : `, ${badge} new`)"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale a numeric badge is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider.",
+            "defaultValue": "'en-US'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component the link renders with, such as Next.js's `Link`, so it\nnavigates through the app's router; a plain `<a>` when unset. This\ncomponent can render on the server, so it never reads a LinkProvider:\npass the prop even under one.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }
@@ -14360,7 +14409,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "values": [
@@ -20242,7 +20291,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"start\" | \"end\" | \"left\" | \"right\"",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "values": [

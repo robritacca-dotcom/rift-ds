@@ -86,6 +86,14 @@
           "default": "default"
         },
         {
+          "name": "iconOnly",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the button holding only its icon, on an even box. The label stays\nas its accessible name. For an icon action that also names itself on\nhover, use IconButton, which wears a tooltip.",
+          "default": false
+        },
+        {
           "name": "disabled",
           "type": "boolean",
           "typeKind": "primitive",
@@ -195,7 +203,7 @@
           "required": false,
           "description": "Legacy toggle for showing the text label.",
           "default": true,
-          "deprecated": "Will be removed once `label` loses its default in the next major;\nan icon-only button will simply omit `label`."
+          "deprecated": "Use `iconOnly`, the spelling the button family shares."
         }
       ]
     }
@@ -242,6 +250,13 @@
     }
   ],
   "size": {
-    "gzip": 1645
-  }
+    "gzip": 1675
+  },
+  "alternatives": [
+    {
+      "name": "IconButton",
+      "when": "the action is an icon alone and should name itself on hover",
+      "schemaUrl": "https://rift-ds.com/schema/components/icon-button.json"
+    }
+  ]
 }

@@ -37,8 +37,31 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Draws the button as a circle holding only its icon, for a tight bar. The label stays as its accessible name.",
+          "description": "Draws the button holding only its icon, on an even box, for a tight bar. The label stays as its accessible name.",
           "default": false
+        },
+        {
+          "name": "tooltip",
+          "type": "string | false",
+          "typeKind": "other",
+          "required": false,
+          "description": "The hover and focus tooltip of the icon-only form, which names itself as\nIconButton does: by default it carries `label`. Pass a string to show\ndifferent wording, or `false` to opt out. A button with a `summary`\nshows none, since its panel opens on the same hover."
+        },
+        {
+          "name": "tooltipPosition",
+          "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "end",
+            "left",
+            "right",
+            "start",
+            "top"
+          ],
+          "required": false,
+          "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
+          "default": "top"
         },
         {
           "name": "size",
@@ -308,6 +331,6 @@
     }
   ],
   "size": {
-    "gzip": 6772
+    "gzip": 7507
   }
 }

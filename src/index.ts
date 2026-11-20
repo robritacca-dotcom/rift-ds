@@ -94,6 +94,7 @@ export * from './components/Grid/Grid';
 export * from './components/Heading/Heading';
 export * from './components/HoverCard/HoverCard';
 export * from './components/Icon/Icon';
+export * from './components/IconButton/IconButton';
 export * from './components/ImageCompare/ImageCompare';
 export * from './components/Input/Input';
 export * from './components/Inspector/InspectorColorPicker';

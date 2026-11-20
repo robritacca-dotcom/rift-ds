@@ -617,28 +617,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
-  "circular-button": {
-    "types": {
-      "LinkComponent": {
-        "kind": "type",
-        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
-        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
-        "refs": [
-          "LinkComponentProps"
-        ]
-      },
-      "LinkComponentProps": {
-        "kind": "type",
-        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
-        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
-      }
-    },
-    "externalTypes": {
-      "ComponentPropsWithRef": "react",
-      "ElementType": "react",
-      "ReactNode": "react"
-    }
-  },
   "code-diff": {
     "types": {
       "CodeDiffChangeLabels": {
@@ -1584,6 +1562,28 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   "hover-card": {
     "types": {},
     "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
+  "icon-button": {
+    "types": {
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
       "ReactNode": "react"
     }
   },

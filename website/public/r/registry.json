@@ -256,12 +256,6 @@
       "description": "Compact pills for attributes, filters, and inline metadata."
     },
     {
-      "name": "circular-button",
-      "type": "registry:ui",
-      "title": "Circular button",
-      "description": "Round icon button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes."
-    },
-    {
       "name": "code-block",
       "type": "registry:ui",
       "title": "Code block",
@@ -530,6 +524,12 @@
       "type": "registry:ui",
       "title": "Icon",
       "description": "One Material Symbol on the icon scale, decorative or named, plain or on a round tile."
+    },
+    {
+      "name": "icon-button",
+      "type": "registry:ui",
+      "title": "Icon button",
+      "description": "Icon-only button in primary, secondary and tertiary emphasis and a default, neutral or destructive tone, in default and compact sizes."
     },
     {
       "name": "image-compare",

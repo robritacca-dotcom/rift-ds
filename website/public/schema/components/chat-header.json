@@ -28,7 +28,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "Trailing controls: a new-chat CircularButton, a view switcher, a close\nbutton. The slot only lays them out — each control owns its behaviour."
+          "description": "Trailing controls: a new-chat IconButton, a view switcher, a close\nbutton. The slot only lays them out — each control owns its behaviour."
         },
         {
           "name": "className",

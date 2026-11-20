@@ -8,9 +8,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 - Import: `import { Button } from 'rift-ds';`
 - Deep import: `import { Button } from 'rift-ds/components/Button/Button';`
 - Rendering: client component (declares 'use client')
-- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/button
 - Schema: https://rift-ds.com/schema/components/button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+
+## Alternatives
+
+- Use [Icon button](https://rift-ds.com/components/icon-button.md) instead when the action is an icon alone and should name itself on hover.
 
 ## Button props
 
@@ -23,6 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 | variant | `"destructive" \| "neutral" \| "primary" \| "secondary" \| "tertiary"` | no | `'primary'` | Emphasis: `primary` (filled), `secondary` (outlined) or `tertiary` (ghost). The colour is `tone`'s job. `neutral` and `destructive` are legacy values from before the split: `neutral` renders as `variant="primary" tone="neutral"` and `destructive` as `variant="secondary" tone="destructive"`. |
 | tone | `"default" \| "destructive" \| "neutral"` | no | `'default'` | Colour, independent of emphasis. `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. Tertiary is already grey, so `neutral` leaves it unchanged; a tertiary `destructive` takes the outlined look, since a danger action needs a visible edge. Left unset, a legacy `variant` (`neutral` or `destructive`) supplies the tone instead. |
 | size | `"default" \| "compact"` | no | `'default'` | Button size |
+| iconOnly | `boolean` | no | `false` | Draws the button holding only its icon, on an even box. The label stays as its accessible name. For an icon action that also names itself on hover, use IconButton, which wears a tooltip. |
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | loading | `boolean` | no |  | Shows a spinner in the left icon slot and blocks interaction while an async action runs. Keeps the variant's full-colour appearance (unlike `disabled`) and sets `aria-busy` on the rendered element. |
 | glass | `boolean` | no |  | Frosts the button for a busy ground (a shader, a photo, a chart): the page behind it is blurred, an outlined or ghost button takes the glass fill at rest and a filled one lets a little of the ground through its colour. Hover and press are the variant's own. Works on every `variant` and `tone`. |
@@ -35,7 +40,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same dat
 | priority | `"destructive" \| "primary" \| "secondary" \| "tertiary"` | no |  | Legacy alias for `variant`. Deprecated: Use `variant` instead. |
 | state | `"default" \| "active" \| "disabled" \| "hover"` | no |  | Documentation-only interaction state. Deprecated: Use `disabled` for the disabled state. Documentation-only affordance for rendering a *static* interaction state in Storybook and the showcase site. Real hover/active styling comes from CSS pseudo-classes and needs no prop — for docs, prefer `className="ds-button--hover"`. |
 | icon | `string \| ReactNode` | no |  | Legacy alias for `iconLeft` — Material Symbol name (string) or custom element (ReactNode). Deprecated: Use `iconLeft` instead. |
-| text | `boolean` | no | `true` | Legacy toggle for showing the text label. Deprecated: Will be removed once `label` loses its default in the next major; an icon-only button will simply omit `label`. |
+| text | `boolean` | no | `true` | Legacy toggle for showing the text label. Deprecated: Use `iconOnly`, the spelling the button family shares. |
 
 ## Keyboard
 

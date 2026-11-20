@@ -540,6 +540,11 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
             `${baseClass}__segment`,
             isActive ? `${baseClass}__segment--active` : '',
             segment.disabled ? `${baseClass}__segment--disabled` : '',
+            // Icon and label both on screen: the icon's edge takes a step
+            // less padding (design.md, SegmentedControl).
+            segment.icon && showLabels && collapseMode === 'full'
+              ? `${baseClass}__segment--icon-start`
+              : '',
           ]
             .filter(Boolean)
             .join(' ');

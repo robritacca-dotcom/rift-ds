@@ -290,3 +290,33 @@
 /* Compact group labels keep the base --font-paragraph-sm-* type — the
    scale has no smaller step. */
 
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The trigger always ends on its chevron and may lead with the
+   value's icon (16 → 12, compact 12 → 8); an option may lead with an icon
+   and a chosen option ends on the chosen mark (12 → 8; compact is
+   already at 8, the floor). */
+.ds-dropdown__trigger {
+  padding-inline-end: var(--padding-300);
+}
+
+.ds-dropdown__trigger:has(.ds-dropdown__value-icon) {
+  padding-inline-start: var(--padding-300);
+}
+
+.ds-dropdown--compact .ds-dropdown__trigger {
+  padding-inline-end: var(--padding-200);
+}
+
+.ds-dropdown--compact .ds-dropdown__trigger:has(.ds-dropdown__value-icon) {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-dropdown__option:has(.ds-dropdown__option-icon) {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-dropdown__option:has(.ds-chosen-mark) {
+  padding-inline-end: var(--padding-200);
+}

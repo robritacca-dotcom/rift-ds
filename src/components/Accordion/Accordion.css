@@ -124,3 +124,11 @@
   color: var(--color-text-secondary);
   margin: 0;
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The trigger always ends on its chevron (20 → 16); the leading
+   side keeps the panel's inset, the line its content reads from. */
+.ds-accordion__trigger {
+  padding-inline-end: var(--padding-400);
+}

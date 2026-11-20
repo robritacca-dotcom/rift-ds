@@ -222,3 +222,15 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The trigger leads with the clock and ends on the chevron, so
+   both ends step down (16 → 12, compact 12 → 8). */
+.ds-timepicker__trigger {
+  padding-inline: var(--padding-300);
+}
+
+.ds-timepicker--compact .ds-timepicker__trigger {
+  padding-inline: var(--padding-200);
+}

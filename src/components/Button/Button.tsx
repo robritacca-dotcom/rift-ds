@@ -208,21 +208,6 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     const resolvedState = state ?? (isDisabled ? 'disabled' : 'default');
     const isLoading = Boolean(loading);
 
-    const classes = [
-      baseClass,
-      `${baseClass}--${resolvedVariant}`,
-      `${baseClass}--${resolvedState}`,
-      `${baseClass}--${size}`,
-      isLoading && `${baseClass}--loading`,
-      glass && `${baseClass}--glass`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    // Material Symbols — rounded only
-    const iconClass = 'material-symbols-rounded';
-
     // Backwards compatibility: icon prop maps to iconLeft.
     // While loading, the spinner takes over the left icon slot so the label
     // keeps its position and the button doesn't change width.
@@ -232,6 +217,26 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
     ) : (
       iconLeft || icon
     );
+
+    // A glyph's box carries its own side bearing, so beside a label the icon's
+    // edge takes a step less padding than the text's (design.md, Button).
+    // An icon-only button keeps its even padding.
+    const classes = [
+      baseClass,
+      `${baseClass}--${resolvedVariant}`,
+      `${baseClass}--${resolvedState}`,
+      `${baseClass}--${size}`,
+      isLoading && `${baseClass}--loading`,
+      glass && `${baseClass}--glass`,
+      text && label && leftIcon && `${baseClass}--icon-start`,
+      text && label && iconRight && `${baseClass}--icon-end`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    // Material Symbols — rounded only
+    const iconClass = 'material-symbols-rounded';
 
     /** Render an icon slot — string → Material Symbol, ReactNode → custom element */
     const renderIcon = (iconProp: string | React.ReactNode, position?: 'right') => {

@@ -64,6 +64,33 @@
   padding-block: 0;
 }
 
+/* ============================================
+   ICON SIDE PADDING
+   An icon's box carries its own side bearing, so
+   beside a label the icon's edge reads one step
+   wider than the text's at the same padding. The
+   icon side takes the step below: 20 → 16 at
+   default, 12 → 8 at compact. The spinner in the
+   leading slot counts as an icon. An icon-only
+   button keeps its even padding.
+   ============================================ */
+
+.ds-button--icon-start {
+  padding-inline-start: var(--padding-400);
+}
+
+.ds-button--icon-end {
+  padding-inline-end: var(--padding-400);
+}
+
+.ds-button--compact.ds-button--icon-start {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-button--compact.ds-button--icon-end {
+  padding-inline-end: var(--padding-200);
+}
+
 .ds-button--compact .ds-button__icon {
   /* Figma: compact icons are 20px (vs 24px default). */
   --icon-size: var(--ds-button-icon-size, var(--icon-size-500));

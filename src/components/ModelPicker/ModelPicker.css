@@ -203,3 +203,14 @@
 .ds-model-picker__effort-options {
   flex: none;
 }
+
+/* Icon side padding, Button's rule: the chevron always trails, and its box
+   carries its own side bearing, so the end takes the step below the label
+   side (16 → 12, compact 12 → 8). */
+.ds-model-picker__trigger {
+  padding-inline-end: var(--padding-300);
+}
+
+.ds-model-picker--compact .ds-model-picker__trigger {
+  padding-inline-end: var(--padding-200);
+}

@@ -274,3 +274,56 @@
 .ds-input--affixed.ds-input--compact .ds-input__clear {
   margin-inline-end: calc(-1 * var(--padding-300));
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. An icon drawn in the field moves in one step and the text keeps
+   its distance from it (16 → 12, compact 12 → 8). The affixed wrapper's clear
+   and action buttons already pull into the edge with their own margin. */
+.ds-input__icon--left {
+  inset-inline-start: var(--padding-300);
+}
+
+.ds-input__icon--right {
+  inset-inline-end: var(--padding-300);
+}
+
+.ds-input--has-icon-left .ds-input__field {
+  padding-inline-start: calc(var(--padding-300) + 24px + var(--gap-200)); /* 12px + 24px icon + 8px gap */
+}
+
+.ds-input--has-icon-right .ds-input__field {
+  padding-inline-end: calc(var(--padding-300) + 24px + var(--gap-200)); /* 12px + 24px icon + 8px gap */
+}
+
+.ds-input--compact .ds-input__icon--left {
+  inset-inline-start: var(--padding-200);
+}
+
+.ds-input--compact .ds-input__icon--right {
+  inset-inline-end: var(--padding-200);
+}
+
+.ds-input--compact.ds-input--has-icon-left .ds-input__field {
+  padding-inline-start: calc(var(--padding-200) + 20px + var(--gap-200)); /* 8px + 20px icon + 8px gap */
+}
+
+.ds-input--compact.ds-input--has-icon-right .ds-input__field {
+  padding-inline-end: calc(var(--padding-200) + 20px + var(--gap-200)); /* 8px + 20px icon + 8px gap */
+}
+
+.ds-input--affixed.ds-input--has-icon-left .ds-input__field-wrapper {
+  padding-inline-start: var(--padding-300);
+}
+
+.ds-input--affixed.ds-input--has-icon-right .ds-input__field-wrapper {
+  padding-inline-end: var(--padding-300);
+}
+
+.ds-input--affixed.ds-input--compact.ds-input--has-icon-left .ds-input__field-wrapper {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-input--affixed.ds-input--compact.ds-input--has-icon-right .ds-input__field-wrapper {
+  padding-inline-end: var(--padding-200);
+}

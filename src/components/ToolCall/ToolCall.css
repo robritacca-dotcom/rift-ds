@@ -307,3 +307,11 @@
 .ds-tool-call__content > .ds-code-block .ds-code-block__pre {
   padding: 0;
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The header's chevron end steps in from the card inset; the
+   leading side keeps the inset, the line the body below it reads from. */
+.ds-tool-call__header:has(.ds-tool-call__chevron) {
+  padding-inline-end: calc(var(--ds-chat-card-inset) - var(--padding-100));
+}

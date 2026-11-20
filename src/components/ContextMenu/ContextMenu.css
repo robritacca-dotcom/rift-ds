@@ -287,3 +287,27 @@
     transform: scale(1);
   }
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. A row that leads with an icon, or ends on a trailing icon or the
+   submenu chevron, steps that side down (16 → 12, compact 12 → 8). The
+   compact rules carry the panel class, so the compact chevron side keeps
+   its trim instead of losing it to the compact row's padding. */
+.ds-context-menu__item:has(.ds-context-menu__item-label > .ds-context-menu__item-icon:first-child) {
+  padding-inline-start: var(--padding-300);
+}
+
+.ds-context-menu__item:has(.ds-context-menu__item-icon-right),
+.ds-context-menu__item--has-submenu {
+  padding-inline-end: var(--padding-300);
+}
+
+.ds-context-menu__panel--compact .ds-context-menu__item:has(.ds-context-menu__item-label > .ds-context-menu__item-icon:first-child) {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-context-menu__panel--compact .ds-context-menu__item:has(.ds-context-menu__item-icon-right),
+.ds-context-menu__panel--compact .ds-context-menu__item--has-submenu {
+  padding-inline-end: var(--padding-200);
+}

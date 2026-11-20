@@ -247,3 +247,11 @@
 .ds-agent-plan .material-symbols-rounded {
   color: inherit;
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The header's chevron end steps in from the card inset; the
+   leading side keeps the inset, the line the body below it reads from. */
+.ds-agent-plan__header:has(.ds-agent-plan__chevron) {
+  padding-inline-end: calc(var(--ds-chat-card-inset) - var(--padding-100));
+}

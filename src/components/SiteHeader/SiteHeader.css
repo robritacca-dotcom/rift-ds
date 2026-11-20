@@ -361,3 +361,10 @@
 .ds-site-header__drawer .ds-nav-list {
   width: 100%;
 }
+
+/* Icon side padding, Button's rule: a section with a mega menu trails a
+   caret, whose box carries its own side bearing, so that pill's end takes
+   the step below the label side (16 → 12). */
+.ds-site-header__pill:has(.ds-site-header__caret) {
+  padding-inline-end: var(--padding-300);
+}

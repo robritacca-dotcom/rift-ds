@@ -743,3 +743,15 @@
     transition: none;
   }
 }
+
+/* Icon side padding, Button's rule: beside the label the icon's box carries
+   its own side bearing, so its edge takes the step below the text side
+   (20 → 16 at default, 12 → 8 at compact). The busy and status glyphs ride
+   the same slot. An icon-only button keeps its even box. */
+.ds-ai-button:not(.ds-ai-button--icon-only):has(.ds-ai-button__icon) {
+  padding-inline-start: var(--padding-400);
+}
+
+.ds-ai-button--compact:not(.ds-ai-button--icon-only):has(.ds-ai-button__icon) {
+  padding-inline-start: var(--padding-200);
+}

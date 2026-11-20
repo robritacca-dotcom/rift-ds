@@ -42,19 +42,19 @@
      Let the flex stretch size it to the main segment instead. */
   height: auto;
   align-self: stretch;
+  /* Icon side padding, as Button's: the chevron's cap side takes one step
+     less than a full circle would give it, so the trigger is a padding
+     step narrower than the row height and the chevron sits centred in it,
+     6px either side. This replaces the old optical nudge toward the seam,
+     which reached the same seam-side gap by moving the glyph instead of
+     trimming the cap. The compact trigger keeps its full circle: its
+     chevron already sits 6px from either side, and trimming it would put
+     the glyph in the cap's curve. */
+  width: calc(var(--control-height-default) - var(--padding-100));
 }
 
-/* Optical centering: the trigger is flat on the left and a full round cap
-   on the right, so its visual mass sits left of the box centre (the
-   centroid of a square-plus-semicircle is ~5% of the width off-centre).
-   A geometrically centred chevron reads as pushed toward the cap; nudge
-   it toward the flat edge to match. */
-.ds-split-button .ds-split-button__trigger .ds-circular-button__icon {
-  transform: translateX(calc(-2px * var(--ds-inline-sign, 1)));
-}
-
-.ds-split-button .ds-split-button__trigger.ds-circular-button--compact .ds-circular-button__icon {
-  transform: translateX(calc(-1px * var(--ds-inline-sign, 1)));
+.ds-split-button .ds-split-button__trigger.ds-circular-button--compact {
+  width: var(--control-height-compact);
 }
 
 /* ============================================

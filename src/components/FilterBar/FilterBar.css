@@ -196,3 +196,15 @@
 .ds-filter-bar .material-symbols-rounded {
   color: inherit;
 }
+
+/* Icon side padding, Button's rule: a side that holds a glyph takes the
+   step below the text side, since the glyph's box carries its own side
+   bearing. The caret always trails; the leading icon is optional
+   (12 → 8; compact is already at 8, the floor). */
+.ds-filter-bar__chip {
+  padding-inline-end: var(--padding-200);
+}
+
+.ds-filter-bar__chip:has(.ds-filter-bar__icon) {
+  padding-inline-start: var(--padding-200);
+}

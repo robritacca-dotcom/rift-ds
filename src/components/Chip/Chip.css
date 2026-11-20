@@ -74,6 +74,32 @@
 }
 
 /* ============================================
+   ICON SIDE PADDING
+   Button's rule: beside the label an icon's box
+   carries its own side bearing, so a side that
+   holds the leading icon or the remove glyph
+   takes the step below the text side (12 → 8,
+   large 20 → 16). Compact stays at 8, the floor: closer, the glyph
+   sits in the pill's cap.
+   ============================================ */
+
+.ds-chip:has(.ds-chip__icon) {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-chip:has(.ds-chip__remove) {
+  padding-inline-end: var(--padding-200);
+}
+
+.ds-chip--large:has(.ds-chip__icon) {
+  padding-inline-start: var(--padding-400);
+}
+
+.ds-chip--large:has(.ds-chip__remove) {
+  padding-inline-end: var(--padding-400);
+}
+
+/* ============================================
    ICON (leading)
    ============================================ */
 

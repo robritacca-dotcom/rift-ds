@@ -987,3 +987,11 @@
 .ds-thread-panel__project {
   padding-inline-end: var(--padding-300);
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. A thread row that shows its icon leads with it, so it starts
+   on the icon rows' line rather than the text rows' (12 → 8). */
+.ds-thread-panel__thread:has(.ds-thread-panel__thread-icon) {
+  padding-inline-start: var(--padding-200);
+}

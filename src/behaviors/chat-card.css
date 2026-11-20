@@ -106,7 +106,10 @@
   align-items: center;
   gap: var(--gap-200);
   height: var(--control-height-compact);
-  padding: 0 var(--padding-300);
+  /* Compact Button's padding, with its icon side rule: the leading icon's
+     edge takes the step below the text side (12 → 8). */
+  padding-block: 0;
+  padding-inline: var(--padding-200) var(--padding-300);
   border-radius: var(--radius-pill);
   background-color: var(--ds-chat-card-readout-bg);
   color: var(--ds-chat-card-readout-text);

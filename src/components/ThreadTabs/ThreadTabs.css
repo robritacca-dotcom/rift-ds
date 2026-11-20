@@ -253,3 +253,10 @@
 .ds-thread-tabs__add:hover {
   background-color: var(--color-action-passive-bg-hover);
 }
+
+/* Icon side padding, Button's rule: a leading status dot or icon carries its
+   own side bearing, so the trigger's start takes the step below the text
+   side (12 → 8). */
+.ds-thread-tabs__trigger:has(.ds-thread-tabs__status, .ds-thread-tabs__icon) {
+  padding-inline-start: var(--padding-200);
+}

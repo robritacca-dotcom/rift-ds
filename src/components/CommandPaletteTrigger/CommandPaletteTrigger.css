@@ -98,3 +98,12 @@
   border-color: var(--color-bg-container-border);
   background-color: var(--color-bg-container-secondary);
 }
+
+/* Icon side padding, Button's rule: the search glyph leads and the keycaps
+   end the field, and each box carries its own side bearing, so both ends
+   take the step below a text edge (12 → 8). Compact is already at
+   8, the floor: closer, the glyph sits in the pill's cap. The icon-only
+   circle keeps its centred glyph. */
+.ds-command-palette-trigger:not(.ds-command-palette-trigger--icon-only) {
+  padding-inline: var(--padding-200);
+}

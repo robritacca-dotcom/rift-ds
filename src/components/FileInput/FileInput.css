@@ -279,3 +279,12 @@
 .ds-file-input .material-symbols-rounded {
   color: inherit;
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. A file row always leads with its type glyph (12 → 8,
+   compact is already at 8, the floor); its remove circle pads its own
+   glyph. */
+.ds-file-input__file {
+  padding-inline-start: var(--padding-200);
+}

@@ -241,3 +241,10 @@
 .ds-rich-dropdown--disabled .ds-rich-dropdown__chevron {
   color: var(--color-input-text-disabled);
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The trigger always ends on its chevron (16 → 12). */
+.ds-rich-dropdown__trigger {
+  padding-inline-end: var(--padding-300);
+}

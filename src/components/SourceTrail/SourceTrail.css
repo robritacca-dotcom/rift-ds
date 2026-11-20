@@ -216,3 +216,11 @@
 .ds-source-trail .material-symbols-rounded:not(.ds-source-trail__chevron) {
   color: inherit;
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The header's chevron end steps in from the card inset; the
+   leading side keeps the inset, the line the body below it reads from. */
+.ds-source-trail__header:has(.ds-source-trail__chevron) {
+  padding-inline-end: calc(var(--ds-chat-card-inset) - var(--padding-100));
+}

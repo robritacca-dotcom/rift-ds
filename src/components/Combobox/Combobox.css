@@ -391,3 +391,15 @@
 .ds-combobox .material-symbols-rounded {
   color: inherit;
 }
+
+/* Icon side padding, Button's rule: a glyph's box carries its own side
+   bearing, so a side that holds one takes the step below the text side. The
+   control always leads with the search glyph and ends on the chevron
+   (16 → 12, compact 12 → 8). A chip's 8px is already the floor. */
+.ds-combobox__control {
+  padding-inline: var(--padding-300);
+}
+
+.ds-combobox--compact .ds-combobox__control {
+  padding-inline: var(--padding-200);
+}

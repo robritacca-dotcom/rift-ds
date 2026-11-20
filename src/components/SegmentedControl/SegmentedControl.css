@@ -219,6 +219,17 @@
   padding-block: 0;
 }
 
+/* Icon side padding: beside a label the icon's box carries its own side
+   bearing, so its edge takes the step below the text's, as Button's does:
+   16 → 12 at default, 12 → 8 at compact. */
+.ds-segmented-control__segment--icon-start {
+  padding-inline-start: var(--padding-300);
+}
+
+.ds-segmented-control--compact .ds-segmented-control__segment--icon-start {
+  padding-inline-start: var(--padding-200);
+}
+
 .ds-segmented-control--compact .ds-segmented-control__label {
   font-size: var(--font-paragraph-sm-emphasis-size);
   line-height: var(--font-paragraph-sm-emphasis-line-height);

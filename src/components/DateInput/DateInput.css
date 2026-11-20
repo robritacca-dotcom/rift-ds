@@ -131,3 +131,23 @@
 .ds-date-input--disabled .ds-date-input__icon {
   color: var(--color-input-text-disabled);
 }
+
+/* Icon side padding, Button's rule (design.md): a glyph's box carries its
+   own side bearing, so a side that holds one takes the step below the text
+   side. The calendar glyph moves in one step and the text keeps its
+   distance from it (16 → 12, compact 12 → 8). */
+.ds-date-input__icon {
+  inset-inline-start: var(--padding-300);
+}
+
+.ds-date-input__field {
+  padding-inline-start: calc(var(--padding-300) + 24px + var(--gap-200)); /* 12px + 24px icon + 8px gap */
+}
+
+.ds-date-input--compact .ds-date-input__icon {
+  inset-inline-start: var(--padding-200);
+}
+
+.ds-date-input--compact .ds-date-input__field {
+  padding-inline-start: calc(var(--padding-200) + 20px + var(--gap-200)); /* 8px + 20px icon + 8px gap */
+}

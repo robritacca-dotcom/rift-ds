@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.32.0",
+      "date": "2026-11-21",
+      "title": "Anthropic SDK 1.x support, and IconButton",
+      "body": [
+        "The chat installs beside Anthropic’s SDK 1.x. The chat server’s optional peer was `^0.116.0`, which npm reads as 0.116.x only, so an app on SDK 1.x stopped on a peer conflict. The range is now `^0.116.0 || ^1.0.0`, nothing in the chat API changed, and both SDK lines work. On SDK 1.x your key is sent as `Authorization: Bearer` and requests use API version 2026-10-21, so update a proxy that reads `X-Api-Key` first.",
+        "CircularButton is now IconButton, because its shape is the theme’s and a square theme drew a circular button square. Button gains `iconOnly`, the spelling the button family shares. AiButton and CommandPaletteTrigger name their icon-only form with a tooltip, and `rift-ds/chat` exports `preloadChatWidget` so your own opener can load the panel ahead of the press.",
+        "Nothing published was removed: `CircularButton` and Button’s `text` keep working as deprecated aliases. One look changed everywhere: the side of a button, chip, field or menu row that holds an icon takes one padding step less, so the glyph’s edge reads level with the text’s."
+      ]
+    },
+    {
       "version": "1.31.0",
       "date": "2026-11-19",
       "title": "A chat that changes the page, and a row for a decision",

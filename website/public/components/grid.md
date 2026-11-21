@@ -2,7 +2,7 @@
 
 Equal columns that fold by their own width, with a gap from the scale and cells that share a row’s height.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.31.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: layout
 - Import: `import { Grid } from 'rift-ds';`

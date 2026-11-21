@@ -17298,26 +17298,38 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'contained'"
           },
           {
+            "name": "containedWidth",
+            "type": "\"default\" | \"narrow\" | \"wide\"",
+            "required": false,
+            "description": "The contained width's step, for a page a level narrower or wider than\nthe default: `narrow` (1200px, a 1080px article beside an edge-docked sidebar), `default` (1440px) or `wide` (1680px).\nThe header and the footer follow it when contained. With the sidebar\ndocked to the edge, the step caps the room after the sidebar; docked to\nthe content, it caps the sidebar and the content together.",
+            "values": [
+              "default",
+              "narrow",
+              "wide"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
             "name": "headerWidth",
             "type": "\"contained\" | \"full\"",
             "required": false,
-            "description": "How wide the header's bar runs, apart from the page, for a SiteHeader\nthat sets no `width` of its own. Defaults to `width`.",
+            "description": "How wide the header's bar runs, for a SiteHeader that sets no `width`\nof its own. It moves with the sidebar's dock: `full` when the sidebar\ndocks to the window's edge (so the brand sits over the sidebar, flush\nwith the same edge), the page's `width` when it docks beside the\ncontent. Set it only to break that pairing.",
             "values": [
               "contained",
               "full"
             ],
-            "defaultValue": "width"
+            "defaultValue": "sidebarDock === 'edge' ? 'full' : width"
           },
           {
             "name": "footerWidth",
             "type": "\"contained\" | \"full\"",
             "required": false,
-            "description": "How wide the footer's row runs, apart from the page. Defaults to\n`width`; set it to the header's width so the top and the bottom of the\nsite match.",
+            "description": "How wide the footer's row runs. It moves with the header: `full` when\nthe sidebar docks to the window's edge, the page's `width` when it\ndocks beside the content, so the top and the bottom of the site always\nagree. Set it only to break that pairing.",
             "values": [
               "contained",
               "full"
             ],
-            "defaultValue": "width"
+            "defaultValue": "sidebarDock === 'edge' ? 'full' : width"
           },
           {
             "name": "sidebarDock",

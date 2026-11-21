@@ -236,7 +236,6 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
   const product = useStagedProductName(PRODUCT);
   const staged = useIsStaged();
   const [pageWidth, setPageWidth] = useState<Width>("contained");
-  const [headerWidth, setHeaderWidth] = useState<Width>("full");
   const [dock, setDock] = useState<Dock>("edge");
   const [asidePlacement, setAsidePlacement] = useState<"edge" | "column">("edge");
   const [chatOpen, setChatOpen] = useState(false);
@@ -282,19 +281,10 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     { type: "separator" },
     {
       type: "group",
-      label: "Header width",
+      label: "Header, sidebar and footer",
       items: [
-        radio("contained", headerWidth, "Contained", setHeaderWidth),
-        radio("full", headerWidth, "Full width", setHeaderWidth),
-      ],
-    },
-    { type: "separator" },
-    {
-      type: "group",
-      label: "Sidebar",
-      items: [
-        radio("edge", dock, "Docked to the edge", setDock),
-        radio("content", dock, "Beside the content", setDock),
+        radio("edge", dock, "Edge to edge", setDock),
+        radio("content", dock, "Contained with the page", setDock),
       ],
     },
     { type: "separator" },
@@ -324,8 +314,6 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     <SiteLayout
       className={[styles.layout, chatOpen && chatDocks ? styles.layoutChatOpen : ""].filter(Boolean).join(" ")}
       width={pageWidth}
-      headerWidth={headerWidth}
-      footerWidth={headerWidth}
       readingWidth
       sidebarDock={dock}
       asidePlacement={asidePlacement}

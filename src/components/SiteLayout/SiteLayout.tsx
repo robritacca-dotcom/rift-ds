@@ -42,16 +42,29 @@ type SiteLayoutOwnProps = {
    */
   width?: 'contained' | 'full';
   /**
-   * How wide the header's bar runs, apart from the page, for a SiteHeader
-   * that sets no `width` of its own. Defaults to `width`.
-   * @default width
+   * The contained width's step, for a page a level narrower or wider than
+   * the default: `narrow` (1200px, a 1080px article beside an edge-docked sidebar), `default` (1440px) or `wide` (1680px).
+   * The header and the footer follow it when contained. With the sidebar
+   * docked to the edge, the step caps the room after the sidebar; docked to
+   * the content, it caps the sidebar and the content together.
+   * @default 'default'
+   */
+  containedWidth?: 'narrow' | 'default' | 'wide';
+  /**
+   * How wide the header's bar runs, for a SiteHeader that sets no `width`
+   * of its own. It moves with the sidebar's dock: `full` when the sidebar
+   * docks to the window's edge (so the brand sits over the sidebar, flush
+   * with the same edge), the page's `width` when it docks beside the
+   * content. Set it only to break that pairing.
+   * @default sidebarDock === 'edge' ? 'full' : width
    */
   headerWidth?: 'contained' | 'full';
   /**
-   * How wide the footer's row runs, apart from the page. Defaults to
-   * `width`; set it to the header's width so the top and the bottom of the
-   * site match.
-   * @default width
+   * How wide the footer's row runs. It moves with the header: `full` when
+   * the sidebar docks to the window's edge, the page's `width` when it
+   * docks beside the content, so the top and the bottom of the site always
+   * agree. Set it only to break that pairing.
+   * @default sidebarDock === 'edge' ? 'full' : width
    */
   footerWidth?: 'contained' | 'full';
   /**
@@ -100,6 +113,7 @@ export function SiteLayout({
   aside,
   footer,
   width = 'contained',
+  containedWidth = 'default',
   headerWidth,
   footerWidth,
   readingWidth = false,
@@ -114,6 +128,10 @@ export function SiteLayout({
   ...rest
 }: SiteLayoutProps) {
   const baseClass = 'ds-site-layout';
+  // The frame moves as one: an edge-docked sidebar takes the header and the
+  // footer to the window's edges with it; docked beside the content, both
+  // follow the page.
+  const frameWidth = sidebarDock === 'edge' ? 'full' : width;
   const classes = [
     baseClass,
     `${baseClass}--dock-${sidebarDock}`,
@@ -145,14 +163,20 @@ export function SiteLayout({
   );
 
   return (
-    <div {...rest} ref={ref} className={classes} data-ds-width={width}>
+    <div
+      {...rest}
+      ref={ref}
+      className={classes}
+      data-ds-width={width}
+      data-ds-contained={containedWidth === 'default' ? undefined : containedWidth}
+    >
       {skipLinkLabel && (
         <Link variant="skip" href={`#${mainId}`}>
           {skipLinkLabel}
         </Link>
       )}
       {header && (
-        <div className={`${baseClass}__header`} data-ds-width={headerWidth ?? width}>
+        <div className={`${baseClass}__header`} data-ds-width={headerWidth ?? frameWidth}>
           {header}
         </div>
       )}
@@ -170,7 +194,7 @@ export function SiteLayout({
         </div>
       )}
       {footer && (
-        <div className={`${baseClass}__footer`} data-ds-width={footerWidth ?? width}>
+        <div className={`${baseClass}__footer`} data-ds-width={footerWidth ?? frameWidth}>
           <div className={`${baseClass}__footer-row`}>{footer}</div>
         </div>
       )}

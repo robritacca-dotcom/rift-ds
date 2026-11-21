@@ -185,8 +185,9 @@ const siteShells = [
 
 const siteLevers = [
   { id: "page", lever: "Page width", prop: "SiteLayout width", values: "contained or full" },
-  { id: "header", lever: "Header width", prop: "SiteLayout headerWidth", values: "contained or full; the page width unless set" },
-  { id: "footer", lever: "Footer width", prop: "SiteLayout footerWidth", values: "contained or full; the page width unless set" },
+  { id: "step", lever: "Contained step", prop: "SiteLayout containedWidth", values: "narrow (1200px), default (1440px) or wide (1680px)" },
+  { id: "header", lever: "Header width", prop: "SiteLayout headerWidth", values: "moves with the dock: full when edge-docked, the page width beside the content" },
+  { id: "footer", lever: "Footer width", prop: "SiteLayout footerWidth", values: "moves with the header" },
   { id: "dock", lever: "Sidebar dock", prop: "SiteLayout sidebarDock", values: "content (the row's first column) or edge (the window's start edge)" },
   { id: "aside", lever: "On this page", prop: "SiteLayout asidePlacement", values: "column (beside the content) or edge (pinned to the window's end edge)" },
   { id: "reading", lever: "Reading width", prop: "SiteLayout readingWidth", values: "on holds a contained page's main column to about 75 characters" },

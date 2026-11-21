@@ -49,6 +49,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     width: { control: 'radio', options: ['contained', 'full'] },
+    containedWidth: { control: 'radio', options: ['narrow', 'default', 'wide'] },
     headerWidth: { control: 'radio', options: ['contained', 'full'] },
     footerWidth: { control: 'radio', options: ['contained', 'full'] },
     sidebarDock: { control: 'radio', options: ['content', 'edge'] },
@@ -107,9 +108,9 @@ export const FloatingAside: Story = {
   ),
 };
 
-/** The header and the footer run full width over a contained page: each width is its own lever. */
-export const MixedWidths: Story = {
-  args: { width: 'contained', headerWidth: 'full', footerWidth: 'full', sidebarDock: 'edge' },
+/** Docked to the edge, the header and the footer go full width with the sidebar, over a contained page: the frame moves as one. */
+export const EdgeFrame: Story = {
+  args: { width: 'contained', sidebarDock: 'edge' },
 };
 
 /** A reading measure: while the page is contained, the main column holds about 75 characters. */
@@ -137,4 +138,9 @@ export const ContentOnly: Story = {
 /** The reverse mix: a full-width page under a contained header and footer, a contained row nested in a full one. */
 export const FullPageContainedHeader: Story = {
   args: { width: 'full', headerWidth: 'contained', footerWidth: 'contained', sidebarDock: 'content' },
+};
+
+/** A level narrower: the contained width at its narrow step (1200px, a 1080px article beside the edge-docked sidebar), the header and the footer following it. */
+export const NarrowContained: Story = {
+  args: { containedWidth: 'narrow', sidebarDock: 'edge' },
 };

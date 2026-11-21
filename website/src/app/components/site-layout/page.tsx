@@ -14,8 +14,6 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 
 const USAGE = `<SiteLayout
   width="contained"
-  headerWidth="full"
-  footerWidth="full"
   sidebarDock="edge"
   asidePlacement="column"
   readingWidth
@@ -29,9 +27,10 @@ const USAGE = `<SiteLayout
 
 const LEVERS = [
   { id: "width", prop: "width", values: "contained (default), full", does: "How wide the columns run: centred at 1440px, or edge to edge with the gutter" },
-  { id: "headerWidth", prop: "headerWidth", values: "contained, full", does: "The header bar's width, for a SiteHeader with no width of its own; the page width unless set" },
-  { id: "footerWidth", prop: "footerWidth", values: "contained, full", does: "The footer row's width; the page width unless set" },
-  { id: "sidebarDock", prop: "sidebarDock", values: "content (default), edge", does: "The sidebar as the row's first column, or docked to the window's start edge behind a hairline" },
+  { id: "containedWidth", prop: "containedWidth", values: "narrow, default (default), wide", does: "The contained width's step: 1200px, 1440px or 1680px, followed by the header and the footer" },
+  { id: "headerWidth", prop: "headerWidth", values: "contained, full", does: "The header bar's width; moves with the dock (full when edge-docked, the page width beside the content), set only to break the pairing" },
+  { id: "footerWidth", prop: "footerWidth", values: "contained, full", does: "The footer row's width; moves with the header, set only to break the pairing" },
+  { id: "sidebarDock", prop: "sidebarDock", values: "content (default), edge", does: "The sidebar as the row's first column, or docked to the window's start edge behind a hairline; the header and the footer move with it" },
   { id: "asidePlacement", prop: "asidePlacement", values: "column (default), edge", does: "The aside as a column after the content, or pinned to the window's end edge as AnchorNav's floating minimap" },
   { id: "readingWidth", prop: "readingWidth", values: "true, false (default)", does: "The main column held to about 75 characters, centred, while the page is contained" },
   { id: "reserve", prop: "--ds-site-layout-reserve-end", values: "a length, 0 by default", does: "Room the frame gives up at its end edge for a docked panel, such as a chat; an edge aside moves in with it" },

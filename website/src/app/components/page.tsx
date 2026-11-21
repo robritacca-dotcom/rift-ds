@@ -1,13 +1,7 @@
 import { sectionLandingMetadata } from "@/config/navigation";
 import MegaNav from "../../components/MegaNav/MegaNav";
-import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../components/Sidebar/ComponentsSidebar";
-import PageLinks from "../../components/PageLinks/PageLinks";
-import ComponentCardGrid from "../../components/ComponentCardGrid/ComponentCardGrid";
-import FeaturedComponents from "../../components/FeaturedComponents/FeaturedComponents";
-import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
-import { componentCategoryMetadata } from "rift-ds/components/registry";
-import { componentPages } from "@/data/component-pages";
+import ComponentsIndex from "./ComponentsIndex";
 import styles from "./page.module.css";
 
 // Page-level, so it never cascades to the sub-pages (see sectionLandingMetadata).
@@ -22,39 +16,7 @@ export default function ComponentsPage() {
         <ComponentsSidebar />
 
         <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Components</h1>
-            <PageLinks storybookPath="/?path=/docs/components-button--docs" />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Every building block in one place
-            </p>
-            <p className={styles.introBody}>
-              Each component is built on the colour, spacing, and typography tokens from the foundations pages. They all share the same padding rules, focus styles, and sizing conventions so they feel consistent when combined, and because every colour and shape is a token, each one renders correctly in all of the shipped themes, light and dark included. Click into any component to see its variants, states, and sizing options.
-            </p>
-          </div>
-
-          {/* One section per category, cards alphabetical within */}
-          <div className={`${styles.categorySections} animate-in animate-delay-2`}>
-            <FeaturedComponents />
-            {componentCategoryMetadata.map((cat) => (
-              <section key={cat.id} id={cat.id} className={styles.categorySection}>
-                <SectionTitle
-                  title={cat.label}
-                  trailing={`${componentPages.filter((c) => c.category === cat.id).length}`}
-                  divider={false}
-                />
-                <ComponentCardGrid
-                  components={componentPages.filter((c) => c.category === cat.id)}
-                />
-              </section>
-            ))}
-          </div>
+          <ComponentsIndex />
         </main>
       </div>
     </>

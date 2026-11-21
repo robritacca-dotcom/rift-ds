@@ -692,7 +692,13 @@ function RotatingSubtitle() {
   );
 }
 
-export default function DesignSystemLanding() {
+/**
+ * The home page. `chrome` (on by default) draws the site's header and the
+ * main region around the page; /labs/site-frame turns it off and hosts the
+ * same page inside the library's SiteLayout, which brings both.
+ */
+export default function DesignSystemLanding({ chrome = true }: { chrome?: boolean }) {
+  const Region = chrome ? "main" : "div";
   const [alerts, setAlerts] = useState({ transactions: true, security: true, market: false });
   const [currency, setCurrency] = useState("usd");
   const [dueDate, setDueDate] = useState("2026-08-15");
@@ -1429,9 +1435,9 @@ export default function DesignSystemLanding() {
   return (
     <>
       <ExtendedBackground />
-      <MegaNav />
+      {chrome && <MegaNav />}
 
-      <main className={styles.page} id="main-content">
+      <Region className={styles.page} id={chrome ? "main-content" : undefined}>
         {/* ---------- page header (deliberately light: this is the index of
              the design-system section, so it carries the tagline, the
              section links, the accent swatches and the registry-counted
@@ -1691,7 +1697,7 @@ export default function DesignSystemLanding() {
             </span>
           </a>
         </section>
-      </main>
+      </Region>
 
     </>
   );

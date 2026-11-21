@@ -134,6 +134,15 @@
   padding-inline: var(--ds-shell-gutter) var(--padding-300);
 }
 
+/* Optical alignment: a NavList's words line up with the header's brand,
+   not its row fills, so the list hangs out by its own text inset and the
+   fills sit in the gutter. A host's own list sets the same hook to join in. */
+.ds-site-layout__sidebar > .ds-nav-list,
+.ds-site-layout__sidebar > [data-ds-sidebar-hang] {
+  width: calc(100% + var(--ds-nav-list-text-inset, 0px));
+  margin-inline-start: calc(-1 * var(--ds-nav-list-text-inset, 0px));
+}
+
 /* Docked to the edge, the content sits the column gap off the divider,
    not the gutter, so it never crowds the sidebar, and takes the same gap
    at the window's end, so it centres between the two edges (an edge-pinned
@@ -143,10 +152,38 @@
 }
 
 /* An edge-pinned aside floats over the window's end margin, so the row
-   keeps room for it there at any width or dock: the gutter it sits in, the
-   rail itself (about a control's height wide) and a beat. */
-.ds-site-layout.ds-site-layout--aside-edge .ds-site-layout__row {
-  padding-inline-end: calc(var(--ds-shell-gutter) + var(--control-height-default) + var(--gap-500));
+   keeps room for it: the gutter it sits in, the rail itself (about a
+   control's height wide) and a beat. A contained row takes only the part
+   of that room its own margin does not already give (100% is the body's
+   width; docked to the edge, the sidebar's column comes off it first; a
+   window narrower than the contained width leaves no margin), so a
+   wide window keeps the full contained width; a full row takes all of it. */
+.ds-site-layout {
+  --ds-site-layout-rail-room: calc(var(--ds-shell-gutter) + var(--control-height-default) + var(--gap-500));
+}
+
+.ds-site-layout.ds-site-layout--aside-edge[data-ds-width='contained'] .ds-site-layout__row {
+  padding-inline-end: max(
+    var(--ds-shell-gutter),
+    calc(var(--ds-site-layout-rail-room) - max(0px, (100% - var(--ds-shell-contained-width)) / 2))
+  );
+}
+
+.ds-site-layout.ds-site-layout--aside-edge.ds-site-layout--dock-edge[data-ds-width='contained'] .ds-site-layout__row {
+  padding-inline-end: max(
+    var(--gap-1500),
+    calc(
+      var(--ds-site-layout-rail-room) -
+        max(
+          0px,
+          (100% - var(--ds-site-layout-sidebar-width) - var(--ds-shell-gutter) - var(--ds-shell-contained-width)) / 2
+        )
+    )
+  );
+}
+
+.ds-site-layout.ds-site-layout--aside-edge[data-ds-width='full'] .ds-site-layout__row {
+  padding-inline-end: max(var(--gap-1500), var(--ds-site-layout-rail-room));
 }
 
 /* The edge-docked sidebar's divider: a hairline that fades out at both
@@ -206,7 +243,14 @@
 .ds-site-layout--aside-edge .ds-site-layout__aside {
   position: fixed;
   inset-block-start: 50%;
-  inset-inline-end: calc(var(--ds-site-layout-reserve-end) + var(--ds-shell-gutter));
+  /* Fixed to the window, so it follows the end reserve, not the frame's
+     box. A host that narrows the page itself rather than through the
+     reserve (padding on the body for a docked chat) moves it with
+     --ds-site-layout-aside-inset instead. */
+  inset-inline-end: var(
+    --ds-site-layout-aside-inset,
+    calc(var(--ds-site-layout-reserve-end) + var(--ds-shell-gutter))
+  );
   padding-block-start: 0;
   transform: translateY(-50%);
   /* Above the page's content, below the sticky header and its menus. */
@@ -285,5 +329,11 @@
   .ds-site-layout.ds-site-layout .ds-site-layout__row {
     grid-template-columns: minmax(0, 1fr);
     padding-inline: var(--ds-shell-gutter);
+  }
+
+  /* The edge aside is gone too, and its room with it. */
+  .ds-site-layout.ds-site-layout--aside-edge[data-ds-width] .ds-site-layout__row,
+  .ds-site-layout.ds-site-layout--aside-edge.ds-site-layout--dock-edge[data-ds-width] .ds-site-layout__row {
+    padding-inline-end: var(--ds-shell-gutter);
   }
 }

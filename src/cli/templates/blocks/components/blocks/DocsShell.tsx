@@ -7,12 +7,12 @@
  * product, replace the navigation and the footer with your own, and wire
  * the search to your command palette.
  *
- * Three settings below lay it out, each independent of the others:
- * PAGE_WIDTH (the columns contained at 1440px or full width), HEADER_WIDTH
- * (the same for the header bar and the footer) and SIDEBAR_DOCK (the
- * sidebar docked to the window's edge, or beside the content in the page's
- * row). SiteLayout's readingWidth holds the article to a reading measure
- * while the page is contained.
+ * Two settings below lay it out: PAGE_WIDTH (the columns contained at
+ * 1440px or full width) and SIDEBAR_DOCK, which moves the header, the
+ * sidebar and the footer as one frame: docked to the window's edge, the
+ * header and the footer run full width with it; beside the content, all
+ * three follow the page. SiteLayout's readingWidth holds the article to a
+ * reading measure while the page is contained.
  *
  * Responsive by construction: below 1152px the on-this-page rail gives
  * way, and below 960px the sidebar leaves the page and the header's menu
@@ -34,10 +34,7 @@ import styles from './DocsShell.module.css';
 /** How wide the page's columns run: centred at 1440px, or the full window. */
 const PAGE_WIDTH: 'contained' | 'full' = 'full';
 
-/** How wide the header bar runs, apart from the page: the same two values. */
-const HEADER_WIDTH: 'contained' | 'full' = 'full';
-
-/** Where the sidebar sits: docked to the window's start edge, or beside the content in the page's row. */
+/** Where the sidebar sits, the header and the footer moving with it: docked to the window's start edge, or beside the content in the page's row. */
 const SIDEBAR_DOCK: 'edge' | 'content' = 'edge';
 
 /** The product's name, shown in the header and the footer. */
@@ -129,8 +126,6 @@ export function DocsShell({ currentHref, breadcrumb, children }: DocsShellProps)
   return (
     <SiteLayout
       width={PAGE_WIDTH}
-      headerWidth={HEADER_WIDTH}
-      footerWidth={HEADER_WIDTH}
       readingWidth
       sidebarDock={SIDEBAR_DOCK}
       mainId="docs-article"

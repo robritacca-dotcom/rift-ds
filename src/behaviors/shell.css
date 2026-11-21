@@ -137,6 +137,20 @@
   --ds-shell-content-max: none;
 }
 
+/* The contained width's steps, a level either side of the default, for a
+   host that wants the page narrower or wider without a length of its own:
+   data-ds-contained="narrow" (1200px: with a sidebar docked at the edge,
+   a 1080px article), "default"
+   (1440px) or "wide" (1680px, a dashboard). Declared after the default so
+   it wins on the same element, and inherited by every nested width element. */
+:where([data-ds-contained='narrow']) {
+  --ds-shell-contained-width: 1200px;
+}
+
+:where([data-ds-contained='wide']) {
+  --ds-shell-contained-width: 1680px;
+}
+
 /* initial makes a custom property guaranteed-invalid, so a reader's
    fallback applies. */
 :where([data-ds-width='contained']) {

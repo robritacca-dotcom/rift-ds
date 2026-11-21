@@ -8,6 +8,12 @@
    ============================================ */
 
 .ds-nav-list {
+  /* How far a row's text sits in from the row's own edge (the rows are
+     compact tertiary Buttons, the headings share their inset). A host that
+     lines the list's text up with something above it, a header's brand,
+     hangs the list out by this much, so the fills sit in the gutter and the
+     words sit on the line (SiteLayout's sidebar does). */
+  --ds-nav-list-text-inset: var(--padding-300);
   display: flex;
   flex-direction: column;
   gap: var(--gap-050);

@@ -57,6 +57,8 @@
     "./chat/demo": "./src/chat/demo.ts",
     "./chat/chat.css": "./src/chat/ChatWidget.css",
     "./format": "./src/format/index.ts",
+    "./code": "./src/code/index.ts",
+    "./code/highlight": "./src/code/highlight.ts",
     "./tokens/registry": "./src/tokens/registry.ts",
     "./tokens/values": "./src/tokens/values.ts",
     "./tokens/motion": "./src/tokens/motion.ts",
@@ -99,7 +101,8 @@
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "recharts": "^3.0.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "shiki": "^3.0.0 || ^4.0.0"
   },
   "peerDependenciesMeta": {
     "@anthropic-ai/sdk": {
@@ -118,6 +121,9 @@
       "optional": true
     },
     "remark-gfm": {
+      "optional": true
+    },
+    "shiki": {
       "optional": true
     }
   },
@@ -159,6 +165,7 @@
     "recharts": "^3.7.0",
     "remark-gfm": "^4.0.1",
     "sharp": "^0.35.3",
+    "shiki": "^4.6.0",
     "storybook": "^10.6.6",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",

@@ -853,6 +853,35 @@ const pixelInkColours: SwatchData[] = [
   },
 ];
 
+/* --- Code --- */
+const codeColours: SwatchData[] = [
+  {
+    label: "Keyword", cssVar: "--color-code-keyword",
+    dark: { primitive: "--purple--03--", hex: "#CFABF7", rgb: "207 / 171 / 247" },
+    light: { primitive: "--purple--08--", hex: "#7434B3", rgb: "116 / 52 / 179" },
+  },
+  {
+    label: "String", cssVar: "--color-code-string",
+    dark: { primitive: "--green--03--", hex: "#9DEBD4", rgb: "157 / 235 / 212" },
+    light: { primitive: "--green--09--", hex: "#03765A", rgb: "3 / 118 / 90" },
+  },
+  {
+    label: "Function", cssVar: "--color-code-function",
+    dark: { primitive: "--blue--03--", hex: "#AABCEF", rgb: "170 / 188 / 239" },
+    light: { primitive: "--blue--08--", hex: "#163789", rgb: "22 / 55 / 137" },
+  },
+  {
+    label: "Constant", cssVar: "--color-code-constant",
+    dark: { primitive: "--orange--03--", hex: "#F6B794", rgb: "246 / 183 / 148" },
+    light: { primitive: "--orange--09--", hex: "#8F4324", rgb: "143 / 67 / 36" },
+  },
+  {
+    label: "Comment", cssVar: "--color-code-comment",
+    dark: { primitive: "--neutral--04--", hex: "#A2A2A2", rgb: "162 / 162 / 162" },
+    light: { primitive: "--neutral--06--", hex: "#6D6D6D", rgb: "109 / 109 / 109" },
+  },
+];
+
 /* --- Count badge --- */
 const countBadgeColours: SwatchData[] = [
   {
@@ -1225,6 +1254,15 @@ export default function SemanticColoursPage() {
             <SectionTitle title="Pixel ink" />
             <div className={styles.colourSwatches}>
               {pixelInkColours.map((s) => (
+                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+              ))}
+            </div>
+          </section>
+          {/* Code */}
+          <section className={styles.colourGroup}>
+            <SectionTitle title="Code" />
+            <div className={styles.colourSwatches}>
+              {codeColours.map((s) => (
                 <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
               ))}
             </div>

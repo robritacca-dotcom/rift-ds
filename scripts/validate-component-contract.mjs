@@ -77,6 +77,10 @@ const SANCTIONED = {
 const SANCTIONED_ANCHORS = {
   'AnchorNav/AnchorNav.tsx':
     'in-page `#id` jumps the component scrolls and tracks itself; a router link would only add a history entry per jump',
+  'SectionTitle/SectionTitle.tsx':
+    "a section heading's own `#id` anchor, the same fragment link Heading draws; it stays server-renderable",
+  'Heading/Heading.tsx':
+    "a heading's own `#id` anchor, a fragment on the current page the browser scrolls to and writes to the address bar; a router link would add nothing and need a client boundary",
   'ErrorSummary/ErrorSummary.tsx':
     'in-page `#id` jumps to a form control the component scrolls to and focuses itself; a router link would navigate away from the form',
 };

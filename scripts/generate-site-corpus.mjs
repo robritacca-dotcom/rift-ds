@@ -1170,6 +1170,10 @@ const EXCLUDED_ROUTES = new Map([
     'the sign-in block rendered full screen from the file the init bin ships: placeholder data in a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
   ['/docs/blocks/shader-scene',
     'the shader-scene block rendered full screen from the file the init bin ships: a starter scene and its sliders; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry, and writing a scene is the subject of /docs/shaders'],
+  ['/docs/blocks/docs',
+    'the docs block rendered full screen from the file the init bin ships: placeholder docs for a fictional product; the block\'s name, description and command reach the corpus through /docs/blocks, which maps over the blocks registry'],
+  ['/templates/docs',
+    'the docs template rendered full viewport — its prose is a fictional UI kit\'s documentation; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
   ['/templates/landing-page',
     'the landing page template rendered full viewport — its prose is a fictional payments product\'s marketing page; its name and summary reach the corpus through the site map\'s Templates list, drawn from templatesSidebarLinks'],
 ]);

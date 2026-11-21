@@ -127,6 +127,22 @@ export default function SiteHeaderPage() {
           </section>
 
           <section className={styles.section}>
+            <SectionTitle title="Width" />
+            <p className={styles.introBody}>
+              Set <code>width</code> and the bar brings its own side gutter. <code>full</code> runs it edge to edge, the
+              brand at the far start and the actions at the far end; <code>contained</code> centres its contents at the
+              contained width, so they line up with a contained page below. The same two values set a page&apos;s width
+              in SiteLayout, AppLayout and the templates, apart from the shell mode.
+            </p>
+            <div className={styles.frame}>
+              <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} width="full" navLabel="Example, full width" />
+            </div>
+            <div className={styles.frame}>
+              <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} width="contained" navLabel="Example, contained" />
+            </div>
+          </section>
+
+          <section className={styles.section}>
             <SectionTitle title="The fold" />
             <p className={styles.introBody}>
               The bar measures itself rather than the viewport, so it folds exactly when its pills stop fitting,

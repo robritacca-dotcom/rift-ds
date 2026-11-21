@@ -62,3 +62,8 @@ export const WithoutDivider: Story = {
     divider: false,
   },
 };
+
+/** An id from the title and a "#" link to the section, shown on hover and focus. */
+export const Anchored: Story = {
+  args: { title: 'Install the package', anchor: true },
+};

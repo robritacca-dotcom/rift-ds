@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { Button } from '../Button/Button';
+import { Badge } from '../Badge/Badge';
+import { MOTION_SCROLL_SETTLE_MS } from '../../tokens/motion';
 import type { LinkComponent } from '../../behaviors/LinkProvider';
 import './NavList.css';
 import '../../fonts/material-symbols.css';
@@ -26,12 +28,52 @@ export interface NavListItem {
    * stay current on their child routes.
    */
   current?: boolean;
+  /** A short tag after the label, such as "New" or "Beta", drawn as a neutral Badge. */
+  badge?: string;
 }
+
+/**
+ * A titled section of rows: a heading over its items, the way a long
+ * documentation sidebar groups its pages. Sections sit only at the top
+ * level; their items nest like any others.
+ */
+export interface NavListSection {
+  /** Marks the entry as a section rather than a row. */
+  type: 'section';
+  /** The section's heading. */
+  label: string;
+  /** The section's rows. */
+  items: NavListItem[];
+  /** Stable identity for its expansion state. Defaults to the label. */
+  id?: string;
+  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */
+  collapsible?: boolean;
+}
+
+/** A top-level entry: a row, or a section of rows. */
+export type NavListEntry = NavListItem | NavListSection;
+
+const isSection = (entry: NavListEntry): entry is NavListSection => (entry as NavListSection).type === 'section';
 
 /** Props owned by NavList itself — everything else falls through to the list element. */
 type NavListOwnProps = {
-  /** Navigation tree to render. */
-  items: NavListItem[];
+  /** Navigation tree to render: rows, and at the top level, sections of rows. */
+  items: NavListEntry[];
+  /**
+   * Row density. `default` is the drawer's 40px top row; `compact` sets
+   * every row on the 32px compact control height, for a long sidebar of
+   * pages (a documentation site's hundred entries).
+   */
+  size?: 'default' | 'compact';
+  /**
+   * Make the list its own scroll area: it fills the height its parent
+   * gives it, scrolls inside without carrying the page along at its ends,
+   * and brings the current row into view when it first renders. Put it in
+   * a column with a fixed or sticky height.
+   */
+  scrollable?: boolean;
+  /** Accessible name for a section's fold toggle while folded, given its heading. Defaults to "Expand <label>". */
+  sectionExpandLabel?: (label: string) => string;
   /** href of the current page — the exactly matching row gets `aria-current="page"` and the active treatment. */
   currentHref?: string;
   /** Controlled list of expanded item ids. */
@@ -79,6 +121,9 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
   (
     {
       items,
+      size = 'default',
+      scrollable = false,
+      sectionExpandLabel,
       currentHref,
       expandedIds,
       defaultExpandedIds,
@@ -96,12 +141,84 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
     const baseClass = 'ds-nav-list';
     const uid = useId();
 
-    const [internalExpanded, setInternalExpanded] = useState<string[]>(
-      defaultExpandedIds ?? [],
-    );
-    const expanded = expandedIds ?? internalExpanded;
-
     const itemId = (item: NavListItem) => item.id ?? item.href;
+    const sectionId = (section: NavListSection) => `section:${section.id ?? section.label}`;
+
+    // Uncontrolled, the branch that holds the current page starts open, so
+    // a reader landing deep in a long tree sees where they are.
+    const [internalExpanded, setInternalExpanded] = useState<string[]>(() => {
+      const open = new Set(defaultExpandedIds ?? []);
+      const holdsCurrent = (item: NavListItem): boolean =>
+        (item.current ?? (currentHref !== undefined && item.href === currentHref)) ||
+        Boolean(item.items?.some(holdsCurrent));
+      const walk = (list: NavListItem[]) => {
+        for (const item of list) {
+          if (item.items?.some(holdsCurrent)) open.add(itemId(item));
+          if (item.items) walk(item.items);
+        }
+      };
+      for (const entry of items) {
+        if (isSection(entry)) {
+          if (entry.collapsible && entry.items.some(holdsCurrent)) open.add(sectionId(entry));
+          walk(entry.items);
+        } else {
+          walk([entry]);
+        }
+      }
+      return [...open];
+    });
+    const expanded = expandedIds ?? internalExpanded;
+    const rootRef = useRef<HTMLUListElement | null>(null);
+    const setRootRef = (node: HTMLUListElement | null) => {
+      rootRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    };
+
+    // A scrollable list keeps its scrollbar out of sight until it scrolls,
+    // and fades its content out at whichever end has more to scroll to.
+    // Written straight to the DOM (data attributes), never React state, so
+    // a scroll re-renders nothing.
+    useEffect(() => {
+      const root = rootRef.current;
+      if (!scrollable || !root) return;
+      let settle: ReturnType<typeof setTimeout> | undefined;
+      const edges = () => {
+        const max = root.scrollHeight - root.clientHeight;
+        root.toggleAttribute('data-fade-start', root.scrollTop > 1);
+        root.toggleAttribute('data-fade-end', root.scrollTop < max - 1);
+      };
+      const onScroll = () => {
+        edges();
+        root.setAttribute('data-scrolling', '');
+        clearTimeout(settle);
+        settle = setTimeout(() => root.removeAttribute('data-scrolling'), MOTION_SCROLL_SETTLE_MS);
+      };
+      edges();
+      root.addEventListener('scroll', onScroll, { passive: true });
+      const resize = new ResizeObserver(edges);
+      resize.observe(root);
+      return () => {
+        clearTimeout(settle);
+        root.removeEventListener('scroll', onScroll);
+        resize.disconnect();
+      };
+    }, [scrollable]);
+
+    // A scrollable list brings the current row into view once, on mount,
+    // scrolling only itself: never the page around it.
+    useEffect(() => {
+      const root = rootRef.current;
+      if (!scrollable || !root) return;
+      const row = root.querySelector<HTMLElement>('[aria-current="page"]');
+      if (!row) return;
+      const top = row.getBoundingClientRect().top - root.getBoundingClientRect().top;
+      if (top < 0 || top > root.clientHeight - row.offsetHeight) {
+        root.scrollTop += top - root.clientHeight / 3;
+      }
+      // Mount only: later navigation is the reader's own scroll.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const toggle = (id: string) => {
       const next = expanded.includes(id)
@@ -125,8 +242,9 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
         const link = (
           <Button
             variant="tertiary"
-            size={level === 1 ? 'default' : 'compact'}
+            size={level === 1 && size === 'default' ? 'default' : 'compact'}
             label={item.label}
+            iconRight={item.badge ? <Badge className={`${baseClass}__badge`} label={item.badge} variant="neutral" /> : undefined}
             href={item.href}
             linkComponent={linkComponent}
             ariaCurrent={isCurrent}
@@ -183,9 +301,60 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
         );
       });
 
+    const renderSection = (section: NavListSection) => {
+      const id = sectionId(section);
+      const panelId = `${uid}-${id}`;
+      const isOpen = !section.collapsible || expanded.includes(id);
+      return (
+        <li key={id} className={`${baseClass}__section`}>
+          {section.collapsible ? (
+            <button
+              type="button"
+              className={`${baseClass}__heading ${baseClass}__heading--toggle`}
+              aria-expanded={isOpen}
+              aria-controls={panelId}
+              aria-label={isOpen ? collapseLabel(section.label) : (sectionExpandLabel ?? expandLabel)(section.label)}
+              onClick={() => toggle(id)}
+            >
+              <span className={`${baseClass}__heading-text`}>{section.label}</span>
+              <span className={`${baseClass}__chevron material-symbols-rounded`} aria-hidden="true">
+                expand_more
+              </span>
+            </button>
+          ) : (
+            <span className={`${baseClass}__heading`} id={`${panelId}-heading`}>
+              {section.label}
+            </span>
+          )}
+          <div
+            id={panelId}
+            className={`${baseClass}__panel ${isOpen ? `${baseClass}__panel--open` : ''}`}
+            inert={!isOpen}
+          >
+            <ul
+              className={`${baseClass}__section-list`}
+              aria-labelledby={section.collapsible ? undefined : `${panelId}-heading`}
+              aria-label={section.collapsible ? section.label : undefined}
+            >
+              {renderItems(1, section.items)}
+            </ul>
+          </div>
+        </li>
+      );
+    };
+
+    const classes = [
+      baseClass,
+      size === 'compact' ? `${baseClass}--compact` : '',
+      scrollable ? `${baseClass}--scrollable` : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     return (
-      <ul {...rest} ref={ref} className={`${baseClass} ${className}`.trim()}>
-        {renderItems(1, items)}
+      <ul {...rest} ref={setRootRef} className={classes}>
+        {items.map((entry) => (isSection(entry) ? renderSection(entry) : renderItems(1, [entry])))}
       </ul>
     );
   },

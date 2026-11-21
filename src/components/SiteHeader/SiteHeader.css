@@ -52,6 +52,15 @@
   overflow-clip-margin: var(--gap-200);
 }
 
+/* A set width (the shell recipe's width axis): the bar takes the side
+   gutter, and contained centres it at the contained width so it lines up
+   with a contained page; full leaves the maximum at none. */
+.ds-site-header--width .ds-site-header__bar {
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+  margin-inline: auto;
+  padding-inline: var(--ds-shell-gutter);
+}
+
 .ds-site-header__brand {
   display: flex;
   align-items: center;
@@ -360,6 +369,15 @@
 
 .ds-site-header__drawer .ds-nav-list {
   width: 100%;
+}
+
+/* The list does the scrolling, as NavList's scrollable mode: no scrollbar
+   until it moves and its ends fading out, the sidebar's treatment, so the
+   drawer's body only gives it the height. */
+.ds-site-header__drawer .ds-drawer__body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* Icon side padding, Button's rule: a section with a mega menu trails a

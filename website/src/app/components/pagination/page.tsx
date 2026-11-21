@@ -144,6 +144,16 @@ export default function PaginationPage() {
             <PaginatedTable />
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Previous and next" />
+            <div className={styles.kitDemo}>
+              <Pagination variant="adjacent" previous={{ href: "#installation", label: "Installation" }} next={{ href: "#theming", label: "Theming" }} />
+              <p className={styles.kitNote}>
+                The <code>adjacent</code> form links to the page before and after this one in a sequence, such as a guide&apos;s chapters, as two cards that name them.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="pagination" />
         </main>
       </div>

@@ -103,39 +103,28 @@
 
 /* ============================================
    COPY BUTTON
+   A compact tertiary CopyButton; nothing to restyle.
    ============================================ */
 
 .ds-code-block__copy {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-100);
-  margin: 0;
-  padding: var(--padding-050) var(--padding-200);
-  border: none;
-  border-radius: var(--radius-pill);
-  background: none;
-  font-family: var(--font-paragraph-sm-emphasis-family);
-  font-size: var(--font-paragraph-sm-emphasis-size);
-  font-weight: var(--font-paragraph-sm-emphasis-weight);
-  line-height: var(--font-paragraph-sm-emphasis-line-height);
-  color: var(--color-text-secondary);
-  cursor: pointer;
   flex-shrink: 0;
-  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.ds-code-block__copy .material-symbols-rounded {
-  --icon-size: var(--icon-size-500);
-  line-height: 1;
+/* ============================================
+   TABS
+   The header's row of tabs: the Tabs component at its compact size,
+   sat on the header's divider so the active underline is the divider's
+   own segment rather than a second line above it.
+   ============================================ */
+
+.ds-code-block__header--tabs {
+  padding-block: 0;
+  padding-inline-start: var(--padding-200);
 }
 
-.ds-code-block__copy:hover {
-  background-color: var(--color-action-passive-bg-hover);
-}
-
-.ds-code-block__copy:focus-visible {
-  outline: 2px solid var(--color-action-primary-bg);
-  outline-offset: 2px;
+.ds-code-block__tabs {
+  margin-block-end: calc(-1 * var(--border-025));
+  border-block-end: none;
 }
 
 /* ============================================
@@ -180,6 +169,56 @@
   color: var(--color-text-primary);
   white-space: pre;
 }
+
+/* ============================================
+   LINES
+   Rendered line by line when the code is highlighted, numbered or has
+   marked lines. A marked line bleeds to the block's edges, so its wash
+   reads as the whole row rather than a box around the text.
+   ============================================ */
+
+.ds-code-block__code--lines {
+  display: block;
+  min-width: max-content;
+}
+
+.ds-code-block__line {
+  display: flex;
+  gap: var(--gap-400);
+  margin-inline: calc(-1 * var(--padding-400));
+  padding-inline: calc(var(--padding-400) - var(--border-050)) var(--padding-400);
+  border-inline-start: var(--border-050) solid transparent;
+}
+
+.ds-code-block__line--marked {
+  background-color: var(--color-bg-container-tertiary);
+  border-inline-start-color: var(--color-text-tertiary);
+}
+
+.ds-code-block__line-number {
+  flex-shrink: 0;
+  min-width: var(--ds-code-block-gutter, 1ch);
+  text-align: end;
+  color: var(--color-text-tertiary);
+  user-select: none;
+}
+
+/* An empty line keeps its height without putting a character on the
+   clipboard. */
+.ds-code-block__line-text:empty::before {
+  content: ' ';
+}
+
+/* ============================================
+   SYNTAX ROLES
+   Only present when the consumer passes highlighted lines.
+   ============================================ */
+
+.ds-code-block__token--keyword { color: var(--color-code-keyword); }
+.ds-code-block__token--string { color: var(--color-code-string); }
+.ds-code-block__token--function { color: var(--color-code-function); }
+.ds-code-block__token--constant { color: var(--color-code-constant); }
+.ds-code-block__token--comment { color: var(--color-code-comment); }
 
 /* Icons take the colour of the text around them. Explicit, not just
    inherited by default: a consumer stylesheet that sets a colour on

@@ -153,3 +153,177 @@
 .ds-nav-list__item > .ds-nav-list__sublist {
   margin-top: var(--gap-050);
 }
+
+/* ============================================
+   COMPACT
+   Every row on the 32px compact control height, for a
+   long sidebar: the 40px reservation and toggle step down
+   to match, so a hundred rows read as one quiet column.
+   ============================================ */
+
+.ds-nav-list--compact .ds-nav-list__item {
+  min-height: var(--control-height-compact);
+}
+
+.ds-nav-list--compact .ds-nav-list__toggle {
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
+}
+
+.ds-nav-list--compact .ds-nav-list__sublist {
+  padding-inline-start: var(--padding-400);
+}
+
+.ds-nav-list__badge {
+  margin-inline-start: auto;
+}
+
+/* ============================================
+   SECTIONS
+   A heading over its rows: the rails' group heading
+   (caption face, tertiary text, mixed case), seated on
+   the rows' leading line. A collapsible heading is a
+   full-width quiet button with the chevron at its end.
+   ============================================ */
+
+.ds-nav-list__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-nav-list__section + .ds-nav-list__section,
+.ds-nav-list__item + .ds-nav-list__section {
+  margin-block-start: var(--gap-500);
+}
+
+.ds-nav-list__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  box-sizing: border-box;
+  min-height: var(--control-height-compact);
+  padding-inline: var(--padding-300);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-nav-list--compact .ds-nav-list__heading {
+  padding-inline: var(--padding-300);
+}
+
+.ds-nav-list__heading--toggle {
+  width: 100%;
+  margin: 0;
+  padding-inline-end: var(--padding-200);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-nav-list__heading--toggle:hover {
+  background-color: var(--color-action-passive-bg-hover);
+  color: var(--color-text-secondary);
+}
+
+.ds-nav-list__heading--toggle:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-nav-list__heading-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ds-nav-list__heading--toggle[aria-expanded='true'] .ds-nav-list__chevron {
+  transform: rotate(180deg);
+}
+
+.ds-nav-list__section-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ============================================
+   SCROLLABLE
+   The list as its own scroll area: it takes its parent's
+   height, keeps its scroll to itself at both ends, and
+   keeps a still gutter so rows do not shift when the
+   scrollbar comes and goes.
+   ============================================ */
+
+.ds-nav-list--scrollable {
+  /* How far the content fades in or out at an end with more to scroll. */
+  --ds-nav-list-fade: var(--gap-1000);
+  --ds-nav-list-fade-start: 0px;
+  --ds-nav-list-fade-end: 0px;
+  flex-wrap: nowrap;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-block: var(--padding-200);
+  /* The scrollbar stays out of sight until the list scrolls. */
+  scrollbar-width: none;
+  /* The ends fade only when there is more past them, so a list at its top
+     shows its first row crisp. ds-allow(color): mask alpha keywords
+     (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--ds-nav-list-fade-start),
+    black calc(100% - var(--ds-nav-list-fade-end)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--ds-nav-list-fade-start),
+    black calc(100% - var(--ds-nav-list-fade-end)),
+    transparent
+  );
+}
+
+/* A fixed-height column scrolls its rows rather than squeezing them: a
+   flex child would otherwise shrink to fit and the rows would overlap. */
+.ds-nav-list--scrollable > * {
+  flex-shrink: 0;
+}
+
+.ds-nav-list--scrollable[data-fade-start] {
+  --ds-nav-list-fade-start: var(--ds-nav-list-fade);
+}
+
+.ds-nav-list--scrollable[data-fade-end] {
+  --ds-nav-list-fade-end: var(--ds-nav-list-fade);
+}
+
+.ds-nav-list--scrollable::-webkit-scrollbar {
+  width: 0;
+}
+
+/* While it scrolls: a thin thumb on no track, gone again once it settles. */
+.ds-nav-list--scrollable[data-scrolling] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-container-border) transparent;
+}
+
+.ds-nav-list--scrollable[data-scrolling]::-webkit-scrollbar {
+  width: var(--padding-150);
+}
+
+.ds-nav-list--scrollable[data-scrolling]::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-border);
+}

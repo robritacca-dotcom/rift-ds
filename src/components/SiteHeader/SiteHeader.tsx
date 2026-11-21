@@ -4,12 +4,14 @@ import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import { useLayer } from '../../behaviors/useLayer';
 import { isRtl } from '../../behaviors/direction';
+import { BREAKPOINT_MID_PX, BREAKPOINT_TABLET_PX, mediaBelow } from '../../tokens/breakpoints';
 import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import { IconButton } from '../IconButton/IconButton';
 import { Drawer } from '../Drawer/Drawer';
 import { MegaMenu, type MegaMenuItem, type MegaMenuShowcase } from '../MegaMenu/MegaMenu';
 import { NavList, type NavListItem } from '../NavList/NavList';
 import { ProgressiveBlur } from '../ProgressiveBlur/ProgressiveBlur';
+import '../../behaviors/shell.css';
 import './SiteHeader.css';
 import '../../fonts/material-symbols.css';
 
@@ -90,6 +92,15 @@ type SiteHeaderOwnProps = {
    */
   initialFold?: 'tablet' | 'mid' | 'never';
   /**
+   * Fold the bar into its menu at or below this breakpoint even when the
+   * pills would fit (`tablet` is 959px and below, `mid` 1279px), for a site
+   * whose sidebar of pages leaves the page there: the menu then carries the
+   * pages (each section's `drawerItems`), so the reader always has one way
+   * in. Leave it out to fold only when the row runs out of room.
+   * @default undefined
+   */
+  foldBelow?: 'tablet' | 'mid';
+  /**
    * Whether the header sticks to the top of the viewport over a progressive
    * blur. Off, it scrolls away with the page and draws no blur.
    */
@@ -117,6 +128,16 @@ type SiteHeaderOwnProps = {
   drawerTitle?: string;
   /** The accessible name of the drawer's close button. */
   drawerCloseLabel?: string;
+  /**
+   * How wide the bar's contents run, read from the shell recipe's width
+   * axis. `contained` centres them in the contained width (1440px, or the
+   * nearest `--ds-shell-contained-width`) with the side gutter, lining up
+   * with a contained page below; `full` runs them edge to edge, the gutter
+   * aside. Leave it out and the bar fills whatever box the host gives it,
+   * with no gutter of its own.
+   * @default undefined
+   */
+  width?: 'contained' | 'full';
   /** Additional CSS classes on the `<header>`. */
   className?: string;
 };
@@ -154,6 +175,7 @@ export function SiteHeader({
   defaultDrawerOpen = false,
   onDrawerOpenChange,
   initialFold = 'tablet',
+  foldBelow,
   sticky = true,
   tintAfter = 48,
   linkComponent,
@@ -161,6 +183,7 @@ export function SiteHeader({
   drawerOpenLabel = 'Open menu',
   drawerTitle = 'Menu',
   drawerCloseLabel = 'Close menu',
+  width,
   className = '',
   ref,
   ...rest
@@ -238,8 +261,11 @@ export function SiteHeader({
       const room = bar.clientWidth - lockedGutter.current;
       const full = rowWidth(actionsRef.current);
       const tight = condensedActionsRef.current ? rowWidth(condensedActionsRef.current) : full;
-      setCondensed(condensedActionsRef.current != null && full > room);
-      setFolded(tight > room);
+      const forced =
+        foldBelow !== undefined &&
+        window.matchMedia(mediaBelow(foldBelow === 'mid' ? BREAKPOINT_MID_PX : BREAKPOINT_TABLET_PX)).matches;
+      setCondensed(condensedActionsRef.current != null && (forced || full > room));
+      setFolded(forced || tight > room);
       setMeasured(true);
     };
     measure();
@@ -253,7 +279,7 @@ export function SiteHeader({
       condensedActionsRef.current,
     ].forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
-  }, [sections, actions, condensedActions, wideActions, brand]);
+  }, [sections, actions, condensedActions, wideActions, brand, foldBelow]);
 
   // The tint over the sticky blur follows the page's scroll past `tintAfter`.
   useEffect(() => {
@@ -287,10 +313,13 @@ export function SiteHeader({
     const rtl = isRtl(bar);
     const start = (rect: DOMRect) => (rtl ? document.documentElement.clientWidth - rect.right : rect.left);
     const barRect = bar.getBoundingClientRect();
+    // The bar's own start padding (its gutter, when `width` is set) is where
+    // its brand actually starts, so the drawer's brand lands on it.
+    const inset = parseFloat(getComputedStyle(bar).paddingInlineStart) || 0;
     const offsets: Record<string, string> = {
       '--ds-site-header-height': `${bar.offsetHeight}px`,
       '--ds-site-header-drawer-top': `${Math.max(barRect.top, 0)}px`,
-      '--ds-site-header-drawer-start': `${start(barRect)}px`,
+      '--ds-site-header-drawer-start': `${start(barRect) + inset}px`,
     };
     const button = menuButtonRef.current?.getBoundingClientRect();
     if (button && button.width > 0) {
@@ -384,6 +413,7 @@ export function SiteHeader({
   const classes = [
     baseClass,
     sticky && `${baseClass}--sticky`,
+    width && `${baseClass}--width`,
     condensed && `${baseClass}--condensed`,
     folded && `${baseClass}--folded`,
     !measured && initialFold !== 'never' && `${baseClass}--prefold-${initialFold}`,
@@ -393,7 +423,7 @@ export function SiteHeader({
     .join(' ');
 
   return (
-    <header {...rest} ref={setRef} className={classes}>
+    <header {...rest} ref={setRef} className={classes} data-ds-width={width}>
       {sticky && <ProgressiveBlur className={`${baseClass}__blur`} tinted={tinted} />}
 
       <div ref={barRef} className={`${baseClass}__bar`}>
@@ -556,6 +586,7 @@ export function SiteHeader({
           currentHref={currentHref}
           defaultExpandedIds={currentSectionId ? [currentSectionId] : []}
           linkComponent={Link}
+          scrollable
           onNavigate={() => setDrawerOpen(false)}
         />
       </Drawer>

@@ -6,7 +6,7 @@
   "label": "Code block",
   "slug": "code-block",
   "category": "data-display",
-  "description": "Monospace code with a header and one-click copy.",
+  "description": "Monospace code with a header and one-click copy, optional highlighting, line numbers and tabs.",
   "client": true,
   "importPath": "rift-ds/components/CodeBlock/CodeBlock",
   "barrel": "main",
@@ -20,8 +20,18 @@
           "name": "code",
           "type": "string",
           "typeKind": "primitive",
-          "required": true,
-          "description": "The code to display, as a plain string"
+          "required": false,
+          "description": "The code to display, as a plain string. Required unless `lines` or `tabs` supply it."
+        },
+        {
+          "name": "lines",
+          "type": "CodeLine[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The code highlighted, one array of tokens per line, as returned by\n`highlight()` from `rift-ds/code/highlight`. Each token is coloured by\nits role. Without it the code is monochrome. When `code` is left out,\nthe copy button copies the text of these lines.",
+          "typeRefs": [
+            "CodeLine"
+          ]
         },
         {
           "name": "language",
@@ -36,6 +46,67 @@
           "typeKind": "primitive",
           "required": false,
           "description": "Filename shown in the header, e.g. \"tokens-light.css\""
+        },
+        {
+          "name": "showLineNumbers",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show a line number before each line.",
+          "default": false
+        },
+        {
+          "name": "highlightLines",
+          "type": "number[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Line numbers (counted from 1) to mark with a highlighted background, e.g. the lines a step changed."
+        },
+        {
+          "name": "tabs",
+          "type": "CodeBlockTab[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "Several snippets behind a row of tabs in the header (an install command\nfor each package manager, the same example in two languages). Replaces\nthe filename and language. `packageManagerTabs()` from `rift-ds/code`\nwrites the install case.",
+          "typeRefs": [
+            "CodeBlockTab"
+          ]
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The selected tab's value (controlled)."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The initially selected tab's value (uncontrolled). Defaults to the first tab."
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the tab's value when the reader picks a tab."
+        },
+        {
+          "name": "syncKey",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Share the selected tab with every CodeBlock on the page that has the\nsame key, and remember it for the reader's next visit (in\nlocalStorage). Ignored while `value` is controlled."
+        },
+        {
+          "name": "tabsLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the tab list.",
+          "default": "Code variants"
         },
         {
           "name": "showCopy",
@@ -133,6 +204,37 @@
       ]
     }
   ],
+  "types": {
+    "CodeBlockTab": {
+      "kind": "interface",
+      "definition": "interface CodeBlockTab {\n  /** Unique value; also the value a `syncKey` shares between blocks. */\n  value: string;\n  /** Tab label, e.g. \"pnpm\". */\n  label: string;\n  /** The snippet, as a plain string. Copied as is. */\n  code: string;\n  /** The snippet highlighted, as returned by `highlight()` from `rift-ds/code/highlight`. */\n  lines?: CodeLine[];\n}",
+      "description": "One snippet in a tabbed CodeBlock.",
+      "refs": [
+        "CodeLine"
+      ]
+    },
+    "CodeLine": {
+      "kind": "type",
+      "definition": "type CodeLine = CodeToken[];",
+      "description": "One line of highlighted code: its runs, in order, with no newline.",
+      "refs": [
+        "CodeToken"
+      ]
+    },
+    "CodeToken": {
+      "kind": "interface",
+      "definition": "interface CodeToken {\n  /** The text of the run, exactly as it appears in the source. */\n  content: string;\n  /** The syntax role, which picks its colour. Leave it out for plain text. */\n  role?: CodeTokenRole;\n}",
+      "description": "One run of code text, optionally marked with a syntax role.",
+      "refs": [
+        "CodeTokenRole"
+      ]
+    },
+    "CodeTokenRole": {
+      "kind": "type",
+      "definition": "type CodeTokenRole = 'keyword' | 'string' | 'function' | 'constant' | 'comment';",
+      "description": "A syntax role a highlighter marks a run of code with. Each is coloured by its `--color-code-*` token."
+    }
+  },
   "keyboard": [
     {
       "pattern": "disclosure",
@@ -151,6 +253,46 @@
             "Space"
           ],
           "text": "Does the same as Enter."
+        }
+      ]
+    },
+    {
+      "pattern": "tabs",
+      "part": "snippet tabs",
+      "label": "Tabs",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+      "rows": [
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the list at the selected tab, and out of the list on the next press."
+        },
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next tab and selects it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous tab and selects it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last tab and selects it."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first tab and selects it."
         }
       ]
     }

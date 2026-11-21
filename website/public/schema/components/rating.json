@@ -6,7 +6,7 @@
   "label": "Rating",
   "slug": "rating",
   "category": "forms",
-  "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
+  "description": "Star-scale rating or a thumbs up and down verdict, with keyboard selection and a read-only mode.",
   "client": true,
   "importPath": "rift-ds/components/Rating/Rating",
   "barrel": "main",
@@ -113,6 +113,34 @@
           "required": false,
           "description": "Additional CSS classes",
           "default": ""
+        },
+        {
+          "name": "variant",
+          "type": "\"stars\" | \"thumbs\"",
+          "typeKind": "enum",
+          "values": [
+            "stars",
+            "thumbs"
+          ],
+          "required": false,
+          "description": "The scale's form. `stars` (the default) is a row of `max` steps that\nfill up to the value. `thumbs` is a two-way verdict, a thumb up and a\nthumb down, for a quick \"Was this helpful?\": value 1 is up, 2 is down,\n0 is no answer yet, and `max` and `icon` are ignored.",
+          "default": "stars"
+        },
+        {
+          "name": "upLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the thumb up in the `thumbs` form.",
+          "default": "Yes"
+        },
+        {
+          "name": "downLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the thumb down in the `thumbs` form.",
+          "default": "No"
         }
       ]
     }

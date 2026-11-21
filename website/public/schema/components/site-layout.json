@@ -1,0 +1,159 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.32.0",
+  "kind": "component",
+  "name": "SiteLayout",
+  "label": "Site layout",
+  "slug": "site-layout",
+  "category": "layout",
+  "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.",
+  "client": true,
+  "importPath": "rift-ds/components/SiteLayout/SiteLayout",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/site-layout",
+  "markdownUrl": "https://rift-ds.com/components/site-layout.md",
+  "exports": [
+    {
+      "component": "SiteLayout",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": true,
+          "description": "The page's main content: the article, the page."
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The top bar, usually a SiteHeader (give it the same `width` to line it up)."
+        },
+        {
+          "name": "sidebar",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The navigation column, usually a scrollable NavList: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`), so a reader has\none menu, never two."
+        },
+        {
+          "name": "aside",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The column after the content, usually an AnchorNav reading the page's headings. Gives way below 1152px in the `column` placement."
+        },
+        {
+          "name": "asidePlacement",
+          "type": "\"column\" | \"edge\"",
+          "typeKind": "enum",
+          "values": [
+            "column",
+            "edge"
+          ],
+          "required": false,
+          "description": "Where the aside sits. `column` gives it a column of its own after the\ncontent. `edge` pins it to the window's end edge, centred on the\nheight, and gives the content the room: the place for AnchorNav's\n`floating` variant, a minimap that opens on hover or focus. Hidden\nbelow 960px in either.",
+          "default": "column"
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The bottom of the site, usually a SiteFooter."
+        },
+        {
+          "name": "width",
+          "type": "\"contained\" | \"full\"",
+          "typeKind": "enum",
+          "values": [
+            "contained",
+            "full"
+          ],
+          "required": false,
+          "description": "How wide the page runs, the shell recipe's width axis. `contained`\ncentres the columns at the contained width (1440px, or the nearest\n`--ds-shell-contained-width`); `full` runs them edge to edge, the side\ngutter aside.",
+          "default": "contained"
+        },
+        {
+          "name": "footerWidth",
+          "type": "\"contained\" | \"full\"",
+          "typeKind": "enum",
+          "values": [
+            "contained",
+            "full"
+          ],
+          "required": false,
+          "description": "How wide the footer's row runs, apart from the page. Defaults to\n`width`; set it to the header's width so the top and the bottom of the\nsite match.",
+          "defaultExpression": "width"
+        },
+        {
+          "name": "sidebarDock",
+          "type": "\"content\" | \"edge\"",
+          "typeKind": "enum",
+          "values": [
+            "content",
+            "edge"
+          ],
+          "required": false,
+          "description": "Where the sidebar sits. `content` keeps it in the page's row, beside the\ncontent, so a contained page centres all three columns together. `edge`\ndocks it to the window's start edge behind a hairline, and the content\nand aside are laid out (and contained) in the room after it.",
+          "default": "content"
+        },
+        {
+          "name": "mainId",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The id of the main region, the skip link's target.",
+          "default": "main"
+        },
+        {
+          "name": "skipLinkLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The skip link's text, the page's first stop. Pass an empty string for none.",
+          "default": "Skip to content"
+        },
+        {
+          "name": "sidebarLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the sidebar's navigation landmark.",
+          "default": "Pages"
+        },
+        {
+          "name": "asideLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the aside's complementary landmark.",
+          "default": "On this page"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "A frame: its slots own their keys, and the skip link and the menu button are native."
+  },
+  "alternatives": [
+    {
+      "name": "AppLayout",
+      "when": "the page is an app screen with a rail of tools rather than a site of pages",
+      "schemaUrl": "https://rift-ds.com/schema/components/app-layout.json"
+    }
+  ]
+}

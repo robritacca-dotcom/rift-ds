@@ -23,6 +23,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | title | `string` | yes |  | Section heading text. Note: this shadows the native `title` tooltip attribute, which SectionTitle does not expose. |
 | trailing | `ReactNode` | no |  | Optional trailing content (count, badge, metadata) |
 | divider | `boolean` | no | `true` | Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone. |
+| anchor | `string \| boolean` | no |  | Give the heading an id and a "#" link to itself, shown on hover and focus, as Heading's `anchor` does. `true` makes the id from the title; a string sets it. |
+| anchorLabel | `((title: string) => string)` | no | `` (text) => `Link to ${text}` `` | Accessible name of the anchor link, given the title. Defaults to "Link to <title>". |
 | className | `string` | no |  | Additional CSS classes |
 
 ## Keyboard

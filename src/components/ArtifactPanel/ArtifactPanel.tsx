@@ -2,7 +2,7 @@
 
 import React, { useId, useState } from 'react';
 import { IconButton } from '../IconButton/IconButton';
-import { CodeBlock, type CodeBlockProps } from '../CodeBlock/CodeBlock';
+import { CodeBlock, type CodeBlockProps, type CodeLine } from '../CodeBlock/CodeBlock';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl';
 import './ArtifactPanel.css';
 import '../../fonts/material-symbols.css';
@@ -13,8 +13,18 @@ export type ArtifactPanelView = 'preview' | 'code';
 
 /** Props owned by ArtifactPanel itself — everything else falls through to the root `<section>`. */
 type ArtifactPanelOwnProps = {
-  /** The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip. */
-  title: React.ReactNode;
+  /** The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip. Required for the `panel` layout; an `inline` example may leave it out, and is then named by `viewLabel`. */
+  title?: React.ReactNode;
+  /**
+   * Where it sits. `panel` (the default) fills the box a host gives it,
+   * beside a conversation, and the host paints the card. `inline` is a
+   * self-contained frame in the flow of a page, sized by its content: its
+   * own card, a centred preview stage, and the source a switch away, the
+   * live example of a component's documentation.
+   */
+  layout?: 'panel' | 'inline';
+  /** The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. */
+  lines?: CodeLine[];
   /** A quiet line beside the name: what kind of thing this is, or which version. */
   meta?: React.ReactNode;
   /** Leading mark in the header — Material Symbol name (string) or custom element (ReactNode). */
@@ -87,6 +97,8 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
   (
     {
       title,
+      layout = 'panel',
+      lines,
       meta,
       icon,
       children,
@@ -139,8 +151,9 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
       <section
         ref={ref}
         {...rest}
-        className={[baseClass, className].filter(Boolean).join(' ')}
-        aria-labelledby={titleId}
+        className={[baseClass, layout === 'inline' ? `${baseClass}--inline` : '', className].filter(Boolean).join(' ')}
+        aria-labelledby={title ? titleId : undefined}
+        aria-label={title ? undefined : viewLabel}
       >
         <header className={`${baseClass}__header`}>
           <div className={`${baseClass}__heading`}>
@@ -152,9 +165,11 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
               ) : (
                 <span className={`${baseClass}__icon`}>{icon}</span>
               ))}
-            <h2 className={`${baseClass}__title`} id={titleId}>
-              {title}
-            </h2>
+            {title && (
+              <h2 className={`${baseClass}__title`} id={titleId}>
+                {title}
+              </h2>
+            )}
             {meta && <span className={`${baseClass}__meta`}>{meta}</span>}
           </div>
           <div className={`${baseClass}__controls`}>
@@ -197,7 +212,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
         <div className={`${baseClass}__body`} data-view={current}>
           {current === 'code' && hasCode ? (
             <div className={`${baseClass}__code`}>
-              <CodeBlock {...codeBlockLabels} code={code ?? ''} language={language} />
+              <CodeBlock {...codeBlockLabels} code={code ?? ''} lines={lines} language={language} />
             </div>
           ) : children ? (
             <div className={`${baseClass}__content`}>{children}</div>

@@ -6,7 +6,7 @@
   "label": "Artifact panel",
   "slug": "artifact-panel",
   "category": "ai",
-  "description": "The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.",
+  "description": "A preview with its source a switch away: the panel a chat opens beside the conversation, or an inline live example on a page.",
   "client": true,
   "importPath": "rift-ds/components/ArtifactPanel/ArtifactPanel",
   "barrel": "main",
@@ -20,8 +20,30 @@
           "name": "title",
           "type": "ReactNode",
           "typeKind": "reference",
-          "required": true,
-          "description": "The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip."
+          "required": false,
+          "description": "The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip. Required for the `panel` layout; an `inline` example may leave it out, and is then named by `viewLabel`."
+        },
+        {
+          "name": "layout",
+          "type": "\"inline\" | \"panel\"",
+          "typeKind": "enum",
+          "values": [
+            "inline",
+            "panel"
+          ],
+          "required": false,
+          "description": "Where it sits. `panel` (the default) fills the box a host gives it,\nbeside a conversation, and the host paints the card. `inline` is a\nself-contained frame in the flow of a page, sized by its content: its\nown card, a centred preview stage, and the source a switch away, the\nlive example of a component's documentation.",
+          "default": "panel"
+        },
+        {
+          "name": "lines",
+          "type": "CodeLine[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock.",
+          "typeRefs": [
+            "CodeLine"
+          ]
         },
         {
           "name": "meta",
@@ -233,6 +255,27 @@
       "kind": "component-props",
       "component": "CodeBlock",
       "see": "get_component(\"CodeBlock\")"
+    },
+    "CodeLine": {
+      "kind": "type",
+      "definition": "type CodeLine = CodeToken[];",
+      "description": "One line of highlighted code: its runs, in order, with no newline.",
+      "refs": [
+        "CodeToken"
+      ]
+    },
+    "CodeToken": {
+      "kind": "interface",
+      "definition": "interface CodeToken {\n  /** The text of the run, exactly as it appears in the source. */\n  content: string;\n  /** The syntax role, which picks its colour. Leave it out for plain text. */\n  role?: CodeTokenRole;\n}",
+      "description": "One run of code text, optionally marked with a syntax role.",
+      "refs": [
+        "CodeTokenRole"
+      ]
+    },
+    "CodeTokenRole": {
+      "kind": "type",
+      "definition": "type CodeTokenRole = 'keyword' | 'string' | 'function' | 'constant' | 'comment';",
+      "description": "A syntax role a highlighter marks a run of code with. Each is coloured by its `--color-code-*` token."
     }
   },
   "externalTypes": {

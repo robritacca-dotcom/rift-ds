@@ -27,6 +27,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer starts open, when the header owns its state. |
 | onDrawerOpenChange | `((open: boolean) => void)` | no |  | Called when the drawer opens or closes, controlled or not. |
 | initialFold | `"tablet" \| "mid" \| "never"` | no | `'tablet'` | Where the bar folds before it has measured itself: on the first frame, which a server-rendered page shows before its script runs. Below this breakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS alone, so a phone never sees the pills overflow; the measurement takes over once the script runs. Pick the step nearest where the pills stop fitting, or `never` for a bar that fits at every width. |
+| foldBelow | `"tablet" \| "mid"` | no | `undefined` | Fold the bar into its menu at or below this breakpoint even when the pills would fit (`tablet` is 959px and below, `mid` 1279px), for a site whose sidebar of pages leaves the page there: the menu then carries the pages (each section's `drawerItems`), so the reader always has one way in. Leave it out to fold only when the row runs out of room. |
 | sticky | `boolean` | no | `true` | Whether the header sticks to the top of the viewport over a progressive blur. Off, it scrolls away with the page and draws no blur. |
 | tintAfter | `number` | no | `48` | How far, in pixels, the page scrolls before the page-surface tint fades in over the sticky header's blur. |
 | linkComponent | `LinkComponent` | no |  | The component every link renders through, so a router's link (Next.js `Link`) navigates without a reload. Falls back to the nearest `LinkProvider`, then `<a>`. |
@@ -34,6 +35,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | drawerOpenLabel | `string` | no | `'Open menu'` | The accessible name of the menu button that opens the drawer. |
 | drawerTitle | `string` | no | `'Menu'` | The drawer's title, naming the dialog. Shown at its top when there is no `brand`; with one, the brand takes its place and the title is read only by assistive tech. |
 | drawerCloseLabel | `string` | no | `'Close menu'` | The accessible name of the drawer's close button. |
+| width | `"contained" \| "full"` | no | `undefined` | How wide the bar's contents run, read from the shell recipe's width axis. `contained` centres them in the contained width (1440px, or the nearest `--ds-shell-contained-width`) with the side gutter, lining up with a contained page below; `full` runs them edge to edge, the gutter aside. Leave it out and the bar fills whatever box the host gives it, with no gutter of its own. |
 | className | `string` | no | `''` | Additional CSS classes on the `<header>`. |
 
 ## Keyboard

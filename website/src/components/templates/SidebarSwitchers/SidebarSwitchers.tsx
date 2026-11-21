@@ -10,10 +10,13 @@ import {
   TEMPLATE_LAYOUTS,
   setChatBackdrop,
   setTemplateLayout,
+  setTemplateWidth,
+  TEMPLATE_WIDTHS,
   type TemplateLayout,
+  type TemplateWidth,
   type TemplateLayoutScope,
 } from "@/lib/templateLayout";
-import { useChatBackdrop, useTemplateLayout } from "../TemplateShell/useTemplateLayout";
+import { useChatBackdrop, useTemplateLayout, useTemplateWidth } from "../TemplateShell/useTemplateLayout";
 import { useIsStaged } from "../useStagedProductName";
 import styles from "./SidebarSwitchers.module.css";
 
@@ -46,6 +49,7 @@ export default function SidebarSwitchers({
   scope?: TemplateLayoutScope;
 }) {
   const layout = useTemplateLayout(scope);
+  const width = useTemplateWidth();
   const backdrop = useChatBackdrop();
   const controls = showLayout ? (
     <div className={styles.column}>
@@ -62,6 +66,18 @@ export default function SidebarSwitchers({
           showLabels={false}
         />
       </div>
+      {/* The page width, apart from the layout: any mode, contained or full. */}
+      {scope === "templates" && (
+        <div className={styles.shellSwitch}>
+          <SegmentedControl
+            segments={[...TEMPLATE_WIDTHS]}
+            value={width}
+            onValueChange={(value) => setTemplateWidth(value as TemplateWidth)}
+            aria-label="Page width"
+            showLabels={false}
+          />
+        </div>
+      )}
       {scope === "chat" && layout === "flush" && (
         <SegmentedControl
           segments={[...CHAT_BACKDROPS]}
@@ -105,6 +121,7 @@ export function CollapsedSidebarSwitchers({
   scope?: TemplateLayoutScope;
 }) {
   const layout = useTemplateLayout(scope);
+  const width = useTemplateWidth();
   const backdrop = useChatBackdrop();
   return (
     <>
@@ -116,6 +133,16 @@ export function CollapsedSidebarSwitchers({
           value={layout}
           onValueChange={(value) => setTemplateLayout(value as TemplateLayout, scope)}
           aria-label="Layout"
+          size="compact"
+          cycle
+        />
+      )}
+      {showLayout && scope === "templates" && (
+        <SegmentedControl
+          segments={[...TEMPLATE_WIDTHS]}
+          value={width}
+          onValueChange={(value) => setTemplateWidth(value as TemplateWidth)}
+          aria-label="Page width"
           size="compact"
           cycle
         />

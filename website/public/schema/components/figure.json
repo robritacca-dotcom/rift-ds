@@ -6,7 +6,7 @@
   "label": "Figure",
   "slug": "figure",
   "category": "data-display",
-  "description": "Images with captions, in the case-study frame.",
+  "description": "Images with captions, in the case-study frame, with a Do or Don't verdict for guidelines.",
   "client": false,
   "importPath": "rift-ds/components/Figure/Figure",
   "barrel": "main",
@@ -36,6 +36,26 @@
           "typeKind": "function",
           "required": false,
           "description": "Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support.\nIt is attached to the zoom button wrapping the image, not to the\n`<figure>`, so it replaces the native `onClick` on the root."
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"error\" | \"positive\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "error",
+            "positive"
+          ],
+          "required": false,
+          "description": "A verdict on what the figure shows, for a guideline's Do and Don't pair:\n`positive` leads the caption with a positive \"Do\" badge, `error` with an\nerror \"Don't\" badge, on the crisp container fill. `default` is a plain\nfigure. Set two side by side in a Grid.",
+          "default": "default"
+        },
+        {
+          "name": "verdictLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The verdict mark's text. Defaults to \"Do\" for `positive` and \"Don't\" for `error`."
         },
         {
           "name": "className",

@@ -16,6 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 
 - Use [Context menu](https://rift-ds.com/components/context-menu.md) instead when the menu opens on the content itself.
 - Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when the choice is a form value.
+- Use [Menu bar](https://rift-ds.com/components/menubar.md) instead when several menus sit side by side in a persistent bar.
 
 ## DropdownMenu props
 

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.32.0",
+  "kind": "component",
+  "name": "BackToTop",
+  "label": "Back to top",
+  "slug": "back-to-top",
+  "category": "navigation",
+  "description": "A round button in the page's corner that appears on a long scroll and takes the reader back to the top.",
+  "client": true,
+  "importPath": "rift-ds/components/BackToTop/BackToTop",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/back-to-top",
+  "markdownUrl": "https://rift-ds.com/components/back-to-top.md",
+  "exports": [
+    {
+      "component": "BackToTop",
+      "props": [
+        {
+          "name": "threshold",
+          "type": "number",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "How far, in px, the page scrolls before the button appears. `0` shows it at once.",
+          "default": 640
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name and tooltip of the button.",
+          "default": "Back to top"
+        },
+        {
+          "name": "focusTarget",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The id of the element to move focus to after the jump (the page's main\nregion, say), so a keyboard reader continues from the top too. Leave it\nout to keep focus on the button."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "keys": {
+    "by": "platform",
+    "note": "A native button: the browser owns Enter and Space, and the press scrolls the page."
+  }
+}

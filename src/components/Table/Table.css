@@ -259,3 +259,17 @@
 .ds-table--column-dividers .ds-table__cell:not(:last-child) {
   border-inline-end: var(--border-025) solid var(--color-table-divider);
 }
+
+/* ============================================
+   CODE COLUMN (column `mono`)
+   A reference table's code cells: the code face at the
+   cell's size, broken anywhere so a long type wraps inside
+   its column rather than widening the table.
+   ============================================ */
+
+.ds-table__cell-content--mono {
+  font-family: var(--font-family-code);
+  font-size-adjust: var(--font-code-aspect);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}

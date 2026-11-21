@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "back-to-top",
+  "type": "registry:ui",
+  "title": "Back to top",
+  "description": "A round button in the page's corner that appears on a long scroll and takes the reader back to the top.",
+  "author": "Robert Ritacca <https://robertritacca.com>",
+  "registryDependencies": [
+    "https://rift-ds.com/r/base.json",
+    "https://rift-ds.com/r/icon-button.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/BackToTop/BackToTop.css",
+      "type": "registry:file",
+      "target": "rift/components/BackToTop/BackToTop.css",
+      "content": "/* ============================================\n   BACK TO TOP COMPONENT\n   A neutral IconButton pinned to the bottom end corner,\n   fading and rising in once the page has scrolled.\n   ============================================ */\n\n.ds-back-to-top {\n  position: fixed;\n  inset-block-end: var(--ds-back-to-top-inset, var(--gap-500));\n  inset-inline-end: var(--ds-back-to-top-inset, var(--gap-500));\n  z-index: var(--layer-sticky);\n  opacity: 0;\n  transform: translateY(var(--gap-200));\n  pointer-events: none;\n  transition:\n    opacity var(--motion-duration-base) var(--motion-ease-standard),\n    transform var(--motion-duration-base) var(--motion-ease-standard);\n}\n\n.ds-back-to-top--shown {\n  opacity: 1;\n  transform: none;\n  pointer-events: auto;\n}\n\n.ds-back-to-top .ds-icon-button {\n  box-shadow: var(--shadow-floating);\n}\n"
+    },
+    {
+      "path": "src/components/BackToTop/BackToTop.tsx",
+      "type": "registry:file",
+      "target": "rift/components/BackToTop/BackToTop.tsx",
+      "content": "'use client';\n\nimport React, { useEffect, useState } from 'react';\nimport { IconButton } from '../IconButton/IconButton';\nimport './BackToTop.css';\n\n/** Props owned by BackToTop itself. */\ntype BackToTopOwnProps = {\n  /** How far, in px, the page scrolls before the button appears. `0` shows it at once. */\n  threshold?: number;\n  /** Accessible name and tooltip of the button. */\n  label?: string;\n  /**\n   * The id of the element to move focus to after the jump (the page's main\n   * region, say), so a keyboard reader continues from the top too. Leave it\n   * out to keep focus on the button.\n   */\n  focusTarget?: string;\n  /** Additional CSS classes */\n  className?: string;\n};\n\nexport interface BackToTopProps\n  extends BackToTopOwnProps,\n    Omit<React.ComponentPropsWithRef<'div'>, keyof BackToTopOwnProps | 'children'> {}\n\n/**\n * BackToTop: a round button pinned to the page's bottom end corner that\n * appears once the reader has scrolled a long way down, and takes them\n * back to the top. Smooth, unless the reader asks for reduced motion.\n * While hidden it is inert, so it is never a tab stop that does nothing.\n */\nexport function BackToTop({\n  threshold = 640,\n  label = 'Back to top',\n  focusTarget,\n  className = '',\n  ref,\n  ...rest\n}: BackToTopProps) {\n  const [shown, setShown] = useState(false);\n\n  useEffect(() => {\n    let frame = 0;\n    const measure = () => {\n      frame = 0;\n      setShown(threshold === 0 || window.scrollY > threshold);\n    };\n    const schedule = () => {\n      if (frame === 0) frame = window.requestAnimationFrame(measure);\n    };\n    measure();\n    window.addEventListener('scroll', schedule, { passive: true });\n    return () => {\n      window.removeEventListener('scroll', schedule);\n      if (frame !== 0) window.cancelAnimationFrame(frame);\n    };\n  }, [threshold]);\n\n  const toTop = () => {\n    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });\n    if (focusTarget) {\n      const target = document.getElementById(focusTarget);\n      if (target) {\n        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');\n        target.focus({ preventScroll: true });\n      }\n    }\n  };\n\n  const classes = ['ds-back-to-top', shown ? 'ds-back-to-top--shown' : '', className].filter(Boolean).join(' ');\n  return (\n    <div {...rest} ref={ref} className={classes} inert={!shown}>\n      <IconButton icon=\"arrow_upward\" label={label} variant=\"primary\" tone=\"neutral\" tooltipPosition=\"start\" onClick={toTop} />\n    </div>\n  );\n}\n"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
   "label": "Nav list",
   "slug": "nav-list",
   "category": "navigation",
-  "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
+  "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
   "client": true,
   "importPath": "rift-ds/components/NavList/NavList",
   "barrel": "main",
@@ -18,13 +18,40 @@
       "props": [
         {
           "name": "items",
-          "type": "NavListItem[]",
+          "type": "NavListEntry[]",
           "typeKind": "array",
           "required": true,
-          "description": "Navigation tree to render.",
+          "description": "Navigation tree to render: rows, and at the top level, sections of rows.",
           "typeRefs": [
-            "NavListItem"
+            "NavListEntry"
           ]
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Row density. `default` is the drawer's 40px top row; `compact` sets\nevery row on the 32px compact control height, for a long sidebar of\npages (a documentation site's hundred entries).",
+          "default": "default"
+        },
+        {
+          "name": "scrollable",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Make the list its own scroll area: it fills the height its parent\ngives it, scrolls inside without carrying the page along at its ends,\nand brings the current row into view when it first renders. Put it in\na column with a fixed or sticky height.",
+          "default": false
+        },
+        {
+          "name": "sectionExpandLabel",
+          "type": "((label: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name for a section's fold toggle while folded, given its heading. Defaults to \"Expand <label>\"."
         },
         {
           "name": "currentHref",
@@ -123,9 +150,26 @@
       "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
       "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
     },
+    "NavListEntry": {
+      "kind": "type",
+      "definition": "type NavListEntry = NavListItem | NavListSection;",
+      "description": "A top-level entry: a row, or a section of rows.",
+      "refs": [
+        "NavListItem",
+        "NavListSection"
+      ]
+    },
     "NavListItem": {
       "kind": "interface",
-      "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n}"
+      "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n}"
+    },
+    "NavListSection": {
+      "kind": "interface",
+      "definition": "interface NavListSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The section's heading. */\n  label: string;\n  /** The section's rows. */\n  items: NavListItem[];\n  /** Stable identity for its expansion state. Defaults to the label. */\n  id?: string;\n  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */\n  collapsible?: boolean;\n}",
+      "description": "A titled section of rows: a heading over its items, the way a long\ndocumentation sidebar groups its pages. Sections sit only at the top\nlevel; their items nest like any others.",
+      "refs": [
+        "NavListItem"
+      ]
     }
   },
   "externalTypes": {

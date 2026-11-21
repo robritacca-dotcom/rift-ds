@@ -13,7 +13,7 @@ npx rift-ds init block dashboard
 ```
 
 1. `init app` writes `components/rift/`: the wrapper that routes every link through Next's `Link`, the script that applies the stored colour mode before first paint, and the base theme's font. It prints the root layout to use. Make `app/layout.tsx` exactly that, keeping its metadata, and drop any `globals.css` import `create-next-app` left there: its body colours and font cover the library's.
-2. `init block <name>` copies in a whole starting page built from the library, laid out for desktop and phone: `app-shell`, `dashboard`, `settings`, `planner`, `sign-in` and `shader-scene`. With no name it lists them. The files are the project's own from then on, so change them freely.
+2. `init block <name>` copies in a whole starting page built from the library, laid out for desktop and phone: `app-shell`, `dashboard`, `settings`, `planner`, `sign-in`, `shader-scene` and `docs`. With no name it lists them. The files are the project's own from then on, so change them freely.
 3. Start every new screen from a block, or inside the `AppShell` the app shell and dashboard blocks write to `components/blocks/`, never from a blank file, then fill it with library components.
 
 The init commands only add files and never overwrite one, so they are safe to run again.

@@ -69,3 +69,8 @@ export const WithIcons: Story = {
     </div>
   ),
 };
+
+/** "Skip to content": press Tab into the frame and it appears at the top of the page. */
+export const Skip: Story = {
+  args: { variant: 'skip', href: '#main', children: 'Skip to content' },
+};

@@ -207,6 +207,11 @@
       "name": "Dropdown",
       "when": "the choice is a form value",
       "schemaUrl": "https://rift-ds.com/schema/components/dropdown.json"
+    },
+    {
+      "name": "Menubar",
+      "when": "several menus sit side by side in a persistent bar",
+      "schemaUrl": "https://rift-ds.com/schema/components/menubar.json"
     }
   ]
 }

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.32.0",
+  "kind": "component",
+  "name": "SiteFooter",
+  "label": "Site footer",
+  "slug": "site-footer",
+  "category": "navigation",
+  "description": "The bottom of a site: brand, columns of links, and a row of small print and social links.",
+  "client": false,
+  "importPath": "rift-ds/components/SiteFooter/SiteFooter",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/site-footer",
+  "markdownUrl": "https://rift-ds.com/components/site-footer.md",
+  "exports": [
+    {
+      "component": "SiteFooter",
+      "props": [
+        {
+          "name": "columns",
+          "type": "SiteFooterColumn[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The sitemap columns, in order along the row.",
+          "typeRefs": [
+            "SiteFooterColumn"
+          ]
+        },
+        {
+          "name": "brand",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The brand at the start of the footer: a logo, a name, or both."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "A line about the site under the brand."
+        },
+        {
+          "name": "social",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Social or utility controls for the bottom row's end, such as IconButtons."
+        },
+        {
+          "name": "legal",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The bottom row's small print: a copyright, a licence, a privacy link."
+        },
+        {
+          "name": "navigationLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name of the navigation landmark that holds the columns.",
+          "default": "Site"
+        },
+        {
+          "name": "externalLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Text read after an external link's name, for a screen reader.",
+          "default": "(opens in a new tab)"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component its links render with, such as Next.js's `Link`. A plain\n`<a>` when unset. Server-renderable, so it reads no LinkProvider: pass\nit here.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "SiteFooterColumn": {
+      "kind": "interface",
+      "definition": "interface SiteFooterColumn {\n  /** The column's heading, e.g. \"Docs\". */\n  title: string;\n  /** Its links, in order. */\n  links: SiteFooterLink[];\n}",
+      "description": "A titled column of footer links.",
+      "refs": [
+        "SiteFooterLink"
+      ]
+    },
+    "SiteFooterLink": {
+      "kind": "interface",
+      "definition": "interface SiteFooterLink {\n  /** Link text. */\n  label: string;\n  /** Where it goes. */\n  href: string;\n  /** The link leaves the site: it opens in a new tab and says so. */\n  external?: boolean;\n}",
+      "description": "One link in a footer column."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react",
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "Plain links: the browser owns Tab and Enter."
+  }
+}

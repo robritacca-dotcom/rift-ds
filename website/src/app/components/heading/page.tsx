@@ -64,6 +64,16 @@ export default function HeadingPage() {
             </div>
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Anchor links" />
+            <div className={styles.kitDemo}>
+              <Heading level={3} anchor>Getting started</Heading>
+              <p className={styles.kitNote}>
+                With <code>anchor</code>, the heading takes an id made from its text and a link to itself that shows on hover and focus, so a reader can link straight to the section. It stays a Server Component.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="heading" />
         </main>
       </div>

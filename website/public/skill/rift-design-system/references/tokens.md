@@ -11,7 +11,7 @@ How to read it:
 
 The live reference with swatches is at https://rift-ds.com/foundations, and the MCP endpoint's `list_tokens` tool serves the names.
 
-## Colour (162)
+## Colour (167)
 
 Prefix: `--color-*`.
 
@@ -103,6 +103,11 @@ Prefix: `--color-*`.
 | `--color-chat-bubble-sent-text` | `#050505` (`--primitive-neutral-10`) | `#F1F1F1` (`--primitive-neutral-01`) |
 | `--color-chat-card-bg` | `#FFFFFF` (`--primitive-neutral-00`) | `#050505` (`--primitive-neutral-10`) |
 | `--color-chat-context-bg` | `#F1F1F1` (`--primitive-neutral-01`) | `#0E0E0E` (`--primitive-neutral-09`) |
+| `--color-code-comment` | `#6D6D6D` (`--primitive-neutral-06`) | `#A2A2A2` (`--primitive-neutral-04`) |
+| `--color-code-constant` | `#8F4324` (`--primitive-orange-09`) | `#F6B794` (`--primitive-orange-03`) |
+| `--color-code-function` | `#163789` (`--primitive-blue-08`) | `#AABCEF` (`--primitive-blue-03`) |
+| `--color-code-keyword` | `#7434B3` (`--primitive-purple-08`) | `#CFABF7` (`--primitive-purple-03`) |
+| `--color-code-string` | `#03765A` (`--primitive-green-09`) | `#9DEBD4` (`--primitive-green-03`) |
 | `--color-control-thumb` | `#CFEAF3` (`--primitive-teal-02`) | `#052F3E` (`--primitive-teal-10`) |
 | `--color-core-accent-amber` | `#EF8247` (`--primitive-orange-07`) | `#EF8247` (`--primitive-orange-07`) |
 | `--color-core-accent-cobalt` | `#1E47B0` (`--primitive-blue-07`) | `#1E47B0` (`--primitive-blue-07`) |

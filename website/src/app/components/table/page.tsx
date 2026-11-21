@@ -252,6 +252,30 @@ export default function TablePage() {
             </div>
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Code columns" />
+            <div className={styles.kitDemo}>
+              <Table
+                bordered
+                size="compact"
+                caption="Props"
+                columns={[
+                  { key: "prop", header: "Prop", mono: true, width: "24%", rowHeader: true },
+                  { key: "type", header: "Type", mono: true, width: "32%" },
+                  { key: "description", header: "Description" },
+                ]}
+                rows={[
+                  { id: "items", cells: { prop: "items", type: "NavListEntry[]", description: "Navigation tree to render." } },
+                  { id: "size", cells: { prop: "size", type: "'default' | 'compact'", description: "Row density." } },
+                  { id: "change", cells: { prop: "onExpandedChange", type: "(expandedIds: string[]) => void", description: "Fires with the new list of expanded ids." } },
+                ]}
+              />
+              <p className={styles.kitNote}>
+                A <code>mono</code> column sets its cells in the code face and wraps long values inside the column, for a reference table of props, types and tokens.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="table" />
         </main>
       </div>

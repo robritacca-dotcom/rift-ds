@@ -6,10 +6,13 @@
    assistant takes) is TemplateShell's; this sheet styles the page inside
    its content column. */
 
-/* The content column: centred at 1440px in the floating layout (the shell
-   lifts the cap in the inset one), with equal side padding. */
+/* The content column: centred at 1440px, or the full width when the page
+   runs full (the shell's width switch, in any layout), with equal side
+   padding. */
 .content {
-  max-width: 1440px;
+  /* This screen's contained width; the shell centres the column at it
+     unless the page runs full width (the shell recipe's width axis). */
+  --ds-shell-contained-width: 1440px;
   padding: var(--padding-500) var(--padding-1000) var(--padding-1500);
   display: flex;
   flex-direction: column;

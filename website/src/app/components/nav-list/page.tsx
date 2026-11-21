@@ -4,11 +4,38 @@ import React, { useState } from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { NavList } from "rift-ds/components/NavList/NavList";
+import { NavList, type NavListEntry } from "rift-ds/components/NavList/NavList";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+
+const DOCS_PAGES = ["Accordion", "Alert", "Avatar", "Badge", "Breadcrumb", "Button", "Calendar", "Card", "Checkbox", "Code block", "Combobox", "Dialog", "Drawer", "Dropdown menu", "Field", "Input", "Kbd", "Menubar", "Pagination", "Popover", "Select", "Slider", "Switch", "Table", "Tabs", "Toast", "Tooltip"];
+
+const DOCS_NAV: NavListEntry[] = [
+  {
+    type: "section",
+    label: "Getting started",
+    items: [
+      { label: "Introduction", href: "/docs" },
+      { label: "Installation", href: "/docs/installation" },
+      { label: "Theming", href: "/docs/theming", items: [{ label: "Colours", href: "/docs/theming/colours" }, { label: "Dark mode", href: "/docs/theming/dark-mode" }] },
+      { label: "CLI", href: "/docs/cli", badge: "New" },
+    ],
+  },
+  {
+    type: "section",
+    label: "Components",
+    items: DOCS_PAGES.map((label) => ({ label, href: `/docs/components/${label.toLowerCase().replace(/ /g, "-")}` })),
+  },
+  {
+    type: "section",
+    label: "Guides",
+    collapsible: true,
+    items: [{ label: "Forms", href: "/docs/guides/forms" }, { label: "Accessibility", href: "/docs/guides/accessibility" }],
+  },
+];
+
 
 const basicItems = [
   { label: "Overview", href: "#overview" },
@@ -135,6 +162,18 @@ export default function NavListPage() {
             <SectionTitle title="Static group" />
             <div style={{ maxWidth: "360px" }}>
               <NavList items={staticGroupItems} aria-label="Static group example" />
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="A long sidebar" />
+            <div className={styles.kitDemo}>
+              <nav aria-label="Documentation example" className={styles.kitFrame}>
+                <NavList items={DOCS_NAV} size="compact" scrollable currentHref="/docs/components/menubar" />
+              </nav>
+              <p className={styles.kitNote}>
+                Compact rows, titled sections, a badge, and its own scroll: <code>scrollable</code> keeps the scroll inside the list at both ends and brings the current page into view on load. The branch that holds the current page starts open.
+              </p>
             </div>
           </section>
 

@@ -72,7 +72,9 @@
 .content {
   position: relative;
   width: 100%;
-  max-width: 1440px;
+  /* The shell recipe's width axis (CONTENT_WIDTH in AppShell.tsx): 1440px
+     contained, or the whole column when full, in any mode. */
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
   min-width: 0;
   display: flex;
   flex-direction: column;

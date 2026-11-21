@@ -11,8 +11,8 @@ type LinkOwnProps = {
   href: string;
   /** The link text. */
   children: React.ReactNode;
-  /** `inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined. */
-  variant?: 'inline' | 'standalone';
+  /** `inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined. `skip` is a page's first link, "Skip to content": hidden until it takes focus from the keyboard, then shown pinned to the top of the page above everything, so a keyboard reader can pass the header and the navigation in one press. Point it at the main region's id. */
+  variant?: 'inline' | 'standalone' | 'skip';
   /** The standalone link's type size: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor. */
   size?: 'default' | 'compact';
   /** The link leaves the app: it opens in a new tab with `rel="noopener noreferrer"`, carries an outward mark, and tells a screen reader it opens a new tab. */
@@ -81,7 +81,7 @@ export function Link({
   const classes = [
     'ds-link',
     `ds-link--${variant}`,
-    variant === 'standalone' && `ds-link--${size}`,
+    variant !== 'inline' && `ds-link--${size}`,
     disabled && 'ds-link--disabled',
     className,
   ]

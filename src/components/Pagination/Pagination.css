@@ -126,3 +126,83 @@
   color: var(--color-text-secondary);
   white-space: nowrap;
 }
+
+/* ============================================
+   ADJACENT (variant="adjacent")
+   The page before and after this one in a sequence, as two
+   cards on the container family's surface: an eyebrow with
+   its chevron over the page's title. Previous holds the start
+   edge and next the end, each half the row, so a missing side
+   leaves its half empty rather than stretching the other.
+   ============================================ */
+
+.ds-pagination--adjacent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+.ds-pagination__adjacent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-100);
+  min-width: 0;
+  padding: var(--padding-400) var(--padding-500);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard), border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-pagination__adjacent:hover {
+  background-color: var(--color-bg-container-secondary);
+}
+
+.ds-pagination__adjacent:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-pagination__adjacent--next {
+  grid-column: 2;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.ds-pagination__adjacent-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-pagination__adjacent-eyebrow .ds-pagination__icon {
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-pagination__adjacent-title {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+}
+
+@media (max-width: 480px) {
+  .ds-pagination--adjacent {
+    grid-template-columns: 1fr;
+  }
+
+  .ds-pagination__adjacent--next {
+    grid-column: 1;
+  }
+}

@@ -5,11 +5,14 @@ import type { ChatBackdrop } from "rift-ds/chat";
 import {
   DEFAULT_CHAT_BACKDROP,
   DEFAULT_LAYOUTS,
+  DEFAULT_TEMPLATE_WIDTH,
   readChatBackdrop,
+  readTemplateWidth,
   readTemplateLayout,
   subscribeTemplateLayout,
   type TemplateLayout,
   type TemplateLayoutScope,
+  type TemplateWidth,
 } from "@/lib/templateLayout";
 
 /** The visitor's layout for a scope of screens; the scope's default on the server and first paint. */
@@ -24,4 +27,9 @@ export function useTemplateLayout(scope: TemplateLayoutScope = "templates"): Tem
 /** The chat home's flush backdrop; the default on the server and first paint. */
 export function useChatBackdrop(): ChatBackdrop {
   return useSyncExternalStore(subscribeTemplateLayout, readChatBackdrop, () => DEFAULT_CHAT_BACKDROP);
+}
+
+/** The templates' page width; the default on the server and first paint. */
+export function useTemplateWidth(): TemplateWidth {
+  return useSyncExternalStore(subscribeTemplateLayout, readTemplateWidth, () => DEFAULT_TEMPLATE_WIDTH);
 }

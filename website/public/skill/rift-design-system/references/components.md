@@ -2,7 +2,7 @@
 
 Generated from the component registry at version 1.32.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
-## Actions (9)
+## Actions (10)
 
 Buttons, button groups, and toggles for triggering actions and switching modes.
 
@@ -29,6 +29,14 @@ The entry point to a command palette: a button dressed as a search field, with t
 - Import: `import { CommandPaletteTrigger } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/command-palette-trigger.md
+
+### Copy button
+
+A button that puts a value on the clipboard and confirms it, with text or as an icon alone.
+
+- Import: `import { CopyButton } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/copy-button.md
 
 ### Icon button
 
@@ -140,7 +148,7 @@ The tile a chat leaves in the thread for something it made, a toggle that opens 
 
 ### Artifact panel
 
-The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.
+A preview with its source a switch away: the panel a chat opens beside the conversation, or an inline live example on a page.
 
 - Import: `import { ArtifactPanel } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -597,7 +605,7 @@ Compact pills for attributes, filters, and inline metadata.
 
 ### Code block
 
-Monospace code with a header and one-click copy.
+Monospace code with a header and one-click copy, optional highlighting, line numbers and tabs.
 
 - Import: `import { CodeBlock } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -669,7 +677,7 @@ A month, a week or a day of events: pills on their days, overflow counts in the 
 
 ### Figure
 
-Images with captions, in the case-study frame.
+Images with captions, in the case-study frame, with a Do or Don't verdict for guidelines.
 
 - Import: `import { Figure } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -765,7 +773,7 @@ Headline metrics with labels, trend deltas, an optional icon tile and caption, a
 
 ### Table
 
-Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.
+Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.
 
 - Import: `import { Table } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -1073,7 +1081,7 @@ Radio button and radio group with vertical and horizontal layouts, animated dot 
 
 ### Rating
 
-Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.
+Star-scale rating or a thumbs up and down verdict, with keyboard selection and a read-only mode.
 
 - Import: `import { Rating } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -1203,13 +1211,13 @@ One-row switch for inspector panels, where the whole bar toggles and the track s
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/inspector-toggle-switch.md
 
-## Layout (11)
+## Layout (12)
 
 Page scaffolding: app shells, sidebars, dividers, and section headings.
 
 ### App layout
 
-Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset.
+Full-page template pairing the collapsible App sidebar with a content area, in flush, floating or inset mode, contained or full width.
 
 - Import: `import { AppLayout } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -1271,6 +1279,14 @@ Secondary navigation column listing one section's pages, with group headings and
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/sidebar-panel.md
 
+### Site layout
+
+The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.
+
+- Import: `import { SiteLayout } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/site-layout.md
+
 ### Split pane
 
 Two resizable regions with a draggable, keyboard-operable divider between them.
@@ -1331,17 +1347,25 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (13)
+## Navigation (16)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
 ### Anchor nav
 
-An on-page list of anchor links that tracks the reader's position and jumps between sections.
+An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings.
 
 - Import: `import { AnchorNav } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/anchor-nav.md
+
+### Back to top
+
+A round button in the page's corner that appears on a long scroll and takes the reader back to the top.
+
+- Import: `import { BackToTop } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/back-to-top.md
 
 ### Bottom nav
 
@@ -1375,6 +1399,14 @@ A wide navigation panel of icon rows with descriptions, beside an optional featu
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/mega-menu.md
 
+### Menu bar
+
+A persistent row of menus, like an app's File, Edit and View, with arrow keys along the bar.
+
+- Import: `import { Menubar } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/menubar.md
+
 ### Nav (deprecated)
 
 A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.
@@ -1386,7 +1418,7 @@ A legacy plain top bar of brand and page links, superseded by the site header an
 
 ### Nav list
 
-Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.
+Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.
 
 - Import: `import { NavList } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
@@ -1394,11 +1426,19 @@ Vertical list of navigation links for drawers and menus, with three indent level
 
 ### Pagination
 
-Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.
+Numbered page navigation with ellipses and a compact readout, or links to the previous and next page of a sequence.
 
 - Import: `import { Pagination } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/pagination.md
+
+### Site footer
+
+The bottom of a site: brand, columns of links, and a row of small print and social links.
+
+- Import: `import { SiteFooter } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/site-footer.md
 
 ### Site header
 
@@ -1530,7 +1570,7 @@ Headings, running text, links, and lists, each drawn from a tier of the type sca
 
 ### Heading
 
-A heading whose outline level and type tier are chosen apart.
+A heading whose outline level and type tier are chosen apart, with an optional link to itself.
 
 - Import: `import { Heading } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
@@ -1546,7 +1586,7 @@ One Material Symbol on the icon scale, decorative or named, plain or on a round 
 
 ### Link
 
-A text link inside a sentence or on its own, routed through the app's link component.
+A text link inside a sentence, on its own, or skipping to the content, routed through the app's link component.
 
 - Import: `import { Link } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')

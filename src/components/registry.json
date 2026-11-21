@@ -162,7 +162,7 @@
       "name": "AnchorNav",
       "label": "Anchor nav",
       "slug": "anchor-nav",
-      "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
+      "description": "An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings.",
       "category": "navigation",
       "client": true,
       "pattern": "link"
@@ -180,10 +180,13 @@
       "name": "AppLayout",
       "label": "App layout",
       "slug": "app-layout",
-      "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset.",
+      "description": "Full-page template pairing the collapsible App sidebar with a content area, in flush, floating or inset mode, contained or full width.",
       "category": "layout",
       "client": true,
-      "keys": { "by": "component", "note": "The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own.", "see": "AppSidebar" }
+      "keys": { "by": "component", "note": "The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own.", "see": "AppSidebar" },
+      "alternatives": [
+        { "name": "SiteLayout", "when": "the page is a site of pages under a top header, such as documentation" }
+      ]
     },
     {
       "name": "AppSidebar",
@@ -218,7 +221,7 @@
       "name": "ArtifactPanel",
       "label": "Artifact panel",
       "slug": "artifact-panel",
-      "description": "The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.",
+      "description": "A preview with its source a switch away: the panel a chat opens beside the conversation, or an inline live example on a page.",
       "category": "ai",
       "client": true,
       "partPatterns": [{ "pattern": "button", "part": "buttons" }]
@@ -283,6 +286,15 @@
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" }
+    },
+    {
+      "name": "BackToTop",
+      "label": "Back to top",
+      "slug": "back-to-top",
+      "description": "A round button in the page's corner that appears on a long scroll and takes the reader back to the top.",
+      "category": "navigation",
+      "client": true,
+      "keys": { "by": "platform", "note": "A native button: the browser owns Enter and Space, and the press scrolls the page." }
     },
     {
       "name": "Badge",
@@ -471,10 +483,13 @@
       "name": "CodeBlock",
       "label": "Code block",
       "slug": "code-block",
-      "description": "Monospace code with a header and one-click copy.",
+      "description": "Monospace code with a header and one-click copy, optional highlighting, line numbers and tabs.",
       "category": "data-display",
       "client": true,
-      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
+      "partPatterns": [
+        { "pattern": "disclosure", "part": "collapsible section" },
+        { "pattern": "tabs", "part": "snippet tabs" }
+      ]
     },
     {
       "name": "CodeDiff",
@@ -575,6 +590,18 @@
       "category": "charts",
       "client": false,
       "keys": { "by": "none" }
+    },
+    {
+      "name": "CopyButton",
+      "label": "Copy button",
+      "slug": "copy-button",
+      "description": "A button that puts a value on the clipboard and confirms it, with text or as an icon alone.",
+      "category": "actions",
+      "client": true,
+      "pattern": "button",
+      "alternatives": [
+        { "name": "IconButton", "when": "the button runs an action other than copying a value" }
+      ]
     },
     {
       "name": "CurrencyInput",
@@ -728,7 +755,8 @@
       "pattern": "menu",
       "alternatives": [
         { "name": "ContextMenu", "when": "the menu opens on the content itself" },
-        { "name": "Dropdown", "when": "the choice is a form value" }
+        { "name": "Dropdown", "when": "the choice is a form value" },
+        { "name": "Menubar", "when": "several menus sit side by side in a persistent bar" }
       ]
     },
     {
@@ -789,7 +817,7 @@
       "name": "Figure",
       "label": "Figure",
       "slug": "figure",
-      "description": "Images with captions, in the case-study frame.",
+      "description": "Images with captions, in the case-study frame, with a Do or Don't verdict for guidelines.",
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" }
@@ -894,7 +922,7 @@
       "name": "Heading",
       "label": "Heading",
       "slug": "heading",
-      "description": "A heading whose outline level and type tier are chosen apart.",
+      "description": "A heading whose outline level and type tier are chosen apart, with an optional link to itself.",
       "category": "typography",
       "client": false,
       "keys": { "by": "none" }
@@ -926,7 +954,8 @@
       "client": false,
       "pattern": "button",
       "alternatives": [
-        { "name": "Button", "when": "the action needs its words on show, with or without an icon beside them" }
+        { "name": "Button", "when": "the action needs its words on show, with or without an icon beside them" },
+        { "name": "CopyButton", "when": "the button puts a value on the clipboard and should confirm it" }
       ]
     },
     {
@@ -1080,7 +1109,7 @@
       "name": "Link",
       "label": "Link",
       "slug": "link",
-      "description": "A text link inside a sentence or on its own, routed through the app's link component.",
+      "description": "A text link inside a sentence, on its own, or skipping to the content, routed through the app's link component.",
       "category": "typography",
       "client": false,
       "pattern": "link"
@@ -1149,6 +1178,19 @@
       "keys": { "by": "component", "note": "The list of suggestions is driven from the field it belongs to: the arrow keys move, Enter chooses and Escape closes." }
     },
     {
+      "name": "Menubar",
+      "label": "Menu bar",
+      "slug": "menubar",
+      "description": "A persistent row of menus, like an app's File, Edit and View, with arrow keys along the bar.",
+      "category": "navigation",
+      "client": true,
+      "pattern": "menubar",
+      "alternatives": [
+        { "name": "Toolbar", "when": "the bar holds controls that act at once rather than menus" },
+        { "name": "DropdownMenu", "when": "one menu opens from one trigger" }
+      ]
+    },
+    {
       "name": "MessageActions",
       "label": "Message actions",
       "slug": "message-actions",
@@ -1197,7 +1239,7 @@
       "name": "NavList",
       "label": "Nav list",
       "slug": "nav-list",
-      "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
+      "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
       "category": "navigation",
       "client": true,
       "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
@@ -1248,7 +1290,7 @@
       "name": "Pagination",
       "label": "Pagination",
       "slug": "pagination",
-      "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
+      "description": "Numbered page navigation with ellipses and a compact readout, or links to the previous and next page of a sequence.",
       "category": "navigation",
       "client": true,
       "partPatterns": [{ "pattern": "button", "part": "page buttons" }]
@@ -1396,7 +1438,7 @@
       "name": "Rating",
       "label": "Rating",
       "slug": "rating",
-      "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
+      "description": "Star-scale rating or a thumbs up and down verdict, with keyboard selection and a read-only mode.",
       "category": "forms",
       "client": true,
       "pattern": "radio-group"
@@ -1515,6 +1557,15 @@
       "partPatterns": [{ "pattern": "tabs", "part": "mode tabs" }]
     },
     {
+      "name": "SiteFooter",
+      "label": "Site footer",
+      "slug": "site-footer",
+      "description": "The bottom of a site: brand, columns of links, and a row of small print and social links.",
+      "category": "navigation",
+      "client": false,
+      "keys": { "by": "platform", "note": "Plain links: the browser owns Tab and Enter." }
+    },
+    {
       "name": "SiteHeader",
       "label": "Site header",
       "slug": "site-header",
@@ -1522,6 +1573,18 @@
       "category": "navigation",
       "client": true,
       "keys": { "by": "component", "note": "Focusing a section opens its panel, Arrow Down moves into it, and Escape closes it." }
+    },
+    {
+      "name": "SiteLayout",
+      "label": "Site layout",
+      "slug": "site-layout",
+      "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.",
+      "category": "layout",
+      "client": true,
+      "keys": { "by": "platform", "note": "A frame: its slots own their keys, and the skip link and the menu button are native." },
+      "alternatives": [
+        { "name": "AppLayout", "when": "the page is an app screen with a rail of tools rather than a site of pages" }
+      ]
     },
     {
       "name": "Skeleton",
@@ -1673,7 +1736,7 @@
       "name": "Table",
       "label": "Table",
       "slug": "table",
-      "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
+      "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.",
       "category": "data-display",
       "client": false,
       "keys": { "by": "none" },
@@ -1832,7 +1895,10 @@
       "description": "A grouped strip of controls in one pill shell: clusters, separators, arrow-key focus, and a glass floating variant.",
       "category": "layout",
       "client": true,
-      "pattern": "toolbar"
+      "pattern": "toolbar",
+      "alternatives": [
+        { "name": "Menubar", "when": "the controls are named menus of commands, like an app's File and Edit" }
+      ]
     },
     {
       "name": "Tooltip",

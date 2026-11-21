@@ -4,11 +4,24 @@ import React from "react";
 import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
-import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
+import { CodeBlock, type CodeLine } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
+import { packageManagerTabs } from "rift-ds/code";
+const HIGHLIGHT_SOURCE = `import { Chip } from 'rift-ds/components/Chip/Chip';
+
+// A filter that is on
+<Chip label="Filter" icon="check" selected />`;
+
+const HIGHLIGHTED: CodeLine[] = [
+  [{ content: "import", role: "keyword" }, { content: " { Chip } " }, { content: "from", role: "keyword" }, { content: " " }, { content: "'rift-ds/components/Chip/Chip'", role: "string" }, { content: ";" }],
+  [],
+  [{ content: "// A filter that is on", role: "comment" }],
+  [{ content: "<" }, { content: "Chip", role: "constant" }, { content: " " }, { content: "label", role: "function" }, { content: "=", role: "keyword" }, { content: '"Filter"', role: "string" }, { content: " " }, { content: "icon", role: "function" }, { content: "=", role: "keyword" }, { content: '"check"', role: "string" }, { content: " " }, { content: "selected", role: "function" }, { content: " />" }],
+];
+
 
 const USAGE_SNIPPET = `import { Chip } from 'rift-ds/components/Chip/Chip';
 
@@ -126,6 +139,33 @@ export default function CodeBlockPage() {
           <section className={styles.section}>
             <SectionTitle title="Bare (no header)" />
             <CodeBlock code="npm run storybook" showCopy={false} />
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Highlighting, line numbers and marked lines" />
+            <div className={styles.kitDemo}>
+              <CodeBlock
+                filename="FilterChip.tsx"
+                showLineNumbers
+                highlightLines={[4]}
+                code={HIGHLIGHT_SOURCE}
+                lines={HIGHLIGHTED}
+              />
+              <p className={styles.kitNote}>
+                Code stays monochrome until you pass <code>lines</code>, which <code>highlight()</code> from <code>rift-ds/code/highlight</code> writes through shiki, best called in a Server Component so the page ships no highlighter. Each run takes one of five syntax colours from the theme.
+              </p>
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Tabs that stay in step" />
+            <div className={styles.kitDemo}>
+              <CodeBlock tabs={packageManagerTabs({ install: "rift-ds" })} syncKey="package-manager" />
+              <CodeBlock tabs={packageManagerTabs({ run: "rift-ds init" })} syncKey="package-manager" />
+              <p className={styles.kitNote}>
+                Every block with the same <code>syncKey</code> follows the reader&apos;s pick, and remembers it for their next visit. <code>packageManagerTabs()</code> from <code>rift-ds/code</code> writes the npm, pnpm, yarn and bun commands.
+              </p>
+            </div>
           </section>
 
           <ComponentInstallStrip slug="code-block" />

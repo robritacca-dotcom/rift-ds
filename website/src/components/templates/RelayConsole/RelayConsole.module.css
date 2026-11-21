@@ -8,6 +8,8 @@
    earns the full viewport width, and the globe holds the wider stage just
    as well (the structural pick from the retired portfolio-map screen). */
 .content {
+  /* Contained or not, the instrument takes the whole column. */
+  --ds-shell-contained-width: 100%;
   width: 100%;
   min-width: 0;
   min-height: 0;

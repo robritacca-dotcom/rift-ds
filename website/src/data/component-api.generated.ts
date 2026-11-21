@@ -1113,7 +1113,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Anchor nav",
     "slug": "anchor-nav",
     "category": "navigation",
-    "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
+    "description": "An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings.",
     "client": true,
     "importPath": "rift-ds/components/AnchorNav/AnchorNav",
     "barrel": "main",
@@ -1124,10 +1124,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "items",
             "type": "AnchorNavItem[]",
-            "required": true,
-            "description": "The on-page sections to list, in document order",
+            "required": false,
+            "description": "The on-page sections to list, in document order. Leave it out and pass `fromHeadings` to read them from the page.",
             "typeRefs": [
               "AnchorNavItem"
+            ]
+          },
+          {
+            "name": "fromHeadings",
+            "type": "AnchorNavHeadingSource",
+            "required": false,
+            "description": "Read the sections from the page's headings instead of listing them:\n`{}` lists every `h2` in `main`, and `root`, `selector` and `minItems`\nnarrow it. Ignored when `items` is passed. Renders nothing until enough\nsections are found.",
+            "typeRefs": [
+              "AnchorNavHeadingSource"
             ]
           },
           {
@@ -1171,7 +1180,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "offset",
             "type": "number",
             "required": false,
-            "description": "Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height",
+            "description": "Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height. A heading with a larger `scroll-margin-top` counts from there, so a jump to it always marks it.",
             "defaultValue": "96"
           }
         ]
@@ -1248,7 +1257,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "App layout",
     "slug": "app-layout",
     "category": "layout",
-    "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset.",
+    "description": "Full-page template pairing the collapsible App sidebar with a content area, in flush, floating or inset mode, contained or full width.",
     "client": true,
     "importPath": "rift-ds/components/AppLayout/AppLayout",
     "barrel": "main",
@@ -1331,7 +1340,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content full width in a raised surface (hairline\nand floating shadow) inset from the other edges, which scrolls inside\nitself.",
+            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself. How\nwide the content runs is `width`, apart from the mode.",
             "values": [
               "floating",
               "flush",
@@ -1341,6 +1350,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "typeRefs": [
               "AppSidebarLayout"
             ]
+          },
+          {
+            "name": "width",
+            "type": "\"contained\" | \"full\"",
+            "required": false,
+            "description": "How wide the content runs, in any `layout`: `contained` centres it at\nthe contained width (1120px here, or `--ds-shell-contained-width` set\non the layout); `full` runs it the whole width the mode leaves it.",
+            "values": [
+              "contained",
+              "full"
+            ],
+            "defaultValue": "'contained'"
           },
           {
             "name": "theme",
@@ -1772,7 +1792,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Artifact panel",
     "slug": "artifact-panel",
     "category": "ai",
-    "description": "The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away.",
+    "description": "A preview with its source a switch away: the panel a chat opens beside the conversation, or an inline live example on a page.",
     "client": true,
     "importPath": "rift-ds/components/ArtifactPanel/ArtifactPanel",
     "barrel": "main",
@@ -1783,8 +1803,28 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "title",
             "type": "ReactNode",
-            "required": true,
-            "description": "The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip."
+            "required": false,
+            "description": "The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip. Required for the `panel` layout; an `inline` example may leave it out, and is then named by `viewLabel`."
+          },
+          {
+            "name": "layout",
+            "type": "\"inline\" | \"panel\"",
+            "required": false,
+            "description": "Where it sits. `panel` (the default) fills the box a host gives it,\nbeside a conversation, and the host paints the card. `inline` is a\nself-contained frame in the flow of a page, sized by its content: its\nown card, a centred preview stage, and the source a switch away, the\nlive example of a component's documentation.",
+            "values": [
+              "inline",
+              "panel"
+            ],
+            "defaultValue": "'panel'"
+          },
+          {
+            "name": "lines",
+            "type": "CodeLine[]",
+            "required": false,
+            "description": "The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock.",
+            "typeRefs": [
+              "CodeLine"
+            ]
           },
           {
             "name": "meta",
@@ -2686,6 +2726,51 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | ((count: number) => string)",
             "required": false,
             "description": "Accessible label for the overflow counter. Defaults to \"N more\" (for\nexample \"4 more\"), with N the number of hidden avatars. Pass a function\ngiven that count to localise or add context, e.g.\n`(count) => \\`${count} more reviewers\\``; a plain string replaces the\nlabel outright, whatever the count."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "BackToTop",
+    "label": "Back to top",
+    "slug": "back-to-top",
+    "category": "navigation",
+    "description": "A round button in the page's corner that appears on a long scroll and takes the reader back to the top.",
+    "client": true,
+    "importPath": "rift-ds/components/BackToTop/BackToTop",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "BackToTop",
+        "props": [
+          {
+            "name": "threshold",
+            "type": "number",
+            "required": false,
+            "description": "How far, in px, the page scrolls before the button appears. `0` shows it at once.",
+            "defaultValue": "640"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name and tooltip of the button.",
+            "defaultValue": "'Back to top'"
+          },
+          {
+            "name": "focusTarget",
+            "type": "string",
+            "required": false,
+            "description": "The id of the element to move focus to after the jump (the page's main\nregion, say), so a keyboard reader continues from the top too. Leave it\nout to keep focus on the button."
           },
           {
             "name": "className",
@@ -4621,7 +4706,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Code block",
     "slug": "code-block",
     "category": "data-display",
-    "description": "Monospace code with a header and one-click copy.",
+    "description": "Monospace code with a header and one-click copy, optional highlighting, line numbers and tabs.",
     "client": true,
     "importPath": "rift-ds/components/CodeBlock/CodeBlock",
     "barrel": "main",
@@ -4632,8 +4717,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "code",
             "type": "string",
-            "required": true,
-            "description": "The code to display, as a plain string"
+            "required": false,
+            "description": "The code to display, as a plain string. Required unless `lines` or `tabs` supply it."
+          },
+          {
+            "name": "lines",
+            "type": "CodeLine[]",
+            "required": false,
+            "description": "The code highlighted, one array of tokens per line, as returned by\n`highlight()` from `rift-ds/code/highlight`. Each token is coloured by\nits role. Without it the code is monochrome. When `code` is left out,\nthe copy button copies the text of these lines.",
+            "typeRefs": [
+              "CodeLine"
+            ]
           },
           {
             "name": "language",
@@ -4646,6 +4740,59 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Filename shown in the header, e.g. \"tokens-light.css\""
+          },
+          {
+            "name": "showLineNumbers",
+            "type": "boolean",
+            "required": false,
+            "description": "Show a line number before each line.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "highlightLines",
+            "type": "number[]",
+            "required": false,
+            "description": "Line numbers (counted from 1) to mark with a highlighted background, e.g. the lines a step changed."
+          },
+          {
+            "name": "tabs",
+            "type": "CodeBlockTab[]",
+            "required": false,
+            "description": "Several snippets behind a row of tabs in the header (an install command\nfor each package manager, the same example in two languages). Replaces\nthe filename and language. `packageManagerTabs()` from `rift-ds/code`\nwrites the install case.",
+            "typeRefs": [
+              "CodeBlockTab"
+            ]
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The selected tab's value (controlled)."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": "The initially selected tab's value (uncontrolled). Defaults to the first tab."
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the tab's value when the reader picks a tab."
+          },
+          {
+            "name": "syncKey",
+            "type": "string",
+            "required": false,
+            "description": "Share the selected tab with every CodeBlock on the page that has the\nsame key, and remember it for the reader's next visit (in\nlocalStorage). Ignored while `value` is controlled."
+          },
+          {
+            "name": "tabsLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the tab list.",
+            "defaultValue": "'Code variants'"
           },
           {
             "name": "showCopy",
@@ -6125,6 +6272,110 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "CopyButton",
+    "label": "Copy button",
+    "slug": "copy-button",
+    "category": "actions",
+    "description": "A button that puts a value on the clipboard and confirms it, with text or as an icon alone.",
+    "client": true,
+    "importPath": "rift-ds/components/CopyButton/CopyButton",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "CopyButton",
+        "props": [
+          {
+            "name": "value",
+            "type": "string | (() => string)",
+            "required": true,
+            "description": "The text put on the clipboard, or a function that returns it at the moment of the press (for a value that changes, such as the current URL)."
+          },
+          {
+            "name": "onCopied",
+            "type": "((value: string) => void)",
+            "required": false,
+            "description": "Called with the copied text after it is put on the clipboard, so a host can count copies or announce them."
+          },
+          {
+            "name": "copyText",
+            "type": "string",
+            "required": false,
+            "description": "Visible text before a copy. Ignored when `iconOnly`.",
+            "defaultValue": "'Copy'"
+          },
+          {
+            "name": "copyLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name before a copy. Defaults to `copyText`."
+          },
+          {
+            "name": "copiedLabel",
+            "type": "string",
+            "required": false,
+            "description": "Visible text and accessible name for a moment after a copy.",
+            "defaultValue": "'Copied'"
+          },
+          {
+            "name": "iconOnly",
+            "type": "boolean",
+            "required": false,
+            "description": "Show only the glyph, with the label in a tooltip, as an IconButton.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "variant",
+            "type": "\"secondary\" | \"tertiary\"",
+            "required": false,
+            "description": "Visual emphasis, as on Button.",
+            "values": [
+              "secondary",
+              "tertiary"
+            ],
+            "defaultValue": "'tertiary'"
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"neutral\"",
+            "required": false,
+            "description": "Colour, as on Button: `neutral` draws the secondary outline in the neutral greys rather than the action colour, for a utility control such as a page's \"Copy link\".",
+            "values": [
+              "default",
+              "neutral"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Control size, as on Button.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'compact'"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Disable the button.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
             "defaultValue": "''"
           }
         ]
@@ -9551,7 +9802,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Figure",
     "slug": "figure",
     "category": "data-display",
-    "description": "Images with captions, in the case-study frame.",
+    "description": "Images with captions, in the case-study frame, with a Do or Don't verdict for guidelines.",
     "client": false,
     "importPath": "rift-ds/components/Figure/Figure",
     "barrel": "main",
@@ -9576,6 +9827,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "MouseEventHandler<HTMLButtonElement>",
             "required": false,
             "description": "Click handler (e.g. open a lightbox) — adds zoom affordance + keyboard support.\nIt is attached to the zoom button wrapping the image, not to the\n`<figure>`, so it replaces the native `onClick` on the root."
+          },
+          {
+            "name": "variant",
+            "type": "\"default\" | \"error\" | \"positive\"",
+            "required": false,
+            "description": "A verdict on what the figure shows, for a guideline's Do and Don't pair:\n`positive` leads the caption with a positive \"Do\" badge, `error` with an\nerror \"Don't\" badge, on the crisp container fill. `default` is a plain\nfigure. Set two side by side in a Grid.",
+            "values": [
+              "default",
+              "error",
+              "positive"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "verdictLabel",
+            "type": "string",
+            "required": false,
+            "description": "The verdict mark's text. Defaults to \"Do\" for `positive` and \"Don't\" for `error`."
           },
           {
             "name": "className",
@@ -10623,7 +10892,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Heading",
     "slug": "heading",
     "category": "typography",
-    "description": "A heading whose outline level and type tier are chosen apart.",
+    "description": "A heading whose outline level and type tier are chosen apart, with an optional link to itself.",
     "client": false,
     "importPath": "rift-ds/components/Heading/Heading",
     "barrel": "main",
@@ -10701,6 +10970,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "end",
               "start"
             ]
+          },
+          {
+            "name": "anchor",
+            "type": "string | boolean",
+            "required": false,
+            "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, so a reader can link straight to the section. `true` makes the\nid from the heading's text (\"Getting started\" becomes\n`getting-started`); a string sets it. An `id` passed directly wins."
+          },
+          {
+            "name": "anchorLabel",
+            "type": "((text: string) => string)",
+            "required": false,
+            "description": "Accessible name of the anchor link, given the heading's text. Defaults to \"Link to <text>\".",
+            "defaultValue": "(text) => `Link to ${text}`"
           },
           {
             "name": "children",
@@ -12293,7 +12575,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Link",
     "slug": "link",
     "category": "typography",
-    "description": "A text link inside a sentence or on its own, routed through the app's link component.",
+    "description": "A text link inside a sentence, on its own, or skipping to the content, routed through the app's link component.",
     "client": false,
     "importPath": "rift-ds/components/Link/Link",
     "barrel": "main",
@@ -12315,11 +12597,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "variant",
-            "type": "\"inline\" | \"standalone\"",
+            "type": "\"inline\" | \"standalone\" | \"skip\"",
             "required": false,
-            "description": "`inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined.",
+            "description": "`inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined. `skip` is a page's first link, \"Skip to content\": hidden until it takes focus from the keyboard, then shown pinned to the top of the page above everything, so a keyboard reader can pass the header and the navigation in one press. Point it at the main region's id.",
             "values": [
               "inline",
+              "skip",
               "standalone"
             ],
             "defaultValue": "'inline'"
@@ -12995,6 +13278,67 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "Menubar",
+    "label": "Menu bar",
+    "slug": "menubar",
+    "category": "navigation",
+    "description": "A persistent row of menus, like an app's File, Edit and View, with arrow keys along the bar.",
+    "client": true,
+    "importPath": "rift-ds/components/Menubar/Menubar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "Menubar",
+        "props": [
+          {
+            "name": "menus",
+            "type": "MenubarMenu[]",
+            "required": true,
+            "description": "The menus, in order along the bar.",
+            "typeRefs": [
+              "MenubarMenu"
+            ]
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name for the bar.",
+            "defaultValue": "'Menu bar'"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Trigger and menu size.",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "keyLabels",
+            "type": "Partial<Record<string, string>>",
+            "required": false,
+            "description": "Key names for the shortcut hints in every menu, for a keyboard other than English (passed to each DropdownMenu).",
+            "typeRefs": [
+              "ShortcutKeyLabels"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "MessageActions",
     "label": "Message actions",
     "slug": "message-actions",
@@ -13395,7 +13739,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Nav list",
     "slug": "nav-list",
     "category": "navigation",
-    "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.",
+    "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
     "client": true,
     "importPath": "rift-ds/components/NavList/NavList",
     "barrel": "main",
@@ -13405,12 +13749,36 @@ export const componentApi: readonly ComponentApiEntry[] = [
         "props": [
           {
             "name": "items",
-            "type": "NavListItem[]",
+            "type": "NavListEntry[]",
             "required": true,
-            "description": "Navigation tree to render.",
+            "description": "Navigation tree to render: rows, and at the top level, sections of rows.",
             "typeRefs": [
-              "NavListItem"
+              "NavListEntry"
             ]
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
+            "required": false,
+            "description": "Row density. `default` is the drawer's 40px top row; `compact` sets\nevery row on the 32px compact control height, for a long sidebar of\npages (a documentation site's hundred entries).",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "scrollable",
+            "type": "boolean",
+            "required": false,
+            "description": "Make the list its own scroll area: it fills the height its parent\ngives it, scrolls inside without carrying the page along at its ends,\nand brings the current row into view when it first renders. Put it in\na column with a fixed or sticky height.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "sectionExpandLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name for a section's fold toggle while folded, given its heading. Defaults to \"Expand <label>\"."
           },
           {
             "name": "currentHref",
@@ -13920,7 +14288,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Pagination",
     "slug": "pagination",
     "category": "navigation",
-    "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
+    "description": "Numbered page navigation with ellipses and a compact readout, or links to the previous and next page of a sequence.",
     "client": true,
     "importPath": "rift-ds/components/Pagination/Pagination",
     "barrel": "main",
@@ -13928,6 +14296,58 @@ export const componentApi: readonly ComponentApiEntry[] = [
       {
         "component": "Pagination",
         "props": [
+          {
+            "name": "variant",
+            "type": "\"numbered\" | \"adjacent\"",
+            "required": false,
+            "description": "The pager's form. `numbered` (the default) steps through numbered pages\nof one list. `adjacent` links to the page before and after this one in\na sequence (a guide's chapters, a set of articles) as two cards naming\nthem, and takes `previous` and `next` instead of page numbers.",
+            "values": [
+              "adjacent",
+              "numbered"
+            ],
+            "defaultValue": "'numbered'"
+          },
+          {
+            "name": "previous",
+            "type": "PaginationLink",
+            "required": false,
+            "description": "The page before this one, for the `adjacent` form. Leave it out on the first page.",
+            "typeRefs": [
+              "PaginationLink"
+            ]
+          },
+          {
+            "name": "next",
+            "type": "PaginationLink",
+            "required": false,
+            "description": "The page after this one, for the `adjacent` form. Leave it out on the last page.",
+            "typeRefs": [
+              "PaginationLink"
+            ]
+          },
+          {
+            "name": "previousText",
+            "type": "string",
+            "required": false,
+            "description": "The eyebrow over the previous page's title in the `adjacent` form.",
+            "defaultValue": "'Previous'"
+          },
+          {
+            "name": "nextText",
+            "type": "string",
+            "required": false,
+            "description": "The eyebrow over the next page's title in the `adjacent` form.",
+            "defaultValue": "'Next'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component that renders the `adjacent` form's links, such as Next.js's `Link`. Defaults to the nearest LinkProvider's, else a plain `<a>`.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
           {
             "name": "page",
             "type": "number",
@@ -13944,8 +14364,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "pageCount",
             "type": "number",
-            "required": true,
-            "description": "Total number of pages"
+            "required": false,
+            "description": "Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it.",
+            "defaultValue": "1"
           },
           {
             "name": "onPageChange",
@@ -15323,7 +15744,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Rating",
     "slug": "rating",
     "category": "forms",
-    "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.",
+    "description": "Star-scale rating or a thumbs up and down verdict, with keyboard selection and a read-only mode.",
     "client": true,
     "importPath": "rift-ds/components/Rating/Rating",
     "barrel": "main",
@@ -15416,6 +15837,31 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": "''"
+          },
+          {
+            "name": "variant",
+            "type": "\"stars\" | \"thumbs\"",
+            "required": false,
+            "description": "The scale's form. `stars` (the default) is a row of `max` steps that\nfill up to the value. `thumbs` is a two-way verdict, a thumb up and a\nthumb down, for a quick \"Was this helpful?\": value 1 is up, 2 is down,\n0 is no answer yet, and `max` and `icon` are ignored.",
+            "values": [
+              "stars",
+              "thumbs"
+            ],
+            "defaultValue": "'stars'"
+          },
+          {
+            "name": "upLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the thumb up in the `thumbs` form.",
+            "defaultValue": "'Yes'"
+          },
+          {
+            "name": "downLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the thumb down in the `thumbs` form.",
+            "defaultValue": "'No'"
           }
         ]
       }
@@ -15857,6 +16303,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether to draw the bottom divider line. Set false above content that draws its own lines (bordered tables, calendars), so the section separates by whitespace alone.",
             "defaultValue": "true"
+          },
+          {
+            "name": "anchor",
+            "type": "string | boolean",
+            "required": false,
+            "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, as Heading's `anchor` does. `true` makes the id from the title;\na string sets it."
+          },
+          {
+            "name": "anchorLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "Accessible name of the anchor link, given the title. Defaults to \"Link to <title>\".",
+            "defaultValue": "(text) => `Link to ${text}`"
           },
           {
             "name": "className",
@@ -16518,6 +16977,87 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "SiteFooter",
+    "label": "Site footer",
+    "slug": "site-footer",
+    "category": "navigation",
+    "description": "The bottom of a site: brand, columns of links, and a row of small print and social links.",
+    "client": false,
+    "importPath": "rift-ds/components/SiteFooter/SiteFooter",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "SiteFooter",
+        "props": [
+          {
+            "name": "columns",
+            "type": "SiteFooterColumn[]",
+            "required": true,
+            "description": "The sitemap columns, in order along the row.",
+            "typeRefs": [
+              "SiteFooterColumn"
+            ]
+          },
+          {
+            "name": "brand",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The brand at the start of the footer: a logo, a name, or both."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "A line about the site under the brand."
+          },
+          {
+            "name": "social",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Social or utility controls for the bottom row's end, such as IconButtons."
+          },
+          {
+            "name": "legal",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The bottom row's small print: a copyright, a licence, a privacy link."
+          },
+          {
+            "name": "navigationLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the navigation landmark that holds the columns.",
+            "defaultValue": "'Site'"
+          },
+          {
+            "name": "externalLabel",
+            "type": "string",
+            "required": false,
+            "description": "Text read after an external link's name, for a screen reader.",
+            "defaultValue": "'(opens in a new tab)'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`. A plain\n`<a>` when unset. Server-renderable, so it reads no LinkProvider: pass\nit here.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "SiteHeader",
     "label": "Site header",
     "slug": "site-header",
@@ -16607,6 +17147,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'tablet'"
           },
           {
+            "name": "foldBelow",
+            "type": "\"tablet\" | \"mid\"",
+            "required": false,
+            "description": "Fold the bar into its menu at or below this breakpoint even when the\npills would fit (`tablet` is 959px and below, `mid` 1279px), for a site\nwhose sidebar of pages leaves the page there: the menu then carries the\npages (each section's `drawerItems`), so the reader always has one way\nin. Leave it out to fold only when the row runs out of room.",
+            "values": [
+              "mid",
+              "tablet"
+            ],
+            "defaultValue": "undefined"
+          },
+          {
             "name": "sticky",
             "type": "boolean",
             "required": false,
@@ -16658,10 +17209,148 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'Close menu'"
           },
           {
+            "name": "width",
+            "type": "\"contained\" | \"full\"",
+            "required": false,
+            "description": "How wide the bar's contents run, read from the shell recipe's width\naxis. `contained` centres them in the contained width (1440px, or the\nnearest `--ds-shell-contained-width`) with the side gutter, lining up\nwith a contained page below; `full` runs them edge to edge, the gutter\naside. Leave it out and the bar fills whatever box the host gives it,\nwith no gutter of its own.",
+            "values": [
+              "contained",
+              "full"
+            ],
+            "defaultValue": "undefined"
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
             "description": "Additional CSS classes on the `<header>`.",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "SiteLayout",
+    "label": "Site layout",
+    "slug": "site-layout",
+    "category": "layout",
+    "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.",
+    "client": true,
+    "importPath": "rift-ds/components/SiteLayout/SiteLayout",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "SiteLayout",
+        "props": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The page's main content: the article, the page."
+          },
+          {
+            "name": "header",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The top bar, usually a SiteHeader (give it the same `width` to line it up)."
+          },
+          {
+            "name": "sidebar",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The navigation column, usually a scrollable NavList: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`), so a reader has\none menu, never two."
+          },
+          {
+            "name": "aside",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The column after the content, usually an AnchorNav reading the page's headings. Gives way below 1152px in the `column` placement."
+          },
+          {
+            "name": "asidePlacement",
+            "type": "\"column\" | \"edge\"",
+            "required": false,
+            "description": "Where the aside sits. `column` gives it a column of its own after the\ncontent. `edge` pins it to the window's end edge, centred on the\nheight, and gives the content the room: the place for AnchorNav's\n`floating` variant, a minimap that opens on hover or focus. Hidden\nbelow 960px in either.",
+            "values": [
+              "column",
+              "edge"
+            ],
+            "defaultValue": "'column'"
+          },
+          {
+            "name": "footer",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The bottom of the site, usually a SiteFooter."
+          },
+          {
+            "name": "width",
+            "type": "\"contained\" | \"full\"",
+            "required": false,
+            "description": "How wide the page runs, the shell recipe's width axis. `contained`\ncentres the columns at the contained width (1440px, or the nearest\n`--ds-shell-contained-width`); `full` runs them edge to edge, the side\ngutter aside.",
+            "values": [
+              "contained",
+              "full"
+            ],
+            "defaultValue": "'contained'"
+          },
+          {
+            "name": "footerWidth",
+            "type": "\"contained\" | \"full\"",
+            "required": false,
+            "description": "How wide the footer's row runs, apart from the page. Defaults to\n`width`; set it to the header's width so the top and the bottom of the\nsite match.",
+            "values": [
+              "contained",
+              "full"
+            ],
+            "defaultValue": "width"
+          },
+          {
+            "name": "sidebarDock",
+            "type": "\"content\" | \"edge\"",
+            "required": false,
+            "description": "Where the sidebar sits. `content` keeps it in the page's row, beside the\ncontent, so a contained page centres all three columns together. `edge`\ndocks it to the window's start edge behind a hairline, and the content\nand aside are laid out (and contained) in the room after it.",
+            "values": [
+              "content",
+              "edge"
+            ],
+            "defaultValue": "'content'"
+          },
+          {
+            "name": "mainId",
+            "type": "string",
+            "required": false,
+            "description": "The id of the main region, the skip link's target.",
+            "defaultValue": "'main'"
+          },
+          {
+            "name": "skipLinkLabel",
+            "type": "string",
+            "required": false,
+            "description": "The skip link's text, the page's first stop. Pass an empty string for none.",
+            "defaultValue": "'Skip to content'"
+          },
+          {
+            "name": "sidebarLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the sidebar's navigation landmark.",
+            "defaultValue": "'Pages'"
+          },
+          {
+            "name": "asideLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the aside's complementary landmark.",
+            "defaultValue": "'On this page'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
             "defaultValue": "''"
           }
         ]
@@ -18004,7 +18693,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Table",
     "slug": "table",
     "category": "data-display",
-    "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
+    "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.",
     "client": false,
     "importPath": "rift-ds/components/Table/Table",
     "barrel": "main",

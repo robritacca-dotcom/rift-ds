@@ -1,5 +1,6 @@
 import React from 'react';
 import './Figure.css';
+import { Badge } from '../Badge/Badge';
 
 /** Props owned by Figure itself — everything else falls through to the root figure. */
 type FigureOwnProps = {
@@ -13,6 +14,15 @@ type FigureOwnProps = {
    * `<figure>`, so it replaces the native `onClick` on the root.
    */
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /**
+   * A verdict on what the figure shows, for a guideline's Do and Don't pair:
+   * `positive` leads the caption with a positive "Do" badge, `error` with an
+   * error "Don't" badge, on the crisp container fill. `default` is a plain
+   * figure. Set two side by side in a Grid.
+   */
+  variant?: 'default' | 'positive' | 'error';
+  /** The verdict mark's text. Defaults to "Do" for `positive` and "Don't" for `error`. */
+  verdictLabel?: string;
   /** Additional CSS classes */
   className?: string;
 };
@@ -23,15 +33,16 @@ export interface FigureProps
 
 /**
  * Figure component — an image with an optional caption in a bordered,
- * rounded container. Pass onClick to make it zoomable (adds the
+ * rounded container. `variant` adds a Do or Don't verdict for guidelines. Pass onClick to make it zoomable (adds the
  * zoom cursor, hover dim, and keyboard activation). Forwards a ref to the
  * root `<figure>` and spreads native attributes onto it.
  */
 export const Figure = React.forwardRef<HTMLElement, FigureProps>(
-  ({ children, caption, onClick, className = '', ...rest }, ref) => {
+  ({ children, caption, onClick, variant = 'default', verdictLabel, className = '', ...rest }, ref) => {
     const baseClass = 'ds-figure';
+    const verdict = variant === 'default' ? null : (verdictLabel ?? (variant === 'positive' ? 'Do' : "Don't"));
 
-    const classes = [baseClass, onClick && `${baseClass}--zoomable`, className]
+    const classes = [baseClass, onClick && `${baseClass}--zoomable`, verdict && `${baseClass}--${variant}`, className]
       .filter(Boolean)
       .join(' ');
 
@@ -50,8 +61,17 @@ export const Figure = React.forwardRef<HTMLElement, FigureProps>(
         ) : (
           media
         )}
-        {caption && (
-          <figcaption className={`${baseClass}__caption`}>{caption}</figcaption>
+        {(caption || verdict) && (
+          <figcaption className={`${baseClass}__caption`}>
+            {verdict && (
+              <Badge
+                className={`${baseClass}__verdict`}
+                label={verdict}
+                variant={variant === 'positive' ? 'positive' : 'error'}
+              />
+            )}
+            {caption}
+          </figcaption>
         )}
       </figure>
     );

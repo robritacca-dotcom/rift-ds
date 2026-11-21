@@ -256,6 +256,24 @@ export default function ArtifactPanelPage() {
             </div>
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Inline" />
+            <div className={styles.kitDemo}>
+              <ArtifactPanel
+                layout="inline"
+                viewLabel="Button example"
+                language="tsx"
+                code={`<Button variant="primary">Save</Button>\n<Button variant="secondary">Cancel</Button>`}
+              >
+                <Button variant="primary">Save</Button>
+                <Button variant="secondary">Cancel</Button>
+              </ArtifactPanel>
+              <p className={styles.kitNote}>
+                The same preview and source in the flow of a page: its own card, a stage that centres the example, and the code a switch away. The live example of a component&apos;s documentation.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="artifact-panel" />
         </main>
       </div>

@@ -81,6 +81,16 @@ export default function RatingPage() {
             </div>
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Thumbs" />
+            <div className={styles.kitDemo}>
+              <Rating variant="thumbs" label="Was this page helpful?" upLabel="Yes, it helped" downLabel="No, it did not help" />
+              <p className={styles.kitNote}>
+                A two-way verdict for a quick &quot;Was this helpful?&quot;. Value 1 is up and 2 is down, with the same keys as the stars.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="rating" />
         </main>
       </div>

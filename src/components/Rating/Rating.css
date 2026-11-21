@@ -72,3 +72,29 @@
 .ds-rating--disabled .ds-rating__step:hover {
   transform: none;
 }
+
+/* ============================================
+   THUMBS (variant="thumbs")
+   A two-way verdict: the chosen thumb fills in the primary
+   icon colour (a verdict, not a score, so not the star gold),
+   and each thumb sits in a tertiary icon button's round hover.
+   ============================================ */
+
+.ds-rating--thumbs {
+  gap: var(--gap-100);
+}
+
+.ds-rating--thumbs .ds-rating__step {
+  justify-content: center;
+  width: var(--control-height-compact);
+  height: var(--control-height-compact);
+  border-radius: var(--radius-pill);
+}
+
+.ds-rating--thumbs .ds-rating__step:not(:disabled):hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-rating--thumbs .ds-rating__step--filled {
+  color: var(--color-icon-primary);
+}

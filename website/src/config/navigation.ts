@@ -527,6 +527,11 @@ export const templatesSidebarLinks: NavLink[] = [
     label: "Landing page",
     description: "A product's front page: hero, products, figures and a call to action",
   },
+  {
+    href: "/templates/docs",
+    label: "Docs",
+    description: "A documentation site: a long sidebar, highlighted code, live examples and an on-this-page rail",
+  },
 ];
 
 /**

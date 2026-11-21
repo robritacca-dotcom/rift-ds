@@ -41,6 +41,13 @@ import styles from './AppShell.module.css';
  */
 const SHELL_LAYOUT: AppSidebarLayout = 'floating';
 
+/**
+ * How wide the page runs, apart from the mode: `contained` centres the
+ * content column at 1440px, `full` runs it the whole width the mode leaves.
+ * Any mode takes either.
+ */
+const CONTENT_WIDTH: 'contained' | 'full' = 'contained';
+
 /** The product's name, shown beside the logo in the sidebar. */
 const PRODUCT_NAME = 'Acme';
 
@@ -101,6 +108,7 @@ export function AppShell({ activeKey, breadcrumb, title, actions, children }: Ap
     <div
       className={styles.shell}
       data-ds-shell={SHELL_LAYOUT}
+      data-ds-width={CONTENT_WIDTH}
     >
       <AppSidebar
         sections={NAV_SECTIONS}

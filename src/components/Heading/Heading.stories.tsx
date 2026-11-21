@@ -86,3 +86,15 @@ export const Wrapping: Story = {
 export const Centred: Story = {
   args: { tier: 'heading-1', align: 'center', children: 'Welcome aboard' },
 };
+
+/** An id from the text and a "#" link to the section, shown on hover and focus. */
+export const Anchored: Story = {
+  args: { level: 2, anchor: true, children: 'Getting started' },
+  play: async ({ canvasElement }) => {
+    const heading = canvasElement.querySelector('h2');
+    await expect(heading).toHaveAttribute('id', 'getting-started');
+    const link = canvasElement.querySelector('a');
+    await expect(link).toHaveAttribute('href', '#getting-started');
+    await expect(link).toHaveAccessibleName('Link to Getting started');
+  },
+};

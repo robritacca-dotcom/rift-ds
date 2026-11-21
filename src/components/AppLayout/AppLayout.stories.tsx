@@ -126,8 +126,9 @@ export const Floating: Story = {
   },
 };
 
-/** The rail runs flush on the shell colour and the content runs full width
-    in a surface inset from the other edges, scrolling inside itself. */
+/** The rail runs flush on the shell colour and the content sits in a
+    surface inset from the other edges, scrolling inside itself, centred at
+    the contained width like every mode. */
 export const Inset: Story = {
   args: {
     layout: 'inset',
@@ -137,9 +138,19 @@ export const Inset: Story = {
           Dashboard
         </h1>
         <p style={{ fontSize: 16, color: 'var(--color-text-tertiary)', maxWidth: 640 }}>
-          The rail sits flush on the shell colour, and the content runs full width in a raised surface that scrolls on its own.
+          The rail sits flush on the shell colour, and the content sits in a raised surface that scrolls on its own.
         </p>
       </div>
     ),
   },
+};
+
+/** Any mode at full width: the width is its own choice, apart from the mode. */
+export const InsetFullWidth: Story = {
+  args: { ...Inset.args, layout: 'inset', width: 'full' },
+};
+
+/** Flush at full width. */
+export const FlushFullWidth: Story = {
+  args: { ...Default.args, width: 'full' },
 };

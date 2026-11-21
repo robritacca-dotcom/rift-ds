@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AnchorNav } from './AnchorNav';
+import { Heading } from '../Heading/Heading';
 
 const pageSections = [
   { id: 'preview', label: 'Preview' },
@@ -89,4 +90,23 @@ export const LongList: Story = {
     ],
     activeId: 'theming',
   },
+};
+
+/** Sections read from the page's headings rather than listed: every h2 under the root, ids made from their text. */
+export const FromHeadings: Story = {
+  args: { items: undefined, fromHeadings: { root: '#anchor-nav-article' } },
+  render: (args) => (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: 'var(--gap-500)' }}>
+      <article id="anchor-nav-article">
+        {['Installation', 'Usage', 'Composition', 'Accessibility'].map((title) => (
+          <section key={title} style={{ minHeight: 160 }}>
+            <Heading level={2} anchor>
+              {title}
+            </Heading>
+          </section>
+        ))}
+      </article>
+      <AnchorNav {...args} />
+    </div>
+  ),
 };

@@ -20,7 +20,7 @@
  * - `floating`: the rail floats as a glass card and the content column is
  *   centred at the template's own max width; the page scrolls.
  * - `inset`: the rail runs flush on the app shell colour and the content
- *   runs full width in a surface inset from the other edges, scrolling
+ *   sits in a surface inset from the other edges, scrolling
  *   inside it; a docked assistant takes the same inset treatment.
  *
  * An `entitySwitcher` puts an EntitySwitcher under the brand row, in the
@@ -35,12 +35,12 @@
 import React from "react";
 import { AppSidebar, type AppSidebarProps } from "rift-ds/components/AppSidebar/AppSidebar";
 import { useDockViewport } from "rift-ds/chat";
-import type { TemplateLayout } from "@/lib/templateLayout";
+import type { TemplateLayout, TemplateWidth } from "@/lib/templateLayout";
 import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
 import { EntitySwitcher, type EntitySwitcherProps } from "rift-ds/components/EntitySwitcher/EntitySwitcher";
 import { TemplateShellContext } from "./context";
-import { useTemplateLayout } from "./useTemplateLayout";
+import { useTemplateLayout, useTemplateWidth } from "./useTemplateLayout";
 import styles from "./TemplateShell.module.css";
 
 
@@ -79,6 +79,8 @@ export interface TemplateShellProps {
   fill?: "page" | "viewport";
   /** Forces a layout, over the visitor's stored choice. */
   layout?: TemplateLayout;
+  /** Forces the page width, over the visitor's stored choice: contained or full, in any layout. */
+  width?: TemplateWidth;
   /** The template's content column class: its padding, gap and floating max width. */
   contentClassName?: string;
   /** The page content, laid out in the content column. */
@@ -94,10 +96,13 @@ export default function TemplateShell({
   assistant,
   fill = "page",
   layout: layoutProp,
+  width: widthProp,
   contentClassName,
   children,
 }: TemplateShellProps) {
   const storedLayout = useTemplateLayout();
+  const storedWidth = useTemplateWidth();
+  const width: TemplateWidth = widthProp ?? storedWidth;
   const appFrame = useAppFrame();
   // A phone screen has no rail and no room for an inset, so the app frame
   // always draws the floating layout's plain column.
@@ -128,6 +133,7 @@ export default function TemplateShell({
           .filter(Boolean)
           .join(" ")}
         data-ds-shell={layout}
+        data-ds-width={width}
       >
         {!appFrame && (
           <div className={styles.sidebar}>

@@ -39,6 +39,21 @@
           "default": true
         },
         {
+          "name": "anchor",
+          "type": "string | boolean",
+          "typeKind": "other",
+          "required": false,
+          "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, as Heading's `anchor` does. `true` makes the id from the title;\na string sets it."
+        },
+        {
+          "name": "anchorLabel",
+          "type": "((title: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of the anchor link, given the title. Defaults to \"Link to <title>\".",
+          "defaultExpression": "(text) => `Link to ${text}`"
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",

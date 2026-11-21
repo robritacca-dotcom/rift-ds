@@ -1,0 +1,147 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.32.0",
+  "kind": "component",
+  "name": "CopyButton",
+  "label": "Copy button",
+  "slug": "copy-button",
+  "category": "actions",
+  "description": "A button that puts a value on the clipboard and confirms it, with text or as an icon alone.",
+  "client": true,
+  "importPath": "rift-ds/components/CopyButton/CopyButton",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/copy-button",
+  "markdownUrl": "https://rift-ds.com/components/copy-button.md",
+  "exports": [
+    {
+      "component": "CopyButton",
+      "props": [
+        {
+          "name": "value",
+          "type": "string | (() => string)",
+          "typeKind": "other",
+          "required": true,
+          "description": "The text put on the clipboard, or a function that returns it at the moment of the press (for a value that changes, such as the current URL)."
+        },
+        {
+          "name": "onCopied",
+          "type": "((value: string) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the copied text after it is put on the clipboard, so a host can count copies or announce them."
+        },
+        {
+          "name": "copyText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visible text before a copy. Ignored when `iconOnly`.",
+          "default": "Copy"
+        },
+        {
+          "name": "copyLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name before a copy. Defaults to `copyText`."
+        },
+        {
+          "name": "copiedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Visible text and accessible name for a moment after a copy.",
+          "default": "Copied"
+        },
+        {
+          "name": "iconOnly",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Show only the glyph, with the label in a tooltip, as an IconButton.",
+          "default": false
+        },
+        {
+          "name": "variant",
+          "type": "\"secondary\" | \"tertiary\"",
+          "typeKind": "enum",
+          "values": [
+            "secondary",
+            "tertiary"
+          ],
+          "required": false,
+          "description": "Visual emphasis, as on Button.",
+          "default": "tertiary"
+        },
+        {
+          "name": "tone",
+          "type": "\"default\" | \"neutral\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "neutral"
+          ],
+          "required": false,
+          "description": "Colour, as on Button: `neutral` draws the secondary outline in the neutral greys rather than the action colour, for a utility control such as a page's \"Copy link\".",
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Control size, as on Button.",
+          "default": "compact"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Disable the button.",
+          "default": false
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes.",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "keyboard": [
+    {
+      "pattern": "button",
+      "label": "Button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Activates the button."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Activates the button."
+        }
+      ]
+    }
+  ],
+  "alternatives": [
+    {
+      "name": "IconButton",
+      "when": "the button runs an action other than copying a value",
+      "schemaUrl": "https://rift-ds.com/schema/components/icon-button.json"
+    }
+  ]
+}

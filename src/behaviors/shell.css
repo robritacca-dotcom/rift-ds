@@ -37,6 +37,10 @@
      hairline and floating shadow, held off the
      other edges by the inset gap.
 
+   The page's width is a second axis, apart from
+   the mode (WIDTH below): any mode takes a
+   contained or a full-width page.
+
    Declared on the marked root, not on :root, so
    a theme scoped to part of a page reaches it.
    design.md's "App shells" section owns the
@@ -97,6 +101,41 @@
   --ds-shell-surface-border: var(--ds-shell-edge-border);
   --ds-shell-surface-shadow: var(--ds-shell-edge-shadow);
   --ds-shell-surface-radius: var(--ds-shell-radius);
+}
+
+/* ============================================
+   WIDTH
+   How wide the page runs, an axis of its own: any
+   shell mode, a site layout or a header takes
+   data-ds-width="contained" (a centred column with
+   a maximum) or "full" (the whole width the host
+   gives it, the side gutter aside), so a mode
+   never decides it.
+
+   A host's column reads
+     max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+     padding-inline: var(--ds-shell-gutter);
+   with margin-inline: auto. "full" sets the
+   maximum to none; contained leaves it unset, so
+   the fallback reads the contained width where the
+   column is, and a host or a page can set its own
+   (--ds-shell-contained-width, 1440px by default)
+   on any element down to the column itself.
+   ============================================ */
+
+:where([data-ds-width]) {
+  --ds-shell-contained-width: 1440px;
+  --ds-shell-gutter: var(--padding-500);
+}
+
+:where([data-ds-width='full']) {
+  --ds-shell-content-max: none;
+}
+
+@media (max-width: 768px) {
+  :where([data-ds-width]) {
+    --ds-shell-gutter: var(--padding-400);
+  }
 }
 
 /* The blur backdrop, drawn once for any host: a fixed layer behind the

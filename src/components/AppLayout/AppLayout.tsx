@@ -36,11 +36,17 @@ type AppLayoutOwnProps = {
    * colour behind a hairline, the content centred beside it on the crisp
    * app surface, nothing raised. `floating` floats the rail as a glass card,
    * the content still centred. `inset` runs the rail flush on the shell
-   * colour and sets the content full width in a raised surface (hairline
-   * and floating shadow) inset from the other edges, which scrolls inside
-   * itself.
+   * colour and sets the content in a raised surface (hairline and floating
+   * shadow) inset from the other edges, which scrolls inside itself. How
+   * wide the content runs is `width`, apart from the mode.
    */
   layout?: AppSidebarLayout;
+  /**
+   * How wide the content runs, in any `layout`: `contained` centres it at
+   * the contained width (1120px here, or `--ds-shell-contained-width` set
+   * on the layout); `full` runs it the whole width the mode leaves it.
+   */
+  width?: 'contained' | 'full';
   /**
    * Colour scheme: 'dark' pins the layout to the dark theme (the historical
    * behaviour and the default); 'inherit' drops the pin so the layout
@@ -83,6 +89,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
       logo,
       children,
       layout = 'flush',
+      width = 'contained',
       theme = 'dark',
       linkComponent,
       className = '',
@@ -131,6 +138,8 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
         // An app layout is the floor of the page, never over anything, so
         // it takes no backdrop; the blur is the chat's alone.
         data-ds-shell={layout}
+        // The recipe's second axis: how wide the content runs, in any mode.
+        data-ds-width={width}
       >
         <AppSidebar
           sections={sections}

@@ -1,6 +1,6 @@
 # Rating
 
-Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon.
+Star-scale rating or a thumbs up and down verdict, with keyboard selection and a read-only mode.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -28,6 +28,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | label | `string` | no | `'Rating'` | Accessible name for the group, and the base of each step's label |
 | valueLabel | `((value: number, max: number) => string)` | no | `` (value: number, max: number) => `${value} out of ${max}` `` | The spoken value, given a step (or, in `readOnly` mode, the current rating) and `max`. Defaults to "3 out of 5". It follows `label` and a colon, as in "Rating: 3 out of 5". |
 | className | `string` | no | `''` | Additional CSS classes |
+| variant | `"stars" \| "thumbs"` | no | `'stars'` | The scale's form. `stars` (the default) is a row of `max` steps that fill up to the value. `thumbs` is a two-way verdict, a thumb up and a thumb down, for a quick "Was this helpful?": value 1 is up, 2 is down, 0 is no answer yet, and `max` and `icon` are ignored. |
+| upLabel | `string` | no | `'Yes'` | Accessible name of the thumb up in the `thumbs` form. |
+| downLabel | `string` | no | `'No'` | Accessible name of the thumb down in the `thumbs` form. |
 
 ## Keyboard
 

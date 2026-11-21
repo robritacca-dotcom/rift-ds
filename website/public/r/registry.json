@@ -67,7 +67,7 @@
       "name": "anchor-nav",
       "type": "registry:ui",
       "title": "Anchor nav",
-      "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections."
+      "description": "An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings."
     },
     {
       "name": "animated-number",
@@ -79,7 +79,7 @@
       "name": "app-layout",
       "type": "registry:ui",
       "title": "App layout",
-      "description": "Full-page template pairing the collapsible App sidebar with a content area, in one of the three app shell modes: flush, floating or inset."
+      "description": "Full-page template pairing the collapsible App sidebar with a content area, in flush, floating or inset mode, contained or full width."
     },
     {
       "name": "app-sidebar",
@@ -103,7 +103,7 @@
       "name": "artifact-panel",
       "type": "registry:ui",
       "title": "Artifact panel",
-      "description": "The panel a chat opens beside the conversation to preview what it made: live content, a sandboxed page or a site, with the source a switch away."
+      "description": "A preview with its source a switch away: the panel a chat opens beside the conversation, or an inline live example on a page."
     },
     {
       "name": "attachment-drop-zone",
@@ -140,6 +140,12 @@
       "type": "registry:ui",
       "title": "Avatar group",
       "description": "Overlapping avatar stack with a +N counter for the overflow."
+    },
+    {
+      "name": "back-to-top",
+      "type": "registry:ui",
+      "title": "Back to top",
+      "description": "A round button in the page's corner that appears on a long scroll and takes the reader back to the top."
     },
     {
       "name": "badge",
@@ -259,7 +265,7 @@
       "name": "code-block",
       "type": "registry:ui",
       "title": "Code block",
-      "description": "Monospace code with a header and one-click copy."
+      "description": "Monospace code with a header and one-click copy, optional highlighting, line numbers and tabs."
     },
     {
       "name": "code-diff",
@@ -320,6 +326,12 @@
       "type": "registry:ui",
       "title": "Contribution graph",
       "description": "A year of activity, one cell per day."
+    },
+    {
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "Copy button",
+      "description": "A button that puts a value on the clipboard and confirms it, with text or as an icon alone."
     },
     {
       "name": "currency-input",
@@ -451,7 +463,7 @@
       "name": "figure",
       "type": "registry:ui",
       "title": "Figure",
-      "description": "Images with captions, in the case-study frame."
+      "description": "Images with captions, in the case-study frame, with a Do or Don't verdict for guidelines."
     },
     {
       "name": "file-input",
@@ -511,7 +523,7 @@
       "name": "heading",
       "type": "registry:ui",
       "title": "Heading",
-      "description": "A heading whose outline level and type tier are chosen apart."
+      "description": "A heading whose outline level and type tier are chosen apart, with an optional link to itself."
     },
     {
       "name": "hover-card",
@@ -625,7 +637,7 @@
       "name": "link",
       "type": "registry:ui",
       "title": "Link",
-      "description": "A text link inside a sentence or on its own, routed through the app's link component."
+      "description": "A text link inside a sentence, on its own, or skipping to the content, routed through the app's link component."
     },
     {
       "name": "link-list",
@@ -670,6 +682,12 @@
       "description": "An inline reference to an entity or a skill, with the menu that @ or / opens while typing and the tag it leaves in the message."
     },
     {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menu bar",
+      "description": "A persistent row of menus, like an app's File, Edit and View, with arrow keys along the bar."
+    },
+    {
       "name": "message-actions",
       "type": "registry:ui",
       "title": "Message actions",
@@ -703,7 +721,7 @@
       "name": "nav-list",
       "type": "registry:ui",
       "title": "Nav list",
-      "description": "Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles."
+      "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll."
     },
     {
       "name": "notification-center",
@@ -733,7 +751,7 @@
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
-      "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode."
+      "description": "Numbered page navigation with ellipses and a compact readout, or links to the previous and next page of a sequence."
     },
     {
       "name": "panel",
@@ -823,7 +841,7 @@
       "name": "rating",
       "type": "registry:ui",
       "title": "Rating",
-      "description": "Star-scale rating control with keyboard selection, a read-only mode, and a configurable icon."
+      "description": "Star-scale rating or a thumbs up and down verdict, with keyboard selection and a read-only mode."
     },
     {
       "name": "reasoning",
@@ -892,10 +910,22 @@
       "description": "A signature drawn with a pointer or typed, kept as SVG with a PNG on demand."
     },
     {
+      "name": "site-footer",
+      "type": "registry:ui",
+      "title": "Site footer",
+      "description": "The bottom of a site: brand, columns of links, and a row of small print and social links."
+    },
+    {
       "name": "site-header",
       "type": "registry:ui",
       "title": "Site header",
       "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit."
+    },
+    {
+      "name": "site-layout",
+      "type": "registry:ui",
+      "title": "Site layout",
+      "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart."
     },
     {
       "name": "skeleton",
@@ -991,7 +1021,7 @@
       "name": "table",
       "type": "registry:ui",
       "title": "Table",
-      "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls."
+      "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls."
     },
     {
       "name": "table-toolbar",

@@ -1,6 +1,6 @@
 # Code block
 
-Monospace code with a header and one-click copy.
+Monospace code with a header and one-click copy, optional highlighting, line numbers and tabs.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -16,9 +16,18 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| code | `string` | yes |  | The code to display, as a plain string |
+| code | `string` | no |  | The code to display, as a plain string. Required unless `lines` or `tabs` supply it. |
+| lines | `CodeLine[]` | no |  | The code highlighted, one array of tokens per line, as returned by `highlight()` from `rift-ds/code/highlight`. Each token is coloured by its role. Without it the code is monochrome. When `code` is left out, the copy button copies the text of these lines. |
 | language | `string` | no |  | Language tag shown in the header, e.g. "tsx", "css" |
 | filename | `string` | no |  | Filename shown in the header, e.g. "tokens-light.css" |
+| showLineNumbers | `boolean` | no | `false` | Show a line number before each line. |
+| highlightLines | `number[]` | no |  | Line numbers (counted from 1) to mark with a highlighted background, e.g. the lines a step changed. |
+| tabs | `CodeBlockTab[]` | no |  | Several snippets behind a row of tabs in the header (an install command for each package manager, the same example in two languages). Replaces the filename and language. `packageManagerTabs()` from `rift-ds/code` writes the install case. |
+| value | `string` | no |  | The selected tab's value (controlled). |
+| defaultValue | `string` | no |  | The initially selected tab's value (uncontrolled). Defaults to the first tab. |
+| onValueChange | `((value: string) => void)` | no |  | Called with the tab's value when the reader picks a tab. |
+| syncKey | `string` | no |  | Share the selected tab with every CodeBlock on the page that has the same key, and remember it for the reader's next visit (in localStorage). Ignored while `value` is controlled. |
+| tabsLabel | `string` | no | `'Code variants'` | Accessible name for the tab list. |
 | showCopy | `boolean` | no | `true` | Show the copy-to-clipboard button |
 | onCopied | `(() => void)` | no |  | Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. |
 | maxHeight | `string \| number` | no |  | Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. |
@@ -42,3 +51,61 @@ The collapsible section follows the WAI-ARIA disclosure pattern (https://www.w3.
 | --- | --- |
 | Enter | Opens what it controls, and closes it when it is open. |
 | Space | Does the same as Enter. |
+
+The snippet tabs follows the WAI-ARIA tabs pattern (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+
+| Key | What it does |
+| --- | --- |
+| Tab | Moves focus into the list at the selected tab, and out of the list on the next press. |
+| Arrow Right | Moves to the next tab and selects it. The opposite arrow in a right-to-left layout. |
+| Arrow Left | Moves to the previous tab and selects it. The opposite arrow in a right-to-left layout. |
+| End | Moves to the last tab and selects it. |
+| Home | Moves to the first tab and selects it. |
+
+## Types
+
+### CodeBlockTab
+
+One snippet in a tabbed CodeBlock.
+
+```ts
+interface CodeBlockTab {
+  /** Unique value; also the value a `syncKey` shares between blocks. */
+  value: string;
+  /** Tab label, e.g. "pnpm". */
+  label: string;
+  /** The snippet, as a plain string. Copied as is. */
+  code: string;
+  /** The snippet highlighted, as returned by `highlight()` from `rift-ds/code/highlight`. */
+  lines?: CodeLine[];
+}
+```
+
+### CodeLine
+
+One line of highlighted code: its runs, in order, with no newline.
+
+```ts
+type CodeLine = CodeToken[];
+```
+
+### CodeToken
+
+One run of code text, optionally marked with a syntax role.
+
+```ts
+interface CodeToken {
+  /** The text of the run, exactly as it appears in the source. */
+  content: string;
+  /** The syntax role, which picks its colour. Leave it out for plain text. */
+  role?: CodeTokenRole;
+}
+```
+
+### CodeTokenRole
+
+A syntax role a highlighter marks a run of code with. Each is coloured by its `--color-code-*` token.
+
+```ts
+type CodeTokenRole = 'keyword' | 'string' | 'function' | 'constant' | 'comment';
+```

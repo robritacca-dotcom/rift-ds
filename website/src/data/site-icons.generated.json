@@ -1,7 +1,7 @@
 {
   "$comment": "The icons in the website's cut of the icon font, and the fingerprints of what it was cut from. Written by scripts/generate-site-icons.mjs; never edited by hand.",
-  "from": "2bb490f013a3a73133dbeb12cf7f578c273bcb1135a3e863008a2ac7bd9978c0",
-  "font": "d80a5be5dba4b8547a9a5bad5f83223d3874eacbe55d6da320c936137142e814",
+  "from": "04451fd39d406c20e8664de9c49c48ae7f5570ac9b1f860198ae5b650acdcaa0",
+  "font": "1b4688d6c46d2b799eddce0b78f08d2937b48bde080b59bde799775dbd7d8522",
   "icons": [
     "ac_unit",
     "access_time",
@@ -216,6 +216,7 @@
     "diversity_3",
     "dns",
     "do_not_disturb",
+    "dock",
     "dock_to_left",
     "dock_to_right",
     "docs",
@@ -814,6 +815,8 @@
     "west",
     "widgets",
     "width",
+    "width_full",
+    "width_normal",
     "wifi",
     "wind_power",
     "work",

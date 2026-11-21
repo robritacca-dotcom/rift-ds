@@ -32,6 +32,8 @@
     "./components/StreamingText/useStreamReveal": 1100,
     "./components/registry": 17500,
     "./format": 3000,
+    "./code": 1000,
+    "./code/highlight": 1500,
     "./tokens/breakpoints": 1100,
     "./tokens/motion": 900,
     "./tokens/registry": 2100,

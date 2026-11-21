@@ -138,3 +138,8 @@ export const KeyboardNavigation: Story = {
     await expect(step(5)).toHaveFocus();
   },
 };
+
+/** A two-way verdict for "Was this page helpful?": value 1 is up, 2 is down. */
+export const Thumbs: Story = {
+  args: { variant: 'thumbs', label: 'Was this page helpful?', upLabel: 'Yes, it helped', downLabel: 'No, it did not help' },
+};

@@ -69,3 +69,29 @@
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
 }
+
+/* ============================================
+   VERDICT (variant="positive" | "error")
+   A guideline's Do or Don't: a status Badge leading the
+   caption, saying the verdict in words and in its status
+   colour, on the crisp container fill behind a hairline (a
+   verdict frames a live specimen more often than a photo, and
+   the photo mat's grey reads as a dark slab on a white page).
+   ============================================ */
+
+.ds-figure--positive,
+.ds-figure--error {
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.ds-figure--positive .ds-figure__caption,
+.ds-figure--error .ds-figure__caption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-200);
+}
+
+.ds-figure__verdict {
+  flex: none;
+}

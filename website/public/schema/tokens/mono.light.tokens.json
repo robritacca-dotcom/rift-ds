@@ -2227,6 +2227,26 @@
       "$type": "color",
       "$value": "{primitive.neutral-01}"
     },
+    "code-comment": {
+      "$type": "color",
+      "$value": "{color.text-tertiary}"
+    },
+    "code-constant": {
+      "$type": "color",
+      "$value": "{primitive.orange-09}"
+    },
+    "code-function": {
+      "$type": "color",
+      "$value": "{primitive.blue-08}"
+    },
+    "code-keyword": {
+      "$type": "color",
+      "$value": "{primitive.purple-08}"
+    },
+    "code-string": {
+      "$type": "color",
+      "$value": "{primitive.green-09}"
+    },
     "control-thumb": {
       "$type": "color",
       "$value": "{color.action-primary-text}"

@@ -113,3 +113,38 @@
   width: 100%;
   max-width: 560px;
 }
+
+/* ============================================
+   DOCS-KIT SECTION
+   ============================================ */
+.kitDemo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  width: 100%;
+}
+
+.kitNote {
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.kitFrame {
+  width: 100%;
+  max-width: 320px;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  box-sizing: border-box;
+}
+
+.kitPair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--gap-400);
+}

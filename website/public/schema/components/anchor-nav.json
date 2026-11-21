@@ -6,7 +6,7 @@
   "label": "Anchor nav",
   "slug": "anchor-nav",
   "category": "navigation",
-  "description": "An on-page list of anchor links that tracks the reader's position and jumps between sections.",
+  "description": "An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings.",
   "client": true,
   "importPath": "rift-ds/components/AnchorNav/AnchorNav",
   "barrel": "main",
@@ -20,10 +20,20 @@
           "name": "items",
           "type": "AnchorNavItem[]",
           "typeKind": "array",
-          "required": true,
-          "description": "The on-page sections to list, in document order",
+          "required": false,
+          "description": "The on-page sections to list, in document order. Leave it out and pass `fromHeadings` to read them from the page.",
           "typeRefs": [
             "AnchorNavItem"
+          ]
+        },
+        {
+          "name": "fromHeadings",
+          "type": "AnchorNavHeadingSource",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Read the sections from the page's headings instead of listing them:\n`{}` lists every `h2` in `main`, and `root`, `selector` and `minItems`\nnarrow it. Ignored when `items` is passed. Renders nothing until enough\nsections are found.",
+          "typeRefs": [
+            "AnchorNavHeadingSource"
           ]
         },
         {
@@ -73,13 +83,18 @@
           "type": "number",
           "typeKind": "primitive",
           "required": false,
-          "description": "Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height",
+          "description": "Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height. A heading with a larger `scroll-margin-top` counts from there, so a jump to it always marks it.",
           "default": 96
         }
       ]
     }
   ],
   "types": {
+    "AnchorNavHeadingSource": {
+      "kind": "interface",
+      "definition": "interface AnchorNavHeadingSource {\n  /** A selector for the element whose headings are listed. Defaults to `main`. */\n  root?: string;\n  /** Which headings count as sections. Defaults to `h2`. */\n  selector?: string;\n  /** List nothing until at least this many sections are found, since a rail of one link is no help. Defaults to 2. */\n  minItems?: number;\n}",
+      "description": "Where `fromHeadings` (and `useHeadingItems`) look for the page's sections."
+    },
     "AnchorNavItem": {
       "kind": "interface",
       "definition": "interface AnchorNavItem {\n  /** The id of the element the item jumps to (rendered as `href=\"#id\"`) */\n  id: string;\n  /** Link text */\n  label: string;\n}"

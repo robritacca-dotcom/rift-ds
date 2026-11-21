@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 ## Alternatives
 
 - Use [Button](https://rift-ds.com/components/button.md) instead when the action needs its words on show, with or without an icon beside them.
+- Use [Copy button](https://rift-ds.com/components/copy-button.md) instead when the button puts a value on the clipboard and should confirm it.
 
 ## IconButton props
 

@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Live docs: https://rift-ds.com/components/toolbar
 - Schema: https://rift-ds.com/schema/components/toolbar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Menu bar](https://rift-ds.com/components/menubar.md) instead when the controls are named menus of commands, like an app's File and Edit.
+
 ## Toolbar props
 
 | Prop | Type | Required | Default | Description |

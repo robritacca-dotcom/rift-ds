@@ -10,7 +10,7 @@ import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
-import { PHOTO_LANDSCAPE, PHOTOS } from "@/lib/attachment-demo";
+import { PHOTO_LANDSCAPE, PHOTO_PORTRAIT, PHOTOS } from "@/lib/attachment-demo";
 
 export default function FigurePage() {
   return (
@@ -72,6 +72,23 @@ export default function FigurePage() {
                 height={768}
               />
             </Figure>
+          </section>
+
+          <section className={styles.section}>
+            <SectionTitle title="Do and Don&apos;t" />
+            <div className={styles.kitDemo}>
+              <div className={styles.kitPair}>
+                <Figure variant="positive" caption="Crop to the subject, so the eye lands where the story is.">
+                  <Image src={PHOTO_PORTRAIT} alt="A green mountain split by a long crack, cropped close" width={640} height={480} />
+                </Figure>
+                <Figure variant="error" caption="Leave the subject small in a wide frame of empty sky.">
+                  <Image src={PHOTO_LANDSCAPE} alt="A small figure in a wide canyon" width={640} height={480} />
+                </Figure>
+              </div>
+              <p className={styles.kitNote}>
+                A verdict adds a coloured bar and a Do or Don&apos;t mark in words, so a guideline pair reads without relying on colour. Two figures in a grid make the pair.
+              </p>
+            </div>
           </section>
 
           <ComponentInstallStrip slug="figure" />

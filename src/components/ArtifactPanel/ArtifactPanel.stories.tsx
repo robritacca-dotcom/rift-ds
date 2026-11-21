@@ -172,3 +172,21 @@ export const ViewSwitch: Story = {
     await expect(canvas.getByTitle('Launch page')).toBeInTheDocument();
   },
 };
+
+/** A live example in the flow of a page: a preview stage, its source a switch away. */
+export const Inline: Story = {
+  args: {
+    layout: 'inline',
+    title: undefined,
+    viewLabel: 'Button example',
+    code: `<Button variant="primary">Save</Button>\n<Button variant="secondary">Cancel</Button>`,
+    language: 'tsx',
+    children: (
+      <>
+        <Button variant="primary">Save</Button>
+        <Button variant="secondary">Cancel</Button>
+      </>
+    ),
+  },
+  decorators: [(Story) => <div style={{ width: 'min(640px, 100%)' }}><Story /></div>],
+};

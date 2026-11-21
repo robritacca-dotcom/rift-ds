@@ -170,6 +170,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "anchor-nav": {
     "types": {
+      "AnchorNavHeadingSource": {
+        "kind": "interface",
+        "definition": "interface AnchorNavHeadingSource {\n  /** A selector for the element whose headings are listed. Defaults to `main`. */\n  root?: string;\n  /** Which headings count as sections. Defaults to `h2`. */\n  selector?: string;\n  /** List nothing until at least this many sections are found, since a rail of one link is no help. Defaults to 2. */\n  minItems?: number;\n}",
+        "description": "Where `fromHeadings` (and `useHeadingItems`) look for the page's sections."
+      },
       "AnchorNavItem": {
         "kind": "interface",
         "definition": "interface AnchorNavItem {\n  /** The id of the element the item jumps to (rendered as `href=\"#id\"`) */\n  id: string;\n  /** Link text */\n  label: string;\n}"
@@ -309,6 +314,27 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "component-props",
         "component": "CodeBlock",
         "see": "get_component(\"CodeBlock\")"
+      },
+      "CodeLine": {
+        "kind": "type",
+        "definition": "type CodeLine = CodeToken[];",
+        "description": "One line of highlighted code: its runs, in order, with no newline.",
+        "refs": [
+          "CodeToken"
+        ]
+      },
+      "CodeToken": {
+        "kind": "interface",
+        "definition": "interface CodeToken {\n  /** The text of the run, exactly as it appears in the source. */\n  content: string;\n  /** The syntax role, which picks its colour. Leave it out for plain text. */\n  role?: CodeTokenRole;\n}",
+        "description": "One run of code text, optionally marked with a syntax role.",
+        "refs": [
+          "CodeTokenRole"
+        ]
+      },
+      "CodeTokenRole": {
+        "kind": "type",
+        "definition": "type CodeTokenRole = 'keyword' | 'string' | 'function' | 'constant' | 'comment';",
+        "description": "A syntax role a highlighter marks a run of code with. Each is coloured by its `--color-code-*` token."
       }
     },
     "externalTypes": {
@@ -616,6 +642,40 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "MouseEventHandler": "react",
       "ReactNode": "react"
     }
+  },
+  "code-block": {
+    "types": {
+      "CodeBlockTab": {
+        "kind": "interface",
+        "definition": "interface CodeBlockTab {\n  /** Unique value; also the value a `syncKey` shares between blocks. */\n  value: string;\n  /** Tab label, e.g. \"pnpm\". */\n  label: string;\n  /** The snippet, as a plain string. Copied as is. */\n  code: string;\n  /** The snippet highlighted, as returned by `highlight()` from `rift-ds/code/highlight`. */\n  lines?: CodeLine[];\n}",
+        "description": "One snippet in a tabbed CodeBlock.",
+        "refs": [
+          "CodeLine"
+        ]
+      },
+      "CodeLine": {
+        "kind": "type",
+        "definition": "type CodeLine = CodeToken[];",
+        "description": "One line of highlighted code: its runs, in order, with no newline.",
+        "refs": [
+          "CodeToken"
+        ]
+      },
+      "CodeToken": {
+        "kind": "interface",
+        "definition": "interface CodeToken {\n  /** The text of the run, exactly as it appears in the source. */\n  content: string;\n  /** The syntax role, which picks its colour. Leave it out for plain text. */\n  role?: CodeTokenRole;\n}",
+        "description": "One run of code text, optionally marked with a syntax role.",
+        "refs": [
+          "CodeTokenRole"
+        ]
+      },
+      "CodeTokenRole": {
+        "kind": "type",
+        "definition": "type CodeTokenRole = 'keyword' | 'string' | 'function' | 'constant' | 'comment';",
+        "description": "A syntax role a highlighter marks a run of code with. Each is coloured by its `--color-code-*` token."
+      }
+    },
+    "externalTypes": {}
   },
   "code-diff": {
     "types": {
@@ -1834,6 +1894,61 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "menubar": {
+    "types": {
+      "DropdownMenuEntry": {
+        "kind": "type",
+        "definition": "type DropdownMenuEntry =\n  | DropdownMenuItem\n  | DropdownMenuSeparator\n  | DropdownMenuGroup;",
+        "refs": [
+          "DropdownMenuGroup",
+          "DropdownMenuItem",
+          "DropdownMenuSeparator"
+        ]
+      },
+      "DropdownMenuGroup": {
+        "kind": "interface",
+        "definition": "interface DropdownMenuGroup {\n  type: 'group';\n  /** Section heading */\n  label: string;\n  /** Items within the group */\n  items: DropdownMenuEntry[];\n}",
+        "refs": [
+          "DropdownMenuEntry"
+        ]
+      },
+      "DropdownMenuItem": {
+        "kind": "interface",
+        "definition": "interface DropdownMenuItem {\n  type?: 'item';\n  /** Display label */\n  label: string;\n  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */\n  description?: string;\n  /** Keyboard shortcut hint as literal text (e.g. \"⇧ ⌘ P\"). `keys` writes it for the reader's platform instead. */\n  shortcut?: string;\n  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */\n  iconRight?: string | React.ReactNode;\n  /** Disabled state */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */\n  destructive?: boolean;\n  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */\n  selected?: boolean;\n  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */\n  checked?: boolean;\n  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */\n  closeOnSelect?: boolean;\n  /** Click handler */\n  onClick?: () => void;\n  /** Nested sub-menu items */\n  children?: DropdownMenuEntry[];\n}",
+        "refs": [
+          "DropdownMenuEntry",
+          "Shortcut"
+        ]
+      },
+      "DropdownMenuSeparator": {
+        "kind": "interface",
+        "definition": "interface DropdownMenuSeparator {\n  type: 'separator';\n}"
+      },
+      "MenubarMenu": {
+        "kind": "interface",
+        "definition": "interface MenubarMenu {\n  /** The trigger's text, e.g. \"File\". Also the open menu's accessible name. */\n  label: string;\n  /** The menu's entries, in DropdownMenu's shape: items, groups, separators, checkbox and radio items, sub-menus and shortcuts. */\n  items: DropdownMenuEntry[];\n  /** Show the trigger but do not let it open. */\n  disabled?: boolean;\n}",
+        "description": "One menu in the bar: its trigger's label and the entries it opens.",
+        "refs": [
+          "DropdownMenuEntry"
+        ]
+      },
+      "Shortcut": {
+        "kind": "type",
+        "definition": "type Shortcut = string;",
+        "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+      },
+      "ShortcutKeyLabels": {
+        "kind": "type",
+        "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+        "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+      }
+    },
+    "externalTypes": {
+      "Partial": "typescript",
+      "ReactNode": "react",
+      "Record": "typescript"
+    }
+  },
   "message-actions": {
     "types": {
       "MessageAction": {
@@ -1898,9 +2013,26 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
         "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
       },
+      "NavListEntry": {
+        "kind": "type",
+        "definition": "type NavListEntry = NavListItem | NavListSection;",
+        "description": "A top-level entry: a row, or a section of rows.",
+        "refs": [
+          "NavListItem",
+          "NavListSection"
+        ]
+      },
       "NavListItem": {
         "kind": "interface",
-        "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n}"
+        "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n}"
+      },
+      "NavListSection": {
+        "kind": "interface",
+        "definition": "interface NavListSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The section's heading. */\n  label: string;\n  /** The section's rows. */\n  items: NavListItem[];\n  /** Stable identity for its expansion state. Defaults to the label. */\n  id?: string;\n  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */\n  collapsible?: boolean;\n}",
+        "description": "A titled section of rows: a heading over its items, the way a long\ndocumentation sidebar groups its pages. Sections sit only at the top\nlevel; their items nest like any others.",
+        "refs": [
+          "NavListItem"
+        ]
       }
     },
     "externalTypes": {
@@ -1984,6 +2116,32 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
       "ReactNode": "react"
+    }
+  },
+  "pagination": {
+    "types": {
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "PaginationLink": {
+        "kind": "interface",
+        "definition": "interface PaginationLink {\n  /** Where the link goes. */\n  href: string;\n  /** The page's title, shown under the Previous or Next eyebrow. */\n  label: string;\n}",
+        "description": "A neighbouring page the `adjacent` form links to."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react"
     }
   },
   "panel": {
@@ -2299,6 +2457,41 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "site-footer": {
+    "types": {
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "SiteFooterColumn": {
+        "kind": "interface",
+        "definition": "interface SiteFooterColumn {\n  /** The column's heading, e.g. \"Docs\". */\n  title: string;\n  /** Its links, in order. */\n  links: SiteFooterLink[];\n}",
+        "description": "A titled column of footer links.",
+        "refs": [
+          "SiteFooterLink"
+        ]
+      },
+      "SiteFooterLink": {
+        "kind": "interface",
+        "definition": "interface SiteFooterLink {\n  /** Link text. */\n  label: string;\n  /** Where it goes. */\n  href: string;\n  /** The link leaves the site: it opens in a new tab and says so. */\n  external?: boolean;\n}",
+        "description": "One link in a footer column."
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
+      "ReactNode": "react"
+    }
+  },
   "site-header": {
     "types": {
       "LinkComponent": {
@@ -2337,6 +2530,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "externalTypes": {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
+      "ReactNode": "react"
+    }
+  },
+  "site-layout": {
+    "types": {},
+    "externalTypes": {
       "ReactNode": "react"
     }
   },
@@ -2493,7 +2692,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "TableColumn": {
         "kind": "interface",
-        "definition": "interface TableColumn {\n  /** Unique column identifier, used as the key into each row's cells */\n  key: string;\n  /** Header label displayed in the column header */\n  header: React.ReactNode;\n  /** Optional column width (CSS value like '200px', '30%', 'auto') */\n  width?: string;\n  /** Text alignment for cells in this column. `start` (the default) and `end` follow the reading direction, so a number column set to `end` sits right in English and left in Arabic; `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */\n  sort?: 'asc' | 'desc';\n  /** Whether this column names each row. Its cells render as row headers (`<th scope=\"row\">`), so moving along a row announces which record it is. */\n  rowHeader?: boolean;\n}"
+        "definition": "interface TableColumn {\n  /** Unique column identifier, used as the key into each row's cells */\n  key: string;\n  /** Header label displayed in the column header */\n  header: React.ReactNode;\n  /** Optional column width (CSS value like '200px', '30%', 'auto') */\n  width?: string;\n  /** Text alignment for cells in this column. `start` (the default) and `end` follow the reading direction, so a number column set to `end` sits right in English and left in Arabic; `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */\n  sort?: 'asc' | 'desc';\n  /** Whether this column names each row. Its cells render as row headers (`<th scope=\"row\">`), so moving along a row announces which record it is. */\n  rowHeader?: boolean;\n  /** Set the column's cells in the code face, wrapping long values at any character: for prop names, types, defaults, tokens and other code a reference table lists. */\n  mono?: boolean;\n}"
       },
       "TableRow": {
         "kind": "interface",

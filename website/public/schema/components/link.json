@@ -6,7 +6,7 @@
   "label": "Link",
   "slug": "link",
   "category": "typography",
-  "description": "A text link inside a sentence or on its own, routed through the app's link component.",
+  "description": "A text link inside a sentence, on its own, or skipping to the content, routed through the app's link component.",
   "client": false,
   "importPath": "rift-ds/components/Link/Link",
   "barrel": "main",
@@ -32,14 +32,15 @@
         },
         {
           "name": "variant",
-          "type": "\"inline\" | \"standalone\"",
+          "type": "\"inline\" | \"standalone\" | \"skip\"",
           "typeKind": "enum",
           "values": [
             "inline",
+            "skip",
             "standalone"
           ],
           "required": false,
-          "description": "`inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined.",
+          "description": "`inline` sits inside a sentence, underlined and in the sentence's colour; `standalone` stands on its own line or beside a control, in the tertiary action text colour and its own type face. Both are underlined. `skip` is a page's first link, \"Skip to content\": hidden until it takes focus from the keyboard, then shown pinned to the top of the page above everything, so a keyboard reader can pass the header and the navigation in one press. Point it at the main region's id.",
           "default": "inline"
         },
         {

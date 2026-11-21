@@ -21,6 +21,8 @@ export interface TableColumn {
   sort?: 'asc' | 'desc';
   /** Whether this column names each row. Its cells render as row headers (`<th scope="row">`), so moving along a row announces which record it is. */
   rowHeader?: boolean;
+  /** Set the column's cells in the code face, wrapping long values at any character: for prop names, types, defaults, tokens and other code a reference table lists. */
+  mono?: boolean;
 }
 
 export interface TableRow {
@@ -154,7 +156,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
               {columns.map((col) => {
                 const content = (
                   <div
-                    className={`${baseClass}__cell-content`}
+                    className={`${baseClass}__cell-content${col.mono ? ` ${baseClass}__cell-content--mono` : ''}`}
                     style={{
                       // flex-start and flex-end follow the reading direction;
                       // left and right stay on their screen side.

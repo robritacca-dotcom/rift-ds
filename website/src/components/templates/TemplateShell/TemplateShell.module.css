@@ -64,8 +64,14 @@
    the column has (an open chat or an expanded rail narrows it without the
    viewport changing) with @container template-content queries. */
 .content {
+  /* The shell recipe's width axis: centred at the screen's contained width
+     (1440px from the shell root, or the template's own, set on its
+     content class),
+     or the whole column when the page runs full, in any layout. */
   position: relative;
   width: 100%;
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+  margin-inline: auto;
   min-width: 0;
   container: template-content / inline-size;
 }
@@ -242,15 +248,19 @@
   box-shadow: var(--ds-shell-surface-shadow);
 }
 
-/* Full width in the surface, its side padding matching its top padding
+/* The surface's scroller, its side padding at least its top padding
    (the templates' 20px, stepping to 16px with theirs below 1080px), and
     the scroller, its thin scrollbar always showing. The doubled class
    outranks a template's own max width whatever order the stylesheets load
    in. */
 .surface .content.content {
   max-width: none;
-  padding-left: var(--padding-500);
-  padding-right: var(--padding-500);
+  /* The content is the surface's scroller, so it keeps the surface's full
+     width (the scrollbar stays at the surface's edge) and centres a
+     contained page with its padding instead of a maximum: the larger of
+     the gutter and half the room past the contained width. */
+  padding-left: max(var(--padding-500), calc((100% - var(--ds-shell-contained-width)) / 2)); /* ds-allow(physical): equal on both sides, so the reading direction changes nothing */
+  padding-right: max(var(--padding-500), calc((100% - var(--ds-shell-contained-width)) / 2)); /* ds-allow(physical): equal on both sides, so the reading direction changes nothing */
   /* The bar's fill and blur run to the surface's edges, and the surface's
      clip masks them to its rounded corners. */
   --sticky-bleed: var(--padding-500);
@@ -379,4 +389,10 @@
   .inset .stickyTopBar {
     top: var(--sticky-gap);
   }
+}
+
+/* A full-width page in the inset surface: the gutter alone. */
+.shell[data-ds-width='full'] .surface .content.content {
+  padding-left: var(--padding-500); /* ds-allow(physical): equal on both sides */
+  padding-right: var(--padding-500); /* ds-allow(physical): equal on both sides */
 }

@@ -38,6 +38,17 @@ type RatingOwnProps = {
   valueLabel?: (value: number, max: number) => string;
   /** Additional CSS classes */
   className?: string;
+  /**
+   * The scale's form. `stars` (the default) is a row of `max` steps that
+   * fill up to the value. `thumbs` is a two-way verdict, a thumb up and a
+   * thumb down, for a quick "Was this helpful?": value 1 is up, 2 is down,
+   * 0 is no answer yet, and `max` and `icon` are ignored.
+   */
+  variant?: 'stars' | 'thumbs';
+  /** Accessible name of the thumb up in the `thumbs` form. */
+  upLabel?: string;
+  /** Accessible name of the thumb down in the `thumbs` form. */
+  downLabel?: string;
 };
 
 export interface RatingProps
@@ -57,9 +68,12 @@ const defaultValueLabel = (value: number, max: number) => `${value} out of ${max
 export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
   (
     {
+      variant = 'stars',
+      upLabel = 'Yes',
+      downLabel = 'No',
       value,
       defaultValue = 0,
-      max = 5,
+      max: maxProp = 5,
       onValueChange,
       readOnly = false,
       disabled = false,
@@ -73,6 +87,8 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
     },
     ref,
   ) => {
+    const thumbs = variant === 'thumbs';
+    const max = thumbs ? 2 : maxProp;
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState(0);
 
@@ -84,6 +100,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
     const classes = [
       baseClass,
       `${baseClass}--${size}`,
+      thumbs ? `${baseClass}--thumbs` : '',
       readOnly ? `${baseClass}--read-only` : '',
       disabled ? `${baseClass}--disabled` : '',
       className,
@@ -126,6 +143,11 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
     };
 
     const steps = Array.from({ length: max }, (_, i) => i + 1);
+    // Stars fill up to the value; a thumb is either the one chosen or not.
+    const isFilled = (step: number) => (thumbs ? step === displayValue : step <= displayValue);
+    const iconFor = (step: number) => (thumbs ? (step === 1 ? 'thumb_up' : 'thumb_down') : icon);
+    const stepLabel = (step: number) =>
+      thumbs ? (step === 1 ? upLabel : downLabel) : valueLabel(step, max);
 
     if (readOnly) {
       return (
@@ -134,15 +156,15 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
           ref={ref}
           className={classes}
           role="img"
-          aria-label={rest['aria-label'] ?? `${label}: ${valueLabel(currentValue, max)}`}
+          aria-label={rest['aria-label'] ?? `${label}: ${thumbs ? (currentValue ? stepLabel(currentValue) : '') : valueLabel(currentValue, max)}`}
         >
           {steps.map((step) => (
             <span
               key={step}
-              className={`${baseClass}__step ${step <= displayValue ? `${baseClass}__step--filled` : ''}`}
+              className={`${baseClass}__step ${isFilled(step) ? `${baseClass}__step--filled` : ''}`}
               aria-hidden="true"
             >
-              <span className={`${baseClass}__icon${typeof icon === 'string' ? ` material-symbols-rounded ${mirrorClass(icon)}` : ''}`}>{icon}</span>
+              <span className={`${baseClass}__icon${typeof iconFor(step) === 'string' ? ` material-symbols-rounded ${mirrorClass(iconFor(step))}` : ''}`}>{iconFor(step)}</span>
             </span>
           ))}
         </div>
@@ -170,15 +192,15 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               type="button"
               role="radio"
               aria-checked={checked}
-              aria-label={label ? `${label}: ${valueLabel(step, max)}` : valueLabel(step, max)}
+              aria-label={thumbs ? stepLabel(step) : label ? `${label}: ${stepLabel(step)}` : stepLabel(step)}
               tabIndex={tabStop ? 0 : -1}
               disabled={disabled}
-              className={`${baseClass}__step ${step <= displayValue ? `${baseClass}__step--filled` : ''}`}
+              className={`${baseClass}__step ${isFilled(step) ? `${baseClass}__step--filled` : ''}`}
               onClick={() => setValue(step)}
               onMouseEnter={() => setHoverValue(step)}
             >
-              <span className={`${baseClass}__icon${typeof icon === 'string' ? ` material-symbols-rounded ${mirrorClass(icon)}` : ''}`} aria-hidden="true">
-                {icon}
+              <span className={`${baseClass}__icon${typeof iconFor(step) === 'string' ? ` material-symbols-rounded ${mirrorClass(iconFor(step))}` : ''}`} aria-hidden="true">
+                {iconFor(step)}
               </span>
             </button>
           );

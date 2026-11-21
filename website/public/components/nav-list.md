@@ -1,6 +1,6 @@
 # Nav list
 
-Vertical list of navigation links for drawers and menus, with three indent levels and per-row expand toggles.
+Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -16,7 +16,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| items | `NavListItem[]` | yes |  | Navigation tree to render. |
+| items | `NavListEntry[]` | yes |  | Navigation tree to render: rows, and at the top level, sections of rows. |
+| size | `"default" \| "compact"` | no | `'default'` | Row density. `default` is the drawer's 40px top row; `compact` sets every row on the 32px compact control height, for a long sidebar of pages (a documentation site's hundred entries). |
+| scrollable | `boolean` | no | `false` | Make the list its own scroll area: it fills the height its parent gives it, scrolls inside without carrying the page along at its ends, and brings the current row into view when it first renders. Put it in a column with a fixed or sticky height. |
+| sectionExpandLabel | `((label: string) => string)` | no |  | Accessible name for a section's fold toggle while folded, given its heading. Defaults to "Expand <label>". |
 | currentHref | `string` | no |  | href of the current page — the exactly matching row gets `aria-current="page"` and the active treatment. |
 | expandedIds | `string[]` | no |  | Controlled list of expanded item ids. |
 | defaultExpandedIds | `string[]` | no |  | Initially expanded item ids (uncontrolled). |
@@ -60,6 +63,14 @@ are; a router whose link takes `to` instead needs a one-line adapter:
 type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 ```
 
+### NavListEntry
+
+A top-level entry: a row, or a section of rows.
+
+```ts
+type NavListEntry = NavListItem | NavListSection;
+```
+
 ### NavListItem
 
 ```ts
@@ -83,6 +94,29 @@ interface NavListItem {
    * stay current on their child routes.
    */
   current?: boolean;
+  /** A short tag after the label, such as "New" or "Beta", drawn as a neutral Badge. */
+  badge?: string;
+}
+```
+
+### NavListSection
+
+A titled section of rows: a heading over its items, the way a long
+documentation sidebar groups its pages. Sections sit only at the top
+level; their items nest like any others.
+
+```ts
+interface NavListSection {
+  /** Marks the entry as a section rather than a row. */
+  type: 'section';
+  /** The section's heading. */
+  label: string;
+  /** The section's rows. */
+  items: NavListItem[];
+  /** Stable identity for its expansion state. Defaults to the label. */
+  id?: string;
+  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */
+  collapsible?: boolean;
 }
 ```
 

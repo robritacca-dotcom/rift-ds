@@ -72,6 +72,19 @@
         "app/shader/page.tsx",
         "app/shader/page.module.css"
       ]
+    },
+    {
+      "name": "docs",
+      "label": "Docs",
+      "description": "A documentation page: a site header, a long sidebar of pages, an article with tabbed install commands and live examples, an on-this-page rail and a footer.",
+      "route": "/guide",
+      "files": [
+        "components/blocks/DocsShell.tsx",
+        "components/blocks/DocsShell.module.css",
+        "app/guide/page.tsx",
+        "app/guide/page.module.css",
+        "app/guide/PageFeedback.tsx"
+      ]
     }
   ]
 }

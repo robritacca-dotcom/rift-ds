@@ -13,6 +13,8 @@
  * look) or solid: blur says a chat rests above something, and a template is
  * always the floor of its page, so it has none. The sidebar footer's switch
  * writes its screen's scope.
+ * The page width (TemplateWidth) is a choice of its own for the templates,
+ * set beside the layout and independent of it.
  * Each is kept in localStorage so it follows the visitor between screens of
  * its kind and survives a reload. Same-tab changes reach every reader
  * through a window event; other tabs through the storage event.
@@ -28,6 +30,20 @@ export const TEMPLATE_LAYOUTS: readonly { value: TemplateLayout; label: string; 
   { value: "floating", label: "Floating", icon: "view_sidebar" },
   { value: "inset", label: "Inset", icon: "space_dashboard" },
 ];
+
+/**
+ * How wide a template's page runs, an axis apart from the layout (the shell
+ * recipe's width axis): `contained` centres the content at the screen's own
+ * width, `full` runs it the whole column, in any of the three layouts.
+ */
+export type TemplateWidth = "contained" | "full";
+
+export const TEMPLATE_WIDTHS: readonly { value: TemplateWidth; label: string; icon: string }[] = [
+  { value: "contained", label: "Contained", icon: "width_normal" },
+  { value: "full", label: "Full width", icon: "width_full" },
+];
+
+export const DEFAULT_TEMPLATE_WIDTH: TemplateWidth = "contained";
 
 /** The chat home's flush backdrops. */
 export const CHAT_BACKDROPS: readonly { value: ChatBackdrop; label: string; icon: string }[] = [
@@ -49,10 +65,14 @@ const LAYOUT_KEYS: Record<TemplateLayoutScope, string> = {
   chat: "chat-layout",
 };
 const CHAT_BACKDROP_KEY = "chat-backdrop";
+const WIDTH_KEY = "template-width";
 const CHANGE_EVENT = "template-layout-change";
 
 const isLayout = (value: string | null): value is TemplateLayout =>
   TEMPLATE_LAYOUTS.some((layout) => layout.value === value);
+
+const isWidth = (value: string | null): value is TemplateWidth =>
+  TEMPLATE_WIDTHS.some((width) => width.value === value);
 
 const isBackdrop = (value: string | null): value is ChatBackdrop =>
   CHAT_BACKDROPS.some((backdrop) => backdrop.value === value);
@@ -82,6 +102,15 @@ export function readTemplateLayout(scope: TemplateLayoutScope = "templates"): Te
 
 export function setTemplateLayout(layout: TemplateLayout, scope: TemplateLayoutScope = "templates") {
   write(LAYOUT_KEYS[scope], layout);
+}
+
+/** The templates' stored page width, or the default when none (or an unknown one) is kept. */
+export function readTemplateWidth(): TemplateWidth {
+  return read(WIDTH_KEY, isWidth, DEFAULT_TEMPLATE_WIDTH);
+}
+
+export function setTemplateWidth(width: TemplateWidth) {
+  write(WIDTH_KEY, width);
 }
 
 /** The chat home's stored flush backdrop, or the default when none (or an unknown one) is kept. */

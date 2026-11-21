@@ -109,5 +109,12 @@
   ],
   "size": {
     "gzip": 836
-  }
+  },
+  "alternatives": [
+    {
+      "name": "Menubar",
+      "when": "the controls are named menus of commands, like an app's File and Edit",
+      "schemaUrl": "https://rift-ds.com/schema/components/menubar.json"
+    }
+  ]
 }

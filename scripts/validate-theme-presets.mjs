@@ -31,8 +31,8 @@
  *      lever (they feed chart series 2-7 and the background blobs' default), so
  *      every preset must emit all six in both themes — the shipped keys
  *      are still a declaration.
- *   c. Contrast in every state — each row of ACTION_PAIRINGS and
- *      TIER_PAIRINGS below (an
+ *   c. Contrast in every state — each row of ACTION_PAIRINGS,
+ *      CODE_PAIRINGS and TIER_PAIRINGS below (an
  *      action fill, the label or icon a component draws on it, and the
  *      minimum: 4.5:1 for text, 3:1 for icons and strokes) must hold in
  *      both themes, for every preset AND for the shipped token files.
@@ -162,7 +162,15 @@ const LOGO_PAIRINGS = [
   ['--color-bg-page-primary', '--color-product-mark', 3, "a template's product mark on the page"],
 ];
 
-const PAIRINGS = [...ACTION_PAIRINGS, ...TIER_PAIRINGS, ...LOGO_PAIRINGS];
+/** The syntax roles a highlighted CodeBlock or CodeDiff writes in: text on
+    a card, so each holds the 4.5:1 text minimum in every theme cell. */
+const CODE_PAIRINGS = ['keyword', 'string', 'function', 'constant', 'comment'].map((role) => [
+  '--color-bg-container-primary',
+  `--color-code-${role}`,
+  4.5,
+  `highlighted code (${role}) on a code block`,
+]);
+const PAIRINGS = [...ACTION_PAIRINGS, ...TIER_PAIRINGS, ...CODE_PAIRINGS, ...LOGO_PAIRINGS];
 
 /** Pairings that genuinely fail today, keyed "<preset>|<theme>|<fill>|<foreground>"
     (the preset id "shipped" is the unthemed token files) and pinned with
@@ -288,7 +296,7 @@ const checkPairings = (id, theme, overrides, logoToned = false) => {
   };
   const pageBg = resolveRgb('--color-bg-page-primary', null);
   if (!pageBg) return;
-  for (const [fillName, fgName, min, usage] of logoToned ? PAIRINGS : [...ACTION_PAIRINGS, ...TIER_PAIRINGS]) {
+  for (const [fillName, fgName, min, usage] of logoToned ? PAIRINGS : [...ACTION_PAIRINGS, ...TIER_PAIRINGS, ...CODE_PAIRINGS]) {
     const fill = resolveRgb(fillName, pageBg);
     const fg = fill && resolveRgb(fgName, fill);
     if (!fill || !fg) continue;

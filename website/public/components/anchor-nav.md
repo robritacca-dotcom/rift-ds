@@ -1,6 +1,6 @@
 # Anchor nav
 
-An on-page list of anchor links that tracks the reader's position and jumps between sections.
+An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -16,13 +16,14 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| items | `AnchorNavItem[]` | yes |  | The on-page sections to list, in document order |
+| items | `AnchorNavItem[]` | no |  | The on-page sections to list, in document order. Leave it out and pass `fromHeadings` to read them from the page. |
+| fromHeadings | `AnchorNavHeadingSource` | no |  | Read the sections from the page's headings instead of listing them: `{}` lists every `h2` in `main`, and `root`, `selector` and `minItems` narrow it. Ignored when `items` is passed. Renders nothing until enough sections are found. |
 | variant | `"list" \| "floating"` | no | `'list'` | Visual form: `list` renders the inline "On this page" rail; `floating` collapses to a stack of short lines that expands into a panel on hover, keyboard focus, or tap, so it can ride a page edge without taking column width |
 | title | `string` | no | `'On this page'` | Header text above the list; pass an empty string to render no header. Note: this shadows the native `title` tooltip attribute, which AnchorNav does not expose. |
 | icon | `string \| ReactNode` | no | `'toc'` | Icon beside the header — Material Symbol name (string) or custom element (ReactNode); pass an empty string for none |
 | activeId | `string` | no |  | Controlled active item id — set it to drive the highlight yourself and skip scroll tracking |
 | onActiveChange | `((id: string) => void)` | no |  | Fires when the tracked (or clicked) active item changes |
-| offset | `number` | no | `96` | Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height |
+| offset | `number` | no | `96` | Distance in px from the viewport top at which a section counts as current, e.g. a sticky header's height. A heading with a larger `scroll-margin-top` counts from there, so a jump to it always marks it. |
 
 ## Keyboard
 
@@ -35,6 +36,21 @@ Follows the WAI-ARIA link pattern (https://www.w3.org/WAI/ARIA/apg/patterns/link
 | Enter | Follows the link. |
 
 ## Types
+
+### AnchorNavHeadingSource
+
+Where `fromHeadings` (and `useHeadingItems`) look for the page's sections.
+
+```ts
+interface AnchorNavHeadingSource {
+  /** A selector for the element whose headings are listed. Defaults to `main`. */
+  root?: string;
+  /** Which headings count as sections. Defaults to `h2`. */
+  selector?: string;
+  /** List nothing until at least this many sections are found, since a rail of one link is no help. Defaults to 2. */
+  minItems?: number;
+}
+```
 
 ### AnchorNavItem
 

@@ -399,3 +399,116 @@
   border-radius: var(--radius-300);
   box-shadow: var(--shadow-floating);
 }
+
+/* --------------------------------------------------------- page width */
+
+/* The column drawn inside a floating shell's content area: contained
+   leaves the plane showing either side, full runs to the gutter. */
+.widthStage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--padding-100);
+}
+
+.widthColumn {
+  height: 100%;
+  box-sizing: border-box;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-tertiary);
+}
+
+.widthColumn[data-width="contained"] {
+  width: 64%;
+}
+
+.widthColumn[data-width="full"] {
+  width: 100%;
+}
+
+/* --------------------------------------------------------- site shells */
+
+/* SiteLayout drawn small: a header bar over a body of sidebar, content
+   and aside. The header's contents and the row are contained (a centred
+   inner box) or full; the sidebar sits in the row or at the frame's edge. */
+.siteFrame {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-300);
+  background: var(--color-bg-page-primary);
+}
+
+.siteHeader {
+  display: flex;
+  justify-content: center;
+  flex: 0 0 14%;
+  padding: var(--padding-100);
+  border-block-end: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.siteHeaderBar {
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-container-tertiary);
+}
+
+.siteFrame[data-header="contained"] .siteHeaderBar {
+  width: 72%;
+}
+
+.siteFrame[data-header="full"] .siteHeaderBar {
+  width: 100%;
+}
+
+.siteBody {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.siteRow {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-100);
+  padding: var(--padding-150) var(--padding-100);
+}
+
+.siteFrame[data-dock="content"] .siteRow > * {
+  max-width: 100%;
+}
+
+.siteFrame[data-header="contained"][data-dock="content"] .siteRow {
+  padding-inline: 14%;
+}
+
+.siteSidebar {
+  flex: 0 0 18%;
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-secondary);
+}
+
+.siteFrame[data-dock="edge"] .siteSidebar {
+  flex-basis: 20%;
+  border-radius: 0;
+  border-inline-end: var(--border-025) solid var(--color-bg-container-border);
+}
+
+.siteFrame[data-dock="edge"] .siteRow {
+  padding-inline: 8%;
+}
+
+.siteContent {
+  flex: 1;
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-tertiary);
+}
+
+.siteAside {
+  flex: 0 0 14%;
+  border-radius: var(--radius-200);
+  background: var(--color-bg-container-secondary);
+}

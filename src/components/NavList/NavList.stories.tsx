@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
-import { NavList } from './NavList';
+import { NavList, type NavListEntry } from './NavList';
 
 const flatItems = [
   { label: 'Overview', href: '#overview' },
@@ -72,7 +72,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     items: flatItems,
-    'aria-label': 'Documentation',
   },
 };
 
@@ -80,7 +79,6 @@ export const Nested: Story = {
   args: {
     items: nestedItems,
     defaultExpandedIds: ['guides'],
-    'aria-label': 'Documentation',
   },
 };
 
@@ -89,7 +87,6 @@ export const ThreeLevels: Story = {
     items: threeLevelItems,
     defaultExpandedIds: ['library'],
     multiple: true,
-    'aria-label': 'Documentation',
   },
 };
 
@@ -97,14 +94,12 @@ export const CurrentPage: Story = {
   args: {
     items: flatItems,
     currentHref: '#guides',
-    'aria-label': 'Documentation',
   },
 };
 
 export const Controlled: Story = {
   args: {
     items: nestedItems,
-    'aria-label': 'Documentation',
   },
   render: function ControlledStory(args) {
     const [expandedIds, setExpandedIds] = useState<string[]>(['guides']);
@@ -117,7 +112,6 @@ export const MultipleOpen: Story = {
     items: nestedItems,
     multiple: true,
     defaultExpandedIds: ['guides', 'reference'],
-    'aria-label': 'Documentation',
   },
 };
 
@@ -135,7 +129,6 @@ export const StaticGroup: Story = {
         ],
       },
     ],
-    'aria-label': 'Documentation',
   },
 };
 
@@ -150,7 +143,6 @@ export const KeyboardExpansion: Story = {
     items: nestedItems,
     defaultExpandedIds: ['guides'],
     onExpandedChange: fn(),
-    'aria-label': 'Documentation',
   },
   play: async ({ canvas, userEvent, args }) => {
     const collapseGuides = canvas.getByRole('button', { name: 'Collapse Guides' });
@@ -197,5 +189,88 @@ export const KeyboardExpansion: Story = {
     await expect(expandReference).toHaveAttribute('aria-expanded', 'false');
     tokens.focus();
     await expect(tokens).not.toHaveFocus();
+  },
+};
+
+const PAGES = [
+  'Accordion', 'Alert', 'Alert dialog', 'Avatar', 'Badge', 'Breadcrumb', 'Button', 'Calendar', 'Card', 'Carousel',
+  'Checkbox', 'Code block', 'Combobox', 'Command', 'Context menu', 'Data table', 'Date picker', 'Dialog', 'Drawer',
+  'Dropdown menu', 'Empty state', 'Field', 'Hover card', 'Input', 'Kbd', 'Label', 'Menubar', 'Pagination', 'Popover',
+  'Progress', 'Radio group', 'Select', 'Separator', 'Sheet', 'Skeleton', 'Slider', 'Switch', 'Table', 'Tabs',
+  'Textarea', 'Toast', 'Toggle', 'Tooltip',
+];
+const slug = (label: string) => label.toLowerCase().replace(/ /g, '-');
+
+/** A documentation sidebar: titled sections, a long run of pages, a nested branch and badges. */
+const DOCS_NAV: NavListEntry[] = [
+  {
+    type: 'section',
+    label: 'Getting started',
+    items: [
+      { label: 'Introduction', href: '/docs' },
+      { label: 'Installation', href: '/docs/installation' },
+      {
+        label: 'Theming',
+        href: '/docs/theming',
+        items: [
+          { label: 'Colours', href: '/docs/theming/colours' },
+          { label: 'Typography', href: '/docs/theming/typography' },
+          { label: 'Dark mode', href: '/docs/theming/dark-mode' },
+        ],
+      },
+      { label: 'CLI', href: '/docs/cli', badge: 'New' },
+      { label: 'Changelog', href: '/docs/changelog' },
+    ],
+  },
+  {
+    type: 'section',
+    label: 'Components',
+    items: PAGES.map((label) => ({
+      label,
+      href: `/docs/components/${slug(label)}`,
+      badge: label === 'Menubar' ? 'New' : undefined,
+    })),
+  },
+  {
+    type: 'section',
+    label: 'Guides',
+    collapsible: true,
+    items: [
+      { label: 'Forms', href: '/docs/guides/forms' },
+      { label: 'Server rendering', href: '/docs/guides/server-rendering' },
+      { label: 'Accessibility', href: '/docs/guides/accessibility' },
+    ],
+  },
+];
+
+/**
+ * A long documentation sidebar: compact rows, sections, its own scroll that
+ * stops at its ends, and the current page brought into view on load.
+ */
+export const DocsSidebar: Story = {
+  args: {
+    items: DOCS_NAV,
+    size: 'compact',
+    scrollable: true,
+    currentHref: '/docs/components/menubar',
+  },
+  render: (args) => (
+    <nav aria-label="Documentation" style={{ height: 480, width: 260, display: 'flex', flexDirection: 'column' }}>
+      <NavList {...args} />
+    </nav>
+  ),
+};
+
+/** The branch that holds the current page opens itself. */
+export const OpensToCurrentPage: Story = {
+  args: {
+    items: DOCS_NAV.slice(0, 1),
+    size: 'compact',
+    currentHref: '/docs/theming/dark-mode',
+  },
+  play: async ({ canvasElement }) => {
+    const current = canvasElement.querySelector('[aria-current="page"]');
+    await expect(current).toHaveTextContent('Dark mode');
+    await expect(current?.closest('[inert]')).toBeNull();
   },
 };

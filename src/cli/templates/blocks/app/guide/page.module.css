@@ -1,0 +1,94 @@
+/*
+ * The docs page's own spacing. Every value is a rift-ds token, except the
+ * specimen height, explained where it is set.
+ */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.lead {
+  margin: 0;
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  color: var(--color-text-secondary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-400);
+  padding-block-start: var(--padding-500);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--gap-400);
+}
+
+/* A small stage for a Do or Don't specimen: tall enough for one control
+   with room around it. */
+.specimen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(3 * var(--control-height-default));
+  line-height: normal;
+}
+
+.pageFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding-block-start: var(--padding-1000);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.updated {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.feedbackRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+.feedbackQuestion,
+.feedbackThanks {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.feedbackNote {
+  /* A note field the width of a short sentence, not of the article. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  max-width: 480px;
+}

@@ -6,7 +6,7 @@
   "label": "Pagination",
   "slug": "pagination",
   "category": "navigation",
-  "description": "Numbered page navigation for long datasets, with ellipses, disabled end arrows, and a compact readout mode.",
+  "description": "Numbered page navigation with ellipses and a compact readout, or links to the previous and next page of a sequence.",
   "client": true,
   "importPath": "rift-ds/components/Pagination/Pagination",
   "barrel": "main",
@@ -16,6 +16,64 @@
     {
       "component": "Pagination",
       "props": [
+        {
+          "name": "variant",
+          "type": "\"numbered\" | \"adjacent\"",
+          "typeKind": "enum",
+          "values": [
+            "adjacent",
+            "numbered"
+          ],
+          "required": false,
+          "description": "The pager's form. `numbered` (the default) steps through numbered pages\nof one list. `adjacent` links to the page before and after this one in\na sequence (a guide's chapters, a set of articles) as two cards naming\nthem, and takes `previous` and `next` instead of page numbers.",
+          "default": "numbered"
+        },
+        {
+          "name": "previous",
+          "type": "PaginationLink",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The page before this one, for the `adjacent` form. Leave it out on the first page.",
+          "typeRefs": [
+            "PaginationLink"
+          ]
+        },
+        {
+          "name": "next",
+          "type": "PaginationLink",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The page after this one, for the `adjacent` form. Leave it out on the last page.",
+          "typeRefs": [
+            "PaginationLink"
+          ]
+        },
+        {
+          "name": "previousText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The eyebrow over the previous page's title in the `adjacent` form.",
+          "default": "Previous"
+        },
+        {
+          "name": "nextText",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The eyebrow over the next page's title in the `adjacent` form.",
+          "default": "Next"
+        },
+        {
+          "name": "linkComponent",
+          "type": "LinkComponent",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The component that renders the `adjacent` form's links, such as Next.js's `Link`. Defaults to the nearest LinkProvider's, else a plain `<a>`.",
+          "typeRefs": [
+            "LinkComponent"
+          ]
+        },
         {
           "name": "page",
           "type": "number",
@@ -35,8 +93,9 @@
           "name": "pageCount",
           "type": "number",
           "typeKind": "primitive",
-          "required": true,
-          "description": "Total number of pages"
+          "required": false,
+          "description": "Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it.",
+          "default": 1
         },
         {
           "name": "onPageChange",
@@ -123,6 +182,30 @@
       ]
     }
   ],
+  "types": {
+    "LinkComponent": {
+      "kind": "type",
+      "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+      "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+      "refs": [
+        "LinkComponentProps"
+      ]
+    },
+    "LinkComponentProps": {
+      "kind": "type",
+      "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+      "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+    },
+    "PaginationLink": {
+      "kind": "interface",
+      "definition": "interface PaginationLink {\n  /** Where the link goes. */\n  href: string;\n  /** The page's title, shown under the Previous or Next eyebrow. */\n  label: string;\n}",
+      "description": "A neighbouring page the `adjacent` form links to."
+    }
+  },
+  "externalTypes": {
+    "ComponentPropsWithRef": "react",
+    "ElementType": "react"
+  },
   "keyboard": [
     {
       "pattern": "button",

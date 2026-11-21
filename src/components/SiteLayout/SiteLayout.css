@@ -1,0 +1,243 @@
+/* ============================================
+   SITE LAYOUT COMPONENT
+   The frame of a documentation or marketing site:
+   header, sidebar, main, aside and footer, laid out
+   by two independent choices, the page's width
+   (the shell recipe's width axis) and where the
+   sidebar docks. No surface of its own, not even
+   the page colour: what lies behind shows through.
+   ============================================ */
+
+.ds-site-layout {
+  /* The header's height, the same calc SiteHeader uses for its bar, so the
+     sticky columns start below it. An override hook for another header. */
+  --ds-site-layout-header-height: calc(var(--control-height-default) + var(--padding-1000));
+  /* The window's height, an override hook for a host that pins it (a page
+     drawn in a scaled preview frame sets its own). */
+  --ds-site-layout-viewport-height: 100vh;
+  /* Column widths: room for a page title or a section name on one line. */
+  --ds-site-layout-sidebar-width: calc(6.5 * var(--control-height-default));
+  --ds-site-layout-aside-width: calc(5 * var(--control-height-default));
+  /* The room between the header and the page, the site's own page rhythm:
+     the sidebar, the main column and the aside all start this far down. */
+  --ds-site-layout-top-gap: var(--gap-1500);
+  /* A heading jump lands clear of the sticky header and of the blur that
+     fades out below its bar (SiteHeader's --ds-site-header-blur-reach,
+     --gap-1500), with a beat to spare, so the heading is never cut off. */
+  --ds-heading-scroll-margin: calc(
+    var(--ds-site-layout-header-height) + var(--ds-site-header-blur-reach, var(--gap-1500)) + var(--gap-200)
+  );
+  display: flex;
+  flex-direction: column;
+  /* The whole width of whatever holds it, a flex parent that centres its
+     children included: the frame is the page, never a column in one. */
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: var(--ds-site-layout-viewport-height);
+  /* No background: the page behind is the floor, so an ambient field or a
+     shader the host paints there shows through the frame. */
+}
+
+/* ============================================
+   BODY AND ROW
+   The row is the width axis: contained, it centres
+   at the contained width; full, it runs edge to
+   edge. Docked to the content, the sidebar is the
+   row's first column; docked to the edge, it sits
+   before the row and the row takes the room after.
+   ============================================ */
+
+.ds-site-layout__body {
+  display: flex;
+  flex: 1 0 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-site-layout__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  /* The site's column gap, the room between a page's columns. */
+  gap: var(--gap-1500);
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+  margin-inline: auto;
+  padding-inline: var(--ds-shell-gutter);
+  box-sizing: border-box;
+}
+
+.ds-site-layout--dock-content.ds-site-layout--with-sidebar .ds-site-layout__row {
+  grid-template-columns: var(--ds-site-layout-sidebar-width) minmax(0, 1fr);
+}
+
+.ds-site-layout--with-aside .ds-site-layout__row {
+  grid-template-columns: minmax(0, 1fr) var(--ds-site-layout-aside-width);
+}
+
+.ds-site-layout--dock-content.ds-site-layout--with-sidebar.ds-site-layout--with-aside .ds-site-layout__row {
+  grid-template-columns: var(--ds-site-layout-sidebar-width) minmax(0, 1fr) var(--ds-site-layout-aside-width);
+}
+
+/* ============================================
+   SIDEBAR
+   Sticks below the header and holds the window's
+   height, so a scrollable NavList inside scrolls on
+   its own. Docked to the edge it carries the gutter
+   on its start side and a hairline on its end.
+   ============================================ */
+
+.ds-site-layout__sidebar {
+  position: sticky;
+  top: var(--ds-site-layout-header-height);
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  height: calc(var(--ds-site-layout-viewport-height) - var(--ds-site-layout-header-height));
+  min-height: 0;
+  /* Its list starts the top gap down, and scrolls up through it. */
+  padding-block-start: var(--ds-site-layout-top-gap);
+  box-sizing: border-box;
+}
+
+.ds-site-layout--dock-edge .ds-site-layout__sidebar {
+  position: sticky;
+  flex: none;
+  width: calc(var(--ds-site-layout-sidebar-width) + var(--ds-shell-gutter));
+  padding-inline: var(--ds-shell-gutter) var(--padding-300);
+}
+
+/* Docked to the edge, the content sits the column gap off the divider,
+   not the gutter, so it never crowds the sidebar, and takes the same gap
+   at the window's end, so it centres between the two edges (an edge-pinned
+   aside sits in that end margin). */
+.ds-site-layout--dock-edge.ds-site-layout--with-sidebar .ds-site-layout__row {
+  padding-inline: var(--gap-1500);
+}
+
+/* The edge-docked sidebar's divider: a hairline that fades out at both
+   ends, so it reads as a seam between the sidebar and the page rather than
+   a box drawn around the list. */
+.ds-site-layout--dock-edge .ds-site-layout__sidebar::after {
+  content: '';
+  position: absolute;
+  /* From where the list starts, not from the header's edge. */
+  inset-block: var(--ds-site-layout-top-gap) 0;
+  inset-inline-end: 0;
+  width: var(--border-025);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-divider) var(--gap-1000),
+    var(--color-divider) calc(100% - var(--gap-1000)),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* ============================================
+   MAIN AND ASIDE
+   ============================================ */
+
+.ds-site-layout__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  min-width: 0;
+  padding-block: var(--ds-site-layout-top-gap) var(--padding-1500);
+  outline: none;
+}
+
+.ds-site-layout__aside {
+  position: sticky;
+  top: var(--ds-site-layout-header-height);
+  align-self: start;
+  padding-block-start: var(--ds-site-layout-top-gap);
+}
+
+/* Pinned to the window's end edge (asidePlacement="edge"): out of the
+   grid, centred on the height, a gutter in from the edge, so the content
+   keeps the room a column would take. --ds-site-layout-aside-end moves it
+   in from the edge, for a host that reserves room there (a docked chat). */
+.ds-site-layout--aside-edge .ds-site-layout__aside {
+  position: fixed;
+  inset-block-start: 50%;
+  inset-inline-end: var(--ds-site-layout-aside-end, var(--ds-shell-gutter));
+  padding-block-start: 0;
+  transform: translateY(-50%);
+  /* Above the page's content, below the sticky header and its menus. */
+  z-index: 5;
+  transition: inset-inline-end var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* ============================================
+   FOOTER
+   A fading hairline above, the width axis inside.
+   ============================================ */
+
+.ds-site-layout__footer {
+  position: relative;
+  /* Room between the page and the footer, so the body (the sidebar's last
+     rows included) ends well clear of the line above it. */
+  margin-block-start: var(--gap-2000);
+}
+
+/* The line above the footer fades out at both ends, the sidebar divider's
+   treatment turned on its side. */
+.ds-site-layout__footer::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: var(--border-025);
+  background: linear-gradient(
+    to right, /* ds-allow(physical): a symmetric fade, the same at both ends in either reading direction */
+    transparent,
+    var(--color-divider) var(--gap-1500),
+    var(--color-divider) calc(100% - var(--gap-1500)),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.ds-site-layout__footer-row {
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+  margin-inline: auto;
+  padding-inline: var(--ds-shell-gutter);
+  box-sizing: border-box;
+}
+
+/* ============================================
+   RESPONSIVE
+   Below 1152px the aside gives way; below 960px
+   the sidebar leaves the page to the header's menu.
+   ============================================ */
+
+@media (max-width: 1151px) {
+  .ds-site-layout__aside {
+    display: none;
+  }
+
+  .ds-site-layout--with-aside .ds-site-layout__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ds-site-layout--dock-content.ds-site-layout--with-sidebar.ds-site-layout--with-aside .ds-site-layout__row {
+    grid-template-columns: var(--ds-site-layout-sidebar-width) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 959px) {
+  .ds-site-layout__sidebar,
+  .ds-site-layout--aside-edge .ds-site-layout__aside {
+    display: none;
+  }
+
+  /* The sidebar's room and gap go with it: the content takes the header's
+     gutter, so it lines up with the brand above it. */
+  .ds-site-layout.ds-site-layout .ds-site-layout__row {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: var(--ds-shell-gutter);
+  }
+}

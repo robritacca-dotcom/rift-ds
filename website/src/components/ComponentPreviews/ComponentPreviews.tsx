@@ -80,6 +80,8 @@ import { NumberInput } from "rift-ds/components/NumberInput/NumberInput";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
 import { InterruptCard } from "rift-ds/components/InterruptCard/InterruptCard";
 import { Kbd } from "rift-ds/components/Kbd/Kbd";
+import { CopyButton } from "rift-ds/components/CopyButton/CopyButton";
+import { Menubar } from "rift-ds/components/Menubar/Menubar";
 import { InspectorColorPicker } from "rift-ds/components/Inspector/InspectorColorPicker";
 import { InspectorDropdown } from "rift-ds/components/Inspector/InspectorDropdown";
 import { InspectorInput } from "rift-ds/components/Inspector/InspectorInput";
@@ -1377,6 +1379,79 @@ const previews: Record<string, () => ReactNode> = {
           ]}
           values={[{ questionId: "framework", values: ["next"] }]}
         />
+      </div>
+    </>
+  ),
+  "copy-button": () => (
+    <>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <CopyButton value="npm install rift-ds" variant="secondary" size="default" />
+        <CopyButton value="npm install rift-ds" iconOnly copyLabel="Copy command" />
+      </div>
+    </>
+  ),
+  "menubar": () => (
+    <>
+      <div style={{ pointerEvents: "none" }} aria-hidden="true" inert>
+        <Menubar
+          size="compact"
+          label="Preview menu bar"
+          menus={[
+            { label: "File", items: [{ label: "New" }] },
+            { label: "Edit", items: [{ label: "Undo" }] },
+            { label: "View", items: [{ label: "Zoom" }] },
+          ]}
+        />
+      </div>
+    </>
+  ),
+  "back-to-top": () => (
+    <>
+      <div aria-hidden="true" inert style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px", width: "70%" }}>
+        {[100, 92, 84, 60].map((w) => (
+          <div key={w} style={{ width: `${w}%`, height: "8px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+        ))}
+        <IconButton icon="arrow_upward" label="Back to top" variant="primary" tone="neutral" size="compact" tooltip={false} />
+      </div>
+    </>
+  ),
+  "site-footer": () => (
+    <>
+      <div aria-hidden="true" inert style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", width: "80%" }}>
+        {["Docs", "Components", "Community"].map((title) => (
+          <div key={title} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <span style={{ font: "var(--font-paragraph-sm-emphasis-weight) var(--font-caption-size)/1.2 var(--font-family-body)", color: "var(--color-text-primary)" }}>{title}</span>
+            {[80, 64, 72].map((w) => (
+              <div key={w} style={{ width: `${w}%`, height: "6px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+            ))}
+          </div>
+        ))}
+        <div style={{ gridColumn: "1 / -1", borderTop: "1px solid var(--color-divider)", paddingTop: "8px" }}>
+          <div style={{ width: "40%", height: "6px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+        </div>
+      </div>
+    </>
+  ),
+  "site-layout": () => (
+    <>
+      <div aria-hidden="true" inert style={{ display: "grid", gridTemplateColumns: "22% 1fr 18%", gridTemplateRows: "14px 1fr", gap: "8px", width: "80%", height: "70%" }}>
+        <div style={{ gridColumn: "1 / -1", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px", borderInlineEnd: "1px solid var(--color-divider)", paddingInlineEnd: "6px" }}>
+          {[90, 70, 80, 60, 75].map((w) => (
+            <div key={w} style={{ width: `${w}%`, height: "5px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ width: "60%", height: "10px", borderRadius: "999px", background: "var(--color-text-tertiary)" }} />
+          {[100, 95, 88, 92].map((w) => (
+            <div key={w} style={{ width: `${w}%`, height: "5px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          {[80, 60, 70].map((w) => (
+            <div key={w} style={{ width: `${w}%`, height: "4px", borderRadius: "999px", background: "var(--color-bg-container-tertiary)" }} />
+          ))}
+        </div>
       </div>
     </>
   ),

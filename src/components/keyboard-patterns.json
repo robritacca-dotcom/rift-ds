@@ -176,6 +176,63 @@
         }
       ]
     },
+    "menubar": {
+      "label": "Menu bar",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/menubar/",
+      "rows": [
+        {
+          "id": "tab-stop",
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the bar at the last menu it was on, and out of the bar on the next press."
+        },
+        {
+          "id": "next",
+          "keys": [
+            "ArrowRight"
+          ],
+          "inline": true,
+          "text": "Moves to the next menu, opening it if a menu is open."
+        },
+        {
+          "id": "previous",
+          "keys": [
+            "ArrowLeft"
+          ],
+          "inline": true,
+          "text": "Moves to the previous menu, opening it if a menu is open."
+        },
+        {
+          "id": "last",
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last menu."
+        },
+        {
+          "id": "first",
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first menu."
+        },
+        {
+          "id": "open",
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Opens the menu and moves into it; the menu's own keys then apply."
+        },
+        {
+          "id": "dismiss",
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes the open menu and returns focus to its name in the bar."
+        }
+      ]
+    },
     "combobox": {
       "label": "Combobox",
       "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/combobox/",

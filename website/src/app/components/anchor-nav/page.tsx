@@ -96,6 +96,16 @@ export default function AnchorNavPage() {
             </div>
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Read from the page" />
+            <div className={styles.kitDemo}>
+              <AnchorNav fromHeadings={{ root: "#main-content" }} />
+              <p className={styles.kitNote}>
+                Leave out <code>items</code> and pass <code>fromHeadings</code>, and the list reads the page&apos;s section headings, making ids for any that have none. This one lists the sections of this page.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="anchor-nav" />
         </main>
       </div>

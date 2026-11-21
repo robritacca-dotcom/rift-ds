@@ -1,0 +1,28 @@
+/* ============================================
+   BACK TO TOP COMPONENT
+   A neutral IconButton pinned to the bottom end corner,
+   fading and rising in once the page has scrolled.
+   ============================================ */
+
+.ds-back-to-top {
+  position: fixed;
+  inset-block-end: var(--ds-back-to-top-inset, var(--gap-500));
+  inset-inline-end: var(--ds-back-to-top-inset, var(--gap-500));
+  z-index: var(--layer-sticky);
+  opacity: 0;
+  transform: translateY(var(--gap-200));
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-back-to-top--shown {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.ds-back-to-top .ds-icon-button {
+  box-shadow: var(--shadow-floating);
+}

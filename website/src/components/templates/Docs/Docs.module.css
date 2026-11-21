@@ -1,0 +1,182 @@
+/* The docs template's own touches. SiteLayout owns the frame, the columns,
+   the widths and the fold; this sheet styles the article and the sidebar's
+   foot. Every value is a semantic token, except the reading width, said
+   where it is set. */
+
+/* The templates carousel pins the window's height in its scaled frames,
+   and the frame stretches across the site body's own padding (the family's
+   pattern; the primitives mirror the body's inset in globals.css), so a
+   full-width header and an edge-docked sidebar meet the window's edges. */
+.layout {
+  --ds-site-layout-viewport-height: calc(var(--layout-viewport-height, 100vh));
+  width: calc(100% + var(--primitive-padding-1000) * 2);
+  margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-1000));
+  /* A documentation page reads on the crispest surface the theme has (white
+     in light mode), with the site's ambient field turned off for the route,
+     so nothing moves behind the text. SiteLayout itself draws no fill. */
+  background-color: var(--color-bg-container-primary);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+/* The article reads the page's width axis: contained, it holds a reading
+   width (760px keeps a paragraph near 75 characters in the body face),
+   centred in its column; full, it runs the whole column. */
+.article {
+  display: flex;
+  flex-direction: column;
+  /* The site's section rhythm: a wide beat between the article's sections,
+     a narrower one inside each. */
+  gap: var(--gap-1000);
+  width: 100%;
+  max-width: var(--ds-shell-content-max, 760px);
+  /* Centred in its column, so the room either side of the article (to the
+     sidebar and to the on-this-page rail) is even. */
+  margin-inline: auto;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.titleActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  padding-block-end: var(--padding-200);
+}
+
+.lead {
+  margin: 0;
+  font-family: var(--font-sub-display-family);
+  font-size: var(--font-sub-display-size);
+  font-weight: var(--font-sub-display-weight);
+  line-height: var(--font-sub-display-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* The page's description under the subtitle: the component pages' intro
+   body, running text in the paragraph face. */
+.introBody {
+  margin: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  color: var(--color-text-primary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  /* The component pages' rhythm under a ruled section title. */
+  gap: var(--gap-1000);
+}
+
+/* A Do or Don't specimen's stage: three control rows tall. */
+.specimen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(3 * var(--control-height-default));
+  line-height: normal;
+}
+
+.pageFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding-block-start: var(--padding-1000);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+}
+
+.updated {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+.feedbackRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+}
+
+.feedbackText {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+/* The note field: a short sentence's width, not the article's. */
+.feedbackNote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+  max-width: 480px;
+}
+
+/* The docked assistant's room: at the dock threshold (DOCK_QUERY in
+   rift-ds/chat) the page gives up the panel's width and its gap on both
+   sides, as TemplateShell's floating layout does; below it the panel
+   overlays and the page keeps its width. */
+@media (min-width: 1440px) {
+  .layoutChatOpen {
+    padding-inline-end: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
+    /* The floating rail moves in from the edge the panel now holds. */
+    --ds-site-layout-aside-end: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2 + var(--ds-shell-gutter));
+    transition: padding-inline-end var(--motion-duration-slow) var(--motion-ease-emphasized);
+  }
+}
+
+/* The body's own padding steps down on narrower screens (globals.css), so
+   the stretch across it steps with it, the landing page's pattern. */
+@media (max-width: 959px) {
+  .layout {
+    width: calc(100% + var(--primitive-padding-500) * 2);
+    margin: calc(-1 * var(--primitive-padding-500));
+  }
+}
+
+@media (max-width: 600px) {
+  .layout {
+    width: calc(100% + var(--primitive-padding-400) * 2);
+    margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-400));
+  }
+}

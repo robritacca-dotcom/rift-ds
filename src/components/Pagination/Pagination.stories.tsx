@@ -90,3 +90,22 @@ export const Uncontrolled: Story = {
     pageCount: 10,
   },
 };
+
+/** The page before and after this one in a sequence, as two titled links. */
+export const Adjacent: Story = {
+  args: {
+    variant: 'adjacent',
+    previous: { href: '#installation', label: 'Installation' },
+    next: { href: '#theming', label: 'Theming' },
+  },
+  parameters: { layout: 'padded' },
+};
+
+/** The first page of a sequence: no previous page, so its half stays empty. */
+export const AdjacentFirstPage: Story = {
+  args: {
+    variant: 'adjacent',
+    next: { href: '#installation', label: 'Installation' },
+  },
+  parameters: { layout: 'padded' },
+};

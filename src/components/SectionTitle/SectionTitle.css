@@ -43,3 +43,39 @@
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-tertiary);
 }
+
+/* Anchor: Heading's "#" link to the section, quiet until the heading is
+   hovered or the link focused, and a scroll margin so a jump clears a
+   sticky header (--ds-heading-scroll-margin, as on Heading). */
+.ds-section-title__heading--anchored {
+  scroll-margin-block-start: var(--ds-heading-scroll-margin, var(--gap-500));
+}
+
+.ds-section-title__anchor {
+  margin-inline-start: 0.3em; /* ds-allow(typography): a word-space after the title at any tier, as on Heading */
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-section-title__heading:hover .ds-section-title__anchor,
+.ds-section-title__anchor:focus-visible {
+  opacity: 1;
+}
+
+.ds-section-title__anchor:hover {
+  color: var(--color-text-secondary);
+}
+
+.ds-section-title__anchor:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-100);
+}
+
+@media (hover: none) {
+  .ds-section-title__anchor {
+    opacity: 1;
+  }
+}

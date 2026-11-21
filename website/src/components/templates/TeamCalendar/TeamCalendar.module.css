@@ -6,7 +6,9 @@
 
 .content {
   width: 100%;
-  max-width: 1680px;
+  /* This screen's contained width; the shell centres the column at it
+     unless the page runs full width (the shell recipe's width axis). */
+  --ds-shell-contained-width: 1680px;
   min-width: 0;
   min-height: 0;
   display: flex;

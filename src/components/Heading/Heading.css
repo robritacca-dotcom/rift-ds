@@ -127,3 +127,46 @@
 .ds-heading--align-end {
   text-align: end;
 }
+
+/* ============================================
+   ANCHOR
+   A quiet "#" after the text that links to the heading itself.
+   Hidden until the heading is hovered or the link is focused, so a
+   page of headings reads clean; a focused link always shows. The
+   heading keeps a scroll margin so a jump lands it clear of a sticky
+   header (a page sets --ds-heading-scroll-margin to its header's height).
+   ============================================ */
+
+.ds-heading--anchored {
+  scroll-margin-block-start: var(--ds-heading-scroll-margin, var(--gap-500));
+}
+
+.ds-heading__anchor {
+  margin-inline-start: 0.3em; /* ds-allow(typography): the gap follows the heading's own size, so every tier sets the mark a word-space away */
+  color: var(--color-text-tertiary);
+  font-weight: inherit;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-heading:hover .ds-heading__anchor,
+.ds-heading__anchor:focus-visible {
+  opacity: 1;
+}
+
+.ds-heading__anchor:hover {
+  color: var(--color-text-secondary);
+}
+
+.ds-heading__anchor:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-100);
+}
+
+@media (hover: none) {
+  .ds-heading__anchor {
+    opacity: 1;
+  }
+}

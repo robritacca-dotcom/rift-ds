@@ -1,6 +1,6 @@
 # Table
 
-Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.
+Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -52,6 +52,8 @@ interface TableColumn {
   sort?: 'asc' | 'desc';
   /** Whether this column names each row. Its cells render as row headers (`<th scope="row">`), so moving along a row announces which record it is. */
   rowHeader?: boolean;
+  /** Set the column's cells in the code face, wrapping long values at any character: for prop names, types, defaults, tokens and other code a reference table lists. */
+  mono?: boolean;
 }
 ```
 

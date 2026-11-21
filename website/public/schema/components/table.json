@@ -6,7 +6,7 @@
   "label": "Table",
   "slug": "table",
   "category": "data-display",
-  "description": "Data table with flexible cell content, striped rows, compact sizing, and support for icons, inputs, buttons, and interactive controls.",
+  "description": "Data table with flexible cell content, striped rows, compact sizing, code columns, and support for icons, inputs and controls.",
   "client": false,
   "importPath": "rift-ds/components/Table/Table",
   "barrel": "main",
@@ -101,7 +101,7 @@
   "types": {
     "TableColumn": {
       "kind": "interface",
-      "definition": "interface TableColumn {\n  /** Unique column identifier, used as the key into each row's cells */\n  key: string;\n  /** Header label displayed in the column header */\n  header: React.ReactNode;\n  /** Optional column width (CSS value like '200px', '30%', 'auto') */\n  width?: string;\n  /** Text alignment for cells in this column. `start` (the default) and `end` follow the reading direction, so a number column set to `end` sits right in English and left in Arabic; `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */\n  sort?: 'asc' | 'desc';\n  /** Whether this column names each row. Its cells render as row headers (`<th scope=\"row\">`), so moving along a row announces which record it is. */\n  rowHeader?: boolean;\n}"
+      "definition": "interface TableColumn {\n  /** Unique column identifier, used as the key into each row's cells */\n  key: string;\n  /** Header label displayed in the column header */\n  header: React.ReactNode;\n  /** Optional column width (CSS value like '200px', '30%', 'auto') */\n  width?: string;\n  /** Text alignment for cells in this column. `start` (the default) and `end` follow the reading direction, so a number column set to `end` sits right in English and left in Arabic; `left` and `right` are screen sides. */\n  align?: 'start' | 'center' | 'end' | 'left' | 'right';\n  /** The column's current sort, the direction DataTable's sorts use, set as `aria-sort` on its header so a screen reader announces it while reading the column. Leave unset on unsorted columns. */\n  sort?: 'asc' | 'desc';\n  /** Whether this column names each row. Its cells render as row headers (`<th scope=\"row\">`), so moving along a row announces which record it is. */\n  rowHeader?: boolean;\n  /** Set the column's cells in the code face, wrapping long values at any character: for prop names, types, defaults, tokens and other code a reference table lists. */\n  mono?: boolean;\n}"
     },
     "TableRow": {
       "kind": "interface",

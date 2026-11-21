@@ -1,6 +1,6 @@
 # Heading
 
-A heading whose outline level and type tier are chosen apart.
+A heading whose outline level and type tier are chosen apart, with an optional link to itself.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -22,6 +22,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | truncate | `boolean` | no | `false` | Keep the heading on one line, ending in an ellipsis where it runs out of room. The full text stays in the accessible name. |
 | balance | `boolean` | no | `false` | Balance the lines of a heading that wraps, so the last line is never a lone word. |
 | align | `"center" \| "start" \| "end"` | no |  | Where the text sits on the line, along the reading direction. |
+| anchor | `string \| boolean` | no |  | Give the heading an id and a "#" link to itself, shown on hover and focus, so a reader can link straight to the section. `true` makes the id from the heading's text ("Getting started" becomes `getting-started`); a string sets it. An `id` passed directly wins. |
+| anchorLabel | `((text: string) => string)` | no | `` (text) => `Link to ${text}` `` | Accessible name of the anchor link, given the heading's text. Defaults to "Link to <text>". |
 | children | `ReactNode` | no |  | The heading's text. |
 | className | `string` | no | `''` | Additional CSS classes. |
 

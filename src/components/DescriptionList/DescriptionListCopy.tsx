@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { IconButton } from '../IconButton/IconButton';
-import { MOTION_FEEDBACK_RESET_MS } from '../../tokens/motion';
+import { CopyButton } from '../CopyButton/CopyButton';
 
 /** Props owned by DescriptionListCopy. */
 export interface DescriptionListCopyProps {
@@ -16,52 +14,21 @@ export interface DescriptionListCopyProps {
   onCopied?: (value: string) => void;
 }
 
-/** Put text on the clipboard: the async API, else a selected textarea, for an embedded browser or a page served over http. */
-function writeClipboard(text: string) {
-  const fallback = () => {
-    // Selecting the textarea takes focus, and removing it would leave focus
-    // on the page body: hand it back, so the next key still reaches the
-    // button that was pressed.
-    const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.className = 'ds-visually-hidden';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    focused?.focus({ preventScroll: true });
-  };
-  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(fallback);
-  else fallback();
-}
-
 /**
  * The copy button beside a description list value. Internal: DescriptionList
  * renders it for a `copyable` item, so the list itself stays
- * server-renderable. A compact tertiary IconButton whose glyph and name
- * turn to "Copied" for a moment after a press.
+ * server-renderable. An icon-only CopyButton whose glyph and name turn to
+ * "Copied" for a moment after a press.
  */
 export function DescriptionListCopy({ value, label, copiedLabel, onCopied }: DescriptionListCopyProps) {
-  const [copied, setCopied] = useState(false);
-  const timer = useRef<number | undefined>(undefined);
-  useEffect(() => () => window.clearTimeout(timer.current), []);
-  const copy = () => {
-    writeClipboard(value);
-    onCopied?.(value);
-    setCopied(true);
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setCopied(false), MOTION_FEEDBACK_RESET_MS);
-  };
   return (
-    <IconButton
+    <CopyButton
       className="ds-description-list__copy"
-      icon={copied ? 'check' : 'content_copy'}
-      variant="tertiary"
-      size="compact"
-      label={copied ? copiedLabel : label}
-      onClick={copy}
+      value={value}
+      iconOnly
+      copyLabel={label}
+      copiedLabel={copiedLabel}
+      onCopied={onCopied}
     />
   );
 }

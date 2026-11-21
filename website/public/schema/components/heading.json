@@ -6,7 +6,7 @@
   "label": "Heading",
   "slug": "heading",
   "category": "typography",
-  "description": "A heading whose outline level and type tier are chosen apart.",
+  "description": "A heading whose outline level and type tier are chosen apart, with an optional link to itself.",
   "client": false,
   "importPath": "rift-ds/components/Heading/Heading",
   "barrel": "main",
@@ -92,6 +92,21 @@
           ],
           "required": false,
           "description": "Where the text sits on the line, along the reading direction."
+        },
+        {
+          "name": "anchor",
+          "type": "string | boolean",
+          "typeKind": "other",
+          "required": false,
+          "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, so a reader can link straight to the section. `true` makes the\nid from the heading's text (\"Getting started\" becomes\n`getting-started`); a string sets it. An `id` passed directly wins."
+        },
+        {
+          "name": "anchorLabel",
+          "type": "((text: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Accessible name of the anchor link, given the heading's text. Defaults to \"Link to <text>\".",
+          "defaultExpression": "(text) => `Link to ${text}`"
         },
         {
           "name": "children",

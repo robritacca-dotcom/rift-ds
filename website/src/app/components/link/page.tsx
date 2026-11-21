@@ -52,6 +52,16 @@ export default function LinkPage() {
             </div>
           </section>
 
+          <section className={styles.section}>
+            <SectionTitle title="Skip link" />
+            <div className={styles.kitDemo}>
+              <Link variant="skip" href="#main-content">Skip to content</Link>
+              <p className={styles.kitNote}>
+                Put it first on the page. It stays hidden until a keyboard reader tabs to it, then appears at the top so they can pass the header and navigation in one press. Press Tab from the address bar to see it.
+              </p>
+            </div>
+          </section>
+
           <ComponentInstallStrip slug="link" />
         </main>
       </div>

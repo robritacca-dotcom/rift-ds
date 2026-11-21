@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Badge } from '../Badge/Badge';
 import { Table } from './Table';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
@@ -376,5 +377,44 @@ export const MixedContent: Story = {
     ],
     caption: 'Team members',
     captionHidden: true,
+  },
+};
+
+/** A props reference: code columns that wrap, a Badge for a required prop. */
+export const PropsReference: Story = {
+  args: {
+    bordered: true,
+    size: 'compact',
+    caption: 'Props',
+    columns: [
+      { key: 'prop', header: 'Prop', mono: true, width: '22%', rowHeader: true },
+      { key: 'type', header: 'Type', mono: true, width: '30%' },
+      { key: 'default', header: 'Default', mono: true, width: '14%' },
+      { key: 'description', header: 'Description' },
+    ],
+    rows: [
+      {
+        id: 'items',
+        cells: {
+          prop: <>items <Badge label="Required" variant="neutral" /></>,
+          type: 'NavListEntry[]',
+          default: '–',
+          description: 'Navigation tree to render.',
+        },
+      },
+      {
+        id: 'size',
+        cells: { prop: 'size', type: "'default' | 'compact'", default: "'default'", description: 'Row density.' },
+      },
+      {
+        id: 'onExpandedChange',
+        cells: {
+          prop: 'onExpandedChange',
+          type: '(expandedIds: string[]) => void',
+          default: '–',
+          description: 'Fires with the full new list of expanded ids.',
+        },
+      },
+    ],
   },
 };

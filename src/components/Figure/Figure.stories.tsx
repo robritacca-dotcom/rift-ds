@@ -51,3 +51,17 @@ export const NoCaption: Story = {
     children: <img src={PHOTOS[4]} alt="Red light running through a dark valley" />,
   },
 };
+
+/** A guideline's Do and Don't pair: two verdict figures side by side. */
+export const DoAndDont: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-400)' }}>
+      <Figure variant="positive" caption="Crop to the subject, so the eye lands where the story is.">
+        <img src={PHOTO_PORTRAIT} alt="A green mountain split by a long crack, cropped close" />
+      </Figure>
+      <Figure variant="error" caption="Leave the subject small in a wide frame of empty sky.">
+        <img src={PHOTO_LANDSCAPE} alt="A small figure in a wide canyon" />
+      </Figure>
+    </div>
+  ),
+};

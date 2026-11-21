@@ -316,6 +316,18 @@
   --color-pixel-ink-5: var(--primitive-blue-07);
   --color-pixel-ink-6: var(--primitive-purple-08);
 
+  /* Code - Syntax roles for highlighted code in a CodeBlock. Text on
+     a card, so each holds 4.5:1 against --color-bg-container-primary in
+     every theme. Never the brand ramp: a theme re-points it, and a keyword
+     would turn into a second action colour. A comment reads as quiet text,
+     so it aliases the tertiary text role. Unhighlighted code stays
+     monochrome; these only colour code a consumer has run a highlighter over. */
+  --color-code-keyword: var(--primitive-purple-08);
+  --color-code-string: var(--primitive-green-09);
+  --color-code-function: var(--primitive-blue-08);
+  --color-code-constant: var(--primitive-orange-09);
+  --color-code-comment: var(--color-text-tertiary);
+
   /* Count badge - The solid pill a count rides on an icon's corner or
      trails a row with (a toolbar's filter count, a tab's unread count, a
      nav row's count, a bar's dot): the error

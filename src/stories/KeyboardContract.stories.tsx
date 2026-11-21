@@ -127,6 +127,7 @@ const FIXTURES: Record<string, Fixture> = {
   'Reasoning:disclosure': { story: 'Default' },
   'ToolCall:disclosure': { story: 'Default' },
   'CodeBlock:disclosure': { story: 'Collapsible' },
+  'CodeBlock:tabs': { story: 'PackageManagerTabs' },
   'AgentPlan:disclosure': { story: 'WithDetails' },
   'SourceTrail:disclosure': { story: 'WithDetails' },
   'Popover:disclosure': { story: 'Default' },
@@ -581,6 +582,33 @@ const RUNNERS: Record<PatternId, Runner> = {
   toolbar: roving('[role="toolbar"]', 'button, a[href], input, select, [tabindex]', undefined, false),
   'radio-group': roving('[role="radiogroup"]', '[role="radio"]', 'aria-checked'),
 
+  // The bar is a roving set of menu names; ArrowDown opens the focused one
+  // and Escape brings focus back to its name. The open menu's own keys are
+  // the menu pattern's, which its DropdownMenu already holds.
+  menubar: async (context) => {
+    const triggers = '[role="menuitem"][aria-haspopup]';
+    await roving('[role="menubar"]', triggers)(context);
+    const { host, done } = context;
+    const first = enabled(host.querySelectorAll(`[role="menubar"] ${triggers}`))[0];
+    first.focus();
+    await press('ArrowDown');
+    const menu = await waitFor(() => {
+      const found = [...document.querySelectorAll('[role="menu"]')].find(shown);
+      if (!found) throw new Error('open (ArrowDown): no role="menu" appeared');
+      return found;
+    });
+    await waitFor(() => {
+      if (!menu.contains(current())) throw new Error(`open (ArrowDown): focus did not move into the menu, it is on ${describe(current())}`);
+    });
+    done('open');
+    await press('Escape');
+    await waitFor(() => {
+      if (shown(menu)) throw new Error('dismiss (Escape): the menu is still open');
+      if (document.activeElement !== first) throw new Error(`dismiss (Escape): focus went to ${describe(document.activeElement)}, not back to the menu's name`);
+    });
+    done('dismiss');
+  },
+
   menu: async ({ host, fixture, done }) => {
     const opener = await fixture.open!(host);
     const menu = await waitFor(() => {
@@ -903,6 +931,7 @@ export const TabsPattern = contract('tabs');
 export const ToolbarPattern = contract('toolbar');
 export const RadioGroupPattern = contract('radio-group');
 export const MenuPattern = contract('menu');
+export const MenubarPattern = contract('menubar');
 export const ComboboxPattern = contract('combobox');
 export const DialogPattern = contract('dialog');
 export const TreePattern = contract('tree');

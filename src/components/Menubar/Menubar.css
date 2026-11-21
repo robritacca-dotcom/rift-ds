@@ -1,0 +1,82 @@
+/* ============================================
+   MENUBAR COMPONENT
+   A persistent row of menus. The bar is Toolbar's
+   shell (container fill, hairline, pill); each
+   menu is a DropdownMenu, whose panel is unchanged.
+   ============================================ */
+
+/* Base: Toolbar's pill shell, so a menu bar and a toolbar sitting in the
+   same chrome read as one family. Padding clears the focus ring's reach. */
+
+.ds-menubar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+  padding: var(--padding-100);
+  background-color: var(--color-bg-container-primary);
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-pill);
+}
+
+/* ============================================
+   TRIGGER
+   A quiet text button on the control row: the tertiary
+   button's hover, and the same wash held while its menu is open.
+   ============================================ */
+
+.ds-menubar__trigger {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--control-height-compact);
+  margin: 0;
+  padding-inline: var(--padding-300);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-menubar__trigger:hover,
+.ds-menubar__trigger[aria-expanded='true'] {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-menubar__trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-menubar__trigger[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ds-menubar__trigger[aria-disabled='true']:hover {
+  background: none;
+}
+
+/* The trigger draws its own ring; the menu's wrapper ring would double it. */
+.ds-menubar__menu .ds-dropdown-menu__trigger:focus-visible {
+  outline: none;
+}
+
+/* Compact: a smaller trigger on the same shell. */
+
+.ds-menubar--compact {
+  padding: var(--padding-050);
+}
+
+.ds-menubar--compact .ds-menubar__trigger {
+  /* One step under the compact row, so the compact bar's outer height
+     (with its padding) lands near the compact control height. */
+  height: calc(var(--control-height-compact) - var(--padding-200));
+  padding-inline: var(--padding-200);
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.32.0",
+  "kind": "component",
+  "name": "Menubar",
+  "label": "Menu bar",
+  "slug": "menubar",
+  "category": "navigation",
+  "description": "A persistent row of menus, like an app's File, Edit and View, with arrow keys along the bar.",
+  "client": true,
+  "importPath": "rift-ds/components/Menubar/Menubar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/menubar",
+  "markdownUrl": "https://rift-ds.com/components/menubar.md",
+  "exports": [
+    {
+      "component": "Menubar",
+      "props": [
+        {
+          "name": "menus",
+          "type": "MenubarMenu[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The menus, in order along the bar.",
+          "typeRefs": [
+            "MenubarMenu"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Accessible name for the bar.",
+          "default": "Menu bar"
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"compact\"",
+          "typeKind": "enum",
+          "values": [
+            "compact",
+            "default"
+          ],
+          "required": false,
+          "description": "Trigger and menu size.",
+          "default": "default"
+        },
+        {
+          "name": "keyLabels",
+          "type": "Partial<Record<string, string>>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Key names for the shortcut hints in every menu, for a keyboard other than English (passed to each DropdownMenu).",
+          "typeRefs": [
+            "ShortcutKeyLabels"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "DropdownMenuEntry": {
+      "kind": "type",
+      "definition": "type DropdownMenuEntry =\n  | DropdownMenuItem\n  | DropdownMenuSeparator\n  | DropdownMenuGroup;",
+      "refs": [
+        "DropdownMenuGroup",
+        "DropdownMenuItem",
+        "DropdownMenuSeparator"
+      ]
+    },
+    "DropdownMenuGroup": {
+      "kind": "interface",
+      "definition": "interface DropdownMenuGroup {\n  type: 'group';\n  /** Section heading */\n  label: string;\n  /** Items within the group */\n  items: DropdownMenuEntry[];\n}",
+      "refs": [
+        "DropdownMenuEntry"
+      ]
+    },
+    "DropdownMenuItem": {
+      "kind": "interface",
+      "definition": "interface DropdownMenuItem {\n  type?: 'item';\n  /** Display label */\n  label: string;\n  /** A line under the label, such as what the choice does or means. It wraps the row to two lines in the caption style; the icon stays centred on the pair. */\n  description?: string;\n  /** Keyboard shortcut hint as literal text (e.g. \"⇧ ⌘ P\"). `keys` writes it for the reader's platform instead. */\n  shortcut?: string;\n  /** Keyboard shortcut hint in the shortcut grammar (`mod+shift+p`), written for the reader's platform (⇧⌘P on a Mac, Ctrl+Shift+P elsewhere) and announced through `aria-keyshortcuts`. Display only: bind the action itself with `useShortcut`. Wins over `shortcut`. */\n  keys?: Shortcut;\n  /** Item icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** A trailing icon after the label, such as `open_in_new` on an item that opens another site. Decorative: say what the item does in its label. A Material Symbol name (string) or a custom element (ReactNode). Ignored on an item that opens a sub-menu. */\n  iconRight?: string | React.ReactNode;\n  /** Disabled state */\n  disabled?: boolean;\n  /** Marks a dangerous or irreversible item (delete, remove…): it takes the destructive colour, with the error tint on hover and focus */\n  destructive?: boolean;\n  /** Marks the item as the current choice of a set: it holds the passive wash and a trailing check, and is announced as a checked radio item. Leave undefined on plain action items; pass `false` on the unchosen members of a set so they are announced as radio items too. Ignored on an item that opens a sub-menu. */\n  selected?: boolean;\n  /** Marks the item as one of a set picked independently: it leads with the checkbox's box, ticked when true, and is announced as a checkbox item. Leave undefined on plain action items. The host toggles it in `onClick`. Ignored on an item that opens a sub-menu. */\n  checked?: boolean;\n  /** Whether choosing the item closes the menu. Defaults to false for a checkbox item, so several can be toggled in one visit, and true for every other item. */\n  closeOnSelect?: boolean;\n  /** Click handler */\n  onClick?: () => void;\n  /** Nested sub-menu items */\n  children?: DropdownMenuEntry[];\n}",
+      "refs": [
+        "DropdownMenuEntry",
+        "Shortcut"
+      ]
+    },
+    "DropdownMenuSeparator": {
+      "kind": "interface",
+      "definition": "interface DropdownMenuSeparator {\n  type: 'separator';\n}"
+    },
+    "MenubarMenu": {
+      "kind": "interface",
+      "definition": "interface MenubarMenu {\n  /** The trigger's text, e.g. \"File\". Also the open menu's accessible name. */\n  label: string;\n  /** The menu's entries, in DropdownMenu's shape: items, groups, separators, checkbox and radio items, sub-menus and shortcuts. */\n  items: DropdownMenuEntry[];\n  /** Show the trigger but do not let it open. */\n  disabled?: boolean;\n}",
+      "description": "One menu in the bar: its trigger's label and the entries it opens.",
+      "refs": [
+        "DropdownMenuEntry"
+      ]
+    },
+    "Shortcut": {
+      "kind": "type",
+      "definition": "type Shortcut = string;",
+      "description": "A shortcut in the grammar above, such as `mod+k`, `shift+?` or `g i`."
+    },
+    "ShortcutKeyLabels": {
+      "kind": "type",
+      "definition": "type ShortcutKeyLabels = Partial<Record<string, string>>;",
+      "description": "The legends a shortcut is drawn with, by modifier or key name. Merged over the platform's defaults."
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "menubar",
+      "label": "Menu bar",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/menubar/",
+      "rows": [
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the bar at the last menu it was on, and out of the bar on the next press."
+        },
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next menu, opening it if a menu is open.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous menu, opening it if a menu is open.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last menu."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first menu."
+        },
+        {
+          "keys": [
+            "ArrowDown"
+          ],
+          "text": "Opens the menu and moves into it; the menu's own keys then apply."
+        },
+        {
+          "keys": [
+            "Escape"
+          ],
+          "text": "Closes the open menu and returns focus to its name in the bar."
+        }
+      ]
+    }
+  ],
+  "alternatives": [
+    {
+      "name": "Toolbar",
+      "when": "the bar holds controls that act at once rather than menus",
+      "schemaUrl": "https://rift-ds.com/schema/components/toolbar.json"
+    },
+    {
+      "name": "DropdownMenu",
+      "when": "one menu opens from one trigger",
+      "schemaUrl": "https://rift-ds.com/schema/components/dropdown-menu.json"
+    }
+  ]
+}

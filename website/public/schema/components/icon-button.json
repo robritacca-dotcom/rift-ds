@@ -253,6 +253,11 @@
       "name": "Button",
       "when": "the action needs its words on show, with or without an icon beside them",
       "schemaUrl": "https://rift-ds.com/schema/components/button.json"
+    },
+    {
+      "name": "CopyButton",
+      "when": "the button puts a value on the clipboard and should confirm it",
+      "schemaUrl": "https://rift-ds.com/schema/components/copy-button.json"
     }
   ]
 }

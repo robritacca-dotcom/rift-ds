@@ -5,9 +5,35 @@ import './Pagination.css';
 import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
 import { formatNumber } from '../../behaviors/locale';
+import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
+
+/** A neighbouring page the `adjacent` form links to. */
+export interface PaginationLink {
+  /** Where the link goes. */
+  href: string;
+  /** The page's title, shown under the Previous or Next eyebrow. */
+  label: string;
+}
 
 /** Props owned by Pagination itself — everything else falls through to the nav landmark. */
 type PaginationOwnProps = {
+  /**
+   * The pager's form. `numbered` (the default) steps through numbered pages
+   * of one list. `adjacent` links to the page before and after this one in
+   * a sequence (a guide's chapters, a set of articles) as two cards naming
+   * them, and takes `previous` and `next` instead of page numbers.
+   */
+  variant?: 'numbered' | 'adjacent';
+  /** The page before this one, for the `adjacent` form. Leave it out on the first page. */
+  previous?: PaginationLink;
+  /** The page after this one, for the `adjacent` form. Leave it out on the last page. */
+  next?: PaginationLink;
+  /** The eyebrow over the previous page's title in the `adjacent` form. */
+  previousText?: string;
+  /** The eyebrow over the next page's title in the `adjacent` form. */
+  nextText?: string;
+  /** The component that renders the `adjacent` form's links, such as Next.js's `Link`. Defaults to the nearest LinkProvider's, else a plain `<a>`. */
+  linkComponent?: LinkComponent;
   /**
    * Current page (1-based), for a controlled pager. Leave it undefined to let
    * the component keep its own page, seeded from `defaultPage`.
@@ -15,8 +41,8 @@ type PaginationOwnProps = {
   page?: number;
   /** Page shown on first render when the pager is uncontrolled (1-based) */
   defaultPage?: number;
-  /** Total number of pages */
-  pageCount: number;
+  /** Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it. */
+  pageCount?: number;
   /** Called with the page the user requests */
   onPageChange?: (page: number) => void;
   /** Pages shown on each side of the current page */
@@ -86,7 +112,8 @@ const getPageItems = (
 /**
  * Pagination component — page navigation for long datasets.
  * Numbered pages with ellipses for large ranges, or a compact
- * prev/next readout. Pairs with Table.
+ * prev/next readout. Pairs with Table. The `adjacent` form instead links
+ * to the previous and next page of a sequence, as two titled cards.
  *
  * Forwards a ref to the `<nav>` landmark and spreads unrecognised props onto
  * it. The landmark is named "Pagination" unless a native `aria-label` or
@@ -95,9 +122,15 @@ const getPageItems = (
 export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
   (
     {
+      variant = 'numbered',
+      previous,
+      next,
+      previousText = 'Previous',
+      nextText = 'Next',
+      linkComponent,
       page,
       defaultPage = 1,
-      pageCount,
+      pageCount = 1,
       onPageChange,
       siblingCount = 1,
       size = 'default',
@@ -113,6 +146,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     ref,
   ) => {
     const locale = useLocale(localeProp);
+    const Link = useLinkComponent(linkComponent);
     const baseClass = 'ds-pagination';
     const compact = size === 'compact';
 
@@ -134,6 +168,42 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     const classes = [baseClass, compact ? `${baseClass}--compact` : '', className]
       .filter(Boolean)
       .join(' ');
+
+    if (variant === 'adjacent') {
+      const card = (direction: 'previous' | 'next', link: PaginationLink) => (
+        <Link
+          href={link.href}
+          className={`${baseClass}__adjacent ${baseClass}__adjacent--${direction}`}
+          rel={direction === 'previous' ? 'prev' : 'next'}
+        >
+          <span className={`${baseClass}__adjacent-eyebrow`}>
+            {direction === 'previous' && (
+              <span className={`${baseClass}__icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
+                chevron_left
+              </span>
+            )}
+            {direction === 'previous' ? previousText : nextText}
+            {direction === 'next' && (
+              <span className={`${baseClass}__icon material-symbols-rounded ds-mirror-rtl`} aria-hidden="true">
+                chevron_right
+              </span>
+            )}
+          </span>
+          <span className={`${baseClass}__adjacent-title`}>{link.label}</span>
+        </Link>
+      );
+      return (
+        <nav
+          aria-label={ariaLabel ?? 'Pagination'}
+          {...rest}
+          ref={ref}
+          className={[baseClass, `${baseClass}--adjacent`, className].filter(Boolean).join(' ')}
+        >
+          {previous ? card('previous', previous) : <span aria-hidden="true" />}
+          {next ? card('next', next) : <span aria-hidden="true" />}
+        </nav>
+      );
+    }
 
     const arrowButton = (direction: 'previous' | 'next') => {
       const disabled = direction === 'previous' ? isFirst : isLast;

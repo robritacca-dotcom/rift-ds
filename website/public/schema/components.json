@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.32.0",
   "package": "rift-ds",
-  "count": 190,
+  "count": 195,
   "components": [
     {
       "name": "Accordion",
@@ -223,6 +223,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/avatar-group.json",
       "docsUrl": "https://rift-ds.com/components/avatar-group",
       "markdownUrl": "https://rift-ds.com/components/avatar-group.md"
+    },
+    {
+      "name": "BackToTop",
+      "label": "Back to top",
+      "slug": "back-to-top",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/back-to-top.json",
+      "docsUrl": "https://rift-ds.com/components/back-to-top",
+      "markdownUrl": "https://rift-ds.com/components/back-to-top.md"
     },
     {
       "name": "Badge",
@@ -523,6 +533,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/contribution-graph.json",
       "docsUrl": "https://rift-ds.com/components/contribution-graph",
       "markdownUrl": "https://rift-ds.com/components/contribution-graph.md"
+    },
+    {
+      "name": "CopyButton",
+      "label": "Copy button",
+      "slug": "copy-button",
+      "category": "actions",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/copy-button.json",
+      "docsUrl": "https://rift-ds.com/components/copy-button",
+      "markdownUrl": "https://rift-ds.com/components/copy-button.md"
     },
     {
       "name": "CurrencyInput",
@@ -1105,6 +1125,16 @@
       "markdownUrl": "https://rift-ds.com/components/mention.md"
     },
     {
+      "name": "Menubar",
+      "label": "Menu bar",
+      "slug": "menubar",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/menubar.json",
+      "docsUrl": "https://rift-ds.com/components/menubar",
+      "markdownUrl": "https://rift-ds.com/components/menubar.md"
+    },
+    {
       "name": "MessageActions",
       "label": "Message actions",
       "slug": "message-actions",
@@ -1475,6 +1505,16 @@
       "markdownUrl": "https://rift-ds.com/components/signature-pad.md"
     },
     {
+      "name": "SiteFooter",
+      "label": "Site footer",
+      "slug": "site-footer",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/site-footer.json",
+      "docsUrl": "https://rift-ds.com/components/site-footer",
+      "markdownUrl": "https://rift-ds.com/components/site-footer.md"
+    },
+    {
       "name": "SiteHeader",
       "label": "Site header",
       "slug": "site-header",
@@ -1483,6 +1523,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/site-header.json",
       "docsUrl": "https://rift-ds.com/components/site-header",
       "markdownUrl": "https://rift-ds.com/components/site-header.md"
+    },
+    {
+      "name": "SiteLayout",
+      "label": "Site layout",
+      "slug": "site-layout",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/site-layout.json",
+      "docsUrl": "https://rift-ds.com/components/site-layout",
+      "markdownUrl": "https://rift-ds.com/components/site-layout.md"
     },
     {
       "name": "Skeleton",

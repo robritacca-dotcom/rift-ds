@@ -58,6 +58,8 @@ export default defineConfig({
         'chat/upstash': 'src/chat/upstash.ts',
         'chat/demo': 'src/chat/demo.ts',
         'format/index': 'src/format/index.ts',
+        'code/index': 'src/code/index.ts',
+        'code/highlight': 'src/code/highlight.ts',
         'tokens/registry': 'src/tokens/registry.ts',
         'tokens/values': 'src/tokens/values.ts',
         'tokens/motion': 'src/tokens/motion.ts',
@@ -81,6 +83,7 @@ export default defineConfig({
         /^react($|\/)/.test(id) ||
         /^react-dom($|\/)/.test(id) ||
         /^recharts($|\/)/.test(id) ||
+        /^shiki($|\/)/.test(id) ||
         /^react-markdown($|\/)/.test(id) ||
         /^remark-gfm($|\/)/.test(id) ||
         /^@anthropic-ai\/sdk($|\/)/.test(id) ||

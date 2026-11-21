@@ -98,6 +98,7 @@ const meta = {
   argTypes: {
     sticky: { control: 'boolean' },
     tintAfter: { control: 'number' },
+    width: { control: 'radio', options: [undefined, 'contained', 'full'] },
   },
 } satisfies Meta<typeof SiteHeader>;
 
@@ -206,4 +207,16 @@ export const Keyboard: Story = {
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(section).toHaveAttribute('aria-expanded', 'false'));
   },
+};
+
+/** Full width: the bar runs edge to edge with the side gutter, the brand at the far start and the actions at the far end. */
+export const FullWidth: Story = {
+  args: { width: 'full' },
+  parameters: { layout: 'fullscreen' },
+};
+
+/** Contained: the bar's contents centre at the contained width with the gutter, lining up with a contained page below. */
+export const Contained: Story = {
+  args: { width: 'contained' },
+  parameters: { layout: 'fullscreen' },
 };

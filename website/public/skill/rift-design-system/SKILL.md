@@ -5,7 +5,7 @@ description: Build React UI with rift-ds. Use when installing the package, compo
 
 # Using rift-ds
 
-Generated from the library's registries at version 1.32.0, alongside every deploy of https://rift-ds.com. The library is 189 React components across 13 categories, themed by 328 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
+Generated from the library's registries at version 1.32.0, alongside every deploy of https://rift-ds.com. The library is 194 React components across 13 categories, themed by 333 semantic design tokens, published to npm. Designed and built by Robert Ritacca (https://robertritacca.com), MIT licensed.
 
 ## Install
 
@@ -77,7 +77,7 @@ The widths the library's layouts switch at are exported from `rift-ds/tokens/bre
 
 references/components.md lists every component with its import line and description. The categories:
 
-- Actions (9): Buttons, button groups, and toggles for triggering actions and switching modes.
+- Actions (10): Buttons, button groups, and toggles for triggering actions and switching modes.
 - AI (36): Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 - Charts (16): Data visualisation components for plotting series and activity over time.
 - Data display (37): Cards, tables, lists, and badges for presenting structured content.
@@ -85,9 +85,9 @@ references/components.md lists every component with its import line and descript
 - Feedback (11): Alerts, toasts, progress, and empty states that tell people what is happening.
 - Forms (26): Inputs, pickers, and selection controls for collecting and editing values.
 - Inspector (7): One-row controls for tool panels and settings rails, each carrying its name inside the control and sized to match Button.
-- Layout (11): Page scaffolding: app shells, sidebars, dividers, and section headings.
+- Layout (12): Page scaffolding: app shells, sidebars, dividers, and section headings.
 - Maps (4): Geographic surfaces for showing where things are and what connects them: a globe, a flat world map, and the callout and key that explain them.
-- Navigation (13): Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
+- Navigation (16): Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 - Overlays (10): Dialogs, drawers, menus, and tooltips that float above the page.
 - Typography (5): Headings, running text, links, and lists, each drawn from a tier of the type scale.
 

@@ -1,0 +1,157 @@
+/* ============================================
+   SITE FOOTER COMPONENT
+   The bottom of a site: brand and a line about it,
+   a sitemap of link columns, and a row of small print.
+   The floor of the page, so it carries no surface of
+   its own: a hairline fading at both ends above the
+   small print separates the two rows, and the host
+   decides the width.
+   ============================================ */
+
+.ds-site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-1000);
+  width: 100%;
+  padding-block: var(--padding-1000) var(--padding-500);
+  box-sizing: border-box;
+  container-type: inline-size;
+}
+
+/* ============================================
+   TOP — about, then the columns
+   ============================================ */
+
+.ds-site-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-500);
+  justify-content: space-between;
+}
+
+.ds-site-footer__about {
+  display: flex;
+  flex: 1 1 calc(10 * var(--control-height-default));
+  flex-direction: column;
+  gap: var(--gap-300);
+  max-width: calc(10 * var(--control-height-default));
+}
+
+.ds-site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-site-footer__description {
+  margin: 0;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+}
+
+.ds-site-footer__columns {
+  display: grid;
+  flex: 2 1 auto;
+  grid-template-columns: repeat(auto-fit, minmax(calc(4 * var(--control-height-default)), 1fr));
+  gap: var(--gap-500);
+}
+
+.ds-site-footer__title {
+  margin: 0 0 var(--gap-300);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-primary);
+}
+
+.ds-site-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Quiet links: secondary text that lifts to primary on hover, the way the
+   rails' rows do, with no underline until hover. */
+.ds-site-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-100);
+  transition: color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-site-footer__link:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+.ds-site-footer__link:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.ds-site-footer__external {
+  --icon-size: var(--icon-size-500);
+  line-height: 1;
+}
+
+/* ============================================
+   BOTTOM — small print and social
+   ============================================ */
+
+.ds-site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-300);
+  position: relative;
+  padding-block-start: var(--padding-500);
+}
+
+/* The rule above the small print fades out at both ends, so it reads as a
+   pause in the footer rather than a box edge. */
+.ds-site-footer__bottom::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: var(--border-025);
+  background: linear-gradient(
+    to right, /* ds-allow(physical): a symmetric fade, the same at both ends in either reading direction */
+    transparent,
+    var(--color-divider) var(--gap-1500),
+    var(--color-divider) calc(100% - var(--gap-1500)),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.ds-site-footer__legal {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-site-footer__social {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}

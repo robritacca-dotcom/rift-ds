@@ -4,6 +4,8 @@
    ============================================ */
 
 .ds-app-layout {
+  /* The contained width, AppLayout's own: an app's working column. */
+  --ds-shell-contained-width: 1120px;
   display: flex;
   min-height: 100vh;
   /* The shell recipe's plane (src/behaviors/shell.css), set per layout by
@@ -49,7 +51,9 @@
    ============================================ */
 .ds-app-layout__content {
   width: 100%;
-  max-width: 1120px;
+  /* The shell recipe's width axis: the contained width, or none when full. */
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: var(--gap-1000);
@@ -69,7 +73,7 @@
 
 /* ============================================
    INSET LAYOUT — the rail flush on the shell
-   colour, the content full width in a surface
+   colour, the content in a surface
    inset from the other three edges. The page
    holds the viewport and the surface scrolls.
    The rail's own item inset is the gap on its
@@ -115,12 +119,12 @@
   scrollbar-color: var(--color-bg-container-border) transparent;
 }
 
-/* Full width in the surface, and a size container: content inside can
+/* A size container, centred in the surface or its full width by the
+   width axis like every mode: content inside can
    restack by the room the surface gives it (an open chat panel or an
    expanded rail narrows it without the viewport changing) with
    @container ds-app-layout-content queries. */
 .ds-app-layout--inset .ds-app-layout__content {
-  max-width: none;
   container: ds-app-layout-content / inline-size;
 }
 

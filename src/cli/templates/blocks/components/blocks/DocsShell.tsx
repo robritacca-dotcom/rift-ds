@@ -108,9 +108,9 @@ const SECTIONS: SiteHeaderSection[] = [
 
 /** The footer's sitemap. */
 const FOOTER_COLUMNS: SiteFooterColumn[] = [
-  { title: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }, { label: 'Installation', href: '/guide' }] },
-  { title: 'Components', links: [{ label: 'Button', href: '#button' }, { label: 'Table', href: '#table' }] },
-  { title: 'Community', links: [{ label: 'Discussions', href: 'https://example.com/discussions', external: true }] },
+  { label: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }, { label: 'Installation', href: '/guide' }] },
+  { label: 'Components', links: [{ label: 'Button', href: '#button' }, { label: 'Table', href: '#table' }] },
+  { label: 'Community', links: [{ label: 'Discussions', href: 'https://example.com/discussions', external: true }] },
 ];
 
 export interface DocsShellProps {

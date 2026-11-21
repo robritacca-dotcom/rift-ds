@@ -74,7 +74,7 @@ const meta = {
           variant={args.asidePlacement === 'edge' ? 'floating' : undefined}
         />
       }
-      footer={<SiteFooter brand="Acme" columns={[{ title: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }] }]} legal="© 2026 Acme." />}
+      footer={<SiteFooter brand="Acme" columns={[{ label: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }] }]} legal="© 2026 Acme." />}
     />
   ),
 } satisfies Meta<typeof SiteLayout>;
@@ -140,7 +140,7 @@ export const FullPageContainedHeader: Story = {
   args: { width: 'full', headerWidth: 'contained', footerWidth: 'contained', sidebarDock: 'content' },
 };
 
-/** A level narrower: the contained width at its narrow step (1200px, a 1080px article beside the edge-docked sidebar), the header and the footer following it. */
+/** A level narrower: the contained width at its narrow step (1200px, a 1080px article beside the edge-docked sidebar); the header and the footer run full with the edge dock, the mega menu capped at the step. */
 export const NarrowContained: Story = {
   args: { containedWidth: 'narrow', sidebarDock: 'edge' },
 };

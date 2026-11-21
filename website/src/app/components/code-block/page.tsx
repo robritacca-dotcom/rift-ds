@@ -152,7 +152,7 @@ export default function CodeBlockPage() {
                 lines={HIGHLIGHTED}
               />
               <p className={styles.kitNote}>
-                Code stays monochrome until you pass <code>lines</code>, which <code>highlight()</code> from <code>rift-ds/code/highlight</code> writes through shiki, best called in a Server Component so the page ships no highlighter. Each run takes one of five syntax colours from the theme.
+                Code stays monochrome until you pass <code>lines</code>, which <code>highlight()</code> from <code>rift-ds/code/highlight</code> writes through shiki (an optional peer: install <code>shiki</code> to use it), best called in a Server Component so the page ships no highlighter. Each run takes one of five syntax colours from the theme.
               </p>
             </div>
           </section>

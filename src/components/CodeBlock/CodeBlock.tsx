@@ -75,8 +75,8 @@ type CodeBlockOwnProps = {
   tabsLabel?: string;
   /** Show the copy-to-clipboard button */
   showCopy?: boolean;
-  /** Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. */
-  onCopied?: () => void;
+  /** Called with the copied text (the shown tab's code, or the text of `lines`) after it is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. */
+  onCopied?: (value: string) => void;
   /** Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. */
   maxHeight?: number | string;
   /** Show a chevron beside the filename that collapses/expands the code area */
@@ -239,7 +239,7 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
               <CopyButton
                 className={`${baseClass}__copy`}
                 value={shownCode}
-                onCopied={() => onCopied?.()}
+                onCopied={onCopied}
                 copyText={copyText}
                 copyLabel={copyLabel}
                 copiedLabel={copiedLabel}

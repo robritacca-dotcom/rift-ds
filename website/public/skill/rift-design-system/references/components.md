@@ -1442,7 +1442,7 @@ The bottom of a site: brand, columns of links, and a row of small print and soci
 
 ### Site header
 
-A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.
+A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit or below a set breakpoint.
 
 - Import: `import { SiteHeader } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

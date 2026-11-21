@@ -12,7 +12,7 @@ const meta = {
     description: 'Components and guides for building the Acme app.',
     columns: [
       {
-        title: 'Docs',
+        label: 'Docs',
         links: [
           { label: 'Introduction', href: '#introduction' },
           { label: 'Installation', href: '#installation' },
@@ -21,7 +21,7 @@ const meta = {
         ],
       },
       {
-        title: 'Components',
+        label: 'Components',
         links: [
           { label: 'Button', href: '#button' },
           { label: 'Menubar', href: '#menubar' },
@@ -29,7 +29,7 @@ const meta = {
         ],
       },
       {
-        title: 'Community',
+        label: 'Community',
         links: [
           { label: 'Discussions', href: 'https://example.com/discussions', external: true },
           { label: 'Contributing', href: '#contributing' },

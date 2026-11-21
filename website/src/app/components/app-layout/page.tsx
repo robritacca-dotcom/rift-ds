@@ -79,7 +79,7 @@ export default function AppLayoutPage() {
               collapses to an icon rail; the main region reflows automatically. The layout prop
               picks one of the three app shell modes the templates and the chat share: flush
               (the default), the rail on the shell colour behind a hairline with the content crisp
-              beside it; floating, the rail as a glass card; or inset, the content full width in a
+              beside it; floating, the rail as a glass card; or inset, the content in a
               raised surface of its own. The component
               pins itself to the dark theme by default, which is why the demos below appear
               dark; pass theme=&quot;inherit&quot; to drop the pin and let the layout follow the
@@ -157,7 +157,7 @@ export default function AppLayoutPage() {
               >
                 <DemoContent
                   heading="Dashboard"
-                  body="The rail sits flush on the shell colour, and the content runs full width in a raised surface that scrolls on its own."
+                  body="The rail sits flush on the shell colour, and the content sits in a raised surface that scrolls on its own, contained or full by its own width."
                 />
               </AppLayout>
             </div>

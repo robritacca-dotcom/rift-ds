@@ -12,7 +12,9 @@
      compact tertiary Buttons, the headings share their inset). A host that
      lines the list's text up with something above it, a header's brand,
      hangs the list out by this much, so the fills sit in the gutter and the
-     words sit on the line (SiteLayout's sidebar does). */
+     words sit on the line (SiteLayout's sidebar does). Compact rows inset
+     their text --padding-300; default rows (a default Button) --padding-500,
+     set below. */
   --ds-nav-list-text-inset: var(--padding-300);
   display: flex;
   flex-direction: column;
@@ -166,6 +168,17 @@
    long sidebar: the 40px reservation and toggle step down
    to match, so a hundred rows read as one quiet column.
    ============================================ */
+
+/* Default size: the top-level rows are default Buttons, so their text sits
+   --padding-500 in; the hang and the section headings follow it, so the
+   headings sit on the rows' leading line at either size. */
+.ds-nav-list:not(.ds-nav-list--compact) {
+  --ds-nav-list-text-inset: var(--padding-500);
+}
+
+.ds-nav-list:not(.ds-nav-list--compact) .ds-nav-list__heading {
+  padding-inline-start: var(--padding-500);
+}
 
 .ds-nav-list--compact .ds-nav-list__item {
   min-height: var(--control-height-compact);

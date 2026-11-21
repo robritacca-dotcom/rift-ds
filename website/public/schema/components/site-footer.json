@@ -56,7 +56,7 @@
           "description": "The bottom row's small print: a copyright, a licence, a privacy link."
         },
         {
-          "name": "navigationLabel",
+          "name": "navLabel",
           "type": "string",
           "typeKind": "primitive",
           "required": false,
@@ -108,8 +108,8 @@
     },
     "SiteFooterColumn": {
       "kind": "interface",
-      "definition": "interface SiteFooterColumn {\n  /** The column's heading, e.g. \"Docs\". */\n  title: string;\n  /** Its links, in order. */\n  links: SiteFooterLink[];\n}",
-      "description": "A titled column of footer links.",
+      "definition": "interface SiteFooterColumn {\n  /** The column's heading, e.g. \"Docs\". */\n  label: string;\n  /** Its links, in order. */\n  links: SiteFooterLink[];\n}",
+      "description": "A labelled column of footer links.",
       "refs": [
         "SiteFooterLink"
       ]
@@ -128,5 +128,8 @@
   "keys": {
     "by": "platform",
     "note": "Plain links: the browser owns Tab and Enter."
+  },
+  "size": {
+    "gzip": 668
   }
 }

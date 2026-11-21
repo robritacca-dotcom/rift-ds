@@ -98,7 +98,7 @@
     },
     "MenubarMenu": {
       "kind": "interface",
-      "definition": "interface MenubarMenu {\n  /** The trigger's text, e.g. \"File\". Also the open menu's accessible name. */\n  label: string;\n  /** The menu's entries, in DropdownMenu's shape: items, groups, separators, checkbox and radio items, sub-menus and shortcuts. */\n  items: DropdownMenuEntry[];\n  /** Show the trigger but do not let it open. */\n  disabled?: boolean;\n}",
+      "definition": "interface MenubarMenu {\n  /** The trigger's text, e.g. \"File\". Also the open menu's accessible name. */\n  label: string;\n  /** The menu's entries, in DropdownMenu's shape: items, groups, separators, checkbox and radio items, sub-menus and shortcuts. */\n  items: DropdownMenuEntry[];\n  /** Show the trigger but do not let it open. */\n  disabled?: boolean;\n  /** Stable identity for the menu, when two menus share a label. Defaults to the label. */\n  id?: string;\n}",
       "description": "One menu in the bar: its trigger's label and the entries it opens.",
       "refs": [
         "DropdownMenuEntry"
@@ -173,6 +173,9 @@
       ]
     }
   ],
+  "size": {
+    "gzip": 9465
+  },
   "alternatives": [
     {
       "name": "Toolbar",

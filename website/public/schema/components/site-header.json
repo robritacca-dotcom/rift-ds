@@ -6,7 +6,7 @@
   "label": "Site header",
   "slug": "site-header",
   "category": "navigation",
-  "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.",
+  "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit or below a set breakpoint.",
   "client": true,
   "importPath": "rift-ds/components/SiteHeader/SiteHeader",
   "barrel": "main",
@@ -100,8 +100,8 @@
             "tablet"
           ],
           "required": false,
-          "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width.",
-          "default": "tablet"
+          "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width. Defaults to\n`foldBelow` when that is set, so a bar told to fold at a step starts\nfolded there too and never shifts when its script runs.",
+          "defaultExpression": "foldBelow ?? 'tablet'"
         },
         {
           "name": "foldBelow",
@@ -240,6 +240,6 @@
     "note": "Focusing a section opens its panel, Arrow Down moves into it, and Escape closes it."
   },
   "size": {
-    "gzip": 9746
+    "gzip": 10779
   }
 }

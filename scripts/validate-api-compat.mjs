@@ -89,7 +89,16 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `bin` for a binary, `schema` for a published schema file and
  * `schema` + `property` (a JSON pointer) for a meta-schema property.
  */
-const SANCTIONED_BREAKS = [];
+const SANCTIONED_BREAKS = [
+  {
+    since: '1.33.0',
+    component: 'NavList',
+    prop: 'items',
+    change: 'type',
+    reason:
+      'A widening, not a break: NavListEntry is NavListItem | NavListSection, so every NavListItem[] a consumer passes still type-checks; sections are the new member.',
+  },
+];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */
 

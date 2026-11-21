@@ -88,7 +88,10 @@ type SiteHeaderOwnProps = {
    * breakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS
    * alone, so a phone never sees the pills overflow; the measurement takes
    * over once the script runs. Pick the step nearest where the pills stop
-   * fitting, or `never` for a bar that fits at every width.
+   * fitting, or `never` for a bar that fits at every width. Defaults to
+   * `foldBelow` when that is set, so a bar told to fold at a step starts
+   * folded there too and never shifts when its script runs.
+   * @default foldBelow ?? 'tablet'
    */
   initialFold?: 'tablet' | 'mid' | 'never';
   /**
@@ -175,8 +178,8 @@ export function SiteHeader({
   drawerOpen: drawerOpenProp,
   defaultDrawerOpen = false,
   onDrawerOpenChange,
-  initialFold = 'tablet',
   foldBelow,
+  initialFold = foldBelow ?? 'tablet',
   sticky = true,
   tintAfter = 48,
   linkComponent,
@@ -400,6 +403,34 @@ export function SiteHeader({
   const panelOpen = openId != null && sections.some((s) => s.id === openId && s.mega);
   const shown = sections.find((s) => s.id === shownId && s.mega) ?? null;
 
+  // The open menu's height, so the backdrop a full-width bar lays behind it
+  // (see SiteHeader.css) reaches past the menu's bottom edge before it fades.
+  // Measured as the menu opens and as it changes size (another section's
+  // menu, a wrapped description), straight onto the header's style, so a
+  // resize never renders React.
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    const panel = panelRef.current;
+    if (!header || !panel || !panelOpen) return;
+    const write = () => {
+      header.style.setProperty('--ds-site-header-menu-height', `${panel.offsetHeight}px`);
+      // Where the section pills start, from the bar's inline start, so a
+      // full bar's menu opens under them rather than centred on the window.
+      const bar = barRef.current;
+      const nav = navRef.current;
+      if (bar && nav) {
+        const barRect = bar.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        const start = isRtl(bar) ? barRect.right - navRect.right : navRect.left - barRect.left;
+        header.style.setProperty('--ds-site-header-nav-start', `${Math.round(start)}px`);
+      }
+    };
+    write();
+    const observer = new ResizeObserver(write);
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, [panelOpen, shownId]);
+
   const drawerItems: NavListItem[] = sections.map((section) => ({
     id: section.id,
     label: section.label,
@@ -426,6 +457,14 @@ export function SiteHeader({
   return (
     <header {...rest} ref={setRef} className={classes} data-ds-width={width}>
       {sticky && <ProgressiveBlur className={`${baseClass}__blur`} tinted={tinted} />}
+      {/* Behind an open menu on a full-width bar: the window's width, from
+          the top to past the menu, fading out below (SiteHeader.css shows
+          it only in that mode). */}
+      <ProgressiveBlur
+        className={`${baseClass}__menu-blur`}
+        tinted
+        data-open={panelOpen && !folded ? '' : undefined}
+      />
 
       <div ref={barRef} className={`${baseClass}__bar`}>
         {brand && (

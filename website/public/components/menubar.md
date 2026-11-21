@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { Menubar } from 'rift-ds';`
 - Deep import: `import { Menubar } from 'rift-ds/components/Menubar/Menubar';`
 - Rendering: client component (declares 'use client')
+- Size: 9.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/menubar
 - Schema: https://rift-ds.com/schema/components/menubar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -119,6 +120,8 @@ interface MenubarMenu {
   items: DropdownMenuEntry[];
   /** Show the trigger but do not let it open. */
   disabled?: boolean;
+  /** Stable identity for the menu, when two menus share a label. Defaults to the label. */
+  id?: string;
 }
 ```
 

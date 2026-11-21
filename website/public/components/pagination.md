@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { Pagination } from 'rift-ds';`
 - Deep import: `import { Pagination } from 'rift-ds/components/Pagination/Pagination';`
 - Rendering: client component (declares 'use client')
-- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/pagination
 - Schema: https://rift-ds.com/schema/components/pagination.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | linkComponent | `LinkComponent` | no |  | The component that renders the `adjacent` form's links, such as Next.js's `Link`. Defaults to the nearest LinkProvider's, else a plain `<a>`. |
 | page | `number` | no |  | Current page (1-based), for a controlled pager. Leave it undefined to let the component keep its own page, seeded from `defaultPage`. |
 | defaultPage | `number` | no | `1` | Page shown on first render when the pager is uncontrolled (1-based) |
-| pageCount | `number` | no | `1` | Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it. |
+| pageCount | `number` | no |  | Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it. |
 | onPageChange | `((page: number) => void)` | no |  | Called with the page the user requests |
 | siblingCount | `number` | no | `1` | Pages shown on each side of the current page |
 | size | `"default" \| "compact"` | no | `'default'` | Component size — compact swaps the numbers for a "Page X of Y" readout |

@@ -1,68 +1,9 @@
-/* The site frame lab. Everything the frame lays out is SiteLayout's; this
-   sheet holds only what hosting it on this site takes (each marked as a gap
-   the lab exists to find) and the lever panel. */
-
-.frame.frame {
-  /* Gap: the site header's bar is 78px (MegaNav sets --ds-site-header-height
-     on the header itself, where SiteLayout's sibling columns cannot read it),
-     so the frame is told the same height here. */
-  --ds-site-layout-header-height: 78px;
-  /* Gap: the site's body carries its own padding (globals.css), so a frame
-     meant to reach the window's edges stretches back across it, as the
-     template family does. */
-  width: calc(100% + var(--primitive-padding-1000) * 2);
-  margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-1000));
-}
-
-/* Gap: MegaNav caps its own header at 1440px, which would stop a full-width
-   header lever from reaching the edges; the frame's header width decides. */
-.frame :global(.ds-site-layout__header > header.ds-site-header) {
-  max-width: none;
-}
-
-/* Gap: the site narrows the body for the docked chat (html[data-chat="docked"]
-   body in globals.css), so the frame takes no end reserve of its own; the
-   floating rail, fixed to the window, moves in alone. */
-:global(html[data-chat="docked"]) .frame {
-  --ds-site-layout-aside-inset: calc(var(--layout-chat-width) + var(--layout-chat-inset) + var(--ds-shell-gutter));
-}
+/* The site frame lab's own surface: the lever panel. The frame itself is
+   website/src/components/SiteFrame. */
 
 /* The lever panel steps out from under the docked chat. */
 :global(html[data-chat="docked"]) .panel {
   inset-inline-end: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2 + var(--gap-500));
-}
-
-/* The site's own sidebar sticks by its own measure; in the slot, the slot
-   sticks and the sidebar scrolls inside it. */
-.siteSidebar {
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: none;
-  /* The site's sidebar hangs its active pill into the gutter (its rows'
-     text lines up with the brand; the fill sits outside). A scroll box
-     clips on both axes, so the box itself reaches into the gutter by the
-     same 20px and pads it back, and the hanging pill shows whole. */
-  margin-inline-start: calc(-1 * var(--padding-500));
-  padding-inline-start: var(--padding-500);
-}
-
-.siteSidebar > * {
-  position: static;
-  width: 100%;
-}
-
-@media (max-width: 959px) {
-  .frame.frame {
-    width: calc(100% + var(--primitive-padding-500) * 2);
-    margin: calc(-1 * var(--primitive-padding-500));
-  }
-}
-
-@media (max-width: 600px) {
-  .frame.frame {
-    width: calc(100% + var(--primitive-padding-400) * 2);
-    margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-400));
-  }
 }
 
 /* ============================================
@@ -86,8 +27,21 @@
   box-shadow: var(--shadow-floating);
 }
 
-.panel:not([data-open]) {
+.panel[data-state="closed"] {
   width: auto;
+}
+
+/* Folded until the reader opens it below the widest steps (see the
+   component's panelOpen). */
+/* ds-allow(breakpoint): the lab panel folds below the 1440px default step it tunes, where it would cover the page */
+@media (max-width: 1439px) {
+  .panel[data-state="auto"] {
+    width: auto;
+  }
+
+  .panel[data-state="auto"] .panelBody {
+    display: none;
+  }
 }
 
 .panelToggle {

@@ -47,6 +47,18 @@
      shader the host paints there shows through the frame. */
 }
 
+/* A frame that reaches the window's edges (docked to the edge, or a full
+   page) keeps a wider gutter from the tablet step up, so the brand and the
+   sidebar's words sit well in from the edge and a row's hanging fill keeps
+   room before it. The header's slot and the footer's row inherit it, so all
+   three still share one line. --ds-site-layout-edge-gutter overrides it. */
+@media (min-width: 960px) {
+  .ds-site-layout--dock-edge,
+  .ds-site-layout[data-ds-width='full'] {
+    --ds-shell-gutter: var(--ds-site-layout-edge-gutter, calc(var(--padding-500) + var(--padding-300)));
+  }
+}
+
 /* ============================================
    HEADER
    The header's slot draws no box, so a sticky

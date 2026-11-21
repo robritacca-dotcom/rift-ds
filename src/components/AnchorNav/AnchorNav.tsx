@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useLayer } from '../../behaviors/useLayer';
+import { headingSlug } from '../../behaviors/headingSlug';
 import './AnchorNav.css';
 import '../../behaviors/direction.css';
 import { mirrorClass } from '../../behaviors/direction';
@@ -30,13 +31,11 @@ const headingText = (heading: Element): string => {
   return (copy.textContent ?? '').trim();
 };
 
-const slug = (text: string) =>
-  text
-    .toLowerCase()
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/g, '');
+// The one heading-slug rule (src/behaviors/headingSlug.ts), so these ids
+// match the ones Heading's and SectionTitle's `anchor` write. Keep this
+// local alias: without a statement here, react-docgen-typescript reads
+// useHeadingItems below as the file's component and drops AnchorNav's props.
+const slug = (text: string) => headingSlug(text);
 
 /**
  * The sections of the page, read from its headings: every match of

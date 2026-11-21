@@ -12,7 +12,7 @@
     "WorldMap": 117000
   },
   "subpaths": {
-    ".": 354300,
+    ".": 360000,
     "./behaviors/LinkProvider": 600,
     "./behaviors/deferComponent": 800,
     "./behaviors/LocaleProvider": 700,
@@ -21,7 +21,7 @@
     "./charts": 8600,
     "./chat": 76500,
     "./chat/actions": 2000,
-    "./chat/demo": 28100,
+    "./chat/demo": 28700,
     "./chat/server": 10500,
     "./chat/upstash": 2000,
     "./components/Attachment/fileTypes": 2000,
@@ -32,8 +32,8 @@
     "./components/StreamingText/useStreamReveal": 1100,
     "./components/registry": 17500,
     "./format": 3000,
-    "./code": 1000,
-    "./code/highlight": 1500,
+    "./code": 500,
+    "./code/highlight": 700,
     "./tokens/breakpoints": 1100,
     "./tokens/motion": 900,
     "./tokens/registry": 2100,

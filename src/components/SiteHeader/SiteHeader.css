@@ -36,6 +36,41 @@
   z-index: -1;
 }
 
+/* Behind an open menu on a full-width bar, a second progressive blur: the
+   window's width from the top down past the menu's bottom edge (its height
+   measured into --ds-site-header-menu-height as it opens), dissolving below
+   it, so the menu floats over a softened page rather than a hard band. It
+   sits with the bar's own blur, behind the bar and the menu, and only a
+   full-width bar shows it; a contained bar's menu needs no help. */
+.ds-site-header__menu-blur.ds-progressive-blur {
+  position: fixed;
+  inset: 0 0 auto;
+  height: calc(
+    var(--ds-site-header-height) + var(--gap-200) + var(--ds-site-header-menu-height, 0px) +
+      var(--ds-site-header-blur-reach) * 2
+  );
+  z-index: -1;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility 0s linear var(--motion-duration-slow);
+}
+
+.ds-site-header[data-ds-width='full'] .ds-site-header__menu-blur.ds-progressive-blur,
+:where([data-ds-width='full']) > .ds-site-header:not([data-ds-width]) .ds-site-header__menu-blur.ds-progressive-blur {
+  display: block;
+}
+
+.ds-site-header__menu-blur.ds-progressive-blur[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-ease-standard),
+    visibility 0s;
+}
+
 /* The bar: brand, pills, then the end cluster pushed to the far side. */
 .ds-site-header__bar {
   position: relative;
@@ -215,6 +250,23 @@
 
 .ds-site-header__panel > .ds-mega-menu {
   pointer-events: auto;
+}
+
+/* A full-width bar keeps its menu at the contained width and opens it
+   where the reader is looking: the panel starts under the section pills
+   (--ds-site-header-nav-start, measured as it opens), runs at most the
+   shell recipe's contained width, and never comes closer to the window's
+   end than the side gutter, so a wide window neither stretches the menu's
+   columns apart nor strands it in the middle. A contained bar's menu spans
+   the bar as before. Full comes from the header's own width or, unset, from
+   the width of the slot it sits in (SiteLayout's header slot). */
+.ds-site-header[data-ds-width='full'] .ds-site-header__panel,
+:where([data-ds-width='full']) > .ds-site-header:not([data-ds-width]) .ds-site-header__panel {
+  inset-inline: var(--ds-site-header-nav-start, var(--ds-shell-gutter, 0px)) auto;
+  width: min(
+    var(--ds-shell-contained-width, 100%),
+    calc(100% - var(--ds-site-header-nav-start, var(--ds-shell-gutter, 0px)) - var(--ds-shell-gutter, 0px))
+  );
 }
 
 /* Condensed: `condensedActions` take the place of `actions`. Whichever set

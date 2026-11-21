@@ -919,7 +919,7 @@
       "name": "site-header",
       "type": "registry:ui",
       "title": "Site header",
-      "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit."
+      "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit or below a set breakpoint."
     },
     {
       "name": "site-layout",

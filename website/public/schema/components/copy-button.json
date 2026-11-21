@@ -35,7 +35,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Visible text before a copy. Ignored when `iconOnly`.",
+          "description": "Visible text before a copy. When `iconOnly`, it is the accessible name and the tooltip instead, unless `copyLabel` is set.",
           "default": "Copy"
         },
         {
@@ -60,6 +60,22 @@
           "required": false,
           "description": "Show only the glyph, with the label in a tooltip, as an IconButton.",
           "default": false
+        },
+        {
+          "name": "tooltipPosition",
+          "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+          "typeKind": "enum",
+          "values": [
+            "bottom",
+            "end",
+            "left",
+            "right",
+            "start",
+            "top"
+          ],
+          "required": false,
+          "description": "Where the icon-only form's tooltip sits, as on IconButton.",
+          "default": "top"
         },
         {
           "name": "variant",
@@ -137,6 +153,9 @@
       ]
     }
   ],
+  "size": {
+    "gzip": 5649
+  },
   "alternatives": [
     {
       "name": "IconButton",

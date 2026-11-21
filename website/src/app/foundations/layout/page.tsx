@@ -141,22 +141,28 @@ const widthProperties = [
     value: "20px, 16px at 768px and below",
     role: "The side gutter every width keeps, so a full page never touches the window's edge.",
   },
+  {
+    id: "contained-step",
+    name: "data-ds-contained",
+    value: "narrow 1200px, wide 1680px",
+    role: "The contained width a level either way of the default, set on the width element (SiteLayout's containedWidth). The defaults sit only on the outermost width element, so a nested one (a header's slot, a footer's row) inherits the host's width rather than resetting it.",
+  },
 ] as const;
 
 const widthHosts = [
   { id: "app-layout", host: "AppLayout", how: "width: contained (1120px) or full, in flush, floating or inset" },
-  { id: "site-layout", host: "SiteLayout", how: "width: the header, the columns and the footer's row, contained (1440px) or full" },
+  { id: "site-layout", host: "SiteLayout", how: "width and containedWidth: the columns contained (narrow 1200px, default 1440px, wide 1680px) or full; the header and footer move with the sidebar's dock" },
   { id: "site-header", host: "SiteHeader", how: "width: the bar's contents contained or edge to edge, with the gutter; unset, it fills its host with none" },
   { id: "templates", host: "The templates", how: "The width switch beside the mode switch in the rail's footer, kept for every template" },
   { id: "app-block", host: "The app shell block", how: "CONTENT_WIDTH beside SHELL_LAYOUT at the top of the file" },
-  { id: "docs-block", host: "The docs block", how: "PAGE_WIDTH and HEADER_WIDTH at the top of the file" },
+  { id: "docs-block", host: "The docs block", how: "PAGE_WIDTH and SIDEBAR_DOCK at the top of the file; the header and footer move with the dock" },
 ] as const;
 
 /* ============================================
    SITE SHELL DATA
    SiteLayout's frame: a header over a sidebar, the content and an aside,
-   laid out by the header's width, the page's width and where the sidebar
-   docks, each set apart.
+   laid out by the page's width and where the sidebar docks; the header and
+   the footer move with the dock.
    ============================================ */
 
 const siteShells = [
@@ -171,8 +177,8 @@ const siteShells = [
     id: "full-content",
     header: "full",
     dock: "content",
-    title: "Full header, docked to the content",
-    note: "The bar runs edge to edge; the three columns stay centred below it",
+    title: "Full width, docked to the content",
+    note: "A full page: the bar and the columns run edge to edge with the gutter, the sidebar in the row",
   },
   {
     id: "full-edge",
@@ -439,7 +445,7 @@ export default function LayoutPage() {
           <section className={styles.group}>
             <SectionTitle title="Site shells" />
             <p className={styles.groupNote}>
-              A site of pages, documentation or marketing, lays out under a top header rather than beside an app&apos;s rail. SiteLayout is its frame: a SiteHeader over a navigation sidebar, the content and an on-this-page aside, then a SiteFooter. Three levers set it, each apart from the others: how wide the header bar runs, how wide the page runs, and where the sidebar docks. A site is the floor of its page, so it takes none of the app shell modes and no surface of its own.
+              A site of pages, documentation or marketing, lays out under a top header rather than beside an app&apos;s rail. SiteLayout is its frame: a SiteHeader over a navigation sidebar, the content and an on-this-page aside, then a SiteFooter. Its levers are props: how wide the page runs and its contained size, where the sidebar docks (the header and the footer move with it), where the aside sits and the reading width. A site is the floor of its page, so it takes none of the app shell modes and no surface of its own.
             </p>
             <div className={styles.appShells}>
               {siteShells.map((site) => (
@@ -477,7 +483,7 @@ export default function LayoutPage() {
               bordered
             />
             <p className={styles.groupNote}>
-              The sidebar sticks below the header and scrolls on its own, so a long list of pages never carries the page along; the aside sticks beside the content. Every lever is independent, so any combination holds. Below 1152px a column aside gives way, and below 960px the sidebar and an edge aside leave the page: the header folds into its menu, which carries the sidebar’s pages, so a reader has one menu. A SiteHeader set with no width of its own follows the header width. The docs block, <code className={styles.query}>npx rift-ds init block docs</code>, is SiteLayout with a full header over a sidebar docked to the edge.
+              The sidebar sticks below the header and scrolls on its own, so a long list of pages never carries the page along; the aside sticks beside the content. Any combination holds; the header and the footer follow the dock unless headerWidth or footerWidth breaks the pairing. Below 1152px a column aside gives way, and below 960px the sidebar and an edge aside leave the page: a header set to fold at the tablet step folds into its menu, which carries the sidebar’s pages, so a reader has one menu. A SiteHeader set with no width of its own follows the header width. The docs block, <code className={styles.query}>npx rift-ds init block docs</code>, is SiteLayout with a full header over a sidebar docked to the edge.
             </p>
           </section>
 

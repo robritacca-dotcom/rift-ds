@@ -54,8 +54,8 @@ export default function SiteLayoutPage() {
           <div className={`${styles.introSection} animate-in animate-delay-1`}>
             <p className={styles.subDisplay}>The frame of a docs site</p>
             <p className={styles.introBody}>
-              A header, a sidebar of pages, the content, an on-this-page aside and a footer, laid out by choices you
-              set apart: how wide the page, the header and the footer each run, where the sidebar docks and where the
+              A header, a sidebar of pages, the content, an on-this-page aside and a footer, laid out by props: how
+              wide the page runs, where the sidebar docks (the header and the footer move with it) and where the
               aside sits. Any combination holds. The sidebar sticks below the header and scrolls on its own, the aside
               gives way on a laptop, and on a tablet or phone the header&apos;s one menu carries the sidebar&apos;s pages.
             </p>
@@ -73,12 +73,15 @@ export default function SiteLayoutPage() {
           <section className={styles.section}>
             <SectionTitle title="Layout levers" />
             <p className={styles.demoText}>
-              Every lever is a prop on SiteLayout, so a swap is one value changed in one place. The widths read the
+              Every lever is a prop on SiteLayout or, for the room a docked panel takes, a custom property on it, so
+              a swap is one value changed in one place. A NavList in the sidebar hangs by its own text inset, so its
+              words line up with the header&apos;s brand, and a host that narrows the page itself (padding on the
+              body for a docked chat) moves the edge aside with <code>--ds-site-layout-aside-inset</code>. The widths read the
               shell recipe&apos;s width axis, the same one AppLayout and the templates read, apart from any shell mode.
             </p>
             <Table
               columns={[
-                { key: "prop", header: "Prop", mono: true },
+                { key: "prop", header: "Prop or property", mono: true },
                 { key: "values", header: "Values" },
                 { key: "does", header: "What it sets" },
               ]}

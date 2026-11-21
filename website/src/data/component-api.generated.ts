@@ -1355,7 +1355,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "width",
             "type": "\"contained\" | \"full\"",
             "required": false,
-            "description": "How wide the content runs, in any `layout`: `contained` centres it at\nthe contained width (1120px here, or `--ds-shell-contained-width` set\non the layout); `full` runs it the whole width the mode leaves it.",
+            "description": "How wide the content runs, in any `layout`: `contained` centres it at\nthe contained width (1120px here, or `--ds-shell-contained-width` set\non the layout); `full` runs it the whole width the mode leaves it. An\napp's working column, so it takes none of SiteLayout's site-scale\n`containedWidth` steps. `inset` no longer forces full width, as it did\nup to 1.32: pass `width=\"full\"` for that edge-to-edge inset.",
             "values": [
               "contained",
               "full"
@@ -1821,7 +1821,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "lines",
             "type": "CodeLine[]",
             "required": false,
-            "description": "The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock.",
+            "description": "The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. Offers the Code view on its own; `code`, when also given, is the text the copy button copies.",
             "typeRefs": [
               "CodeLine"
             ]
@@ -4803,9 +4803,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "onCopied",
-            "type": "(() => void)",
+            "type": "((value: string) => void)",
             "required": false,
-            "description": "Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
+            "description": "Called with the copied text (the shown tab's code, or the text of `lines`) after it is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
           },
           {
             "name": "maxHeight",
@@ -6308,7 +6308,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "copyText",
             "type": "string",
             "required": false,
-            "description": "Visible text before a copy. Ignored when `iconOnly`.",
+            "description": "Visible text before a copy. When `iconOnly`, it is the accessible name and the tooltip instead, unless `copyLabel` is set.",
             "defaultValue": "'Copy'"
           },
           {
@@ -6330,6 +6330,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Show only the glyph, with the label in a tooltip, as an IconButton.",
             "defaultValue": "false"
+          },
+          {
+            "name": "tooltipPosition",
+            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "required": false,
+            "description": "Where the icon-only form's tooltip sits, as on IconButton.",
+            "values": [
+              "bottom",
+              "end",
+              "left",
+              "right",
+              "start",
+              "top"
+            ],
+            "defaultValue": "'top'"
           },
           {
             "name": "variant",
@@ -12611,7 +12626,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "The standalone link's type size: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor.",
+            "description": "The type size of a standalone or skip link: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor.",
             "values": [
               "compact",
               "default"
@@ -13775,12 +13790,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
-            "name": "sectionExpandLabel",
-            "type": "((label: string) => string)",
-            "required": false,
-            "description": "Accessible name for a section's fold toggle while folded, given its heading. Defaults to \"Expand <label>\"."
-          },
-          {
             "name": "currentHref",
             "type": "string",
             "required": false,
@@ -13796,7 +13805,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "defaultExpandedIds",
             "type": "string[]",
             "required": false,
-            "description": "Initially expanded item ids (uncontrolled)."
+            "description": "Initially expanded item ids (uncontrolled). The branch and the\ncollapsible section that hold the current page start open as well, so a\nreader landing deep in a long tree sees where they are."
           },
           {
             "name": "onExpandedChange",
@@ -13808,7 +13817,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "multiple",
             "type": "boolean",
             "required": false,
-            "description": "Allow several sections expanded at once. Default false — expanding one collapses the rest.",
+            "description": "Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in.",
             "defaultValue": "false"
           },
           {
@@ -14365,8 +14374,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pageCount",
             "type": "number",
             "required": false,
-            "description": "Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it.",
-            "defaultValue": "1"
+            "description": "Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it."
           },
           {
             "name": "onPageChange",
@@ -15842,7 +15850,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"stars\" | \"thumbs\"",
             "required": false,
-            "description": "The scale's form. `stars` (the default) is a row of `max` steps that\nfill up to the value. `thumbs` is a two-way verdict, a thumb up and a\nthumb down, for a quick \"Was this helpful?\": value 1 is up, 2 is down,\n0 is no answer yet, and `max` and `icon` are ignored.",
+            "description": "The scale's form. `stars` (the default) is a row of `max` steps that\nfill up to the value. `thumbs` is a two-way verdict, a thumb up and a\nthumb down, for a quick \"Was this helpful?\": value 1 is up, 2 is down,\n0 is no answer yet, and `max`, `icon` and `valueLabel` are ignored.",
             "values": [
               "stars",
               "thumbs"
@@ -16308,7 +16316,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "anchor",
             "type": "string | boolean",
             "required": false,
-            "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, as Heading's `anchor` does. `true` makes the id from the title;\na string sets it."
+            "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, as Heading's `anchor` does. `true` makes the id from the title;\na string sets it. The id lands on the heading, not the root, so an\n`id` passed through goes to the root and the link targets the anchor."
           },
           {
             "name": "anchorLabel",
@@ -17024,7 +17032,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "The bottom row's small print: a copyright, a licence, a privacy link."
           },
           {
-            "name": "navigationLabel",
+            "name": "navLabel",
             "type": "string",
             "required": false,
             "description": "Accessible name of the navigation landmark that holds the columns.",
@@ -17063,7 +17071,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Site header",
     "slug": "site-header",
     "category": "navigation",
-    "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.",
+    "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit or below a set breakpoint.",
     "client": true,
     "importPath": "rift-ds/components/SiteHeader/SiteHeader",
     "barrel": "main",
@@ -17139,13 +17147,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "initialFold",
             "type": "\"tablet\" | \"mid\" | \"never\"",
             "required": false,
-            "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width.",
+            "description": "Where the bar folds before it has measured itself: on the first frame,\nwhich a server-rendered page shows before its script runs. Below this\nbreakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS\nalone, so a phone never sees the pills overflow; the measurement takes\nover once the script runs. Pick the step nearest where the pills stop\nfitting, or `never` for a bar that fits at every width. Defaults to\n`foldBelow` when that is set, so a bar told to fold at a step starts\nfolded there too and never shifts when its script runs.",
             "values": [
               "mid",
               "never",
               "tablet"
             ],
-            "defaultValue": "'tablet'"
+            "defaultValue": "foldBelow ?? 'tablet'"
           },
           {
             "name": "foldBelow",

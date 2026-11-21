@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { IconButton } from '../IconButton/IconButton';
 import { DropdownMenu, type DropdownMenuEntry } from './DropdownMenu';
 
 const meta: Meta<typeof DropdownMenu> = {
@@ -324,4 +326,41 @@ const SelectedStateDemo = () => {
 export const SelectedState: Story = {
   args: { trigger: null, items: [] },
   render: () => <SelectedStateDemo />,
+};
+
+/* ============================================
+   ONE MENU AT A TIME
+   ============================================ */
+
+/**
+ * Two menus side by side, each trigger wearing a tooltip, as a header's
+ * switchers do. Opening the second closes the first, even while the second
+ * trigger's tooltip shows: a tooltip is a passive layer, so it never stops
+ * the press from reaching the open menu.
+ */
+export const OneMenuAtATime: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--gap-400)' }}>
+      <DropdownMenu
+        items={[{ label: 'Contained', onClick: () => {} }, { label: 'Full width', onClick: () => {} }]}
+        trigger={<IconButton icon="width_normal" label="Layout" />}
+      />
+      <DropdownMenu
+        items={[{ label: 'Field', onClick: () => {} }, { label: 'Prism', onClick: () => {} }]}
+        trigger={<IconButton icon="diamond" label="Background" />}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(canvas.getByRole('button', { name: 'Layout' }));
+    await waitFor(() => expect(body.getByRole('menuitem', { name: 'Full width' })).toBeVisible());
+    const second = canvas.getByRole('button', { name: 'Background' });
+    await userEvent.hover(second);
+    await waitFor(() => expect(body.getAllByRole('tooltip').some((tip) => tip.textContent === 'Background')).toBe(true));
+    await userEvent.click(second);
+    await waitFor(() => expect(body.getByRole('menuitem', { name: 'Prism' })).toBeVisible());
+    await waitFor(() => expect(body.queryByRole('menuitem', { name: 'Full width' })).toBeNull());
+  },
 };

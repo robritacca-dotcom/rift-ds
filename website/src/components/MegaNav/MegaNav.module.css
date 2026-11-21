@@ -155,3 +155,13 @@
     display: none;
   }
 }
+
+/* The layout switcher (inside SiteFrame) on a desktop bar only: below the
+   tablet step the frame's sidebar leaves the page and its two layouts draw
+   the same, so the control would change nothing. Doubled for the production
+   stylesheet order noted above. */
+@media (max-width: 959px) {
+  .header .desktopOnly.desktopOnly {
+    display: none;
+  }
+}

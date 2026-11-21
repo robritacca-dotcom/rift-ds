@@ -18,11 +18,13 @@
  *   the app shell modes (App shells, Site shells on /foundations/layout).
  * - **The layout levers are live.** A Layout icon button in the header, the
  *   theme picker's form, opens a menu whose radio groups set the page width,
- *   the header width and where the sidebar docks, so every combination can
- *   be seen in place, and whether the on-this-page rail floats at the edge
- *   (AnchorNav's floating minimap, the site's own) or takes a column. It
- *   opens on a full-width header over a sidebar docked to the edge, a
- *   contained article and the floating rail.
+ *   its contained size (narrow, default, wide), the frame (the header, the
+ *   sidebar and the footer, which move as one: edge to edge, or contained
+ *   with the page) and whether the on-this-page rail floats at the edge
+ *   (AnchorNav's floating minimap, the site's own) or takes a column, so
+ *   every combination can be seen in place. It opens edge to edge, with a
+ *   contained article and the floating rail; a full-width header's mega
+ *   menus keep the contained width over a blur.
  * - **Code is highlighted on the server.** The route calls `highlight()`
  *   from `rift-ds/code/highlight` and hands the lines down, so the page ships
  *   no highlighter; the install commands are `packageManagerTabs()` with one
@@ -179,7 +181,7 @@ const SECTIONS: SiteHeaderSection[] = [
 
 const FOOTER_COLUMNS: SiteFooterColumn[] = [
   {
-    title: "Docs",
+    label: "Docs",
     links: [
       { label: "Introduction", href: "#introduction" },
       { label: "Installation", href: "#installation" },
@@ -188,7 +190,7 @@ const FOOTER_COLUMNS: SiteFooterColumn[] = [
     ],
   },
   {
-    title: "Components",
+    label: "Components",
     links: [
       { label: "Button", href: "#button" },
       { label: "Data table", href: "#data-table" },
@@ -196,7 +198,7 @@ const FOOTER_COLUMNS: SiteFooterColumn[] = [
     ],
   },
   {
-    title: "Community",
+    label: "Community",
     links: [
       { label: "Discussions", href: "https://example.com/discussions", external: true },
       { label: "Contributing", href: "#contributing" },
@@ -236,6 +238,7 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
   const product = useStagedProductName(PRODUCT);
   const staged = useIsStaged();
   const [pageWidth, setPageWidth] = useState<Width>("contained");
+  const [containedWidth, setContainedWidth] = useState<"narrow" | "default" | "wide">("default");
   const [dock, setDock] = useState<Dock>("edge");
   const [asidePlacement, setAsidePlacement] = useState<"edge" | "column">("edge");
   const [chatOpen, setChatOpen] = useState(false);
@@ -281,6 +284,16 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     { type: "separator" },
     {
       type: "group",
+      label: "Contained size",
+      items: [
+        radio("narrow", containedWidth, "Narrow, 1200px", setContainedWidth),
+        radio("default", containedWidth, "Default, 1440px", setContainedWidth),
+        radio("wide", containedWidth, "Wide, 1680px", setContainedWidth),
+      ],
+    },
+    { type: "separator" },
+    {
+      type: "group",
       label: "Header, sidebar and footer",
       items: [
         radio("edge", dock, "Edge to edge", setDock),
@@ -314,6 +327,7 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     <SiteLayout
       className={[styles.layout, chatOpen && chatDocks ? styles.layoutChatOpen : ""].filter(Boolean).join(" ")}
       width={pageWidth}
+      containedWidth={containedWidth}
       readingWidth
       sidebarDock={dock}
       asidePlacement={asidePlacement}

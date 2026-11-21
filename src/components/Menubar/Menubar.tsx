@@ -14,6 +14,8 @@ export interface MenubarMenu {
   items: DropdownMenuEntry[];
   /** Show the trigger but do not let it open. */
   disabled?: boolean;
+  /** Stable identity for the menu, when two menus share a label. Defaults to the label. */
+  id?: string;
 }
 
 /** Props owned by Menubar itself. */
@@ -97,10 +99,10 @@ export function Menubar({
   };
 
   return (
-    <div {...rest} ref={ref} className={classes} role="menubar" aria-label={label}>
+    <div aria-label={label} {...rest} ref={ref} className={classes} role="menubar">
       {menus.map((menu, index) => (
         <DropdownMenu
-          key={menu.label}
+          key={menu.id ?? menu.label}
           className={`${baseClass}__menu`}
           items={menu.items}
           size={size}

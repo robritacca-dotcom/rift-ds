@@ -99,12 +99,13 @@ export interface SiteLayoutProps
 /**
  * SiteLayout: the frame of a documentation or marketing site. A header, a
  * navigation sidebar, the main content, an aside and a footer, laid out by
- * independent choices: how wide the page runs (`width`), the header and
- * the footer each apart from it (`headerWidth`, `footerWidth`), where the
- * sidebar docks (`sidebarDock`) and where the aside sits
- * (`asidePlacement`); any combination holds. The sidebar sticks below the header and
- * scrolls on its own; below 1152px the aside gives way, and below 960px the
- * sidebar leaves the page to the header's own menu. A skip link comes first.
+ * props: how wide the page runs (`width`, stepped by `containedWidth`),
+ * where the sidebar docks (`sidebarDock`; the header and the footer move
+ * with it unless `headerWidth` or `footerWidth` breaks the pairing), where
+ * the aside sits (`asidePlacement`) and the reading width; any combination
+ * holds. The sidebar sticks below the header and scrolls on its own; below
+ * 1152px a column aside gives way, and below 960px the sidebar and an edge
+ * aside leave the page to the header's own menu. A skip link comes first.
  */
 export function SiteLayout({
   children,

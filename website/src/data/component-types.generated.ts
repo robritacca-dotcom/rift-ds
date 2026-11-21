@@ -1926,7 +1926,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "MenubarMenu": {
         "kind": "interface",
-        "definition": "interface MenubarMenu {\n  /** The trigger's text, e.g. \"File\". Also the open menu's accessible name. */\n  label: string;\n  /** The menu's entries, in DropdownMenu's shape: items, groups, separators, checkbox and radio items, sub-menus and shortcuts. */\n  items: DropdownMenuEntry[];\n  /** Show the trigger but do not let it open. */\n  disabled?: boolean;\n}",
+        "definition": "interface MenubarMenu {\n  /** The trigger's text, e.g. \"File\". Also the open menu's accessible name. */\n  label: string;\n  /** The menu's entries, in DropdownMenu's shape: items, groups, separators, checkbox and radio items, sub-menus and shortcuts. */\n  items: DropdownMenuEntry[];\n  /** Show the trigger but do not let it open. */\n  disabled?: boolean;\n  /** Stable identity for the menu, when two menus share a label. Defaults to the label. */\n  id?: string;\n}",
         "description": "One menu in the bar: its trigger's label and the entries it opens.",
         "refs": [
           "DropdownMenuEntry"
@@ -2028,7 +2028,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "NavListSection": {
         "kind": "interface",
-        "definition": "interface NavListSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The section's heading. */\n  label: string;\n  /** The section's rows. */\n  items: NavListItem[];\n  /** Stable identity for its expansion state. Defaults to the label. */\n  id?: string;\n  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */\n  collapsible?: boolean;\n}",
+        "definition": "interface NavListSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The section's heading. */\n  label: string;\n  /** The section's rows. */\n  items: NavListItem[];\n  /**\n   * Stable identity for its expansion state. Defaults to the label. In\n   * `expandedIds`, `defaultExpandedIds` and `onExpandedChange` a section\n   * appears as `section:<id>`, so its id never collides with a row's.\n   */\n  id?: string;\n  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */\n  collapsible?: boolean;\n}",
         "description": "A titled section of rows: a heading over its items, the way a long\ndocumentation sidebar groups its pages. Sections sit only at the top\nlevel; their items nest like any others.",
         "refs": [
           "NavListItem"
@@ -2474,8 +2474,8 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "SiteFooterColumn": {
         "kind": "interface",
-        "definition": "interface SiteFooterColumn {\n  /** The column's heading, e.g. \"Docs\". */\n  title: string;\n  /** Its links, in order. */\n  links: SiteFooterLink[];\n}",
-        "description": "A titled column of footer links.",
+        "definition": "interface SiteFooterColumn {\n  /** The column's heading, e.g. \"Docs\". */\n  label: string;\n  /** Its links, in order. */\n  links: SiteFooterLink[];\n}",
+        "description": "A labelled column of footer links.",
         "refs": [
           "SiteFooterLink"
         ]

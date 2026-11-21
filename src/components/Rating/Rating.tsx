@@ -42,7 +42,7 @@ type RatingOwnProps = {
    * The scale's form. `stars` (the default) is a row of `max` steps that
    * fill up to the value. `thumbs` is a two-way verdict, a thumb up and a
    * thumb down, for a quick "Was this helpful?": value 1 is up, 2 is down,
-   * 0 is no answer yet, and `max` and `icon` are ignored.
+   * 0 is no answer yet, and `max`, `icon` and `valueLabel` are ignored.
    */
   variant?: 'stars' | 'thumbs';
   /** Accessible name of the thumb up in the `thumbs` form. */
@@ -58,10 +58,12 @@ export interface RatingProps
 const defaultValueLabel = (value: number, max: number) => `${value} out of ${max}`;
 
 /**
- * Star-scale rating control. Behaves as a radio group: each step is a
- * `role="radio"` button, arrow keys move the selection, and the current
- * step holds the roving tab stop. `readOnly` renders the same row as a
- * static image with a spoken "N out of M" label.
+ * Rating control: a star scale, or with `variant="thumbs"` a thumb up and a
+ * thumb down for a quick "Was this helpful?". Behaves as a radio group:
+ * each step is a `role="radio"` button, arrow keys move the selection, and
+ * the current step holds the roving tab stop. `readOnly` renders the same
+ * row as a static image with a spoken label ("N out of M", or the thumb's
+ * label).
  *
  * Forwards a ref to the root element and spreads unrecognised props onto it.
  */
@@ -156,7 +158,14 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
           ref={ref}
           className={classes}
           role="img"
-          aria-label={rest['aria-label'] ?? `${label}: ${thumbs ? (currentValue ? stepLabel(currentValue) : '') : valueLabel(currentValue, max)}`}
+          aria-label={
+            rest['aria-label'] ??
+            (thumbs
+              ? currentValue
+                ? `${label}: ${stepLabel(currentValue)}`
+                : label
+              : `${label}: ${valueLabel(currentValue, max)}`)
+          }
         >
           {steps.map((step) => (
             <span

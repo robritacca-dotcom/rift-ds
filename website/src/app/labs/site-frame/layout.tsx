@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import SiteFrame from "./SiteFrame";
+import SiteFrameLab from "./SiteFrame";
 
 export const metadata = {
   title: "Labs: site frame",
@@ -16,5 +16,5 @@ export const metadata = {
  * reader moves between the home, the index and the sub page.
  */
 export default function LabsSiteFrameLayout({ children }: { children: ReactNode }) {
-  return <SiteFrame>{children}</SiteFrame>;
+  return <SiteFrameLab>{children}</SiteFrameLab>;
 }

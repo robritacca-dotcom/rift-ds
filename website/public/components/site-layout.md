@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { SiteLayout } from 'rift-ds';`
 - Deep import: `import { SiteLayout } from 'rift-ds/components/SiteLayout/SiteLayout';`
 - Rendering: client component (declares 'use client')
+- Size: 1.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/site-layout
 - Schema: https://rift-ds.com/schema/components/site-layout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -39,6 +40,6 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 
 ## Keyboard
 
-A frame: its slots own their keys, and the skip link and the menu button are native. Those keys belong to the platform, so no test of this library presses them.
+A frame: its slots own their keys, and its skip link is a native link. Those keys belong to the platform, so no test of this library presses them.
 
 Types from other packages: `ReactNode` (react).

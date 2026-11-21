@@ -1569,7 +1569,7 @@
       "name": "SiteHeader",
       "label": "Site header",
       "slug": "site-header",
-      "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.",
+      "description": "A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit or below a set breakpoint.",
       "category": "navigation",
       "client": true,
       "keys": { "by": "component", "note": "Focusing a section opens its panel, Arrow Down moves into it, and Escape closes it." }
@@ -1581,7 +1581,7 @@
       "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.",
       "category": "layout",
       "client": true,
-      "keys": { "by": "platform", "note": "A frame: its slots own their keys, and the skip link and the menu button are native." },
+      "keys": { "by": "platform", "note": "A frame: its slots own their keys, and its skip link is a native link." },
       "alternatives": [
         { "name": "AppLayout", "when": "the page is an app screen with a rail of tools rather than a site of pages" }
       ]

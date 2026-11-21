@@ -32,7 +32,7 @@ This is a more thorough, component-specific version of `new-page`. The Button pa
    - Note the BEM class names used for each variant/state
 
 3. **Read the gold-standard reference:**
-   - `website/src/app/components/button/page.tsx` — study the variant showcase grid structure (rows = states, columns = variants), the `pageHeader` block, `introSection`, and how `PageLinks` is used
+   - `website/src/app/components/button/page.tsx` (the frame) and `ButtonDocs.tsx` beside it (the article) — study the variant showcase grid structure (rows = states, columns = variants), the `pageHeader` block, `introSection`, and how `PageLinks` is used
    - `website/src/app/components/button/page.module.css` — CSS module structure
 
 4. **Create `website/src/app/components/<component-slug>/page.tsx`:**

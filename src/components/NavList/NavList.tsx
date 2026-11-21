@@ -44,7 +44,11 @@ export interface NavListSection {
   label: string;
   /** The section's rows. */
   items: NavListItem[];
-  /** Stable identity for its expansion state. Defaults to the label. */
+  /**
+   * Stable identity for its expansion state. Defaults to the label. In
+   * `expandedIds`, `defaultExpandedIds` and `onExpandedChange` a section
+   * appears as `section:<id>`, so its id never collides with a row's.
+   */
   id?: string;
   /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */
   collapsible?: boolean;
@@ -72,17 +76,19 @@ type NavListOwnProps = {
    * a column with a fixed or sticky height.
    */
   scrollable?: boolean;
-  /** Accessible name for a section's fold toggle while folded, given its heading. Defaults to "Expand <label>". */
-  sectionExpandLabel?: (label: string) => string;
   /** href of the current page — the exactly matching row gets `aria-current="page"` and the active treatment. */
   currentHref?: string;
   /** Controlled list of expanded item ids. */
   expandedIds?: string[];
-  /** Initially expanded item ids (uncontrolled). */
+  /**
+   * Initially expanded item ids (uncontrolled). The branch and the
+   * collapsible section that hold the current page start open as well, so a
+   * reader landing deep in a long tree sees where they are.
+   */
   defaultExpandedIds?: string[];
   /** Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes. */
   onExpandedChange?: (expandedIds: string[]) => void;
-  /** Allow several sections expanded at once. Default false — expanding one collapses the rest. */
+  /** Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in. */
   multiple?: boolean;
   /** Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. */
   onNavigate?: (item: NavListItem, event: React.MouseEvent<HTMLElement>) => void;
@@ -123,7 +129,6 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
       items,
       size = 'default',
       scrollable = false,
-      sectionExpandLabel,
       currentHref,
       expandedIds,
       defaultExpandedIds,
@@ -220,12 +225,35 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Each expandable id's ancestors (the rows and the section it sits in),
+    // so the one-open rule closes only siblings, never the branch around
+    // the row the reader just opened.
+    const ancestorsOf = new Map<string, string[]>();
+    const mapAncestors = (list: NavListItem[], chain: string[]) => {
+      for (const item of list) {
+        if (!item.items) continue;
+        ancestorsOf.set(itemId(item), chain);
+        mapAncestors(item.items, [...chain, itemId(item)]);
+      }
+    };
+    for (const entry of items) {
+      if (isSection(entry)) {
+        ancestorsOf.set(sectionId(entry), []);
+        mapAncestors(entry.items, [sectionId(entry)]);
+      } else {
+        mapAncestors([entry], []);
+      }
+    }
+
     const toggle = (id: string) => {
+      const keep = new Set(ancestorsOf.get(id) ?? []);
+      // Sections are top-level folds of their own; opening one row never
+      // closes another section.
       const next = expanded.includes(id)
         ? expanded.filter((entry) => entry !== id)
         : multiple
           ? [...expanded, id]
-          : [id];
+          : [...expanded.filter((entry) => keep.has(entry) || (entry.startsWith('section:') && !id.startsWith('section:'))), id];
       if (expandedIds === undefined) setInternalExpanded(next);
       onExpandedChange?.(next);
     };
@@ -313,7 +341,7 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
               className={`${baseClass}__heading ${baseClass}__heading--toggle`}
               aria-expanded={isOpen}
               aria-controls={panelId}
-              aria-label={isOpen ? collapseLabel(section.label) : (sectionExpandLabel ?? expandLabel)(section.label)}
+              aria-label={isOpen ? collapseLabel(section.label) : expandLabel(section.label)}
               onClick={() => toggle(id)}
             >
               <span className={`${baseClass}__heading-text`}>{section.label}</span>

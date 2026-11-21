@@ -133,8 +133,10 @@ export default function SiteHeaderPage() {
               brand at the far start and the actions at the far end; <code>contained</code> centres its contents at the
               contained width, so they line up with a contained page below. The same two values set a page&apos;s width
               in SiteLayout, AppLayout and the templates, apart from the shell mode. Inside a SiteLayout, leave
-              <code>width</code> out and the bar follows the layout&apos;s <code>headerWidth</code>, so a swap is made
-              in one place.
+              <code>width</code> out and the bar follows the layout&apos;s <code>headerWidth</code>, which itself
+              follows where the sidebar docks, so a swap is made in one place. A full bar keeps its mega menu at the
+              contained width, opening under the pills, over a blur that runs the window&apos;s width and fades out below, so a wide
+              window never stretches the menu&apos;s columns apart.
             </p>
             <div className={styles.frame}>
               <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} width="full" navLabel="Example, full width" />

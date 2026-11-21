@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { ArtifactPanel } from 'rift-ds';`
 - Deep import: `import { ArtifactPanel } from 'rift-ds/components/ArtifactPanel/ArtifactPanel';`
 - Rendering: client component (declares 'use client')
-- Size: 7.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/artifact-panel
 - Schema: https://rift-ds.com/schema/components/artifact-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | --- | --- | --- | --- | --- |
 | title | `ReactNode` | no |  | The artifact's name, shown in the header and used as the panel's accessible name. Collides with the native `title` tooltip attribute on purpose: a panel has a heading, not a tooltip. Required for the `panel` layout; an `inline` example may leave it out, and is then named by `viewLabel`. |
 | layout | `"inline" \| "panel"` | no | `'panel'` | Where it sits. `panel` (the default) fills the box a host gives it, beside a conversation, and the host paints the card. `inline` is a self-contained frame in the flow of a page, sized by its content: its own card, a centred preview stage, and the source a switch away, the live example of a component's documentation. |
-| lines | `CodeLine[]` | no |  | The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. |
+| lines | `CodeLine[]` | no |  | The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. Offers the Code view on its own; `code`, when also given, is the text the copy button copies. |
 | meta | `ReactNode` | no |  | A quiet line beside the name: what kind of thing this is, or which version. |
 | icon | `string \| ReactNode` | no |  | Leading mark in the header — Material Symbol name (string) or custom element (ReactNode). |
 | children | `ReactNode` | no |  | The preview, as live React content. Wins over `html` and `src`. |

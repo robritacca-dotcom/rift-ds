@@ -6,6 +6,7 @@ import '../../fonts/material-symbols.css';
 import { useLocale } from '../../behaviors/LocaleProvider';
 import { formatNumber } from '../../behaviors/locale';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
+import { warnOnce } from '../../behaviors/devWarning';
 
 /** A neighbouring page the `adjacent` form links to. */
 export interface PaginationLink {
@@ -130,7 +131,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       linkComponent,
       page,
       defaultPage = 1,
-      pageCount = 1,
+      pageCount: pageCountProp,
       onPageChange,
       siblingCount = 1,
       size = 'default',
@@ -148,6 +149,12 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     const locale = useLocale(localeProp);
     const Link = useLinkComponent(linkComponent);
     const baseClass = 'ds-pagination';
+    // pageCount is optional because the adjacent form has no pages to count;
+    // the numbered form without it would draw a single page.
+    if (variant === 'numbered' && pageCountProp === undefined) {
+      warnOnce('Pagination: the numbered form needs `pageCount`; without it, it draws one page.');
+    }
+    const pageCount = pageCountProp ?? 1;
     const compact = size === 'compact';
 
     const isControlled = page !== undefined;

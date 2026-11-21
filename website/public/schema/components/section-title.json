@@ -43,7 +43,7 @@
           "type": "string | boolean",
           "typeKind": "other",
           "required": false,
-          "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, as Heading's `anchor` does. `true` makes the id from the title;\na string sets it."
+          "description": "Give the heading an id and a \"#\" link to itself, shown on hover and\nfocus, as Heading's `anchor` does. `true` makes the id from the title;\na string sets it. The id lands on the heading, not the root, so an\n`id` passed through goes to the root and the link targets the anchor."
         },
         {
           "name": "anchorLabel",
@@ -70,7 +70,7 @@
     "by": "none"
   },
   "size": {
-    "gzip": 299
+    "gzip": 497
   },
   "alternatives": [
     {

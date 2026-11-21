@@ -180,7 +180,10 @@
   },
   "keys": {
     "by": "platform",
-    "note": "A frame: its slots own their keys, and the skip link and the menu button are native."
+    "note": "A frame: its slots own their keys, and its skip link is a native link."
+  },
+  "size": {
+    "gzip": 1356
   },
   "alternatives": [
     {

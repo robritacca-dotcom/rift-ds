@@ -94,8 +94,7 @@
           "type": "number",
           "typeKind": "primitive",
           "required": false,
-          "description": "Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it.",
-          "default": 1
+          "description": "Total number of pages. Required for the `numbered` form; the `adjacent` form ignores it."
         },
         {
           "name": "onPageChange",
@@ -229,6 +228,6 @@
     }
   ],
   "size": {
-    "gzip": 1306
+    "gzip": 1684
   }
 }

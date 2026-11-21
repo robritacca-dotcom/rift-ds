@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { SiteFooter } from 'rift-ds';`
 - Deep import: `import { SiteFooter } from 'rift-ds/components/SiteFooter/SiteFooter';`
 - Rendering: server-renderable (no 'use client')
+- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/site-footer
 - Schema: https://rift-ds.com/schema/components/site-footer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -20,7 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | description | `ReactNode` | no |  | A line about the site under the brand. |
 | social | `ReactNode` | no |  | Social or utility controls for the bottom row's end, such as IconButtons. |
 | legal | `ReactNode` | no |  | The bottom row's small print: a copyright, a licence, a privacy link. |
-| navigationLabel | `string` | no | `'Site'` | Accessible name of the navigation landmark that holds the columns. |
+| navLabel | `string` | no | `'Site'` | Accessible name of the navigation landmark that holds the columns. |
 | externalLabel | `string` | no | `'(opens in a new tab)'` | Text read after an external link's name, for a screen reader. |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`. A plain `<a>` when unset. Server-renderable, so it reads no LinkProvider: pass it here. |
 | className | `string` | no | `''` | Additional CSS classes |
@@ -52,12 +53,12 @@ type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 
 ### SiteFooterColumn
 
-A titled column of footer links.
+A labelled column of footer links.
 
 ```ts
 interface SiteFooterColumn {
   /** The column's heading, e.g. "Docs". */
-  title: string;
+  label: string;
   /** Its links, in order. */
   links: SiteFooterLink[];
 }

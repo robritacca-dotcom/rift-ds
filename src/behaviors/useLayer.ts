@@ -21,7 +21,10 @@ import { useCallback, useEffect, useRef } from 'react';
  *   lands outside of, and that opts into light dismiss, closes; the walk
  *   stops at the first layer that contains the press or does not
  *   light-dismiss (a modal, which owns its backdrop). So a press on a
- *   Dialog's body closes the menus open above it and leaves the Dialog.
+ *   Dialog's body closes the menus open above it and leaves the Dialog. A
+ *   `passive` layer (a tooltip) is passed through, never a stop, so a press
+ *   on another menu's trigger closes the open menu even while a tooltip
+ *   shows over it.
  * - **Backdrop clicks** stay with the modal that draws the backdrop, but a
  *   press that began while another layer was on top was that layer's press:
  *   `ownsPress()` tells the modal so, and it keeps itself open. Without it, a
@@ -54,6 +57,14 @@ type LayerOptions = {
    * also to stop the outside-press walk at a layer that contains the press.
    */
   getElements?: () => (HTMLElement | null | undefined)[];
+  /**
+   * A layer that only listens for Escape and never owns a press: a tooltip.
+   * The outside-press walk passes through it to the layers beneath, and it is
+   * never the press owner, so a tooltip showing over an open menu (its own
+   * trigger hovered, say) never keeps that menu open or a modal's backdrop
+   * from closing it. Escape still reaches it first while it is on top.
+   */
+  passive?: boolean;
 };
 
 export type LayerHandle = {
@@ -99,12 +110,13 @@ const handleKeyDown = (event: KeyboardEvent) => {
 };
 
 const handlePointerDown = (event: PointerEvent) => {
-  pressOwner = layers[layers.length - 1] ?? null;
+  pressOwner = [...layers].reverse().find((layer) => !layer.optionsRef.current.passive) ?? null;
   const target = event.target instanceof Node ? event.target : null;
   if (!target) return;
   // Walk a snapshot: a dismissal can unregister layers mid-walk.
   for (const layer of [...layers].reverse()) {
     const options = layer.optionsRef.current;
+    if (options.passive) continue;
     if (!options.dismissOnOutsidePress || contains(layer, target)) break;
     options.onDismiss?.();
   }
@@ -157,7 +169,9 @@ export function useLayer(options: LayerOptions): LayerHandle {
   const ownsPress = useCallback(() => {
     const layer = layerRef.current;
     if (!layer) return false;
-    return pressOwner ? pressOwner === layer : layers[layers.length - 1] === layer;
+    return pressOwner
+      ? pressOwner === layer
+      : [...layers].reverse().find((entry) => !entry.optionsRef.current.passive) === layer;
   }, []);
 
   return { ownsPress };

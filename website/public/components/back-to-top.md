@@ -8,6 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { BackToTop } from 'rift-ds';`
 - Deep import: `import { BackToTop } from 'rift-ds/components/BackToTop/BackToTop';`
 - Rendering: client component (declares 'use client')
+- Size: 4.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/back-to-top
 - Schema: https://rift-ds.com/schema/components/back-to-top.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

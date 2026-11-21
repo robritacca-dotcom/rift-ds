@@ -10,6 +10,8 @@ import { ASSISTANT_NAME } from "@/config/brand.generated";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
 import BackgroundSwitcher from "../BackgroundSwitcher/BackgroundSwitcher";
+import LayoutSwitcher from "../LayoutSwitcher/LayoutSwitcher";
+import { useInSiteFrame } from "../SiteFrame/context";
 import { openSitePalette } from "../SitePalette/palette-bus";
 import { deferComponent, usePreloadWhenIdle } from "rift-ds/behaviors/deferComponent";
 import { getNavSections, type MegaShowcase } from "@/config/navigation";
@@ -37,6 +39,8 @@ export default function MegaNav() {
   const pathname = usePathname() ?? "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const { setOpen: setChatOpen, returnFocusRef } = useChatWidget();
+  // Inside SiteFrame the bar offers the frame's layout switcher.
+  const inFrame = useInSiteFrame();
   usePreloadWhenIdle(DeferredShowcaseCover.preload);
 
   // A navigation closes the drawer, including one the drawer did not start
@@ -143,6 +147,7 @@ export default function MegaNav() {
           <CommandPaletteTrigger size="compact" className={styles.searchBtn} onClick={openSitePalette} />
           {chatButton}
           <BrandSwitcher size="compact" className={styles.barOnly} />
+          {inFrame && <LayoutSwitcher size="compact" className={styles.desktopOnly} />}
           <BackgroundSwitcher size="compact" className={styles.barOnly} />
           <ThemeToggle size="compact" className={styles.barOnly} />
         </>
@@ -152,8 +157,9 @@ export default function MegaNav() {
           <CommandPaletteTrigger size="compact" iconOnly onClick={openSitePalette} />
           {chatButton}
           <BrandSwitcher size="compact" className={styles.barOnly} />
+          {inFrame && <LayoutSwitcher size="compact" className={styles.desktopOnly} />}
           <BackgroundSwitcher size="compact" className={styles.barOnly} />
-          <ThemeToggle size="compact" cycle className={styles.barOnly} />
+          <ThemeToggle size="compact" menu className={styles.barOnly} />
         </>
       }
       wideActions={<GetStartedSplit />}

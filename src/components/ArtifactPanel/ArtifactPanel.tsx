@@ -23,7 +23,7 @@ type ArtifactPanelOwnProps = {
    * live example of a component's documentation.
    */
   layout?: 'panel' | 'inline';
-  /** The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. */
+  /** The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. Offers the Code view on its own; `code`, when also given, is the text the copy button copies. */
   lines?: CodeLine[];
   /** A quiet line beside the name: what kind of thing this is, or which version. */
   meta?: React.ReactNode;
@@ -129,7 +129,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
   ) => {
     const titleId = useId();
     const hasPreview = Boolean(children) || html !== undefined || Boolean(src);
-    const hasCode = code !== undefined;
+    const hasCode = code !== undefined || lines !== undefined;
 
     const [ownView, setOwnView] = useState<ArtifactPanelView>(defaultView ?? 'preview');
     const wanted = view ?? ownView;
@@ -150,10 +150,10 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
     return (
       <section
         ref={ref}
+        aria-label={title ? undefined : viewLabel}
         {...rest}
         className={[baseClass, layout === 'inline' ? `${baseClass}--inline` : '', className].filter(Boolean).join(' ')}
         aria-labelledby={title ? titleId : undefined}
-        aria-label={title ? undefined : viewLabel}
       >
         <header className={`${baseClass}__header`}>
           <div className={`${baseClass}__heading`}>
@@ -212,7 +212,7 @@ export const ArtifactPanel = React.forwardRef<HTMLElement, ArtifactPanelProps>(
         <div className={`${baseClass}__body`} data-view={current}>
           {current === 'code' && hasCode ? (
             <div className={`${baseClass}__code`}>
-              <CodeBlock {...codeBlockLabels} code={code ?? ''} lines={lines} language={language} />
+              <CodeBlock {...codeBlockLabels} code={code} lines={lines} language={language} />
             </div>
           ) : children ? (
             <div className={`${baseClass}__content`}>{children}</div>

@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { FormSection } from 'rift-ds';`
 - Deep import: `import { FormSection } from 'rift-ds/components/FormSection/FormSection';`
 - Rendering: server-renderable (no 'use client')
-- Size: 0.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/form-section
 - Schema: https://rift-ds.com/schema/components/form-section.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

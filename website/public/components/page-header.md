@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { PageHeader } from 'rift-ds';`
 - Deep import: `import { PageHeader } from 'rift-ds/components/PageHeader/PageHeader';`
 - Rendering: server-renderable (no 'use client')
-- Size: 1.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/page-header
 - Schema: https://rift-ds.com/schema/components/page-header.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

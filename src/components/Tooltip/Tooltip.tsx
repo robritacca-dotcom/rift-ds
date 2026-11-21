@@ -113,8 +113,11 @@ export const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
       };
     }, []);
 
+    // Passive: Escape hides it, but it never stops a press from closing the
+    // menu or popover beneath it (useLayer's `passive`).
     useLayer({
       open: visible,
+      passive: true,
       onDismiss: () => {
         clearTimeout(showTimeoutRef.current);
         clearTimeout(hideTimeoutRef.current);

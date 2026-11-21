@@ -123,7 +123,7 @@
             "thumbs"
           ],
           "required": false,
-          "description": "The scale's form. `stars` (the default) is a row of `max` steps that\nfill up to the value. `thumbs` is a two-way verdict, a thumb up and a\nthumb down, for a quick \"Was this helpful?\": value 1 is up, 2 is down,\n0 is no answer yet, and `max` and `icon` are ignored.",
+          "description": "The scale's form. `stars` (the default) is a row of `max` steps that\nfill up to the value. `thumbs` is a two-way verdict, a thumb up and a\nthumb down, for a quick \"Was this helpful?\": value 1 is up, 2 is down,\n0 is no answer yet, and `max`, `icon` and `valueLabel` are ignored.",
           "default": "stars"
         },
         {
@@ -190,6 +190,6 @@
     }
   ],
   "size": {
-    "gzip": 1267
+    "gzip": 1385
   }
 }

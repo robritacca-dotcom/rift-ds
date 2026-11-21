@@ -29,7 +29,7 @@ For a **component documentation page**, use the `component-doc-page` skill inste
 
 2. **Read the exemplars before writing anything.** The live pages are the source of truth for structure — mirror them rather than writing a shell from memory:
    - `website/src/app/skills/page.tsx` — a standard content page (layout shell, sidebar wiring, header/intro blocks, entry animations)
-   - `website/src/app/components/button/page.tsx` + `page.module.css` + `layout.tsx` — the richest example, with `PageLinks` and per-page CSS
+   - `website/src/app/components/button/page.tsx` + `ButtonDocs.tsx` + `page.module.css` + `layout.tsx` — the richest example, with `PageLinks` and per-page CSS (the article lives in `ButtonDocs.tsx`)
    - `website/src/config/navigation.ts` — nav config (single source of truth for sidebars, mega menu, and breadcrumbs; the sitemap derives its routes from the sidebar configs)
 
 3. **Create the directory** `website/src/app/<path>/` with three files, mirroring the exemplar:

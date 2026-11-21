@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { Heading } from 'rift-ds';`
 - Deep import: `import { Heading } from 'rift-ds/components/Heading/Heading';`
 - Rendering: server-renderable (no 'use client')
-- Size: 0.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 0.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/heading
 - Schema: https://rift-ds.com/schema/components/heading.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

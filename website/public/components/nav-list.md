@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { NavList } from 'rift-ds';`
 - Deep import: `import { NavList } from 'rift-ds/components/NavList/NavList';`
 - Rendering: client component (declares 'use client')
-- Size: 2.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 3.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/nav-list
 - Schema: https://rift-ds.com/schema/components/nav-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -19,12 +19,11 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | items | `NavListEntry[]` | yes |  | Navigation tree to render: rows, and at the top level, sections of rows. |
 | size | `"default" \| "compact"` | no | `'default'` | Row density. `default` is the drawer's 40px top row; `compact` sets every row on the 32px compact control height, for a long sidebar of pages (a documentation site's hundred entries). |
 | scrollable | `boolean` | no | `false` | Make the list its own scroll area: it fills the height its parent gives it, scrolls inside without carrying the page along at its ends, and brings the current row into view when it first renders. Put it in a column with a fixed or sticky height. |
-| sectionExpandLabel | `((label: string) => string)` | no |  | Accessible name for a section's fold toggle while folded, given its heading. Defaults to "Expand <label>". |
 | currentHref | `string` | no |  | href of the current page — the exactly matching row gets `aria-current="page"` and the active treatment. |
 | expandedIds | `string[]` | no |  | Controlled list of expanded item ids. |
-| defaultExpandedIds | `string[]` | no |  | Initially expanded item ids (uncontrolled). |
+| defaultExpandedIds | `string[]` | no |  | Initially expanded item ids (uncontrolled). The branch and the collapsible section that hold the current page start open as well, so a reader landing deep in a long tree sees where they are. |
 | onExpandedChange | `((expandedIds: string[]) => void)` | no |  | Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes. |
-| multiple | `boolean` | no | `false` | Allow several sections expanded at once. Default false — expanding one collapses the rest. |
+| multiple | `boolean` | no | `false` | Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in. |
 | onNavigate | `((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. |
 | expandLabel | `((label: string) => string)` | no | `` (label) => `Expand ${label}` `` | Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to "Expand <label>". |
 | collapseLabel | `((label: string) => string)` | no | `` (label) => `Collapse ${label}` `` | Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". |
@@ -113,7 +112,11 @@ interface NavListSection {
   label: string;
   /** The section's rows. */
   items: NavListItem[];
-  /** Stable identity for its expansion state. Defaults to the label. */
+  /**
+   * Stable identity for its expansion state. Defaults to the label. In
+   * `expandedIds`, `defaultExpandedIds` and `onExpandedChange` a section
+   * appears as `section:<id>`, so its id never collides with a row's.
+   */
   id?: string;
   /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */
   collapsible?: boolean;

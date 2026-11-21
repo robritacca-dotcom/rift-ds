@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { AnchorNav } from 'rift-ds';`
 - Deep import: `import { AnchorNav } from 'rift-ds/components/AnchorNav/AnchorNav';`
 - Rendering: client component (declares 'use client')
-- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/anchor-nav
 - Schema: https://rift-ds.com/schema/components/anchor-nav.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

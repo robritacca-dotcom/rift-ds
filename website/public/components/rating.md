@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { Rating } from 'rift-ds';`
 - Deep import: `import { Rating } from 'rift-ds/components/Rating/Rating';`
 - Rendering: client component (declares 'use client')
-- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/rating
 - Schema: https://rift-ds.com/schema/components/rating.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,7 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | label | `string` | no | `'Rating'` | Accessible name for the group, and the base of each step's label |
 | valueLabel | `((value: number, max: number) => string)` | no | `` (value: number, max: number) => `${value} out of ${max}` `` | The spoken value, given a step (or, in `readOnly` mode, the current rating) and `max`. Defaults to "3 out of 5". It follows `label` and a colon, as in "Rating: 3 out of 5". |
 | className | `string` | no | `''` | Additional CSS classes |
-| variant | `"stars" \| "thumbs"` | no | `'stars'` | The scale's form. `stars` (the default) is a row of `max` steps that fill up to the value. `thumbs` is a two-way verdict, a thumb up and a thumb down, for a quick "Was this helpful?": value 1 is up, 2 is down, 0 is no answer yet, and `max` and `icon` are ignored. |
+| variant | `"stars" \| "thumbs"` | no | `'stars'` | The scale's form. `stars` (the default) is a row of `max` steps that fill up to the value. `thumbs` is a two-way verdict, a thumb up and a thumb down, for a quick "Was this helpful?": value 1 is up, 2 is down, 0 is no answer yet, and `max`, `icon` and `valueLabel` are ignored. |
 | upLabel | `string` | no | `'Yes'` | Accessible name of the thumb up in the `thumbs` form. |
 | downLabel | `string` | no | `'No'` | Accessible name of the thumb down in the `thumbs` form. |
 

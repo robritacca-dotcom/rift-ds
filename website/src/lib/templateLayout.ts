@@ -15,12 +15,12 @@
  * writes its screen's scope.
  * The page width (TemplateWidth) is a choice of its own for the templates,
  * set beside the layout and independent of it.
- * Each is kept in localStorage so it follows the visitor between screens of
- * its kind and survives a reload. Same-tab changes reach every reader
- * through a window event; other tabs through the storage event.
+ * Each is a stored choice (lib/storedChoice), so it follows the visitor
+ * between screens of its kind and survives a reload.
  */
 import type { AppSidebarLayout } from "rift-ds/components/AppSidebar/AppSidebar";
 import type { ChatBackdrop } from "rift-ds/chat";
+import { readStoredChoice as read, subscribeStoredChoice, writeStoredChoice } from "./storedChoice";
 
 export type TemplateLayout = AppSidebarLayout;
 export type TemplateLayoutScope = "templates" | "chat";
@@ -77,31 +77,13 @@ const isWidth = (value: string | null): value is TemplateWidth =>
 const isBackdrop = (value: string | null): value is ChatBackdrop =>
   CHAT_BACKDROPS.some((backdrop) => backdrop.value === value);
 
-function read<T extends string>(key: string, valid: (value: string | null) => value is T, fallback: T): T {
-  try {
-    const stored = localStorage.getItem(key);
-    return valid(stored) ? stored : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function write(key: string, value: string) {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    /* private mode: the pick only lasts until the next change event */
-  }
-  window.dispatchEvent(new Event(CHANGE_EVENT));
-}
-
 /** The scope's stored layout, or its default when none (or an unknown one) is kept. */
 export function readTemplateLayout(scope: TemplateLayoutScope = "templates"): TemplateLayout {
   return read(LAYOUT_KEYS[scope], isLayout, DEFAULT_LAYOUTS[scope]);
 }
 
 export function setTemplateLayout(layout: TemplateLayout, scope: TemplateLayoutScope = "templates") {
-  write(LAYOUT_KEYS[scope], layout);
+  writeStoredChoice(LAYOUT_KEYS[scope], layout, CHANGE_EVENT);
 }
 
 /** The templates' stored page width, or the default when none (or an unknown one) is kept. */
@@ -110,7 +92,7 @@ export function readTemplateWidth(): TemplateWidth {
 }
 
 export function setTemplateWidth(width: TemplateWidth) {
-  write(WIDTH_KEY, width);
+  writeStoredChoice(WIDTH_KEY, width, CHANGE_EVENT);
 }
 
 /** The chat home's stored flush backdrop, or the default when none (or an unknown one) is kept. */
@@ -120,14 +102,7 @@ export function readChatBackdrop(): ChatBackdrop {
 
 /** Stores the chat home's flush backdrop; readers hear it through the same change event as the layout. */
 export function setChatBackdrop(backdrop: ChatBackdrop) {
-  write(CHAT_BACKDROP_KEY, backdrop);
+  writeStoredChoice(CHAT_BACKDROP_KEY, backdrop, CHANGE_EVENT);
 }
 
-export function subscribeTemplateLayout(callback: () => void) {
-  window.addEventListener(CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
-  return () => {
-    window.removeEventListener(CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
-}
+export const subscribeTemplateLayout = subscribeStoredChoice(CHANGE_EVENT);

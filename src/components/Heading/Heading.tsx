@@ -1,3 +1,4 @@
+import { headingSlug } from '../../behaviors/headingSlug';
 import React from 'react';
 import './Heading.css';
 
@@ -65,19 +66,6 @@ const textOf = (node: React.ReactNode): string => {
   return '';
 };
 
-// A helper beside the component that writes its ids, so a host can make
-// the same id for a link to the section. Heading is a server component, so
-// Fast Refresh has nothing to lose here.
-/** A URL fragment from a heading's text: lower case, words joined by hyphens, punctuation dropped. */
-// eslint-disable-next-line react-refresh/only-export-components
-export const headingSlug = (text: string): string =>
-  text
-    .toLowerCase()
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/g, '');
-
 /**
  * A heading in the type scale. `level` sets the element and `tier` the
  * look, chosen apart, so the outline stays correct whatever size a design
@@ -126,3 +114,9 @@ export function Heading({
     </Tag>
   );
 }
+
+// Re-exported beside the component that writes the ids (its one home is
+// src/behaviors/headingSlug.ts); Heading is a server component, so Fast
+// Refresh has nothing to lose here.
+// eslint-disable-next-line react-refresh/only-export-components
+export { headingSlug };

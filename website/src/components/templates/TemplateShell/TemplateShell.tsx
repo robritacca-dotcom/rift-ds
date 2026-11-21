@@ -81,7 +81,7 @@ export interface TemplateShellProps {
   layout?: TemplateLayout;
   /** Forces the page width, over the visitor's stored choice: contained or full, in any layout. */
   width?: TemplateWidth;
-  /** The template's content column class: its padding, gap and floating max width. */
+  /** The template's content column class: its padding, gap and contained width (`--ds-shell-contained-width`), read in every layout. */
   contentClassName?: string;
   /** The page content, laid out in the content column. */
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 # Site header
 
-A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit.
+A site's sticky top bar of section pills and mega menus, folding to a drawer when the pills no longer fit or below a set breakpoint.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { SiteHeader } from 'rift-ds';`
 - Deep import: `import { SiteHeader } from 'rift-ds/components/SiteHeader/SiteHeader';`
 - Rendering: client component (declares 'use client')
-- Size: 9.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/site-header
 - Schema: https://rift-ds.com/schema/components/site-header.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,7 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | drawerOpen | `boolean` | no |  | Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. |
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer starts open, when the header owns its state. |
 | onDrawerOpenChange | `((open: boolean) => void)` | no |  | Called when the drawer opens or closes, controlled or not. |
-| initialFold | `"tablet" \| "mid" \| "never"` | no | `'tablet'` | Where the bar folds before it has measured itself: on the first frame, which a server-rendered page shows before its script runs. Below this breakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS alone, so a phone never sees the pills overflow; the measurement takes over once the script runs. Pick the step nearest where the pills stop fitting, or `never` for a bar that fits at every width. |
+| initialFold | `"tablet" \| "mid" \| "never"` | no | `foldBelow ?? 'tablet'` | Where the bar folds before it has measured itself: on the first frame, which a server-rendered page shows before its script runs. Below this breakpoint (`tablet` or the wider `mid`) the bar starts folded by CSS alone, so a phone never sees the pills overflow; the measurement takes over once the script runs. Pick the step nearest where the pills stop fitting, or `never` for a bar that fits at every width. Defaults to `foldBelow` when that is set, so a bar told to fold at a step starts folded there too and never shifts when its script runs. |
 | foldBelow | `"tablet" \| "mid"` | no | `undefined` | Fold the bar into its menu at or below this breakpoint even when the pills would fit (`tablet` is 959px and below, `mid` 1279px), for a site whose sidebar of pages leaves the page there: the menu then carries the pages (each section's `drawerItems`), so the reader always has one way in. Leave it out to fold only when the row runs out of room. |
 | sticky | `boolean` | no | `true` | Whether the header sticks to the top of the viewport over a progressive blur. Off, it scrolls away with the page and draws no blur. |
 | tintAfter | `number` | no | `48` | How far, in pixels, the page scrolls before the page-surface tint fades in over the sticky header's blur. |

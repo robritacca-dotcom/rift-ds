@@ -11,7 +11,7 @@ type CopyButtonOwnProps = {
   value: string | (() => string);
   /** Called with the copied text after it is put on the clipboard, so a host can count copies or announce them. */
   onCopied?: (value: string) => void;
-  /** Visible text before a copy. Ignored when `iconOnly`. */
+  /** Visible text before a copy. When `iconOnly`, it is the accessible name and the tooltip instead, unless `copyLabel` is set. */
   copyText?: string;
   /** Accessible name before a copy. Defaults to `copyText`. */
   copyLabel?: string;
@@ -19,6 +19,11 @@ type CopyButtonOwnProps = {
   copiedLabel?: string;
   /** Show only the glyph, with the label in a tooltip, as an IconButton. */
   iconOnly?: boolean;
+  /**
+   * Where the icon-only form's tooltip sits, as on IconButton.
+   * @default 'top'
+   */
+  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
   /** Visual emphasis, as on Button. */
   variant?: 'secondary' | 'tertiary';
   /** Colour, as on Button: `neutral` draws the secondary outline in the neutral greys rather than the action colour, for a utility control such as a page's "Copy link". */
@@ -33,7 +38,7 @@ type CopyButtonOwnProps = {
 
 export interface CopyButtonProps
   extends CopyButtonOwnProps,
-    Omit<React.ComponentPropsWithRef<'button'>, keyof CopyButtonOwnProps | 'children' | 'type' | 'value'> {}
+    Omit<React.ComponentPropsWithRef<'button'>, keyof CopyButtonOwnProps | 'children' | 'type' | 'value' | 'aria-label'> {}
 
 /**
  * CopyButton: puts a value on the clipboard and says so. A Button (or an
@@ -49,6 +54,7 @@ export function CopyButton({
   copyLabel,
   copiedLabel = 'Copied',
   iconOnly = false,
+  tooltipPosition = 'top',
   variant = 'tertiary',
   tone = 'default',
   size = 'compact',
@@ -79,6 +85,7 @@ export function CopyButton({
         className={classes}
         icon={icon}
         label={name}
+        tooltipPosition={tooltipPosition}
         variant={variant}
         tone={tone}
         size={size}

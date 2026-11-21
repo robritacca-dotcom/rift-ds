@@ -9,12 +9,22 @@
   gap: var(--primitive-gap-500);
   /* Pages can pass several link buttons (About passes four, a foundations
      page three): wrap rather than force the page wider than its viewport.
-     The group may shrink beside a long title, which is what lets its
-     buttons wrap on a desktop row too, and the cap lets them on a phone,
-     since a header row that wraps would otherwise size the group to its
-     one-line width. */
-  flex-shrink: 1;
-  min-width: 0;
+     The cap lets them wrap on a phone; beside a title the whole group
+     wraps under it instead (below). */
   flex-wrap: wrap;
   max-width: 100%;
+}
+
+/* Beside a title, the group keeps its one-line width and the title row
+   wraps it underneath as a whole when the two no longer fit, rather than
+   the group stacking its buttons into a column beside the title (a long
+   title at a laptop width did that). Below the row's own breakpoint every
+   page stacks the row anyway, and max-width lets a group of several
+   buttons wrap there. One rule here, so no page's title row has to say it. */
+:global(*):has(> .pageLinks) {
+  flex-wrap: wrap;
+}
+
+:global(*):has(> .pageLinks) > .pageLinks {
+  flex-shrink: 0;
 }

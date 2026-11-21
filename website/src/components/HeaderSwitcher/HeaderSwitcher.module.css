@@ -1,9 +1,9 @@
-/* The background switcher is the package's DropdownMenu; this sheet styles
-   only its trigger, on the track recipe the theme switcher's trigger wears
-   (the ThemePicker spec in design.md: the row height as a circle,
-   the container fill behind a hairline, SegmentedControl's track curve),
-   with the active background's icon in the chip's place, so the two
-   triggers read as a pair in the bar. */
+/* Every header switcher is the package's DropdownMenu; this sheet styles
+   only their shared trigger, on the track recipe the theme switcher's
+   trigger wears (the ThemePicker spec in design.md: the row height as a
+   circle, the container fill behind a hairline, SegmentedControl's track
+   curve), with the current choice's icon in the chip's place, so every
+   trigger in the bar reads as one set. */
 
 .trigger {
   display: inline-flex;

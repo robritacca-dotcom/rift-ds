@@ -16,7 +16,8 @@ type SectionTitleOwnProps = {
   /**
    * Give the heading an id and a "#" link to itself, shown on hover and
    * focus, as Heading's `anchor` does. `true` makes the id from the title;
-   * a string sets it.
+   * a string sets it. The id lands on the heading, not the root, so an
+   * `id` passed through goes to the root and the link targets the anchor.
    */
   anchor?: boolean | string;
   /** Accessible name of the anchor link, given the title. Defaults to "Link to <title>". */

@@ -13,7 +13,7 @@ import { IconButton } from "rift-ds/components/IconButton/IconButton";
 
 const COLUMNS = [
   {
-    title: "Docs",
+    label: "Docs",
     links: [
       { label: "Introduction", href: "#introduction" },
       { label: "Installation", href: "#installation" },
@@ -21,7 +21,7 @@ const COLUMNS = [
     ],
   },
   {
-    title: "Components",
+    label: "Components",
     links: [
       { label: "Button", href: "#button" },
       { label: "Menu bar", href: "#menubar" },
@@ -29,7 +29,7 @@ const COLUMNS = [
     ],
   },
   {
-    title: "Community",
+    label: "Community",
     links: [
       { label: "Discussions", href: "https://example.com/discussions", external: true },
       { label: "Contributing", href: "#contributing" },

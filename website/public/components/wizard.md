@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { Wizard } from 'rift-ds';`
 - Deep import: `import { Wizard } from 'rift-ds/components/Wizard/Wizard';`
 - Rendering: client component (declares 'use client')
-- Size: 3.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 3.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/wizard
 - Schema: https://rift-ds.com/schema/components/wizard.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

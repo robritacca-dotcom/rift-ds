@@ -14,10 +14,10 @@ export interface SiteFooterLink {
   external?: boolean;
 }
 
-/** A titled column of footer links. */
+/** A labelled column of footer links. */
 export interface SiteFooterColumn {
   /** The column's heading, e.g. "Docs". */
-  title: string;
+  label: string;
   /** Its links, in order. */
   links: SiteFooterLink[];
 }
@@ -35,7 +35,7 @@ type SiteFooterOwnProps = {
   /** The bottom row's small print: a copyright, a licence, a privacy link. */
   legal?: React.ReactNode;
   /** Accessible name of the navigation landmark that holds the columns. */
-  navigationLabel?: string;
+  navLabel?: string;
   /** Text read after an external link's name, for a screen reader. */
   externalLabel?: string;
   /**
@@ -64,7 +64,7 @@ export function SiteFooter({
   description,
   social,
   legal,
-  navigationLabel = 'Site',
+  navLabel = 'Site',
   externalLabel = '(opens in a new tab)',
   linkComponent,
   className = '',
@@ -85,11 +85,11 @@ export function SiteFooter({
             </div>
           )}
             {columns.length > 0 && (
-            <nav className={`${baseClass}__columns`} aria-label={navigationLabel}>
+            <nav className={`${baseClass}__columns`} aria-label={navLabel}>
               {columns.map((column, index) => (
-                <div key={column.title} className={`${baseClass}__column`}>
+                <div key={column.label} className={`${baseClass}__column`}>
                   <p className={`${baseClass}__title`} id={`${uid}-${index}`}>
-                    {column.title}
+                    {column.label}
                   </p>
                   <ul className={`${baseClass}__links`} aria-labelledby={`${uid}-${index}`}>
                     {column.links.map((link) => {

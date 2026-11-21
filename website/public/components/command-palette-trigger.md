@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Import: `import { CommandPaletteTrigger } from 'rift-ds';`
 - Deep import: `import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger';`
 - Rendering: server-renderable (no 'use client')
-- Size: 4.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/command-palette-trigger
 - Schema: https://rift-ds.com/schema/components/command-palette-trigger.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

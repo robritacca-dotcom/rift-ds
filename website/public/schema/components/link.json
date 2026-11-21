@@ -52,7 +52,7 @@
             "default"
           ],
           "required": false,
-          "description": "The standalone link's type size: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor.",
+          "description": "The type size of a standalone or skip link: `default` the paragraph face, `compact` the small paragraph face. An inline link always takes the size of the text around it. Distinct from no native attribute of an anchor.",
           "default": "default"
         },
         {
@@ -150,6 +150,6 @@
     }
   ],
   "size": {
-    "gzip": 867
+    "gzip": 863
   }
 }

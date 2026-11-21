@@ -44,7 +44,11 @@ type AppLayoutOwnProps = {
   /**
    * How wide the content runs, in any `layout`: `contained` centres it at
    * the contained width (1120px here, or `--ds-shell-contained-width` set
-   * on the layout); `full` runs it the whole width the mode leaves it.
+   * on the layout); `full` runs it the whole width the mode leaves it. An
+   * app's working column, so it takes none of SiteLayout's site-scale
+   * `containedWidth` steps. `inset` no longer forces full width, as it did
+   * up to 1.32: pass `width="full"` for that edge-to-edge inset.
+   * @default 'contained'
    */
   width?: 'contained' | 'full';
   /**

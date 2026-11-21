@@ -1,9 +1,8 @@
 "use client";
 
-import type { ComponentPropsWithoutRef } from "react";
 import { useRouter } from "next/navigation";
-import { DropdownMenu, type DropdownMenuEntry } from "rift-ds/components/DropdownMenu/DropdownMenu";
-import { Tooltip } from "rift-ds/components/Tooltip/Tooltip";
+import type { DropdownMenuEntry } from "rift-ds/components/DropdownMenu/DropdownMenu";
+import HeaderSwitcher from "../HeaderSwitcher/HeaderSwitcher";
 import { loadShaderScene } from "@/lib/shaders/lazy-scene";
 import {
   SITE_BACKGROUNDS,
@@ -11,7 +10,6 @@ import {
   setSiteBackground,
   useSiteBackground,
 } from "@/lib/shaders/background";
-import styles from "./BackgroundSwitcher.module.css";
 
 /* A scene's code is not on the page until it is wanted (lib/shaders/
    lazy-scene): a hover or a focus on the trigger starts the load, so a
@@ -20,38 +18,9 @@ const preloadScenes = () => {
   loadShaderScene().catch(() => {});
 };
 
-/* The trigger as its own element, so the menu semantics DropdownMenu
-   clones onto its trigger (the aria attributes, the click and the keys)
-   land on the real button and not on the tooltip's wrapper. The tooltip
-   names the bare icon, the way the theme switcher's names its swatch;
-   the sheet hides it while the menu is open, since the menu says it all. */
-function Trigger({
-  icon,
-  tip,
-  compact,
-  className,
-  ...buttonProps
-}: ComponentPropsWithoutRef<"button"> & { icon: string; tip: string; compact: boolean }) {
-  return (
-    <Tooltip content={tip} position="bottom" className={`${styles.tip} ${className ?? ""}`}>
-      <button
-        type="button"
-        {...buttonProps}
-        className={`${styles.trigger} ${compact ? styles.triggerCompact : ""}`}
-        aria-label={tip}
-        onPointerEnter={preloadScenes}
-        onFocus={preloadScenes}
-      >
-        <span className="material-symbols-rounded" aria-hidden="true">
-          {icon}
-        </span>
-      </button>
-    </Tooltip>
-  );
-}
-
 /**
- * The header's background switcher, beside the theme switcher: a menu of
+ * The header's background switcher, a HeaderSwitcher beside the theme
+ * switcher: a menu of
  * every background in SITE_BACKGROUNDS, each row its icon, its name and a
  * line on it, the active one marked, in the form the theme menu's rows
  * take. The trigger wears the active background's icon on the same
@@ -97,14 +66,14 @@ export default function BackgroundSwitcher({
   ];
 
   return (
-    <DropdownMenu
+    <HeaderSwitcher
       className={className}
       size={size}
       align={align}
       items={items}
-      trigger={
-        <Trigger icon={current.icon} tip={`Background: ${current.label}`} compact={size === "compact"} />
-      }
+      icon={current.icon}
+      label={`Background: ${current.label}`}
+      onIntent={preloadScenes}
     />
   );
 }

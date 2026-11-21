@@ -40,7 +40,7 @@
           "type": "CodeLine[]",
           "typeKind": "array",
           "required": false,
-          "description": "The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock.",
+          "description": "The source highlighted, as `highlight()` from `rift-ds/code/highlight` returns it, passed to the code view's CodeBlock. Offers the Code view on its own; `code`, when also given, is the text the copy button copies.",
           "typeRefs": [
             "CodeLine"
           ]
@@ -305,6 +305,6 @@
     }
   ],
   "size": {
-    "gzip": 7893
+    "gzip": 10431
   }
 }

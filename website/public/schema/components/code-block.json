@@ -118,10 +118,10 @@
         },
         {
           "name": "onCopied",
-          "type": "(() => void)",
+          "type": "((value: string) => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Called after the code is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
+          "description": "Called with the copied text (the shown tab's code, or the text of `lines`) after it is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
         },
         {
           "name": "maxHeight",
@@ -298,6 +298,6 @@
     }
   ],
   "size": {
-    "gzip": 1015
+    "gzip": 7768
   }
 }

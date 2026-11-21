@@ -324,7 +324,9 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     <SiteLayout
       className={[styles.layout, chatOpen && chatDocks ? styles.layoutChatOpen : ""].filter(Boolean).join(" ")}
       width={pageWidth}
+      headerWidth={headerWidth}
       footerWidth={headerWidth}
+      readingWidth
       sidebarDock={dock}
       asidePlacement={asidePlacement}
       mainId="docs-main"
@@ -338,7 +340,6 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
           }
           sections={SECTIONS}
           currentHref={CURRENT}
-          width={headerWidth}
           foldBelow="tablet"
           actions={
             <>

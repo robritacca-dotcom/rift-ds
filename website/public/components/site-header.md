@@ -35,7 +35,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | drawerOpenLabel | `string` | no | `'Open menu'` | The accessible name of the menu button that opens the drawer. |
 | drawerTitle | `string` | no | `'Menu'` | The drawer's title, naming the dialog. Shown at its top when there is no `brand`; with one, the brand takes its place and the title is read only by assistive tech. |
 | drawerCloseLabel | `string` | no | `'Close menu'` | The accessible name of the drawer's close button. |
-| width | `"contained" \| "full"` | no | `undefined` | How wide the bar's contents run, read from the shell recipe's width axis. `contained` centres them in the contained width (1440px, or the nearest `--ds-shell-contained-width`) with the side gutter, lining up with a contained page below; `full` runs them edge to edge, the gutter aside. Leave it out and the bar fills whatever box the host gives it, with no gutter of its own. |
+| width | `"contained" \| "full"` | no | `undefined` | How wide the bar's contents run, read from the shell recipe's width axis. `contained` centres them in the contained width (1440px, or the nearest `--ds-shell-contained-width`) with the side gutter, lining up with a contained page below; `full` runs them edge to edge, the gutter aside. Leave it out and the bar fills whatever box the host gives it, with no gutter of its own; inside a SiteLayout it follows the layout's `headerWidth` instead. |
 | className | `string` | no | `''` | Additional CSS classes on the `<header>`. |
 
 ## Keyboard

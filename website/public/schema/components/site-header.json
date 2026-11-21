@@ -182,7 +182,7 @@
             "full"
           ],
           "required": false,
-          "description": "How wide the bar's contents run, read from the shell recipe's width\naxis. `contained` centres them in the contained width (1440px, or the\nnearest `--ds-shell-contained-width`) with the side gutter, lining up\nwith a contained page below; `full` runs them edge to edge, the gutter\naside. Leave it out and the bar fills whatever box the host gives it,\nwith no gutter of its own.",
+          "description": "How wide the bar's contents run, read from the shell recipe's width\naxis. `contained` centres them in the contained width (1440px, or the\nnearest `--ds-shell-contained-width`) with the side gutter, lining up\nwith a contained page below; `full` runs them edge to edge, the gutter\naside. Leave it out and the bar fills whatever box the host gives it,\nwith no gutter of its own; inside a SiteLayout it follows the layout's\n`headerWidth` instead.",
           "defaultExpression": "undefined"
         },
         {

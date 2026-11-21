@@ -184,9 +184,13 @@ const siteShells = [
 ] as const;
 
 const siteLevers = [
-  { id: "header", lever: "Header width", prop: "SiteHeader width", values: "contained, full, or unset (fills its host)" },
   { id: "page", lever: "Page width", prop: "SiteLayout width", values: "contained or full" },
+  { id: "header", lever: "Header width", prop: "SiteLayout headerWidth", values: "contained or full; the page width unless set" },
+  { id: "footer", lever: "Footer width", prop: "SiteLayout footerWidth", values: "contained or full; the page width unless set" },
   { id: "dock", lever: "Sidebar dock", prop: "SiteLayout sidebarDock", values: "content (the row's first column) or edge (the window's start edge)" },
+  { id: "aside", lever: "On this page", prop: "SiteLayout asidePlacement", values: "column (beside the content) or edge (pinned to the window's end edge)" },
+  { id: "reading", lever: "Reading width", prop: "SiteLayout readingWidth", values: "on holds a contained page's main column to about 75 characters" },
+  { id: "reserve", lever: "End reserve", prop: "--ds-site-layout-reserve-end", values: "room given up at the end edge for a docked panel, such as a chat" },
 ] as const;
 
 /* ============================================
@@ -472,7 +476,7 @@ export default function LayoutPage() {
               bordered
             />
             <p className={styles.groupNote}>
-              The sidebar sticks below the header and scrolls on its own, so a long list of pages never carries the page along; the aside sticks beside the content. Below 1152px the aside gives way, and below 960px the sidebar folds into a drawer behind a menu button. The docs block, <code className={styles.query}>npx rift-ds init block docs</code>, is SiteLayout with a full header over a sidebar docked to the edge.
+              The sidebar sticks below the header and scrolls on its own, so a long list of pages never carries the page along; the aside sticks beside the content. Every lever is independent, so any combination holds. Below 1152px a column aside gives way, and below 960px the sidebar and an edge aside leave the page: the header folds into its menu, which carries the sidebar’s pages, so a reader has one menu. A SiteHeader set with no width of its own follows the header width. The docs block, <code className={styles.query}>npx rift-ds init block docs</code>, is SiteLayout with a full header over a sidebar docked to the edge.
             </p>
           </section>
 

@@ -9,7 +9,10 @@ import './SiteLayout.css';
 type SiteLayoutOwnProps = {
   /** The page's main content: the article, the page. */
   children: React.ReactNode;
-  /** The top bar, usually a SiteHeader (give it the same `width` to line it up). */
+  /**
+   * The top bar, usually a SiteHeader. A SiteHeader given no `width` of its
+   * own follows `headerWidth`, so the bar lines up with the page below it.
+   */
   header?: React.ReactNode;
   /**
    * The navigation column, usually a scrollable NavList: the wide-screen
@@ -39,6 +42,12 @@ type SiteLayoutOwnProps = {
    */
   width?: 'contained' | 'full';
   /**
+   * How wide the header's bar runs, apart from the page, for a SiteHeader
+   * that sets no `width` of its own. Defaults to `width`.
+   * @default width
+   */
+  headerWidth?: 'contained' | 'full';
+  /**
    * How wide the footer's row runs, apart from the page. Defaults to
    * `width`; set it to the header's width so the top and the bottom of the
    * site match.
@@ -52,6 +61,12 @@ type SiteLayoutOwnProps = {
    * and aside are laid out (and contained) in the room after it.
    */
   sidebarDock?: 'content' | 'edge';
+  /**
+   * Hold the main column to a reading width (about 75 characters of body
+   * text, centred in its column) while the page is contained. A full-width page lets the content run the whole column.
+   * `--ds-site-layout-reading-width` sets the measure.
+   */
+  readingWidth?: boolean;
   /** The id of the main region, the skip link's target. */
   mainId?: string;
   /** The skip link's text, the page's first stop. Pass an empty string for none. */
@@ -71,8 +86,10 @@ export interface SiteLayoutProps
 /**
  * SiteLayout: the frame of a documentation or marketing site. A header, a
  * navigation sidebar, the main content, an aside and a footer, laid out by
- * two independent choices: how wide the page runs (`width`) and where the
- * sidebar docks (`sidebarDock`). The sidebar sticks below the header and
+ * independent choices: how wide the page runs (`width`), the header and
+ * the footer each apart from it (`headerWidth`, `footerWidth`), where the
+ * sidebar docks (`sidebarDock`) and where the aside sits
+ * (`asidePlacement`); any combination holds. The sidebar sticks below the header and
  * scrolls on its own; below 1152px the aside gives way, and below 960px the
  * sidebar leaves the page to the header's own menu. A skip link comes first.
  */
@@ -83,7 +100,9 @@ export function SiteLayout({
   aside,
   footer,
   width = 'contained',
+  headerWidth,
   footerWidth,
+  readingWidth = false,
   sidebarDock = 'content',
   asidePlacement = 'column',
   mainId = 'main',
@@ -101,6 +120,7 @@ export function SiteLayout({
     sidebar ? `${baseClass}--with-sidebar` : '',
     aside && asidePlacement === 'column' ? `${baseClass}--with-aside` : '',
     aside && asidePlacement === 'edge' ? `${baseClass}--aside-edge` : '',
+    readingWidth ? `${baseClass}--reading` : '',
     className,
   ]
     .filter(Boolean)
@@ -131,7 +151,11 @@ export function SiteLayout({
           {skipLinkLabel}
         </Link>
       )}
-      {header}
+      {header && (
+        <div className={`${baseClass}__header`} data-ds-width={headerWidth ?? width}>
+          {header}
+        </div>
+      )}
       {sidebarDock === 'edge' ? (
         <div className={`${baseClass}__body`}>
           {sidebarColumn}

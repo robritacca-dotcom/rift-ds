@@ -220,3 +220,9 @@ export const Contained: Story = {
   args: { width: 'contained' },
   parameters: { layout: 'fullscreen' },
 };
+
+/** Folded below the tablet step whatever the fit, so it folds where a SiteLayout's sidebar leaves the page and its drawer carries the sidebar's pages. Narrow the canvas below 960px to see it fold. */
+export const FoldBelowTablet: Story = {
+  args: { width: 'full', foldBelow: 'tablet' },
+  parameters: { layout: 'fullscreen' },
+};

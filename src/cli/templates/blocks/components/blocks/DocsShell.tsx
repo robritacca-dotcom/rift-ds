@@ -9,8 +9,10 @@
  *
  * Three settings below lay it out, each independent of the others:
  * PAGE_WIDTH (the columns contained at 1440px or full width), HEADER_WIDTH
- * (the same for the header bar) and SIDEBAR_DOCK (the sidebar docked to the
- * window's edge, or beside the content in the page's row).
+ * (the same for the header bar and the footer) and SIDEBAR_DOCK (the
+ * sidebar docked to the window's edge, or beside the content in the page's
+ * row). SiteLayout's readingWidth holds the article to a reading measure
+ * while the page is contained.
  *
  * Responsive by construction: below 1152px the on-this-page rail gives
  * way, and below 960px the sidebar leaves the page and the header's menu
@@ -127,7 +129,9 @@ export function DocsShell({ currentHref, breadcrumb, children }: DocsShellProps)
   return (
     <SiteLayout
       width={PAGE_WIDTH}
+      headerWidth={HEADER_WIDTH}
       footerWidth={HEADER_WIDTH}
+      readingWidth
       sidebarDock={SIDEBAR_DOCK}
       mainId="docs-article"
       header={
@@ -135,7 +139,6 @@ export function DocsShell({ currentHref, breadcrumb, children }: DocsShellProps)
           brand={<span className={styles.brand}>{PRODUCT_NAME}</span>}
           sections={SECTIONS}
           currentHref="/guide"
-          width={HEADER_WIDTH}
           foldBelow="tablet"
           actions={
             <>

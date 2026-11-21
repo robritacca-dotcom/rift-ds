@@ -28,20 +28,14 @@
   color: var(--color-text-primary);
 }
 
-/* The article reads the page's width axis: contained, it holds a reading
-   width (760px keeps a paragraph near 75 characters in the body face),
-   centred in its column; full, it runs the whole column. */
+/* The article. SiteLayout's readingWidth holds it to the measure while the
+   page is contained, centred in its column. */
 .article {
   display: flex;
   flex-direction: column;
   /* The site's section rhythm: a wide beat between the article's sections,
      a narrower one inside each. */
   gap: var(--gap-1000);
-  width: 100%;
-  max-width: var(--ds-shell-content-max, 760px);
-  /* Centred in its column, so the room either side of the article (to the
-     sidebar and to the on-this-page rail) is even. */
-  margin-inline: auto;
 }
 
 .intro {
@@ -158,10 +152,8 @@
    overlays and the page keeps its width. */
 @media (min-width: 1440px) {
   .layoutChatOpen {
-    padding-inline-end: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
-    /* The floating rail moves in from the edge the panel now holds. */
-    --ds-site-layout-aside-end: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2 + var(--ds-shell-gutter));
-    transition: padding-inline-end var(--motion-duration-slow) var(--motion-ease-emphasized);
+    /* SiteLayout's end reserve: the frame and the floating rail step in. */
+    --ds-site-layout-reserve-end: calc(var(--layout-chat-width) + var(--layout-chat-inset) * 2);
   }
 }
 

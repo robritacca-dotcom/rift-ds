@@ -132,7 +132,9 @@ export default function SiteHeaderPage() {
               Set <code>width</code> and the bar brings its own side gutter. <code>full</code> runs it edge to edge, the
               brand at the far start and the actions at the far end; <code>contained</code> centres its contents at the
               contained width, so they line up with a contained page below. The same two values set a page&apos;s width
-              in SiteLayout, AppLayout and the templates, apart from the shell mode.
+              in SiteLayout, AppLayout and the templates, apart from the shell mode. Inside a SiteLayout, leave
+              <code>width</code> out and the bar follows the layout&apos;s <code>headerWidth</code>, so a swap is made
+              in one place.
             </p>
             <div className={styles.frame}>
               <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} width="full" navLabel="Example, full width" />
@@ -147,7 +149,10 @@ export default function SiteHeaderPage() {
             <p className={styles.introBody}>
               The bar measures itself rather than the viewport, so it folds exactly when its pills stop fitting,
               whatever the number of sections, the length of the labels or the room a docked panel leaves. Folded, the
-              menu button opens a drawer of the same sections.
+              menu button opens a drawer of the same sections. <code>foldBelow</code> also folds it below a set
+              step (<code>tablet</code>, under 960px, or <code>mid</code>, under 1280px) whatever the fit, so it can
+              fold where a layout&apos;s sidebar leaves the page: with each section&apos;s <code>drawerItems</code>,
+              the drawer then carries the sidebar&apos;s pages and a reader has one menu.
             </p>
             <div className={`${styles.frame} ${styles.frameNarrow}`}>
               <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} navLabel="Example, folded" />

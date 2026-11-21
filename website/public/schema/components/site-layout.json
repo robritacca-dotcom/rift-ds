@@ -28,7 +28,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "The top bar, usually a SiteHeader (give it the same `width` to line it up)."
+          "description": "The top bar, usually a SiteHeader. A SiteHeader given no `width` of its\nown follows `headerWidth`, so the bar lines up with the page below it."
         },
         {
           "name": "sidebar",
@@ -76,6 +76,18 @@
           "default": "contained"
         },
         {
+          "name": "headerWidth",
+          "type": "\"contained\" | \"full\"",
+          "typeKind": "enum",
+          "values": [
+            "contained",
+            "full"
+          ],
+          "required": false,
+          "description": "How wide the header's bar runs, apart from the page, for a SiteHeader\nthat sets no `width` of its own. Defaults to `width`.",
+          "defaultExpression": "width"
+        },
+        {
           "name": "footerWidth",
           "type": "\"contained\" | \"full\"",
           "typeKind": "enum",
@@ -98,6 +110,14 @@
           "required": false,
           "description": "Where the sidebar sits. `content` keeps it in the page's row, beside the\ncontent, so a contained page centres all three columns together. `edge`\ndocks it to the window's start edge behind a hairline, and the content\nand aside are laid out (and contained) in the room after it.",
           "default": "content"
+        },
+        {
+          "name": "readingWidth",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Hold the main column to a reading width (about 75 characters of body\ntext, centred in its column) while the page is contained. A full-width page lets the content run the whole column.\n`--ds-site-layout-reading-width` sets the measure.",
+          "default": false
         },
         {
           "name": "mainId",

@@ -16992,8 +16992,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           {
             "name": "columns",
             "type": "SiteFooterColumn[]",
-            "required": true,
-            "description": "The sitemap columns, in order along the row.",
+            "required": false,
+            "description": "The sitemap columns, in order along the row. Leave it out for a footer of small print alone.",
+            "defaultValue": "[]",
             "typeRefs": [
               "SiteFooterColumn"
             ]
@@ -17212,7 +17213,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "width",
             "type": "\"contained\" | \"full\"",
             "required": false,
-            "description": "How wide the bar's contents run, read from the shell recipe's width\naxis. `contained` centres them in the contained width (1440px, or the\nnearest `--ds-shell-contained-width`) with the side gutter, lining up\nwith a contained page below; `full` runs them edge to edge, the gutter\naside. Leave it out and the bar fills whatever box the host gives it,\nwith no gutter of its own.",
+            "description": "How wide the bar's contents run, read from the shell recipe's width\naxis. `contained` centres them in the contained width (1440px, or the\nnearest `--ds-shell-contained-width`) with the side gutter, lining up\nwith a contained page below; `full` runs them edge to edge, the gutter\naside. Leave it out and the bar fills whatever box the host gives it,\nwith no gutter of its own; inside a SiteLayout it follows the layout's\n`headerWidth` instead.",
             "values": [
               "contained",
               "full"
@@ -17254,7 +17255,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "header",
             "type": "ReactNode",
             "required": false,
-            "description": "The top bar, usually a SiteHeader (give it the same `width` to line it up)."
+            "description": "The top bar, usually a SiteHeader. A SiteHeader given no `width` of its\nown follows `headerWidth`, so the bar lines up with the page below it."
           },
           {
             "name": "sidebar",
@@ -17297,6 +17298,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'contained'"
           },
           {
+            "name": "headerWidth",
+            "type": "\"contained\" | \"full\"",
+            "required": false,
+            "description": "How wide the header's bar runs, apart from the page, for a SiteHeader\nthat sets no `width` of its own. Defaults to `width`.",
+            "values": [
+              "contained",
+              "full"
+            ],
+            "defaultValue": "width"
+          },
+          {
             "name": "footerWidth",
             "type": "\"contained\" | \"full\"",
             "required": false,
@@ -17317,6 +17329,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "edge"
             ],
             "defaultValue": "'content'"
+          },
+          {
+            "name": "readingWidth",
+            "type": "boolean",
+            "required": false,
+            "description": "Hold the main column to a reading width (about 75 characters of body\ntext, centred in its column) while the page is contained. A full-width page lets the content run the whole column.\n`--ds-site-layout-reading-width` sets the measure.",
+            "defaultValue": "false"
           },
           {
             "name": "mainId",

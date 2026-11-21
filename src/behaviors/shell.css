@@ -116,14 +116,19 @@
      max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
      padding-inline: var(--ds-shell-gutter);
    with margin-inline: auto. "full" sets the
-   maximum to none; contained leaves it unset, so
-   the fallback reads the contained width where the
-   column is, and a host or a page can set its own
-   (--ds-shell-contained-width, 1440px by default)
-   on any element down to the column itself.
+   maximum to none; contained resets it to unset
+   (so a contained row nests inside a full page),
+   and the fallback reads the contained width where
+   the column is. A host or a page can set its own
+   (--ds-shell-contained-width, 1440px by default,
+   and --ds-shell-gutter) on any element down to
+   the column itself: the defaults are declared
+   only on the outermost width element, so a
+   nested one (a header's slot, a footer's row)
+   inherits the host's values, never the defaults.
    ============================================ */
 
-:where([data-ds-width]) {
+:where([data-ds-width]:not([data-ds-width] *)) {
   --ds-shell-contained-width: 1440px;
   --ds-shell-gutter: var(--padding-500);
 }
@@ -132,8 +137,14 @@
   --ds-shell-content-max: none;
 }
 
+/* initial makes a custom property guaranteed-invalid, so a reader's
+   fallback applies. */
+:where([data-ds-width='contained']) {
+  --ds-shell-content-max: initial;
+}
+
 @media (max-width: 768px) {
-  :where([data-ds-width]) {
+  :where([data-ds-width]:not([data-ds-width] *)) {
     --ds-shell-gutter: var(--padding-400);
   }
 }

@@ -1,7 +1,7 @@
 /*
  * The docs shell's own touches. SiteLayout owns the columns, the sticky
- * sidebar, the widths and the fold; every value here is a rift-ds token,
- * except the article's reading width, explained where it is set.
+ * sidebar, the widths, the reading measure and the fold; every value here
+ * is a rift-ds token.
  */
 
 .brand {
@@ -11,12 +11,8 @@
   color: var(--color-text-primary);
 }
 
-/* The article's reading width: 720px keeps a paragraph near 75 characters
-   in the body face, however wide the page runs. */
 .article {
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);
-  width: 100%;
-  max-width: 720px;
 }

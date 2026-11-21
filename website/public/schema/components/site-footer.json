@@ -20,8 +20,9 @@
           "name": "columns",
           "type": "SiteFooterColumn[]",
           "typeKind": "array",
-          "required": true,
-          "description": "The sitemap columns, in order along the row.",
+          "required": false,
+          "description": "The sitemap columns, in order along the row. Leave it out for a footer of small print alone.",
+          "defaultExpression": "[]",
           "typeRefs": [
             "SiteFooterColumn"
           ]

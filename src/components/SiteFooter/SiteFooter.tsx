@@ -24,8 +24,8 @@ export interface SiteFooterColumn {
 
 /** Props owned by SiteFooter itself. */
 type SiteFooterOwnProps = {
-  /** The sitemap columns, in order along the row. */
-  columns: SiteFooterColumn[];
+  /** The sitemap columns, in order along the row. Leave it out for a footer of small print alone. */
+  columns?: SiteFooterColumn[];
   /** The brand at the start of the footer: a logo, a name, or both. */
   brand?: React.ReactNode;
   /** A line about the site under the brand. */
@@ -59,7 +59,7 @@ export interface SiteFooterProps
  * a grid to a single stack as the footer narrows. Server-renderable.
  */
 export function SiteFooter({
-  columns,
+  columns = [],
   brand,
   description,
   social,
@@ -76,47 +76,51 @@ export function SiteFooter({
   const uid = useId();
   return (
     <footer {...rest} ref={ref} className={[baseClass, className].filter(Boolean).join(' ')}>
-      <div className={`${baseClass}__top`}>
-        {(brand || description) && (
-          <div className={`${baseClass}__about`}>
-            {brand && <div className={`${baseClass}__brand`}>{brand}</div>}
-            {description && <p className={`${baseClass}__description`}>{description}</p>}
-          </div>
-        )}
-        <nav className={`${baseClass}__columns`} aria-label={navigationLabel}>
-          {columns.map((column, index) => (
-            <div key={column.title} className={`${baseClass}__column`}>
-              <p className={`${baseClass}__title`} id={`${uid}-${index}`}>
-                {column.title}
-              </p>
-              <ul className={`${baseClass}__links`} aria-labelledby={`${uid}-${index}`}>
-                {column.links.map((link) => {
-                  const ExternalOrRouted = link.external ? 'a' : Anchor;
-                  return (
-                    <li key={`${link.href}-${link.label}`}>
-                      <ExternalOrRouted
-                        className={`${baseClass}__link`}
-                        href={link.href}
-                        {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                      >
-                        {link.label}
-                        {link.external && (
-                          <>
-                            <span className={`${baseClass}__external material-symbols-rounded`} aria-hidden="true">
-                              arrow_outward
-                            </span>
-                            <span className="ds-visually-hidden"> {externalLabel}</span>
-                          </>
-                        )}
-                      </ExternalOrRouted>
-                    </li>
-                  );
-                })}
-              </ul>
+      {(brand || description || columns.length > 0) && (
+        <div className={`${baseClass}__top`}>
+          {(brand || description) && (
+            <div className={`${baseClass}__about`}>
+              {brand && <div className={`${baseClass}__brand`}>{brand}</div>}
+              {description && <p className={`${baseClass}__description`}>{description}</p>}
             </div>
-          ))}
-        </nav>
-      </div>
+          )}
+            {columns.length > 0 && (
+            <nav className={`${baseClass}__columns`} aria-label={navigationLabel}>
+              {columns.map((column, index) => (
+                <div key={column.title} className={`${baseClass}__column`}>
+                  <p className={`${baseClass}__title`} id={`${uid}-${index}`}>
+                    {column.title}
+                  </p>
+                  <ul className={`${baseClass}__links`} aria-labelledby={`${uid}-${index}`}>
+                    {column.links.map((link) => {
+                      const ExternalOrRouted = link.external ? 'a' : Anchor;
+                      return (
+                        <li key={`${link.href}-${link.label}`}>
+                          <ExternalOrRouted
+                            className={`${baseClass}__link`}
+                            href={link.href}
+                            {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          >
+                            {link.label}
+                            {link.external && (
+                              <>
+                                <span className={`${baseClass}__external material-symbols-rounded`} aria-hidden="true">
+                                  arrow_outward
+                                </span>
+                                <span className="ds-visually-hidden"> {externalLabel}</span>
+                              </>
+                            )}
+                          </ExternalOrRouted>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </nav>
+            )}
+        </div>
+      )}
       {(legal || social) && (
         <div className={`${baseClass}__bottom`}>
           {legal && <div className={`${baseClass}__legal`}>{legal}</div>}

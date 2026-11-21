@@ -134,7 +134,8 @@ type SiteHeaderOwnProps = {
    * nearest `--ds-shell-contained-width`) with the side gutter, lining up
    * with a contained page below; `full` runs them edge to edge, the gutter
    * aside. Leave it out and the bar fills whatever box the host gives it,
-   * with no gutter of its own.
+   * with no gutter of its own; inside a SiteLayout it follows the layout's
+   * `headerWidth` instead.
    * @default undefined
    */
   width?: 'contained' | 'full';

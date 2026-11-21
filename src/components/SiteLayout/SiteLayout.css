@@ -18,6 +18,12 @@
   /* Column widths: room for a page title or a section name on one line. */
   --ds-site-layout-sidebar-width: calc(6.5 * var(--control-height-default));
   --ds-site-layout-aside-width: calc(5 * var(--control-height-default));
+  /* The reading width of `readingWidth`: about 75 characters of body text. */
+  --ds-site-layout-reading-width: calc(19 * var(--control-height-default));
+  /* Room the page gives up at its end edge, for a panel the host docks
+     there (a chat): the whole frame, header included, steps in by it, and
+     an edge-pinned aside moves in with it. 0 by default. */
+  --ds-site-layout-reserve-end: 0px;
   /* The room between the header and the page, the site's own page rhythm:
      the sidebar, the main column and the aside all start this far down. */
   --ds-site-layout-top-gap: var(--gap-1500);
@@ -35,8 +41,28 @@
   width: 100%;
   box-sizing: border-box;
   min-height: var(--ds-site-layout-viewport-height);
+  padding-inline-end: var(--ds-site-layout-reserve-end);
+  transition: padding-inline-end var(--motion-duration-slow) var(--motion-ease-emphasized);
   /* No background: the page behind is the floor, so an ambient field or a
      shader the host paints there shows through the frame. */
+}
+
+/* ============================================
+   HEADER
+   The header's slot draws no box, so a sticky
+   header sticks to the whole page; it carries the
+   header's width axis, which a SiteHeader with no
+   width of its own reads.
+   ============================================ */
+
+.ds-site-layout__header {
+  display: contents;
+}
+
+.ds-site-layout__header > .ds-site-header:not(.ds-site-header--width) .ds-site-header__bar {
+  max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
+  margin-inline: auto;
+  padding-inline: var(--ds-shell-gutter);
 }
 
 /* ============================================
@@ -116,6 +142,13 @@
   padding-inline: var(--gap-1500);
 }
 
+/* An edge-pinned aside floats over the window's end margin, so the row
+   keeps room for it there at any width or dock: the gutter it sits in, the
+   rail itself (about a control's height wide) and a beat. */
+.ds-site-layout.ds-site-layout--aside-edge .ds-site-layout__row {
+  padding-inline-end: calc(var(--ds-shell-gutter) + var(--control-height-default) + var(--gap-500));
+}
+
 /* The edge-docked sidebar's divider: a hairline that fades out at both
    ends, so it reads as a seam between the sidebar and the page rather than
    a box drawn around the list. */
@@ -149,6 +182,17 @@
   outline: none;
 }
 
+/* readingWidth: the main column holds the measure, centred in its grid
+   cell, while the page is contained; full sets the shell maximum to none.
+   The main element itself narrows, never its children, so a fixed control
+   inside it (BackToTop, a docked panel) keeps its own placement. */
+.ds-site-layout--reading .ds-site-layout__main {
+  width: 100%;
+  max-width: var(--ds-shell-content-max, var(--ds-site-layout-reading-width));
+  justify-self: center;
+  box-sizing: border-box;
+}
+
 .ds-site-layout__aside {
   position: sticky;
   top: var(--ds-site-layout-header-height);
@@ -158,12 +202,11 @@
 
 /* Pinned to the window's end edge (asidePlacement="edge"): out of the
    grid, centred on the height, a gutter in from the edge, so the content
-   keeps the room a column would take. --ds-site-layout-aside-end moves it
-   in from the edge, for a host that reserves room there (a docked chat). */
+   keeps the room a column would take. It moves in with the end reserve. */
 .ds-site-layout--aside-edge .ds-site-layout__aside {
   position: fixed;
   inset-block-start: 50%;
-  inset-inline-end: var(--ds-site-layout-aside-end, var(--ds-shell-gutter));
+  inset-inline-end: calc(var(--ds-site-layout-reserve-end) + var(--ds-shell-gutter));
   padding-block-start: 0;
   transform: translateY(-50%);
   /* Above the page's content, below the sticky header and its menus. */
@@ -210,12 +253,15 @@
 
 /* ============================================
    RESPONSIVE
-   Below 1152px the aside gives way; below 960px
-   the sidebar leaves the page to the header's menu.
+   Below 1152px a column aside gives way; below
+   960px the sidebar and an edge aside leave the
+   page, and the header's menu carries the pages.
    ============================================ */
 
 @media (max-width: 1151px) {
-  .ds-site-layout__aside {
+  /* The column aside only: an edge-pinned one takes no column, so it stays
+     until the sidebar goes. */
+  .ds-site-layout--with-aside .ds-site-layout__aside {
     display: none;
   }
 

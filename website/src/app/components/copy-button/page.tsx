@@ -37,9 +37,11 @@ export default function CopyButtonPage() {
             <div className={styles.demoRow}>
               <CopyButton value="npm install rift-ds" />
               <CopyButton value="npm install rift-ds" variant="secondary" size="default" copyText="Copy command" />
+              <CopyButton value="npm install rift-ds" variant="secondary" tone="neutral" size="default" copyText="Copy link" />
             </div>
             <p className={styles.demoText}>
-              Tertiary and compact by default, to sit quietly in a header or beside a value.
+              Tertiary and compact by default, to sit quietly in a header or beside a value. <code>tone=&quot;neutral&quot;</code>{" "}
+              draws the secondary outline in the neutral greys, for a utility control such as a page&apos;s copy link.
             </p>
           </section>
 

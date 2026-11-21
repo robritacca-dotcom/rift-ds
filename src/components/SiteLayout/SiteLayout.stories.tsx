@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AnchorNav } from '../AnchorNav/AnchorNav';
 import { Heading } from '../Heading/Heading';
@@ -48,19 +49,30 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     width: { control: 'radio', options: ['contained', 'full'] },
+    headerWidth: { control: 'radio', options: ['contained', 'full'] },
+    footerWidth: { control: 'radio', options: ['contained', 'full'] },
     sidebarDock: { control: 'radio', options: ['content', 'edge'] },
+    asidePlacement: { control: 'radio', options: ['column', 'edge'] },
+    readingWidth: { control: 'boolean' },
   },
   args: {
     width: 'contained',
     sidebarDock: 'content',
+    asidePlacement: 'column',
+    readingWidth: false,
     children: article,
   },
   render: (args) => (
     <SiteLayout
       {...args}
-      header={<SiteHeader brand="Acme" width={args.width} sticky={false} sections={[{ id: 'docs', label: 'Docs', href: '#docs' }, { id: 'blog', label: 'Blog', href: '#blog' }]} currentHref="#docs" />}
+      header={<SiteHeader brand="Acme" sticky={false} sections={[{ id: 'docs', label: 'Docs', href: '#docs' }, { id: 'blog', label: 'Blog', href: '#blog' }]} currentHref="#docs" />}
       sidebar={<NavList items={NAV} size="compact" scrollable currentHref="#installation" />}
-      aside={<AnchorNav fromHeadings={{ root: '#site-layout-article' }} />}
+      aside={
+        <AnchorNav
+          fromHeadings={{ root: '#site-layout-article' }}
+          variant={args.asidePlacement === 'edge' ? 'floating' : undefined}
+        />
+      }
       footer={<SiteFooter brand="Acme" columns={[{ title: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }] }]} legal="© 2026 Acme." />}
     />
   ),
@@ -93,4 +105,36 @@ export const FloatingAside: Story = {
       aside={<AnchorNav fromHeadings={{ root: '#site-layout-article' }} variant="floating" />}
     />
   ),
+};
+
+/** The header and the footer run full width over a contained page: each width is its own lever. */
+export const MixedWidths: Story = {
+  args: { width: 'contained', headerWidth: 'full', footerWidth: 'full', sidebarDock: 'edge' },
+};
+
+/** A reading measure: while the page is contained, the main column holds about 75 characters. */
+export const ReadingWidth: Story = {
+  args: { readingWidth: true, sidebarDock: 'edge', asidePlacement: 'edge' },
+};
+
+/** Room reserved at the end edge, as for a docked chat: the frame and the floating aside step in together. */
+export const ReservedEnd: Story = {
+  args: { sidebarDock: 'edge', asidePlacement: 'edge', style: { '--ds-site-layout-reserve-end': '320px' } as React.CSSProperties },
+};
+
+/** No sidebar and no aside: the frame holds the content alone, at either width. */
+export const ContentOnly: Story = {
+  args: { sidebar: undefined, aside: undefined, readingWidth: true },
+  render: (args) => (
+    <SiteLayout
+      {...args}
+      header={<SiteHeader brand="Acme" sticky={false} sections={[{ id: 'docs', label: 'Docs', href: '#docs' }]} currentHref="#docs" />}
+      footer={<SiteFooter brand="Acme" legal="© 2026 Acme." />}
+    />
+  ),
+};
+
+/** The reverse mix: a full-width page under a contained header and footer, a contained row nested in a full one. */
+export const FullPageContainedHeader: Story = {
+  args: { width: 'full', headerWidth: 'contained', footerWidth: 'contained', sidebarDock: 'content' },
 };

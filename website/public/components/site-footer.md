@@ -15,7 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| columns | `SiteFooterColumn[]` | yes |  | The sitemap columns, in order along the row. |
+| columns | `SiteFooterColumn[]` | no | `[]` | The sitemap columns, in order along the row. Leave it out for a footer of small print alone. |
 | brand | `ReactNode` | no |  | The brand at the start of the footer: a logo, a name, or both. |
 | description | `ReactNode` | no |  | A line about the site under the brand. |
 | social | `ReactNode` | no |  | Social or utility controls for the bottom row's end, such as IconButtons. |

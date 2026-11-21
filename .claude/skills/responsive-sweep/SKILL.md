@@ -43,6 +43,8 @@ Run it in the background; a full sweep takes several minutes. Keep the output ou
 node scripts/check-responsive-layout.mjs --shots <scratchpad>/responsive-sweep --json <scratchpad>/responsive-sweep.json
 ```
 
+Every framed page also has a reader-chosen layout, so the sweep of record runs a second time with the site frame's Full width layout seeded (same command, plus `--storage site-frame-dock=edge,site-frame-size=narrow`, into its own output folder and JSON).
+
 `--routes` narrows to route prefixes and `--quick` uses a five-step ladder, both for re-checking a fix, never for the sweep of record. The output is grouped: one line per element and kind, with every route and width it shows at, so a break in shared chrome is one finding, not two hundred.
 
 If the run reports `error` findings (a page that failed to load), stop and report them first: a page that does not load at all is worse than any layout break, and `smoke-hydration.mjs` is the place to look.

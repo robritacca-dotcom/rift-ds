@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import PipelineWireframe from "@/components/PipelineWireframe/PipelineWireframe";
 import { MegaMenu, type MegaMenuItem } from "rift-ds/components/MegaMenu/MegaMenu";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -34,59 +32,51 @@ const SHOWCASE = {
 
 export default function MegaMenuPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Mega menu</h1>
-            <PageLinks storybookPath="/?path=/docs/components-megamenu--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>A section of a site at a glance</p>
-            <p className={styles.introBody}>
-              A wide panel of link rows, each with an icon and a line on what the page holds, beside an optional
-              featured card. It is the panel only: the host places it and owns the triggers, so it owns{" "}
-              <code>open</code> too. Hover a section in this site’s header to see one in place;{" "}
-              <Link href="/components/site-header">Site header</Link> is the reference host.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="With a showcase" />
-            <p className={styles.introBody}>
-              The rows run at least four to a column in two thirds of the panel, growing deeper before a fourth column opens, and the card fills the last third, its cover
-              stretching to whatever height the rows reach.
-            </p>
-            <MegaMenu open items={ITEMS} showcase={SHOWCASE} />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Rows only" />
-            <p className={styles.introBody}>
-              Without a showcase the rows take the whole panel, up to four columns, each growing deeper before
-              another opens, so a long menu never scrolls.
-            </p>
-            <MegaMenu open items={ITEMS} />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Current page" />
-            <p className={styles.introBody}>
-              <code>currentHref</code> marks the row for the page being viewed, or a parent of it, one step past the
-              hover wash so the two never read the same.
-            </p>
-            <MegaMenu open items={ITEMS} currentHref="#api" />
-          </section>
-
-          <ComponentInstallStrip slug="mega-menu" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Mega menu</h1>
+        <PageLinks storybookPath="/?path=/docs/components-megamenu--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>A section of a site at a glance</p>
+        <p className={styles.introBody}>
+          A wide panel of link rows, each with an icon and a line on what the page holds, beside an optional
+          featured card. It is the panel only: the host places it and owns the triggers, so it owns{" "}
+          <code>open</code> too. Hover a section in this site’s header to see one in place;{" "}
+          <Link href="/components/site-header">Site header</Link> is the reference host.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="With a showcase" />
+        <p className={styles.introBody}>
+          The rows run at least four to a column in two thirds of the panel, growing deeper before a fourth column opens, and the card fills the last third, its cover
+          stretching to whatever height the rows reach.
+        </p>
+        <MegaMenu open items={ITEMS} showcase={SHOWCASE} />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Rows only" />
+        <p className={styles.introBody}>
+          Without a showcase the rows take the whole panel, up to four columns, each growing deeper before
+          another opens, so a long menu never scrolls.
+        </p>
+        <MegaMenu open items={ITEMS} />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Current page" />
+        <p className={styles.introBody}>
+          <code>currentHref</code> marks the row for the page being viewed, or a parent of it, one step past the
+          hover wash so the two never read the same.
+        </p>
+        <MegaMenu open items={ITEMS} currentHref="#api" />
+      </section>
+
+      <ComponentInstallStrip slug="mega-menu" />
+    </div>
   );
 }

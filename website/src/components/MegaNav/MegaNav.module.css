@@ -6,21 +6,21 @@
    component's own.
    ============================================ */
 
-/* The header sits in the body, centred by it, at the page's 1440px content
-   width. Its height stays the 78px the site has always had: the anchor
-   clearance in globals.css (--layout-anchor-clearance) is set against it. */
-.header {
-  max-width: 1440px;
-  --ds-site-header-height: 78px;
-}
-
 /* The site's chrome layer, not the library's sticky one: component pages
    carry sticky table headers, top app bars and tooltips at --layer-sticky
    and above, and later in the page they would paint over the stuck bar as
    it scrolls. Doubled for the production stylesheet order noted on
-   the condensed set below. */
+   the condensed set below.
+
+   The bar's height is the 78px the site has always had (the anchor
+   clearance in globals.css, --layout-anchor-clearance, is set against
+   it), set once on the site frame (SiteFrame.module.css) so SiteLayout's
+   sticky columns read it too. SiteHeader declares its own default on its
+   root, which would shadow the frame's, so the header inherits it here;
+   its width is the frame's. */
 .header.header {
   z-index: var(--layer-site-chrome);
+  --ds-site-header-height: inherit;
 }
 
 /* The tint behind the stuck bar fades at the fast step, not the library's

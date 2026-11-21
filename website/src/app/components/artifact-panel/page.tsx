@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ArtifactPanel } from "rift-ds/components/ArtifactPanel/ArtifactPanel";
 import { Button } from "rift-ds/components/Button/Button";
 import { IconButton } from "rift-ds/components/IconButton/IconButton";
@@ -133,150 +131,142 @@ function LivePreview() {
 
 export default function ArtifactPanelPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Artifact panel</h1>
-            <PageLinks storybookPath="/?path=/docs/components-artifactpanel--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>What the chat made, beside the chat</p>
-            <p className={styles.introBody}>
-              Artifact panel is the surface a chat opens next to the
-              conversation to show something it made: a dashboard, a page, a
-              site. A header names the artifact and holds its controls, and
-              the body is the preview or the source. It is surface-less and
-              fills the box it is given, so the host paints the card around
-              it and gives that card a definite height.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="Live content as the preview" />
-            <p className={styles.demoText}>
-              Children render straight into the body as React content, which
-              scrolls under a header that stays put. Content brings its own
-              padding, so a dashboard can sit inset and a full-bleed page can
-              run to the edge. The expand toggle appears when onExpandedChange
-              is given and the close button when onClose is given. Both only
-              report intent: the panel never sizes or removes itself. Here the
-              page grows the frame on expand and swaps in a button on close.
-            </p>
-            <LivePreview />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="An HTML document, with its source" />
-            <p className={styles.demoText}>
-              Pass html and the body draws the document in a sandboxed frame
-              with an origin of its own, so it has no reach into the host
-              page. Add code and the header gains a Preview and Code switch.
-              The panel keeps the chosen view itself unless the host passes
-              view and onViewChange. A src URL is framed the same way, for a
-              page that is already deployed.
-            </p>
-            <div className={styles.panelFrame} data-anchor-ignore>
-              <ArtifactPanel
-                title="Spring walk sign-up"
-                meta="Page"
-                icon="web"
-                html={SIGNUP_PAGE}
-                code={SIGNUP_PAGE}
-                language="html"
-              />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Code only" />
-            <p className={styles.demoText}>
-              With code and no preview there is nothing to switch between, so
-              the switch is left out and the body shows the source. The
-              language prop labels the code view.
-            </p>
-            <div
-              className={`${styles.panelFrame} ${styles.panelFrameShort}`}
-              data-anchor-ignore
-            >
-              <ArtifactPanel
-                title="routes.ts"
-                meta="TypeScript"
-                icon="code"
-                code={ROUTE_CODE}
-                language="typescript"
-              />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Header actions" />
-            <p className={styles.demoText}>
-              The actions slot seats extra controls ahead of the expand and
-              close buttons: a download, a share, a version menu. Tertiary
-              Icon buttons match the two the panel draws itself. When the
-              row runs short the meta line gives way first, then the title
-              truncates, and the controls keep their place.
-            </p>
-            <div
-              className={`${styles.panelFrame} ${styles.panelFrameShort}`}
-              data-anchor-ignore
-            >
-              <ArtifactPanel
-                title="Trail report"
-                meta="Version 3"
-                icon="dashboard"
-                onExpandedChange={() => {}}
-                onClose={() => {}}
-                actions={
-                  <>
-                    <IconButton
-                      icon="download"
-                      variant="tertiary"
-                      label="Download the report"
-                      tooltipPosition="bottom"
-                    />
-                    <IconButton
-                      icon="ios_share"
-                      variant="tertiary"
-                      label="Share the report"
-                      tooltipPosition="bottom"
-                    />
-                  </>
-                }
-              >
-                <TrailBoard />
-              </ArtifactPanel>
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Inline" />
-            <div className={styles.kitDemo}>
-              <ArtifactPanel
-                layout="inline"
-                viewLabel="Button example"
-                language="tsx"
-                code={`<Button variant="primary">Save</Button>\n<Button variant="secondary">Cancel</Button>`}
-              >
-                <Button variant="primary">Save</Button>
-                <Button variant="secondary">Cancel</Button>
-              </ArtifactPanel>
-              <p className={styles.kitNote}>
-                The same preview and source in the flow of a page: its own card, a stage that centres the example, and the code a switch away. The live example of a component&apos;s documentation.
-              </p>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="artifact-panel" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Artifact panel</h1>
+        <PageLinks storybookPath="/?path=/docs/components-artifactpanel--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>What the chat made, beside the chat</p>
+        <p className={styles.introBody}>
+          Artifact panel is the surface a chat opens next to the
+          conversation to show something it made: a dashboard, a page, a
+          site. A header names the artifact and holds its controls, and
+          the body is the preview or the source. It is surface-less and
+          fills the box it is given, so the host paints the card around
+          it and gives that card a definite height.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="Live content as the preview" />
+        <p className={styles.demoText}>
+          Children render straight into the body as React content, which
+          scrolls under a header that stays put. Content brings its own
+          padding, so a dashboard can sit inset and a full-bleed page can
+          run to the edge. The expand toggle appears when onExpandedChange
+          is given and the close button when onClose is given. Both only
+          report intent: the panel never sizes or removes itself. Here the
+          page grows the frame on expand and swaps in a button on close.
+        </p>
+        <LivePreview />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="An HTML document, with its source" />
+        <p className={styles.demoText}>
+          Pass html and the body draws the document in a sandboxed frame
+          with an origin of its own, so it has no reach into the host
+          page. Add code and the header gains a Preview and Code switch.
+          The panel keeps the chosen view itself unless the host passes
+          view and onViewChange. A src URL is framed the same way, for a
+          page that is already deployed.
+        </p>
+        <div className={styles.panelFrame} data-anchor-ignore>
+          <ArtifactPanel
+            title="Spring walk sign-up"
+            meta="Page"
+            icon="web"
+            html={SIGNUP_PAGE}
+            code={SIGNUP_PAGE}
+            language="html"
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Code only" />
+        <p className={styles.demoText}>
+          With code and no preview there is nothing to switch between, so
+          the switch is left out and the body shows the source. The
+          language prop labels the code view.
+        </p>
+        <div
+          className={`${styles.panelFrame} ${styles.panelFrameShort}`}
+          data-anchor-ignore
+        >
+          <ArtifactPanel
+            title="routes.ts"
+            meta="TypeScript"
+            icon="code"
+            code={ROUTE_CODE}
+            language="typescript"
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Header actions" />
+        <p className={styles.demoText}>
+          The actions slot seats extra controls ahead of the expand and
+          close buttons: a download, a share, a version menu. Tertiary
+          Icon buttons match the two the panel draws itself. When the
+          row runs short the meta line gives way first, then the title
+          truncates, and the controls keep their place.
+        </p>
+        <div
+          className={`${styles.panelFrame} ${styles.panelFrameShort}`}
+          data-anchor-ignore
+        >
+          <ArtifactPanel
+            title="Trail report"
+            meta="Version 3"
+            icon="dashboard"
+            onExpandedChange={() => {}}
+            onClose={() => {}}
+            actions={
+              <>
+                <IconButton
+                  icon="download"
+                  variant="tertiary"
+                  label="Download the report"
+                  tooltipPosition="bottom"
+                />
+                <IconButton
+                  icon="ios_share"
+                  variant="tertiary"
+                  label="Share the report"
+                  tooltipPosition="bottom"
+                />
+              </>
+            }
+          >
+            <TrailBoard />
+          </ArtifactPanel>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Inline" />
+        <div className={styles.kitDemo}>
+          <ArtifactPanel
+            layout="inline"
+            viewLabel="Button example"
+            language="tsx"
+            code={`<Button variant="primary">Save</Button>\n<Button variant="secondary">Cancel</Button>`}
+          >
+            <Button variant="primary">Save</Button>
+            <Button variant="secondary">Cancel</Button>
+          </ArtifactPanel>
+          <p className={styles.kitNote}>
+            The same preview and source in the flow of a page: its own card, a stage that centres the example, and the code a switch away. The live example of a component&apos;s documentation.
+          </p>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="artifact-panel" />
+    </div>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ChatThread } from "rift-ds/components/ChatThread/ChatThread";
 import { ChatMessage } from "rift-ds/components/ChatMessage/ChatMessage";
 import { Button } from "rift-ds/components/Button/Button";
@@ -74,97 +72,88 @@ function AnchoringDemo({ flow }: { flow?: "top-down" | "bottom-up" }) {
 
 export default function ChatThreadPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Chat thread</h1>
-            <PageLinks storybookPath="/?path=/docs/components-chatthread--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              The conversation column that owns the scrolling
-            </p>
-            <p className={styles.introBody}>
-              Turns stack inside a scrollable column with consistent gutters,
-              a fade at either end, and a scrollbar that only appears while
-              scrolling is happening. When a new turn is appended it floats
-              to the top of the viewport, pushing the conversation upward and
-              leaving the response room to stream in below. The classic
-              bottom-up thread is one prop away.
-            </p>
-          </div>
-
-          {/* Send anchoring */}
-          <section className={styles.section}>
-            <SectionTitle title="Send anchoring" />
-            <p className={styles.demoText}>
-              Sending appends a turn and scrolls it to the top. A trailing
-              spacer grows so even a short newest exchange can reach the top,
-              and reduced motion makes the glide instant. The spacer holds
-              exactly the room the anchor still needs and no more, giving it
-              back as a response grows into it, so the space is gone by the
-              time the answer lands instead of leaving a void under it.
-            </p>
-            <AnchoringDemo />
-          </section>
-
-          {/* Bottom up */}
-          <section className={styles.section}>
-            <SectionTitle title="Bottom up" />
-            <p className={styles.demoText}>
-              Set flow to bottom-up for the classic message thread. Turns
-              stack from the bottom edge, so a short conversation sits just
-              above the composer, and the view follows a growing answer down
-              for as long as the reader stays at the bottom. Scrolling up to
-              reread lets go; the next send takes hold again.
-            </p>
-            <AnchoringDemo flow="bottom-up" />
-          </section>
-
-          {/* Edge fades */}
-          <section className={styles.section}>
-            <SectionTitle title="Edge fades" />
-            <p className={styles.demoText}>
-              A pure CSS mask fades the first and last lines as they scroll
-              out, hinting there is more in either direction. No scroll
-              listeners are involved.
-            </p>
-            <div className={`${styles.threadFrame} ${styles.threadFrameShort}`}>
-              <ChatThread className={styles.thread} anchor={false}>
-                {EXCHANGES.flatMap(({ q, a }) => [
-                  <ChatMessage key={`${q}-q`} role="user">
-                    {q}
-                  </ChatMessage>,
-                  <ChatMessage key={`${q}-a`} role="assistant">
-                    {a}
-                  </ChatMessage>,
-                ])}
-              </ChatThread>
-            </div>
-          </section>
-
-          {/* Scrollbar */}
-          <section className={styles.section}>
-            <SectionTitle title="A quiet scrollbar" />
-            <p className={styles.demoText}>
-              The content gutters live on an inner wrapper, so the thin
-              scrollbar rides the far edge of the component instead of
-              sitting inside the conversation. It stays invisible until the
-              thread is actually scrolling, then fades back out.
-            </p>
-          </section>
-
-          <ComponentInstallStrip slug="chat-thread" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Chat thread</h1>
+        <PageLinks storybookPath="/?path=/docs/components-chatthread--docs" />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          The conversation column that owns the scrolling
+        </p>
+        <p className={styles.introBody}>
+          Turns stack inside a scrollable column with consistent gutters,
+          a fade at either end, and a scrollbar that only appears while
+          scrolling is happening. When a new turn is appended it floats
+          to the top of the viewport, pushing the conversation upward and
+          leaving the response room to stream in below. The classic
+          bottom-up thread is one prop away.
+        </p>
+      </div>
+
+      {/* Send anchoring */}
+      <section className={styles.section}>
+        <SectionTitle title="Send anchoring" />
+        <p className={styles.demoText}>
+          Sending appends a turn and scrolls it to the top. A trailing
+          spacer grows so even a short newest exchange can reach the top,
+          and reduced motion makes the glide instant. The spacer holds
+          exactly the room the anchor still needs and no more, giving it
+          back as a response grows into it, so the space is gone by the
+          time the answer lands instead of leaving a void under it.
+        </p>
+        <AnchoringDemo />
+      </section>
+
+      {/* Bottom up */}
+      <section className={styles.section}>
+        <SectionTitle title="Bottom up" />
+        <p className={styles.demoText}>
+          Set flow to bottom-up for the classic message thread. Turns
+          stack from the bottom edge, so a short conversation sits just
+          above the composer, and the view follows a growing answer down
+          for as long as the reader stays at the bottom. Scrolling up to
+          reread lets go; the next send takes hold again.
+        </p>
+        <AnchoringDemo flow="bottom-up" />
+      </section>
+
+      {/* Edge fades */}
+      <section className={styles.section}>
+        <SectionTitle title="Edge fades" />
+        <p className={styles.demoText}>
+          A pure CSS mask fades the first and last lines as they scroll
+          out, hinting there is more in either direction. No scroll
+          listeners are involved.
+        </p>
+        <div className={`${styles.threadFrame} ${styles.threadFrameShort}`}>
+          <ChatThread className={styles.thread} anchor={false}>
+            {EXCHANGES.flatMap(({ q, a }) => [
+              <ChatMessage key={`${q}-q`} role="user">
+                {q}
+              </ChatMessage>,
+              <ChatMessage key={`${q}-a`} role="assistant">
+                {a}
+              </ChatMessage>,
+            ])}
+          </ChatThread>
+        </div>
+      </section>
+
+      {/* Scrollbar */}
+      <section className={styles.section}>
+        <SectionTitle title="A quiet scrollbar" />
+        <p className={styles.demoText}>
+          The content gutters live on an inner wrapper, so the thin
+          scrollbar rides the far edge of the component instead of
+          sitting inside the conversation. It stays invisible until the
+          thread is actually scrolling, then fades back out.
+        </p>
+      </section>
+
+      <ComponentInstallStrip slug="chat-thread" />
+    </div>
   );
 }

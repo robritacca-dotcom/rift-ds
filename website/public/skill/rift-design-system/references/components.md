@@ -1284,7 +1284,7 @@ Secondary navigation column listing one section's pages, with group headings and
 The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.
 
 - Import: `import { SiteLayout } from 'rift-ds';`
-- Rendering: client component (declares 'use client')
+- Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/site-layout.md
 
 ### Split pane

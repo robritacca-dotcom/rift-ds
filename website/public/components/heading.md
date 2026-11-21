@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Live docs: https://rift-ds.com/components/heading
 - Schema: https://rift-ds.com/schema/components/heading.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Section title](https://rift-ds.com/components/section-title.md) instead when the heading opens a page section, with a divider line or a count or action beside the title.
+
 ## Heading props
 
 | Prop | Type | Required | Default | Description |

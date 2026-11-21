@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "@/components/Sidebar/Sidebar";
-import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import {
@@ -27,8 +24,6 @@ import {
 } from "@/data/shader-contract";
 import { emberScene } from "../../../../../src/cli/templates/blocks/components/blocks/emberScene";
 import s from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/shaders");
 
 /* The shaders guide: how to paint a scene of your own with ShaderScene.
    The worked scene is the file the shader-scene block ships, shown and run
@@ -115,12 +110,7 @@ export default function ShadersPage() {
 
   return (
     <>
-      <MegaNav />
-
-      <div className={s.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={s.dsContent} id="main-content">
+        <div className={s.dsContent}>
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
@@ -388,8 +378,7 @@ export default function ShadersPage() {
               skills and the MCP endpoint.
             </p>
           </section>
-        </main>
-      </div>
+        </div>
     </>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Badge } from "rift-ds/components/Badge/Badge";
 import {
   DataTable,
@@ -158,243 +156,235 @@ export default function TableToolbarPage() {
   );
 
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Table toolbar</h1>
-            <PageLinks storybookPath="/?path=/docs/components-tabletoolbar--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              The controls over a table, in one row
-            </p>
-            <p className={styles.introBody}>
-              Search, filters as chips, sort, group, the columns, the density,
-              saved views, a bulk bar for selected rows and the page&apos;s
-              actions, in one row that never wraps. Put it in a data
-              table&apos;s toolbar slot and it reads and sets the table&apos;s
-              own state with no props. Its filters and the table&apos;s header
-              filters are one list, so a filter set from either shows in both.
-            </p>
-          </div>
-
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="Inside a data table" />
-            <p className={styles.sectionBody}>
-              Add a filter from the Filter button, beside search, or from a
-              column&apos;s menu. Each chip reads its column, its condition
-              and its value, and opens the same editor as the header; chips
-              that do not fit fold into a +N chip. Columns shows, hides and
-              orders the columns, and the density switch sets the table&apos;s
-              density, which every control in the bar follows. The primary
-              action is a split button when it carries a menu.
-            </p>
-            <DataTable
-              columns={columns}
-              rows={rows}
-              columnMenu
-              caption="Issues"
-              defaultFilters={[
-                {
-                  id: "status-1",
-                  column: "status",
-                  operator: "isAnyOf",
-                  value: ["Open", "Blocked"],
-                },
-              ]}
-              toolbar={
-                <TableToolbar
-                  primaryAction={{
-                    id: "new",
-                    label: "New issue",
-                    icon: "add",
-                    onSelect: () => {},
-                    menu: [
-                      { id: "template", label: "From a template", icon: "content_copy", onSelect: () => {} },
-                      { id: "import", label: "Import", icon: "upload", onSelect: () => {} },
-                    ],
-                  }}
-                />
-              }
-            />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Sort and group" />
-            <p className={styles.sectionBody}>
-              Sort lists the sorts first sort first: drag a row, or press Alt
-              with the arrows, to reorder them, and Add sort picks another
-              column. Group picks the column the rows gather by, with Collapse
-              all and Expand all. Each icon carries a count while it is set.
-            </p>
-            <DataTable
-              columns={typedColumns}
-              rows={rows}
-              multiSort
-              columnMenu
-              caption="Issues, sorted and grouped"
-              defaultSorts={[
-                { key: "status", direction: "asc" },
-                { key: "estimate", direction: "desc" },
-              ]}
-              defaultGrouping={["owner"]}
-              toolbar={<TableToolbar />}
-            />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="The bulk bar" />
-            <p className={styles.sectionBody}>
-              Tick a row and the bar becomes the bulk bar at the same height:
-              Clear, the count, Select all N past the page, then each action in
-              full, the destructive ones last, with a More menu for what does
-              not fit. An action runs on the selection, which can be every
-              matching row, as a query a server can act on.
-            </p>
-            <DataTable
-              columns={columns}
-              rows={rows}
-              selectable
-              pageSize={3}
-              defaultSelectedIds={["i1", "i2"]}
-              caption="Issues, two selected"
-              toolbar={
-                <TableToolbar
-                  bulkActions={[
-                    { id: "assign", label: "Assign", icon: "person_add", onSelect: () => {} },
-                    { id: "label", label: "Add label", icon: "label", onSelect: () => {} },
-                    { id: "delete", label: "Delete", icon: "delete", destructive: true, onSelect: () => {} },
-                  ]}
-                />
-              }
-            />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Saved views" />
-            <p className={styles.sectionBody}>
-              Views sit as tabs on their own row over the bar. Picking one
-              applies its setup to the table; once the table moves on from it,
-              the tab shows a dot, and its menu saves, saves as new, resets,
-              renames or deletes it. The plus saves the table as a new view.
-            </p>
-            <DataTable
-              columns={typedColumns}
-              rows={rows}
-              multiSort
-              columnMenu
-              caption="Issues, saved views"
-              toolbar={<TableToolbar defaultViews={VIEWS} />}
-            />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Narrow" />
-            <p className={styles.sectionBody}>
-              Narrower than a phone, measured on the bar itself, it folds to
-              icons: search opens in a panel, the chips move into the Filter
-              panel with a count on its icon, and More holds the secondary
-              actions and the density. On a phone screen every panel opens as
-              a sheet from the bottom.
-            </p>
-            <div className={styles.narrowFrame}>
-              <DataTable
-                columns={columns}
-                rows={rows}
-                pageSize={3}
-                caption="Issues, narrow"
-                defaultFilters={[
-                  { id: "status-1", column: "status", operator: "isAnyOf", value: ["Open"] },
-                ]}
-                toolbar={
-                  <TableToolbar
-                    primaryAction={{ id: "new", label: "New issue", icon: "add", onSelect: () => {} }}
-                  />
-                }
-              />
-            </div>
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="AI command" />
-            <p className={styles.sectionBody}>
-              The <code>command</code> prop adds a Describe button at the start of
-              the bar. Pressing it turns the whole row into a composer, the way
-              selecting rows turns it into the bulk bar. A long request grows the
-              composer to three rows and pushes the table down. Your handler turns the sentence into a whole table
-              setup, and the library calls no model. A change lands in a toast
-              with an Undo, and an error lands in a toast with the table left
-              alone and the text back in the composer. Try it here; the
-              handler is a stand-in, and the merchant sales template runs it on a
-              real model.
-            </p>
-            <DataTable
-              columns={columns}
-              rows={rows}
-              pageSize={3}
-              caption="Issues, with an AI command"
-              toolbar={
-                <TableToolbar
-                  command={DEMO_COMMAND}
-                  labels={{ commandPlaceholder: "Try: only blocked issues, or fail" }}
-                />
-              }
-            />
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Over any table" />
-            <p className={styles.sectionBody}>
-              Outside a data table the bar is driven by its own props: the
-              columns it knows about, and each piece of state as a controlled or
-              uncontrolled pair. Here it searches a plain table.
-            </p>
-            <TableToolbar
-              columns={[{ key: "title", label: "Issue" }]}
-              filterable={false}
-              columnsPanel={false}
-              densitySwitch={false}
-              search={search}
-              onSearchChange={setSearch}
-              filters={filters}
-              onFiltersChange={setFilters}
-              count={{ shown: shown.length, total: rows.length }}
-            />
-            <Table
-              bordered
-              columns={[
-                { key: "title", header: "Issue" },
-                { key: "owner", header: "Owner" },
-              ]}
-              rows={shown.map((row) => ({
-                id: row.id,
-                cells: { title: row.values.title, owner: row.values.owner },
-              }))}
-            />
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-4`}>
-            <SectionTitle title="Filters" />
-            <p className={styles.sectionBody}>
-              A column&apos;s filter takes the conditions its values call for:
-              text contains, starts with or is; a number compares or falls
-              between two; a date is before, after or between; a column with
-              options is any of or none of them; a list has any, all or none of
-              its values. Every condition joins with and. A filter left without
-              a value when its editor closes is dropped.
-            </p>
-          </section>
-
-          <ComponentInstallStrip slug="table-toolbar" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Table toolbar</h1>
+        <PageLinks storybookPath="/?path=/docs/components-tabletoolbar--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          The controls over a table, in one row
+        </p>
+        <p className={styles.introBody}>
+          Search, filters as chips, sort, group, the columns, the density,
+          saved views, a bulk bar for selected rows and the page&apos;s
+          actions, in one row that never wraps. Put it in a data
+          table&apos;s toolbar slot and it reads and sets the table&apos;s
+          own state with no props. Its filters and the table&apos;s header
+          filters are one list, so a filter set from either shows in both.
+        </p>
+      </div>
+
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="Inside a data table" />
+        <p className={styles.sectionBody}>
+          Add a filter from the Filter button, beside search, or from a
+          column&apos;s menu. Each chip reads its column, its condition
+          and its value, and opens the same editor as the header; chips
+          that do not fit fold into a +N chip. Columns shows, hides and
+          orders the columns, and the density switch sets the table&apos;s
+          density, which every control in the bar follows. The primary
+          action is a split button when it carries a menu.
+        </p>
+        <DataTable
+          columns={columns}
+          rows={rows}
+          columnMenu
+          caption="Issues"
+          defaultFilters={[
+            {
+              id: "status-1",
+              column: "status",
+              operator: "isAnyOf",
+              value: ["Open", "Blocked"],
+            },
+          ]}
+          toolbar={
+            <TableToolbar
+              primaryAction={{
+                id: "new",
+                label: "New issue",
+                icon: "add",
+                onSelect: () => {},
+                menu: [
+                  { id: "template", label: "From a template", icon: "content_copy", onSelect: () => {} },
+                  { id: "import", label: "Import", icon: "upload", onSelect: () => {} },
+                ],
+              }}
+            />
+          }
+        />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Sort and group" />
+        <p className={styles.sectionBody}>
+          Sort lists the sorts first sort first: drag a row, or press Alt
+          with the arrows, to reorder them, and Add sort picks another
+          column. Group picks the column the rows gather by, with Collapse
+          all and Expand all. Each icon carries a count while it is set.
+        </p>
+        <DataTable
+          columns={typedColumns}
+          rows={rows}
+          multiSort
+          columnMenu
+          caption="Issues, sorted and grouped"
+          defaultSorts={[
+            { key: "status", direction: "asc" },
+            { key: "estimate", direction: "desc" },
+          ]}
+          defaultGrouping={["owner"]}
+          toolbar={<TableToolbar />}
+        />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="The bulk bar" />
+        <p className={styles.sectionBody}>
+          Tick a row and the bar becomes the bulk bar at the same height:
+          Clear, the count, Select all N past the page, then each action in
+          full, the destructive ones last, with a More menu for what does
+          not fit. An action runs on the selection, which can be every
+          matching row, as a query a server can act on.
+        </p>
+        <DataTable
+          columns={columns}
+          rows={rows}
+          selectable
+          pageSize={3}
+          defaultSelectedIds={["i1", "i2"]}
+          caption="Issues, two selected"
+          toolbar={
+            <TableToolbar
+              bulkActions={[
+                { id: "assign", label: "Assign", icon: "person_add", onSelect: () => {} },
+                { id: "label", label: "Add label", icon: "label", onSelect: () => {} },
+                { id: "delete", label: "Delete", icon: "delete", destructive: true, onSelect: () => {} },
+              ]}
+            />
+          }
+        />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Saved views" />
+        <p className={styles.sectionBody}>
+          Views sit as tabs on their own row over the bar. Picking one
+          applies its setup to the table; once the table moves on from it,
+          the tab shows a dot, and its menu saves, saves as new, resets,
+          renames or deletes it. The plus saves the table as a new view.
+        </p>
+        <DataTable
+          columns={typedColumns}
+          rows={rows}
+          multiSort
+          columnMenu
+          caption="Issues, saved views"
+          toolbar={<TableToolbar defaultViews={VIEWS} />}
+        />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Narrow" />
+        <p className={styles.sectionBody}>
+          Narrower than a phone, measured on the bar itself, it folds to
+          icons: search opens in a panel, the chips move into the Filter
+          panel with a count on its icon, and More holds the secondary
+          actions and the density. On a phone screen every panel opens as
+          a sheet from the bottom.
+        </p>
+        <div className={styles.narrowFrame}>
+          <DataTable
+            columns={columns}
+            rows={rows}
+            pageSize={3}
+            caption="Issues, narrow"
+            defaultFilters={[
+              { id: "status-1", column: "status", operator: "isAnyOf", value: ["Open"] },
+            ]}
+            toolbar={
+              <TableToolbar
+                primaryAction={{ id: "new", label: "New issue", icon: "add", onSelect: () => {} }}
+              />
+            }
+          />
+        </div>
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="AI command" />
+        <p className={styles.sectionBody}>
+          The <code>command</code> prop adds a Describe button at the start of
+          the bar. Pressing it turns the whole row into a composer, the way
+          selecting rows turns it into the bulk bar. A long request grows the
+          composer to three rows and pushes the table down. Your handler turns the sentence into a whole table
+          setup, and the library calls no model. A change lands in a toast
+          with an Undo, and an error lands in a toast with the table left
+          alone and the text back in the composer. Try it here; the
+          handler is a stand-in, and the merchant sales template runs it on a
+          real model.
+        </p>
+        <DataTable
+          columns={columns}
+          rows={rows}
+          pageSize={3}
+          caption="Issues, with an AI command"
+          toolbar={
+            <TableToolbar
+              command={DEMO_COMMAND}
+              labels={{ commandPlaceholder: "Try: only blocked issues, or fail" }}
+            />
+          }
+        />
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Over any table" />
+        <p className={styles.sectionBody}>
+          Outside a data table the bar is driven by its own props: the
+          columns it knows about, and each piece of state as a controlled or
+          uncontrolled pair. Here it searches a plain table.
+        </p>
+        <TableToolbar
+          columns={[{ key: "title", label: "Issue" }]}
+          filterable={false}
+          columnsPanel={false}
+          densitySwitch={false}
+          search={search}
+          onSearchChange={setSearch}
+          filters={filters}
+          onFiltersChange={setFilters}
+          count={{ shown: shown.length, total: rows.length }}
+        />
+        <Table
+          bordered
+          columns={[
+            { key: "title", header: "Issue" },
+            { key: "owner", header: "Owner" },
+          ]}
+          rows={shown.map((row) => ({
+            id: row.id,
+            cells: { title: row.values.title, owner: row.values.owner },
+          }))}
+        />
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-4`}>
+        <SectionTitle title="Filters" />
+        <p className={styles.sectionBody}>
+          A column&apos;s filter takes the conditions its values call for:
+          text contains, starts with or is; a number compares or falls
+          between two; a date is before, after or between; a column with
+          options is any of or none of them; a list has any, all or none of
+          its values. Every condition joins with and. A filter left without
+          a value when its editor closes is dropped.
+        </p>
+      </section>
+
+      <ComponentInstallStrip slug="table-toolbar" />
+    </div>
   );
 }

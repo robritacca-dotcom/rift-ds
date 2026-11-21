@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SidebarPanel } from "rift-ds/components/SidebarPanel/SidebarPanel";
 import type { SidebarPanelItem } from "rift-ds/components/SidebarPanel/SidebarPanel";
 import { Button } from "rift-ds/components/Button/Button";
@@ -92,93 +90,85 @@ function DrillInDemo() {
 
 export default function SidebarPanelPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Sidebar panel</h1>
-            <PageLinks storybookPath="/?path=/docs/components-sidebarpanel--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              The second column of app navigation
-            </p>
-            <p className={styles.introBody}>
-              A 240px column listing the pages inside one section, under a heading that names it. Items can sit under group headings, carry a count badge, and nest one level deep as an accordion. It works on its own, and it is the panel AppSidebar opens beside the rail when navigation runs to a third level.
-            </p>
-          </div>
-
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="Default" />
-            <p className={styles.sectionBody}>
-              Flat rows with one accordion. Financial planning stays closed until it is pressed, and its rows hang from a tree line under the label.
-            </p>
-            <div className={styles.panelDemo} data-anchor-ignore>
-              <SidebarPanel
-                items={reportItems}
-                title="Reports and analytics"
-                activeKey="standard"
-              />
-            </div>
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Current page inside an accordion" />
-            <p className={styles.sectionBody}>
-              When activeKey names a nested row, the accordion holding it starts open, so the reader lands with their place already showing. Close it and the parent row keeps the emphasis weight.
-            </p>
-            <div className={styles.panelDemo} data-anchor-ignore>
-              <SidebarPanel
-                items={reportItems}
-                title="Reports and analytics"
-                activeKey="budgets"
-              />
-            </div>
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-4`}>
-            <SectionTitle title="Groups and badges" />
-            <p className={styles.sectionBody}>
-              Consecutive items that share a group render under one heading. A badge adds the same count pill the app sidebar uses.
-            </p>
-            <div className={styles.panelDemo} data-anchor-ignore>
-              <SidebarPanel
-                items={settingsItems}
-                title="Settings"
-                activeKey="profile"
-              />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Collapse control" />
-            <p className={styles.sectionBody}>
-              Passing onCollapse adds a close control beside the heading. The panel reports the press; the host decides what showing and hiding it means.
-            </p>
-            <div data-anchor-ignore>
-              <CollapseDemo />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Back row" />
-            <p className={styles.sectionBody}>
-              Passing onBack adds a row above the heading that returns to the level above. This is the drill-in screen the app sidebar’s mobile drawer shows in place of the panel. Press Menu, then Reports, to move between the two levels.
-            </p>
-            <div data-anchor-ignore>
-              <DrillInDemo />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="sidebar-panel" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Sidebar panel</h1>
+        <PageLinks storybookPath="/?path=/docs/components-sidebarpanel--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          The second column of app navigation
+        </p>
+        <p className={styles.introBody}>
+          A 240px column listing the pages inside one section, under a heading that names it. Items can sit under group headings, carry a count badge, and nest one level deep as an accordion. It works on its own, and it is the panel AppSidebar opens beside the rail when navigation runs to a third level.
+        </p>
+      </div>
+
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="Default" />
+        <p className={styles.sectionBody}>
+          Flat rows with one accordion. Financial planning stays closed until it is pressed, and its rows hang from a tree line under the label.
+        </p>
+        <div className={styles.panelDemo} data-anchor-ignore>
+          <SidebarPanel
+            items={reportItems}
+            title="Reports and analytics"
+            activeKey="standard"
+          />
+        </div>
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Current page inside an accordion" />
+        <p className={styles.sectionBody}>
+          When activeKey names a nested row, the accordion holding it starts open, so the reader lands with their place already showing. Close it and the parent row keeps the emphasis weight.
+        </p>
+        <div className={styles.panelDemo} data-anchor-ignore>
+          <SidebarPanel
+            items={reportItems}
+            title="Reports and analytics"
+            activeKey="budgets"
+          />
+        </div>
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-4`}>
+        <SectionTitle title="Groups and badges" />
+        <p className={styles.sectionBody}>
+          Consecutive items that share a group render under one heading. A badge adds the same count pill the app sidebar uses.
+        </p>
+        <div className={styles.panelDemo} data-anchor-ignore>
+          <SidebarPanel
+            items={settingsItems}
+            title="Settings"
+            activeKey="profile"
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Collapse control" />
+        <p className={styles.sectionBody}>
+          Passing onCollapse adds a close control beside the heading. The panel reports the press; the host decides what showing and hiding it means.
+        </p>
+        <div data-anchor-ignore>
+          <CollapseDemo />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Back row" />
+        <p className={styles.sectionBody}>
+          Passing onBack adds a row above the heading that returns to the level above. This is the drill-in screen the app sidebar’s mobile drawer shows in place of the panel. Press Menu, then Reports, to move between the two levels.
+        </p>
+        <div data-anchor-ignore>
+          <DrillInDemo />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="sidebar-panel" />
+    </div>
   );
 }

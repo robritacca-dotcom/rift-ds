@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
 import { Table } from "rift-ds/components/Table/Table";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -85,79 +83,70 @@ function InteractivePagination(props: {
 
 export default function PaginationPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Pagination</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-pagination--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Navigate long datasets a page at a time
-            </p>
-            <p className={styles.introBody}>
-              Numbered page buttons with the first and last page always
-              visible and ellipses covering the gaps. The current page uses
-              the primary action fill, arrows disable at either end, and a
-              compact mode trades the numbers for a page readout. Pairs
-              naturally with Table.
-            </p>
-          </div>
-
-          {/* Default */}
-          <section className={styles.section}>
-            <SectionTitle title="Default" />
-            <div className={styles.demoStack}>
-              <InteractivePagination pageCount={10} />
-            </div>
-          </section>
-
-          {/* Many pages */}
-          <section className={styles.section}>
-            <SectionTitle title="Many pages" />
-            <div className={styles.demoStack}>
-              <InteractivePagination pageCount={24} initialPage={12} />
-              <InteractivePagination pageCount={24} initialPage={12} siblingCount={2} />
-            </div>
-          </section>
-
-          {/* Compact */}
-          <section className={styles.section}>
-            <SectionTitle title="Compact" />
-            <div className={styles.demoStack}>
-              <InteractivePagination pageCount={12} initialPage={3} size="compact" />
-            </div>
-          </section>
-
-          {/* With table */}
-          <section className={styles.section}>
-            <SectionTitle title="With a table" />
-            <PaginatedTable />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Previous and next" />
-            <div className={styles.kitDemo}>
-              <Pagination variant="adjacent" previous={{ href: "#installation", label: "Installation" }} next={{ href: "#theming", label: "Theming" }} />
-              <p className={styles.kitNote}>
-                The <code>adjacent</code> form links to the page before and after this one in a sequence, such as a guide&apos;s chapters, as two cards that name them.
-              </p>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="pagination" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Pagination</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-pagination--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Navigate long datasets a page at a time
+        </p>
+        <p className={styles.introBody}>
+          Numbered page buttons with the first and last page always
+          visible and ellipses covering the gaps. The current page uses
+          the primary action fill, arrows disable at either end, and a
+          compact mode trades the numbers for a page readout. Pairs
+          naturally with Table.
+        </p>
+      </div>
+
+      {/* Default */}
+      <section className={styles.section}>
+        <SectionTitle title="Default" />
+        <div className={styles.demoStack}>
+          <InteractivePagination pageCount={10} />
+        </div>
+      </section>
+
+      {/* Many pages */}
+      <section className={styles.section}>
+        <SectionTitle title="Many pages" />
+        <div className={styles.demoStack}>
+          <InteractivePagination pageCount={24} initialPage={12} />
+          <InteractivePagination pageCount={24} initialPage={12} siblingCount={2} />
+        </div>
+      </section>
+
+      {/* Compact */}
+      <section className={styles.section}>
+        <SectionTitle title="Compact" />
+        <div className={styles.demoStack}>
+          <InteractivePagination pageCount={12} initialPage={3} size="compact" />
+        </div>
+      </section>
+
+      {/* With table */}
+      <section className={styles.section}>
+        <SectionTitle title="With a table" />
+        <PaginatedTable />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Previous and next" />
+        <div className={styles.kitDemo}>
+          <Pagination variant="adjacent" previous={{ href: "#installation", label: "Installation" }} next={{ href: "#theming", label: "Theming" }} />
+          <p className={styles.kitNote}>
+            The <code>adjacent</code> form links to the page before and after this one in a sequence, such as a guide&apos;s chapters, as two cards that name them.
+          </p>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="pagination" />
+    </div>
   );
 }

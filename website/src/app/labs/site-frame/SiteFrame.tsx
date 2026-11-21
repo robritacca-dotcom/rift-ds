@@ -10,8 +10,8 @@
  * panel starts at the site's settings and persists across the three pages,
  * because this layout never remounts.
  *
- * Chromeless (src/config/chromeless.ts), so the root layout's footer,
- * anchor rail and chat button stand down and the frame brings its own; the
+ * Chromeless (src/config/chromeless.ts), so the root layout's own site
+ * frame and chat button stand down and this lab brings its own frame; the
  * lab mounts the site's chat launcher, which a chromeless route hides.
  */
 
@@ -95,7 +95,6 @@ export default function SiteFrameLab({ children }: { children: ReactNode }) {
         currentHref={pathname}
         onThisPage={kind === "sub"}
         settings={settings}
-        mainId="lab-main"
       >
         {children}
       </SiteFrame>

@@ -37,7 +37,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | actions | `ReactNode` | no |  | Extra header controls, seated ahead of the expand and close buttons: a download, a share, a version menu. |
 | previewLabel | `string` | no | `'Preview'` | Label for the preview segment of the view switch. |
 | codeLabel | `string` | no | `'Code'` | Label for the code segment of the view switch. |
-| viewLabel | `string` | no | `'Artifact view'` | Accessible name for the view switch. |
+| viewLabel | `string` | no | `'Artifact view'` | Accessible name for the view switch, and for the panel itself when `title` is left out (an untitled `inline` example). |
 | expandLabel | `string` | no | `'Expand the artifact'` | Accessible name for the expand toggle while the panel is at its resting size. |
 | collapseLabel | `string` | no | `'Collapse the artifact'` | Accessible name for the expand toggle while the panel is expanded. |
 | closeLabel | `string` | no | `'Close the artifact'` | Accessible name for the close button. |

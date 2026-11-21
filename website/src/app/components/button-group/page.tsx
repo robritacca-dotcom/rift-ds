@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ButtonGroup } from "rift-ds/components/ButtonGroup/ButtonGroup";
 import type { ButtonProps } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -55,74 +53,64 @@ const primaryGroup: ButtonProps[] = [
 
 export default function ButtonGroupPage() {
   return (
-    <>
-
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Button group</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-buttongroup--docs"
-            />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Groups related buttons in a row or column
-            </p>
-            <p className={styles.introBody}>
-              Used for nav menus, toolbars, and action sets where buttons need consistent spacing and alignment without wiring it up manually each time.
-            </p>
-          </div>
-
-          {/* Horizontal */}
-          <section className={styles.section}>
-            <SectionTitle title="Horizontal" />
-            <div className={styles.showcase}>
-              <span className={styles.showcaseLabel}>Default</span>
-              <div className={styles.previewBox}>
-                <ButtonGroup orientation="horizontal" buttons={horizontalDefault} />
-              </div>
-
-              <span className={styles.showcaseLabel}>With icons</span>
-              <div className={styles.previewBox}>
-                <ButtonGroup orientation="horizontal" buttons={horizontalWithIcons} />
-              </div>
-
-              <span className={styles.showcaseLabel}>Mixed priorities</span>
-              <div className={styles.previewBox}>
-                <ButtonGroup orientation="horizontal" buttons={primaryGroup} />
-              </div>
-            </div>
-          </section>
-
-          {/* Vertical */}
-          <section className={styles.section}>
-            <SectionTitle title="Vertical" />
-            <div className={styles.showcase}>
-              <span className={styles.showcaseLabel}>Default</span>
-              <div className={styles.previewBox}>
-                <ButtonGroup orientation="vertical" buttons={verticalDefault} />
-              </div>
-
-              <span className={styles.showcaseLabel}>With icons</span>
-              <div className={styles.previewBox}>
-                <ButtonGroup orientation="vertical" buttons={verticalWithIcons} />
-              </div>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="button-group" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Button group</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-buttongroup--docs"
+        />
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Groups related buttons in a row or column
+        </p>
+        <p className={styles.introBody}>
+          Used for nav menus, toolbars, and action sets where buttons need consistent spacing and alignment without wiring it up manually each time.
+        </p>
+      </div>
+
+      {/* Horizontal */}
+      <section className={styles.section}>
+        <SectionTitle title="Horizontal" />
+        <div className={styles.showcase}>
+          <span className={styles.showcaseLabel}>Default</span>
+          <div className={styles.previewBox}>
+            <ButtonGroup orientation="horizontal" buttons={horizontalDefault} />
+          </div>
+
+          <span className={styles.showcaseLabel}>With icons</span>
+          <div className={styles.previewBox}>
+            <ButtonGroup orientation="horizontal" buttons={horizontalWithIcons} />
+          </div>
+
+          <span className={styles.showcaseLabel}>Mixed priorities</span>
+          <div className={styles.previewBox}>
+            <ButtonGroup orientation="horizontal" buttons={primaryGroup} />
+          </div>
+        </div>
+      </section>
+
+      {/* Vertical */}
+      <section className={styles.section}>
+        <SectionTitle title="Vertical" />
+        <div className={styles.showcase}>
+          <span className={styles.showcaseLabel}>Default</span>
+          <div className={styles.previewBox}>
+            <ButtonGroup orientation="vertical" buttons={verticalDefault} />
+          </div>
+
+          <span className={styles.showcaseLabel}>With icons</span>
+          <div className={styles.previewBox}>
+            <ButtonGroup orientation="vertical" buttons={verticalWithIcons} />
+          </div>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="button-group" />
+    </div>
   );
 }

@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "@/components/Sidebar/ComponentsSidebar";
 import PageLinks from "@/components/PageLinks/PageLinks";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -256,389 +254,381 @@ export default function AiChatPage() {
   const stageHeight = phone ? 760 : 720;
 
   return (
-    <>
-      <MegaNav />
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
 
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>{chatWidget.label}</h1>
-            <PageLinks storybookPath="/?path=/docs/chat-chatwidget--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>The whole chat, assembled, set up with props</p>
-            <p className={styles.introBody}>
-              Three components make it: a provider that holds the conversation, the chat surface,
-              and a launcher that is the button and the panel. Everything below is a prop on one of
-              them, shown on the chat itself, running on a written conversation with no model
-              behind it. How to add it, from one command to the headless engine, is on{" "}
-              <Link href="/docs/chat" className={styles.inlineLink}>
-                the AI chat docs page
-              </Link>
-              , and{" "}
-              <Link href="/playground?view=chat" className={styles.inlineLink}>
-                the playground
-              </Link>{" "}
-              stages the same chat with every option on a lever.
-            </p>
-          </div>
-
-          <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
-            <Tabs tabs={viewportTabs} value={viewport} onValueChange={setViewport} aria-label="Examples by viewport" />
-            <p className={styles.viewportNote}>
-              {phone
-                ? `Under ${strip(TAKEOVER_QUERY)} the chat is the whole screen, with the welcome stacked for a handset.`
-                : "On a wide panel the rails sit inline and the welcome spreads out."}
-            </p>
-          </div>
-
-          <section id="live" className={`${styles.section} animate-in animate-delay-2`} data-anchor-ignore>
-            <SectionTitle title="Live" />
-            <p className={styles.sectionNote}>
-              Everything on, the way the playground stages it: threads and tabs, the agent panel,
-              the artifact panel, files, mentions and the model picker. Pick a question to see a reply arrive with its
-              reasoning, a card and the follow-up chips.
-            </p>
-            <ChatStage
-              key={`live-${viewport}`}
-              phone={phone}
-              height={phone ? 800 : 820}
-              widget={{
-                threads: !phone,
-                threadsProps: { defaultExpanded: false, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
-                tabs: !phone,
-                agent: { tabs: demoAgentTabs("Acme Assistant") },
-                artifacts: true,
-                fileAttachments: true,
-                mentions: DEMO_MENTIONS,
-                placeholder: "Ask anything, @ for entities or / for commands",
-                composerActions: <ModelPicker models={DEMO_MODELS} placement="top" />,
-              }}
-            />
-          </section>
-
-          <section id="responsive" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Responsive forms" />
-            <p className={styles.sectionNote}>
-              The launcher picks one of three forms from the viewport; nothing to set. Inside the
-              panel, the thread rail and the agent pane sit inline when the panel is at least{" "}
-              {THREADS_RAIL_MIN_WIDTH}px and {ASIDE_RAIL_MIN_WIDTH}px wide and open as sheets below
-              that, judged by the panel&apos;s own width rather than the screen&apos;s. The{" "}
-              <code>phone</code> prop on the surface stacks the welcome screen for a handset, which
-              is what the Mobile tab above switches on.
-            </p>
-            <Table
-              bordered
-              size="compact"
-              caption="Where the chat sits on each screen"
-              captionHidden
-              columns={[
-                { key: "screen", header: "Screen", width: "18%" },
-                { key: "where", header: "Form" },
-                { key: "width", header: "Viewport", width: "24%" },
-              ]}
-              rows={SCREENS.map((row) => ({ id: row.id, cells: { screen: row.screen, where: row.where, width: row.width } }))}
-            />
-          </section>
-
-          <section id="placement" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Placement" />
-            <p className={styles.sectionNote}>
-              <code>defaultPlacement</code> on the provider sets where the panel starts. With{" "}
-              <code>placementEnabled</code> on the surface, the header carries a menu the visitor
-              moves it from. <code>fullscreenEnabled</code> and <code>closeEnabled</code> add or
-              remove those two controls. A phone has neither the menu nor the resize grips. The
-              chat in the corner of this page has all of them on.
-            </p>
-            <Table
-              bordered
-              size="compact"
-              caption="Placements"
-              captionHidden
-              columns={[
-                { key: "label", header: "Placement", width: "24%" },
-                { key: "what", header: "What it does" },
-              ]}
-              rows={PLACEMENTS.map((row) => ({ id: row.id, cells: { label: row.label, what: row.what } }))}
-            />
-          </section>
-
-          <section id="as-a-page" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="As a page" />
-            <p className={styles.sectionNote}>
-              Where the chat is the page rather than a panel over one, as on a chat home,{" "}
-              <code>layout</code> seats it in one of the three app shell modes that AppLayout and
-              the templates draw. <code>flush</code> runs the history rail on the shell colour
-              behind a hairline with the conversation crisp beside it, and takes a{" "}
-              <code>backdrop</code> of solid or blur. <code>floating</code> lifts the rail into a
-              glass card. <code>inset</code>, below, seats the conversation and each trailing panel
-              in raised surfaces, with the header controls in the panel&apos;s top row. Left out,
-              the chat draws no shell and takes its host&apos;s ground. On a phone every mode gives
-              way to the plain full-screen chat.
-            </p>
-            <ChatStage
-              key={`page-${viewport}`}
-              phone={phone}
-              height={phone ? 780 : 720}
-              widget={{
-                layout: "inset",
-                threads: true,
-                threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
-                agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone },
-              }}
-            />
-          </section>
-
-          <section id="welcome" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Welcome screen" />
-            <p className={styles.sectionNote}>
-              An empty chat shows a greeting for the time of day, the <code>title</code> and{" "}
-              <code>tagline</code>, and the <code>starters</code>. The <code>widgets</code> slot
-              puts anything under the composer: links, cards or a whole dashboard, held to one
-              screen or scrolling as a page with <code>widgetsLayout</code>, and as wide as the
-              composer or the panel with <code>widgetsWidth</code>. It all leaves with the first
-              message, and it arrives rather than appears: the composer first, then the greeting,
-              then the tiles of a dashboard one after another, after a short hold a host can
-              lengthen or zero with <code>--ds-chat-widget-welcome-hold</code>; reduced motion
-              makes the whole entrance instant. The four fillings, side by side in the compact
-              layout: the starters alone, then links, cards and a dashboard in their place, the
-              dashboard running wide.
-            </p>
-            <div className={styles.stageGrid}>
-              {WELCOME_VARIANTS.map((variant) => (
-                <figure key={`welcome-${variant.value}-${viewport}`} className={styles.stageCell}>
-                  <ChatStage
-                    phone={phone}
-                    height={780}
-                    widget={(chat) => ({
-                      compact: true,
-                      showStarters: variant.value === "none",
-                      /* No slot at all for the bare welcome: an element that renders nothing
-                         would still reserve the slot's room and lift the greeting off centre. */
-                      widgets: variant.value === "none" ? undefined : <DemoWelcome variant={variant.value} onAsk={chat.send} />,
-                      widgetsLayout: variant.wide || phone ? "scroll" : "fit",
-                      widgetsWidth: variant.wide ? "wide" : "column",
-                    })}
-                  />
-                  <figcaption className={styles.stageCaption}>{variant.label}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </section>
-
-          <section id="context" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Context" />
-            <p className={styles.sectionNote}>
-              The note over the composer says what the chat is looking at, from one{" "}
-              <code>context</code> object. For a page it is the page&apos;s name. When the reader
-              puts something in front of the chat, a few ticked rows or a highlighted figure, the
-              host updates the <code>label</code>, the <code>note</code> and the <code>icon</code>{" "}
-              together, and the note is read out once it settles. <code>onClear</code> ends the
-              note in a clear button that goes back to the page, named by{" "}
-              <code>contextClearLabel</code>, and <code>sent</code> repeats the context above each
-              message sent over it, so the thread keeps what each question was about. Here three
-              orders are in front of the chat: send a starter, then clear the note.{" "}
-              <Link href="/docs/chat#context-and-actions">Context and actions</Link> covers the
-              hooks that follow a highlight. This site&apos;s chat uses them: highlight a row of the
-              props table below, then open the chat.
-            </p>
-            <ContextStage key={`context-${viewport}`} phone={phone} height={stageHeight} />
-          </section>
-
-          <section id="threads" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Threads and tabs" />
-            <p className={styles.sectionNote}>
-              <code>threads</code> turns the history rail on. Every chat is kept and a new chat is
-              named after its first reply; a chat can be pinned, renamed or deleted from its row.{" "}
-              <code>threadsProps</code> sets the rail&apos;s brand, profile, footer and whether it
-              starts expanded; the provider&apos;s <code>threads</code> option seeds the history, switches
-              the detail lines and pins, and takes the rename, delete and pin callbacks.{" "}
-              <code>tabs</code> is a separate switch: a tab per open chat, in sync with the rail,
-              closing back to the welcome screen when the last one goes. On a phone the rail opens
-              as a sheet from the header.
-            </p>
-            <ChatStage
-              key={`threads-${viewport}`}
-              phone={phone}
-              height={phone ? 780 : 780}
-              widget={{
-                threads: true,
-                threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
-                tabs: true,
-              }}
-              setup={stageThreads}
-            />
-          </section>
-
-          <section id="agent-panel" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Agent panel" />
-            <p className={styles.sectionNote}>
-              <code>agent</code> turns the pane on and names its tabs; here, what the agent has
-              done, what is waiting for approval, what is scheduled, and the person&apos;s profile.{" "}
-              <code>defaultOpen</code> opens it at mount; otherwise the header button does. The tabs
-              and their contents are the host&apos;s own. <code>aside</code> takes a render function
-              instead, for a pane of your own. On a phone it opens as a sheet.
-            </p>
-            <ChatStage
-              key={`agent-${viewport}`}
-              phone={phone}
-              height={phone ? 780 : 780}
-              widget={{ agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone } }}
-              setup={stageQuickReplies}
-            />
-          </section>
-
-          <section id="artifact-panel" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Artifact panel" />
-            <p className={styles.sectionNote}>
-              <code>artifacts</code> turns the panel on, for a reply that makes something too big
-              for a turn: a dashboard, a page, a file. The artifact arrives as a card of kind{" "}
-              <code>{ARTIFACT_CARD_KIND}</code>, so the server sends it like any other card. The
-              thread shows it as a tile, and the tile or the header button opens it beside the
-              conversation. An HTML document or a URL is drawn in a sandboxed frame, with the
-              source behind the Code view; the provider&apos;s <code>artifactRenderers</code> draw
-              a kind of your own as live components. Drag the panel&apos;s left edge to size it, or
-              expand it to take the conversation&apos;s room: it glides across while the
-              conversation folds away, the history stays where it is, and Escape brings the
-              conversation back. It opens at a resting width, or at the room the
-              conversation leaves it, and slides in and out as a drawer at that width. The panel
-              sits beside the conversation from{" "}
-              {ASIDE_RAIL_MIN_WIDTH}px of chat width, and opens as a sheet below that and on a
-              phone. It shares its seat with the agent panel, one at a time.
-            </p>
-            <ChatStage
-              key={`artifact-${viewport}`}
-              phone={phone}
-              height={phone ? 780 : 720}
-              widget={{ artifacts: true }}
-              setup={stageArtifact(!phone)}
-            />
-          </section>
-
-          <section id="quick-replies" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Quick replies" />
-            <p className={styles.sectionNote}>
-              <code>starters</code> open an empty chat, with <code>startersKey</code> deciding when a
-              fresh set is drawn. The provider&apos;s <code>followups</code> option names the
-              endpoint or function that writes follow-up questions from each answer, shown under
-              it with a shimmer while they are on their way; <code>fallbackFollowups</code> covers
-              a miss. Starters a model writes for the reader&apos;s focus hold the same shimmer
-              through <code>startersPending</code> until they arrive. A chip holds{" "}
-              {SUGGESTION_MAX_CHARS} characters; a longer one is dropped rather
-              than cut. Once a chip is sent, its row stays as the record: the sent chip outlined,
-              the rest faded, none of them tappable.
-            </p>
-            <ChatStage key={`replies-${viewport}`} phone={phone} height={stageHeight} setup={stageQuickReplies} />
-          </section>
-
-          <section id="questions" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Questions" />
-            <p className={styles.sectionNote}>
-              When a reply needs a decision before it can go on, it ends in a question with the
-              answers to pick, drawn as a question card under the prose in place of the follow-up
-              chips. One answer is a tap, several are ticked and sent together, and a short set is
-              asked a step at a time. The answer is sent as the next message, plain text for the
-              model, and the card stays as the record of the choice. A set of more than one question
-              holds the composer under <code>questionsPlaceholder</code> until it is answered or
-              skipped. On the server, <code>askUser</code> gives the model the tool it asks through;
-              a script attaches a <code>question</code> to a reply, with the replies its answers
-              lead to.
-            </p>
-            <ChatStage key={`questions-${viewport}`} phone={phone} height={stageHeight} setup={stageQuestions} />
-          </section>
-
-          <section id="flow" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Flow" />
-            <p className={styles.sectionNote}>
-              <code>flow</code> sets which way the conversation reads. The default,{" "}
-              <code>top-down</code>, floats each new message to the top of the thread and streams
-              the answer in below it. <code>bottom-up</code> is the classic message thread: turns
-              stack from the bottom, the newest just above the composer, and the view follows the
-              answer down until you scroll up to reread.
-            </p>
-            <ChatStage
-              key={`flow-${viewport}`}
-              phone={phone}
-              height={stageHeight}
-              widget={{ flow: "bottom-up" }}
-              setup={stageFlow}
-            />
-          </section>
-
-          <section id="rich-content" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Rich content" />
-            <p className={styles.sectionNote}>
-              A reply can carry a card as well as text. The server sends the card as data with a
-              kind, and the provider&apos;s <code>renderers</code> map each kind to a component, so
-              any component in this library can sit inside a reply. The demo subpath ships
-              renderers for a chart, a plan, a tool call, a diff, an approval, a source list and a
-              product card; here a chart and a plan.
-            </p>
-            <ChatStage key={`cards-${viewport}`} phone={phone} height={phone ? 800 : 860} setup={stageRichContent} />
-          </section>
-
-          <section id="status" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Live status and reasoning" />
-            <p className={styles.sectionNote}>
-              Built in, driven by the transport&apos;s status events. While the model works, its
-              current step shows as a live status above the reply and its reasoning collects
-              underneath, open. When the first words arrive the reasoning folds into one line that
-              says how long it took. The reply streams in at an even pace whatever rate the model
-              sends it at; reduced motion turns the pacing off. This example asks its question over
-              and over, slowed down so the thinking can be read.
-            </p>
-            <ChatStage key={`status-${viewport}`} phone={phone} height={stageHeight} timing={SLOW_TIMING} setup={stageStatus} loopAfterMs={4000} />
-          </section>
-
-          <section id="documents" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Documents" />
-            <p className={styles.sectionNote}>
-              <code>fileAttachments</code> turns files on: the composer&apos;s attach button, a
-              paste, or a drop anywhere on the chat, with <code>maxAttachments</code> and{" "}
-              <code>maxAttachmentBytes</code> as the limits. A long paste becomes a file of its own.
-              Previews are built in the browser and nothing is uploaded unless the host&apos;s
-              transport sends it. In the thread, a sent file is a tile above the message: a picture
-              keeps its own ratio, a document wears its type; several form a grid, and past a limit
-              the rest collapse behind a count. Pressing a tile opens the viewer. <code>mentions</code> supplies the people, files and commands typed with
-              @ and /, and <code>models</code> the picker&apos;s list, with{" "}
-              <code>lockedModelDescription</code> for one the budget has locked.
-            </p>
-            <ChatStage
-              key={`documents-${viewport}`}
-              phone={phone}
-              height={phone ? 800 : 920}
-              widget={{
-                fileAttachments: true,
-                mentions: DEMO_MENTIONS,
-                placeholder: "Ask anything, @ for entities or / for commands",
-                composerActions: <ModelPicker models={DEMO_MODELS} placement="top" />,
-              }}
-              setup={stageDocuments}
-            />
-          </section>
-
-          <section id="parts" className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Parts" />
-            <p className={styles.sectionNote}>The chat is built from these components, each with a page of its own.</p>
-            <ul className={styles.parts}>
-              {parts.map((component) => (
-                <li key={component.slug}>
-                  <Link href={`/components/${component.slug}`} className={styles.partChip}>
-                    {component.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <ComponentInstallStrip slug="ai-chat" />
-        </main>
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>{chatWidget.label}</h1>
+        <PageLinks storybookPath="/?path=/docs/chat-chatwidget--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>The whole chat, assembled, set up with props</p>
+        <p className={styles.introBody}>
+          Three components make it: a provider that holds the conversation, the chat surface,
+          and a launcher that is the button and the panel. Everything below is a prop on one of
+          them, shown on the chat itself, running on a written conversation with no model
+          behind it. How to add it, from one command to the headless engine, is on{" "}
+          <Link href="/docs/chat" className={styles.inlineLink}>
+            the AI chat docs page
+          </Link>
+          , and{" "}
+          <Link href="/playground?view=chat" className={styles.inlineLink}>
+            the playground
+          </Link>{" "}
+          stages the same chat with every option on a lever.
+        </p>
+      </div>
+
+      <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
+        <Tabs tabs={viewportTabs} value={viewport} onValueChange={setViewport} aria-label="Examples by viewport" />
+        <p className={styles.viewportNote}>
+          {phone
+            ? `Under ${strip(TAKEOVER_QUERY)} the chat is the whole screen, with the welcome stacked for a handset.`
+            : "On a wide panel the rails sit inline and the welcome spreads out."}
+        </p>
+      </div>
+
+      <section id="live" className={`${styles.section} animate-in animate-delay-2`} data-anchor-ignore>
+        <SectionTitle title="Live" />
+        <p className={styles.sectionNote}>
+          Everything on, the way the playground stages it: threads and tabs, the agent panel,
+          the artifact panel, files, mentions and the model picker. Pick a question to see a reply arrive with its
+          reasoning, a card and the follow-up chips.
+        </p>
+        <ChatStage
+          key={`live-${viewport}`}
+          phone={phone}
+          height={phone ? 800 : 820}
+          widget={{
+            threads: !phone,
+            threadsProps: { defaultExpanded: false, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
+            tabs: !phone,
+            agent: { tabs: demoAgentTabs("Acme Assistant") },
+            artifacts: true,
+            fileAttachments: true,
+            mentions: DEMO_MENTIONS,
+            placeholder: "Ask anything, @ for entities or / for commands",
+            composerActions: <ModelPicker models={DEMO_MODELS} placement="top" />,
+          }}
+        />
+      </section>
+
+      <section id="responsive" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Responsive forms" />
+        <p className={styles.sectionNote}>
+          The launcher picks one of three forms from the viewport; nothing to set. Inside the
+          panel, the thread rail and the agent pane sit inline when the panel is at least{" "}
+          {THREADS_RAIL_MIN_WIDTH}px and {ASIDE_RAIL_MIN_WIDTH}px wide and open as sheets below
+          that, judged by the panel&apos;s own width rather than the screen&apos;s. The{" "}
+          <code>phone</code> prop on the surface stacks the welcome screen for a handset, which
+          is what the Mobile tab above switches on.
+        </p>
+        <Table
+          bordered
+          size="compact"
+          caption="Where the chat sits on each screen"
+          captionHidden
+          columns={[
+            { key: "screen", header: "Screen", width: "18%" },
+            { key: "where", header: "Form" },
+            { key: "width", header: "Viewport", width: "24%" },
+          ]}
+          rows={SCREENS.map((row) => ({ id: row.id, cells: { screen: row.screen, where: row.where, width: row.width } }))}
+        />
+      </section>
+
+      <section id="placement" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Placement" />
+        <p className={styles.sectionNote}>
+          <code>defaultPlacement</code> on the provider sets where the panel starts. With{" "}
+          <code>placementEnabled</code> on the surface, the header carries a menu the visitor
+          moves it from. <code>fullscreenEnabled</code> and <code>closeEnabled</code> add or
+          remove those two controls. A phone has neither the menu nor the resize grips. The
+          chat in the corner of this page has all of them on.
+        </p>
+        <Table
+          bordered
+          size="compact"
+          caption="Placements"
+          captionHidden
+          columns={[
+            { key: "label", header: "Placement", width: "24%" },
+            { key: "what", header: "What it does" },
+          ]}
+          rows={PLACEMENTS.map((row) => ({ id: row.id, cells: { label: row.label, what: row.what } }))}
+        />
+      </section>
+
+      <section id="as-a-page" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="As a page" />
+        <p className={styles.sectionNote}>
+          Where the chat is the page rather than a panel over one, as on a chat home,{" "}
+          <code>layout</code> seats it in one of the three app shell modes that AppLayout and
+          the templates draw. <code>flush</code> runs the history rail on the shell colour
+          behind a hairline with the conversation crisp beside it, and takes a{" "}
+          <code>backdrop</code> of solid or blur. <code>floating</code> lifts the rail into a
+          glass card. <code>inset</code>, below, seats the conversation and each trailing panel
+          in raised surfaces, with the header controls in the panel&apos;s top row. Left out,
+          the chat draws no shell and takes its host&apos;s ground. On a phone every mode gives
+          way to the plain full-screen chat.
+        </p>
+        <ChatStage
+          key={`page-${viewport}`}
+          phone={phone}
+          height={phone ? 780 : 720}
+          widget={{
+            layout: "inset",
+            threads: true,
+            threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
+            agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone },
+          }}
+        />
+      </section>
+
+      <section id="welcome" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Welcome screen" />
+        <p className={styles.sectionNote}>
+          An empty chat shows a greeting for the time of day, the <code>title</code> and{" "}
+          <code>tagline</code>, and the <code>starters</code>. The <code>widgets</code> slot
+          puts anything under the composer: links, cards or a whole dashboard, held to one
+          screen or scrolling as a page with <code>widgetsLayout</code>, and as wide as the
+          composer or the panel with <code>widgetsWidth</code>. It all leaves with the first
+          message, and it arrives rather than appears: the composer first, then the greeting,
+          then the tiles of a dashboard one after another, after a short hold a host can
+          lengthen or zero with <code>--ds-chat-widget-welcome-hold</code>; reduced motion
+          makes the whole entrance instant. The four fillings, side by side in the compact
+          layout: the starters alone, then links, cards and a dashboard in their place, the
+          dashboard running wide.
+        </p>
+        <div className={styles.stageGrid}>
+          {WELCOME_VARIANTS.map((variant) => (
+            <figure key={`welcome-${variant.value}-${viewport}`} className={styles.stageCell}>
+              <ChatStage
+                phone={phone}
+                height={780}
+                widget={(chat) => ({
+                  compact: true,
+                  showStarters: variant.value === "none",
+                  /* No slot at all for the bare welcome: an element that renders nothing
+                     would still reserve the slot's room and lift the greeting off centre. */
+                  widgets: variant.value === "none" ? undefined : <DemoWelcome variant={variant.value} onAsk={chat.send} />,
+                  widgetsLayout: variant.wide || phone ? "scroll" : "fit",
+                  widgetsWidth: variant.wide ? "wide" : "column",
+                })}
+              />
+              <figcaption className={styles.stageCaption}>{variant.label}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section id="context" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Context" />
+        <p className={styles.sectionNote}>
+          The note over the composer says what the chat is looking at, from one{" "}
+          <code>context</code> object. For a page it is the page&apos;s name. When the reader
+          puts something in front of the chat, a few ticked rows or a highlighted figure, the
+          host updates the <code>label</code>, the <code>note</code> and the <code>icon</code>{" "}
+          together, and the note is read out once it settles. <code>onClear</code> ends the
+          note in a clear button that goes back to the page, named by{" "}
+          <code>contextClearLabel</code>, and <code>sent</code> repeats the context above each
+          message sent over it, so the thread keeps what each question was about. Here three
+          orders are in front of the chat: send a starter, then clear the note.{" "}
+          <Link href="/docs/chat#context-and-actions">Context and actions</Link> covers the
+          hooks that follow a highlight. This site&apos;s chat uses them: highlight a row of the
+          props table below, then open the chat.
+        </p>
+        <ContextStage key={`context-${viewport}`} phone={phone} height={stageHeight} />
+      </section>
+
+      <section id="threads" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Threads and tabs" />
+        <p className={styles.sectionNote}>
+          <code>threads</code> turns the history rail on. Every chat is kept and a new chat is
+          named after its first reply; a chat can be pinned, renamed or deleted from its row.{" "}
+          <code>threadsProps</code> sets the rail&apos;s brand, profile, footer and whether it
+          starts expanded; the provider&apos;s <code>threads</code> option seeds the history, switches
+          the detail lines and pins, and takes the rename, delete and pin callbacks.{" "}
+          <code>tabs</code> is a separate switch: a tab per open chat, in sync with the rail,
+          closing back to the welcome screen when the last one goes. On a phone the rail opens
+          as a sheet from the header.
+        </p>
+        <ChatStage
+          key={`threads-${viewport}`}
+          phone={phone}
+          height={phone ? 780 : 780}
+          widget={{
+            threads: true,
+            threadsProps: { defaultExpanded: !phone, logoText: "Acme Assistant", profile: { name: "Jordan Reyes", meta: "jordan@acme.example" } },
+            tabs: true,
+          }}
+          setup={stageThreads}
+        />
+      </section>
+
+      <section id="agent-panel" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Agent panel" />
+        <p className={styles.sectionNote}>
+          <code>agent</code> turns the pane on and names its tabs; here, what the agent has
+          done, what is waiting for approval, what is scheduled, and the person&apos;s profile.{" "}
+          <code>defaultOpen</code> opens it at mount; otherwise the header button does. The tabs
+          and their contents are the host&apos;s own. <code>aside</code> takes a render function
+          instead, for a pane of your own. On a phone it opens as a sheet.
+        </p>
+        <ChatStage
+          key={`agent-${viewport}`}
+          phone={phone}
+          height={phone ? 780 : 780}
+          widget={{ agent: { tabs: demoAgentTabs("Acme Assistant"), defaultOpen: !phone } }}
+          setup={stageQuickReplies}
+        />
+      </section>
+
+      <section id="artifact-panel" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Artifact panel" />
+        <p className={styles.sectionNote}>
+          <code>artifacts</code> turns the panel on, for a reply that makes something too big
+          for a turn: a dashboard, a page, a file. The artifact arrives as a card of kind{" "}
+          <code>{ARTIFACT_CARD_KIND}</code>, so the server sends it like any other card. The
+          thread shows it as a tile, and the tile or the header button opens it beside the
+          conversation. An HTML document or a URL is drawn in a sandboxed frame, with the
+          source behind the Code view; the provider&apos;s <code>artifactRenderers</code> draw
+          a kind of your own as live components. Drag the panel&apos;s left edge to size it, or
+          expand it to take the conversation&apos;s room: it glides across while the
+          conversation folds away, the history stays where it is, and Escape brings the
+          conversation back. It opens at a resting width, or at the room the
+          conversation leaves it, and slides in and out as a drawer at that width. The panel
+          sits beside the conversation from{" "}
+          {ASIDE_RAIL_MIN_WIDTH}px of chat width, and opens as a sheet below that and on a
+          phone. It shares its seat with the agent panel, one at a time.
+        </p>
+        <ChatStage
+          key={`artifact-${viewport}`}
+          phone={phone}
+          height={phone ? 780 : 720}
+          widget={{ artifacts: true }}
+          setup={stageArtifact(!phone)}
+        />
+      </section>
+
+      <section id="quick-replies" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Quick replies" />
+        <p className={styles.sectionNote}>
+          <code>starters</code> open an empty chat, with <code>startersKey</code> deciding when a
+          fresh set is drawn. The provider&apos;s <code>followups</code> option names the
+          endpoint or function that writes follow-up questions from each answer, shown under
+          it with a shimmer while they are on their way; <code>fallbackFollowups</code> covers
+          a miss. Starters a model writes for the reader&apos;s focus hold the same shimmer
+          through <code>startersPending</code> until they arrive. A chip holds{" "}
+          {SUGGESTION_MAX_CHARS} characters; a longer one is dropped rather
+          than cut. Once a chip is sent, its row stays as the record: the sent chip outlined,
+          the rest faded, none of them tappable.
+        </p>
+        <ChatStage key={`replies-${viewport}`} phone={phone} height={stageHeight} setup={stageQuickReplies} />
+      </section>
+
+      <section id="questions" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Questions" />
+        <p className={styles.sectionNote}>
+          When a reply needs a decision before it can go on, it ends in a question with the
+          answers to pick, drawn as a question card under the prose in place of the follow-up
+          chips. One answer is a tap, several are ticked and sent together, and a short set is
+          asked a step at a time. The answer is sent as the next message, plain text for the
+          model, and the card stays as the record of the choice. A set of more than one question
+          holds the composer under <code>questionsPlaceholder</code> until it is answered or
+          skipped. On the server, <code>askUser</code> gives the model the tool it asks through;
+          a script attaches a <code>question</code> to a reply, with the replies its answers
+          lead to.
+        </p>
+        <ChatStage key={`questions-${viewport}`} phone={phone} height={stageHeight} setup={stageQuestions} />
+      </section>
+
+      <section id="flow" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Flow" />
+        <p className={styles.sectionNote}>
+          <code>flow</code> sets which way the conversation reads. The default,{" "}
+          <code>top-down</code>, floats each new message to the top of the thread and streams
+          the answer in below it. <code>bottom-up</code> is the classic message thread: turns
+          stack from the bottom, the newest just above the composer, and the view follows the
+          answer down until you scroll up to reread.
+        </p>
+        <ChatStage
+          key={`flow-${viewport}`}
+          phone={phone}
+          height={stageHeight}
+          widget={{ flow: "bottom-up" }}
+          setup={stageFlow}
+        />
+      </section>
+
+      <section id="rich-content" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Rich content" />
+        <p className={styles.sectionNote}>
+          A reply can carry a card as well as text. The server sends the card as data with a
+          kind, and the provider&apos;s <code>renderers</code> map each kind to a component, so
+          any component in this library can sit inside a reply. The demo subpath ships
+          renderers for a chart, a plan, a tool call, a diff, an approval, a source list and a
+          product card; here a chart and a plan.
+        </p>
+        <ChatStage key={`cards-${viewport}`} phone={phone} height={phone ? 800 : 860} setup={stageRichContent} />
+      </section>
+
+      <section id="status" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Live status and reasoning" />
+        <p className={styles.sectionNote}>
+          Built in, driven by the transport&apos;s status events. While the model works, its
+          current step shows as a live status above the reply and its reasoning collects
+          underneath, open. When the first words arrive the reasoning folds into one line that
+          says how long it took. The reply streams in at an even pace whatever rate the model
+          sends it at; reduced motion turns the pacing off. This example asks its question over
+          and over, slowed down so the thinking can be read.
+        </p>
+        <ChatStage key={`status-${viewport}`} phone={phone} height={stageHeight} timing={SLOW_TIMING} setup={stageStatus} loopAfterMs={4000} />
+      </section>
+
+      <section id="documents" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Documents" />
+        <p className={styles.sectionNote}>
+          <code>fileAttachments</code> turns files on: the composer&apos;s attach button, a
+          paste, or a drop anywhere on the chat, with <code>maxAttachments</code> and{" "}
+          <code>maxAttachmentBytes</code> as the limits. A long paste becomes a file of its own.
+          Previews are built in the browser and nothing is uploaded unless the host&apos;s
+          transport sends it. In the thread, a sent file is a tile above the message: a picture
+          keeps its own ratio, a document wears its type; several form a grid, and past a limit
+          the rest collapse behind a count. Pressing a tile opens the viewer. <code>mentions</code> supplies the people, files and commands typed with
+          @ and /, and <code>models</code> the picker&apos;s list, with{" "}
+          <code>lockedModelDescription</code> for one the budget has locked.
+        </p>
+        <ChatStage
+          key={`documents-${viewport}`}
+          phone={phone}
+          height={phone ? 800 : 920}
+          widget={{
+            fileAttachments: true,
+            mentions: DEMO_MENTIONS,
+            placeholder: "Ask anything, @ for entities or / for commands",
+            composerActions: <ModelPicker models={DEMO_MODELS} placement="top" />,
+          }}
+          setup={stageDocuments}
+        />
+      </section>
+
+      <section id="parts" className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Parts" />
+        <p className={styles.sectionNote}>The chat is built from these components, each with a page of its own.</p>
+        <ul className={styles.parts}>
+          {parts.map((component) => (
+            <li key={component.slug}>
+              <Link href={`/components/${component.slug}`} className={styles.partChip}>
+                {component.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <ComponentInstallStrip slug="ai-chat" />
+    </div>
   );
 }

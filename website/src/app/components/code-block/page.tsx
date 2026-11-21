@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { CodeBlock, type CodeLine } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -54,124 +52,115 @@ const SCROLL_SNIPPET = `:root {
 
 export default function CodeBlockPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Code block</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-codeblock--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Monospace code with a header and one-click copy
-            </p>
-            <p className={styles.introBody}>
-              The system&apos;s one sanctioned monospace context. An optional header carries a
-              filename and language tag; the copy button confirms with a check for two
-              seconds. Long lines scroll horizontally inside the block, a{' '}
-              <code>maxHeight</code> caps tall snippets with an inner vertical scroll, and{' '}
-              <code>collapsible</code> folds the whole code area behind a chevron.
-            </p>
-          </div>
-
-          {/* With header */}
-          <section className={styles.section}>
-            <SectionTitle title="With filename and language" />
-            <CodeBlock code={TOKEN_SNIPPET} filename="tokens-light.css" language="css" />
-          </section>
-
-          {/* Usage snippet */}
-          <section className={styles.section}>
-            <SectionTitle title="Usage snippet" />
-            <p className={styles.introBody}>
-              The intended everyday use: component usage examples on these showcase pages.
-            </p>
-            <CodeBlock code={USAGE_SNIPPET} language="tsx" />
-          </section>
-
-          {/* Collapsible */}
-          <section className={styles.section}>
-            <SectionTitle title="Collapsible" />
-            <p className={styles.introBody}>
-              With <code>collapsible</code>, a chevron beside the filename opens and closes
-              the code area, the same animation as Accordion. Add{' '}
-              <code>defaultCollapsed</code> to start closed.
-            </p>
-            <CodeBlock
-              code={USAGE_SNIPPET}
-              filename="ChipExample.tsx"
-              language="tsx"
-              collapsible
-            />
-            <CodeBlock
-              code={TOKEN_SNIPPET}
-              filename="tokens-light.css"
-              language="css"
-              collapsible
-              defaultCollapsed
-            />
-          </section>
-
-          {/* Constrained height */}
-          <section className={styles.section}>
-            <SectionTitle title="Constrained height" />
-            <p className={styles.introBody}>
-              With <code>maxHeight</code>, tall snippets scroll vertically inside the block
-              while the header stays pinned. Numbers are pixels; strings pass through as-is.
-            </p>
-            <CodeBlock
-              code={SCROLL_SNIPPET}
-              filename="tokens-light.css"
-              language="css"
-              maxHeight={220}
-            />
-          </section>
-
-          {/* Bare */}
-          <section className={styles.section}>
-            <SectionTitle title="Bare (no header)" />
-            <CodeBlock code="npm run storybook" showCopy={false} />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Highlighting, line numbers and marked lines" />
-            <div className={styles.kitDemo}>
-              <CodeBlock
-                filename="FilterChip.tsx"
-                showLineNumbers
-                highlightLines={[4]}
-                code={HIGHLIGHT_SOURCE}
-                lines={HIGHLIGHTED}
-              />
-              <p className={styles.kitNote}>
-                Code stays monochrome until you pass <code>lines</code>, which <code>highlight()</code> from <code>rift-ds/code/highlight</code> writes through shiki (an optional peer: install <code>shiki</code> to use it), best called in a Server Component so the page ships no highlighter. Each run takes one of five syntax colours from the theme.
-              </p>
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Tabs that stay in step" />
-            <div className={styles.kitDemo}>
-              <CodeBlock tabs={packageManagerTabs({ install: "rift-ds" })} syncKey="package-manager" />
-              <CodeBlock tabs={packageManagerTabs({ run: "rift-ds init" })} syncKey="package-manager" />
-              <p className={styles.kitNote}>
-                Every block with the same <code>syncKey</code> follows the reader&apos;s pick, and remembers it for their next visit. <code>packageManagerTabs()</code> from <code>rift-ds/code</code> writes the npm, pnpm, yarn and bun commands.
-              </p>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="code-block" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Code block</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-codeblock--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Monospace code with a header and one-click copy
+        </p>
+        <p className={styles.introBody}>
+          The system&apos;s one sanctioned monospace context. An optional header carries a
+          filename and language tag; the copy button confirms with a check for two
+          seconds. Long lines scroll horizontally inside the block, a{' '}
+          <code>maxHeight</code> caps tall snippets with an inner vertical scroll, and{' '}
+          <code>collapsible</code> folds the whole code area behind a chevron.
+        </p>
+      </div>
+
+      {/* With header */}
+      <section className={styles.section}>
+        <SectionTitle title="With filename and language" />
+        <CodeBlock code={TOKEN_SNIPPET} filename="tokens-light.css" language="css" />
+      </section>
+
+      {/* Usage snippet */}
+      <section className={styles.section}>
+        <SectionTitle title="Usage snippet" />
+        <p className={styles.introBody}>
+          The intended everyday use: component usage examples on these showcase pages.
+        </p>
+        <CodeBlock code={USAGE_SNIPPET} language="tsx" />
+      </section>
+
+      {/* Collapsible */}
+      <section className={styles.section}>
+        <SectionTitle title="Collapsible" />
+        <p className={styles.introBody}>
+          With <code>collapsible</code>, a chevron beside the filename opens and closes
+          the code area, the same animation as Accordion. Add{' '}
+          <code>defaultCollapsed</code> to start closed.
+        </p>
+        <CodeBlock
+          code={USAGE_SNIPPET}
+          filename="ChipExample.tsx"
+          language="tsx"
+          collapsible
+        />
+        <CodeBlock
+          code={TOKEN_SNIPPET}
+          filename="tokens-light.css"
+          language="css"
+          collapsible
+          defaultCollapsed
+        />
+      </section>
+
+      {/* Constrained height */}
+      <section className={styles.section}>
+        <SectionTitle title="Constrained height" />
+        <p className={styles.introBody}>
+          With <code>maxHeight</code>, tall snippets scroll vertically inside the block
+          while the header stays pinned. Numbers are pixels; strings pass through as-is.
+        </p>
+        <CodeBlock
+          code={SCROLL_SNIPPET}
+          filename="tokens-light.css"
+          language="css"
+          maxHeight={220}
+        />
+      </section>
+
+      {/* Bare */}
+      <section className={styles.section}>
+        <SectionTitle title="Bare (no header)" />
+        <CodeBlock code="npm run storybook" showCopy={false} />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Highlighting, line numbers and marked lines" />
+        <div className={styles.kitDemo}>
+          <CodeBlock
+            filename="FilterChip.tsx"
+            showLineNumbers
+            highlightLines={[4]}
+            code={HIGHLIGHT_SOURCE}
+            lines={HIGHLIGHTED}
+          />
+          <p className={styles.kitNote}>
+            Code stays monochrome until you pass <code>lines</code>, which <code>highlight()</code> from <code>rift-ds/code/highlight</code> writes through shiki (an optional peer: install <code>shiki</code> to use it), best called in a Server Component so the page ships no highlighter. Each run takes one of five syntax colours from the theme.
+          </p>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Tabs that stay in step" />
+        <div className={styles.kitDemo}>
+          <CodeBlock tabs={packageManagerTabs({ install: "rift-ds" })} syncKey="package-manager" />
+          <CodeBlock tabs={packageManagerTabs({ run: "rift-ds init" })} syncKey="package-manager" />
+          <p className={styles.kitNote}>
+            Every block with the same <code>syncKey</code> follows the reader&apos;s pick, and remembers it for their next visit. <code>packageManagerTabs()</code> from <code>rift-ds/code</code> writes the npm, pnpm, yarn and bun commands.
+          </p>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="code-block" />
+    </div>
   );
 }

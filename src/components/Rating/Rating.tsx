@@ -28,7 +28,7 @@ type RatingOwnProps = {
   icon?: string | React.ReactNode;
   /** Component size */
   size?: 'default' | 'compact';
-  /** Accessible name for the group, and the base of each step's label */
+  /** Accessible name for the group, and the base of each step's label (in the `thumbs` form the group's name only; each thumb is named by `upLabel` or `downLabel`) */
   label?: string;
   /**
    * The spoken value, given a step (or, in `readOnly` mode, the current

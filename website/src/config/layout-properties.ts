@@ -4,14 +4,12 @@
  * The values live in website/src/app/globals.css and nowhere else:
  * /foundations/layout reads them from the stylesheet at build time
  * (lib/layout-source.ts), so this list holds only the words. The
- * properties are the site's page shell, not the package's, which is why
- * they sit in the site's stylesheet rather than the token files.
+ * properties are the site's, not the package's (the site frame's own
+ * columns are SiteLayout's `--ds-site-layout-*`), which is why they sit in
+ * the site's stylesheet rather than the token files.
  * scripts/validate-foundation-mirrors.mjs holds this list to the
  * stylesheet in both directions, so a new property cannot ship without a
  * description, and a removed one cannot linger here.
- *
- * `shell` marks the three the page draws as its shell diagram; the rest
- * cannot be drawn usefully and go in its table.
  */
 
 export interface LayoutProperty {
@@ -19,25 +17,20 @@ export interface LayoutProperty {
   name: string;
   /** What it sizes, in a sentence. */
   role: string;
-  /** Drawn in the shell diagram rather than listed in the table. */
-  shell?: boolean;
 }
 
 export const LAYOUT_PROPERTIES: readonly LayoutProperty[] = [
   {
     name: "--layout-sidebar-width",
-    role: "The left navigation rail’s width.",
-    shell: true,
+    role: "The site’s own pill sidebar’s width (the site frame lab’s Sidebar option), and the footer brand block’s width outside the frame.",
   },
   {
     name: "--layout-column-gap",
-    role: "The gap between the shell’s columns.",
-    shell: true,
+    role: "The gap between a page’s own columns: its details rail, or a document’s table of contents.",
   },
   {
     name: "--layout-rail-width",
-    role: "The right details rail’s width.",
-    shell: true,
+    role: "A page’s own details rail’s width (the overview’s and the releases page’s).",
   },
   {
     name: "--layout-toolbar-height",

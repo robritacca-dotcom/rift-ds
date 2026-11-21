@@ -1,5 +1,5 @@
 import React from "react";
-import { headingSlug } from "../Heading/Heading";
+import { headingSlug } from "../../behaviors/headingSlug";
 import "./SectionTitle.css";
 
 /** Props owned by SectionTitle itself — everything else falls through to the root div. */

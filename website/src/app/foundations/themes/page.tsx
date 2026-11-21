@@ -1,10 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useSyncExternalStore } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { Button } from "rift-ds/components/Button/Button";
 import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
@@ -21,8 +18,6 @@ import { ThemeBanner } from "./ThemeBanner";
 
 /* Matches the SSR value of data-brand on <html> in the root layout. */
 const getServerSnapshot = () => SERVED_THEME_ID;
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/themes");
 
 const SETUP_SNIPPET = `// Every shipped theme, one generated stylesheet each, plus this aggregate.
 import 'rift-ds/tokens/presets/presets.css';
@@ -48,166 +43,158 @@ export default function ThemesPage() {
   useLayoutEffect(() => installScopedThemes(), []);
 
   return (
-    <>
-      <MegaNav />
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Header */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Themes</h1>
+      </div>
 
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          {tiles.length} examples of how far the tokens can move
+        </p>
+        <p className={styles.introBody}>
+          These themes are demonstrations, not a menu: each one is the
+          whole system restyled through its tokens alone, to show the
+          range one set of primitives covers. A look means both colour
+          modes, a typeface or a heading and body pairing, with self-hosted fonts,
+          type weight and tracking, the colour of the logo and of each type
+          tier, icon weight, radius, density, motion, elevation, the ambient
+          background, and the chart palette. Apply one and this page rethemes around you,
+          which is the honest preview. Your own brand takes the same
+          path: the playground builds it live and copies out paste-ready
+          CSS.
+        </p>
+      </div>
 
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Header */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Themes</h1>
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              {tiles.length} examples of how far the tokens can move
-            </p>
-            <p className={styles.introBody}>
-              These themes are demonstrations, not a menu: each one is the
-              whole system restyled through its tokens alone, to show the
-              range one set of primitives covers. A look means both colour
-              modes, a typeface or a heading and body pairing, with self-hosted fonts,
-              type weight and tracking, the colour of the logo and of each type
-              tier, icon weight, radius, density, motion, elevation, the ambient
-              background, and the chart palette. Apply one and this page rethemes around you,
-              which is the honest preview. Your own brand takes the same
-              path: the playground builds it live and copies out paste-ready
-              CSS.
-            </p>
-          </div>
-
-          {/* Gallery */}
-          <div className={`${styles.grid} animate-in animate-delay-2`}>
-            {tiles.map((tile) => {
-              const preset = THEME_PRESETS[tile.value];
-              const accents = preset?.accents ?? SHIPPED_ACCENTS;
-              const isActive = active === tile.value;
-              return (
-                <article
-                  key={tile.value}
-                  className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
-                  {...{ [THEME_SCOPE_ATTRIBUTE]: tile.value }}
-                >
-                  <ThemeBanner className={styles.cardBanner} />
-                  <div className={styles.cardSwatches}>
-                    <span
-                      className={styles.brandSwatch}
-                      style={{
-                        backgroundColor: tile.color,
-                        borderRadius: tile.swatchRadius,
-                      }}
-                      aria-hidden="true"
-                    />
-                    <span className={styles.accentRow} aria-hidden="true">
-                      {Object.values(accents).map((hex, i) => (
-                        <span
-                          key={i}
-                          className={styles.accentDot}
-                          style={{ backgroundColor: hex }}
-                        />
-                      ))}
-                    </span>
-                  </div>
-
-                  <h2
-                    className={styles.cardName}
-                    style={{ fontFamily: tile.headingFont }}
-                  >
-                    {tile.label}
-                  </h2>
-                  <p
-                    className={styles.cardPairing}
-                    style={{ fontFamily: tile.bodyFont }}
-                  >
-                    {tile.description}
-                  </p>
-
-                  {preset && (
-                    <p className={styles.cardLevers}>
-                      radius {preset.radiusScale}% · density {preset.density}% ·
-                      motion {motionSpeedPercent(preset.motionScale)}% · {preset.elevation} elevation
-                    </p>
-                  )}
-                  {!preset && (
-                    <p className={styles.cardLevers}>
-                      the raw token files, exactly as shipped
-                    </p>
-                  )}
-
-                  <div className={styles.cardActions}>
-                    <Button
-                      label={isActive ? "Applied" : "Apply"}
-                      variant="primary"
-                      size="compact"
-                      iconLeft={isActive ? "check" : "brush"}
-                      disabled={isActive}
-                      onClick={() => applyBrand(tile.value)}
-                    />
-                    <div className={styles.cardLinks}>
-                      <IconButton
-                        icon="description"
-                        variant="secondary"
-                        tone="neutral"
-                        size="compact"
-                        label={`${tile.label} DESIGN.md`}
-                        tooltip="DESIGN.md"
-                        href={`/foundations/themes/${tile.value}`}
-                      />
-                      <IconButton
-                        icon="tune"
-                        variant="secondary"
-                        tone="neutral"
-                        size="compact"
-                        label={`Open ${tile.label} in the playground`}
-                        tooltip="Playground"
-                        href={`/playground?preset=${tile.value}`}
-                      />
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-
-            {/* The grid ends where a new theme would begin, like the hero
-                dot row and the switcher menu: a dashed slot for the look
-                that doesn't exist yet. */}
-            <article className={`${styles.card} ${styles.cardCreate}`}>
+      {/* Gallery */}
+      <div className={`${styles.grid} animate-in animate-delay-2`}>
+        {tiles.map((tile) => {
+          const preset = THEME_PRESETS[tile.value];
+          const accents = preset?.accents ?? SHIPPED_ACCENTS;
+          const isActive = active === tile.value;
+          return (
+            <article
+              key={tile.value}
+              className={`${styles.card} ${isActive ? styles.cardActive : ""}`}
+              {...{ [THEME_SCOPE_ATTRIBUTE]: tile.value }}
+            >
+              <ThemeBanner className={styles.cardBanner} />
               <div className={styles.cardSwatches}>
-                <span className={styles.createSwatch} aria-hidden="true">
-                  <span className="material-symbols-rounded">add</span>
+                <span
+                  className={styles.brandSwatch}
+                  style={{
+                    backgroundColor: tile.color,
+                    borderRadius: tile.swatchRadius,
+                  }}
+                  aria-hidden="true"
+                />
+                <span className={styles.accentRow} aria-hidden="true">
+                  {Object.values(accents).map((hex, i) => (
+                    <span
+                      key={i}
+                      className={styles.accentDot}
+                      style={{ backgroundColor: hex }}
+                    />
+                  ))}
                 </span>
               </div>
 
-              <h2 className={styles.cardName}>Create your own</h2>
-              <p className={styles.cardPairing}>
-                Any colour, pairing, and shape over the same tokens
+              <h2
+                className={styles.cardName}
+                style={{ fontFamily: tile.headingFont }}
+              >
+                {tile.label}
+              </h2>
+              <p
+                className={styles.cardPairing}
+                style={{ fontFamily: tile.bodyFont }}
+              >
+                {tile.description}
               </p>
-              <p className={styles.cardLevers}>
-                every lever live, copied out as paste-ready CSS
-              </p>
+
+              {preset && (
+                <p className={styles.cardLevers}>
+                  radius {preset.radiusScale}% · density {preset.density}% ·
+                  motion {motionSpeedPercent(preset.motionScale)}% · {preset.elevation} elevation
+                </p>
+              )}
+              {!preset && (
+                <p className={styles.cardLevers}>
+                  the raw token files, exactly as shipped
+                </p>
+              )}
 
               <div className={styles.cardActions}>
                 <Button
-                  label="Open the playground"
+                  label={isActive ? "Applied" : "Apply"}
                   variant="primary"
                   size="compact"
-                  iconRight="arrow_forward"
-                  href="/playground"
+                  iconLeft={isActive ? "check" : "brush"}
+                  disabled={isActive}
+                  onClick={() => applyBrand(tile.value)}
                 />
+                <div className={styles.cardLinks}>
+                  <IconButton
+                    icon="description"
+                    variant="secondary"
+                    tone="neutral"
+                    size="compact"
+                    label={`${tile.label} DESIGN.md`}
+                    tooltip="DESIGN.md"
+                    href={`/foundations/themes/${tile.value}`}
+                  />
+                  <IconButton
+                    icon="tune"
+                    variant="secondary"
+                    tone="neutral"
+                    size="compact"
+                    label={`Open ${tile.label} in the playground`}
+                    tooltip="Playground"
+                    href={`/playground?preset=${tile.value}`}
+                  />
+                </div>
               </div>
             </article>
+          );
+        })}
+
+        {/* The grid ends where a new theme would begin, like the hero
+            dot row and the switcher menu: a dashed slot for the look
+            that doesn't exist yet. */}
+        <article className={`${styles.card} ${styles.cardCreate}`}>
+          <div className={styles.cardSwatches}>
+            <span className={styles.createSwatch} aria-hidden="true">
+              <span className="material-symbols-rounded">add</span>
+            </span>
           </div>
 
-          {/* Consumer setup, once a reader has seen what they would be setting up. */}
-          <div className={`${styles.setupBlock} animate-in animate-delay-2`}>
-            <CodeBlock code={SETUP_SNIPPET} language="tsx" showCopy />
+          <h2 className={styles.cardName}>Create your own</h2>
+          <p className={styles.cardPairing}>
+            Any colour, pairing, and shape over the same tokens
+          </p>
+          <p className={styles.cardLevers}>
+            every lever live, copied out as paste-ready CSS
+          </p>
+
+          <div className={styles.cardActions}>
+            <Button
+              label="Open the playground"
+              variant="primary"
+              size="compact"
+              iconRight="arrow_forward"
+              href="/playground"
+            />
           </div>
-        </main>
+        </article>
       </div>
-    </>
+
+      {/* Consumer setup, once a reader has seen what they would be setting up. */}
+      <div className={`${styles.setupBlock} animate-in animate-delay-2`}>
+        <CodeBlock code={SETUP_SNIPPET} language="tsx" showCopy />
+      </div>
+    </div>
   );
 }

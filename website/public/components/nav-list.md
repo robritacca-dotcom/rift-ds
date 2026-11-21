@@ -25,8 +25,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | onExpandedChange | `((expandedIds: string[]) => void)` | no |  | Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes. |
 | multiple | `boolean` | no | `false` | Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in. |
 | onNavigate | `((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. |
-| expandLabel | `((label: string) => string)` | no | `` (label) => `Expand ${label}` `` | Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to "Expand <label>". |
-| collapseLabel | `((label: string) => string)` | no | `` (label) => `Collapse ${label}` `` | Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". |
+| expandLabel | `((label: string) => string)` | no | `` (label) => `Expand ${label}` `` | Accessible name of a collapsed row's or section's toggle, given its label. Defaults to "Expand <label>". |
+| collapseLabel | `((label: string) => string)` | no | `` (label) => `Collapse ${label}` `` | Accessible name of an expanded row's or section's toggle, given its label. Defaults to "Collapse <label>". |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to each row's Button. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
 | className | `string` | no | `''` | Additional CSS classes |
 
@@ -85,6 +85,7 @@ interface NavListItem {
   /**
    * When false, an item with children renders no toggle and its children stay
    * visible — a permanent group rather than a collapsible section.
+   * @default true
    */
   collapsible?: boolean;
   /**
@@ -118,7 +119,12 @@ interface NavListSection {
    * appears as `section:<id>`, so its id never collides with a row's.
    */
   id?: string;
-  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */
+  /**
+   * Let the reader fold the section under its heading. Unlike a row with
+   * `items`, which folds unless told not to, a section is a plain label
+   * unless told to fold.
+   * @default false
+   */
   collapsible?: boolean;
 }
 ```

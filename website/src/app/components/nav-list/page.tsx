@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { NavList, type NavListEntry } from "rift-ds/components/NavList/NavList";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -17,22 +15,22 @@ const DOCS_NAV: NavListEntry[] = [
     type: "section",
     label: "Getting started",
     items: [
-      { label: "Introduction", href: "/docs" },
-      { label: "Installation", href: "/docs/installation" },
-      { label: "Theming", href: "/docs/theming", items: [{ label: "Colours", href: "/docs/theming/colours" }, { label: "Dark mode", href: "/docs/theming/dark-mode" }] },
-      { label: "CLI", href: "/docs/cli", badge: "New" },
+      { label: "Introduction", href: "#introduction" },
+      { label: "Installation", href: "#installation" },
+      { label: "Theming", href: "#theming", items: [{ label: "Colours", href: "#theming-colours" }, { label: "Dark mode", href: "#theming-dark-mode" }] },
+      { label: "CLI", href: "#cli", badge: "New" },
     ],
   },
   {
     type: "section",
     label: "Components",
-    items: DOCS_PAGES.map((label) => ({ label, href: `/docs/components/${label.toLowerCase().replace(/ /g, "-")}` })),
+    items: DOCS_PAGES.map((label) => ({ label, href: `#components-${label.toLowerCase().replace(/ /g, "-")}` })),
   },
   {
     type: "section",
     label: "Guides",
     collapsible: true,
-    items: [{ label: "Forms", href: "/docs/guides/forms" }, { label: "Accessibility", href: "/docs/guides/accessibility" }],
+    items: [{ label: "Forms", href: "#guides-forms" }, { label: "Accessibility", href: "#guides-accessibility" }],
   },
 ];
 
@@ -93,94 +91,85 @@ function ControlledExample() {
 
 export default function NavListPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Nav list</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-navlist--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Navigation links as a vertical list
-            </p>
-            <p className={styles.introBody}>
-              Nav list renders navigation trees for drawers and side menus. Every row is a real link built on the tertiary Button, so shape, sizing, and states match the rest of the system, and sections expand with a separate chevron toggle: tapping the label navigates, tapping the chevron expands.
-            </p>
-          </div>
-
-          {/* Basic */}
-          <section className={styles.section}>
-            <SectionTitle title="Basic list" />
-            <div style={{ maxWidth: "360px" }}>
-              <NavList items={basicItems} aria-label="Basic example" />
-            </div>
-          </section>
-
-          {/* Nested */}
-          <section className={styles.section}>
-            <SectionTitle title="Nested sections" />
-            <div style={{ maxWidth: "360px" }}>
-              <NavList
-                items={nestedItems}
-                defaultExpandedIds={["guides"]}
-                aria-label="Nested example"
-              />
-            </div>
-          </section>
-
-          {/* Current page */}
-          <section className={styles.section}>
-            <SectionTitle title="Current page" />
-            <div style={{ maxWidth: "360px" }}>
-              <NavList
-                items={basicItems}
-                currentHref="#guides"
-                aria-label="Current page example"
-              />
-            </div>
-          </section>
-
-          {/* Controlled */}
-          <section className={styles.section}>
-            <SectionTitle title="Controlled, one open at a time" />
-            <div style={{ maxWidth: "360px" }}>
-              <ControlledExample />
-            </div>
-          </section>
-
-          {/* Static group */}
-          <section className={styles.section}>
-            <SectionTitle title="Static group" />
-            <div style={{ maxWidth: "360px" }}>
-              <NavList items={staticGroupItems} aria-label="Static group example" />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="A long sidebar" />
-            <div className={styles.kitDemo}>
-              <nav aria-label="Documentation example" className={styles.kitFrame}>
-                <NavList items={DOCS_NAV} size="compact" scrollable currentHref="/docs/components/menubar" />
-              </nav>
-              <p className={styles.kitNote}>
-                Compact rows, titled sections, a badge, and its own scroll: <code>scrollable</code> keeps the scroll inside the list at both ends and brings the current page into view on load. The branch that holds the current page starts open.
-              </p>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="nav-list" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Nav list</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-navlist--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Navigation links as a vertical list
+        </p>
+        <p className={styles.introBody}>
+          Nav list renders navigation trees for drawers and side menus. Every row is a real link built on the tertiary Button, so shape, sizing, and states match the rest of the system, and sections expand with a separate chevron toggle: tapping the label navigates, tapping the chevron expands.
+        </p>
+      </div>
+
+      {/* Basic */}
+      <section className={styles.section}>
+        <SectionTitle title="Basic list" />
+        <div style={{ maxWidth: "360px" }}>
+          <NavList items={basicItems} aria-label="Basic example" />
+        </div>
+      </section>
+
+      {/* Nested */}
+      <section className={styles.section}>
+        <SectionTitle title="Nested sections" />
+        <div style={{ maxWidth: "360px" }}>
+          <NavList
+            items={nestedItems}
+            defaultExpandedIds={["guides"]}
+            aria-label="Nested example"
+          />
+        </div>
+      </section>
+
+      {/* Current page */}
+      <section className={styles.section}>
+        <SectionTitle title="Current page" />
+        <div style={{ maxWidth: "360px" }}>
+          <NavList
+            items={basicItems}
+            currentHref="#guides"
+            aria-label="Current page example"
+          />
+        </div>
+      </section>
+
+      {/* Controlled */}
+      <section className={styles.section}>
+        <SectionTitle title="Controlled, one open at a time" />
+        <div style={{ maxWidth: "360px" }}>
+          <ControlledExample />
+        </div>
+      </section>
+
+      {/* Static group */}
+      <section className={styles.section}>
+        <SectionTitle title="Static group" />
+        <div style={{ maxWidth: "360px" }}>
+          <NavList items={staticGroupItems} aria-label="Static group example" />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="A long sidebar" />
+        <div className={styles.kitDemo}>
+          <nav aria-label="Documentation example" className={styles.kitFrame}>
+            <NavList items={DOCS_NAV} size="compact" scrollable currentHref="#components-menubar" />
+          </nav>
+          <p className={styles.kitNote}>
+            Compact rows, titled sections, a badge, and its own scroll: <code>scrollable</code> keeps the scroll inside the list at both ends and brings the current page into view on load. The branch that holds the current page starts open.
+          </p>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="nav-list" />
+    </div>
   );
 }

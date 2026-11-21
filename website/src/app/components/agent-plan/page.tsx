@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { AgentPlan } from "rift-ds/components/AgentPlan/AgentPlan";
 import { Button } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -64,97 +62,89 @@ function SimulatedRun() {
 
 export default function AgentPlanPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Agent plan</h1>
-            <PageLinks storybookPath="/?path=/docs/components-agentplan--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              The whole task, ticked off as the agent works
-            </p>
-            <p className={styles.introBody}>
-              Agent status says what is happening right now and Tool call
-              records one action. Agent plan holds the task itself: a
-              collapsible checklist with one row per step, a live progress
-              readout in the header, and completed work receding as the run
-              advances.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="A plan in progress" />
-            <p className={styles.demoText}>
-              Each step carries its own status. Completed steps tick off and
-              recede, the active step takes a spinner and an emphasised
-              label, and pending steps wait their turn. The header title is
-              computed from the steps unless you set one.
-            </p>
-            <div className={styles.demoColumn}>
-              <AgentPlan steps={liveSteps} />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Watch it advance" />
-            <p className={styles.demoText}>
-              The same plan driven by state. The header readout and the step
-              indicators follow the data, nothing animates on its own.
-            </p>
-            <SimulatedRun />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Failure" />
-            <p className={styles.demoText}>
-              A failed step colours its indicator and label through the error
-              role, and an optional detail line says what went wrong.
-            </p>
-            <div className={styles.demoColumn}>
-              <AgentPlan
-                steps={[
-                  { label: "Read project files", status: "completed" },
-                  {
-                    label: "Run the test suite",
-                    status: "failed",
-                    detail: "2 stories throw on render",
-                  },
-                  { label: "Open a pull request" },
-                ]}
-              />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Collapsed" />
-            <p className={styles.demoText}>
-              The list collapses behind the header, so a long plan can sit
-              quietly inside a chat transcript. The progress readout stays
-              visible either way.
-            </p>
-            <div className={styles.demoColumn}>
-              <AgentPlan
-                defaultOpen={false}
-                steps={[
-                  { label: "Read project files", status: "completed" },
-                  { label: "Implement dark mode tokens", status: "active" },
-                  { label: "Run lint and a production build" },
-                ]}
-              />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="agent-plan" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Agent plan</h1>
+        <PageLinks storybookPath="/?path=/docs/components-agentplan--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          The whole task, ticked off as the agent works
+        </p>
+        <p className={styles.introBody}>
+          Agent status says what is happening right now and Tool call
+          records one action. Agent plan holds the task itself: a
+          collapsible checklist with one row per step, a live progress
+          readout in the header, and completed work receding as the run
+          advances.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="A plan in progress" />
+        <p className={styles.demoText}>
+          Each step carries its own status. Completed steps tick off and
+          recede, the active step takes a spinner and an emphasised
+          label, and pending steps wait their turn. The header title is
+          computed from the steps unless you set one.
+        </p>
+        <div className={styles.demoColumn}>
+          <AgentPlan steps={liveSteps} />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Watch it advance" />
+        <p className={styles.demoText}>
+          The same plan driven by state. The header readout and the step
+          indicators follow the data, nothing animates on its own.
+        </p>
+        <SimulatedRun />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Failure" />
+        <p className={styles.demoText}>
+          A failed step colours its indicator and label through the error
+          role, and an optional detail line says what went wrong.
+        </p>
+        <div className={styles.demoColumn}>
+          <AgentPlan
+            steps={[
+              { label: "Read project files", status: "completed" },
+              {
+                label: "Run the test suite",
+                status: "failed",
+                detail: "2 stories throw on render",
+              },
+              { label: "Open a pull request" },
+            ]}
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Collapsed" />
+        <p className={styles.demoText}>
+          The list collapses behind the header, so a long plan can sit
+          quietly inside a chat transcript. The progress readout stays
+          visible either way.
+        </p>
+        <div className={styles.demoColumn}>
+          <AgentPlan
+            defaultOpen={false}
+            steps={[
+              { label: "Read project files", status: "completed" },
+              { label: "Implement dark mode tokens", status: "active" },
+              { label: "Run lint and a production build" },
+            ]}
+          />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="agent-plan" />
+    </div>
   );
 }

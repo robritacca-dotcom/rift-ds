@@ -59,10 +59,12 @@
  *                           sweep a stored choice other than the served
  *                           default (an app shell mode, for one: the
  *                           templates' `template-layout`, the chat home's
- *                           `chat-layout` and `chat-backdrop`); a sweep of
- *                           record runs once per seeded state, and once
- *                           without, since the defaults are what a first
- *                           visit sees
+ *                           `chat-layout` and `chat-backdrop`; the site
+ *                           frame's Full width layout,
+ *                           `site-frame-dock=edge,site-frame-size=narrow`);
+ *                           a sweep of record runs once per seeded state,
+ *                           and once without, since the defaults are what
+ *                           a first visit sees
  */
 /* global document, getComputedStyle, NodeFilter, window -- inspect() runs in the browser */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';

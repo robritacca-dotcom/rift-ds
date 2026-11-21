@@ -1,17 +1,12 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import { ColourSwatch } from "rift-ds/components/ColourSwatch/ColourSwatch";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { TOKEN_COUNTS } from "rift-ds/tokens/registry";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-mode");
 
 /* ============================================
    COLOUR DATA
@@ -986,309 +981,299 @@ export default function SemanticColoursPage() {
   const theme = useTheme();
 
   return (
-    <>
-
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Semantic colours</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/foundations-tokens--docs"
-            />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Semantic roles that map to primitives per mode
-            </p>
-            <p className={styles.introBody}>
-              Each colour here has a role, like &quot;page background&quot; or &quot;error border&quot;, and maps to a different primitive value depending on whether the UI is in light or dark mode. Components only reference these roles, so switching themes is just swapping which primitives each role points to. The shipped theme presets work the same way one level up: each is a generated stylesheet re-pointing these roles, applied by one data-brand attribute, with light and dark carried inside it. Each chip paints the live token, so it follows whichever theme is applied; the primitive and hex printed beside it are the base theme’s wiring. Toggle the mode above to see the values change. All {TOKEN_COUNTS.colour} colour tokens are below, grouped by the role they play.
-            </p>
-          </div>
-
-          {/* Primary UI Colours */}
-          <section className={`${styles.colourGroup} animate-in animate-delay-2`}>
-            <SectionTitle title="Primary UI colours" />
-            <div className={styles.colourSwatches}>
-              {primaryUiColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Accent Colours */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Accent colours" />
-            <div className={styles.colourSwatches}>
-              {accentColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Ambient Colours */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Ambient colours" />
-            <div className={styles.colourSwatches}>
-              {ambientColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Page */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Page" />
-            <div className={styles.colourSwatches}>
-              {pageColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Container */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Container" />
-            <div className={styles.colourSwatches}>
-              {containerColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Chat surfaces */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Chat surfaces" />
-            <div className={styles.colourSwatches}>
-              {chatSurfaceColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Table */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Table" />
-            <div className={styles.colourSwatches}>
-              {tableColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Calendar surfaces */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Calendar surfaces" />
-            <div className={styles.colourSwatches}>
-              {calendarSurfaceColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Text */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Text" />
-            <div className={styles.colourSwatches}>
-              {textColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Icon */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Icon" />
-            <div className={styles.colourSwatches}>
-              {iconColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Label */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Label" />
-            <div className={styles.colourSwatches}>
-              {labelColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Action / Primary */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Action / primary" />
-            <div className={styles.colourSwatches}>
-              {actionPrimaryColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Action / Passive */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Action / passive" />
-            <div className={styles.colourSwatches}>
-              {actionPassiveColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Action / Neutral */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Action / neutral" />
-            <div className={styles.colourSwatches}>
-              {actionNeutralColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Action / Destructive */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Action / destructive" />
-            <div className={styles.colourSwatches}>
-              {actionDestructiveColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Input */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Input" />
-            <div className={styles.colourSwatches}>
-              {inputColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Overlay & Controls */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Overlay & controls" />
-            <div className={styles.colourSwatches}>
-              {overlayControlColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Status */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Status" />
-            <div className={styles.colourSwatches}>
-              {statusColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.bgVar} dark={s.dark} light={s.light} theme={theme} status borderVar={s.borderVar} />
-              ))}
-              {statusTextColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-              {statusIconColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Trend */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Trend" />
-            <div className={styles.colourSwatches}>
-              {trendColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* File types */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="File types" />
-            <div className={styles.colourSwatches}>
-              {fileTypeColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* AI */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="AI" />
-            <div className={styles.colourSwatches}>
-              {aiColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Chart / Contribution */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Chart / contribution" />
-            <div className={styles.colourSwatches}>
-              {chartContributionColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Chart / Series */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Chart / series" />
-            <div className={styles.colourSwatches}>
-              {chartSeriesColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Pixel ink */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Pixel ink" />
-            <div className={styles.colourSwatches}>
-              {pixelInkColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-          {/* Code */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Code" />
-            <div className={styles.colourSwatches}>
-              {codeColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-          {/* Count badge */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Count badge" />
-            <div className={styles.colourSwatches}>
-              {countBadgeColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-
-          {/* Avatar */}
-          <section className={styles.colourGroup}>
-            <SectionTitle title="Avatar" />
-            <div className={styles.colourSwatches}>
-              {avatarColours.map((s) => (
-                <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
-              ))}
-            </div>
-          </section>
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Semantic colours</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/foundations-tokens--docs"
+        />
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Semantic roles that map to primitives per mode
+        </p>
+        <p className={styles.introBody}>
+          Each colour here has a role, like &quot;page background&quot; or &quot;error border&quot;, and maps to a different primitive value depending on whether the UI is in light or dark mode. Components only reference these roles, so switching themes is just swapping which primitives each role points to. The shipped theme presets work the same way one level up: each is a generated stylesheet re-pointing these roles, applied by one data-brand attribute, with light and dark carried inside it. Each chip paints the live token, so it follows whichever theme is applied; the primitive and hex printed beside it are the base theme’s wiring. Toggle the mode above to see the values change. All {TOKEN_COUNTS.colour} colour tokens are below, grouped by the role they play.
+        </p>
+      </div>
+
+      {/* Primary UI Colours */}
+      <section className={`${styles.colourGroup} animate-in animate-delay-2`}>
+        <SectionTitle title="Primary UI colours" />
+        <div className={styles.colourSwatches}>
+          {primaryUiColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Accent Colours */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Accent colours" />
+        <div className={styles.colourSwatches}>
+          {accentColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Ambient Colours */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Ambient colours" />
+        <div className={styles.colourSwatches}>
+          {ambientColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Page */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Page" />
+        <div className={styles.colourSwatches}>
+          {pageColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Container */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Container" />
+        <div className={styles.colourSwatches}>
+          {containerColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Chat surfaces */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Chat surfaces" />
+        <div className={styles.colourSwatches}>
+          {chatSurfaceColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Table */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Table" />
+        <div className={styles.colourSwatches}>
+          {tableColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Calendar surfaces */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Calendar surfaces" />
+        <div className={styles.colourSwatches}>
+          {calendarSurfaceColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Text */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Text" />
+        <div className={styles.colourSwatches}>
+          {textColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Icon */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Icon" />
+        <div className={styles.colourSwatches}>
+          {iconColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Label */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Label" />
+        <div className={styles.colourSwatches}>
+          {labelColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Action / Primary */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Action / primary" />
+        <div className={styles.colourSwatches}>
+          {actionPrimaryColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Action / Passive */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Action / passive" />
+        <div className={styles.colourSwatches}>
+          {actionPassiveColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Action / Neutral */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Action / neutral" />
+        <div className={styles.colourSwatches}>
+          {actionNeutralColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Action / Destructive */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Action / destructive" />
+        <div className={styles.colourSwatches}>
+          {actionDestructiveColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Input */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Input" />
+        <div className={styles.colourSwatches}>
+          {inputColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Overlay & Controls */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Overlay & controls" />
+        <div className={styles.colourSwatches}>
+          {overlayControlColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Status */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Status" />
+        <div className={styles.colourSwatches}>
+          {statusColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.bgVar} dark={s.dark} light={s.light} theme={theme} status borderVar={s.borderVar} />
+          ))}
+          {statusTextColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+          {statusIconColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Trend */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Trend" />
+        <div className={styles.colourSwatches}>
+          {trendColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* File types */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="File types" />
+        <div className={styles.colourSwatches}>
+          {fileTypeColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* AI */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="AI" />
+        <div className={styles.colourSwatches}>
+          {aiColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Chart / Contribution */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Chart / contribution" />
+        <div className={styles.colourSwatches}>
+          {chartContributionColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Chart / Series */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Chart / series" />
+        <div className={styles.colourSwatches}>
+          {chartSeriesColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Pixel ink */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Pixel ink" />
+        <div className={styles.colourSwatches}>
+          {pixelInkColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+      {/* Code */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Code" />
+        <div className={styles.colourSwatches}>
+          {codeColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+      {/* Count badge */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Count badge" />
+        <div className={styles.colourSwatches}>
+          {countBadgeColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+
+      {/* Avatar */}
+      <section className={styles.colourGroup}>
+        <SectionTitle title="Avatar" />
+        <div className={styles.colourSwatches}>
+          {avatarColours.map((s) => (
+            <ColourSwatch key={s.label} label={s.label} cssVar={s.cssVar} dark={s.dark} light={s.light} theme={theme} />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

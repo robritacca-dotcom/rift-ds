@@ -1,14 +1,3 @@
-/* ============================================
-   OVERVIEW PAGE LAYOUT
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   display: flex;
@@ -185,7 +174,6 @@ a.toolItem:hover {
   color: var(--color-text-tertiary);
 }
 
-
 /* ============================================
    INLINE LINKS — design.md / CLAUDE.md mentions
    ============================================ */
@@ -296,11 +284,6 @@ a.statItem:hover {
   .pageHeader {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .dsLayout {
-    padding-left: 0;
-    min-width: 0;
   }
 
   .dsContent {

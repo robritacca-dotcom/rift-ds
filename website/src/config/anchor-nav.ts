@@ -1,6 +1,7 @@
 /**
- * Routes for the site-wide floating anchor nav (SiteAnchorRail in the root
- * layout). Every page gets the rail automatically — it reads the page's h2
+ * Routes for the site-wide floating anchor nav (SiteFrame's rail, read
+ * through siteFrameRailFor in config/site-frame.ts). Every page gets the
+ * rail automatically — it reads the page's h2
  * headings after render, so a new page needs no wiring — except:
  *
  * - ANCHOR_NAV_EXCLUDED_ROUTES: pages that should not carry one. The index

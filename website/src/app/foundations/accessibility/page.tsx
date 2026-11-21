@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Stat } from "rift-ds/components/Stat/Stat";
@@ -20,8 +17,6 @@ import {
   modalOverlays,
   layerComponents,
 } from "@/data/a11y-coverage";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/accessibility");
 
 const gateColumns = [
   { key: "gate", header: "Gate", width: "24%" },
@@ -262,212 +257,204 @@ export default function AccessibilityPage() {
   const [demoOpen, setDemoOpen] = useState(false);
 
   return (
-    <>
-      <MegaNav />
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
 
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-
-          {/* No PageLinks: the other foundations pages link Storybook's token
-              docs because they document tokens, and there is no accessibility
-              story to point at. /foundations/themes omits it the same way. */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Accessibility</h1>
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Built for whoever reaches it, however they reach it
-            </p>
-            <p className={styles.introBody}>
-              Some people tab through a page. Others hear it read aloud, zoom it to twice
-              its size, or switch it to dark at midnight. A component that only works with
-              a mouse and perfect eyesight shuts all of them out, and every product built
-              from it inherits the same wall. So here accessibility is part of what a
-              component is, settled once in the library instead of remembered screen by
-              screen.
-            </p>
-            <p className={styles.introBody}>
-              The build holds the line. Every component is audited against WCAG 2.1 Level
-              AA on every change, alone and again inside the pages it sits in, and a
-              failure stops the change. The rest of this page is what that covers, and
-              what still needs a person.
-            </p>
-          </div>
-
-          {/* Coverage */}
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="Coverage" divider />
-            <div className={styles.statRow}>
-              <Stat
-                value={`${Math.floor((STORIED_COMPONENT_COUNT / COMPONENT_COUNT) * 100)}%`}
-                label="Of components audited against WCAG 2.1 AA"
-              />
-              <Stat
-                value={STORY_COUNT.toLocaleString("en-US")}
-                label="Stories rendered and checked on every change"
-              />
-              <Stat value="4.5:1" label="Contrast every action holds, in every theme" />
-              <Stat
-                value={layerComponents.length}
-                label="Overlays that close one layer at a time"
-              />
-            </div>
-          </section>
-
-          {/* Gates */}
-          <section className={styles.section}>
-            <SectionTitle title="What the build enforces" />
-            <p className={styles.sectionNote}>
-              Every gate runs in the same run as everything else. None of them is a
-              separate ritual somebody has to remember.
-            </p>
-            <Table
-              columns={gateColumns}
-              rows={gateRows}
-              caption="The accessibility gates and when each one runs"
-              captionHidden
-              bordered
-            />
-          </section>
-
-          {/* Contrast */}
-          <section className={styles.section}>
-            <SectionTitle title="Themes start from an AA baseline" divider />
-            <p className={styles.sectionNote}>
-              The shipped themes are examples, and the expectation is that you build your
-              own. What travels is the baseline they are built to: every action fill, at
-              rest, on hover and when pressed, is resolved through the var() chain and
-              held against the label or icon drawn on it, AA for text and 3:1 for icons,
-              in light and dark. Every shipped theme clears it, so whichever one
-              you start from is a passing starting point.
-            </p>
-          </section>
-
-          {/* Inherited behaviour */}
-          <section className={styles.section}>
-            <SectionTitle title="What every component inherits" />
-            <p className={styles.sectionNote}>
-              The interactive components are built on this repo&apos;s own behaviour layer
-              rather than a third-party primitives library, so the keyboard and focus
-              rules are written once and shared. {BEHAVIOUR_MODULE_COUNT} modules carry
-              them.
-            </p>
-            <Table
-              columns={inheritedColumns}
-              rows={inheritedRows}
-              caption="The shared behaviour layer and what it guarantees"
-              captionHidden
-              bordered
-            />
-          </section>
-
-          {/* Keyboard contract + live demo */}
-          <section className={styles.section}>
-            <SectionTitle title="The overlay keyboard contract" />
-            <p className={styles.sectionNote}>
-              {modalOverlays.slice(0, -1).join(", ")} and{" "}
-              {modalOverlays.at(-1)} share one contract, because they share the code
-              behind it: the dialog stories assert every row below, so a regression in
-              the shared layer fails the suite for all of them. The popovers,
-              menus, pickers and tooltips do not hold focus, but they dismiss through the
-              same stack, so Escape and an outside press reach them first:{" "}
-              {layerComponents.length} components in all answer to it.
-            </p>
-            <Table
-              columns={keyboardColumns}
-              rows={keyboardRows}
-              caption="Keyboard and focus behaviour shared by the modal overlays"
-              captionHidden
-              bordered
-            />
-
-            <div className={styles.demo}>
-              <div className={styles.demoCopy}>
-                <span className={styles.demoTitle}>Try it with the keyboard</span>
-                <p className={styles.demoBody}>
-                  Open the dialog, then press Tab a few times: focus cycles through the
-                  dialog’s controls and never reaches the page behind. Press Escape and focus
-                  lands back on the button you opened it with.
-                </p>
-              </div>
-              <Button
-                label="Open dialog"
-                variant="secondary"
-                onClick={() => setDemoOpen(true)}
-              />
-            </div>
-
-            <Dialog
-              open={demoOpen}
-              onOpenChange={setDemoOpen}
-              title="Focus is trapped here"
-              description="Tab cycles these controls. Escape returns focus to the trigger."
-              footer={
-                <>
-                  <Button
-                    label="Cancel"
-                    variant="tertiary"
-                    onClick={() => setDemoOpen(false)}
-                  />
-                  <Button
-                    label="Confirm"
-                    variant="primary"
-                    onClick={() => setDemoOpen(false)}
-                  />
-                </>
-              }
-            >
-              <Input label="A field to tab through" placeholder="Type anything" />
-            </Dialog>
-          </section>
-
-          {/* The keyboard contract */}
-          <section className={styles.section}>
-            <SectionTitle title="The keyboard contract" />
-            <p className={styles.sectionNote}>
-              A component that follows a WAI-ARIA pattern, or has a part that does, names
-              it in the registry, and one test presses that pattern’s keys against every component that names it,
-              in a left-to-right and a right-to-left layout. The same rows print on each
-              component’s page, in its markdown and in its schema, so a key is only
-              documented where a test presses it.
-            </p>
-            <p className={styles.sectionNote}>
-              Every component is accounted for. {inContract} are tested against a pattern below,
-              in whole or in part. {keyOwners("component")} have keys of their own, which their
-              own stories must press, or the stories of the component they are built on. {keyOwners("platform")} leave their keys to the browser or
-              the engine underneath, such as a native range input. {keyOwners("none")} have
-              nothing to focus, and a test holds that too.
-            </p>
-            <Table
-              columns={patternColumns}
-              rows={patternRows}
-              caption="Keyboard patterns and the components tested against each"
-              captionHidden
-              bordered
-            />
-          </section>
-
-          {/* What the build leaves to a person */}
-          <section className={styles.section}>
-            <SectionTitle title="What still needs a person" />
-            <p className={styles.sectionNote}>
-              axe finds roughly a third of WCAG failures. These are the ones that need
-              someone reading the page.
-            </p>
-            <Table
-              columns={reviewColumns}
-              rows={reviewRows}
-              caption="Accessibility checks the build leaves to human review"
-              captionHidden
-              bordered
-            />
-          </section>
-        </main>
+      {/* No PageLinks: the other foundations pages link Storybook's token
+          docs because they document tokens, and there is no accessibility
+          story to point at. /foundations/themes omits it the same way. */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Accessibility</h1>
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Built for whoever reaches it, however they reach it
+        </p>
+        <p className={styles.introBody}>
+          Some people tab through a page. Others hear it read aloud, zoom it to twice
+          its size, or switch it to dark at midnight. A component that only works with
+          a mouse and perfect eyesight shuts all of them out, and every product built
+          from it inherits the same wall. So here accessibility is part of what a
+          component is, settled once in the library instead of remembered screen by
+          screen.
+        </p>
+        <p className={styles.introBody}>
+          The build holds the line. Every component is audited against WCAG 2.1 Level
+          AA on every change, alone and again inside the pages it sits in, and a
+          failure stops the change. The rest of this page is what that covers, and
+          what still needs a person.
+        </p>
+      </div>
+
+      {/* Coverage */}
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="Coverage" divider />
+        <div className={styles.statRow}>
+          <Stat
+            value={`${Math.floor((STORIED_COMPONENT_COUNT / COMPONENT_COUNT) * 100)}%`}
+            label="Of components audited against WCAG 2.1 AA"
+          />
+          <Stat
+            value={STORY_COUNT.toLocaleString("en-US")}
+            label="Stories rendered and checked on every change"
+          />
+          <Stat value="4.5:1" label="Contrast every action holds, in every theme" />
+          <Stat
+            value={layerComponents.length}
+            label="Overlays that close one layer at a time"
+          />
+        </div>
+      </section>
+
+      {/* Gates */}
+      <section className={styles.section}>
+        <SectionTitle title="What the build enforces" />
+        <p className={styles.sectionNote}>
+          Every gate runs in the same run as everything else. None of them is a
+          separate ritual somebody has to remember.
+        </p>
+        <Table
+          columns={gateColumns}
+          rows={gateRows}
+          caption="The accessibility gates and when each one runs"
+          captionHidden
+          bordered
+        />
+      </section>
+
+      {/* Contrast */}
+      <section className={styles.section}>
+        <SectionTitle title="Themes start from an AA baseline" divider />
+        <p className={styles.sectionNote}>
+          The shipped themes are examples, and the expectation is that you build your
+          own. What travels is the baseline they are built to: every action fill, at
+          rest, on hover and when pressed, is resolved through the var() chain and
+          held against the label or icon drawn on it, AA for text and 3:1 for icons,
+          in light and dark. Every shipped theme clears it, so whichever one
+          you start from is a passing starting point.
+        </p>
+      </section>
+
+      {/* Inherited behaviour */}
+      <section className={styles.section}>
+        <SectionTitle title="What every component inherits" />
+        <p className={styles.sectionNote}>
+          The interactive components are built on this repo&apos;s own behaviour layer
+          rather than a third-party primitives library, so the keyboard and focus
+          rules are written once and shared. {BEHAVIOUR_MODULE_COUNT} modules carry
+          them.
+        </p>
+        <Table
+          columns={inheritedColumns}
+          rows={inheritedRows}
+          caption="The shared behaviour layer and what it guarantees"
+          captionHidden
+          bordered
+        />
+      </section>
+
+      {/* Keyboard contract + live demo */}
+      <section className={styles.section}>
+        <SectionTitle title="The overlay keyboard contract" />
+        <p className={styles.sectionNote}>
+          {modalOverlays.slice(0, -1).join(", ")} and{" "}
+          {modalOverlays.at(-1)} share one contract, because they share the code
+          behind it: the dialog stories assert every row below, so a regression in
+          the shared layer fails the suite for all of them. The popovers,
+          menus, pickers and tooltips do not hold focus, but they dismiss through the
+          same stack, so Escape and an outside press reach them first:{" "}
+          {layerComponents.length} components in all answer to it.
+        </p>
+        <Table
+          columns={keyboardColumns}
+          rows={keyboardRows}
+          caption="Keyboard and focus behaviour shared by the modal overlays"
+          captionHidden
+          bordered
+        />
+
+        <div className={styles.demo}>
+          <div className={styles.demoCopy}>
+            <span className={styles.demoTitle}>Try it with the keyboard</span>
+            <p className={styles.demoBody}>
+              Open the dialog, then press Tab a few times: focus cycles through the
+              dialog’s controls and never reaches the page behind. Press Escape and focus
+              lands back on the button you opened it with.
+            </p>
+          </div>
+          <Button
+            label="Open dialog"
+            variant="secondary"
+            onClick={() => setDemoOpen(true)}
+          />
+        </div>
+
+        <Dialog
+          open={demoOpen}
+          onOpenChange={setDemoOpen}
+          title="Focus is trapped here"
+          description="Tab cycles these controls. Escape returns focus to the trigger."
+          footer={
+            <>
+              <Button
+                label="Cancel"
+                variant="tertiary"
+                onClick={() => setDemoOpen(false)}
+              />
+              <Button
+                label="Confirm"
+                variant="primary"
+                onClick={() => setDemoOpen(false)}
+              />
+            </>
+          }
+        >
+          <Input label="A field to tab through" placeholder="Type anything" />
+        </Dialog>
+      </section>
+
+      {/* The keyboard contract */}
+      <section className={styles.section}>
+        <SectionTitle title="The keyboard contract" />
+        <p className={styles.sectionNote}>
+          A component that follows a WAI-ARIA pattern, or has a part that does, names
+          it in the registry, and one test presses that pattern’s keys against every component that names it,
+          in a left-to-right and a right-to-left layout. The same rows print on each
+          component’s page, in its markdown and in its schema, so a key is only
+          documented where a test presses it.
+        </p>
+        <p className={styles.sectionNote}>
+          Every component is accounted for. {inContract} are tested against a pattern below,
+          in whole or in part. {keyOwners("component")} have keys of their own, which their
+          own stories must press, or the stories of the component they are built on. {keyOwners("platform")} leave their keys to the browser or
+          the engine underneath, such as a native range input. {keyOwners("none")} have
+          nothing to focus, and a test holds that too.
+        </p>
+        <Table
+          columns={patternColumns}
+          rows={patternRows}
+          caption="Keyboard patterns and the components tested against each"
+          captionHidden
+          bordered
+        />
+      </section>
+
+      {/* What the build leaves to a person */}
+      <section className={styles.section}>
+        <SectionTitle title="What still needs a person" />
+        <p className={styles.sectionNote}>
+          axe finds roughly a third of WCAG failures. These are the ones that need
+          someone reading the page.
+        </p>
+        <Table
+          columns={reviewColumns}
+          rows={reviewRows}
+          caption="Accessibility checks the build leaves to human review"
+          captionHidden
+          bordered
+        />
+      </section>
+    </div>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   ThreadPanel,
   type ThreadPanelThread,
@@ -339,167 +337,159 @@ function MetaDemo() {
 
 export default function ThreadPanelPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Thread panel</h1>
-            <PageLinks storybookPath="/?path=/docs/components-threadpanel--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              The session history, one rail
-            </p>
-            <p className={styles.introBody}>
-              Thread panel is the left edge of a chat or agent product: the
-              brand, a new-thread action with its shortcut hint, standing
-              controls, the grouped history, and the profile footer. It is
-              fully controlled and surface-less, so the host owns the active
-              thread, the navigation, and the band colour it sits on.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="The full anatomy" />
-            <p className={styles.demoText}>
-              Every section is optional and renders only when its props do.
-              Here the panel carries all of them; clicking a thread moves the
-              controlled selection, and the history is the one region that
-              scrolls.
-            </p>
-            <FullAnatomy />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Collapse to a rail" />
-            <p className={styles.demoText}>
-              With onExpandedChange wired, the header grows a toggle and the
-              panel folds to App sidebar&apos;s 64px icon rail: the panel
-              animates its own width, labels fade under the sweeping clip,
-              rows become circular icon buttons, and the history steps out
-              of the way. Collapsed, the logo is the expand button. Try it.
-            </p>
-            <CollapseDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Threads alone" />
-            <p className={styles.demoText}>
-              With nothing but groups, the panel is a bare history list. A
-              flat list is one group with no label.
-            </p>
-            <div className={styles.railRow}>
-              <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
-                <ThreadPanel groups={GROUPS} activeThreadId="quickstart" />
-              </div>
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="The thread lifecycle" />
-            <p className={styles.demoText}>
-              Rows carry a real history&apos;s lifecycle, all controlled from
-              outside. A pending thread holds its title&apos;s place with a
-              shimmer while the host generates a name; threadActions hangs an
-              overflow menu on every row, revealed only on hover or focus
-              and built from the compact Dropdown menu; and
-              renamingThreadId swaps a row to an inline rename field, where
-              Enter commits and Escape cancels. Long titles fade out under a
-              trailing mask rather than clipping, so the revealed trigger
-              never collides with text. Try it: start a new chat, then
-              rename or delete it from the row&apos;s menu.
-            </p>
-            <LifecycleDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Timestamps on the trailing edge" />
-            <p className={styles.demoText}>
-              Each thread can carry a small meta caption, the usual home for
-              a relative time.
-            </p>
-            <MetaDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Detail rows" />
-            <p className={styles.demoText}>
-              A row scales from a bare title to the full detail anatomy: a
-              status dot leading the title, a quiet description line under
-              the same trailing fade, and a trailing cluster pairing a
-              session glyph with the meta caption. The dot reads in three
-              parts. Fill says whether the thread wants attention, colour
-              says what it wants, and motion says it is live: a hollow
-              ring is idle, a pulsing neutral dot is working, and solid
-              dots in the info, warning and error colours mean unread,
-              needs input and failed. The dot is decorative, so each state
-              is also read aloud after the title. Once one thread
-              carries a status every row draws a dot, so the titles share
-              a left edge.
-            </p>
-            <DetailsDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Pinned threads" />
-            <p className={styles.demoText}>
-              Pinning is a grouping the host owns: a pinned thread carries
-              the pin mark and lives in its own leading group, and pin or
-              unpin travel through the row menu like any other thread
-              action. Try it from a row&apos;s overflow menu.
-            </p>
-            <PinnedDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Projects" />
-            <p className={styles.demoText}>
-              Between the standing controls and the history, the panel can
-              carry a projects section: rows with the controls&apos; anatomy
-              under their own group heading, with a quiet new-project
-              button. The active project fills like an active thread, and
-              collapsed the rows fold to icon circles while the header steps
-              aside.
-            </p>
-            <ProjectsDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Rows as links" />
-            <p className={styles.demoText}>
-              Give a thread an href and its row renders as a real anchor,
-              with the active row announcing aria-current. Rendered this way
-              the panel needs no callbacks at all, so it can come straight
-              from a Server Component.
-            </p>
-            <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
-              <ThreadPanel
-                activeThreadId="search"
-                groups={[
-                  {
-                    label: "atlas-app",
-                    threads: [
-                      { id: "onboarding", title: "Rework the onboarding flow", href: "#onboarding" },
-                      { id: "search", title: "Speed up the search index", href: "#search" },
-                      { id: "billing", title: "Untangle the billing webhooks", href: "#billing" },
-                    ],
-                  },
-                ]}
-                newThreadLabel="New thread"
-                newThreadHref="#new"
-              />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="thread-panel" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Thread panel</h1>
+        <PageLinks storybookPath="/?path=/docs/components-threadpanel--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          The session history, one rail
+        </p>
+        <p className={styles.introBody}>
+          Thread panel is the left edge of a chat or agent product: the
+          brand, a new-thread action with its shortcut hint, standing
+          controls, the grouped history, and the profile footer. It is
+          fully controlled and surface-less, so the host owns the active
+          thread, the navigation, and the band colour it sits on.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="The full anatomy" />
+        <p className={styles.demoText}>
+          Every section is optional and renders only when its props do.
+          Here the panel carries all of them; clicking a thread moves the
+          controlled selection, and the history is the one region that
+          scrolls.
+        </p>
+        <FullAnatomy />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Collapse to a rail" />
+        <p className={styles.demoText}>
+          With onExpandedChange wired, the header grows a toggle and the
+          panel folds to App sidebar&apos;s 64px icon rail: the panel
+          animates its own width, labels fade under the sweeping clip,
+          rows become circular icon buttons, and the history steps out
+          of the way. Collapsed, the logo is the expand button. Try it.
+        </p>
+        <CollapseDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Threads alone" />
+        <p className={styles.demoText}>
+          With nothing but groups, the panel is a bare history list. A
+          flat list is one group with no label.
+        </p>
+        <div className={styles.railRow}>
+          <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
+            <ThreadPanel groups={GROUPS} activeThreadId="quickstart" />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="The thread lifecycle" />
+        <p className={styles.demoText}>
+          Rows carry a real history&apos;s lifecycle, all controlled from
+          outside. A pending thread holds its title&apos;s place with a
+          shimmer while the host generates a name; threadActions hangs an
+          overflow menu on every row, revealed only on hover or focus
+          and built from the compact Dropdown menu; and
+          renamingThreadId swaps a row to an inline rename field, where
+          Enter commits and Escape cancels. Long titles fade out under a
+          trailing mask rather than clipping, so the revealed trigger
+          never collides with text. Try it: start a new chat, then
+          rename or delete it from the row&apos;s menu.
+        </p>
+        <LifecycleDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Timestamps on the trailing edge" />
+        <p className={styles.demoText}>
+          Each thread can carry a small meta caption, the usual home for
+          a relative time.
+        </p>
+        <MetaDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Detail rows" />
+        <p className={styles.demoText}>
+          A row scales from a bare title to the full detail anatomy: a
+          status dot leading the title, a quiet description line under
+          the same trailing fade, and a trailing cluster pairing a
+          session glyph with the meta caption. The dot reads in three
+          parts. Fill says whether the thread wants attention, colour
+          says what it wants, and motion says it is live: a hollow
+          ring is idle, a pulsing neutral dot is working, and solid
+          dots in the info, warning and error colours mean unread,
+          needs input and failed. The dot is decorative, so each state
+          is also read aloud after the title. Once one thread
+          carries a status every row draws a dot, so the titles share
+          a left edge.
+        </p>
+        <DetailsDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Pinned threads" />
+        <p className={styles.demoText}>
+          Pinning is a grouping the host owns: a pinned thread carries
+          the pin mark and lives in its own leading group, and pin or
+          unpin travel through the row menu like any other thread
+          action. Try it from a row&apos;s overflow menu.
+        </p>
+        <PinnedDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Projects" />
+        <p className={styles.demoText}>
+          Between the standing controls and the history, the panel can
+          carry a projects section: rows with the controls&apos; anatomy
+          under their own group heading, with a quiet new-project
+          button. The active project fills like an active thread, and
+          collapsed the rows fold to icon circles while the header steps
+          aside.
+        </p>
+        <ProjectsDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Rows as links" />
+        <p className={styles.demoText}>
+          Give a thread an href and its row renders as a real anchor,
+          with the active row announcing aria-current. Rendered this way
+          the panel needs no callbacks at all, so it can come straight
+          from a Server Component.
+        </p>
+        <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
+          <ThreadPanel
+            activeThreadId="search"
+            groups={[
+              {
+                label: "atlas-app",
+                threads: [
+                  { id: "onboarding", title: "Rework the onboarding flow", href: "#onboarding" },
+                  { id: "search", title: "Speed up the search index", href: "#search" },
+                  { id: "billing", title: "Untangle the billing webhooks", href: "#billing" },
+                ],
+              },
+            ]}
+            newThreadLabel="New thread"
+            newThreadHref="#new"
+          />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="thread-panel" />
+    </div>
   );
 }

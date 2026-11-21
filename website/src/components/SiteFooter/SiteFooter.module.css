@@ -1,13 +1,14 @@
-/* SiteFooter — sitemap footer: a hairline, a brand block beside four
-   columns of links, then a quiet copyright row. Matches the MegaNav
-   1440px shell width; body owns the outer gutters and the docked-chat
-   inset, so the footer never goes full-bleed. Identical on every page —
-   nothing here reacts to which shell a page uses. */
+/* SiteFooter — sitemap footer: a brand block beside four columns of
+   links, then a quiet copyright row. It sits in the site frame's footer
+   slot, which draws the hairline above it and owns the outer gutters and
+   the docked-chat inset; its content caps at 1440px, the contained frame's
+   width, from the slot's start edge. Identical on every page. */
 
 .footer {
   width: 100%;
   max-width: 1440px;
   margin-top: auto;
+  padding-block-start: var(--gap-1500);
   display: flex;
   flex-direction: column;
   gap: var(--gap-1500);
@@ -18,13 +19,15 @@
 .body {
   display: flex;
   align-items: flex-start;
-  gap: var(--layout-column-gap);
+  gap: var(--gap-1500);
 }
 
 /* The reason the whole thing lines up. The brand block is exactly the
-   docs shell's nav rail width, and the flex gap is the shell's column
-   gap, so the link grid begins on the same vertical line the page's
-   content does — without the footer knowing anything about the page. On
+   site frame's sidebar width (SiteLayout's --ds-site-layout-sidebar-width,
+   inherited in its footer slot), and the flex gap is the frame's column
+   gap (--gap-1500), so the link grid begins on the same vertical line the
+   page's content does, in either layout, without the footer knowing
+   anything about the page. On
    pages with no rail the brand block simply reads as a brand block, the
    way Figma's or Stripe's does, and the columns still start where the
    page's own content grid would put its second column.
@@ -37,7 +40,7 @@
    the grid to the content line instead means it either matches exactly or
    is offset by a whole rail. */
 .brand {
-  flex: 0 0 var(--layout-sidebar-width);
+  flex: 0 0 var(--ds-site-layout-sidebar-width, var(--layout-sidebar-width));
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { sectionLandingMetadata } from "@/config/navigation";
-import MegaNav from "../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import TemplateShowcase from "./TemplateShowcase";
 import styles from "./page.module.css";
@@ -18,10 +17,7 @@ export const metadata = sectionLandingMetadata("/templates");
 export default function TemplatesPage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <main className={styles.dsContent} id="main-content">
+              <div className={styles.dsContent}>
           <PageBreadcrumb />
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
@@ -48,8 +44,7 @@ export default function TemplatesPage() {
           <div className={`${styles.showcaseSection} animate-in animate-delay-2`}>
             <TemplateShowcase />
           </div>
-        </main>
-      </div>
+        </div>
     </>
   );
 }

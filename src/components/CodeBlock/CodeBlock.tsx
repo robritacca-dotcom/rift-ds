@@ -75,7 +75,7 @@ type CodeBlockOwnProps = {
   tabsLabel?: string;
   /** Show the copy-to-clipboard button */
   showCopy?: boolean;
-  /** Called with the copied text (the shown tab's code, or the text of `lines`) after it is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. */
+  /** Called with the copied text (the shown tab's code, or the text of `lines`) as it is sent to the clipboard, through the async API or its textarea fallback (the write is not awaited), so a host can count copies. */
   onCopied?: (value: string) => void;
   /** Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. */
   maxHeight?: number | string;

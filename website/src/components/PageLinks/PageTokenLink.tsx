@@ -10,7 +10,8 @@ import { Button } from "rift-ds/components/Button/Button";
  * token index (/schema/tokens/index.json, which lists every theme's DTCG
  * files and names the guide on /docs/schemas), so a page that shows tokens
  * as swatches is one plain link from the same tokens as data. The index is
- * a file, not a page, so the link is a plain anchor.
+ * a file, not a page, so the link is a plain anchor, and it opens in a new
+ * tab so the reader keeps their place on the page.
  */
 export default function PageTokenLink() {
   const pathname = usePathname();
@@ -23,6 +24,8 @@ export default function PageTokenLink() {
       iconLeft="data_object"
       href="/schema/tokens/index.json"
       linkComponent="a"
+      target="_blank"
+      rel="noopener noreferrer"
     />
   );
 }

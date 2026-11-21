@@ -1,14 +1,3 @@
-/* ============================================
-   SITE UPDATES PAGE LAYOUT
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   display: flex;
@@ -285,11 +274,6 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--primitive-gap-400);
-  }
-
-  .dsLayout {
-    padding-left: 0;
-    min-width: 0;
   }
 
 }

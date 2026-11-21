@@ -1,17 +1,12 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import { EntityCard } from "rift-ds/components/EntityCard/EntityCard";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/icons");
 
 /* ============================================
    ICON DATA
@@ -294,13 +289,7 @@ const totalIcons = iconCategories.reduce((sum, cat) => sum + cat.icons.length, 0
 export default function IconsPage() {
   return (
     <>
-
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
+        <div className={styles.dsContent}>
           <PageBreadcrumb />
           {/* Page Title */}
           <div className={`${styles.pageHeader} animate-in`}>
@@ -421,8 +410,7 @@ export default function IconsPage() {
               </div>
             </section>
           ))}
-        </main>
-      </div>
+        </div>
 
     </>
   );

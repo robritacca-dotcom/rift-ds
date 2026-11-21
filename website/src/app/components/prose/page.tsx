@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Prose } from "rift-ds/components/Prose/Prose";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -14,12 +12,7 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 export default function ProsePage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
+        <div className={styles.dsContent}>
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Prose</h1>
@@ -264,8 +257,7 @@ export function Dashboard() {
           </section>
 
           <ComponentInstallStrip slug="prose" />
-        </main>
-      </div>
+        </div>
 
     </>
   );

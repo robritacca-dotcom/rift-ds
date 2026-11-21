@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ToolCall } from "rift-ds/components/ToolCall/ToolCall";
 import { Button } from "rift-ds/components/Button/Button";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
@@ -122,103 +120,94 @@ function ApprovalDemo() {
 
 export default function ToolCallPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Tool call</h1>
-            <PageLinks storybookPath="/?path=/docs/components-toolcall--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>What ran, how it went, what it returned</p>
-            <p className={styles.introBody}>
-              A run is mostly a list of these. So the collapsed header carries
-              everything needed to skim it (the tool, the target, the outcome,
-              the time), and the body carries everything needed to audit it.
-            </p>
-          </div>
-
-          {/* Statuses */}
-          <section className={styles.section}>
-            <SectionTitle title="Statuses" />
-            <p className={styles.demoText}>
-              The container stays neutral, so a long run reads as a list rather
-              than a wall of tinted cards. The status word and its icon carry
-              the state; the border never changes.
-            </p>
-            <div className={styles.stack}>
-              <ToolCall name="read_file" summary="package.json" duration="0.1s" />
-              <ToolCall name="bash" summary="npm run lint" status="running" />
-              <ToolCall
-                name="write_file"
-                summary="src/app/page.tsx"
-                status="pending"
-              />
-              <ToolCall
-                name="fetch"
-                summary="https://api.example.com/v2/users"
-                status="error"
-                duration="1.1s"
-              >
-                ENOENT: no such file or directory
-              </ToolCall>
-            </div>
-          </section>
-
-          {/* Detail */}
-          <section className={styles.section}>
-            <SectionTitle title="Arguments and result" />
-            <p className={styles.demoText}>
-              Pass the call&apos;s detail as children and the header becomes a
-              disclosure. With nothing to disclose it renders as a plain row
-              instead: a row that cannot open should not look pressable.
-            </p>
-            <div className={styles.stack}>
-              <ToolCall
-                name="grep"
-                summary="--color-status- in tokens-light.css"
-                duration="0.4s"
-                defaultOpen
-              >
-                <CodeBlock code={GREP_ARGS} language="json" />
-              </ToolCall>
-            </div>
-          </section>
-
-          {/* Approval */}
-          <section className={styles.section}>
-            <SectionTitle title="Waiting on a person" />
-            <p className={styles.demoText}>
-              Approval controls render outside the collapsible panel. Someone
-              deciding whether to allow a write should not have to expand the
-              call to find the button, and someone who wants to check the
-              arguments first can still open it.
-            </p>
-            <ApprovalDemo />
-          </section>
-
-          {/* Live run */}
-          <section className={styles.section}>
-            <SectionTitle title="A live run" />
-            <p className={styles.demoText}>
-              The log surface is a composition, not a component: tool call is
-              the line, and an ordinary list is the container. Play the run
-              and the calls appear in order, each running briefly before it
-              settles.
-            </p>
-            <LiveRunDemo />
-          </section>
-
-          <ComponentInstallStrip slug="tool-call" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Tool call</h1>
+        <PageLinks storybookPath="/?path=/docs/components-toolcall--docs" />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>What ran, how it went, what it returned</p>
+        <p className={styles.introBody}>
+          A run is mostly a list of these. So the collapsed header carries
+          everything needed to skim it (the tool, the target, the outcome,
+          the time), and the body carries everything needed to audit it.
+        </p>
+      </div>
+
+      {/* Statuses */}
+      <section className={styles.section}>
+        <SectionTitle title="Statuses" />
+        <p className={styles.demoText}>
+          The container stays neutral, so a long run reads as a list rather
+          than a wall of tinted cards. The status word and its icon carry
+          the state; the border never changes.
+        </p>
+        <div className={styles.stack}>
+          <ToolCall name="read_file" summary="package.json" duration="0.1s" />
+          <ToolCall name="bash" summary="npm run lint" status="running" />
+          <ToolCall
+            name="write_file"
+            summary="src/app/page.tsx"
+            status="pending"
+          />
+          <ToolCall
+            name="fetch"
+            summary="https://api.example.com/v2/users"
+            status="error"
+            duration="1.1s"
+          >
+            ENOENT: no such file or directory
+          </ToolCall>
+        </div>
+      </section>
+
+      {/* Detail */}
+      <section className={styles.section}>
+        <SectionTitle title="Arguments and result" />
+        <p className={styles.demoText}>
+          Pass the call&apos;s detail as children and the header becomes a
+          disclosure. With nothing to disclose it renders as a plain row
+          instead: a row that cannot open should not look pressable.
+        </p>
+        <div className={styles.stack}>
+          <ToolCall
+            name="grep"
+            summary="--color-status- in tokens-light.css"
+            duration="0.4s"
+            defaultOpen
+          >
+            <CodeBlock code={GREP_ARGS} language="json" />
+          </ToolCall>
+        </div>
+      </section>
+
+      {/* Approval */}
+      <section className={styles.section}>
+        <SectionTitle title="Waiting on a person" />
+        <p className={styles.demoText}>
+          Approval controls render outside the collapsible panel. Someone
+          deciding whether to allow a write should not have to expand the
+          call to find the button, and someone who wants to check the
+          arguments first can still open it.
+        </p>
+        <ApprovalDemo />
+      </section>
+
+      {/* Live run */}
+      <section className={styles.section}>
+        <SectionTitle title="A live run" />
+        <p className={styles.demoText}>
+          The log surface is a composition, not a component: tool call is
+          the line, and an ordinary list is the container. Play the run
+          and the calls appear in order, each running briefly before it
+          settles.
+        </p>
+        <LiveRunDemo />
+      </section>
+
+      <ComponentInstallStrip slug="tool-call" />
+    </div>
   );
 }

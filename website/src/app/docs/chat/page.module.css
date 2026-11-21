@@ -1,16 +1,3 @@
-/* ============================================
-   AI CHAT (docs)
-   The standard doc page shell, plus the reference lists the install
-   sections need.
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   min-width: 0;
@@ -162,11 +149,6 @@
   .pageHeader {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .dsLayout {
-    padding-left: 0;
-    min-width: 0;
   }
 
   .dsContent {

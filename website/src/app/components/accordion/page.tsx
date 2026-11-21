@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Accordion } from "rift-ds/components/Accordion/Accordion";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -42,50 +40,41 @@ const faqItems = [
 
 export default function AccordionPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Accordion</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-accordion--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Expand and collapse content
-            </p>
-            <p className={styles.introBody}>
-              Accordions organise related content into collapsible sections so users can focus on what matters. Available in single-open or multiple-open mode.
-            </p>
-          </div>
-
-          {/* Single */}
-          <section className={styles.section}>
-            <SectionTitle title="Single open" />
-            <div style={{ maxWidth: "520px" }}>
-              <Accordion items={faqItems} defaultExpanded={["1"]} />
-            </div>
-          </section>
-
-          {/* Multiple */}
-          <section className={styles.section}>
-            <SectionTitle title="Multiple open" />
-            <div style={{ maxWidth: "520px" }}>
-              <Accordion items={faqItems} multiple defaultExpanded={["1", "3"]} />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="accordion" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Accordion</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-accordion--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Expand and collapse content
+        </p>
+        <p className={styles.introBody}>
+          Accordions organise related content into collapsible sections so users can focus on what matters. Available in single-open or multiple-open mode.
+        </p>
+      </div>
+
+      {/* Single */}
+      <section className={styles.section}>
+        <SectionTitle title="Single open" />
+        <div style={{ maxWidth: "520px" }}>
+          <Accordion items={faqItems} defaultExpanded={["1"]} />
+        </div>
+      </section>
+
+      {/* Multiple */}
+      <section className={styles.section}>
+        <SectionTitle title="Multiple open" />
+        <div style={{ maxWidth: "520px" }}>
+          <Accordion items={faqItems} multiple defaultExpanded={["1", "3"]} />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="accordion" />
+    </div>
   );
 }

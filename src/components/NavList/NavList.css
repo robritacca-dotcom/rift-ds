@@ -292,7 +292,11 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-block: var(--padding-200);
+  /* Room at both ends for the fade, a hook so a host can line the first
+     row up with something beside it (SiteLayout's sidebar pulls the list up
+     by it, so the first row starts level with the page's first line). */
+  --ds-nav-list-block-inset: var(--padding-200);
+  padding-block: var(--ds-nav-list-block-inset);
   /* The scrollbar stays out of sight until the list scrolls. */
   scrollbar-width: none;
   /* The ends fade only when there is more past them, so a list at its top

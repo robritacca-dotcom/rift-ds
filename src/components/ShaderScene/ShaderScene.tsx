@@ -39,7 +39,8 @@ export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' 
  * `pending` while the GL context comes up (bounded by a watchdog), `active`
  * once a frame has painted, `unavailable` when it is disabled, WebGL2
  * cannot run it or its context is lost (it returns to `active` when the
- * context comes back).
+ * context comes back, or after it rebuilds on a fresh canvas once it is
+ * near the screen, passing through `pending`).
  */
 export type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';
 
@@ -217,6 +218,10 @@ export function ShaderScene({
   /* Bumped when a lost GL context comes back, which rebuilds the renderer:
      everything made on the old context died with it. */
   const [restored, setRestored] = React.useState(0);
+  /* Rebuilds since the last painted frame: a page asking for more contexts
+     than the browser keeps would otherwise trade them back and forth, so
+     after two the scene waits for the browser to hand its context back. */
+  const rebuildsWithoutPaint = React.useRef(0);
   React.useEffect(() => {
     if (!enabled || gl !== 'pending') return;
     const timer = window.setTimeout(() => setGaveUp(true), MOTION_RENDERER_WATCHDOG_MS);
@@ -266,17 +271,30 @@ export function ShaderScene({
         })
       : null;
     /* A context the browser takes back (a GPU reset, a driver update, too
-       many contexts on the page) leaves the canvas blank while every call
-       still succeeds. Report it, so the status stops saying `active` and the
-       caller's fallback shows, and ask for the context back: when it comes,
-       the effect runs again and builds a renderer on it. Listened for on a
-       scene that failed to start too, which may have been handed a context
-       that was already lost. */
+       many contexts on the page, where the browser drops the one least
+       recently drawn, so a scene paused off screen goes first) leaves the
+       canvas blank while every call still succeeds. Report it, so the
+       status stops saying `active` and the caller's fallback shows, and
+       ask for the context back: when it comes, the effect runs again and
+       builds a renderer on it. A scene near the screen does not wait on
+       the browser: it rebuilds on a fresh canvas (the canvas is keyed on
+       the rebuild count), at once if it is in view, or as it comes back
+       into view. Listened for on a scene that failed to start too, which
+       may have been handed a context that was already lost. */
     let lost = false;
+    let near = false;
+    let rebuildFrame = 0;
+    const rebuild = () => {
+      if (rebuildsWithoutPaint.current >= 2) return;
+      rebuildsWithoutPaint.current += 1;
+      setGl('pending');
+      setRestored((count) => count + 1);
+    };
     const onContextLost = (event: Event) => {
       event.preventDefault();
       lost = true;
       setGl('failed');
+      if (near) rebuildFrame = requestAnimationFrame(rebuild);
     };
     const onContextRestored = () => {
       setGl('pending');
@@ -285,6 +303,7 @@ export function ShaderScene({
     canvas?.addEventListener('webglcontextlost', onContextLost);
     canvas?.addEventListener('webglcontextrestored', onContextRestored);
     const unlisten = () => {
+      cancelAnimationFrame(rebuildFrame);
       canvas?.removeEventListener('webglcontextlost', onContextLost);
       canvas?.removeEventListener('webglcontextrestored', onContextRestored);
     };
@@ -356,6 +375,7 @@ export function ShaderScene({
       renderer.draw(values, time, canvas.width, canvas.height, ratio);
       if (!painted) {
         painted = true;
+        rebuildsWithoutPaint.current = 0;
         setGl('painted');
       }
     };
@@ -389,10 +409,16 @@ export function ShaderScene({
       typeof IntersectionObserver === 'undefined'
         ? null
         : new IntersectionObserver(
-            (entries) => (entries[entries.length - 1].isIntersecting ? start() : stop()),
+            (entries) => {
+              near = entries[entries.length - 1].isIntersecting;
+              if (!near) stop();
+              else if (lost) rebuild();
+              else start();
+            },
             { rootMargin: '200px 0px' }
           );
     visibilityObserver?.observe(host);
+    if (!visibilityObserver) near = true;
 
     /* A paused scene (scrolled away) still has to fill a box that changed:
        one frame at the time it stopped on, sized and painted together. */
@@ -433,7 +459,7 @@ export function ShaderScene({
 
   return (
     <div {...rest} ref={setRef} className={classes} data-status={status} aria-hidden="true">
-      {enabled && <canvas ref={canvasRef} className="ds-shader-scene__canvas" />}
+      {enabled && <canvas key={restored} ref={canvasRef} className="ds-shader-scene__canvas" />}
     </div>
   );
 }

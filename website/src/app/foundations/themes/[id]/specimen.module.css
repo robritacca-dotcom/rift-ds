@@ -1,18 +1,3 @@
-/* ============================================
-   THEME SPECIMEN
-   The bar is the site's; everything inside .scope wears the theme, so
-   every rule there reads semantic tokens only and lets the scope decide
-   what they are.
-   ============================================ */
-/* The standard foundations shell, as /foundations/themes lays it out. */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   min-width: 0;
@@ -65,11 +50,6 @@
   gap: var(--gap-300);
 }
 
-
-
-
-
-
 .body {
   display: flex;
   flex-direction: column;
@@ -111,8 +91,6 @@
   gap: var(--gap-500);
 }
 
-
-
 .subhead {
   margin-top: var(--gap-300);
   font-family: var(--font-title-body-family);
@@ -134,10 +112,6 @@
   display: flex;
   flex: 1 1 0;
 }
-
-
-
-
 
 .seriesBars {
   display: flex;
@@ -373,8 +347,6 @@
   padding: var(--padding-1000);
   border-top: var(--border-025) solid var(--color-divider);
 }
-
-
 
 .endTitle {
   font-family: var(--font-display-2-family);

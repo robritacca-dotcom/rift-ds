@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 ## Alternatives
 
 - Use [Page header](https://rift-ds.com/components/page-header.md) instead when the heading is the page’s own title, with its breadcrumb and actions.
+- Use [Heading](https://rift-ds.com/components/heading.md) instead when the heading needs a level or type tier of its own rather than a section’s divided title.
 
 ## SectionTitle props
 

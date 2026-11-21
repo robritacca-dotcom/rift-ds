@@ -77,6 +77,11 @@
       "name": "PageHeader",
       "when": "the heading is the page’s own title, with its breadcrumb and actions",
       "schemaUrl": "https://rift-ds.com/schema/components/page-header.json"
+    },
+    {
+      "name": "Heading",
+      "when": "the heading needs a level or type tier of its own rather than a section’s divided title",
+      "schemaUrl": "https://rift-ds.com/schema/components/heading.json"
     }
   ]
 }

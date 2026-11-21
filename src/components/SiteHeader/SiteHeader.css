@@ -262,6 +262,8 @@
    the width of the slot it sits in (SiteLayout's header slot). */
 .ds-site-header[data-ds-width='full'] .ds-site-header__panel,
 :where([data-ds-width='full']) > .ds-site-header:not([data-ds-width]) .ds-site-header__panel {
+  /* --ds-site-header-nav-start is measured onto the header as the menu
+     opens, not a hook; the fallback covers the frame before it is. */
   inset-inline: var(--ds-site-header-nav-start, var(--ds-shell-gutter, 0px)) auto;
   width: min(
     var(--ds-shell-contained-width, 100%),

@@ -1959,7 +1959,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "viewLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the view switch.",
+            "description": "Accessible name for the view switch, and for the panel itself when `title` is left out (an untitled `inline` example).",
             "defaultValue": "'Artifact view'"
           },
           {
@@ -4805,7 +4805,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onCopied",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Called with the copied text (the shown tab's code, or the text of `lines`) after it is put on the clipboard, through the async API or its textarea fallback, so a host can count copies."
+            "description": "Called with the copied text (the shown tab's code, or the text of `lines`) as it is sent to the clipboard, through the async API or its textarea fallback (the write is not awaited), so a host can count copies."
           },
           {
             "name": "maxHeight",
@@ -6302,7 +6302,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onCopied",
             "type": "((value: string) => void)",
             "required": false,
-            "description": "Called with the copied text after it is put on the clipboard, so a host can count copies or announce them."
+            "description": "Called with the copied text as it is sent to the clipboard (the write is not awaited), so a host can count copies or announce them."
           },
           {
             "name": "copyText",
@@ -13833,14 +13833,14 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "expandLabel",
             "type": "((label: string) => string)",
             "required": false,
-            "description": "Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to \"Expand <label>\".",
+            "description": "Accessible name of a collapsed row's or section's toggle, given its label. Defaults to \"Expand <label>\".",
             "defaultValue": "(label) => `Expand ${label}`"
           },
           {
             "name": "collapseLabel",
             "type": "((label: string) => string)",
             "required": false,
-            "description": "Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to \"Collapse <label>\".",
+            "description": "Accessible name of an expanded row's or section's toggle, given its label. Defaults to \"Collapse <label>\".",
             "defaultValue": "(label) => `Collapse ${label}`"
           },
           {
@@ -15829,7 +15829,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "label",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the group, and the base of each step's label",
+            "description": "Accessible name for the group, and the base of each step's label (in the `thumbs` form the group's name only; each thumb is named by `upLabel` or `downLabel`)",
             "defaultValue": "'Rating'"
           },
           {
@@ -17246,7 +17246,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "slug": "site-layout",
     "category": "layout",
     "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.",
-    "client": true,
+    "client": false,
     "importPath": "rift-ds/components/SiteLayout/SiteLayout",
     "barrel": "main",
     "exports": [
@@ -17269,7 +17269,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sidebar",
             "type": "ReactNode",
             "required": false,
-            "description": "The navigation column, usually a scrollable NavList: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`), so a reader has\none menu, never two."
+            "description": "The navigation column, usually a scrollable NavList: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`, and set the\nheader's `foldBelow=\"tablet\"` so it folds at the same step), so a\nreader has one menu, never two."
           },
           {
             "name": "aside",

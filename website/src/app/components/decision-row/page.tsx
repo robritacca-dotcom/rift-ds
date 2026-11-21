@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { DecisionRow, type DecisionRowStatus } from "rift-ds/components/DecisionRow/DecisionRow";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
@@ -44,61 +42,53 @@ function Queue() {
 
 export default function DecisionRowPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Decision row</h1>
-            <PageLinks storybookPath="/?path=/docs/components-decisionrow--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>A yes or a no, and then the answer</p>
-            <p className={styles.introBody}>
-              Decision row is one item waiting on the reader: a request, an invitation, a draft, a change to review. While it waits it offers two buttons in your words, and once decided it settles to a mark saying which, with Undo while you can still reverse it. It is a Widget row with that lifecycle, so it sits in a Widget beside plain rows. When the buttons leave, focus moves to Undo or to the row, and the outcome is announced.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="A queue" />
-            <div className={styles.demoSurface}>
-              <Queue />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="In your own words" />
-            <div className={styles.demoSurface}>
-              <Widget title="Drafts">
-                <DecisionRow
-                  title="Reply to the supplier"
-                  description="Written by the assistant"
-                  acceptLabel="Keep"
-                  declineLabel="Discard"
-                  acceptedLabel="Kept"
-                  declinedLabel="Discarded"
-                />
-                <DecisionRow
-                  title="Remove Sam from the workspace"
-                  description="Requested by an admin"
-                  acceptLabel="Remove"
-                  declineLabel="Keep"
-                  acceptedLabel="Removed"
-                  declinedLabel="Kept"
-                  tone="destructive"
-                />
-              </Widget>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="decision-row" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Decision row</h1>
+        <PageLinks storybookPath="/?path=/docs/components-decisionrow--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>A yes or a no, and then the answer</p>
+        <p className={styles.introBody}>
+          Decision row is one item waiting on the reader: a request, an invitation, a draft, a change to review. While it waits it offers two buttons in your words, and once decided it settles to a mark saying which, with Undo while you can still reverse it. It is a Widget row with that lifecycle, so it sits in a Widget beside plain rows. When the buttons leave, focus moves to Undo or to the row, and the outcome is announced.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="A queue" />
+        <div className={styles.demoSurface}>
+          <Queue />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="In your own words" />
+        <div className={styles.demoSurface}>
+          <Widget title="Drafts">
+            <DecisionRow
+              title="Reply to the supplier"
+              description="Written by the assistant"
+              acceptLabel="Keep"
+              declineLabel="Discard"
+              acceptedLabel="Kept"
+              declinedLabel="Discarded"
+            />
+            <DecisionRow
+              title="Remove Sam from the workspace"
+              description="Requested by an admin"
+              acceptLabel="Remove"
+              declineLabel="Keep"
+              acceptedLabel="Removed"
+              declinedLabel="Kept"
+              tone="destructive"
+            />
+          </Widget>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="decision-row" />
+    </div>
   );
 }

@@ -254,7 +254,12 @@ export function SiteHeader({
     const bar = barRef.current;
     if (!bar) return;
     const measure = () => {
-      const gap = parseFloat(getComputedStyle(bar).columnGap) || 0;
+      const barStyle = getComputedStyle(bar);
+      const gap = parseFloat(barStyle.columnGap) || 0;
+      // clientWidth counts the bar's own inline padding (the shell gutter
+      // a full-width bar carries), which the row can never use.
+      const padding =
+        (parseFloat(barStyle.paddingInlineStart) || 0) + (parseFloat(barStyle.paddingInlineEnd) || 0);
       const navStart = navRef.current ? parseFloat(getComputedStyle(navRef.current).marginInlineStart) || 0 : 0;
       const rowWidth = (actionsEl: HTMLElement | null) => {
         const parts = [brandRef.current, navRef.current, wideRef.current, actionsEl];
@@ -262,7 +267,7 @@ export function SiteHeader({
         const present = widths.filter((w) => w > 0).length;
         return widths.reduce((sum, w) => sum + w, 0) + navStart + gap * Math.max(present - 1, 0);
       };
-      const room = bar.clientWidth - lockedGutter.current;
+      const room = bar.clientWidth - padding - lockedGutter.current;
       const full = rowWidth(actionsRef.current);
       const tight = condensedActionsRef.current ? rowWidth(condensedActionsRef.current) : full;
       const forced =

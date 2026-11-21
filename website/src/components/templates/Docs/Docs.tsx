@@ -16,15 +16,15 @@
  * - **No app shell.** A documentation site is a site, not an app, so it
  *   lays out through SiteLayout rather than TemplateShell, and takes none of
  *   the app shell modes (App shells, Site shells on /foundations/layout).
- * - **The layout levers are live.** A Layout icon button in the header, the
- *   theme picker's form, opens a menu whose radio groups set the page width,
- *   its contained size (narrow, default, wide), the frame (the header, the
- *   sidebar and the footer, which move as one: edge to edge, or contained
- *   with the page) and whether the on-this-page rail floats at the edge
- *   (AnchorNav's floating minimap, the site's own) or takes a column, so
- *   every combination can be seen in place. It opens edge to edge, with a
- *   contained article and the floating rail; a full-width header's mega
- *   menus keep the contained width over a blur.
+ * - **The layout switcher is live.** A Layout icon button in the header, the
+ *   theme picker's form, opens a menu of the site frame's two layouts, the
+ *   same presets the site's own header offers (lib/siteFrameLayout):
+ *   Contained, the page centred with the sidebar beside it, and Full width,
+ *   edge to edge over the narrow step's 1080px reading column. The header,
+ *   the sidebar and the footer move as one with it. Desktop only, as on the
+ *   site: below the tablet step both draw the same. It opens on Full width
+ *   with the floating rail; a full-width header's mega menus open under its
+ *   pills at the contained width, over a blur.
  * - **Code is highlighted on the server.** The route calls `highlight()`
  *   from `rift-ds/code/highlight` and hands the lines down, so the page ships
  *   no highlighter; the install commands are `packageManagerTabs()` with one
@@ -94,6 +94,7 @@ import TemplateAssistant, { type TemplateAssistantSuggestion } from "../Template
 import { FigmaIcon, StorybookIcon } from "../../BrandIcons/BrandIcons";
 import { ProductMark } from "../ProductMark/ProductMark";
 import { useIsStaged, useStagedProductName } from "../useStagedProductName";
+import { SITE_FRAME_LAYOUTS } from "@/lib/siteFrameLayout";
 import { BUTTON_SCHEMA, PAGE_MARKDOWN, USAGE, VARIANTS } from "./docsSamples";
 import styles from "./Docs.module.css";
 
@@ -224,8 +225,6 @@ const CHAT_REPLIES: Record<string, string> = {
 const CHAT_FALLBACK =
   "I can answer from this page: the Button's variants, sizes, labels, keyboard support and props. Try one of the suggestions to see how an answer reads.";
 
-type Width = "contained" | "full";
-type Dock = "edge" | "content";
 
 export interface DocsProps {
   /** USAGE highlighted by the route. */
@@ -237,10 +236,11 @@ export interface DocsProps {
 export default function Docs({ usageLines, variantLines }: DocsProps) {
   const product = useStagedProductName(PRODUCT);
   const staged = useIsStaged();
-  const [pageWidth, setPageWidth] = useState<Width>("contained");
-  const [containedWidth, setContainedWidth] = useState<"narrow" | "default" | "wide">("default");
-  const [dock, setDock] = useState<Dock>("edge");
-  const [asidePlacement, setAsidePlacement] = useState<"edge" | "column">("edge");
+  // The site frame's two layout presets (lib/siteFrameLayout), offered by
+  // the header's Layout menu as the site's own layout switcher offers them;
+  // the page width and the rail's placement stay fixed for the demo.
+  const [layoutId, setLayoutId] = useState<(typeof SITE_FRAME_LAYOUTS)[number]["id"]>("full");
+  const layout = SITE_FRAME_LAYOUTS.find((preset) => preset.id === layoutId) ?? SITE_FRAME_LAYOUTS[0];
   const [chatOpen, setChatOpen] = useState(false);
   // At the dock threshold the panel docks and the page gives up its width;
   // below it the panel overlays (or takes over a phone), and the page stays.
@@ -267,48 +267,14 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     window.open(`${base}${encodeURIComponent(prompt)}`, "_blank", "noopener,noreferrer");
   };
 
-  const radio = <T extends string>(value: T, current: T, label: string, set: (v: T) => void) => ({
-    label,
-    selected: value === current,
-    onClick: () => set(value),
-  });
   const layoutItems: DropdownMenuEntry[] = [
-    {
-      type: "group",
-      label: "Page width",
-      items: [
-        radio("contained", pageWidth, "Contained", setPageWidth),
-        radio("full", pageWidth, "Full width", setPageWidth),
-      ],
-    },
-    { type: "separator" },
-    {
-      type: "group",
-      label: "Contained size",
-      items: [
-        radio("narrow", containedWidth, "Narrow, 1200px", setContainedWidth),
-        radio("default", containedWidth, "Default, 1440px", setContainedWidth),
-        radio("wide", containedWidth, "Wide, 1680px", setContainedWidth),
-      ],
-    },
-    { type: "separator" },
-    {
-      type: "group",
-      label: "Header, sidebar and footer",
-      items: [
-        radio("edge", dock, "Edge to edge", setDock),
-        radio("content", dock, "Contained with the page", setDock),
-      ],
-    },
-    { type: "separator" },
-    {
-      type: "group",
-      label: "On this page",
-      items: [
-        radio("edge", asidePlacement, "Floating at the edge", setAsidePlacement),
-        radio("column", asidePlacement, "A column beside the page", setAsidePlacement),
-      ],
-    },
+    ...SITE_FRAME_LAYOUTS.map((preset) => ({
+      label: preset.label,
+      description: preset.description,
+      icon: preset.icon,
+      selected: preset.id === layout.id,
+      onClick: () => setLayoutId(preset.id),
+    })),
     // The way back to the templates index, the other templates' rail footer
     // link; a staged preview in the playground draws none.
     ...(staged
@@ -326,14 +292,15 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
     <div data-bg-hidden hidden />
     <SiteLayout
       className={[styles.layout, chatOpen && chatDocks ? styles.layoutChatOpen : ""].filter(Boolean).join(" ")}
-      width={pageWidth}
-      containedWidth={containedWidth}
+      width="contained"
+      containedWidth={layout.layout.containedWidth}
       readingWidth
-      sidebarDock={dock}
-      asidePlacement={asidePlacement}
+      sidebarDock={layout.layout.sidebarDock}
+      asidePlacement="edge"
       mainId="docs-main"
       header={
         <SiteHeader
+          className={styles.header}
           brand={
             <span className={styles.brand}>
               <ProductMark />
@@ -346,12 +313,21 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
           actions={
             <>
               <CommandPaletteTrigger label="Search the docs" size="compact" />
+              {/* Desktop only, as on the site: below the tablet step the
+                  sidebar leaves the page and both layouts draw the same. */}
               <DropdownMenu
+                className={styles.desktopOnly}
                 align="end"
                 size="compact"
                 items={layoutItems}
                 trigger={
-                  <IconButton icon="view_quilt" label="Layout" variant="secondary" tone="neutral" size="compact" />
+                  <IconButton
+                    icon={layout.icon}
+                    label={`Layout: ${layout.label}`}
+                    variant="secondary"
+                    tone="neutral"
+                    size="compact"
+                  />
                 }
               />
               <BrandSwitcher size="compact" />
@@ -362,6 +338,21 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
           condensedActions={
             <>
               <CommandPaletteTrigger label="Search the docs" size="compact" iconOnly />
+              <DropdownMenu
+                className={styles.desktopOnly}
+                align="end"
+                size="compact"
+                items={layoutItems}
+                trigger={
+                  <IconButton
+                    icon={layout.icon}
+                    label={`Layout: ${layout.label}`}
+                    variant="secondary"
+                    tone="neutral"
+                    size="compact"
+                  />
+                }
+              />
               <ThemeToggle size="compact" cycle />
               <AiButton label="Ask AI" size="compact" iconOnly onClick={() => setChatOpen(true)} />
             </>
@@ -379,7 +370,7 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
       aside={
         <AnchorNav
           fromHeadings={{ root: "#docs-main" }}
-          variant={asidePlacement === "edge" ? "floating" : "list"}
+          variant="floating"
         />
       }
       footer={

@@ -34,7 +34,7 @@ export function SaveBar() {
 
 export default function GuidePage() {
   return (
-    <DocsShell currentHref="/guide" breadcrumb={[{ label: 'Docs', href: '/guide' }, { label: 'Installation' }]}>
+    <DocsShell currentHref="#installation" breadcrumb={[{ label: 'Docs', href: '#docs' }, { label: 'Installation' }]}>
       <header className={styles.intro}>
         <Heading level={1} tier="display-2">
           Installation

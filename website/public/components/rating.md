@@ -25,7 +25,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | allowClear | `boolean` | no | `false` | Selecting the already-selected step clears the rating back to 0 |
 | icon | `string \| ReactNode` | no | `'star'` | Glyph drawn for each step — Material Symbol name (string) or custom element (ReactNode). A string glyph solidifies on filled steps via the font's fill axis; a custom element should draw with `currentColor` so the filled colour still reads. |
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
-| label | `string` | no | `'Rating'` | Accessible name for the group, and the base of each step's label |
+| label | `string` | no | `'Rating'` | Accessible name for the group, and the base of each step's label (in the `thumbs` form the group's name only; each thumb is named by `upLabel` or `downLabel`) |
 | valueLabel | `((value: number, max: number) => string)` | no | `` (value: number, max: number) => `${value} out of ${max}` `` | The spoken value, given a step (or, in `readOnly` mode, the current rating) and `max`. Defaults to "3 out of 5". It follows `label` and a colon, as in "Rating: 3 out of 5". |
 | className | `string` | no | `''` | Additional CSS classes |
 | variant | `"stars" \| "thumbs"` | no | `'stars'` | The scale's form. `stars` (the default) is a row of `max` steps that fill up to the value. `thumbs` is a two-way verdict, a thumb up and a thumb down, for a quick "Was this helpful?": value 1 is up, 2 is down, 0 is no answer yet, and `max`, `icon` and `valueLabel` are ignored. |

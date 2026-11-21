@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Stepper } from "rift-ds/components/Stepper/Stepper";
 import { Button } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -65,95 +63,86 @@ function WizardDemo() {
 
 export default function StepperPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Stepper</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-stepper--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Show where a multi-stage flow stands
-            </p>
-            <p className={styles.introBody}>
-              An ordered list of steps for wizards and other staged flows.
-              Steps before the active one render complete with a check, the
-              active step takes the primary action fill and aria-current, and
-              later steps stay muted until the flow reaches them. Pass an
-              onStepClick handler and completed steps become buttons, so a
-              reader can revisit an earlier stage without losing their place.
-            </p>
-          </div>
-
-          {/* Default */}
-          <section className={styles.section}>
-            <SectionTitle title="Default" />
-            <div className={styles.demoStack}>
-              <div className={styles.demo}>
-                <Stepper steps={checkoutSteps} activeStep={1} />
-              </div>
-            </div>
-          </section>
-
-          {/* With descriptions */}
-          <section className={styles.section}>
-            <SectionTitle title="With descriptions" />
-            <div className={styles.demoStack}>
-              <div className={styles.demoWide}>
-                <Stepper steps={describedSteps} activeStep={1} />
-              </div>
-            </div>
-          </section>
-
-          {/* Vertical */}
-          <section className={styles.section}>
-            <SectionTitle title="Vertical" />
-            <div className={styles.demoStack}>
-              <div className={styles.demoNarrow}>
-                <Stepper
-                  steps={describedSteps}
-                  activeStep={2}
-                  orientation="vertical"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Progress states */}
-          <section className={styles.section}>
-            <SectionTitle title="Progress states" />
-            <p className={styles.introBody}>
-              The first step of a flow, and a finished one. To show a flow as done, set <code>activeStep</code> to the number of steps: every step shows its check and none is current.
-            </p>
-            <div className={styles.demoStack}>
-              <div className={styles.demo}>
-                <Stepper steps={checkoutSteps} activeStep={0} />
-              </div>
-              <div className={styles.demo}>
-                <Stepper steps={checkoutSteps} activeStep={checkoutSteps.length} />
-              </div>
-            </div>
-          </section>
-
-          {/* Clickable */}
-          <section className={styles.section}>
-            <SectionTitle title="In a wizard" />
-            <WizardDemo />
-          </section>
-
-          <ComponentInstallStrip slug="stepper" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Stepper</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-stepper--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Show where a multi-stage flow stands
+        </p>
+        <p className={styles.introBody}>
+          An ordered list of steps for wizards and other staged flows.
+          Steps before the active one render complete with a check, the
+          active step takes the primary action fill and aria-current, and
+          later steps stay muted until the flow reaches them. Pass an
+          onStepClick handler and completed steps become buttons, so a
+          reader can revisit an earlier stage without losing their place.
+        </p>
+      </div>
+
+      {/* Default */}
+      <section className={styles.section}>
+        <SectionTitle title="Default" />
+        <div className={styles.demoStack}>
+          <div className={styles.demo}>
+            <Stepper steps={checkoutSteps} activeStep={1} />
+          </div>
+        </div>
+      </section>
+
+      {/* With descriptions */}
+      <section className={styles.section}>
+        <SectionTitle title="With descriptions" />
+        <div className={styles.demoStack}>
+          <div className={styles.demoWide}>
+            <Stepper steps={describedSteps} activeStep={1} />
+          </div>
+        </div>
+      </section>
+
+      {/* Vertical */}
+      <section className={styles.section}>
+        <SectionTitle title="Vertical" />
+        <div className={styles.demoStack}>
+          <div className={styles.demoNarrow}>
+            <Stepper
+              steps={describedSteps}
+              activeStep={2}
+              orientation="vertical"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Progress states */}
+      <section className={styles.section}>
+        <SectionTitle title="Progress states" />
+        <p className={styles.introBody}>
+          The first step of a flow, and a finished one. To show a flow as done, set <code>activeStep</code> to the number of steps: every step shows its check and none is current.
+        </p>
+        <div className={styles.demoStack}>
+          <div className={styles.demo}>
+            <Stepper steps={checkoutSteps} activeStep={0} />
+          </div>
+          <div className={styles.demo}>
+            <Stepper steps={checkoutSteps} activeStep={checkoutSteps.length} />
+          </div>
+        </div>
+      </section>
+
+      {/* Clickable */}
+      <section className={styles.section}>
+        <SectionTitle title="In a wizard" />
+        <WizardDemo />
+      </section>
+
+      <ComponentInstallStrip slug="stepper" />
+    </div>
   );
 }

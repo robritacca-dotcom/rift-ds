@@ -1,6 +1,5 @@
 "use client";
 
-import MegaNav from "../components/MegaNav/MegaNav";
 import { FullBleedBackground } from "../components/BlurBackground/BlurBackground";
 import { Button } from "rift-ds/components/Button/Button";
 import styles from "./not-found.module.css";
@@ -9,10 +8,7 @@ export default function NotFound() {
   return (
     <>
       <FullBleedBackground />
-
-      <MegaNav />
-
-      <main className={styles.container} id="main-content">
+      <div className={styles.container}>
         <div className={`${styles.content} animate-in`}>
           <span className={styles.errorCode}>404</span>
           <h1 className={styles.title}>Page not found</h1>
@@ -26,7 +22,7 @@ export default function NotFound() {
             href="/"
           />
         </div>
-      </main>
+      </div>
 
     </>
   );

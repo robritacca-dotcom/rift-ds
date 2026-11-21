@@ -1,14 +1,3 @@
-/* ============================================
-   SEMANTIC COLOURS PAGE LAYOUT
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   display: flex;
@@ -91,11 +80,6 @@
   .pageHeader {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .dsLayout {
-    padding-left: 0;
-    min-width: 0;
   }
 
   .dsContent {

@@ -282,6 +282,9 @@
 .ds-bento-tile__description {
   margin: 0;
   max-width: 48ch;
+  /* A long unbroken run (a prop sample, a URL) breaks at the tile's edge
+     rather than running past it in a narrow tile. */
+  overflow-wrap: anywhere;
   color: var(--color-text-secondary);
   font-size: var(--font-paragraph-size);
   line-height: var(--font-paragraph-line-height);

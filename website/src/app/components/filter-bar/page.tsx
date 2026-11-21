@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { FilterBar } from "rift-ds/components/FilterBar/FilterBar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -71,99 +69,91 @@ export default function FilterBarPage() {
   );
 
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Filter bar</h1>
-            <PageLinks storybookPath="/?path=/docs/components-filterbar--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Narrowing a collection, one chip at a time
-            </p>
-            <p className={styles.introBody}>
-              Each chip opens a popover of options. Active filters show their
-              choice, grow a clear button, and flip to the action fill; a
-              clear-all appears once anything is set. State is one map of
-              filter id to active values, so wiring it to a table or a list is
-              a single callback.
-            </p>
-          </div>
-
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="Wired to a collection" />
-            <p className={styles.sectionBody}>
-              A controlled bar filtering the rows below it. Status and assignee
-              take several values; priority is single-select and closes on
-              choice.
-            </p>
-            <FilterBar
-              filters={issueFilters}
-              values={values}
-              onValuesChange={setValues}
-            />
-            <div className={styles.resultList}>
-              {visible.map((issue) => (
-                <div key={issue.title} className={styles.resultRow}>
-                  <span>{issue.title}</span>
-                  <span className={styles.resultMeta}>
-                    {statusLabels[issue.status]}
-                  </span>
-                </div>
-              ))}
-              {visible.length === 0 && (
-                <div className={styles.resultEmpty}>
-                  Nothing matches the active filters.
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Uncontrolled" />
-            <p className={styles.sectionBody}>
-              With defaultValues the bar keeps its own state and reports every
-              change. An empty map means unfiltered, so consumers never guess
-              at sentinel values.
-            </p>
-            <FilterBar filters={issueFilters} defaultValues={{ priority: ["high"] }} />
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-4`}>
-            <SectionTitle title="Compact" />
-            <p className={styles.sectionBody}>
-              The compact size tightens the chips to Chip&apos;s compact
-              paddings, for toolbars above dense tables.
-            </p>
-            <FilterBar
-              size="compact"
-              filters={issueFilters}
-              defaultValues={{ assignee: ["jane"], status: ["open"] }}
-              clearLabel="Reset"
-            />
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-5`}>
-            <SectionTitle title="Keyboard" />
-            <p className={styles.sectionBody}>
-              The popovers are real listboxes driven from the chip, so focus never
-              leaves the trigger. Enter and Space toggle the highlighted option, and
-              Escape closes the list. Single-select filters close as soon as a choice
-              lands. The keys that move through the options are listed under Tested
-              keys.
-            </p>
-          </section>
-
-          <ComponentInstallStrip slug="filter-bar" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Filter bar</h1>
+        <PageLinks storybookPath="/?path=/docs/components-filterbar--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Narrowing a collection, one chip at a time
+        </p>
+        <p className={styles.introBody}>
+          Each chip opens a popover of options. Active filters show their
+          choice, grow a clear button, and flip to the action fill; a
+          clear-all appears once anything is set. State is one map of
+          filter id to active values, so wiring it to a table or a list is
+          a single callback.
+        </p>
+      </div>
+
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="Wired to a collection" />
+        <p className={styles.sectionBody}>
+          A controlled bar filtering the rows below it. Status and assignee
+          take several values; priority is single-select and closes on
+          choice.
+        </p>
+        <FilterBar
+          filters={issueFilters}
+          values={values}
+          onValuesChange={setValues}
+        />
+        <div className={styles.resultList}>
+          {visible.map((issue) => (
+            <div key={issue.title} className={styles.resultRow}>
+              <span>{issue.title}</span>
+              <span className={styles.resultMeta}>
+                {statusLabels[issue.status]}
+              </span>
+            </div>
+          ))}
+          {visible.length === 0 && (
+            <div className={styles.resultEmpty}>
+              Nothing matches the active filters.
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Uncontrolled" />
+        <p className={styles.sectionBody}>
+          With defaultValues the bar keeps its own state and reports every
+          change. An empty map means unfiltered, so consumers never guess
+          at sentinel values.
+        </p>
+        <FilterBar filters={issueFilters} defaultValues={{ priority: ["high"] }} />
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-4`}>
+        <SectionTitle title="Compact" />
+        <p className={styles.sectionBody}>
+          The compact size tightens the chips to Chip&apos;s compact
+          paddings, for toolbars above dense tables.
+        </p>
+        <FilterBar
+          size="compact"
+          filters={issueFilters}
+          defaultValues={{ assignee: ["jane"], status: ["open"] }}
+          clearLabel="Reset"
+        />
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-5`}>
+        <SectionTitle title="Keyboard" />
+        <p className={styles.sectionBody}>
+          The popovers are real listboxes driven from the chip, so focus never
+          leaves the trigger. Enter and Space toggle the highlighted option, and
+          Escape closes the list. Single-select filters close as soon as a choice
+          lands. The keys that move through the options are listed under Tested
+          keys.
+        </p>
+      </section>
+
+      <ComponentInstallStrip slug="filter-bar" />
+    </div>
   );
 }

@@ -1,18 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import { TypographySwatch } from "rift-ds/components/TypographySwatch/TypographySwatch";
 import { typeStyleColour } from "@/lib/theme/theme-overrides";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/typography");
 
 /* ============================================
    TYPOGRAPHY DATA
@@ -328,106 +323,96 @@ export default function TypographyView({ scaleTable }: { scaleTable: React.React
   const isMobileView = viewport === "mobile";
 
   return (
-    <>
-
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Typography</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/foundations-typography--docs"
-            />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              One scale, and the faces are yours: the base theme sets it in{" "}
-              <a
-                href="https://fonts.google.com/specimen/Nunito+Sans"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.fontLink}
-              >
-                Nunito Sans
-              </a>
-            </p>
-            <p className={styles.introBody}>
-              Mega and Display styles are for hero moments and landing pages. Headings structure sections. Title is for bold labels. Paragraph Em is the default for buttons and interactive controls. Paragraph is body copy. The SM variants scale each of those down for compact components and secondary text. Overline is the uppercase label face, always paired with an uppercase transform at the use site. Caption is the floor, for footnotes and disclaimers only. The faces are theme decisions: the scale chains through heading and body family roles, and the shipped themes mix serif, sans, grotesk, rounded and mono pairings over this same scale.
-            </p>
-            <p className={styles.introBody}>
-              Every style chains its family through one of two role tokens: the
-              display and heading styles read <code>--font-family-heading</code>,
-              the body styles read <code>--font-family-body</code>, and both
-              resolve to <code>--font-family-primary</code> by default. The base
-              theme keeps the roles on one face; several presets split them, and
-              consumers of the package can point them at different faces to pair
-              a heading font with a body font, previewing pairings in the
-              playground. The printed specs are the base theme&apos;s values: a
-              preset sets its own tier weights and tracking, and Forest sets
-              its display tier to semibold. Colour works the same way: display
-              text reads <code>--color-text-display</code> and headings read{" "}
-              <code>--color-text-heading</code>, both aliasing the primary text,
-              so a theme can give a tier its own colour.
-            </p>
-          </div>
-
-          {/* Viewport toggle — Mega/Display/Sub-display step down below
-              768px; headings and body hold at every size. */}
-          <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
-            <Tabs
-              tabs={viewportTabs}
-              value={viewport}
-              onValueChange={setViewport}
-              aria-label="Token values by viewport"
-            />
-            <p className={styles.viewportNote}>
-              {isMobileView
-                ? "Below 768px the display tier steps down automatically. Headings and body never step."
-                : "Above 768px every style renders at its full size."}
-            </p>
-          </div>
-
-          {/* Type Sections */}
-          {typeSections.map((section, idx) => (
-            <section
-              key={section.title}
-              className={`${styles.typeSection}${idx < 2 ? " animate-in animate-delay-2" : ""}`}
-            >
-              <SectionTitle title={section.title} />
-
-              <div className={styles.typeStyles}>
-                {section.styles.map((t) => {
-                  const m = isMobileView ? t.mobile : undefined;
-                  return (
-                    <TypographySwatch
-                      key={t.name}
-                      name={t.name}
-                      weight={t.weight}
-                      size={m?.size ?? t.size}
-                      lineHeight={m?.lineHeight ?? t.lineHeight}
-                      letterSpacing={t.letterSpacing}
-                      previewStyle={{
-                        ...(m ? { ...t.previewStyle, ...m.previewStyle } : t.previewStyle),
-                        color: typeStyleColour(/--font-([a-z0-9-]+)-family/.exec(String(t.previewStyle.fontFamily))?.[1] ?? ""),
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-          ))}
-
-          {scaleTable}
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Typography</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/foundations-typography--docs"
+        />
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          One scale, and the faces are yours: the base theme sets it in{" "}
+          <a
+            href="https://fonts.google.com/specimen/Nunito+Sans"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.fontLink}
+          >
+            Nunito Sans
+          </a>
+        </p>
+        <p className={styles.introBody}>
+          Mega and Display styles are for hero moments and landing pages. Headings structure sections. Title is for bold labels. Paragraph Em is the default for buttons and interactive controls. Paragraph is body copy. The SM variants scale each of those down for compact components and secondary text. Overline is the uppercase label face, always paired with an uppercase transform at the use site. Caption is the floor, for footnotes and disclaimers only. The faces are theme decisions: the scale chains through heading and body family roles, and the shipped themes mix serif, sans, grotesk, rounded and mono pairings over this same scale.
+        </p>
+        <p className={styles.introBody}>
+          Every style chains its family through one of two role tokens: the
+          display and heading styles read <code>--font-family-heading</code>,
+          the body styles read <code>--font-family-body</code>, and both
+          resolve to <code>--font-family-primary</code> by default. The base
+          theme keeps the roles on one face; several presets split them, and
+          consumers of the package can point them at different faces to pair
+          a heading font with a body font, previewing pairings in the
+          playground. The printed specs are the base theme&apos;s values: a
+          preset sets its own tier weights and tracking, and Forest sets
+          its display tier to semibold. Colour works the same way: display
+          text reads <code>--color-text-display</code> and headings read{" "}
+          <code>--color-text-heading</code>, both aliasing the primary text,
+          so a theme can give a tier its own colour.
+        </p>
+      </div>
+
+      {/* Viewport toggle — Mega/Display/Sub-display step down below
+          768px; headings and body hold at every size. */}
+      <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
+        <Tabs
+          tabs={viewportTabs}
+          value={viewport}
+          onValueChange={setViewport}
+          aria-label="Token values by viewport"
+        />
+        <p className={styles.viewportNote}>
+          {isMobileView
+            ? "Below 768px the display tier steps down automatically. Headings and body never step."
+            : "Above 768px every style renders at its full size."}
+        </p>
+      </div>
+
+      {/* Type Sections */}
+      {typeSections.map((section, idx) => (
+        <section
+          key={section.title}
+          className={`${styles.typeSection}${idx < 2 ? " animate-in animate-delay-2" : ""}`}
+        >
+          <SectionTitle title={section.title} />
+
+          <div className={styles.typeStyles}>
+            {section.styles.map((t) => {
+              const m = isMobileView ? t.mobile : undefined;
+              return (
+                <TypographySwatch
+                  key={t.name}
+                  name={t.name}
+                  weight={t.weight}
+                  size={m?.size ?? t.size}
+                  lineHeight={m?.lineHeight ?? t.lineHeight}
+                  letterSpacing={t.letterSpacing}
+                  previewStyle={{
+                    ...(m ? { ...t.previewStyle, ...m.previewStyle } : t.previewStyle),
+                    color: typeStyleColour(/--font-([a-z0-9-]+)-family/.exec(String(t.previewStyle.fontFamily))?.[1] ?? ""),
+                  }}
+                />
+              );
+            })}
+          </div>
+        </section>
+      ))}
+
+      {scaleTable}
+    </div>
   );
 }

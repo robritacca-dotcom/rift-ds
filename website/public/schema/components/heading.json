@@ -141,5 +141,12 @@
   },
   "size": {
     "gzip": 648
-  }
+  },
+  "alternatives": [
+    {
+      "name": "SectionTitle",
+      "when": "the heading opens a page section, with a divider line or a count or action beside the title",
+      "schemaUrl": "https://rift-ds.com/schema/components/section-title.json"
+    }
+  ]
 }

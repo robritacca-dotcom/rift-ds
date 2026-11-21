@@ -1,8 +1,6 @@
 "use client";
 
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { AppLayout } from "rift-ds/components/AppLayout/AppLayout";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -55,118 +53,109 @@ function DemoContent({ heading, body }: { heading: string; body: string }) {
 
 export default function AppLayoutPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>App layout</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-applayout--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Full-page template with a collapsible sidebar
-            </p>
-            <p className={styles.introBody}>
-              A page shell that pairs the App sidebar with a content area. The sidebar
-              collapses to an icon rail; the main region reflows automatically. The layout prop
-              picks one of the three app shell modes the templates and the chat share: flush
-              (the default), the rail on the shell colour behind a hairline with the content crisp
-              beside it; floating, the rail as a glass card; or inset, the content in a
-              raised surface of its own. The component
-              pins itself to the dark theme by default, which is why the demos below appear
-              dark; pass theme=&quot;inherit&quot; to drop the pin and let the layout follow the
-              surrounding data-theme like any other component.
-            </p>
-          </div>
-
-          {/* Expanded */}
-          <section className={styles.section}>
-            <SectionTitle title="Expanded sidebar" />
-            <div className={styles.layoutDemo}>
-              <AppLayout
-                sections={demoSections}
-                profile={demoProfile}
-                activeKey="dashboard"
-                logoText="Northlight"
-                defaultExpanded={true}
-              >
-                <DemoContent
-                  heading="Dashboard"
-                  body="Content is centred in the main area. Collapse the sidebar with the toggle to see the layout reflow."
-                />
-              </AppLayout>
-            </div>
-          </section>
-
-          {/* Collapsed */}
-          <section className={styles.section}>
-            <SectionTitle title="Collapsed by default" />
-            <div className={styles.layoutDemo}>
-              <AppLayout
-                sections={demoSections}
-                profile={demoProfile}
-                activeKey="analytics"
-                logoText="Northlight"
-                defaultExpanded={false}
-              >
-                <DemoContent
-                  heading="Analytics"
-                  body="The sidebar starts as a 64px icon rail and expands on demand."
-                />
-              </AppLayout>
-            </div>
-          </section>
-
-          {/* Floating */}
-          <section className={styles.section}>
-            <SectionTitle title="Floating layout" />
-            <div className={styles.layoutDemo}>
-              <AppLayout
-                sections={demoSections}
-                profile={demoProfile}
-                activeKey="dashboard"
-                logoText="Northlight"
-                layout="floating"
-              >
-                <DemoContent
-                  heading="Dashboard"
-                  body="The rail floats off the edges as a glass card, and the content stays centred beside it."
-                />
-              </AppLayout>
-            </div>
-          </section>
-
-          {/* Inset */}
-          <section className={styles.section}>
-            <SectionTitle title="Inset layout" />
-            <div className={styles.layoutDemo}>
-              <AppLayout
-                sections={demoSections}
-                profile={demoProfile}
-                activeKey="dashboard"
-                logoText="Northlight"
-                layout="inset"
-              >
-                <DemoContent
-                  heading="Dashboard"
-                  body="The rail sits flush on the shell colour, and the content sits in a raised surface that scrolls on its own, contained or full by its own width."
-                />
-              </AppLayout>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="app-layout" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>App layout</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-applayout--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Full-page template with a collapsible sidebar
+        </p>
+        <p className={styles.introBody}>
+          A page shell that pairs the App sidebar with a content area. The sidebar
+          collapses to an icon rail; the main region reflows automatically. The layout prop
+          picks one of the three app shell modes the templates and the chat share: flush
+          (the default), the rail on the shell colour behind a hairline with the content crisp
+          beside it; floating, the rail as a glass card; or inset, the content in a
+          raised surface of its own. The component
+          pins itself to the dark theme by default, which is why the demos below appear
+          dark; pass theme=&quot;inherit&quot; to drop the pin and let the layout follow the
+          surrounding data-theme like any other component.
+        </p>
+      </div>
+
+      {/* Expanded */}
+      <section className={styles.section}>
+        <SectionTitle title="Expanded sidebar" />
+        <div className={styles.layoutDemo}>
+          <AppLayout
+            sections={demoSections}
+            profile={demoProfile}
+            activeKey="dashboard"
+            logoText="Northlight"
+            defaultExpanded={true}
+          >
+            <DemoContent
+              heading="Dashboard"
+              body="Content is centred in the main area. Collapse the sidebar with the toggle to see the layout reflow."
+            />
+          </AppLayout>
+        </div>
+      </section>
+
+      {/* Collapsed */}
+      <section className={styles.section}>
+        <SectionTitle title="Collapsed by default" />
+        <div className={styles.layoutDemo}>
+          <AppLayout
+            sections={demoSections}
+            profile={demoProfile}
+            activeKey="analytics"
+            logoText="Northlight"
+            defaultExpanded={false}
+          >
+            <DemoContent
+              heading="Analytics"
+              body="The sidebar starts as a 64px icon rail and expands on demand."
+            />
+          </AppLayout>
+        </div>
+      </section>
+
+      {/* Floating */}
+      <section className={styles.section}>
+        <SectionTitle title="Floating layout" />
+        <div className={styles.layoutDemo}>
+          <AppLayout
+            sections={demoSections}
+            profile={demoProfile}
+            activeKey="dashboard"
+            logoText="Northlight"
+            layout="floating"
+          >
+            <DemoContent
+              heading="Dashboard"
+              body="The rail floats off the edges as a glass card, and the content stays centred beside it."
+            />
+          </AppLayout>
+        </div>
+      </section>
+
+      {/* Inset */}
+      <section className={styles.section}>
+        <SectionTitle title="Inset layout" />
+        <div className={styles.layoutDemo}>
+          <AppLayout
+            sections={demoSections}
+            profile={demoProfile}
+            activeKey="dashboard"
+            logoText="Northlight"
+            layout="inset"
+          >
+            <DemoContent
+              heading="Dashboard"
+              body="The rail sits flush on the shell colour, and the content sits in a raised surface that scrolls on its own, contained or full by its own width."
+            />
+          </AppLayout>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="app-layout" />
+    </div>
   );
 }

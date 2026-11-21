@@ -61,7 +61,7 @@ type ArtifactPanelOwnProps = {
   previewLabel?: string;
   /** Label for the code segment of the view switch. */
   codeLabel?: string;
-  /** Accessible name for the view switch. */
+  /** Accessible name for the view switch, and for the panel itself when `title` is left out (an untitled `inline` example). */
   viewLabel?: string;
   /** Accessible name for the expand toggle while the panel is at its resting size. */
   expandLabel?: string;

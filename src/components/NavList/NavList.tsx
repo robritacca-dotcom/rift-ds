@@ -20,6 +20,7 @@ export interface NavListItem {
   /**
    * When false, an item with children renders no toggle and its children stay
    * visible — a permanent group rather than a collapsible section.
+   * @default true
    */
   collapsible?: boolean;
   /**
@@ -50,7 +51,12 @@ export interface NavListSection {
    * appears as `section:<id>`, so its id never collides with a row's.
    */
   id?: string;
-  /** Let the reader fold the section under its heading. Default false: the heading is a plain label. */
+  /**
+   * Let the reader fold the section under its heading. Unlike a row with
+   * `items`, which folds unless told not to, a section is a plain label
+   * unless told to fold.
+   * @default false
+   */
   collapsible?: boolean;
 }
 
@@ -92,9 +98,9 @@ type NavListOwnProps = {
   multiple?: boolean;
   /** Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. */
   onNavigate?: (item: NavListItem, event: React.MouseEvent<HTMLElement>) => void;
-  /** Accessible name of a collapsed section's chevron toggle, given the row's label. Defaults to "Expand <label>". */
+  /** Accessible name of a collapsed row's or section's toggle, given its label. Defaults to "Expand <label>". */
   expandLabel?: (label: string) => string;
-  /** Accessible name of an expanded section's chevron toggle, given the row's label. Defaults to "Collapse <label>". */
+  /** Accessible name of an expanded row's or section's toggle, given its label. Defaults to "Collapse <label>". */
   collapseLabel?: (label: string) => string;
   /**
    * The component its links render with, such as Next.js's `Link`, so they
@@ -246,14 +252,18 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
     }
 
     const toggle = (id: string) => {
-      const keep = new Set(ancestorsOf.get(id) ?? []);
-      // Sections are top-level folds of their own; opening one row never
-      // closes another section.
+      // One open at a time among siblings only: an entry closes when it shares
+      // the opened one's parent and kind (a section, or a row), so the branch
+      // around it, its own open descendants and the rows of other sections
+      // all stay as they are.
+      const parentOf = (entry: string) => (ancestorsOf.get(entry) ?? []).join('\u0000');
+      const isSection = (entry: string) => entry.startsWith('section:');
+      const sibling = (entry: string) => parentOf(entry) === parentOf(id) && isSection(entry) === isSection(id);
       const next = expanded.includes(id)
         ? expanded.filter((entry) => entry !== id)
         : multiple
           ? [...expanded, id]
-          : [...expanded.filter((entry) => keep.has(entry) || (entry.startsWith('section:') && !id.startsWith('section:'))), id];
+          : [...expanded.filter((entry) => !sibling(entry)), id];
       if (expandedIds === undefined) setInternalExpanded(next);
       onExpandedChange?.(next);
     };

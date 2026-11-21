@@ -99,8 +99,11 @@ export const HoverCard = React.forwardRef<HTMLSpanElement, HoverCardProps>(
 
     // Escape dismisses while visible, wherever focus is (WCAG 1.4.13), through
     // the shared layer stack, so it never also closes a Dialog beneath.
+    // Passive, as a tooltip is: Escape hides it, but it never stops a press
+    // from closing the menu, popover or modal beneath it.
     useLayer({
       open: visible,
+      passive: true,
       onDismiss: () => {
         clearTimeout(showTimeoutRef.current);
         clearTimeout(hideTimeoutRef.current);

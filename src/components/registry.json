@@ -925,7 +925,10 @@
       "description": "A heading whose outline level and type tier are chosen apart, with an optional link to itself.",
       "category": "typography",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "SectionTitle", "when": "the heading opens a page section, with a divider line or a count or action beside the title" }
+      ]
     },
     {
       "name": "HoverCard",
@@ -1496,7 +1499,8 @@
       "client": false,
       "keys": { "by": "none" },
       "alternatives": [
-        { "name": "PageHeader", "when": "the heading is the page’s own title, with its breadcrumb and actions" }
+        { "name": "PageHeader", "when": "the heading is the page’s own title, with its breadcrumb and actions" },
+        { "name": "Heading", "when": "the heading needs a level or type tier of its own rather than a section’s divided title" }
       ]
     },
     {
@@ -1580,7 +1584,7 @@
       "slug": "site-layout",
       "description": "The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.",
       "category": "layout",
-      "client": true,
+      "client": false,
       "keys": { "by": "platform", "note": "A frame: its slots own their keys, and its skip link is a native link." },
       "alternatives": [
         { "name": "AppLayout", "when": "the page is an app screen with a rail of tools rather than a site of pages" }

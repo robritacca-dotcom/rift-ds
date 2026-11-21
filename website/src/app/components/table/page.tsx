@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Table } from "rift-ds/components/Table/Table";
 import { Button } from "rift-ds/components/Button/Button";
 import { IconButton } from "rift-ds/components/IconButton/IconButton";
@@ -33,253 +31,244 @@ const basicRows = [
 
 export default function TablePage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Table</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-table--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Structured data in rows and columns
-            </p>
-            <p className={styles.introBody}>
-              Cells are flexible and can hold text, icons, form inputs, or action buttons. Supports striped rows for readability and a compact size for denser layouts.
-            </p>
-          </div>
-
-          {/* Default */}
-          <section className={styles.section}>
-            <SectionTitle title="Default" />
-            <div className={styles.tableWrapper}>
-              <Table columns={basicColumns} rows={basicRows} bordered />
-            </div>
-          </section>
-
-          {/* Compact */}
-          <section className={styles.section}>
-            <SectionTitle title="Compact" />
-            <div className={styles.tableWrapper}>
-              <Table columns={basicColumns} rows={basicRows} size="compact" bordered />
-            </div>
-          </section>
-
-          {/* Striped */}
-          <section className={styles.section}>
-            <SectionTitle title="Striped" />
-            <div className={styles.tableWrapper}>
-              <Table columns={basicColumns} rows={basicRows} striped bordered />
-            </div>
-          </section>
-
-          {/* With icons */}
-          <section className={styles.section}>
-            <SectionTitle title="With icons" />
-            <div className={styles.tableWrapper}>
-              <Table
-                bordered
-                columns={[
-                  { key: "name", header: "Name", width: "35%" },
-                  { key: "department", header: "Department", width: "30%" },
-                  { key: "status", header: "Status", align: "center" },
-                ]}
-                rows={[
-                  {
-                    id: "1",
-                    cells: {
-                      name: (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                          <span className="material-symbols-rounded">person</span>
-                          Alice Chen
-                        </span>
-                      ),
-                      department: "Design",
-                      status: <span className="material-symbols-rounded" style={{ color: "var(--color-status-positive-icon)" }}>check_circle</span>,
-                    },
-                  },
-                  {
-                    id: "2",
-                    cells: {
-                      name: (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                          <span className="material-symbols-rounded">person</span>
-                          Bob Rivera
-                        </span>
-                      ),
-                      department: "Engineering",
-                      status: <span className="material-symbols-rounded" style={{ color: "var(--color-status-positive-icon)" }}>check_circle</span>,
-                    },
-                  },
-                  {
-                    id: "3",
-                    cells: {
-                      name: (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                          <span className="material-symbols-rounded">person</span>
-                          Carol Osei
-                        </span>
-                      ),
-                      department: "Product",
-                      status: <span className="material-symbols-rounded" style={{ color: "var(--color-status-error-icon)" }}>cancel</span>,
-                    },
-                  },
-                ]}
-              />
-            </div>
-          </section>
-
-          {/* With controls */}
-          <section className={styles.section}>
-            <SectionTitle title="With controls" />
-            <div className={styles.tableWrapper}>
-              <Table
-                bordered
-                columns={[
-                  { key: "select", header: "", width: "48px", align: "center" },
-                  { key: "name", header: "Name", width: "25%" },
-                  { key: "role", header: "Role", width: "20%" },
-                  { key: "email", header: "Email" },
-                  { key: "actions", header: "Actions", align: "end" },
-                ]}
-                rows={[
-                  {
-                    id: "1",
-                    cells: {
-                      select: <Checkbox checked aria-label="Select Alice" />,
-                      name: (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                          <span className="material-symbols-rounded">person</span>
-                          Alice Chen
-                        </span>
-                      ),
-                      role: "Designer",
-                      email: "alice@example.com",
-                      actions: (
-                        <span style={{ display: "inline-flex", gap: "4px" }}>
-                          <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
-                          <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
-                        </span>
-                      ),
-                    },
-                  },
-                  {
-                    id: "2",
-                    cells: {
-                      select: <Checkbox aria-label="Select Bob" />,
-                      name: (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                          <span className="material-symbols-rounded">person</span>
-                          Bob Rivera
-                        </span>
-                      ),
-                      role: "Engineer",
-                      email: "bob@example.com",
-                      actions: (
-                        <span style={{ display: "inline-flex", gap: "4px" }}>
-                          <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
-                          <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
-                        </span>
-                      ),
-                    },
-                  },
-                  {
-                    id: "3",
-                    cells: {
-                      select: <Checkbox aria-label="Select Carol" />,
-                      name: (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                          <span className="material-symbols-rounded">person</span>
-                          Carol Osei
-                        </span>
-                      ),
-                      role: "Product Manager",
-                      email: "carol@example.com",
-                      actions: (
-                        <span style={{ display: "inline-flex", gap: "8px" }}>
-                          <Button label="Invite" variant="secondary" size="compact" />
-                        </span>
-                      ),
-                    },
-                  },
-                ]}
-              />
-            </div>
-          </section>
-
-          {/* With inputs */}
-          <section className={styles.section}>
-            <SectionTitle title="With inputs" />
-            <div className={styles.tableWrapper}>
-              <Table
-                bordered
-                columns={[
-                  { key: "setting", header: "Setting", width: "30%" },
-                  { key: "value", header: "Value" },
-                ]}
-                rows={[
-                  {
-                    id: "1",
-                    cells: {
-                      setting: "Display name",
-                      value: <Input placeholder="Enter name" value="Alice Chen" size="compact" />,
-                    },
-                  },
-                  {
-                    id: "2",
-                    cells: {
-                      setting: "Email address",
-                      value: <Input placeholder="Enter email" value="alice@example.com" type="email" size="compact" />,
-                    },
-                  },
-                  {
-                    id: "3",
-                    cells: {
-                      setting: "Location",
-                      value: <Input placeholder="Enter city" size="compact" />,
-                    },
-                  },
-                ]}
-              />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Code columns" />
-            <div className={styles.kitDemo}>
-              <Table
-                bordered
-                size="compact"
-                caption="Props"
-                columns={[
-                  { key: "prop", header: "Prop", mono: true, width: "24%", rowHeader: true },
-                  { key: "type", header: "Type", mono: true, width: "32%" },
-                  { key: "description", header: "Description" },
-                ]}
-                rows={[
-                  { id: "items", cells: { prop: "items", type: "NavListEntry[]", description: "Navigation tree to render." } },
-                  { id: "size", cells: { prop: "size", type: "'default' | 'compact'", description: "Row density." } },
-                  { id: "change", cells: { prop: "onExpandedChange", type: "(expandedIds: string[]) => void", description: "Fires with the new list of expanded ids." } },
-                ]}
-              />
-              <p className={styles.kitNote}>
-                A <code>mono</code> column sets its cells in the code face and wraps long values inside the column, for a reference table of props, types and tokens.
-              </p>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="table" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Table</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-table--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Structured data in rows and columns
+        </p>
+        <p className={styles.introBody}>
+          Cells are flexible and can hold text, icons, form inputs, or action buttons. Supports striped rows for readability and a compact size for denser layouts.
+        </p>
+      </div>
+
+      {/* Default */}
+      <section className={styles.section}>
+        <SectionTitle title="Default" />
+        <div className={styles.tableWrapper}>
+          <Table columns={basicColumns} rows={basicRows} bordered />
+        </div>
+      </section>
+
+      {/* Compact */}
+      <section className={styles.section}>
+        <SectionTitle title="Compact" />
+        <div className={styles.tableWrapper}>
+          <Table columns={basicColumns} rows={basicRows} size="compact" bordered />
+        </div>
+      </section>
+
+      {/* Striped */}
+      <section className={styles.section}>
+        <SectionTitle title="Striped" />
+        <div className={styles.tableWrapper}>
+          <Table columns={basicColumns} rows={basicRows} striped bordered />
+        </div>
+      </section>
+
+      {/* With icons */}
+      <section className={styles.section}>
+        <SectionTitle title="With icons" />
+        <div className={styles.tableWrapper}>
+          <Table
+            bordered
+            columns={[
+              { key: "name", header: "Name", width: "35%" },
+              { key: "department", header: "Department", width: "30%" },
+              { key: "status", header: "Status", align: "center" },
+            ]}
+            rows={[
+              {
+                id: "1",
+                cells: {
+                  name: (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                      <span className="material-symbols-rounded">person</span>
+                      Alice Chen
+                    </span>
+                  ),
+                  department: "Design",
+                  status: <span className="material-symbols-rounded" style={{ color: "var(--color-status-positive-icon)" }}>check_circle</span>,
+                },
+              },
+              {
+                id: "2",
+                cells: {
+                  name: (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                      <span className="material-symbols-rounded">person</span>
+                      Bob Rivera
+                    </span>
+                  ),
+                  department: "Engineering",
+                  status: <span className="material-symbols-rounded" style={{ color: "var(--color-status-positive-icon)" }}>check_circle</span>,
+                },
+              },
+              {
+                id: "3",
+                cells: {
+                  name: (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                      <span className="material-symbols-rounded">person</span>
+                      Carol Osei
+                    </span>
+                  ),
+                  department: "Product",
+                  status: <span className="material-symbols-rounded" style={{ color: "var(--color-status-error-icon)" }}>cancel</span>,
+                },
+              },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* With controls */}
+      <section className={styles.section}>
+        <SectionTitle title="With controls" />
+        <div className={styles.tableWrapper}>
+          <Table
+            bordered
+            columns={[
+              { key: "select", header: "", width: "48px", align: "center" },
+              { key: "name", header: "Name", width: "25%" },
+              { key: "role", header: "Role", width: "20%" },
+              { key: "email", header: "Email" },
+              { key: "actions", header: "Actions", align: "end" },
+            ]}
+            rows={[
+              {
+                id: "1",
+                cells: {
+                  select: <Checkbox checked aria-label="Select Alice" />,
+                  name: (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                      <span className="material-symbols-rounded">person</span>
+                      Alice Chen
+                    </span>
+                  ),
+                  role: "Designer",
+                  email: "alice@example.com",
+                  actions: (
+                    <span style={{ display: "inline-flex", gap: "4px" }}>
+                      <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+                      <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
+                    </span>
+                  ),
+                },
+              },
+              {
+                id: "2",
+                cells: {
+                  select: <Checkbox aria-label="Select Bob" />,
+                  name: (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                      <span className="material-symbols-rounded">person</span>
+                      Bob Rivera
+                    </span>
+                  ),
+                  role: "Engineer",
+                  email: "bob@example.com",
+                  actions: (
+                    <span style={{ display: "inline-flex", gap: "4px" }}>
+                      <IconButton icon="edit" label="Edit" variant="tertiary" size="compact" />
+                      <IconButton icon="delete" label="Delete" variant="tertiary" size="compact" />
+                    </span>
+                  ),
+                },
+              },
+              {
+                id: "3",
+                cells: {
+                  select: <Checkbox aria-label="Select Carol" />,
+                  name: (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                      <span className="material-symbols-rounded">person</span>
+                      Carol Osei
+                    </span>
+                  ),
+                  role: "Product Manager",
+                  email: "carol@example.com",
+                  actions: (
+                    <span style={{ display: "inline-flex", gap: "8px" }}>
+                      <Button label="Invite" variant="secondary" size="compact" />
+                    </span>
+                  ),
+                },
+              },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* With inputs */}
+      <section className={styles.section}>
+        <SectionTitle title="With inputs" />
+        <div className={styles.tableWrapper}>
+          <Table
+            bordered
+            columns={[
+              { key: "setting", header: "Setting", width: "30%" },
+              { key: "value", header: "Value" },
+            ]}
+            rows={[
+              {
+                id: "1",
+                cells: {
+                  setting: "Display name",
+                  value: <Input placeholder="Enter name" value="Alice Chen" size="compact" />,
+                },
+              },
+              {
+                id: "2",
+                cells: {
+                  setting: "Email address",
+                  value: <Input placeholder="Enter email" value="alice@example.com" type="email" size="compact" />,
+                },
+              },
+              {
+                id: "3",
+                cells: {
+                  setting: "Location",
+                  value: <Input placeholder="Enter city" size="compact" />,
+                },
+              },
+            ]}
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Code columns" />
+        <div className={styles.kitDemo}>
+          <Table
+            bordered
+            size="compact"
+            caption="Props"
+            columns={[
+              { key: "prop", header: "Prop", mono: true, width: "24%", rowHeader: true },
+              { key: "type", header: "Type", mono: true, width: "32%" },
+              { key: "description", header: "Description" },
+            ]}
+            rows={[
+              { id: "items", cells: { prop: "items", type: "NavListEntry[]", description: "Navigation tree to render." } },
+              { id: "size", cells: { prop: "size", type: "'default' | 'compact'", description: "Row density." } },
+              { id: "change", cells: { prop: "onExpandedChange", type: "(expandedIds: string[]) => void", description: "Fires with the new list of expanded ids." } },
+            ]}
+          />
+          <p className={styles.kitNote}>
+            A <code>mono</code> column sets its cells in the code face and wraps long values inside the column, for a reference table of props, types and tokens.
+          </p>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="table" />
+    </div>
   );
 }

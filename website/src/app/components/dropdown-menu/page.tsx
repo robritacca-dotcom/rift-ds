@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { DropdownMenu, DropdownMenuEntry } from "rift-ds/components/DropdownMenu/DropdownMenu";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Button } from "rift-ds/components/Button/Button";
@@ -167,139 +165,130 @@ const shortcutItems: DropdownMenuEntry[] = [
 
 export default function DropdownMenuPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Dropdown menu</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-dropdownmenu--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              A contextual menu for actions and navigation
-            </p>
-            <p className={styles.introBody}>
-              Triggered by a button or element, the dropdown menu displays a floating panel with items, sections, keyboard shortcuts, a line of description under an item where the choice needs one, and nested sub-menus. Hover fills are inset from the panel edge for a refined look.
-            </p>
-          </div>
-
-          {/* Default */}
-          <section className={styles.section}>
-            <SectionTitle title="Default" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <DropdownMenu
-                  trigger={<Button label="Open menu" variant="secondary" />}
-                  items={simpleItems}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Sections and groups */}
-          <section className={styles.section}>
-            <SectionTitle title="Sections and groups" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <DropdownMenu
-                  trigger={<Button label="My account" variant="secondary" />}
-                  items={groupedItems}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Sub-menus */}
-          <section className={styles.section}>
-            <SectionTitle title="Sub-menus" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <DropdownMenu
-                  trigger={<Button label="Actions" variant="secondary" />}
-                  items={subMenuItems}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* With shortcuts */}
-          <section className={styles.section}>
-            <SectionTitle title="With shortcuts" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <DropdownMenu
-                  trigger={<Button label="Edit" variant="secondary" />}
-                  items={shortcutItems}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Compact */}
-          <section className={styles.section}>
-            <SectionTitle title="Compact" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <DropdownMenu
-                  trigger={<Button label="Compact" variant="secondary" size="compact" />}
-                  items={simpleItems}
-                  size="compact"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Selected state */}
-          <section className={styles.section}>
-            <SectionTitle title="Selected state" />
-            <p className={styles.introBody}>
-              When a menu picks one option from a set, give every member a selected value. The current choice holds a quiet fill and a check, and assistive technology hears the rows as radio items.
-            </p>
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <SelectedStateDemo />
-              </div>
-            </div>
-          </section>
-
-          {/* With descriptions */}
-          <section className={styles.section}>
-            <SectionTitle title="With descriptions" />
-            <p className={styles.introBody}>
-              An item can carry a line of description under its label, for a choice a word alone does not settle. The row grows to two lines and keeps its icon centred on the pair; the rest of the menu is unchanged.
-            </p>
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <WithDescriptionsDemo />
-              </div>
-            </div>
-          </section>
-
-          {/* Checkbox items */}
-          <section className={styles.section}>
-            <SectionTitle title="Checkbox items" />
-            <p className={styles.introBody}>
-              When each option is picked on its own, give it a checked value. The row leads with the checkbox&apos;s own box, assistive technology hears it as a checkbox item, and choosing it leaves the menu open so several can be toggled in one visit. closeOnSelect overrides that either way.
-            </p>
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <CheckboxItemsDemo />
-              </div>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="dropdown-menu" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Dropdown menu</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-dropdownmenu--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          A contextual menu for actions and navigation
+        </p>
+        <p className={styles.introBody}>
+          Triggered by a button or element, the dropdown menu displays a floating panel with items, sections, keyboard shortcuts, a line of description under an item where the choice needs one, and nested sub-menus. Hover fills are inset from the panel edge for a refined look.
+        </p>
+      </div>
+
+      {/* Default */}
+      <section className={styles.section}>
+        <SectionTitle title="Default" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <DropdownMenu
+              trigger={<Button label="Open menu" variant="secondary" />}
+              items={simpleItems}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Sections and groups */}
+      <section className={styles.section}>
+        <SectionTitle title="Sections and groups" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <DropdownMenu
+              trigger={<Button label="My account" variant="secondary" />}
+              items={groupedItems}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Sub-menus */}
+      <section className={styles.section}>
+        <SectionTitle title="Sub-menus" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <DropdownMenu
+              trigger={<Button label="Actions" variant="secondary" />}
+              items={subMenuItems}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* With shortcuts */}
+      <section className={styles.section}>
+        <SectionTitle title="With shortcuts" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <DropdownMenu
+              trigger={<Button label="Edit" variant="secondary" />}
+              items={shortcutItems}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Compact */}
+      <section className={styles.section}>
+        <SectionTitle title="Compact" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <DropdownMenu
+              trigger={<Button label="Compact" variant="secondary" size="compact" />}
+              items={simpleItems}
+              size="compact"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Selected state */}
+      <section className={styles.section}>
+        <SectionTitle title="Selected state" />
+        <p className={styles.introBody}>
+          When a menu picks one option from a set, give every member a selected value. The current choice holds a quiet fill and a check, and assistive technology hears the rows as radio items.
+        </p>
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <SelectedStateDemo />
+          </div>
+        </div>
+      </section>
+
+      {/* With descriptions */}
+      <section className={styles.section}>
+        <SectionTitle title="With descriptions" />
+        <p className={styles.introBody}>
+          An item can carry a line of description under its label, for a choice a word alone does not settle. The row grows to two lines and keeps its icon centred on the pair; the rest of the menu is unchanged.
+        </p>
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <WithDescriptionsDemo />
+          </div>
+        </div>
+      </section>
+
+      {/* Checkbox items */}
+      <section className={styles.section}>
+        <SectionTitle title="Checkbox items" />
+        <p className={styles.introBody}>
+          When each option is picked on its own, give it a checked value. The row leads with the checkbox&apos;s own box, assistive technology hears it as a checkbox item, and choosing it leaves the menu open so several can be toggled in one visit. closeOnSelect overrides that either way.
+        </p>
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <CheckboxItemsDemo />
+          </div>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="dropdown-menu" />
+    </div>
   );
 }

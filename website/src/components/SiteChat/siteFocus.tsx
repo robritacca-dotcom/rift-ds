@@ -6,8 +6,8 @@ import { describeSelection, useHeldHighlight, useSelectionFocus, type SelectedTe
 
 /**
  * What the visitor has highlighted on the page they are reading, for the
- * site chat. The page's main column (`#main-content`, which every page
- * renders) is the root, so a selection in the chat's own panel never counts,
+ * site chat. The page's main column (`#main-content`, which the site
+ * frame renders around every framed page) is the root, so a selection in the chat's own panel never counts,
  * and moving to another page lets the highlight go.
  *
  * The package's `describeSelection` reads what the highlight sits in (a

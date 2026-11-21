@@ -1,5 +1,6 @@
 /**
- * Routes that render none of the shared site chrome (footer, chat panel,
+ * Routes that render none of the shared site chrome (the site frame's
+ * header, sidebar, on-this-page rail and footer; the chat panel; the
  * command palette):
  * the playground is an immersive tool — a floating toolbar pill and glass
  * panels over a dotted stage — whose Chat view hosts its own copy of the widget

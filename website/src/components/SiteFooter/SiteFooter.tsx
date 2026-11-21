@@ -5,7 +5,6 @@ import { AUTHOR_NAME, AUTHOR_URL, BRAND_NAME } from "@/config/brand.generated";
 import { getSectionItems, docsSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { SOCIAL_PROFILES, PROJECT_LINKS } from "@/config/social";
 import { InstagramIcon, LinkedInIcon, XIcon } from "../BrandIcons/BrandIcons";
-import FadeDivider from "../FadeDivider/FadeDivider";
 import styles from "./SiteFooter.module.css";
 
 /**
@@ -89,10 +88,8 @@ function LinkColumn({
 export default function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <FadeDivider />
-
       {/* Brand block + links. The brand block is exactly as wide as the
-          docs shell's nav rail and its column gap, so the link grid starts
+          site frame's sidebar and its column gap, so the link grid starts
           on the same line the page's content does — on the pages that have
           a rail, and identically on the pages that don't. */}
       <div className={styles.body}>

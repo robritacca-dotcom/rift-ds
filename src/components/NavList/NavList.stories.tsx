@@ -274,3 +274,37 @@ export const OpensToCurrentPage: Story = {
     await expect(current?.closest('[inert]')).toBeNull();
   },
 };
+
+/**
+ * One open at a time means among siblings only: opening a row closes the
+ * other open row beside it, never the open rows of another section.
+ */
+export const OneOpenAmongSiblings: Story = {
+  args: {
+    items: [
+      {
+        type: 'section',
+        label: 'Guides',
+        items: [
+          { label: 'Forms', href: '#forms', items: [{ label: 'Validation', href: '#validation' }] },
+          { label: 'Tables', href: '#tables', items: [{ label: 'Sorting', href: '#sorting' }] },
+        ],
+      },
+      {
+        type: 'section',
+        label: 'Recipes',
+        items: [{ label: 'Checkout', href: '#checkout', items: [{ label: 'Payment', href: '#payment' }] }],
+      },
+    ],
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Expand Forms' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Expand Checkout' }));
+    // A row in another section: Forms stays open.
+    await expect(canvas.getByRole('button', { name: 'Collapse Forms' })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Expand Tables' }));
+    // A sibling: Forms closes, Checkout in the other section stays open.
+    await expect(canvas.getByRole('button', { name: 'Expand Forms' })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Collapse Checkout' })).toBeInTheDocument();
+  },
+};

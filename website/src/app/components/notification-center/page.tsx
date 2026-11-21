@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   NotificationCenter,
   NotificationItem,
@@ -128,91 +126,83 @@ function InboxDemo() {
 
 export default function NotificationCenterPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Notification centre</h1>
-            <PageLinks storybookPath="/?path=/docs/components-notificationcenter--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Everything that happened while you were away
-            </p>
-            <p className={styles.introBody}>
-              Toast interrupts, this accumulates. A header with the unread
-              count and a mark all read control, optional filter tabs with
-              counts, and a scrolling list of notification items with their
-              own actions. Filtering stays with you: swap the children when
-              the tab changes.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="A working inbox" />
-            <p className={styles.demoText}>
-              The tabs filter, the counts follow the data, and mark all read
-              clears the dots. Unread items carry an emphasised title and an
-              info coloured dot, never the action colour.
-            </p>
-            <InboxDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Items" />
-            <p className={styles.demoText}>
-              An item takes a Material Symbol name or any element as its
-              leading visual, a right aligned time, supporting copy, and a
-              row of compact buttons when the notification can be acted on.
-            </p>
-            <div className={styles.demoColumn}>
-              <NotificationCenter title="Item anatomy">
-                <NotificationItem
-                  title="Deployment finished"
-                  time="2m"
-                  unread
-                  media="rocket_launch"
-                  actions={
-                    <Button variant="secondary" size="compact" label="View site" />
-                  }
-                >
-                  The site is live on production.
-                </NotificationItem>
-                <NotificationItem
-                  title="Ann requested your review"
-                  time="Mon"
-                  media={<Avatar name="Ann Press" size="sm" />}
-                >
-                  The pull request updates the notification preferences flow.
-                </NotificationItem>
-                <NotificationItem title="Security check completed" time="Sun" media="verified_user">
-                  No exposed credentials or vulnerable dependencies were found.
-                </NotificationItem>
-              </NotificationCenter>
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Empty" />
-            <p className={styles.demoText}>
-              With nothing to show, the built in empty state keeps the panel
-              from reading as broken. Pass your own through the emptyState
-              prop when the moment needs different words.
-            </p>
-            <div className={styles.demoColumn}>
-              <NotificationCenter />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="notification-center" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Notification centre</h1>
+        <PageLinks storybookPath="/?path=/docs/components-notificationcenter--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Everything that happened while you were away
+        </p>
+        <p className={styles.introBody}>
+          Toast interrupts, this accumulates. A header with the unread
+          count and a mark all read control, optional filter tabs with
+          counts, and a scrolling list of notification items with their
+          own actions. Filtering stays with you: swap the children when
+          the tab changes.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="A working inbox" />
+        <p className={styles.demoText}>
+          The tabs filter, the counts follow the data, and mark all read
+          clears the dots. Unread items carry an emphasised title and an
+          info coloured dot, never the action colour.
+        </p>
+        <InboxDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Items" />
+        <p className={styles.demoText}>
+          An item takes a Material Symbol name or any element as its
+          leading visual, a right aligned time, supporting copy, and a
+          row of compact buttons when the notification can be acted on.
+        </p>
+        <div className={styles.demoColumn}>
+          <NotificationCenter title="Item anatomy">
+            <NotificationItem
+              title="Deployment finished"
+              time="2m"
+              unread
+              media="rocket_launch"
+              actions={
+                <Button variant="secondary" size="compact" label="View site" />
+              }
+            >
+              The site is live on production.
+            </NotificationItem>
+            <NotificationItem
+              title="Ann requested your review"
+              time="Mon"
+              media={<Avatar name="Ann Press" size="sm" />}
+            >
+              The pull request updates the notification preferences flow.
+            </NotificationItem>
+            <NotificationItem title="Security check completed" time="Sun" media="verified_user">
+              No exposed credentials or vulnerable dependencies were found.
+            </NotificationItem>
+          </NotificationCenter>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Empty" />
+        <p className={styles.demoText}>
+          With nothing to show, the built in empty state keeps the panel
+          from reading as broken. Pass your own through the emptyState
+          prop when the moment needs different words.
+        </p>
+        <div className={styles.demoColumn}>
+          <NotificationCenter />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="notification-center" />
+    </div>
   );
 }

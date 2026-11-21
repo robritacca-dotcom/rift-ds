@@ -1,19 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import { SpacingSwatch } from "rift-ds/components/SpacingSwatch/SpacingSwatch";
 import type { SpacingSwatchVariant } from "rift-ds/components/SpacingSwatch/SpacingSwatch";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { Table } from "rift-ds/components/Table/Table";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/spatial");
 
 /* ============================================
    SPACING DATA
@@ -93,100 +88,90 @@ export default function SemanticSpacingPage() {
   const isMobileView = viewport === "mobile";
 
   return (
-    <>
-
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Semantic spacing</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/foundations-tokens--docs"
-            />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Border, radius, gap, and padding: the spatial contract
-            </p>
-            <p className={styles.introBody}>
-              Border controls stroke thickness. Radius sets corner rounding, from subtle (2px) to full pill shapes. Gap is the space between sibling elements like buttons in a group or items in a list. Padding is the breathing room inside a container, like the space between a card edge and its content.
-            </p>
-          </div>
-
-          {/* Viewport toggle — section-rhythm tokens (gap XXL–XXXXL,
-              padding XXL) step one notch down below 768px. */}
-          <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
-            <Tabs
-              tabs={viewportTabs}
-              value={viewport}
-              onValueChange={setViewport}
-              aria-label="Token values by viewport"
-            />
-            <p className={styles.viewportNote}>
-              {isMobileView
-                ? "Below 768px the section-rhythm steps (gap 1500–3000, padding 1500) compress one notch. Everything else holds."
-                : "Above 768px every step renders at its full size."}
-            </p>
-          </div>
-
-          {/* The names as text: a swatch shows only its step. */}
-          <p className={styles.viewportNote}>
-            A token is named for its group and its step: <code>--border-025</code>,{" "}
-            <code>--radius-300</code>, <code>--radius-pill</code>, <code>--gap-400</code>,{" "}
-            <code>--padding-200</code>.
-          </p>
-
-          {/* Sections */}
-          {spacingSections.map((section, idx) => (
-            <section
-              key={section.title}
-              className={`${styles.spacingGroup}${idx < 2 ? " animate-in animate-delay-2" : ""}`}
-            >
-              <SectionTitle title={section.title} />
-              <div className={styles.spacingGrid}>
-                {section.tokens.map((t) => (
-                  <SpacingSwatch
-                    key={`${section.title}-${t.label}`}
-                    label={t.label}
-                    value={isMobileView && t.mobileValue ? t.mobileValue : t.value}
-                    px={isMobileView && t.mobilePx ? t.mobilePx : t.px}
-                    variant={t.variant}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
-
-          {/* Control height: one height per size for every row control */}
-          <section className={styles.spacingGroup}>
-            <SectionTitle title="Control height" />
-            <p className={styles.viewportNote}>
-              Every control that can share a row takes one height at each size, border included,
-              so fields, pickers, buttons and segmented controls set side by side line up exactly.
-            </p>
-            <Table
-              bordered
-              columns={[
-                { key: "token", header: "Token" },
-                { key: "value", header: "Value" },
-                { key: "use", header: "Use" },
-              ]}
-              rows={[
-                { id: "default", cells: { token: "--control-height-default", value: "40px", use: "Default controls" } },
-                { id: "compact", cells: { token: "--control-height-compact", value: "32px", use: "The same controls at the compact size" } },
-              ]}
-            />
-          </section>
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Semantic spacing</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/foundations-tokens--docs"
+        />
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Border, radius, gap, and padding: the spatial contract
+        </p>
+        <p className={styles.introBody}>
+          Border controls stroke thickness. Radius sets corner rounding, from subtle (2px) to full pill shapes. Gap is the space between sibling elements like buttons in a group or items in a list. Padding is the breathing room inside a container, like the space between a card edge and its content.
+        </p>
+      </div>
+
+      {/* Viewport toggle — section-rhythm tokens (gap XXL–XXXXL,
+          padding XXL) step one notch down below 768px. */}
+      <div className={`${styles.viewportToggle} animate-in animate-delay-2`}>
+        <Tabs
+          tabs={viewportTabs}
+          value={viewport}
+          onValueChange={setViewport}
+          aria-label="Token values by viewport"
+        />
+        <p className={styles.viewportNote}>
+          {isMobileView
+            ? "Below 768px the section-rhythm steps (gap 1500–3000, padding 1500) compress one notch. Everything else holds."
+            : "Above 768px every step renders at its full size."}
+        </p>
+      </div>
+
+      {/* The names as text: a swatch shows only its step. */}
+      <p className={styles.viewportNote}>
+        A token is named for its group and its step: <code>--border-025</code>,{" "}
+        <code>--radius-300</code>, <code>--radius-pill</code>, <code>--gap-400</code>,{" "}
+        <code>--padding-200</code>.
+      </p>
+
+      {/* Sections */}
+      {spacingSections.map((section, idx) => (
+        <section
+          key={section.title}
+          className={`${styles.spacingGroup}${idx < 2 ? " animate-in animate-delay-2" : ""}`}
+        >
+          <SectionTitle title={section.title} />
+          <div className={styles.spacingGrid}>
+            {section.tokens.map((t) => (
+              <SpacingSwatch
+                key={`${section.title}-${t.label}`}
+                label={t.label}
+                value={isMobileView && t.mobileValue ? t.mobileValue : t.value}
+                px={isMobileView && t.mobilePx ? t.mobilePx : t.px}
+                variant={t.variant}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {/* Control height: one height per size for every row control */}
+      <section className={styles.spacingGroup}>
+        <SectionTitle title="Control height" />
+        <p className={styles.viewportNote}>
+          Every control that can share a row takes one height at each size, border included,
+          so fields, pickers, buttons and segmented controls set side by side line up exactly.
+        </p>
+        <Table
+          bordered
+          columns={[
+            { key: "token", header: "Token" },
+            { key: "value", header: "Value" },
+            { key: "use", header: "Use" },
+          ]}
+          rows={[
+            { id: "default", cells: { token: "--control-height-default", value: "40px", use: "Default controls" } },
+            { id: "compact", cells: { token: "--control-height-compact", value: "32px", use: "The same controls at the compact size" } },
+          ]}
+        />
+      </section>
+    </div>
   );
 }

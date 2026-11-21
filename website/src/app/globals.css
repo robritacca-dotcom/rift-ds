@@ -25,9 +25,11 @@ html[data-theme-ready] {
 }
 
 :root {
-  /* Docs-shell column widths: left nav rail, right details rail, and the
-     gap between columns. Every page module sizes its rails from these so
-     the mid-breakpoint override below reaches all of them at once. */
+  /* A page's own column widths (the site frame's columns are SiteLayout's
+     --ds-site-layout-*): the site's own pill sidebar, a page's details
+     rail and the gap between a page's columns. The pages that have such
+     rails size them from these, so the mid-breakpoint override below
+     reaches all of them at once. */
   --layout-sidebar-width: 291px;
   --layout-rail-width: 320px;
   --layout-column-gap: var(--gap-1500);
@@ -47,8 +49,8 @@ html[data-theme-ready] {
   --layout-stage-bottom-clearance: calc(var(--layout-chat-inset) * 2 + 48px);
 
   /* How far an anchor target rests below the viewport top. The sticky
-     header bar is 78px (--ds-site-header-height, set in MegaNav's
-     stylesheet), and its progressive blur dissolves for another
+     header bar is 78px (--ds-site-header-height, set on the site
+     frame in SiteFrame.module.css), and its progressive blur dissolves for another
      --ds-site-header-blur-reach below it, so a heading parked just under
      the bar sits inside the frost. 128px lands it in the blur's last
      stretch, where the weakest layer alone is left and the text reads
@@ -128,10 +130,10 @@ html[data-theme-ready] {
   }
 }
 
-/* Mid breakpoint (960–1279px): narrow both rails and tighten the column
-   gap so the center column keeps a readable measure. Right rails stack
-   below the main content at 1151px (per-page), and the left nav hides at
-   959px (Sidebar.module.css). */
+/* Mid breakpoint (960–1279px): narrow a page's own rails and tighten its
+   column gap so its centre column keeps a readable measure. Its details
+   rail stacks below the content at 1151px (per-page); the site frame's
+   sidebar leaves the page at 959px by SiteLayout's own rule. */
 @media (max-width: 1279px) {
   :root {
     --layout-sidebar-width: 240px;
@@ -141,7 +143,7 @@ html[data-theme-ready] {
 }
 
 /* Every section heading is an anchor target for the floating anchor nav
-   (SiteAnchorRail assigns ids to the ones without), so every one lands
+   (SiteFrame's rail, the library's AnchorNav, assigns ids to the ones without), so every one lands
    clear of the sticky header the same way — pages that anchor a section
    element instead set the same clearance on it themselves. */
 main h2 {
@@ -717,8 +719,12 @@ html .ds-list--marker-icon .ds-list__item::before {
    title block main's first child — the one case where that pull-up
    overshoots, hoisting the h1 above the sidebar's first row. Cancel it
    structurally, so the heading starts where the breadcrumbs would have,
-   level with the sidebar, on all ~149 page modules at once. */
-main > div:first-child:has(> h1) {
+   level with the sidebar, on every page module at once. A page renders its
+   article as one div inside the site frame's main, so the title block is
+   that div's first child; the first form covers a page rendered straight
+   into a main (the site frame lab's). */
+main > div:first-child:has(> h1),
+main > div:first-child > div:first-child:has(> h1) {
   margin-top: 0;
 }
 

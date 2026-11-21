@@ -172,3 +172,36 @@
     margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-400));
   }
 }
+
+/* The Layout menu, desktop only as on the site: below the tablet step the
+   sidebar leaves the page and both layouts draw the same. */
+@media (max-width: 959px) {
+  .desktopOnly {
+    display: none;
+  }
+}
+
+/* The condensed action set's stand-in before the bar has measured itself,
+   as the site header's (MegaNav.module.css): on a first paint narrower
+   than the full row needs, the full set would otherwise show for a frame
+   and run past the bar's edge. The bar is the size container, never the
+   header root, so the viewport-fixed blur behind it still spans the
+   viewport. */
+.header :global(.ds-site-header__bar) {
+  container: docs-header / inline-size;
+}
+
+/* ds-allow(breakpoint): content-driven: the full action row fits beside the pills only at the bar's full content width, the site header's own step. */
+@container docs-header (max-width: 1439px) {
+  .header:global(.ds-site-header--prefold-tablet) :global(.ds-site-header__actions:not(.ds-site-header__actions--condensed)) {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .header.header:global(.ds-site-header--prefold-tablet) :global(.ds-site-header__actions--condensed) {
+    position: static;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}

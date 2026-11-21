@@ -27,9 +27,7 @@ import { SiteChatProvider } from "@/components/SiteChat/SiteChatProvider";
 import { SiteLinkProvider } from "@/components/SiteLinkProvider/SiteLinkProvider";
 import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
-import SiteFooter from "@/components/SiteFooter/SiteFooter";
-import { SiteFooterMount } from "@/components/SiteFooter/SiteFooterMount";
-import SiteAnchorRail from "@/components/FloatingAnchorNav/SiteAnchorRail";
+import { SiteFrameMount } from "@/components/SiteFrame/SiteFrameMount";
 import { ClientNav } from "@/components/ClientNav/ClientNav";
 import BlurBackground from "@/components/BlurBackground/BlurBackground";
 import { DocumentThemeGuard } from "@/components/DocumentThemeGuard/DocumentThemeGuard";
@@ -269,15 +267,11 @@ export default async function RootLayout({
           {/* Internal plain-anchor clicks become client-side navigations, so
               the providers above (and an open chat) survive card links. */}
           <ClientNav />
-          {children}
-          {/* The footer is site chrome, mounted once here rather than per
-              page. The chat panel stays after it, last in the tab order. */}
-          <SiteFooterMount>
-            <SiteFooter />
-          </SiteFooterMount>
-          {/* The floating on-this-page nav: reads each page's h2 headings
-              after navigation, gated by src/config/anchor-nav.ts. */}
-          <SiteAnchorRail />
+          {/* The site frame (header, sidebar, rail and footer), mounted once
+              here around every page with the site's chrome, so it never
+              remounts on navigation; each page renders only its article.
+              The chat panel stays after it, last in the tab order. */}
+          <SiteFrameMount>{children}</SiteFrameMount>
           <SiteChatMount />
           {/* The global command palette (an experiment): mounted once beside
               the chat, so Cmd+K and the header's search button work on every

@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { ContextMenu } from "rift-ds/components/ContextMenu/ContextMenu";
 import { DropdownMenuEntry } from "rift-ds/components/DropdownMenu/DropdownMenu";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -50,74 +48,65 @@ const richItems: DropdownMenuEntry[] = [
 
 export default function ContextMenuPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Context menu</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-contextmenu--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              A menu that opens where you click
-            </p>
-            <p className={styles.introBody}>
-              Right-click (or press the keyboard menu key) on the wrapped area
-              and the panel opens at the pointer, clamped to the viewport. It
-              shares its entry model and styling with the dropdown menu:
-              items, sections, shortcut hints, destructive and disabled states,
-              and sub-menus.
-            </p>
-          </div>
-
-          {/* Default */}
-          <section className={styles.section}>
-            <SectionTitle title="Default" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <ContextMenu items={fileItems} ariaLabel="File actions">
-                  <div className={styles.demoTarget}>Right-click here</div>
-                </ContextMenu>
-              </div>
-            </div>
-          </section>
-
-          {/* Groups and sub-menus */}
-          <section className={styles.section}>
-            <SectionTitle title="Groups and sub-menus" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <ContextMenu items={richItems} ariaLabel="Document actions">
-                  <div className={styles.demoTarget}>Right-click for grouped actions</div>
-                </ContextMenu>
-              </div>
-            </div>
-          </section>
-
-          {/* Compact */}
-          <section className={styles.section}>
-            <SectionTitle title="Compact" />
-            <div className={styles.variantRow}>
-              <div className={styles.variantItem}>
-                <ContextMenu items={fileItems} size="compact" ariaLabel="File actions">
-                  <div className={styles.demoTarget}>Right-click for the compact menu</div>
-                </ContextMenu>
-              </div>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="context-menu" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Context menu</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-contextmenu--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          A menu that opens where you click
+        </p>
+        <p className={styles.introBody}>
+          Right-click (or press the keyboard menu key) on the wrapped area
+          and the panel opens at the pointer, clamped to the viewport. It
+          shares its entry model and styling with the dropdown menu:
+          items, sections, shortcut hints, destructive and disabled states,
+          and sub-menus.
+        </p>
+      </div>
+
+      {/* Default */}
+      <section className={styles.section}>
+        <SectionTitle title="Default" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <ContextMenu items={fileItems} ariaLabel="File actions">
+              <div className={styles.demoTarget}>Right-click here</div>
+            </ContextMenu>
+          </div>
+        </div>
+      </section>
+
+      {/* Groups and sub-menus */}
+      <section className={styles.section}>
+        <SectionTitle title="Groups and sub-menus" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <ContextMenu items={richItems} ariaLabel="Document actions">
+              <div className={styles.demoTarget}>Right-click for grouped actions</div>
+            </ContextMenu>
+          </div>
+        </div>
+      </section>
+
+      {/* Compact */}
+      <section className={styles.section}>
+        <SectionTitle title="Compact" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <ContextMenu items={fileItems} size="compact" ariaLabel="File actions">
+              <div className={styles.demoTarget}>Right-click for the compact menu</div>
+            </ContextMenu>
+          </div>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="context-menu" />
+    </div>
   );
 }

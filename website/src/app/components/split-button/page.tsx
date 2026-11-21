@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { SplitButton } from "rift-ds/components/SplitButton/SplitButton";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -112,46 +110,37 @@ function SplitButtonGrid({
 
 export default function SplitButtonPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Split button</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-splitbutton--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              One default action, with the alternatives attached
-            </p>
-            <p className={styles.introBody}>
-              The label fires the primary action directly; the chevron opens a menu of variants. One pill silhouette, two segments, so the common case stays one click away while the rest stays discoverable. <code>variant</code> sets the emphasis (primary or secondary) and <code>tone</code> the colour (default, neutral or destructive), and every combination comes in default and compact sizes; hover and press the segments to see their interactive states, and the loading rows keep full colour while blocking clicks.
-            </p>
-          </div>
-
-          {/* Variant grids — one per variant × size, like the Button page */}
-          {sizes.map((sz) =>
-            variants.map((cell) => (
-              <SplitButtonGrid
-                key={`${cell.key}-${sz.value}`}
-                cell={cell}
-                size={sz.value}
-                sizeLabel={sz.label}
-              />
-            ))
-          )}
-
-          <ComponentInstallStrip slug="split-button" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Split button</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-splitbutton--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          One default action, with the alternatives attached
+        </p>
+        <p className={styles.introBody}>
+          The label fires the primary action directly; the chevron opens a menu of variants. One pill silhouette, two segments, so the common case stays one click away while the rest stays discoverable. <code>variant</code> sets the emphasis (primary or secondary) and <code>tone</code> the colour (default, neutral or destructive), and every combination comes in default and compact sizes; hover and press the segments to see their interactive states, and the loading rows keep full colour while blocking clicks.
+        </p>
+      </div>
+
+      {/* Variant grids — one per variant × size, like the Button page */}
+      {sizes.map((sz) =>
+        variants.map((cell) => (
+          <SplitButtonGrid
+            key={`${cell.key}-${sz.value}`}
+            cell={cell}
+            size={sz.value}
+            sizeLabel={sz.label}
+          />
+        ))
+      )}
+
+      <ComponentInstallStrip slug="split-button" />
+    </div>
   );
 }

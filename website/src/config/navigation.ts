@@ -402,7 +402,7 @@ export const componentsSidebarLinks: NavLink[] = [
     })),
 ];
 
-/** A titled group of sidebar links; the header toggles the group's accordion. */
+/** A titled group of sidebar links (an accordion in the site's own Sidebar). */
 export interface SidebarGroup {
   id: string;
   label: string;
@@ -410,8 +410,8 @@ export interface SidebarGroup {
 }
 
 /**
- * The components sidebar, grouped by category — one accordion per registry
- * category, components alphabetical by label within each. Categories have no
+ * The components sidebar, grouped by category — one titled section per registry
+ * category (an accordion in the site's own Sidebar), components alphabetical by label within each. Categories have no
  * page of their own; they are sections of the /components index (`#<id>`
  * anchors) and these sidebar groups.
  */
@@ -435,7 +435,7 @@ export const foundationsSidebarLinks: NavLink[] = [
   { href: "/foundations/accessibility", label: "Accessibility", description: "What the build enforces" },
   { href: "/foundations/elevation", label: "Elevation", description: "The shadow and depth tokens" },
   { href: "/foundations/icons", label: "Icons", description: "The icon font and its size scale" },
-  { href: "/foundations/layout", label: "Layout", description: "The breakpoints, the page shell and the three app shell modes" },
+  { href: "/foundations/layout", label: "Layout", description: "The breakpoints, the site frame and the three app shell modes" },
   { href: "/foundations/logos", label: "Logos", description: "The brand marks and how they are used" },
   { href: "/foundations/motion", label: "Motion", description: "The duration and easing tokens" },
   { href: "/foundations/colour-primitives", label: "Primitive colours", description: "The raw values behind the colour tokens" },
@@ -546,18 +546,6 @@ export const hiddenTemplateLinks: NavLink[] = [];
 /* ============================================
    HELPERS
    ============================================ */
-
-/**
- * Returns sidebar links with the matching href marked active.
- */
-export function getSidebarLinks(links: NavLink[], activeHref: string) {
-  const sidebarLinks = links.map((link) => ({
-    ...link,
-    active: link.href === activeHref ? true : undefined,
-  }));
-
-  return { sidebarLinks };
-}
 
 /**
  * Every sidebar array, in one place, so a page's canonical name can be looked

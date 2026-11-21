@@ -3,9 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Timeline } from "rift-ds/components/Timeline/Timeline";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -94,75 +92,66 @@ const EXPERIENCE = [
 
 export default function TimelinePage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Timeline</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-timeline--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Ordered sequences: histories and steppers
-            </p>
-            <p className={styles.introBody}>
-              One component, two orientations. Vertical for histories and process
-              narratives: career entries, project phases. Horizontal for compact
-              steppers like a loop&apos;s run stages. Markers are dots by default,
-              numbered circles with <code>numbered</code>, or Material Symbols per item.
-              The <code>company</code> variant swaps the marker for a logo and groups one
-              or more roles (each with a right-aligned date) under a single entry.
-            </p>
-          </div>
-
-          {/* Vertical */}
-          <section className={styles.section}>
-            <SectionTitle title="Vertical: a history" />
-            <Timeline items={CAREER} />
-          </section>
-
-          {/* Numbered */}
-          <section className={styles.section}>
-            <SectionTitle title="Vertical: numbered steps" />
-            <Timeline numbered items={LOOP_RUN} />
-          </section>
-
-          {/* Icons */}
-          <section className={styles.section}>
-            <SectionTitle title="With icons" />
-            <Timeline
-              items={[
-                { icon: "monitoring", title: "Pull analytics", description: "Read GA4, filter bot noise." },
-                { icon: "edit", title: "Rewrite on a branch", description: "One copy-shaped change per run." },
-                { icon: "check_circle", title: "Approval", description: "A human approves every merge." },
-              ]}
-            />
-          </section>
-
-          {/* Horizontal */}
-          <section className={styles.section}>
-            <SectionTitle title="Horizontal stepper" />
-            <Timeline orientation="horizontal" numbered items={LOOP_RUN} />
-          </section>
-
-          {/* Company */}
-          <section className={styles.section}>
-            <SectionTitle title="Company: grouped roles" />
-            <Timeline variant="company" items={EXPERIENCE} />
-          </section>
-
-          <ComponentInstallStrip slug="timeline" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Timeline</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-timeline--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Ordered sequences: histories and steppers
+        </p>
+        <p className={styles.introBody}>
+          One component, two orientations. Vertical for histories and process
+          narratives: career entries, project phases. Horizontal for compact
+          steppers like a loop&apos;s run stages. Markers are dots by default,
+          numbered circles with <code>numbered</code>, or Material Symbols per item.
+          The <code>company</code> variant swaps the marker for a logo and groups one
+          or more roles (each with a right-aligned date) under a single entry.
+        </p>
+      </div>
+
+      {/* Vertical */}
+      <section className={styles.section}>
+        <SectionTitle title="Vertical: a history" />
+        <Timeline items={CAREER} />
+      </section>
+
+      {/* Numbered */}
+      <section className={styles.section}>
+        <SectionTitle title="Vertical: numbered steps" />
+        <Timeline numbered items={LOOP_RUN} />
+      </section>
+
+      {/* Icons */}
+      <section className={styles.section}>
+        <SectionTitle title="With icons" />
+        <Timeline
+          items={[
+            { icon: "monitoring", title: "Pull analytics", description: "Read GA4, filter bot noise." },
+            { icon: "edit", title: "Rewrite on a branch", description: "One copy-shaped change per run." },
+            { icon: "check_circle", title: "Approval", description: "A human approves every merge." },
+          ]}
+        />
+      </section>
+
+      {/* Horizontal */}
+      <section className={styles.section}>
+        <SectionTitle title="Horizontal stepper" />
+        <Timeline orientation="horizontal" numbered items={LOOP_RUN} />
+      </section>
+
+      {/* Company */}
+      <section className={styles.section}>
+        <SectionTitle title="Company: grouped roles" />
+        <Timeline variant="company" items={EXPERIENCE} />
+      </section>
+
+      <ComponentInstallStrip slug="timeline" />
+    </div>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import Link from "next/link";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
@@ -13,6 +11,13 @@ import { emberScene } from "../../../../../src/cli/templates/blocks/components/b
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
+/* A stage holds its scene, and the scene its WebGL context, only while the
+   stage is on screen or about to be. The page shows more scenes than a
+   browser keeps contexts alive at once (Chrome starts dropping the oldest
+   past sixteen), and the oldest on a page reached from another is the
+   site background's, so every stage mounted at once would take the
+   header's pick away from the band while the menu still named it. An
+   unmounted scene gives its context back (the renderer's dispose). */
 function Stage({
   caption,
   children,
@@ -20,9 +25,26 @@ function Stage({
   caption?: string;
   children: React.ReactNode;
 }) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [near, setNear] = React.useState(false);
+  React.useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setNear(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setNear(entry.isIntersecting),
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <div className={styles.stage}>
-      {children}
+    <div ref={ref} className={styles.stage}>
+      {near && children}
       {caption && <span className={styles.stageCaption}>{caption}</span>}
     </div>
   );
@@ -82,207 +104,199 @@ const SCRIM = {
 
 export default function ShaderScenePage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Shader scene</h1>
-            <PageLinks storybookPath="/?path=/docs/components-shaderscene--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>A scene, not a field</p>
-            <p className={styles.introBody}>
-              Where Shader field sums soft light into an abstract wash, Shader
-              scene paints a place: a planet&rsquo;s limb at night, a tear of
-              light opening across the dark, a streak of light printed in
-              type, a meteor shower, a sea drawn in points. All read the background
-              field&rsquo;s colour roles from the page, so a theme, a preset
-              or a scoped override recolours them with nothing to configure.
-            </p>
-            <p className={styles.introBody}>
-              It is scenery, not interface. It fills the box you give it,
-              ignores the pointer and stays out of the accessibility tree, so
-              placement, clipping and anything that sits on top belong to you.
-            </p>
-          </div>
-
-          {/* Scenes */}
-          <section className={styles.section}>
-            <SectionTitle title="Scenes" />
-            <p className={styles.demoText}>
-              The scenes, picked with <code>scene</code>. The horizon sets a
-              sun on a curved limb over hazy land and a moving ocean, and
-              its <code>dawn</code> setting moves the sun along the arc. The rift opens at its middle and streams light
-              outwards. Glyphs prints a streak of light and its blooms in
-              type: each character cell reads the light under it and takes a
-              heavier character the brighter it is, in the theme&rsquo;s code
-              face. Prism sends beams of light out of a cut stone, a few
-              strong among faint ones, each edge split into the theme&rsquo;s
-              own spectrum.
-              Meteors drops a shower past a planet&rsquo;s edge, where a sun
-              flares on the limb. Waves is a sea drawn in points, each one
-              larger and brighter on a crest. Aurora folds wide ribbons of
-              colour through one another, round a deep void. Highway is a straight
-              highway at night, drawn in light trails that all pull to one point
-              on the horizon. Ocean is open water seen from straight above,
-              with a shark, a ray, a turtle and schools of fish drawn in type
-              and swimming through it. Sky is cloud massed overhead and burning
-              with a low sun, hot on its lit side and cold in its shade. Galaxy is a spiral seen
-              at a slant, a hot core in wound arms, deep in a field of stars. Every scene but the rift is also one of this
-              site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
-              GL context.
-            </p>
-            <div className={styles.stageGrid}>
-              <Stage caption='scene="horizon"'>
-                <ShaderScene scene="horizon" />
-              </Stage>
-              <Stage caption='scene="rift"'>
-                <ShaderScene scene="rift" passes={RIFT_PASSES} />
-              </Stage>
-            </div>
-            <Stage caption='scene="glyphs"'>
-              <ShaderScene scene="glyphs" passes={GLYPH_PASSES} speed={1} />
-            </Stage>
-            <div className={styles.stageGrid}>
-              <Stage caption='scene="prism"'>
-                <ShaderScene scene="prism" passes={FULL_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="meteors"'>
-                <ShaderScene scene="meteors" passes={FULL_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="waves"'>
-                <ShaderScene scene="waves" passes={FULL_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="aurora"'>
-                <ShaderScene scene="aurora" passes={FULL_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="highway"'>
-                <ShaderScene scene="highway" passes={FULL_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="ocean"'>
-                <ShaderScene scene="ocean" passes={OCEAN_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="sky"'>
-                <ShaderScene scene="sky" passes={SKY_PASSES} speed={1} />
-              </Stage>
-              <Stage caption='scene="galaxy"'>
-                <ShaderScene scene="galaxy" passes={FULL_PASSES} speed={1} />
-              </Stage>
-            </div>
-          </section>
-
-          {/* Settings */}
-          <section className={styles.section}>
-            <SectionTitle title="Settings" />
-            <p className={styles.demoText}>
-              Each scene&rsquo;s settings pass as a partial in{" "}
-              <code>params</code>, merged over its defaults, so changing one
-              thing takes one key. <code>SHADER_SCENES</code> lists every key
-              with its label and range, which is all a host needs to draw its
-              own sliders. A new value moves the scene on its next frame and
-              never rebuilds the GL state.
-            </p>
-            <Stage caption="crown 0.52, glow 1.45, beam 1.8, ocean 0.55">
-              <ShaderScene params={TUNED} />
-            </Stage>
-          </section>
-
-          {/* Passes */}
-          <section className={styles.section}>
-            <SectionTitle title="Finishing passes" />
-            <p className={styles.demoText}>
-              Finishing passes run over the scene: a scrim, a vignette, fades to the
-              page at the top and the bottom, and film grain. Each is on or off
-              with its own settings in <code>passes</code>. The fades melt the
-              scene into the page ground, and the scrim is the one to reach for
-              when text sits on top.
-            </p>
-            <Stage caption="scrim 0.3 and a vignette">
-              <ShaderScene passes={SCRIM} />
-            </Stage>
-          </section>
-
-          {/* Light mode */}
-          <section className={styles.section}>
-            <SectionTitle title="Light mode" />
-            <p className={styles.demoText}>
-              Every scene but the ocean and the sky is a night scene: it adds
-              light to a dark ground. On a light page each one works its light out
-              against a dark ground of its own and lays it onto the page as a
-              pale tint, so it reads as a soft dawn instead of a dark block.
-              The ocean has a day of its own: a turquoise shallow on a light
-              page, deep moonlit water on a dark one. So has the sky: a
-              golden hour on a light page, the last of a sunset under a night sky on a
-              dark one. Switch the theme to see
-              the stages above change. The scene never sets{" "}
-              <code>data-theme</code> itself, which would hide a preset&rsquo;s
-              colours.
-            </p>
-          </section>
-
-          {/* A scene of the caller's */}
-          <section className={styles.section}>
-            <SectionTitle title="Your own scene" />
-            <p className={styles.demoText}>
-              <code>scene</code> also takes a scene of your own: the colours it
-              reads, its settings and the GLSL that paints it. It gets what
-              the library&rsquo;s scenes get, the theme&rsquo;s colours, the
-              noise helpers, the passes, light mode and the same budget, and
-              it is compared by what it says, so an object written inline
-              compiles once. A scene that fails to compile reports{" "}
-              <code>unavailable</code> and hands the compiler&rsquo;s log to{" "}
-              <code>onError</code>, numbered from your own first line.{" "}
-              <Link href="/docs/shaders" className={styles.inlineLink}>Shaders</Link>{" "}
-              is the guide to writing one.
-            </p>
-            <Stage caption="scene={ember}">
-              <ShaderScene scene={emberScene} passes={NO_FADES} />
-            </Stage>
-            <CodeBlock code={OWN_SCENE_SNIPPET} language="tsx" showCopy />
-          </section>
-
-          {/* Live tuning */}
-          <section className={styles.section}>
-            <SectionTitle title="Tuning by drag" />
-            <p className={styles.demoText}>
-              A host with sliders should not render on every move. Pass a ref
-              in <code>liveRef</code> and write the full values to it as the
-              pointer moves: the scene reads it every frame in place of the
-              props, and nothing renders until you commit. The playground&rsquo;s
-              Shaders view tunes its scenes this way.
-            </p>
-          </section>
-
-          {/* Motion and fallback */}
-          <section className={styles.section}>
-            <SectionTitle title="Reduced motion, fallback and status" />
-            <p className={styles.demoText}>
-              Under <code>prefers-reduced-motion</code> the scene holds a still
-              frame, which still answers its settings. <code>speed</code> at 0
-              does the same on purpose. Like Shader field, the scene paints
-              nothing until its first frame is drawn and then fades in, so
-              while it is pending, switched off or where WebGL2 is not
-              available, whatever sits under it shows: the page, or a
-              fallback of your own laid beneath it. It reports which
-              happened, as Shader field does:{" "}
-              <code>onStatusChange</code> and <code>data-status</code> move
-              from <code>pending</code> to <code>active</code> or{" "}
-              <code>unavailable</code>, and <code>enabled={"{false}"}</code>{" "}
-              switches it off, so a fallback of your own has something to
-              listen to. The loop also stops while the scene is scrolled out
-              of view.
-            </p>
-          </section>
-
-          <ComponentInstallStrip slug="shader-scene" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Shader scene</h1>
+        <PageLinks storybookPath="/?path=/docs/components-shaderscene--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>A scene, not a field</p>
+        <p className={styles.introBody}>
+          Where Shader field sums soft light into an abstract wash, Shader
+          scene paints a place: a planet&rsquo;s limb at night, a tear of
+          light opening across the dark, a streak of light printed in
+          type, a meteor shower, a sea drawn in points. All read the background
+          field&rsquo;s colour roles from the page, so a theme, a preset
+          or a scoped override recolours them with nothing to configure.
+        </p>
+        <p className={styles.introBody}>
+          It is scenery, not interface. It fills the box you give it,
+          ignores the pointer and stays out of the accessibility tree, so
+          placement, clipping and anything that sits on top belong to you.
+        </p>
+      </div>
+
+      {/* Scenes */}
+      <section className={styles.section}>
+        <SectionTitle title="Scenes" />
+        <p className={styles.demoText}>
+          The scenes, picked with <code>scene</code>. The horizon sets a
+          sun on a curved limb over hazy land and a moving ocean, and
+          its <code>dawn</code> setting moves the sun along the arc. The rift opens at its middle and streams light
+          outwards. Glyphs prints a streak of light and its blooms in
+          type: each character cell reads the light under it and takes a
+          heavier character the brighter it is, in the theme&rsquo;s code
+          face. Prism sends beams of light out of a cut stone, a few
+          strong among faint ones, each edge split into the theme&rsquo;s
+          own spectrum.
+          Meteors drops a shower past a planet&rsquo;s edge, where a sun
+          flares on the limb. Waves is a sea drawn in points, each one
+          larger and brighter on a crest. Aurora folds wide ribbons of
+          colour through one another, round a deep void. Highway is a straight
+          highway at night, drawn in light trails that all pull to one point
+          on the horizon. Ocean is open water seen from straight above,
+          with a shark, a ray, a turtle and schools of fish drawn in type
+          and swimming through it. Sky is cloud massed overhead and burning
+          with a low sun, hot on its lit side and cold in its shade. Galaxy is a spiral seen
+          at a slant, a hot core in wound arms, deep in a field of stars. Every scene but the rift is also one of this
+          site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
+          GL context.
+        </p>
+        <div className={styles.stageGrid}>
+          <Stage caption='scene="horizon"'>
+            <ShaderScene scene="horizon" />
+          </Stage>
+          <Stage caption='scene="rift"'>
+            <ShaderScene scene="rift" passes={RIFT_PASSES} />
+          </Stage>
+        </div>
+        <Stage caption='scene="glyphs"'>
+          <ShaderScene scene="glyphs" passes={GLYPH_PASSES} speed={1} />
+        </Stage>
+        <div className={styles.stageGrid}>
+          <Stage caption='scene="prism"'>
+            <ShaderScene scene="prism" passes={FULL_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="meteors"'>
+            <ShaderScene scene="meteors" passes={FULL_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="waves"'>
+            <ShaderScene scene="waves" passes={FULL_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="aurora"'>
+            <ShaderScene scene="aurora" passes={FULL_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="highway"'>
+            <ShaderScene scene="highway" passes={FULL_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="ocean"'>
+            <ShaderScene scene="ocean" passes={OCEAN_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="sky"'>
+            <ShaderScene scene="sky" passes={SKY_PASSES} speed={1} />
+          </Stage>
+          <Stage caption='scene="galaxy"'>
+            <ShaderScene scene="galaxy" passes={FULL_PASSES} speed={1} />
+          </Stage>
+        </div>
+      </section>
+
+      {/* Settings */}
+      <section className={styles.section}>
+        <SectionTitle title="Settings" />
+        <p className={styles.demoText}>
+          Each scene&rsquo;s settings pass as a partial in{" "}
+          <code>params</code>, merged over its defaults, so changing one
+          thing takes one key. <code>SHADER_SCENES</code> lists every key
+          with its label and range, which is all a host needs to draw its
+          own sliders. A new value moves the scene on its next frame and
+          never rebuilds the GL state.
+        </p>
+        <Stage caption="crown 0.52, glow 1.45, beam 1.8, ocean 0.55">
+          <ShaderScene params={TUNED} />
+        </Stage>
+      </section>
+
+      {/* Passes */}
+      <section className={styles.section}>
+        <SectionTitle title="Finishing passes" />
+        <p className={styles.demoText}>
+          Finishing passes run over the scene: a scrim, a vignette, fades to the
+          page at the top and the bottom, and film grain. Each is on or off
+          with its own settings in <code>passes</code>. The fades melt the
+          scene into the page ground, and the scrim is the one to reach for
+          when text sits on top.
+        </p>
+        <Stage caption="scrim 0.3 and a vignette">
+          <ShaderScene passes={SCRIM} />
+        </Stage>
+      </section>
+
+      {/* Light mode */}
+      <section className={styles.section}>
+        <SectionTitle title="Light mode" />
+        <p className={styles.demoText}>
+          Every scene but the ocean and the sky is a night scene: it adds
+          light to a dark ground. On a light page each one works its light out
+          against a dark ground of its own and lays it onto the page as a
+          pale tint, so it reads as a soft dawn instead of a dark block.
+          The ocean has a day of its own: a turquoise shallow on a light
+          page, deep moonlit water on a dark one. So has the sky: a
+          golden hour on a light page, the last of a sunset under a night sky on a
+          dark one. Switch the theme to see
+          the stages above change. The scene never sets{" "}
+          <code>data-theme</code> itself, which would hide a preset&rsquo;s
+          colours.
+        </p>
+      </section>
+
+      {/* A scene of the caller's */}
+      <section className={styles.section}>
+        <SectionTitle title="Your own scene" />
+        <p className={styles.demoText}>
+          <code>scene</code> also takes a scene of your own: the colours it
+          reads, its settings and the GLSL that paints it. It gets what
+          the library&rsquo;s scenes get, the theme&rsquo;s colours, the
+          noise helpers, the passes, light mode and the same budget, and
+          it is compared by what it says, so an object written inline
+          compiles once. A scene that fails to compile reports{" "}
+          <code>unavailable</code> and hands the compiler&rsquo;s log to{" "}
+          <code>onError</code>, numbered from your own first line.{" "}
+          <Link href="/docs/shaders" className={styles.inlineLink}>Shaders</Link>{" "}
+          is the guide to writing one.
+        </p>
+        <Stage caption="scene={ember}">
+          <ShaderScene scene={emberScene} passes={NO_FADES} />
+        </Stage>
+        <CodeBlock code={OWN_SCENE_SNIPPET} language="tsx" showCopy />
+      </section>
+
+      {/* Live tuning */}
+      <section className={styles.section}>
+        <SectionTitle title="Tuning by drag" />
+        <p className={styles.demoText}>
+          A host with sliders should not render on every move. Pass a ref
+          in <code>liveRef</code> and write the full values to it as the
+          pointer moves: the scene reads it every frame in place of the
+          props, and nothing renders until you commit. The playground&rsquo;s
+          Shaders view tunes its scenes this way.
+        </p>
+      </section>
+
+      {/* Motion and fallback */}
+      <section className={styles.section}>
+        <SectionTitle title="Reduced motion, fallback and status" />
+        <p className={styles.demoText}>
+          Under <code>prefers-reduced-motion</code> the scene holds a still
+          frame, which still answers its settings. <code>speed</code> at 0
+          does the same on purpose. Like Shader field, the scene paints
+          nothing until its first frame is drawn and then fades in, so
+          while it is pending, switched off or where WebGL2 is not
+          available, whatever sits under it shows: the page, or a
+          fallback of your own laid beneath it. It reports which
+          happened, as Shader field does:{" "}
+          <code>onStatusChange</code> and <code>data-status</code> move
+          from <code>pending</code> to <code>active</code> or{" "}
+          <code>unavailable</code>, and <code>enabled={"{false}"}</code>{" "}
+          switches it off, so a fallback of your own has something to
+          listen to. The loop also stops while the scene is scrolled out
+          of view.
+        </p>
+      </section>
+
+      <ComponentInstallStrip slug="shader-scene" />
+    </div>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { HoverCard } from "rift-ds/components/HoverCard/HoverCard";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Button } from "rift-ds/components/Button/Button";
@@ -38,84 +36,75 @@ const packageContent = (
 
 export default function HoverCardPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Hover card</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-hovercard--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              A preview of the destination
-            </p>
-            <p className={styles.introBody}>
-              Where a tooltip names a control, a hover card previews what is behind a link: a profile behind a username, a summary behind a reference. The panel is interactive and stays open while the pointer is inside it. It opens on focus too, so keyboard users get the same preview.
-            </p>
-          </div>
-
-          {/* Default */}
-          <section className={styles.section}>
-            <SectionTitle title="Default" />
-            <div className={styles.variantRow}>
-              <HoverCard content={profileContent}>
-                <Button variant="tertiary" label="@janedoe" />
-              </HoverCard>
-            </div>
-          </section>
-
-          {/* Positions */}
-          <section className={styles.section}>
-            <SectionTitle title="Positions" />
-            <div className={styles.variantRow}>
-              <HoverCard content={packageContent} position="top">
-                <Button variant="secondary" label="Top" />
-              </HoverCard>
-              <HoverCard content={packageContent} position="bottom">
-                <Button variant="secondary" label="Bottom" />
-              </HoverCard>
-              <HoverCard content={packageContent} position="right">
-                <Button variant="secondary" label="Right" />
-              </HoverCard>
-            </div>
-          </section>
-
-          {/* In running text */}
-          <section className={styles.section}>
-            <SectionTitle title="In running text" />
-            <p className={styles.introBody} style={{ maxWidth: "480px" }}>
-              The component library ships to npm as{" "}
-              <HoverCard content={packageContent}>
-                <a href="/docs/get-started" style={{ color: "var(--color-action-primary-text-tertiary)" }}>
-                  rift-ds
-                </a>
-              </HoverCard>{" "}
-              and the website consumes it like any other package.
-            </p>
-          </section>
-
-          {/* No delay */}
-          <section className={styles.section}>
-            <SectionTitle title="No delay" />
-            <div className={styles.variantRow}>
-              <HoverCard content={packageContent} showDelay={0}>
-                <Button variant="secondary" label="Opens immediately" />
-              </HoverCard>
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="hover-card" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Hover card</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-hovercard--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          A preview of the destination
+        </p>
+        <p className={styles.introBody}>
+          Where a tooltip names a control, a hover card previews what is behind a link: a profile behind a username, a summary behind a reference. The panel is interactive and stays open while the pointer is inside it. It opens on focus too, so keyboard users get the same preview.
+        </p>
+      </div>
+
+      {/* Default */}
+      <section className={styles.section}>
+        <SectionTitle title="Default" />
+        <div className={styles.variantRow}>
+          <HoverCard content={profileContent}>
+            <Button variant="tertiary" label="@janedoe" />
+          </HoverCard>
+        </div>
+      </section>
+
+      {/* Positions */}
+      <section className={styles.section}>
+        <SectionTitle title="Positions" />
+        <div className={styles.variantRow}>
+          <HoverCard content={packageContent} position="top">
+            <Button variant="secondary" label="Top" />
+          </HoverCard>
+          <HoverCard content={packageContent} position="bottom">
+            <Button variant="secondary" label="Bottom" />
+          </HoverCard>
+          <HoverCard content={packageContent} position="right">
+            <Button variant="secondary" label="Right" />
+          </HoverCard>
+        </div>
+      </section>
+
+      {/* In running text */}
+      <section className={styles.section}>
+        <SectionTitle title="In running text" />
+        <p className={styles.introBody} style={{ maxWidth: "480px" }}>
+          The component library ships to npm as{" "}
+          <HoverCard content={packageContent}>
+            <a href="/docs/get-started" style={{ color: "var(--color-action-primary-text-tertiary)" }}>
+              rift-ds
+            </a>
+          </HoverCard>{" "}
+          and the website consumes it like any other package.
+        </p>
+      </section>
+
+      {/* No delay */}
+      <section className={styles.section}>
+        <SectionTitle title="No delay" />
+        <div className={styles.variantRow}>
+          <HoverCard content={packageContent} showDelay={0}>
+            <Button variant="secondary" label="Opens immediately" />
+          </HoverCard>
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="hover-card" />
+    </div>
   );
 }

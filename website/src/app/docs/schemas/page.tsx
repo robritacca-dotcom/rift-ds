@@ -1,7 +1,4 @@
-import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "@/components/Sidebar/Sidebar";
-import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { Accordion } from "rift-ds/components/Accordion/Accordion";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -10,8 +7,6 @@ import { PACKAGE_NAME, SITE_URL } from "@/config/brand.generated";
 import { THEME_IDS } from "rift-ds/tokens/values";
 import { DEFAULT_THEME_LABEL, THEME_PRESETS } from "@/lib/theme/presets";
 import s from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/schemas");
 
 /* The schemas page, a short reference: where each published file is, the
    tokens' two forms. Every URL derives from SITE_URL; every count lives in the files themselves.
@@ -60,12 +55,7 @@ tokenValue('--color-action-primary-bg', THEME_IDS[0], 'dark');`;
 export default function SchemasPage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={s.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={s.dsContent} id="main-content">
+        <div className={s.dsContent}>
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
@@ -179,8 +169,7 @@ export default function SchemasPage() {
               }))}
             />
           </section>
-        </main>
-      </div>
+        </div>
     </>
   );
 }

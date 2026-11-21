@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   EventCalendar,
   type EventCalendarEvent,
@@ -67,74 +65,66 @@ function ScheduleDemo() {
 
 export default function EventCalendarPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Event calendar</h1>
-            <PageLinks storybookPath="/?path=/docs/components-eventcalendar--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              A month at a glance
-            </p>
-            <p className={styles.introBody}>
-              Date picker selects a date, this one shows a schedule: a full
-              month grid with event pills on their days, an overflow row once
-              a day is full, and month navigation, or one week or one day at
-              a time. A legend can toggle the colours, and a panel can list
-              the selected day. On a phone the month draws each event as its
-              dot. It places what it is given, so fetching, filtering, and
-              what a click means stay with you.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="A month with plans" />
-            <p className={styles.demoText}>
-              Events carry a date, a title, an optional time, and an accent
-              from the core accent roles, never the action colour. Untimed
-              events sort first within a day, and rows share the height of
-              the fullest day in their week. Clicking a day, or anywhere on
-              its cell, moves the selection chip to its number.
-            </p>
-            <ScheduleDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Overflow" />
-            <p className={styles.demoText}>
-              Past maxEventsPerDay, here two, the rest collapse into an
-              overflow row. With onDateClick set it becomes a button, as in
-              the demo above, so a click can open the day, in the day view or
-              a panel of your own.
-            </p>
-            <EventCalendar
-              events={events}
-              defaultMonth="2026-08"
-              maxEventsPerDay={2}
-            />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Read only" />
-            <p className={styles.demoText}>
-              With no click handlers, pills and day numbers render as inert
-              text rather than buttons, so a display calendar contains no
-              fake affordances. Month navigation still works.
-            </p>
-            <EventCalendar events={events.slice(0, 8)} defaultMonth="2026-08" />
-          </section>
-
-          <ComponentInstallStrip slug="event-calendar" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Event calendar</h1>
+        <PageLinks storybookPath="/?path=/docs/components-eventcalendar--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          A month at a glance
+        </p>
+        <p className={styles.introBody}>
+          Date picker selects a date, this one shows a schedule: a full
+          month grid with event pills on their days, an overflow row once
+          a day is full, and month navigation, or one week or one day at
+          a time. A legend can toggle the colours, and a panel can list
+          the selected day. On a phone the month draws each event as its
+          dot. It places what it is given, so fetching, filtering, and
+          what a click means stay with you.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="A month with plans" />
+        <p className={styles.demoText}>
+          Events carry a date, a title, an optional time, and an accent
+          from the core accent roles, never the action colour. Untimed
+          events sort first within a day, and rows share the height of
+          the fullest day in their week. Clicking a day, or anywhere on
+          its cell, moves the selection chip to its number.
+        </p>
+        <ScheduleDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Overflow" />
+        <p className={styles.demoText}>
+          Past maxEventsPerDay, here two, the rest collapse into an
+          overflow row. With onDateClick set it becomes a button, as in
+          the demo above, so a click can open the day, in the day view or
+          a panel of your own.
+        </p>
+        <EventCalendar
+          events={events}
+          defaultMonth="2026-08"
+          maxEventsPerDay={2}
+        />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Read only" />
+        <p className={styles.demoText}>
+          With no click handlers, pills and day numbers render as inert
+          text rather than buttons, so a display calendar contains no
+          fake affordances. Month navigation still works.
+        </p>
+        <EventCalendar events={events.slice(0, 8)} defaultMonth="2026-08" />
+      </section>
+
+      <ComponentInstallStrip slug="event-calendar" />
+    </div>
   );
 }

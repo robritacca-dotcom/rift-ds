@@ -16,7 +16,10 @@
   margin: 0 auto;
   /* A step tighter than the token every other page puts above its title:
      the hero is the one page whose opening has to land above the fold, so
-     the whole stack rides up a touch. */
+     the whole stack rides up a touch. The site frame's top gap carries the
+     framed pages' title padding (--gap-1000) the home page never had, so
+     the margin hands it back and the padding below keeps its own steps. */
+  margin-block-start: calc(-1 * var(--primitive-gap-1000));
   padding: var(--primitive-gap-500) 0 96px;
 }
 

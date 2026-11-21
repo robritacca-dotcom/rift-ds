@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "rift-ds/components/Button/Button";
 import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
 import { Panel } from "rift-ds/components/Panel/Panel";
-import MegaNav from "@/components/MegaNav/MegaNav";
 import {
   FullBleedBackground,
   HiddenBackground,
@@ -95,10 +94,9 @@ export default function RouteErrorFallback({
   return (
     <>
       <FullBleedBackground />
-      <MegaNav />
-      <main className={styles.page} id="main-content">
+      <div className={styles.page}>
         <div className={`${styles.content} animate-in`}>{card}</div>
-      </main>
+      </div>
     </>
   );
 }

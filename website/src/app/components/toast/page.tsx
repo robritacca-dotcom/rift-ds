@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Toast, ToastProvider, useToast } from "rift-ds/components/Toast/Toast";
 import { Button } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -92,12 +90,7 @@ function ToastTriggers() {
 export default function ToastPage() {
   return (
     <ToastProvider position="bottom-right">
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
+        <div className={styles.dsContent}>
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Toast</h1>
@@ -160,8 +153,7 @@ export default function ToastPage() {
           </section>
 
           <ComponentInstallStrip slug="toast" />
-        </main>
-      </div>
+        </div>
 
     </ToastProvider>
   );

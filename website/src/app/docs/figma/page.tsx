@@ -1,9 +1,6 @@
 import Link from "next/link";
-import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import { FigmaIcon } from "@/components/BrandIcons/BrandIcons";
-import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { BRAND_NAME, FIGMA_URL, SITE_URL } from "@/config/brand.generated";
 import { Accordion } from "rift-ds/components/Accordion/Accordion";
 import { Button } from "rift-ds/components/Button/Button";
@@ -15,8 +12,6 @@ import { SYSTEM_THEME_COUNT, assertKitThemes, figmaThemes } from "./kit";
 import { VariablesPanel } from "./VariablesPanel";
 import { KitWindow } from "./KitWindow";
 import s from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/figma");
 
 /* The Figma kit's page: the one place on the site that says what the kit
    is, how it lines up with the code and what it does not do, so the site
@@ -120,12 +115,7 @@ ${SITE_URL}/schema/tokens/${KIT_THEME_IDS[0]}.light.tokens.json`;
 export default function FigmaKitPage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={s.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={s.dsContent} id="main-content">
+        <div className={s.dsContent}>
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
@@ -390,8 +380,7 @@ export default function FigmaKitPage() {
               ]}
             />
           </section>
-        </main>
-      </div>
+        </div>
     </>
   );
 }

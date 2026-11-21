@@ -1,18 +1,13 @@
 "use client";
 
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import {
   MotionSwatch,
   type MotionSwatchDemo,
 } from "rift-ds/components/MotionSwatch/MotionSwatch";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/motion");
 
 /* ============================================
    MOTION TOKENS
@@ -142,174 +137,165 @@ const easings: EasingToken[] = [
 
 export default function MotionPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Motion</h1>
-            <PageLinks storybookPath="/?path=/docs/foundations-tokens--docs" />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Motion is quiet: a small scale, used sparingly
-            </p>
-            <p className={styles.introBody}>
-              Animation in the interface is functional, not decorative: it confirms an
-              interaction, reveals structure, or signals loading. The one thing that moves
-              for its own sake is the background, which is scenery rather than interface
-              and keeps its own timings. The whole CSS vocabulary is
-              {" "}{coreDurations.length + extendedDurations.length} durations and{" "}
-              {easings.length} easing curves, defined once as{" "}
-              <code>--motion-*</code> tokens and shared by the component library and this
-              site. Never write a literal <code>0.2s ease</code> in component CSS. Compose
-              a duration token with an easing token instead. Click any tile to replay its
-              animation.
-            </p>
-          </div>
-
-          {/* Core durations */}
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="Durations: core scale" />
-            <p className={styles.sectionNote}>
-              {coreDurations.length} steps cover day-to-day UI. Base is the workhorse: the standard for
-              colour, opacity, and border transitions. Step down to fast for hover
-              feedback, up to slow for structural change, and reserve slower for page
-              entrances. Each tile animates at its token&apos;s actual speed.
-            </p>
-            <div className={styles.swatchRow}>
-              {coreDurations.map((duration) => (
-                <MotionSwatch
-                  key={duration.token}
-                  label={duration.label}
-                  token={duration.token}
-                  value={duration.value}
-                  kind="duration"
-                />
-              ))}
-            </div>
-            <ul className={styles.useList}>
-              {coreDurations.map((duration) => (
-                <li key={duration.token} className={styles.useRow}>
-                  <span className={styles.useTerm}>{duration.label}</span>
-                  <span className={styles.useValue}>{duration.use}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Extended durations */}
-          <section className={styles.section}>
-            <SectionTitle title="Durations: extended" />
-            <p className={styles.sectionNote}>
-              Special-purpose timings that would otherwise live as magic numbers. They are
-              named so they stay consistent, but they are not part of the day-to-day scale.
-              Reach for the core scale first.
-            </p>
-            <div className={styles.swatchRow}>
-              {extendedDurations.map((duration) => (
-                <MotionSwatch
-                  key={duration.token}
-                  label={duration.label}
-                  token={duration.token}
-                  value={duration.value}
-                  kind="duration"
-                  demo={duration.demo}
-                />
-              ))}
-            </div>
-            <ul className={styles.useList}>
-              {extendedDurations.map((duration) => (
-                <li key={duration.token} className={styles.useRow}>
-                  <span className={styles.useTerm}>{duration.label}</span>
-                  <span className={styles.useValue}>{duration.use}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Easings */}
-          <section className={styles.section}>
-            <SectionTitle title="Easing curves" />
-            <p className={styles.sectionNote}>
-              {easings.length} named curves, each with a distinct job. Every tile animates over the same
-              600ms so the shape of the curve is what you see: standard for everyday
-              transitions, emphasized for layout, entrance for anything appearing on screen,
-              linear for loops, spring for the one sanctioned overshoot.
-            </p>
-            <div className={styles.swatchRow}>
-              {easings.map((easing) => (
-                <MotionSwatch
-                  key={easing.token}
-                  label={easing.label}
-                  token={easing.token}
-                  value={easing.value}
-                  kind="easing"
-                />
-              ))}
-            </div>
-            <ul className={styles.useList}>
-              {easings.map((easing) => (
-                <li key={easing.token} className={styles.useRow}>
-                  <span className={styles.useTerm}>{easing.label}</span>
-                  <span className={styles.useValue}>{easing.use}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Reduced motion */}
-          <section className={styles.section}>
-            <SectionTitle title="Reduced motion" />
-            <p className={styles.sectionNote}>
-              The token layer respects <code>prefers-reduced-motion</code> at the source:
-              when the preference is set, every duration token collapses to 0.01ms and a
-              universal guard flattens any remaining hardcoded transitions and animations.
-              Components that use the tokens get accessibility for free: there is nothing
-              to opt into, and no component-level media queries to write. The library writes
-              one only where a collapsed duration is not enough: a looping animation would
-              strobe at 0.01ms rather than stop, so its component parks it in a query of its
-              own, and an entrance it would rather skip it drops outright. Each says which,
-              in a comment the build checks.
-            </p>
-            <p className={styles.sectionNote}>
-              That guard is CSS, so it cannot reach animation driven from JavaScript. The
-              background shader runs on the GPU through a frame loop, which means it has to
-              check the preference itself. It does: with reduced motion set, it draws a
-              single still frame and never starts animating. The charts animate their
-              marks in from JavaScript too, and delegate the same check to recharts,
-              whose default animation setting honours the preference on its own.
-            </p>
-          </section>
-
-          {/* JS timings */}
-          <section className={styles.section}>
-            <SectionTitle title="Timings in JavaScript" />
-            <p className={styles.sectionNote}>
-              Some timings live in JavaScript timers rather than CSS: hover show and hide
-              delays, toast auto-dismiss, carousel autoplay, the streaming
-              reveal&apos;s pacing, the summary panel&apos;s staging, and a few more. Those
-              share one home too, the constants published
-              as <code>rift-ds/tokens/motion</code>, and the module itself
-              is the full list. Components read them as
-              defaults and still expose each one through props. Most are schedule timings
-              that decide when something appears or is taken away, not animations, so the
-              reduced-motion collapse deliberately leaves them alone: a toast that
-              dismisses itself faster would help nobody. The ones that pace an animation
-              check the preference in JavaScript instead, the same way the background
-              shader does.
-            </p>
-          </section>
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Motion</h1>
+        <PageLinks storybookPath="/?path=/docs/foundations-tokens--docs" />
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Motion is quiet: a small scale, used sparingly
+        </p>
+        <p className={styles.introBody}>
+          Animation in the interface is functional, not decorative: it confirms an
+          interaction, reveals structure, or signals loading. The one thing that moves
+          for its own sake is the background, which is scenery rather than interface
+          and keeps its own timings. The whole CSS vocabulary is
+          {" "}{coreDurations.length + extendedDurations.length} durations and{" "}
+          {easings.length} easing curves, defined once as{" "}
+          <code>--motion-*</code> tokens and shared by the component library and this
+          site. Never write a literal <code>0.2s ease</code> in component CSS. Compose
+          a duration token with an easing token instead. Click any tile to replay its
+          animation.
+        </p>
+      </div>
+
+      {/* Core durations */}
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="Durations: core scale" />
+        <p className={styles.sectionNote}>
+          {coreDurations.length} steps cover day-to-day UI. Base is the workhorse: the standard for
+          colour, opacity, and border transitions. Step down to fast for hover
+          feedback, up to slow for structural change, and reserve slower for page
+          entrances. Each tile animates at its token&apos;s actual speed.
+        </p>
+        <div className={styles.swatchRow}>
+          {coreDurations.map((duration) => (
+            <MotionSwatch
+              key={duration.token}
+              label={duration.label}
+              token={duration.token}
+              value={duration.value}
+              kind="duration"
+            />
+          ))}
+        </div>
+        <ul className={styles.useList}>
+          {coreDurations.map((duration) => (
+            <li key={duration.token} className={styles.useRow}>
+              <span className={styles.useTerm}>{duration.label}</span>
+              <span className={styles.useValue}>{duration.use}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Extended durations */}
+      <section className={styles.section}>
+        <SectionTitle title="Durations: extended" />
+        <p className={styles.sectionNote}>
+          Special-purpose timings that would otherwise live as magic numbers. They are
+          named so they stay consistent, but they are not part of the day-to-day scale.
+          Reach for the core scale first.
+        </p>
+        <div className={styles.swatchRow}>
+          {extendedDurations.map((duration) => (
+            <MotionSwatch
+              key={duration.token}
+              label={duration.label}
+              token={duration.token}
+              value={duration.value}
+              kind="duration"
+              demo={duration.demo}
+            />
+          ))}
+        </div>
+        <ul className={styles.useList}>
+          {extendedDurations.map((duration) => (
+            <li key={duration.token} className={styles.useRow}>
+              <span className={styles.useTerm}>{duration.label}</span>
+              <span className={styles.useValue}>{duration.use}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Easings */}
+      <section className={styles.section}>
+        <SectionTitle title="Easing curves" />
+        <p className={styles.sectionNote}>
+          {easings.length} named curves, each with a distinct job. Every tile animates over the same
+          600ms so the shape of the curve is what you see: standard for everyday
+          transitions, emphasized for layout, entrance for anything appearing on screen,
+          linear for loops, spring for the one sanctioned overshoot.
+        </p>
+        <div className={styles.swatchRow}>
+          {easings.map((easing) => (
+            <MotionSwatch
+              key={easing.token}
+              label={easing.label}
+              token={easing.token}
+              value={easing.value}
+              kind="easing"
+            />
+          ))}
+        </div>
+        <ul className={styles.useList}>
+          {easings.map((easing) => (
+            <li key={easing.token} className={styles.useRow}>
+              <span className={styles.useTerm}>{easing.label}</span>
+              <span className={styles.useValue}>{easing.use}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Reduced motion */}
+      <section className={styles.section}>
+        <SectionTitle title="Reduced motion" />
+        <p className={styles.sectionNote}>
+          The token layer respects <code>prefers-reduced-motion</code> at the source:
+          when the preference is set, every duration token collapses to 0.01ms and a
+          universal guard flattens any remaining hardcoded transitions and animations.
+          Components that use the tokens get accessibility for free: there is nothing
+          to opt into, and no component-level media queries to write. The library writes
+          one only where a collapsed duration is not enough: a looping animation would
+          strobe at 0.01ms rather than stop, so its component parks it in a query of its
+          own, and an entrance it would rather skip it drops outright. Each says which,
+          in a comment the build checks.
+        </p>
+        <p className={styles.sectionNote}>
+          That guard is CSS, so it cannot reach animation driven from JavaScript. The
+          background shader runs on the GPU through a frame loop, which means it has to
+          check the preference itself. It does: with reduced motion set, it draws a
+          single still frame and never starts animating. The charts animate their
+          marks in from JavaScript too, and delegate the same check to recharts,
+          whose default animation setting honours the preference on its own.
+        </p>
+      </section>
+
+      {/* JS timings */}
+      <section className={styles.section}>
+        <SectionTitle title="Timings in JavaScript" />
+        <p className={styles.sectionNote}>
+          Some timings live in JavaScript timers rather than CSS: hover show and hide
+          delays, toast auto-dismiss, carousel autoplay, the streaming
+          reveal&apos;s pacing, the summary panel&apos;s staging, and a few more. Those
+          share one home too, the constants published
+          as <code>rift-ds/tokens/motion</code>, and the module itself
+          is the full list. Components read them as
+          defaults and still expose each one through props. Most are schedule timings
+          that decide when something appears or is taken away, not animations, so the
+          reduced-motion collapse deliberately leaves them alone: a toast that
+          dismisses itself faster would help nobody. The ones that pace an animation
+          check the preference in JavaScript instead, the same way the background
+          shader does.
+        </p>
+      </section>
+    </div>
   );
 }

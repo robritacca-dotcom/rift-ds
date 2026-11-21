@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { StackedBarChart } from "rift-ds/components/Chart/StackedBarChart";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -27,44 +25,35 @@ const trafficSeries = [
 
 export default function StackedBarChartPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Stacked bar chart</h1>
-            <PageLinks storybookPath="/?path=/docs/components-stackedbarchart--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Totals and their composition in one bar
-            </p>
-            <p className={styles.introBody}>
-              Segments stack to the total, so each bar answers two questions at once: how much, and made of what.
-            </p>
-          </div>
-
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="Default" />
-            <StackedBarChart
-              data={trafficData}
-              xKey="label"
-              series={trafficSeries}
-              title="Visitors by device"
-              subtitle="Monthly traffic, January to June 2024"
-              height={350}
-            />
-          </section>
-
-          <ComponentInstallStrip slug="stacked-bar-chart" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Stacked bar chart</h1>
+        <PageLinks storybookPath="/?path=/docs/components-stackedbarchart--docs" />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Totals and their composition in one bar
+        </p>
+        <p className={styles.introBody}>
+          Segments stack to the total, so each bar answers two questions at once: how much, and made of what.
+        </p>
+      </div>
+
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="Default" />
+        <StackedBarChart
+          data={trafficData}
+          xKey="label"
+          series={trafficSeries}
+          title="Visitors by device"
+          subtitle="Monthly traffic, January to June 2024"
+          height={350}
+        />
+      </section>
+
+      <ComponentInstallStrip slug="stacked-bar-chart" />
+    </div>
   );
 }

@@ -1,11 +1,8 @@
 "use client";
 
-import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import Link from "next/link";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import { ArchitectureMap } from "@/components/ArchitectureMap/ArchitectureMap";
-import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Table } from "rift-ds/components/Table/Table";
@@ -25,8 +22,6 @@ import { SITE_URL } from "@/lib/structuredData";
 import { chatExchangeMap } from "../../overview/maps";
 import { widgetMap } from "./maps";
 import s from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/chat");
 
 /* The chat's docs page: a light overview, then how to add it, in the
    blueprints' register: headings, short notes, code and tables, in the
@@ -385,12 +380,7 @@ const line = confirmationLine(confirmation, { actions: { close: closeBookings },
 export default function ChatInstallPage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={s.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={s.dsContent} id="main-content">
+        <div className={s.dsContent}>
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
@@ -765,8 +755,7 @@ export default function ChatInstallPage() {
             </dl>
             <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy />
           </section>
-        </main>
-      </div>
+        </div>
     </>
   );
 }

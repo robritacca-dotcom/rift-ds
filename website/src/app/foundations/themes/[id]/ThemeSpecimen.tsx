@@ -18,9 +18,7 @@ import { Slider } from "rift-ds/components/Slider/Slider";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { Textarea } from "rift-ds/components/Textarea/Textarea";
 import { ToggleSwitch } from "rift-ds/components/ToggleSwitch/ToggleSwitch";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import { installScopedThemes, THEME_SCOPE_ATTRIBUTE } from "@/lib/theme/scoped-theme";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
 import { themeTagline } from "@/lib/theme/presets";
@@ -76,7 +74,6 @@ const ICONS = ["home", "search", "favorite", "bolt", "settings", "palette", "cha
    props type is the button element's, which has no `download`. */
 const downloadAs = (name: string): Record<string, string> => ({ download: name });
 
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/themes");
 
 const toHex = (rgb: string) => {
   const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/.exec(rgb);
@@ -200,10 +197,7 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
   useLayoutEffect(() => installScopedThemes(), []);
 
   return (
-    <div className={styles.dsLayout}>
-      <Sidebar links={sidebarLinks} />
-
-      <main className={styles.dsContent} id="main-content">
+      <div className={styles.dsContent}>
         {/* The specimen is the card, header and all. */}
         <div className={`${styles.scope} animate-in`} {...{ [THEME_SCOPE_ATTRIBUTE]: id }}>
           <ThemeBanner className={styles.scopeBanner} />
@@ -463,7 +457,6 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
           </footer>
         </div>
         </div>
-      </main>
-    </div>
+      </div>
   );
 }

@@ -16,7 +16,8 @@ import { useCallback, useEffect, useRef } from 'react';
  *   swallowed when that layer is not Escape-dismissible (a lower layer must
  *   never close through a blocking one). One press, one layer. An Escape a
  *   component has already handled (`event.preventDefault()`, say an input
- *   clearing its own text) is left alone.
+ *   clearing its own text) is left alone. A passive layer on top (a
+ *   tooltip, a hover card) still takes Escape first.
  * - **An outside press** walks down from the top: every layer the press
  *   lands outside of, and that opts into light dismiss, closes; the walk
  *   stops at the first layer that contains the press or does not
@@ -58,7 +59,8 @@ type LayerOptions = {
    */
   getElements?: () => (HTMLElement | null | undefined)[];
   /**
-   * A layer that only listens for Escape and never owns a press: a tooltip.
+   * A layer that only listens for Escape and never owns a press: a tooltip
+   * or a hover card. (Not addEventListener's `passive`.)
    * The outside-press walk passes through it to the layers beneath, and it is
    * never the press owner, so a tooltip showing over an open menu (its own
    * trigger hovered, say) never keeps that menu open or a modal's backdrop

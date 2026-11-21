@@ -7,7 +7,7 @@ import RouteErrorFallback, {
 /**
  * The root error boundary: a runtime error inside any page's segment shows
  * the recovery card in place of the page, while the root layout (and the
- * chat, palette, footer and background it mounts) stays up. It wraps the
+ * site frame, chat, palette and background it mounts) stays up. It wraps the
  * routes below the root layout, not the layout itself, so a throw inside
  * the layout-mounted chrome is outside its reach; that is global-error's
  * job, which this site does not define. The immersive segments carry their

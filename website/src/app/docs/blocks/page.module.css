@@ -1,15 +1,3 @@
-/* ============================================
-   BLOCKS (docs)
-   The standard doc page shell, plus the block preview.
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   min-width: 0;

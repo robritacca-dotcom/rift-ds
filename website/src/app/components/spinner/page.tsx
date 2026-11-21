@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Spinner } from "rift-ds/components/Spinner/Spinner";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -12,53 +10,44 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 
 export default function SpinnerPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Spinner</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-spinner--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Loading in progress
-            </p>
-            <p className={styles.introBody}>
-              An animated circular indicator that communicates an ongoing process. Available in three sizes and three tones: default, neutral, and inherit, which takes the colour of the control it sits in.
-            </p>
-          </div>
-
-          {/* Sizes */}
-          <section className={styles.section}>
-            <SectionTitle title="Sizes" />
-            <div className={styles.variantRow}>
-              <Spinner size="sm" />
-              <Spinner size="md" />
-              <Spinner size="lg" />
-            </div>
-          </section>
-
-          {/* Variants */}
-          <section className={styles.section}>
-            <SectionTitle title="Variants" />
-            <div className={styles.variantRow}>
-              <Spinner tone="default" size="lg" />
-              <Spinner tone="neutral" size="lg" />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="spinner" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Spinner</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-spinner--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Loading in progress
+        </p>
+        <p className={styles.introBody}>
+          An animated circular indicator that communicates an ongoing process. Available in three sizes and three tones: default, neutral, and inherit, which takes the colour of the control it sits in.
+        </p>
+      </div>
+
+      {/* Sizes */}
+      <section className={styles.section}>
+        <SectionTitle title="Sizes" />
+        <div className={styles.variantRow}>
+          <Spinner size="sm" />
+          <Spinner size="md" />
+          <Spinner size="lg" />
+        </div>
+      </section>
+
+      {/* Variants */}
+      <section className={styles.section}>
+        <SectionTitle title="Variants" />
+        <div className={styles.variantRow}>
+          <Spinner tone="default" size="lg" />
+          <Spinner tone="neutral" size="lg" />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="spinner" />
+    </div>
   );
 }

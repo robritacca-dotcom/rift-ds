@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import {
   AgentRail,
   type AgentRailTab,
@@ -173,103 +171,95 @@ function StatusDemo() {
 
 export default function AgentRailPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Agent rail</h1>
-            <PageLinks storybookPath="/?path=/docs/components-agentrail--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>The agent, and its record</p>
-            <p className={styles.introBody}>
-              Agent rail is the mirror of Thread panel. Where the left rail
-              holds the sessions a person has had, this one holds the agent
-              itself: who it is at the top, and what it has been doing below,
-              split across tabs. It is fully controlled and surface-less, so
-              the host owns the tab on stage and the band the rail sits on.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="The full anatomy" />
-            <p className={styles.demoText}>
-              The portrait with its edit affordance, the tab strip, and one
-              scrolling pane. The header and the strip stay put while the
-              pane changes, so switching tabs never moves the agent&apos;s
-              face. With onCollapse wired, a chevron floats over the
-              rail&apos;s leading corner rather than sitting in the header,
-              which is what keeps the portrait on the centre axis. The
-              trailing corner is left to the host, because a rail seated at a
-              card&apos;s edge is where the card&apos;s own controls end up. A
-              chevron by default and not a cross, for the same reason: two
-              crosses a few pixels apart can read as two ways to dismiss the
-              same thing. A host that wants the way out where a panel&apos;s
-              close usually sits sets collapseVariant to close, which draws a
-              cross in the trailing corner instead; the AI chat&apos;s agent
-              panel does. The way back in belongs to the host. Try the tabs,
-              then collapse it.
-            </p>
-            <FullAnatomy />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Panes are host content" />
-            <p className={styles.demoText}>
-              The rail owns the shell, not what fills it. The four panes
-              here are built from Notification item rows and Empty state, so
-              an activity entry and a notification are the same row. A pane
-              that spends most of its life empty is the point of the
-              pattern: a quiet rail means nothing is waiting on a human.
-            </p>
-            <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
-              <AgentRail
-                profile={{ name: "Skylark", status: "Connected" }}
-                tabs={TABS}
-                value="approvals"
-              />
-            </div>
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="What the agent is" />
-            <p className={styles.demoText}>
-              The status line takes any of the five status roles, so the
-              rail can say the agent is connected, retrying, or offline
-              without a second component. With no profile at all the rail is
-              tabs alone, for a product whose agent has no face of its own.
-            </p>
-            <StatusDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="Tabs say what they are" />
-            <p className={styles.demoText}>
-              The strip is a content-sized Segmented control, which brings
-              its tablist semantics, sliding pill and arrow-key traversal
-              along. Labels, never glyphs alone: four unlabelled tabs are a
-              guess for anyone who has not used the product before. That is
-              also what sets the rail&apos;s width, and what rules the icons
-              out here. An icon and its gap cost 28px a tab, so four
-              icon-and-label tabs would need 423px, which is more room than
-              a conversation&apos;s companion should take. Labels alone fit,
-              and a host whose own labels do not gets a sideways scroll
-              rather than a clipped last tab.
-            </p>
-            <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
-              <AgentRail tabs={TABS} value="scheduled" />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="agent-rail" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Agent rail</h1>
+        <PageLinks storybookPath="/?path=/docs/components-agentrail--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>The agent, and its record</p>
+        <p className={styles.introBody}>
+          Agent rail is the mirror of Thread panel. Where the left rail
+          holds the sessions a person has had, this one holds the agent
+          itself: who it is at the top, and what it has been doing below,
+          split across tabs. It is fully controlled and surface-less, so
+          the host owns the tab on stage and the band the rail sits on.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="The full anatomy" />
+        <p className={styles.demoText}>
+          The portrait with its edit affordance, the tab strip, and one
+          scrolling pane. The header and the strip stay put while the
+          pane changes, so switching tabs never moves the agent&apos;s
+          face. With onCollapse wired, a chevron floats over the
+          rail&apos;s leading corner rather than sitting in the header,
+          which is what keeps the portrait on the centre axis. The
+          trailing corner is left to the host, because a rail seated at a
+          card&apos;s edge is where the card&apos;s own controls end up. A
+          chevron by default and not a cross, for the same reason: two
+          crosses a few pixels apart can read as two ways to dismiss the
+          same thing. A host that wants the way out where a panel&apos;s
+          close usually sits sets collapseVariant to close, which draws a
+          cross in the trailing corner instead; the AI chat&apos;s agent
+          panel does. The way back in belongs to the host. Try the tabs,
+          then collapse it.
+        </p>
+        <FullAnatomy />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Panes are host content" />
+        <p className={styles.demoText}>
+          The rail owns the shell, not what fills it. The four panes
+          here are built from Notification item rows and Empty state, so
+          an activity entry and a notification are the same row. A pane
+          that spends most of its life empty is the point of the
+          pattern: a quiet rail means nothing is waiting on a human.
+        </p>
+        <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
+          <AgentRail
+            profile={{ name: "Skylark", status: "Connected" }}
+            tabs={TABS}
+            value="approvals"
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="What the agent is" />
+        <p className={styles.demoText}>
+          The status line takes any of the five status roles, so the
+          rail can say the agent is connected, retrying, or offline
+          without a second component. With no profile at all the rail is
+          tabs alone, for a product whose agent has no face of its own.
+        </p>
+        <StatusDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Tabs say what they are" />
+        <p className={styles.demoText}>
+          The strip is a content-sized Segmented control, which brings
+          its tablist semantics, sliding pill and arrow-key traversal
+          along. Labels, never glyphs alone: four unlabelled tabs are a
+          guess for anyone who has not used the product before. That is
+          also what sets the rail&apos;s width, and what rules the icons
+          out here. An icon and its gap cost 28px a tab, so four
+          icon-and-label tabs would need 423px, which is more room than
+          a conversation&apos;s companion should take. Labels alone fit,
+          and a host whose own labels do not gets a sideways scroll
+          rather than a clipped last tab.
+        </p>
+        <div className={`${styles.railFrame} ${styles.railFrameShort}`}>
+          <AgentRail tabs={TABS} value="scheduled" />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="agent-rail" />
+    </div>
   );
 }

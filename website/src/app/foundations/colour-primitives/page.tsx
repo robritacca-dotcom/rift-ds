@@ -1,18 +1,13 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import { ColourSwatch } from "rift-ds/components/ColourSwatch/ColourSwatch";
 import PageLinks from "../../../components/PageLinks/PageLinks";
-import { getSidebarLinks, foundationsSidebarLinks } from "@/config/navigation";
 import styles from "./page.module.css";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Tabs } from "rift-ds/components/Tabs/Tabs";
 import { Tooltip } from "rift-ds/components/Tooltip/Tooltip";
-
-const { sidebarLinks } = getSidebarLinks(foundationsSidebarLinks, "/foundations/colour-primitives");
 
 /* ============================================
    PRIMITIVE COLOUR DATA
@@ -263,190 +258,180 @@ export default function PrimitiveColoursPage() {
   const [view, setView] = useState<"ramps" | "swatches">("ramps");
 
   return (
-    <>
-
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Primitive colours</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/foundations-tokens--docs"
-            />
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Colour ramps: the raw layer every theme re-points
-            </p>
-            <p className={styles.introBody}>
-              These raw values never get used directly in components. Instead, they feed into the semantic layer where each value gets assigned a role like &quot;page background&quot; or &quot;primary text&quot;. Keeping them separate means the palette can evolve without touching any component styles, and it is what makes re-theming cheap: the shipped theme presets rebase these ramps, and overriding a primitive cascades through everything built on it.
-            </p>
-          </div>
-
-          {/* View switch */}
-          <div className={`${styles.viewSwitch} animate-in animate-delay-2`}>
-            <Tabs
-              tabs={[
-                { value: "ramps", label: "Ramps", icon: "view_week" },
-                { value: "swatches", label: "Swatches", icon: "grid_view" },
-              ]}
-              value={view}
-              onValueChange={(v) => setView(v as "ramps" | "swatches")}
-              aria-label="Primitive colour view"
-            />
-          </div>
-
-          {view === "ramps" ? (
-            <div role="tabpanel" aria-label="Ramps" className={styles.rampView}>
-              {/* Stepped ramps on a shared column grid */}
-              <div className={styles.rampTable}>
-                <div className={styles.rampHeaderRow} aria-hidden="true">
-                  <span className={styles.rampLabel} />
-                  <div className={styles.rampCells}>
-                    {STEP_COLUMNS.map((step) => (
-                      <span key={step} className={styles.rampStep}>
-                        {step}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {steppedRamps.map((ramp) => {
-                  /* Every stepped ramp runs the full 00–11 grid; the offset
-                     guard stays so a ramp that starts later still lands in
-                     the column its step number names. */
-                  const offset = STEP_COLUMNS.indexOf(stepOf(ramp.swatches[0].cssVar));
-                  return (
-                    <div className={styles.rampRow} key={ramp.title}>
-                      <span className={styles.rampLabel}>{ramp.title}</span>
-                      <div className={styles.rampCells}>
-                        {offset > 0 && <span className={styles.rampSpacer} aria-hidden="true" />}
-                        {ramp.swatches.map((s, i) => {
-                          const isKey = stepOf(s.cssVar) === "07" && ramp.title !== "Neutral";
-                          return (
-                            <Tooltip
-                              key={s.cssVar}
-                              content={swatchTip(s)}
-                              className={`${styles.rampTip}`}
-                            >
-                              <span
-                                className={`${styles.rampCell}${isKey ? ` ${styles.rampCellKey}` : ""}`}
-                                style={{ background: `var(${s.cssVar})` }}
-                                role="img"
-                                aria-label={`${s.label}, ${s.hex}`}
-                              />
-                            </Tooltip>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <p className={styles.rampNote}>
-                Step 07 is each chromatic ramp&apos;s key colour, outlined above. It is the
-                value the ramp is built around, and the one the playground rebases when you
-                re-theme. Hover any step for its token name and value.
-              </p>
-
-              {/* Alpha ramps: no step numbering, shown over a light/dark split */}
-              {alphaRamps.map((ramp) => (
-                <div className={styles.alphaGroup} key={ramp.title}>
-                  <span className={styles.rampLabel}>{ramp.title}</span>
-                  <div className={styles.alphaCells}>
-                    {ramp.swatches.map((s, i) => (
-                      <div className={styles.alphaCell} key={s.cssVar}>
-                        <Tooltip
-                          content={swatchTip(s)}
-                          className={`${styles.rampTip}`}
-                        >
-                          <span
-                            className={styles.alphaSwatch}
-                            role="img"
-                            aria-label={`${s.label}, ${s.hex}`}
-                          >
-                            <span
-                              className={styles.alphaChip}
-                              style={{ background: `var(${s.cssVar})` }}
-                            />
-                          </span>
-                        </Tooltip>
-                        <span className={styles.alphaLabel}>{s.short}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              <p className={styles.rampNote}>
-                These carry an alpha channel, so each one sits over a light and dark half to
-                show what it does to whatever is behind it.
-              </p>
-
-              {fixedRamps.map((ramp) => (
-                <div className={styles.alphaGroup} key={ramp.title}>
-                  <span className={styles.rampLabel}>{ramp.title}</span>
-                  <div className={styles.alphaCells}>
-                    {ramp.swatches.map((s, i) => (
-                      <div className={styles.alphaCell} key={s.cssVar}>
-                        <Tooltip
-                          content={swatchTip(s)}
-                          className={`${styles.rampTip}`}
-                        >
-                          <span
-                            className={styles.alphaSwatch}
-                            role="img"
-                            aria-label={`${s.label}, ${s.hex}`}
-                          >
-                            <span
-                              className={styles.alphaChip}
-                              style={{ background: `var(${s.cssVar})` }}
-                            />
-                          </span>
-                        </Tooltip>
-                        <span className={styles.alphaLabel}>{s.short}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              <p className={styles.rampNote}>
-                The file formats sit outside the ramps. Each is the colour its format is known
-                by everywhere else, so a theme never repaints it.
-              </p>
-            </div>
-          ) : (
-            <div role="tabpanel" aria-label="Swatches" className={styles.swatchView}>
-              {colourRamps.map((ramp) => (
-                <section key={ramp.title} className={styles.colourGroup}>
-                  <SectionTitle title={ramp.title} />
-                  <div className={styles.colourSwatches}>
-                    {ramp.swatches.map((s) => (
-                      <ColourSwatch
-                        key={s.cssVar}
-                        label={s.label}
-                        cssVar={s.cssVar}
-                        dark={{ hex: s.hex, rgb: s.rgb }}
-                        theme={theme}
-                      />
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-          )}
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Primitive colours</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/foundations-tokens--docs"
+        />
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Colour ramps: the raw layer every theme re-points
+        </p>
+        <p className={styles.introBody}>
+          These raw values never get used directly in components. Instead, they feed into the semantic layer where each value gets assigned a role like &quot;page background&quot; or &quot;primary text&quot;. Keeping them separate means the palette can evolve without touching any component styles, and it is what makes re-theming cheap: the shipped theme presets rebase these ramps, and overriding a primitive cascades through everything built on it.
+        </p>
+      </div>
+
+      {/* View switch */}
+      <div className={`${styles.viewSwitch} animate-in animate-delay-2`}>
+        <Tabs
+          tabs={[
+            { value: "ramps", label: "Ramps", icon: "view_week" },
+            { value: "swatches", label: "Swatches", icon: "grid_view" },
+          ]}
+          value={view}
+          onValueChange={(v) => setView(v as "ramps" | "swatches")}
+          aria-label="Primitive colour view"
+        />
+      </div>
+
+      {view === "ramps" ? (
+        <div role="tabpanel" aria-label="Ramps" className={styles.rampView}>
+          {/* Stepped ramps on a shared column grid */}
+          <div className={styles.rampTable}>
+            <div className={styles.rampHeaderRow} aria-hidden="true">
+              <span className={styles.rampLabel} />
+              <div className={styles.rampCells}>
+                {STEP_COLUMNS.map((step) => (
+                  <span key={step} className={styles.rampStep}>
+                    {step}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {steppedRamps.map((ramp) => {
+              /* Every stepped ramp runs the full 00–11 grid; the offset
+                 guard stays so a ramp that starts later still lands in
+                 the column its step number names. */
+              const offset = STEP_COLUMNS.indexOf(stepOf(ramp.swatches[0].cssVar));
+              return (
+                <div className={styles.rampRow} key={ramp.title}>
+                  <span className={styles.rampLabel}>{ramp.title}</span>
+                  <div className={styles.rampCells}>
+                    {offset > 0 && <span className={styles.rampSpacer} aria-hidden="true" />}
+                    {ramp.swatches.map((s, i) => {
+                      const isKey = stepOf(s.cssVar) === "07" && ramp.title !== "Neutral";
+                      return (
+                        <Tooltip
+                          key={s.cssVar}
+                          content={swatchTip(s)}
+                          className={`${styles.rampTip}`}
+                        >
+                          <span
+                            className={`${styles.rampCell}${isKey ? ` ${styles.rampCellKey}` : ""}`}
+                            style={{ background: `var(${s.cssVar})` }}
+                            role="img"
+                            aria-label={`${s.label}, ${s.hex}`}
+                          />
+                        </Tooltip>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className={styles.rampNote}>
+            Step 07 is each chromatic ramp&apos;s key colour, outlined above. It is the
+            value the ramp is built around, and the one the playground rebases when you
+            re-theme. Hover any step for its token name and value.
+          </p>
+
+          {/* Alpha ramps: no step numbering, shown over a light/dark split */}
+          {alphaRamps.map((ramp) => (
+            <div className={styles.alphaGroup} key={ramp.title}>
+              <span className={styles.rampLabel}>{ramp.title}</span>
+              <div className={styles.alphaCells}>
+                {ramp.swatches.map((s, i) => (
+                  <div className={styles.alphaCell} key={s.cssVar}>
+                    <Tooltip
+                      content={swatchTip(s)}
+                      className={`${styles.rampTip}`}
+                    >
+                      <span
+                        className={styles.alphaSwatch}
+                        role="img"
+                        aria-label={`${s.label}, ${s.hex}`}
+                      >
+                        <span
+                          className={styles.alphaChip}
+                          style={{ background: `var(${s.cssVar})` }}
+                        />
+                      </span>
+                    </Tooltip>
+                    <span className={styles.alphaLabel}>{s.short}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <p className={styles.rampNote}>
+            These carry an alpha channel, so each one sits over a light and dark half to
+            show what it does to whatever is behind it.
+          </p>
+
+          {fixedRamps.map((ramp) => (
+            <div className={styles.alphaGroup} key={ramp.title}>
+              <span className={styles.rampLabel}>{ramp.title}</span>
+              <div className={styles.alphaCells}>
+                {ramp.swatches.map((s, i) => (
+                  <div className={styles.alphaCell} key={s.cssVar}>
+                    <Tooltip
+                      content={swatchTip(s)}
+                      className={`${styles.rampTip}`}
+                    >
+                      <span
+                        className={styles.alphaSwatch}
+                        role="img"
+                        aria-label={`${s.label}, ${s.hex}`}
+                      >
+                        <span
+                          className={styles.alphaChip}
+                          style={{ background: `var(${s.cssVar})` }}
+                        />
+                      </span>
+                    </Tooltip>
+                    <span className={styles.alphaLabel}>{s.short}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <p className={styles.rampNote}>
+            The file formats sit outside the ramps. Each is the colour its format is known
+            by everywhere else, so a theme never repaints it.
+          </p>
+        </div>
+      ) : (
+        <div role="tabpanel" aria-label="Swatches" className={styles.swatchView}>
+          {colourRamps.map((ramp) => (
+            <section key={ramp.title} className={styles.colourGroup}>
+              <SectionTitle title={ramp.title} />
+              <div className={styles.colourSwatches}>
+                {ramp.swatches.map((s) => (
+                  <ColourSwatch
+                    key={s.cssVar}
+                    label={s.label}
+                    cssVar={s.cssVar}
+                    dark={{ hex: s.hex, rgb: s.rgb }}
+                    theme={theme}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

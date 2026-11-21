@@ -128,7 +128,8 @@ How the scene resolved, the same three states ShaderField reports.
 `pending` while the GL context comes up (bounded by a watchdog), `active`
 once a frame has painted, `unavailable` when it is disabled, WebGL2
 cannot run it or its context is lost (it returns to `active` when the
-context comes back).
+context comes back, or after it rebuilds on a fresh canvas once it is
+near the screen, passing through `pending`).
 
 ```ts
 type ShaderSceneStatus = 'pending' | 'active' | 'unavailable';

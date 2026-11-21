@@ -9,7 +9,7 @@ import { useCopied } from '../../behaviors/clipboard';
 type CopyButtonOwnProps = {
   /** The text put on the clipboard, or a function that returns it at the moment of the press (for a value that changes, such as the current URL). */
   value: string | (() => string);
-  /** Called with the copied text after it is put on the clipboard, so a host can count copies or announce them. */
+  /** Called with the copied text as it is sent to the clipboard (the write is not awaited), so a host can count copies or announce them. */
   onCopied?: (value: string) => void;
   /** Visible text before a copy. When `iconOnly`, it is the accessible name and the tooltip instead, unless `copyLabel` is set. */
   copyText?: string;

@@ -197,7 +197,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name for the view switch.",
+          "description": "Accessible name for the view switch, and for the panel itself when `title` is left out (an untitled `inline` example).",
           "default": "Artifact view"
         },
         {

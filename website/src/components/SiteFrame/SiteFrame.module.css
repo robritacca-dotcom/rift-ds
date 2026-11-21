@@ -3,21 +3,20 @@
    gap /labs/site-frame found between the library and this site. */
 
 .frame.frame {
-  /* the site header's bar is 78px (MegaNav sets --ds-site-header-height
-     on the header itself, where SiteLayout's sibling columns cannot read it),
-     so the frame is told the same height here. */
-  --ds-site-layout-header-height: 78px;
+  /* The site header's bar is 78px: set once here, on the frame, so MegaNav's
+     SiteHeader and SiteLayout's sticky columns read the same height. */
+  --ds-site-header-height: 78px;
+  /* The headroom the site's pages had before the frame: the body's gap under
+     the header (--gap-2000) plus the old frame's top padding (--gap-1000),
+     so every page's sidebar and title start where they always did. */
+  --ds-site-layout-top-gap: calc(var(--gap-2000) + var(--gap-1000));
   /* the site's body carries its own padding (globals.css), so a frame
-     meant to reach the window's edges stretches back across it, as the
-     template family does. */
+     meant to reach the window's edges stretches back across its sides and
+     its foot, as the template family does. Not its top: the body's top
+     padding is where the header has always rested, the gap it keeps from
+     the window's edge until the page scrolls and it sticks. */
   width: calc(100% + var(--primitive-padding-1000) * 2);
-  margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-1000));
-}
-
-/* MegaNav caps its own header at 1440px, which would stop a full-width
-   header lever from reaching the edges; the frame's header width decides. */
-.frame :global(.ds-site-layout__header > header.ds-site-header) {
-  max-width: none;
+  margin: 0 calc(-1 * var(--primitive-padding-1000)) calc(-1 * var(--primitive-padding-500));
 }
 
 /* the site narrows the body for the docked chat (html[data-chat="docked"]
@@ -49,13 +48,13 @@
 @media (max-width: 959px) {
   .frame.frame {
     width: calc(100% + var(--primitive-padding-500) * 2);
-    margin: calc(-1 * var(--primitive-padding-500));
+    margin: 0 calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-500));
   }
 }
 
 @media (max-width: 600px) {
   .frame.frame {
     width: calc(100% + var(--primitive-padding-400) * 2);
-    margin: calc(-1 * var(--primitive-padding-500)) calc(-1 * var(--primitive-padding-400));
+    margin: 0 calc(-1 * var(--primitive-padding-400)) calc(-1 * var(--primitive-padding-500));
   }
 }

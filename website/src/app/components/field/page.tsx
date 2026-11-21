@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { Field } from "rift-ds/components/Field/Field";
 import { Input } from "rift-ds/components/Input/Input";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -16,12 +14,7 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 export default function FieldPage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
+        <div className={styles.dsContent}>
           <PageBreadcrumb />
           <div className={`${styles.pageHeader} animate-in`}>
             <h1 className={styles.pageTitle}>Field</h1>
@@ -168,8 +161,7 @@ export default function FieldPage() {
 
 
           <ComponentInstallStrip slug="field" />
-        </main>
-      </div>
+        </div>
     </>
   );
 }

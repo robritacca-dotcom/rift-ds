@@ -9,9 +9,11 @@
    ============================================ */
 
 .ds-site-layout {
-  /* The header's height, the same calc SiteHeader uses for its bar, so the
-     sticky columns start below it. An override hook for another header. */
-  --ds-site-layout-header-height: calc(var(--control-height-default) + var(--padding-1000));
+  /* The header's height, so the sticky columns start below it: SiteHeader's
+     own --ds-site-header-height when the host sets it on the layout (one
+     value then sizes both), else the same calc SiteHeader uses for its bar.
+     An override hook for another header. */
+  --ds-site-layout-header-height: var(--ds-site-header-height, calc(var(--control-height-default) + var(--padding-1000)));
   /* The window's height, an override hook for a host that pins it (a page
      drawn in a scaled preview frame sets its own). */
   --ds-site-layout-viewport-height: 100vh;
@@ -20,10 +22,11 @@
   --ds-site-layout-aside-width: calc(5 * var(--control-height-default));
   /* The reading width of `readingWidth`: about 75 characters of body text. */
   --ds-site-layout-reading-width: calc(19 * var(--control-height-default));
-  /* Room the page gives up at its end edge, for a panel the host docks
-     there (a chat): the whole frame, header included, steps in by it, and
-     an edge-pinned aside moves in with it. 0 by default. */
-  --ds-site-layout-reserve-end: 0px;
+  /* --ds-site-layout-reserve-end, the room the page gives up at its end
+     edge for a panel the host docks there (a chat), is read with a 0
+     fallback and never declared here, so a host can set it on the layout
+     or any ancestor: the whole frame, header included, steps in by it, and
+     an edge-pinned aside moves in with it. */
   /* The room between the header and the page, the site's own page rhythm:
      the sidebar, the main column and the aside all start this far down. */
   --ds-site-layout-top-gap: var(--gap-1500);
@@ -41,7 +44,7 @@
   width: 100%;
   box-sizing: border-box;
   min-height: var(--ds-site-layout-viewport-height);
-  padding-inline-end: var(--ds-site-layout-reserve-end);
+  padding-inline-end: var(--ds-site-layout-reserve-end, 0px);
   transition: padding-inline-end var(--motion-duration-slow) var(--motion-ease-emphasized);
   /* No background: the page behind is the floor, so an ambient field or a
      shader the host paints there shows through the frame. */
@@ -153,6 +156,11 @@
 .ds-site-layout__sidebar > [data-ds-sidebar-hang] {
   width: calc(100% + var(--ds-nav-list-text-inset, 0px));
   margin-inline-start: calc(-1 * var(--ds-nav-list-text-inset, 0px));
+  /* The same optical rule on the block axis: a scrollable list keeps room
+     at its top for its fade (--ds-nav-list-block-inset); pulling the list
+     up by it starts the first row level with the page's first line, the
+     breadcrumb or the title. */
+  margin-block-start: calc(-1 * var(--ds-nav-list-block-inset, 0px));
 }
 
 /* Docked to the edge, the content sits the column gap off the divider,
@@ -261,7 +269,7 @@
      --ds-site-layout-aside-inset instead. */
   inset-inline-end: var(
     --ds-site-layout-aside-inset,
-    calc(var(--ds-site-layout-reserve-end) + var(--ds-shell-gutter))
+    calc(var(--ds-site-layout-reserve-end, 0px) + var(--ds-shell-gutter))
   );
   padding-block-start: 0;
   transform: translateY(-50%);

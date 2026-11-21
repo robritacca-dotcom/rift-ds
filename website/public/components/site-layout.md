@@ -7,7 +7,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 - Category: layout
 - Import: `import { SiteLayout } from 'rift-ds';`
 - Deep import: `import { SiteLayout } from 'rift-ds/components/SiteLayout/SiteLayout';`
-- Rendering: client component (declares 'use client')
+- Rendering: server-renderable (no 'use client')
 - Size: 1.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/site-layout
 - Schema: https://rift-ds.com/schema/components/site-layout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
@@ -22,7 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | --- | --- | --- | --- | --- |
 | children | `ReactNode` | yes |  | The page's main content: the article, the page. |
 | header | `ReactNode` | no |  | The top bar, usually a SiteHeader. A SiteHeader given no `width` of its own follows `headerWidth`, so the bar lines up with the page below it. |
-| sidebar | `ReactNode` | no |  | The navigation column, usually a scrollable NavList: the wide-screen form of the site's sub-navigation. Sticks below the header; below 960px it leaves the page, and the header's own menu carries the same pages (give each SiteHeader section its `drawerItems`), so a reader has one menu, never two. |
+| sidebar | `ReactNode` | no |  | The navigation column, usually a scrollable NavList: the wide-screen form of the site's sub-navigation. Sticks below the header; below 960px it leaves the page, and the header's own menu carries the same pages (give each SiteHeader section its `drawerItems`, and set the header's `foldBelow="tablet"` so it folds at the same step), so a reader has one menu, never two. |
 | aside | `ReactNode` | no |  | The column after the content, usually an AnchorNav reading the page's headings. Gives way below 1152px in the `column` placement. |
 | asidePlacement | `"column" \| "edge"` | no | `'column'` | Where the aside sits. `column` gives it a column of its own after the content. `edge` pins it to the window's end edge, centred on the height, and gives the content the room: the place for AnchorNav's `floating` variant, a minimap that opens on hover or focus. Hidden below 960px in either. |
 | footer | `ReactNode` | no |  | The bottom of the site, usually a SiteFooter. |

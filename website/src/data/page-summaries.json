@@ -809,7 +809,7 @@
     },
     "/foundations/layout": {
       "title": "Layout",
-      "text": "Where layouts switch, the page shell's measurements, the three app shell modes, and the order surfaces stack in.",
+      "text": "Where layouts switch, the site frame, the three app shell modes, and the order surfaces stack in.",
       "chips": [
         {
           "id": "breakpoints",
@@ -837,7 +837,7 @@
         },
         {
           "id": "shell",
-          "label": "What is the page shell?"
+          "label": "What is the site frame?"
         },
         {
           "id": "app-shells",

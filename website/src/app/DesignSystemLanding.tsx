@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import MegaNav from "../components/MegaNav/MegaNav";
 import { ExtendedBackground } from "../components/BlurBackground/BlurBackground";
 import FadeDivider from "../components/FadeDivider/FadeDivider";
 import styles from "./page.module.css";
@@ -693,12 +692,10 @@ function RotatingSubtitle() {
 }
 
 /**
- * The home page. `chrome` (on by default) draws the site's header and the
- * main region around the page; /labs/site-frame turns it off and hosts the
- * same page inside the library's SiteLayout, which brings both.
+ * The home page's article. The site frame (SiteFrameMount in the root
+ * layout) brings the header and the main region around it.
  */
-export default function DesignSystemLanding({ chrome = true }: { chrome?: boolean }) {
-  const Region = chrome ? "main" : "div";
+export default function DesignSystemLanding() {
   const [alerts, setAlerts] = useState({ transactions: true, security: true, market: false });
   const [currency, setCurrency] = useState("usd");
   const [dueDate, setDueDate] = useState("2026-08-15");
@@ -1435,9 +1432,8 @@ export default function DesignSystemLanding({ chrome = true }: { chrome?: boolea
   return (
     <>
       <ExtendedBackground />
-      {chrome && <MegaNav />}
 
-      <Region className={styles.page} id={chrome ? "main-content" : undefined}>
+      <div className={styles.page}>
         {/* ---------- page header (deliberately light: this is the index of
              the design-system section, so it carries the tagline, the
              section links, the accent swatches and the registry-counted
@@ -1697,7 +1693,7 @@ export default function DesignSystemLanding({ chrome = true }: { chrome?: boolea
             </span>
           </a>
         </section>
-      </Region>
+      </div>
 
     </>
   );

@@ -53,7 +53,7 @@ const NAV: NavListEntry[] = [
     label: 'Getting started',
     items: [
       { label: 'Introduction', href: '#introduction' },
-      { label: 'Installation', href: '/guide' },
+      { label: 'Installation', href: '#installation' },
       {
         label: 'Theming',
         href: '#theming',
@@ -89,10 +89,10 @@ const SECTIONS: SiteHeaderSection[] = [
   {
     id: 'docs',
     label: 'Docs',
-    href: '/guide',
+    href: '#docs',
     drawerItems: [
       { label: 'Introduction', href: '#introduction' },
-      { label: 'Installation', href: '/guide' },
+      { label: 'Installation', href: '#installation' },
       { label: 'Theming', href: '#theming' },
       { label: 'CLI', href: '#cli' },
     ],
@@ -108,7 +108,7 @@ const SECTIONS: SiteHeaderSection[] = [
 
 /** The footer's sitemap. */
 const FOOTER_COLUMNS: SiteFooterColumn[] = [
-  { label: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }, { label: 'Installation', href: '/guide' }] },
+  { label: 'Docs', links: [{ label: 'Introduction', href: '#introduction' }, { label: 'Installation', href: '#installation' }] },
   { label: 'Components', links: [{ label: 'Button', href: '#button' }, { label: 'Table', href: '#table' }] },
   { label: 'Community', links: [{ label: 'Discussions', href: 'https://example.com/discussions', external: true }] },
 ];
@@ -133,7 +133,7 @@ export function DocsShell({ currentHref, breadcrumb, children }: DocsShellProps)
         <SiteHeader
           brand={<span className={styles.brand}>{PRODUCT_NAME}</span>}
           sections={SECTIONS}
-          currentHref="/guide"
+          currentHref="#docs"
           foldBelow="tablet"
           actions={
             <>

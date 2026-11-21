@@ -1,17 +1,3 @@
-/* ============================================
-   TEMPLATES PAGE LAYOUT
-   No sidebar: the carousel below is the way
-   into each template, so the content column
-   runs the full layout width.
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   display: flex;
@@ -77,6 +63,7 @@
    ============================================ */
 .showcaseSection {
   width: 100%;
+  container-type: inline-size;
 }
 
 /* Full bleed: the column centres inside the body, so escaping it takes the
@@ -84,10 +71,12 @@
    viewport into --bleed-width (100vw counts the scrollbar; the measurement
    does not), with 100vw as the pre-hydration fallback.
 
-   --showcase-gutter mirrors the body's own side padding in globals.css
-   (per breakpoint below), so --showcase-inset is the distance from the
-   viewport edge to the content column's left edge: the snapped slide lines
-   up with the column, and the rest of the track runs off screen. The slide
+   The section is a container, so 100cqw is the content column's own width
+   and --showcase-inset, half of what the bleed adds to it, is the distance
+   from the viewport edge to the column's left edge in any site frame
+   layout; --showcase-gutter (per breakpoint below) is its floor. The
+   snapped slide lines up with the column, and the rest of the track runs
+   off screen. The slide
    width is capped so the window stays a contained figure with the next
    slide peeking in from the right (--showcase-peek is the reserved peek
    room, a layout coordinate like the design size — narrower on phones,
@@ -97,7 +86,7 @@
   --showcase-peek: 120px;
   --showcase-inset: max(
     var(--showcase-gutter),
-    (var(--bleed-width, 100vw) - 1440px) / 2
+    (var(--bleed-width, 100vw) - 100cqw) / 2
   );
   --slide-width: min(
     1080px,

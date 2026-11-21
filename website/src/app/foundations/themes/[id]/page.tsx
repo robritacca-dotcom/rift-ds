@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import MegaNav from "@/components/MegaNav/MegaNav";
 import { pageOpenGraph, TITLE_TEMPLATE } from "@/config/navigation";
 import {
   DEFAULT_THEME_LABEL,
@@ -54,7 +53,6 @@ export default async function ThemeSpecimenPage({
 
   return (
     <>
-      <MegaNav />
       <ThemeSpecimen
         id={id}
         label={labelOf(id)}

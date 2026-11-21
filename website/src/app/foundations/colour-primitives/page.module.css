@@ -1,14 +1,3 @@
-/* ============================================
-   PRIMITIVE COLOURS PAGE LAYOUT
-   ============================================ */
-.dsLayout {
-  display: flex;
-  gap: var(--layout-column-gap);
-  width: 100%;
-  max-width: 1440px;
-  padding-top: var(--primitive-gap-1000);
-}
-
 .dsContent {
   flex: 1;
   display: flex;
@@ -282,11 +271,6 @@
     .alphaCells {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
-
-  .dsLayout {
-    padding-left: 0;
-    min-width: 0;
   }
 
   .dsContent {

@@ -1,18 +1,19 @@
 "use client";
 
 /**
- * SiteFrame: the site's chrome as the library's SiteLayout. The real header
- * (MegaNav), a sidebar of the section's pages (the site's own Sidebar or
- * the library's NavList, by `settings.sidebar`), the article, the
- * on-this-page rail (the library's AnchorNav reading the article's h2s)
- * and the real footer, laid out by SiteFrameSettings
- * (website/src/config/site-frame.ts owns them and the migration notes).
+ * SiteFrame: the site's chrome as the library's SiteLayout, around every
+ * framed page (SiteFrameMount in the root layout). The real header
+ * (MegaNav, with the layout switcher this frame enables), a sidebar of the
+ * section's pages (the library's NavList by default, or the site's own
+ * Sidebar, by `settings.sidebar`), the page's article, the on-this-page
+ * rail (the library's AnchorNav reading the article's h2s) and the real
+ * footer, laid out by SiteFrameSettings (website/src/config/site-frame.ts
+ * owns them and the route rules).
  *
  * SiteFrame.module.css holds what hosting SiteLayout on this site takes:
- * the header's height, the stretch across the body's padding, MegaNav's own
- * width cap lifted, the rail's offset for the docked chat and a scroll box
- * for the site's sidebar that lets its active pill hang. Each is commented
- * there. No live page renders this yet; /labs/site-frame does.
+ * the header's height, the stretch across the body's padding, the rail's
+ * offset for the docked chat and a scroll box for the site's own sidebar
+ * that lets its active pill hang. Each is commented there.
  */
 
 import type { ReactNode } from "react";
@@ -49,7 +50,7 @@ export interface SiteFrameProps {
    * the reader's layout pick (the header's layout switcher) over them.
    */
   settings?: SiteFrameSettings;
-  /** The id of the main region. */
+  /** The id of the main region, the root layout's skip link target. */
   mainId?: string;
 }
 
@@ -90,10 +91,15 @@ export default function SiteFrame({
     <SiteLayout
       className={styles.frame}
       width={settings.width}
-      containedWidth={settings.containedWidth}
+      // The narrow step is a reading width for an article beside a sidebar;
+      // a page with no sidebar (the home page, privacy, the templates index)
+      // keeps the default step's full width in either layout.
+      containedWidth={nav ? settings.containedWidth : "default"}
       sidebarDock={settings.sidebarDock}
       asidePlacement={settings.asidePlacement}
       mainId={mainId}
+      // The root layout draws the site's skip link, aimed at this main.
+      skipLinkLabel=""
       header={<MegaNav />}
       sidebar={sidebar}
       aside={

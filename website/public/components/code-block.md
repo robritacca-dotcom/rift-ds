@@ -29,7 +29,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same dat
 | syncKey | `string` | no |  | Share the selected tab with every CodeBlock on the page that has the same key, and remember it for the reader's next visit (in localStorage). Ignored while `value` is controlled. |
 | tabsLabel | `string` | no | `'Code variants'` | Accessible name for the tab list. |
 | showCopy | `boolean` | no | `true` | Show the copy-to-clipboard button |
-| onCopied | `((value: string) => void)` | no |  | Called with the copied text (the shown tab's code, or the text of `lines`) after it is put on the clipboard, through the async API or its textarea fallback, so a host can count copies. |
+| onCopied | `((value: string) => void)` | no |  | Called with the copied text (the shown tab's code, or the text of `lines`) as it is sent to the clipboard, through the async API or its textarea fallback (the write is not awaited), so a host can count copies. |
 | maxHeight | `string \| number` | no |  | Max height of the block; code scrolls vertically inside while the header stays pinned. Numbers are px. |
 | collapsible | `boolean` | no | `false` | Show a chevron beside the filename that collapses/expands the code area |
 | defaultCollapsed | `boolean` | no | `false` | Start collapsed (only applies when collapsible) |

@@ -1,13 +1,10 @@
-import MegaNav from "../../components/MegaNav/MegaNav";
 import styles from "./page.module.css";
 import { AUTHOR_NAME, AUTHOR_URL } from "@/config/brand.generated";
 
 export default function PrivacyPage() {
   return (
     <>
-      <MegaNav />
-
-      <main className={styles.privacyContainer} id="main-content">
+      <div className={styles.privacyContainer}>
         <div className={`${styles.heading} animate-in`}>
           <h1 className={styles.title}>Privacy</h1>
           <p className={styles.subtitle}>What this site collects, and what it does not.</p>
@@ -34,7 +31,8 @@ export default function PrivacyPage() {
           <h2 className={styles.sectionTitle}>Your picks</h2>
           <p className={styles.body}>
             The site remembers what you pick for it: light or dark, the
-            theme, the background, and a template&apos;s shell and backdrop.
+            theme, the background, the page layout, and a template&apos;s
+            shell, width and backdrop.
             They stay in your browser&apos;s local storage, on this device,
             and are never sent anywhere.
           </p>
@@ -117,7 +115,7 @@ export default function PrivacyPage() {
             Open an issue on the project&apos;s GitHub repository.
           </p>
         </div>
-      </main>
+      </div>
     </>
   );
 }

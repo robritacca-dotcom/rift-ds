@@ -1,8 +1,6 @@
 "use client";
 
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { EntityCard } from "rift-ds/components/EntityCard/EntityCard";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
@@ -21,61 +19,52 @@ const demoLogos = [
 
 export default function EntityCardPage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Entity card</h1>
-            <PageLinks
-              storybookPath="/?path=/docs/components-entitycard--docs"
-            />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              A labelled tile for icons and logos
-            </p>
-            <p className={styles.introBody}>
-              A compact display-only card with a centred Material Symbol or image and a label
-              beneath. It powers the Icons and Logos galleries in the Foundations section, where
-              rows of entities need to read as a uniform grid.
-            </p>
-          </div>
-
-          {/* Icon cards */}
-          <section className={styles.section}>
-            <SectionTitle title="Icon cards" />
-            <div className={styles.cardGrid}>
-              {demoIcons.map((name) => (
-                <EntityCard key={name} label={name} icon={name} />
-              ))}
-            </div>
-          </section>
-
-          {/* Image cards */}
-          <section className={styles.section}>
-            <SectionTitle title="Image cards" />
-            <div className={styles.cardGrid}>
-              {demoLogos.map((logo) => (
-                <EntityCard
-                  key={logo.label}
-                  label={logo.label}
-                  imageSrc={logo.src}
-                  imageAlt={logo.label}
-                />
-              ))}
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="entity-card" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Entity card</h1>
+        <PageLinks
+          storybookPath="/?path=/docs/components-entitycard--docs"
+        />
       </div>
 
-    </>
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          A labelled tile for icons and logos
+        </p>
+        <p className={styles.introBody}>
+          A compact display-only card with a centred Material Symbol or image and a label
+          beneath. It powers the Icons and Logos galleries in the Foundations section, where
+          rows of entities need to read as a uniform grid.
+        </p>
+      </div>
+
+      {/* Icon cards */}
+      <section className={styles.section}>
+        <SectionTitle title="Icon cards" />
+        <div className={styles.cardGrid}>
+          {demoIcons.map((name) => (
+            <EntityCard key={name} label={name} icon={name} />
+          ))}
+        </div>
+      </section>
+
+      {/* Image cards */}
+      <section className={styles.section}>
+        <SectionTitle title="Image cards" />
+        <div className={styles.cardGrid}>
+          {demoLogos.map((logo) => (
+            <EntityCard
+              key={logo.label}
+              label={logo.label}
+              imageSrc={logo.src}
+              imageAlt={logo.label}
+            />
+          ))}
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="entity-card" />
+    </div>
   );
 }

@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "../../../components/Sidebar/Sidebar";
-import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { THEME_PRESETS, THEME_SELECTOR_ORDER } from "@/lib/theme/presets";
 import { BASE_THEME_ID } from "@/lib/theme/brand";
 import styles from "./page.module.css";
@@ -33,8 +30,6 @@ import {
   AGENT_STARTER_SNIPPET,
   skillCurlSnippet,
 } from "@/data/agent-skills";
-
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/get-started");
 
 /** On-this-page rail entries: ids match the elements below, in document order. */
 const PAGE_SECTIONS = [
@@ -424,459 +419,450 @@ export default function GetStartedPage() {
   }, []);
 
   return (
-    <>
-      <MegaNav />
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
 
-      <div className={styles.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-
-          {/* Page Title */}
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Get started</h1>
-          </div>
-
-          {/* Intro */}
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              Install Rift DS, then make it yours
-            </p>
-            <p className={styles.introBody}>
-              <code>rift-ds</code> is the package this site is built with. Theming is plain CSS
-              custom properties, with no configuration API or theme provider.{" "}
-              <Link href="/playground" className={styles.inlineLink}>
-                Try it in the playground
-              </Link>
-              .
-            </p>
-          </div>
-
-          {/* Content + Built-with rail */}
-          <div className={styles.railLayout}>
-            <div className={styles.railMain}>
-              {/* Every way in, agents first. Every panel stays in the document
-                  (hidden, not unmounted), so a search engine and the corpus
-                  coverage check read all of them. */}
-              <section id="install" className={`${styles.section} animate-in animate-delay-2`}>
-                <SectionTitle title="Install" />
-                <div className={styles.installTabs}>
-                  <Tabs
-                    tabs={INSTALL_TABS}
-                    value={installTab}
-                    onValueChange={setInstallTab}
-                    aria-label="Ways to install"
-                  />
-                </div>
-
-                <div id="agent-quickstart" role="tabpanel" aria-label="With an agent" hidden={installTab !== "agent-quickstart"} className={styles.panel}>
-                  <p className={styles.sectionNote}>
-                    Use this if a coding agent writes your code. Paste this file into your agent,
-                    or save it at your project root as <code>{AGENT_STARTER_FILE}</code>. Your
-                    agent does the install from there.
-                  </p>
-                  <CodeBlock
-                    code={AGENT_STARTER}
-                    language="markdown"
-                    filename={AGENT_STARTER_FILE}
-                    maxHeight={360}
-                    showCopy
-                    onCopied={countStarter("copy")}
-                  />
-                  <h3 className={styles.subheading}>Optional: give your agent more</h3>
-                  <p className={styles.sectionNote}>
-                    Connect the MCP endpoint so it can look up exact props and tokens while it
-                    builds. No key or account is needed.
-                  </p>
-                  <CodeBlock code={MCP_CLIENTS[0].snippet} language={MCP_CLIENTS[0].language} filename={MCP_CLIENTS[0].filename ?? MCP_CLIENTS[0].label} showCopy />
-                  <p className={styles.sectionNote}>
-                    Install the skills it loads every session. This also prints the MCP connect line.
-                  </p>
-                  <CodeBlock code={INIT_SNIPPET} language="bash" showCopy onCopied={countInstall("init")} />
-                  <Accordion
-                    multiple
-                    items={[
-                      {
-                        id: "mcp-clients",
-                        title: "Other MCP clients",
-                        content: (
-                          <div className={styles.panel}>
-                            {MCP_CLIENTS.slice(1).map((client) => (
-                              <CodeBlock
-                                key={client.id}
-                                code={client.snippet}
-                                language={client.language}
-                                filename={client.filename ?? client.label}
-                                showCopy
-                              />
-                            ))}
-                          </div>
-                        ),
-                      },
-                      {
-                        id: "mcp-tools",
-                        title: "What the MCP tools answer",
-                        content: (
-                          <div className={styles.panel}>
-                            <ul className={styles.promptList}>
-                              {MCP_TOOLS.map((tool) => (
-                                <li key={tool.name} className={styles.promptItem}>
-                                  <span>“{tool.prompt}”</span>
-                                  <code className={styles.promptTool}>{tool.name}</code>
-                                </li>
-                              ))}
-                            </ul>
-                            <p className={styles.sectionNote}>
-                              The same contracts are plain files too: every component page&apos;s
-                              For agents button has its markdown and its JSON schema, and{" "}
-                              <Link href="/docs/schemas" className={styles.inlineLink}>Schemas</Link>{" "}
-                              covers the rest.
-                            </p>
-                          </div>
-                        ),
-                      },
-                      {
-                        id: "skills",
-                        title: "The skills, and installing without npm",
-                        content: (
-                          <div className={styles.panel}>
-                            <ul className={styles.promptList}>
-                              {AGENT_SKILLS.map((skill) => (
-                                <li key={skill.name} className={styles.promptItem}>
-                                  <span>{skill.summary}</span>
-                                  <code className={styles.promptTool}>{skill.name}</code>
-                                </li>
-                              ))}
-                            </ul>
-                            <p className={styles.sectionNote}>
-                              <code>npx rift-ds init</code> writes them to <code>.claude/skills/</code>.
-                              Add <code>--skill</code> and a name to install one, and re-run it to
-                              refresh them. No npm nearby? The same files are one curl each:
-                            </p>
-                            <CodeBlock code={SKILL_SNIPPET} language="bash" showCopy />
-                            <p className={styles.sectionNote}>
-                              Using another agent? The skills CLI installs the same files where
-                              Cursor, Codex and the rest look for them:
-                            </p>
-                            <CodeBlock code={SKILLS_CLI_SNIPPET} language="bash" showCopy />
-                          </div>
-                        ),
-                      },
-                      {
-                        id: "starter-more",
-                        title: "Save AGENTS.md from the terminal, or with your theme",
-                        content: (
-                          <div className={styles.panel}>
-                            <p className={styles.sectionNote}>Fetch it again after you upgrade:</p>
-                            <CodeBlock code={AGENT_STARTER_SNIPPET} language="bash" showCopy onCopied={countStarter("curl")} />
-                            <p className={styles.sectionNote}>
-                              Made a theme in the{" "}
-                              <Link href="/playground" className={styles.inlineLink}>playground</Link>?
-                              Its Export theme button gives you one AGENTS.md with the setup, the
-                              theme in words and its CSS.
-                            </p>
-                          </div>
-                        ),
-                      },
-                    ]}
-                  />
-                </div>
-
-                <div id="quick-start" role="tabpanel" aria-label="Next.js" hidden={installTab !== "quick-start"} className={styles.panel}>
-                  <p className={styles.sectionNote}>
-                    Use this if you have a Next.js app router project, or a fresh{" "}
-                    <code>create-next-app</code>. Run these:
-                  </p>
-                  <CodeBlock code={QUICK_START_SNIPPET} language="bash" showCopy onCopied={countInstall("quick-start")} />
-                  <p className={styles.sectionNote}>
-                    Then make <code>app/layout.tsx</code> this, keep your metadata, and drop the{" "}
-                    <code>globals.css</code> import <code>create-next-app</code> added.
-                  </p>
-                  <CodeBlock code={LAYOUT_SNIPPET} language="tsx" showCopy />
-                  <p className={styles.sectionNote}>
-                    Your first page is at <code>/dashboard</code>. Neither <code>init</code>{" "}
-                    command overwrites a file. <Link href="/docs/blocks" className={styles.inlineLink}>Blocks</Link>{" "}
-                    lists the other starting pages.
-                  </p>
-                </div>
-
-                <div id="react" role="tabpanel" aria-label="Any React app" hidden={installTab !== "react"} className={styles.panel}>
-                  <p className={styles.sectionNote}>
-                    Use this for any other React 19 app with a bundler, such as Vite.
-                  </p>
-                  <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy onCopied={countInstall("npm")} />
-                  <CodeBlock code={USAGE_SNIPPET} language="tsx" filename="app.tsx" showCopy />
-                  <Accordion
-                    multiple
-                    items={[
-                      {
-                        id: "requirements",
-                        title: "Requirements",
-                        content: (
-                          <p className={styles.sectionNote}>
-                            React 19 or later and a bundler that handles CSS and font imports, with
-                            TypeScript&apos;s <code>moduleResolution</code> set to{" "}
-                            <code>&quot;bundler&quot;</code> or <code>&quot;nodenext&quot;</code>. The
-                            package is ESM-only.
-                          </p>
-                        ),
-                      },
-                      {
-                        id: "charts",
-                        title: "Charts",
-                        content: (
-                          <div className={styles.panel}>
-                            <p className={styles.sectionNote}>Recharts is an optional peer, needed only for the recharts-backed charts.</p>
-                            <CodeBlock code={CHARTS_SNIPPET} language="tsx" showCopy />
-                          </div>
-                        ),
-                      },
-                      {
-                        id: "providers",
-                        title: "Optional providers",
-                        content: (
-                          <p className={styles.sectionNote}>
-                            <code>ToastProvider</code> for <code>useToast</code>,{" "}
-                            <code>LinkProvider</code> for your router&apos;s link, and{" "}
-                            <code>LocaleProvider</code> for the locale numbers and dates are written in.
-                          </p>
-                        ),
-                      },
-                    ]}
-                  />
-                </div>
-
-                <div id="other-ways" role="tabpanel" aria-label="Other ways" hidden={installTab !== "other"} className={styles.panel}>
-                  <h3 id="shadcn-registry" className={styles.subheading}>Single components</h3>
-                  <p className={styles.sectionNote}>
-                    Use this if you want source you own, not a dependency. The shadcn CLI brings
-                    the component, what it builds on and the shared base.{" "}
-                    <a href="/r/registry.json">/r/registry.json</a> lists them all. If your project
-                    has no <code>components.json</code>, run <code>npx shadcn init</code> first.
-                  </p>
-                  <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy onCopied={countInstall("shadcn")} />
-                  <h3 id="clone" className={styles.subheading}>The whole repo</h3>
-                  <p className={styles.sectionNote}>
-                    Use this to run or fork the system itself. Everything is MIT licensed, this site
-                    included, and one install brings up both Storybook and these docs.
-                  </p>
-                  <CodeBlock code={CLONE_SNIPPET} language="bash" showCopy onCopied={countInstall("clone")} />
-                </div>
-
-                {SHOW_FIGMA_LINKS && (
-                  <div id="figma-kit" role="tabpanel" aria-label="Figma kit" hidden={installTab !== "figma"} className={styles.panel}>
-                    <p className={styles.sectionNote}>
-                      Use this if you design in Figma. The kit has a page for every component, with
-                      a sticker sheet of its states, the main component and the parts it is built
-                      from. Its variables are named after the code’s tokens, with themes and light
-                      and dark as variable modes. Duplicate it from the Figma Community to start.
-                    </p>
-                    <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" className={styles.kitImageLink}>
-                      {/* The same frame exported in Light and Dark, swapped by the site's theme. */}
-                      <Image
-                        src="/images/figma-kit-light.jpg"
-                        alt="Component pages in the Figma kit, each with a sticker sheet, the main component, and links to the docs and Storybook"
-                        width={1920}
-                        height={1080}
-                        className={`${styles.kitImage} ${styles.kitImageLight}`}
-                      />
-                      <Image
-                        src="/images/figma-kit-dark.jpg"
-                        alt="Component pages in the Figma kit, each with a sticker sheet, the main component, and links to the docs and Storybook"
-                        width={1920}
-                        height={1080}
-                        className={`${styles.kitImage} ${styles.kitImageDark}`}
-                      />
-                    </a>
-                    <div>
-                      <Button
-                        label="Open the Figma kit"
-                        variant="secondary"
-                        iconLeft={<FigmaIcon />}
-                        iconRight="open_in_new"
-                        href={FIGMA_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      />
-                    </div>
-                  </div>
-                )}
-              </section>
-
-              {/* Customise */}
-              <section id="customise" className={`${styles.section} animate-in animate-delay-3`}>
-                <SectionTitle title="Customise" />
-
-                <div id="re-theme" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Theme</h3>
-                  <p className={styles.sectionNote}>
-                    Components read semantic tokens, and semantic tokens read primitives, so
-                    overriding a primitive changes everything built on it, in both modes.
-                    The{" "}
-                    <Link href="/playground" className={styles.inlineLink}>playground</Link>{" "}
-                    writes this CSS for you.
-                  </p>
-                  <CodeBlock code={PRIMITIVE_SNIPPET} language="css" showCopy />
-                  <p className={styles.sectionNote}>To change one meaning, override its semantic token:</p>
-                  <CodeBlock code={SEMANTIC_SNIPPET} language="css" showCopy />
-                </div>
-
-                <div id="preset-themes" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Shipped themes</h3>
-                  <p className={styles.sectionNote}>
-                    Import the aggregate once and set one attribute:{" "}
-                    {THEME_SELECTOR_ORDER.filter((id) => id !== BASE_THEME_ID)
-                      .map((id) => THEME_PRESETS[id].label)
-                      .join(", ")}
-                    . Each also loads alone from <code>tokens/presets/&lt;name&gt;.css</code>, and answers to its name in lowercase as the attribute, as well as to its id.
-                  </p>
-                  <CodeBlock code={PRESET_SNIPPET} language="tsx" showCopy />
-                  <p className={styles.sectionNote}>
-                    To change one part of a shipped theme, override its token. The theme
-                    stylesheets sit in cascade layers, so any rule of your own outranks them,
-                    whatever its selector, in both modes:
-                  </p>
-                  <CodeBlock code={PRESET_OVERRIDE_SNIPPET} language="css" showCopy />
-                </div>
-
-                <div id="dark-mode" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Dark mode</h3>
-                  <p className={styles.sectionNote}>
-                    Set <code>data-theme=&quot;dark&quot;</code> on the root element. Components
-                    have no <code>prefers-color-scheme</code> queries, so your app decides when,
-                    and <code>base.css</code> brings the page and native controls along.
-                  </p>
-                  <CodeBlock code={DARK_MODE_SNIPPET} language="html" showCopy />
-                  <p className={styles.sectionNote}>
-                    To let visitors choose, apply the stored mode before first paint and add a
-                    ThemeToggle:
-                  </p>
-                  <CodeBlock code={COLOR_MODE_SNIPPET} language="tsx" showCopy />
-                </div>
-
-                <div id="fonts" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Fonts</h3>
-                  <p className={styles.sectionNote}>
-                    No text face is bundled. Load any font and point the family token at it, or
-                    split headings and body into two roles.
-                  </p>
-                  <CodeBlock code={FONT_SNIPPET} language="css" showCopy />
-                </div>
-
-                <div id="icons" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Icons</h3>
-                  <p className={styles.sectionNote}>
-                    Material Symbols ships as a variable font, with fill, weight and grade as
-                    custom properties at any scope. Every icon prop also takes your own element.
-                  </p>
-                  <CodeBlock code={ICON_SNIPPET} language="css" showCopy />
-                  <CodeBlock code={ICON_NODE_SNIPPET} language="tsx" showCopy />
-                </div>
-
-                <div id="shaders" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Shaders</h3>
-                  <p className={styles.sectionNote}>
-                    <Link href="/components/shader-scene" className={styles.inlineLink}>Shader scene</Link>{" "}
-                    paints a WebGL scene behind a page, in the theme&rsquo;s colours. Pick one the
-                    library ships or pass a scene of your own, written in GLSL;{" "}
-                    <Link href="/docs/shaders" className={styles.inlineLink}>Shaders</Link> is the
-                    guide.
-                  </p>
-                  <CodeBlock code={SCENE_SNIPPET} language="tsx" showCopy />
-                </div>
-
-                <div id="locale" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Locale and direction</h3>
-                  <p className={styles.sectionNote}>
-                    Numbers, dates and times are written in US English until you wrap the app in{" "}
-                    <code>LocaleProvider</code>. A component&apos;s own <code>locale</code> prop
-                    wins, and the few that render on the server take the prop alone.
-                  </p>
-                  <CodeBlock code={LOCALE_SNIPPET} language="tsx" showCopy />
-                  <p className={styles.sectionNote}>
-                    The locale formats and never translates: every word a component writes is a
-                    prop with an English default. For a right-to-left language, set{" "}
-                    <code>dir=&quot;rtl&quot;</code> on <code>&lt;html&gt;</code> and the layout,
-                    keys, popups and directional icons follow.
-                  </p>
-                </div>
-
-                <div id="money" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Money and dates</h3>
-                  <p className={styles.sectionNote}>
-                    An amount is a decimal string such as <code>&quot;1234.50&quot;</code>, never a
-                    float. <code>rift-ds/format</code> reads what a person typed in their locale,
-                    adds and multiplies on whole numbers, and writes money and relative dates. It
-                    has no React, so a server route can use it too.
-                  </p>
-                  <CodeBlock code={FORMAT_SNIPPET} language="ts" showCopy />
-                </div>
-
-                <div id="shortcuts" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Keyboard shortcuts</h3>
-                  <p className={styles.sectionNote}>
-                    <code>useShortcut</code> binds a key string, <code>mod+s</code> being ⌘S on a
-                    Mac and Ctrl+S elsewhere. It stays quiet while someone types and never takes
-                    Escape from an open overlay. Give it a <code>description</code> and{" "}
-                    <code>useRegisteredShortcuts</code> lists it for a help dialog.
-                  </p>
-                  <CodeBlock code={SHORTCUT_SNIPPET} language="tsx" showCopy />
-                </div>
-
-                <div id="forms" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Forms</h3>
-                  <p className={styles.sectionNote}>
-                    Give a control a <code>name</code> and it submits with the form around it, so{" "}
-                    <code>FormData</code> and a server action read it with no state of your own.
-                    Custom controls submit through a hidden input, which native validation
-                    skips, so check <code>required</code> where you handle the submit.
-                  </p>
-                  <CodeBlock code={FORMS_SNIPPET} language="tsx" showCopy />
-                </div>
-
-                <div id="chat-agent-ui" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Chat</h3>
-                  <p className={styles.sectionNote}>
-                    One command scaffolds the{" "}
-                    <Link href="/docs/chat" className={styles.inlineLink}>chat widget</Link> into a
-                    Next.js app, with its server handlers, and a scripted mode runs it with no
-                    key. Keys stay on the server. This site&apos;s{" "}
-                    <OpenChatLink className={styles.inlineLinkButton}>{ASSISTANT_NAME}</OpenChatLink>{" "}
-                    is that widget.{" "}
-                    <Link href="/components/ai-chat" className={styles.inlineLink}>Its component page</Link>{" "}
-                    has every option.
-                  </p>
-                  <CodeBlock code={CHAT_SNIPPET} language="bash" showCopy />
-                </div>
-
-                <div id="ambient-background" className={styles.subsection}>
-                  <h3 className={styles.subheading}>Ambient background</h3>
-                  <p className={styles.sectionNote}>
-                    <Link href="/components/shader-field" className={styles.inlineLink}>Shader field</Link>{" "}
-                    fills a positioned ancestor you provide and can fail on hardware you do not
-                    control, so it reports its status and you paint the fallback.
-                  </p>
-                  <CodeBlock code={SHADER_SNIPPET} language="tsx" showCopy />
-                </div>
-              </section>
-
-              {/* Built with */}
-              <section id="built-with" className={`${styles.section} animate-in animate-delay-4`}>
-                <SectionTitle title="Built with" />
-                <div className={styles.toolList}>
-                  {STACK_TOOLS.map((tool) => (
-                    <ToolItem key={tool.name} tool={tool} />
-                  ))}
-                </div>
-              </section>
-            </div>
-          </div>
-
-          <FloatingAnchorNav items={PAGE_SECTIONS} />
-        </main>
+      {/* Page Title */}
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Get started</h1>
       </div>
 
-    </>
+      {/* Intro */}
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          Install Rift DS, then make it yours
+        </p>
+        <p className={styles.introBody}>
+          <code>rift-ds</code> is the package this site is built with. Theming is plain CSS
+          custom properties, with no configuration API or theme provider.{" "}
+          <Link href="/playground" className={styles.inlineLink}>
+            Try it in the playground
+          </Link>
+          .
+        </p>
+      </div>
+
+      {/* Content + Built-with rail */}
+      <div className={styles.railLayout}>
+        <div className={styles.railMain}>
+          {/* Every way in, agents first. Every panel stays in the document
+              (hidden, not unmounted), so a search engine and the corpus
+              coverage check read all of them. */}
+          <section id="install" className={`${styles.section} animate-in animate-delay-2`}>
+            <SectionTitle title="Install" />
+            <div className={styles.installTabs}>
+              <Tabs
+                tabs={INSTALL_TABS}
+                value={installTab}
+                onValueChange={setInstallTab}
+                aria-label="Ways to install"
+              />
+            </div>
+
+            <div id="agent-quickstart" role="tabpanel" aria-label="With an agent" hidden={installTab !== "agent-quickstart"} className={styles.panel}>
+              <p className={styles.sectionNote}>
+                Use this if a coding agent writes your code. Paste this file into your agent,
+                or save it at your project root as <code>{AGENT_STARTER_FILE}</code>. Your
+                agent does the install from there.
+              </p>
+              <CodeBlock
+                code={AGENT_STARTER}
+                language="markdown"
+                filename={AGENT_STARTER_FILE}
+                maxHeight={360}
+                showCopy
+                onCopied={countStarter("copy")}
+              />
+              <h3 className={styles.subheading}>Optional: give your agent more</h3>
+              <p className={styles.sectionNote}>
+                Connect the MCP endpoint so it can look up exact props and tokens while it
+                builds. No key or account is needed.
+              </p>
+              <CodeBlock code={MCP_CLIENTS[0].snippet} language={MCP_CLIENTS[0].language} filename={MCP_CLIENTS[0].filename ?? MCP_CLIENTS[0].label} showCopy />
+              <p className={styles.sectionNote}>
+                Install the skills it loads every session. This also prints the MCP connect line.
+              </p>
+              <CodeBlock code={INIT_SNIPPET} language="bash" showCopy onCopied={countInstall("init")} />
+              <Accordion
+                multiple
+                items={[
+                  {
+                    id: "mcp-clients",
+                    title: "Other MCP clients",
+                    content: (
+                      <div className={styles.panel}>
+                        {MCP_CLIENTS.slice(1).map((client) => (
+                          <CodeBlock
+                            key={client.id}
+                            code={client.snippet}
+                            language={client.language}
+                            filename={client.filename ?? client.label}
+                            showCopy
+                          />
+                        ))}
+                      </div>
+                    ),
+                  },
+                  {
+                    id: "mcp-tools",
+                    title: "What the MCP tools answer",
+                    content: (
+                      <div className={styles.panel}>
+                        <ul className={styles.promptList}>
+                          {MCP_TOOLS.map((tool) => (
+                            <li key={tool.name} className={styles.promptItem}>
+                              <span>“{tool.prompt}”</span>
+                              <code className={styles.promptTool}>{tool.name}</code>
+                            </li>
+                          ))}
+                        </ul>
+                        <p className={styles.sectionNote}>
+                          The same contracts are plain files too: every component page&apos;s
+                          For agents button has its markdown and its JSON schema, and{" "}
+                          <Link href="/docs/schemas" className={styles.inlineLink}>Schemas</Link>{" "}
+                          covers the rest.
+                        </p>
+                      </div>
+                    ),
+                  },
+                  {
+                    id: "skills",
+                    title: "The skills, and installing without npm",
+                    content: (
+                      <div className={styles.panel}>
+                        <ul className={styles.promptList}>
+                          {AGENT_SKILLS.map((skill) => (
+                            <li key={skill.name} className={styles.promptItem}>
+                              <span>{skill.summary}</span>
+                              <code className={styles.promptTool}>{skill.name}</code>
+                            </li>
+                          ))}
+                        </ul>
+                        <p className={styles.sectionNote}>
+                          <code>npx rift-ds init</code> writes them to <code>.claude/skills/</code>.
+                          Add <code>--skill</code> and a name to install one, and re-run it to
+                          refresh them. No npm nearby? The same files are one curl each:
+                        </p>
+                        <CodeBlock code={SKILL_SNIPPET} language="bash" showCopy />
+                        <p className={styles.sectionNote}>
+                          Using another agent? The skills CLI installs the same files where
+                          Cursor, Codex and the rest look for them:
+                        </p>
+                        <CodeBlock code={SKILLS_CLI_SNIPPET} language="bash" showCopy />
+                      </div>
+                    ),
+                  },
+                  {
+                    id: "starter-more",
+                    title: "Save AGENTS.md from the terminal, or with your theme",
+                    content: (
+                      <div className={styles.panel}>
+                        <p className={styles.sectionNote}>Fetch it again after you upgrade:</p>
+                        <CodeBlock code={AGENT_STARTER_SNIPPET} language="bash" showCopy onCopied={countStarter("curl")} />
+                        <p className={styles.sectionNote}>
+                          Made a theme in the{" "}
+                          <Link href="/playground" className={styles.inlineLink}>playground</Link>?
+                          Its Export theme button gives you one AGENTS.md with the setup, the
+                          theme in words and its CSS.
+                        </p>
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </div>
+
+            <div id="quick-start" role="tabpanel" aria-label="Next.js" hidden={installTab !== "quick-start"} className={styles.panel}>
+              <p className={styles.sectionNote}>
+                Use this if you have a Next.js app router project, or a fresh{" "}
+                <code>create-next-app</code>. Run these:
+              </p>
+              <CodeBlock code={QUICK_START_SNIPPET} language="bash" showCopy onCopied={countInstall("quick-start")} />
+              <p className={styles.sectionNote}>
+                Then make <code>app/layout.tsx</code> this, keep your metadata, and drop the{" "}
+                <code>globals.css</code> import <code>create-next-app</code> added.
+              </p>
+              <CodeBlock code={LAYOUT_SNIPPET} language="tsx" showCopy />
+              <p className={styles.sectionNote}>
+                Your first page is at <code>/dashboard</code>. Neither <code>init</code>{" "}
+                command overwrites a file. <Link href="/docs/blocks" className={styles.inlineLink}>Blocks</Link>{" "}
+                lists the other starting pages.
+              </p>
+            </div>
+
+            <div id="react" role="tabpanel" aria-label="Any React app" hidden={installTab !== "react"} className={styles.panel}>
+              <p className={styles.sectionNote}>
+                Use this for any other React 19 app with a bundler, such as Vite.
+              </p>
+              <CodeBlock code={INSTALL_SNIPPET} language="bash" showCopy onCopied={countInstall("npm")} />
+              <CodeBlock code={USAGE_SNIPPET} language="tsx" filename="app.tsx" showCopy />
+              <Accordion
+                multiple
+                items={[
+                  {
+                    id: "requirements",
+                    title: "Requirements",
+                    content: (
+                      <p className={styles.sectionNote}>
+                        React 19 or later and a bundler that handles CSS and font imports, with
+                        TypeScript&apos;s <code>moduleResolution</code> set to{" "}
+                        <code>&quot;bundler&quot;</code> or <code>&quot;nodenext&quot;</code>. The
+                        package is ESM-only.
+                      </p>
+                    ),
+                  },
+                  {
+                    id: "charts",
+                    title: "Charts",
+                    content: (
+                      <div className={styles.panel}>
+                        <p className={styles.sectionNote}>Recharts is an optional peer, needed only for the recharts-backed charts.</p>
+                        <CodeBlock code={CHARTS_SNIPPET} language="tsx" showCopy />
+                      </div>
+                    ),
+                  },
+                  {
+                    id: "providers",
+                    title: "Optional providers",
+                    content: (
+                      <p className={styles.sectionNote}>
+                        <code>ToastProvider</code> for <code>useToast</code>,{" "}
+                        <code>LinkProvider</code> for your router&apos;s link, and{" "}
+                        <code>LocaleProvider</code> for the locale numbers and dates are written in.
+                      </p>
+                    ),
+                  },
+                ]}
+              />
+            </div>
+
+            <div id="other-ways" role="tabpanel" aria-label="Other ways" hidden={installTab !== "other"} className={styles.panel}>
+              <h3 id="shadcn-registry" className={styles.subheading}>Single components</h3>
+              <p className={styles.sectionNote}>
+                Use this if you want source you own, not a dependency. The shadcn CLI brings
+                the component, what it builds on and the shared base.{" "}
+                <a href="/r/registry.json">/r/registry.json</a> lists them all. If your project
+                has no <code>components.json</code>, run <code>npx shadcn init</code> first.
+              </p>
+              <CodeBlock code={SHADCN_SNIPPET} language="bash" showCopy onCopied={countInstall("shadcn")} />
+              <h3 id="clone" className={styles.subheading}>The whole repo</h3>
+              <p className={styles.sectionNote}>
+                Use this to run or fork the system itself. Everything is MIT licensed, this site
+                included, and one install brings up both Storybook and these docs.
+              </p>
+              <CodeBlock code={CLONE_SNIPPET} language="bash" showCopy onCopied={countInstall("clone")} />
+            </div>
+
+            {SHOW_FIGMA_LINKS && (
+              <div id="figma-kit" role="tabpanel" aria-label="Figma kit" hidden={installTab !== "figma"} className={styles.panel}>
+                <p className={styles.sectionNote}>
+                  Use this if you design in Figma. The kit has a page for every component, with
+                  a sticker sheet of its states, the main component and the parts it is built
+                  from. Its variables are named after the code’s tokens, with themes and light
+                  and dark as variable modes. Duplicate it from the Figma Community to start.
+                </p>
+                <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" className={styles.kitImageLink}>
+                  {/* The same frame exported in Light and Dark, swapped by the site's theme. */}
+                  <Image
+                    src="/images/figma-kit-light.jpg"
+                    alt="Component pages in the Figma kit, each with a sticker sheet, the main component, and links to the docs and Storybook"
+                    width={1920}
+                    height={1080}
+                    className={`${styles.kitImage} ${styles.kitImageLight}`}
+                  />
+                  <Image
+                    src="/images/figma-kit-dark.jpg"
+                    alt="Component pages in the Figma kit, each with a sticker sheet, the main component, and links to the docs and Storybook"
+                    width={1920}
+                    height={1080}
+                    className={`${styles.kitImage} ${styles.kitImageDark}`}
+                  />
+                </a>
+                <div>
+                  <Button
+                    label="Open the Figma kit"
+                    variant="secondary"
+                    iconLeft={<FigmaIcon />}
+                    iconRight="open_in_new"
+                    href={FIGMA_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* Customise */}
+          <section id="customise" className={`${styles.section} animate-in animate-delay-3`}>
+            <SectionTitle title="Customise" />
+
+            <div id="re-theme" className={styles.subsection}>
+              <h3 className={styles.subheading}>Theme</h3>
+              <p className={styles.sectionNote}>
+                Components read semantic tokens, and semantic tokens read primitives, so
+                overriding a primitive changes everything built on it, in both modes.
+                The{" "}
+                <Link href="/playground" className={styles.inlineLink}>playground</Link>{" "}
+                writes this CSS for you.
+              </p>
+              <CodeBlock code={PRIMITIVE_SNIPPET} language="css" showCopy />
+              <p className={styles.sectionNote}>To change one meaning, override its semantic token:</p>
+              <CodeBlock code={SEMANTIC_SNIPPET} language="css" showCopy />
+            </div>
+
+            <div id="preset-themes" className={styles.subsection}>
+              <h3 className={styles.subheading}>Shipped themes</h3>
+              <p className={styles.sectionNote}>
+                Import the aggregate once and set one attribute:{" "}
+                {THEME_SELECTOR_ORDER.filter((id) => id !== BASE_THEME_ID)
+                  .map((id) => THEME_PRESETS[id].label)
+                  .join(", ")}
+                . Each also loads alone from <code>tokens/presets/&lt;name&gt;.css</code>, and answers to its name in lowercase as the attribute, as well as to its id.
+              </p>
+              <CodeBlock code={PRESET_SNIPPET} language="tsx" showCopy />
+              <p className={styles.sectionNote}>
+                To change one part of a shipped theme, override its token. The theme
+                stylesheets sit in cascade layers, so any rule of your own outranks them,
+                whatever its selector, in both modes:
+              </p>
+              <CodeBlock code={PRESET_OVERRIDE_SNIPPET} language="css" showCopy />
+            </div>
+
+            <div id="dark-mode" className={styles.subsection}>
+              <h3 className={styles.subheading}>Dark mode</h3>
+              <p className={styles.sectionNote}>
+                Set <code>data-theme=&quot;dark&quot;</code> on the root element. Components
+                have no <code>prefers-color-scheme</code> queries, so your app decides when,
+                and <code>base.css</code> brings the page and native controls along.
+              </p>
+              <CodeBlock code={DARK_MODE_SNIPPET} language="html" showCopy />
+              <p className={styles.sectionNote}>
+                To let visitors choose, apply the stored mode before first paint and add a
+                ThemeToggle:
+              </p>
+              <CodeBlock code={COLOR_MODE_SNIPPET} language="tsx" showCopy />
+            </div>
+
+            <div id="fonts" className={styles.subsection}>
+              <h3 className={styles.subheading}>Fonts</h3>
+              <p className={styles.sectionNote}>
+                No text face is bundled. Load any font and point the family token at it, or
+                split headings and body into two roles.
+              </p>
+              <CodeBlock code={FONT_SNIPPET} language="css" showCopy />
+            </div>
+
+            <div id="icons" className={styles.subsection}>
+              <h3 className={styles.subheading}>Icons</h3>
+              <p className={styles.sectionNote}>
+                Material Symbols ships as a variable font, with fill, weight and grade as
+                custom properties at any scope. Every icon prop also takes your own element.
+              </p>
+              <CodeBlock code={ICON_SNIPPET} language="css" showCopy />
+              <CodeBlock code={ICON_NODE_SNIPPET} language="tsx" showCopy />
+            </div>
+
+            <div id="shaders" className={styles.subsection}>
+              <h3 className={styles.subheading}>Shaders</h3>
+              <p className={styles.sectionNote}>
+                <Link href="/components/shader-scene" className={styles.inlineLink}>Shader scene</Link>{" "}
+                paints a WebGL scene behind a page, in the theme&rsquo;s colours. Pick one the
+                library ships or pass a scene of your own, written in GLSL;{" "}
+                <Link href="/docs/shaders" className={styles.inlineLink}>Shaders</Link> is the
+                guide.
+              </p>
+              <CodeBlock code={SCENE_SNIPPET} language="tsx" showCopy />
+            </div>
+
+            <div id="locale" className={styles.subsection}>
+              <h3 className={styles.subheading}>Locale and direction</h3>
+              <p className={styles.sectionNote}>
+                Numbers, dates and times are written in US English until you wrap the app in{" "}
+                <code>LocaleProvider</code>. A component&apos;s own <code>locale</code> prop
+                wins, and the few that render on the server take the prop alone.
+              </p>
+              <CodeBlock code={LOCALE_SNIPPET} language="tsx" showCopy />
+              <p className={styles.sectionNote}>
+                The locale formats and never translates: every word a component writes is a
+                prop with an English default. For a right-to-left language, set{" "}
+                <code>dir=&quot;rtl&quot;</code> on <code>&lt;html&gt;</code> and the layout,
+                keys, popups and directional icons follow.
+              </p>
+            </div>
+
+            <div id="money" className={styles.subsection}>
+              <h3 className={styles.subheading}>Money and dates</h3>
+              <p className={styles.sectionNote}>
+                An amount is a decimal string such as <code>&quot;1234.50&quot;</code>, never a
+                float. <code>rift-ds/format</code> reads what a person typed in their locale,
+                adds and multiplies on whole numbers, and writes money and relative dates. It
+                has no React, so a server route can use it too.
+              </p>
+              <CodeBlock code={FORMAT_SNIPPET} language="ts" showCopy />
+            </div>
+
+            <div id="shortcuts" className={styles.subsection}>
+              <h3 className={styles.subheading}>Keyboard shortcuts</h3>
+              <p className={styles.sectionNote}>
+                <code>useShortcut</code> binds a key string, <code>mod+s</code> being ⌘S on a
+                Mac and Ctrl+S elsewhere. It stays quiet while someone types and never takes
+                Escape from an open overlay. Give it a <code>description</code> and{" "}
+                <code>useRegisteredShortcuts</code> lists it for a help dialog.
+              </p>
+              <CodeBlock code={SHORTCUT_SNIPPET} language="tsx" showCopy />
+            </div>
+
+            <div id="forms" className={styles.subsection}>
+              <h3 className={styles.subheading}>Forms</h3>
+              <p className={styles.sectionNote}>
+                Give a control a <code>name</code> and it submits with the form around it, so{" "}
+                <code>FormData</code> and a server action read it with no state of your own.
+                Custom controls submit through a hidden input, which native validation
+                skips, so check <code>required</code> where you handle the submit.
+              </p>
+              <CodeBlock code={FORMS_SNIPPET} language="tsx" showCopy />
+            </div>
+
+            <div id="chat-agent-ui" className={styles.subsection}>
+              <h3 className={styles.subheading}>Chat</h3>
+              <p className={styles.sectionNote}>
+                One command scaffolds the{" "}
+                <Link href="/docs/chat" className={styles.inlineLink}>chat widget</Link> into a
+                Next.js app, with its server handlers, and a scripted mode runs it with no
+                key. Keys stay on the server. This site&apos;s{" "}
+                <OpenChatLink className={styles.inlineLinkButton}>{ASSISTANT_NAME}</OpenChatLink>{" "}
+                is that widget.{" "}
+                <Link href="/components/ai-chat" className={styles.inlineLink}>Its component page</Link>{" "}
+                has every option.
+              </p>
+              <CodeBlock code={CHAT_SNIPPET} language="bash" showCopy />
+            </div>
+
+            <div id="ambient-background" className={styles.subsection}>
+              <h3 className={styles.subheading}>Ambient background</h3>
+              <p className={styles.sectionNote}>
+                <Link href="/components/shader-field" className={styles.inlineLink}>Shader field</Link>{" "}
+                fills a positioned ancestor you provide and can fail on hardware you do not
+                control, so it reports its status and you paint the fallback.
+              </p>
+              <CodeBlock code={SHADER_SNIPPET} language="tsx" showCopy />
+            </div>
+          </section>
+
+          {/* Built with */}
+          <section id="built-with" className={`${styles.section} animate-in animate-delay-4`}>
+            <SectionTitle title="Built with" />
+            <div className={styles.toolList}>
+              {STACK_TOOLS.map((tool) => (
+                <ToolItem key={tool.name} tool={tool} />
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <FloatingAnchorNav items={PAGE_SECTIONS} />
+    </div>
   );
 }

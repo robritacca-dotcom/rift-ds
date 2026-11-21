@@ -28,6 +28,8 @@ export interface BackToTopProps
  * BackToTop: a round button pinned to the page's bottom end corner that
  * appears once the reader has scrolled a long way down, and takes them
  * back to the top. Smooth, unless the reader asks for reduced motion.
+ * The ref and native attributes go to the pinned wrapper, the node that
+ * appears and hides; the button inside is an IconButton named by `label`.
  * While hidden it is inert, so it is never a tab stop that does nothing.
  */
 export function BackToTop({

@@ -1,16 +1,11 @@
 import Link from "next/link";
-import MegaNav from "@/components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import Sidebar from "@/components/Sidebar/Sidebar";
-import { getSidebarLinks, docsSidebarLinks } from "@/config/navigation";
 import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { PACKAGE_NAME } from "@/config/brand.generated";
 import { blockPreviewPath, blocks } from "@/data/blocks";
 import { BlockPreview } from "./BlockPreview";
 import s from "./page.module.css";
-
-const { sidebarLinks } = getSidebarLinks(docsSidebarLinks, "/docs/blocks");
 
 /* The blocks index: how to add one, then every block from the registry
    (src/cli/templates/blocks/registry.json) with a live preview of its
@@ -23,12 +18,7 @@ npx ${PACKAGE_NAME} init app`;
 export default function BlocksPage() {
   return (
     <>
-      <MegaNav />
-
-      <div className={s.dsLayout}>
-        <Sidebar links={sidebarLinks} />
-
-        <main className={s.dsContent} id="main-content">
+        <div className={s.dsContent}>
           <PageBreadcrumb />
 
           <div className={`${s.pageHeader} animate-in`}>
@@ -81,8 +71,7 @@ export default function BlocksPage() {
               <CodeBlock code={block.files.join("\n")} language="text" />
             </section>
           ))}
-        </main>
-      </div>
+        </div>
     </>
   );
 }

@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { AttachmentDropZone } from "rift-ds/components/Attachment/AttachmentDropZone";
 import { AttachmentTile } from "rift-ds/components/Attachment/AttachmentTile";
 import { formatBytes } from "rift-ds/components/Attachment/fileTypes";
@@ -46,47 +44,39 @@ function DropDemo() {
 
 export default function AttachmentDropZonePage() {
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Attachment drop zone</h1>
-            <PageLinks storybookPath="/?path=/docs/components-attachmentdropzone--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>Drop a file anywhere on the chat</p>
-            <p className={styles.introBody}>
-              Wrap a surface in the zone and a file dragged anywhere over it lands, so nobody has to aim for the composer. While files hover, an overlay covers the surface and says what letting go will do. Dropping is a pointer path, so pair it with an attach button for the keyboard.
-            </p>
-          </div>
-
-          <section className={styles.section}>
-            <SectionTitle title="Try it" />
-            <p className={styles.demoText}>
-              Drag one or more files over the panel. Its edge lights up and the surface frosts over, and the files appear as tiles when you let go. They are read in your browser and go nowhere.
-            </p>
-            <DropDemo />
-          </section>
-
-          <section className={styles.section}>
-            <SectionTitle title="What it leaves alone" />
-            <p className={styles.demoText}>
-              The zone only reacts to a drag that carries files. Dragging selected text or a link across it does nothing, and it keeps a file drop to itself so a drop target around it never handles the same files twice.
-            </p>
-            <AttachmentDropZone className={styles.dropSurface} label="Drop files to attach">
-              <p className={styles.dropEmpty}>Select this sentence and drag it. Nothing happens.</p>
-            </AttachmentDropZone>
-          </section>
-
-          <ComponentInstallStrip slug="attachment-drop-zone" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Attachment drop zone</h1>
+        <PageLinks storybookPath="/?path=/docs/components-attachmentdropzone--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>Drop a file anywhere on the chat</p>
+        <p className={styles.introBody}>
+          Wrap a surface in the zone and a file dragged anywhere over it lands, so nobody has to aim for the composer. While files hover, an overlay covers the surface and says what letting go will do. Dropping is a pointer path, so pair it with an attach button for the keyboard.
+        </p>
+      </div>
+
+      <section className={styles.section}>
+        <SectionTitle title="Try it" />
+        <p className={styles.demoText}>
+          Drag one or more files over the panel. Its edge lights up and the surface frosts over, and the files appear as tiles when you let go. They are read in your browser and go nowhere.
+        </p>
+        <DropDemo />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="What it leaves alone" />
+        <p className={styles.demoText}>
+          The zone only reacts to a drag that carries files. Dragging selected text or a link across it does nothing, and it keeps a file drop to itself so a drop target around it never handles the same files twice.
+        </p>
+        <AttachmentDropZone className={styles.dropSurface} label="Drop files to attach">
+          <p className={styles.dropEmpty}>Select this sentence and drag it. Nothing happens.</p>
+        </AttachmentDropZone>
+      </section>
+
+      <ComponentInstallStrip slug="attachment-drop-zone" />
+    </div>
   );
 }

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Link } from '../Link/Link';
 import '../../behaviors/shell.css';
@@ -18,8 +16,9 @@ type SiteLayoutOwnProps = {
    * The navigation column, usually a scrollable NavList: the wide-screen
    * form of the site's sub-navigation. Sticks below the header; below
    * 960px it leaves the page, and the header's own menu carries the same
-   * pages (give each SiteHeader section its `drawerItems`), so a reader has
-   * one menu, never two.
+   * pages (give each SiteHeader section its `drawerItems`, and set the
+   * header's `foldBelow="tablet"` so it folds at the same step), so a
+   * reader has one menu, never two.
    */
   sidebar?: React.ReactNode;
   /** The column after the content, usually an AnchorNav reading the page's headings. Gives way below 1152px in the `column` placement. */

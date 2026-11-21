@@ -9,10 +9,9 @@
   gap: var(--gap-2000);
   width: 100%;
   max-width: 720px;
-  /* Top offset matches the 40px every other page puts above its title,
-     so the h1 sits at the same height site-wide */
-  padding: var(--primitive-gap-1000) var(--primitive-padding-1000)
-    var(--gap-2000);
+  /* No top offset of its own: the site frame's top gap puts the h1 at the
+     same height as every other page's */
+  padding: 0 var(--primitive-padding-1000) var(--gap-2000);
 }
 
 .heading {

@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import MegaNav from "../../../components/MegaNav/MegaNav";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import ComponentsSidebar from "../../../components/Sidebar/ComponentsSidebar";
 import { StreamingText } from "rift-ds/components/StreamingText/StreamingText";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import { Button } from "rift-ds/components/Button/Button";
@@ -52,92 +50,84 @@ export default function StreamingTextPage() {
   const fast = useSimulatedStream(120);
 
   return (
-    <>
-      <MegaNav />
-
-      <div className={styles.dsLayout}>
-        <ComponentsSidebar />
-
-        <main className={styles.dsContent} id="main-content">
-          <PageBreadcrumb />
-          <div className={`${styles.pageHeader} animate-in`}>
-            <h1 className={styles.pageTitle}>Streaming text</h1>
-            <PageLinks storybookPath="/?path=/docs/components-streamingtext--docs" />
-          </div>
-
-          <div className={`${styles.introSection} animate-in animate-delay-1`}>
-            <p className={styles.subDisplay}>
-              The reveal for text that arrives in pieces
-            </p>
-            <p className={styles.introBody}>
-              An LLM response typing itself out, extracted into a primitive.
-              It inherits the surrounding typography, animates only through
-              appended text, and keeps a cursor blinking while more is coming.
-              Under reduced motion the typing is skipped and each chunk
-              appears whole. The pacing itself ships headless as
-              useStreamReveal, and this site&apos;s own chat runs on it: the
-              same engine, rendering markdown instead of a span.
-            </p>
-          </div>
-
-          <section className={`${styles.section} animate-in animate-delay-2`}>
-            <SectionTitle title="A simulated stream" />
-            <p className={styles.sectionBody}>
-              Chunks of a few words land every 400ms; the reveal types through
-              each one and the cursor holds between them.
-            </p>
-            <div className={styles.demoCard} aria-live="polite">
-              <StreamingText text={stream.text} streaming={stream.streaming} />
-            </div>
-            <div className={styles.demoControls}>
-              <Button
-                variant="secondary"
-                size="compact"
-                label="Replay"
-                iconLeft="replay"
-                onClick={stream.replay}
-              />
-            </div>
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-3`}>
-            <SectionTitle title="Catching up" />
-            <p className={styles.sectionBody}>
-              The same response delivered three times faster. The reveal widens
-              its steps as the backlog grows, so it stays close behind the
-              stream instead of falling seconds behind it.
-            </p>
-            <div className={styles.demoCard} aria-live="polite">
-              <StreamingText text={fast.text} streaming={fast.streaming} />
-            </div>
-            <div className={styles.demoControls}>
-              <Button
-                variant="secondary"
-                size="compact"
-                label="Replay"
-                iconLeft="replay"
-                onClick={fast.replay}
-              />
-            </div>
-          </section>
-
-          <section className={`${styles.section} animate-in animate-delay-4`}>
-            <SectionTitle title="Finished text" />
-            <p className={styles.sectionBody}>
-              Text present on mount renders whole, and with streaming off there
-              is no cursor: a settled message costs nothing. Announcement stays
-              the container&apos;s job, so pair the component with an aria-live
-              region when the surrounding UI does not already announce the
-              message.
-            </p>
-            <div className={styles.demoCard}>
-              <StreamingText text="A finished message renders whole, with no cursor and no timers running." />
-            </div>
-          </section>
-
-          <ComponentInstallStrip slug="streaming-text" />
-        </main>
+    <div className={styles.dsContent}>
+      <PageBreadcrumb />
+      <div className={`${styles.pageHeader} animate-in`}>
+        <h1 className={styles.pageTitle}>Streaming text</h1>
+        <PageLinks storybookPath="/?path=/docs/components-streamingtext--docs" />
       </div>
-    </>
+
+      <div className={`${styles.introSection} animate-in animate-delay-1`}>
+        <p className={styles.subDisplay}>
+          The reveal for text that arrives in pieces
+        </p>
+        <p className={styles.introBody}>
+          An LLM response typing itself out, extracted into a primitive.
+          It inherits the surrounding typography, animates only through
+          appended text, and keeps a cursor blinking while more is coming.
+          Under reduced motion the typing is skipped and each chunk
+          appears whole. The pacing itself ships headless as
+          useStreamReveal, and this site&apos;s own chat runs on it: the
+          same engine, rendering markdown instead of a span.
+        </p>
+      </div>
+
+      <section className={`${styles.section} animate-in animate-delay-2`}>
+        <SectionTitle title="A simulated stream" />
+        <p className={styles.sectionBody}>
+          Chunks of a few words land every 400ms; the reveal types through
+          each one and the cursor holds between them.
+        </p>
+        <div className={styles.demoCard} aria-live="polite">
+          <StreamingText text={stream.text} streaming={stream.streaming} />
+        </div>
+        <div className={styles.demoControls}>
+          <Button
+            variant="secondary"
+            size="compact"
+            label="Replay"
+            iconLeft="replay"
+            onClick={stream.replay}
+          />
+        </div>
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-3`}>
+        <SectionTitle title="Catching up" />
+        <p className={styles.sectionBody}>
+          The same response delivered three times faster. The reveal widens
+          its steps as the backlog grows, so it stays close behind the
+          stream instead of falling seconds behind it.
+        </p>
+        <div className={styles.demoCard} aria-live="polite">
+          <StreamingText text={fast.text} streaming={fast.streaming} />
+        </div>
+        <div className={styles.demoControls}>
+          <Button
+            variant="secondary"
+            size="compact"
+            label="Replay"
+            iconLeft="replay"
+            onClick={fast.replay}
+          />
+        </div>
+      </section>
+
+      <section className={`${styles.section} animate-in animate-delay-4`}>
+        <SectionTitle title="Finished text" />
+        <p className={styles.sectionBody}>
+          Text present on mount renders whole, and with streaming off there
+          is no cursor: a settled message costs nothing. Announcement stays
+          the container&apos;s job, so pair the component with an aria-live
+          region when the surrounding UI does not already announce the
+          message.
+        </p>
+        <div className={styles.demoCard}>
+          <StreamingText text="A finished message renders whole, with no cursor and no timers running." />
+        </div>
+      </section>
+
+      <ComponentInstallStrip slug="streaming-text" />
+    </div>
   );
 }

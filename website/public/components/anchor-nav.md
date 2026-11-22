@@ -2,7 +2,7 @@
 
 An on-page list of anchor links that tracks the reader's position, listed by hand or read from the page's headings.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.32.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
 - Import: `import { AnchorNav } from 'rift-ds';`

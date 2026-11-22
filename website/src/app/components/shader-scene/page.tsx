@@ -150,7 +150,9 @@ export default function ShaderScenePage() {
           with a shark, a ray, a turtle and schools of fish drawn in type
           and swimming through it. Sky is cloud massed overhead and burning
           with a low sun, hot on its lit side and cold in its shade. Galaxy is a spiral seen
-          at a slant, a hot core in wound arms, deep in a field of stars. Every scene but the rift is also one of this
+          at a slant, a hot core in wound arms, deep in a field of stars. Tide is
+          dusk over still water, smeared like a long exposure, with a band of
+          fire on the horizon mirrored in the water. Every scene but the rift is also one of this
           site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
           GL context.
         </p>
@@ -190,6 +192,9 @@ export default function ShaderScenePage() {
           <Stage caption='scene="galaxy"'>
             <ShaderScene scene="galaxy" passes={FULL_PASSES} speed={1} />
           </Stage>
+          <Stage caption='scene="tide"'>
+            <ShaderScene scene="tide" passes={SKY_PASSES} speed={1} />
+          </Stage>
         </div>
       </section>
 
@@ -228,14 +233,15 @@ export default function ShaderScenePage() {
       <section className={styles.section}>
         <SectionTitle title="Light mode" />
         <p className={styles.demoText}>
-          Every scene but the ocean and the sky is a night scene: it adds
+          Every scene but the ocean, the sky and the tide is a night scene: it adds
           light to a dark ground. On a light page each one works its light out
           against a dark ground of its own and lays it onto the page as a
           pale tint, so it reads as a soft dawn instead of a dark block.
           The ocean has a day of its own: a turquoise shallow on a light
           page, deep moonlit water on a dark one. So has the sky: a
           golden hour on a light page, the last of a sunset under a night sky on a
-          dark one. Switch the theme to see
+          dark one. And so has the tide: a periwinkle evening over pale water
+          on a light page, the last of the light on a dark one. Switch the theme to see
           the stages above change. The scene never sets{" "}
           <code>data-theme</code> itself, which would hide a preset&rsquo;s
           colours.

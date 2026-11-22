@@ -58,7 +58,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean', 'sky', 'galaxy'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean', 'sky', 'galaxy', 'tide'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -152,6 +152,14 @@ export const Galaxy: Story = {
   args: {
     scene: 'galaxy',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
+  },
+};
+
+/** Tide: dusk over still water, smeared like a long exposure, a band of fire on the horizon mirrored in the water. */
+export const Tide: Story = {
+  args: {
+    scene: 'tide',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.1 } } },
   },
 };
 

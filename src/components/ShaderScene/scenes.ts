@@ -1809,4 +1809,191 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky, galaxy];
+/**
+ * The tide: dusk over still water, painted as if the camera were dragged
+ * sideways through a long exposure, so every shape is a horizontal smear.
+ * Night comes down from the top of the sky, which clears to a cold band
+ * near the water; a band of fire lies right on the horizon with a hot line
+ * along it, a dark smear of cloud hangs above the fire and burns along its
+ * underside, and a low spit of land runs out on the right. The water below
+ * mirrors the sky, broken into streaks that close up as they run off to the
+ * horizon, with the fire laid in it and glints under the sun. Like the sky
+ * it has a day of its own, told from the page ground: on a light page a
+ * periwinkle evening over pale water, on a dark one the last of the light
+ * under a night sky. It reads the whole ambient set and casts it by
+ * temperature, since a theme's slots carry no fixed hue: the coolest tone
+ * is the sky and the water, the warmest the fire and the next warmest its
+ * second tone, so a theme recolours it and it still reads as a sunset.
+ */
+export const tide: Scene = {
+  id: "tide",
+  label: "Tide",
+  description: "Dusk over still water, smeared like a long exposure: a band of fire on the horizon under night coming down, mirrored in the water.",
+  /* The whole set: the scene casts it by temperature. */
+  colours: [
+    "--color-ambient-1",
+    "--color-ambient-2",
+    "--color-ambient-3",
+    "--color-ambient-4",
+    "--color-ambient-5",
+    "--color-ambient-6",
+  ],
+  params: [
+    { key: "horizon", label: "Horizon", min: 0.15, max: 0.95, step: 0.01, default: 0.4 },
+    { key: "glow", label: "Fire", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "line", label: "Hot line", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "sunX", label: "Sun position", min: -1, max: 1, step: 0.01, default: 0.15 },
+    { key: "cloud", label: "Cloud", min: 0, max: 1, step: 0.01, default: 0.6 },
+    { key: "cloudY", label: "Cloud height", min: 0, max: 0.4, step: 0.01, default: 0.12 },
+    { key: "ripple", label: "Ripples", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "land", label: "Land", min: 0, max: 1, step: 0.01, default: 0.5 },
+    { key: "depth", label: "Sky depth", min: 0, max: 1.5, step: 0.01, default: 1 },
+    { key: "brush", label: "Brush", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec3 tBlue;
+vec3 tSlate;
+vec3 tPale;
+vec3 tCoral;
+vec3 tAmber;
+vec3 tGold;
+vec3 tViolet;
+float tDay;
+
+float tideLum(vec3 c) {
+  return dot(c, vec3(0.2126, 0.7152, 0.0722));
+}
+
+/* A theme's ambient tone at full brightness, so it reads as a hue; a tone
+   with next to no hue keeps its own value, or a grey would come out white. */
+vec3 tideHue(vec3 c) {
+  float hi = max(c.r, max(c.g, c.b));
+  float chroma = (hi - min(c.r, min(c.g, c.b))) / max(hi, 1e-3);
+  return mix(c, c / max(hi, 1e-3), smoothstep(0.04, 0.2, chroma));
+}
+
+/* A mix made by eye rather than by light, so a thinned blue stays blue. */
+vec3 tideMix(vec3 a, vec3 b, float k) {
+  return pow(mix(pow(a, vec3(1.0 / 2.2)), pow(b, vec3(1.0 / 2.2)), k), vec3(2.2));
+}
+
+/* One amount by night, another by day. */
+float tideDk(float night, float day) {
+  return mix(night, day, tDay);
+}
+
+/* Light laid on a base: added on a dark ground, mixed in by eye on a light one. */
+vec3 tideLay(vec3 base, vec3 c, float k) {
+  return mix(base + c * k, tideMix(base, c, clamp(k, 0.0, 1.0)), tDay);
+}
+
+/* The sky a height a above the horizon: night overhead, a cold clear band
+   lower down, and the fire right on the water, hottest under the sun. */
+vec3 tideSky(float x, float a, float sx, float aspect) {
+  float side = exp(-(x - sx) * (x - sx) / (0.5 * aspect * aspect));
+  float climb = pow(clamp(a / max(1.0 - u_horizon, 0.1), 0.0, 1.0), 0.6);
+  vec3 zenith = tideLay(u_ground, mix(tSlate, tViolet, 0.15), tideDk(0.018, 0.62) * u_depth);
+  vec3 clear = tideLay(u_ground, tPale, tideDk(0.09, 0.3) * u_depth * (0.5 + 0.5 * side));
+  vec3 col = mix(clear, zenith, climb);
+  float warm = exp(-a * a / (0.012 * u_glow + 1e-4)) * (0.3 + 0.7 * side);
+  float hot = exp(-a * a / (0.0022 * u_glow + 1e-4)) * (0.4 + 0.6 * side);
+  col = tideLay(col, mix(tCoral, tViolet, 0.15), warm * tideDk(0.22, 0.45) * min(u_glow, 1.0));
+  col = tideLay(col, mix(tCoral, tAmber, 0.5), hot * tideDk(1.4, 0.75) * min(u_glow, 1.4));
+  return col;
+}
+
+vec3 scene(vec2 uv, float t) {
+  float aspect = u_size.x / u_size.y;
+  float x = (uv.x - 0.5) * aspect;
+  tDay = smoothstep(0.1, 0.45, tideLum(u_ground));
+  /* A theme's slots carry no fixed hue, so the tones are cast by
+     temperature: the coolest of the set is the sky, the warmest the fire,
+     the next warmest its second tone. */
+  vec3 tones[6];
+  int coolest = 0;
+  int warmest = 0;
+  for (int i = 0; i < 6; i++) {
+    tones[i] = tideHue(u_col[i]);
+    float heat = tones[i].r - tones[i].b;
+    if (heat < tones[coolest].r - tones[coolest].b) coolest = i;
+    if (heat > tones[warmest].r - tones[warmest].b) warmest = i;
+  }
+  int second = warmest == 0 ? 1 : 0;
+  for (int i = 0; i < 6; i++) {
+    if (i != warmest && tones[i].r - tones[i].b > tones[second].r - tones[second].b) second = i;
+  }
+  tBlue = tones[coolest];
+  tSlate = mix(tBlue, vec3(tideLum(tBlue)), 0.35);
+  tPale = mix(tBlue, vec3(1.0), 0.2);
+  tCoral = tones[warmest];
+  tAmber = mix(tones[second], tCoral, 0.3);
+  tGold = mix(tAmber, vec3(1.0, 0.9, 0.6), 0.35);
+  tViolet = mix(tBlue, tCoral, 0.4);
+  float w = t * u_drift;
+  float sx = u_sunX * 0.5 * aspect;
+  float near = exp(-(x - sx) * (x - sx) / 0.15);
+  float side = exp(-(x - sx) * (x - sx) / (0.5 * aspect * aspect));
+
+  /* Every edge is a stroke of the brush, so the bands waver a little
+     along their length. */
+  float jitter = (fbm(vec2(x * 1.3 + w * 0.01, uv.y * 3.0)) - 0.5) * 0.035 * u_brush;
+  float up = uv.y - u_horizon;
+  float a = max(up + jitter * smoothstep(0.0, 0.03, up), 0.0);
+
+  vec3 col = tideSky(x, a, sx, aspect);
+
+  /* A smear of cloud above the fire, combed flat by the drag, dark in its
+     body and burning along its underside where the fire reaches it. */
+  float n = fbm(vec2(x * 0.42 - w * 0.004, uv.y * 7.5 + 3.0));
+  float n2 = fbm(vec2(x * 1.6 - w * 0.006, uv.y * 26.0 + 11.0));
+  float lane = exp(-pow(a - u_cloudY, 2.0) / 0.012);
+  float leftward = mix(1.0, smoothstep(sx + 0.6 * aspect, sx - 0.2 * aspect, x), 0.6);
+  float cloud = smoothstep(0.4, 0.66, n * 0.75 + n2 * 0.35) * lane * leftward * u_cloud * smoothstep(0.0, 0.02, up);
+  vec3 cloudCol = mix(u_ground * 0.55 + tSlate * 0.006, tideMix(u_ground, mix(tSlate, tViolet, 0.2) * 0.3, 0.82), tDay);
+  col = mix(col, cloudCol, min(1.0, cloud * 1.3));
+  float under = cloud * exp(-a * a / (0.03 * u_glow + 1e-4)) * (1.0 - smoothstep(0.35, 0.8, n2));
+  col = tideLay(col, mix(tCoral, tAmber, 0.3), under * tideDk(0.5, 0.55) * (0.4 + 0.6 * side));
+
+  /* The hot line right on the water, a pixel or two thick. */
+  float lw = 1.4 * u_ratio / u_size.y;
+  float line = exp(-up * up / (lw * lw)) + 0.35 * exp(-up * up / (36.0 * lw * lw));
+  col = tideLay(col, mix(tGold, vec3(1.0), 0.3), line * u_line * (0.35 + 0.65 * side) * tideDk(2.4, 0.8));
+
+  /* The water: the sky mirrored and broken into streaks that close up as
+     they run off to the horizon, dark under the near shore. */
+  float d = max(-up, 0.0);
+  float depth = 0.3 / (d + 0.025);
+  float ripple = fbm(vec2(x * depth * 0.12 + w * 0.01, depth * 2.4 - w * 0.12));
+  float fine = vnoise(vec2(x * depth * 0.5 - w * 0.03, depth * 8.0 + w * 0.3));
+  float ra = d * 1.25 + (ripple - 0.5) * 0.06 * u_ripple;
+  vec3 refl = tideSky(x + (fine - 0.5) * 0.04 * u_ripple, max(ra, 0.0), sx, aspect);
+  vec3 waterBase = mix(u_ground + tSlate * 0.02 * u_depth, tideMix(u_ground, tSlate * 0.55, 0.55 * u_depth), tDay);
+  float mirror = exp(-d / 0.22) * mix(1.0, 0.15 + 1.0 * smoothstep(0.4, 0.75, ripple), min(1.0, u_ripple));
+  vec3 water = mix(waterBase, refl * tideDk(0.7, 0.88), min(1.0, mirror * 0.85));
+  vec3 deep = mix(u_ground * 0.9, tideMix(u_ground, tSlate * 0.22, 0.85 * u_depth), tDay);
+  water = mix(water, deep, smoothstep(0.06, 0.45, d) * 0.7);
+  float glint = pow(fine, 5.0) * near * exp(-d / 0.18) * u_ripple;
+  water = tideLay(water, mix(tCoral, tGold, 0.45), glint * tideDk(1.1, 0.6) * min(u_glow, 1.0));
+
+  /* A low spit of land out on the right, laid on the horizon, with its
+     dark reflection under it. */
+  float region = smoothstep(0.05 * aspect, 0.35 * aspect, x) * u_land;
+  float landH = region * (0.014 + 0.012 * fbm(vec2(x * 2.5, 4.0)));
+  float px = u_ratio / u_size.y;
+  vec3 landCol = mix(u_ground * 0.6 + tSlate * 0.008, tideMix(u_ground, tSlate * 0.2, 0.8), tDay);
+  float onLand = smoothstep(landH + px, landH - px, up) * smoothstep(-2.0 * px, 0.0, up) * step(0.001, region);
+  col = mix(col, landCol, onLand);
+  water = mix(water, landCol, smoothstep(landH * 1.3 + px, landH * 1.3 - px, d) * step(0.001, region) * 0.55);
+
+  col = mix(water, col, smoothstep(-px, px, up));
+
+  /* The weave of the canvas, and the fine combing of the brush. */
+  float comb = vnoise(vec2(x * 3.0 + w * 0.004, uv.y * u_size.y / u_ratio * 0.45));
+  col *= 1.0 + (comb - 0.5) * 0.14 * u_brush;
+  return max(col, vec3(0.0));
+}
+`,
+};
+
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky, galaxy, tide];

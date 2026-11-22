@@ -116,6 +116,14 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.08 } } },
   },
+  {
+    id: "tide",
+    label: "Tide",
+    description: "Dusk over still water, smeared like a long exposure: a band of fire on the horizon, mirrored in the water.",
+    sceneId: "tide",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.1 } } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

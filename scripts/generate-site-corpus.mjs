@@ -74,12 +74,18 @@ import {
   STORYBOOK_URL,
 } from './brand.mjs';
 import { isEntryScript } from './lib/report.mjs';
+import { leaksIn } from './lib/screens.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const websiteApp = join(repoRoot, 'website', 'src', 'app');
 
 export const outputPath = join(
   repoRoot, 'website', 'src', 'data', 'site-corpus.generated.ts'
+);
+
+/** The second output: what each page puts on the visitor's screen (see buildPageScreens). */
+export const screensPath = join(
+  repoRoot, 'website', 'src', 'data', 'page-screens.generated.ts'
 );
 
 /**
@@ -193,11 +199,34 @@ const jsxText = (raw) =>
     .filter((line, index, lines) => line !== '' || lines.length === 1)
     .join(' ');
 
+/**
+ * Set while the page screens are read (buildPageScreens). A component page's
+ * demos render data that only exists while the page runs (a row's values, a
+ * live count), and the screen keeps the page's words around such a value
+ * rather than fail on it; it also keeps the short visible text a screen
+ * shows (isScreenText). The corpus itself stays strict.
+ */
+let lenientExpressions = false;
+
 const decode = (text) =>
   text.replace(/&[a-z]+;/gi, (entity) => ENTITIES[entity] ?? entity);
 
+/**
+ * True for what a screen shows a reader, which is wider than prose: a demo's
+ * label ("Finished in 4s") or a section's title ("States") is what a visitor
+ * points at and asks about. Still only text with words in it, never a bare
+ * lowercase identifier (a variant name, a pattern id).
+ */
+function isScreenText(text) {
+  if (!/[A-Za-z]{2}/.test(text)) return false;
+  if (/^[a-z][\w-]*$/.test(text)) return false;
+  if (/^https?:/.test(text)) return false;
+  return true;
+}
+
 /** True for fragments that read as sentences rather than code. */
 export function isProse(text) {
+  if (lenientExpressions) return isScreenText(text);
   if (text.length < 25) return false;
   if (text.split(/\s+/).length < 4) return false;
   // Paths, selectors, imports. A sentence that opens on a path ("/api/mcp
@@ -742,6 +771,7 @@ export const pageProse = (...segments) => {
     const rel = path.slice(websiteApp.length + 1).replaceAll('\\', '/');
     for (const { expression, line } of unresolvedExpressions.get(path) ?? []) {
       const key = `${rel}::${expression}`;
+      if (lenientExpressions) continue;
       if (RUNTIME_EXPRESSIONS.has(key)) {
         usedRuntimeExpressions.add(key);
         continue;
@@ -1507,10 +1537,121 @@ export function corpusSizes() {
   });
 }
 
+/* ============================================================
+   Page screens: what the visitor is looking at
+   ------------------------------------------------------------
+   The chat sits on the page the visitor is reading, so a question about
+   "this" is a question about that page. The browser sends the path; the
+   route expands it into what the page shows from this file, which the
+   corpus alone cannot do: the corpus leaves the component pages out to
+   stay inside its budget, and a page's own text is what a question asked
+   on it most needs.
+
+   One entry per static route, in one of three forms:
+   - `prose`: the page's own words, read exactly as the corpus reads a
+     covered page (the same pageContent), for the component pages the
+     corpus leaves out.
+   - `section`: the corpus section that already carries the page's words,
+     so nothing is sent twice.
+   - `about`: the written reason a page is outside the corpus, which says
+     what is on it (a demo collage, a fictional template). Its prose stays
+     out, by the same decision that keeps it out of the corpus.
+
+   Same boundary as the corpus: published, owner-authored prose only, held
+   to the same leak screen. It is sent only as the trailing, uncached block
+   of a request made on that page (website/src/lib/site-chat-context.ts),
+   and the chat's get_page tool reads it for any other page.
+   ============================================================ */
+
+const RESERVED_EXAMPLE_ADDRESS = /@(?:[\w-]+\.)*(?:example|test|invalid)$|@example\.(?:com|org|net)$/i;
+
+function buildPageScreens() {
+  const covered = coveredElsewhere();
+  const onSitePages = new Set(sitePageRoutes());
+  const sanctioned = sanctionedFacts();
+  const screens = {};
+  for (const route of siteRoutes()) {
+    if (EXCLUDED_ROUTES.has(route)) {
+      screens[route] = { about: EXCLUDED_ROUTES.get(route) };
+      continue;
+    }
+    if (route.split('/').some(isDynamicSegment)) continue;
+    if (covered.has(route)) {
+      screens[route] = { section: covered.get(route) };
+    } else if (onSitePages.has(route)) {
+      screens[route] = { section: 'Site pages' };
+    } else if (/^\/components\//.test(route)) {
+      lenientExpressions = true;
+      let content;
+      try {
+        content = pageContent(...route.slice(1).split('/'));
+      } finally {
+        lenientExpressions = false;
+      }
+      const { prose, factsMarkdown } = content;
+      const text = [prose, factsMarkdown].filter(Boolean).join('\n\n');
+      if (text) screens[route] = { prose: text };
+    }
+  }
+  for (const [route, screen] of Object.entries(screens)) {
+    const text = screen.prose ?? screen.about ?? '';
+    // An address is sanctioned as the corpus sanctions one (a page's
+    // corpus-facts()), or when its domain is reserved for examples (RFC 2606:
+    // .example, .test, .invalid, example.com/org/net), which no one can own,
+    // so a demo's fixture address is never a person's.
+    const leaks = leaksIn(text).filter(
+      (leak) => !(leak.id === 'email' && (sanctioned.has(leak.text) || RESERVED_EXAMPLE_ADDRESS.test(leak.text)))
+    );
+    if (leaks.length > 0) {
+      throw new Error(
+        `generate-site-corpus: the screen for ${route} carries a ${leaks[0].what} (${leaks[0].shown}); ` +
+          `it would be sent to the model. Remove it at the source.`
+      );
+    }
+  }
+  const sorted = Object.fromEntries(Object.entries(screens).sort(([a], [b]) => a.localeCompare(b)));
+  // The chat panel is on the screen too: the parts the widget registry names, each with its page.
+  const registry = JSON.parse(read(join(repoRoot, 'src', 'components', 'registry.json')));
+  const [widget] = JSON.parse(read(join(repoRoot, 'src', 'chat', 'registry.json'))).widgets;
+  const byName = new Map(registry.components.map((c) => [c.name, c]));
+  const panel = {
+    label: widget.label,
+    path: `/components/${widget.slug}`,
+    parts: widget.parts.map((name) => {
+      const part = byName.get(name);
+      if (!part) throw new Error(`generate-site-corpus: the chat widget names a part ${name} the component registry does not hold.`);
+      return { label: part.label, path: `/components/${part.slug}` };
+    }),
+  };
+  return `// AUTO-GENERATED — do not edit by hand.
+// Source of truth: the published site's page prose, read the way the corpus reads it.
+// Regenerate: node scripts/generate-site-corpus.mjs (runs via predev/prebuild).
+// Server-only: read by the chat route, never by a page.
+
+export interface PageScreen {
+  /** The page's own words, for a page the corpus leaves out. */
+  prose?: string;
+  /** The corpus section that already carries the page's words. */
+  section?: string;
+  /** Why the page is outside the corpus, which says what is on it. */
+  about?: string;
+}
+
+/** What each static route shows, keyed by path. */
+export const pageScreens: Record<string, PageScreen> = ${JSON.stringify(sorted, null, 2)};
+
+/** The chat panel every page shows when it is open: the widget, and the components it is built from. */
+export const chatPanel: { label: string; path: string; parts: { label: string; path: string }[] } = ${JSON.stringify(panel, null, 2)};
+`;
+}
+
 /** What this generator writes, for the freshness check (scripts/lib/fresh.mjs). */
 export const surface = () => ({
   regenerate: 'node scripts/generate-site-corpus.mjs',
-  files: [[outputPath, buildSiteCorpus()]],
+  files: [
+    [outputPath, buildSiteCorpus()],
+    [screensPath, buildPageScreens()],
+  ],
 });
 
 /** Write the generated files. The chain runner calls this; run alone, the script does. */
@@ -1530,6 +1671,8 @@ export async function main() {
   } else {
     writeFileSync(outputPath, buildSiteCorpus());
     console.log(`✓ Generated ${outputPath.replace(repoRoot + '/', '')}`);
+    writeFileSync(screensPath, buildPageScreens());
+    console.log(`✓ Generated ${screensPath.replace(repoRoot + '/', '')}`);
   }
 }
 

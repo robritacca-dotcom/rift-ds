@@ -18,6 +18,10 @@ providers:
         messages:
           - role: user
             content: '{{prompt}}'
+        # The page the question is asked from, as the widget sends it: a case
+        # with a `page` var gets that page's screen block, one without asks
+        # from nowhere (an empty path is dropped by the route).
+        path: '{{page}}'
       transformResponse: file://transform-response.js
 
 # Three runs per question: same question, different answers — report a rate,

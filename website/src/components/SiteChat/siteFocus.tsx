@@ -3,6 +3,7 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { describeSelection, useHeldHighlight, useSelectionFocus, type SelectedText, type ChatSelection } from "rift-ds/chat";
+import { readBrand } from "@/lib/theme/brand";
 
 /**
  * What the visitor has highlighted on the page they are reading, for the
@@ -55,11 +56,29 @@ export function SiteFocusProvider({ children }: { children: ReactNode }) {
 
 export const useSiteFocus = () => useContext(FocusContext);
 
-/** The request's context: the page, and the highlight when there is one. */
+/*
+ * What else is on the visitor's screen, read from <html> at each send: the
+ * theme (data-brand, absent for the base theme), the colour mode
+ * (data-theme) and where the chat panel sits (data-chat, which ChatLauncher
+ * writes; absent when it is over the page). The route keeps each only when
+ * it is one of its known values (lib/site-chat-context.ts).
+ */
+function screenState() {
+  if (typeof document === "undefined") return undefined;
+  const root = document.documentElement;
+  return {
+    theme: readBrand(),
+    mode: root.getAttribute("data-theme") ?? undefined,
+    placement: root.getAttribute("data-chat") ?? undefined,
+  };
+}
+
+/** The request's context: the page, the highlight when there is one, and the screen around them. */
 export function siteContextString(path: string | null, focus: SiteFocus | null) {
-  if (!focus) return JSON.stringify({ path });
+  const screen = screenState();
+  if (!focus) return JSON.stringify({ path, screen });
   const { text, kind, source, heading, around, column, row } = focus;
-  return JSON.stringify({ path, highlight: { text, kind, source, heading, around, column, row } });
+  return JSON.stringify({ path, highlight: { text, kind, source, heading, around, column, row }, screen });
 }
 
 /* The prop a props-table cell names, as Component.prop. */

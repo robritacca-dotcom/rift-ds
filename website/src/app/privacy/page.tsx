@@ -44,7 +44,7 @@ export default function PrivacyPage() {
             The chat answers questions about this design system and its site.
             Messages go to Anthropic, whose model writes the replies. For each
             exchange the site keeps the question, the answer, the page it was
-            asked from and any text you had highlighted on it, which model answered, timing and token counts, and a
+            asked from, any text you had highlighted on it, the theme and colour mode you were reading it in and where the chat sat on the screen, which model answered, timing and token counts, and a
             thumbs verdict if you leave one. Each entry carries a scrambled,
             one-way stand-in for your network address so abuse can be
             spotted; it is not your name, and it cannot be turned back into

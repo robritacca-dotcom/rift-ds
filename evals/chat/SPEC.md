@@ -38,7 +38,7 @@ and the corpus boundary in CLAUDE.md.
 
 | Id | Rule | Enforced by |
 |---|---|---|
-| G1 | Facts about the system and the site come only from the site corpus. A fact not in it is unknown: say so plainly, never guess. | L1 per-case `contains` asserts on the fact questions in `golden-set.json`; L3 for the tone of "I don't know" |
+| G1 | Facts about the system and the site come only from published data: the site corpus, the visitor's screen block and the lookup tools. A fact none of them holds is unknown: look before saying so, then say so plainly, never guess. | L1 per-case `contains` asserts on the fact questions in `golden-set.json`; L3 for the tone of "I don't know" |
 | G2 | Every site path the answer cites must exist. | L1 `evals/chat/assert-paths.mjs`, on every case via `defaultTest` |
 | G3 | A stated component count must match the registry; a qualified approximation may run a little under, never over. | L1 `evals/chat/assert-component-count.mjs`. Wired only on the count case today; attach it to any new case likely to elicit a count |
 | G4 | Every fact the golden set requires must actually be in the generated corpus. | L0 `scripts/validate-chat-coverage.mjs`, in CI |
@@ -60,6 +60,21 @@ shared with `/api/mcp` through `website/src/lib/site-tools.ts`.
 | T4 | Tool-answered eval cases carry empty `requiredFacts`: the facts live in the generated prop/token data, not the corpus, and `validate-chat-coverage.mjs` checks `requiredFacts` against the corpus alone. | L0 by construction; this row records why those cases look different |
 | A1 | When the most useful next step depends on an answer whose likely values can be listed, the reply asks in words and then calls `ask_user` with those answers, once, as its last action. Authority: `DEFAULT_ASK_USER_DESCRIPTION` in `src/chat/server.ts`, the tool's own description. | L1 the theme-preset case asserts a `[question]` line, which `transform-response.js` appends for a `question` event |
 | A2 | A question that can simply be answered, or an open one, is answered: most replies never ask. Over-asking is the failure this rule exists for. | L1 two cases assert no `[question]` line |
+
+## The screen
+
+Authority: "The visitor's screen" section of `persona.ts`, and the block
+`siteContextBlock` in `website/src/lib/site-chat-context.ts` writes from the
+page's path (the page's words from `website/src/data/page-screens.generated.ts`,
+the components it draws, the chat panel from `website/src/lib/site-chat-panel.ts`,
+the theme, mode and placement). A case asks from a page with its `page` var.
+
+| Id | Rule | Enforced by |
+|---|---|---|
+| S1 | The chat is on the visitor's screen: a question about this, here, or something named by how it looks is about the page or the chat panel, answered from the screen block. Never "I cannot see your screen". | L1 the `source: screen` cases on the Agent status page assert the answer names Agent status and never says it cannot see the screen |
+| S2 | A fact the page on screen states is answered from it, though the corpus leaves the page out; a fact another page states is read with `get_page` before the answer says the site does not cover it. | L1 the done-colour case (on the page) and the summaryOnly case (from another page) |
+| S3 | An unclear question takes the reading the screen and the conversation support, answered, with the reading named; it asks only when two readings need different answers. | Unenforced, L3 |
+| S4 | Screen cases carry empty `requiredFacts` unless the fact is also in the corpus: the page's words live in the screens file, and `validate-chat-coverage.mjs` checks the corpus alone. | L0 by construction; this row records why those cases look different |
 
 ## Identity and scope
 

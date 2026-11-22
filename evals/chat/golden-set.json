@@ -787,9 +787,10 @@
     }
   },
   {
-    "description": "designer: the tick beside the chat's own reply line (live session: the chat said it could not see the screen)",
+    "description": "screen: the tick beside the chat's own reply line, asked on the Agent status page (live session: the chat said it could not see the screen) (S1)",
     "vars": {
-      "question": "I see a green checkmark in the dots beside 'Thought for 3s'. What is it?"
+      "question": "I see a green checkmark in the dots beside 'Thought for 3s'. What is it?",
+      "page": "/components/agent-status"
     },
     "assert": [
       {
@@ -809,7 +810,73 @@
       "requiredFacts": [
         "Thought for 4s",
         "the dots draw a tick in the positive status colour"
-      ]
+      ],
+      "source": "screen"
+    }
+  },
+  {
+    "description": "screen: 'the live agent status' on the Agent status page reads as the line above the reply, not a request to see the screen (S1)",
+    "vars": {
+      "question": "Look at the live agent status",
+      "page": "/components/agent-status"
+    },
+    "assert": [
+      {
+        "type": "icontains-any",
+        "value": [
+          "agent status",
+          "agent-status"
+        ]
+      },
+      {
+        "type": "not-icontains",
+        "value": "can't see your screen"
+      },
+      {
+        "type": "not-icontains",
+        "value": "cannot see your screen"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [],
+      "source": "screen"
+    }
+  },
+  {
+    "description": "screen: a fact only the component page states (the done colour), asked on that page (S2)",
+    "vars": {
+      "question": "What colour is the done state?",
+      "page": "/components/agent-status"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "positive"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [],
+      "source": "screen"
+    }
+  },
+  {
+    "description": "screen: a fact only another component page states, asked from elsewhere (get_page) (S2)",
+    "vars": {
+      "question": "On the Reasoning component, what does summaryOnly drop?",
+      "page": "/docs/get-started"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "chevron"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [],
+      "source": "screen"
     }
   }
 ]

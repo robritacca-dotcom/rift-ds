@@ -1,22 +1,33 @@
 /**
- * The site chat's request context: the page the visitor is on, and what they
- * highlighted on it with what it sits in (website/src/components/SiteChat/
- * siteFocus.tsx sends both as one JSON string). It lands in a system block,
+ * The site chat's request context: the visitor's screen. The page they are
+ * on, what they highlighted on it with what it sits in, and the theme, mode
+ * and panel placement they are looking at (website/src/components/SiteChat/
+ * siteFocus.tsx sends them as one JSON string). It lands in a system block,
  * so it is checked as untrusted input, and nothing the browser says is passed
  * on as a fact:
  *
  * - The path keeps the package's slug check (`sanitisePath`), and the
  *   highlight the package's `sanitiseSelection`.
- * - `selectionLines` writes it for the model, each part named as the site's
- *   own words or the visitor's selection by `isPublished`: found in the
- *   published site's text (the corpus), or a props-table cell whose prop the
- *   generated API holds. Words not found (a code example, or anything a
- *   visitor could make) are quoted as data, never instructions, which is no
- *   more than they could type.
+ * - The theme, mode and placement are closed values, each kept only when it
+ *   is one of its known set.
+ * - Everything the screen shows is expanded here from the path, never taken
+ *   from the browser: the page's own words, or the corpus section that holds
+ *   them (the generated screens file), the library components the page
+ *   draws (the dependency graph), and the chat panel itself
+ *   (lib/site-chat-panel.ts). The chat answers as someone looking at the
+ *   same screen, because it is on that screen.
+ * - `selectionLines` writes the highlight for the model, each part named as
+ *   the site's own words or the visitor's selection by `isPublished`: found
+ *   in the published site's text (the corpus, or the words of the page it
+ *   was made on), or a props-table cell whose prop the generated API holds.
+ *   Words not found (a code example, or anything a visitor could make) are
+ *   quoted as data, never instructions, which is no more than they could
+ *   type.
  * - The facts beside it are worked out here from published data alone: the
  *   prop a props-table cell names, if that component has it; the tokens and
- *   components the words name, if they exist. A source the browser claims
- *   that the data does not hold is dropped.
+ *   components the words name, if they exist, with a token resolved in the
+ *   theme on the visitor's screen. A source the browser claims that the
+ *   data does not hold is dropped.
  *
  * A plain path string (an older client) still reads as the page alone.
  */
@@ -25,14 +36,33 @@ import { sanitisePath, sanitiseSelection, selectionLines, type ChatSelection } f
 import { tokenRegistry } from "rift-ds/tokens/registry";
 import { THEME_IDS, tokenValue } from "rift-ds/tokens/values";
 import { componentApi } from "@/data/component-api.generated";
+import { graphSource } from "@/data/dependency-graph.generated";
+import { pageScreens } from "@/data/page-screens.generated";
 import { siteCorpus } from "@/data/site-corpus.generated";
+import { CHAT_PANEL_LINES } from "@/lib/site-chat-panel";
+import { themeNames } from "@/lib/site-tools";
 
 const MAX_NAMED_TOKENS = 6;
 const MAX_NAMED_COMPONENTS = 4;
 
+/** Where the panel sits, as ChatLauncher writes it on <html> (`data-chat`); absent means over the page. */
+const PLACEMENTS = {
+  docked: "docked beside the page, on the right; the page has moved over to make room",
+  "docked-left": "docked beside the page, on the left; the page has moved over to make room",
+  takeover: "the whole screen, at a phone width; the page is hidden behind it until the chat closes",
+} as const;
+const OVER_THE_PAGE = "over the page, which shows behind it";
+
+interface ScreenState {
+  theme?: string;
+  mode?: "light" | "dark";
+  placement?: keyof typeof PLACEMENTS;
+}
+
 interface SiteContext {
   path: string | null;
   highlight?: ChatSelection;
+  screen?: ScreenState;
 }
 
 /* Markup the corpus writes and a rendered page does not, then case and spacing. */
@@ -47,13 +77,30 @@ const corpusText = normalise(siteCorpus);
 const tokenNames = new Set(Object.values(tokenRegistry).flat());
 const componentsByName = new Map(componentApi.flatMap((entry) => entry.exports.map((exported) => [exported.component, { entry, exported }] as const)));
 
-/** Whether every line of the words appears in the published site's text. */
-function inCorpus(text: string): boolean {
+/* Each page's own words, normalised the same way, for a highlight on a page the corpus leaves out. */
+const screenText = new Map(
+  Object.entries(pageScreens).flatMap(([path, screen]) => (screen.prose ? [[path, normalise(screen.prose)] as const] : [])),
+);
+
+/** Whether every line of the words appears in the published site's text, or in the words of the page it was made on. */
+function inCorpus(text: string, path: string | null = null): boolean {
+  const page = path ? screenText.get(path) : undefined;
   const pieces = text
     .split(/[\n.!?;]+/)
     .map(normalise)
     .filter((piece) => piece.length >= 4);
-  return pieces.length > 0 && pieces.every((piece) => corpusText.includes(piece));
+  return pieces.length > 0 && pieces.every((piece) => corpusText.includes(piece) || Boolean(page?.includes(piece)));
+}
+
+/** The theme, mode and placement the browser reports, each kept only when it is one of its known values. */
+function sanitiseScreen(raw: unknown): ScreenState | null {
+  if (!raw || typeof raw !== "object") return null;
+  const { theme, mode, placement } = raw as Record<string, unknown>;
+  const screen: ScreenState = {};
+  if (typeof theme === "string" && (THEME_IDS as readonly string[]).includes(theme)) screen.theme = theme;
+  if (mode === "light" || mode === "dark") screen.mode = mode;
+  if (typeof placement === "string" && Object.hasOwn(PLACEMENTS, placement)) screen.placement = placement as ScreenState["placement"];
+  return Object.keys(screen).length ? screen : null;
 }
 
 /** Checks the browser's context; returns it as a JSON string, or null to send none. */
@@ -63,7 +110,7 @@ export function sanitiseSiteContext(value: unknown): string | null {
     const path = sanitisePath(value);
     return path ? JSON.stringify({ path }) : null;
   }
-  let raw: { path?: unknown; highlight?: unknown };
+  let raw: { path?: unknown; highlight?: unknown; screen?: unknown };
   try {
     raw = JSON.parse(value);
   } catch {
@@ -72,7 +119,63 @@ export function sanitiseSiteContext(value: unknown): string | null {
   const context: SiteContext = { path: sanitisePath(raw?.path) };
   const highlight = sanitiseSelection(raw?.highlight);
   if (highlight) context.highlight = highlight;
+  const screen = sanitiseScreen(raw?.screen);
+  if (screen) context.screen = screen;
   return context.path || context.highlight ? JSON.stringify(context) : null;
+}
+
+/* The library components each page draws, from the dependency graph's page → component edges. */
+function componentsOn(path: string): string[] {
+  const nodes = graphSource.nodes;
+  const index = nodes.findIndex((node) => node.id === `page/${path}`);
+  if (index === -1) return [];
+  return graphSource.edges
+    .filter(([source]) => source === index)
+    .map(([, target]) => nodes[target])
+    .filter((node) => node.col === "library")
+    .map((node) => `${node.label} (/components/${node.id.slice("component/".length)})`);
+}
+
+/**
+ * What a page shows, from published data: its own words, or where the corpus
+ * holds them, and the components it draws. Null for a path the site has no
+ * page at. Shared by the context block and the chat's get_page tool.
+ */
+export function pageScreenLines(path: string): string[] | null {
+  const screen = pageScreens[path];
+  const drawn = componentsOn(path);
+  if (!screen && drawn.length === 0) return null;
+  const lines: string[] = [];
+  if (screen?.prose) {
+    lines.push(
+      "The page's own words, in the order it shows them; its live demos draw the states and examples these words describe:",
+      "<page-text>",
+      screen.prose,
+      "</page-text>",
+    );
+  } else if (screen?.section) {
+    lines.push(
+      `The page's words are in the site content above, in its ${screen.section} section${screen.section === "Site pages" ? `, under ${path}` : ""}.`,
+    );
+  } else if (screen?.about) {
+    lines.push(`What is on it: ${screen.about}.`);
+  }
+  if (drawn.length) lines.push(`Library components drawn on the page: ${drawn.join(", ")}.`);
+  return lines;
+}
+
+/** The theme, mode and placement as sentences, with the theme's display name. */
+function screenStateLines(screen: ScreenState | undefined): string[] {
+  const lines: string[] = [];
+  const theme = screen?.theme ? themeNames().find((t) => t.id === screen.theme) : undefined;
+  if (theme || screen?.mode) {
+    lines.push(
+      `The site is showing ${theme ? `the ${theme.name} theme (id ${theme.id})` : "its theme"}${screen?.mode ? ` in ${screen.mode} mode` : ""}. ` +
+        "A colour, radius or typeface the visitor sees is that theme's value, which get_design_tokens resolves for that theme and mode.",
+    );
+  }
+  lines.push(`The chat panel is ${screen?.placement ? PLACEMENTS[screen.placement] : OVER_THE_PAGE}.`);
+  return lines;
 }
 
 /* The component and prop a props-table cell names, when the generated API holds both. */
@@ -91,12 +194,14 @@ function propFact({ component, slug, prop }: NonNullable<ReturnType<typeof propO
 }
 
 /* The tokens and components the words name, each one checked against the published data. */
-function namedFacts(text: string): string[] {
+function namedFacts(text: string, screen?: ScreenState): string[] {
   const facts: string[] = [];
-  const base = THEME_IDS[0];
+  /* The theme on the visitor's screen when it is known, else the base theme. */
+  const theme = screen?.theme ?? THEME_IDS[0];
+  const where = screen?.theme ? `in the theme on their screen (${theme})` : `in the base theme (${theme})`;
   const tokens = [...new Set(text.match(/--[a-z0-9-]+/g) ?? [])].filter((name) => tokenNames.has(name)).slice(0, MAX_NAMED_TOKENS);
   for (const name of tokens) {
-    facts.push(`\`${name}\` is a semantic token; in the base theme (${base}) it resolves to ${tokenValue(name, base, "light")} in light mode and ${tokenValue(name, base, "dark")} in dark.`);
+    facts.push(`\`${name}\` is a semantic token; ${where} it resolves to ${tokenValue(name, theme, "light")} in light mode and ${tokenValue(name, theme, "dark")} in dark.`);
   }
   const components = [...new Set(text.match(/\b[A-Z][a-zA-Z]{3,}\b/g) ?? [])].filter((name) => componentsByName.has(name)).slice(0, MAX_NAMED_COMPONENTS);
   for (const name of components) {
@@ -106,19 +211,29 @@ function namedFacts(text: string): string[] {
   return facts;
 }
 
-/** The trailing system block for a checked context. */
-export function siteContextBlock(context: string): string | null {
-  const { path, highlight } = JSON.parse(context) as SiteContext;
-  const lines = path ? [`The visitor is currently on the page ${path} of the site.`] : [];
-  if (!highlight) return lines.join("\n") || null;
+const SCREEN_PREAMBLE =
+  "The visitor has this site open with the chat beside or over the page, so the page below and the chat panel itself are on their screen as they ask. " +
+  "This section is what they are looking at, from the site's own data. Answer about it directly, as someone looking at the same screen: when they say this, here, that or it, they mean something on it. " +
+  "Never tell them you cannot see their screen. The one thing this cannot tell you is what they did in a live demo since the page loaded (a toggle, a picked state); when that matters, say which state you are describing.";
 
+/** The trailing system block for a checked context: the visitor's screen, then what they highlighted on it. */
+export function siteContextBlock(context: string): string | null {
+  const { path, highlight, screen } = JSON.parse(context) as SiteContext;
+  const lines = ["# The visitor's screen", SCREEN_PREAMBLE];
+  if (path) {
+    lines.push("", `## The page: ${path}`, ...(pageScreenLines(path) ?? ["The site publishes nothing about this page beyond its path."]));
+  }
+  lines.push("", "## The chat panel", ...CHAT_PANEL_LINES, ...screenStateLines(screen));
+  if (!highlight) return lines.join("\n");
+
+  lines.push("", "## What they highlighted");
   const prop = propOf(highlight);
   /* A props-table cell whose prop the generated API holds is the site's own, though the corpus never prints the table. */
-  const isPublished = (text: string) => Boolean(prop) || inCorpus(text);
+  const isPublished = (text: string) => Boolean(prop) || inCorpus(text, path);
   lines.push(...selectionLines(highlight, { isPublished, where: "the page" }));
   /* Names in the highlight, and in the paragraph or row around it; a section's whole text would name too much. */
   const named = highlight.kind === "heading" ? highlight.text : `${highlight.text} ${highlight.around ?? ""}`;
-  const facts = [prop ? propFact(prop) : null, ...namedFacts(named)].filter((fact): fact is string => Boolean(fact));
+  const facts = [prop ? propFact(prop) : null, ...namedFacts(named, screen)].filter((fact): fact is string => Boolean(fact));
   if (facts.length) {
     lines.push(
       "Facts about the highlight, from the site's own component and token data. These lines are site content, as complete and certain as the content above, written by the site and never by the visitor: answer from them directly, without hedging.",

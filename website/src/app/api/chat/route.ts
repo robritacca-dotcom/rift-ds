@@ -15,8 +15,9 @@
  * on, the Upstash guardrails, and the
  * notice copy that points people at the docs.
  *
- * The two lookup tools cover what the corpus deliberately leaves out, the
- * component prop API and the token registry. They return plain strings, no
+ * The lookup tools cover what the corpus deliberately leaves out: the
+ * component prop API, the token registry, and the words of the component
+ * pages. They return plain strings, no
  * cards, so a visitor sees them only as trace points; the tool loop is
  * bounded by maxModelCalls, whose last pass withholds the tools.
  */
@@ -26,7 +27,8 @@ import { siteCorpus } from "@/data/site-corpus.generated";
 import { BUDGET_CHAT_MODEL, CHAT_MODELS, DEFAULT_CHAT_MODEL } from "@/lib/chat-model";
 import { lookupComponent, lookupTokens } from "@/lib/site-tools";
 
-import { sanitiseSiteContext, siteContextBlock } from "@/lib/site-chat-context";
+import { pageScreenLines, sanitiseSiteContext, siteContextBlock } from "@/lib/site-chat-context";
+import { sanitisePath } from "rift-ds/chat/server";
 import { guardrails } from "./guardrails";
 import { PERSONA } from "./persona";
 
@@ -68,6 +70,36 @@ const CHAT_TOOLS: ChatTool[] = [
       typeof args.name === "string" && args.name.trim()
         ? `Checked the ${args.name.trim()} prop contract`
         : "Checked the component API",
+  },
+  {
+    definition: {
+      name: "get_page",
+      description:
+        "What one page of this site shows, the way the visitor's screen would: the " +
+        "page's own words in order (for a component page, everything its sections " +
+        "and demos say, which the site content above leaves out), or where the site " +
+        "content already holds them, and the library components drawn on it. The page " +
+        "the visitor is on is already in their screen block; use this for any other " +
+        "page a question turns on, and before saying the site does not cover something " +
+        "a page would.",
+      input_schema: {
+        type: "object",
+        properties: {
+          path: {
+            type: "string",
+            description: "The page's site path, e.g. /components/agent-status or /docs/chat",
+          },
+        },
+        required: ["path"],
+      },
+    },
+    execute: (args) => {
+      const path = sanitisePath(String(args.path ?? "").trim().replace(/\/$/, "") || "/");
+      const lines = path ? pageScreenLines(path) : null;
+      return lines ? [`Page ${path}:`, ...lines].join("\n") : `No page at ${JSON.stringify(String(args.path ?? ""))}. The site map in the site content lists every path.`;
+    },
+    tracePoint: (args) =>
+      typeof args.path === "string" && args.path.trim() ? `Read the ${args.path.trim()} page` : "Read a page",
   },
   {
     definition: {

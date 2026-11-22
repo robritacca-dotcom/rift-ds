@@ -65,13 +65,17 @@
 }
 
 /* ============================================
-   AI GLOW — opt-in via the `aiGlow` prop
-   While focused, the plain selected border stands down and the AI gradient
-   ring takes its place — the same "a model answers here" signal AiButton
-   carries, for composers whose messages are answered by a model.
+   AI GLOW — the `aiGlow` prop
+   The AI gradient ring in place of the shell's border: AiButton's signal
+   that a model is at work. By default (`aiGlow="streaming"`) a composer
+   wears it only while a response streams (the working rules below): focus
+   keeps the plain selected border, so the ring means work alone. `aiGlow`
+   as `true` adds the focus form, `--ai-glow-focus`: while focused, the
+   plain selected border stands down and the ring takes its place. `false`
+   leaves both classes off.
    ============================================ */
 
-.ds-composer--ai-glow:focus-within {
+.ds-composer--ai-glow-focus:focus-within {
   border-color: transparent;
 }
 
@@ -154,13 +158,13 @@
    the entrance pace and the ring fades up a --motion-duration-fast beat
    behind it — the transition here (the destination state's) governs the
    way in; the resting rules above govern the quick way back. */
-.ds-composer--ai-glow:focus-within::before {
+.ds-composer--ai-glow-focus:focus-within::before {
   opacity: 1;
   transition: opacity var(--motion-duration-slower) var(--motion-ease-entrance) var(--motion-duration-fast);
   animation-play-state: running;
 }
 
-.ds-composer--ai-glow:focus-within::after {
+.ds-composer--ai-glow-focus:focus-within::after {
   opacity: 0.3;
   transform: none;
   transition:
@@ -198,8 +202,9 @@
 
 /* Working: while a response streams, the ring stays lit and keeps turning
    whether or not the field holds focus — the visible half of the `streaming`
-   contract for glowing composers. The pairing is defined in design.md's
-   Composer section; streaming without aiGlow changes nothing. */
+   contract, and the only time a composer on the default wears the ring at
+   all. The pairing is defined in design.md's Composer section; with
+   `aiGlow` off, streaming changes nothing here. */
 .ds-composer--ai-glow.ds-composer--streaming {
   border-color: transparent;
 }

@@ -78,7 +78,7 @@ function ChatComposer({ onSubmit, ...props }: ComposerProps) {
 }
 
 /** Send flips into a short fake stream, with stop cutting it off early. */
-function StreamingDemo() {
+function StreamingDemo({ aiGlow }: { aiGlow?: ComposerProps["aiGlow"] }) {
   const [value, setValue] = useState("");
   const [streaming, setStreaming] = useState(false);
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -109,7 +109,7 @@ function StreamingDemo() {
         onSubmit={start}
         streaming={streaming}
         onStop={stop}
-        aiGlow
+        aiGlow={aiGlow}
       />
       <p className={styles.demoNote} aria-live="polite">
         {streaming
@@ -215,9 +215,9 @@ export default function ComposerPage() {
         <p className={styles.demoText}>
           While a response streams, the send button becomes a stop button
           and submitting is blocked, so a person can never fire a message
-          into a running answer. On a glowing composer the gradient ring
-          also stays lit and keeps turning while the agent works, focus or
-          not. Try it: send something and the demo streams for a few
+          into a running answer. The gradient ring also lights and keeps
+          turning while the agent works, focus or not, unless aiGlow is
+          false. Try it: send something and the demo streams for a few
           seconds.
         </p>
         <StreamingDemo />
@@ -243,12 +243,23 @@ export default function ComposerPage() {
       <section className={styles.section}>
         <SectionTitle title="AI glow" />
         <p className={styles.demoText}>
-          With aiGlow, focusing the composer replaces the plain selected
-          border with AiButton&apos;s signature: the glow blooms out of
-          the send corner and the ring fades up a beat behind it, the
-          system&apos;s signal that a model answers here. Blur collapses
-          it back. Off by default; the site chat turns it on. Click into
-          the field to see it.
+          The gradient ring is AiButton&apos;s signature on the composer,
+          the system&apos;s signal that a model is at work. By default it
+          is for the agent at work alone: focus keeps the plain selected
+          border, and the ring lights only while a response streams, so a
+          resting composer never competes with the reply&apos;s live
+          status. Send a message to see it.
+        </p>
+        <div className={styles.stack}>
+          <StreamingDemo />
+        </div>
+        <p className={styles.demoText}>
+          Set aiGlow to true and focus wears the ring too: the glow blooms
+          out of the send corner and the ring fades up a beat behind it,
+          and blur collapses it back. For a composer that stands alone,
+          where the ring on focus is the only sign a model answers. Set it
+          to false and the ring never shows. Click into the field to see
+          the focus form.
         </p>
         <div className={styles.stack}>
           <ChatComposer placeholder="Ask the model something" aiGlow />

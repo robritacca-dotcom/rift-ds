@@ -75,7 +75,7 @@ const STAGES: Stage[] = [
             Sign-ups rose five weeks out of six, and most of the lift came from the new onboarding.
           </ChatMessage>
         </div>
-        <Composer aria-label="Message" placeholder="Ask anything" aiGlow />
+        <Composer aria-label="Message" placeholder="Ask anything" />
       </div>
     ),
   },

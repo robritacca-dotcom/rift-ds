@@ -45,8 +45,8 @@ type ComposerOwnProps = {
   onSubmit?: (value: string) => void;
   /**
    * A response is streaming: the send button becomes a stop button, submit
-   * is blocked, and Enter is inert. On a glowing composer (`aiGlow`) the
-   * gradient ring also stays lit and keeps turning while this is true.
+   * is blocked, and Enter is inert. The gradient ring is lit and turning
+   * while this is true, unless `aiGlow` is `false`.
    */
   streaming?: boolean;
   /** Fires when the stop button is pressed while `streaming`. */
@@ -58,13 +58,15 @@ type ComposerOwnProps = {
   /** Growth cap in text rows before the textarea scrolls internally. Defaults to 12 in a chat composer, or 3 in the mini composer. */
   maxRows?: number;
   /**
-   * While focused, the shell wears AiButton's slowly rotating gradient ring
-   * and glow in place of the plain selected border — the system's "a model
-   * answers here" signal, for composers whose messages are answered by one.
-   * While `streaming`, the ring stays lit and turning whether or not the
-   * field holds focus. Off by default.
+   * AiButton's slowly rotating gradient ring and glow on the shell, the
+   * system's "a model is at work here" signal. `'streaming'`, the default,
+   * lights it only while `streaming` is true and keeps the plain selected
+   * border on focus, so the ring means the agent is working and nothing
+   * else, and a resting composer never competes with a reply's live status.
+   * `true` also lights it whenever the field is focused, in place of the
+   * selected border. `false` never lights it.
    */
-  aiGlow?: boolean;
+  aiGlow?: boolean | 'streaming';
   /**
    * Contextual note rendered as a full-width, non-interactive chip — the
    * "what the model is looking at" line a chat host pins over the message
@@ -259,7 +261,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       size = 'default',
       inline = false,
       maxRows = inline === true ? 3 : 12,
-      aiGlow = false,
+      aiGlow = 'streaming',
       context,
       contextIcon,
       contextPlacement = 'inside',
@@ -684,6 +686,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
     const classes = [
       baseClass,
       aiGlow ? `${baseClass}--ai-glow` : '',
+      aiGlow === true ? `${baseClass}--ai-glow-focus` : '',
       inline === true && size === 'compact' ? `${baseClass}--compact` : '',
       inline ? `${baseClass}--inline` : '',
       inline === 'chat' ? `${baseClass}--inline-chat` : '',

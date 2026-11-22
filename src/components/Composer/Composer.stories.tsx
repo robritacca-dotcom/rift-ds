@@ -19,7 +19,7 @@ const meta = {
     value: { control: 'text' },
     defaultValue: { control: 'text' },
     streaming: { control: 'boolean' },
-    aiGlow: { control: 'boolean' },
+    aiGlow: { control: 'inline-radio', options: [false, true, 'streaming'] },
     maxRows: { control: 'number' },
     sendLabel: { control: 'text' },
     stopLabel: { control: 'text' },
@@ -42,10 +42,11 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 /**
- * With `aiGlow`, focusing the composer replaces the plain selected border
- * with AiButton's signature: the glow blooms out of the send corner and the
- * ring fades up a beat behind it; blur collapses it back. Click into the
- * field to see it.
+ * `aiGlow` as `true`, the opt-in focus form: focusing the composer replaces
+ * the plain selected border with AiButton's signature. The glow blooms out
+ * of the send corner and the ring fades up a beat behind it; blur collapses
+ * it back. Click into the field to see it. By default the ring shows only
+ * while a response streams (see GlowOnlyWhileStreaming).
  */
 export const AiGlow: Story = {
   args: {
@@ -99,15 +100,34 @@ export const Streaming: Story = {
 };
 
 /**
- * `aiGlow` and `streaming` together: the gradient ring stays lit and keeps
- * turning while the agent works, whether or not the field holds focus.
- * Either prop alone behaves as before.
+ * While `streaming`, the gradient ring stays lit and keeps turning, whether
+ * or not the field holds focus. This holds on the default and on `aiGlow`
+ * as `true`; only `aiGlow={false}` keeps the ring dark.
  */
 export const WorkingGlow: Story = {
   args: {
     aiGlow: true,
     streaming: true,
     onStop: () => {},
+  },
+};
+
+/**
+ * The default, `aiGlow="streaming"`: the ring is for the agent at work
+ * alone. Focus keeps the plain selected border; the ring lights only while
+ * `streaming`, so a resting composer never competes with a reply's live
+ * status.
+ */
+export const GlowOnlyWhileStreaming: Story = {
+  args: {
+    placeholder: 'Focus me: no ring until a reply streams',
+  },
+  play: async ({ canvasElement }) => {
+    const shell = canvasElement.querySelector('.ds-composer') as HTMLElement;
+    await expect(shell.className).toContain('ds-composer--ai-glow');
+    await expect(shell.className).not.toContain('ds-composer--ai-glow-focus');
+    shell.querySelector('textarea')?.focus();
+    await expect(getComputedStyle(shell, '::before').opacity).toBe('0');
   },
 };
 

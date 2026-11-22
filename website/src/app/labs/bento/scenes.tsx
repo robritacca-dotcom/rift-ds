@@ -212,7 +212,7 @@ export function ChatScene() {
             ]}
           />
         </div>
-        <Composer aiGlow streaming={streaming} value="" onValueChange={() => {}} placeholder="Ask anything" />
+        <Composer streaming={streaming} value="" onValueChange={() => {}} placeholder="Ask anything" />
       </div>
     </div>
   );

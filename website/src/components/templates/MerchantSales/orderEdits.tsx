@@ -22,6 +22,9 @@ const baseValues = (id: string) => (byId ??= new Map(ledgerRows().map((row) => [
 
 export type Confirmation = ActionConfirmation<OrderActionId>;
 
+/** A card's way out, pressed: Undo reversed a change, Dismiss turned a proposal down. The action and how many orders, for the message that says so. */
+export type UndoMark = { action: OrderActionId; count: number; dismissed?: boolean };
+
 export type CardState = { status: "confirmed"; undo: () => void; readout: ActionReadout } | { status: "cancelled" } | { status: "undone" };
 
 type EditsValue = {
@@ -38,6 +41,10 @@ type EditsValue = {
   markConfirmation: (confirmation: Confirmation) => void;
   /** The mark, taken once by the request that carries it, so a later typed "yes" is never taken for a click. */
   takeConfirmation: () => Confirmation | null;
+  /** Marks the next chat message as a card's Undo or Dismiss, already made, for the request it sends. */
+  markUndo: (undo: UndoMark) => void;
+  /** The Undo mark, taken once by the request that carries it, so a typed "undo that" is never taken for a click. */
+  takeUndo: () => UndoMark | null;
   reset: () => void;
   cards: Record<string, CardState>;
   setCard: (id: string, state: CardState) => void;
@@ -65,6 +72,15 @@ export function OrderEditsProvider({ children }: { children: React.ReactNode }) 
   const getLog = React.useCallback(() => logRef.current, []);
   /* The package's one-shot mark: set by a card's Confirm, taken by the request it sends, so a typed "yes" never counts. */
   const [{ mark: markConfirmation, take: takeConfirmation }] = React.useState(createConfirmationMark<OrderActionId>);
+  const undoRef = React.useRef<UndoMark | null>(null);
+  const markUndo = React.useCallback((undo: UndoMark) => {
+    undoRef.current = undo;
+  }, []);
+  const takeUndo = React.useCallback(() => {
+    const undo = undoRef.current;
+    undoRef.current = null;
+    return undo;
+  }, []);
   const valuesOf = React.useCallback((id: string) => {
     const values = baseValues(id);
     return values && withEdit(values, editsRef.current[id]);
@@ -113,8 +129,8 @@ export function OrderEditsProvider({ children }: { children: React.ReactNode }) 
   const setCard = React.useCallback((id: string, state: CardState) => setCards((current) => ({ ...current, [id]: state })), []);
 
   const value = React.useMemo(
-    () => ({ edits, getEdits, plan, valuesOf, run, getLog, markConfirmation, takeConfirmation, reset, cards, setCard }),
-    [edits, getEdits, plan, valuesOf, run, getLog, markConfirmation, takeConfirmation, reset, cards, setCard],
+    () => ({ edits, getEdits, plan, valuesOf, run, getLog, markConfirmation, takeConfirmation, markUndo, takeUndo, reset, cards, setCard }),
+    [edits, getEdits, plan, valuesOf, run, getLog, markConfirmation, takeConfirmation, markUndo, takeUndo, reset, cards, setCard],
   );
   return <EditsContext.Provider value={value}>{children}</EditsContext.Provider>;
 }

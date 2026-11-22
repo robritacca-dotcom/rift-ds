@@ -146,6 +146,13 @@ function sanitiseChanges(value: unknown) {
 const sanitiseConfirmation = (value: unknown) =>
   checkConfirmation(value, { actions: ORDER_ACTION_IDS, isId: isOrderId, maxCount: ROW_COUNT, maxIds: MAX_FOCUS_IDS });
 
+/* Set only on the message a card's Undo or Dismiss sends; typed words have none. */
+function sanitiseUndo(value: unknown) {
+  const { action, count, dismissed } = (value ?? {}) as Record<string, unknown>;
+  if (!ORDER_ACTION_IDS.includes(action as OrderActionId) || typeof count !== "number" || count < 1 || count > ROW_COUNT) return null;
+  return { action: action as OrderActionId, count: Math.floor(count), dismissed: dismissed === true };
+}
+
 /**
  * What each action would do to these orders now, edits included: the dry run
  * for every one, so the model offers a next change only when it would change
@@ -201,6 +208,7 @@ export function sanitiseTableContext(value: unknown): string | null {
     charts: Object.keys(currentLedgerEdits()).length ? chartFacts(computeCharts(currentRows())) : null,
     changes: sanitiseChanges(view.changes),
     confirmation: sanitiseConfirmation(view.confirmation),
+    undo: sanitiseUndo(view.undo),
   });
 }
 

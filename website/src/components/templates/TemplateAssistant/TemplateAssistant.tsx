@@ -77,19 +77,35 @@ const DEFAULT_REASONING = [
   "Drafting the answer",
 ];
 
-/** One staged answer: its reasoning, a step at a time, then its text. */
-function AssistantReply({ text, steps }: { text: string; steps: string[] }) {
+/** One staged answer: its reasoning, a step at a time, then its text. `onBusyChange` reports while it is still arriving, and `halted` ends it where it stands, the whole answer shown. */
+function AssistantReply({
+  text,
+  steps,
+  halted = false,
+  onBusyChange,
+}: {
+  text: string;
+  steps: string[];
+  halted?: boolean;
+  onBusyChange?: (busy: boolean) => void;
+}) {
   /* A reply only mounts after a press, in the browser, so this is safe to read here. */
   const [still] = React.useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   const words = React.useMemo(() => text.split(/(?<= )/), [text]);
   const [shownSteps, setShownSteps] = React.useState(still ? steps.length + 1 : 1);
   const [shownWords, setShownWords] = React.useState(still ? words.length : 0);
   const [open, setOpen] = React.useState(!still);
-  const thinking = shownSteps <= steps.length;
-  const streaming = !thinking && shownWords < words.length;
+  const thinking = !halted && shownSteps <= steps.length;
+  const streaming = !halted && !thinking && shownWords < words.length;
+  const busy = thinking || streaming;
+  React.useEffect(() => {
+    onBusyChange?.(busy);
+    /* A reply cleared mid-answer (a new chat) must not leave the composer working. */
+    return () => onBusyChange?.(false);
+  }, [busy, onBusyChange]);
 
   React.useEffect(() => {
-    if (still) return;
+    if (still || halted) return;
     let timer: number;
     const stream = () => {
       setShownWords((count) => {
@@ -110,24 +126,24 @@ function AssistantReply({ text, steps }: { text: string; steps: string[] }) {
     };
     think(1);
     return () => window.clearTimeout(timer);
-  }, [still, steps, words]);
+  }, [still, halted, steps, words]);
 
   return (
     <ChatMessage role="assistant">
       <Reasoning
         streaming={thinking}
         duration={Math.round((steps.length * REASONING_STEP_MS) / 1000)}
-        open={open}
+        open={open && !halted}
         onOpenChange={setOpen}
       >
-        {steps.slice(0, shownSteps).map((step) => (
+        {steps.slice(0, halted ? steps.length : shownSteps).map((step) => (
           <p key={step} className={styles.reasoningStep}>
             {step}
           </p>
         ))}
       </Reasoning>
       {!thinking && (
-        <StreamingText text={words.slice(0, shownWords).join("")} streaming={streaming} cursor={streaming} />
+        <StreamingText text={halted ? text : words.slice(0, shownWords).join("")} streaming={streaming} cursor={streaming} />
       )}
     </ChatMessage>
   );
@@ -211,6 +227,10 @@ export default function TemplateAssistant({
   const [turns, setTurns] = React.useState<
     { id: number; role: "user" | "assistant"; text: string; steps?: string[] }[]
   >([]);
+  /* Whether the newest reply is still arriving, for the composer: its ring
+     lights and Send becomes Stop while one is, as in the site chat. */
+  const [busy, setBusy] = React.useState(false);
+  const [haltedId, setHaltedId] = React.useState<number | null>(null);
 
   const greeting = React.useSyncExternalStore(
     subscribeClock,
@@ -384,7 +404,13 @@ export default function TemplateAssistant({
             <ChatThread className={styles.chatThread}>
               {turns.map((turn) =>
                 turn.role === "assistant" ? (
-                  <AssistantReply key={turn.id} text={turn.text} steps={turn.steps ?? DEFAULT_REASONING} />
+                  <AssistantReply
+                    key={turn.id}
+                    text={turn.text}
+                    steps={turn.steps ?? DEFAULT_REASONING}
+                    halted={haltedId === turn.id}
+                    onBusyChange={turn.id === turns[turns.length - 1].id ? setBusy : undefined}
+                  />
                 ) : (
                   <ChatMessage key={turn.id} role={turn.role}>
                     {turn.text}
@@ -410,7 +436,8 @@ export default function TemplateAssistant({
             <Composer
               ref={composerRef}
               inline="chat"
-              aiGlow
+              streaming={busy}
+              onStop={() => setHaltedId(turns[turns.length - 1]?.id ?? null)}
               sendLabel="Send"
               placeholder="Ask anything"
               value={value}

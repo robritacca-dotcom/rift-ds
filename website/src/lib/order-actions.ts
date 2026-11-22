@@ -158,6 +158,24 @@ export function readoutFor(plan: ActionPlan, before: Values[], tense: "will" | "
   };
 }
 
+/** The record of an undo: the same orders, from what the change left them as (`before`) back to what they are now (`after`). */
+export function undoReadoutFor(before: Values[], after: Values[]): ActionReadout {
+  const count = before.length;
+  const reversed = before.reduce((total, values, index) => total + (Number(values.refund) || 0) - (Number(after[index].refund) || 0), 0);
+  const reversedOrders = before.filter((values, index) => values.payment === "Refunded" && after[index].payment !== "Refunded").length;
+  const statusChanged = after.some((values, index) => values.status !== before[index].status);
+  return {
+    title: `${count.toLocaleString("en-US")} ${count === 1 ? "order" : "orders"} restored`,
+    facts: [
+      ...(statusChanged ? ([["Status", `${tally(before, "status")} → ${tally(after, "status")}`]] as [string, string][]) : []),
+      ...(reversedOrders ? ([["Refund reversed", `${money(reversed)} across ${reversedOrders.toLocaleString("en-US")} ${reversedOrders === 1 ? "order" : "orders"}`]] as [string, string][]) : []),
+      ["Order value", money(after.reduce((total, values) => total + (Number(values.netRevenue) || 0), 0))],
+      ["Categories", tally(after, "category")],
+      ["Customers", new Set(after.map((values) => values.customer)).size.toLocaleString("en-US")],
+    ],
+  };
+}
+
 /** One entry in the visit's change log, which every chat request carries so the assistant knows what has already been done. */
 export interface ChangeLogEntry {
   action: OrderActionId;

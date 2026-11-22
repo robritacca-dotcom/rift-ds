@@ -23,6 +23,7 @@ import {
   DOCK_QUERY,
   createFetchTransport,
   useChatWidget,
+  useTurnAwaiting,
   pickStarters,
   useTakeoverViewport,
   type ChatTransport,
@@ -38,7 +39,7 @@ import type { TableContextValue } from "../../../../../src/components/DataTable/
 import type { TableView } from "../../../../../src/components/DataTable/views";
 import { ChatFocusProvider, SentFocusChip, flashRows, focusForRequest, focusLabel, useFocusStarters, namedOrders, useChatFocus } from "./chatFocus";
 import { useOrderEdits } from "./orderEdits";
-import { ORDER_ACTIONS, readoutFor, theseOrders, type ActionPlan, type ActionReadout } from "@/lib/order-actions";
+import { ORDER_ACTIONS, readoutFor, theseOrders, undoReadoutFor, type ActionPlan, type ActionReadout } from "@/lib/order-actions";
 import styles from "./MerchantSales.module.css";
 
 /* As many of a confirmed change's ids as its request carries, for the server to say what could be done next. */
@@ -58,6 +59,8 @@ const ChangesContext = React.createContext<{
   undo: (id: string, before: TableView) => void;
   /** Holds a confirmed change's record for the reply its confirmation message is about to get. */
   stageRecord: (data: OrderCardData) => void;
+  /** Stages the readout an undo's reply opens with. */
+  stageReadout: (readout: ActionReadout) => void;
   /** Turns the table to these orders alone, so a change shows its result rather than a filter it emptied. */
   showOrders: (ids: string[]) => void;
 } | null>(null);
@@ -160,17 +163,34 @@ type OrderCardData = ActionPlan & { id: string };
  * one row, and the reply opens with the same card as the readout of what was
  * done (`record`), a lead card standing under the thinking line, so nothing
  * moves it while the model works out its sentence. Undo is the record's, and waits for that sentence,
- * which describes the change it would reverse.
+ * which describes the change it would reverse. Undo follows the same recipe as Confirm: the change is
+ * reversed on the page, the press is sent as the reader's message, marked so the route knows it is
+ * made, and the reply says so under its own status line.
  */
 function OrderActionCard({ id, action, ids, skipped, record = false }: OrderCardData & { record?: boolean }) {
-  const { plan, run, valuesOf, cards, setCard, markConfirmation } = useOrderEdits();
-  const { injectTurn, send, streaming } = useChatWidget();
+  const { plan, run, valuesOf, cards, setCard, markConfirmation, markUndo } = useOrderEdits();
+  const { send, streaming } = useChatWidget();
+  /* A press made while the reply that carries this card is still arriving waits for it to end:
+     the chat takes one message at a time, and a press must never go unsaid. */
+  const queued = React.useRef<string | null>(null);
+  const say = (text: string) => {
+    if (streaming) queued.current = text;
+    else send(text);
+  };
+  React.useEffect(() => {
+    if (streaming || queued.current === null) return;
+    const text = queued.current;
+    queued.current = null;
+    send(text);
+  }, [streaming, send]);
   const changes = React.useContext(ChangesContext);
   const state = cards[id] as (typeof cards)[string] | undefined;
   const definition = ORDER_ACTIONS[action];
   const count = (n: number) => `${n.toLocaleString("en-US")} ${n === 1 ? "order" : "orders"}`;
   const title = `${definition.label}: ${count(ids.length)}`;
   const status = state?.status === "cancelled" ? "dismissed" : (state?.status ?? "proposed");
+  /* A change still to confirm holds its reply's status line on "Waiting for approval". */
+  useTurnAwaiting(status === "proposed", id);
   const proposed = status === "proposed" ? plan(action, ids) : null;
   const preview = proposed ? readoutFor(proposed, proposed.ids.map((orderId) => valuesOf(orderId) ?? {}), "will") : null;
   const confirmed = state?.status === "confirmed" ? state : null;
@@ -206,15 +226,26 @@ function OrderActionCard({ id, action, ids, skipped, record = false }: OrderCard
         changes?.stageRecord({ id, action, ids, skipped });
         /* The request says this message was confirmed on its card; a typed "yes" never is. */
         markConfirmation({ action, count: now.ids.length, ids: now.ids.slice(0, MAX_CONFIRMED_IDS) });
-        send(definition.confirm(theseOrders(now.ids.length)));
+        say(definition.confirm(theseOrders(now.ids.length)));
       }}
-      onDismiss={() => setCard(id, { status: "cancelled" })}
+      onDismiss={() => {
+        setCard(id, { status: "cancelled" });
+        /* The way out is an action too, so it is the reader's message and gets its reply, marked so the model knows the card is already put away. */
+        markUndo({ action, count: ids.length, dismissed: true });
+        say(`No, leave ${theseOrders(ids.length)} as ${ids.length === 1 ? "it is" : "they are"}`);
+      }}
       onUndo={
         record && confirmed && !streaming
           ? () => {
+              /* Read either side of the undo: the reply opens with what the orders were and what they are again. */
+              const before = ids.map((orderId) => valuesOf(orderId) ?? {});
               confirmed.undo();
               setCard(id, { status: "undone" });
-              injectTurn({ role: "assistant", text: `Undone: those ${count(ids.length)} are back as they were.` });
+              changes?.stageReadout(undoReadoutFor(before, ids.map((orderId) => valuesOf(orderId) ?? {})));
+              /* Undo takes Confirm's path: the press is the reader's own message, marked on the request it
+                 sends, and the reply answers it under its own status line. */
+              markUndo({ action, count: ids.length });
+              say("Undo that change");
             }
           : undefined
       }
@@ -234,12 +265,13 @@ const RENDERERS = {
 
 function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: React.ReactNode }) {
   const { getFocus } = useChatFocus();
-  const { getEdits, getLog, takeConfirmation } = useOrderEdits();
+  const { getEdits, getLog, takeConfirmation, takeUndo } = useOrderEdits();
   const { toast, dismiss } = useToast();
   const [undone, setUndone] = React.useState<ReadonlySet<string>>(new Set());
   const lastToast = React.useRef<string | null>(null);
   const tableCoveredRef = React.useRef(false);
   const stagedRecord = React.useRef<OrderCardData | null>(null);
+  const stagedReadout = React.useRef<ActionReadout | null>(null);
 
   const undo = React.useCallback(
     (id: string, before: TableView) => {
@@ -256,7 +288,7 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
     const inner = createFetchTransport("/api/merchant-chat", {
       getContext: () => {
         const view = bridge.current?.view;
-        return view ? JSON.stringify({ ...view, columnWidths: undefined, focus: focusForRequest(getFocus()), edits: getEdits(), changes: getLog().slice(-MAX_LOGGED), confirmation: takeConfirmation() }) : null;
+        return view ? JSON.stringify({ ...view, columnWidths: undefined, focus: focusForRequest(getFocus()), edits: getEdits(), changes: getLog().slice(-MAX_LOGGED), confirmation: takeConfirmation(), undo: takeUndo() }) : null;
       },
     });
     return async function* merchantTransport(messages, signal) {
@@ -264,6 +296,10 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
       const record = stagedRecord.current;
       stagedRecord.current = null;
       if (record) yield { type: "card", card: { kind: "order-record", data: record, lead: true } };
+      /* An undo's reply opens the same way, with the readout of what went back. */
+      const readout = stagedReadout.current;
+      stagedReadout.current = null;
+      if (readout) yield { type: "card", card: { kind: "action-readout", data: readout, lead: true } };
       let change: { id: string; before: TableView } | null = null;
       let landed = Promise.resolve();
       let words = "";
@@ -302,7 +338,7 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
         }
       }
     };
-  }, [bridge, getFocus, getEdits, getLog, takeConfirmation, toast, dismiss, undo]);
+  }, [bridge, getFocus, getEdits, getLog, takeConfirmation, takeUndo, toast, dismiss, undo]);
 
   const changes = React.useMemo(
     () => ({
@@ -313,6 +349,9 @@ function ChatWithToasts({ bridge, children }: { bridge: BridgeRef; children: Rea
       undo,
       stageRecord: (data: OrderCardData) => {
         stagedRecord.current = data;
+      },
+      stageReadout: (readout: ActionReadout) => {
+        stagedReadout.current = readout;
       },
       showOrders: (ids: string[]) => {
         if (!bridge.current) return;

@@ -272,11 +272,12 @@ const handler = createChatHandler({
   system: [{ type: "text", text: SYSTEM, cache_control: { type: "ephemeral", ttl: "1h" } }],
   sanitiseContext: sanitiseTableContext,
   contextBlock: (context) => {
-    const { focus, editedOrders, changes, confirmation, kpis, ...view } = JSON.parse(context) as {
+    const { focus, editedOrders, changes, confirmation, undo, kpis, ...view } = JSON.parse(context) as {
       kpis: { label: string; value: string; delta: string }[] | null;
       focus: Record<string, unknown> | null;
       editedOrders: number;
       confirmation: { action: OrderActionId; count: number; ids: string[] } | null;
+      undo: { action: OrderActionId; count: number; dismissed: boolean } | null;
       changes: { action: OrderActionId; count: number; source: "bar" | "chat"; undone: boolean }[];
     };
     const log = changes.map((change) =>
@@ -288,7 +289,11 @@ const handler = createChatHandler({
       `Orders the reader has changed on this page: ${editedOrders}.`,
       ...(kpis ? [`The KPI band as it now reads, with those changes: ${kpis.map((kpi) => `${kpi.label} ${kpi.value} (${kpi.delta} on September)`).join("; ")}.`] : []),
       `Changes made on this page, oldest first. A card you proposed that appears here was confirmed, so never say it is still waiting:\n${log.length ? log.join("\n") : "None."}`,
-      confirmationLine(confirmation, { actions: ORDER_ACTIONS, noun: (count) => (count === 1 ? "order" : "orders") }),
+      undo
+        ? undo.dismissed
+          ? `This message was the reader pressing Dismiss on the card that proposed ${ORDER_ACTIONS[undo.action].label.toLowerCase()} for ${undo.count} ${undo.count === 1 ? "order" : "orders"}. The card is put away and nothing changed. Say so in one sentence, never tell them to dismiss it, and propose nothing.`
+          : `This message was the reader pressing Undo on a change's card: ${undo.count} ${undo.count === 1 ? "order" : "orders"} ${ORDER_ACTIONS[undo.action].done} is reversed, and ${undo.count === 1 ? "it is" : "they are"} back as ${undo.count === 1 ? "it was" : "they were"}. The undo is made. Say so in one sentence, with what the figures now read if they moved, and propose nothing.`
+        : confirmationLine(confirmation, { actions: ORDER_ACTIONS, noun: (count) => (count === 1 ? "order" : "orders") }),
       ...nextSteps(confirmation?.ids.length ? confirmation.ids : focusOrderIds(focus)),
     ].join("\n\n");
   },

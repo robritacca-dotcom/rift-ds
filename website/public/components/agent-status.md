@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| state | `AgentStatusState` | no | `'thinking'` | What the agent is doing. Drives the colour, the default label, and whether the matrix animates. |
+| state | `AgentStatusState` | no | `'thinking'` | What the agent is doing. Drives the colour, the default label, and whether the matrix animates. `waiting` takes the warning status colour, `done` the positive one (with a tick) and `error` the error one (with a cross); the other three stay monochrome. |
 | label | `string` | no |  | Status text. Falls back to a default for the state. Ignored when `children` are given. |
 | pattern | `"braille" \| "orbit" \| "breathe" \| "snake" \| "fill-sweep" \| "pulse" \| "columns" \| "checkerboard" \| "scan" \| "rain" \| "cascade" \| "sparkle" \| "wave-rows" \| "helix" \| "diagonal-swipe" \| "twinkle"` | no |  | Which dot-matrix choreography to run while the agent is active. Defaults to `orbit`. `waiting` with no pattern draws its glyph instead, a prompt whose cursor breathes (the same as AgentStatusMark); `done` and `error` draw a tick and a cross whatever the pattern. |
 | shimmer | `boolean` | no |  | Sweep a highlight across the label while the agent is active. Defaults to on for `thinking`, `working` and `waiting`, off for the resting states. |

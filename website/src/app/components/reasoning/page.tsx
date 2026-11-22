@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
 import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
@@ -143,6 +144,12 @@ export default function ReasoningPage() {
           keeps the trigger&rsquo;s own geometry, so a trace arriving
           mid-response promotes it to a real disclosure without moving
           anything.
+        </p>
+        <p className={styles.demoText}>
+          This site&rsquo;s chat opens every reply with this line, its
+          summary an <Link href="/components/agent-status">Agent status</Link>.
+          Once the answer lands, the dots draw a tick in the positive colour
+          and the label reads how long the model thought.
         </p>
         <Reasoning
           streaming

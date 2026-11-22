@@ -519,7 +519,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "state",
             "type": "AgentStatusState",
             "required": false,
-            "description": "What the agent is doing. Drives the colour, the default label, and whether the matrix animates.",
+            "description": "What the agent is doing. Drives the colour, the default label, and whether the matrix animates. `waiting` takes the warning status colour, `done` the positive one (with a tick) and `error` the error one (with a cross); the other three stay monochrome.",
             "values": [
               "done",
               "error",

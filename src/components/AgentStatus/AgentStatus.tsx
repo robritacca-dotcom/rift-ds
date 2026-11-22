@@ -35,7 +35,7 @@ const ACTIVE_STATES: readonly AgentStatusState[] = ['thinking', 'working', 'wait
 
 /** Props owned by AgentStatus itself — everything else falls through to the root element. */
 type AgentStatusOwnProps = {
-  /** What the agent is doing. Drives the colour, the default label, and whether the matrix animates. */
+  /** What the agent is doing. Drives the colour, the default label, and whether the matrix animates. `waiting` takes the warning status colour, `done` the positive one (with a tick) and `error` the error one (with a cross); the other three stay monochrome. */
   state?: AgentStatusState;
   /** Status text. Falls back to a default for the state. Ignored when `children` are given. */
   label?: string;

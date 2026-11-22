@@ -7,6 +7,7 @@ import { agentStatusPatterns } from "rift-ds/components/AgentStatus/AgentStatusP
 import type { AgentStatusState } from "rift-ds/components/AgentStatus/AgentStatusPatterns";
 import { agentRingProps } from "rift-ds/components/AgentStatus/AgentRing";
 import { Button } from "rift-ds/components/Button/Button";
+import { Reasoning } from "rift-ds/components/Reasoning/Reasoning";
 import { Input } from "rift-ds/components/Input/Input";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { Table } from "rift-ds/components/Table/Table";
@@ -127,7 +128,8 @@ export default function AgentStatusPage() {
           waiting on a person, finished, failed. Those three also draw a
           glyph of their own in the dots: a prompt with a breathing cursor,
           a tick and a cross, so the shape says which it is before the
-          colour does.
+          colour does. Waiting takes the warning status colour, done the
+          positive one and error the error one.
         </p>
         <div className={styles.stack}>
           <AgentStatus state="idle" />
@@ -136,6 +138,36 @@ export default function AgentStatusPage() {
           <AgentStatus state="waiting" label="Waiting for approval" />
           <AgentStatus state="done" label="Finished in 4s" />
           <AgentStatus state="error" label="Tool call failed" />
+        </div>
+      </section>
+
+      {/* In this site's chat */}
+      <section className={styles.section}>
+        <SectionTitle title="In this site&rsquo;s chat" />
+        <p className={styles.demoText}>
+          This site&rsquo;s own chat wears it on every reply. The line above
+          each answer is a Reasoning summary drawn by an AgentStatus: while
+          the model works the dots run and the label names the step, and
+          when the answer lands the dots draw the tick in the positive
+          colour and the label settles to how long it thought, such as
+          &ldquo;Thought for 4s&rdquo;. A reply that fails draws the cross
+          instead, and a reply holding a card that waits on your Confirm
+          shows the waiting prompt until you answer it.
+        </p>
+        <div className={styles.stack}>
+          <Reasoning
+            streaming
+            summaryOnly
+            summary={<AgentStatus state="working" label="Reading the site" />}
+          />
+          <Reasoning
+            summaryOnly
+            summary={<AgentStatus state="waiting" label="Waiting for your approval" />}
+          />
+          <Reasoning
+            summaryOnly
+            summary={<AgentStatus state="done" label="Thought for 4s" />}
+          />
         </div>
       </section>
 

@@ -406,6 +406,22 @@ export default function ChatInstallPage() {
               stages it with every option live.
             </p>
             <p className={s.introBody}>
+              Each reply opens with a status line: an{" "}
+              <Link href="/components/agent-status" className={s.inlineLink}>
+                Agent status
+              </Link>{" "}
+              as the summary of a{" "}
+              <Link href="/components/reasoning" className={s.inlineLink}>
+                Reasoning
+              </Link>{" "}
+              disclosure. While the model works its dots run and the label names the step. When
+              the answer lands, the dots draw a tick in the positive status colour and the label
+              reads how long it thought, such as “Thought for 4s”; open it to read the trace. A
+              failed reply draws a cross in the error colour, and a reply holding a card that
+              waits on Confirm shows the waiting prompt in the warning colour until it is
+              answered.
+            </p>
+            <p className={s.introBody}>
               There are three ways to add it. The full install adds everything to a Next.js app
               with one command; bring a key. UI only puts the chat panel over an endpoint you
               already have. Headless gives you the engine under your own design. The packages are

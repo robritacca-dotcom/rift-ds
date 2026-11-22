@@ -785,5 +785,31 @@
       "seat": "developer",
       "requiredFacts": []
     }
+  },
+  {
+    "description": "designer: the tick beside the chat's own reply line (live session: the chat said it could not see the screen)",
+    "vars": {
+      "question": "I see a green checkmark in the dots beside 'Thought for 3s'. What is it?"
+    },
+    "assert": [
+      {
+        "type": "icontains-any",
+        "value": [
+          "agent status",
+          "agent-status"
+        ]
+      },
+      {
+        "type": "not-icontains",
+        "value": "can't see your screen"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [
+        "Thought for 4s",
+        "the dots draw a tick in the positive status colour"
+      ]
+    }
   }
 ]

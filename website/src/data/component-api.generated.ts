@@ -543,7 +543,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pattern",
             "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
             "required": false,
-            "description": "Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise.",
+            "description": "Which dot-matrix choreography to run while the agent is active. Defaults to `orbit`. `waiting` with no pattern draws its glyph instead, a prompt whose cursor breathes (the same as AgentStatusMark); `done` and `error` draw a tick and a cross whatever the pattern.",
             "values": [
               "braille",
               "breathe",
@@ -589,7 +589,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "variant",
             "type": "\"inline\" | \"bar\" | \"pill\"",
             "required": false,
-            "description": "`inline` sits in a line of content; `bar` is a full-width row for the\ntop of a panel; `pill` is a glass pill for a status that floats over\nthe page while a run goes on; once it ends the dots fill solid in the\nstatus colour, as in every variant. The pill does not position itself.",
+            "description": "`inline` sits in a line of content; `bar` is a full-width row for the\ntop of a panel; `pill` is a glass pill for a status that floats over\nthe page while a run goes on; once it ends the dots draw a tick or a\ncross in the status colour, as in every variant. The pill does not\nposition itself.",
             "values": [
               "bar",
               "inline",
@@ -643,7 +643,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "pattern",
             "type": "\"braille\" | \"orbit\" | \"breathe\" | \"snake\" | \"fill-sweep\" | \"pulse\" | \"columns\" | \"checkerboard\" | \"scan\" | \"rain\" | \"cascade\" | \"sparkle\" | \"wave-rows\" | \"helix\" | \"diagonal-swipe\" | \"twinkle\"",
             "required": false,
-            "description": "Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise.",
+            "description": "Which choreography to run while the agent is active: every AgentStatus pattern, redrawn for the square grid. Defaults to `orbit`. `waiting` with no pattern draws its glyph instead, a prompt whose cursor breathes; `done` and `error` draw a tick and a cross whatever the pattern.",
             "values": [
               "braille",
               "breathe",
@@ -754,7 +754,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "state",
             "type": "AgentStatusState",
             "required": false,
-            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work.",
+            "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark's prompt glyph in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark drawing a\ntick or a cross in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work.",
             "values": [
               "done",
               "error",
@@ -5723,7 +5723,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "streaming",
             "type": "boolean",
             "required": false,
-            "description": "A response is streaming: the send button becomes a stop button, submit\nis blocked, and Enter is inert. On a glowing composer (`aiGlow`) the\ngradient ring also stays lit and keeps turning while this is true.",
+            "description": "A response is streaming: the send button becomes a stop button, submit\nis blocked, and Enter is inert. The gradient ring is lit and turning\nwhile this is true, unless `aiGlow` is `false`.",
             "defaultValue": "false"
           },
           {
@@ -5759,10 +5759,10 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "aiGlow",
-            "type": "boolean",
+            "type": "boolean | \"streaming\"",
             "required": false,
-            "description": "While focused, the shell wears AiButton's slowly rotating gradient ring\nand glow in place of the plain selected border — the system's \"a model\nanswers here\" signal, for composers whose messages are answered by one.\nWhile `streaming`, the ring stays lit and turning whether or not the\nfield holds focus. Off by default.",
-            "defaultValue": "false"
+            "description": "AiButton's slowly rotating gradient ring and glow on the shell, the\nsystem's \"a model is at work here\" signal. `'streaming'`, the default,\nlights it only while `streaming` is true and keeps the plain selected\nborder on focus, so the ring means the agent is working and nothing\nelse, and a resting composer never competes with a reply's live status.\n`true` also lights it whenever the field is focused, in place of the\nselected border. `false` never lights it.",
+            "defaultValue": "'streaming'"
           },
           {
             "name": "context",
@@ -22174,9 +22174,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "logo",
-            "type": "string | null",
+            "type": "string | ReactNode | null",
             "required": false,
-            "description": "The header mark's image src; null (the default) shows the name alone.",
+            "description": "The header mark: an image src, or a node drawn as given, such as an inline SVG that reads the theme's tokens. Null (the default) shows the name alone.",
             "defaultValue": "null"
           },
           {
@@ -22214,6 +22214,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Replaces the composer's leading actions (the model picker)."
+          },
+          {
+            "name": "composerGlow",
+            "type": "boolean | \"streaming\"",
+            "required": false,
+            "description": "The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never.",
+            "defaultValue": "'streaming'"
           },
           {
             "name": "models",
@@ -22618,6 +22625,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "((durationSeconds: number) => string)",
             "required": false,
             "description": "The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to \"Thought for <n>s\", or \"Thought process\" with no duration."
+          },
+          {
+            "name": "awaitingApprovalLabel",
+            "type": "string",
+            "required": false,
+            "description": "A reply's status line while a card in it waits on the reader's Confirm. Defaults to \"Waiting for approval\"."
           },
           {
             "name": "composerLabels",

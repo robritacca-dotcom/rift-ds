@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 - Import: `import { CopyButton } from 'rift-ds';`
 - Deep import: `import { CopyButton } from 'rift-ds/components/CopyButton/CopyButton';`
 - Rendering: client component (declares 'use client')
-- Size: 5.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 5.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/copy-button
 - Schema: https://rift-ds.com/schema/components/copy-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

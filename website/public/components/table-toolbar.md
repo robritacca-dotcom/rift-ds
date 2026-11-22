@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 - Import: `import { TableToolbar } from 'rift-ds';`
 - Deep import: `import { TableToolbar } from 'rift-ds/components/TableToolbar/TableToolbar';`
 - Rendering: client component (declares 'use client')
-- Size: 40.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 40.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/table-toolbar
 - Schema: https://rift-ds.com/schema/components/table-toolbar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

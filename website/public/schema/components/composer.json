@@ -49,7 +49,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "A response is streaming: the send button becomes a stop button, submit\nis blocked, and Enter is inert. On a glowing composer (`aiGlow`) the\ngradient ring also stays lit and keeps turning while this is true.",
+          "description": "A response is streaming: the send button becomes a stop button, submit\nis blocked, and Enter is inert. The gradient ring is lit and turning\nwhile this is true, unless `aiGlow` is `false`.",
           "default": false
         },
         {
@@ -89,11 +89,11 @@
         },
         {
           "name": "aiGlow",
-          "type": "boolean",
-          "typeKind": "primitive",
+          "type": "boolean | \"streaming\"",
+          "typeKind": "other",
           "required": false,
-          "description": "While focused, the shell wears AiButton's slowly rotating gradient ring\nand glow in place of the plain selected border — the system's \"a model\nanswers here\" signal, for composers whose messages are answered by one.\nWhile `streaming`, the ring stays lit and turning whether or not the\nfield holds focus. Off by default.",
-          "default": false
+          "description": "AiButton's slowly rotating gradient ring and glow on the shell, the\nsystem's \"a model is at work here\" signal. `'streaming'`, the default,\nlights it only while `streaming` is true and keeps the plain selected\nborder on focus, so the ring means the agent is working and nothing\nelse, and a resting composer never competes with a reply's live status.\n`true` also lights it whenever the field is focused, in place of the\nselected border. `false` never lights it.",
+          "default": "streaming"
         },
         {
           "name": "context",
@@ -393,6 +393,6 @@
     "note": "Enter sends, Shift and Enter adds a line, and with a mention list open the arrow keys move through it, Enter or Tab writes the choice and Escape closes it."
   },
   "size": {
-    "gzip": 11098
+    "gzip": 11130
   }
 }

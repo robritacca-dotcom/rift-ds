@@ -132,10 +132,10 @@
         },
         {
           "name": "logo",
-          "type": "string | null",
+          "type": "string | ReactNode | null",
           "typeKind": "other",
           "required": false,
-          "description": "The header mark's image src; null (the default) shows the name alone.",
+          "description": "The header mark: an image src, or a node drawn as given, such as an inline SVG that reads the theme's tokens. Null (the default) shows the name alone.",
           "default": null
         },
         {
@@ -178,6 +178,14 @@
           "typeKind": "reference",
           "required": false,
           "description": "Replaces the composer's leading actions (the model picker)."
+        },
+        {
+          "name": "composerGlow",
+          "type": "boolean | \"streaming\"",
+          "typeKind": "other",
+          "required": false,
+          "description": "The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never.",
+          "default": "streaming"
         },
         {
           "name": "models",
@@ -636,6 +644,13 @@
           "typeKind": "function",
           "required": false,
           "description": "The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to \"Thought for <n>s\", or \"Thought process\" with no duration."
+        },
+        {
+          "name": "awaitingApprovalLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A reply's status line while a card in it waits on the reader's Confirm. Defaults to \"Waiting for approval\"."
         },
         {
           "name": "composerLabels",

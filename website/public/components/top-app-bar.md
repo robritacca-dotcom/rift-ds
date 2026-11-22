@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 - Import: `import { TopAppBar } from 'rift-ds';`
 - Deep import: `import { TopAppBar } from 'rift-ds/components/TopAppBar/TopAppBar';`
 - Rendering: client component (declares 'use client')
-- Size: 9.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/top-app-bar
 - Schema: https://rift-ds.com/schema/components/top-app-bar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

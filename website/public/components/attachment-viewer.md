@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 - Import: `import { AttachmentViewer } from 'rift-ds';`
 - Deep import: `import { AttachmentViewer } from 'rift-ds/components/Attachment/AttachmentViewer';`
 - Rendering: client component (declares 'use client')
-- Size: 11.4 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 11.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/attachment-viewer
 - Schema: https://rift-ds.com/schema/components/attachment-viewer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

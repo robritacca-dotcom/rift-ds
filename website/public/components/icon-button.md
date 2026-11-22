@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 - Import: `import { IconButton } from 'rift-ds';`
 - Deep import: `import { IconButton } from 'rift-ds/components/IconButton/IconButton';`
 - Rendering: server-renderable (no 'use client')
-- Size: 4.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/icon-button
 - Schema: https://rift-ds.com/schema/components/icon-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

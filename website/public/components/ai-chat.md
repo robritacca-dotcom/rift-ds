@@ -34,12 +34,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 | placeholder | `string` | no | `'Ask anything'` | The composer's placeholder text. |
 | questionsPlaceholder | `string` | no | `'Answer the questions above, or skip them'` | The composer's placeholder while a set of questions holds it: the answer goes in the card, or the card is skipped. |
 | showStarters | `boolean` | no | `true` | Show the conversation starters on the welcome screen. |
-| logo | `string \| null` | no | `null` | The header mark's image src; null (the default) shows the name alone. |
+| logo | `string \| ReactNode \| null` | no | `null` | The header mark: an image src, or a node drawn as given, such as an inline SVG that reads the theme's tokens. Null (the default) shows the name alone. |
 | tagline | `string` | no | `'How can I help you today?'` | The welcome screen's line under the greeting. |
 | starters | `Starter[]` | no |  | The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped. |
 | startersKey | `string` | no | `''` | Keys the starters' staged reveal: a new key replays the generation beat, the same key shows the set standing. A host whose starters follow the page passes the pathname. |
 | startersPending | `boolean` | no | `false` | Holds the starters' shimmer while the host is still writing them, for starters a model generates: the set reveals the moment this turns false, without the staged beat. Off by default. |
 | composerActions | `ReactNode` | no |  | Replaces the composer's leading actions (the model picker). |
+| composerGlow | `boolean \| "streaming"` | no | `'streaming'` | The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never. |
 | models | `ChatModelOption[]` | no |  | The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker. |
 | defaultModel | `string` | no |  | The picker's selection before the server has reported its default. Defaults to the first model. |
 | lockedModelDescription | `string` | no | `'Paused for today to stay in budget.'` | The one line a locked model shows in place of its description. |
@@ -94,6 +95,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.33.0. The same dat
 | followupsLabel | `string` | no | `'Follow-up questions'` | Accessible name of the follow-up question row under a finished answer. Defaults to "Follow-up questions". |
 | pastedTextLabel | `string` | no |  | The name a long paste's tile wears in the composer and the sent message. Defaults to "Pasted text". |
 | reasoningLabel | `((durationSeconds: number) => string)` | no |  | The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to "Thought for <n>s", or "Thought process" with no duration. |
+| awaitingApprovalLabel | `string` | no |  | A reply's status line while a card in it waits on the reader's Confirm. Defaults to "Waiting for approval". |
 | composerLabels | `Pick<ComposerProps, "aria-label" \| "attachmentTileLabels" \| "attachLabel" \| "dropLabel" \| "filesLabel" \| "formatFileAnnouncement" \| "formatMentionAnnouncement" \| "stopLabel">` | no |  | The composer's words, over Composer's English defaults: the attach button ("Attach files"), the drop overlay on the shell ("Drop files to attach"), the queued files' list ("Attachments") and their tiles (`attachmentTileLabels`), the stop button ("Stop generating"), the text field's name ("Message"), and the sentences announced when files or mention matches change. The send button's name is `sendLabel`. |
 | attachmentDropZoneLabels | `Pick<AttachmentDropZoneProps, "label">` | no |  | The drop overlay's headline when a file is dragged over the chat with attachments on, over AttachmentDropZone's "Drop files to attach". Its second line is `attachHint`. |
 | renderAttachmentPreview | `((item: AttachmentItem) => ReactNode)` | no |  | Draws a sent file in the viewer its tile opens, in place of the built-in view: a document renderer of the host's own, a spreadsheet. Return nothing to keep the built-in view, which shows pictures, pasted text, and a PDF or a text file that carries a `fileUrl`. |

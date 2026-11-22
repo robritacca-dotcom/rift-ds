@@ -183,7 +183,7 @@
     "note": "A frame: its slots own their keys, and its skip link is a native link."
   },
   "size": {
-    "gzip": 1356
+    "gzip": 1350
   },
   "alternatives": [
     {

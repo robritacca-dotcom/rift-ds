@@ -95,7 +95,7 @@
             "working"
           ],
           "required": false,
-          "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark breathing in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark filled\nsolid in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work.",
+          "description": "What the agent behind the button is doing, in AgentStatus's vocabulary.\nThe label never changes; the icon carries the state. `thinking` and\n`working` show AgentStatusMark and spin the ring faster, `waiting` shows\nthe mark's prompt glyph in the warning colour with the ring at rest, and `done` and\n`error` turn the button to their status colours with the mark drawing a\ntick or a cross in the status colour, then return to the resting look after a\nbeat. The button stays clickable throughout, unlike Button's\n`loading`, so a click can open the conversation to watch the work.",
           "typeRefs": [
             "AgentStatusState"
           ]
@@ -331,6 +331,6 @@
     }
   ],
   "size": {
-    "gzip": 7534
+    "gzip": 7627
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import BrandMark from "@/components/BrandMark/BrandMark";
 import { usePathname } from "next/navigation";
 import { useChatWidget, type ChatWidgetProps } from "rift-ds/chat";
 import { getNavLabel } from "@/config/navigation";
@@ -55,7 +56,8 @@ export function useSiteWidgetProps(): Pick<
 
   return {
     title: ASSISTANT_NAME,
-    logo: "/logos/mark.svg",
+    /* The inline mark, not the static file: it reads the brand mark tokens, so it wears whichever theme is on. */
+    logo: <BrandMark size={20} />,
     /* The last pair is tied: "AI" alone on a line is a widow at the docked
        panel's width. */
     tagline: "Ask about the system, the tokens, design, or AI",

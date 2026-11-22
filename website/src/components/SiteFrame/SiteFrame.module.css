@@ -24,6 +24,18 @@
   margin: 0 calc(-1 * var(--primitive-padding-1000)) calc(-1 * var(--primitive-padding-500));
 }
 
+/* At rest the header's controls sit level with the docked chat's header row
+   (its mark, name and buttons), so the two read as one line across the
+   window. The bar rests one step higher than the body's top padding leaves
+   it and gives the step back underneath, so nothing below it moves; once
+   the page scrolls it sticks to the window's edge as before. Only where a
+   chat can dock beside the page. */
+@media (min-width: 960px) {
+  .frame :global(.ds-site-header) {
+    margin-block: calc(-1 * var(--gap-100)) var(--gap-100);
+  }
+}
+
 /* the site narrows the body for the docked chat (html[data-chat="docked"]
    body in globals.css), so the frame takes no end reserve of its own; the
    floating rail, fixed to the window, moves in alone. */

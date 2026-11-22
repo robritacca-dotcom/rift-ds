@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { ShaderScene } from 'rift-ds';`
 - Deep import: `import { ShaderScene } from 'rift-ds/components/ShaderScene/ShaderScene';`
 - Rendering: client component (declares 'use client')
-- Size: 29.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 32.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/shader-scene
 - Schema: https://rift-ds.com/schema/components/shader-scene.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

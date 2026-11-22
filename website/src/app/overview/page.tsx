@@ -259,12 +259,17 @@ export default function AboutDsPage() {
             <SectionTitle title="How the chat answers" />
             <p className={styles.sectionBody}>
               The corpus holds everything published as prose, cached for
-              an hour, so most answers come from context alone. Exact
-              facts (a prop&apos;s type or default, a token count, a
+              an hour, so most answers come from context alone. Each
+              message also carries the visitor&apos;s screen: the page
+              they are on in full, the page of any component they name,
+              the chat panel itself and the theme they see, so a question
+              about “this” is answered about what is in front of them.
+              Exact facts (a prop&apos;s type or default, a token count, a
               token&apos;s value in a theme) come from lookup tools that
-              read the same data <code>/api/mcp</code> serves, shown in
-              the widget as a trace point. The corpus keeps the chat
-              fluent; the tools keep it exact.
+              read the same data <code>/api/mcp</code> serves, and one
+              more reads any other page; each shows in the widget as a
+              trace point. The corpus keeps the chat fluent; the tools
+              keep it exact.
             </p>
             <ArchitectureMap
               map={chatExchangeMap}

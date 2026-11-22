@@ -2,11 +2,13 @@
  * The merchant assistant's behaviour held to each case's `expect` var:
  *   card: an order-action card is required ("order-action"), or forbidden (false).
  *   action / count: the proposed card's action and how many orders it changes.
+ *   asks: the reply must end in a question card (true), or must not (false).
+ *   options: patterns the card's answers, joined, must match (case-insensitive).
  *   says / never: patterns the reply's words must and must not match (case-insensitive).
  * A notice or an error fails every case: a guardrail or an outage is not an answer.
  */
 export default function assertMerchant(output, context) {
-  const { text, cards } = JSON.parse(String(output));
+  const { text, cards, questions = [] } = JSON.parse(String(output));
   const expect = context.vars.expect ?? {};
   const problems = [];
   if (text.startsWith('[error]')) problems.push(text);
@@ -15,6 +17,10 @@ export default function assertMerchant(output, context) {
   if (expect.card === false && proposal) problems.push(`an unwanted proposal card (${proposal.action}, ${proposal.count})`);
   if (expect.action && proposal && proposal.action !== expect.action) problems.push(`proposed ${proposal.action}, not ${expect.action}`);
   if (expect.count != null && proposal && proposal.count !== expect.count) problems.push(`proposed ${proposal.count} orders, not ${expect.count}`);
+  if (expect.asks === true && !questions.length) problems.push('no question card');
+  if (expect.asks === false && questions.length) problems.push(`an unwanted question card ("${questions[0].prompt}")`);
+  const offered = questions.flatMap((question) => question.options).join(' | ');
+  for (const pattern of expect.options ?? []) if (!new RegExp(pattern, 'i').test(offered)) problems.push(`no answer matches /${pattern}/: "${offered}"`);
   for (const pattern of expect.says ?? []) if (!new RegExp(pattern, 'i').test(text)) problems.push(`never says /${pattern}/`);
   for (const pattern of expect.never ?? []) if (new RegExp(pattern, 'i').test(text)) problems.push(`says /${pattern}/: "${text.slice(0, 160)}"`);
   return { pass: problems.length === 0, score: problems.length ? 0 : 1, reason: problems.length ? problems.join('; ') : 'as expected' };

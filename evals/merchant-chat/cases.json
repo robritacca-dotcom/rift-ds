@@ -52,7 +52,8 @@
         ],
         "never": [
           "(?<!nothing |not |none |never )(are|is|have been|has been|were) (now )?cancelled(?! (when|once|if|after))"
-        ]
+        ],
+        "asks": false
       }
     }
   },
@@ -461,6 +462,120 @@
         "says": [
           "14",
           "443"
+        ]
+      }
+    }
+  },
+  {
+    "description": "asking: a change with two readings ends in a question card, and proposes nothing",
+    "vars": {
+      "description": "asking: a change with two readings ends in a question card, and proposes nothing",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "cancel any that are outstanding"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            },
+            {
+              "column": "risk",
+              "operator": "isAnyOf",
+              "value": [
+                "High"
+              ]
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": null
+        }
+      },
+      "expect": {
+        "asks": true,
+        "card": false,
+        "options": [
+          "paid|payment",
+          "deliver|ship|fulfil"
+        ]
+      }
+    }
+  },
+  {
+    "description": "asking: the picked answer carries on to the proposal, without asking again",
+    "vars": {
+      "description": "asking: the picked answer carries on to the proposal, without asking again",
+      "request": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "cancel any that are outstanding"
+          },
+          {
+            "role": "assistant",
+            "content": "Which orders do you mean by \"outstanding\", among the high-risk orders placed in October 2026?"
+          },
+          {
+            "role": "user",
+            "content": "Unpaid orders"
+          }
+        ],
+        "context": {
+          "version": 1,
+          "sorts": [
+            {
+              "key": "placedOn",
+              "direction": "desc"
+            }
+          ],
+          "filters": [
+            {
+              "column": "placedOn",
+              "operator": "after",
+              "value": "2026-09-30"
+            },
+            {
+              "column": "risk",
+              "operator": "isAnyOf",
+              "value": [
+                "High"
+              ]
+            }
+          ],
+          "search": "",
+          "hiddenColumns": [],
+          "columnOrder": [
+            "orderId"
+          ],
+          "grouping": [],
+          "size": "default",
+          "focus": null
+        }
+      },
+      "expect": {
+        "asks": false,
+        "card": "order-action",
+        "action": "cancel",
+        "says": [
+          "confirm"
         ]
       }
     }

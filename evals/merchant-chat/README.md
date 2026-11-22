@@ -35,6 +35,10 @@ make write tools safe to ship:
 - A card confirmation's reply says it is done and offers only a next step
   that would change something.
 - A change no action covers (a price) is declined, with no card.
+- A change with more than one reading ("cancel any that are outstanding")
+  ends in a question card with the readings as answers and proposes nothing;
+  the picked answer then carries on to the proposal without asking again. A
+  clear request never asks.
 
 The focus cases check that a highlighted KPI, a highlighted cell and a ticked
 set are answered about what they are. Each case runs three times; one that

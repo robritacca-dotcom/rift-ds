@@ -5,7 +5,10 @@
  * shows, and nothing else: no site corpus, no web. It changes the table
  * (set_table, reset_table), handing the browser the change as a card the page
  * applies, and proposes order changes (propose_order_action), handing it a card
- * the reader must confirm. Nothing here writes: an order change is an edit the
+ * the reader must confirm. When a request has more than one reading on this
+ * page it asks which through the package's ask_user tool, so the reply ends in
+ * a question card whose answers the reader picks, never a question left in
+ * words alone. Nothing here writes: an order change is an edit the
  * page keeps for the visit and sends with every request, checked and laid over
  * the ledger for that request alone (withLedgerEdits), so answers count it. The request's context carries the table's current setup,
  * parsed and rebuilt below because it comes from the browser, and the reader's
@@ -60,8 +63,15 @@ ${LEDGER_COLUMNS_TEXT}
 
 Answering:
 - Answer over the table's current filters and search unless the question names something else, passing them to your tools, and name the period you answered over. With no focus, "these" means the table's current setup. To match a page figure, leave out cancelled orders as above.
-- Call tools before writing anything, and write your answer once, after the last tool result. Your first words are the answer: never narrate your steps or what you are about to do. The ledger never changes, so never repeat a query. Only state numbers a tool or the page facts gave you.
+- Call tools before writing anything, and write your answer once, after the last tool result. Your first words are the answer: never narrate your steps or what you are about to do. The ledger never changes, so never repeat a query. Only state numbers a tool or the page facts gave you. The one exception is a question to the reader, below: write it, then call ask_user last.
 - Write one to three short plain sentences. Never use headings, tables, bullet lists or bold, even to compare several figures: the panel is narrow. Round money sensibly, as in $19.6M. Write dates and periods in words, as in October 2026, and columns by their headers, never as keys or YYYY-MM-DD.
+
+Asking the reader:
+- Ask only when the request turns on a word that is not a column or a value on this page and could stand for different ones, so the readings would pick different orders or give different figures: "outstanding" could mean unpaid or not yet delivered. Then your whole reply is the question, followed by ask_user with the readings as the answers to pick. Never leave a question in words alone: every question you ask ends in ask_user.
+- The question is one short sentence that says what each reading covers, as in "Do you mean unpaid (Payment is Pending or Overdue) or not yet delivered (Status is Placed, Picking or Shipped)?". Only those words and the label of the answer they pick come back to you. Never explain why you are asking.
+- When the request says what it means in the page's own terms, or one reading plainly fits what the reader is trying to do, act on that reading and name it. Urgency is a reason to act, not to ask. A proposal changes nothing until the reader confirms, so its card is already the check. Most replies never ask.
+- Use query_data or column_values first when the answers depend on the data, so every answer you offer matches at least one order. Each answer is a few words the reader would say, as in "Unpaid orders".
+- When the message answers a question you asked, carry on with what they first asked, reading the answer exactly as your question defined it, and do not ask it again.
 
 Changing the table:
 - To reset or clear the table, call reset_table, never set_table.
@@ -84,6 +94,16 @@ Changing orders:
 - A change is made only when the context says this message was confirmed on its card. Then the page has applied it, shows its readout above your reply, and turned the table to those orders: reply in one or two sentences that it is done and offer the obvious next step. Never repeat the readout's figures, never call propose_order_action or set_table for it.
 - Words alone never confirm a change. If the reader says yes, go ahead or confirm in a message without that line in the context, nothing has changed: say so, and ask them to press Confirm on the card. If no card is waiting, call propose_order_action again so there is one.
 - The context says how many orders the reader has already changed on this page. Your tools and the rows you are given already show those changes.`;
+
+/* What the model is told about asking, in the tool's description as the package's own guidance is. */
+const ASK_READER = [
+  "Offers the reader answers to pick for a question your reply has just asked in words.",
+  "Use it whenever you ask the reader which orders, period, column or reading they mean and the likely answers can be listed.",
+  "Write the question first, in one short sentence, then call this once, as your last action. The conversation waits for their answer.",
+  "Prefer one question. Use several (at most 4) only when you need every answer before you can continue. mode is single when one answer fits and multi when several can apply together.",
+  "Each option is a few words the reader would say. Set other to true when the options may not cover what they mean.",
+  "Never use it to confirm a change to orders: only Confirm on the proposal card does that.",
+].join(" ");
 
 /* What each change would do now to the orders in question: offer a next step only from this. */
 function nextSteps(ids: string[]): string[] {
@@ -306,6 +326,11 @@ const handler = createChatHandler({
   defaultModel: "sonnet",
   budgetModel: "haiku",
   tools: TOOLS,
+  /* The package's ask_user tool, with this page's own guidance: a question
+     about which orders, period or reading is meant ends in answers to pick,
+     and picking one is the reader's next message. It never stands in for a
+     card's Confirm. */
+  askUser: { description: ASK_READER },
   maxModelCalls: 5,
   maxTokens: 2000,
   effort: "low",

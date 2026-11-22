@@ -6,7 +6,7 @@
     },
     "assert": [
       {
-        "type": "contains",
+        "type": "icontains",
         "value": "github"
       }
     ],
@@ -22,7 +22,7 @@
     },
     "assert": [
       {
-        "type": "contains",
+        "type": "icontains",
         "value": "github"
       }
     ],
@@ -483,7 +483,7 @@
     "assert": [
       {
         "type": "icontains",
-        "value": "maintainer"
+        "value": "Ritacca"
       },
       {
         "type": "icontains",
@@ -877,6 +877,41 @@
       "seat": "designer",
       "requiredFacts": [],
       "source": "screen"
+    }
+  },
+  {
+    "description": "screen: whether the component on screen is a client component, asked on its page (logged failure: the chat answered, then withdrew the answer as unpublished) (S2)",
+    "vars": {
+      "question": "Is it a client component?",
+      "page": "/components/avatar-group"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "Server Component"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "requiredFacts": [],
+      "source": "screen"
+    }
+  },
+  {
+    "description": "developer: the shape of an object prop, from the types its contract names (logged failure: the chat said the type was not published) (T1, tool-answered: get_component)",
+    "vars": {
+      "question": "How do I wire up the command prop on TableToolbar?"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "onSubmit"
+      }
+    ],
+    "metadata": {
+      "seat": "developer",
+      "source": "tools",
+      "requiredFacts": []
     }
   }
 ]

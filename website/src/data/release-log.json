@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.33.0",
+      "date": "2026-11-22",
+      "title": "Site layout, code highlighting and the docs kit",
+      "body": [
+        "Everything a documentation or marketing site needs is now in the package. SiteLayout frames the site, holding a SiteHeader, a scrollable NavList sidebar, the page and an on-this-page AnchorNav, with the new SiteFooter below; it renders on the server and runs contained or full width. Menubar, CopyButton and BackToTop are new too, and `npx rift-ds init block docs` scaffolds a documentation page built from all of it.",
+        "CodeBlock takes pre-highlighted `lines`, coloured through the new `--color-code-*` tokens, with line numbers, highlighted lines and install tabs that stay in step across a page. `rift-ds/code/highlight` does the highlighting behind the new optional `shiki` peer. AnchorNav can build its list from the page’s headings, Heading and SectionTitle take a copyable `anchor`, and Pagination, ArtifactPanel, Rating, Figure, Link and Table gain the forms a docs page asks for.",
+        "Nothing published was removed. Two behaviours moved: AppLayout’s `width` now defaults to `contained` in every mode, so pass `width=\"full\"` for an edge-to-edge inset layout, and NavList’s single-open closes only a row’s siblings, with the current page’s branch open."
+      ]
+    },
+    {
       "version": "1.32.0",
       "date": "2026-11-21",
       "title": "Anthropic SDK 1.x support, and IconButton",

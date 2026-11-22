@@ -154,11 +154,11 @@ export default function AiButtonPage() {
           doing, in AgentStatus&rsquo;s vocabulary. The label never
           changes; the icon carries the state. Thinking and working swap
           the icon for the agent mark, a square of dots sized exactly to
-          the icon, and spin the ring faster. Waiting shows the mark
-          breathing in the warning colour with the ring at rest, because
+          the icon, and spin the ring faster. Waiting shows the mark&rsquo;s
+          prompt in the warning colour with the ring at rest, because
           the next move is yours. Done and error turn the whole button to
-          their status colours, with the mark filled solid in green or
-          red for a beat,
+          their status colours, with the mark drawing a tick in green or a
+          cross in red for a beat,
           then the resting look returns. The
           button stays clickable throughout, so a click can open the
           conversation to watch the work.

@@ -124,9 +124,10 @@ export default function AgentStatusPage() {
         <p className={styles.demoText}>
           Six states. The three working states are deliberately monochrome
           and colour is held back for the states where it means something:
-          waiting on a person, finished, failed. The terminal states fill
-          the matrix solid, so the shape reads as done before the colour
-          does.
+          waiting on a person, finished, failed. Those three also draw a
+          glyph of their own in the dots: a prompt with a breathing cursor,
+          a tick and a cross, so the shape says which it is before the
+          colour does.
         </p>
         <div className={styles.stack}>
           <AgentStatus state="idle" />
@@ -170,8 +171,8 @@ export default function AgentStatusPage() {
           without moving or reading larger than it. Every pattern above is
           redrawn for the square on the same twelve-slot cycle, and the
           states and colours are AgentStatus&rsquo;s. Orbit is the default,
-          and the one AI button shows while it works; waiting defaults to
-          breathe, a still pulse that says it is the person&rsquo;s turn.
+          and the one AI button shows while it works; waiting, done and
+          error draw the same three glyphs here.
         </p>
         <div className={styles.patternGrid}>
           {agentStatusPatterns.map((pattern) => (
@@ -236,8 +237,8 @@ export default function AgentStatusPage() {
         <p className={styles.demoText}>
           The pill variant is a glass status for a run that goes on while
           the person keeps working: it floats over the page and reports
-          each step. Once the run ends the dots fill solid in the status
-          colour, and the label says what happened. An action
+          each step. Once the run ends the dots draw a tick or a cross in
+          the status colour, and the label says what happened. An action
           after the text opens the run. The pill does not position itself;
           the host seats it.
         </p>

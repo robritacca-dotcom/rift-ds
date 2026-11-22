@@ -192,18 +192,7 @@
   --ds-agent-label-color: var(--color-status-error-text);
 }
 
-/* Terminal states fill the matrix solid, so the shape itself reads as
-   finished, and twinkle: one or two dots at a time dip and return, so the
-   finished mark stays alive without drawing the eye. The doubled class and
-   :nth-child(n) lift the rule over every pattern's dark-dot opt-outs, so
-   the whole matrix twinkles whatever the pattern. */
-.ds-agent-status.ds-agent-status--done .ds-agent-status__dot:nth-child(n),
-.ds-agent-status.ds-agent-status--error .ds-agent-status__dot:nth-child(n) {
-  opacity: 1;
-  transform: none;
-  animation: ds-agent-dot-twinkle var(--ds-agent-twinkle-cycle) var(--motion-ease-standard) infinite;
-  animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
-}
+/* What the matrix draws once a run ends or waits is in GLYPHS, below. */
 
 /* ============================================
    SIZES
@@ -574,7 +563,7 @@
   animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
 }
 
-/* The twinkle's scatter, shared by the pattern and the finished states */
+/* The twinkle pattern's scatter */
 .ds-agent-status__dot:nth-child(1) { --ds-agent-twinkle-step: 7; }
 .ds-agent-status__dot:nth-child(2) { --ds-agent-twinkle-step: 2; }
 .ds-agent-status__dot:nth-child(3) { --ds-agent-twinkle-step: 10; }
@@ -651,15 +640,6 @@
 
 .ds-agent-status-mark--error {
   --ds-agent-color: var(--color-status-error-icon);
-}
-
-/* Finished: solid and twinkling, as AgentStatus's matrix does. */
-.ds-agent-status-mark.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(n),
-.ds-agent-status-mark.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(n) {
-  opacity: 1;
-  transform: none;
-  animation: ds-agent-dot-twinkle var(--ds-agent-twinkle-cycle) var(--motion-ease-standard) infinite;
-  animation-delay: calc(var(--ds-agent-twinkle-step, 0) * var(--ds-agent-twinkle-slot));
 }
 
 .ds-agent-status-mark--animated .ds-agent-status-mark__dot {
@@ -1108,6 +1088,116 @@
 }
 
 /* ============================================
+   GLYPHS
+   The three states that ask something of the
+   reader each resolve the matrix into a mark of
+   their own, so the shape says which one it is
+   before the colour or the label does:
+
+     done       error      waiting
+     . . . o    o . . o    o . . .
+     o . o .    . o o .    . o . .
+     . o . .    o . . o    o . o o
+
+   a tick, a cross, and a prompt whose cursor
+   breathes. The mark's square grid draws the same
+   three with a row to spare. Each is drawn in
+   stroke order, one dot a slot, then holds. The
+   doubled class and :nth-child(n) lift these
+   rules over every pattern's own, so a finished
+   matrix draws its glyph whatever pattern ran.
+   Waiting draws the prompt on its default pattern
+   only: a pattern asked for by name still runs.
+   ============================================ */
+
+.ds-agent-status--waiting.ds-agent-status--breathe,
+.ds-agent-status-mark--waiting.ds-agent-status-mark--breathe {
+  /* The glyph is the signal now, so the unlit dots fall back to the
+     working floor and the prompt stands clear of them. */
+  --ds-agent-dot-dim: 0.2;
+}
+
+.ds-agent-status.ds-agent-status--done .ds-agent-status__dot:nth-child(n),
+.ds-agent-status.ds-agent-status--error .ds-agent-status__dot:nth-child(n),
+.ds-agent-status.ds-agent-status--waiting.ds-agent-status--breathe .ds-agent-status__dot:nth-child(n),
+.ds-agent-status-mark.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(n),
+.ds-agent-status-mark.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(n),
+.ds-agent-status-mark.ds-agent-status-mark--waiting.ds-agent-status-mark--breathe .ds-agent-status-mark__dot:nth-child(n) {
+  opacity: var(--ds-agent-dot-dim);
+  transform: scale(var(--ds-agent-dot-rest));
+  animation: none;
+}
+
+.ds-agent-status.ds-agent-status--done .ds-agent-status__dot:is(:nth-child(4), :nth-child(5), :nth-child(7), :nth-child(10)),
+.ds-agent-status.ds-agent-status--error .ds-agent-status__dot:is(:nth-child(1), :nth-child(4), :nth-child(6), :nth-child(7), :nth-child(9), :nth-child(12)),
+.ds-agent-status.ds-agent-status--waiting.ds-agent-status--breathe .ds-agent-status__dot:is(:nth-child(1), :nth-child(6), :nth-child(9)),
+.ds-agent-status-mark.ds-agent-status-mark--done .ds-agent-status-mark__dot:is(:nth-child(8), :nth-child(9), :nth-child(11), :nth-child(14)),
+.ds-agent-status-mark.ds-agent-status-mark--error .ds-agent-status-mark__dot:is(:nth-child(1), :nth-child(4), :nth-child(6), :nth-child(7), :nth-child(10), :nth-child(11), :nth-child(13), :nth-child(16)),
+.ds-agent-status-mark.ds-agent-status-mark--waiting.ds-agent-status-mark--breathe .ds-agent-status-mark__dot:is(:nth-child(1), :nth-child(6), :nth-child(9)) {
+  opacity: 1;
+  transform: none;
+  animation: var(--ds-agent-glyph-draw, none) var(--motion-duration-slow) var(--motion-ease-entrance) backwards;
+  animation-delay: calc(var(--ds-agent-glyph-step, 0) * var(--ds-agent-slot));
+}
+
+/* The stroke-by-stroke draw runs only when the indicator reaches its state
+   while on screen. One that mounts already there shows the glyph standing. */
+.ds-agent-status--arrived,
+.ds-agent-status-mark--arrived {
+  --ds-agent-glyph-draw: ds-agent-dot-draw;
+}
+
+/* The prompt's cursor: the two dots after the chevron, breathing. */
+.ds-agent-status.ds-agent-status--waiting.ds-agent-status--breathe .ds-agent-status__dot:is(:nth-child(11), :nth-child(12)),
+.ds-agent-status-mark.ds-agent-status-mark--waiting.ds-agent-status-mark--breathe .ds-agent-status-mark__dot:is(:nth-child(15), :nth-child(16)) {
+  animation: ds-agent-dot-breathe var(--ds-agent-cycle) var(--motion-ease-standard) infinite;
+}
+
+/* Stroke order. The tick runs down its short arm and up its long one; the
+   cross draws one stroke, then the other; the chevron runs top to bottom. */
+.ds-agent-status--done .ds-agent-status__dot:nth-child(5) { --ds-agent-glyph-step: 0; }
+.ds-agent-status--done .ds-agent-status__dot:nth-child(10) { --ds-agent-glyph-step: 1; }
+.ds-agent-status--done .ds-agent-status__dot:nth-child(7) { --ds-agent-glyph-step: 2; }
+.ds-agent-status--done .ds-agent-status__dot:nth-child(4) { --ds-agent-glyph-step: 3; }
+.ds-agent-status--error .ds-agent-status__dot:nth-child(1) { --ds-agent-glyph-step: 0; }
+.ds-agent-status--error .ds-agent-status__dot:nth-child(6) { --ds-agent-glyph-step: 1; }
+.ds-agent-status--error .ds-agent-status__dot:nth-child(12) { --ds-agent-glyph-step: 2; }
+.ds-agent-status--error .ds-agent-status__dot:nth-child(4) { --ds-agent-glyph-step: 3; }
+.ds-agent-status--error .ds-agent-status__dot:nth-child(7) { --ds-agent-glyph-step: 4; }
+.ds-agent-status--error .ds-agent-status__dot:nth-child(9) { --ds-agent-glyph-step: 5; }
+.ds-agent-status--waiting .ds-agent-status__dot:nth-child(1) { --ds-agent-glyph-step: 0; }
+.ds-agent-status--waiting .ds-agent-status__dot:nth-child(6) { --ds-agent-glyph-step: 1; }
+.ds-agent-status--waiting .ds-agent-status__dot:nth-child(9) { --ds-agent-glyph-step: 2; }
+
+.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-glyph-step: 0; }
+.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(14) { --ds-agent-glyph-step: 1; }
+.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-glyph-step: 2; }
+.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(8) { --ds-agent-glyph-step: 3; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-glyph-step: 0; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-glyph-step: 1; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(11) { --ds-agent-glyph-step: 2; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-glyph-step: 3; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(4) { --ds-agent-glyph-step: 4; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(7) { --ds-agent-glyph-step: 5; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(10) { --ds-agent-glyph-step: 6; }
+.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(13) { --ds-agent-glyph-step: 7; }
+.ds-agent-status-mark--waiting .ds-agent-status-mark__dot:nth-child(1) { --ds-agent-glyph-step: 0; }
+.ds-agent-status-mark--waiting .ds-agent-status-mark__dot:nth-child(6) { --ds-agent-glyph-step: 1; }
+.ds-agent-status-mark--waiting .ds-agent-status-mark__dot:nth-child(9) { --ds-agent-glyph-step: 2; }
+
+@keyframes ds-agent-dot-draw {
+  from {
+    opacity: var(--ds-agent-dot-dim);
+    transform: scale(var(--ds-agent-dot-rest));
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* ============================================
    REDUCED MOTION
    The global guard collapses every animation to
    its final frame, which for the matrix is dark.
@@ -1121,6 +1211,8 @@
   .ds-agent-status.ds-agent-status--error .ds-agent-status__dot:nth-child(n),
   .ds-agent-status-mark.ds-agent-status-mark--done .ds-agent-status-mark__dot:nth-child(n),
   .ds-agent-status-mark.ds-agent-status-mark--error .ds-agent-status-mark__dot:nth-child(n),
+  .ds-agent-status.ds-agent-status--waiting.ds-agent-status--breathe .ds-agent-status__dot:nth-child(n),
+  .ds-agent-status-mark.ds-agent-status-mark--waiting.ds-agent-status-mark--breathe .ds-agent-status-mark__dot:nth-child(n),
   .ds-agent-status--animated.ds-agent-status--twinkle .ds-agent-status__dot:nth-child(n),
   .ds-agent-status-mark--animated.ds-agent-status-mark--twinkle .ds-agent-status-mark__dot:nth-child(n) {
     animation: none;

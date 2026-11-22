@@ -17,6 +17,19 @@ const DEFAULT_LABELS: Record<AgentStatusState, string> = {
   error: 'Failed',
 };
 
+/**
+ * Whether the state has changed since the indicator mounted. A glyph is
+ * drawn in, dot by dot, only when the indicator arrives at its state while
+ * on screen; one that mounts already finished shows its glyph standing, so
+ * a reply scrolled back into view never replays the moment it ended.
+ */
+function useArrived(state: AgentStatusState): boolean {
+  const [initial] = useState(state);
+  const [arrived, setArrived] = useState(false);
+  if (!arrived && state !== initial) setArrived(true);
+  return arrived;
+}
+
 /** States where the matrix animates and the label may shimmer. */
 const ACTIVE_STATES: readonly AgentStatusState[] = ['thinking', 'working', 'waiting'];
 
@@ -26,7 +39,7 @@ type AgentStatusOwnProps = {
   state?: AgentStatusState;
   /** Status text. Falls back to a default for the state. Ignored when `children` are given. */
   label?: string;
-  /** Which dot-matrix choreography to run. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn (the same as AgentStatusMark), and `orbit` otherwise. */
+  /** Which dot-matrix choreography to run while the agent is active. Defaults to `orbit`. `waiting` with no pattern draws its glyph instead, a prompt whose cursor breathes (the same as AgentStatusMark); `done` and `error` draw a tick and a cross whatever the pattern. */
   pattern?: AgentStatusPattern;
   /**
    * Sweep a highlight across the label while the agent is active. Defaults to
@@ -42,8 +55,9 @@ type AgentStatusOwnProps = {
   /**
    * `inline` sits in a line of content; `bar` is a full-width row for the
    * top of a panel; `pill` is a glass pill for a status that floats over
-   * the page while a run goes on; once it ends the dots fill solid in the
-   * status colour, as in every variant. The pill does not position itself.
+   * the page while a run goes on; once it ends the dots draw a tick or a
+   * cross in the status colour, as in every variant. The pill does not
+   * position itself.
    */
   variant?: 'inline' | 'bar' | 'pill';
   /** A trailing control after the status text, such as a link that opens the run. Meant for the `pill` and `bar` variants. */
@@ -64,6 +78,8 @@ export interface AgentStatusProps
  *
  * Colour carries meaning rather than decoration — the three working states are
  * monochrome, and only `waiting`, `done` and `error` take a status colour.
+ * Those three also resolve the matrix into a glyph of their own (a prompt, a
+ * tick, a cross), so the shape says which it is before the colour does.
  * The whole thing is one polite live region, so a screen reader hears the state
  * change without the caller wiring anything up.
  */
@@ -84,6 +100,7 @@ export const AgentStatus = React.forwardRef<HTMLDivElement, AgentStatusProps>(
     ref,
   ) => {
     const baseClass = 'ds-agent-status';
+    const arrived = useArrived(state);
     const isActive = ACTIVE_STATES.includes(state);
     const isShimmering = shimmer ?? isActive;
     // Legacy aliases: sm/md predate the chat set settling on ChatMessage's names.
@@ -112,6 +129,7 @@ export const AgentStatus = React.forwardRef<HTMLDivElement, AgentStatusProps>(
       `${baseClass}--${resolvedSize}`,
       `${baseClass}--${variant}`,
       isActive ? `${baseClass}--animated` : '',
+      arrived ? `${baseClass}--arrived` : '',
       className,
     ]
       .filter(Boolean)
@@ -168,7 +186,7 @@ const MARK_DOT_COUNT = 16;
 type AgentStatusMarkOwnProps = {
   /** What the agent is doing. Drives the colour and whether the dots animate, as on AgentStatus. Defaults to `working`, unlike AgentStatus's `thinking`: the mark stands in for an icon on a control (AiButton's, a pill's), where the commonest moment it is drawn is a run under way, while the labelled AgentStatus most often opens a reply. */
   state?: AgentStatusState;
-  /** Which choreography to run: every AgentStatus pattern, redrawn for the square grid. Defaults to `breathe` while `waiting`, a still pulse that reads as the person's turn, and `orbit` otherwise. */
+  /** Which choreography to run while the agent is active: every AgentStatus pattern, redrawn for the square grid. Defaults to `orbit`. `waiting` with no pattern draws its glyph instead, a prompt whose cursor breathes; `done` and `error` draw a tick and a cross whatever the pattern. */
   pattern?: AgentStatusPattern;
   /** Additional CSS classes */
   className?: string;
@@ -183,18 +201,20 @@ export interface AgentStatusMarkProps
  * by `--icon-size`, drawn inside a Material Symbol's live area, so it swaps
  * with a glyph without moving or outgrowing it. Every AgentStatus pattern
  * runs on it, redrawn for the square, in AgentStatus's cycle and colours;
- * orbit is the default, and breathe while waiting. AiButton's status is
- * the first host.
+ * orbit is the default, and waiting, done and error draw AgentStatus's
+ * three glyphs. AiButton's status is the first host.
  * Hidden from assistive technology; the host announces the state.
  */
 export const AgentStatusMark = React.forwardRef<HTMLSpanElement, AgentStatusMarkProps>(
   ({ state = 'working', pattern, className = '', ...rest }, ref) => {
     const baseClass = 'ds-agent-status-mark';
+    const arrived = useArrived(state);
     const classes = [
       baseClass,
       `${baseClass}--${state}`,
       `${baseClass}--${pattern ?? (state === 'waiting' ? 'breathe' : 'orbit')}`,
       ACTIVE_STATES.includes(state) ? `${baseClass}--animated` : '',
+      arrived ? `${baseClass}--arrived` : '',
       className,
     ]
       .filter(Boolean)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { AgentStatus } from './AgentStatus';
 import { agentStatusPatterns } from './AgentStatusPatterns';
 import { agentRingProps } from './AgentRing';
@@ -39,6 +39,53 @@ export const States: Story = {
       <AgentStatus state="error" label="Tool call failed" />
     </div>
   ),
+};
+
+const GLYPH_ENDINGS = ['done', 'error', 'waiting'] as const;
+
+const GlyphsDemo = () => {
+  const [ending, setEnding] = useState<(typeof GLYPH_ENDINGS)[number] | null>(null);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>
+      <AgentStatus state={ending ?? 'working'} />
+      <div style={{ display: 'flex', gap: 8 }}>
+        {GLYPH_ENDINGS.map((state) => (
+          <button key={state} type="button" onClick={() => setEnding(state)}>
+            {state}
+          </button>
+        ))}
+        <button type="button" onClick={() => setEnding(null)}>
+          working
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * `done`, `error` and `waiting` each resolve the matrix into a glyph of
+ * their own: a tick, a cross, and a prompt whose cursor breathes. Reaching
+ * the state while on screen draws the glyph dot by dot; an indicator that
+ * mounts already there (the States story) shows it standing.
+ */
+export const Glyphs: Story = {
+  render: () => <GlyphsDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const status = canvas.getByRole('status');
+    const lit = () =>
+      [...status.querySelectorAll('.ds-agent-status__dot')]
+        .map((dot, index) => (getComputedStyle(dot).opacity === '1' ? index + 1 : 0))
+        .filter(Boolean)
+        .join(' ');
+    await expect(status.className).not.toContain('ds-agent-status--arrived');
+    await userEvent.click(canvas.getByRole('button', { name: 'done' }));
+    await expect(status.className).toContain('ds-agent-status--arrived');
+    /* The tick: up the long arm to the top corner, down the short one. */
+    await waitFor(() => expect(lit()).toBe('4 5 7 10'), { timeout: 3000 });
+    await userEvent.click(canvas.getByRole('button', { name: 'error' }));
+    await waitFor(() => expect(lit()).toBe('1 4 6 7 9 12'), { timeout: 3000 });
+  },
 };
 
 /** Every choreography runs over the same 4x3 grid, so the footprint never shifts. */

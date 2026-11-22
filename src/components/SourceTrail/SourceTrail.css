@@ -126,7 +126,7 @@
 
 .ds-source-trail__list {
   margin: 0;
-  /* 12px above and below, every chat card's edge inset. */
+  /* The recipe's edge above and below, every chat card's edge inset. */
   padding: var(--ds-chat-card-edge) var(--ds-chat-card-inset);
   border-top: var(--border-025) solid var(--color-divider);
   list-style: none;

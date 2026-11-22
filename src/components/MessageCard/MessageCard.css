@@ -86,7 +86,7 @@
   padding: var(--padding-400) var(--ds-chat-card-inset) var(--padding-200);
 }
 
-/* Without media the body opens the card, at the chat cards' 12px edge. */
+/* Without media the body opens the card, at the chat cards' edge. */
 .ds-message-card__body:first-child {
   padding-top: var(--ds-chat-card-edge);
 }

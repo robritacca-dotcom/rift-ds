@@ -7,9 +7,9 @@
 
    A content card of the chat furniture: the
    container fill behind its border, at the
-   ArtifactCard's radius, with a bubble's
-   padding so its text starts where the
-   reply's own text does.
+   ArtifactCard's radius, with the recipe's
+   edge and inset as its padding so its text
+   starts where the reply's own text does.
    ============================================ */
 
 .ds-action-card {

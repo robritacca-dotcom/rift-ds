@@ -717,6 +717,48 @@
     }
   },
   {
+    "description": "designer: a bare request to help choose asks first, from a page (live failure 2026-11-22: a list of every theme, then \"if you tell me\") (A1)",
+    "vars": {
+      "question": "help me choose a theme",
+      "page": "/"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "[question]"
+      },
+      {
+        "type": "not-icontains",
+        "value": "if you tell me"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": []
+    }
+  },
+  {
+    "description": "designer: a recommendation that depends on what the visitor has asks, never invites in words (A1, A3)",
+    "vars": {
+      "question": "Which chart should I use?",
+      "page": "/components"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "[question]"
+      },
+      {
+        "type": "not-icontains",
+        "value": "if you tell me"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": []
+    }
+  },
+  {
     "description": "developer: no ask_user when the question can simply be answered (A2)",
     "vars": {
       "question": "What radius token do buttons use?"
@@ -912,6 +954,28 @@
       "seat": "developer",
       "source": "tools",
       "requiredFacts": []
+    }
+  },
+  {
+    "description": "designer: a yes-or-no with one answer is answered, on the page it is about (A2)",
+    "vars": {
+      "question": "Can I make my own theme?",
+      "page": "/playground"
+    },
+    "assert": [
+      {
+        "type": "not-contains",
+        "value": "[question]"
+      },
+      {
+        "type": "icontains",
+        "value": "playground"
+      }
+    ],
+    "metadata": {
+      "seat": "designer",
+      "requiredFacts": [],
+      "source": "screen"
     }
   }
 ]

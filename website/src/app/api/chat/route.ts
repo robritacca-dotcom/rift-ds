@@ -12,7 +12,7 @@
  * cache writes), the model allowlist and its budget tiers, the two
  * deterministic lookup tools over the generated registries (shared with
  * /api/mcp through @/lib/site-tools), the package's ask_user tool switched
- * on, the Upstash guardrails, and the
+ * on with the site's own rule for when to ask (ASK_VISITOR), the Upstash guardrails, and the
  * notice copy that points people at the docs.
  *
  * The lookup tools cover what the corpus deliberately leaves out: the
@@ -151,6 +151,22 @@ const CHAT_TOOLS: ChatTool[] = [
    mapping still fires on the rare question that does provoke reasoning. */
 const EFFORT = "low";
 
+/* When the chat asks, in the site's own words (the package's default covers
+   the mechanics, this the rule). Two things follow a reply and they are not
+   the same: the suggestion chips carry a conversation on and none of them
+   matters to it, while a question is asked only when the next reply cannot
+   be written without the answer, and then it is always a card, never a
+   question left in words. It also says to ask first: a lookup spends the
+   calls a question needs, and the last call is offered no tools. */
+const ASK_VISITOR = [
+  "Shows the visitor answers to pick for a question your reply has just asked in words. Picking one is their next message, and the conversation waits for it.",
+  "Ask when your next reply depends on a choice only the visitor can make and there are two or more answers you can list, each leading to a different reply: what they are building, which framework, which of several things an unclear word or a bare name means, which of the options they want compared, what matters most to them in a recommendation.",
+  "Whenever your reply would end by asking the visitor to tell you which, or would answer every possibility at once because you do not know which applies, ask with this instead. A closing line such as \"tell me what your data looks like and I can narrow it down\" is that question: when you are about to write one, ask it here and let them pick. Never leave such a question in words alone, and never answer a request to help choose, pick or recommend with a list of every choice.",
+  "Do not ask when you can simply answer, when one reading is clearly the likelier (answer it and name the reading), when the answers cannot be listed, or to confirm what they already said. Optional next steps are not questions: the suggestions shown after a reply carry those, and nothing depends on them. Most replies do not ask.",
+  "Decide whether to ask before you look anything up, and ask as your first action: the answer decides what is worth reading.",
+  "Write the question first, in one short sentence, then call this once, as your last action. Prefer one question. Use several (at most 4) only when you need every answer before you can continue. mode is single when one answer fits and multi when several can be true together. Each answer is a few words the visitor would say. Set other to true when the options may not cover every answer.",
+].join(" ");
+
 const handler = createChatHandler({
   apiKey: process.env.ANTHROPIC_API_KEY,
   // The route deploys ahead of its environment variables on purpose, so an
@@ -178,7 +194,7 @@ const handler = createChatHandler({
      on them. Its guidance lives in the tool description, which sits before
      the cached system blocks and never changes per request, so the corpus
      cache is untouched. Asking ends the exchange with no further call. */
-  askUser: true,
+  askUser: { description: ASK_VISITOR },
   maxModelCalls: 3,
   maxTokens: 3000,
   effort: EFFORT,

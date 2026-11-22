@@ -21,9 +21,10 @@ How to use it:
 - **Editing `persona.ts`?** Update the matching row here in the same change,
   and re-read the "unenforced" column: a new rule ships with either a tripwire
   or an explicit entry under human review.
-- **Editing the `ask_user` description?** Rows A1 and A2 take their authority
-  from it; update them in the same change. A site that overrides it passes
-  `askUser: { description }` in `website/src/app/api/chat/route.ts`.
+- **Editing the `ask_user` description?** Rows A1 to A3 take their authority
+  from it; update them in the same change. This site writes its own,
+  `ASK_VISITOR`, passed as `askUser: { description }` in
+  `website/src/app/api/chat/route.ts`.
 
 Enforcement lives in four layers (defined in `evals/chat/README.md`):
 **L0** build-time validators, **L1** deterministic assertions through the real
@@ -58,8 +59,9 @@ shared with `/api/mcp` through `website/src/lib/site-tools.ts`.
 | T2 | An empty lookup means the component or category is not findable: say so, never fill the gap with a plausible contract. | Unenforced, L3 |
 | T3 | The tools are plumbing, not content: never mentioned to the visitor; tool rounds surface only as trace points under the status label. | Unenforced, L3 |
 | T4 | Tool-answered eval cases carry empty `requiredFacts`: the facts live in the generated prop/token data, not the corpus, and `validate-chat-coverage.mjs` checks `requiredFacts` against the corpus alone. | L0 by construction; this row records why those cases look different |
-| A1 | When the most useful next step depends on an answer whose likely values can be listed, the reply asks in words and then calls `ask_user` with those answers, once, as its last action. Authority: `DEFAULT_ASK_USER_DESCRIPTION` in `src/chat/server.ts`, the tool's own description. | L1 the theme-preset case asserts a `[question]` line, which `transform-response.js` appends for a `question` event |
-| A2 | A question that can simply be answered, or an open one, is answered: most replies never ask. Over-asking is the failure this rule exists for. | L1 two cases assert no `[question]` line |
+| A1 | A question is asked when the next reply depends on a choice only the visitor can make and two or more answers can be listed, each leading to a different reply. The reply asks in words and then calls `ask_user` with those answers, once, before any lookup. Authority: `ASK_VISITOR` in `website/src/app/api/chat/route.ts`, the tool's description as this site writes it (`DEFAULT_ASK_USER_DESCRIPTION` in `src/chat/server.ts` is the package's). | L1 three cases assert a `[question]` line, which `transform-response.js` appends for a `question` event: the theme preset, the bare "help me choose a theme" and the chart |
+| A2 | A question that can simply be answered, or an open one, is answered: most replies never ask. Over-asking is the failure this rule exists for. The suggestions under a reply carry optional next steps, and nothing depends on them. | L1 three cases assert no `[question]` line |
+| A3 | A question is never left in words alone: a reply never ends by inviting the visitor to tell it more so it can narrow the answer down. Authority: the persona's line on it, and `ASK_VISITOR`. | L1 the two newer A1 cases assert `not-icontains` on "if you tell me"; other phrasings are L3 |
 
 ## The screen
 

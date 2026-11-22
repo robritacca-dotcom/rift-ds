@@ -251,9 +251,12 @@ export interface ChatHandlerOptions {
   system: string | SystemBlocks | ((context: { path: string | null }) => string | SystemBlocks);
   /**
    * An uncached trailing block built from the request's context, after the
-   * cache breakpoint. Defaults to naming the page; return null for none.
+   * cache breakpoint. Defaults to naming the page; return null for none. The
+   * second argument is the conversation as the handler received it, the
+   * latest message last, for a block that answers what the visitor named
+   * (a page, a record) as well as where they are.
    */
-  contextBlock?: (path: string) => string | null;
+  contextBlock?: (path: string, conversation: { messages: readonly ChatTransportMessage[] }) => string | null;
   /** The models on offer. The client sends a `value`; the handler calls the matching `id`. */
   models: ChatModelOption[];
   /** The wire value that serves when the budget has headroom and the visitor has not chosen. Defaults to the first model. */
@@ -561,7 +564,7 @@ export function createChatHandler(options: ChatHandlerOptions): (request: Reques
     );
     /* One per request: every tool call in the reply shares its scratch object. */
     const toolContext: ChatToolContext = { context: parsed.path, request: {} };
-    const trailing = parsed.path ? contextBlock(parsed.path) : null;
+    const trailing = parsed.path ? contextBlock(parsed.path, { messages: parsed.messages }) : null;
     const system: SystemBlocks = trailing
       ? [...systemBase, { type: 'text', text: trailing }]
       : systemBase;

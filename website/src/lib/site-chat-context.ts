@@ -16,6 +16,11 @@
  *   draws (the dependency graph), and the chat panel itself
  *   (lib/site-chat-panel.ts). The chat answers as someone looking at the
  *   same screen, because it is on that screen.
+ * - A component the visitor names in the conversation ("the live agent
+ *   status", "AgentStatus", "agent-status") has its page attached too, read
+ *   the same way, so a question that names a page gets it without waiting
+ *   on the model to look it up (`namedPages`). The get_page tool covers any
+ *   page beyond these.
  * - `selectionLines` writes the highlight for the model, each part named as
  *   the site's own words or the visitor's selection by `isPublished`: found
  *   in the published site's text (the corpus, or the words of the page it
@@ -33,6 +38,7 @@
  */
 
 import { sanitisePath, sanitiseSelection, selectionLines, type ChatSelection } from "rift-ds/chat/server";
+import type { ChatTransportMessage } from "rift-ds/chat";
 import { tokenRegistry } from "rift-ds/tokens/registry";
 import { THEME_IDS, tokenValue } from "rift-ds/tokens/values";
 import { componentApi } from "@/data/component-api.generated";
@@ -211,19 +217,131 @@ function namedFacts(text: string, screen?: ScreenState): string[] {
   return facts;
 }
 
+/* ------------------------------------------------------------
+   Pages the visitor names
+   ------------------------------------------------------------ */
+
+/** How many named pages one message attaches, and how much of their text, so a list of names cannot flood the block. */
+const MAX_NAMED_PAGES = 3;
+const MAX_NAMED_PAGE_CHARS = 16_000;
+/** How many of the visitor's messages are read for names, the latest first: a follow-up ("and its done state?") keeps the page an earlier message named. */
+const NAMED_PAGE_MESSAGES = 3;
+
+/* Lower case, with hyphens, underscores and runs of space as one space, so "agent-status", "Agent_Status" and "agent  status" read alike. */
+const nameForm = (text: string) => text.toLowerCase().replace(/[-_\s]+/g, " ").trim();
+/* "AgentStatusMark" as "agent status mark". */
+const camelWords = (name: string) => nameForm(name.replace(/([a-z0-9])([A-Z])/g, "$1 $2"));
+
+/**
+ * Every way the site names a component's page: its label, its registry
+ * name, the name of each component its module exports (written as one word
+ * or as words) and its slug. Longest first, so "agent status mark" is found
+ * before "agent status" and "status" never claims what a longer name holds.
+ */
+const PAGE_NAMES: { term: string; path: string; label: string }[] = (() => {
+  const seen = new Map<string, { term: string; path: string; label: string }>();
+  for (const entry of componentApi) {
+    const path = `/components/${entry.slug}`;
+    const names = [entry.label, entry.name, entry.slug, ...entry.exports.map((exported) => exported.component)];
+    for (const name of names) {
+      for (const term of [nameForm(name), camelWords(name)]) {
+        if (term.length >= 3 && !seen.has(term)) seen.set(term, { term, path, label: entry.label });
+      }
+    }
+  }
+  return [...seen.values()].sort((a, b) => b.term.length - a.term.length);
+})();
+
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const PAGE_NAME_PATTERNS = PAGE_NAMES.map((name) => ({
+  ...name,
+  pattern: new RegExp(`(?<![a-z0-9])${escapeRegExp(name.term)}(?![a-z0-9])`),
+  asName: name.term.includes(" ") ? null : writtenAsName(name.term),
+}));
+
+/**
+ * A one-word name ("list", "button", "card") is also an ordinary English
+ * word, so it counts only when the message writes it as a name: capitalised
+ * mid-sentence ("the Button"), in code ("`button`"), followed by
+ * "component", or as the whole message. A name of two or more words ("agent
+ * status") is specific enough as written. Anything missed is one get_page
+ * call away.
+ */
+function writtenAsName(term: string): (text: string) => boolean {
+  const word = escapeRegExp(term);
+  const capitalised = escapeRegExp(term[0].toUpperCase() + term.slice(1));
+  /* Case matters here: "Button" mid-sentence, never at a sentence's start, where every word is capitalised. */
+  const midSentence = new RegExp(`(?<!^\\s*)(?<![.!?:]\\s*)(?<![A-Za-z0-9])${capitalised}(?![a-z0-9])`);
+  /* And not here: "`button`", "button component", or the name alone. */
+  const cued = new RegExp(`\`${word}\`|(?<![a-z0-9])${word}\\s+components?\\b|^\\s*${word}\\s*\\??\\s*$`, "i");
+  return (text) => midSentence.test(text) || cued.test(text);
+}
+
+/**
+ * The component pages the visitor's recent messages name, latest message
+ * first and the longest name first within one, skipping the page on screen
+ * (already in the block). A matched span is blanked so a shorter name inside
+ * it ("status" inside "agent status") does not match again.
+ */
+export function namedPages(messages: readonly ChatTransportMessage[], onScreen: string | null): { path: string; label: string }[] {
+  const found: { path: string; label: string }[] = [];
+  const recent = messages.filter((message) => message.role === "user").slice(-NAMED_PAGE_MESSAGES).reverse();
+  for (const message of recent) {
+    let text = ` ${nameForm(camelSplitInText(message.content))} `;
+    for (const name of PAGE_NAME_PATTERNS) {
+      const match = name.pattern.exec(text);
+      if (!match) continue;
+      if (name.asName && !name.asName(message.content)) continue;
+      text = text.slice(0, match.index) + " ".repeat(match[0].length) + text.slice(match.index + match[0].length);
+      if (name.path === onScreen || found.some((page) => page.path === name.path)) continue;
+      found.push({ path: name.path, label: name.label });
+      if (found.length === MAX_NAMED_PAGES) return found;
+    }
+  }
+  return found;
+}
+
+/* A CamelCase name written in a message ("AgentStatus") as words, leaving ordinary prose alone. */
+const camelSplitInText = (text: string) => text.replace(/\b([A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+)\b/g, (name) => camelWords(name));
+
+/** The named pages as a section of the block, each in full until the shared budget runs out. */
+function namedPageLines(messages: readonly ChatTransportMessage[], onScreen: string | null): string[] {
+  const pages = namedPages(messages, onScreen);
+  if (pages.length === 0) return [];
+  const lines = [
+    "",
+    "## Pages they named",
+    "The visitor's messages name these components, so their pages are here as the screen would show them. For any other page a question turns on, use get_page.",
+  ];
+  let budget = MAX_NAMED_PAGE_CHARS;
+  for (const { path, label } of pages) {
+    const page = pageScreenLines(path);
+    if (!page) continue;
+    const text = page.join("\n");
+    if (text.length > budget) {
+      lines.push("", `### ${label} (${path})`, "Its page is long; read it with get_page.");
+      continue;
+    }
+    budget -= text.length;
+    lines.push("", `### ${label} (${path})`, text);
+  }
+  return lines;
+}
+
 const SCREEN_PREAMBLE =
   "The visitor has this site open with the chat beside or over the page, so the page below and the chat panel itself are on their screen as they ask. " +
   "This section is what they are looking at, from the site's own data. Answer about it directly, as someone looking at the same screen: when they say this, here, that or it, they mean something on it. " +
   "Never tell them you cannot see their screen. The one thing this cannot tell you is what they did in a live demo since the page loaded (a toggle, a picked state); when that matters, say which state you are describing.";
 
-/** The trailing system block for a checked context: the visitor's screen, then what they highlighted on it. */
-export function siteContextBlock(context: string): string | null {
+/** The trailing system block for a checked context: the visitor's screen, the pages they named, then what they highlighted. */
+export function siteContextBlock(context: string, conversation?: { messages: readonly ChatTransportMessage[] }): string | null {
   const { path, highlight, screen } = JSON.parse(context) as SiteContext;
   const lines = ["# The visitor's screen", SCREEN_PREAMBLE];
   if (path) {
     lines.push("", `## The page: ${path}`, ...(pageScreenLines(path) ?? ["The site publishes nothing about this page beyond its path."]));
   }
   lines.push("", "## The chat panel", ...CHAT_PANEL_LINES, ...screenStateLines(screen));
+  lines.push(...namedPageLines(conversation?.messages ?? [], path));
   if (!highlight) return lines.join("\n");
 
   lines.push("", "## What they highlighted");

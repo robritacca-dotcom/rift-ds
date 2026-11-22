@@ -79,9 +79,10 @@ const CHAT_TOOLS: ChatTool[] = [
         "page's own words in order (for a component page, everything its sections " +
         "and demos say, which the site content above leaves out), or where the site " +
         "content already holds them, and the library components drawn on it. The page " +
-        "the visitor is on is already in their screen block; use this for any other " +
-        "page a question turns on, and before saying the site does not cover something " +
-        "a page would.",
+        "the visitor is on, and the pages of components their messages name, are already " +
+        "in their screen block; read any other page a question turns on with this, as " +
+        "part of working out the answer, and always before saying the site does not " +
+        "cover something a page would.",
       input_schema: {
         type: "object",
         properties: {

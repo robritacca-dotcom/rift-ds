@@ -48,15 +48,15 @@
   /* Insets: every row's first thing stands this far in; stacked cards and
      opened panels hold their text this far off the top and bottom edges. */
   --ds-chat-card-inset: var(--padding-500);
-  --ds-chat-card-edge: var(--padding-300);
+  --ds-chat-card-edge: var(--padding-400);
 
   /* Rhythm, three steps: a title's subline (a description, detail, meta or
      subtitle line) sits straight under it, its leading the only space; a
      body under that (a description under a meta line, a list of facts)
      stands a text gap off; blocks (text to buttons) a block gap apart. */
   --ds-chat-card-gap-subline: 0;
-  --ds-chat-card-gap-text: var(--gap-200);
-  --ds-chat-card-gap-block: var(--gap-400);
+  --ds-chat-card-gap-text: var(--gap-300);
+  --ds-chat-card-gap-block: var(--gap-500);
 
   /* One-row cards: a compact control and this much above and below, so a
      label row and a row holding a button are one height. */
@@ -70,12 +70,17 @@
 /* The fact list: a label beside its value, a line each, as ActionReadout
    and ActionCard list what a change will do or did. A card sets only where
    the list sits. */
+/* The list's own margin is cleared at no specificity, so the card's rule
+   for where the list sits wins whichever stylesheet loads last. */
+:where(.ds-chat-card-facts) {
+  margin: 0;
+}
+
 .ds-chat-card-facts {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
-  column-gap: var(--gap-400);
-  row-gap: var(--gap-100);
-  margin: 0;
+  column-gap: var(--gap-500);
+  row-gap: var(--gap-200);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);

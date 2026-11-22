@@ -278,8 +278,8 @@
 .ds-tool-call__content > .ds-code-block .ds-code-block__header {
   order: 1;
   justify-content: flex-start;
-  /* 16px off the code, the chat cards' block seam. */
-  margin-block-start: var(--gap-400);
+  /* A block gap off the code, the chat cards' seam. */
+  margin-block-start: var(--ds-chat-card-gap-block);
   padding: 0;
   border-bottom: none;
 }

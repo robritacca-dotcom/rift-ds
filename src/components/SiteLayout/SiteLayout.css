@@ -77,7 +77,9 @@
 .ds-site-layout__header > .ds-site-header:not(.ds-site-header--width) .ds-site-header__bar {
   max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
   margin-inline: auto;
-  padding-inline: var(--ds-shell-gutter);
+  padding-inline: var(--ds-shell-gutter);  /* SiteHeader's own name for its bar's side padding, which its menu
+     panel lines up with. */
+  --_bar-inset: var(--ds-shell-gutter);
 }
 
 /* ============================================

@@ -6,6 +6,11 @@
   /* The site header's bar is 78px: set once here, on the frame, so MegaNav's
      SiteHeader and SiteLayout's sticky columns read the same height. */
   --ds-site-header-height: 78px;
+  /* The Full width layout's step is narrower than the Contained layout's
+     1440px, and up to 1440px the two draw the same, so the header's menu
+     hangs from the pills only past it, as a contained bar's never needs
+     to. The width is the Contained preset's (SITE_FRAME_LAYOUTS). */
+  --ds-site-header-menu-hang-from: 1440px;
   /* The headroom the site's pages had before the frame: the body's gap under
      the header (--gap-2000) plus the old frame's top padding (--gap-1000),
      so every page's sidebar and title start where they always did. */

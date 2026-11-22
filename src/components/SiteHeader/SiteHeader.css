@@ -94,6 +94,9 @@
   max-width: var(--ds-shell-content-max, var(--ds-shell-contained-width));
   margin-inline: auto;
   padding-inline: var(--ds-shell-gutter);
+  /* The bar's side padding, read by the menu panel so it lines up with
+     the bar's content rather than its outer edge. */
+  --_bar-inset: var(--ds-shell-gutter);
 }
 
 .ds-site-header__brand {
@@ -234,9 +237,11 @@
   visibility: hidden;
 }
 
-/* The mega menu hangs under the bar across its full width. It is not
-   anchored to a control (useAnchoredPosition's job): it belongs to the bar
-   and spans it, so it rides the bar's own box.
+/* The mega menu hangs under the bar across the bar's content, inside its
+   side padding, so its edges meet the brand and the last action and the
+   page's content below. It is not anchored to a control
+   (useAnchoredPosition's job): it belongs to the bar and spans it, so it
+   rides the bar's own box.
    The wrapper keeps the height of the last section shown after the menu
    closes, so it never takes a press itself: a transparent box that size
    would sit over the page and swallow its clicks. Only the menu does, and a
@@ -244,7 +249,7 @@
 .ds-site-header__panel {
   position: absolute;
   inset-block-start: calc(100% + var(--gap-200));
-  inset-inline: 0;
+  inset-inline: var(--_bar-inset, 0px);
   pointer-events: none;
 }
 
@@ -252,22 +257,47 @@
   pointer-events: auto;
 }
 
-/* A full-width bar keeps its menu at the contained width and opens it
-   where the reader is looking: the panel starts under the section pills
-   (--ds-site-header-nav-start, measured as it opens), runs at most the
-   shell recipe's contained width, and never comes closer to the window's
-   end than the side gutter, so a wide window neither stretches the menu's
-   columns apart nor strands it in the middle. A contained bar's menu spans
-   the bar as before. Full comes from the header's own width or, unset, from
-   the width of the slot it sits in (SiteLayout's header slot). */
+/* A full-width bar wider than the contained width keeps its menu at the
+   contained width and opens it where the reader is looking: the panel
+   starts under the section pills (--ds-site-header-nav-start, measured as
+   it opens), runs at most the shell recipe's contained width, and never
+   comes closer to the window's end than the side padding, so a wide window
+   neither stretches the menu's columns apart nor strands it in the middle.
+   On a bar no wider than --ds-site-header-menu-hang-from (an override
+   hook, the contained width by default; a host whose contained layout is
+   wider than its full one's step sets it to that wider width), where a
+   full bar and a contained one draw the same, the menu does the same as a
+   contained bar's and spans the bar's content: the clamp below is a step,
+   zero up to that width and the pills' offset past it. Full comes from the
+   header's own width or, unset, from the width of the slot it sits in
+   (SiteLayout's header slot). */
 .ds-site-header[data-ds-width='full'] .ds-site-header__panel,
 :where([data-ds-width='full']) > .ds-site-header:not([data-ds-width]) .ds-site-header__panel {
   /* --ds-site-header-nav-start is measured onto the header as the menu
      opens, not a hook; the fallback covers the frame before it is. */
-  inset-inline: var(--ds-site-header-nav-start, var(--ds-shell-gutter, 0px)) auto;
+  --_panel-start: calc(
+    var(--_bar-inset, 0px) +
+      clamp(
+        0px,
+        (100% - var(--ds-site-header-menu-hang-from, var(--ds-shell-contained-width, 100%))) * 1000,
+        var(--ds-site-header-nav-start, var(--_bar-inset, 0px)) - var(--_bar-inset, 0px)
+      )
+  );
+  inset-inline: var(--_panel-start) auto;
+  /* The contained-width cap holds only while the menu hangs from the
+     pills; up to the hang width the cap steps out of the way (the same
+     step, inverted), so the menu meets the bar's far edge as a contained
+     bar's does. */
   width: min(
-    var(--ds-shell-contained-width, 100%),
-    calc(100% - var(--ds-site-header-nav-start, var(--ds-shell-gutter, 0px)) - var(--ds-shell-gutter, 0px))
+    calc(
+      var(--ds-shell-contained-width, 100%) +
+        clamp(
+          0px,
+          (var(--ds-site-header-menu-hang-from, var(--ds-shell-contained-width, 100%)) - 100% + 1px) * 1000,
+          100vw
+        )
+    ),
+    calc(100% - var(--_panel-start) - var(--_bar-inset, 0px))
   );
 }
 

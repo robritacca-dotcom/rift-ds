@@ -181,6 +181,13 @@
   }
 }
 
+/* The Full width layout's step is narrower than the Contained layout's
+   1440px, and up to 1440px the two draw the same, so the menu hangs from
+   the pills only past it (the site frame sets the same). */
+.header {
+  --ds-site-header-menu-hang-from: 1440px;
+}
+
 /* The condensed action set's stand-in before the bar has measured itself,
    as the site header's (MegaNav.module.css): on a first paint narrower
    than the full row needs, the full set would otherwise show for a frame

@@ -39,7 +39,7 @@ and the corpus boundary in CLAUDE.md.
 | Id | Rule | Enforced by |
 |---|---|---|
 | G1 | Facts about the system and the site come only from published data: the site corpus, the visitor's screen block and the lookup tools. A fact none of them holds is unknown: look before saying so, then say so plainly, never guess. | L1 per-case `contains` asserts on the fact questions in `golden-set.json`; L3 for the tone of "I don't know" |
-| G2 | Every site path the answer cites must exist. | L1 `evals/chat/assert-paths.mjs`, on every case via `defaultTest` |
+| G2 | Every site path the answer cites must exist: a page, a route handler or a published file. The route a block writes into the reader's own app is the one path that is not this site's. | L1 `evals/chat/assert-paths.mjs`, on every case via `defaultTest` |
 | G3 | A stated component count must match the registry; a qualified approximation may run a little under, never over. | L1 `evals/chat/assert-component-count.mjs`. Wired only on the count case today; attach it to any new case likely to elicit a count |
 | G4 | Every fact the golden set requires must actually be in the generated corpus. | L0 `scripts/validate-chat-coverage.mjs`, in CI |
 | G5 | The site publishes no direct contact channels. Availability, rates, hiring, and engagement terms are the maintainer's to answer: say so and point at the GitHub repository the footer links. | L1 the availability case asserts the answer names GitHub |

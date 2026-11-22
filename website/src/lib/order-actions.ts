@@ -180,7 +180,7 @@ export function undoReadoutFor(before: Values[], after: Values[]): ActionReadout
 export interface ChangeLogEntry {
   action: OrderActionId;
   count: number;
-  /** Where it was made: the selection bar, or a card the chat proposed. */
-  source: "bar" | "chat";
+  /** Where it was made: the selection bar, a card the chat proposed, or an outside agent's proposal the reader confirmed on the page. */
+  source: "bar" | "chat" | "agent";
   undone?: boolean;
 }

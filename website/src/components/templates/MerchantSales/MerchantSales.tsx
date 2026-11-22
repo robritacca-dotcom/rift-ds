@@ -39,7 +39,7 @@ import TemplateAssistant from "../TemplateAssistant/TemplateAssistant";
 import { MerchantChatProvider, MerchantChatWidget, useToastsClearOfPanel, type TableBridge } from "./MerchantChat";
 import { highlightRanges, useChatFocus, type ChatFocus } from "./chatFocus";
 import { OrderEditsProvider, useOrderEdits } from "./orderEdits";
-import { ORDER_ACTIONS, skippedText, withEdit, type ActionPlan, type OrderActionId } from "@/lib/order-actions";
+import { ORDER_ACTIONS, readoutFor, skippedText, withEdit, type ActionPlan, type ChangeLogEntry, type OrderActionId } from "@/lib/order-actions";
 import { AlertDialog } from "rift-ds/components/AlertDialog/AlertDialog";
 import { useToast } from "rift-ds/components/Toast/Toast";
 import type { TableToolbarSelection } from "rift-ds/components/TableToolbar/TableToolbar";
@@ -64,6 +64,7 @@ import {
 import { nextView } from "@/lib/order-ledger-view";
 import { COLUMN_KEYS, ledgerRows } from "@/data/order-ledger";
 import OrdersTable from "./OrdersTable";
+import { useMerchantPageTools, type ConfirmPlan } from "./useMerchantPageTools";
 
 /* ---------------------------------------------------------------- data */
 
@@ -213,7 +214,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
   const ask = useCallback(() => setOpen(true), [setOpen]);
 
   /* The bar's order actions: a click is the reader's own instruction, so fulfilling applies at once with the toast's Undo as the way back; a change that takes something away (a cancellation, a refund) confirms first. */
-  const { edits, plan, run, reset } = useOrderEdits();
+  const { edits, plan, run, reset, valuesOf } = useOrderEdits();
   /* The band and the charts as the reader has made them: worked out from the edited ledger once anything is changed, the pinned figures before (computeKpis and computeCharts give them exactly). */
   const { kpis, charts } = useMemo(() => {
     if (!Object.keys(edits).length) return { kpis: MERCHANT_KPIS, charts: MERCHANT_CHARTS };
@@ -231,11 +232,14 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
   );
   const { toast, dismiss } = useToast();
   const [pending, setPending] = useState<ActionPlan | null>(null);
+  /* Set while the dialog is an outside agent's proposal: how its tool call hears what the reader chose. */
+  const settleAgent = useRef<((confirmed: boolean) => void) | null>(null);
+  const [agentAsked, setAgentAsked] = useState(false);
   const apply = useCallback(
-    (next: ActionPlan) => {
+    (next: ActionPlan, source: ChangeLogEntry["source"] = "bar") => {
       const action = ORDER_ACTIONS[next.action];
       const skipped = skippedText(next.skipped);
-      const undo = run(next, "bar");
+      const undo = run(next, source);
       const count = next.ids.length.toLocaleString("en-US");
       const toastId = toast({
         variant: "positive",
@@ -273,6 +277,27 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
     },
     [bridge, plan, apply, toast],
   );
+  /* An outside agent's proposal (useMerchantPageTools) waits on the same dialog, whatever the action: the agent asked, so
+     the reader confirms each one. Its tool call settles with their choice, and never reaches `run` on its own. */
+  const closePending = useCallback((confirmed: boolean) => {
+    settleAgent.current?.(confirmed);
+    settleAgent.current = null;
+    setAgentAsked(false);
+    setPending(null);
+  }, []);
+  const confirmForAgent = useCallback<ConfirmPlan>(
+    (next, signal) =>
+      new Promise<boolean>((resolve) => {
+        /* One question at a time: a second proposal while one waits is turned down, not stacked. */
+        if (settleAgent.current || signal?.aborted) return resolve(false);
+        settleAgent.current = resolve;
+        signal?.addEventListener("abort", () => settleAgent.current === resolve && closePending(false), { once: true });
+        setAgentAsked(true);
+        setPending(next);
+      }),
+    [closePending],
+  );
+  useMerchantPageTools(bridge, confirmForAgent);
   /* Reset starts the demo over: the edits, and the table, selection and focus they left behind (a filter to the changed orders, say). */
   const resetDemo = useCallback(() => {
     reset();
@@ -297,6 +322,15 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
   const pendingVerb = pendingAction ? (pendingAction.verb ?? pendingAction.label) : "";
   const pendingNoun = pending?.ids.length === 1 ? "order" : "orders";
   const pendingSkipped = pending ? skippedText(pending.skipped) : "";
+  /* For an agent's proposal the dialog says who asked and shows the change from what the orders are to what they become. */
+  const pendingFacts = useMemo(() => {
+    if (!pending || !agentAsked) return "";
+    const before = pending.ids.flatMap((id) => {
+      const values = valuesOf(id);
+      return values ? [values] : [];
+    });
+    return readoutFor({ ...pending, skipped: {} }, before, "will").facts.slice(0, 3).map(([label, value]) => `${label}: ${value}.`).join(" ");
+  }, [pending, agentAsked, valuesOf]);
   /* Closing hands focus back to whatever opened it, as the launcher does. */
   useEffect(() => {
     if (!open) returnFocusRef.current?.focus();
@@ -487,15 +521,15 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
           {/* A cancellation or a refund from the bar confirms first, naming what changes and what it leaves alone. */}
           <AlertDialog
             open={pending !== null}
-            onOpenChange={(open) => !open && setPending(null)}
+            onOpenChange={(open) => !open && closePending(false)}
             title={pending ? `${pendingVerb} ${pending.ids.length.toLocaleString("en-US")} ${pendingNoun}?` : ""}
-            description={[pending && pendingAction?.effect?.(pending.ids.length), pendingSkipped ? `Left as they are: ${pendingSkipped}.` : "", "You can undo this from the notice that follows."].filter(Boolean).join(" ")}
+            description={[agentAsked ? "An agent in your browser asked for this. Nothing changes unless you confirm." : "", pendingFacts, pending && pendingAction?.effect?.(pending.ids.length), pendingSkipped ? `Left as they are: ${pendingSkipped}.` : "", "You can undo this from the notice that follows."].filter(Boolean).join(" ")}
             confirmLabel={pending ? `${pendingVerb} ${pendingNoun}` : undefined}
             cancelLabel="Keep them"
-            tone="destructive"
+            tone={pendingAction?.destructive ? "destructive" : "default"}
             onConfirm={() => {
-              if (pending) apply(pending);
-              setPending(null);
+              if (pending) apply(pending, agentAsked ? "agent" : "bar");
+              closePending(true);
             }}
           />
     </TemplateShell>

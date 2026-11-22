@@ -138,7 +138,7 @@ function sanitiseChanges(value: unknown) {
   return value.slice(-10).flatMap((entry) => {
     const { action, count, source, undone } = (entry ?? {}) as Record<string, unknown>;
     if (!ORDER_ACTION_IDS.includes(action as OrderActionId) || typeof count !== "number" || count < 0 || count > ROW_COUNT) return [];
-    return [{ action, count: Math.floor(count), source: source === "chat" ? "chat" : "bar", undone: undone === true }];
+    return [{ action, count: Math.floor(count), source: source === "chat" || source === "agent" ? source : "bar", undone: undone === true }];
   });
 }
 

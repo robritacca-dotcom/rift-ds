@@ -72,7 +72,7 @@ const subscribeDock = (onChange: () => void) => {
 };
 const readDocked = () => window.matchMedia(DOCK_QUERY).matches;
 
-function applyToTable(table: TableBridge, view: TableView) {
+export function applyToTable(table: TableBridge, view: TableView) {
   table.setCommandLanding(true);
   table.applyView(view);
   setTimeout(() => table.setCommandLanding(false), MOTION_TABLE_COMMAND_SKELETON_MS);

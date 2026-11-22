@@ -634,7 +634,11 @@ export default function ChatInstallPage() {
             <p className={s.sectionNote}>
               A button of your own can open the chat and report on it too. Pass{" "}
               <code>useChatAgentState()</code> to an AiButton&apos;s <code>state</code>, and a reply
-              keeps showing its progress on the button after the panel is closed.
+              keeps showing its progress on the button after the panel is closed. A card that
+              waits on the reader, such as a proposed change with Confirm still to press, calls{" "}
+              <code>useTurnAwaiting(true, id)</code>: its reply&apos;s status line then reads
+              “Waiting for approval” and the button reports <code>waiting</code>, from
+              one record, until the card says it no longer waits.
             </p>
           </section>
 

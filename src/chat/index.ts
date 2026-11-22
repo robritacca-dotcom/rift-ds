@@ -45,6 +45,7 @@ export {
 export { ChatLauncher, CHAT_PANEL_ID, type ChatLauncherProps } from './ChatLauncher';
 export { preloadChatWidget } from './deferredChatWidget';
 export { useChatAgentState } from './agentState';
+export { useTurnAwaiting } from './awaiting';
 export { ChatThreads, type ChatThreadsProps } from './ChatThreads';
 export { ChatTabs, type ChatTabsProps } from './ChatTabs';
 export { ChatAgentPane, type ChatAgentPaneProps } from './ChatAgentPane';

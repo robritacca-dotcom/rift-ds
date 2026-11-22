@@ -10,6 +10,7 @@ import { Prose } from '../components/Prose/Prose';
 import type { PromptSuggestionsProps } from '../components/PromptSuggestions/PromptSuggestions';
 import type { QuestionCardLabels } from '../components/QuestionCard/QuestionCard';
 import { Reasoning } from '../components/Reasoning/Reasoning';
+import { TurnIdContext } from './awaiting';
 import { useChatWidget } from './context';
 import { DOCK_QUERY } from './queries';
 import { FollowupSuggestions } from './FollowupSuggestions';
@@ -27,11 +28,18 @@ export interface AssistantTurnLabels {
   };
   /** The reasoning disclosure's summary once thinking is over, given the seconds it took when known. */
   reasoning?: (durationSeconds: number | undefined) => string;
+  /** The status line while a card in the reply waits on the reader's Confirm. Defaults to "Waiting for approval". */
+  awaitingApproval?: string;
   /** The question card a reply ends in. */
   questionCard?: Partial<QuestionCardLabels>;
   /** The follow-up row's hidden "(chosen)" text. */
   promptSuggestions?: Pick<PromptSuggestionsProps, 'chosenLabel'>;
 }
+
+/* The line's English, used for every label the host leaves out. */
+const DEFAULT_REASONING_LABEL = (durationSeconds: number | undefined) =>
+  durationSeconds !== undefined ? `Thought for ${durationSeconds}s` : 'Thought process';
+const DEFAULT_AWAITING_APPROVAL_LABEL = 'Waiting for approval';
 
 /* The code blocks are drawn by react-markdown through a module-level
    components map, so their labels arrive by context rather than props. */
@@ -142,12 +150,12 @@ export function AssistantTurn({
   const leadCards = allCards.filter((card) => card.lead);
   const cards = allCards.filter((card) => !card.lead);
   const led = leadCards.length > 0;
-  /* A reply that opens with its answer has nothing to think about on
-     screen: the live status gives way to the card, and only a real trace
-     point brings the disclosure back. A lead card is not the answer: the
-     model is still to think and speak under it. */
-  const answered = !!content || cards.length > 0;
-  const showReasoning = tracePoints.length > 0 || (thinking && !answered) || led;
+  /* Every reply that had a thinking phase keeps the line: live while it
+     thinks, then the tick and how long it took, trace or none, so the line
+     is a fixed part of a reply rather than something that comes and goes.
+     A turn the host seeded never thought, has no duration, and gets none. */
+  const showReasoning =
+    thinking || tracePoints.length > 0 || led || durationSeconds !== undefined;
 
   /* Whether this turn's follow-up questions are still being generated: the
      request fires when a backend answer commits (see ChatProvider) and lands
@@ -156,7 +164,13 @@ export function AssistantTurn({
      while this is the newest turn and nothing new is streaming: once the
      visitor has moved on, a late resolution just appears, and a shimmer
      under an old answer would pull the eye backwards. */
-  const { turns, live: liveTurn, freshFollowupsId } = useChatWidget();
+  const { turns, live: liveTurn, freshFollowupsId, awaiting: awaitingCards } = useChatWidget();
+  /* Whether a card in this reply waits on the reader (a proposed change with
+     Confirm still to press), read from the provider's one record so the line
+     and the chat's opener always agree. */
+  const turnId = (live ?? turn)?.id ?? null;
+  let awaiting = false;
+  for (const id of awaitingCards.values()) if (id === turnId) awaiting = true;
   const followupsPending =
     !!turn &&
     turn.text !== '' &&
@@ -195,12 +209,11 @@ export function AssistantTurn({
         ) : undefined
       }
     >
+      <TurnIdContext.Provider value={turnId}>
       <div className="ds-chat-widget__response">
-        {/* While thinking the disclosure carries the live status; once
-            streaming, it stays only if a trace actually accumulated: an
-            empty collapsed panel is noise. Until a trace point arrives there
-            is nothing behind the line either, so it renders as a plain
-            status: no chevron, nothing to open. */}
+        {/* The line stays for the whole reply. Until a trace point arrives
+            there is nothing behind it, so it renders as a plain status: no
+            chevron, nothing to open. */}
         {showReasoning && (
           <Reasoning
             /* Under a lead card the trace is never streaming, so it never
@@ -209,13 +222,25 @@ export function AssistantTurn({
             streaming={thinking && !led}
             summaryOnly={tracePoints.length === 0}
             duration={durationSeconds}
-            /* Thinking, the AgentStatus below owns the line; the label is
-               the text that takes over once it is done. */
-            label={labels?.reasoning && !thinking ? labels.reasoning(durationSeconds) : undefined}
+            /* One AgentStatus owns the line for the whole reply, so the
+               moment the thinking ends its matrix draws the tick (the cross
+               when the reply failed) and its
+               label glides from the last step to the summary, and both
+               stay: the tick is the line's mark from then on. While a card
+               in the reply waits on Confirm, the line is the prompt and
+               says so instead, and settles to the tick once it is answered. */
             summary={
               thinking && live ? (
                 <AgentStatus state="working" label={live.statusLabel} />
-              ) : undefined
+              ) : awaiting ? (
+                <AgentStatus state="waiting" label={labels?.awaitingApproval ?? DEFAULT_AWAITING_APPROVAL_LABEL} />
+              ) : (
+                <AgentStatus
+                  state={source?.outcome === 'failed' ? 'error' : 'done'}
+                  className="ds-chat-widget__thought"
+                  label={(labels?.reasoning ?? DEFAULT_REASONING_LABEL)(durationSeconds)}
+                />
+              )
             }
           >
             {tracePoints.length > 0 && (
@@ -252,6 +277,7 @@ export function AssistantTurn({
             above the actions row: they are part of the reply. */}
         {turn?.question && <TurnQuestion turn={turn} labels={labels?.questionCard} />}
       </div>
+      </TurnIdContext.Provider>
     </ChatMessage>
   );
 }

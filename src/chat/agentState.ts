@@ -13,12 +13,13 @@ import { useChatWidget } from './context';
  * the end of a reply is only reported once.
  *
  * `thinking` until the first words, `working` once words or rich content are
- * arriving, `waiting` while a question stands unanswered, then `done` or
+ * arriving, `waiting` while a question stands unanswered or a card waits on
+ * the reader's Confirm (see `useTurnAwaiting`), then `done` or
  * `error` for a beat as a reply ends. A reply the visitor stopped, or a chat
  * they reset, goes straight back to `idle`.
  */
 export function useChatAgentState(): AgentStatusState {
-  const { live, turns } = useChatWidget();
+  const { live, turns, awaiting } = useChatWidget();
   const [ended, setEnded] = useState<'done' | 'error' | null>(null);
   const last = turns[turns.length - 1];
 
@@ -43,5 +44,10 @@ export function useChatAgentState(): AgentStatusState {
     return live.phase === 'thinking' && !live.content && !live.cards?.length ? 'thinking' : 'working';
   }
   if (last?.role === 'assistant' && last.question && !last.answers) return 'waiting';
+  /* A card still waiting on Confirm, in a turn of the thread on screen: a
+     wait recorded in a thread since left or reset does not count. */
+  for (const turnId of awaiting.values()) {
+    if (turns.some((turn) => turn.id === turnId)) return 'waiting';
+  }
   return ended ?? 'idle';
 }

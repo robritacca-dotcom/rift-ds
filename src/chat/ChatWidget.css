@@ -510,6 +510,16 @@
   gap: var(--gap-500);
 }
 
+/* The finished reasoning line: the tick keeps the positive colour and the
+   words go back to the quiet summary they were, in the trigger's own face
+   and colour, so the mark is the only thing on the line that says done. */
+.ds-chat-widget__thought.ds-agent-status {
+  --ds-agent-label-color: inherit;
+
+  font: inherit;
+  letter-spacing: inherit;
+}
+
 /* No divider: the composer floats free of the transcript. */
 .ds-chat-widget__footer {
   display: flex;

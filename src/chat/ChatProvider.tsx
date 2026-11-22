@@ -194,6 +194,19 @@ export function ChatProvider({
   const askedRef = useRef<Set<string>>(new Set());
   const [freshFollowupsId, setFreshFollowupsId] = useState<string | null>(null);
 
+  /* The cards waiting on the reader, kept here rather than in the turn that
+     draws them so the status line and the opener's state read one record. */
+  const [awaiting, setAwaitingMap] = useState<ReadonlyMap<string, string>>(() => new Map());
+  const setAwaiting = useCallback((key: string, turnId: string | null) => {
+    setAwaitingMap((current) => {
+      if ((current.get(key) ?? null) === turnId) return current;
+      const next = new Map(current);
+      if (turnId === null) next.delete(key);
+      else next.set(key, turnId);
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
     if (!target || askedRef.current.has(target.id)) return;
     askedRef.current.add(target.id);
@@ -346,6 +359,8 @@ export function ChatProvider({
       setStarterRevealKey,
       starterSeed,
       freshFollowupsId,
+      awaiting,
+      setAwaiting,
       view,
       setView,
       placement,
@@ -376,6 +391,8 @@ export function ChatProvider({
       starterRevealKey,
       starterSeed,
       freshFollowupsId,
+      awaiting,
+      setAwaiting,
       view,
       placement,
       setPlacement,

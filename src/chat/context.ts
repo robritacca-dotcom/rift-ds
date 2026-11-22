@@ -56,6 +56,10 @@ export interface ChatWidgetContextValue extends ChatState {
   starterSeed: number;
   /** The turn whose follow-ups landed most recently in this open session, or null. Its row plays the entrance. */
   freshFollowupsId: string | null;
+  /** The cards waiting on the reader's Confirm, by card key, each with the id of the turn it stands in. The one record the reply's status line and `useChatAgentState` both read. Written through `setAwaiting`, usually by `useTurnAwaiting`. */
+  awaiting: ReadonlyMap<string, string>;
+  /** Record that the card under `key` waits on the reader in the turn `turnId`, or, given `null`, that it no longer does. */
+  setAwaiting: (key: string, turnId: string | null) => void;
   view: ChatView;
   setView: (view: ChatView) => void;
   /** The panel's seat: a dock edge or floating. Provider-lifetime, so a reload returns to the host's default. */

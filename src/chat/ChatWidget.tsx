@@ -197,8 +197,8 @@ export interface ChatWidgetProps {
   questionsPlaceholder?: string;
   /** Show the conversation starters on the welcome screen. */
   showStarters?: boolean;
-  /** The header mark's image src; null (the default) shows the name alone. */
-  logo?: string | null;
+  /** The header mark: an image src, or a node drawn as given, such as an inline SVG that reads the theme's tokens. Null (the default) shows the name alone. */
+  logo?: string | ReactNode | null;
   /** The welcome screen's line under the greeting. */
   tagline?: string;
   /** The conversation starters: a few pre-written questions. Each must fit the chip budget (SUGGESTION_MAX_CHARS); one that does not is dropped rather than clipped. */
@@ -209,6 +209,8 @@ export interface ChatWidgetProps {
   startersPending?: boolean;
   /** Replaces the composer's leading actions (the model picker). */
   composerActions?: ReactNode;
+  /** The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never. */
+  composerGlow?: boolean | 'streaming';
   /** The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker. */
   models?: ChatModelOption[];
   /** The picker's selection before the server has reported its default. Defaults to the first model. */
@@ -334,6 +336,8 @@ export interface ChatWidgetProps {
   pastedTextLabel?: string;
   /** The reasoning disclosure's summary once the thinking is over, given the seconds it took when known. Defaults to "Thought for <n>s", or "Thought process" with no duration. */
   reasoningLabel?: (durationSeconds: number | undefined) => string;
+  /** A reply's status line while a card in it waits on the reader's Confirm. Defaults to "Waiting for approval". */
+  awaitingApprovalLabel?: string;
 
   /* The words of the library components the widget composes. One prop per
      component, named after it and typed from that component's own props:
@@ -470,6 +474,8 @@ export function ChatWidget({
   followupsLabel = 'Follow-up questions',
   pastedTextLabel,
   reasoningLabel,
+  awaitingApprovalLabel,
+  composerGlow = 'streaming',
   tabsProps,
   composerLabels,
   attachmentDropZoneLabels,
@@ -500,10 +506,11 @@ export function ChatWidget({
     () => ({
       codeBlock: codeBlockLabels,
       reasoning: reasoningLabel,
+      awaitingApproval: awaitingApprovalLabel,
       questionCard: questionCardLabels,
       promptSuggestions: promptSuggestionsLabels,
     }),
-    [codeBlockLabels, reasoningLabel, questionCardLabels, promptSuggestionsLabels],
+    [codeBlockLabels, reasoningLabel, awaitingApprovalLabel, questionCardLabels, promptSuggestionsLabels],
   );
   const {
     turns,
@@ -1193,7 +1200,7 @@ export function ChatWidget({
                   onClick={() => setThreadsOpen(true)}
                 />
               )}
-              {logo && <img src={logo} alt="" width={20} height={20} />}
+              {typeof logo === 'string' ? <img src={logo} alt="" width={20} height={20} /> : logo}
               <span className="ds-chat-widget__brand-name">{title}</span>
             </span>
           }
@@ -1307,7 +1314,8 @@ export function ChatWidget({
             sendLabel={sendLabel}
             /* Nothing to seat in the footer, no footer: the one-row composer. */
             inline={composerHasActions ? false : 'chat'}
-            aiGlow
+            /* By default the ring is for the agent at work: focus keeps the plain border, so the reply's live status holds the eye. */
+            aiGlow={composerGlow}
             value={draft}
             onValueChange={setDraft}
             onSubmit={handleSubmit}

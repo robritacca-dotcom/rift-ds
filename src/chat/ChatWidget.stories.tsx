@@ -5,6 +5,8 @@ import { ChatProvider } from './ChatProvider';
 import { ChatWidget, type ChatContext, type ChatWidgetProps } from './ChatWidget';
 import { ChatLauncher } from './ChatLauncher';
 import { useChatWidget } from './context';
+import { useTurnAwaiting } from './awaiting';
+import { useChatAgentState } from './agentState';
 import { scriptChat } from './sim';
 import { ARTIFACT_CARD_KIND, type ChatCard, type ChatModelOption, type ChatTransport } from './types';
 import {
@@ -423,6 +425,107 @@ export const LeadCard: Story = {
     await expect(reasoning.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     await expect(card.compareDocumentPosition(prose) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     await expect(reasoning.className).not.toContain('ds-reasoning--open');
+  },
+};
+
+/* A reply with no trace at all: a status, then the words. */
+const plainTransport: ChatTransport = async function* () {
+  yield { type: 'status', label: 'Thinking' };
+  yield { type: 'delta', text: 'Here is the answer.' };
+  yield { type: 'done' };
+};
+
+/** The status line is a fixed part of a reply: with no trace to open it stays as a plain line, the matrix drawing the tick beside how long the thinking took. */
+export const StatusLineStays: Story = {
+  render: (args) => (
+    <ChatProvider transport={plainTransport} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} />
+        </Stage>
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Hello{Enter}');
+    await waitFor(() => expect(canvas.getByText('Here is the answer.')).toBeInTheDocument(), { timeout: 4000 });
+    const line = await canvas.findByText(/^Thought for \d+s$/, undefined, { timeout: 4000 });
+    const reasoning = line.closest('.ds-reasoning') as HTMLElement;
+    await expect(reasoning.querySelector('.ds-agent-status--done')).not.toBeNull();
+    /* Nothing behind the line, so nothing to press. */
+    await expect(reasoning.querySelector('button')).toBeNull();
+  },
+};
+
+/* A card that waits on the reader until Confirm is pressed, the shape of a
+   proposed change: it reports its wait under its own key. */
+function ApprovalCard({ id }: { id: string }) {
+  const [confirmed, setConfirmed] = useState(false);
+  useTurnAwaiting(!confirmed, id);
+  return (
+    <div data-testid="approval-card">
+      {confirmed ? (
+        'Confirmed'
+      ) : (
+        <button type="button" onClick={() => setConfirmed(true)}>
+          Confirm
+        </button>
+      )}
+    </div>
+  );
+}
+
+const APPROVAL_RENDERERS = {
+  approval: (data: unknown) => <ApprovalCard id={String(data)} />,
+};
+
+const approvalTransport: ChatTransport = async function* () {
+  yield { type: 'status', label: 'Thinking' };
+  yield { type: 'card', card: { kind: 'approval', data: 'change-1' } };
+  yield { type: 'delta', text: 'Nothing changes until you confirm.' };
+  yield { type: 'done' };
+};
+
+/** What `useChatAgentState` reports, printed beside the panel as an opener's button would show it. */
+function AgentStateReadout() {
+  return <output data-testid="agent-state">{useChatAgentState()}</output>;
+}
+
+/** A card that calls `useTurnAwaiting` holds its reply's status line on "Waiting for approval", and `useChatAgentState` reports `waiting` from the same record, so the line and the chat's opener always agree; pressing Confirm settles both. */
+export const AwaitingApproval: Story = {
+  render: (args) => (
+    <ChatProvider transport={approvalTransport} renderers={APPROVAL_RENDERERS} followups={false} feedback={false}>
+      <OpenOnMount>
+        <Stage>
+          <ChatWidget {...args} />
+        </Stage>
+        <AgentStateReadout />
+      </OpenOnMount>
+    </ChatProvider>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Cancel the order{Enter}');
+    await waitFor(() => expect(canvas.getByText('Nothing changes until you confirm.')).toBeInTheDocument(), {
+      timeout: 4000,
+    });
+    const card = canvas.getByTestId('approval-card');
+    const reasoning = (card.closest('.ds-chat-widget__response') as HTMLElement).querySelector(
+      '.ds-reasoning',
+    ) as HTMLElement;
+    await waitFor(() => expect(within(reasoning).getByText('Waiting for approval')).toBeInTheDocument(), {
+      timeout: 4000,
+    });
+    await expect(reasoning.querySelector('.ds-agent-status--waiting')).not.toBeNull();
+    await waitFor(() => expect(canvas.getByTestId('agent-state')).toHaveTextContent('waiting'), { timeout: 4000 });
+
+    await userEvent.click(within(card).getByRole('button', { name: 'Confirm' }));
+    await waitFor(() => expect(within(reasoning).getByText(/^Thought for \d+s$/)).toBeInTheDocument(), {
+      timeout: 4000,
+    });
+    await expect(reasoning.querySelector('.ds-agent-status--done')).not.toBeNull();
+    await waitFor(() => expect(canvas.getByTestId('agent-state')).not.toHaveTextContent('waiting'), { timeout: 4000 });
   },
 };
 

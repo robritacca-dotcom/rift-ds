@@ -579,16 +579,20 @@ function ThemeSwitcher() {
    A second row under the theme row, in its form: one dot per background
    in SITE_BACKGROUNDS, wearing the scene's icon, picked through the same
    helper the header's BackgroundSwitcher uses, so the two stay in step.
-   A hover or focus starts loading the scene code, as the header does. */
+   The off row is left out: the hero shows off what can be painted, and
+   the header menu still offers None. A hover or focus starts loading the
+   scene code, as the header does. */
 const preloadScenes = () => {
   loadShaderScene().catch(() => {});
 };
+
+const SHOWCASE_BACKGROUNDS = SITE_BACKGROUNDS.filter((entry) => !entry.off);
 
 function SceneSwitcher() {
   const active = useSiteBackground();
   return (
     <div className={`${styles.accentRow} ${styles.sceneRow}`} role="group" aria-label="Background">
-      {SITE_BACKGROUNDS.map((entry, index) => (
+      {SHOWCASE_BACKGROUNDS.map((entry, index) => (
         <span key={entry.id} className={styles.swatchWrap}>
           <button
             type="button"
@@ -614,7 +618,7 @@ function SceneSwitcher() {
         <Link
           href="/playground?view=shaders"
           className={styles.accentSwatchAdd}
-          style={{ "--swatch-i": SITE_BACKGROUNDS.length } as React.CSSProperties}
+          style={{ "--swatch-i": SHOWCASE_BACKGROUNDS.length } as React.CSSProperties}
           aria-label="Tune a scene in the playground"
         >
           <span className="material-symbols-rounded" aria-hidden="true">

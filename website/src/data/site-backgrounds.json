@@ -456,8 +456,8 @@
           "y": 0.29,
           "scale": 1.15,
           "core": 0.7,
-          "stars": 0.7,
-          "nebula": 0.9,
+          "stars": 0.5,
+          "nebula": 0.45,
           "band": -0.3,
           "bandY": 0.04
         },
@@ -478,8 +478,8 @@
           "y": 0.14,
           "scale": 1.55,
           "core": 0.7,
-          "stars": 0.7,
-          "nebula": 0.7,
+          "stars": 0.5,
+          "nebula": 0.35,
           "band": -0.15,
           "bandY": 0.22
         },
@@ -496,6 +496,52 @@
           "grain": {
             "params": {
               "amount": 0.08
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "tide",
+      "label": "Tide",
+      "description": "Dusk over still water",
+      "icon": "water",
+      "scene": "tide",
+      "home": {
+        "params": {
+          "horizon": 0.87,
+          "cloudY": 0.024
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "grain": {
+            "params": {
+              "amount": 0.1
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "horizon": 0.78,
+          "cloudY": 0.04,
+          "land": 0.4
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "params": {
+              "amount": 0.1
             }
           }
         }

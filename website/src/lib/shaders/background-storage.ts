@@ -185,7 +185,18 @@ export type SiteBackgroundEntry = {
    right, through the hero and under the galaxy, at the scene's own
    angle. Page: it is flattened and raised to cross the top of the band,
    behind the header, and eased further, so the title sits under its
-   lower edge and the fade takes the rest. */
+   lower edge and the fade takes the rest.
+
+   Tide, both bands: a scene that paints its own day, dark at its own top,
+   so it takes no top fade, and the lighter grain. In both the
+   horizon sits the same distance under the header, about 117px, so the
+   header keeps a strip of sky of its own and everything below it sits on
+   the water: 0.87 of the tall home band, 0.78 of the shorter page band
+   (the horizon's range reaches 0.95 for this). The cloud is brought down
+   onto the fire, about 22px above the horizon in both (0.024 and 0.04),
+   where only its densest patch shows, so it never climbs behind the header. Page: the
+   land is eased, and a long bottom fade takes the water to the page
+   before the content starts. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

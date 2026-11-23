@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "kind": "component",
   "name": "AppLayout",
   "label": "App layout",
@@ -210,7 +210,7 @@
     "note": "The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own."
   },
   "size": {
-    "gzip": 9776
+    "gzip": 9771
   },
   "alternatives": [
     {

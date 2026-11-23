@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "kind": "component",
   "name": "AppSidebar",
   "label": "App sidebar",
@@ -325,6 +325,6 @@
     "note": "Below the mobile breakpoint the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it."
   },
   "size": {
-    "gzip": 9407
+    "gzip": 9400
   }
 }

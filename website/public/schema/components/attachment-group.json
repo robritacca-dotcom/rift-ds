@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "kind": "component",
   "name": "AttachmentGroup",
   "label": "Attachment group",
@@ -247,6 +247,6 @@
     }
   ],
   "size": {
-    "gzip": 13180
+    "gzip": 14402
   }
 }

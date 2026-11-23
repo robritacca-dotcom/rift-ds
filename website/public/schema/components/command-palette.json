@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "kind": "component",
   "name": "CommandPalette",
   "label": "Command palette",
@@ -257,6 +257,6 @@
     }
   ],
   "size": {
-    "gzip": 9129
+    "gzip": 9131
   }
 }

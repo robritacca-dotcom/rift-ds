@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "kind": "component",
   "name": "ThemePicker",
   "label": "Theme picker",
@@ -207,6 +207,6 @@
     }
   ],
   "size": {
-    "gzip": 6620
+    "gzip": 6621
   }
 }

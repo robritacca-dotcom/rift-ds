@@ -9,10 +9,39 @@
  * verbatim in the emitted JS — and the raw .css files are copied in by
  * build-package.mjs, keeping the per-component `import './X.css'`
  * convention working for consumers' bundlers.
+ *
+ * Every module under src/components is an entry of its own, because the
+ * ./components/* subpath lets a consumer deep-import any of them. Rollup
+ * keeps a non-entry module's exports only as far as something inside the
+ * build imports them: a component file that re-exports a helper the barrel
+ * takes from the helper's own file (ErrorSummary's `fieldErrorsFrom`,
+ * DataTable's period helpers) shipped without that export, so its .d.ts
+ * promised a name its .js did not have. As an entry, a module keeps its
+ * whole signature. validate-package-publish.mjs holds every subpath's .js
+ * to the value exports its .d.ts declares.
  */
+import { readdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
+
+const componentsDir = join(dirname(fileURLToPath(import.meta.url)), 'src', 'components');
+
+/** Every component-folder module, keyed by its output path: stories and tests excluded. */
+const componentModules = Object.fromEntries(
+  readdirSync(componentsDir, { withFileTypes: true })
+    .filter((dir) => dir.isDirectory())
+    .flatMap((dir) =>
+      readdirSync(join(componentsDir, dir.name))
+        .filter((file) => /\.tsx?$/.test(file) && !/\.(stories|test)\.tsx?$/.test(file) && !file.endsWith('.d.ts'))
+        .map((file) => [
+          `components/${dir.name}/${file.replace(/\.tsx?$/, '')}`,
+          `src/components/${dir.name}/${file}`,
+        ])
+    )
+);
 
 export default defineConfig({
   // public/ holds website/Storybook showcase assets (hero images, logos) —
@@ -36,6 +65,8 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: {
+        // First, so the explicit subpath entries below win a key they share.
+        ...componentModules,
         index: 'src/index.ts',
         charts: 'src/charts.ts',
         'components/registry': 'src/components/registry.ts',

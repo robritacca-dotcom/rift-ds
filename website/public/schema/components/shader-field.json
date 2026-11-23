@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "kind": "component",
   "name": "ShaderField",
   "label": "Shader field",
@@ -90,6 +90,6 @@
     "by": "none"
   },
   "size": {
-    "gzip": 6199
+    "gzip": 6218
   }
 }

@@ -5,8 +5,8 @@
  * the manifest against what the tarball actually contains, and
  * `arethetypeswrong` resolves every export subpath the way each consumer
  * kind would — bundlers, and Node ESM under node16/nodenext. The existing
- * consumer smoke (`scripts/smoke-consumer.mjs`) proves one Vite consumer
- * builds; these two see the resolution modes that smoke never exercises.
+ * consumer smoke (`scripts/smoke-consumer.mjs`) proves the Vite consumers
+ * and a Next consumer build; these two see the resolution modes that smoke never exercises.
  * Runs after `build:lib` in `verify` and CI's library job, and belongs in
  * any release preflight.
  *
@@ -36,11 +36,22 @@
  * force a rift major). Added 2026-10-25 with the engine. TanStack Virtual,
  * the windowing under DataTable and the package's other runtime dependency,
  * is held out of the public types by the same rule.
+ *
+ * And one rule about the shipped JavaScript: every value a subpath's .d.ts
+ * exports, its .js exports too. The types are emitted from source, the
+ * JavaScript from a tree-shaken build, so the two can disagree, and a
+ * consumer only finds out when their production build fails on a missing
+ * export after the import type-checked. Every module a consumer can reach
+ * is checked: each explicit JS subpath and every module the ./components/*
+ * wildcard maps to (minus the ones the manifest blocks with null). The
+ * TypeScript compiler reads both sides, so `export *`, aliases and
+ * type-only exports resolve the way a consumer's toolchain would see them.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 import { distExports } from './package-manifest.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -83,6 +94,72 @@ if (leaks.length > 0) {
   process.exit(1);
 }
 
+/* Every value a subpath's types export, its JavaScript exports too. */
+const exportsMap = distExports();
+const blocked = new Set(
+  Object.entries(exportsMap)
+    .filter(([, target]) => target === null)
+    .map(([key]) => key.replace(/^\.\//, '') + '.js')
+);
+const jsFiles = (dir) =>
+  readdirSync(dir).flatMap((entry) => {
+    const full = join(dir, entry);
+    return statSync(full).isDirectory() ? jsFiles(full) : entry.endsWith('.js') ? [full] : [];
+  });
+const reachable = new Set();
+for (const [key, target] of Object.entries(exportsMap)) {
+  if (target === null || typeof target === 'string') continue;
+  const js = target.import;
+  if (typeof js !== 'string' || !js.endsWith('.js')) continue;
+  if (!js.includes('*')) {
+    reachable.add(join(dist, js));
+    continue;
+  }
+  const [prefix, suffix] = js.replace(/^\.\//, '').split('*');
+  for (const file of jsFiles(join(dist, prefix))) {
+    const rel = file.slice(dist.length + 1);
+    if (rel.endsWith(suffix) && !blocked.has(rel) && !key.includes('.css')) reachable.add(file);
+  }
+}
+const modules = [...reachable].filter((js) => existsSync(js.replace(/\.js$/, '.d.ts')));
+const program = ts.createProgram(
+  modules.flatMap((js) => [js, js.replace(/\.js$/, '.d.ts')]),
+  { allowJs: true, noEmit: true, skipLibCheck: true, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler, target: ts.ScriptTarget.ESNext }
+);
+const checker = program.getTypeChecker();
+const exportsOf = (file, valuesOnly) => {
+  const source = program.getSourceFile(file);
+  const symbol = source && checker.getSymbolAtLocation(source);
+  if (!symbol) return new Set();
+  return new Set(
+    checker
+      .getExportsOfModule(symbol)
+      .filter((exp) => {
+        if (!valuesOnly) return true;
+        const target = exp.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exp) : exp;
+        // A type-only re-export (`export type { X }`) is an alias to a value
+        // that carries no value at runtime; the declaration says so.
+        const typeOnly = exp.declarations?.some((d) => ts.isTypeOnlyImportOrExportDeclaration?.(d) || d.isTypeOnly || d.parent?.parent?.isTypeOnly);
+        return !typeOnly && (target.flags & ts.SymbolFlags.Value) !== 0;
+      })
+      .map((exp) => exp.escapedName.toString())
+  );
+};
+const missing = [];
+for (const js of modules) {
+  const declared = exportsOf(js.replace(/\.js$/, '.d.ts'), true);
+  const shipped = exportsOf(js, false);
+  const absent = [...declared].filter((name) => !shipped.has(name));
+  if (absent.length > 0) missing.push(`${js.slice(dist.length + 1)}: ${absent.join(', ')}`);
+}
+if (missing.length > 0) {
+  console.error(
+    '✗ A subpath\'s .d.ts exports values its .js does not, so a consumer import type-checks and then fails to build:'
+  );
+  for (const line of missing) console.error(`  - ${line}`);
+  process.exit(1);
+}
+
 run('publint', bin('publint'), [dist]);
 /* Single-file stylesheet subpaths: assets, excluded from module resolution. */
 const assetSubpaths = Object.entries(distExports())
@@ -101,6 +178,6 @@ run(
 );
 
 console.log(
-  `✓ Package publish surface valid — no shipped type names TanStack, publint clean, every module subpath resolves for ESM and bundler consumers` +
+  `✓ Package publish surface valid — no shipped type names TanStack, ${modules.length} subpath modules export every value their types declare, publint clean, every module subpath resolves for ESM and bundler consumers` +
     (assetSubpaths.length > 0 ? ` (${assetSubpaths.length} stylesheet subpath(s) checked by publint alone).` : '.')
 );

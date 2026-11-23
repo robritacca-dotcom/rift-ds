@@ -2,7 +2,7 @@
 
 Hours within one day: a row per person or resource and a bar from each start to its end, on an axis of hours.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.35.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.35.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { ResourceTimeline } from 'rift-ds';`

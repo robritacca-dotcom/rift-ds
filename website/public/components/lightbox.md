@@ -2,13 +2,13 @@
 
 Fullscreen media viewer on the shared overlay stack: deep scrim, caption chip, gallery stepping, trapped and restored focus.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.35.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.35.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: overlays
 - Import: `import { Lightbox } from 'rift-ds';`
 - Deep import: `import { Lightbox } from 'rift-ds/components/Lightbox/Lightbox';`
 - Rendering: client component (declares 'use client')
-- Size: 3.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 3.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/lightbox
 - Schema: https://rift-ds.com/schema/components/lightbox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

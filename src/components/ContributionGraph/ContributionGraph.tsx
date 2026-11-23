@@ -1,5 +1,6 @@
 import React from 'react';
-import { DEFAULT_LOCALE, weekStartOf, weekdayOffset, type Weekday } from '../../behaviors/locale';
+import { DEFAULT_LOCALE, weekStartOf, type Weekday } from '../../behaviors/locale';
+import { buildWeeks } from './weeks';
 import '../Chart/Chart.css';
 import './ContributionGraph.css';
 
@@ -14,7 +15,7 @@ export interface ContributionDay {
 
 /** Props owned by ContributionGraph itself; everything else falls through to the root div. */
 type ContributionGraphOwnProps = {
-  /** One entry per day, ordered oldest to newest */
+  /** One entry per day. Each is drawn on its own weekday's row, so a day left out is an empty cell. */
   days: ContributionDay[];
   /**
    * Chart title, in the shared chart header.
@@ -91,27 +92,6 @@ const cellLabelFor = (locale: string) => (count: number, date: Date) => {
   if (count === 0) return `No contributions on ${formatted}`;
   if (count === 1) return `1 contribution on ${formatted}`;
   return `${count} contributions on ${formatted}`;
-};
-
-/** Group days into calendar weeks, each column starting on `weekStart` (Sunday in en-US, like GitHub) */
-const buildWeeks = (days: ContributionDay[], weekStart: Weekday) => {
-  const weeks: (ContributionDay | null)[][] = [];
-  let week: (ContributionDay | null)[] = [];
-
-  days.forEach((day, index) => {
-    if (index === 0) {
-      // Pad the first week so the first day lands on its weekday row
-      week = Array<ContributionDay | null>(weekdayOffset(parseDay(day.date).getDay(), weekStart)).fill(null);
-    }
-    week.push(day);
-    if (week.length === 7) {
-      weeks.push(week);
-      week = [];
-    }
-  });
-  if (week.length > 0) weeks.push(week);
-
-  return weeks;
 };
 
 /** Month label positions: [weekIndex, monthName] where a new month begins */

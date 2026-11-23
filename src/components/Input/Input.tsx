@@ -17,6 +17,14 @@ type InputOwnProps = {
   type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url';
   /** Component size (not the native character-width `size` attribute) */
   size?: 'default' | 'compact';
+  /**
+   * The field's form. `quiet` draws no border or fill at rest, only the
+   * leading icon and the placeholder, and reveals the full field while it is
+   * hovered, focused or holds a value, or while the nearest ancestor marked
+   * `data-quiet-host` (a list row) is hovered. For a list where every row can
+   * take an optional entry. An error always shows the full field.
+   */
+  variant?: 'default' | 'quiet';
   /** Error state — shows error styling and message */
   error?: boolean;
   /** Helper text displayed below the input. With the older `error` flag and no `errorText`, it doubles as the error message. */
@@ -79,6 +87,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       value,
       type = 'text',
       size = 'default',
+      variant = 'default',
       disabled = false,
       required = false,
       error = false,
@@ -128,6 +137,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const classes = [
       baseClass,
       size === 'compact' ? `${baseClass}--compact` : '',
+      variant === 'quiet' ? `${baseClass}--quiet` : '',
+      variant === 'quiet' && filled ? `${baseClass}--filled` : '',
       invalid ? `${baseClass}--error` : '',
       affixed ? `${baseClass}--affixed` : '',
       disabled ? `${baseClass}--disabled` : '',

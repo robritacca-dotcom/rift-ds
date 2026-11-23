@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent } from 'storybook/test';
+import { Avatar } from '../Avatar/Avatar';
 import { Input } from './Input';
 
 const meta = {
@@ -30,8 +31,8 @@ const meta = {
     onBlur: fn(),
   },
   decorators: [
-    (Story) => (
-      <div style={{ width: '320px' }}>
+    (Story, { parameters }) => (
+      <div style={{ width: parameters.frameWidth ?? '320px' }}>
         <Story />
       </div>
     ),
@@ -200,5 +201,92 @@ export const WithErrorText: Story = {
     await expect(input).toHaveAccessibleDescription(
       'Enter an email address like name@example.com. We send receipts here.',
     );
+  },
+};
+
+/**
+ * The quiet form: no border or fill at rest, only the icon and placeholder.
+ * Hover it, focus it or type in it and the full field comes back.
+ */
+export const Quiet: Story = {
+  args: { variant: 'quiet', iconLeft: 'edit_note', placeholder: 'Add a note', 'aria-label': 'Note' },
+  play: async ({ canvas, canvasElement }) => {
+    const input = canvas.getByRole('textbox', { name: 'Note' });
+    const root = canvasElement.querySelector('.ds-input');
+    await expect(getComputedStyle(input).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+    await expect(root).not.toHaveClass('ds-input--filled');
+    await userEvent.type(input, 'Left early');
+    await expect(root).toHaveClass('ds-input--filled');
+    await userEvent.clear(input);
+    await expect(root).not.toHaveClass('ds-input--filled');
+  },
+};
+
+const STUDENTS = [
+  { name: 'Amara Okafor', note: '' },
+  { name: 'Ben Lindqvist', note: 'Arrived 10 minutes late' },
+  { name: 'Chloé Martin', note: '' },
+  { name: 'Diego Ramírez', note: '' },
+  { name: 'Hana Sato', note: 'Dentist, back after lunch' },
+];
+
+/**
+ * An attendance list where every row can take an optional note. Each row is a
+ * `data-quiet-host`, so hovering anywhere on it reveals its field; a note
+ * already written keeps its field showing.
+ */
+export const QuietInAList: Story = {
+  parameters: { frameWidth: '560px' },
+  render: () => (
+    <ul
+      aria-label="Attendance, period 2"
+      style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' }}
+    >
+      {STUDENTS.map((student) => (
+        <li
+          key={student.name}
+          data-quiet-host
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--gap-300)',
+            paddingBlock: 'var(--padding-100)',
+            borderBlockEnd: 'var(--border-025) solid var(--color-bg-container-border)',
+          }}
+        >
+          <Avatar name={student.name} size="sm" />
+          <span style={{ flex: '0 0 9rem', font: 'var(--font-paragraph-size) var(--font-paragraph-family)', color: 'var(--color-text-primary)' }}>
+            {student.name}
+          </span>
+          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+            <Input
+              variant="quiet"
+              size="compact"
+              iconLeft="edit_note"
+              placeholder="Add a note"
+              aria-label={`Note for ${student.name}`}
+              defaultValue={student.note}
+            />
+          </div>
+        </li>
+      ))}
+    </ul>
+  ),
+  play: async ({ canvas, canvasElement }) => {
+    const empty = canvas.getByRole('textbox', { name: 'Note for Amara Okafor' });
+    const written = canvas.getByRole('textbox', { name: 'Note for Ben Lindqvist' });
+    await expect(getComputedStyle(empty).borderTopColor).toBe('rgba(0, 0, 0, 0)');
+    await expect(written.closest('.ds-input')).toHaveClass('ds-input--filled');
+    await expect(canvasElement.querySelectorAll('li[data-quiet-host]')).toHaveLength(STUDENTS.length);
+  },
+};
+
+/** An error always shows the full field, quiet or not. */
+export const QuietWithError: Story = {
+  args: {
+    variant: 'quiet',
+    'aria-label': 'Note',
+    placeholder: 'Add a note',
+    errorText: 'Keep the note under 80 characters.',
   },
 };

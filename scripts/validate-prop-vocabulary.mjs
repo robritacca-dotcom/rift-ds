@@ -670,6 +670,7 @@ const SANCTIONED_FORM_VARIANTS = {
   Card: { values: ['default', 'case-study'], reason: FORM },
   Deadline: { values: ['badge', 'text'], reason: 'its form, a tinted pill or inline text; the status colour comes from the distance to the deadline, never a prop' },
   EmptyState: { values: ['plain', 'bordered'], reason: FORM },
+  Input: { values: ['default', 'quiet'], reason: 'the field\'s form, a full field or one that shows only its placeholder until its row is hovered, it has focus or holds a value, which it has instead of an emphasis' },
   Link: { values: ['inline', 'standalone', 'skip'], reason: 'where the link sits, inside a sentence, on its own line, or as the page\'s hidden skip link, which it has instead of an emphasis' },
   List: { values: ['unordered', 'ordered', 'plain'], reason: 'the list\'s form (a `ul`, an `ol`, or a markerless stack), which it has instead of an emphasis' },
   Pagination: { values: ['numbered', 'adjacent'], reason: 'the pager\'s form, numbered pages of one list or links to the neighbouring pages of a sequence, which it has instead of an emphasis' },

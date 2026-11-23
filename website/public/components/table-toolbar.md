@@ -8,9 +8,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { TableToolbar } from 'rift-ds';`
 - Deep import: `import { TableToolbar } from 'rift-ds/components/TableToolbar/TableToolbar';`
 - Rendering: client component (declares 'use client')
-- Size: 40.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 41.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/table-toolbar
 - Schema: https://rift-ds.com/schema/components/table-toolbar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+
+## Alternatives
+
+- Use [Action bar](https://rift-ds.com/components/action-bar.md) instead when the actions finish the work on a long list or form, docked below it rather than over a table.
 
 ## TableToolbar props
 

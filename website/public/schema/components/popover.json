@@ -121,7 +121,8 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible label for the trigger and the panel; the panel is named \"Popover\" when it is omitted"
+          "description": "Legacy accessible-name prop for the trigger and the panel. A native `aria-label` wins when both are passed, and names those two rather than the wrapper; with neither, the panel is named \"Popover\".",
+          "deprecated": "Pass the native `aria-label` attribute instead."
         },
         {
           "name": "className",
@@ -160,6 +161,6 @@
     }
   ],
   "size": {
-    "gzip": 2778
+    "gzip": 2787
   }
 }

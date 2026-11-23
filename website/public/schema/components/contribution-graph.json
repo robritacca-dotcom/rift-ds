@@ -56,6 +56,14 @@
           "description": "Summary line shown under the grid, e.g. \"496 contributions in the last year\""
         },
         {
+          "name": "fill",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the week columns stretch to fill the graph's width. Defaults to\n`true`. Set `false` to keep every column at the base cell size, so a short\nrun of weeks draws small squares at the start of its box instead of large ones.",
+          "default": true
+        },
+        {
           "name": "showMonthLabels",
           "type": "boolean",
           "typeKind": "primitive",
@@ -164,6 +172,6 @@
     "by": "none"
   },
   "size": {
-    "gzip": 1791
+    "gzip": 1806
   }
 }

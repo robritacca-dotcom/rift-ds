@@ -24,6 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | size | `"default" \| "large"` | no | `'default'` | Stat size |
 | icon | `string \| ReactNode` | no |  | A decorative mark in a round tile above the value, naming what the metric is about: a Material Symbol name (string) or a node. |
 | caption | `ReactNode` | no |  | A short note at the far end of the top row, in the caption face: the period the figure covers ("Last 30 days"), its source. |
+| captionPlacement | `"head" \| "label"` | no | `'head'` | Where the caption sits: `head`, at the far end of the top row beside the icon, or `label`, a second line under the label. Defaults to `head`. |
 | children | `ReactNode` | no |  | Shown after the value, label and delta, such as a Sparkline of the metric's recent history or an AvatarGroup of who it counts. |
 | locale | `string` | no | `'en-US'` | The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. |
 | className | `string` | no | `''` | Additional CSS classes |

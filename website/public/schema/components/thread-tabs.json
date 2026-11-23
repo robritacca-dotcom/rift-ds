@@ -85,8 +85,9 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name for the tab strip.",
-          "default": "Open threads"
+          "description": "Legacy accessible-name prop for the tab strip. Defaults to \"Open threads\"; a native `aria-label` wins when both are passed, and names the strip rather than the wrapper.",
+          "default": "Open threads",
+          "deprecated": "Pass the native `aria-label` attribute instead."
         },
         {
           "name": "className",
@@ -141,6 +142,6 @@
     }
   ],
   "size": {
-    "gzip": 2108
+    "gzip": 2114
   }
 }

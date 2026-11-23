@@ -117,6 +117,57 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "ActionBar",
+    "label": "Action bar",
+    "slug": "action-bar",
+    "category": "actions",
+    "description": "A bar docked to the bottom of a long list or form, with a summary line and the primary actions over a progressive blur.",
+    "client": false,
+    "importPath": "rift-ds/components/ActionBar/ActionBar",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "ActionBar",
+        "props": [
+          {
+            "name": "summary",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The summary line at the bar's start, such as \"23 students still to\nmark\". It is a polite live region, so a count that changes while the\nreader works is announced once it settles."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "The actions at the bar's end, typically one or two Buttons with the\nprimary action last. On a narrow bar they wrap below the summary and\nhold the end edge."
+          },
+          {
+            "name": "sticky",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the bar holds to the bottom of its scroll container while the\ncontent scrolls under it. Off, it sits in flow after the content.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "blur",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the content fades under a progressive blur that reaches above\nthe bar. Off, the bar is a solid surface with a hairline at its top\nedge.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes on the root.",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "ActionCard",
     "label": "Action card",
     "slug": "action-card",
@@ -939,9 +990,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "description",
-            "type": "string",
+            "type": "ReactNode",
             "required": false,
-            "description": "Alert description / body text"
+            "description": "The body under the title. Plain text is the usual case; it also takes a short run of markup, such as a sentence with a Link in it or a list of two or three items."
           },
           {
             "name": "variant",
@@ -1519,6 +1570,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Floats the rail as a glass card, the same as `layout=\"floating\"`.",
             "defaultValue": "false",
             "deprecated": "Use `layout=\"floating\"`."
+          },
+          {
+            "name": "position",
+            "type": "AppSidebarPosition",
+            "required": false,
+            "description": "Where the rail is laid out. `fixed` (the default) pins it to the\nviewport's start edge at the viewport's height, with the side panel and\nthe phone drawer fixed beside it, as a full-page app wants. `contained`\nlays it out in its parent instead, for a framed preview or a layout that\nis not the whole page: the parent is a flex row with a definite height,\nthe rail is its first item at the parent's height (sticky, so it holds\nwhile the parent scrolls), and the content beside it gives way as the\nrail expands and the side panel opens. On a phone the trigger, the scrim\nand the drawer stay inside the parent too.",
+            "values": [
+              "contained",
+              "fixed"
+            ],
+            "defaultValue": "'fixed'",
+            "typeRefs": [
+              "AppSidebarPosition"
+            ]
           },
           {
             "name": "topSlot",
@@ -4178,8 +4243,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the scrollable conversation region.",
-            "defaultValue": "'Conversation'"
+            "description": "Legacy accessible-name prop for the scrollable conversation region. Defaults to \"Conversation\"; a native `aria-label` wins when both are passed.",
+            "defaultValue": "'Conversation'",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "jumpLabel",
@@ -6120,7 +6186,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the menu"
+            "description": "Legacy accessible-name prop for the menu. A native `aria-label` wins when both are passed, and names the menu rather than the wrapper.",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "keyLabels",
@@ -6195,6 +6262,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string",
             "required": false,
             "description": "Summary line shown under the grid, e.g. \"496 contributions in the last year\""
+          },
+          {
+            "name": "fill",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the week columns stretch to fill the graph's width. Defaults to\n`true`. Set `false` to keep every column at the base cell size, so a short\nrun of weeks draws small squares at the start of its box instead of large ones.",
+            "defaultValue": "true"
           },
           {
             "name": "showMonthLabels",
@@ -9522,7 +9596,41 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "today",
             "type": "string",
             "required": false,
-            "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
+            "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the\ntoday chip and picks the month shown first. Defaults to the device's\ndate, read in the browser only: a server render draws no today chip and\nthe browser adds it once it hydrates, so a server in another time zone\ncan never put it on the wrong day, and it moves on at midnight. The month\nshown first still falls back to the render-time clock, so a server-rendered\nhost passes `today` (or `defaultMonth`) when the first month must match.\nPin it for a demo, a test or a time zone the device is not in."
+          },
+          {
+            "name": "now",
+            "type": "string",
+            "required": false,
+            "description": "The time (24-hour `HH:mm`) the day view's now marker sits at, when the\nday shown is `today`. Defaults to the device's clock, read in the browser\nonly and moved on every minute, so a server render draws no marker; pin\nit for a demo, a test or a screenshot."
+          },
+          {
+            "name": "nowLabel",
+            "type": "string",
+            "required": false,
+            "description": "The text of the day view's now marker.",
+            "defaultValue": "'Now'"
+          },
+          {
+            "name": "allDayLabel",
+            "type": "string",
+            "required": false,
+            "description": "What the day view's schedule shows in place of a time for an event with none.",
+            "defaultValue": "'All day'"
+          },
+          {
+            "name": "emptyDayLabel",
+            "type": "string",
+            "required": false,
+            "description": "What the day view's schedule says on a day with no events.",
+            "defaultValue": "'No events'"
+          },
+          {
+            "name": "bare",
+            "type": "boolean",
+            "required": false,
+            "description": "Strips the calendar's own fill, border, radius and padding, for a Panel or Widget that already draws the surface.",
+            "defaultValue": "false"
           },
           {
             "name": "legend",
@@ -9594,7 +9702,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "view",
             "type": "\"day\" | \"week\" | \"month\"",
             "required": false,
-            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time.",
+            "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day as a schedule, each event's start and end time first, with a now marker on today, stepping a day at a time.",
             "values": [
               "day",
               "month",
@@ -9655,7 +9763,19 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "monthLabel",
             "type": "((month: Date) => string)",
             "required": false,
-            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is the week's range in `locale`."
+            "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is `weekLabel`, the day view's `dayLabel`."
+          },
+          {
+            "name": "weekLabel",
+            "type": "((start: Date, end: Date) => string)",
+            "required": false,
+            "description": "The week view's heading, given the first and last day of the week in\nview: the visible title and the name of the week's cells. Defaults to\nthe range in `locale` (\"August 16 – 22, 2026\" in `en-US`)."
+          },
+          {
+            "name": "dayLabel",
+            "type": "((date: Date) => string)",
+            "required": false,
+            "description": "The full name of a day, given the day: the day view's heading and every\nday's spoken name. Defaults to the weekday and the date in `locale`\n(\"Thursday, August 20, 2026\" in `en-US`)."
           },
           {
             "name": "overflowLabel",
@@ -9903,8 +10023,25 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "files",
             "type": "FileInputFile[]",
             "required": false,
-            "description": "Files to list under the dropzone",
-            "defaultValue": "[]",
+            "description": "Files to list under the dropzone (controlled). Leave it out and FileInput keeps its own list, starting from `defaultFiles`.",
+            "typeRefs": [
+              "FileInputFile"
+            ]
+          },
+          {
+            "name": "defaultFiles",
+            "type": "FileInputFile[]",
+            "required": false,
+            "description": "The list FileInput starts with when `files` is left out (uncontrolled). A selection adds to it, or replaces it unless `multiple` is set, and a remove button takes an entry out.",
+            "typeRefs": [
+              "FileInputFile"
+            ]
+          },
+          {
+            "name": "onFilesChange",
+            "type": "((files: FileInputFile[]) => void)",
+            "required": false,
+            "description": "Called with the whole list after a selection or a removal, in both modes. A controlled host can set `files` to it.",
             "typeRefs": [
               "FileInputFile"
             ]
@@ -11499,6 +11636,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "values": [
               "compact",
               "default"
+            ],
+            "defaultValue": "'default'"
+          },
+          {
+            "name": "variant",
+            "type": "\"default\" | \"quiet\"",
+            "required": false,
+            "description": "The field's form. `quiet` draws no border or fill at rest, only the\nleading icon and the placeholder, and reveals the full field while it is\nhovered, focused or holds a value, or while the nearest ancestor marked\n`data-quiet-host` (a list row) is hovered. For a list where every row can\ntake an optional entry. An error always shows the full field.",
+            "values": [
+              "default",
+              "quiet"
             ],
             "defaultValue": "'default'"
           },
@@ -14896,7 +15044,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label for the trigger and the panel; the panel is named \"Popover\" when it is omitted"
+            "description": "Legacy accessible-name prop for the trigger and the panel. A native `aria-label` wins when both are passed, and names those two rather than the wrapper; with neither, the panel is named \"Popover\".",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "className",
@@ -14952,7 +15101,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible label describing what is loading. Defaults to \"Progress\"; a passed native `aria-label` works too."
+            "description": "Legacy accessible-name prop for the bar, saying what is loading. A native `aria-label` wins when both are passed; with neither, the bar is named \"Progress\".",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "locale",
@@ -15114,8 +15264,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the list.",
-            "defaultValue": "'Suggested prompts'"
+            "description": "Legacy accessible-name prop for the list. Defaults to \"Suggested prompts\"; a native `aria-label` wins when both are passed.",
+            "defaultValue": "'Suggested prompts'",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "className",
@@ -18411,6 +18562,17 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "A short note at the far end of the top row, in the caption face: the period the figure covers (\"Last 30 days\"), its source."
           },
           {
+            "name": "captionPlacement",
+            "type": "\"head\" | \"label\"",
+            "required": false,
+            "description": "Where the caption sits: `head`, at the far end of the top row beside the\nicon, or `label`, a second line under the label. Defaults to `head`.",
+            "values": [
+              "head",
+              "label"
+            ],
+            "defaultValue": "'head'"
+          },
+          {
             "name": "children",
             "type": "ReactNode",
             "required": false,
@@ -19785,7 +19947,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "showLabels",
             "type": "boolean",
             "required": false,
-            "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name.",
+            "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name. The labelled strip is wider than an expanded AppSidebar, so its `footerSlot` takes the icon-only strip.",
             "defaultValue": "true"
           },
           {
@@ -20216,8 +20378,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "ariaLabel",
             "type": "string",
             "required": false,
-            "description": "Accessible name for the tab strip.",
-            "defaultValue": "'Open threads'"
+            "description": "Legacy accessible-name prop for the tab strip. Defaults to \"Open threads\"; a native `aria-label` wins when both are passed, and names the strip rather than the wrapper.",
+            "defaultValue": "'Open threads'",
+            "deprecated": "Pass the native `aria-label` attribute instead."
           },
           {
             "name": "className",
@@ -22681,9 +22844,9 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "chatThreadLabels",
-            "type": "Pick<ChatThreadProps, \"ariaLabel\" | \"jumpLabel\">",
+            "type": "Pick<ChatThreadProps, \"aria-label\" | \"ariaLabel\" | \"jumpLabel\">",
             "required": false,
-            "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\") and the scroll-to-latest control (\"Scroll to the latest message\").",
+            "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\", as `aria-label`; the deprecated `ariaLabel` still works) and the scroll-to-latest control (\"Scroll to the latest message\").",
             "typeRefs": [
               "ChatThreadProps"
             ]

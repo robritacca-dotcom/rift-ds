@@ -43,7 +43,8 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name for the menu"
+          "description": "Legacy accessible-name prop for the menu. A native `aria-label` wins when both are passed, and names the menu rather than the wrapper.",
+          "deprecated": "Pass the native `aria-label` attribute instead."
         },
         {
           "name": "keyLabels",
@@ -168,7 +169,7 @@
     }
   ],
   "size": {
-    "gzip": 7672
+    "gzip": 7689
   },
   "alternatives": [
     {

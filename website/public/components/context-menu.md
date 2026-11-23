@@ -22,7 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | --- | --- | --- | --- | --- |
 | items | `DropdownMenuEntry[]` | yes |  | Menu entries — DropdownMenu's model (items, groups, separators). A context menu draws an item's label, icon, shortcut, selected and destructive states; it does not draw `description` or `checked`, and `closeOnSelect` is not read. |
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
-| ariaLabel | `string` | no |  | Accessible name for the menu |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the menu. A native `aria-label` wins when both are passed, and names the menu rather than the wrapper. Deprecated: Pass the native `aria-label` attribute instead. |
 | keyLabels | `Partial<Record<string, string>>` | no |  | Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. |
 | className | `string` | no | `''` | Additional CSS classes |
 | children | `ReactNode` | yes |  | The right-clickable area the menu is attached to |

@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { MaskedInput } from 'rift-ds';`
 - Deep import: `import { MaskedInput } from 'rift-ds/components/MaskedInput/MaskedInput';`
 - Rendering: client component (declares 'use client')
-- Size: 7.2 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 7.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/masked-input
 - Schema: https://rift-ds.com/schema/components/masked-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

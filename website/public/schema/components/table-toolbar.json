@@ -547,6 +547,13 @@
     "note": "Alt and the up or down arrow reorder a column or a sort row, and Escape closes a panel."
   },
   "size": {
-    "gzip": 40890
-  }
+    "gzip": 40976
+  },
+  "alternatives": [
+    {
+      "name": "ActionBar",
+      "when": "the actions finish the work on a long list or form, docked below it rather than over a table",
+      "schemaUrl": "https://rift-ds.com/schema/components/action-bar.json"
+    }
+  ]
 }

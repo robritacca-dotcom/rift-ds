@@ -90,6 +90,18 @@
           "description": "A short note at the far end of the top row, in the caption face: the period the figure covers (\"Last 30 days\"), its source."
         },
         {
+          "name": "captionPlacement",
+          "type": "\"head\" | \"label\"",
+          "typeKind": "enum",
+          "values": [
+            "head",
+            "label"
+          ],
+          "required": false,
+          "description": "Where the caption sits: `head`, at the far end of the top row beside the\nicon, or `label`, a second line under the label. Defaults to `head`.",
+          "default": "head"
+        },
+        {
           "name": "children",
           "type": "ReactNode",
           "typeKind": "reference",
@@ -122,6 +134,6 @@
     "by": "none"
   },
   "size": {
-    "gzip": 1387
+    "gzip": 1431
   }
 }

@@ -21,6 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | subtitle | `string` | no |  | Description text below the title. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
 | caption | `string` | no |  | Summary line shown under the grid, e.g. "496 contributions in the last year" |
+| fill | `boolean` | no | `true` | Whether the week columns stretch to fill the graph's width. Defaults to `true`. Set `false` to keep every column at the base cell size, so a short run of weeks draws small squares at the start of its box instead of large ones. |
 | showMonthLabels | `boolean` | no | `true` | Show month labels above the grid |
 | showLegend | `boolean` | no | `true` | Show the Less → More legend under the grid |
 | gridLabel | `string` | no |  | Accessible name for the grid of day cells, which renders as one image. Falls back to `caption`, then to "Contribution activity". |

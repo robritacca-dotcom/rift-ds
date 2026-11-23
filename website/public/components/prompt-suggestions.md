@@ -26,7 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Row scale. `default` sits at the body-paragraph scale, so a suggestion reads at the same weight as the messages it will become; `compact` is the quieter row for placements alongside a live conversation. |
 | value | `string` | no |  | The `id` of the suggestion already taken. Set, the row becomes the record of that choice: the taken suggestion outlined solid in the strongest ink, the rest faded behind a dashed line, and none of them tappable any more. The same treatment QuestionCard gives a pick. For a row that stays on screen after use, such as the follow-ups under an earlier answer. |
 | chosenLabel | `string` | no | `'(chosen)'` | Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". |
-| ariaLabel | `string` | no | `'Suggested prompts'` | Accessible name for the list. |
+| ariaLabel | `string` | no | `'Suggested prompts'` | Legacy accessible-name prop for the list. Defaults to "Suggested prompts"; a native `aria-label` wins when both are passed. Deprecated: Pass the native `aria-label` attribute instead. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

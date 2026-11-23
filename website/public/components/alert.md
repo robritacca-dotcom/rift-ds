@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | title | `string` | no |  | Alert title text. Note: this shadows the native `title` tooltip attribute, which Alert does not expose. |
-| description | `string` | no |  | Alert description / body text |
+| description | `ReactNode` | no |  | The body under the title. Plain text is the usual case; it also takes a short run of markup, such as a sentence with a Link in it or a list of two or three items. |
 | variant | `"error" \| "info" \| "positive" \| "warning" \| "neutral"` | no | `'info'` | Alert variant determines colour and icon |
 | size | `"default" \| "compact"` | no | `'default'` | Component size |
 | action | `ReactNode` | no |  | Actions under the description: one or two compact Buttons or a Link that act on what the alert says (retry, review, undo). |

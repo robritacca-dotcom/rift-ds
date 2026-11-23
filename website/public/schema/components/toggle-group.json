@@ -129,7 +129,7 @@
   "types": {
     "ToggleGroupItem": {
       "kind": "interface",
-      "definition": "interface ToggleGroupItem {\n  /** Unique value */\n  value: string;\n  /** Display label or icon name (Material Symbols) */\n  label: string;\n  /** Use Material Symbol icon instead of text */\n  icon?: boolean;\n}"
+      "definition": "interface ToggleGroupItem {\n  /** Unique value */\n  value: string;\n  /** Display label or icon name (Material Symbols) */\n  label: string;\n  /**\n   * Draw `label` as a Material Symbol icon instead of text. An item is an\n   * icon or a label, never both: for icon-plus-label options, use\n   * SegmentedControl, whose segments take an `icon` beside their `label`.\n   */\n  icon?: boolean;\n}"
     }
   },
   "keyboard": [

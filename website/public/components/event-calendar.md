@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Deep import: `import { EventCalendar } from 'rift-ds/components/EventCalendar/EventCalendar';`
 - Rendering: client component (declares 'use client')
-- Size: 3.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/event-calendar
 - Schema: https://rift-ds.com/schema/components/event-calendar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -24,7 +24,12 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | onEventClick | `((event: EventCalendarEvent) => void)` | no |  | Fires with the clicked event. Pills only render as buttons when this is set. |
 | onDateClick | `((date: string) => void)` | no |  | Fires with the clicked day (YYYY-MM-DD) — from anywhere on the cell, the day number, and the "+N more" overflow row. The number and overflow row only become buttons when this is set, and cells only take their pointer cursor and hover feedback with it. |
 | selectedDate | `string` | no |  | Marks this day (YYYY-MM-DD) as the selected one — the action-colour chip on its number, taking precedence over the today chip. Controlled by the consumer; pair with `onDateClick` to move it. |
-| today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. |
+| today | `string` | no |  | The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date, read in the browser only: a server render draws no today chip and the browser adds it once it hydrates, so a server in another time zone can never put it on the wrong day, and it moves on at midnight. The month shown first still falls back to the render-time clock, so a server-rendered host passes `today` (or `defaultMonth`) when the first month must match. Pin it for a demo, a test or a time zone the device is not in. |
+| now | `string` | no |  | The time (24-hour `HH:mm`) the day view's now marker sits at, when the day shown is `today`. Defaults to the device's clock, read in the browser only and moved on every minute, so a server render draws no marker; pin it for a demo, a test or a screenshot. |
+| nowLabel | `string` | no | `'Now'` | The text of the day view's now marker. |
+| allDayLabel | `string` | no | `'All day'` | What the day view's schedule shows in place of a time for an event with none. |
+| emptyDayLabel | `string` | no | `'No events'` | What the day view's schedule says on a day with no events. |
+| bare | `boolean` | no | `false` | Strips the calendar's own fill, border, radius and padding, for a Panel or Widget that already draws the surface. |
 | legend | `EventCalendarLegendItem[]` | no |  | What each event colour means, shown as a row of dots and labels under the grid. With `legendToggles`, each entry also shows and hides its colour's events. |
 | legendToggles | `boolean` | no | `false` | Makes each legend entry a selectable Chip that shows or hides the events of its colour, so a reader can narrow a busy calendar by kind. |
 | hiddenColors | `EventCalendarColor[]` | no |  | The colours whose events are hidden, for controlled use. Pair with `onHiddenColorsChange`. |
@@ -33,7 +38,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | legendLabel | `string` | no | `'Show events by kind'` | The name of the legend's set of toggles, when `legendToggles` is on. |
 | renderSelectedDay | `((date: string, events: EventCalendarEvent[]) => ReactNode)` | no |  | Draws a panel for the selected day under the grid, in every view: handed the day (YYYY-MM-DD) and its events as shown, it returns what the panel holds (a list of the day's events, a form to add one). Shown only while `selectedDate` is set. |
 | actions | `ReactNode` | no |  | Trailing header slot, e.g. a "New event" Button. |
-| view | `"day" \| "week" \| "month"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time. |
+| view | `"day" \| "week" \| "month"` | no | `'month'` | `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day as a schedule, each event's start and end time first, with a now marker on today, stepping a day at a time. |
 | previousLabel | `string` | no | `'Previous month'` | Accessible name of the previous-month button. |
 | nextLabel | `string` | no | `'Next month'` | Accessible name of the next-month button. |
 | previousWeekLabel | `string` | no | `'Previous week'` | Accessible name of the previous-week button, in the week view. |
@@ -41,7 +46,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | previousDayLabel | `string` | no | `'Previous day'` | Accessible name of the previous-day button, in the day view. |
 | nextDayLabel | `string` | no | `'Next day'` | Accessible name of the next-day button, in the day view. |
 | showLessLabel | `string` | no | `'Show less'` | The visible text of the control that folds an expanded day back, when a day's "+N more" opens it in place (with no `onDateClick`). |
-| monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of the month in view: the visible title and the name of the day grid. Defaults to the month name and the year in `locale` ("January 2026" in `en-US`). Month view only; the week view's heading is the week's range in `locale`. |
+| monthLabel | `((month: Date) => string)` | no |  | The month heading, given the first day of the month in view: the visible title and the name of the day grid. Defaults to the month name and the year in `locale` ("January 2026" in `en-US`). Month view only; the week view's heading is `weekLabel`, the day view's `dayLabel`. |
+| weekLabel | `((start: Date, end: Date) => string)` | no |  | The week view's heading, given the first and last day of the week in view: the visible title and the name of the week's cells. Defaults to the range in `locale` ("August 16 – 22, 2026" in `en-US`). |
+| dayLabel | `((date: Date) => string)` | no |  | The full name of a day, given the day: the day view's heading and every day's spoken name. Defaults to the weekday and the date in `locale` ("Thursday, August 20, 2026" in `en-US`). |
 | overflowLabel | `((count: number, date: Date) => string)` | no |  | Accessible name of a day's "+N more" overflow button, given the number of hidden events and the day. Defaults to "N more events" followed by the full date in `locale`. |
 | moreLabel | `((count: number) => string)` | no | `` (count: number): string => `+${count} more` `` | The visible text of a day's overflow row, given the number of hidden events. Defaults to "+N more". The row's accessible name is `overflowLabel` when it is a button. |
 | weekdayLabels | `string[]` | no |  | The weekday headers above the grid: seven entries, Sunday first, laid out from `weekStartsOn`. Defaults to the short weekday names in `locale` ("Sun" to "Sat" in `en-US`), or its narrow names where the short ones are whole words (Arabic); a list of any other length falls back to the default. |
@@ -87,7 +94,17 @@ interface EventCalendarEvent {
   endDate?: string;
   /** Short label shown in the event pill. */
   title: string;
-  /** Start time as already-formatted text like "09:30" or "1:40 PM". Untimed events sort first, then clock times in clock order, then any other text. */
+  /** When the event starts, as a 24-hour `HH:mm` string ("08:50", "13:40"). The calendar writes it in the resolved locale and sorts each day by it: untimed events first, then by the clock. */
+  start?: string;
+  /** When the event ends, as a 24-hour `HH:mm` string, later than `start`. With it, the event shows and is named with its range ("8:50 – 9:50 AM" in `en-US`). */
+  end?: string;
+  /**
+   * Start time as already-formatted text like "09:30" or "1:40 PM", shown
+   * as written in place of `start` and `end` when it is set. Without `start`
+   * it sorts by the clock where it reads as a clock time, after untimed
+   * events and ahead of any other text.
+   * @deprecated Use `start` (and `end`), which the calendar formats in the resolved locale.
+   */
   time?: string;
   /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
   color?: EventCalendarColor;

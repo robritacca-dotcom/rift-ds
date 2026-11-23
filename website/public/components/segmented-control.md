@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { SegmentedControl } from 'rift-ds';`
 - Deep import: `import { SegmentedControl } from 'rift-ds/components/SegmentedControl/SegmentedControl';`
 - Rendering: client component (declares 'use client')
-- Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/segmented-control
 - Schema: https://rift-ds.com/schema/components/segmented-control.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -65,9 +65,24 @@ interface Segment {
   icon?: string | React.ReactNode;
   /** Whether disabled */
   disabled?: boolean;
+  /**
+   * A status the choice itself means. When this segment is selected, the pill
+   * takes that status's colours (`--color-status-*`) in place of the action
+   * colour, for a set whose options are statuses (Present, Late, Absent).
+   * Idle segments, hover and the focus ring are unchanged.
+   */
+  status?: SegmentStatus;
   /** The id of the `role="tabpanel"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */
   panelId?: string;
 }
+```
+
+### SegmentStatus
+
+The status roles a segment can mean (see `Segment.status`).
+
+```ts
+type SegmentStatus = 'positive' | 'warning' | 'error' | 'info';
 ```
 
 Types from other packages: `ReactNode` (react).

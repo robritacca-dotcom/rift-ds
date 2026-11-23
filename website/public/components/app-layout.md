@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { AppLayout } from 'rift-ds';`
 - Deep import: `import { AppLayout } from 'rift-ds/components/AppLayout/AppLayout';`
 - Rendering: client component (declares 'use client')
-- Size: 9.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 9.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-layout
 - Schema: https://rift-ds.com/schema/components/app-layout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

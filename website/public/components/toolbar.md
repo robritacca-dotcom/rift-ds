@@ -15,6 +15,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 ## Alternatives
 
 - Use [Menu bar](https://rift-ds.com/components/menubar.md) instead when the controls are named menus of commands, like an app's File and Edit.
+- Use [Action bar](https://rift-ds.com/components/action-bar.md) instead when a summary and the primary actions close out a long list or form, docked to its bottom.
 
 ## Toolbar props
 

@@ -36,8 +36,27 @@
           "type": "FileInputFile[]",
           "typeKind": "array",
           "required": false,
-          "description": "Files to list under the dropzone",
-          "defaultExpression": "[]",
+          "description": "Files to list under the dropzone (controlled). Leave it out and FileInput keeps its own list, starting from `defaultFiles`.",
+          "typeRefs": [
+            "FileInputFile"
+          ]
+        },
+        {
+          "name": "defaultFiles",
+          "type": "FileInputFile[]",
+          "typeKind": "array",
+          "required": false,
+          "description": "The list FileInput starts with when `files` is left out (uncontrolled). A selection adds to it, or replaces it unless `multiple` is set, and a remove button takes an entry out.",
+          "typeRefs": [
+            "FileInputFile"
+          ]
+        },
+        {
+          "name": "onFilesChange",
+          "type": "((files: FileInputFile[]) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with the whole list after a selection or a removal, in both modes. A controlled host can set `files` to it.",
           "typeRefs": [
             "FileInputFile"
           ]
@@ -136,7 +155,7 @@
   "types": {
     "FileInputFile": {
       "kind": "interface",
-      "definition": "interface FileInputFile {\n  /** Stable identifier */\n  id: string;\n  /** File name shown in the list */\n  name: string;\n  /** Size in bytes — rendered human-readable */\n  size?: number;\n  /** Upload progress 0–100. Omit for files that are already stored. */\n  progress?: number;\n  /** Per-file error message — replaces the size line */\n  error?: string;\n}"
+      "definition": "interface FileInputFile {\n  /** Stable identifier */\n  id: string;\n  /** File name shown in the list */\n  name: string;\n  /** Size in bytes — rendered human-readable */\n  size?: number;\n  /** Upload progress 0–100. Omit for files that are already stored. */\n  progress?: number;\n  /** Per-file error message — replaces the size line */\n  error?: string;\n  /** The picked file itself. Set on the entries FileInput makes from a selection, so an uncontrolled list still hands the host its files. */\n  file?: File;\n}"
     }
   },
   "externalTypes": {
@@ -164,6 +183,6 @@
     }
   ],
   "size": {
-    "gzip": 2188
+    "gzip": 2347
   }
 }

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.34.0",
+  "kind": "component",
+  "name": "ActionBar",
+  "label": "Action bar",
+  "slug": "action-bar",
+  "category": "actions",
+  "description": "A bar docked to the bottom of a long list or form, with a summary line and the primary actions over a progressive blur.",
+  "client": false,
+  "importPath": "rift-ds/components/ActionBar/ActionBar",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/action-bar",
+  "markdownUrl": "https://rift-ds.com/components/action-bar.md",
+  "exports": [
+    {
+      "component": "ActionBar",
+      "props": [
+        {
+          "name": "summary",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The summary line at the bar's start, such as \"23 students still to\nmark\". It is a polite live region, so a count that changes while the\nreader works is announced once it settles."
+        },
+        {
+          "name": "actions",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The actions at the bar's end, typically one or two Buttons with the\nprimary action last. On a narrow bar they wrap below the summary and\nhold the end edge."
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the bar holds to the bottom of its scroll container while the\ncontent scrolls under it. Off, it sits in flow after the content.",
+          "default": true
+        },
+        {
+          "name": "blur",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the content fades under a progressive blur that reaches above\nthe bar. Off, the bar is a solid surface with a hairline at its top\nedge.",
+          "default": true
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes on the root.",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keys": {
+    "by": "platform",
+    "note": "The bar adds no keys of its own: its actions are buttons, and the browser owns Tab, Enter and Space."
+  },
+  "size": {
+    "gzip": 454
+  },
+  "alternatives": [
+    {
+      "name": "Toolbar",
+      "when": "the controls act on a canvas or a view and sit together in one pill, rather than closing out a list",
+      "schemaUrl": "https://rift-ds.com/schema/components/toolbar.json"
+    },
+    {
+      "name": "TableToolbar",
+      "when": "the bar sits over a table and holds its search, filters and view settings",
+      "schemaUrl": "https://rift-ds.com/schema/components/table-toolbar.json"
+    }
+  ]
+}

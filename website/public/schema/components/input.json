@@ -60,6 +60,18 @@
           "default": "default"
         },
         {
+          "name": "variant",
+          "type": "\"default\" | \"quiet\"",
+          "typeKind": "enum",
+          "values": [
+            "default",
+            "quiet"
+          ],
+          "required": false,
+          "description": "The field's form. `quiet` draws no border or fill at rest, only the\nleading icon and the placeholder, and reveals the full field while it is\nhovered, focused or holds a value, or while the nearest ancestor marked\n`data-quiet-host` (a list row) is hovered. For a list where every row can\ntake an optional entry. An error always shows the full field.",
+          "default": "default"
+        },
+        {
           "name": "error",
           "type": "boolean",
           "typeKind": "primitive",
@@ -183,7 +195,7 @@
     }
   ],
   "size": {
-    "gzip": 5657
+    "gzip": 5687
   },
   "alternatives": [
     {

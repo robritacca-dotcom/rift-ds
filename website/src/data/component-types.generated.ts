@@ -43,6 +43,12 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "action-bar": {
+    "types": {},
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "action-card": {
     "types": {
       "ActionCardStatus": {
@@ -246,6 +252,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "type",
         "definition": "type AppSidebarLayout = 'flush' | 'floating' | 'inset';",
         "description": "The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface."
+      },
+      "AppSidebarPosition": {
+        "kind": "type",
+        "definition": "type AppSidebarPosition = 'fixed' | 'contained';",
+        "description": "Where the rail is laid out: fixed to the viewport's start edge, or in its parent's flow."
       },
       "AppSidebarProfile": {
         "kind": "interface",
@@ -1425,7 +1436,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "EventCalendarEvent": {
         "kind": "interface",
-        "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\" or \"1:40 PM\". Untimed events sort first, then clock times in clock order, then any other text. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+        "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** When the event starts, as a 24-hour `HH:mm` string (\"08:50\", \"13:40\"). The calendar writes it in the resolved locale and sorts each day by it: untimed events first, then by the clock. */\n  start?: string;\n  /** When the event ends, as a 24-hour `HH:mm` string, later than `start`. With it, the event shows and is named with its range (\"8:50 – 9:50 AM\" in `en-US`). */\n  end?: string;\n  /**\n   * Start time as already-formatted text like \"09:30\" or \"1:40 PM\", shown\n   * as written in place of `start` and `end` when it is set. Without `start`\n   * it sorts by the clock where it reads as a clock time, after untimed\n   * events and ahead of any other text.\n   * @deprecated Use `start` (and `end`), which the calendar formats in the resolved locale.\n   */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
         "refs": [
           "EventCalendarColor"
         ]
@@ -1467,7 +1478,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "FileInputFile": {
         "kind": "interface",
-        "definition": "interface FileInputFile {\n  /** Stable identifier */\n  id: string;\n  /** File name shown in the list */\n  name: string;\n  /** Size in bytes — rendered human-readable */\n  size?: number;\n  /** Upload progress 0–100. Omit for files that are already stored. */\n  progress?: number;\n  /** Per-file error message — replaces the size line */\n  error?: string;\n}"
+        "definition": "interface FileInputFile {\n  /** Stable identifier */\n  id: string;\n  /** File name shown in the list */\n  name: string;\n  /** Size in bytes — rendered human-readable */\n  size?: number;\n  /** Upload progress 0–100. Omit for files that are already stored. */\n  progress?: number;\n  /** Per-file error message — replaces the size line */\n  error?: string;\n  /** The picked file itself. Set on the entries FileInput makes from a selection, so an uncontrolled list still hands the host its files. */\n  file?: File;\n}"
       }
     },
     "externalTypes": {
@@ -2338,7 +2349,15 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "Segment": {
         "kind": "interface",
-        "definition": "interface Segment {\n  /** Unique value for this segment */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
+        "definition": "interface Segment {\n  /** Unique value for this segment */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether disabled */\n  disabled?: boolean;\n  /**\n   * A status the choice itself means. When this segment is selected, the pill\n   * takes that status's colours (`--color-status-*`) in place of the action\n   * colour, for a set whose options are statuses (Present, Late, Absent).\n   * Idle segments, hover and the focus ring are unchanged.\n   */\n  status?: SegmentStatus;\n  /** The id of the `role=\"tabpanel\"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}",
+        "refs": [
+          "SegmentStatus"
+        ]
+      },
+      "SegmentStatus": {
+        "kind": "type",
+        "definition": "type SegmentStatus = 'positive' | 'warning' | 'error' | 'info';",
+        "description": "The status roles a segment can mean (see `Segment.status`)."
       }
     },
     "externalTypes": {
@@ -3031,7 +3050,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "ToggleGroupItem": {
         "kind": "interface",
-        "definition": "interface ToggleGroupItem {\n  /** Unique value */\n  value: string;\n  /** Display label or icon name (Material Symbols) */\n  label: string;\n  /** Use Material Symbol icon instead of text */\n  icon?: boolean;\n}"
+        "definition": "interface ToggleGroupItem {\n  /** Unique value */\n  value: string;\n  /** Display label or icon name (Material Symbols) */\n  label: string;\n  /**\n   * Draw `label` as a Material Symbol icon instead of text. An item is an\n   * icon or a label, never both: for icon-plus-label options, use\n   * SegmentedControl, whose segments take an `icon` beside their `label`.\n   */\n  icon?: boolean;\n}"
       }
     },
     "externalTypes": {}

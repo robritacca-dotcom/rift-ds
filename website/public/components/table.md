@@ -14,7 +14,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 
 ## Alternatives
 
-- Use [Data table](https://rift-ds.com/components/data-table.md) instead when the rows need sorting, filtering, editing or loading from a server.
+- Use [Data table](https://rift-ds.com/components/data-table.md) instead when the rows need sorting, filtering, paging, editing or loading from a server.
 
 ## Table props
 

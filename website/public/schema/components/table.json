@@ -121,7 +121,7 @@
   "alternatives": [
     {
       "name": "DataTable",
-      "when": "the rows need sorting, filtering, editing or loading from a server",
+      "when": "the rows need sorting, filtering, paging, editing or loading from a server",
       "schemaUrl": "https://rift-ds.com/schema/components/data-table.json"
     }
   ]

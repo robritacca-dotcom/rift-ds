@@ -706,10 +706,10 @@
         },
         {
           "name": "chatThreadLabels",
-          "type": "Pick<ChatThreadProps, \"ariaLabel\" | \"jumpLabel\">",
+          "type": "Pick<ChatThreadProps, \"aria-label\" | \"ariaLabel\" | \"jumpLabel\">",
           "typeKind": "reference",
           "required": false,
-          "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\") and the scroll-to-latest control (\"Scroll to the latest message\").",
+          "description": "The conversation's names, over ChatThread's English defaults: the scrolling region (\"Conversation\", as `aria-label`; the deprecated `ariaLabel` still works) and the scroll-to-latest control (\"Scroll to the latest message\").",
           "typeRefs": [
             "ChatThreadProps"
           ]

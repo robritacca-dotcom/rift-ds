@@ -16,6 +16,12 @@
       "description": "Collapsible content sections for organising related information."
     },
     {
+      "name": "action-bar",
+      "type": "registry:ui",
+      "title": "Action bar",
+      "description": "A bar docked to the bottom of a long list or form, with a summary line and the primary actions over a progressive blur."
+    },
+    {
       "name": "action-card",
       "type": "registry:ui",
       "title": "Action card",

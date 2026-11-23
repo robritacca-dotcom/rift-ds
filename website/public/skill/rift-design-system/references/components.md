@@ -2,9 +2,17 @@
 
 Generated from the component registry at version 1.34.0. One entry per public component; each Contract link is the component's full prop table as markdown. A component marked deprecated still works in existing code; its Deprecated line names what to use instead.
 
-## Actions (10)
+## Actions (11)
 
 Buttons, button groups, and toggles for triggering actions and switching modes.
+
+### Action bar
+
+A bar docked to the bottom of a long list or form, with a summary line and the primary actions over a progressive blur.
+
+- Import: `import { ActionBar } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/action-bar.md
 
 ### Button
 

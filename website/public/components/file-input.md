@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { FileInput } from 'rift-ds';`
 - Deep import: `import { FileInput } from 'rift-ds/components/FileInput/FileInput';`
 - Rendering: client component (declares 'use client')
-- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/file-input
 - Schema: https://rift-ds.com/schema/components/file-input.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,7 +18,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | no |  | Field label above the dropzone |
 | placeholder | `string` | no | `'Drag and drop, or click to browse'` | Instructional copy inside the dropzone |
-| files | `FileInputFile[]` | no | `[]` | Files to list under the dropzone |
+| files | `FileInputFile[]` | no |  | Files to list under the dropzone (controlled). Leave it out and FileInput keeps its own list, starting from `defaultFiles`. |
+| defaultFiles | `FileInputFile[]` | no |  | The list FileInput starts with when `files` is left out (uncontrolled). A selection adds to it, or replaces it unless `multiple` is set, and a remove button takes an entry out. |
+| onFilesChange | `((files: FileInputFile[]) => void)` | no |  | Called with the whole list after a selection or a removal, in both modes. A controlled host can set `files` to it. |
 | size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper or error message displayed below the field |
@@ -58,6 +60,8 @@ interface FileInputFile {
   progress?: number;
   /** Per-file error message — replaces the size line */
   error?: string;
+  /** The picked file itself. Set on the entries FileInput makes from a selection, so an uncontrolled list still hands the host its files. */
+  file?: File;
 }
 ```
 

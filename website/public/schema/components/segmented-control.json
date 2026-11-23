@@ -159,7 +159,15 @@
   "types": {
     "Segment": {
       "kind": "interface",
-      "definition": "interface Segment {\n  /** Unique value for this segment */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether disabled */\n  disabled?: boolean;\n  /** The id of the `role=\"tabpanel\"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}"
+      "definition": "interface Segment {\n  /** Unique value for this segment */\n  value: string;\n  /** Display label */\n  label: string;\n  /** Optional icon — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n  /** Whether disabled */\n  disabled?: boolean;\n  /**\n   * A status the choice itself means. When this segment is selected, the pill\n   * takes that status's colours (`--color-status-*`) in place of the action\n   * colour, for a set whose options are statuses (Present, Late, Absent).\n   * Idle segments, hover and the focus ring are unchanged.\n   */\n  status?: SegmentStatus;\n  /** The id of the `role=\"tabpanel\"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */\n  panelId?: string;\n}",
+      "refs": [
+        "SegmentStatus"
+      ]
+    },
+    "SegmentStatus": {
+      "kind": "type",
+      "definition": "type SegmentStatus = 'positive' | 'warning' | 'error' | 'info';",
+      "description": "The status roles a segment can mean (see `Segment.status`)."
     }
   },
   "externalTypes": {
@@ -207,7 +215,7 @@
     }
   ],
   "size": {
-    "gzip": 6539
+    "gzip": 6579
   },
   "alternatives": [
     {

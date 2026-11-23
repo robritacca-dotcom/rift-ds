@@ -115,6 +115,11 @@
       "name": "Menubar",
       "when": "the controls are named menus of commands, like an app's File and Edit",
       "schemaUrl": "https://rift-ds.com/schema/components/menubar.json"
+    },
+    {
+      "name": "ActionBar",
+      "when": "a summary and the primary actions close out a long list or form, docked to its bottom",
+      "schemaUrl": "https://rift-ds.com/schema/components/action-bar.json"
     }
   ]
 }

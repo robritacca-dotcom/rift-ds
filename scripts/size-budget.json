@@ -12,7 +12,7 @@
     "WorldMap": 117000
   },
   "subpaths": {
-    ".": 362000,
+    ".": 364000,
     "./behaviors/LinkProvider": 600,
     "./behaviors/deferComponent": 800,
     "./behaviors/LocaleProvider": 700,

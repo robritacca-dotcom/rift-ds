@@ -31,6 +31,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | onProfileMore | `(() => void)` | no |  | Callback when profile more button clicked |
 | layout | `AppSidebarLayout` | no |  | How the rail meets the page, one of the three app shell modes. `flush` runs it edge to edge on the shell colour behind a hairline divider, nothing raised. `floating` floats it off the viewport edges as a glass card: inset with rounded corners, the translucent glass fill over a backdrop blur, and the floating shadow (the inset defaults to 20px and is overridable via the --ds-sidebar-float-inset custom property). `inset` runs it flush on the app shell colour, beside a raised content surface inset from the edges, as AppLayout's `inset` layout draws it. Inside a host that marks itself a shell (AppLayout, a chat or template page), the rail reads that host's mode from the shell recipe. Defaults to `flush` (or `floating` while the deprecated `floating` is set). |
 | floating | `boolean` | no | `false` | Floats the rail as a glass card, the same as `layout="floating"`. Deprecated: Use `layout="floating"`. |
+| position | `AppSidebarPosition` | no | `'fixed'` | Where the rail is laid out. `fixed` (the default) pins it to the viewport's start edge at the viewport's height, with the side panel and the phone drawer fixed beside it, as a full-page app wants. `contained` lays it out in its parent instead, for a framed preview or a layout that is not the whole page: the parent is a flex row with a definite height, the rail is its first item at the parent's height (sticky, so it holds while the parent scrolls), and the content beside it gives way as the rail expands and the side panel opens. On a phone the trigger, the scrim and the drawer stay inside the parent too. |
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | persistentTopSlot | `boolean` | no | `false` | Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
@@ -90,6 +91,14 @@ The three app shell modes, how the rail meets the page: edge to edge behind a ha
 
 ```ts
 type AppSidebarLayout = 'flush' | 'floating' | 'inset';
+```
+
+### AppSidebarPosition
+
+Where the rail is laid out: fixed to the viewport's start edge, or in its parent's flow.
+
+```ts
+type AppSidebarPosition = 'fixed' | 'contained';
 ```
 
 ### AppSidebarProfile

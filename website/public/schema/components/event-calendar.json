@@ -85,7 +85,46 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in."
+          "description": "The date the calendar treats as today (`YYYY-MM-DD`): it carries the\ntoday chip and picks the month shown first. Defaults to the device's\ndate, read in the browser only: a server render draws no today chip and\nthe browser adds it once it hydrates, so a server in another time zone\ncan never put it on the wrong day, and it moves on at midnight. The month\nshown first still falls back to the render-time clock, so a server-rendered\nhost passes `today` (or `defaultMonth`) when the first month must match.\nPin it for a demo, a test or a time zone the device is not in."
+        },
+        {
+          "name": "now",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The time (24-hour `HH:mm`) the day view's now marker sits at, when the\nday shown is `today`. Defaults to the device's clock, read in the browser\nonly and moved on every minute, so a server render draws no marker; pin\nit for a demo, a test or a screenshot."
+        },
+        {
+          "name": "nowLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The text of the day view's now marker.",
+          "default": "Now"
+        },
+        {
+          "name": "allDayLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What the day view's schedule shows in place of a time for an event with none.",
+          "default": "All day"
+        },
+        {
+          "name": "emptyDayLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "What the day view's schedule says on a day with no events.",
+          "default": "No events"
+        },
+        {
+          "name": "bare",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Strips the calendar's own fill, border, radius and padding, for a Panel or Widget that already draws the surface.",
+          "default": false
         },
         {
           "name": "legend",
@@ -171,7 +210,7 @@
             "week"
           ],
           "required": false,
-          "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time.",
+          "description": "`month` shows the whole month, a day's overflow folded behind \"+N more\"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day as a schedule, each event's start and end time first, with a now marker on today, stepping a day at a time.",
           "default": "month"
         },
         {
@@ -235,7 +274,21 @@
           "type": "((month: Date) => string)",
           "typeKind": "function",
           "required": false,
-          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is the week's range in `locale`."
+          "description": "The month heading, given the first day of the month in view: the visible\ntitle and the name of the day grid. Defaults to the month name and the\nyear in `locale` (\"January 2026\" in `en-US`). Month view only; the week\nview's heading is `weekLabel`, the day view's `dayLabel`."
+        },
+        {
+          "name": "weekLabel",
+          "type": "((start: Date, end: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The week view's heading, given the first and last day of the week in\nview: the visible title and the name of the week's cells. Defaults to\nthe range in `locale` (\"August 16 – 22, 2026\" in `en-US`)."
+        },
+        {
+          "name": "dayLabel",
+          "type": "((date: Date) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The full name of a day, given the day: the day view's heading and every\nday's spoken name. Defaults to the weekday and the date in `locale`\n(\"Thursday, August 20, 2026\" in `en-US`)."
         },
         {
           "name": "overflowLabel",
@@ -303,7 +356,7 @@
     },
     "EventCalendarEvent": {
       "kind": "interface",
-      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** Start time as already-formatted text like \"09:30\" or \"1:40 PM\". Untimed events sort first, then clock times in clock order, then any other text. */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
+      "definition": "interface EventCalendarEvent {\n  /** Unique event identifier. */\n  id: string;\n  /** The day the event falls on (YYYY-MM-DD), or its first day when it runs over several. */\n  date: string;\n  /** The last day of an event that runs over several days (YYYY-MM-DD, inclusive): it shows on every day from `date` to this one, its pills joined across the days and its dot on the first. */\n  endDate?: string;\n  /** Short label shown in the event pill. */\n  title: string;\n  /** When the event starts, as a 24-hour `HH:mm` string (\"08:50\", \"13:40\"). The calendar writes it in the resolved locale and sorts each day by it: untimed events first, then by the clock. */\n  start?: string;\n  /** When the event ends, as a 24-hour `HH:mm` string, later than `start`. With it, the event shows and is named with its range (\"8:50 – 9:50 AM\" in `en-US`). */\n  end?: string;\n  /**\n   * Start time as already-formatted text like \"09:30\" or \"1:40 PM\", shown\n   * as written in place of `start` and `end` when it is set. Without `start`\n   * it sorts by the clock where it reads as a clock time, after untimed\n   * events and ahead of any other text.\n   * @deprecated Use `start` (and `end`), which the calendar formats in the resolved locale.\n   */\n  time?: string;\n  /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */\n  color?: EventCalendarColor;\n}",
       "refs": [
         "EventCalendarColor"
       ]
@@ -349,6 +402,6 @@
     }
   ],
   "size": {
-    "gzip": 3882
+    "gzip": 4884
   }
 }

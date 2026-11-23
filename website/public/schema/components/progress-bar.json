@@ -49,7 +49,8 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible label describing what is loading. Defaults to \"Progress\"; a passed native `aria-label` works too."
+          "description": "Legacy accessible-name prop for the bar, saying what is loading. A native `aria-label` wins when both are passed; with neither, the bar is named \"Progress\".",
+          "deprecated": "Pass the native `aria-label` attribute instead."
         },
         {
           "name": "locale",

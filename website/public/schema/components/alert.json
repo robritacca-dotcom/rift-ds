@@ -25,10 +25,10 @@
         },
         {
           "name": "description",
-          "type": "string",
-          "typeKind": "primitive",
+          "type": "ReactNode",
+          "typeKind": "reference",
           "required": false,
-          "description": "Alert description / body text"
+          "description": "The body under the title. Plain text is the usual case; it also takes a short run of markup, such as a sentence with a Link in it or a list of two or three items."
         },
         {
           "name": "variant",
@@ -131,6 +131,6 @@
     }
   ],
   "size": {
-    "gzip": 561
+    "gzip": 590
   }
 }

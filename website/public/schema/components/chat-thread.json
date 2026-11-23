@@ -41,8 +41,9 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name for the scrollable conversation region.",
-          "default": "Conversation"
+          "description": "Legacy accessible-name prop for the scrollable conversation region. Defaults to \"Conversation\"; a native `aria-label` wins when both are passed.",
+          "default": "Conversation",
+          "deprecated": "Pass the native `aria-label` attribute instead."
         },
         {
           "name": "jumpLabel",
@@ -78,6 +79,6 @@
     "note": "A focusable scroll region: the browser scrolls it with the arrow, Page, Home and End keys."
   },
   "size": {
-    "gzip": 1500
+    "gzip": 1506
   }
 }

@@ -112,8 +112,9 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name for the list.",
-          "default": "Suggested prompts"
+          "description": "Legacy accessible-name prop for the list. Defaults to \"Suggested prompts\"; a native `aria-label` wins when both are passed.",
+          "default": "Suggested prompts",
+          "deprecated": "Pass the native `aria-label` attribute instead."
         },
         {
           "name": "className",
@@ -159,6 +160,6 @@
     }
   ],
   "size": {
-    "gzip": 1691
+    "gzip": 1695
   }
 }

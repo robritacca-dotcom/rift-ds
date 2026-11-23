@@ -50,7 +50,11 @@ interface ToggleGroupItem {
   value: string;
   /** Display label or icon name (Material Symbols) */
   label: string;
-  /** Use Material Symbol icon instead of text */
+  /**
+   * Draw `label` as a Material Symbol icon instead of text. An item is an
+   * icon or a label, never both: for icon-plus-label options, use
+   * SegmentedControl, whose segments take an `icon` beside their `label`.
+   */
   icon?: boolean;
 }
 ```

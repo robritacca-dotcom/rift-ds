@@ -26,7 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | open | `boolean` | no |  | Whether the popover is open (controlled mode) |
 | defaultOpen | `boolean` | no | `false` | Whether the popover starts open when uncontrolled |
 | onOpenChange | `((open: boolean) => void)` | no |  | Callback when open state changes |
-| ariaLabel | `string` | no |  | Accessible label for the trigger and the panel; the panel is named "Popover" when it is omitted |
+| ariaLabel | `string` | no |  | Legacy accessible-name prop for the trigger and the panel. A native `aria-label` wins when both are passed, and names those two rather than the wrapper; with neither, the panel is named "Popover". Deprecated: Pass the native `aria-label` attribute instead. |
 | className | `string` | no | `''` | Additional CSS classes for the popover's root wrapper, which holds the trigger and the panel |
 
 ## Keyboard

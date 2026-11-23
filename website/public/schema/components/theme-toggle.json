@@ -73,7 +73,7 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name.",
+          "description": "Show each segment's label beside its icon. Set `false` for an icon-only strip: each label becomes the segment's tooltip on hover and keyboard focus, and stays its accessible name. The labelled strip is wider than an expanded AppSidebar, so its `footerSlot` takes the icon-only strip.",
           "default": true
         },
         {
@@ -182,6 +182,6 @@
     }
   ],
   "size": {
-    "gzip": 7185
+    "gzip": 7232
   }
 }

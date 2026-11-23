@@ -24,6 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | value | `string` | no |  | Current value |
 | type | `"number" \| "search" \| "text" \| "tel" \| "url" \| "email" \| "password"` | no | `'text'` | Input type — curated subset; use a dedicated component for checkbox/radio/file |
 | size | `"default" \| "compact"` | no | `'default'` | Component size (not the native character-width `size` attribute) |
+| variant | `"default" \| "quiet"` | no | `'default'` | The field's form. `quiet` draws no border or fill at rest, only the leading icon and the placeholder, and reveals the full field while it is hovered, focused or holds a value, or while the nearest ancestor marked `data-quiet-host` (a list row) is hovered. For a list where every row can take an optional entry. An error always shows the full field. |
 | error | `boolean` | no | `false` | Error state — shows error styling and message |
 | helperText | `string` | no |  | Helper text displayed below the input. With the older `error` flag and no `errorText`, it doubles as the error message. |
 | errorText | `ReactNode` | no |  | The error message, shown under the input while the helper text keeps its place. Setting it marks the input invalid; Field's spec owns the wiring. |

@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 | closeLabel | `string \| ((title: string) => string)` | no | `'Close thread'` | Accessible name for a tab's close button. A string is followed by a colon and the tab's label ("Close thread: Q3 plan"); a function is given the label and returns the whole name, so a translation can put the label where its grammar needs it. |
 | onAdd | `(() => void)` | no |  | Fires when the trailing new-tab button is pressed. The button renders only when this is given. |
 | addLabel | `string` | no | `'New thread'` | Accessible name for the new-tab button. |
-| ariaLabel | `string` | no | `'Open threads'` | Accessible name for the tab strip. |
+| ariaLabel | `string` | no | `'Open threads'` | Legacy accessible-name prop for the tab strip. Defaults to "Open threads"; a native `aria-label` wins when both are passed, and names the strip rather than the wrapper. Deprecated: Pass the native `aria-label` attribute instead. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

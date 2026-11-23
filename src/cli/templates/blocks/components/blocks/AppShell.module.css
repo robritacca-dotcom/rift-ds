@@ -11,6 +11,9 @@
   --ds-sidebar-float-inset: var(--shell-inset);
   /* The rail's width, which the main column clears. */
   --shell-rail: 64px;
+  /* The content's side gutter, which the top bar's fill and blur reach
+     across too, so nothing scrolls past them at the surface's corners. */
+  --shell-gutter: var(--padding-1000);
 
   display: flex;
   min-width: 0;
@@ -79,7 +82,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);
-  padding: var(--shell-inset) var(--padding-1000) var(--padding-1500);
+  padding: var(--shell-inset) var(--shell-gutter) var(--padding-1500);
 }
 
 /* ---------------------------------------------------------- top bar */
@@ -106,7 +109,7 @@
   position: absolute;
   top: calc(-1 * var(--shell-inset));
   bottom: 0;
-  inset-inline: calc(-1 * var(--padding-400));
+  inset-inline: calc(-1 * var(--shell-gutter));
   z-index: -1;
   background: linear-gradient(to bottom, var(--ds-shell-surface) var(--shell-inset), transparent);
   pointer-events: none;
@@ -122,7 +125,7 @@
   position: absolute;
   top: calc(-1 * var(--shell-inset));
   bottom: calc(-1 * var(--gap-1000));
-  inset-inline: calc(-1 * var(--padding-400));
+  inset-inline: calc(-1 * var(--shell-gutter));
   height: auto;
   z-index: -1;
   opacity: 0;
@@ -184,8 +187,8 @@
 
 /* Laptop: a tighter side gutter. */
 @media (max-width: 1279px) {
-  .content {
-    padding-inline: var(--padding-500);
+  .shell {
+    --shell-gutter: var(--padding-500);
   }
 }
 
@@ -194,6 +197,7 @@
 @media (max-width: 768px) {
   .shell {
     --shell-inset: var(--padding-400);
+    --shell-gutter: var(--shell-inset);
   }
 
   .shell .main,
@@ -215,7 +219,7 @@
   }
 
   .content {
-    padding: var(--shell-inset) var(--shell-inset) var(--padding-1000);
+    padding: var(--shell-inset) var(--shell-gutter) var(--padding-1000);
   }
 
   /* Clear the menu button (40px) at the bar's left end. */

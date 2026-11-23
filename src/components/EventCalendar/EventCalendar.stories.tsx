@@ -120,12 +120,36 @@ export const WeekView: Story = {
     today: '2026-08-20',
   },
   play: async ({ canvas, userEvent }) => {
-    await expect(canvas.getByRole('group', { name: 'August 16 – 22, 2026' })).toBeInTheDocument();
+    const week = canvas.getByRole('group', { name: 'August 16 – 22, 2026' });
+    // Plain spaces only: ICU's thin spaces differ between Node and browsers and would break hydration.
+    await expect(week.getAttribute('aria-label')).not.toMatch(/[\u00A0\u2009\u202F]/);
     // Every event on the busiest day shows, with no overflow row.
     await expect(canvas.queryByText(/more$/)).toBeNull();
     await userEvent.click(canvas.getByRole('button', { name: 'Next week' }));
     await expect(canvas.getByRole('group', { name: 'August 23 – 29, 2026' })).toBeInTheDocument();
     await userEvent.click(canvas.getByRole('button', { name: 'Previous week' }));
+  },
+};
+
+/** Times sort by the clock, whatever form they are written in: "8:50" before "12:50", "11:00 AM" before "1:40 PM". */
+export const ClockOrder: Story = {
+  args: {
+    view: 'day',
+    selectedDate: '2026-08-20',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+    events: [
+      { id: 'c1', date: '2026-08-20', title: 'Lunch duty', time: '12:50', color: 'amber' },
+      { id: 'c2', date: '2026-08-20', title: 'Maths', time: '8:50', color: 'cobalt' },
+      { id: 'c3', date: '2026-08-20', title: 'Science', time: '1:40 PM', color: 'mint' },
+      { id: 'c4', date: '2026-08-20', title: 'Assembly', time: '11:00 AM', color: 'violet' },
+    ],
+  },
+  play: async ({ canvas }) => {
+    const titles = ['Maths', 'Assembly', 'Lunch duty', 'Science'].map((title) => canvas.getByText(title));
+    for (let i = 1; i < titles.length; i++) {
+      await expect(titles[i - 1].compareDocumentPosition(titles[i]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    }
   },
 };
 

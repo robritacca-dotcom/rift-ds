@@ -11,8 +11,10 @@ import {
   weekStartOf,
   weekdayHeadersIn,
   weekdayOffset,
+  plainSpaces,
   type Weekday,
 } from '../../behaviors/locale';
+import { compareTimes } from './eventTime';
 
 export type EventCalendarColor =
   | 'neutral'
@@ -32,7 +34,7 @@ export interface EventCalendarEvent {
   endDate?: string;
   /** Short label shown in the event pill. */
   title: string;
-  /** Start time as already-formatted text like "09:30". Untimed events sort first. */
+  /** Start time as already-formatted text like "09:30" or "1:40 PM". Untimed events sort first, then clock times in clock order, then any other text. */
   time?: string;
   /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
   color?: EventCalendarColor;
@@ -316,7 +318,8 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       setExpandedDays((current) => (current.includes(day) ? current.filter((d) => d !== day) : [...current, day]));
     const weekRangeLabel = useMemo(() => {
       const format = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
-      return (start: Date) => format.formatRange(start, new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6));
+      return (start: Date) =>
+        plainSpaces(format.formatRange(start, new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6)));
     }, [locale]);
 
     /* The colours the legend has switched off. Applied here, so every view
@@ -329,7 +332,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       onHiddenColorsChange?.(next);
     };
 
-    // Group events by date, untimed first then by time text
+    // Group events by date, untimed first then by the clock
     const eventsByDate = useMemo(() => {
       const map = new Map<string, EventCalendarEvent[]>();
       const add = (day: string, event: EventCalendarEvent) => {
@@ -359,7 +362,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
           if (!a.time && !b.time) return 0;
           if (!a.time) return -1;
           if (!b.time) return 1;
-          return a.time.localeCompare(b.time, locale);
+          return compareTimes(a.time, b.time, locale);
         });
       }
       return map;
@@ -369,7 +372,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       return (event: EventCalendarEvent) => {
         const start = parseDay(event.date);
         const end = parseDay(event.endDate);
-        return start && end && end > start ? format.formatRange(start, end) : null;
+        return start && end && end > start ? plainSpaces(format.formatRange(start, end)) : null;
       };
     }, [locale]);
 

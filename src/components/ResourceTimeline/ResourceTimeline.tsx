@@ -1,5 +1,5 @@
 import React from "react";
-import { DEFAULT_LOCALE } from "../../behaviors/locale";
+import { DEFAULT_LOCALE, plainSpaces } from "../../behaviors/locale";
 import { ScrollRegion } from "../../behaviors/ScrollRegion";
 import "../../behaviors/visually-hidden.css";
 import "../../behaviors/direction.css";
@@ -105,7 +105,7 @@ export function ResourceTimeline({
   const asDate = (minutes: number) =>
     new Date(2000, 0, 1, Math.floor(minutes / 60), minutes % 60);
   const range = (start: number, end: number) =>
-    timeFormat.formatRange(asDate(start), asDate(end));
+    plainSpaces(timeFormat.formatRange(asDate(start), asDate(end)));
 
   const hours: number[] = [];
   for (let h = from / 60; h <= to / 60; h++) hours.push(h);

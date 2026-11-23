@@ -225,6 +225,10 @@ for (const [key, target] of Object.entries(expected)) {
 const INTERNAL_MODULES = new Map([
   ['src/components/DatePicker/calendar.ts',
     'the date helpers and grid keys DatePicker and DateRangePicker share; the pickers are the public surface'],
+  ['src/components/EventCalendar/eventTime.ts',
+    'reads an event\'s preformatted `time` text as a clock time so the calendar can sort it; the calendar is the public surface'],
+  ['src/components/ContributionGraph/weeks.ts',
+    'places each day on its own weekday\'s row and week\'s column; the graph is the public surface'],
   ['src/components/Chart/palette.ts',
     'series-colour reader shared by the chart set; the --color-chart-series tokens it reads are the public surface'],
   ['src/components/Attachment/typeMark.ts',

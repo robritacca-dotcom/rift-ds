@@ -99,6 +99,16 @@ export function isEnglish(locale: string): boolean {
 }
 
 /** Whether `locale` writes times on a 12-hour clock (en-US) rather than a 24-hour one (en-GB, de-DE). */
+/**
+ * Formatted date or time text with its spaces made plain. ICU writes thin
+ * and narrow no-break spaces around a range's dash and before a day period
+ * ("November 16 – 22", "1:40 PM"), and Node and browsers ship different ICU
+ * versions, so one call can print different spaces on the server and in the
+ * browser and break hydration. Every range a component prints goes through
+ * this.
+ */
+export const plainSpaces = (text: string): string => text.replace(/[\u00A0\u2009\u202F]/g, ' ');
+
 export function uses12HourClock(locale: string): boolean {
   const cycle = new Intl.DateTimeFormat(locale, { hour: 'numeric' }).resolvedOptions().hourCycle;
   return cycle === 'h11' || cycle === 'h12';

@@ -28,6 +28,12 @@ type ContributionGraphOwnProps = {
   bare?: boolean;
   /** Summary line shown under the grid, e.g. "496 contributions in the last year" */
   caption?: string;
+  /**
+   * Whether the week columns stretch to fill the graph's width. Defaults to
+   * `true`. Set `false` to keep every column at the base cell size, so a short
+   * run of weeks draws small squares at the start of its box instead of large ones.
+   */
+  fill?: boolean;
   /** Show month labels above the grid */
   showMonthLabels?: boolean;
   /** Show the Less → More legend under the grid */
@@ -133,6 +139,7 @@ export const ContributionGraph = React.forwardRef<HTMLDivElement, ContributionGr
   subtitle,
   bare = false,
   caption,
+  fill = true,
   showMonthLabels = true,
   showLegend = true,
   gridLabel,
@@ -159,9 +166,13 @@ export const ContributionGraph = React.forwardRef<HTMLDivElement, ContributionGr
     .filter(Boolean)
     .join(' ');
 
-  // Columns stretch to fill the container but never shrink below the base
-  // cell size — past that, the scroll wrapper takes over
-  const columnTemplate = `repeat(${weeks.length}, minmax(var(--ds-contribution-cell), 1fr))`;
+  // Filling, columns stretch to the container but never shrink below the base
+  // cell size (past that, the scroll wrapper takes over). Not filling, every
+  // column holds the base cell size and the grid sits at the start of its box.
+  // The month labels share the template, so they stay over their weeks.
+  const columnTemplate = fill
+    ? `repeat(${weeks.length}, minmax(var(--ds-contribution-cell), 1fr))`
+    : `repeat(${weeks.length}, var(--ds-contribution-cell))`;
 
   return (
     <div {...rest} ref={ref} className={classes}>

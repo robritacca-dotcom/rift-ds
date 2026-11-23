@@ -471,7 +471,7 @@ function ToolbarPanel({
       <Popover
         size={size}
         surface="menu"
-        ariaLabel={ariaLabel}
+        aria-label={ariaLabel}
         position={position}
         onOpenChange={onOpenChange}
         content={content}
@@ -2018,7 +2018,7 @@ export const TableToolbar = React.forwardRef<HTMLDivElement, TableToolbarProps>(
                   <Popover
                     surface="menu"
                     size={size}
-                    ariaLabel={labels.filters(activeFilters)}
+                    aria-label={labels.filters(activeFilters)}
                     onOpenChange={dropIncomplete}
                     content={panelContent}
                   >

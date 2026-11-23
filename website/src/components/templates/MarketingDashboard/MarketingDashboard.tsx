@@ -636,7 +636,7 @@ export default function MarketingDashboard() {
                     <ProgressBar
                       value={channel.pct}
                       size="compact"
-                      ariaLabel={`${channel.name} share of spend`}
+                      aria-label={`${channel.name} share of spend`}
                     />
                   </div>
                 ))}

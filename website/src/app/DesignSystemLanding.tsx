@@ -831,7 +831,7 @@ export default function DesignSystemLanding() {
           <IconButton icon="edit_square" variant="tertiary" label="New chat" />
         }
       />
-      <ChatThread ariaLabel="Example conversation" className={styles.chatDemoThread}>
+      <ChatThread aria-label="Example conversation" className={styles.chatDemoThread}>
         <ChatMarker>Today</ChatMarker>
         <ChatMessage role="user">
           How much did I spend on dining in July?
@@ -1061,7 +1061,7 @@ export default function DesignSystemLanding() {
         suggestions={PROMPT_IDEAS}
         layout="wrap"
         size="compact"
-        ariaLabel="Suggested questions"
+        aria-label="Suggested questions"
         onValueChange={(id) =>
           setDraft(PROMPT_IDEAS.find((p) => p.id === id)?.label ?? "")
         }
@@ -1117,7 +1117,7 @@ export default function DesignSystemLanding() {
             <span className={styles.rowTitle}>{goal.label}</span>
             <span className={styles.rowHint}>{goal.target}</span>
           </div>
-          <ProgressBar value={goal.value} showLabel ariaLabel={`${goal.label} progress`} />
+          <ProgressBar value={goal.value} showLabel aria-label={`${goal.label} progress`} />
         </div>
       ))}
     </DemoCard>

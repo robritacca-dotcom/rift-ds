@@ -149,10 +149,10 @@ export function DemoWelcome({
   onAsk: (prompt: string) => void;
 }) {
   if (variant === 'links') {
-    return <PromptSuggestions layout="tiles" ariaLabel="Places to start" suggestions={LINKS} onValueChange={onAsk} />;
+    return <PromptSuggestions layout="tiles" aria-label="Places to start" suggestions={LINKS} onValueChange={onAsk} />;
   }
   if (variant === 'cards') {
-    return <PromptSuggestions layout="cards" ariaLabel="Things to ask" suggestions={CARDS} onValueChange={onAsk} />;
+    return <PromptSuggestions layout="cards" aria-label="Things to ask" suggestions={CARDS} onValueChange={onAsk} />;
   }
   if (variant === 'dashboard') return <DemoBoard onAsk={onAsk} />;
   return null;

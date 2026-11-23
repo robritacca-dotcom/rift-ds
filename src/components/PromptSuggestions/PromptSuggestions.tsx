@@ -78,7 +78,11 @@ type PromptSuggestionsOwnProps = {
   value?: string;
   /** Visually hidden text read after the taken suggestion once `value` is set. Defaults to "(chosen)". */
   chosenLabel?: string;
-  /** Accessible name for the list. */
+  /**
+   * Legacy accessible-name prop for the list. Defaults to "Suggested prompts"; a native `aria-label` wins when both are passed.
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** Additional CSS classes */
   className?: string;
@@ -186,7 +190,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
         ref={ref}
         className={classes}
         role="list"
-        aria-label={ariaLabel}
+        aria-label={rest['aria-label'] ?? ariaLabel}
         /* aria-busy is load-bearing while pending: the placeholders are
            aria-hidden, and a busy list is exempt from the required-children
            rule that an otherwise empty role="list" would fail. */

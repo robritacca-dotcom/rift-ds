@@ -56,7 +56,7 @@ export function FollowupSuggestions({
     <PromptSuggestions
       className="ds-chat-widget__followups"
       layout="stack"
-      ariaLabel={rowLabel}
+      aria-label={rowLabel}
       chosenLabel={chosenLabel}
       pending={pending}
       entrance={entrance}

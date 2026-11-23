@@ -15,7 +15,7 @@ const meta = {
   argTypes: {
     anchor: { control: 'boolean' },
     flow: { control: 'inline-radio', options: ['top-down', 'bottom-up'] },
-    ariaLabel: { control: 'text' },
+    'aria-label': { control: 'text' },
   },
 } satisfies Meta<typeof ChatThread>;
 

@@ -19,7 +19,7 @@ const meta = {
       control: 'inline-radio',
       options: ['default', 'compact'],
     },
-    ariaLabel: {
+    'aria-label': {
       control: 'text',
     },
   },

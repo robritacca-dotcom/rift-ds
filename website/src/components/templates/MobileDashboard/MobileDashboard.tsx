@@ -588,7 +588,7 @@ export default function MobileDashboard() {
                               <ProgressBar
                                 value={channel.pct}
                                 size="compact"
-                                ariaLabel={`${channel.name} share of traffic`}
+                                aria-label={`${channel.name} share of traffic`}
                               />
                             </div>
                           ))}

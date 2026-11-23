@@ -374,7 +374,7 @@ export function ThemeSpecimen({ id, label }: ThemeSpecimenProps) {
               <Tile name="range" wide>
                 <div className={styles.stack}>
                   <Slider defaultValue={64} aria-label="Volume" />
-                  <ProgressBar value={42} ariaLabel="Progress" />
+                  <ProgressBar value={42} aria-label="Progress" />
                 </div>
               </Tile>
             </div>

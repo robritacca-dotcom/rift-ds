@@ -127,7 +127,7 @@ export const DocumentChip = React.forwardRef<HTMLDivElement, DocumentChipProps>(
               size="compact"
               value={progress}
               showLabel
-              ariaLabel={progressLabel(name)}
+              aria-label={progressLabel(name)}
             />
           )}
 

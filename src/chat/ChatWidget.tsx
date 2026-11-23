@@ -373,8 +373,8 @@ export interface ChatWidgetProps {
     | 'attachmentTileLabels'
     | 'attachmentViewerLabels'
   >;
-  /** The conversation's names, over ChatThread's English defaults: the scrolling region ("Conversation") and the scroll-to-latest control ("Scroll to the latest message"). */
-  chatThreadLabels?: Pick<ChatThreadProps, 'ariaLabel' | 'jumpLabel'>;
+  /** The conversation's names, over ChatThread's English defaults: the scrolling region ("Conversation", as `aria-label`; the deprecated `ariaLabel` still works) and the scroll-to-latest control ("Scroll to the latest message"). */
+  chatThreadLabels?: Pick<ChatThreadProps, 'aria-label' | 'ariaLabel' | 'jumpLabel'>;
   /** The model picker's words, over ModelPicker's English defaults: the open list's name ("Model") and the trigger's text when nothing is selected ("Choose a model"). The trigger's own name is `modelPickerLabel`. */
   modelPickerLabels?: Pick<ModelPickerProps, 'listLabel' | 'placeholder'>;
   /** The artifact panel's words, over ArtifactPanel's English defaults: the view switch ("Preview", "Code", "Artifact view"), the expand and close buttons ("Expand the artifact", "Collapse the artifact", "Close the artifact") and the code view's CodeBlock (`codeBlockLabels`). */
@@ -955,7 +955,7 @@ export function ChatWidget({
     <div className="ds-chat-widget__starters">
       <PromptSuggestions
         layout="stack"
-        ariaLabel={startersLabel}
+        aria-label={startersLabel}
         pending={startersThinking}
         entrance={startersEntrance}
         suggestions={starters}

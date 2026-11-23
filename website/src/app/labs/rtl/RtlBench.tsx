@@ -158,7 +158,7 @@ export function RtlBench() {
 
           <Station title="الحالة">
             <Alert variant="info" title="تحديث" description="تم حفظ التغييرات قبل دقيقة." dismissible />
-            <ProgressBar value={64} showLabel ariaLabel="التقدم" />
+            <ProgressBar value={64} showLabel aria-label="التقدم" />
             <div className={styles.row}>
               <Avatar name="سارة أحمد" status="online" statusLabel="متصلة" />
               <AnimatedNumber value={1234567.5} decimals={1} animateOnMount={false} />

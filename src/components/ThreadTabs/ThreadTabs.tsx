@@ -47,7 +47,11 @@ type ThreadTabsOwnProps = {
   onAdd?: () => void;
   /** Accessible name for the new-tab button. */
   addLabel?: string;
-  /** Accessible name for the tab strip. */
+  /**
+   * Legacy accessible-name prop for the tab strip. Defaults to "Open threads"; a native `aria-label` wins when both are passed, and names the strip rather than the wrapper.
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** Additional CSS classes */
   className?: string;
@@ -111,6 +115,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
       onAdd,
       addLabel = 'New thread',
       ariaLabel = 'Open threads',
+      'aria-label': nativeAriaLabel,
       className = '',
       ...rest
     },
@@ -220,7 +225,7 @@ export const ThreadTabs = React.forwardRef<HTMLDivElement, ThreadTabsProps>(
 
     return (
       <div {...rest} ref={ref} className={classes}>
-        <ul className={`${baseClass}__list`} aria-label={ariaLabel} ref={listRef}>
+        <ul className={`${baseClass}__list`} aria-label={nativeAriaLabel ?? ariaLabel} ref={listRef}>
           {entries.map(({ tab, leaving: isLeaving }) => {
             const active = !isLeaving && tab.id === activeId;
             const status = tab.status ?? (tab.unread ? 'unread' : 'idle');

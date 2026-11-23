@@ -446,7 +446,7 @@ export function EntitySwitcher({
       onOpenChange={setOpen}
       // Popover names the trigger and the panel with this, so the trigger
       // announces the selection as well as what it does.
-      ariaLabel={`${switcherLabel}: ${selected.item.name}`}
+      aria-label={`${switcherLabel}: ${selected.item.name}`}
     >
       {/* One trigger in both forms: collapsed, the mark holds its seat and
           the rest fades, so nothing jumps. */}

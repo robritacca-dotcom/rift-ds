@@ -101,7 +101,7 @@ export default function DashboardPage() {
                   <span>{row.name}</span>
                   <span className={styles.muted}>{row.done}%</span>
                 </div>
-                <ProgressBar value={row.done} size="compact" ariaLabel={`${row.name} progress`} />
+                <ProgressBar value={row.done} size="compact" aria-label={`${row.name} progress`} />
               </li>
             ))}
           </ul>

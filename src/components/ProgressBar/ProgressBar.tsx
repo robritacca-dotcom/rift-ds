@@ -56,7 +56,7 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         aria-valuenow={clamped}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={restAriaLabel || ariaLabel || 'Progress'}
+        aria-label={restAriaLabel ?? ariaLabel ?? 'Progress'}
       >
         <div className={`${baseClass}__track`}>
           <div className={`${baseClass}__fill`} style={{ width: `${clamped}%` }} />

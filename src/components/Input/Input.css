@@ -327,3 +327,33 @@
 .ds-input--affixed.ds-input--compact.ds-input--has-icon-right .ds-input__field-wrapper {
   padding-inline-end: var(--padding-200);
 }
+
+/* ============================================
+   QUIET
+   At rest the field draws no border and no fill,
+   only its leading icon and placeholder. The
+   border stays, transparent, so revealing it
+   moves nothing. The rest rule names every
+   condition that reveals the field, so a
+   revealed field is simply the default one,
+   with its own hover, focus and error states:
+   the field hovered or focused, a value in it,
+   an error, disabled, or the nearest
+   [data-quiet-host] ancestor (a list row)
+   hovered.
+   ============================================ */
+
+.ds-input--quiet:not(.ds-input--filled, .ds-input--error, .ds-input--disabled):not(:where([data-quiet-host]:hover) *):not(.ds-input--affixed) .ds-input__field:not(:hover, :focus),
+.ds-input--quiet.ds-input--affixed:not(.ds-input--filled, .ds-input--error, .ds-input--disabled):not(:where([data-quiet-host]:hover) *) .ds-input__field-wrapper:not(:hover, :focus-within) {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+/* Forced colors flatten every fill, so the border is all that marks the
+   field out: keep it at rest. */
+@media (forced-colors: active) {
+  .ds-input--quiet:not(.ds-input--filled, .ds-input--error, .ds-input--disabled):not(:where([data-quiet-host]:hover) *):not(.ds-input--affixed) .ds-input__field:not(:hover, :focus),
+  .ds-input--quiet.ds-input--affixed:not(.ds-input--filled, .ds-input--error, .ds-input--disabled):not(:where([data-quiet-host]:hover) *) .ds-input__field-wrapper:not(:hover, :focus-within) {
+    border-color: var(--color-input-border-primary);
+  }
+}

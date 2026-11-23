@@ -50,6 +50,9 @@
  *   node scripts/check-responsive-layout.mjs [options]
  *     --origin <url>        sweep a running site instead of booting the build
  *     --routes <a,b,...>    sweep only these routes (prefix match: /templates)
+ *     --paths <a,b,...>     with --origin, sweep exactly these paths instead
+ *                           of the site's routes: another app, such as a
+ *                           consumer app built with the package
  *     --widths <a,b,...>    override the width ladder
  *     --quick               a five-step ladder instead of every breakpoint
  *     --concurrency <n>     pages swept in parallel (default 4)
@@ -493,7 +496,9 @@ async function shoot(browser, origin, groups, dir) {
 async function main() {
   const widths = ladder();
   const only = list(option('routes'));
-  const routes = staticSiteRoutes().filter((r) => !only || only.some((p) => r === p || r.startsWith(`${p}/`)));
+  const paths = list(option('paths'));
+  if (paths && !option('origin')) throw new Error('--paths sweeps another app, so it needs --origin');
+  const routes = paths ?? staticSiteRoutes().filter((r) => !only || only.some((p) => r === p || r.startsWith(`${p}/`)));
   const concurrency = Number(option('concurrency') ?? 4);
   const server = option('origin') ? { origin: option('origin').replace(/\/$/, ''), stop: () => {} } : await startServer();
   const browser = await chromium.launch();

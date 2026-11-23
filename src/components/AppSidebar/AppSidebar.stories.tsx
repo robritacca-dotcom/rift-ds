@@ -76,6 +76,8 @@ const meta = {
   },
   decorators: [
     (Story, ctx) => {
+      // A story that draws its own frame (the contained rail) skips the page.
+      if (ctx.parameters.ownFrame) return <Story />;
       const expanded = (ctx.args as { defaultExpanded?: boolean }).defaultExpanded ?? false;
       return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#0E0E0E' }}>
@@ -486,5 +488,65 @@ export const PanelBehaviour: Story = {
     // Rest in the open state the snapshot expects.
     await userEvent.click(source);
     await expect(source).toHaveAttribute('aria-expanded', 'true');
+  },
+};
+
+/** `position="contained"` lays the rail out in its parent instead of fixing
+    it to the viewport: here a bordered 720 x 480 frame, a flex row with the
+    rail as its first item. The rail runs the frame's height, the side panel
+    opens beside it inside the frame, and the content gives way to both. */
+export const Contained: Story = {
+  args: {
+    position: 'contained',
+    layout: 'inset',
+    defaultExpanded: true,
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'planning',
+    activeTertiaryKey: 'budgets',
+  },
+  parameters: { ownFrame: true, layout: 'centered' },
+  render: (args) => (
+    <div
+      data-testid="frame"
+      style={{
+        display: 'flex',
+        width: 720,
+        height: 480,
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        border: 'var(--border-025) solid var(--color-bg-container-border)',
+        borderRadius: 'var(--radius-600)',
+        background: 'var(--color-bg-app-shell)',
+        color: 'var(--color-text-primary)',
+      }}
+    >
+      <AppSidebar {...args} />
+      <div style={{ flex: 1, minWidth: 0, padding: 'var(--padding-1000)', overflow: 'auto' }}>
+        <h1 style={{ margin: 0 }}>Page content</h1>
+        <p style={{ color: 'var(--color-text-secondary)' }}>Content beside the contained rail.</p>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const frame = canvasElement.querySelector<HTMLElement>('[data-testid="frame"]')!;
+    const rail = frame.querySelector<HTMLElement>('.ds-app-sidebar')!;
+    const panel = frame.querySelector<HTMLElement>('.ds-app-sidebar__panel')!;
+    const outer = frame.getBoundingClientRect();
+    const border = parseFloat(getComputedStyle(frame).borderTopWidth);
+    // The rail starts at the frame's inner corner and runs its height.
+    await waitFor(() => {
+      const box = rail.getBoundingClientRect();
+      expect(Math.round(box.top)).toBe(Math.round(outer.top + border));
+      expect(Math.round(box.left)).toBe(Math.round(outer.left + border));
+      expect(Math.round(box.height)).toBe(Math.round(outer.height - border * 2));
+    });
+    // The open panel sits beside the rail, inside the frame.
+    await waitFor(() => {
+      const railBox = rail.getBoundingClientRect();
+      const panelBox = panel.getBoundingClientRect();
+      expect(Math.round(panelBox.left)).toBe(Math.round(railBox.right));
+      expect(panelBox.bottom).toBeLessThanOrEqual(outer.bottom);
+    });
   },
 };

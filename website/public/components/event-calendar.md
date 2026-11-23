@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { EventCalendar } from 'rift-ds';`
 - Deep import: `import { EventCalendar } from 'rift-ds/components/EventCalendar/EventCalendar';`
 - Rendering: client component (declares 'use client')
-- Size: 3.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 3.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/event-calendar
 - Schema: https://rift-ds.com/schema/components/event-calendar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -87,7 +87,7 @@ interface EventCalendarEvent {
   endDate?: string;
   /** Short label shown in the event pill. */
   title: string;
-  /** Start time as already-formatted text like "09:30". Untimed events sort first. */
+  /** Start time as already-formatted text like "09:30" or "1:40 PM". Untimed events sort first, then clock times in clock order, then any other text. */
   time?: string;
   /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
   color?: EventCalendarColor;

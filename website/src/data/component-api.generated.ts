@@ -6166,7 +6166,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "days",
             "type": "ContributionDay[]",
             "required": true,
-            "description": "One entry per day, ordered oldest to newest",
+            "description": "One entry per day. Each is drawn on its own weekday's row, so a day left out is an empty cell.",
             "typeRefs": [
               "ContributionDay"
             ]

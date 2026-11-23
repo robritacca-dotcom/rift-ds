@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { Dialog } from 'rift-ds';`
 - Deep import: `import { Dialog } from 'rift-ds/components/Dialog/Dialog';`
 - Rendering: client component (declares 'use client')
-- Size: 5.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 5.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/dialog
 - Schema: https://rift-ds.com/schema/components/dialog.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

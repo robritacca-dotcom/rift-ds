@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 - Import: `import { ContributionGraph } from 'rift-ds';`
 - Deep import: `import { ContributionGraph } from 'rift-ds/components/ContributionGraph/ContributionGraph';`
 - Rendering: server-renderable (no 'use client')
-- Size: 1.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 1.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/contribution-graph
 - Schema: https://rift-ds.com/schema/components/contribution-graph.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -16,7 +16,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same dat
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| days | `ContributionDay[]` | yes |  | One entry per day, ordered oldest to newest |
+| days | `ContributionDay[]` | yes |  | One entry per day. Each is drawn on its own weekday's row, so a day left out is an empty cell. |
 | title | `string` | no |  | Chart title, in the shared chart header. Note: this replaces the native `title` tooltip attribute, which the graph does not expose. |
 | subtitle | `string` | no |  | Description text below the title. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |

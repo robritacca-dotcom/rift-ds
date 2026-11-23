@@ -557,7 +557,7 @@ export const AiButton = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, 
                 <PromptSuggestions
                   layout="stack"
                   size="compact"
-                  ariaLabel={suggestionsLabel}
+                  aria-label={suggestionsLabel}
                   suggestions={summary.suggestions}
                   onValueChange={onSummarySuggestion}
                 />

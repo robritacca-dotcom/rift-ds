@@ -1255,7 +1255,7 @@ const SPANISH_ARGS: Partial<ChatWidgetProps> = {
     label: 'Archivos adjuntos',
     attachmentViewerLabels: { closeLabel: 'Cerrar' },
   },
-  chatThreadLabels: { ariaLabel: 'Conversación', jumpLabel: 'Ir al último mensaje' },
+  chatThreadLabels: { 'aria-label': 'Conversación', jumpLabel: 'Ir al último mensaje' },
   modelPickerLabels: { listLabel: 'Modelo', placeholder: 'Elegir un modelo' },
   threadsProps: {
     defaultExpanded: true,

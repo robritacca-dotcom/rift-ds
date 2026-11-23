@@ -30,7 +30,11 @@ type ChatThreadOwnProps = {
    * returning to the bottom, or the next send, takes hold again.
    */
   flow?: 'top-down' | 'bottom-up';
-  /** Accessible name for the scrollable conversation region. */
+  /**
+   * Legacy accessible-name prop for the scrollable conversation region. Defaults to "Conversation"; a native `aria-label` wins when both are passed.
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** Accessible name for the scroll-to-bottom control. */
   jumpLabel?: string;
@@ -382,7 +386,7 @@ export const ChatThread = React.forwardRef<HTMLDivElement, ChatThreadProps>(
         ref={setRef}
         className={classes}
         role="region"
-        aria-label={ariaLabel}
+        aria-label={rest['aria-label'] ?? ariaLabel}
         tabIndex={0}
         onScroll={handleScroll}
       >

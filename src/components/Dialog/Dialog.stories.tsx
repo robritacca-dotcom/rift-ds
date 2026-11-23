@@ -312,7 +312,7 @@ export const PopoverInDialog: Story = {
           <Button label="Open dialog" variant="secondary" onClick={() => setOpen(true)} />
           <Dialog {...args} open={open} onOpenChange={setOpen} title="Share settings">
             <p style={{ margin: 0 }}>Body text outside the popover.</p>
-            <Popover ariaLabel="Link details" content={<span>Anyone with the link can view.</span>}>
+            <Popover aria-label="Link details" content={<span>Anyone with the link can view.</span>}>
               <Button label="Details" variant="tertiary" />
             </Popover>
           </Dialog>

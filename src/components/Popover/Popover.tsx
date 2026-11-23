@@ -36,7 +36,11 @@ type PopoverOwnProps = {
   defaultOpen?: boolean;
   /** Callback when open state changes */
   onOpenChange?: (open: boolean) => void;
-  /** Accessible label for the trigger and the panel; the panel is named "Popover" when it is omitted */
+  /**
+   * Legacy accessible-name prop for the trigger and the panel. A native `aria-label` wins when both are passed, and names those two rather than the wrapper; with neither, the panel is named "Popover".
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** Additional CSS classes for the popover's root wrapper, which holds the trigger and the panel */
   className?: string;
@@ -77,7 +81,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       open: controlledOpen,
       defaultOpen = false,
       onOpenChange,
-      ariaLabel,
+      ariaLabel: legacyAriaLabel,
+      'aria-label': nativeAriaLabel,
       className = '',
       onMouseEnter,
       onMouseLeave,
@@ -85,6 +90,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     },
     ref,
   ) => {
+    const ariaLabel = nativeAriaLabel ?? legacyAriaLabel;
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);

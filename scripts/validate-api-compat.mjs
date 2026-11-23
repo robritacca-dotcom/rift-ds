@@ -89,7 +89,22 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
  * `bin` for a binary, `schema` for a published schema file and
  * `schema` + `property` (a JSON pointer) for a meta-schema property.
  */
-const SANCTIONED_BREAKS = [];
+const SANCTIONED_BREAKS = [
+  {
+    since: '1.35.0',
+    component: 'Alert',
+    prop: 'description',
+    change: 'type',
+    reason: 'a widening: string became React.ReactNode, which every string still is, so a link or a short list fits',
+  },
+  {
+    since: '1.35.0',
+    component: 'ChatWidget',
+    prop: 'chatThreadLabels',
+    change: 'type',
+    reason: "a widening: the Pick gained ChatThread's native 'aria-label' beside the deprecated ariaLabel, which it keeps",
+  },
+];
 
 /* ── Baseline ──────────────────────────────────────────────────────────── */
 

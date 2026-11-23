@@ -33,7 +33,7 @@ export function ChatTabs({ ariaLabel = 'Open chats', closeLabel = 'Close chat', 
       addLabel={threads.newThreadLabel}
       closeLabel={closeLabel}
       statusLabels={statusLabels}
-      ariaLabel={ariaLabel}
+      aria-label={ariaLabel}
     />
   );
 }

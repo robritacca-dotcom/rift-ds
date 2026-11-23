@@ -62,7 +62,7 @@ const meta = {
   },
   args: {
     items: basicItems,
-    ariaLabel: 'File actions',
+    'aria-label': 'File actions',
     children: <div style={targetStyle}>Right-click here</div>,
   },
 } satisfies Meta<typeof ContextMenu>;
@@ -84,7 +84,7 @@ export const Compact: Story = {
    and the chosen one holds the wash and the check (DropdownMenu's recipe). */
 export const SelectedState: Story = {
   args: {
-    ariaLabel: 'Sort order',
+    'aria-label': 'Sort order',
     items: [
       {
         type: 'group',

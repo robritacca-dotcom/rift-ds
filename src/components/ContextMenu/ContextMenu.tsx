@@ -25,7 +25,11 @@ type ContextMenuOwnProps = {
   items: DropdownMenuEntry[];
   /** Component size */
   size?: 'default' | 'compact';
-  /** Accessible name for the menu */
+  /**
+   * Legacy accessible-name prop for the menu. A native `aria-label` wins when both are passed, and names the menu rather than the wrapper.
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** Replaces any legend an item's `keys` is written with, such as `{ ctrl: 'Strg' }` for a German keyboard. */
   keyLabels?: ShortcutKeyLabels;
@@ -261,6 +265,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
       items,
       size = 'default',
       ariaLabel,
+      'aria-label': nativeAriaLabel,
       keyLabels,
       className = '',
       children,
@@ -532,7 +537,7 @@ export const ContextMenu = React.forwardRef<HTMLDivElement, ContextMenuProps>(
             <ul
               className={panelClasses}
               role="menu"
-              aria-label={ariaLabel}
+              aria-label={nativeAriaLabel ?? ariaLabel}
               aria-activedescendant={
                 focusedIndex >= 0 ? `${generatedId}-item-${focusedIndex}` : undefined
               }

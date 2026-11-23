@@ -229,7 +229,7 @@ export default function PromptSuggestionsPage() {
             layout="stack"
             pending
             suggestions={[]}
-            ariaLabel="Suggestions loading"
+            aria-label="Suggestions loading"
           />
         </div>
       </section>

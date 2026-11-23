@@ -459,7 +459,7 @@ export default function TemplateAssistant({
             <div className={styles.chatStartersColumn}>
               <PromptSuggestions
                 layout="stack"
-                ariaLabel="Conversation starters"
+                aria-label="Conversation starters"
                 suggestions={suggestions}
                 onValueChange={(id) => {
                   const suggestion = suggestions.find((s) => s.id === id);

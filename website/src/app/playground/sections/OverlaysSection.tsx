@@ -95,7 +95,7 @@ export default function OverlaysSection() {
       <div className={styles.demoRow}>
         <Popover
           content="Popovers ride the floating-shadow token and the container surface."
-          ariaLabel="About popovers"
+          aria-label="About popovers"
         >
           <Button label="Popover" variant="tertiary" />
         </Popover>
@@ -117,7 +117,7 @@ export default function OverlaysSection() {
         </Tooltip>
       </div>
 
-      <ContextMenu items={FILE_ITEMS} ariaLabel="File actions">
+      <ContextMenu items={FILE_ITEMS} aria-label="File actions">
         <div className={styles.contextTarget}>Right-click here for the context menu</div>
       </ContextMenu>
 

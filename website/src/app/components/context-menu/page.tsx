@@ -75,7 +75,7 @@ export default function ContextMenuPage() {
         <SectionTitle title="Default" />
         <div className={styles.variantRow}>
           <div className={styles.variantItem}>
-            <ContextMenu items={fileItems} ariaLabel="File actions">
+            <ContextMenu items={fileItems} aria-label="File actions">
               <div className={styles.demoTarget}>Right-click here</div>
             </ContextMenu>
           </div>
@@ -87,7 +87,7 @@ export default function ContextMenuPage() {
         <SectionTitle title="Groups and sub-menus" />
         <div className={styles.variantRow}>
           <div className={styles.variantItem}>
-            <ContextMenu items={richItems} ariaLabel="Document actions">
+            <ContextMenu items={richItems} aria-label="Document actions">
               <div className={styles.demoTarget}>Right-click for grouped actions</div>
             </ContextMenu>
           </div>
@@ -99,7 +99,7 @@ export default function ContextMenuPage() {
         <SectionTitle title="Compact" />
         <div className={styles.variantRow}>
           <div className={styles.variantItem}>
-            <ContextMenu items={fileItems} size="compact" ariaLabel="File actions">
+            <ContextMenu items={fileItems} size="compact" aria-label="File actions">
               <div className={styles.demoTarget}>Right-click for the compact menu</div>
             </ContextMenu>
           </div>

@@ -2888,7 +2888,7 @@ export function DataTable<R extends DataTableRow = DataTableRow>({
                   size="compact"
                   open={headerFilter === shown.id}
                   onOpenChange={(open) => (open ? setHeaderFilter(shown.id) : closeHeaderFilter())}
-                  ariaLabel={filterLabels.filtered(text)}
+                  aria-label={filterLabels.filtered(text)}
                   // A menu among the header's menus: DropdownMenu's surface, the editor in a menu row.
                   surface="menu"
                   content={

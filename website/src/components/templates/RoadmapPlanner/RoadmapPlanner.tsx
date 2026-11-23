@@ -664,7 +664,7 @@ export default function RoadmapPlanner() {
                       </div>
                       <ProgressBar
                         value={selected.progress ?? 0}
-                        ariaLabel={`${selected.title} progress`}
+                        aria-label={`${selected.title} progress`}
                       />
                     </div>
                   )}

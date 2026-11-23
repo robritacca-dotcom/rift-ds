@@ -157,7 +157,7 @@ export function ThemesShowcase() {
             <Avatar name="Sam Okafor" />
           </AvatarGroup>
         </div>
-        <ProgressBar value={68} showLabel ariaLabel="Checklist progress" />
+        <ProgressBar value={68} showLabel aria-label="Checklist progress" />
         <div className={styles.badgeRow}>
           <Badge label="Shipped" variant="positive" />
           <Badge label="In review" variant="info" />

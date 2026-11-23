@@ -10,7 +10,11 @@ type ProgressBarOwnProps = {
   size?: 'default' | 'compact';
   /** Show percentage label */
   showLabel?: boolean;
-  /** Accessible label describing what is loading. Defaults to "Progress"; a passed native `aria-label` works too. */
+  /**
+   * Legacy accessible-name prop for the bar, saying what is loading. A native `aria-label` wins when both are passed; with neither, the bar is named "Progress".
+   *
+   * @deprecated Pass the native `aria-label` attribute instead.
+   */
   ariaLabel?: string;
   /** The BCP 47 locale the percentage label is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
   locale?: string;
@@ -39,8 +43,8 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
       .filter(Boolean)
       .join(' ');
 
-    // `ariaLabel` is the documented prop; a native `aria-label` is honoured
-    // when it is not set, and "Progress" is the last resort.
+    // A native `aria-label` wins over the deprecated `ariaLabel`, and
+    // "Progress" is the last resort.
     const { 'aria-label': restAriaLabel, ...restProps } = rest;
 
     return (
@@ -52,7 +56,7 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         aria-valuenow={clamped}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={ariaLabel || restAriaLabel || 'Progress'}
+        aria-label={restAriaLabel || ariaLabel || 'Progress'}
       >
         <div className={`${baseClass}__track`}>
           <div className={`${baseClass}__fill`} style={{ width: `${clamped}%` }} />

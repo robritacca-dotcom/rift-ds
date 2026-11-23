@@ -222,7 +222,7 @@ export function CollageView({
         <Alert variant="warning" title="Two tokens left at their base" size="compact" />
         <div className={`${styles.tile} ${styles.grow}`}>
           <span className={styles.tileTitle}>Onboarding</span>
-          <ProgressBar value={64} ariaLabel="Onboarding progress" />
+          <ProgressBar value={64} aria-label="Onboarding progress" />
           <div className={styles.row}>
             <Avatar name="Avery Chen" status="online" />
             <Avatar name="Priya Shah" />

@@ -93,7 +93,7 @@ export default function FeedbackSection() {
       </div>
 
       <div className={styles.sliderRow}>
-        <ProgressBar value={progress} showLabel ariaLabel="Demo progress" />
+        <ProgressBar value={progress} showLabel aria-label="Demo progress" />
         <Button
           label="Advance"
           variant="tertiary"

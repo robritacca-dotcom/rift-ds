@@ -643,7 +643,7 @@ export default function Analytics() {
                   <ProgressBar
                     value={page.pct}
                     size="compact"
-                    ariaLabel={`${page.path} share of views`}
+                    aria-label={`${page.path} share of views`}
                   />
                 </div>
               ))}

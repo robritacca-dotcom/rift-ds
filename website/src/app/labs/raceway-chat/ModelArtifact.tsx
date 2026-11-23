@@ -190,7 +190,7 @@ export default function ModelArtifact() {
                 : `Routing ${DISCIPLINE_LABEL[build.discipline].toLowerCase()} · ${levelName(build.level)}`
               : "Generating the building"}
           </span>
-          <ProgressBar className={styles.generatingBar} value={Math.round((build?.share ?? 0) * 100)} size="compact" ariaLabel="Generation" />
+          <ProgressBar className={styles.generatingBar} value={Math.round((build?.share ?? 0) * 100)} size="compact" aria-label="Generation" />
         </div>
       )}
 

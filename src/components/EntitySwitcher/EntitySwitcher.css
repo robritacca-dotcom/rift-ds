@@ -29,8 +29,9 @@
    TRIGGER
    A card that is a control: the container fill and hairline, the passive
    wash on hover. The edge is an inset shadow rather than a border so it
-   takes no room, and the mark starts one --padding-300 in: inside a rail
-   held at the nav rows' inset, that seats it on the collapsed rail's axis.
+   takes no room, and the mark starts one --padding-300 in. Collapsed, the
+   start padding centres the mark in the trigger instead (below), so it sits
+   on the rail's axis in any rail width.
    ============================================ */
 
 .ds-entity-switcher__trigger {
@@ -50,7 +51,8 @@
   cursor: pointer;
   transition:
     background-color var(--motion-duration-base) var(--motion-ease-standard),
-    box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+    box-shadow var(--motion-duration-base) var(--motion-ease-standard),
+    padding-inline-start var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
 .ds-entity-switcher__trigger:hover,
@@ -85,6 +87,12 @@
 :where([data-expanded='false']) .ds-entity-switcher:not(.ds-entity-switcher--expanded) .ds-entity-switcher__trigger {
   background-color: transparent;
   box-shadow: none;
+  /* The mark centres where a rail's row icon centres: the row's icon inset
+     (AppSidebar's panel mode sets the hook), less half of what the larger
+     mark adds. The padding moves with the rail's sweep. */
+  padding-inline-start: calc(
+    var(--ds-entity-switcher-rail-inset, var(--padding-200)) - (var(--icon-size-800) - var(--icon-size-600)) / 2
+  );
 }
 
 .ds-entity-switcher--collapsed .ds-entity-switcher__trigger .ds-entity-switcher__text,

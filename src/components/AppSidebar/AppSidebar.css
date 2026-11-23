@@ -835,6 +835,12 @@
   height: 40px;
 }
 
+/* A collapsed EntitySwitcher in the top slot centres its mark on the row
+   icons' axis, so it takes the panel rows' deeper icon inset. */
+.ds-app-sidebar--panel-mode .ds-app-sidebar__top-slot {
+  --ds-entity-switcher-rail-inset: var(--padding-400);
+}
+
 .ds-app-sidebar--panel-mode .ds-app-sidebar__btn-left {
   height: 24px;
 }

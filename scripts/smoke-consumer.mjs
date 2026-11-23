@@ -26,6 +26,15 @@
  * Neither chat scenario is a Next app, so the Next modules the templates
  * import are declared for tsc and aliased to small stubs for Vite.
  *
+ *   4. The Next consumer: a real Next app (the website's Next version, no
+ *      optional peer), `init app` and every `init block` written in by the
+ *      packed bin, the root layout the bin prints, then `next build`. The
+ *      Vite scenarios bundle only what their entry imports, so a block page
+ *      that imports a name the tarball's JavaScript lacks type-checks there
+ *      and still passes; a production Next build compiles every page, the
+ *      way a consumer's does. Skip it with --skip-next on a machine without
+ *      network access (next/font fetches the base face at build time).
+ *
  * Run by the release workflow before `npm publish`, and runnable locally
  * after `npm run build:lib`.
  */
@@ -159,6 +168,31 @@ function scaffoldChat(app, tarball) {
   run('npm install --no-fund --no-audit', app);
 }
 
+/* The Next consumer's root layout: the one `init app` prints. */
+const NEXT_LAYOUT = `import '${PACKAGE_NAME}/tokens/tokens.css';
+import '${PACKAGE_NAME}/tokens/base.css';
+import '../components/rift/font.css';
+import { riftFont } from '../components/rift/font';
+import { ColorModeScript } from '../components/rift/ColorModeScript';
+import { RiftRoot } from '../components/rift/RiftRoot';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={riftFont.variable} suppressHydrationWarning>
+      <head>
+        <ColorModeScript />
+      </head>
+      <body>
+        <RiftRoot>{children}</RiftRoot>
+      </body>
+    </html>
+  );
+}
+`;
+
+const websitePkg = JSON.parse(readFileSync(join(repoRoot, 'website', 'package.json'), 'utf8'));
+const skipNext = process.argv.includes('--skip-next');
+
 const work = mkdtempSync(join(tmpdir(), 'ds-smoke-'));
 console.log(`▸ Smoke test workspace: ${work}`);
 
@@ -232,6 +266,73 @@ createRoot(document.getElementById('root')!).render(
   console.log(
     `✓ Actions consumer: \`${BIN_NAME} init chat --actions\` scaffolds against the tarball; the propose-and-confirm route, the mount and the proposal cards type-check, and the chat builds.`
   );
+
+  /* ---- 4. The Next consumer: every block, through `next build` -------- */
+  if (skipNext) {
+    console.log('▸ Next consumer skipped (--skip-next).');
+  } else {
+    const next = join(work, 'next');
+    mkdirSync(join(next, 'app'), { recursive: true });
+    writeFileSync(
+      join(next, 'package.json'),
+      JSON.stringify(
+        {
+          name: 'ds-smoke-next',
+          private: true,
+          scripts: { build: 'next build' },
+          dependencies: {
+            [PACKAGE_NAME]: `file:../${tarball}`,
+            next: websitePkg.dependencies.next,
+            react: websitePkg.dependencies.react,
+            'react-dom': websitePkg.dependencies['react-dom'],
+          },
+          devDependencies: {
+            '@types/node': '^22.0.0',
+            '@types/react': '^19.0.0',
+            '@types/react-dom': '^19.0.0',
+            typescript: '^5.9.0',
+          },
+        },
+        null,
+        2
+      )
+    );
+    writeFileSync(
+      join(next, 'tsconfig.json'),
+      JSON.stringify(
+        {
+          compilerOptions: {
+            ...TSCONFIG.compilerOptions,
+            allowJs: true,
+            esModuleInterop: true,
+            isolatedModules: true,
+            resolveJsonModule: true,
+            jsx: 'preserve',
+            incremental: true,
+            plugins: [{ name: 'next' }],
+          },
+          include: ['next-env.d.ts', '**/*.ts', '**/*.tsx', '.next/types/**/*.ts'],
+          exclude: ['node_modules'],
+        },
+        null,
+        2
+      )
+    );
+    writeFileSync(join(next, 'app', 'layout.tsx'), NEXT_LAYOUT);
+    writeFileSync(join(next, 'app', 'page.tsx'), `export default function Home() { return <main>Smoke</main>; }\n`);
+    run('npm install --no-fund --no-audit', next);
+    run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init app`, next);
+    const { blocks } = JSON.parse(
+      readFileSync(join(next, 'node_modules', PACKAGE_NAME, 'bin', 'templates', 'blocks', 'registry.json'), 'utf8')
+    );
+    for (const block of blocks) {
+      run(`node node_modules/${PACKAGE_NAME}/bin/${BIN_NAME}.mjs init block ${block.name}`, next);
+    }
+    run('npx next build', next);
+    console.log(
+      `✓ Next consumer: \`${BIN_NAME} init app\` and every \`${BIN_NAME} init block\` (${blocks.length} blocks) scaffold into a Next app that builds for production against the tarball.`
+    );
+  }
 } finally {
   rmSync(work, { recursive: true, force: true });
 }

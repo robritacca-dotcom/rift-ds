@@ -79,6 +79,29 @@ export const Neutral: Story = {
   },
 };
 
+/** A set whose options are statuses: the selected pill wears the status it means, not the action colour. */
+export const Attendance: Story = {
+  args: {
+    'aria-label': 'Attendance',
+    segments: [
+      { label: 'Present', value: 'present', icon: 'check_circle', status: 'positive' },
+      { label: 'Late', value: 'late', icon: 'schedule', status: 'warning' },
+      { label: 'Absent', value: 'absent', icon: 'cancel', status: 'error' },
+    ],
+    defaultValue: 'present',
+  },
+  play: async ({ canvasElement, canvas, userEvent }) => {
+    const pill = canvasElement.querySelector('.ds-segmented-control__pill');
+    await expect(pill).toHaveClass('ds-segmented-control__pill--positive');
+    await userEvent.click(canvas.getByRole('tab', { name: 'Late' }));
+    await expect(pill).toHaveClass('ds-segmented-control__pill--warning');
+    await expect(pill).not.toHaveClass('ds-segmented-control__pill--positive');
+    await userEvent.click(canvas.getByRole('tab', { name: 'Absent' }));
+    await expect(pill).toHaveClass('ds-segmented-control__pill--error');
+    await expect(canvas.getByRole('tab', { name: 'Absent' })).toHaveAttribute('aria-selected', 'true');
+  },
+};
+
 export const TwoOptions: Story = {
   args: {
     segments: [

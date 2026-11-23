@@ -10,6 +10,9 @@ import { useTopLayer } from '../../behaviors/useTopLayer';
 import { IconButton } from '../IconButton/IconButton';
 import { warnOnce } from '../../behaviors/devWarning';
 
+/** The status roles a segment can mean (see `Segment.status`). */
+export type SegmentStatus = 'positive' | 'warning' | 'error' | 'info';
+
 export interface Segment {
   /** Unique value for this segment */
   value: string;
@@ -19,6 +22,13 @@ export interface Segment {
   icon?: string | React.ReactNode;
   /** Whether disabled */
   disabled?: boolean;
+  /**
+   * A status the choice itself means. When this segment is selected, the pill
+   * takes that status's colours (`--color-status-*`) in place of the action
+   * colour, for a set whose options are statuses (Present, Late, Absent).
+   * Idle segments, hover and the focus ring are unchanged.
+   */
+  status?: SegmentStatus;
   /** The id of the `role="tabpanel"` element this segment shows, written as its `aria-controls`. The consumer renders the panels. */
   panelId?: string;
 }
@@ -229,12 +239,16 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
         ? collapseState.mode
         : 'full';
 
+    // A selected segment that means a status colours the pill with it.
+    const activeStatus = segments.find((segment) => segment.value === activeSegment)?.status;
+
     const classes = [
       baseClass,
       sizeClass,
       variantClass,
       fullWidthClass,
       pillReady ? `${baseClass}--pill-ready` : '',
+      activeStatus ? `${baseClass}--status` : '',
       !showLabels ? `${baseClass}--icons` : '',
       className,
     ]
@@ -533,12 +547,17 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
           showTip(event.target);
         }}
       >
-        <span className={`${baseClass}__pill`} aria-hidden="true" ref={pillRef} />
+        <span
+          className={`${baseClass}__pill${activeStatus ? ` ${baseClass}__pill--${activeStatus}` : ''}`}
+          aria-hidden="true"
+          ref={pillRef}
+        />
         {segments.map((segment, idx) => {
           const isActive = segment.value === activeSegment;
           const btnClasses = [
             `${baseClass}__segment`,
             isActive ? `${baseClass}__segment--active` : '',
+            isActive && segment.status ? `${baseClass}__segment--${segment.status}` : '',
             segment.disabled ? `${baseClass}__segment--disabled` : '',
             // Icon and label both on screen: the icon's edge takes a step
             // less padding (design.md, SegmentedControl).

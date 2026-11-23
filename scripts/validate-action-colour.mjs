@@ -58,7 +58,7 @@ export const SANCTIONED = {
   Inspector: 'selected item (the selected segment of InspectorSegmentedControl)',
   Pagination: 'selected item (the current page)',
   RadioButton: 'checked state of a form control',
-  SegmentedControl: 'selected item (the active segment)',
+  SegmentedControl: 'selected item (the active segment; a segment with a `status` wears its status colour instead, the departure design.md records)',
   SiteHeader: 'selected item (the current section\'s pill)',
   Slider: 'on state of a form control (the filled track and thumb)',
   Stepper: 'selected item (the active step)',

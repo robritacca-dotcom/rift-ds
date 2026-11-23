@@ -22,6 +22,15 @@
   padding: var(--padding-400);
 }
 
+/* Bare — inside a Panel or Widget that already draws the surface, the
+   calendar drops its own, so the two never double their borders. */
+.ds-event-calendar--bare {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
 /* ============================================
    HEADER
    ============================================ */
@@ -451,6 +460,149 @@ button.ds-event-calendar__more:focus-visible {
 
 .ds-event-calendar--day .ds-event-calendar__grid {
   grid-template-columns: 1fr;
+}
+
+/* ============================================
+   DAY VIEW SCHEDULE — the day as a list
+   Each event leads with its start over its end
+   in a column of its own, so the titles line up;
+   a bar in the event's accent sits between. The
+   rows take the pill's fill and hover.
+   ============================================ */
+
+.ds-event-calendar__agenda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-event-calendar__agenda-item {
+  display: flex;
+}
+
+:where(.ds-event-calendar__agenda-event) {
+  --ds-event-accent: var(--color-status-neutral-border);
+}
+
+.ds-event-calendar__agenda-event {
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap-200);
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: var(--padding-150) var(--padding-200);
+  background-color: var(--color-calendar-event-bg);
+  border: var(--border-025) solid transparent;
+  border-radius: var(--radius-200);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+
+button.ds-event-calendar__agenda-event {
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+button.ds-event-calendar__agenda-event:hover {
+  background-color: var(--color-calendar-event-bg-hover);
+  border-color: var(--color-calendar-event-border);
+}
+
+button.ds-event-calendar__agenda-event:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-event-calendar__agenda-time {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  min-inline-size: calc(var(--control-height-default) * 2);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-event-calendar__agenda-start {
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+}
+
+.ds-event-calendar__agenda-end {
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-event-calendar__agenda-bar {
+  flex: none;
+  width: var(--gap-050);
+  border-radius: var(--radius-pill);
+  background-color: var(--ds-event-accent);
+}
+
+.ds-event-calendar__agenda-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: center;
+  overflow-wrap: anywhere;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-emphasis-letter-spacing);
+}
+
+.ds-event-calendar__agenda-empty {
+  margin: 0;
+  padding: var(--padding-300) var(--padding-200);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+/* Now — today's convention, the inverse chip, with a rule running on from
+   it across the schedule. Current, not selected, so never the action
+   colour. */
+.ds-event-calendar__now {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-100);
+}
+
+.ds-event-calendar__now::after {
+  content: '';
+  flex: 1 1 auto;
+  border-block-start: var(--border-050) solid var(--color-bg-page-inverse);
+}
+
+.ds-event-calendar__now-label {
+  flex: none;
+  padding: 0 var(--padding-100);
+  background-color: var(--color-bg-page-inverse);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-on-inverse);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
 }
 
 /* ============================================

@@ -90,9 +90,6 @@ export interface AppSidebarProfile {
 /** The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface. */
 export type AppSidebarLayout = 'flush' | 'floating' | 'inset';
 
-/** Where the rail is laid out: fixed to the viewport's start edge, or in its parent's flow. */
-export type AppSidebarPosition = 'fixed' | 'contained';
-
 /** Props owned by AppSidebar itself — everything else falls through to the `<nav>`. */
 type AppSidebarOwnProps = {
   /** Navigation sections */
@@ -148,9 +145,9 @@ type AppSidebarOwnProps = {
    */
   floating?: boolean;
   /**
-   * Where the rail is laid out. `fixed` (the default) pins it to the
+   * Pin the rail to the viewport. `true` (the default) fixes it to the
    * viewport's start edge at the viewport's height, with the side panel and
-   * the phone drawer fixed beside it, as a full-page app wants. `contained`
+   * the phone drawer fixed beside it, as a full-page app wants. `false`
    * lays it out in its parent instead, for a framed preview or a layout that
    * is not the whole page: the parent is a flex row with a definite height,
    * the rail is its first item at the parent's height (sticky, so it holds
@@ -158,7 +155,7 @@ type AppSidebarOwnProps = {
    * rail expands and the side panel opens. On a phone the trigger, the scrim
    * and the drawer stay inside the parent too.
    */
-  position?: AppSidebarPosition;
+  fixed?: boolean;
   /** Rendered under the logo row, above the nav; fades out while collapsed */
   topSlot?: React.ReactNode;
   /** Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state */
@@ -270,7 +267,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   onProfileMore,
   layout: layoutProp,
   floating: floatingProp = false,
-  position = 'fixed',
+  fixed = true,
   topSlot,
   persistentTopSlot = false,
   footerSlot,
@@ -292,7 +289,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   // The deprecated boolean still floats the rail when no layout is given.
   const layout: AppSidebarLayout = layoutProp ?? (floatingProp ? 'floating' : 'flush');
   const floating = layout === 'floating';
-  const contained = position === 'contained';
+  const contained = !fixed;
   const Link = useLinkComponent(linkComponent);
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours

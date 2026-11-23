@@ -491,13 +491,13 @@ export const PanelBehaviour: Story = {
   },
 };
 
-/** `position="contained"` lays the rail out in its parent instead of fixing
+/** `fixed={false}` lays the rail out in its parent instead of fixing
     it to the viewport: here a bordered 720 x 480 frame, a flex row with the
     rail as its first item. The rail runs the frame's height, the side panel
     opens beside it inside the frame, and the content gives way to both. */
 export const Contained: Story = {
   args: {
-    position: 'contained',
+    fixed: false,
     layout: 'inset',
     defaultExpanded: true,
     sections: threeLevelSections,

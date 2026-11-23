@@ -792,7 +792,7 @@
 
 /* ============================================
    CONTAINED — the rail laid out in its parent
-   (position="contained"), for a framed preview
+   (fixed={false}), for a framed preview
    or a layout that is not the whole page. The
    parent is a flex row with a definite height.
    Every piece that is fixed to the viewport

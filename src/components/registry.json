@@ -1745,7 +1745,7 @@
       "client": false,
       "keys": { "by": "none" },
       "alternatives": [
-        { "name": "DataTable", "when": "the rows need sorting, filtering, editing or loading from a server" }
+        { "name": "DataTable", "when": "the rows need sorting, filtering, paging, editing or loading from a server" }
       ]
     },
     {

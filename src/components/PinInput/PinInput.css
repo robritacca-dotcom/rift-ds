@@ -3,6 +3,10 @@
    Segmented one-time-code input
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — the Field wrapper carries the root class */
 .ds-pininput {
   display: flex;
@@ -90,3 +94,5 @@
   color: var(--color-input-text-disabled);
   cursor: not-allowed;
 }
+
+} /* @layer rift.components */

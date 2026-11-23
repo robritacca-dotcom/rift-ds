@@ -3,6 +3,10 @@
    Displays completion progress as a horizontal bar
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-progress-bar {
   display: flex;
   align-items: center;
@@ -58,3 +62,5 @@
 .ds-progress-bar__fill {
   background-color: var(--color-core-accent-mint);
 }
+
+} /* @layer rift.components */

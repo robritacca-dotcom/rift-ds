@@ -3,6 +3,10 @@
    Token-styled typography for rendered markdown
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-prose {
   font-family: var(--font-paragraph-family);
   font-size: var(--font-paragraph-size);
@@ -338,3 +342,5 @@
 .ds-prose--sm code {
   font-size: var(--font-paragraph-sm-size);
 }
+
+} /* @layer rift.components */

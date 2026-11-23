@@ -5,6 +5,10 @@
    menu is a DropdownMenu, whose panel is unchanged.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base: Toolbar's pill shell, so a menu bar and a toolbar sitting in the
    same chrome read as one family. Padding clears the focus ring's reach. */
 
@@ -80,3 +84,5 @@
   height: calc(var(--control-height-compact) - var(--padding-200));
   padding-inline: var(--padding-200);
 }
+
+} /* @layer rift.components */

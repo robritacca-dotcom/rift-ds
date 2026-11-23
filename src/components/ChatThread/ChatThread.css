@@ -4,6 +4,10 @@
    send-to-top anchoring, subtle scrollbar.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — the root is the scroll container. Inline gutters live on
    __content, so the scrollbar rides the component's far edge. */
 .ds-chat-thread {
@@ -193,3 +197,5 @@
   justify-content: flex-end;
   width: 100%;
 }
+
+} /* @layer rift.components */

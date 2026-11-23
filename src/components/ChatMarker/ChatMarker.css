@@ -3,6 +3,10 @@
    Inline conversation separator for dates and system notes
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-chat-marker {
   display: flex;
   align-items: center;
@@ -59,3 +63,5 @@
 .ds-chat-marker .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

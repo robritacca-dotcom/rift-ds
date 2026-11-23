@@ -7,6 +7,10 @@
    toggle, and the expand animation.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-nav-list {
   /* How far a row's text sits in from the row's own edge (the rows are
      compact tertiary Buttons, the headings share their inset). A host that
@@ -350,3 +354,5 @@
   border-radius: var(--radius-pill);
   background: var(--color-bg-container-border);
 }
+
+} /* @layer rift.components */

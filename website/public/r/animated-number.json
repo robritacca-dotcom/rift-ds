@@ -13,7 +13,7 @@
       "path": "src/components/AnimatedNumber/AnimatedNumber.css",
       "type": "registry:file",
       "target": "rift/components/AnimatedNumber/AnimatedNumber.css",
-      "content": "/* ============================================\n   ANIMATED NUMBER COMPONENT\n   A number that counts to its value\n   ============================================ */\n\n/* Base — inherits the surrounding type entirely: the component is a number\n   inside someone else's composition (a Stat, a table cell, a sentence), so\n   it owns no face, size, or colour of its own. */\n\n.ds-animated-number {\n  display: inline-flex;\n}\n\n/* Tabular figures: every digit the same width, so the layout holds still\n   while the digits roll. */\n.ds-animated-number__value {\n  font-variant-numeric: tabular-nums;\n}\n\n"
+      "content": "/* ============================================\n   ANIMATED NUMBER COMPONENT\n   A number that counts to its value\n   ============================================ */\n\n@layer rift.tokens, rift.preset, rift.components;\n\n@layer rift.components {\n\n/* Base — inherits the surrounding type entirely: the component is a number\n   inside someone else's composition (a Stat, a table cell, a sentence), so\n   it owns no face, size, or colour of its own. */\n\n.ds-animated-number {\n  display: inline-flex;\n}\n\n/* Tabular figures: every digit the same width, so the layout holds still\n   while the digits roll. */\n.ds-animated-number__value {\n  font-variant-numeric: tabular-nums;\n}\n\n} /* @layer rift.components */\n"
     },
     {
       "path": "src/components/AnimatedNumber/AnimatedNumber.tsx",

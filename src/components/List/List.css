@@ -9,6 +9,10 @@
    however the label wraps.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-list {
   --ds-list-gutter: calc(var(--icon-size-500) + var(--gap-200));
@@ -171,3 +175,5 @@
 .ds-list--marker-none .ds-list__item--icon .ds-list__marker {
   inset-inline-start: 0;
 }
+
+} /* @layer rift.components */

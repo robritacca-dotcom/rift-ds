@@ -10,6 +10,10 @@
    design.md's "Layout follows the reading direction" owns the contract.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 :dir(ltr) {
   --ds-inline-sign: 1;
 }
@@ -17,3 +21,5 @@
 :dir(rtl) {
   --ds-inline-sign: -1;
 }
+
+} /* @layer rift.components */

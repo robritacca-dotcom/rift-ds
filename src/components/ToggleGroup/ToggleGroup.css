@@ -3,6 +3,10 @@
    A set of two-state buttons
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* A control strip on the input radius, filled like SegmentedControl's
    track, so the group reads as one control rather than a hairline. */
 .ds-toggle-group {
@@ -126,3 +130,5 @@
 .ds-toggle-group .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

@@ -9,6 +9,8 @@
    the flat action colour.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
 /* The rotation animates a registered custom property: a conic gradient's
    angle cannot tween otherwise. Browsers without @property render the ring
    at its initial angle, static — a correct, quieter fallback. */
@@ -17,6 +19,19 @@
   initial-value: 0deg;
   inherits: false;
 }
+
+/* The opening signature: the AI gradient sweeps once around the whole
+   border — the button's masked conic ring, run as a single swoosh — then
+   fades away, leaving the regular border. The rotation animates a
+   registered custom property; without @property support the ring still
+   fades in and out, just without turning. */
+@property --ds-ai-summary-ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer rift.components {
 
 /* Base */
 .ds-ai-button {
@@ -505,17 +520,6 @@
   }
 }
 
-/* The opening signature: the AI gradient sweeps once around the whole
-   border — the button's masked conic ring, run as a single swoosh — then
-   fades away, leaving the regular border. The rotation animates a
-   registered custom property; without @property support the ring still
-   fades in and out, just without turning. */
-@property --ds-ai-summary-ring-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
 .ds-ai-button__summary::before,
 .ds-ai-button__request::before {
   content: '';
@@ -762,3 +766,5 @@
 .ds-tooltip:has(> .ds-ai-button[aria-expanded='true']) .ds-tooltip__panel {
   display: none;
 }
+
+} /* @layer rift.components */

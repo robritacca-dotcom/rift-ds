@@ -3,6 +3,10 @@
    Contextual feedback with status variants
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-alert {
   display: flex;
   align-items: flex-start;
@@ -287,3 +291,5 @@
 .ds-alert .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

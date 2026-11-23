@@ -8,6 +8,10 @@
    control-height scale, or its container's.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-document-viewer {
   display: flex;
@@ -186,3 +190,5 @@
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-secondary);
 }
+
+} /* @layer rift.components */

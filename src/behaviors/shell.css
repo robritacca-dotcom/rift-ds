@@ -47,6 +47,10 @@
    rules these encode.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 :where([data-ds-shell]) {
   /* The two gaps. The inset gap's value lives with AppSidebar's root rule
      (--ds-shell-inset) and the float gap's with the floating rail
@@ -214,3 +218,5 @@ html[data-chat='docked-left'] :where([data-ds-shell]:not(.ds-chat-widget__rails)
 html[data-chat-resizing] :where([data-ds-shell]) {
   transition: none;
 }
+
+} /* @layer rift.components */

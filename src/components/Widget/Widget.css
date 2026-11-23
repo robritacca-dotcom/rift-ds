@@ -5,6 +5,10 @@
    packs tiles into columns
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Tile — the translucent container behind a hairline, blurred so the body
    stays on a calm field when the tile sits over an ambient background. The
    navigation-tile radius, per the radius scale. */
@@ -339,3 +343,5 @@
   break-inside: avoid;
   margin-bottom: var(--gap-400);
 }
+
+} /* @layer rift.components */

@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-link-list {
   display: flex;
   flex-direction: column;
@@ -69,3 +73,5 @@
   line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
 }
+
+} /* @layer rift.components */

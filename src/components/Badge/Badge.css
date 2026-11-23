@@ -3,6 +3,10 @@
    Small inline status labels
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-badge {
   display: inline-flex;
   align-items: center;
@@ -65,3 +69,5 @@
   background-color: var(--color-status-neutral-bg);
   color: var(--color-status-neutral-text);
 }
+
+} /* @layer rift.components */

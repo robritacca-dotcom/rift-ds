@@ -3,6 +3,10 @@
    Date input with calendar icon and label
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-date-input {
   display: flex;
   flex-direction: column;
@@ -151,3 +155,5 @@
 .ds-date-input--compact .ds-date-input__field {
   padding-inline-start: calc(var(--padding-200) + 20px + var(--gap-200)); /* 8px + 20px icon + 8px gap */
 }
+
+} /* @layer rift.components */

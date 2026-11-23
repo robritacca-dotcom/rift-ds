@@ -2,6 +2,10 @@
    Placement and clipping belong to that ancestor, as with ShaderField: where
    a scene sits is a layout decision. */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-shader-scene {
   position: absolute;
   inset: 0;
@@ -25,3 +29,5 @@
   width: 100%;
   height: 100%;
 }
+
+} /* @layer rift.components */

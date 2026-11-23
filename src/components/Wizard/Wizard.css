@@ -5,6 +5,10 @@
    and Continue at the end, above a rule.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-wizard {
   display: flex;
@@ -65,3 +69,5 @@
   gap: var(--gap-200);
   margin-inline-start: auto;
 }
+
+} /* @layer rift.components */

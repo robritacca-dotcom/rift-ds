@@ -11,6 +11,10 @@
    announcement carries the waiting state.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-interrupt-card {
   --ds-interrupt-card-color: var(--color-icon-secondary);
 
@@ -220,3 +224,5 @@
 .ds-interrupt-card .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

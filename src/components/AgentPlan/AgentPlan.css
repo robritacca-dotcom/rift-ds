@@ -10,6 +10,10 @@
    indicators into one path through the task.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-agent-plan {
   display: flex;
   flex-direction: column;
@@ -255,3 +259,5 @@
 .ds-agent-plan__header:has(.ds-agent-plan__chevron) {
   padding-inline-end: calc(var(--ds-chat-card-inset) - var(--padding-100));
 }
+
+} /* @layer rift.components */

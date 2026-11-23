@@ -3,6 +3,10 @@
    Grouped strip of controls in one shell
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — a pill shell on the container fill. Padding clears the focus
    ring's full reach (2px offset + 2px outline), so a focused control's
    ring seats inside the shell instead of slicing its border. */
@@ -54,3 +58,5 @@
   margin-block: var(--gap-050);
   margin-inline: var(--gap-050);
 }
+
+} /* @layer rift.components */

@@ -4,6 +4,10 @@
    Primitive, Hex, and RGB values in a box.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-colour-swatch {
   /* Layout */
   display: flex;
@@ -89,3 +93,5 @@
 .ds-colour-swatch__data {
   word-break: break-word;
 }
+
+} /* @layer rift.components */

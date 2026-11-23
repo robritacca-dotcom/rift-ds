@@ -3,6 +3,10 @@
    disc a source chip wears for a logo. Chart-series tokens keep it on-theme
    in both modes and re-theme with the rest of a theme like every chart. */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-chat-demo__card-media {
   height: 120px;
   background: linear-gradient(135deg, var(--color-chart-series-1), var(--color-chart-series-2));
@@ -50,3 +54,5 @@
 .ds-chat-demo__artifact-board {
   padding: var(--padding-400);
 }
+
+} /* @layer rift.components */

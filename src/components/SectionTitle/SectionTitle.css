@@ -3,6 +3,10 @@
    Heading with divider line, optional trailing content
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-section-title {
   display: flex;
   align-items: baseline;
@@ -79,3 +83,5 @@
     opacity: 1;
   }
 }
+
+} /* @layer rift.components */

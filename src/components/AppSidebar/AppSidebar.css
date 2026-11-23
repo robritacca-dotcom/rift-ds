@@ -4,6 +4,10 @@
    Expanded: 280px with labels, accordion, profile
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    WRAPPER
    ============================================ */
@@ -1225,3 +1229,5 @@
 .ds-app-sidebar__toggle:active::before {
   background-color: var(--color-action-passive-bg-active);
 }
+
+} /* @layer rift.components */

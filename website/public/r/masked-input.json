@@ -15,7 +15,7 @@
       "path": "src/components/MaskedInput/MaskedInput.css",
       "type": "registry:file",
       "target": "rift/components/MaskedInput/MaskedInput.css",
-      "content": "/* ============================================\n   MASKED INPUT\n   An Input whose text the mask writes; the field,\n   its states and its action slot are Input's.\n   Tabular figures keep the separators still as\n   digits arrive, and a hidden value's dots are\n   spaced so each stands for one character.\n   ============================================ */\n\n.ds-masked-input .ds-input__field {\n  font-variant-numeric: tabular-nums;\n}\n\n.ds-masked-input--concealed .ds-input__field {\n  letter-spacing: var(--font-overline-letter-spacing);\n}\n"
+      "content": "/* ============================================\n   MASKED INPUT\n   An Input whose text the mask writes; the field,\n   its states and its action slot are Input's.\n   Tabular figures keep the separators still as\n   digits arrive, and a hidden value's dots are\n   spaced so each stands for one character.\n   ============================================ */\n\n@layer rift.tokens, rift.preset, rift.components;\n\n@layer rift.components {\n\n.ds-masked-input .ds-input__field {\n  font-variant-numeric: tabular-nums;\n}\n\n.ds-masked-input--concealed .ds-input__field {\n  letter-spacing: var(--font-overline-letter-spacing);\n}\n\n} /* @layer rift.components */\n"
     },
     {
       "path": "src/components/MaskedInput/MaskedInput.tsx",

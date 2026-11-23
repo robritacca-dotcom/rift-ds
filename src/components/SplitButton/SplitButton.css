@@ -3,6 +3,10 @@
    Primary action + attached menu of alternatives
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-split-button {
   display: inline-flex;
   align-items: stretch;
@@ -91,3 +95,5 @@
 .ds-split-button--secondary .ds-split-button__trigger {
   border-inline-start: none;
 }
+
+} /* @layer rift.components */

@@ -9,6 +9,10 @@
    stay put, so switching tabs never moves the agent's face.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-agent-rail {
   /* Width and padding combine on the root, so the component declares its
      own sizing model rather than leaning on a host reset — ThreadPanel's
@@ -289,3 +293,5 @@
   padding-top: var(--padding-200);
   border-top: var(--border-025) solid var(--color-divider);
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    Data table with flexible cell content
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-table {
   width: 100%;
   border-collapse: separate;
@@ -273,3 +277,5 @@
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+
+} /* @layer rift.components */

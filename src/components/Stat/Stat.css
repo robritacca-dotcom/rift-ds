@@ -5,6 +5,10 @@
    a metrics band.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-stat {
   display: inline-flex;
   flex-direction: column;
@@ -253,3 +257,5 @@
 .ds-stat .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

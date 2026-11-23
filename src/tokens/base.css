@@ -8,9 +8,16 @@
    paragraphs, padding on lists) land inside components and push them out
    of true, about 40% too padded in the first outside app.
 
-   Every rule sits inside :where(), so it carries no specificity: a class
-   of your own always wins, wherever the sheets load.
+   Every rule sits inside :where(), so it carries no specificity, and the
+   whole sheet sits in the rift.tokens cascade layer, below rift.components:
+   a component's own rule and any CSS of yours outside a layer both win,
+   wherever the sheets load. Unlayered, this reset would outrank every
+   layered component rule and strip their padding.
    ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.tokens {
 
 /* The reset: border-box sizing, and no margin or padding a component did
    not ask for. */
@@ -82,3 +89,5 @@
   line-height: var(--font-paragraph-line-height);
   letter-spacing: var(--font-paragraph-letter-spacing);
 }
+
+} /* @layer rift.tokens */

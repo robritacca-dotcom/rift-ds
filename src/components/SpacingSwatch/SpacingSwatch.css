@@ -4,6 +4,10 @@
    visual preview, size label, and pixel value.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-spacing-swatch {
   /* Layout */
   display: flex;
@@ -106,3 +110,5 @@
   line-height: var(--font-paragraph-line-height);
   color: var(--color-text-tertiary);
 }
+
+} /* @layer rift.components */

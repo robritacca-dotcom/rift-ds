@@ -4,6 +4,10 @@
    multi-select chips and async loading state
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-combobox {
   display: flex;
   flex-direction: column;
@@ -403,3 +407,5 @@
 .ds-combobox--compact .ds-combobox__control {
   padding-inline: var(--padding-200);
 }
+
+} /* @layer rift.components */

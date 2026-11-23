@@ -2,13 +2,13 @@
   "$comment": "Ceilings, in bytes, for what a first visit to each page of the website costs: gzipped scripts, stylesheets and document per prerendered route, and the file size of each picture under website/public/images. scripts/validate-route-budget.mjs owns the method and the rules. A ceiling only moves in the change that moves its page.",
   "default": {
     "js": 457000,
-    "css": 126000,
+    "css": 129000,
     "html": 31000
   },
   "routes": {
     "/": {
       "js": 792000,
-      "css": 184000,
+      "css": 189000,
       "html": 284000
     },
     "/blueprints/claude": {
@@ -22,12 +22,12 @@
     },
     "/components": {
       "js": 626000,
-      "css": 210000,
+      "css": 215000,
       "html": 181000
     },
     "/components/ai-chat": {
       "js": 589000,
-      "css": 156000,
+      "css": 159000,
       "html": 75000
     },
     "/components/composer": {
@@ -46,29 +46,29 @@
       "html": 354000
     },
     "/docs/blocks/app-shell": {
-      "css": 154000
+      "css": 159000
     },
     "/docs/blocks/dashboard": {
-      "css": 154000
+      "css": 159000
     },
     "/docs/blocks/docs": {
-      "css": 154000
+      "css": 159000
     },
     "/docs/blocks/planner": {
-      "css": 154000
+      "css": 159000
     },
     "/docs/blocks/settings": {
-      "css": 154000
+      "css": 159000
     },
     "/docs/blocks/shader-scene": {
-      "css": 154000
+      "css": 159000
     },
     "/docs/blocks/sign-in": {
-      "css": 154000
+      "css": 159000
     },
     "/labs/marketing": {
       "js": 594000,
-      "css": 156000
+      "css": 160000
     },
     "/labs/raceway-chat": {
       "js": 555000,
@@ -76,12 +76,12 @@
     },
     "/labs/site-frame": {
       "js": 794000,
-      "css": 185000,
+      "css": 190000,
       "html": 285000
     },
     "/labs/site-frame/components": {
       "js": 628000,
-      "css": 210000,
+      "css": 216000,
       "html": 182000
     },
     "/labs/tables": {
@@ -92,7 +92,7 @@
     },
     "/playground": {
       "js": 948000,
-      "css": 214000,
+      "css": 219000,
       "html": 35000
     },
     "/releases": {
@@ -103,16 +103,16 @@
     },
     "/templates/analytics": {
       "js": 706000,
-      "css": 161000,
+      "css": 165000,
       "html": 131000
     },
     "/templates/chat-home": {
       "js": 605000,
-      "css": 141000
+      "css": 144000
     },
     "/templates/merchant-sales": {
       "js": 667000,
-      "css": 173000
+      "css": 177000
     }
   },
   "images": {

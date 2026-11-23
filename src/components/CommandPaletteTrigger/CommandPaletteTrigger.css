@@ -8,6 +8,10 @@
    family in a row, and it hovers like a field.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-command-palette-trigger {
   display: inline-flex;
   align-items: center;
@@ -107,3 +111,5 @@
 .ds-command-palette-trigger:not(.ds-command-palette-trigger--icon-only) {
   padding-inline: var(--padding-200);
 }
+
+} /* @layer rift.components */

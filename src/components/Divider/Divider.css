@@ -3,6 +3,10 @@
    Thin rule separating stacked content
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — plain horizontal <hr> */
 .ds-divider {
   border: none;
@@ -98,3 +102,5 @@
   margin-block: 0;
   margin-inline: var(--gap-500); /* 20px */
 }
+
+} /* @layer rift.components */

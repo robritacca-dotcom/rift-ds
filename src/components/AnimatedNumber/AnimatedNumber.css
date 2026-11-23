@@ -3,6 +3,10 @@
    A number that counts to its value
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — inherits the surrounding type entirely: the component is a number
    inside someone else's composition (a Stat, a table cell, a sentence), so
    it owns no face, size, or colour of its own. */
@@ -17,3 +21,4 @@
   font-variant-numeric: tabular-nums;
 }
 
+} /* @layer rift.components */

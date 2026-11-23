@@ -7,6 +7,10 @@
    a WidgetRow list, on --color-divider.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-checklist {
   display: flex;
@@ -121,3 +125,5 @@
 .ds-checklist__description {
   color: var(--color-text-tertiary);
 }
+
+} /* @layer rift.components */

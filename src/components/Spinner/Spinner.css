@@ -3,6 +3,10 @@
    Animated circular loading indicator
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-spinner {
   display: inline-flex;
   align-items: center;
@@ -82,3 +86,5 @@
     transform: rotate(360deg);
   }
 }
+
+} /* @layer rift.components */

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
+import { Button } from '../components/Button/Button';
 
 /*
  * The token cascade layers, proven in a real browser. Every token sheet sits
@@ -13,6 +14,11 @@ import { expect } from 'storybook/test';
  * - A value declared inside rift.tokens (how the site and the CLI's app
  *   template supply the base theme's face) stays a base value: the base
  *   theme takes it, and a preset still replaces it.
+ *
+ * Component styles sit in a third layer, rift.components, after both. A
+ * consumer's unlayered rule beats a component rule of equal specificity
+ * whatever order the sheets load in, and a rule in rift.tokens (where the
+ * reset lives) never does.
  *
  * The preset list is read from the generated stylesheets themselves, so a
  * new preset is checked the day it ships. Each check sets data-brand and
@@ -151,5 +157,42 @@ export const LayeredBaseValueYieldsToPresets: Story = {
     await expect(
       presetIds.some((id) => ownFace[`${id}/light`] !== ownFace['base/light'])
     ).toBe(true);
+  },
+};
+
+/** A stylesheet put first in <head>, ahead of every sheet the components loaded. */
+function withEarlyStyle(css: string) {
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.prepend(style);
+  return () => style.remove();
+}
+
+const PROBE_PADDING = '3px';
+
+export const ConsumerCssOutranksComponentStyles: Story = {
+  render: () => <Button label="Layer probe" className="layer-probe-button" />,
+  play: async ({ canvasElement }) => {
+    const button = canvasElement.querySelector<HTMLElement>('.ds-button');
+    if (!button) throw new Error('button did not render');
+    const padding = () => getComputedStyle(button).paddingInlineStart;
+    // Not vacuous: the component paints padding of its own, and not the probe's.
+    const own = padding();
+    await expect(own).not.toBe(PROBE_PADDING);
+    await expect(own).not.toBe('0px');
+
+    /* One class against the component's one class, loaded BEFORE the
+       component's sheet: unlayered, it still wins. */
+    const removeEarly = withEarlyStyle(`.layer-probe-button { padding: ${PROBE_PADDING}; }`);
+    const early = padding();
+    removeEarly();
+    await expect(early).toBe(PROBE_PADDING);
+
+    /* The same rule inside rift.tokens, where the reset lives, loaded after
+       the component's sheet: the component's layer still wins. */
+    const removeBase = withStyle(`@layer rift.tokens { .layer-probe-button { padding: ${PROBE_PADDING}; } }`);
+    const base = padding();
+    removeBase();
+    await expect(base).not.toBe(PROBE_PADDING);
   },
 };

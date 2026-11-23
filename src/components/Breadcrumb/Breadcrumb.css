@@ -3,6 +3,10 @@
    Hierarchical navigation trail
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-breadcrumb {
   width: 100%;
 }
@@ -98,3 +102,5 @@
   color: var(--color-text-tertiary);
   user-select: none;
 }
+
+} /* @layer rift.components */

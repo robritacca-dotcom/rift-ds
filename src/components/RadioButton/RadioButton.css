@@ -9,6 +9,10 @@
    ds-control-host lights it on hover.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-radio {
   display: inline-flex;
   align-items: center;
@@ -172,3 +176,5 @@
   flex-wrap: wrap;
   gap: var(--gap-200) var(--gap-500); /* 8px rows, 20px between options */
 }
+
+} /* @layer rift.components */

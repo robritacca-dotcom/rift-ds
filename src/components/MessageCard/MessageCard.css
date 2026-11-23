@@ -11,6 +11,10 @@
    shell, so cards read the same across surfaces.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-message-card {
   display: flex;
   flex-direction: column;
@@ -181,3 +185,5 @@
 .ds-message-card .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    Text input with label, icons, and helper text
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-input {
   display: flex;
   flex-direction: column;
@@ -146,11 +150,11 @@
   inset-inline-end: var(--padding-300); /* 12px */
 }
 
-.ds-input--compact.ds-input--has-icon-left .ds-input__field {
+.ds-input--compact.ds-input--has-icon-left:not(:where(.ds-input--affixed)) .ds-input__field {
   padding-inline-start: calc(var(--padding-300) + 20px + var(--gap-200)); /* 12px + 20px icon + 8px gap */
 }
 
-.ds-input--compact.ds-input--has-icon-right .ds-input__field {
+.ds-input--compact.ds-input--has-icon-right:not(:where(.ds-input--affixed)) .ds-input__field {
   padding-inline-end: calc(var(--padding-300) + 20px + var(--gap-200)); /* 12px + 20px icon + 8px gap */
 }
 
@@ -304,11 +308,14 @@
   inset-inline-end: var(--padding-200);
 }
 
-.ds-input--compact.ds-input--has-icon-left .ds-input__field {
+/* The compact icon padding never reaches an affixed field: there the icon
+   sits in the row's flow and the field's own padding is zero (the affixed
+   rule), whichever rule comes later. :where() keeps the specificity. */
+.ds-input--compact.ds-input--has-icon-left:not(:where(.ds-input--affixed)) .ds-input__field {
   padding-inline-start: calc(var(--padding-200) + 20px + var(--gap-200)); /* 8px + 20px icon + 8px gap */
 }
 
-.ds-input--compact.ds-input--has-icon-right .ds-input__field {
+.ds-input--compact.ds-input--has-icon-right:not(:where(.ds-input--affixed)) .ds-input__field {
   padding-inline-end: calc(var(--padding-200) + 20px + var(--gap-200)); /* 8px + 20px icon + 8px gap */
 }
 
@@ -357,3 +364,5 @@
     border-color: var(--color-input-border-primary);
   }
 }
+
+} /* @layer rift.components */

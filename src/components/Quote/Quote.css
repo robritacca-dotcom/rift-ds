@@ -4,6 +4,10 @@
    optional attribution.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-quote {
   margin: 0;
   display: flex;
@@ -76,3 +80,5 @@
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
 }
+
+} /* @layer rift.components */

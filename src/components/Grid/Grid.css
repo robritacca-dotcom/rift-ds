@@ -9,6 +9,10 @@
    cannot add an extra column on a wide row.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-grid {
   --ds-grid-gap-resolved: var(--ds-grid-gap, var(--gap-500));
@@ -50,3 +54,5 @@
 .ds-grid--align-end {
   align-items: end;
 }
+
+} /* @layer rift.components */

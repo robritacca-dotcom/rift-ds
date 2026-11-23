@@ -7,6 +7,10 @@
    to go.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-decision-row {
@@ -44,3 +48,5 @@
 .ds-decision-row .ds-widget-row__actions {
   margin-inline-start: auto;
 }
+
+} /* @layer rift.components */

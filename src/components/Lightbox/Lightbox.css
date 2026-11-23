@@ -3,6 +3,10 @@
    Fullscreen media viewer over a frosted scrim
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-lightbox {
   position: fixed;
   inset: 0;
@@ -208,3 +212,5 @@
     max-width: calc(100vw - var(--gap-400) * 2);
   }
 }
+
+} /* @layer rift.components */

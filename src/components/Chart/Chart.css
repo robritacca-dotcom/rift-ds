@@ -4,6 +4,10 @@
    used across all chart types (bar, line, pie…).
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    WRAPPER
    ============================================ */
@@ -209,7 +213,9 @@
 
 /* ds-allow(breakpoint): the phone step on its other edge (below 600px, not at or below it); aligning it would change this rule at exactly 600px. */
 @media (max-width: 599px) {
-  .ds-chart {
+  /* A bare chart keeps no padding on a phone either: its host supplies the
+     surface. :where() keeps the specificity where it was. */
+  .ds-chart:not(:where(.ds-chart--bare)) {
     padding: var(--padding-400);
   }
 
@@ -229,3 +235,5 @@
     padding: var(--padding-150) 0;
   }
 }
+
+} /* @layer rift.components */

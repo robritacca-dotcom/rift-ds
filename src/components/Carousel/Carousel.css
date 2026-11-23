@@ -3,6 +3,10 @@
    Sliding content viewer with navigation
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-carousel {
   position: relative;
   width: 100%;
@@ -122,3 +126,5 @@
 .ds-carousel .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

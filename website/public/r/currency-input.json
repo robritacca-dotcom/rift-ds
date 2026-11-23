@@ -14,7 +14,7 @@
       "path": "src/components/CurrencyInput/CurrencyInput.css",
       "type": "registry:file",
       "target": "rift/components/CurrencyInput/CurrencyInput.css",
-      "content": "/* ============================================\n   CURRENCY INPUT\n   An Input with the currency as its prefix or\n   suffix; the field itself, its affixes and its\n   states are Input's. The amount sets in tabular\n   figures, so the digits hold still as they are\n   grouped on blur.\n   ============================================ */\n\n.ds-currency-input .ds-input__field {\n  font-variant-numeric: tabular-nums;\n}\n"
+      "content": "/* ============================================\n   CURRENCY INPUT\n   An Input with the currency as its prefix or\n   suffix; the field itself, its affixes and its\n   states are Input's. The amount sets in tabular\n   figures, so the digits hold still as they are\n   grouped on blur.\n   ============================================ */\n\n@layer rift.tokens, rift.preset, rift.components;\n\n@layer rift.components {\n\n.ds-currency-input .ds-input__field {\n  font-variant-numeric: tabular-nums;\n}\n\n} /* @layer rift.components */\n"
     },
     {
       "path": "src/components/CurrencyInput/CurrencyInput.tsx",

@@ -4,6 +4,10 @@
    `@` for entities, `/` for skills.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    TAG
    Composer lays this exact tag over the text of its textarea, so nothing
@@ -193,3 +197,5 @@
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
   color: var(--color-text-tertiary);
 }
+
+} /* @layer rift.components */

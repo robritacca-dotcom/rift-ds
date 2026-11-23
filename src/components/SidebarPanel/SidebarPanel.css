@@ -7,6 +7,10 @@
    two columns read as one navigation system.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    WRAPPER
    ============================================ */
@@ -297,3 +301,5 @@
 .ds-sidebar-panel .ds-sidebar-panel__chevron {
   color: var(--color-icon-secondary);
 }
+
+} /* @layer rift.components */

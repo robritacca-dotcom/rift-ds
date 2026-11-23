@@ -3,6 +3,10 @@
    Horizontal tab navigation with underline
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* A row that does not fit its container scrolls inline rather than running
    off the page: the tabs never wrap or shrink, the scrollbar is hidden (a
    swipe, a trackpad or the arrow keys, whose focus scrolls the tab into
@@ -179,3 +183,5 @@
   outline-offset: 2px;
   border-radius: var(--radius-200);
 }
+
+} /* @layer rift.components */

@@ -7,6 +7,10 @@
    warning, then error, and error once it passes.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-deadline {
   display: inline-flex;
@@ -80,3 +84,5 @@
 .ds-deadline--text.ds-deadline--overdue {
   font-weight: var(--font-paragraph-emphasis-weight);
 }
+
+} /* @layer rift.components */

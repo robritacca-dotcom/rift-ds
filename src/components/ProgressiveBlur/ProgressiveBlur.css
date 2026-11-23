@@ -3,6 +3,10 @@
    A backdrop blur that dissolves along one edge
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Why a stack, and why masks: a single backdrop-filter is uniform across its
    whole box, so a tint that fades to transparent still ends in a hard line
    where the blur stops. A mask-image multiplies both the layer's paint and
@@ -100,3 +104,5 @@
 .ds-progressive-blur--tinted::after {
   opacity: 1;
 }
+
+} /* @layer rift.components */

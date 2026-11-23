@@ -3,6 +3,10 @@
    Placeholder while content is loading
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-skeleton {
   background-color: var(--color-bg-container-secondary);
   position: relative;
@@ -79,3 +83,5 @@
     transform: translateX(calc(100% * var(--ds-inline-sign, 1)));
   }
 }
+
+} /* @layer rift.components */

@@ -9,6 +9,10 @@
    changes no spacing.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    LABEL
    ============================================ */
@@ -90,3 +94,5 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
 }
+
+} /* @layer rift.components */

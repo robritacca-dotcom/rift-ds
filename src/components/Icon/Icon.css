@@ -6,6 +6,10 @@
    --icon-size, never as a font size.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-icon {
   display: inline-flex;
@@ -53,3 +57,5 @@
 .ds-icon--tile.ds-icon--default {
   color: var(--color-text-primary);
 }
+
+} /* @layer rift.components */

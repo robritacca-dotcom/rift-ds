@@ -8,6 +8,10 @@
    the page colour: what lies behind shows through.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-site-layout {
   /* The header's height, so the sticky columns start below it: SiteHeader's
      own --ds-site-header-height when the host sets it on the layout (one
@@ -359,3 +363,5 @@
     padding-inline-end: var(--ds-shell-gutter);
   }
 }
+
+} /* @layer rift.components */

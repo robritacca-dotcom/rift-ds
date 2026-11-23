@@ -11,6 +11,10 @@
    for actions.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-event-calendar {
   display: flex;
   flex-direction: column;
@@ -628,3 +632,5 @@ button.ds-event-calendar__agenda-event:focus-visible {
   width: var(--gap-200);
   height: var(--gap-200);
 }
+
+} /* @layer rift.components */

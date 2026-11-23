@@ -10,6 +10,10 @@
    on every theme whatever the accent.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-resource-timeline {
   --ds-resource-timeline-label: 9rem;
@@ -192,3 +196,5 @@ button.ds-resource-timeline__bar:focus-visible {
 .ds-resource-timeline__bar--mint {
   --ds-resource-timeline-accent: var(--color-core-accent-mint);
 }
+
+} /* @layer rift.components */

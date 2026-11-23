@@ -13,6 +13,10 @@
    row is a perfect circle around its icon (12 + 8 + 24 + 8 + 12 = 64).
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-thread-panel {
   /* Width and padding combine on the root and the rows, so the component
      declares its own sizing model rather than leaning on a host reset —
@@ -995,3 +999,5 @@
 .ds-thread-panel__thread:has(.ds-thread-panel__thread-icon) {
   padding-inline-start: var(--padding-200);
 }
+
+} /* @layer rift.components */

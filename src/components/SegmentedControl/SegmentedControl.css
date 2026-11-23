@@ -3,6 +3,10 @@
    Pill-style toggle between related views
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-segmented-control {
   position: relative;
   display: inline-flex;
@@ -470,3 +474,5 @@
 .ds-segmented-control--cycle .ds-icon-button:not(.ds-icon-button--disabled):active .ds-icon-button__icon {
   color: var(--color-action-icon-default);
 }
+
+} /* @layer rift.components */

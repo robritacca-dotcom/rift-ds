@@ -9,6 +9,10 @@
    more row in the run, not a different species.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-source-trail {
   display: flex;
   flex-direction: column;
@@ -224,3 +228,5 @@
 .ds-source-trail__header:has(.ds-source-trail__chevron) {
   padding-inline-end: calc(var(--ds-chat-card-inset) - var(--padding-100));
 }
+
+} /* @layer rift.components */

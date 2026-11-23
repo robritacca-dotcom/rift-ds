@@ -4,6 +4,10 @@
    what it shows, and the key to its markers.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-map-legend {
@@ -86,3 +90,5 @@
   color: var(--color-text-secondary);
   margin: 0;
 }
+
+} /* @layer rift.components */

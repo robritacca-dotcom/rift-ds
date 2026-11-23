@@ -3,6 +3,10 @@
    ancestor the caller provides: where the field sits is a layout decision,
    and baking one in would make the component unusable anywhere else. */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-shader-field {
   position: absolute;
   inset: 0;
@@ -22,3 +26,5 @@
 .ds-shader-field[data-status='active'] {
   opacity: 1;
 }
+
+} /* @layer rift.components */

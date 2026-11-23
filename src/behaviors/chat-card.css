@@ -24,6 +24,10 @@
    the decision's read-out.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 :where(
   .ds-interrupt-card,
   .ds-question-card,
@@ -141,3 +145,5 @@
 
   color: inherit;
 }
+
+} /* @layer rift.components */

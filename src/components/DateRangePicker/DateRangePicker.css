@@ -10,6 +10,10 @@
    chips above, which wrap.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Layout */
 .ds-date-range-picker {
   max-inline-size: 100%;
@@ -90,3 +94,5 @@
 .ds-date-picker__gridcell:has(> .ds-date-range-picker__cell--preview-end):dir(rtl) {
   background: linear-gradient(to right, transparent 50%, var(--color-action-passive-bg-active) 50%); /* ds-allow(physical): the right-to-left twin of the rule above */
 }
+
+} /* @layer rift.components */

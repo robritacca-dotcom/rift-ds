@@ -1,10 +1,29 @@
 /* ============================================
    GLOBAL STYLES
    ============================================ */
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/* The site's reset sits in the library's rift.tokens layer, beside its base
+   token values: component styles live in rift.components above it, and any
+   rule outside a layer outranks every layered one, so an unlayered reset
+   would strip every component's padding. */
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.tokens {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* The icons' default colour, which the library leaves to the consumer
+     so a component can set its own. */
+  .material-symbols-rounded {
+    color: var(--color-text-primary);
+  }
 }
 
 html {
@@ -286,10 +305,6 @@ html[data-nav-drawer="open"] .ds-chat-launcher__fab {
   padding-inline: calc(var(--icon-size-600) + var(--primitive-gap-200) - var(--padding-500));
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
 
 /* ============================================
    BLUR BACKGROUND EFFECTS
@@ -682,12 +697,10 @@ html[data-embedded] *::after {
 
    The one website-level addition is the default
    colour, which the library deliberately leaves
-   to the consumer so components can inherit.
+   to the consumer so components can inherit. It
+   sits in the reset's layer at the top of this
+   file, so a component's icon colour wins.
    ============================================ */
-
-.material-symbols-rounded {
-  color: var(--color-text-primary);
-}
 
 /* The site draws its icons from its own cut of the icon font: the same
    outlines with the icons no page draws removed, a small fraction of the

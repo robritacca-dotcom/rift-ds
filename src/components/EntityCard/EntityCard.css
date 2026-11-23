@@ -4,6 +4,10 @@
    and a label. Used on Icons and Logos pages.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-entity-card {
   /* Layout */
   display: flex;
@@ -67,3 +71,5 @@
   text-align: center;
   word-break: break-word;
 }
+
+} /* @layer rift.components */

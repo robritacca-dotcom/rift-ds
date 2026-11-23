@@ -11,6 +11,10 @@
    right-to-left context.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-org-chart {
   min-width: 0;
@@ -141,3 +145,5 @@
   letter-spacing: var(--font-caption-letter-spacing);
   color: var(--color-text-tertiary);
 }
+
+} /* @layer rift.components */

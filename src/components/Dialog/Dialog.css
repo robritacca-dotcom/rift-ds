@@ -3,6 +3,10 @@
    General-purpose modal with backdrop overlay
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-dialog {
   position: fixed;
   inset: 0;
@@ -152,3 +156,5 @@
     margin: var(--padding-400);
   }
 }
+
+} /* @layer rift.components */

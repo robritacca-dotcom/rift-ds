@@ -5,6 +5,10 @@
    at rest, the passive wash on hover and focus at --radius-200).
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-entity-switcher {
   display: flex;
   width: 100%;
@@ -339,3 +343,5 @@
   font-size: var(--font-paragraph-sm-size);
   line-height: var(--font-paragraph-sm-line-height);
 }
+
+} /* @layer rift.components */

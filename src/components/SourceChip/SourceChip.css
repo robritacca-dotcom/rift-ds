@@ -5,6 +5,10 @@
    span otherwise.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-source-chip {
   /* Layout */
   display: inline-flex;
@@ -307,3 +311,5 @@ button.ds-source-chip {
 .ds-source-chip .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

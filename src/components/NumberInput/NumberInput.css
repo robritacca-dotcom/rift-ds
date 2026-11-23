@@ -3,6 +3,10 @@
    Numeric field with stepper buttons and clamping
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-numberinput {
@@ -161,3 +165,5 @@
 .ds-numberinput .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    Step-by-step guidance with numbered steps
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-instructions {
   display: flex;
   flex-direction: column;
@@ -214,3 +218,5 @@
 .ds-instructions--compact .ds-instructions__step:last-child .ds-instructions__content {
   padding-bottom: 0;
 }
+
+} /* @layer rift.components */

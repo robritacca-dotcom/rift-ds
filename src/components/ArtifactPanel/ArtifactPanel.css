@@ -10,6 +10,10 @@
    never leave with the content.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-artifact-panel {
@@ -203,3 +207,5 @@
 .ds-artifact-panel--inline .ds-artifact-panel__frame {
   min-height: var(--ds-artifact-panel-stage-height, calc(6 * var(--control-height-default)));
 }
+
+} /* @layer rift.components */

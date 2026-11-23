@@ -3,6 +3,10 @@
    Contextual overlay panel
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-popover {
   position: relative;
   display: inline-flex;
@@ -118,3 +122,5 @@
   border-color: var(--color-input-border-primary);
   border-radius: var(--radius-300);
 }
+
+} /* @layer rift.components */

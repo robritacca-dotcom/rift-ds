@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* The built-in agent pane. The rail owns its shell; this only says how it
    sits in the widget's bottom sheet, where it fills the width rather than
    holding its own column and the sheet's rounded top edge is the surface. */
@@ -58,3 +62,5 @@
   line-height: var(--font-paragraph-sm-emphasis-line-height);
   color: var(--color-text-primary);
 }
+
+} /* @layer rift.components */

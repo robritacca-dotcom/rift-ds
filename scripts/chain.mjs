@@ -94,6 +94,7 @@ export const CHAIN = [
   ['validate-analytics-events'],
   ['validate-token-references'],
   ['validate-token-layers'],
+  ['validate-component-layers'],
   ['validate-theme-mirrors', 'build'],
   ['validate-foundation-mirrors', 'build'],
   ['validate-preset-stylesheets', 'build'],

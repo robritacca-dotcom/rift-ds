@@ -9,6 +9,10 @@
    the send button keeps the only action colour.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-model-picker {
   position: relative;
   display: inline-flex;
@@ -214,3 +218,5 @@
 .ds-model-picker--compact .ds-model-picker__trigger {
   padding-inline-end: var(--padding-200);
 }
+
+} /* @layer rift.components */

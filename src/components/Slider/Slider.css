@@ -3,6 +3,10 @@
    Range input for selecting values
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-slider {
   display: flex;
   align-items: center;
@@ -117,3 +121,5 @@
   opacity: 0.4;
   pointer-events: none;
 }
+
+} /* @layer rift.components */

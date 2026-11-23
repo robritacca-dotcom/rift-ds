@@ -4,6 +4,10 @@
    held as removable tags inside the field
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-taginput {
   display: flex;
   flex-direction: column;
@@ -167,3 +171,5 @@
 .ds-taginput .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

@@ -8,6 +8,10 @@
    the small tiers borrow from paragraph-sm.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-text {
   margin: 0;
@@ -127,3 +131,5 @@
 .ds-text--align-end {
   text-align: end;
 }
+
+} /* @layer rift.components */

@@ -19,6 +19,16 @@
    changes the indicator's footprint or rhythm.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@property --ds-agent-ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer rift.components {
+
 .ds-agent-status {
   --ds-agent-color: var(--color-text-secondary);
   --ds-agent-label-color: var(--color-text-secondary);
@@ -918,7 +928,6 @@
 .ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(15) { --ds-agent-step: 7.5; }
 .ds-agent-status-mark--diagonal-swipe .ds-agent-status-mark__dot:nth-child(16) { --ds-agent-step: 9; }
 
-
 /* Twinkle: solid, one or two dots dipping on a fixed scatter */
 .ds-agent-status-mark--animated.ds-agent-status-mark--twinkle .ds-agent-status-mark__dot:nth-child(n) {
   opacity: 1;
@@ -962,12 +971,6 @@
    corners. The defaults sit flush on the
    element's own edge and radius.
    ============================================ */
-
-@property --ds-agent-ring-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
 
 /* Zero specificity, so a host's own position always wins: the ring only
    needs a containing block, which absolute and fixed already are. */
@@ -1238,3 +1241,5 @@
     animation: none;
   }
 }
+
+} /* @layer rift.components */

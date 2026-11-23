@@ -4,6 +4,10 @@
    mega menus, actions, and a drawer once folded
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-site-header {
   /* The bar's height. An override hook: the blur's reach and a page's own
@@ -470,3 +474,5 @@
 .ds-site-header__pill:has(.ds-site-header__caret) {
   padding-inline-end: var(--padding-300);
 }
+
+} /* @layer rift.components */

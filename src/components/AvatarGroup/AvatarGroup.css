@@ -5,6 +5,10 @@
    so the counter circle sits flush in the row.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-avatar-group {
@@ -59,3 +63,5 @@
   height: 56px;
   font-size: 18px; /* ds-allow(typography): matches Avatar's box-sized initials */
 }
+
+} /* @layer rift.components */

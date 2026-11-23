@@ -32,6 +32,10 @@
    the same in a panel as in a form.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ---------- size ----------
    default  8px + 24px line + 8px  = 40px, 20px sides, paragraph-emphasis
    compact  6px + 20px line + 6px  = 32px, 12px sides, paragraph-sm-emphasis */
@@ -632,3 +636,5 @@
   content: "";
   flex: 0 0 calc(var(--padding-300) - var(--gap-200));
 }
+
+} /* @layer rift.components */

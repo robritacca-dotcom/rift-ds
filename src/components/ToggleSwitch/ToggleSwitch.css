@@ -8,6 +8,10 @@
    keyed on the track's own modifiers.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-toggle-switch {
   /* Layout */
   display: inline-flex;
@@ -176,3 +180,5 @@
 .ds-toggle-switch--error .ds-toggle-switch__helper {
   color: var(--color-status-error-border);
 }
+
+} /* @layer rift.components */

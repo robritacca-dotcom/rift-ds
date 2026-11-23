@@ -4,6 +4,10 @@
    and multi-stage flows
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-stepper {
@@ -214,3 +218,5 @@ button.ds-stepper__content:hover .ds-stepper__label {
 .ds-stepper .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

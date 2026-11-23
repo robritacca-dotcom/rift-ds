@@ -7,6 +7,10 @@
    tooltips included, is SegmentedControl's.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-theme-toggle {
   flex-shrink: 0;
 }
@@ -14,3 +18,5 @@
 /* The cycle form is SegmentedControl's (`ds-segmented-control--cycle`),
    which draws the circle; `ds-theme-toggle--cycle` stays as a consumer
    hook and styles nothing here. */
+
+} /* @layer rift.components */

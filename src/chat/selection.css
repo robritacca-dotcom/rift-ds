@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* The highlight a chat holds on the page while it is the chat's context
    (useHeldHighlight in selection.ts): the context note's own fill, so the
    passage and the note that names it read as one thing, and quieter than a
@@ -6,3 +10,5 @@
   background-color: var(--color-chat-context-bg);
   color: var(--color-text-primary);
 }
+
+} /* @layer rift.components */

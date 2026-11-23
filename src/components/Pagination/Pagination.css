@@ -3,6 +3,10 @@
    Page navigation for long datasets
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-pagination {
   display: inline-flex;
   align-items: center;
@@ -206,3 +210,5 @@
     grid-column: 1;
   }
 }
+
+} /* @layer rift.components */

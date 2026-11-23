@@ -3,6 +3,8 @@
    Variable font with FILL, GRAD, opsz, wght axes
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
 @font-face {
   font-family: 'Material Symbols Rounded';
   font-style: normal;
@@ -10,6 +12,12 @@
   src: url('./MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.woff2') format('woff2');
   font-display: block;
 }
+
+/* The class rules sit in the rift.tokens cascade layer, below
+   rift.components: a component's own rule on its icon (its display, size or
+   colour) always wins, and so does any CSS of yours outside a layer. The
+   @font-face above stays outside any layer. */
+@layer rift.tokens {
 
 /* ============================================
    ICON BASE STYLES
@@ -105,3 +113,5 @@
 .ds-mirror-rtl:dir(rtl) {
   scale: -1 1;
 }
+
+} /* @layer rift.tokens */

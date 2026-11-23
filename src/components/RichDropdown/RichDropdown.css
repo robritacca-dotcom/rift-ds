@@ -3,6 +3,10 @@
    Select whose options preview their own look
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-rich-dropdown {
@@ -248,3 +252,5 @@
 .ds-rich-dropdown__trigger {
   padding-inline-end: var(--padding-300);
 }
+
+} /* @layer rift.components */

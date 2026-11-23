@@ -3,6 +3,10 @@
    Full-width page-level status strip
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-banner {
   display: flex;
   align-items: center;
@@ -108,3 +112,5 @@
   background-color: var(--color-status-neutral-bg);
   color: var(--color-status-neutral-text);
 }
+
+} /* @layer rift.components */

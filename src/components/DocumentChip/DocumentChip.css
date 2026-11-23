@@ -4,6 +4,10 @@
    metadata line, upload progress, optional remove.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-document-chip {
   /* Accent indirection — the error modifier repoints one variable
      instead of restyling each part */
@@ -224,3 +228,5 @@
 .ds-document-chip:has(> .ds-document-chip__remove) {
   padding-inline-end: var(--padding-200);
 }
+
+} /* @layer rift.components */

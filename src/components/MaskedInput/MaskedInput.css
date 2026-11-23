@@ -7,6 +7,10 @@
    spaced so each stands for one character.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-masked-input .ds-input__field {
   font-variant-numeric: tabular-nums;
 }
@@ -14,3 +18,5 @@
 .ds-masked-input--concealed .ds-input__field {
   letter-spacing: var(--font-overline-letter-spacing);
 }
+
+} /* @layer rift.components */

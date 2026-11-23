@@ -6,7 +6,7 @@
   "label": "File input",
   "slug": "file-input",
   "category": "forms",
-  "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
+  "description": "A click-or-drop upload zone paired with a file list showing size, progress, and per-file errors.",
   "client": true,
   "importPath": "rift-ds/components/FileInput/FileInput",
   "barrel": "main",

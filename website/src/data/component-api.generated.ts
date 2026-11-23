@@ -1572,18 +1572,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "deprecated": "Use `layout=\"floating\"`."
           },
           {
-            "name": "position",
-            "type": "AppSidebarPosition",
+            "name": "fixed",
+            "type": "boolean",
             "required": false,
-            "description": "Where the rail is laid out. `fixed` (the default) pins it to the\nviewport's start edge at the viewport's height, with the side panel and\nthe phone drawer fixed beside it, as a full-page app wants. `contained`\nlays it out in its parent instead, for a framed preview or a layout that\nis not the whole page: the parent is a flex row with a definite height,\nthe rail is its first item at the parent's height (sticky, so it holds\nwhile the parent scrolls), and the content beside it gives way as the\nrail expands and the side panel opens. On a phone the trigger, the scrim\nand the drawer stay inside the parent too.",
-            "values": [
-              "contained",
-              "fixed"
-            ],
-            "defaultValue": "'fixed'",
-            "typeRefs": [
-              "AppSidebarPosition"
-            ]
+            "description": "Pin the rail to the viewport. `true` (the default) fixes it to the\nviewport's start edge at the viewport's height, with the side panel and\nthe phone drawer fixed beside it, as a full-page app wants. `false`\nlays it out in its parent instead, for a framed preview or a layout that\nis not the whole page: the parent is a flex row with a definite height,\nthe rail is its first item at the parent's height (sticky, so it holds\nwhile the parent scrolls), and the content beside it gives way as the\nrail expands and the side panel opens. On a phone the trigger, the scrim\nand the drawer stay inside the parent too.",
+            "defaultValue": "true"
           },
           {
             "name": "topSlot",
@@ -9998,7 +9991,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "File input",
     "slug": "file-input",
     "category": "forms",
-    "description": "A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.",
+    "description": "A click-or-drop upload zone paired with a file list showing size, progress, and per-file errors.",
     "client": true,
     "importPath": "rift-ds/components/FileInput/FileInput",
     "barrel": "main",

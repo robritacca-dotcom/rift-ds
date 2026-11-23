@@ -1025,7 +1025,7 @@ The shared scaffolding for labelled form controls: label, required marker, helpe
 
 ### File input
 
-A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.
+A click-or-drop upload zone paired with a file list showing size, progress, and per-file errors.
 
 - Import: `import { FileInput } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

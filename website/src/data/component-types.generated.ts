@@ -253,11 +253,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "type AppSidebarLayout = 'flush' | 'floating' | 'inset';",
         "description": "The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface."
       },
-      "AppSidebarPosition": {
-        "kind": "type",
-        "definition": "type AppSidebarPosition = 'fixed' | 'contained';",
-        "description": "Where the rail is laid out: fixed to the viewport's start edge, or in its parent's flow."
-      },
       "AppSidebarProfile": {
         "kind": "interface",
         "definition": "interface AppSidebarProfile {\n  /** User display name */\n  name: string;\n  /** User email */\n  email: string;\n  /** Avatar image URL */\n  avatarUrl?: string;\n}"

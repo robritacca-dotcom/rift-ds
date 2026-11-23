@@ -1,6 +1,6 @@
 # File input
 
-A click-or-drop upload zone paired with a controlled file list showing size, progress, and per-file errors.
+A click-or-drop upload zone paired with a file list showing size, progress, and per-file errors.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 

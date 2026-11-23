@@ -145,19 +145,12 @@
           "deprecated": "Use `layout=\"floating\"`."
         },
         {
-          "name": "position",
-          "type": "AppSidebarPosition",
-          "typeKind": "enum",
-          "values": [
-            "contained",
-            "fixed"
-          ],
+          "name": "fixed",
+          "type": "boolean",
+          "typeKind": "primitive",
           "required": false,
-          "description": "Where the rail is laid out. `fixed` (the default) pins it to the\nviewport's start edge at the viewport's height, with the side panel and\nthe phone drawer fixed beside it, as a full-page app wants. `contained`\nlays it out in its parent instead, for a framed preview or a layout that\nis not the whole page: the parent is a flex row with a definite height,\nthe rail is its first item at the parent's height (sticky, so it holds\nwhile the parent scrolls), and the content beside it gives way as the\nrail expands and the side panel opens. On a phone the trigger, the scrim\nand the drawer stay inside the parent too.",
-          "default": "fixed",
-          "typeRefs": [
-            "AppSidebarPosition"
-          ]
+          "description": "Pin the rail to the viewport. `true` (the default) fixes it to the\nviewport's start edge at the viewport's height, with the side panel and\nthe phone drawer fixed beside it, as a full-page app wants. `false`\nlays it out in its parent instead, for a framed preview or a layout that\nis not the whole page: the parent is a flex row with a definite height,\nthe rail is its first item at the parent's height (sticky, so it holds\nwhile the parent scrolls), and the content beside it gives way as the\nrail expands and the side panel opens. On a phone the trigger, the scrim\nand the drawer stay inside the parent too.",
+          "default": true
         },
         {
           "name": "topSlot",
@@ -292,11 +285,6 @@
       "kind": "type",
       "definition": "type AppSidebarLayout = 'flush' | 'floating' | 'inset';",
       "description": "The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface."
-    },
-    "AppSidebarPosition": {
-      "kind": "type",
-      "definition": "type AppSidebarPosition = 'fixed' | 'contained';",
-      "description": "Where the rail is laid out: fixed to the viewport's start edge, or in its parent's flow."
     },
     "AppSidebarProfile": {
       "kind": "interface",

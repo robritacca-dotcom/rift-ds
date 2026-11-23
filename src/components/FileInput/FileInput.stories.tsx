@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { FileInput } from './FileInput';
 import type { FileInputFile } from './FileInput';
 
@@ -79,6 +80,37 @@ export const WithAcceptList: Story = {
     helperText: 'PNG, JPEG, or PDF up to 10 MB each.',
   },
   render: InteractiveTemplate,
+};
+
+/**
+ * Uncontrolled: no `files`, so FileInput keeps the list itself, starting from
+ * `defaultFiles`. A selection adds to it, each entry gets a remove button,
+ * and `onFilesSelected` and `onFilesChange` still fire.
+ */
+export const Uncontrolled: Story = {
+  args: {
+    multiple: true,
+    defaultFiles: [{ id: 'brief', name: 'project-brief.pdf', size: 184_320 }],
+    onFilesSelected: fn(),
+    onFilesChange: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('project-brief.pdf')).toBeInTheDocument();
+
+    const input = canvasElement.querySelector('.ds-file-input__native') as HTMLInputElement;
+    const file = new File(['%PDF'], 'budget.pdf', { type: 'application/pdf' });
+    await userEvent.upload(input, file);
+    await expect(args.onFilesSelected).toHaveBeenCalledWith([file]);
+    await expect(await canvas.findByText('budget.pdf')).toBeInTheDocument();
+    await expect(canvas.getByText('project-brief.pdf')).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove project-brief.pdf' }));
+    await expect(canvas.queryByText('project-brief.pdf')).not.toBeInTheDocument();
+    await expect(args.onFilesChange).toHaveBeenLastCalledWith([
+      expect.objectContaining({ name: 'budget.pdf', file }),
+    ]);
+  },
 };
 
 export const WithFiles: Story = {

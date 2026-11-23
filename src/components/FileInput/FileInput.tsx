@@ -18,6 +18,8 @@ export interface FileInputFile {
   progress?: number;
   /** Per-file error message — replaces the size line */
   error?: string;
+  /** The picked file itself. Set on the entries FileInput makes from a selection, so an uncontrolled list still hands the host its files. */
+  file?: File;
 }
 
 /** Props owned by FileInput itself — everything else falls through to the native <input type="file">. */
@@ -26,8 +28,12 @@ type FileInputOwnProps = {
   label?: string;
   /** Instructional copy inside the dropzone */
   placeholder?: string;
-  /** Files to list under the dropzone */
+  /** Files to list under the dropzone (controlled). Leave it out and FileInput keeps its own list, starting from `defaultFiles`. */
   files?: FileInputFile[];
+  /** The list FileInput starts with when `files` is left out (uncontrolled). A selection adds to it, or replaces it unless `multiple` is set, and a remove button takes an entry out. */
+  defaultFiles?: FileInputFile[];
+  /** Called with the whole list after a selection or a removal, in both modes. A controlled host can set `files` to it. */
+  onFilesChange?: (files: FileInputFile[]) => void;
   /** Component size (not the native character-width `size` attribute) */
   size?: 'default' | 'compact';
   /** Error state — shows error styling and message */
@@ -62,9 +68,11 @@ export interface FileInputProps
 
 /**
  * FileInput component — a click-or-drop zone paired with a list of the
- * chosen files. The list is fully controlled: pass `files` and handle
- * `onFilesSelected` / `onFileRemove` so upload progress and per-file
- * errors stay owned by the host app.
+ * chosen files. The list is a controlled/uncontrolled pair: pass `files` and
+ * handle `onFilesSelected` / `onFileRemove` (or `onFilesChange`) so upload
+ * progress and per-file errors stay owned by the host app, or leave `files`
+ * out and FileInput keeps the list itself, from `defaultFiles`, adding each
+ * selection and showing a remove button on every entry.
  *
  * Forwards a ref to the underlying `<input type="file">` — useful for
  * programmatically opening the picker or clearing the selection — and spreads
@@ -77,7 +85,9 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       placeholder = 'Drag and drop, or click to browse',
       accept,
       multiple = false,
-      files = [],
+      files: controlledFiles,
+      defaultFiles,
+      onFilesChange,
       size = 'default',
       disabled = false,
       required = false,
@@ -100,6 +110,10 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
   ) => {
     const locale = useLocale(localeProp);
     const [isDragging, setIsDragging] = useState(false);
+    const isControlled = controlledFiles !== undefined;
+    const [internalFiles, setInternalFiles] = useState<FileInputFile[]>(defaultFiles ?? []);
+    const files = isControlled ? controlledFiles : internalFiles;
+    const nextEntryId = useRef(0);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const generatedId = useId();
     const inputId = id || name || generatedId;
@@ -112,10 +126,32 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       else if (ref) ref.current = node;
     };
 
+    const commitFiles = (next: FileInputFile[]) => {
+      if (!isControlled) setInternalFiles(next);
+      onFilesChange?.(next);
+    };
+
     const emitFiles = (fileList: FileList | null) => {
       if (!fileList || fileList.length === 0) return;
-      onFilesSelected?.(Array.from(fileList));
+      const picked = Array.from(fileList);
+      onFilesSelected?.(picked);
+      const entries = picked.map((file) => ({
+        id: `${generatedId}-file-${(nextEntryId.current += 1)}`,
+        name: file.name,
+        size: file.size,
+        file,
+      }));
+      commitFiles(multiple ? [...files, ...entries] : entries);
     };
+
+    const removeFile = (fileId: string) => {
+      onFileRemove?.(fileId);
+      commitFiles(files.filter((entry) => entry.id !== fileId));
+    };
+
+    // A list FileInput keeps, or one whose host takes the new list, can lose
+    // an entry; a controlled list without either callback has no way to.
+    const canRemove = Boolean(onFileRemove || onFilesChange || !isControlled);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
@@ -267,11 +303,11 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                   )}
                 </span>
 
-                {onFileRemove && (
+                {canRemove && (
                   <button
                     type="button"
                     className={`${baseClass}__file-remove`}
-                    onClick={() => onFileRemove(file.id)}
+                    onClick={() => removeFile(file.id)}
                     disabled={disabled}
                     aria-label={removeLabel(file.name)}
                   >

@@ -391,7 +391,8 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     const pinnedToday = useMemo(() => parseDay(todayProp), [todayProp]);
     const pinnedNow = clockMinutes(nowProp);
     const clock = useDeviceClock(isDay && pinnedNow === null ? 'minute' : pinnedToday ? 'off' : 'day');
-    const [clockDay, clockTime] = clock?.split('T') ?? [];
+    const clockDay = clock?.split('T')[0];
+    const clockTime = clock?.split('T')[1];
     const deviceToday = useMemo(() => parseDay(clockDay), [clockDay]);
     /* Null until the browser has read its clock, when nothing pins it: no
        day carries the today chip yet. */

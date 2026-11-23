@@ -83,27 +83,27 @@ const NAV_SECTIONS: AppSidebarSection[] = [
 const MONTH = "2026-09";
 
 const EVENTS: EventCalendarEvent[] = [
-  { id: "e1", date: "2026-09-01", title: "Sprint planning", time: "10:00", color: "cobalt" },
-  { id: "e2", date: "2026-09-03", title: "Design review", time: "14:00", color: "violet" },
-  { id: "e3", date: "2026-09-04", title: "Team lunch", time: "12:30", color: "amber" },
+  { id: "e1", date: "2026-09-01", title: "Sprint planning", start: "10:00", color: "cobalt" },
+  { id: "e2", date: "2026-09-03", title: "Design review", start: "14:00", color: "violet" },
+  { id: "e3", date: "2026-09-04", title: "Team lunch", start: "12:30", color: "amber" },
   { id: "e4", date: "2026-09-07", title: "Release 1.4", color: "gold" },
-  { id: "e5", date: "2026-09-08", title: "Stand-up", time: "09:30", color: "cobalt" },
-  { id: "e6", date: "2026-09-09", title: "User interviews", time: "11:00", color: "violet" },
-  { id: "e7", date: "2026-09-10", title: "1:1 with Sam", time: "15:30", color: "cobalt" },
-  { id: "e8", date: "2026-09-11", title: "Yoga", time: "07:30", color: "mint" },
-  { id: "e9", date: "2026-09-14", title: "Sprint planning", time: "10:00", color: "cobalt" },
-  { id: "e10", date: "2026-09-15", title: "Roadmap review", time: "13:00", color: "violet" },
-  { id: "e11", date: "2026-09-15", title: "Portfolio crit", time: "15:00", color: "violet" },
-  { id: "e12", date: "2026-09-17", title: "Copy review", time: "11:00", color: "coral" },
-  { id: "e13", date: "2026-09-18", title: "Demo day", time: "16:00", color: "amber" },
+  { id: "e5", date: "2026-09-08", title: "Stand-up", start: "09:30", color: "cobalt" },
+  { id: "e6", date: "2026-09-09", title: "User interviews", start: "11:00", color: "violet" },
+  { id: "e7", date: "2026-09-10", title: "1:1 with Sam", start: "15:30", color: "cobalt" },
+  { id: "e8", date: "2026-09-11", title: "Yoga", start: "07:30", color: "mint" },
+  { id: "e9", date: "2026-09-14", title: "Sprint planning", start: "10:00", color: "cobalt" },
+  { id: "e10", date: "2026-09-15", title: "Roadmap review", start: "13:00", color: "violet" },
+  { id: "e11", date: "2026-09-15", title: "Portfolio crit", start: "15:00", color: "violet" },
+  { id: "e12", date: "2026-09-17", title: "Copy review", start: "11:00", color: "coral" },
+  { id: "e13", date: "2026-09-18", title: "Demo day", start: "16:00", color: "amber" },
   { id: "e14", date: "2026-09-21", title: "Offsite", color: "gold" },
   { id: "e15", date: "2026-09-22", title: "Offsite", color: "gold" },
-  { id: "e16", date: "2026-09-23", title: "Stand-up", time: "09:30", color: "cobalt" },
-  { id: "e17", date: "2026-09-24", title: "Retro", time: "15:00", color: "cobalt" },
-  { id: "e18", date: "2026-09-25", title: "Game night", time: "19:00", color: "amber" },
-  { id: "e19", date: "2026-09-28", title: "Sprint planning", time: "10:00", color: "cobalt" },
+  { id: "e16", date: "2026-09-23", title: "Stand-up", start: "09:30", color: "cobalt" },
+  { id: "e17", date: "2026-09-24", title: "Retro", start: "15:00", color: "cobalt" },
+  { id: "e18", date: "2026-09-25", title: "Game night", start: "19:00", color: "amber" },
+  { id: "e19", date: "2026-09-28", title: "Sprint planning", start: "10:00", color: "cobalt" },
   { id: "e20", date: "2026-09-29", title: "Beta cut-off", color: "coral" },
-  { id: "e21", date: "2026-09-30", title: "Monthly report due", time: "17:00", color: "coral" },
+  { id: "e21", date: "2026-09-30", title: "Monthly report due", start: "17:00", color: "coral" },
 ];
 
 type Todo = { id: string; label: string };
@@ -203,11 +203,17 @@ function dayParts(date: string): {
 /** The day's events in the calendar's own order: untimed first, then by time. */
 function eventsOn(date: string): EventCalendarEvent[] {
   return EVENTS.filter((e) => e.date === date).sort((a, b) => {
-    if (!a.time && !b.time) return 0;
-    if (!a.time) return -1;
-    if (!b.time) return 1;
-    return a.time.localeCompare(b.time);
+    if (!a.start && !b.start) return 0;
+    if (!a.start) return -1;
+    if (!b.start) return 1;
+    return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
   });
+}
+
+/** "13:00" → "1:00 PM", formatted by hand like the day parts above. */
+function clockTime(start: string): string {
+  const [h, m] = start.split(":").map(Number);
+  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 }
 
 /* ---------------------------------------------------------------- page */
@@ -359,7 +365,7 @@ export default function TeamCalendar() {
                           {event.title}
                         </span>
                         <span className={styles.scheduleTime}>
-                          {event.time ?? "All day"}
+                          {event.start ? clockTime(event.start) : "All day"}
                         </span>
                       </li>
                     ))}

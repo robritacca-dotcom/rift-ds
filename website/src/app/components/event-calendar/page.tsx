@@ -14,23 +14,23 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 
 
 const events: EventCalendarEvent[] = [
-  { id: "e1", date: "2026-08-01", title: "Brunch", time: "11:00", color: "amber" },
-  { id: "e2", date: "2026-08-03", title: "Stand-up", time: "11:30", color: "cobalt" },
-  { id: "e3", date: "2026-08-03", title: "1:1 sync", time: "16:30", color: "cobalt" },
-  { id: "e4", date: "2026-08-05", title: "Gym", time: "07:00", color: "mint" },
-  { id: "e5", date: "2026-08-08", title: "Game night", time: "19:00", color: "violet" },
+  { id: "e1", date: "2026-08-01", title: "Brunch", start: "11:00", color: "amber" },
+  { id: "e2", date: "2026-08-03", title: "Stand-up", start: "11:30", color: "cobalt" },
+  { id: "e3", date: "2026-08-03", title: "1:1 sync", start: "16:30", color: "cobalt" },
+  { id: "e4", date: "2026-08-05", title: "Gym", start: "07:00", color: "mint" },
+  { id: "e5", date: "2026-08-08", title: "Game night", start: "19:00", color: "violet" },
   { id: "e6", date: "2026-08-11", title: "Holidays", color: "gold" },
-  { id: "e7", date: "2026-08-11", title: "Birthday dinner", time: "20:30", color: "coral" },
-  { id: "e8", date: "2026-08-14", title: "Retro", time: "15:00", color: "cobalt" },
-  { id: "e9", date: "2026-08-17", title: "Planning", time: "10:00", color: "cobalt" },
-  { id: "e10", date: "2026-08-17", title: "Haircut", time: "16:00" },
-  { id: "e11", date: "2026-08-20", title: "Stand-up", time: "11:30", color: "cobalt" },
-  { id: "e12", date: "2026-08-20", title: "Team lunch", time: "13:00", color: "amber" },
-  { id: "e13", date: "2026-08-20", title: "Portfolio review", time: "14:30", color: "violet" },
-  { id: "e14", date: "2026-08-20", title: "1:1 sync", time: "16:30", color: "cobalt" },
-  { id: "e15", date: "2026-08-24", title: "Dinner with friends", time: "19:15", color: "coral" },
-  { id: "e16", date: "2026-08-27", title: "Yoga", time: "07:30", color: "mint" },
-  { id: "e17", date: "2026-08-29", title: "Brunch", time: "11:00", color: "amber" },
+  { id: "e7", date: "2026-08-11", title: "Birthday dinner", start: "20:30", color: "coral" },
+  { id: "e8", date: "2026-08-14", title: "Retro", start: "15:00", color: "cobalt" },
+  { id: "e9", date: "2026-08-17", title: "Planning", start: "10:00", color: "cobalt" },
+  { id: "e10", date: "2026-08-17", title: "Haircut", start: "16:00" },
+  { id: "e11", date: "2026-08-20", title: "Stand-up", start: "11:30", color: "cobalt" },
+  { id: "e12", date: "2026-08-20", title: "Team lunch", start: "13:00", color: "amber" },
+  { id: "e13", date: "2026-08-20", title: "Portfolio review", start: "14:30", color: "violet" },
+  { id: "e14", date: "2026-08-20", title: "1:1 sync", start: "16:30", color: "cobalt" },
+  { id: "e15", date: "2026-08-24", title: "Dinner with friends", start: "19:15", color: "coral" },
+  { id: "e16", date: "2026-08-27", title: "Yoga", start: "07:30", color: "mint" },
+  { id: "e17", date: "2026-08-29", title: "Brunch", start: "11:00", color: "amber" },
   { id: "e18", date: "2026-08-31", title: "Payday", color: "gold" },
 ];
 
@@ -46,7 +46,7 @@ function ScheduleDemo() {
         selectedDate={selectedDate}
         onEventClick={(event) => {
           setSelectedDate(event.date);
-          setSelected(`${event.title}${event.time ? ` at ${event.time}` : ""}`);
+          setSelected(`${event.title}${event.start ? ` at ${event.start}` : ""}`);
         }}
         onDateClick={(date) => {
           setSelectedDate(date);
@@ -90,7 +90,7 @@ export default function EventCalendarPage() {
       <section className={styles.section}>
         <SectionTitle title="A month with plans" />
         <p className={styles.demoText}>
-          Events carry a date, a title, an optional time, and an accent
+          Events carry a date, a title, an optional start and end time, and an accent
           from the core accent roles, never the action colour. Untimed
           events sort first within a day, and rows share the height of
           the fullest day in their week. Clicking a day, or anywhere on

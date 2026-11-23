@@ -90,6 +90,9 @@ export interface AppSidebarProfile {
 /** The three app shell modes, how the rail meets the page: edge to edge behind a hairline, floating as a card, or flush beside a raised inset surface. */
 export type AppSidebarLayout = 'flush' | 'floating' | 'inset';
 
+/** Where the rail is laid out: fixed to the viewport's start edge, or in its parent's flow. */
+export type AppSidebarPosition = 'fixed' | 'contained';
+
 /** Props owned by AppSidebar itself — everything else falls through to the `<nav>`. */
 type AppSidebarOwnProps = {
   /** Navigation sections */
@@ -144,6 +147,18 @@ type AppSidebarOwnProps = {
    * @deprecated Use `layout="floating"`.
    */
   floating?: boolean;
+  /**
+   * Where the rail is laid out. `fixed` (the default) pins it to the
+   * viewport's start edge at the viewport's height, with the side panel and
+   * the phone drawer fixed beside it, as a full-page app wants. `contained`
+   * lays it out in its parent instead, for a framed preview or a layout that
+   * is not the whole page: the parent is a flex row with a definite height,
+   * the rail is its first item at the parent's height (sticky, so it holds
+   * while the parent scrolls), and the content beside it gives way as the
+   * rail expands and the side panel opens. On a phone the trigger, the scrim
+   * and the drawer stay inside the parent too.
+   */
+  position?: AppSidebarPosition;
   /** Rendered under the logo row, above the nav; fades out while collapsed */
   topSlot?: React.ReactNode;
   /** Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state */
@@ -255,6 +270,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   onProfileMore,
   layout: layoutProp,
   floating: floatingProp = false,
+  position = 'fixed',
   topSlot,
   persistentTopSlot = false,
   footerSlot,
@@ -276,6 +292,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   // The deprecated boolean still floats the rail when no layout is given.
   const layout: AppSidebarLayout = layoutProp ?? (floatingProp ? 'floating' : 'flush');
   const floating = layout === 'floating';
+  const contained = position === 'contained';
   const Link = useLinkComponent(linkComponent);
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours
@@ -521,6 +538,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     isExpanded || mobileOpen ? `${baseClass}--expanded` : '',
     floating ? `${baseClass}--floating` : '',
     layout === 'inset' ? `${baseClass}--inset` : '',
+    contained ? `${baseClass}--contained` : '',
     mobileOpen ? `${baseClass}--mobile-open` : '',
     isPanelMode ? `${baseClass}--panel-mode` : '',
     className,
@@ -533,7 +551,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       {showMobileTrigger && (
         <button
           type="button"
-          className={`${baseClass}__mobile-trigger`}
+          className={`${baseClass}__mobile-trigger${contained ? ` ${baseClass}__mobile-trigger--contained` : ''}`}
           aria-label={openLabel}
           aria-expanded={mobileOpen}
           aria-controls={drawerId}
@@ -545,7 +563,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         </button>
       )}
       {mobileOpen && (
-        <div className={`${baseClass}__scrim`} onClick={() => layer.ownsPress() && closeMobile()} aria-hidden="true" />
+        <div className={`${baseClass}__scrim${contained ? ` ${baseClass}__scrim--contained` : ''}`} onClick={() => layer.ownsPress() && closeMobile()} aria-hidden="true" />
       )}
     <nav
       aria-label="App navigation"
@@ -921,6 +939,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             isPanelMode ? `${baseClass}__panel--panel-mode` : '',
             floating ? `${baseClass}__panel--floating` : '',
             layout === 'inset' ? `${baseClass}__panel--inset` : '',
+            contained ? `${baseClass}__panel--contained` : '',
           ]
             .filter(Boolean)
             .join(' ')}

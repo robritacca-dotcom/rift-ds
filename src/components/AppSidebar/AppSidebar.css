@@ -233,10 +233,10 @@
   justify-content: space-between;
   height: 40px;
   min-width: 0;
-  /* The same inset in both states: in the collapsed 64px rail the 12px
-     margins leave a 40px row, so the hover pill is a perfect circle clear
-     of the rail edges, with the icon centred (12 + 8 + 24 + 8 + 12 = 64);
-     expanded, these are the pill's edge inset. Nothing to transition. */
+  /* Collapsed, the 12px margins leave a 40px row in the 64px rail, so the
+     hover pill is a perfect circle clear of the rail edges, with the icon
+     centred (12 + 8 + 24 + 8 + 12 = 64). Expanded, the start side trades
+     4px of margin for 4px of padding (the --expanded rule below). */
   margin: 0 var(--padding-300);
   padding: var(--padding-200);
   border-radius: var(--radius-pill);
@@ -254,6 +254,18 @@
 /* Inset via margin + reduced padding (12 + 8 = the 20px the label sat at
    before), so the pill floats off the rail edges while the icon and label
    keep their exact x-positions against the category labels above. */
+
+/* Expanded, the pill's start curve bent right up to the icon 8px in, and
+   the icon read as crammed against the highlight's edge. The start side
+   trades 4px of margin for 4px of padding (8 + 12, still 20), so the icon
+   holds its x and the pill reaches a step toward the rail's edge. Margin
+   and padding glide on the same duration and easing, so their sum stays 20
+   through the sweep and the icon never moves. Not panel mode, whose rows
+   keep one seat of their own. */
+.ds-app-sidebar--expanded:not(.ds-app-sidebar--panel-mode) .ds-app-sidebar__btn {
+  margin-inline-start: var(--padding-200);
+  padding-inline-start: var(--padding-300);
+}
 
 .ds-app-sidebar__btn:hover {
   background-color: var(--color-action-passive-bg-hover);
@@ -779,6 +791,82 @@
 }
 
 /* ============================================
+   CONTAINED — the rail laid out in its parent
+   (position="contained"), for a framed preview
+   or a layout that is not the whole page. The
+   parent is a flex row with a definite height.
+   Every piece that is fixed to the viewport
+   above takes its place in that row instead,
+   held there by position: sticky, and a piece
+   that overlays (the panel while hidden, the
+   phone drawer, its scrim) gives its width
+   back with a negative end margin, so none of
+   them needs a positioned ancestor. Small
+   local stacking values, not the layer tokens:
+   the rail stacks only against its own
+   neighbours in the frame, never the page.
+   ============================================ */
+.ds-app-sidebar--contained {
+  position: sticky;
+  top: 0;
+  /* Sticky honours an inline offset too, which would pin the rail against
+     a scrolling ancestor's edge; the row places it instead. */
+  inset-inline-start: auto;
+  z-index: 3;
+  flex: none;
+  height: 100%;
+}
+
+.ds-app-sidebar--contained.ds-app-sidebar--floating {
+  top: var(--ds-sidebar-float-inset, 20px);
+  inset-inline-start: auto;
+  height: calc(100% - var(--ds-sidebar-float-inset, 20px) * 2);
+  margin-block: var(--ds-sidebar-float-inset, 20px);
+  margin-inline-start: var(--ds-sidebar-float-inset, 20px);
+}
+
+/* The panel follows the rail in the row, so it tracks the rail's width
+   with no offsets of its own. Shown, it takes its width beside the rail
+   and the content gives way, as AppLayout reserves it; hidden, its end
+   margin hands the width back on the same glide. */
+.ds-app-sidebar__panel--contained {
+  position: sticky;
+  top: 0;
+  inset-inline-start: auto;
+  z-index: 2;
+  flex: none;
+  height: 100%;
+  margin-inline-end: calc(-1 * var(--ds-sidebar-panel-width, 240px));
+  transition:
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized),
+    visibility 0s linear var(--motion-duration-base);
+}
+
+.ds-app-sidebar__panel--contained.ds-app-sidebar__panel--visible {
+  margin-inline-end: 0;
+  transition:
+    margin var(--motion-duration-slow) var(--motion-ease-emphasized),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized),
+    visibility 0s linear 0s;
+}
+
+.ds-app-sidebar__panel--contained.ds-app-sidebar__panel--floating {
+  top: var(--ds-sidebar-float-inset, 20px);
+  inset-inline-start: auto;
+  height: calc(100% - var(--ds-sidebar-float-inset, 20px) * 2);
+  margin-block: var(--ds-sidebar-float-inset, 20px);
+  margin-inline-start: var(--gap-300);
+  margin-inline-end: calc(-1 * (var(--ds-sidebar-panel-width, 240px) + var(--gap-300)));
+}
+
+.ds-app-sidebar__panel--contained.ds-app-sidebar__panel--floating.ds-app-sidebar__panel--visible {
+  margin-inline-end: 0;
+}
+
+/* ============================================
    PANEL MODE RAIL — labels under icons
    With the second level in the panel, the
    collapsed rail is the whole of level 1, so it
@@ -1020,6 +1108,48 @@
     border-inline-end: var(--border-025) solid var(--color-bg-container-border);
     box-shadow: var(--shadow-modal);
     animation: ds-app-sidebar-slide-in var(--motion-duration-base) var(--motion-ease-standard);
+  }
+}
+
+/* Contained, the phone drawer stays in its parent: the trigger sits at
+   the parent's top start corner (an absolute box with no offsets keeps its
+   place in the row and takes none of it), and the scrim and the drawer
+   cover the parent's height from its start, each handing its width back
+   with an end margin. The drawer's body scroll lock still holds the page. */
+@media (max-width: 768px) {
+  .ds-app-sidebar--contained.ds-app-sidebar--floating:not(.ds-app-sidebar--mobile-open) {
+    margin: 0;
+  }
+
+  .ds-app-sidebar__mobile-trigger--contained {
+    position: absolute;
+    top: auto;
+    inset-inline-start: auto;
+    z-index: 1;
+    margin-block-start: var(--padding-400);
+    margin-inline-start: var(--padding-400);
+  }
+
+  .ds-app-sidebar__scrim--contained {
+    position: sticky;
+    inset: auto;
+    top: 0;
+    z-index: 2;
+    flex: none;
+    width: 100%;
+    height: 100%;
+    margin-inline-end: -100%;
+  }
+
+  .ds-app-sidebar--contained.ds-app-sidebar--mobile-open {
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    inset-inline-start: auto;
+    z-index: 3;
+    height: 100%;
+    margin: 0;
+    margin-inline-end: -280px; /* ds-allow(spacing): the drawer's own 280px width, handed back to the row */
   }
 }
 

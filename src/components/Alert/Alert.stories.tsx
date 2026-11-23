@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { Alert } from './Alert';
 import { Button } from '../Button/Button';
+import { Link } from '../Link/Link';
 
 const meta = {
   title: 'Components/Alert',
@@ -151,6 +152,24 @@ export const WithAction: Story = {
       <>
         <Button size="compact">Extend session</Button>
         <Button size="compact" variant="tertiary">Sign out</Button>
+      </>
+    ),
+  },
+};
+
+export const RichDescription: Story = {
+  args: {
+    variant: 'error',
+    title: 'Two fields need attention',
+    description: (
+      <>
+        <p>
+          Fix these before you submit, or read the <Link href="#">form guidance</Link>.
+        </p>
+        <ul>
+          <li>Enter a start date.</li>
+          <li>Choose a team.</li>
+        </ul>
       </>
     ),
   },

@@ -9,8 +9,8 @@ type AlertOwnProps = {
    * Note: this shadows the native `title` tooltip attribute, which Alert does not expose.
    */
   title?: string;
-  /** Alert description / body text */
-  description?: string;
+  /** The body under the title. Plain text is the usual case; it also takes a short run of markup, such as a sentence with a Link in it or a list of two or three items. */
+  description?: React.ReactNode;
   /** Alert variant determines colour and icon */
   variant?: 'info' | 'positive' | 'warning' | 'error' | 'neutral';
   /** Component size */
@@ -92,8 +92,14 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 
         <div className={`${baseClass}__content`}>
           {title && <p className={`${baseClass}__title`}>{title}</p>}
-          {description && (
-            <p className={`${baseClass}__description`}>{description}</p>
+          {description != null && description !== false && description !== '' && (
+            // Text sits in a paragraph; markup gets a div, since a paragraph
+            // cannot hold another paragraph or a list.
+            typeof description === 'string' || typeof description === 'number' ? (
+              <p className={`${baseClass}__description`}>{description}</p>
+            ) : (
+              <div className={`${baseClass}__description`}>{description}</div>
+            )
           )}
           {action != null && action !== false && (
             <div className={`${baseClass}__actions`}>{action}</div>

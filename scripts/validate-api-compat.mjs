@@ -92,6 +92,13 @@ const git = (...args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'u
 const SANCTIONED_BREAKS = [
   {
     since: '1.35.0',
+    component: 'Alert',
+    prop: 'description',
+    change: 'type',
+    reason: 'a widening: string became React.ReactNode, which every string still is, so a link or a short list fits',
+  },
+  {
+    since: '1.35.0',
     component: 'ChatWidget',
     prop: 'chatThreadLabels',
     change: 'type',

@@ -94,6 +94,22 @@
   margin: 0;
 }
 
+/* Markup in the description: paragraphs and lists stack at the content's
+   own gap, with no browser margins, and a list keeps its markers inside the
+   content column. Links are the Link component's inline form, which already
+   takes the sentence's colour. */
+.ds-alert__description > :where(p, ul, ol) {
+  margin: 0;
+}
+
+.ds-alert__description > * + :where(p, ul, ol) {
+  margin-block-start: var(--gap-100); /* 4px */
+}
+
+.ds-alert__description :where(ul, ol) {
+  padding-inline-start: var(--padding-500); /* 20px */
+}
+
 /* ============================================
    ACTIONS
    ============================================ */

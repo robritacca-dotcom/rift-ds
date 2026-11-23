@@ -233,10 +233,10 @@
   justify-content: space-between;
   height: 40px;
   min-width: 0;
-  /* The same inset in both states: in the collapsed 64px rail the 12px
-     margins leave a 40px row, so the hover pill is a perfect circle clear
-     of the rail edges, with the icon centred (12 + 8 + 24 + 8 + 12 = 64);
-     expanded, these are the pill's edge inset. Nothing to transition. */
+  /* Collapsed, the 12px margins leave a 40px row in the 64px rail, so the
+     hover pill is a perfect circle clear of the rail edges, with the icon
+     centred (12 + 8 + 24 + 8 + 12 = 64). Expanded, the start side trades
+     4px of margin for 4px of padding (the --expanded rule below). */
   margin: 0 var(--padding-300);
   padding: var(--padding-200);
   border-radius: var(--radius-pill);
@@ -254,6 +254,18 @@
 /* Inset via margin + reduced padding (12 + 8 = the 20px the label sat at
    before), so the pill floats off the rail edges while the icon and label
    keep their exact x-positions against the category labels above. */
+
+/* Expanded, the pill's start curve bent right up to the icon 8px in, and
+   the icon read as crammed against the highlight's edge. The start side
+   trades 4px of margin for 4px of padding (8 + 12, still 20), so the icon
+   holds its x and the pill reaches a step toward the rail's edge. Margin
+   and padding glide on the same duration and easing, so their sum stays 20
+   through the sweep and the icon never moves. Not panel mode, whose rows
+   keep one seat of their own. */
+.ds-app-sidebar--expanded:not(.ds-app-sidebar--panel-mode) .ds-app-sidebar__btn {
+  margin-inline-start: var(--padding-200);
+  padding-inline-start: var(--padding-300);
+}
 
 .ds-app-sidebar__btn:hover {
   background-color: var(--color-action-passive-bg-hover);

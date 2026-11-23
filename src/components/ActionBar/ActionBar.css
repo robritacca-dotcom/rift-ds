@@ -1,0 +1,78 @@
+/* ============================================
+   ACTION BAR
+   A summary line and the primary actions, docked
+   to the bottom of a long list or form
+   ============================================ */
+
+/* Base */
+.ds-action-bar {
+  /* The surface the bar reads as one with: the blur's tint with the blur
+     on, the fill with it off. An override hook: a bar over a container
+     points it at that container's fill. */
+  --ds-action-bar-surface: var(--color-bg-page-primary);
+  /* How far above the bar the blur reaches, so the content dissolves into
+     it rather than stopping at its edge. */
+  --ds-action-bar-blur-reach: var(--gap-1500);
+  position: relative;
+  /* Its own stacking context, so the blur's z-index of -1 paints behind
+     the summary and the actions but never behind the content it covers. */
+  isolation: isolate;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-300) var(--gap-500);
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-block: var(--padding-400);
+  padding-inline: var(--padding-500);
+}
+
+/* Sticky: holds to the bottom edge of its scroll container. */
+.ds-action-bar--sticky {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: var(--layer-sticky);
+}
+
+/* Blur: the stack reaches above the bar, behind its content. The space
+   above the bar in flow is the same reach, so at the end of the scroll
+   the last row clears the blur instead of resting under it. */
+.ds-action-bar--blur {
+  margin-block-start: var(--ds-action-bar-blur-reach);
+}
+
+.ds-action-bar__blur.ds-progressive-blur {
+  --ds-progressive-blur-tint: var(--ds-action-bar-surface);
+  inset-block-start: calc(var(--ds-action-bar-blur-reach) * -1);
+  z-index: -1;
+}
+
+/* Solid: the bar's own surface, parted from the content by a hairline. */
+.ds-action-bar--solid {
+  background-color: var(--ds-action-bar-surface);
+  border-block-start: var(--border-025) solid var(--color-divider);
+}
+
+/* Summary: takes the room at the start; a long line wraps rather than
+   pushing the actions off the bar. */
+.ds-action-bar__summary {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  letter-spacing: var(--font-paragraph-letter-spacing);
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* Actions: hold the end edge, on the summary's row or wrapped below it. */
+.ds-action-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-300);
+  margin-inline-start: auto;
+}

@@ -78,6 +78,19 @@
       "pattern": "accordion"
     },
     {
+      "name": "ActionBar",
+      "label": "Action bar",
+      "slug": "action-bar",
+      "description": "A bar docked to the bottom of a long list or form, with a summary line and the primary actions over a progressive blur.",
+      "category": "actions",
+      "client": false,
+      "keys": { "by": "platform", "note": "The bar adds no keys of its own: its actions are buttons, and the browser owns Tab, Enter and Space." },
+      "alternatives": [
+        { "name": "Toolbar", "when": "the controls act on a canvas or a view and sit together in one pill, rather than closing out a list" },
+        { "name": "TableToolbar", "when": "the bar sits over a table and holds its search, filters and view settings" }
+      ]
+    },
+    {
       "name": "ActionCard",
       "label": "Action card",
       "slug": "action-card",
@@ -1755,7 +1768,10 @@
       "description": "The control bar over a table: search, filter chips, sort, group, columns, density, saved views and a bulk bar, wired to a DataTable in its toolbar slot.",
       "category": "data-display",
       "client": true,
-      "keys": { "by": "component", "note": "Alt and the up or down arrow reorder a column or a sort row, and Escape closes a panel." }
+      "keys": { "by": "component", "note": "Alt and the up or down arrow reorder a column or a sort row, and Escape closes a panel." },
+      "alternatives": [
+        { "name": "ActionBar", "when": "the actions finish the work on a long list or form, docked below it rather than over a table" }
+      ]
     },
     {
       "name": "Tabs",
@@ -1901,7 +1917,8 @@
       "client": true,
       "pattern": "toolbar",
       "alternatives": [
-        { "name": "Menubar", "when": "the controls are named menus of commands, like an app's File and Edit" }
+        { "name": "Menubar", "when": "the controls are named menus of commands, like an app's File and Edit" },
+        { "name": "ActionBar", "when": "a summary and the primary actions close out a long list or form, docked to its bottom" }
       ]
     },
     {

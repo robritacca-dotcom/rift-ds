@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useSyncExternalStore } from 'react';
 import { Chip } from '../Chip/Chip';
 import './EventCalendar.css';
 import '../../behaviors/visually-hidden.css';
@@ -14,7 +14,8 @@ import {
   plainSpaces,
   type Weekday,
 } from '../../behaviors/locale';
-import { compareTimes } from './eventTime';
+import { MOTION_DEADLINE_TICK_MS } from '../../tokens/motion';
+import { clockMinutes, compareTimes, minutesOf, nowMarkerIndex } from './eventTime';
 
 export type EventCalendarColor =
   | 'neutral'
@@ -34,7 +35,17 @@ export interface EventCalendarEvent {
   endDate?: string;
   /** Short label shown in the event pill. */
   title: string;
-  /** Start time as already-formatted text like "09:30" or "1:40 PM". Untimed events sort first, then clock times in clock order, then any other text. */
+  /** When the event starts, as a 24-hour `HH:mm` string ("08:50", "13:40"). The calendar writes it in the resolved locale and sorts each day by it: untimed events first, then by the clock. */
+  start?: string;
+  /** When the event ends, as a 24-hour `HH:mm` string, later than `start`. With it, the event shows and is named with its range ("8:50 – 9:50 AM" in `en-US`). */
+  end?: string;
+  /**
+   * Start time as already-formatted text like "09:30" or "1:40 PM", shown
+   * as written in place of `start` and `end` when it is set. Without `start`
+   * it sorts by the clock where it reads as a clock time, after untimed
+   * events and ahead of any other text.
+   * @deprecated Use `start` (and `end`), which the calendar formats in the resolved locale.
+   */
   time?: string;
   /** Accent for the pill's dot, from the core accent roles. Defaults to `neutral`. */
   color?: EventCalendarColor;
@@ -93,6 +104,76 @@ const monthLabelIn = (locale: string) => {
   return (month: Date): string => format.format(month);
 };
 
+const weekLabelIn = (locale: string) => {
+  const format = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
+  return (start: Date, end: Date): string => plainSpaces(format.formatRange(start, end));
+};
+
+/** A clock time in minutes after midnight as a Date to format, on a day with no clock change. */
+const atMinutes = (minutes: number): Date => new Date(2000, 0, 1, Math.floor(minutes / 60), minutes % 60);
+
+/** The text an event's time is shown and named with, in `locale`, or null when it has none. */
+const eventTimesIn = (locale: string) => {
+  const format = new Intl.DateTimeFormat(locale, { hour: 'numeric', minute: '2-digit' });
+  const clock = (minutes: number) => plainSpaces(format.format(atMinutes(minutes)));
+  return (event: EventCalendarEvent): { range: string; start: string; end: string | null } | null => {
+    if (event.time) return { range: event.time, start: event.time, end: null };
+    const start = clockMinutes(event.start);
+    if (start === null) return null;
+    const end = clockMinutes(event.end);
+    if (end === null || end <= start) return { range: clock(start), start: clock(start), end: null };
+    return {
+      range: plainSpaces(format.formatRange(atMinutes(start), atMinutes(end))),
+      start: clock(start),
+      end: clock(end),
+    };
+  };
+};
+
+/** What an event sorts by within its day: `start` when it is a clock time, else `time`. */
+const sortTimeOf = (event: EventCalendarEvent): string | undefined =>
+  clockMinutes(event.start) !== null ? event.start : event.time;
+
+/* The device's clock, read only in the browser. The server's snapshot is
+   null, so a server render and the hydrating client agree, and the browser's
+   date takes over straight after; a client-only render reads it at once. The
+   snapshot is text at the precision a calendar needs, so the calendar
+   renders again only when the day (or, for the now marker, the minute)
+   turns, and the tick pauses while the page is hidden. */
+const subscribeClock = (onChange: () => void) => {
+  let timer: number | undefined;
+  const start = () => {
+    window.clearInterval(timer);
+    onChange();
+    timer = window.setInterval(onChange, MOTION_DEADLINE_TICK_MS);
+  };
+  const onVisibility = () => {
+    if (document.hidden) window.clearInterval(timer);
+    else start();
+  };
+  start();
+  document.addEventListener('visibilitychange', onVisibility);
+  return () => {
+    window.clearInterval(timer);
+    document.removeEventListener('visibilitychange', onVisibility);
+  };
+};
+const subscribeNothing = () => () => {};
+const clockToDay = () => formatDate(new Date());
+const clockToMinute = () => {
+  const now = new Date();
+  return `${formatDate(now)}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+};
+const noClock = () => null;
+
+function useDeviceClock(precision: 'off' | 'day' | 'minute'): string | null {
+  return useSyncExternalStore(
+    precision === 'off' ? subscribeNothing : subscribeClock,
+    precision === 'minute' ? clockToMinute : precision === 'day' ? clockToDay : noClock,
+    noClock,
+  );
+}
+
 const defaultMoreLabel = (count: number): string => `+${count} more`;
 
 const overflowLabelIn = (formatDayLabel: (date: Date) => string) =>
@@ -126,8 +207,32 @@ type EventCalendarOwnProps = {
    * consumer; pair with `onDateClick` to move it.
    */
   selectedDate?: string;
-  /** The date the calendar treats as today (`YYYY-MM-DD`): it carries the today chip and picks the month shown first. Defaults to the device's date; pin it for a demo, a test or a time zone the device is not in. */
+  /**
+   * The date the calendar treats as today (`YYYY-MM-DD`): it carries the
+   * today chip and picks the month shown first. Defaults to the device's
+   * date, read in the browser only: a server render draws no today chip and
+   * the browser adds it once it hydrates, so a server in another time zone
+   * can never put it on the wrong day, and it moves on at midnight. The month
+   * shown first still falls back to the render-time clock, so a server-rendered
+   * host passes `today` (or `defaultMonth`) when the first month must match.
+   * Pin it for a demo, a test or a time zone the device is not in.
+   */
   today?: string;
+  /**
+   * The time (24-hour `HH:mm`) the day view's now marker sits at, when the
+   * day shown is `today`. Defaults to the device's clock, read in the browser
+   * only and moved on every minute, so a server render draws no marker; pin
+   * it for a demo, a test or a screenshot.
+   */
+  now?: string;
+  /** The text of the day view's now marker. */
+  nowLabel?: string;
+  /** What the day view's schedule shows in place of a time for an event with none. */
+  allDayLabel?: string;
+  /** What the day view's schedule says on a day with no events. */
+  emptyDayLabel?: string;
+  /** Strips the calendar's own fill, border, radius and padding, for a Panel or Widget that already draws the surface. */
+  bare?: boolean;
   /** What each event colour means, shown as a row of dots and labels under the grid. With `legendToggles`, each entry also shows and hides its colour's events. */
   legend?: EventCalendarLegendItem[];
   /** Makes each legend entry a selectable Chip that shows or hides the events of its colour, so a reader can narrow a busy calendar by kind. */
@@ -149,7 +254,7 @@ type EventCalendarOwnProps = {
   renderSelectedDay?: (date: string, events: EventCalendarEvent[]) => React.ReactNode;
   /** Trailing header slot, e.g. a "New event" Button. */
   actions?: React.ReactNode;
-  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day the same way, stepping a day at a time. */
+  /** `month` shows the whole month, a day's overflow folded behind "+N more"; `week` shows one week in tall cells with every event, stepping a week at a time from the selected day's week (else today's), which it keeps as its own state after mount; `day` shows that one day as a schedule, each event's start and end time first, with a now marker on today, stepping a day at a time. */
   view?: 'month' | 'week' | 'day';
   /** Accessible name of the previous-month button. */
   previousLabel?: string;
@@ -169,9 +274,21 @@ type EventCalendarOwnProps = {
    * The month heading, given the first day of the month in view: the visible
    * title and the name of the day grid. Defaults to the month name and the
    * year in `locale` ("January 2026" in `en-US`). Month view only; the week
-   * view's heading is the week's range in `locale`.
+   * view's heading is `weekLabel`, the day view's `dayLabel`.
    */
   monthLabel?: (month: Date) => string;
+  /**
+   * The week view's heading, given the first and last day of the week in
+   * view: the visible title and the name of the week's cells. Defaults to
+   * the range in `locale` ("August 16 – 22, 2026" in `en-US`).
+   */
+  weekLabel?: (start: Date, end: Date) => string;
+  /**
+   * The full name of a day, given the day: the day view's heading and every
+   * day's spoken name. Defaults to the weekday and the date in `locale`
+   * ("Thursday, August 20, 2026" in `en-US`).
+   */
+  dayLabel?: (date: Date) => string;
   /**
    * Accessible name of a day's "+N more" overflow button, given the number of
    * hidden events and the day. Defaults to "N more events" followed by the
@@ -234,6 +351,11 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       onDateClick,
       selectedDate,
       today: todayProp,
+      now: nowProp,
+      nowLabel = 'Now',
+      allDayLabel = 'All day',
+      emptyDayLabel = 'No events',
+      bare = false,
       legend,
       legendToggles = false,
       hiddenColors: hiddenColorsProp,
@@ -251,6 +373,8 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       nextDayLabel = 'Next day',
       showLessLabel = 'Show less',
       monthLabel: monthLabelProp,
+      weekLabel: weekLabelProp,
+      dayLabel: dayLabelProp,
       overflowLabel: overflowLabelProp,
       moreLabel = defaultMoreLabel,
       weekdayLabels,
@@ -262,11 +386,24 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     ref,
   ) => {
     const baseClass = 'ds-event-calendar';
-    const today = useMemo(() => parseDay(todayProp) ?? new Date(), [todayProp]);
+    const isDay = view === 'day';
+    const isWeek = view === 'week' || isDay;
+    const pinnedToday = useMemo(() => parseDay(todayProp), [todayProp]);
+    const pinnedNow = clockMinutes(nowProp);
+    const clock = useDeviceClock(isDay && pinnedNow === null ? 'minute' : pinnedToday ? 'off' : 'day');
+    const [clockDay, clockTime] = clock?.split('T') ?? [];
+    const deviceToday = useMemo(() => parseDay(clockDay), [clockDay]);
+    /* Null until the browser has read its clock, when nothing pins it: no
+       day carries the today chip yet. */
+    const today = pinnedToday ?? deviceToday;
+    const nowMinutes = pinnedNow ?? clockMinutes(clockTime);
+    /* What picks the first month and week when today is not known yet. */
+    const startingDay = today ?? new Date();
     const locale = useLocale(localeProp);
     const weekStart = weekStartsOn ?? weekStartOf(locale);
     const dayNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);
-    const formatDayLabel = useMemo(() => dayLabelIn(locale), [locale]);
+    const formatDayLabel = useMemo(() => dayLabelProp ?? dayLabelIn(locale), [dayLabelProp, locale]);
+    const eventTimes = useMemo(() => eventTimesIn(locale), [locale]);
     const monthLabel = useMemo(() => monthLabelProp ?? monthLabelIn(locale), [monthLabelProp, locale]);
     const overflowLabel = useMemo(
       () => overflowLabelProp ?? overflowLabelIn(formatDayLabel),
@@ -275,7 +412,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
 
     const isControlled = month !== undefined;
     const [uncontrolledMonth, setUncontrolledMonth] = useState(
-      defaultMonth ?? formatMonth(today.getFullYear(), today.getMonth()),
+      defaultMonth ?? formatMonth(startingDay.getFullYear(), startingDay.getMonth()),
     );
     const currentMonth = isControlled ? month : uncontrolledMonth;
     const [viewYear, viewMonth] = parseMonth(currentMonth);
@@ -292,9 +429,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
        another month reports it, as the month view's arrows do. */
     /* The day view is the week view's cell alone: the same anchor, one day
        at a time. */
-    const isDay = view === 'day';
-    const isWeek = view === 'week' || isDay;
-    const [weekAnchor, setWeekAnchor] = useState(() => parseDay(selectedDate) ?? today);
+    const [weekAnchor, setWeekAnchor] = useState(() => parseDay(selectedDate) ?? startingDay);
     const weekStartDate = isDay
       ? weekAnchor
       : new Date(
@@ -316,11 +451,9 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
     const [expandedDays, setExpandedDays] = useState<string[]>([]);
     const toggleDay = (day: string) =>
       setExpandedDays((current) => (current.includes(day) ? current.filter((d) => d !== day) : [...current, day]));
-    const weekRangeLabel = useMemo(() => {
-      const format = new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', year: 'numeric' });
-      return (start: Date) =>
-        plainSpaces(format.formatRange(start, new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6)));
-    }, [locale]);
+    const weekLabel = useMemo(() => weekLabelProp ?? weekLabelIn(locale), [weekLabelProp, locale]);
+    const weekRangeLabel = (start: Date) =>
+      weekLabel(start, new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6));
 
     /* The colours the legend has switched off. Applied here, so every view
        and the selected day's panel show the same events. */
@@ -359,10 +492,12 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
         list.sort((a, b) => {
           // Events that run over several days lead each day, so their pills line up across it.
           if (spans(a) !== spans(b)) return spans(a) ? -1 : 1;
-          if (!a.time && !b.time) return 0;
-          if (!a.time) return -1;
-          if (!b.time) return 1;
-          return compareTimes(a.time, b.time, locale);
+          const ta = sortTimeOf(a);
+          const tb = sortTimeOf(b);
+          if (!ta && !tb) return 0;
+          if (!ta) return -1;
+          if (!tb) return 1;
+          return compareTimes(ta, tb, locale);
         });
       }
       return map;
@@ -396,7 +531,13 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
       }
     }
 
-    const classes = [baseClass, isWeek ? `${baseClass}--week` : '', isDay ? `${baseClass}--day` : '', className]
+    const classes = [
+      baseClass,
+      isWeek ? `${baseClass}--week` : '',
+      isDay ? `${baseClass}--day` : '',
+      bare ? `${baseClass}--bare` : '',
+      className,
+    ]
       .filter(Boolean)
       .join(' ');
     const monthTitle = isDay
@@ -406,6 +547,92 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
         : monthLabel(new Date(viewYear, viewMonth, 1));
     const previousName = isDay ? previousDayLabel : isWeek ? previousWeekLabel : previousLabel;
     const nextName = isDay ? nextDayLabel : isWeek ? nextWeekLabel : nextLabel;
+    const isTodayDate = (date: Date) =>
+      today !== null &&
+      date.getFullYear() === today.getFullYear() &&
+      date.getMonth() === today.getMonth() &&
+      date.getDate() === today.getDate();
+
+    /* An event's name: its title with its range of days, else its time and
+       its day. Shared by the pills and the day view's schedule. */
+    const eventName = (event: EventCalendarEvent, dayLabel: string) => {
+      const span = formatSpan(event);
+      const times = eventTimes(event);
+      return span ? `${event.title}, ${span}` : `${event.title}${times ? `, ${times.range}` : ''}, ${dayLabel}`;
+    };
+
+    /* The day view: the day's events as a schedule, the times first, and a
+       now marker between them when the day is today. */
+    const renderAgenda = (date: Date) => {
+      const dateStr = formatDate(date);
+      const dayEvents = eventsByDate.get(dateStr) ?? [];
+      const dayLabel = formatDayLabel(date);
+      const markerAt =
+        isTodayDate(date) && nowMinutes !== null
+          ? nowMarkerIndex(
+              dayEvents.map((event) => {
+                const time = sortTimeOf(event);
+                return time ? minutesOf(time) : null;
+              }),
+              nowMinutes,
+            )
+          : null;
+      if (dayEvents.length === 0) {
+        return <p className={`${baseClass}__agenda-empty`}>{emptyDayLabel}</p>;
+      }
+      const marker = (
+        <li key="now" className={`${baseClass}__now`}>
+          <span className={`${baseClass}__now-label`}>{nowLabel}</span>
+        </li>
+      );
+      return (
+        <ul className={`${baseClass}__agenda`}>
+          {dayEvents.map((event, index) => {
+            const times = eventTimes(event);
+            const itemClasses = `${baseClass}__agenda-event ${baseClass}__event--${event.color ?? 'neutral'}`;
+            /* As on a pill, the visible parts are hidden and the event is
+               said once, as the button's name or hidden text. */
+            const content = (
+              <>
+                <span className={`${baseClass}__agenda-time`} aria-hidden="true">
+                  <span className={`${baseClass}__agenda-start`}>{times ? times.start : allDayLabel}</span>
+                  {times?.end && <span className={`${baseClass}__agenda-end`}>{times.end}</span>}
+                </span>
+                <span className={`${baseClass}__agenda-bar`} aria-hidden="true" />
+                <span className={`${baseClass}__agenda-title`} aria-hidden="true">
+                  {event.title}
+                </span>
+                {!onEventClick && (
+                  <span className="ds-visually-hidden">
+                    {times ? `${event.title}, ${times.range}` : `${event.title}, ${allDayLabel}`}
+                  </span>
+                )}
+              </>
+            );
+            return (
+              <React.Fragment key={event.id}>
+                {markerAt === index && marker}
+                <li className={`${baseClass}__agenda-item`}>
+                  {onEventClick ? (
+                    <button
+                      type="button"
+                      className={itemClasses}
+                      onClick={() => onEventClick(event)}
+                      aria-label={eventName(event, dayLabel)}
+                    >
+                      {content}
+                    </button>
+                  ) : (
+                    <span className={itemClasses}>{content}</span>
+                  )}
+                </li>
+              </React.Fragment>
+            );
+          })}
+          {markerAt === dayEvents.length && marker}
+        </ul>
+      );
+    };
 
     return (
       <div {...rest} ref={ref} className={classes}>
@@ -450,16 +677,13 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
           role="group"
           aria-label={monthTitle}
         >
-          {cells.map(({ date, inMonth }) => {
+          {isDay ? renderAgenda(weekStartDate) : cells.map(({ date, inMonth }) => {
             const dateStr = formatDate(date);
             const dayEvents = eventsByDate.get(dateStr) ?? [];
             const expanded = isWeek || expandedDays.includes(dateStr);
             const visible = expanded ? dayEvents : dayEvents.slice(0, maxEventsPerDay);
             const overflow = dayEvents.length - visible.length;
-            const isToday =
-              date.getFullYear() === today.getFullYear() &&
-              date.getMonth() === today.getMonth() &&
-              date.getDate() === today.getDate();
+            const isToday = isTodayDate(date);
 
             const dayLabel = formatDayLabel(date);
 
@@ -516,6 +740,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                 <div className={`${baseClass}__events`}>
                   {visible.map((event) => {
                     const span = formatSpan(event);
+                    const timeText = eventTimes(event)?.range;
                     const pillClasses = [
                       `${baseClass}__event`,
                       `${baseClass}__event--${event.color ?? 'neutral'}`,
@@ -535,14 +760,14 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                         <span className={`${baseClass}__event-title`} aria-hidden="true">
                           {event.title}
                         </span>
-                        {event.time && (
+                        {timeText && (
                           <span className={`${baseClass}__event-time`} aria-hidden="true">
-                            {event.time}
+                            {timeText}
                           </span>
                         )}
                         {!onEventClick && (
                           <span className="ds-visually-hidden">
-                            {event.time ? `${event.title}, ${event.time}` : event.title}
+                            {timeText ? `${event.title}, ${timeText}` : event.title}
                           </span>
                         )}
                       </>
@@ -553,11 +778,7 @@ export const EventCalendar = React.forwardRef<HTMLDivElement, EventCalendarProps
                         type="button"
                         className={pillClasses}
                         onClick={() => onEventClick(event)}
-                        aria-label={
-                          span
-                            ? `${event.title}, ${span}`
-                            : `${event.title}${event.time ? `, ${event.time}` : ''}, ${dayLabel}`
-                        }
+                        aria-label={eventName(event, dayLabel)}
                       >
                         {pillContent}
                       </button>

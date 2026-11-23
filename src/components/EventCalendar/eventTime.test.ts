@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareTimes, minutesOf } from './eventTime';
+import { clockMinutes, compareTimes, minutesOf, nowMarkerIndex } from './eventTime';
 
 describe('minutesOf', () => {
   it('reads 24-hour times, padded or not', () => {
@@ -36,5 +36,30 @@ describe('compareTimes', () => {
   });
   it('puts clock times ahead of other text', () => {
     expect(sorted(['Lunch', '8:50'])).toEqual(['8:50', 'Lunch']);
+  });
+});
+
+describe('clockMinutes', () => {
+  it('reads 24-hour HH:mm only', () => {
+    expect(clockMinutes('08:50')).toBe(530);
+    expect(clockMinutes('23:59')).toBe(1439);
+    expect(clockMinutes('8:50')).toBeNull();
+    expect(clockMinutes('24:00')).toBeNull();
+    expect(clockMinutes('1:40 PM')).toBeNull();
+    expect(clockMinutes(undefined)).toBeNull();
+  });
+});
+
+describe('nowMarkerIndex', () => {
+  it('sits before the first event that starts later', () => {
+    expect(nowMarkerIndex([null, 530, 600, 720], 590)).toBe(2);
+    expect(nowMarkerIndex([530, 600], 500)).toBe(0);
+  });
+  it('sits after the last timed event once the day is past', () => {
+    expect(nowMarkerIndex([530, 600, null], 900)).toBe(2);
+  });
+  it('is absent from a day with no timed event', () => {
+    expect(nowMarkerIndex([null, null], 600)).toBeNull();
+    expect(nowMarkerIndex([], 600)).toBeNull();
   });
 });

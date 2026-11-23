@@ -38,3 +38,30 @@ export function compareTimes(a: string, b: string, locale: string): number {
   if ((ma === null) !== (mb === null)) return ma === null ? 1 : -1;
   return a.localeCompare(b, locale);
 }
+
+/**
+ * An event's `start` or `end`, a 24-hour `HH:mm` string ("08:50", "13:40"),
+ * as minutes after midnight, or null when it is not one. Stricter than
+ * `minutesOf`: these are data, not display text.
+ */
+export function clockMinutes(value: string | undefined): number | null {
+  const match = value ? /^([01]\d|2[0-3]):([0-5]\d)$/.exec(value) : null;
+  return match ? Number(match[1]) * 60 + Number(match[2]) : null;
+}
+
+/**
+ * Where the day view's now marker sits in a day's sorted schedule, given each
+ * event's start in minutes (null for an untimed event) and the time now:
+ * before the first event that starts later, else after the last timed one.
+ * Null when the day has no timed event to place it against.
+ */
+export function nowMarkerIndex(starts: (number | null)[], now: number): number | null {
+  let lastTimed = -1;
+  for (let i = 0; i < starts.length; i++) {
+    const start = starts[i];
+    if (start === null) continue;
+    if (start > now) return i;
+    lastTimed = i;
+  }
+  return lastTimed === -1 ? null : lastTimed + 1;
+}

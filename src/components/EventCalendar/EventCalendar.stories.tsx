@@ -216,6 +216,120 @@ export const DayView: Story = {
   },
 };
 
+const timetable: EventCalendarEvent[] = [
+  { id: 't1', date: '2026-08-20', title: 'Registration', start: '08:30', end: '08:50', color: 'neutral' },
+  { id: 't2', date: '2026-08-20', title: 'Maths', start: '08:50', end: '09:50', color: 'cobalt' },
+  { id: 't3', date: '2026-08-20', title: 'English', start: '09:50', end: '10:50', color: 'violet' },
+  { id: 't4', date: '2026-08-20', title: 'Break', start: '10:50', end: '11:10', color: 'amber' },
+  { id: 't5', date: '2026-08-20', title: 'Science', start: '11:10', end: '12:10', color: 'mint' },
+  { id: 't6', date: '2026-08-20', title: 'Sports day', color: 'gold' },
+  { id: 't7', date: '2026-08-21', title: 'Art', start: '13:40', end: '14:40', color: 'coral' },
+];
+
+/** `start` and `end` are 24-hour data; the calendar writes them in its locale and names each event with its range. */
+export const StartAndEnd: Story = {
+  args: {
+    view: 'week',
+    selectedDate: '2026-08-20',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+    events: timetable,
+    onEventClick: () => {},
+  },
+  play: async ({ canvas }) => {
+    const maths = canvas.getByRole('button', { name: /^Maths, / });
+    await expect(maths).toHaveAccessibleName('Maths, 8:50 – 9:50 AM, Thursday, August 20, 2026');
+    // Plain spaces only, so a server render and the browser agree.
+    await expect(maths.getAttribute('aria-label')).not.toMatch(/[\u00A0\u2009\u202F]/);
+    await expect(canvas.getByRole('button', { name: /^Art, / })).toHaveAccessibleName('Art, 1:40 – 2:40 PM, Friday, August 21, 2026');
+  },
+};
+
+/** The same times in a 24-hour locale. */
+export const StartAndEndGerman: Story = {
+  args: { ...StartAndEnd.args, locale: 'de-DE' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: /^Maths, / }).getAttribute('aria-label')).toMatch(/^Maths, 08:50–09:50 Uhr, Donnerstag/);
+  },
+};
+
+/** The day view is a schedule: start over end, a bar in the event's accent, the title, and on today a now marker between the events. */
+export const DaySchedule: Story = {
+  args: {
+    view: 'day',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+    now: '10:15',
+    events: timetable,
+    onEventClick: () => {},
+  },
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const list = canvas.getByRole('list');
+    const items = Array.from(list.children).map((item) => item.textContent);
+    // The untimed event leads, then the clock; the marker sits inside English, before Break.
+    await expect(items).toEqual([
+      'All daySports day',
+      '8:30 AM8:50 AMRegistration',
+      '8:50 AM9:50 AMMaths',
+      '9:50 AM10:50 AMEnglish',
+      'Now',
+      '10:50 AM11:10 AMBreak',
+      '11:10 AM12:10 PMScience',
+    ]);
+    await expect(canvas.getByRole('button', { name: 'Science, 11:10 AM – 12:10 PM, Thursday, August 20, 2026' })).toBeInTheDocument();
+    // Another day is not today, so it has no marker.
+    await userEvent.click(canvas.getByRole('button', { name: 'Next day' }));
+    await expect(canvasElement.querySelector('.ds-event-calendar__now')).toBeNull();
+    await userEvent.click(canvas.getByRole('button', { name: 'Next day' }));
+    await expect(canvas.getByText('No events')).toBeInTheDocument();
+  },
+};
+
+/** `bare` drops the calendar's own surface, for a Panel or Widget that draws one. */
+export const Bare: Story = {
+  args: { bare: true },
+  decorators: [
+    (Story) => (
+      <div style={{ padding: 16, border: '1px solid var(--color-bg-container-border)', borderRadius: 'var(--radius-300)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const calendar = canvasElement.querySelector<HTMLElement>('.ds-event-calendar')!;
+    await expect(calendar).toHaveClass('ds-event-calendar--bare');
+    await expect(getComputedStyle(calendar).borderTopStyle).toBe('none');
+    await expect(getComputedStyle(calendar).paddingTop).toBe('0px');
+  },
+};
+
+/** `weekLabel` and `dayLabel` write the week and day headings, twins of `monthLabel`. */
+export const CustomHeadings: Story = {
+  args: {
+    view: 'week',
+    selectedDate: '2026-08-20',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+    weekLabel: (start: Date, end: Date) => `Week of ${start.getDate()} to ${end.getDate()}`,
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('group', { name: 'Week of 16 to 22' })).toBeInTheDocument();
+  },
+};
+
+export const CustomDayHeading: Story = {
+  args: {
+    view: 'day',
+    selectedDate: '2026-08-20',
+    defaultMonth: undefined,
+    today: '2026-08-20',
+    dayLabel: (date: Date) => `Day ${date.getDate()}`,
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('group', { name: 'Day 20' })).toBeInTheDocument();
+  },
+};
+
 /** `legendToggles` makes each legend entry a Chip that shows or hides its colour's events, in every view. */
 export const LegendToggles: Story = {
   args: {

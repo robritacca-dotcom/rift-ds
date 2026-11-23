@@ -102,3 +102,12 @@ export const QuietYear: Story = {
     return { days: quiet, caption: `${total} contributions in the last year` };
   })(),
 };
+
+/** Eleven weeks of data with `fill={false}`: the columns hold the base cell size and sit at the start of the box, rather than stretching into large squares. */
+export const FewWeeks: Story = {
+  args: (() => {
+    const days = yearData.days.slice(-77);
+    const total = days.reduce((sum, day) => sum + day.count, 0);
+    return { days, fill: false, caption: `${total} contributions in the last 11 weeks` };
+  })(),
+};

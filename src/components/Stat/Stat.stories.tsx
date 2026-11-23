@@ -26,6 +26,10 @@ const meta = {
       control: 'select',
       options: ['default', 'large'],
     },
+    captionPlacement: {
+      control: 'select',
+      options: ['head', 'label'],
+    },
   },
   args: {
     value: '~900%',
@@ -114,6 +118,23 @@ export const KpiTile: Story = {
         <Stat icon="schedule" caption="Last 30 days" value="2.4 days" label="Average lead time" trend="down" delta="-0.3 days">
           <Sparkline data={[3.1, 2.9, 3, 2.8, 2.6, 2.7, 2.5, 2.4]} tone="neutral" />
         </Stat>
+      </Panel>
+    </div>
+  ),
+};
+
+/** `captionPlacement="label"` puts the caption on a second line under the label, in each delta placement, leaving the head to the icon. */
+export const CaptionUnderLabel: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', maxWidth: '760px' }}>
+      <Panel bordered>
+        <Stat icon="shopping_bag" caption="Last 30 days" captionPlacement="label" value="1,284" label="Orders" trend="up" delta="+12% vs prior period" />
+      </Panel>
+      <Panel bordered>
+        <Stat caption="Last 30 days" captionPlacement="label" deltaPlacement="inline" value="2.4 days" label="Average lead time" trend="down" delta="-0.3 days" />
+      </Panel>
+      <Panel bordered>
+        <Stat icon="payments" caption="Since Jan 1" captionPlacement="label" deltaPlacement="auto" value="$48.2k" label="Revenue" trend="up" delta="+8%" />
       </Panel>
     </div>
   ),

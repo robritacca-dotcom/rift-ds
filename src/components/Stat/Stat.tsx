@@ -28,6 +28,11 @@ type StatOwnProps = {
   icon?: string | React.ReactNode;
   /** A short note at the far end of the top row, in the caption face: the period the figure covers ("Last 30 days"), its source. */
   caption?: React.ReactNode;
+  /**
+   * Where the caption sits: `head`, at the far end of the top row beside the
+   * icon, or `label`, a second line under the label. Defaults to `head`.
+   */
+  captionPlacement?: 'head' | 'label';
   /** Shown after the value, label and delta, such as a Sparkline of the metric's recent history or an AvatarGroup of who it counts. */
   children?: React.ReactNode;
   /** The BCP 47 locale a number `value` is written in, such as `ar-EG`. Defaults to `en-US`. This component can render from a Server Component, so it takes the prop alone and reads no LocaleProvider. */
@@ -62,6 +67,7 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
       size = 'default',
       icon,
       caption,
+      captionPlacement = 'head',
       children,
       locale = DEFAULT_LOCALE,
       className = '',
@@ -72,7 +78,9 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
     const baseClass = 'ds-stat';
     const hasIcon = icon != null && icon !== false && icon !== '';
     const hasCaption = caption != null && caption !== false && caption !== '';
-    const hasHead = hasIcon || hasCaption;
+    const captionInHead = hasCaption && captionPlacement === 'head';
+    const captionInLabel = hasCaption && captionPlacement === 'label';
+    const hasHead = hasIcon || captionInHead;
 
     const classes = [
       baseClass,
@@ -88,7 +96,14 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
     const parts = (
       <>
         <span className={`${baseClass}__value`}>{typeof value === 'number' ? formatNumber(value, locale) : value}</span>
-        <span className={`${baseClass}__label`}>{label}</span>
+        {captionInLabel ? (
+          <span className={`${baseClass}__label ${baseClass}__label--captioned`}>
+            <span className={`${baseClass}__label-text`}>{label}</span>
+            <span className={`${baseClass}__caption`}>{caption}</span>
+          </span>
+        ) : (
+          <span className={`${baseClass}__label`}>{label}</span>
+        )}
         {delta && (
           <span className={`${baseClass}__delta ${baseClass}__delta--${trend}`}>
             <span className="material-symbols-rounded" aria-hidden="true">
@@ -114,7 +129,7 @@ export const Stat = React.forwardRef<HTMLDivElement, StatProps>(
                   {icon}
                 </span>
               ))}
-            {hasCaption && <span className={`${baseClass}__caption`}>{caption}</span>}
+            {captionInHead && <span className={`${baseClass}__caption`}>{caption}</span>}
           </span>
         )}
         {deltaPlacement === 'auto' ? <span className={`${baseClass}__body`}>{parts}</span> : parts}

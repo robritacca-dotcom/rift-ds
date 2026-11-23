@@ -90,6 +90,18 @@
   color: var(--color-text-tertiary);
 }
 
+/* A caption placed under the label: the label's area holds both lines,
+   so every placement's grid keeps its areas. */
+.ds-stat__label--captioned {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-stat__label--captioned .ds-stat__caption {
+  margin-inline-start: 0;
+}
+
 /* ============================================
    DELTA — trend-coloured annotation
    ============================================ */

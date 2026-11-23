@@ -2,7 +2,7 @@
 
 A task in steps: the stepper, the step under its heading, and Back and Continue with a running summary.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.35.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.35.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
 - Import: `import { Wizard } from 'rift-ds';`

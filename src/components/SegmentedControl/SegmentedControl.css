@@ -38,6 +38,7 @@
   left: 0; /* ds-allow(physical): the pill slides by the segment's measured offsetLeft, which is a screen offset in either direction */
   width: 0;
   height: 0;
+  box-sizing: border-box; /* a status pill's hairline sits inside the measured box */
   border-radius: var(--radius-pill);
   background-color: var(--color-action-primary-bg);
   opacity: 0;
@@ -46,7 +47,8 @@
   transition:
     transform var(--motion-duration-base) var(--motion-ease-entrance),
     width var(--motion-duration-base) var(--motion-ease-entrance),
-    background-color var(--motion-duration-base) var(--motion-ease-standard);
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .ds-segmented-control--pill-ready .ds-segmented-control__pill {
@@ -64,7 +66,7 @@
 
 /* Hovering the active segment darkens the pill, mirroring the retired
    per-segment hover fill. */
-.ds-segmented-control--pill-ready:has(.ds-segmented-control__segment--active:hover) .ds-segmented-control__pill {
+.ds-segmented-control--pill-ready:not(.ds-segmented-control--status):has(.ds-segmented-control__segment--active:hover) .ds-segmented-control__pill {
   background-color: var(--color-action-primary-bg-hover);
 }
 
@@ -72,7 +74,7 @@
   background-color: var(--color-action-neutral-bg);
 }
 
-.ds-segmented-control--pill-ready.ds-segmented-control--neutral:has(.ds-segmented-control__segment--active:hover) .ds-segmented-control__pill {
+.ds-segmented-control--pill-ready.ds-segmented-control--neutral:not(.ds-segmented-control--status):has(.ds-segmented-control__segment--active:hover) .ds-segmented-control__pill {
   background-color: var(--color-action-neutral-bg-hover);
 }
 
@@ -189,6 +191,121 @@
 
 .ds-segmented-control--neutral .ds-segmented-control__segment--active:hover {
   background-color: var(--color-action-neutral-bg-hover);
+}
+
+/* ============================================
+   STATUS SEGMENTS (Segment.status)
+   A selected segment whose choice is a status
+   (Present, Late, Absent) wears that status in
+   place of the action colour or the neutral
+   tone: the status surface Alert and Toast draw,
+   its tinted fill and border with the status
+   text on it. The pill keeps sliding, and its
+   colours tween with it. Idle segments, hover
+   and the focus ring are the control's own; the
+   status has no hover step, so hovering the
+   selected segment holds its fill.
+   ============================================ */
+
+.ds-segmented-control__pill--positive,
+.ds-segmented-control__segment--positive {
+  --ds-segmented-status-bg: var(--color-status-positive-bg);
+  --ds-segmented-status-border: var(--color-status-positive-border);
+  --ds-segmented-status-text: var(--color-status-positive-text);
+}
+
+.ds-segmented-control__pill--warning,
+.ds-segmented-control__segment--warning {
+  --ds-segmented-status-bg: var(--color-status-warning-bg);
+  --ds-segmented-status-border: var(--color-status-warning-border);
+  --ds-segmented-status-text: var(--color-status-warning-text);
+}
+
+.ds-segmented-control__pill--error,
+.ds-segmented-control__segment--error {
+  --ds-segmented-status-bg: var(--color-status-error-bg);
+  --ds-segmented-status-border: var(--color-status-error-border);
+  --ds-segmented-status-text: var(--color-status-error-text);
+}
+
+.ds-segmented-control__pill--info,
+.ds-segmented-control__segment--info {
+  --ds-segmented-status-bg: var(--color-status-info-bg);
+  --ds-segmented-status-border: var(--color-status-info-border);
+  --ds-segmented-status-text: var(--color-status-info-text);
+}
+
+.ds-segmented-control .ds-segmented-control__pill:is(
+  .ds-segmented-control__pill--positive,
+  .ds-segmented-control__pill--warning,
+  .ds-segmented-control__pill--error,
+  .ds-segmented-control__pill--info
+) {
+  background-color: var(--ds-segmented-status-bg);
+  border: var(--border-025) solid var(--ds-segmented-status-border);
+}
+
+/* Before the pill is measured, the selected segment paints the status
+   itself, as it paints the action colour. */
+.ds-segmented-control:not(.ds-segmented-control--pill-ready) .ds-segmented-control__segment--active:is(
+  .ds-segmented-control__segment--positive,
+  .ds-segmented-control__segment--warning,
+  .ds-segmented-control__segment--error,
+  .ds-segmented-control__segment--info
+),
+.ds-segmented-control:not(.ds-segmented-control--pill-ready) .ds-segmented-control__segment--active:is(
+  .ds-segmented-control__segment--positive,
+  .ds-segmented-control__segment--warning,
+  .ds-segmented-control__segment--error,
+  .ds-segmented-control__segment--info
+):hover {
+  background-color: var(--ds-segmented-status-bg);
+}
+
+.ds-segmented-control .ds-segmented-control__segment--active:is(
+  .ds-segmented-control__segment--positive,
+  .ds-segmented-control__segment--warning,
+  .ds-segmented-control__segment--error,
+  .ds-segmented-control__segment--info
+) :is(.ds-segmented-control__label:not(.ds-segmented-control__label--tip), .ds-segmented-control__icon) {
+  color: var(--ds-segmented-status-text);
+}
+
+/* Forced colours flatten the status fill to the page, so a selected status
+   segment keeps the system highlight every selection wears there. */
+@media (forced-colors: active) {
+  .ds-segmented-control .ds-segmented-control__pill:is(
+    .ds-segmented-control__pill--positive,
+    .ds-segmented-control__pill--warning,
+    .ds-segmented-control__pill--error,
+    .ds-segmented-control__pill--info
+  ),
+  .ds-segmented-control:not(.ds-segmented-control--pill-ready) .ds-segmented-control__segment--active:is(
+    .ds-segmented-control__segment--positive,
+    .ds-segmented-control__segment--warning,
+    .ds-segmented-control__segment--error,
+    .ds-segmented-control__segment--info
+  ) {
+    background-color: var(--color-action-primary-bg);
+  }
+
+  .ds-segmented-control .ds-segmented-control__pill:is(
+    .ds-segmented-control__pill--positive,
+    .ds-segmented-control__pill--warning,
+    .ds-segmented-control__pill--error,
+    .ds-segmented-control__pill--info
+  ) {
+    border-color: var(--color-action-primary-bg);
+  }
+
+  .ds-segmented-control .ds-segmented-control__segment--active:is(
+    .ds-segmented-control__segment--positive,
+    .ds-segmented-control__segment--warning,
+    .ds-segmented-control__segment--error,
+    .ds-segmented-control__segment--info
+  ) :is(.ds-segmented-control__label:not(.ds-segmented-control__label--tip), .ds-segmented-control__icon) {
+    color: var(--color-action-primary-text);
+  }
 }
 
 /* ============================================

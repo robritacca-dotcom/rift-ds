@@ -270,6 +270,26 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "action-bar": () => (
+    <>
+      {/* Rows of a list dissolving under the blur into a docked bar: a count and a primary pill. */}
+      <div aria-hidden="true" style={{ position: "relative", width: "170px", height: "100px", overflow: "hidden", borderRadius: "12px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-page-primary)", padding: "10px 12px", boxSizing: "border-box", display: "grid", gap: "8px", alignContent: "start" }}>
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ width: "10px", height: "10px", borderRadius: "3px", border: "1px solid var(--color-input-border-primary)" }} />
+            <span style={{ height: "6px", flex: 1, borderRadius: "999px", background: "var(--color-text-tertiary)" }} />
+          </div>
+        ))}
+        <div style={{ position: "absolute", insetInline: 0, insetBlockEnd: 0, height: "52px" }}>
+          <ProgressiveBlur side="bottom" tinted />
+          <div style={{ position: "absolute", insetInline: 0, insetBlockEnd: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 12px" }}>
+            <span style={{ fontSize: "9px", color: "var(--color-text-primary)" }}>23 still to mark</span>
+            <span style={{ padding: "3px 8px", borderRadius: "999px", fontSize: "8px", color: "var(--color-action-primary-text)", background: "var(--color-action-primary-bg)" }}>Submit</span>
+          </div>
+        </div>
+      </div>
+    </>
+  ),
   "action-card": () => (
     <>
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", width: "150px", padding: "8px", borderRadius: "10px", border: "1px solid var(--color-bg-container-border)", background: "var(--color-bg-container-primary)" }}>

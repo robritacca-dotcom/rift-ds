@@ -2,7 +2,7 @@
 
 The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.35.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: layout
 - Import: `import { SiteLayout } from 'rift-ds';`

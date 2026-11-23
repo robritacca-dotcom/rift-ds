@@ -2,7 +2,7 @@
 
 One file in a list: its type mark, its name as a link or a button, a line of detail and controls at the end.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.34.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.35.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: data-display
 - Import: `import { FileRow } from 'rift-ds';`

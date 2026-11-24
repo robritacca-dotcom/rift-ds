@@ -106,7 +106,9 @@
   height: var(--control-height-default);
   padding-inline: var(--padding-500);
   border-radius: var(--radius-pill);
-  background-color: var(--color-bg-container-primary);
+  /* Opaque: it floats over whatever the page shows at its corner, and the
+     container fill is translucent in dark mode. */
+  background-color: var(--color-bg-page-primary);
   box-shadow: var(--shadow-floating);
   font-family: var(--font-paragraph-emphasis-family);
   font-size: var(--font-paragraph-emphasis-size);

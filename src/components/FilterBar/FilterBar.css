@@ -143,7 +143,9 @@
   list-style: none;
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-300);
-  background-color: var(--color-bg-container-primary);
+  /* The menu fill, opaque in every theme: the container fill is translucent
+     in dark mode, and the page behind would read through the options. */
+  background-color: var(--color-bg-page-primary);
   box-shadow: var(--shadow-floating);
 }
 

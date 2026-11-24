@@ -1078,7 +1078,9 @@
     width: 40px;
     height: 40px;
     padding: 0;
-    background: var(--color-bg-container-primary);
+    /* Opaque: the trigger floats over the page's own content, and the
+       container fill is translucent in dark mode. */
+    background: var(--color-bg-page-primary);
     border: var(--border-025) solid var(--color-bg-container-border);
     border-radius: var(--radius-pill);
     color: var(--color-text-primary);

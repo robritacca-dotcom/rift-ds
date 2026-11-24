@@ -50,7 +50,7 @@ export default function FormSectionPage() {
             actions={<Button label="Save" />}
           >
             <ToggleSwitch label="A weekly summary" defaultChecked />
-            <ToggleSwitch label="When someone mentions you" />
+            <ToggleSwitch label="When someone mentions you" defaultChecked />
           </FormSection>
         </div>
       </section>

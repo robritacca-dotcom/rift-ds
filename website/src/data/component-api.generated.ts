@@ -20873,8 +20873,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "defaultChecked",
             "type": "boolean",
             "required": false,
-            "description": "Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false.",
-            "defaultValue": "true"
+            "description": "Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to false, as every checkable control does, so a switch left uncontrolled never turns a setting on by itself.",
+            "defaultValue": "false"
           },
           {
             "name": "label",

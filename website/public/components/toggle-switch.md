@@ -17,7 +17,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | checked | `boolean` | no |  | Whether the toggle is on, controlled. Leave undefined to let the switch keep its own state, seeded from `defaultChecked`. |
-| defaultChecked | `boolean` | no | `true` | Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false. |
+| defaultChecked | `boolean` | no | `false` | Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to false, as every checkable control does, so a switch left uncontrolled never turns a setting on by itself. |
 | label | `string` | no | `'Toggle'` | Label text displayed next to the toggle |
 | showLabel | `boolean` | no | `true` | Whether to show the label |
 | helperText | `string` | no |  | Helper or error message rendered under the label text |

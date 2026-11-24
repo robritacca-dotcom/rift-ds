@@ -28,8 +28,8 @@
           "type": "boolean",
           "typeKind": "primitive",
           "required": false,
-          "description": "Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false.",
-          "default": true
+          "description": "Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to false, as every checkable control does, so a switch left uncontrolled never turns a setting on by itself.",
+          "default": false
         },
         {
           "name": "label",

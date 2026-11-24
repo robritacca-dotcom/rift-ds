@@ -687,7 +687,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     iconFill: false,
     logoTone: "action",
     logoEndTone: "matched",
-    displayTone: "ink",
+    // The display tier in the forest: the extras pin light mode to the
+    // button fill's step and keep dark mode on the neutral ink.
+    displayTone: "green",
     headingTone: "ink",
     textTone: "ink",
     // The reference pairing, near enough: Inter Tight's heavy weights

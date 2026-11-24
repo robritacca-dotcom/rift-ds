@@ -1,6 +1,17 @@
 {
   "releases": [
     {
+      "version": "1.36.0",
+      "date": "2026-11-23",
+      "title": "Your CSS wins, buttons submit, switches start off",
+      "body": [
+        "Component styles now sit in a `rift.components` cascade layer, after the token layers, so your own CSS outside a layer always beats them, whatever its selector and whatever order your bundler loads the sheets in. An override that worked under `next dev` no longer disappears under `next build`. A bare reset of your own now outranks the components too, so put it inside `@layer rift.tokens { … }` or import `tokens/base.css`, which already sits there.",
+        "Button, IconButton and SplitButton take a `type`, defaulting to `button`, so `type=\"submit\"` makes one its form’s submit button. ToggleSwitch now starts off, as every other checkable control does, and an off switch looks off; a switch that relied on starting on needs `defaultChecked`.",
+        "Deep imports now ship every value their types declare: `fieldErrorsFrom` from ErrorSummary and DataTable’s period helpers type-checked but failed a production build. FilterBar’s panel is opaque in dark mode, AppSidebar marks one current page, a bare Chart takes no padding on a phone, a clearable search Input shows one clear button, and Table’s total row shows its rule.",
+        "Nothing published was removed. If you copied the settings or sign-in block earlier, give its submit button `type=\"submit\"` and drop its `onClick`."
+      ]
+    },
+    {
       "version": "1.35.0",
       "date": "2026-11-23",
       "title": "A schedule view, a docked action bar and a quiet field",

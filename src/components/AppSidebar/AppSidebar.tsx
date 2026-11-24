@@ -656,8 +656,23 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                  selection, so the rail shows which section is open. */
               const feedsPanel = isPanelMode && hasChildren;
               const isSource = feedsPanel && item.key === panelSourceKey;
+              /* The current page is one of this row's children (or theirs).
+                 Then only that row is the current page: this one carries no
+                 aria-current, and while the child shows below it (the rail
+                 expanded, the accordion open) it drops its fill too, so one
+                 row reads as current. Collapsed or closed, the parent is the
+                 only sign of where the reader is, so it keeps the fill. */
+              const childCurrent = Boolean(
+                hasChildren &&
+                  item.children!.some(
+                    (sub) =>
+                      sub.key === activeSubKey ||
+                      sub.children?.some((leaf) => leaf.key === activeTertiaryKey),
+                  ),
+              );
+              const childShows = childCurrent && !isPanelMode && (isExpanded || mobileOpen) && isOpen;
               const isActive =
-                isPanelMode && panelVisible ? isSource : activeKey === item.key;
+                (isPanelMode && panelVisible ? isSource : activeKey === item.key) && !childShows;
 
               /* A leaf item with an href is a real link; an accordion row
                  stays a button whatever it declares, because its job is to
@@ -770,7 +785,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                             : undefined
                       }
                       aria-controls={feedsPanel && !mobileOpen ? panelId : undefined}
-                      aria-current={activeKey === item.key ? 'page' : undefined}
+                      aria-current={activeKey === item.key && !childCurrent ? 'page' : undefined}
                       data-panel-source={isSource ? 'true' : undefined}
                       title={!isExpanded && !isPanelMode ? item.label : undefined}
                     >
@@ -831,7 +846,12 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                                 }}
                                 aria-expanded={mobileOpen ? undefined : subIsSource && panelVisible}
                                 aria-controls={mobileOpen ? undefined : panelId}
-                                aria-current={activeSubKey === sub.key ? 'page' : undefined}
+                                aria-current={
+                                  activeSubKey === sub.key &&
+                                  !sub.children?.some((leaf) => leaf.key === activeTertiaryKey)
+                                    ? 'page'
+                                    : undefined
+                                }
                                 data-panel-source={subIsSource ? 'true' : undefined}
                               >
                                 {subLabel}

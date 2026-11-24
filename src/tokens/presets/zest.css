@@ -47,14 +47,14 @@
 
 @layer rift.preset {
   html[data-brand="zest"] {
-    --color-action-primary-bg: var(--primitive-green-07);
-    --color-action-primary-bg-active: var(--primitive-green-05);
-    --color-action-primary-bg-hover: var(--primitive-green-06);
+    --color-action-primary-bg: var(--primitive-green-11);
+    --color-action-primary-bg-active: var(--primitive-green-10);
+    --color-action-primary-bg-hover: var(--primitive-green-10);
     --color-action-primary-border: var(--primitive-green-10);
     --color-action-primary-border-secondary: var(--primitive-green-07);
     --color-action-primary-border-tertiary: var(--primitive-green-07);
-    --color-action-primary-text: var(--primitive-green-11);
-    --color-action-primary-text-active: var(--primitive-green-11);
+    --color-action-primary-text: var(--primitive-green-07);
+    --color-action-primary-text-active: var(--primitive-green-07);
     --color-action-primary-text-secondary: var(--primitive-green-10);
     --color-action-primary-text-tertiary: var(--primitive-green-08);
     --color-ai-gradient-end: var(--primitive-green-09);
@@ -66,6 +66,9 @@
     --color-ambient-4: #5AA9E6;
     --color-ambient-5: #B3F0A1;
     --color-ambient-6: #D0F6C5;
+    --color-bg-app-shell: var(--primitive-neutral-00);
+    --color-bg-container-primary-semi: var(--primitive-neutral-01);
+    --color-bg-page-primary: var(--primitive-neutral-00);
     --color-core-accent-amber: #FFA94D;
     --color-core-accent-cobalt: #5AA9E6;
     --color-core-accent-coral: #FF7A66;
@@ -216,9 +219,17 @@
   }
 
   html[data-brand="zest"][data-theme="dark"] {
+    --color-action-primary-bg: var(--primitive-green-07);
+    --color-action-primary-bg-active: var(--primitive-green-05);
+    --color-action-primary-bg-hover: var(--primitive-green-06);
     --color-action-primary-border: var(--primitive-green-07);
     --color-action-primary-border-secondary: var(--primitive-green-08);
+    --color-action-primary-text: var(--primitive-green-11);
+    --color-action-primary-text-active: var(--primitive-green-11);
     --color-action-primary-text-tertiary: var(--primitive-green-07);
+    --color-bg-app-shell: var(--primitive-neutral-09);
+    --color-bg-container-primary-semi: var(--primitive-neutral-09-a60);
+    --color-bg-page-primary: var(--primitive-neutral-10);
     --color-core-ui-secondary: var(--primitive-green-09);
     --color-input-border-selected: var(--primitive-green-08);
     --color-status-positive-text: var(--primitive-green-01);

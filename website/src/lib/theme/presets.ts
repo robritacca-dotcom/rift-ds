@@ -644,6 +644,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // extras below, restored here because extras apply to both themes).
     extraOverridesDark: {
       "--color-status-positive-text": "var(--primitive-green-01)",
+      // EXPERIMENT: dark keeps the lime fill; restore what the light flip moves.
+      "--color-action-primary-bg": "var(--primitive-green-07)",
+      "--color-action-primary-bg-hover": "var(--primitive-green-06)",
+      "--color-action-primary-bg-active": "var(--primitive-green-05)",
+      "--color-action-primary-text": "var(--primitive-green-11)",
+      "--color-action-primary-text-active": "var(--primitive-green-11)",
+      "--color-bg-page-primary": "var(--primitive-neutral-10)",
+      "--color-bg-app-shell": "var(--primitive-neutral-09)",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-09-a60)",
     },
     // Bright sextet: the reference's candy-bright secondaries brought up
     // to chart strength around the lime, which doubles as mint.
@@ -670,7 +679,16 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // lime hover fill — pin it to the same forest step the resting label
     // derives (Volt and Bubblegum make the same repair).
     extraOverrides: {
-      "--color-action-primary-text-active": "var(--primitive-green-11)",
+      // EXPERIMENT: light flips the action to a forest fill under a lime
+      // label (logo follows), on a crisp white page with light grey cards.
+      "--color-action-primary-bg": "var(--primitive-green-11)",
+      "--color-action-primary-bg-hover": "var(--primitive-green-10)",
+      "--color-action-primary-bg-active": "var(--primitive-green-10)",
+      "--color-action-primary-text": "var(--primitive-green-07)",
+      "--color-action-primary-text-active": "var(--primitive-green-07)",
+      "--color-bg-page-primary": "var(--primitive-neutral-00)",
+      "--color-bg-app-shell": "var(--primitive-neutral-00)",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-01)",
       "--color-status-positive-text": "var(--primitive-green-10)",
       "--font-sub-display-weight": "700",
       "--font-mega-1-letter-spacing": "-0.03em",

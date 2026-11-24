@@ -1899,15 +1899,15 @@
     },
     "action-primary-bg": {
       "$type": "color",
-      "$value": "{primitive.green-07}"
+      "$value": "{primitive.green-11}"
     },
     "action-primary-bg-active": {
       "$type": "color",
-      "$value": "{primitive.green-05}"
+      "$value": "{primitive.green-10}"
     },
     "action-primary-bg-hover": {
       "$type": "color",
-      "$value": "{primitive.green-06}"
+      "$value": "{primitive.green-10}"
     },
     "action-primary-border": {
       "$type": "color",
@@ -1923,11 +1923,11 @@
     },
     "action-primary-text": {
       "$type": "color",
-      "$value": "{primitive.green-11}"
+      "$value": "{primitive.green-07}"
     },
     "action-primary-text-active": {
       "$type": "color",
-      "$value": "{primitive.green-11}"
+      "$value": "{primitive.green-07}"
     },
     "action-primary-text-secondary": {
       "$type": "color",
@@ -2081,7 +2081,7 @@
     },
     "bg-app-shell": {
       "$type": "color",
-      "$value": "{primitive.neutral-01}"
+      "$value": "{primitive.neutral-00}"
     },
     "bg-app-surface": {
       "$type": "color",
@@ -2101,7 +2101,7 @@
     },
     "bg-container-primary-semi": {
       "$type": "color",
-      "$value": "{primitive.neutral-00-a90}"
+      "$value": "{primitive.neutral-01}"
     },
     "bg-container-primary-transparent": {
       "$type": "color",
@@ -2125,7 +2125,7 @@
     },
     "bg-page-primary": {
       "$type": "color",
-      "$value": "{primitive.neutral-01}"
+      "$value": "{primitive.neutral-00}"
     },
     "brand-mark": {
       "$type": "color",

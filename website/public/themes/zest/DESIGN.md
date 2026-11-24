@@ -4,12 +4,12 @@ name: "Zest"
 description: "The Zest theme of rift-ds: its colours, type, shape, space and depth, as the theme resolves them."
 
 colors:
-  primary: "#8ae86e"
-  primary-hover: "#9beb83"
-  primary-active: "#a7ee92"
-  on-primary: "#233b1c"
+  primary: "#233b1c"
+  primary-hover: "#2d4b24"
+  primary-active: "#2d4b24"
+  on-primary: "#8ae86e"
   primary-dark: "#8ae86e"
-  canvas-light: "#efefef"
+  canvas-light: "#fdfdfc"
   canvas-dark: "#060705"
   surface: "#fdfdfc"
   surface-dark: "rgba(14, 15, 13, 0.8)"
@@ -20,9 +20,9 @@ colors:
   display-dark: "#e8e9e7"
   heading: "#060705"
   heading-dark: "#e8e9e7"
-  logo: "#8ae86e"
+  logo: "#233b1c"
   logo-dark: "#8ae86e"
-  logo-end: "#a7ee92"
+  logo-end: "#2d4b24"
   logo-end-dark: "#a7ee92"
   text-secondary: "#2f302e"
   text-tertiary: "#6a6b69"
@@ -38,7 +38,7 @@ colors:
   accent-gold: "#ffe14d"
   accent-mint: "#8ae86e"
   accent-violet: "#b18cff"
-  chart-1: "#8ae86e"
+  chart-1: "#233b1c"
   chart-2: "#8ae86e"
   chart-3: "#ffe14d"
   chart-4: "#ff7a66"
@@ -159,7 +159,7 @@ components:
 
 # Zest theme
 
-Zest: Inter Tight headings over Inter text, #8ae86e for actions, pill buttons, 17px inputs and 34px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
+Zest: Inter Tight headings over Inter text, #233b1c for actions, pill buttons, 17px inputs and 34px cards. Soft shadows, kept for what floats: menus, popovers and dialogs.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="zest"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/zest.
 
@@ -169,18 +169,18 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
-| `primary` | `#8ae86e` | `#8ae86e` | `--color-action-primary-bg` |
-| `primary-hover` | `#9beb83` | `#9beb83` | `--color-action-primary-bg-hover` |
-| `primary-active` | `#a7ee92` | `#a7ee92` | `--color-action-primary-bg-active` |
-| `on-primary` | `#233b1c` | `#233b1c` | `--color-action-primary-text` |
-| `canvas-light` | `#efefef` | `#060705` | `--color-bg-page-primary` |
+| `primary` | `#233b1c` | `#8ae86e` | `--color-action-primary-bg` |
+| `primary-hover` | `#2d4b24` | `#9beb83` | `--color-action-primary-bg-hover` |
+| `primary-active` | `#2d4b24` | `#a7ee92` | `--color-action-primary-bg-active` |
+| `on-primary` | `#8ae86e` | `#233b1c` | `--color-action-primary-text` |
+| `canvas-light` | `#fdfdfc` | `#060705` | `--color-bg-page-primary` |
 | `surface` | `#fdfdfc` | `rgba(14, 15, 13, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#efefef` | `#2f302e` | `--color-bg-container-secondary` |
 | `ink` | `#060705` | `#e8e9e7` | `--color-text-primary` |
 | `display` | `#060705` | `#e8e9e7` | `--color-text-display` |
 | `heading` | `#060705` | `#e8e9e7` | `--color-text-heading` |
-| `logo` | `#8ae86e` | `#8ae86e` | `--color-brand-mark` |
-| `logo-end` | `#a7ee92` | `#a7ee92` | `--color-brand-mark-end` |
+| `logo` | `#233b1c` | `#8ae86e` | `--color-brand-mark` |
+| `logo-end` | `#2d4b24` | `#a7ee92` | `--color-brand-mark-end` |
 | `text-secondary` | `#2f302e` | `#b5b7b4` | `--color-text-secondary` |
 | `text-tertiary` | `#6a6b69` | `#9c9e9c` | `--color-text-tertiary` |
 | `border` | `#cecfcd` | `#222422` | `--color-bg-container-border` |

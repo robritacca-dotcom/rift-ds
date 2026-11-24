@@ -644,21 +644,20 @@ function SceneSwitcher() {
 const SUBTITLE_FULL =
   "Open source and fully themeable, built for AI products and coding agents.";
 
-/* One headline per reason the README leads with, in the same order (plus
-   the playground's theme-from-a-file drop beside the themes line), and
-   held to a similar length so every sweep covers about the same ground.
-   The component figure is the registry's count, never a typed number.
-   The Figma kit's line follows it, and shows only while the site links
-   to Figma. */
+/* One headline per reason to pick the system, held to a similar length
+   so every sweep covers about the same ground. The component figure is
+   the registry's count, never a typed number. The Figma kit's line shows
+   only while the site links to Figma. */
 const SUBTITLE_PHRASES = [
-  `${COMPONENT_COUNT} typed components, from buttons to charts.`,
-  ...(SHOW_FIGMA_LINKS ? ["A matching Figma kit, one frame per component."] : []),
-  "AI chat patterns and templates, ready to use.",
-  "Complete themes, applied with one attribute.",
-  "Drop in a DESIGN.md or any image to theme it.",
-  "Agent skills and an MCP endpoint, no key needed.",
-  "Free and MIT, by npm, the shadcn CLI or a clone.",
-  "Accessible by default, checked on every story.",
+  `${COMPONENT_COUNT} components, from icons to complex charts.`,
+  "Swap complete themes with one attribute.",
+  "Theme it from a DESIGN.md or any image.",
+  "Three tiers of tokens, in the W3C DTCG format.",
+  "Agent skills plus a keyless MCP endpoint.",
+  "AI chat patterns and templates, ready to ship.",
+  "Accessible by default, tested on every story.",
+  ...(SHOW_FIGMA_LINKS ? ["A Figma kit that mirrors every component."] : []),
+  "MIT licensed. Install via npm, shadcn or git.",
 ];
 
 function RotatingSubtitle() {
@@ -1461,7 +1460,7 @@ export default function DesignSystemLanding() {
               and the glass buttons frosting it. */}
           <div className={styles.heroInner}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
-          <h1 className={styles.pageTitle}>The open source AI-native design system</h1>
+          <h1 className={styles.pageTitle}>The open-source, AI-native design system</h1>
           <RotatingSubtitle />
           <FadeDivider className={styles.heroDivider} />
           {/* The counts, under a rule: every figure imports from the registry export that

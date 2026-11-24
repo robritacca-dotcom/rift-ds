@@ -186,6 +186,31 @@ export const Clearable: Story = {
   },
 };
 
+/** A clearable search field: the library's clear button replaces the browser's own cancel button, so the field offers one. */
+export const ClearableSearch: Story = {
+  args: { label: 'Search orders', type: 'search', iconLeft: 'search', clearable: true, defaultValue: 'INV-2041' },
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole('searchbox', { name: 'Search orders' });
+    await expect(canvas.getAllByRole('button', { name: 'Clear' })).toHaveLength(1);
+    /* Chromium reports no computed style for this pseudo-element, so find the
+       rule that hides it and prove its selector matches this field. */
+    const rules = (list: CSSRuleList): CSSRule[] =>
+      [...list].flatMap((rule) => ('cssRules' in rule ? [rule, ...rules((rule as CSSGroupingRule).cssRules)] : [rule]));
+    const readable = (sheet: CSSStyleSheet) => {
+      try {
+        return rules(sheet.cssRules);
+      } catch {
+        return []; // a cross-origin sheet (a web font's) keeps its rules to itself
+      }
+    };
+    const hiding = [...document.styleSheets]
+      .flatMap(readable)
+      .filter((rule): rule is CSSStyleRule => rule instanceof CSSStyleRule)
+      .filter((rule) => rule.selectorText.includes('::-webkit-search-cancel-button') && rule.style.display === 'none');
+    await expect(hiding.some((rule) => input.matches(rule.selectorText.replace('::-webkit-search-cancel-button', '')))).toBe(true);
+  },
+};
+
 /** The newer error form: the message under the field, the helper text kept beside it. */
 export const WithErrorText: Story = {
   args: {

@@ -41,7 +41,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Key of the currently active item"
+          "description": "Key of the currently active item. When one of its children is the current page (`activeSubKey` or `activeTertiaryKey`), that child carries `aria-current` instead, and this row drops its fill while the child shows below it."
         },
         {
           "name": "activeSubKey",

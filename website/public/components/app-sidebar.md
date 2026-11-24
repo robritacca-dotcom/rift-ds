@@ -18,7 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | --- | --- | --- | --- | --- |
 | sections | `AppSidebarSection[]` | yes |  | Navigation sections |
 | profile | `AppSidebarProfile` | no |  | Profile data for the bottom section |
-| activeKey | `string` | no |  | Key of the currently active item |
+| activeKey | `string` | no |  | Key of the currently active item. When one of its children is the current page (`activeSubKey` or `activeTertiaryKey`), that child carries `aria-current` instead, and this row drops its fill while the child shows below it. |
 | activeSubKey | `string` | no |  | Key of the currently active sub-item |
 | activeTertiaryKey | `string` | no |  | Key of the currently active third-level item, listed in the side panel |
 | subNav | `"accordion" \| "panel"` | no | `'accordion'` | Where an item's sub-items show. `accordion` (the default) opens them under the row, and a sub-item's own children open in a side panel as level 3. `panel` skips the accordion: a top-level item opens its sub-items straight into the side panel, with their children as the panel's accordion, and the collapsed rail shows each label under its icon. On small screens both modes drill in inside the drawer instead. |

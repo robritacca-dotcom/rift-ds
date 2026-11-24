@@ -1480,7 +1480,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "activeKey",
             "type": "string",
             "required": false,
-            "description": "Key of the currently active item"
+            "description": "Key of the currently active item. When one of its children is the current page (`activeSubKey` or `activeTertiaryKey`), that child carries `aria-current` instead, and this row drops its fill while the child shows below it."
           },
           {
             "name": "activeSubKey",
@@ -18112,6 +18112,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "MouseEventHandler<HTMLButtonElement>",
             "required": false,
             "description": "Click handler for the primary action"
+          },
+          {
+            "name": "type",
+            "type": "\"button\" | \"submit\" | \"reset\"",
+            "required": false,
+            "description": "The primary segment's native type. Defaults to `button`; set `submit` to\nmake the primary action its form's submit button. The menu trigger is\nalways `button`, so opening the menu never submits.",
+            "values": [
+              "button",
+              "reset",
+              "submit"
+            ],
+            "defaultValue": "'button'"
           },
           {
             "name": "items",

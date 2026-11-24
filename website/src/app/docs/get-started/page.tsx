@@ -168,7 +168,8 @@ export function SaveButton({ onSave }: { onSave: () => void }) {
   return <button onClick={onSave}>Save <Kbd keys="mod+s" size="compact" /></button>;
 }`;
 
-const FORMS_SNIPPET = `import { Checkbox } from 'rift-ds/components/Checkbox/Checkbox';
+const FORMS_SNIPPET = `import { Button } from 'rift-ds/components/Button/Button';
+import { Checkbox } from 'rift-ds/components/Checkbox/Checkbox';
 import { Dropdown } from 'rift-ds/components/Dropdown/Dropdown';
 import { TagInput } from 'rift-ds/components/TagInput/TagInput';
 
@@ -177,7 +178,7 @@ import { TagInput } from 'rift-ds/components/TagInput/TagInput';
   <Dropdown name="plan" label="Plan" defaultValue="pro" options={plans} />
   <TagInput name="tag" label="Tags" defaultValues={['design', 'docs']} />
   <Checkbox name="terms" label="Accept the terms" defaultChecked />
-  <button type="submit">Save</button>
+  <Button type="submit" label="Save" />
 </form>`;
 
 /* The widget's scaffold: the registry owns the subcommand and the peers it

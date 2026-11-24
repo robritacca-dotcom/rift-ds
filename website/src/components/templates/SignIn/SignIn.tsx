@@ -130,9 +130,8 @@ export default function SignIn() {
     { kind: "provider" | "email"; value: string } | null
   >(null);
 
-  /* The library's Button is always type="button" (its props Omit `type`), so
-     a form cannot submit through it. The form keeps its onSubmit so Enter in
-     a field still works, and the Button calls the same attempt on click. */
+  /* The Sign in button is the form's submit button, so a click and Enter in a
+     field both arrive through the form's onSubmit. */
   const attemptSignIn = () => {
     const nextEmailError = EMAIL_SHAPE.test(email.trim())
       ? null
@@ -253,7 +252,7 @@ export default function SignIn() {
                   />
                 </div>
 
-                <Button variant="primary" label="Sign in" onClick={attemptSignIn} />
+                <Button type="submit" variant="primary" label="Sign in" />
               </form>
 
               <p className={styles.signup}>

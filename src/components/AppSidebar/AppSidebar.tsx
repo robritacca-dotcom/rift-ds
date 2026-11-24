@@ -96,7 +96,7 @@ type AppSidebarOwnProps = {
   sections: AppSidebarSection[];
   /** Profile data for the bottom section */
   profile?: AppSidebarProfile;
-  /** Key of the currently active item */
+  /** Key of the currently active item. When one of its children is the current page (`activeSubKey` or `activeTertiaryKey`), that child carries `aria-current` instead, and this row drops its fill while the child shows below it. */
   activeKey?: string;
   /** Key of the currently active sub-item */
   activeSubKey?: string;

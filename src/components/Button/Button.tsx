@@ -121,7 +121,7 @@ type ButtonOwnProps = {
 
 export interface ButtonProps
   extends ButtonOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'button'>, keyof ButtonOwnProps > {}
+    Omit<React.ComponentPropsWithoutRef<'button'>, keyof ButtonOwnProps> {}
 
 type ButtonEmphasis = 'primary' | 'secondary' | 'tertiary';
 type ButtonTone = NonNullable<ButtonOwnProps['tone']>;

@@ -41,7 +41,8 @@ export type ShaderSceneSource = {
   /**
    * `dark` for a scene that only adds light and so only reads on a dark
    * ground. On a light page its light is computed against a near-black
-   * ground of its own and laid onto the page as a pale tint. A scene
+   * ground of its own and laid onto the page as colour, its brightest
+   * marks as a deepened ink of the scene's first colour. A scene
    * without it paints for both modes itself, from the page ground
    * (`u_ground`).
    */

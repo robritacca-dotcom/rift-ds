@@ -9,7 +9,7 @@
     { "name": "u_time", "type": "float", "description": "The scene's clock in seconds, the same value as t. It advances with speed and holds still under reduced motion." },
     { "name": "u_ground", "type": "vec3", "description": "The ground the scene paints over, in linear RGB: the page ground, or a near-black of its own for a dark scene on a light page. Add light to it and return the sum." },
     { "name": "u_page", "type": "vec3", "description": "The page ground itself, which the fades melt into." },
-    { "name": "u_lightMode", "type": "float", "description": "1 when a dark scene is being laid onto a light page as a pale tint, otherwise 0." },
+    { "name": "u_lightMode", "type": "float", "description": "1 when a dark scene is being laid onto a light page as colour and ink, otherwise 0." },
     { "name": "u_ratio", "type": "float", "description": "Drawing-buffer pixels per CSS pixel. Multiply a size meant in CSS pixels by it." },
     { "name": "u_col", "type": "vec3[]", "description": "The scene's colours in linear RGB, in the order its colours list names them. Unused slots are black." },
     { "name": "u_glyphs", "type": "sampler2D", "when": "glyphs", "description": "The scene's character ramp as one strip, a cell per character, white on black. Read its red channel." },

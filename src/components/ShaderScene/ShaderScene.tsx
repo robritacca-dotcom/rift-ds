@@ -126,8 +126,9 @@ const DEFAULT_SPEED = 1.6;
  *
  * Every scene but the ocean and the sky is a night scene: it adds light over a dark
  * ground. On a light page each computes its light against a dark ground of
- * its own and lays it onto the page as a pale tint, so it reads as a soft
- * dawn rather than a dark block. The ocean paints both: a turquoise shallow
+ * its own and lays it onto the page as colour, its brightest marks as a
+ * deepened ink of the scene's lead colour, so it reads as a dawn on paper
+ * rather than a dark block, and a crest or a beam stays visible on white. The ocean paints both: a turquoise shallow
  * over a light page ground, deep moonlit water over a dark one. The sky does
  * too: a golden hour over a light ground, the last of a sunset under a night sky
  * over a dark one. Nothing here

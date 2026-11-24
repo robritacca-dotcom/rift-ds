@@ -68,16 +68,24 @@ void main() {
   vec2 uv = gl_FragCoord.xy / u_size;
   vec3 lin = scene(uv, u_time);
   /* A night scene on a light page: the light it adds over its own dark
-     ground is laid onto the page as a pale tint, its hue washed most of
-     the way to white and never more than a light wash, so a horizon reads
-     as a soft dawn on paper rather than a dark block on it. */
+     ground is laid onto the page as colour, so a horizon reads as a dawn
+     on paper rather than a dark block on it, and the brightest marks
+     (a crest, a beam) read as ink rather than vanishing into the white. */
   if (u_lightMode > 0.5) {
     vec3 light = max(lin - u_ground, vec3(0.0));
     float peak = max(light.r, max(light.g, light.b));
     vec3 hue = light / max(peak, 1e-4);
     vec3 pastel = mix(hue, vec3(1.0), 0.3);
-    float strength = clamp(pow(dot(light, vec3(0.2126, 0.7152, 0.0722)) * 4.0, 0.7), 0.0, 0.85);
-    lin = mix(u_page, u_page * pastel, strength);
+    /* Most of the light is laid on as ink rather than tint: its hue
+       resaturated, leaning to the scene's lead colour and deepened, so a
+       bright crest darkens against the paper instead of washing out to
+       white on it. */
+    float hueGrey = dot(hue, vec3(1.0 / 3.0));
+    vec3 lead = u_col[0] / max(max(u_col[0].r, max(u_col[0].g, u_col[0].b)), 1e-4);
+    vec3 rich = mix(clamp(hueGrey + (hue - hueGrey) * 3.0, 0.0, 1.0), lead, 0.6) * 0.5;
+    vec3 tint = mix(u_page * pastel, u_page * rich, 0.8);
+    float strength = clamp(pow(dot(light, vec3(0.2126, 0.7152, 0.0722)) * 8.0, 0.7), 0.0, 0.9);
+    lin = mix(u_page, tint, strength);
   }
 ${call("light", "lin")}
   vec3 srgb = pow(max(lin, vec3(0.0)), vec3(1.0 / 2.2));

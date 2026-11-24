@@ -19,7 +19,7 @@ export type Colours = {
   ground: Rgb;
   /** The page's own ground, which the passes fade to. */
   page: Rgb;
-  /** A night scene on a light page, laid on as a pale tint. */
+  /** A night scene on a light page, laid on as colour and ink. */
   lightMode: boolean;
   colours: Rgb[];
 };
@@ -52,7 +52,7 @@ export function readColours(host: HTMLElement, tokens: string[]): Colours {
 /**
  * A scene's colours for a surface: read from the cascade. A night-only
  * scene on a light page computes its light against a dark ground of its
- * own, and the shader lays that light onto the page as a pale tint
+ * own, and the shader lays that light onto the page as colour and ink
  * (u_lightMode), so its masks still fade to the page and the theme stays
  * light.
  */

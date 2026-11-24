@@ -14,7 +14,7 @@
  *   to call.
  *
  * `mode: 'dark'` says it only adds light: on a light page the component
- * lays that light on as a pale tint. Leave it out for a scene that paints
+ * lays that light on as colour and ink. Leave it out for a scene that paints
  * both modes itself.
  */
 

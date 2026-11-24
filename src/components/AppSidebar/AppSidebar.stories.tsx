@@ -314,11 +314,58 @@ export const CollapsedFooterControl: Story = {
   },
 };
 
+/** A child is the current page: only it carries `aria-current`, and while it
+    shows below its parent the parent gives up its fill, so one row reads as
+    current. Collapse the rail and the parent takes the fill back. */
 export const WithActiveAccordion: Story = {
   args: {
     defaultExpanded: true,
     activeKey: 'components',
     activeSubKey: 'buttons',
+  },
+  play: async ({ canvasElement }) => {
+    const current = canvasElement.querySelectorAll('[aria-current="page"]');
+    await expect(current).toHaveLength(1);
+    await expect(current[0]).toHaveClass('ds-app-sidebar__sub-btn');
+    await expect(canvasElement.querySelectorAll('.ds-app-sidebar__btn--active')).toHaveLength(0);
+  },
+};
+
+/** The current page is a third-level item in the panel: it alone carries
+    `aria-current`, and the second-level row feeding the panel keeps only
+    its selection fill. */
+export const CurrentInThePanel: Story = {
+  args: {
+    defaultExpanded: true,
+    sections: [
+      {
+        items: [
+          {
+            key: 'reports',
+            icon: 'bar_chart',
+            label: 'Reports',
+            children: [
+              { key: 'standard', label: 'Standard reports' },
+              {
+                key: 'planning',
+                label: 'Financial planning',
+                children: [
+                  { key: 'budgets', label: 'Budgets' },
+                  { key: 'forecasts', label: 'Forecasts' },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    activeKey: 'reports',
+    activeSubKey: 'planning',
+    activeTertiaryKey: 'budgets',
+  },
+  play: async () => {
+    await waitFor(() => expect(document.body.querySelectorAll('[aria-current="page"]')).toHaveLength(1));
+    await expect(document.body.querySelector('[aria-current="page"]')).toHaveTextContent('Budgets');
   },
 };
 

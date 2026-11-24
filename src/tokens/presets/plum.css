@@ -48,7 +48,7 @@
 @layer rift.preset {
   html[data-brand="plum"], html[data-brand="signal"] {
     --color-action-primary-bg: #CC4512;
-    --color-action-primary-bg-active: var(--primitive-orange-08);
+    --color-action-primary-bg-active: var(--primitive-orange-09);
     --color-action-primary-bg-hover: var(--primitive-orange-08);
     --color-action-primary-border: var(--primitive-orange-10);
     --color-action-primary-border-secondary: var(--primitive-orange-07);

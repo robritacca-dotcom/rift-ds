@@ -48,7 +48,7 @@
 @layer rift.preset {
   html[data-brand="zest"] {
     --color-action-primary-bg: var(--primitive-green-11);
-    --color-action-primary-bg-active: var(--primitive-green-10);
+    --color-action-primary-bg-active: #182A13;
     --color-action-primary-bg-hover: var(--primitive-green-10);
     --color-action-primary-border: var(--primitive-green-10);
     --color-action-primary-border-secondary: var(--primitive-green-07);
@@ -70,6 +70,7 @@
     --color-bg-app-surface: #FFFFFF;
     --color-bg-container-primary-semi: #F6F6F5;
     --color-bg-page-primary: var(--primitive-neutral-00);
+    --color-brand-mark-end: var(--color-action-primary-bg);
     --color-core-accent-amber: #FFA94D;
     --color-core-accent-cobalt: #5AA9E6;
     --color-core-accent-coral: #FF7A66;
@@ -233,6 +234,7 @@
     --color-bg-app-surface: var(--primitive-neutral-11);
     --color-bg-container-primary-semi: var(--primitive-neutral-09-a60);
     --color-bg-page-primary: var(--primitive-neutral-10);
+    --color-brand-mark-end: var(--color-action-primary-bg-active);
     --color-core-ui-secondary: var(--primitive-green-09);
     --color-input-border-selected: var(--primitive-green-08);
     --color-status-positive-text: var(--primitive-green-01);

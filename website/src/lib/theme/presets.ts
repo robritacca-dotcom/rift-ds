@@ -186,12 +186,12 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     ambient: ["#E7C175", "#7FAE8F", "#A5789F", "#5E6FA8", "#E6A792", "#F0C9BC"],
     // Light mode sets white labels on a deeper terracotta: the key holds
     // only 3.1:1 under white, so the fill steps down until it clears AA,
-    // and hover and press step a little deeper again. The mark follows the
+    // with hover a little deeper and press deeper still. The mark follows the
     // fill. Dark mode keeps the key under its dark label.
     extraOverrides: {
       "--color-action-primary-bg": "#B85A3C",
       "--color-action-primary-bg-hover": "var(--primitive-orange-08)",
-      "--color-action-primary-bg-active": "var(--primitive-orange-08)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-09)",
       "--color-action-primary-text": "#FFFFFF",
       "--color-action-primary-text-active": "#FFFFFF",
     },
@@ -501,13 +501,13 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       // derives, so the labels are pinned to the deepest navy and the hover
       // and pressed fills brighten away from them instead of deepening.
       // Light mode deepens the fill until white labels hold AA (the key
-      // gives 3:1 under white), hover and press a step deeper, and the mark
+      // gives 3:1 under white), hover and press each a step deeper, and the mark
       // follows. Dark mode keeps the bright key under navy labels (below).
       "--color-action-primary-bg": "#CC4512",
       "--color-action-primary-text": "#FFFFFF",
       "--color-action-primary-text-active": "#FFFFFF",
       "--color-action-primary-bg-hover": "var(--primitive-orange-08)",
-      "--color-action-primary-bg-active": "var(--primitive-orange-08)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-09)",
       // The AI gradient crosses from blue to the key: signal blue, a
       // lighter blue, then the orange, all bright enough to read on a
       // white card (dark mode lifts the blues further below).
@@ -708,6 +708,7 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-bg-active": "var(--primitive-green-05)",
       "--color-action-primary-text": "var(--primitive-green-11)",
       "--color-action-primary-text-active": "var(--primitive-green-11)",
+      "--color-brand-mark-end": "var(--color-action-primary-bg-active)",
       "--color-bg-page-primary": "var(--primitive-neutral-10)",
       "--color-bg-app-shell": "var(--primitive-neutral-09)",
       "--color-bg-app-surface": "var(--primitive-neutral-11)",
@@ -744,7 +745,11 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       // cards and app shell.
       "--color-action-primary-bg": "var(--primitive-green-11)",
       "--color-action-primary-bg-hover": "var(--primitive-green-10)",
-      "--color-action-primary-bg-active": "var(--primitive-green-10)",
+      // Pressed sinks below the ramp's darkest step, so it answers apart
+      // from hover.
+      "--color-action-primary-bg-active": "#182A13",
+      // The mark is one forest, end to end, not the pressed near-black.
+      "--color-brand-mark-end": "var(--color-action-primary-bg)",
       "--color-action-primary-text": "var(--primitive-green-07)",
       "--color-action-primary-text-active": "var(--primitive-green-07)",
       "--color-bg-page-primary": "var(--primitive-neutral-00)",

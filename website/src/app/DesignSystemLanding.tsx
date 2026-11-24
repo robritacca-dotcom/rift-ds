@@ -1461,7 +1461,7 @@ export default function DesignSystemLanding() {
               and the glass buttons frosting it. */}
           <div className={styles.heroInner}>
           {/* The tagline is the h1: the nav wordmark owns the name. */}
-          <h1 className={styles.pageTitle}>The open source AI design system</h1>
+          <h1 className={styles.pageTitle}>The open source AI-native design system</h1>
           <RotatingSubtitle />
           <FadeDivider className={styles.heroDivider} />
           {/* The counts, under a rule: every figure imports from the registry export that

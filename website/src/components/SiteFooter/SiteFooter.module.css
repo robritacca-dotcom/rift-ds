@@ -1,8 +1,10 @@
 /* SiteFooter — sitemap footer: a brand block beside four columns of
    links, then a quiet copyright row. It sits in the site frame's footer
    slot, which draws the hairline above it and owns the outer gutters and
-   the docked-chat inset; its content caps at 1440px, the contained frame's
-   width, from the slot's start edge. Identical on every page. */
+   the docked-chat inset. In the contained layout its content caps at
+   1440px, the contained frame's width, from the slot's start edge; in the
+   full-width layout the slot runs edge to edge and so does the footer, its
+   link columns sharing the whole width. Identical on every page. */
 
 .footer {
   width: 100%;
@@ -12,6 +14,10 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-1500);
+}
+
+:global(.ds-site-layout__footer[data-ds-width='full']) .footer {
+  max-width: none;
 }
 
 /* ---- Brand block + links ---- */

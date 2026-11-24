@@ -244,6 +244,15 @@
   margin-inline-end: calc(-1 * var(--padding-200));
 }
 
+/* A search field draws its own cancel button in WebKit and Blink. While the
+   library's clear button is showing, the native one goes, so the field never
+   offers two; a search field without `clearable` keeps the browser's. */
+.ds-input:has(.ds-input__clear) .ds-input__field::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
 .ds-input--affixed.ds-input--error .ds-input__field-wrapper,
 .ds-input--affixed.ds-input--error .ds-input__field-wrapper:focus-within {
   border-color: var(--color-status-error-border);

@@ -147,7 +147,15 @@ export default function SchemasPage() {
               For design tools such as Figma, Style Dictionary or Tokens Studio, the same tokens are
               DTCG files under <code>/schema/tokens/</code>, one per theme and mode, with semantic
               tokens kept as aliases of their primitives.{" "}
-              <a href="/schema/tokens/index.json">index.json</a> lists them all.
+              <a href="/schema/tokens/index.json" className={s.inlineLink}>index.json</a> lists them all.
+            </p>
+            <p className={s.sectionNote}>
+              DTCG is the format of the{" "}
+              <a href="https://www.designtokens.org/" className={s.inlineLink}>W3C Design Tokens Community Group</a>, and the
+              files follow its
+              2025.10 release. Every token carries its DTCG type: colour, dimension, number, font
+              family and weight, shadow, duration or easing curve. Breakpoint overrides stay in{" "}
+              <code>{PACKAGE_NAME}/tokens/values</code>, since DTCG has no way to say them.
             </p>
             <Table
               bordered

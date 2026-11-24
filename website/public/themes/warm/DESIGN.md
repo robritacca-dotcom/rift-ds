@@ -4,10 +4,10 @@ name: "Ember"
 description: "The Ember theme of rift-ds: its colours, type, shape, space and depth, as the theme resolves them."
 
 colors:
-  primary: "#d97757"
-  primary-hover: "#dc8063"
-  primary-active: "#dd876a"
-  on-primary: "#341c15"
+  primary: "#b85a3c"
+  primary-hover: "#a45a42"
+  primary-active: "#75402f"
+  on-primary: "#ffffff"
   primary-dark: "#d97757"
   canvas-light: "#f0efee"
   canvas-dark: "#14100c"
@@ -20,9 +20,9 @@ colors:
   display-dark: "#ede9e5"
   heading: "#14100c"
   heading-dark: "#ede9e5"
-  logo: "#d97757"
+  logo: "#b85a3c"
   logo-dark: "#d97757"
-  logo-end: "#dd876a"
+  logo-end: "#75402f"
   logo-end-dark: "#dd876a"
   text-secondary: "#3c3734"
   text-tertiary: "#746f6c"
@@ -38,7 +38,7 @@ colors:
   accent-gold: "#e7c175"
   accent-mint: "#7fae8f"
   accent-violet: "#a5789f"
-  chart-1: "#d97757"
+  chart-1: "#b85a3c"
   chart-2: "#7fae8f"
   chart-3: "#e7c175"
   chart-4: "#d4695f"
@@ -162,7 +162,7 @@ components:
 
 # Ember theme
 
-Ember: Lora headings over Source Sans 3 text, #d97757 for actions, pill buttons, 12px inputs and 24px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
+Ember: Lora headings over Source Sans 3 text, #b85a3c for actions, pill buttons, 12px inputs and 24px cards. Two shadows, one for what floats and one for dialogs. Everything else separates by contrast.
 
 Take it whole: `import 'rift-ds/tokens/presets/presets.css'` after the tokens, then set `data-brand="warm"` on `<html>`. Or take it as a starting point: any token your own CSS sets outranks the theme in light and dark, so keep its colours and change its face, say. See it at https://rift-ds.com/foundations/themes/warm.
 
@@ -172,18 +172,18 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 
 | Role | Light | Dark | Token |
 | --- | --- | --- | --- |
-| `primary` | `#d97757` | `#d97757` | `--color-action-primary-bg` |
-| `primary-hover` | `#dc8063` | `#dc8063` | `--color-action-primary-bg-hover` |
-| `primary-active` | `#dd876a` | `#dd876a` | `--color-action-primary-bg-active` |
-| `on-primary` | `#341c15` | `#341c15` | `--color-action-primary-text` |
+| `primary` | `#b85a3c` | `#d97757` | `--color-action-primary-bg` |
+| `primary-hover` | `#a45a42` | `#dc8063` | `--color-action-primary-bg-hover` |
+| `primary-active` | `#75402f` | `#dd876a` | `--color-action-primary-bg-active` |
+| `on-primary` | `#ffffff` | `#341c15` | `--color-action-primary-text` |
 | `canvas-light` | `#f0efee` | `#14100c` | `--color-bg-page-primary` |
 | `surface` | `#fefdfc` | `rgba(28, 24, 20, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#f0efee` | `#3c3734` | `--color-bg-container-secondary` |
 | `ink` | `#14100c` | `#ede9e5` | `--color-text-primary` |
 | `display` | `#14100c` | `#ede9e5` | `--color-text-display` |
 | `heading` | `#14100c` | `#ede9e5` | `--color-text-heading` |
-| `logo` | `#d97757` | `#d97757` | `--color-brand-mark` |
-| `logo-end` | `#dd876a` | `#dd876a` | `--color-brand-mark-end` |
+| `logo` | `#b85a3c` | `#d97757` | `--color-brand-mark` |
+| `logo-end` | `#75402f` | `#dd876a` | `--color-brand-mark-end` |
 | `text-secondary` | `#3c3734` | `#bcb8b4` | `--color-text-secondary` |
 | `text-tertiary` | `#746f6c` | `#a4a09c` | `--color-text-tertiary` |
 | `border` | `#d4d0cc` | `#302b28` | `--color-bg-container-border` |

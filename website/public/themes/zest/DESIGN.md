@@ -6,7 +6,7 @@ description: "The Zest theme of rift-ds: its colours, type, shape, space and dep
 colors:
   primary: "#233b1c"
   primary-hover: "#2d4b24"
-  primary-active: "#2d4b24"
+  primary-active: "#182a13"
   on-primary: "#8ae86e"
   primary-dark: "#8ae86e"
   canvas-light: "#fdfdfc"
@@ -16,13 +16,13 @@ colors:
   surface-soft: "#efefef"
   ink: "#060705"
   ink-dark: "#e8e9e7"
-  display: "#060705"
+  display: "#233b1c"
   display-dark: "#e8e9e7"
   heading: "#060705"
   heading-dark: "#e8e9e7"
   logo: "#233b1c"
   logo-dark: "#8ae86e"
-  logo-end: "#2d4b24"
+  logo-end: "#233b1c"
   logo-end-dark: "#a7ee92"
   text-secondary: "#2f302e"
   text-tertiary: "#6a6b69"
@@ -171,16 +171,16 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | --- | --- | --- | --- |
 | `primary` | `#233b1c` | `#8ae86e` | `--color-action-primary-bg` |
 | `primary-hover` | `#2d4b24` | `#9beb83` | `--color-action-primary-bg-hover` |
-| `primary-active` | `#2d4b24` | `#a7ee92` | `--color-action-primary-bg-active` |
+| `primary-active` | `#182a13` | `#a7ee92` | `--color-action-primary-bg-active` |
 | `on-primary` | `#8ae86e` | `#233b1c` | `--color-action-primary-text` |
 | `canvas-light` | `#fdfdfc` | `#060705` | `--color-bg-page-primary` |
 | `surface` | `#fdfdfc` | `rgba(14, 15, 13, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#efefef` | `#2f302e` | `--color-bg-container-secondary` |
 | `ink` | `#060705` | `#e8e9e7` | `--color-text-primary` |
-| `display` | `#060705` | `#e8e9e7` | `--color-text-display` |
+| `display` | `#233b1c` | `#e8e9e7` | `--color-text-display` |
 | `heading` | `#060705` | `#e8e9e7` | `--color-text-heading` |
 | `logo` | `#233b1c` | `#8ae86e` | `--color-brand-mark` |
-| `logo-end` | `#2d4b24` | `#a7ee92` | `--color-brand-mark-end` |
+| `logo-end` | `#233b1c` | `#a7ee92` | `--color-brand-mark-end` |
 | `text-secondary` | `#2f302e` | `#b5b7b4` | `--color-text-secondary` |
 | `text-tertiary` | `#6a6b69` | `#9c9e9c` | `--color-text-tertiary` |
 | `border` | `#cecfcd` | `#222422` | `--color-bg-container-border` |
@@ -194,7 +194,7 @@ Accents, for charts and the background field: amber `#ffa94d`, cobalt `#5aa9e6`,
 
 ## Typography
 
-Inter Tight headings over Inter text. Levels inside a tier share a weight and step by size. Every tier is set in the ink.
+Inter Tight headings over Inter text. Levels inside a tier share a weight and step by size. Display type `display` takes its own colour, while running text stays in the ink.
 
 | Style | Face | Size | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |

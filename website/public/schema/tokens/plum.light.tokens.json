@@ -1899,15 +1899,24 @@
     },
     "action-primary-bg": {
       "$type": "color",
-      "$value": "{primitive.orange-07}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8,
+          0.2706,
+          0.0706
+        ],
+        "alpha": 1,
+        "hex": "#cc4512"
+      }
     },
     "action-primary-bg-active": {
       "$type": "color",
-      "$value": "{primitive.orange-03}"
+      "$value": "{primitive.orange-09}"
     },
     "action-primary-bg-hover": {
       "$type": "color",
-      "$value": "{primitive.orange-04}"
+      "$value": "{primitive.orange-08}"
     },
     "action-primary-border": {
       "$type": "color",
@@ -1923,11 +1932,29 @@
     },
     "action-primary-text": {
       "$type": "color",
-      "$value": "{primitive.purple-10}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      }
     },
     "action-primary-text-active": {
       "$type": "color",
-      "$value": "{primitive.purple-10}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      }
     },
     "action-primary-text-secondary": {
       "$type": "color",
@@ -2085,7 +2112,16 @@
     },
     "bg-app-surface": {
       "$type": "color",
-      "$value": "{primitive.neutral-00}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      }
     },
     "bg-container-border": {
       "$type": "color",
@@ -2101,7 +2137,7 @@
     },
     "bg-container-primary-semi": {
       "$type": "color",
-      "$value": "{primitive.neutral-00-a90}"
+      "$value": "{primitive.neutral-01}"
     },
     "bg-container-primary-transparent": {
       "$type": "color",
@@ -2125,7 +2161,7 @@
     },
     "bg-page-primary": {
       "$type": "color",
-      "$value": "{primitive.neutral-01}"
+      "$value": "{primitive.neutral-00}"
     },
     "brand-mark": {
       "$type": "color",

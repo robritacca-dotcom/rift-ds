@@ -2085,7 +2085,16 @@
     },
     "bg-app-surface": {
       "$type": "color",
-      "$value": "{primitive.neutral-00}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      }
     },
     "bg-container-border": {
       "$type": "color",
@@ -2101,7 +2110,7 @@
     },
     "bg-container-primary-semi": {
       "$type": "color",
-      "$value": "{primitive.neutral-00-a90}"
+      "$value": "{primitive.neutral-01}"
     },
     "bg-container-primary-transparent": {
       "$type": "color",
@@ -2125,7 +2134,16 @@
     },
     "bg-page-primary": {
       "$type": "color",
-      "$value": "{primitive.neutral-01}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      }
     },
     "brand-mark": {
       "$type": "color",

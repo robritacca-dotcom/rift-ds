@@ -75,7 +75,7 @@ Write one function, `vec3 scene(vec2 uv, float t)`, in GLSL ES 3.00 (WebGL2). Re
 | `u_time` | `float` | The scene's clock in seconds, the same value as t. It advances with speed and holds still under reduced motion. |
 | `u_ground` | `vec3` | The ground the scene paints over, in linear RGB: the page ground, or a near-black of its own for a dark scene on a light page. Add light to it and return the sum. |
 | `u_page` | `vec3` | The page ground itself, which the fades melt into. |
-| `u_lightMode` | `float` | 1 when a dark scene is being laid onto a light page as a pale tint, otherwise 0. |
+| `u_lightMode` | `float` | 1 when a dark scene is being laid onto a light page as colour and ink, otherwise 0. |
 | `u_ratio` | `float` | Drawing-buffer pixels per CSS pixel. Multiply a size meant in CSS pixels by it. |
 | `u_col` | `vec3[]` | The scene's colours in linear RGB, in the order its colours list names them. Unused slots are black. |
 | `u_glyphs` | `sampler2D` | The scene's character ramp as one strip, a cell per character, white on black. Read its red channel. Only for a scene that sets `glyphs`. |
@@ -97,7 +97,7 @@ Each entry in `params` also arrives as `uniform float u_<key>`.
 - **Name colour roles, never values.** No `vec3(1.0, 0.4, 0.1)` for a colour. List custom properties in `colours` and read them as `u_col[0]`, `u_col[1]` and so on, in that order, 8 at most. The ambient roles, `--color-ambient-1` onward, are made for this and follow the theme, the colour mode and any preset. A custom property of the project's own works too. Numbers that shape light (a falloff, a weight) are fine as literals.
 - **Correct the aspect yourself.** `uv` is 0 to 1 on both axes, so a circle drawn in it is an ellipse on a wide stage. Start with `float aspect = u_size.x / u_size.y;` and scale x by it.
 - **A param key is a GLSL identifier** and must not repeat a uniform in the table (so not `time`, `size`, `ground`, `page` or `ratio`) or start with a pass's name and an underscore.
-- **Say `mode: 'dark'` for a scene that only adds light**, which is most of them. On a light page the component then lays that light on as a pale tint. A scene that paints both modes leaves it out and reads the ground: `float day = smoothstep(0.1, 0.45, dot(u_ground, vec3(0.2126, 0.7152, 0.0722)));` is 0 on a dark ground and 1 on a light one.
+- **Say `mode: 'dark'` for a scene that only adds light**, which is most of them. On a light page the component then lays that light on as colour, its brightest marks a deepened ink of the scene's first colour. A scene that paints both modes leaves it out and reads the ground: `float day = smoothstep(0.1, 0.45, dot(u_ground, vec3(0.2126, 0.7152, 0.0722)));` is 0 on a dark ground and 1 on a light one.
 - **Keep a pixel cheap.** The component holds the frame rate and the resolution, so the cost left is yours. `fbm` is four noise lookups; a dozen calls a pixel is slow on a laptop across a full-width band. Loops need constant bounds.
 - **Raise `pixelRatio` only for fine detail** (type, points), to 2, and multiply anything sized in CSS pixels by `u_ratio`. Soft light does not need it.
 - **Move with `t`, slowly.** A background drifts on cycles of tens of seconds. Reduced motion holds `t` still for you, so never read a clock of your own.

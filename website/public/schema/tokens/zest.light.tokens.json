@@ -1903,7 +1903,16 @@
     },
     "action-primary-bg-active": {
       "$type": "color",
-      "$value": "{primitive.green-10}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0941,
+          0.1647,
+          0.0745
+        ],
+        "alpha": 1,
+        "hex": "#182a13"
+      }
     },
     "action-primary-bg-hover": {
       "$type": "color",
@@ -2081,11 +2090,29 @@
     },
     "bg-app-shell": {
       "$type": "color",
-      "$value": "{primitive.neutral-00}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647,
+          0.9647,
+          0.9608
+        ],
+        "alpha": 1,
+        "hex": "#f6f6f5"
+      }
     },
     "bg-app-surface": {
       "$type": "color",
-      "$value": "{primitive.neutral-00}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      }
     },
     "bg-container-border": {
       "$type": "color",
@@ -2101,7 +2128,16 @@
     },
     "bg-container-primary-semi": {
       "$type": "color",
-      "$value": "{primitive.neutral-01}"
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647,
+          0.9647,
+          0.9608
+        ],
+        "alpha": 1,
+        "hex": "#f6f6f5"
+      }
     },
     "bg-container-primary-transparent": {
       "$type": "color",
@@ -2133,7 +2169,7 @@
     },
     "brand-mark-end": {
       "$type": "color",
-      "$value": "{color.action-primary-bg-active}"
+      "$value": "{color.action-primary-bg}"
     },
     "calendar-cell-bg": {
       "$type": "color",
@@ -2571,7 +2607,7 @@
     },
     "text-display": {
       "$type": "color",
-      "$value": "{color.text-primary}"
+      "$value": "{primitive.green-11}"
     },
     "text-heading": {
       "$type": "color",

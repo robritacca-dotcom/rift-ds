@@ -9,7 +9,7 @@ colors:
   primary-active: "#133023"
   on-primary: "#cfdad5"
   primary-dark: "#23573f"
-  canvas-light: "#eeefee"
+  canvas-light: "#ffffff"
   canvas-dark: "#070a08"
   surface: "#fcfcfc"
   surface-dark: "rgba(15, 18, 17, 0.8)"
@@ -173,7 +173,7 @@ One action colour, kept for primary buttons, focus rings, the checked state of a
 | `primary-hover` | `#1b4331` | `#1b4331` | `--color-action-primary-bg-hover` |
 | `primary-active` | `#133023` | `#133023` | `--color-action-primary-bg-active` |
 | `on-primary` | `#cfdad5` | `#cfdad5` | `--color-action-primary-text` |
-| `canvas-light` | `#eeefee` | `#070a08` | `--color-bg-page-primary` |
+| `canvas-light` | `#ffffff` | `#070a08` | `--color-bg-page-primary` |
 | `surface` | `#fcfcfc` | `rgba(15, 18, 17, 0.8)` | `--color-bg-container-primary` |
 | `surface-soft` | `#eeefee` | `#2f3231` | `--color-bg-container-secondary` |
 | `ink` | `#070a08` | `#e5e8e6` | `--color-text-primary` |

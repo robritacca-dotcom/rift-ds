@@ -63,8 +63,16 @@
   font-weight: var(--font-paragraph-emphasis-weight);
 }
 
-.ds-table__row--total {
+/* The total's rule sits on its cells: with border-collapse: separate a
+   row's own border never paints (the bordered variant's dividers below are
+   on cells for the same reason). In the bordered table the row above drops
+   its hairline, so the heavier rule is the only line between them. */
+.ds-table__row--total .ds-table__cell {
   border-top: var(--border-050) solid var(--color-table-divider);
+}
+
+.ds-table--bordered .ds-table__row:has(+ .ds-table__row--total) .ds-table__cell {
+  border-bottom: none;
 }
 
 /* ============================================

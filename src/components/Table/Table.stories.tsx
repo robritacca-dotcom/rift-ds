@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Badge } from '../Badge/Badge';
 import { Table } from './Table';
 import { Button } from '../Button/Button';
@@ -98,6 +99,39 @@ export const Bordered: Story = {
     columns: textColumns,
     rows: textRows,
     bordered: true,
+  },
+};
+
+// A total row: the rows above add up to it, under a heavier rule
+const totalRows = [
+  { id: 'q1', cells: { name: 'Q1', role: 'Retainers', email: '$42,000' } },
+  { id: 'q2', cells: { name: 'Q2', role: 'Retainers', email: '$45,500' } },
+  { id: 'q3', cells: { name: 'Q3', role: 'Retainers', email: '$47,250' } },
+  { id: 'sum', variant: 'total' as const, cells: { name: 'Total', role: '', email: '$134,750' } },
+];
+
+const totalRuleOf = (canvasElement: HTMLElement) => {
+  const cell = canvasElement.querySelector<HTMLElement>('.ds-table__row--total .ds-table__cell');
+  if (!cell) throw new Error('total row did not render');
+  const style = getComputedStyle(cell);
+  return `${style.borderTopStyle} ${parseFloat(style.borderTopWidth) > 0}`;
+};
+
+export const WithTotal: Story = {
+  args: { columns: textColumns, rows: totalRows },
+  play: async ({ canvasElement }) => {
+    await expect(totalRuleOf(canvasElement)).toBe('solid true');
+  },
+};
+
+export const WithTotalBordered: Story = {
+  name: 'With total (bordered)',
+  args: { columns: textColumns, rows: totalRows, bordered: true },
+  play: async ({ canvasElement }) => {
+    await expect(totalRuleOf(canvasElement)).toBe('solid true');
+    // The row above gives up its hairline, so the two lines never stack.
+    const above = canvasElement.querySelector<HTMLElement>('[data-row-id="q3"] .ds-table__cell, tbody tr:nth-last-child(2) .ds-table__cell');
+    await expect(above && getComputedStyle(above).borderBottomStyle).toBe('none');
   },
 };
 

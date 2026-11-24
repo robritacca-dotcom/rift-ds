@@ -8,6 +8,10 @@
    deck holds.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-card-stack {
@@ -93,3 +97,4 @@
 
 /* Screen-reader announcement of the deck position. */
 
+} /* @layer rift.components */

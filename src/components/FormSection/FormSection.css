@@ -6,6 +6,10 @@
    aside layout stacks by the room it has.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-form-section {
   container-type: inline-size;
@@ -68,3 +72,5 @@
     gap: var(--gap-1000);
   }
 }
+
+} /* @layer rift.components */

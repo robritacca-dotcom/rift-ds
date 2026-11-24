@@ -10,6 +10,10 @@
    token-only.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-legend-tile {
@@ -65,3 +69,5 @@
   letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
   color: var(--color-text-primary);
 }
+
+} /* @layer rift.components */

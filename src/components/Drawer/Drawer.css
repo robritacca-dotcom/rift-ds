@@ -3,6 +3,10 @@
    Edge-anchored modal panel that slides in
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-drawer {
   position: fixed;
   inset: 0;
@@ -271,3 +275,5 @@
     transition: none;
   }
 }
+
+} /* @layer rift.components */

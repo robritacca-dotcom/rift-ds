@@ -3,6 +3,10 @@
    Container for grouped buttons in nav/subnav
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-button-group {
   /* Layout */
   display: inline-flex; /* Hug content instead of stretch */
@@ -46,3 +50,5 @@
   width: auto; /* Hug content instead of stretch */
   display: inline-flex; /* Hug content */
 }
+
+} /* @layer rift.components */

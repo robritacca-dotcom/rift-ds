@@ -3,6 +3,10 @@
    A button holding a single icon, shaped by the theme's button radius
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-icon-button {
   /* Layout */
   display: inline-flex;
@@ -437,3 +441,5 @@
   height: 8px;
   padding: 0;
 }
+
+} /* @layer rift.components */

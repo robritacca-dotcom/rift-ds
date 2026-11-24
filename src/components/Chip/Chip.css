@@ -5,6 +5,10 @@
    clickable, selectable, and removable variants.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-chip {
   /* Layout */
   display: inline-flex;
@@ -286,3 +290,5 @@
 .ds-chip .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

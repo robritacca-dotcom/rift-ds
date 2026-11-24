@@ -4,6 +4,10 @@
    that have nothing to show
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-empty-state {
   display: flex;
   flex-direction: column;
@@ -146,3 +150,5 @@
 .ds-empty-state .material-symbols-rounded:not(:where(.ds-empty-state__action *)) {
   color: inherit;
 }
+
+} /* @layer rift.components */

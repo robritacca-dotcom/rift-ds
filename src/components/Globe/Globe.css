@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ds-allow-file(physical): a callout points at a place on the globe, whose sides are geography */
 /* ============================================
    GLOBE COMPONENT
@@ -184,3 +188,5 @@
 .ds-globe__callout[data-side='left'] {
   transform: translate(-100%, -100%);
 }
+
+} /* @layer rift.components */

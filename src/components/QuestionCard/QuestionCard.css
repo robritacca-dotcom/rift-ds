@@ -13,6 +13,10 @@
    it. The rows carry the structure.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-question-card {
   display: flex;
   flex-direction: column;
@@ -352,3 +356,4 @@ button.ds-question-card__option--chosen:hover {
   color: var(--color-text-tertiary);
 }
 
+} /* @layer rift.components */

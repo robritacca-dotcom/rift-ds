@@ -5,6 +5,10 @@
    wraps for empty-state hero placements.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-prompt-suggestions {
   display: flex;
   gap: var(--gap-200);
@@ -546,3 +550,4 @@
   box-shadow: none;
 }
 
+} /* @layer rift.components */

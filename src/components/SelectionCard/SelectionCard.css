@@ -15,6 +15,10 @@
    draws.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    GROUP — vertical stack of cards
    ============================================ */
@@ -122,3 +126,5 @@
   display: inline-flex;
   flex-shrink: 0;
 }
+
+} /* @layer rift.components */

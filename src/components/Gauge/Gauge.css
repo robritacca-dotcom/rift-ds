@@ -9,6 +9,10 @@
    property swap.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — the dial centres in the shared chart body */
 
 .ds-gauge__body {
@@ -118,3 +122,5 @@
 .ds-gauge--neutral {
   color: var(--color-text-secondary);
 }
+
+} /* @layer rift.components */

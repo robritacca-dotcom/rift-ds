@@ -5,6 +5,10 @@
    Click the preview to replay one-shot demos.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-motion-swatch {
   /* Layout */
   display: flex;
@@ -174,3 +178,5 @@
   text-align: center;
   overflow-wrap: anywhere;
 }
+
+} /* @layer rift.components */

@@ -4,6 +4,10 @@
    to the bottom of a long list or form
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-action-bar {
   /* The surface the bar reads as one with: the blur's tint with the blur
@@ -76,3 +80,5 @@
   gap: var(--gap-300);
   margin-inline-start: auto;
 }
+
+} /* @layer rift.components */

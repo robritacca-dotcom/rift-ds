@@ -4,6 +4,10 @@
    optional featured card
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base: the floating glass shell, CommandPalette's surface. The panel is a
    shallow strip that lands on whatever the page opens with, display type
    most of it, so its blur runs harder than the shell's 24px: at that
@@ -271,3 +275,5 @@
     min-height: 50cqw;
   }
 }
+
+} /* @layer rift.components */

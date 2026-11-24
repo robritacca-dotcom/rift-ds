@@ -4,6 +4,10 @@
    Pass onClick for a zoomable (lightbox) figure.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-figure {
   margin: 0;
   border-radius: var(--radius-300);
@@ -95,3 +99,5 @@
 .ds-figure__verdict {
   flex: none;
 }
+
+} /* @layer rift.components */

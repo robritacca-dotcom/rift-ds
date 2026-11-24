@@ -4,6 +4,10 @@
    Vertical timeline or horizontal stepper.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-timeline {
   margin: 0;
   padding: 0;
@@ -371,3 +375,5 @@
 .ds-timeline--horizontal .ds-timeline__description {
   overflow-wrap: break-word;
 }
+
+} /* @layer rift.components */

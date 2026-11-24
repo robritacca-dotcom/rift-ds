@@ -3,6 +3,10 @@
    Star-scale rating control
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-rating {
   display: inline-flex;
   align-items: center;
@@ -98,3 +102,5 @@
 .ds-rating--thumbs .ds-rating__step--filled {
   color: var(--color-icon-primary);
 }
+
+} /* @layer rift.components */

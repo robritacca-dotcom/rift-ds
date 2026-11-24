@@ -4,6 +4,10 @@
    Panel and item styling mirror DropdownMenu.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — a plain block wrapper around the right-clickable area
    (a real box, so the keyboard-invocation fallback can measure it) */
 .ds-context-menu {
@@ -311,3 +315,5 @@
 .ds-context-menu__panel--compact .ds-context-menu__item--has-submenu {
   padding-inline-end: var(--padding-200);
 }
+
+} /* @layer rift.components */

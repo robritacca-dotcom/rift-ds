@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ds-allow-file(physical): the arrow and the entrance nudge point at the side the anchored behaviour placed the tooltip on, a screen side */
 /* ============================================
    TOOLTIP COMPONENT
@@ -175,3 +179,5 @@
   border-bottom: var(--border-025) solid var(--color-bg-container-border);
   border-left: var(--border-025) solid var(--color-bg-container-border);
 }
+
+} /* @layer rift.components */

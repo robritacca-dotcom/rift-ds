@@ -12,6 +12,10 @@
    the status word and icon carry the state.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-tool-call {
   /* Two colour channels per status: -text for the status word (tuned for
      text contrast) and -icon for the indicator glyph, which needs a hue
@@ -315,3 +319,5 @@
 .ds-tool-call__header:has(.ds-tool-call__chevron) {
   padding-inline-end: calc(var(--ds-chat-card-inset) - var(--padding-100));
 }
+
+} /* @layer rift.components */

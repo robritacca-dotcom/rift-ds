@@ -5,6 +5,10 @@
    A long AI command grows its own row.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-table-toolbar {
   position: relative;
   display: flex;
@@ -641,3 +645,5 @@
   opacity: 1;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard) var(--motion-duration-base);
 }
+
+} /* @layer rift.components */

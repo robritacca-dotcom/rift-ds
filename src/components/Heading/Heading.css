@@ -8,6 +8,10 @@
    either tier tones every Heading with it.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-heading {
   margin: 0;
@@ -170,3 +174,5 @@
     opacity: 1;
   }
 }
+
+} /* @layer rift.components */

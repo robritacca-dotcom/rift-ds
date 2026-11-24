@@ -1,6 +1,6 @@
 {
   "$schema": "https://rift-ds.com/schema/component.schema.json",
-  "version": "1.35.1",
+  "version": "1.36.0",
   "kind": "component",
   "name": "SelectionCard",
   "label": "Selection card",

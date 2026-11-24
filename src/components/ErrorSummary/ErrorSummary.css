@@ -5,6 +5,10 @@
    heading and a list of links, one per error.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-error-summary {
   display: flex;
@@ -92,3 +96,5 @@
   outline: var(--border-050) solid var(--color-action-primary-bg);
   outline-offset: var(--border-050);
 }
+
+} /* @layer rift.components */

@@ -4,6 +4,10 @@
    day, coloured by the contribution colour ramp
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Card chrome, header, and padding come from the shared chart styles
    (Chart.css); this file owns the grid, legend, and cell ramp. */
 
@@ -167,3 +171,5 @@
 .ds-contribution-graph__legend-label:last-child {
   margin-inline-start: var(--gap-050);
 }
+
+} /* @layer rift.components */

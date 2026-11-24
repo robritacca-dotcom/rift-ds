@@ -4,6 +4,10 @@
    with reset captions, in the chart card chrome
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — the card chrome itself comes from ds-chart. In a chat it is one
    of the chat cards, so it takes their padding, title and rhythm: the
    recipe's edge above and below inside its inset at the sides, a
@@ -56,3 +60,5 @@
   line-height: var(--font-caption-line-height);
   color: var(--color-text-secondary);
 }
+
+} /* @layer rift.components */

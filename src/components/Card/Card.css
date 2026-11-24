@@ -3,6 +3,10 @@
    Content card with preview area and title
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-card {
   /* Layout */
   display: flex;
@@ -188,3 +192,5 @@
   color: var(--color-text-secondary);
   margin: 0;
 }
+
+} /* @layer rift.components */

@@ -5,6 +5,10 @@
    toggle button: pressed while its artifact is on stage in the panel.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-artifact-card {
@@ -105,3 +109,5 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+} /* @layer rift.components */

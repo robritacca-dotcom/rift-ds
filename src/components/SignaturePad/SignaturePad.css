@@ -7,6 +7,10 @@
    in the body face, italic, on the same line.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-signature-pad {
   display: flex;
@@ -139,3 +143,5 @@
 .ds-signature-pad--disabled .ds-signature-pad__canvas {
   pointer-events: none;
 }
+
+} /* @layer rift.components */

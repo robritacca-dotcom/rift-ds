@@ -8,6 +8,10 @@
    is carried per platform (tint, lens, pill).
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    BASE (shared by every platform)
    ============================================ */
@@ -406,3 +410,5 @@
   top: 4px;
   inset-inline-start: calc(50% + 6px);
 }
+
+} /* @layer rift.components */

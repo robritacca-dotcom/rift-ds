@@ -9,6 +9,10 @@
    dropped from a bell icon or inline on a page.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-notification-center {
   display: flex;
   flex-direction: column;
@@ -265,3 +269,5 @@
 .ds-notification-center .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

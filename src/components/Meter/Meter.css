@@ -3,6 +3,10 @@
    Level indicator for a known quantity
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-meter {
   display: flex;
   flex-direction: column;
@@ -96,3 +100,5 @@
 .ds-meter--neutral .ds-meter__fill {
   background-color: var(--color-status-neutral-border);
 }
+
+} /* @layer rift.components */

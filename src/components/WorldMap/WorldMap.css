@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ds-allow-file(physical): a map is geography: west is on the left in every reading direction */
 /* ============================================
    WORLD MAP COMPONENT
@@ -248,3 +252,5 @@ button.ds-world-map__marker:hover .ds-world-map__dot {
 .ds-world-map__callout[data-side='left'] {
   transform: translate(-100%, -100%);
 }
+
+} /* @layer rift.components */

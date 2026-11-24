@@ -7,6 +7,10 @@
    One stylesheet, shared by every member.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    TYPE MARK — what kind of file this is
    Shared by the tile and the viewer. Every mark, and every glyph a tile
@@ -1134,3 +1138,5 @@ button.ds-attachment-group__single:focus-visible {
   align-items: center;
   gap: var(--gap-100);
 }
+
+} /* @layer rift.components */

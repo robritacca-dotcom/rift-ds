@@ -3,6 +3,10 @@
    Inline calendar with month navigation
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-date-picker {
   display: inline-flex;
   flex-direction: column;
@@ -227,3 +231,5 @@
   opacity: 0.4;
   pointer-events: none;
 }
+
+} /* @layer rift.components */

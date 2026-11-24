@@ -5,6 +5,10 @@
    Tokens aligned to Figma spec.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-dropdown-menu {
   position: relative;
   display: inline-flex;
@@ -405,3 +409,5 @@
 .ds-dropdown-menu__panel--compact .ds-dropdown-menu__item--has-submenu {
   padding-inline-end: var(--padding-200);
 }
+
+} /* @layer rift.components */

@@ -9,6 +9,10 @@
    means repointing those four and nothing else.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-chat-message {
   /* Gutter width matches the Avatar sm footprint, so a run of turns keeps
      its left edge whether or not each row shows its avatar. Consumers can
@@ -337,3 +341,5 @@
     opacity: 0.55;
   }
 }
+
+} /* @layer rift.components */

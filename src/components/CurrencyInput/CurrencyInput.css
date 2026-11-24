@@ -7,6 +7,12 @@
    grouped on blur.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-currency-input .ds-input__field {
   font-variant-numeric: tabular-nums;
 }
+
+} /* @layer rift.components */

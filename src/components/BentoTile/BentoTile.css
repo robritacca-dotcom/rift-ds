@@ -5,6 +5,10 @@
    texture together) and
    --ds-bento-tile-panel-width (the open overlay's width). */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ------------------------------------------------------------- base */
 
 /* No overflow clip on the tile itself: the surface and the body clip
@@ -540,3 +544,5 @@
   .ds-bento-tile-overlay__body,
   .ds-bento-tile-art { animation: none; }
 }
+
+} /* @layer rift.components */

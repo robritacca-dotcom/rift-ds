@@ -7,6 +7,10 @@
    so the three read as one family in a row.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-theme-picker {
   position: relative;
   display: inline-flex;
@@ -193,3 +197,5 @@
 .ds-theme-picker--open .ds-theme-picker__trigger-tip .ds-tooltip__panel {
   display: none;
 }
+
+} /* @layer rift.components */

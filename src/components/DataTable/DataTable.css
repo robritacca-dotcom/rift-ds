@@ -7,6 +7,10 @@
    only styles the chrome around it.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-data-table {
   display: flex;
   flex-direction: column;
@@ -1361,3 +1365,5 @@
   /* Banner is a page-wide strip; over a table it takes the frame's corner. */
   border-radius: var(--radius-300);
 }
+
+} /* @layer rift.components */

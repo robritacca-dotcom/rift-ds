@@ -13,6 +13,10 @@
    <html> by the widen grip), --ds-chat-inset and --ds-chat-float-height.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 :root {
   /* The docked panel's resting width; DOCK_MIN_WIDTH in placement.ts mirrors it. */
   --ds-chat-width: 420px;
@@ -1692,3 +1696,5 @@ html[data-chat-resizing] .ds-chat-launcher__panel--floating .ds-chat-header {
   pointer-events: none;
   background: linear-gradient(to bottom, transparent, var(--ds-shell-surface));
 }
+
+} /* @layer rift.components */

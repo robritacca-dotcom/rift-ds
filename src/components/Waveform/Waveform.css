@@ -4,6 +4,10 @@
    the shared twelve-slot cycle
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — height rides the icon scale, bar width derives from it, and the
    colour routes through one custom property so a consumer can tint the wave. */
 
@@ -84,3 +88,5 @@
     transform: scaleY(calc(var(--ds-waveform-amp, 1) * 0.6));
   }
 }
+
+} /* @layer rift.components */

@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ds-allow-file(physical): time runs left to right on the chart axis in every direction, like the other charts' axes; bars are placed by date in screen percentages */
 /* ============================================
    GANTT CHART COMPONENT
@@ -312,3 +316,5 @@ button.ds-gantt__bar:focus-visible {
     --ds-gantt-label-width: 120px;
   }
 }
+
+} /* @layer rift.components */

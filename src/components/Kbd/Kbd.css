@@ -3,6 +3,10 @@
    A single keyboard key rendered as a keycap
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-kbd {
   display: inline-flex;
@@ -47,3 +51,5 @@
   align-items: center;
   gap: var(--gap-050);
 }
+
+} /* @layer rift.components */

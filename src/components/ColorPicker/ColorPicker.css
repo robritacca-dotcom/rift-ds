@@ -14,6 +14,10 @@
    tokens.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-colorpicker {
@@ -276,3 +280,5 @@
 .ds-colorpicker--error .ds-colorpicker__trigger {
   border-color: var(--color-status-error-border);
 }
+
+} /* @layer rift.components */

@@ -318,6 +318,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Every base token sits in the rift.tokens cascade layer, so a consumer's own CSS outranks it."
       },
       {
+        "name": "validate-component-layers",
+        "text": "Every component style sits in the rift.components cascade layer, so a consumer's own CSS outranks it in any load order."
+      },
+      {
         "name": "validate-theme-mirrors",
         "text": "Hand mirrors of token data in the site and design.md match the CSS."
       },

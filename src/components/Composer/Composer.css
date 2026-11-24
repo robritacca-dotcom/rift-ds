@@ -3,6 +3,8 @@
    The chat input shell: file tray, auto-growing textarea, send/stop
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
 /* The focus treatment animates a registered custom property, exactly as
    AiButton does: a conic gradient's angle cannot tween otherwise. Browsers
    without @property render the ring at its initial angle, static — a
@@ -13,6 +15,8 @@
   initial-value: 0deg;
   inherits: false;
 }
+
+@layer rift.components {
 
 .ds-composer {
   /* Anchors the focus ring and glow pseudo-elements */
@@ -792,3 +796,5 @@
   flex-basis: 100%;
   margin: var(--ds-composer-ring) var(--ds-composer-ring) 0;
 }
+
+} /* @layer rift.components */

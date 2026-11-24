@@ -6,6 +6,10 @@
    convention from Chip's selected state.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-filter-bar {
@@ -208,3 +212,5 @@
 .ds-filter-bar__chip:has(.ds-filter-bar__icon) {
   padding-inline-start: var(--padding-200);
 }
+
+} /* @layer rift.components */

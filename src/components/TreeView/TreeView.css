@@ -4,6 +4,10 @@
    and nested structures
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-treeview {
@@ -117,3 +121,5 @@
   padding: 0;
   list-style: none;
 }
+
+} /* @layer rift.components */

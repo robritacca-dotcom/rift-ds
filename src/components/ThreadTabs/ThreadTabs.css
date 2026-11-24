@@ -13,6 +13,10 @@
    (the base beat), since a dismissal should feel lighter than an arrival.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-thread-tabs {
   display: flex;
   align-items: center;
@@ -260,3 +264,5 @@
 .ds-thread-tabs__trigger:has(.ds-thread-tabs__status, .ds-thread-tabs__icon) {
   padding-inline-start: var(--padding-200);
 }
+
+} /* @layer rift.components */

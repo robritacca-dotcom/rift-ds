@@ -6,6 +6,10 @@
    text style of its own.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-streaming-text {
@@ -38,3 +42,5 @@
     opacity: 0.15;
   }
 }
+
+} /* @layer rift.components */

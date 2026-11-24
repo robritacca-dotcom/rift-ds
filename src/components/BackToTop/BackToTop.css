@@ -4,6 +4,10 @@
    fading and rising in once the page has scrolled.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-back-to-top {
   position: fixed;
   inset-block-end: var(--ds-back-to-top-inset, var(--gap-500));
@@ -26,3 +30,5 @@
 .ds-back-to-top .ds-icon-button {
   box-shadow: var(--shadow-floating);
 }
+
+} /* @layer rift.components */

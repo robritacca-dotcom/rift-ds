@@ -10,6 +10,10 @@
    timer inside the row.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-message-actions {
   display: flex;
   align-items: center;
@@ -91,3 +95,5 @@
 .ds-message-actions .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    The plain dashboard surface
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-panel {
   display: flex;
   flex-direction: column;
@@ -31,3 +35,5 @@
 .ds-panel--flush {
   padding: 0;
 }
+
+} /* @layer rift.components */

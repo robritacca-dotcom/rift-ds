@@ -3,6 +3,10 @@
    Top navigation bar using ButtonGroup
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-nav {
   display: flex;
   align-items: center;
@@ -49,3 +53,5 @@
   flex-shrink: 0;
   flex-wrap: nowrap;
 }
+
+} /* @layer rift.components */

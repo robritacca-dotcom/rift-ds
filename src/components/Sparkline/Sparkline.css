@@ -6,6 +6,10 @@
    is one custom property swap.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-sparkline {
@@ -74,3 +78,5 @@
 .ds-sparkline--neutral {
   color: var(--color-text-secondary);
 }
+
+} /* @layer rift.components */

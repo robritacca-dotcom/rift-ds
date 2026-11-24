@@ -5,6 +5,10 @@
    --ds-stack-gap, set from the `gap` prop.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-stack {
   display: flex;
@@ -66,3 +70,5 @@
 .ds-stack--justify-between {
   justify-content: space-between;
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    Collapsible content sections
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* The standard card surface (container fill, hairline border,
    --radius-300), the one SelectionCard's and QuestionCard's option rows
    share, so a collapsible section reads as a card on the page rather than
@@ -132,3 +136,5 @@
 .ds-accordion__trigger {
   padding-inline-end: var(--padding-400);
 }
+
+} /* @layer rift.components */

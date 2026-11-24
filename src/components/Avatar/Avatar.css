@@ -3,6 +3,10 @@
    User profile image with initials fallback
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-avatar {
   position: relative;
   display: inline-flex;
@@ -199,3 +203,5 @@
 .ds-avatar__status--busy {
   background-color: var(--color-status-error-border);
 }
+
+} /* @layer rift.components */

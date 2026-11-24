@@ -12,6 +12,10 @@
    starts where the reply's own text does.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-action-card {
   box-sizing: border-box;
   display: flex;
@@ -145,3 +149,5 @@
 .ds-action-card .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

@@ -4,6 +4,10 @@
    label, hollow outline and live pulse
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-status-dot {
@@ -126,3 +130,5 @@
     opacity: 0;
   }
 }
+
+} /* @layer rift.components */

@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ds-allow-file(physical): a callout points at a place on a map, whose sides are geography */
 /* ============================================
    MAP CALLOUT COMPONENT
@@ -45,3 +49,5 @@
   color: var(--color-text-tertiary);
   font-variant-numeric: tabular-nums;
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    Click-or-drop zone plus a controlled file list
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-file-input {
   display: flex;
   flex-direction: column;
@@ -288,3 +292,5 @@
 .ds-file-input__file {
   padding-inline-start: var(--padding-200);
 }
+
+} /* @layer rift.components */

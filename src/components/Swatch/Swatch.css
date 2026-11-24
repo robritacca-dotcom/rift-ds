@@ -3,6 +3,10 @@
    Clickable colour tile for palettes and pickers
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-swatch {
@@ -50,3 +54,5 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+} /* @layer rift.components */

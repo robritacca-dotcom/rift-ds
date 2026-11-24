@@ -14,7 +14,7 @@
       "path": "src/components/ThemeToggle/ThemeToggle.css",
       "type": "registry:file",
       "target": "rift/components/ThemeToggle/ThemeToggle.css",
-      "content": "/* ============================================\n   THEME TOGGLE\n   The colour-mode control. It is a\n   SegmentedControl, which draws every pixel;\n   this root keeps the strip at its own width\n   in a squeezed row. The icon-only form, its\n   tooltips included, is SegmentedControl's.\n   ============================================ */\n\n.ds-theme-toggle {\n  flex-shrink: 0;\n}\n\n/* The cycle form is SegmentedControl's (`ds-segmented-control--cycle`),\n   which draws the circle; `ds-theme-toggle--cycle` stays as a consumer\n   hook and styles nothing here. */\n"
+      "content": "/* ============================================\n   THEME TOGGLE\n   The colour-mode control. It is a\n   SegmentedControl, which draws every pixel;\n   this root keeps the strip at its own width\n   in a squeezed row. The icon-only form, its\n   tooltips included, is SegmentedControl's.\n   ============================================ */\n\n@layer rift.tokens, rift.preset, rift.components;\n\n@layer rift.components {\n\n.ds-theme-toggle {\n  flex-shrink: 0;\n}\n\n/* The cycle form is SegmentedControl's (`ds-segmented-control--cycle`),\n   which draws the circle; `ds-theme-toggle--cycle` stays as a consumer\n   hook and styles nothing here. */\n\n} /* @layer rift.components */\n"
     },
     {
       "path": "src/components/ThemeToggle/ThemeToggle.tsx",

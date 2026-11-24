@@ -6,6 +6,10 @@
    competing with the answer beside it.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-reasoning {
   /* Where an AgentStatus summary's label starts: matrix plus its gap.
      The rail geometry and the handoff slide both derive from it. */
@@ -304,3 +308,5 @@
     animation: none;
   }
 }
+
+} /* @layer rift.components */

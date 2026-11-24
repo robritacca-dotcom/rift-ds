@@ -8,6 +8,10 @@
    decides the width.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-site-footer {
   display: flex;
   flex-direction: column;
@@ -155,3 +159,5 @@
   align-items: center;
   gap: var(--gap-100);
 }
+
+} /* @layer rift.components */

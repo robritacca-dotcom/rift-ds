@@ -3,6 +3,10 @@
    Custom select with menu, keyboard navigation
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-dropdown {
   display: flex;
   flex-direction: column;
@@ -320,3 +324,5 @@
 .ds-dropdown__option:has(.ds-chosen-mark) {
   padding-inline-end: var(--padding-200);
 }
+
+} /* @layer rift.components */

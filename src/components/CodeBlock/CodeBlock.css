@@ -6,6 +6,10 @@
    code is the one sanctioned monospace context.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-code-block {
   display: flex;
   flex-direction: column;
@@ -228,3 +232,5 @@
 .ds-code-block .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

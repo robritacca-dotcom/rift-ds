@@ -9,9 +9,15 @@
    only what the shared styles cannot reach.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* The stage-name labels draw as SVG text, which inherits no typography from
    the shared chart classes — pin them to the family's primary face. */
 
 .ds-funnel-chart .recharts-label-list text {
   font-family: var(--font-family-primary);
 }
+
+} /* @layer rift.components */

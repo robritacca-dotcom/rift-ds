@@ -5,6 +5,10 @@
    it floats free of the transcript.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 .ds-chat-header {
   display: flex;
@@ -33,3 +37,5 @@
   gap: var(--gap-100);
   flex-shrink: 0;
 }
+
+} /* @layer rift.components */

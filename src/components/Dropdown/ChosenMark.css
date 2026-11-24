@@ -10,6 +10,10 @@
    tick beside a label, not a leading icon.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-chosen-mark {
   --icon-size: var(--icon-size-500);
   flex-shrink: 0;
@@ -17,3 +21,5 @@
   color: var(--color-action-primary-bg);
   line-height: 1;
 }
+
+} /* @layer rift.components */

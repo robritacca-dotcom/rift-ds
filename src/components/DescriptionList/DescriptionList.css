@@ -8,6 +8,10 @@
    never by the viewport.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Frame */
 .ds-description-list__frame {
   container-type: inline-size;
@@ -210,3 +214,5 @@
     grid-template-columns: repeat(min(var(--ds-description-list-columns, 2), 2), minmax(0, 1fr));
   }
 }
+
+} /* @layer rift.components */

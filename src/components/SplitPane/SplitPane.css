@@ -5,6 +5,10 @@
    set from JS; everything visual is tokens.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base */
 
 .ds-split-pane {
@@ -104,3 +108,5 @@
 .ds-split-pane--dragging .ds-split-pane__grip {
   background-color: var(--color-icon-secondary);
 }
+
+} /* @layer rift.components */

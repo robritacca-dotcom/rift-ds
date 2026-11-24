@@ -3,6 +3,10 @@
    Sidebar rail on the left, centered content area
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-app-layout {
   /* The contained width, AppLayout's own: an app's working column. */
   --ds-shell-contained-width: 1120px;
@@ -165,3 +169,5 @@
     padding: var(--padding-500) var(--padding-400);
   }
 }
+
+} /* @layer rift.components */

@@ -3,6 +3,10 @@
    Figma design system button component
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-button {
   /* Layout */
   display: inline-flex;
@@ -646,3 +650,5 @@
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
 }
+
+} /* @layer rift.components */

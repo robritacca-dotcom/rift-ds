@@ -3,6 +3,10 @@
    Modal Cmd+K launcher over a grouped command list
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-command-palette {
   position: fixed;
   inset: 0;
@@ -329,3 +333,5 @@
 .ds-command-palette .material-symbols-rounded {
   color: inherit;
 }
+
+} /* @layer rift.components */

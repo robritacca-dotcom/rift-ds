@@ -6,6 +6,10 @@
    input.
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ============================================
    BASE
    ============================================ */
@@ -234,3 +238,5 @@
 .ds-timepicker--compact .ds-timepicker__trigger {
   padding-inline: var(--padding-200);
 }
+
+} /* @layer rift.components */

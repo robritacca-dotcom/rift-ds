@@ -3,6 +3,10 @@
    A generated character mark, drawn from a name
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* Base — the character rides the icon scale, so it seats wherever an icon
    does. A host that already sets --icon-size on its icon seat is matched by
    the size classes below, which set the same variable. */
@@ -77,3 +81,5 @@
   border-radius: var(--radius-200);
   background-color: color-mix(in srgb, var(--ds-pixel-avatar-ink) 16%, transparent);
 }
+
+} /* @layer rift.components */

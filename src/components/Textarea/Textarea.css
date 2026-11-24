@@ -3,6 +3,10 @@
    Multi-line text input with label and counter
    ============================================ */
 
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 .ds-textarea {
   display: flex;
   flex-direction: column;
@@ -107,3 +111,4 @@
   letter-spacing: var(--font-paragraph-sm-letter-spacing);
 }
 
+} /* @layer rift.components */

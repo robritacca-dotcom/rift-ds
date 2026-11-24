@@ -1,3 +1,7 @@
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
 /* ds-allow-file(physical): the entrance nudge points away from the side the anchored behaviour placed the card on, a screen side */
 /* ============================================
    HOVER CARD COMPONENT
@@ -104,3 +108,5 @@
     transform: translateX(-4px);
   }
 }
+
+} /* @layer rift.components */

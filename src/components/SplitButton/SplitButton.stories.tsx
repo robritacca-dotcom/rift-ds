@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { SplitButton } from './SplitButton';
 
 const saveItems = [
@@ -125,5 +126,31 @@ export const Loading: Story = {
 export const Disabled: Story = {
   args: {
     disabled: true,
+  },
+};
+
+/** `type="submit"` makes the primary segment its form's submit button; the
+    chevron stays a plain button, so opening the menu never submits. */
+export const SubmitsItsForm: Story = {
+  args: { type: 'submit' },
+  render: (args) => (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        (window as unknown as { __splitSubmits: number }).__splitSubmits += 1;
+      }}
+    >
+      <SplitButton {...args} />
+    </form>
+  ),
+  play: async ({ canvasElement }) => {
+    const counter = window as unknown as { __splitSubmits: number };
+    counter.__splitSubmits = 0;
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'More actions' }));
+    await userEvent.keyboard('{Escape}');
+    await expect(counter.__splitSubmits).toBe(0);
+    await userEvent.click(canvas.getByRole('button', { name: 'Save' }));
+    await expect(counter.__splitSubmits).toBe(1);
   },
 };

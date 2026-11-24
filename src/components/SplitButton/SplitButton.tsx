@@ -13,6 +13,12 @@ type SplitButtonOwnProps = {
   label: string;
   /** Click handler for the primary action */
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /**
+   * The primary segment's native type. Defaults to `button`; set `submit` to
+   * make the primary action its form's submit button. The menu trigger is
+   * always `button`, so opening the menu never submits.
+   */
+  type?: 'button' | 'submit' | 'reset';
   /** Menu entries for the alternative actions */
   items: DropdownMenuEntry[];
   /**
@@ -44,7 +50,7 @@ type SplitButtonOwnProps = {
 
 export interface SplitButtonProps
   extends SplitButtonOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'button'>, keyof SplitButtonOwnProps | 'type'> {}
+    Omit<React.ComponentPropsWithoutRef<'button'>, keyof SplitButtonOwnProps> {}
 
 /**
  * A primary action with an attached menu of alternatives — "Save" beside
@@ -63,6 +69,7 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
     {
       label,
       onClick,
+      type = 'button',
       items,
       variant = 'primary',
       tone,
@@ -106,6 +113,7 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
           disabled={disabled}
           loading={loading}
           onClick={onClick}
+          type={type}
         />
         <DropdownMenu
           className={`${baseClass}__menu`}

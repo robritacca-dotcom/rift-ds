@@ -18,6 +18,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | --- | --- | --- | --- | --- |
 | label | `string` | yes |  | Label of the primary action |
 | onClick | `MouseEventHandler<HTMLButtonElement>` | no |  | Click handler for the primary action |
+| type | `"button" \| "submit" \| "reset"` | no | `'button'` | The primary segment's native type. Defaults to `button`; set `submit` to make the primary action its form's submit button. The menu trigger is always `button`, so opening the menu never submits. |
 | items | `DropdownMenuEntry[]` | yes |  | Menu entries for the alternative actions |
 | variant | `"neutral" \| "primary" \| "secondary"` | no | `'primary'` | Emphasis, shared by both segments: `primary` (filled) or `secondary` (outlined). The colour is `tone`'s job. `neutral` is the legacy value from before the split and renders as `variant="primary" tone="neutral"`. |
 | tone | `"default" \| "destructive" \| "neutral"` | no |  | Colour, shared by both segments: `default` carries the action colour, `neutral` the greys, `destructive` the danger colour. |

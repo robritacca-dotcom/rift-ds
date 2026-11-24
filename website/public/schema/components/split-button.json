@@ -31,6 +31,19 @@
           "description": "Click handler for the primary action"
         },
         {
+          "name": "type",
+          "type": "\"button\" | \"submit\" | \"reset\"",
+          "typeKind": "enum",
+          "values": [
+            "button",
+            "reset",
+            "submit"
+          ],
+          "required": false,
+          "description": "The primary segment's native type. Defaults to `button`; set `submit` to\nmake the primary action its form's submit button. The menu trigger is\nalways `button`, so opening the menu never submits.",
+          "default": "button"
+        },
+        {
           "name": "items",
           "type": "DropdownMenuEntry[]",
           "typeKind": "array",

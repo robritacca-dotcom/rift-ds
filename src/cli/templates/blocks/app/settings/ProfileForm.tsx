@@ -65,7 +65,7 @@ export function ProfileForm() {
         columns={2}
         title="Profile"
         description="How you appear to the people you work with."
-        actions={<Button label={saved ? 'Saved' : 'Save profile'} onClick={save} />}
+        actions={<Button type="submit" label={saved ? 'Saved' : 'Save profile'} />}
       >
         <Input
           id="profile-firstName"

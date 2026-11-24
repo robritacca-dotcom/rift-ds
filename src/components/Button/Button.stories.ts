@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, within } from 'storybook/test';
+import { createElement } from 'react';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { Button } from './Button';
 
 const meta = {
@@ -692,5 +693,32 @@ export const TextChildren: Story = {
   play: async ({ canvasElement }) => {
     const button = within(canvasElement).getByRole('button');
     await expect(button).toHaveTextContent('Save changes');
+  },
+};
+
+/** `type="submit"` makes a Button its form's submit button; left at its
+    `button` default, a Button inside a form never submits it. */
+export const SubmitsItsForm: Story = {
+  args: { label: 'Save' },
+  render: (args) => {
+    const onSubmit = (event: { preventDefault: () => void }) => {
+      event.preventDefault();
+      (window as unknown as { __submits: number }).__submits += 1;
+    };
+    return createElement(
+      'form',
+      { onSubmit },
+      createElement(Button, { ...args, label: 'Preview', variant: 'secondary' }),
+      createElement(Button, { ...args, type: 'submit', label: 'Save' }),
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const counter = window as unknown as { __submits: number };
+    counter.__submits = 0;
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Preview' }));
+    await expect(counter.__submits).toBe(0);
+    await userEvent.click(canvas.getByRole('button', { name: 'Save' }));
+    await expect(counter.__submits).toBe(1);
   },
 };

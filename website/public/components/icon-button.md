@@ -32,6 +32,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | label | `string` | yes |  | The button's name: what a screen reader announces and, by default, what the tooltip shows. Required, because the button has no visible text. Named as Button's and AiButton's text is, so the family spells it one way. |
 | tooltip | `string \| false` | no |  | The hover/focus tooltip. An icon-only control names itself: by default the button wears a Tooltip carrying `label`. Pass a string to show different wording, or `false` to opt out — for a host that labels the control another way, or one that owns the button's box directly (SplitButton's trigger stretches to its sibling segment, which the tooltip wrapper would block). |
 | tooltipPosition | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'top'` | Which side the tooltip opens on. `start` and `end` follow the reading direction. |
+| type | `"button" \| "submit" \| "reset"` | no | `'button'` | The button's native type. Defaults to `button`, so a button inside a form never submits it by accident; set `submit` on the form's submit button, or `reset`. Ignored when `href` renders a link. |
 | href | `string` | no |  | Optional href — renders as <a> instead of <button> |
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |

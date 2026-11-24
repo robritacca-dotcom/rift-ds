@@ -31,6 +31,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | disabled | `boolean` | no |  | Whether the button is disabled |
 | loading | `boolean` | no |  | Shows a spinner in the left icon slot and blocks interaction while an async action runs. Keeps the variant's full-colour appearance (unlike `disabled`) and sets `aria-busy` on the rendered element. |
 | glass | `boolean` | no |  | Frosts the button for a busy ground (a shader, a photo, a chart): the page behind it is blurred, an outlined or ghost button takes the glass fill at rest and a filled one lets a little of the ground through its colour. Hover and press are the variant's own. Works on every `variant` and `tone`. |
+| type | `"button" \| "submit" \| "reset"` | no | `'button'` | The button's native type. Defaults to `button`, so a button inside a form never submits it by accident; set `submit` on the form's submit button, or `reset`. Ignored when `href` renders a link. |
 | href | `string` | no |  | Optional href — renders as <a> instead of <button> |
 | target | `string` | no |  | Optional target attribute for links |
 | rel | `string` | no |  | Optional rel attribute for links |

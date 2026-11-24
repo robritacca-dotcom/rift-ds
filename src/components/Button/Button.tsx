@@ -67,6 +67,12 @@ type ButtonOwnProps = {
    * and `tone`.
    */
   glass?: boolean;
+  /**
+   * The button's native type. Defaults to `button`, so a button inside a form
+   * never submits it by accident; set `submit` on the form's submit button, or
+   * `reset`. Ignored when `href` renders a link.
+   */
+  type?: 'button' | 'submit' | 'reset';
   /** Optional href — renders as <a> instead of <button> */
   href?: string;
   /** Optional target attribute for links */
@@ -115,7 +121,7 @@ type ButtonOwnProps = {
 
 export interface ButtonProps
   extends ButtonOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'button'>, keyof ButtonOwnProps | 'type'> {}
+    Omit<React.ComponentPropsWithoutRef<'button'>, keyof ButtonOwnProps > {}
 
 type ButtonEmphasis = 'primary' | 'secondary' | 'tertiary';
 type ButtonTone = NonNullable<ButtonOwnProps['tone']>;
@@ -174,6 +180,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       disabled,
       loading,
       glass,
+      type = 'button',
       href,
       target,
       rel,
@@ -300,7 +307,7 @@ export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, Bu
       <button
         {...rest}
         ref={ref as React.Ref<HTMLButtonElement>}
-        type="button"
+        type={type}
         className={classes}
         disabled={isDisabled || isLoading}
         aria-busy={isLoading || undefined}

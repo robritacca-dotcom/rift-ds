@@ -12,7 +12,7 @@ type ToggleSwitchOwnProps = {
    * keep its own state, seeded from `defaultChecked`.
    */
   checked?: boolean;
-  /** Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to true, so an uncontrolled switch starts on unless this is false. */
+  /** Whether the toggle starts on when uncontrolled (`checked` undefined). Defaults to false, as every checkable control does, so a switch left uncontrolled never turns a setting on by itself. */
   defaultChecked?: boolean;
   /** Label text displayed next to the toggle */
   label?: string;
@@ -65,7 +65,7 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
   (
     {
       checked: checkedProp,
-      defaultChecked = true,
+      defaultChecked = false,
       label = 'Toggle',
       showLabel = true,
       helperText,

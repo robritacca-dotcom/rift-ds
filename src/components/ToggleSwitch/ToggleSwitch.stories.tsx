@@ -38,10 +38,26 @@ export const On: Story = {
   },
 };
 
+/** Off reads as off: no tick, a neutral thumb, and a track off the action colour. */
 export const Off: Story = {
   args: {
     checked: false,
     label: 'Light Mode',
+  },
+  play: async ({ canvasElement }) => {
+    const part = (name: string) => {
+      const node = canvasElement.querySelector<HTMLElement>(`.ds-toggle-switch__${name}`);
+      if (!node) throw new Error(`${name} did not render`);
+      return getComputedStyle(node);
+    };
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--color-action-primary-bg)';
+    canvasElement.appendChild(probe);
+    const action = getComputedStyle(probe).color;
+    probe.remove();
+    await expect(part('thumb-icon').opacity).toBe('0');
+    await expect(part('track').backgroundColor).not.toBe(action);
+    await expect(part('thumb').backgroundColor).not.toBe(part('track').backgroundColor);
   },
 };
 
@@ -78,10 +94,9 @@ export const Compact: Story = {
   },
 };
 
-/** No `checked`: the switch keeps its own state, starting from `defaultChecked`. */
+/** No `checked`: the switch keeps its own state, starting from `defaultChecked`, off unless it is set. */
 export const Uncontrolled: Story = {
   args: {
-    defaultChecked: false,
     label: 'Notifications',
   },
   play: async ({ canvas, userEvent }) => {

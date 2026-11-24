@@ -73,6 +73,12 @@ type IconButtonOwnProps = {
   tooltip?: string | false;
   /** Which side the tooltip opens on. `start` and `end` follow the reading direction. */
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end';
+  /**
+   * The button's native type. Defaults to `button`, so a button inside a form
+   * never submits it by accident; set `submit` on the form's submit button, or
+   * `reset`. Ignored when `href` renders a link.
+   */
+  type?: 'button' | 'submit' | 'reset';
   /** Optional href — renders as <a> instead of <button> */
   href?: string;
   /** Optional target attribute for links */
@@ -105,7 +111,7 @@ type IconButtonOwnProps = {
 
 export interface IconButtonProps
   extends IconButtonOwnProps,
-    Omit<React.ComponentPropsWithoutRef<'button'>, keyof IconButtonOwnProps | 'type'> {}
+    Omit<React.ComponentPropsWithoutRef<'button'>, keyof IconButtonOwnProps> {}
 
 /**
  * The emphasis × tone cell the button renders, as its modifier class, named
@@ -155,6 +161,7 @@ export const IconButton = React.forwardRef<
       label,
       tooltip,
       tooltipPosition = 'top',
+      type = 'button',
       href,
       target,
       rel,
@@ -239,7 +246,7 @@ export const IconButton = React.forwardRef<
         <button
           {...rest}
           ref={ref as React.Ref<HTMLButtonElement>}
-          type="button"
+          type={type}
           className={classes}
           disabled={isDisabled || isLoading}
           aria-busy={isLoading || undefined}

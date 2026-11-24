@@ -32,8 +32,8 @@ export default function SignInPage() {
     // Hand { email, password, remember } to your auth provider here.
   };
 
-  /* Button renders type="button", so the form submits through Enter in a
-     field (onSubmit) and the button calls the same function on click. */
+  /* The Sign in button is the form's submit button, so a click and Enter in
+     a field both arrive here. */
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     signIn();
@@ -73,7 +73,7 @@ export default function SignInPage() {
             <Checkbox label="Remember me" checked={remember} onCheckedChange={setRemember} />
             <Button variant="tertiary" size="compact" label="Forgot password?" href="#" />
           </div>
-          <Button variant="primary" label="Sign in" className={styles.full} onClick={signIn} />
+          <Button type="submit" variant="primary" label="Sign in" className={styles.full} />
         </form>
 
         <Divider label="or" labelPosition="center" spacing="none" />

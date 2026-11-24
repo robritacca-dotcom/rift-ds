@@ -132,6 +132,19 @@
           "default": "top"
         },
         {
+          "name": "type",
+          "type": "\"button\" | \"submit\" | \"reset\"",
+          "typeKind": "enum",
+          "values": [
+            "button",
+            "reset",
+            "submit"
+          ],
+          "required": false,
+          "description": "The button's native type. Defaults to `button`, so a button inside a form\nnever submits it by accident; set `submit` on the form's submit button, or\n`reset`. Ignored when `href` renders a link.",
+          "default": "button"
+        },
+        {
           "name": "href",
           "type": "string",
           "typeKind": "primitive",

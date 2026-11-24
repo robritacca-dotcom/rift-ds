@@ -3522,6 +3522,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Frosts the button for a busy ground (a shader, a photo, a chart): the\npage behind it is blurred, an outlined or ghost button takes the glass\nfill at rest and a filled one lets a little of the ground through its\ncolour. Hover and press are the variant's own. Works on every `variant`\nand `tone`."
           },
           {
+            "name": "type",
+            "type": "\"button\" | \"submit\" | \"reset\"",
+            "required": false,
+            "description": "The button's native type. Defaults to `button`, so a button inside a form\nnever submits it by accident; set `submit` on the form's submit button, or\n`reset`. Ignored when `href` renders a link.",
+            "values": [
+              "button",
+              "reset",
+              "submit"
+            ],
+            "defaultValue": "'button'"
+          },
+          {
             "name": "href",
             "type": "string",
             "required": false,
@@ -11405,6 +11417,18 @@ export const componentApi: readonly ComponentApiEntry[] = [
               "top"
             ],
             "defaultValue": "'top'"
+          },
+          {
+            "name": "type",
+            "type": "\"button\" | \"submit\" | \"reset\"",
+            "required": false,
+            "description": "The button's native type. Defaults to `button`, so a button inside a form\nnever submits it by accident; set `submit` on the form's submit button, or\n`reset`. Ignored when `href` renders a link.",
+            "values": [
+              "button",
+              "reset",
+              "submit"
+            ],
+            "defaultValue": "'button'"
           },
           {
             "name": "href",

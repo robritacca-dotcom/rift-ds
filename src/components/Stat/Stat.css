@@ -110,9 +110,11 @@
    DELTA — trend-coloured annotation
    ============================================ */
 
+/* The arrow sits on the delta's first line, not the middle of its whole
+   height, so a delta that wraps keeps its arrow beside its opening words. */
 .ds-stat__delta {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--gap-050);
   font-family: var(--font-paragraph-sm-emphasis-family);
   font-size: var(--font-paragraph-sm-emphasis-size);
@@ -124,6 +126,10 @@
 .ds-stat__delta .material-symbols-rounded {
   --icon-size: var(--icon-size-500);
   line-height: 1;
+  flex-shrink: 0;
+  /* Centred on one line of the delta's text, whatever a theme makes of the
+     line height and the icon size. */
+  margin-block-start: calc((var(--font-paragraph-sm-emphasis-line-height) - var(--icon-size)) / 2);
 }
 
 /* The trend tokens are theme-split for contrast: the brightest ramp steps

@@ -1009,6 +1009,16 @@
   outline-offset: -2px;
 }
 
+/* The rail's standalone controls (the collapse toggle, the profile menu
+   button, the mobile trigger) take the same ring, outside their round box as
+   Button's sits, rather than the browser's default. */
+.ds-app-sidebar__toggle:focus-visible,
+.ds-app-sidebar__profile-more:focus-visible,
+.ds-app-sidebar__mobile-trigger:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
 /* ============================================
    DRAWER DRILL-IN — the panel's level as a
    second screen inside the mobile drawer

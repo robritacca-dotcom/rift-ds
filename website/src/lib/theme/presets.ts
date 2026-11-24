@@ -184,6 +184,24 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // The ambient field keeps the accents' gold, mint, violet and cobalt
     // and trades the coral and amber blobs for lighter tones of the key colour.
     ambient: ["#E7C175", "#7FAE8F", "#A5789F", "#5E6FA8", "#E6A792", "#F0C9BC"],
+    // Light mode sets white labels on a deeper terracotta: the key holds
+    // only 3.1:1 under white, so the fill steps down until it clears AA,
+    // and hover and press step a little deeper again. The mark follows the
+    // fill. Dark mode keeps the key under its dark label.
+    extraOverrides: {
+      "--color-action-primary-bg": "#B85A3C",
+      "--color-action-primary-bg-hover": "var(--primitive-orange-08)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-08)",
+      "--color-action-primary-text": "#FFFFFF",
+      "--color-action-primary-text-active": "#FFFFFF",
+    },
+    extraOverridesDark: {
+      "--color-action-primary-bg": "var(--primitive-orange-07)",
+      "--color-action-primary-bg-hover": "var(--primitive-orange-06)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-05)",
+      "--color-action-primary-text": "var(--primitive-orange-11)",
+      "--color-action-primary-text-active": "var(--primitive-orange-11)",
+    },
     // Earthy neighbours: every hue muted and pulled a few degrees toward
     // the terracotta key. Orange is the action family, left alone.
     advanced: bases({
@@ -329,6 +347,21 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       teal: "#00A8E8",
       purple: "#8A2EFF",
     }),
+    // Light mode sets the main content (the page, an app's surface) on
+    // crisp white, with the app shell and the cards on the grey; dark mode
+    // keeps the base look's planes.
+    extraOverrides: {
+      "--color-bg-page-primary": "#FFFFFF",
+      "--color-bg-app-shell": "var(--primitive-neutral-01)",
+      "--color-bg-app-surface": "#FFFFFF",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-01)",
+    },
+    extraOverridesDark: {
+      "--color-bg-page-primary": "var(--primitive-neutral-10)",
+      "--color-bg-app-shell": "var(--primitive-neutral-09)",
+      "--color-bg-app-surface": "var(--primitive-neutral-11)",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-09-a60)",
+    },
   },
   coral: {
     label: "Getaway",
@@ -394,16 +427,18 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   plum: {
     label: "Signal",
-    // A bright safety orange on a cool blue-grey page, with a deep
-    // navy second tone. The orange is the key, so buttons, focus and the
+    // A bright safety orange with a deep navy second tone, on crisp white
+    // in light mode. The orange is the key, so buttons, focus and the
     // selected state come from it; it is bright enough that the lever
-    // derives near-black labels over it in both themes. The second tone is
-    // the purple ramp, re-keyed below to navy: it carries the headlines in
-    // light mode, and turns to a pale sky blue in dark mode. The mark stays
-    // on the orange.
+    // derives near-black labels over it, which dark mode keeps, while light
+    // mode deepens the fill under white labels (the extras below). The
+    // second tone is the purple ramp, re-keyed below to navy: it carries
+    // the headlines in light mode, and turns to a pale sky blue in dark
+    // mode. The mark stays on the orange.
     brand: "#FF5F1F",
-    // A slate-blue seed: the page floor lands on a cool grey with white
-    // cards above it, and the hairlines and secondary text pick up a blue cast.
+    // A slate-blue seed: the greys land cool (the cards and the app shell
+    // take the lightest in light mode), and the hairlines and secondary text
+    // pick up a blue cast.
     tintOn: true,
     tintSeed: "#3A5A8C",
     tintStrength: 8,
@@ -465,10 +500,14 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       // The orange is too bright to carry the light labels the lever
       // derives, so the labels are pinned to the deepest navy and the hover
       // and pressed fills brighten away from them instead of deepening.
-      "--color-action-primary-text": "var(--primitive-purple-10)",
-      "--color-action-primary-text-active": "var(--primitive-purple-10)",
-      "--color-action-primary-bg-hover": "var(--primitive-orange-04)",
-      "--color-action-primary-bg-active": "var(--primitive-orange-03)",
+      // Light mode deepens the fill until white labels hold AA (the key
+      // gives 3:1 under white), hover and press a step deeper, and the mark
+      // follows. Dark mode keeps the bright key under navy labels (below).
+      "--color-action-primary-bg": "#CC4512",
+      "--color-action-primary-text": "#FFFFFF",
+      "--color-action-primary-text-active": "#FFFFFF",
+      "--color-action-primary-bg-hover": "var(--primitive-orange-08)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-08)",
       // The AI gradient crosses from blue to the key: signal blue, a
       // lighter blue, then the orange, all bright enough to read on a
       // white card (dark mode lifts the blues further below).
@@ -496,6 +535,12 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--primitive-neutral-01-a01": "rgba(238, 241, 246, 0.01)",
       "--primitive-neutral-01-a60": "rgba(238, 241, 246, 0.6)",
       "--primitive-neutral-01-a82": "rgba(238, 241, 246, 0.82)",
+      // Light mode sets the main content (the page, an app's surface) on
+      // crisp white, with the app shell and the cards on the cool grey.
+      "--color-bg-page-primary": "var(--primitive-neutral-00)",
+      "--color-bg-app-shell": "var(--primitive-neutral-01)",
+      "--color-bg-app-surface": "#FFFFFF",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-01)",
     },
     // Dark mode keeps standard near-blacks, re-tinted from the slate seed so
     // every grey carries a faint blue cast. Navy has no bright step of its
@@ -503,6 +548,15 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // pale sky blue, stated as a hex.
     extraOverridesDark: {
       ...neutralOverrides("#3A5A8C", 0.07, "dark"),
+      "--color-action-primary-bg": "var(--primitive-orange-07)",
+      "--color-action-primary-text": "var(--primitive-purple-10)",
+      "--color-action-primary-text-active": "var(--primitive-purple-10)",
+      "--color-action-primary-bg-hover": "var(--primitive-orange-04)",
+      "--color-action-primary-bg-active": "var(--primitive-orange-03)",
+      "--color-bg-page-primary": "var(--primitive-neutral-10)",
+      "--color-bg-app-shell": "var(--primitive-neutral-09)",
+      "--color-bg-app-surface": "var(--primitive-neutral-11)",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-09-a60)",
       "--color-text-display": "#C9DAF5",
       // On near-black the signal blue sinks a little, so the ring starts
       // one step lighter; the mid stays a saturated blue, never a pale one,
@@ -600,9 +654,10 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
   },
   zest: {
     label: "Zest",
-    // Fintech-brand look in the Wise direction: a bright lime fill under
-    // a deep forest label, heavy tight display type, and near-flat white
-    // surfaces on a faintly green-grey page. The key sits a few degrees
+    // Fintech-brand look in the Wise direction: a deep forest fill under a
+    // bright lime label in light mode (the lime fill under a forest label
+    // in dark), heavy tight display type in the forest, and whisper-grey
+    // cards on a crisp white page. The key sits a few degrees
     // greener than the reference lime (#9FE870, hue 96) so it lands in the
     // GREEN family rather than yellow (the nearest-ramp split falls at
     // hue 103). Keyed into green, the positive status goes lime with it,
@@ -644,7 +699,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // extras below, restored here because extras apply to both themes).
     extraOverridesDark: {
       "--color-status-positive-text": "var(--primitive-green-01)",
-      // EXPERIMENT: dark keeps the lime fill; restore what the light flip moves.
+      // Dark mode keeps the lime fill under its forest label, so it puts
+      // back everything the light flip moves.
       "--color-action-primary-bg": "var(--primitive-green-07)",
       "--color-action-primary-bg-hover": "var(--primitive-green-06)",
       "--color-action-primary-bg-active": "var(--primitive-green-05)",
@@ -652,7 +708,9 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
       "--color-action-primary-text-active": "var(--primitive-green-11)",
       "--color-bg-page-primary": "var(--primitive-neutral-10)",
       "--color-bg-app-shell": "var(--primitive-neutral-09)",
+      "--color-bg-app-surface": "var(--primitive-neutral-11)",
       "--color-bg-container-primary-semi": "var(--primitive-neutral-09-a60)",
+      "--color-text-display": "var(--color-text-primary)",
     },
     // Bright sextet: the reference's candy-bright secondaries brought up
     // to chart strength around the lime, which doubles as mint.
@@ -679,16 +737,22 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     // lime hover fill — pin it to the same forest step the resting label
     // derives (Volt and Bubblegum make the same repair).
     extraOverrides: {
-      // EXPERIMENT: light flips the action to a forest fill under a lime
-      // label (logo follows), on a crisp white page with light grey cards.
+      // Light mode flips the action to a deep forest fill under a lime
+      // label (the mark follows), on a crisp white page with light grey
+      // cards and app shell.
       "--color-action-primary-bg": "var(--primitive-green-11)",
       "--color-action-primary-bg-hover": "var(--primitive-green-10)",
       "--color-action-primary-bg-active": "var(--primitive-green-10)",
       "--color-action-primary-text": "var(--primitive-green-07)",
       "--color-action-primary-text-active": "var(--primitive-green-07)",
       "--color-bg-page-primary": "var(--primitive-neutral-00)",
-      "--color-bg-app-shell": "var(--primitive-neutral-00)",
-      "--color-bg-container-primary-semi": "var(--primitive-neutral-01)",
+      // Main content on crisp white; the app shell and the cards a whisper
+      // of grey off it.
+      "--color-bg-app-shell": "#F6F6F5",
+      "--color-bg-app-surface": "#FFFFFF",
+      "--color-bg-container-primary-semi": "#F6F6F5",
+      // Display type in the brand's deep forest, the button fill's step.
+      "--color-text-display": "var(--primitive-green-11)",
       "--color-status-positive-text": "var(--primitive-green-10)",
       "--font-sub-display-weight": "700",
       "--font-mega-1-letter-spacing": "-0.03em",
@@ -827,9 +891,19 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     extraOverrides: {
       "--font-sub-display-weight": "500",
       "--color-trend-up": "var(--primitive-green-06)",
+      // Light mode sets the main content (the page, an app's surface) on
+      // crisp white, with the app shell and the cards on the grey.
+      "--color-bg-page-primary": "#FFFFFF",
+      "--color-bg-app-shell": "var(--primitive-neutral-01)",
+      "--color-bg-app-surface": "#FFFFFF",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-01)",
     },
     extraOverridesDark: {
       "--color-trend-up": "var(--color-core-accent-mint)",
+      "--color-bg-page-primary": "var(--primitive-neutral-10)",
+      "--color-bg-app-shell": "var(--primitive-neutral-09)",
+      "--color-bg-app-surface": "var(--primitive-neutral-11)",
+      "--color-bg-container-primary-semi": "var(--primitive-neutral-09-a60)",
     },
     // Woodland neighbours: every hue muted toward the understory. Green
     // is the action family, left alone.
@@ -1073,9 +1147,9 @@ export const THEME_TAGLINES: Readonly<Record<string, string>> = {
   marquee: "A film title card, heavy condensed headlines and buttons in mustard over an inky blue-green page with square corners.",
   contrast: "Precise and engineered, an electric blue with drafting-table corners and one technical face.",
   coral: "Sunny and welcoming, a hospitality look of coral warmth and soft, round corners.",
-  plum: "Bright and confident, safety-orange buttons and navy headlines in a quirky grotesk on a cool blue-grey, over slate near-blacks in the dark.",
+  plum: "Bright and confident, safety-orange buttons and navy headlines in a quirky grotesk on crisp white, over slate near-blacks in the dark.",
   gold: "Bold and electric, bright yellow on ink with grotesk headings and a quicker step.",
-  zest: "Fresh and confident, a bright lime on clean white under heavy, tight headlines.",
+  zest: "Fresh and confident, lime on deep forest over crisp white, under heavy, tight forest headlines.",
   forest: "Grounded and calm, a deep woods green with organic softness throughout.",
   terminal: "A command line as a brand: monospace type, square corners, no shadows and fast replies.",
   pink: "Playful and rounded, hot pink with bubbly type and pills everywhere.",

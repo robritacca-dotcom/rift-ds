@@ -47,14 +47,14 @@
 
 @layer rift.preset {
   html[data-brand="plum"], html[data-brand="signal"] {
-    --color-action-primary-bg: var(--primitive-orange-07);
-    --color-action-primary-bg-active: var(--primitive-orange-03);
-    --color-action-primary-bg-hover: var(--primitive-orange-04);
+    --color-action-primary-bg: #CC4512;
+    --color-action-primary-bg-active: var(--primitive-orange-08);
+    --color-action-primary-bg-hover: var(--primitive-orange-08);
     --color-action-primary-border: var(--primitive-orange-10);
     --color-action-primary-border-secondary: var(--primitive-orange-07);
     --color-action-primary-border-tertiary: var(--primitive-orange-07);
-    --color-action-primary-text: var(--primitive-purple-10);
-    --color-action-primary-text-active: var(--primitive-purple-10);
+    --color-action-primary-text: #FFFFFF;
+    --color-action-primary-text-active: #FFFFFF;
     --color-action-primary-text-secondary: var(--primitive-orange-10);
     --color-action-primary-text-tertiary: var(--primitive-orange-08);
     --color-ai-gradient-end: var(--primitive-orange-07);
@@ -66,6 +66,10 @@
     --color-ambient-4: #FFB37A;
     --color-ambient-5: #8FB8F0;
     --color-ambient-6: #FF5F1F;
+    --color-bg-app-shell: var(--primitive-neutral-01);
+    --color-bg-app-surface: #FFFFFF;
+    --color-bg-container-primary-semi: var(--primitive-neutral-01);
+    --color-bg-page-primary: var(--primitive-neutral-00);
     --color-core-accent-amber: #1E9E8A;
     --color-core-accent-cobalt: #5CC8E8;
     --color-core-accent-coral: #FFB37A;
@@ -232,10 +236,19 @@
   }
 
   html[data-brand="plum"][data-theme="dark"], html[data-brand="signal"][data-theme="dark"] {
+    --color-action-primary-bg: var(--primitive-orange-07);
+    --color-action-primary-bg-active: var(--primitive-orange-03);
+    --color-action-primary-bg-hover: var(--primitive-orange-04);
     --color-action-primary-border: var(--primitive-orange-07);
     --color-action-primary-border-secondary: var(--primitive-orange-08);
+    --color-action-primary-text: var(--primitive-purple-10);
+    --color-action-primary-text-active: var(--primitive-purple-10);
     --color-action-primary-text-tertiary: var(--primitive-orange-07);
     --color-ai-gradient-start: var(--primitive-blue-06);
+    --color-bg-app-shell: var(--primitive-neutral-09);
+    --color-bg-app-surface: var(--primitive-neutral-11);
+    --color-bg-container-primary-semi: var(--primitive-neutral-09-a60);
+    --color-bg-page-primary: var(--primitive-neutral-10);
     --color-core-ui-secondary: var(--primitive-orange-09);
     --color-input-border-hover: var(--primitive-orange-08);
     --color-input-border-selected: var(--primitive-orange-08);

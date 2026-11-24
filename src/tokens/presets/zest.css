@@ -66,8 +66,9 @@
     --color-ambient-4: #5AA9E6;
     --color-ambient-5: #B3F0A1;
     --color-ambient-6: #D0F6C5;
-    --color-bg-app-shell: var(--primitive-neutral-00);
-    --color-bg-container-primary-semi: var(--primitive-neutral-01);
+    --color-bg-app-shell: #F6F6F5;
+    --color-bg-app-surface: #FFFFFF;
+    --color-bg-container-primary-semi: #F6F6F5;
     --color-bg-page-primary: var(--primitive-neutral-00);
     --color-core-accent-amber: #FFA94D;
     --color-core-accent-cobalt: #5AA9E6;
@@ -80,6 +81,7 @@
     --color-input-border-hover: var(--primitive-green-08);
     --color-input-border-selected: var(--primitive-green-07);
     --color-status-positive-text: var(--primitive-green-10);
+    --color-text-display: var(--primitive-green-11);
     --font-display-1-letter-spacing: -0.025em;
     --font-display-1-weight: 800;
     --font-display-2-letter-spacing: -0.02em;
@@ -228,11 +230,13 @@
     --color-action-primary-text-active: var(--primitive-green-11);
     --color-action-primary-text-tertiary: var(--primitive-green-07);
     --color-bg-app-shell: var(--primitive-neutral-09);
+    --color-bg-app-surface: var(--primitive-neutral-11);
     --color-bg-container-primary-semi: var(--primitive-neutral-09-a60);
     --color-bg-page-primary: var(--primitive-neutral-10);
     --color-core-ui-secondary: var(--primitive-green-09);
     --color-input-border-selected: var(--primitive-green-08);
     --color-status-positive-text: var(--primitive-green-01);
+    --color-text-display: var(--color-text-primary);
     --primitive-neutral-00: #F6F7F5;
     --primitive-neutral-00-a01: rgba(246, 247, 245, 0.01);
     --primitive-neutral-00-a60: rgba(246, 247, 245, 0.6);

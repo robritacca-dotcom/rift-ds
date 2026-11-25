@@ -33,7 +33,7 @@ If the audit finds `validate-registry` itself broken, stop the whole flow and re
 
 ### 1b. API audit
 
-Run `api-consistency` in its scoped mode over every component the session's diff touched (any file under `src/components/` or `src/chat/`) plus each one's family. Widen to the whole library only when the change is library-wide (a token change, or a change to a convention every component follows), and say in the report that you did. If the diff touches no component, record that the API audit had nothing in scope and move on.
+Run `api-consistency` in its scoped mode over every component the session's diff touched (any file under `src/components/`, `src/chat/` or `src/markdown/`) plus each one's family. Widen to the whole library only when the change is library-wide (a token change, or a change to a convention every component follows), and say in the report that you did. If the diff touches no component, record that the API audit had nothing in scope and move on.
 
 ### 2. Fix
 

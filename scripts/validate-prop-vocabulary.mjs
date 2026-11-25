@@ -544,7 +544,7 @@ for (const file of tracked) {
  */
 const SANCTIONED_CONTROLLED_ONLY = {
   Dialog: 'a modal is opened by the host; it has no trigger of its own to hold open state for',
-  Drawer: 'a modal is opened by the host; it has no trigger of its own to hold open state for',
+  Drawer: 'an overlay opened by the host, modal or not; it has no trigger of its own to hold open state for',
   AlertDialog: 'a modal is opened by the host; it has no trigger of its own to hold open state for',
   Lightbox: 'a modal is opened by the host; it has no trigger of its own to hold open state for',
   AttachmentViewer: 'a modal is opened by the host; it has no trigger of its own to hold open state for',

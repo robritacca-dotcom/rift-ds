@@ -25,7 +25,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
 
 Accept any of:
 
-- **`all`** (the default when nothing is named) → every component under `src/components/` plus the chat widget's modules in `src/chat/`.
+- **`all`** (the default when nothing is named) → every component under `src/components/` plus the chat widget's modules in `src/chat/` and the two mappers in `src/markdown/`.
 - **A family** → a registry `category`, a shared folder, or a pattern family named in words ("the option rows", "everything with a chosen mark", "the overlay list rows"). The family is judged against itself.
 - **A component** → that component plus its family, judged against the family.
 

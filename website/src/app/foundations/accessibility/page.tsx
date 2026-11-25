@@ -361,7 +361,8 @@ export default function AccessibilityPage() {
           {modalOverlays.slice(0, -1).join(", ")} and{" "}
           {modalOverlays.at(-1)} share one contract, because they share the code
           behind it: the dialog stories assert every row below, so a regression in
-          the shared layer fails the suite for all of them. The popovers,
+          the shared layer fails the suite for all of them (Drawer holds to
+          it when modal, its default). The popovers,
           menus, pickers and tooltips do not hold focus, but they dismiss through the
           same stack, so Escape and an outside press reach them first:{" "}
           {layerComponents.length} components in all answer to it.

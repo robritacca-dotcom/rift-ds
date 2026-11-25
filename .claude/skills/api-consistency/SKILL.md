@@ -24,7 +24,7 @@ It also runs **scoped** inside other flows: `new-component` runs it on a new com
 1. **Determine scope.** Accept one of:
    - **Scoped** (the cheap mode other skills call): one component, or a family. A family is the component's shared folder (the registry entry's `folder`) or its `category` in `src/components/registry.json`, plus any component that composes it or that it composes. Every check below runs, but only over these components, and the family is the comparison set for the family checks.
    - A list of specific components (e.g. `Button, IconButton, ButtonGroup`) → compare those
-   - `all` → scan all components in `src/components/`, plus the chat widget's documented exports in `src/chat/` (they ride the same generated API with `importPath` `rift-ds/chat`)
+   - `all` → scan all components in `src/components/`, plus the chat widget's documented exports in `src/chat/` (they ride the same generated API with `importPath` `rift-ds/chat`), and the two mappers in `src/markdown/`, which are not in the generated API and are read from source
    - A category description (e.g. "all button-like components", "all form inputs") → infer the relevant components
 
 2. **Read every component's TypeScript interface.** Start from `website/src/data/component-api.generated.ts` for the prop inventory — it holds every own prop with type, default, requiredness and description, parsed exactly as the published `.d.ts` documents them. Then read the `.tsx` files in scope for what the generated file does not capture:

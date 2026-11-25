@@ -27,7 +27,7 @@ const shadowTokens: ShadowToken[] = [
     tileClass: "elevationTileFloating",
     light: "0 4px 16px rgba(0, 0, 0, 0.12)",
     dark: "0 4px 16px rgba(0, 0, 0, 0.55)",
-    usedBy: "Popover, Dropdown and DropdownMenu, Combobox, ContextMenu, ColorPicker, chart tooltips, Toast, chat surfaces, the floating App sidebar, the command palette",
+    usedBy: "Popover, Dropdown and DropdownMenu, Combobox, ContextMenu, ColorPicker, chart tooltips, Toast, chat surfaces, the floating App sidebar, the floating Drawer, the command palette",
   },
   {
     label: "Modal",
@@ -35,7 +35,7 @@ const shadowTokens: ShadowToken[] = [
     tileClass: "elevationTileModal",
     light: "0 8px 32px rgba(0, 0, 0, 0.2)",
     dark: "0 8px 32px rgba(0, 0, 0, 0.6)",
-    usedBy: "Dialog and AlertDialog panels, Drawer, paired with the --color-scrim backdrop",
+    usedBy: "Dialog and AlertDialog panels, the flush Drawer, paired with the --color-scrim backdrop",
   },
   {
     label: "Pinned column",

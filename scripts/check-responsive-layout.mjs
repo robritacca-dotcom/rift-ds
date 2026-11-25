@@ -161,6 +161,11 @@ const ACCEPTED = [
     reason: 'Each demo is a fixed-height window onto content scrolling under the bar (page.module.css); cropping that content is the demo.',
   },
   {
+    kind: 'overlap',
+    selector: 'div.ds-nav-list__row > a.ds-button',
+    reason: 'A row with children is one shape: its link and its chevron toggle share one grid cell, the toggle painted above the link and taking the tap, and the link reserving the toggle\'s width so its text never runs under it (src/components/NavList/NavList.css, ROWS and TOGGLE).',
+  },
+  {
     kind: 'spill',
     selector: 'ds-contribution-graph__month-label',
     reason: 'A month label sits in its first week column and runs across the next ones by design, like every contribution calendar.',

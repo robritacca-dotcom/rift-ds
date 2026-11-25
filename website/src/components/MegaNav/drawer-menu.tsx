@@ -5,8 +5,8 @@ import type { NavStackEntry, NavStackItem } from "rift-ds/components/NavStack/Na
 import type { SiteHeaderDrawerItem } from "rift-ds/components/SiteHeader/SiteHeader";
 import { componentsSidebarGroups, type MegaItem } from "@/config/navigation";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
-import { FIGMA_URL, NPM_URL, REPOSITORY_URL } from "@/config/brand.generated";
-import { FigmaIcon, GitHubIcon, NpmIcon } from "@/components/BrandIcons/BrandIcons";
+import { AUTHOR_NAME, AUTHOR_URL, FIGMA_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
+import { FigmaIcon, GitHubIcon, NpmIcon, StorybookIcon } from "@/components/BrandIcons/BrandIcons";
 import { themeSegments, useThemeSetting } from "@/components/ThemeToggle/ThemeToggle";
 import { themeTiles } from "@/lib/theme/theme-tiles.generated";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -35,15 +35,27 @@ export function drawerPages(items: MegaItem[]): SiteHeaderDrawerItem[] {
 
 const mark = (glyph: React.ReactNode) => <span className={styles.drawerMark}>{glyph}</span>;
 
-/** Where the system lives off-site, in the order a phone visitor wants it: the repo, the package and the kit before the agent tooling. */
-const RESOURCES: NavStackItem[] = [
+/**
+ * Where the system lives off-site, in the order a phone visitor wants it:
+ * the repo, the package, the kit and the stories before the agent tooling
+ * and the registry, then the author, apart. The landing page's link row
+ * and the footer's credit, given the room a full-screen menu has.
+ */
+const RESOURCES: NavStackEntry[] = [
   { label: "GitHub repo", description: "Source, issues and releases", href: REPOSITORY_URL, icon: mark(<GitHubIcon />), external: true },
   { label: "npm package", description: "Install rift-ds", href: NPM_URL, icon: mark(<NpmIcon />), external: true },
   ...(SHOW_FIGMA_LINKS
     ? [{ label: "Figma kit", description: "Every component, drawn", href: FIGMA_URL, icon: mark(<FigmaIcon />), external: true }]
     : []),
+  { label: "Storybook", description: "Every component's stories", href: STORYBOOK_URL, icon: mark(<StorybookIcon />), external: true },
   { label: "MCP endpoint", description: "Connect a coding agent", href: "/api/mcp", icon: "hub" },
   { label: "AGENTS.md", description: "The agent starter file", href: "/AGENTS.md", icon: "description" },
+  { label: "shadcn registry", description: "Add components with the shadcn CLI", href: "/docs/get-started#shadcn-registry", icon: "terminal" },
+  {
+    type: "section",
+    id: "credit",
+    items: [{ label: AUTHOR_NAME, description: "Designed and built by", href: AUTHOR_URL, icon: "person", external: true }],
+  },
 ];
 
 /**

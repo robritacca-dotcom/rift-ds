@@ -380,6 +380,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
                 {/* Mobile: the full search field folds to this icon, riding
                     with the other actions on the right. */}
                 <IconButton
+                  glass
                   icon="search"
                   variant="secondary"
                   tone="neutral"
@@ -396,6 +397,7 @@ function MerchantSalesScreen({ bridge }: { bridge: React.RefObject<TableBridge |
                   }}
                 />
                 <IconButton
+                  glass
                   icon="notifications"
                   variant="secondary"
                   tone="neutral"

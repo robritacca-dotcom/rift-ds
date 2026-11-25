@@ -379,6 +379,7 @@ export default function ProfitAndLoss() {
             </div>
             <div className={styles.topBarActions}>
               <IconButton
+                glass
                 icon="search"
                 variant="secondary"
                 tone="neutral"
@@ -387,6 +388,7 @@ export default function ProfitAndLoss() {
               />
               <AiButton label="Ask AI" onClick={() => setChatOpen(true)} />
               <IconButton
+                glass
                 icon="notifications"
                 variant="secondary"
                 tone="neutral"

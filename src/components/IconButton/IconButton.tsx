@@ -57,6 +57,14 @@ type IconButtonOwnProps = {
    */
   loading?: boolean;
   /**
+   * Frosts the button for a busy ground (a shader, a photo, a map), as
+   * Button's `glass` does: the page behind it is blurred, an outlined or
+   * ghost button takes the glass fill at rest and a filled one lets a
+   * little of the ground through its colour. Hover and press are the
+   * variant's own. Works on every `variant` and `tone`.
+   */
+  glass?: boolean;
+  /**
    * The button's name: what a screen reader announces and, by default, what
    * the tooltip shows. Required, because the button has no visible text.
    * Named as Button's and AiButton's text is, so the family spells it one way.
@@ -158,6 +166,7 @@ export const IconButton = React.forwardRef<
       state,
       size = 'default',
       loading,
+      glass,
       label,
       tooltip,
       tooltipPosition = 'top',
@@ -192,6 +201,7 @@ export const IconButton = React.forwardRef<
       `${baseClass}--${resolvedState}`,
       `${baseClass}--${size}`,
       isLoading && `${baseClass}--loading`,
+      glass && `${baseClass}--glass`,
       badge !== undefined && `${baseClass}--badged`,
       className,
     ]

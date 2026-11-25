@@ -442,4 +442,39 @@
   padding: 0;
 }
 
+/* ============================================
+   GLASS
+   Button's glass, on the icon-only form: the button frosts what is behind
+   it, with the floating surfaces' blur. An outlined or ghost cell takes
+   the glass fill at rest; a filled cell keeps its colour and lets a little
+   of the ground through it. These rest rules carry two classes, so every
+   pointer hover and press rule above (three) still fills the button
+   solid, and the documentation-only state classes are left out through
+   :where(), which adds no weight.
+   ============================================ */
+
+.ds-icon-button--glass {
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+.ds-icon-button--glass.ds-icon-button--secondary:where(:not(.ds-icon-button--hover, .ds-icon-button--active)),
+.ds-icon-button--glass.ds-icon-button--secondary-neutral:where(:not(.ds-icon-button--hover, .ds-icon-button--active)),
+.ds-icon-button--glass.ds-icon-button--tertiary:where(:not(.ds-icon-button--hover, .ds-icon-button--active)),
+.ds-icon-button--glass.ds-icon-button--destructive:where(:not(.ds-icon-button--hover, .ds-icon-button--active)) {
+  background-color: var(--color-bg-glass);
+}
+
+.ds-icon-button--glass.ds-icon-button--primary:where(:not(.ds-icon-button--hover, .ds-icon-button--active)) {
+  background-color: color-mix(in srgb, var(--color-action-primary-bg) 72%, transparent);
+}
+
+.ds-icon-button--glass.ds-icon-button--neutral:where(:not(.ds-icon-button--hover, .ds-icon-button--active)) {
+  background-color: color-mix(in srgb, var(--color-action-neutral-bg) 72%, transparent);
+}
+
+.ds-icon-button--glass.ds-icon-button--primary-destructive:where(:not(.ds-icon-button--hover, .ds-icon-button--active)) {
+  background-color: color-mix(in srgb, var(--color-action-destructive-bg) 72%, transparent);
+}
+
 } /* @layer rift.components */

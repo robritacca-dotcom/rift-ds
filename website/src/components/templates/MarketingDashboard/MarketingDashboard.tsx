@@ -478,6 +478,7 @@ export default function MarketingDashboard() {
               {/* Mobile: the full search field folds to this icon, riding
                   with the other actions on the right. */}
               <IconButton
+                glass
                 icon="search"
                 variant="secondary"
                 tone="neutral"
@@ -489,6 +490,7 @@ export default function MarketingDashboard() {
                 onClick={() => setChatOpen(true)}
               />
               <IconButton
+                glass
                 icon="notifications"
                 variant="secondary"
                 tone="neutral"

@@ -138,6 +138,18 @@ export const SecondaryNeutralDisabled: Story = {
   args: { variant: 'secondary', tone: 'neutral', disabled: true, icon: 'tune', label: 'Filters' },
 };
 
+// Glass
+
+/** `glass` frosts the ground behind an outlined button and gives it the glass fill at rest: the notification bell on a template's map. */
+export const SecondaryNeutralGlass: Story = {
+  args: { variant: 'secondary', tone: 'neutral', glass: true, icon: 'notifications', label: 'Notifications' },
+};
+
+/** A filled button keeps its colour and lets a little of the ground through. */
+export const PrimaryGlass: Story = {
+  args: { variant: 'primary', glass: true, icon: 'add', label: 'Add' },
+};
+
 // Destructive tone, primary emphasis (Solid Danger)
 export const PrimaryDestructiveDefault: Story = {
   args: { variant: 'primary', tone: 'destructive', icon: 'delete', label: 'Delete' },

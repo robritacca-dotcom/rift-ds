@@ -11461,6 +11461,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Shows a spinner in place of the icon and blocks interaction while an\nasync action runs. Keeps the variant's full-colour appearance (unlike\nthe disabled state) and sets `aria-busy` on the rendered element."
           },
           {
+            "name": "glass",
+            "type": "boolean",
+            "required": false,
+            "description": "Frosts the button for a busy ground (a shader, a photo, a map), as\nButton's `glass` does: the page behind it is blurred, an outlined or\nghost button takes the glass fill at rest and a filled one lets a\nlittle of the ground through its colour. Hover and press are the\nvariant's own. Works on every `variant` and `tone`."
+          },
+          {
             "name": "label",
             "type": "string",
             "required": true,

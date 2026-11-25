@@ -25,10 +25,10 @@ import { readStoredChoice as read, subscribeStoredChoice, writeStoredChoice } fr
 export type TemplateLayout = AppSidebarLayout;
 export type TemplateLayoutScope = "templates" | "chat";
 
-export const TEMPLATE_LAYOUTS: readonly { value: TemplateLayout; label: string; icon: string }[] = [
-  { value: "flush", label: "Flush", icon: "vertical_split" },
-  { value: "floating", label: "Floating", icon: "view_sidebar" },
-  { value: "inset", label: "Inset", icon: "space_dashboard" },
+export const TEMPLATE_LAYOUTS: readonly { value: TemplateLayout; label: string; icon: string; description: string }[] = [
+  { value: "flush", label: "Flush", icon: "vertical_split", description: "Edge to edge behind a hairline" },
+  { value: "floating", label: "Floating", icon: "view_sidebar", description: "The rail as a card beside the page" },
+  { value: "inset", label: "Inset", icon: "space_dashboard", description: "The page in a raised surface" },
 ];
 
 /**
@@ -38,9 +38,9 @@ export const TEMPLATE_LAYOUTS: readonly { value: TemplateLayout; label: string; 
  */
 export type TemplateWidth = "contained" | "full";
 
-export const TEMPLATE_WIDTHS: readonly { value: TemplateWidth; label: string; icon: string }[] = [
-  { value: "contained", label: "Contained", icon: "width_normal" },
-  { value: "full", label: "Full width", icon: "width_full" },
+export const TEMPLATE_WIDTHS: readonly { value: TemplateWidth; label: string; icon: string; description: string }[] = [
+  { value: "contained", label: "Contained", icon: "width_normal", description: "Centred at the screen's own width" },
+  { value: "full", label: "Full width", icon: "width_full", description: "The whole column, edge to edge" },
 ];
 
 export const DEFAULT_TEMPLATE_WIDTH: TemplateWidth = "contained";

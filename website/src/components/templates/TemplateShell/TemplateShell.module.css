@@ -403,3 +403,10 @@
   height: var(--icon-size-600);
   font-size: var(--font-caption-size);
 }
+
+/* A theme's swatch in a rail or side-panel row's icon slot. */
+.railSwatch {
+  display: block;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+}

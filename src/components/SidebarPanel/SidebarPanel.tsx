@@ -3,6 +3,8 @@
 import React, { useCallback, useId, useState } from 'react';
 import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvider';
 import './SidebarPanel.css';
+import { ChosenMark } from '../Dropdown/Dropdown';
+import { mirrorClass } from '../../behaviors/direction';
 import '../../fonts/material-symbols.css';
 
 /* ============================================
@@ -20,6 +22,12 @@ export interface SidebarPanelItem {
   onClick?: () => void;
   /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
   badge?: string | number;
+  /** A second line under the label, such as what a choice does */
+  description?: string;
+  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch */
+  icon?: string | React.ReactNode;
+  /** In a list of choices, whether this row is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. Picking a choice is an action, so the panel stays open */
+  selected?: boolean;
   /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */
   group?: string;
   /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */
@@ -134,18 +142,36 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
       const classes = [
         `${baseClass}__row`,
         nested ? `${baseClass}__row--nested` : '',
+        item.description ? `${baseClass}__row--two-line` : '',
         isActive ? `${baseClass}__row--active` : '',
       ]
         .filter(Boolean)
         .join(' ');
       const content = (
         <>
-          <span className={`${baseClass}__label`}>{item.label}</span>
+          {item.icon != null && (
+            <span className={`${baseClass}__icon`} aria-hidden="true">
+              {typeof item.icon === 'string' ? (
+                <span className={`material-symbols-rounded ${mirrorClass(item.icon)}`}>{item.icon}</span>
+              ) : (
+                item.icon
+              )}
+            </span>
+          )}
+          {item.description ? (
+            <span className={`${baseClass}__text`}>
+              <span className={`${baseClass}__label`}>{item.label}</span>
+              <span className={`${baseClass}__description`}>{item.description}</span>
+            </span>
+          ) : (
+            <span className={`${baseClass}__label`}>{item.label}</span>
+          )}
           {item.badge !== undefined && (
             <span className={`${baseClass}__badge${isCount(item.badge) ? ` ${baseClass}__badge--count` : ''}`}>
               {item.badge}
             </span>
           )}
+          {item.selected && <ChosenMark className={`${baseClass}__chosen`} />}
         </>
       );
       return item.href ? (
@@ -163,6 +189,7 @@ export const SidebarPanel = React.forwardRef<HTMLElement, SidebarPanelProps>(
           className={classes}
           onClick={() => item.onClick?.()}
           aria-current={isActive ? 'page' : undefined}
+          aria-pressed={item.selected}
         >
           {content}
         </button>

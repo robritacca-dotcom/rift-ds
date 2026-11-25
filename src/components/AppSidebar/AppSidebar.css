@@ -350,6 +350,29 @@
   background-color: var(--color-bg-page-primary);
 }
 
+/* A setting's current value, quiet at the row's end while expanded. */
+.ds-app-sidebar__btn-value {
+  /* At the row's end, beside the chevron, as a settings list sets it. */
+  margin-inline-start: auto;
+  margin-inline-end: var(--padding-100);
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__btn-value {
+  opacity: 1;
+}
+
 /* A count: a solid pill on the count badge pair, the "how many" mark
    BottomNav and TableToolbar share, which reads on any row fill. */
 .ds-app-sidebar__btn-badge--count {

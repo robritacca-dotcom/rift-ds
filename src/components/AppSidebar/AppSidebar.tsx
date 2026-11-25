@@ -35,6 +35,12 @@ export interface AppSidebarSubItem {
   href?: string;
   /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
   badge?: string | number;
+  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */
+  description?: string;
+  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */
+  icon?: string | React.ReactNode;
+  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */
+  selected?: boolean;
   /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */
   group?: string;
   /**
@@ -69,6 +75,8 @@ export interface AppSidebarItem {
   href?: string;
   /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */
   badge?: string | number;
+  /** The setting's current value at the row's trailing end while expanded, such as "Dark" on a row whose sub-items are a setting's choices */
+  value?: string;
   /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
   children?: AppSidebarSubItem[];
 }
@@ -548,12 +556,17 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       id: sub.key,
       label: sub.label,
       badge: sub.badge,
+      description: sub.description,
+      icon: sub.icon,
       current: sub.key === activeSubKey || sub.key === activeTertiaryKey || undefined,
       ...(deeper && sub.children?.length
         ? { items: subEntries(sub.children, false) }
         : sub.href
           ? { href: sub.href }
-          : { onSelect: () => { sub.onClick?.(); closeMobile(); } }),
+          : sub.selected !== undefined
+            ? // A choice: it applies where it is, and the drawer stays on its level.
+              { selected: sub.selected, onSelect: () => sub.onClick?.() }
+            : { onSelect: () => { sub.onClick?.(); closeMobile(); } }),
     };
   };
   const itemRow = (item: AppSidebarItem): NavStackItem => {
@@ -569,6 +582,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       ) : (
         item.icon
       ),
+      value: item.value,
       current: item.key === activeKey || undefined,
       ...(item.children?.length
         ? { items: subEntries(item.children, true) }
@@ -815,6 +829,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                       {item.badge}
                     </span>
                   )}
+                  {item.value && <span className={`${baseClass}__btn-value`}>{item.value}</span>}
                   {/* Accordion rows turn the chevron down when open; a row
                       feeding the panel points it at the panel and holds. */}
                   {hasChildren && (

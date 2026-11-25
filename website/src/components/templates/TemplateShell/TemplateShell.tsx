@@ -37,10 +37,9 @@ import { AppSidebar, type AppSidebarProps } from "rift-ds/components/AppSidebar/
 import { Button } from "rift-ds/components/Button/Button";
 import { useDockViewport } from "rift-ds/chat";
 import type { TemplateLayout, TemplateWidth } from "@/lib/templateLayout";
-import SidebarSwitchers, { CollapsedSidebarSwitchers } from "../SidebarSwitchers/SidebarSwitchers";
 import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
 import { EntitySwitcher, type EntitySwitcherProps } from "rift-ds/components/EntitySwitcher/EntitySwitcher";
-import { useAppearanceSection } from "@/components/MegaNav/drawer-menu";
+import { useAppearanceRailSection } from "./appearance-section";
 import { entitySwitcherEntries } from "./drawer-entries";
 import { TemplateShellContext } from "./context";
 import { useTemplateLayout, useTemplateWidth } from "./useTemplateLayout";
@@ -114,19 +113,19 @@ export default function TemplateShell({
   const chatDocks = useDockViewport();
   const [expanded, setExpanded] = React.useState(true);
 
-  /* The phone drawer is a full-screen NavStack: the switcher drills in as
-     its first row, and the footer's look controls become the Appearance
-     group, and the way back to every template is the rail's footer
-     action. The shell switches stay off
-     it: below the mobile breakpoint every mode is the plain page. The
-     switcher's choice is held here so the rail's menu and the drawer's
-     rows show the same one. */
+  /* The look controls are the rail's last section, Appearance: each a row
+     with its current value whose choices open in the side panel, the
+     rail's secondary menu, and in the phone drawer drill in like every
+     other row. The phone drawer also drills into the switcher as its first
+     row, and the way back to every template is the rail's footer action.
+     The switcher's choice is held here so the rail's menu and the
+     drawer's rows show the same one. */
   const [entity, setEntity] = React.useState(entitySwitcher?.value ?? entitySwitcher?.defaultValue);
   const pickEntity = (id: string, item: Parameters<NonNullable<EntitySwitcherProps["onValueChange"]>>[1]) => {
     setEntity(id);
     entitySwitcher?.onValueChange?.(id, item);
   };
-  const appearance = useAppearanceSection({ background: false });
+  const appearance = useAppearanceRailSection();
   const drawerTopEntries =
     entitySwitcher &&
     entitySwitcherEntries({
@@ -135,7 +134,6 @@ export default function TemplateShell({
       onPick: pickEntity,
       label: entitySwitcher.switcherLabel ?? "Switch",
     });
-  const drawerBottomEntries = [appearance];
 
   const content = (
     <div
@@ -165,6 +163,7 @@ export default function TemplateShell({
           <div className={styles.sidebar}>
             <AppSidebar
               {...sidebar}
+              sections={[...sidebar.sections, appearance]}
               layout={layout}
               subNav="panel"
               defaultPanelOpen={false}
@@ -177,13 +176,11 @@ export default function TemplateShell({
               }
               persistentTopSlot={!!entitySwitcher}
               drawerTopEntries={drawerTopEntries}
-              drawerBottomEntries={drawerBottomEntries}
               // The way back to every template belongs to the prototype,
               // not the app, so it is the rail's one action at its foot
               // (and the phone drawer's) rather than one of the app's rows.
               footerAction={<Button label="All templates" variant="primary" iconLeft="arrow_back" href="/templates" />}
-              footerSlot={<SidebarSwitchers showLayout />}
-              collapsedFooterSlot={<CollapsedSidebarSwitchers showLayout />}
+
             />
           </div>
         )}

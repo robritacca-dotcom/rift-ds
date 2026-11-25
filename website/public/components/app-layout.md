@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { AppLayout } from 'rift-ds';`
 - Deep import: `import { AppLayout } from 'rift-ds/components/AppLayout/AppLayout';`
 - Rendering: client component (declares 'use client')
-- Size: 14.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 14.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-layout
 - Schema: https://rift-ds.com/schema/components/app-layout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -68,6 +68,8 @@ interface AppSidebarItem {
   href?: string;
   /** Trailing pill, e.g. unread items. A count takes the count badge colours and, while the rail is collapsed, rides the icon's corner; a word stays a quiet pill, hidden while collapsed */
   badge?: string | number;
+  /** The setting's current value at the row's trailing end while expanded, such as "Dark" on a row whose sub-items are a setting's choices */
+  value?: string;
   /** Sub-items: an accordion under the row, or the side panel's contents when `subNav="panel"` */
   children?: AppSidebarSubItem[];
 }
@@ -119,6 +121,12 @@ interface AppSidebarSubItem {
   href?: string;
   /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
   badge?: string | number;
+  /** A second line under the label, shown where the sub-item is listed in the side panel and the phone drawer */
+  description?: string;
+  /** Icon before the label in the side panel and the phone drawer: a Material Symbol name or a custom element, such as a swatch */
+  icon?: string | React.ReactNode;
+  /** In a list of choices (a setting's options), whether this one is chosen: true carries the chosen mark in the side panel and the phone drawer. Picking a choice is an action, so the panel and the drawer stay open */
+  selected?: boolean;
   /** Group heading this entry sits under when it is listed in the panel (see `subNav`); ignored in the accordion */
   group?: string;
   /**

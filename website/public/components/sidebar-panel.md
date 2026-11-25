@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { SidebarPanel } from 'rift-ds';`
 - Deep import: `import { SidebarPanel } from 'rift-ds/components/SidebarPanel/SidebarPanel';`
 - Rendering: client component (declares 'use client')
-- Size: 1.3 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/sidebar-panel
 - Schema: https://rift-ds.com/schema/components/sidebar-panel.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -73,6 +73,12 @@ interface SidebarPanelItem {
   onClick?: () => void;
   /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */
   badge?: string | number;
+  /** A second line under the label, such as what a choice does */
+  description?: string;
+  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch */
+  icon?: string | React.ReactNode;
+  /** In a list of choices, whether this row is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. Picking a choice is an action, so the panel stays open */
+  selected?: boolean;
   /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */
   group?: string;
   /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */
@@ -80,4 +86,4 @@ interface SidebarPanelItem {
 }
 ```
 
-Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react).
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).

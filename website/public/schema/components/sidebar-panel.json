@@ -113,12 +113,13 @@
     },
     "SidebarPanelItem": {
       "kind": "interface",
-      "definition": "interface SidebarPanelItem {\n  /** Unique key for this item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */\n  group?: string;\n  /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */\n  children?: SidebarPanelItem[];\n}"
+      "definition": "interface SidebarPanelItem {\n  /** Unique key for this item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, such as what a choice does */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices, whether this row is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. Picking a choice is an action, so the panel stays open */\n  selected?: boolean;\n  /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */\n  group?: string;\n  /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */\n  children?: SidebarPanelItem[];\n}"
     }
   },
   "externalTypes": {
     "ComponentPropsWithRef": "react",
-    "ElementType": "react"
+    "ElementType": "react",
+    "ReactNode": "react"
   },
   "keyboard": [
     {
@@ -143,6 +144,6 @@
     }
   ],
   "size": {
-    "gzip": 1318
+    "gzip": 6018
   }
 }

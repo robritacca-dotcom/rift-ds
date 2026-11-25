@@ -213,6 +213,46 @@
   font-weight: var(--font-paragraph-emphasis-weight);
 }
 
+/* A row with a second line grows to hold it. */
+.ds-sidebar-panel__row--two-line {
+  height: auto;
+  min-height: var(--control-height-default);
+  padding-block: var(--padding-150);
+  border-radius: var(--radius-300);
+}
+
+.ds-sidebar-panel__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-sidebar-panel__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-sidebar-panel__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  color: var(--color-icon-primary);
+  --icon-size: var(--icon-size-500);
+}
+
+.ds-sidebar-panel__chosen {
+  flex-shrink: 0;
+}
+
 .ds-sidebar-panel__badge {
   flex-shrink: 0;
   font-family: var(--font-caption-family);

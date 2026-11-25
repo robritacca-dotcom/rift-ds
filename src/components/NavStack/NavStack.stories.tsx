@@ -86,20 +86,32 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** With no `defaultPath`, the stack opens on the level that holds the current page, so a reader deep in a section reopens the menu where they are. */
 export const Default: Story = {
   render: (args) => <SiteMenu onNavigate={args.onNavigate} onPathChange={args.onPathChange} />,
   play: async ({ canvas, userEvent, args }) => {
+    // It opens on Guides, which holds the current page, with that page marked
+    // and the overview row linking the level's page.
+    await expect(canvas.getByRole('heading', { name: 'Guides' })).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Theming' })).toHaveAttribute('aria-current', 'page');
+    await expect(canvas.getByRole('link', { name: 'Guides overview' })).toHaveAttribute('href', '#guides');
+    // Stepping out returns focus to the row it came from.
+    await userEvent.click(canvas.getByRole('button', { name: 'Back to Menu' }));
+    await expect(args.onPathChange).toHaveBeenLastCalledWith([]);
+    await waitFor(() => expect(canvas.getByRole('button', { name: /Guides/ })).toHaveFocus());
     // Drilling in moves focus to the new level's title.
     await userEvent.click(canvas.getByRole('button', { name: /Guides/ }));
     await expect(args.onPathChange).toHaveBeenLastCalledWith(['guides']);
     const title = await canvas.findByRole('heading', { name: 'Guides' });
     await waitFor(() => expect(title).toHaveFocus());
-    // The current page is marked, and the overview row links the level's page.
-    await expect(canvas.getByRole('link', { name: 'Theming' })).toHaveAttribute('aria-current', 'page');
-    await expect(canvas.getByRole('link', { name: 'Guides overview' })).toHaveAttribute('href', '#guides');
-    // Stepping out returns focus to the row it came from.
-    await userEvent.click(canvas.getByRole('button', { name: 'Back to Menu' }));
-    await waitFor(() => expect(canvas.getByRole('button', { name: /Guides/ })).toHaveFocus());
+  },
+};
+
+/** `defaultPath={[]}` opens on the first level whatever the current page. */
+export const FirstLevel: Story = {
+  render: () => <SiteMenu defaultPath={[]} />,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: /Guides/ })).toBeVisible();
   },
 };
 

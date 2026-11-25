@@ -23,7 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | items | `NavStackEntry[]` | yes |  | The first level's rows and sections. A row with `items` drills into the next level. |
 | currentHref | `string` | no |  | href of the current page: the exactly matching row gets `aria-current="page"` and the current treatment, and every row on the way to it the current treatment. |
 | path | `string[]` | no |  | The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`. |
-| defaultPath | `string[]` | no | `[]` | The path the stack opens on, when it owns its state. |
+| defaultPath | `string[]` | no |  | The path the stack opens on, when it owns its state. Left out, it opens on the deepest level that holds the current page (`currentHref`, or a row marked `current`), so a reader deep in a section reopens the menu where they are; `[]` opens on the first level always. |
 | onPathChange | `((path: string[]) => void)` | no |  | Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes. |
 | onNavigate | `((item: NavStackItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in. |
 | header | `ReactNode` | no |  | Content above the first level's rows, such as a search field. |

@@ -10,6 +10,7 @@ import { IconButton } from '../IconButton/IconButton';
 import { Drawer } from '../Drawer/Drawer';
 import { MegaMenu, type MegaMenuItem, type MegaMenuShowcase } from '../MegaMenu/MegaMenu';
 import { NavStack, type NavStackEntry, type NavStackItem } from '../NavStack/NavStack';
+import { navStackPathTo } from '../NavStack/path';
 import { ProgressiveBlur } from '../ProgressiveBlur/ProgressiveBlur';
 import '../../behaviors/shell.css';
 import './SiteHeader.css';
@@ -260,10 +261,12 @@ export function SiteHeader({
      belongs to the first level, the index of the site; a level the reader
      drilled into is about that section, so the footer steps aside there.
      Every open starts on the first level. */
-  const [drawerDepth, setDrawerDepth] = useState(0);
+  // How deep the drawer's stack is; null until the reader steps, while it
+  // sits on the level it opened on (the current page's).
+  const [drawerDepth, setDrawerDepth] = useState<number | null>(null);
   const setDrawerOpen = useCallback(
     (next: boolean) => {
-      setDrawerDepth(0);
+      setDrawerDepth(null);
       lockedGutter.current = next ? window.innerWidth - document.documentElement.clientWidth : 0;
       if (drawerOpenProp === undefined) setDrawerOpenState(next);
       onDrawerOpenChange?.(next);
@@ -495,6 +498,10 @@ export function SiteHeader({
     },
     ...(drawerEntries ?? []),
   ];
+  // The stack opens on the level that holds the current page, so a reader
+  // deep in a section reopens the menu where they are.
+  const drawerOpenPath = navStackPathTo(drawerStack, currentHref);
+  const drawerOnFirstLevel = (drawerDepth ?? drawerOpenPath.length) === 0;
 
   const classes = [
     baseClass,
@@ -657,7 +664,7 @@ export function SiteHeader({
         closeLabel={drawerCloseLabel}
         side="start"
         size="sm"
-        footer={drawerDepth === 0 ? drawerFooter : undefined}
+        footer={drawerOnFirstLevel ? drawerFooter : undefined}
         className={`${baseClass}__drawer`}
         style={drawerOffset}
         heading={
@@ -679,6 +686,7 @@ export function SiteHeader({
           items={drawerStack}
           header={drawerHeader}
           currentHref={currentHref}
+          defaultPath={drawerOpenPath}
           navLabel={navLabel}
           linkComponent={Link}
           onNavigate={() => setDrawerOpen(false)}

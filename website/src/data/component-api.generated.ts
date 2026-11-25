@@ -14151,8 +14151,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "defaultPath",
             "type": "string[]",
             "required": false,
-            "description": "The path the stack opens on, when it owns its state.",
-            "defaultValue": "[]"
+            "description": "The path the stack opens on, when it owns its state. Left out, it opens\non the deepest level that holds the current page (`currentHref`, or a\nrow marked `current`), so a reader deep in a section reopens the menu\nwhere they are; `[]` opens on the first level always."
           },
           {
             "name": "onPathChange",

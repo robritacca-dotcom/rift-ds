@@ -5,6 +5,7 @@ import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvid
 import { mirrorClass } from '../../behaviors/direction';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import '../../behaviors/direction.css';
+import { holdsCurrent, idOf, isSection, navStackPathTo, rowsOf } from './path';
 import './NavStack.css';
 import '../../fonts/material-symbols.css';
 
@@ -71,9 +72,7 @@ export interface NavStackSection {
 /** An entry on a level: a row, or a section of rows. */
 export type NavStackEntry = NavStackItem | NavStackSection;
 
-const isSection = (entry: NavStackEntry): entry is NavStackSection => (entry as NavStackSection).type === 'section';
 const isCount = (badge: string | number) => typeof badge === 'number' || /^\d+\+?$/.test(badge);
-const idOf = (item: NavStackItem) => item.id ?? item.href ?? item.label;
 
 /** Props owned by NavStack itself — everything else falls through to the `<nav>`. */
 type NavStackOwnProps = {
@@ -83,7 +82,12 @@ type NavStackOwnProps = {
   currentHref?: string;
   /** The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`. */
   path?: string[];
-  /** The path the stack opens on, when it owns its state. */
+  /**
+   * The path the stack opens on, when it owns its state. Left out, it opens
+   * on the deepest level that holds the current page (`currentHref`, or a
+   * row marked `current`), so a reader deep in a section reopens the menu
+   * where they are; `[]` opens on the first level always.
+   */
   defaultPath?: string[];
   /** Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes. */
   onPathChange?: (path: string[]) => void;
@@ -113,17 +117,6 @@ export interface NavStackProps
   extends NavStackOwnProps,
     Omit<React.ComponentPropsWithRef<'nav'>, keyof NavStackOwnProps> {}
 
-/** Whether a row is the current page, or holds it somewhere below. */
-function holdsCurrent(item: NavStackItem, currentHref?: string): boolean {
-  if (item.current) return true;
-  if (currentHref && item.href === currentHref) return true;
-  return (item.items ?? []).some((entry) =>
-    isSection(entry) ? entry.items.some((child) => holdsCurrent(child, currentHref)) : holdsCurrent(entry, currentHref),
-  );
-}
-
-/** The rows a level lists, sections opened up. */
-const rowsOf = (entries: NavStackEntry[]) => entries.flatMap((entry) => (isSection(entry) ? entry.items : [entry]));
 
 /**
  * A drill-in menu for a phone: each level fills the space it is given, a
@@ -140,7 +133,7 @@ export function NavStack({
   items,
   currentHref,
   path: pathProp,
-  defaultPath = [],
+  defaultPath,
   onPathChange,
   onNavigate,
   header,
@@ -154,7 +147,7 @@ export function NavStack({
   ...rest
 }: NavStackProps) {
   const Link = useLinkComponent(linkComponent);
-  const [ownPath, setOwnPath] = useState<string[]>(defaultPath);
+  const [ownPath, setOwnPath] = useState<string[]>(() => defaultPath ?? navStackPathTo(items, currentHref));
   const path = pathProp ?? ownPath;
   // Which way the last step went; null until the first step, so the first
   // render neither animates nor moves focus.

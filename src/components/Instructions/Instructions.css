@@ -137,6 +137,27 @@
   margin: 0;
 }
 
+/* A description given as markup holds blocks (a code block, a figure, a
+   list): they stack on the step's own rhythm and never widen the step. */
+div.ds-instructions__description {
+  min-width: 0;
+}
+
+/* A vertical step's content takes the room beside its badge, so a block a
+   description holds (a code block) runs the step's width, one step like
+   the next, in place of each shrinking to its own text. */
+.ds-instructions--vertical .ds-instructions__content {
+  flex: 1 1 0;
+}
+
+div.ds-instructions__description > * {
+  margin-block: 0;
+}
+
+div.ds-instructions__description > * + * {
+  margin-block-start: var(--gap-200); /* 8px */
+}
+
 /* ============================================
    HORIZONTAL LAYOUT
    ============================================ */

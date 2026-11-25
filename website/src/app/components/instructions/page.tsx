@@ -3,6 +3,7 @@
 import React from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { Instructions } from "rift-ds/components/Instructions/Instructions";
+import { CodeBlock } from "rift-ds/components/CodeBlock/CodeBlock";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -70,6 +71,37 @@ export default function InstructionsPage() {
               { label: "Develop", icon: "code" },
               { label: "Test", icon: "bug_report" },
               { label: "Deploy", icon: "rocket_launch" },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Rich steps */}
+      <section className={styles.section}>
+        <SectionTitle title="Rich steps" />
+        <div className={styles.variantStack}>
+          <Instructions
+            title="Set up the project"
+            steps={[
+              {
+                label: "Install the package",
+                description: (
+                  <>
+                    <p>Add it to the app that will render the components.</p>
+                    <CodeBlock language="bash" code="npm install rift-ds" />
+                  </>
+                ),
+              },
+              {
+                label: "Load the tokens",
+                description: (
+                  <>
+                    <p>Import the token stylesheet once, at the root of the app.</p>
+                    <CodeBlock language="ts" code={'import "rift-ds/tokens/tokens.css";'} />
+                  </>
+                ),
+              },
+              { label: "Render a component", description: "Plain text still sets as a paragraph." },
             ]}
           />
         </div>

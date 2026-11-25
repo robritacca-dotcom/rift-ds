@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Instructions } from './Instructions';
+import { CodeBlock } from '../CodeBlock/CodeBlock';
 
 const meta = {
   title: 'Components/Instructions',
@@ -90,6 +91,34 @@ export const Dots: Story = {
       { label: 'Draft', description: 'Create initial design exploration.' },
       { label: 'Review', description: 'Gather feedback from stakeholders.' },
       { label: 'Finalize', description: 'Lock design and hand off to engineering.' },
+    ],
+  },
+};
+
+/** A step's description can be markup: here each step holds the command it describes. */
+export const RichSteps: Story = {
+  args: {
+    title: 'Set up the project',
+    steps: [
+      {
+        label: 'Install the package',
+        description: (
+          <>
+            <p>Add it to the app that will render the components.</p>
+            <CodeBlock language="bash" code="npm install example-package" />
+          </>
+        ),
+      },
+      {
+        label: 'Load the styles',
+        description: (
+          <>
+            <p>Import the stylesheet once, at the root of the app.</p>
+            <CodeBlock language="ts" code={"import 'example-package/styles.css';"} />
+          </>
+        ),
+      },
+      { label: 'Render a component', description: 'Plain text still sets as a paragraph.' },
     ],
   },
 };

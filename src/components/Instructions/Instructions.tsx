@@ -6,8 +6,11 @@ import { mirrorClass } from '../../behaviors/direction';
 export interface InstructionStep {
   /** Step label/title */
   label: string;
-  /** Optional step description */
-  description?: string;
+  /**
+   * What the step says under its label. Plain text is set as a paragraph;
+   * markup (a code block, a figure, a list) is set as a block the step holds.
+   */
+  description?: React.ReactNode;
   /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */
   icon?: string | React.ReactNode;
 }
@@ -95,9 +98,15 @@ export const Instructions = React.forwardRef<HTMLDivElement, InstructionsProps>(
 
               <div className={`${baseClass}__content`}>
                 <p className={`${baseClass}__label`}>{step.label}</p>
-                {step.description && (
-                  <p className={`${baseClass}__description`}>{step.description}</p>
-                )}
+                {step.description != null &&
+                  step.description !== false &&
+                  step.description !== '' &&
+                  (typeof step.description === 'string' ||
+                  typeof step.description === 'number' ? (
+                    <p className={`${baseClass}__description`}>{step.description}</p>
+                  ) : (
+                    <div className={`${baseClass}__description`}>{step.description}</div>
+                  ))}
               </div>
             </li>
           ))}

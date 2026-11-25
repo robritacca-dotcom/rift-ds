@@ -385,6 +385,30 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      otherwise collapsing or expanding the rail. */
   const toggleLabel = mobileOpen ? closeLabel : isExpanded ? collapseLabel : expandLabel;
   const drawerRef = useRef<HTMLElement | null>(null);
+  /* The top block scrolls when the rows outgrow the rail (a long nav, or a
+     roomier theme's taller rows), and fades out at whichever end has more
+     past it, so the last row meets a fade rather than a hard cut against
+     the profile. The edges are written straight to the DOM, so a scroll
+     re-renders nothing (NavList's scrollable rule). */
+  const topRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const top = topRef.current;
+    if (!top) return;
+    const edges = () => {
+      const max = top.scrollHeight - top.clientHeight;
+      top.toggleAttribute('data-fade-start', top.scrollTop > 1);
+      top.toggleAttribute('data-fade-end', top.scrollTop < max - 1);
+    };
+    edges();
+    top.addEventListener('scroll', edges, { passive: true });
+    const resize = new ResizeObserver(edges);
+    resize.observe(top);
+    for (const child of Array.from(top.children)) resize.observe(child);
+    return () => {
+      top.removeEventListener('scroll', edges);
+      resize.disconnect();
+    };
+  }, []);
   /** Keep the internal ref (focus trap, drill focus) while honouring a forwarded one. */
   const setDrawerRef = (node: HTMLElement | null) => {
     drawerRef.current = node;
@@ -674,7 +698,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
       onClick={expandOnClick ?? rest.onClick}
     >
       {/* ---- TOP ---- */}
-      <div className={`${baseClass}__top`}>
+      <div ref={topRef} className={`${baseClass}__top`}>
         {/* Logo */}
         <div className={`${baseClass}__logo`}>
           <div
@@ -802,7 +826,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
                         </span>
                       ) : (
                         <span
-                          className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(item.icon)}` : ''}`}
+                          className={`${baseClass}__btn-icon${typeof item.icon === 'string' ? ` material-symbols-rounded ${mirrorClass(item.icon)}` : ` ${baseClass}__btn-icon--node`}`}
                         >
                           {item.icon}
                         </span>

@@ -102,19 +102,53 @@
    TOP SECTION — logo + nav
    ============================================ */
 .ds-app-sidebar__top {
+  /* How far the rows fade out at an end with more to scroll (AppSidebar.tsx
+     writes data-fade-start and data-fade-end). */
+  --ds-app-sidebar-fade: var(--gap-1000);
+  --ds-app-sidebar-fade-start: 0px;
+  --ds-app-sidebar-fade-end: 0px;
   display: flex;
   flex-direction: column;
   gap: var(--gap-1000);
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   flex: 1;
   min-height: 0;
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--ds-app-sidebar-fade-start),
+    black calc(100% - var(--ds-app-sidebar-fade-end)),
+    transparent
+  );
+  /* ds-allow(color): mask alpha keywords (black/transparent), not palette colours */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--ds-app-sidebar-fade-start),
+    black calc(100% - var(--ds-app-sidebar-fade-end)),
+    transparent
+  );
   /* The scroller clips at its edge, and the logo row sits on it: the
      collapse toggle's hover pill, a --gap-100 step out from the icon, lost
      its top to it. A pill's worth of room inside the top edge, taken back
      from the rail's padding, so nothing moves. */
   padding-top: var(--gap-100);
   margin-top: calc(-1 * var(--gap-100));
+  /* Scrolled to its end, the last row stops a step clear of the profile
+     rather than on it. Rows that fit never reach this: the block's spare
+     height already holds it. */
+  padding-bottom: var(--gap-500);
+}
+
+.ds-app-sidebar__top[data-fade-start] {
+  --ds-app-sidebar-fade-start: var(--ds-app-sidebar-fade);
+}
+
+.ds-app-sidebar__top[data-fade-end] {
+  --ds-app-sidebar-fade-end: var(--ds-app-sidebar-fade);
 }
 
 /* ============================================
@@ -290,6 +324,16 @@
   --icon-size: var(--icon-size-600);
   color: var(--color-icon-primary);
   flex-shrink: 0;
+}
+
+/* A custom icon (a swatch, an inline mark) takes the glyph's box and
+   centres in it, so it sits where a glyph would rather than hugging the
+   start of the seat. */
+.ds-app-sidebar__btn-icon--node {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--icon-size);
+  block-size: var(--icon-size);
 }
 
 /* A generated avatar in the icon seat: a block-level sprite, so the seat
@@ -915,6 +959,17 @@
    ============================================ */
 .ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) {
   width: 80px;
+}
+
+/* The seat assumes the rail's whole width: a classic scrollbar would take
+   a fifth of it and pull every row's pill off its icon. The fade at the
+   scrolling end is the rail's cue that there is more, so the bar goes. */
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__top {
+  scrollbar-width: none;
+}
+
+.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded) .ds-app-sidebar__top::-webkit-scrollbar {
+  display: none;
 }
 
 /* The seat: 12px row margin + 16px row padding puts every 24px icon's

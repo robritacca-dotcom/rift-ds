@@ -21,11 +21,13 @@ import { useIsStaged } from "../useStagedProductName";
 import styles from "./SidebarSwitchers.module.css";
 
 /**
- * The template shells' footer controls. Without the layout switch they
- * share one row: the theme (preset) switcher beside the light/dark
- * toggle, the same pair the site header carries. With it (`showLayout`,
- * only where TemplateShell lays the screen out; elsewhere it would switch
- * nothing) they stack one per row, because a three-way shell strip beside
+ * The footer controls of the template screens outside TemplateShell (the
+ * chat home, the landing page, the sign-in pane, the mobile dashboard),
+ * whose rail carries its own Appearance section instead. Without the
+ * layout switch they share one row: the theme (preset) switcher beside the
+ * light/dark toggle, the same pair the site header carries. With it
+ * (`showLayout`, the chat home's, which lays its own screen out) they
+ * stack one per row, because a three-way shell strip beside
  * the pair runs past the rail's width: the theme, the colour mode, the
  * shell (flush, floating or inset, shared by every template), and on the
  * chat home in flush the backdrop (blur or solid) under it: blur says a

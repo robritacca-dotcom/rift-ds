@@ -161,7 +161,7 @@ export default function SidebarPanelPage() {
       <section className={styles.section}>
         <SectionTitle title="Back row" />
         <p className={styles.sectionBody}>
-          Passing onBack adds a row above the heading that returns to the level above. This is the drill-in screen the app sidebar’s mobile drawer shows in place of the panel. Press Menu, then Reports, to move between the two levels.
+          Passing onBack adds a row above the heading that returns to the level above, for a host that drills into the panel as a screen of its own. The app sidebar’s phone drawer drills in on a nav stack instead. Press Menu, then Reports, to move between the two levels.
         </p>
         <div data-anchor-ignore>
           <DrillInDemo />

@@ -11,8 +11,8 @@
  * `chat`, the chat home, flush by default. The chat home alone carries a
  * backdrop for its flush layout, blur by default (the live site chat's
  * look) or solid: blur says a chat rests above something, and a template is
- * always the floor of its page, so it has none. The sidebar footer's switch
- * writes its screen's scope.
+ * always the floor of its page, so it has none. The template rail's Layout
+ * row (and the chat home's footer switch) writes its screen's scope.
  * The page width (TemplateWidth) is a choice of its own for the templates,
  * set beside the layout and independent of it.
  * Each is a stored choice (lib/storedChoice), so it follows the visitor

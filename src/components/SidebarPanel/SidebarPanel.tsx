@@ -50,7 +50,7 @@ type SidebarPanelOwnProps = {
   onCollapse?: () => void;
   /** Accessible name of the collapse button. Defaults to "Collapse <title>", or "Collapse panel" when there is no title */
   collapseLabel?: string;
-  /** Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens */
+  /** Renders a back row above the heading and calls this when it is pressed, for a host that drills into the panel as a screen of its own */
   onBack?: () => void;
   /** Label of the back row */
   backLabel?: string;

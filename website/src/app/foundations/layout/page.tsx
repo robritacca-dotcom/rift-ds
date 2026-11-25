@@ -141,7 +141,7 @@ const widthHosts = [
   { id: "app-layout", host: "AppLayout", how: "width: contained (1120px) or full, in flush, floating or inset" },
   { id: "site-layout", host: "SiteLayout", how: "width and containedWidth: the columns contained (narrow 1200px, default 1440px, wide 1680px) or full; the header and footer move with the sidebar's dock" },
   { id: "site-header", host: "SiteHeader", how: "width: the bar's contents contained or edge to edge, with the gutter; unset, it fills its host with none" },
-  { id: "templates", host: "The templates", how: "The width switch beside the mode switch in the rail's footer, kept for every template" },
+  { id: "templates", host: "The templates", how: "The Width row in the rail's Appearance section, kept for every template" },
   { id: "app-block", host: "The app shell block", how: "CONTENT_WIDTH beside SHELL_LAYOUT at the top of the file" },
   { id: "docs-block", host: "The docs block", how: "PAGE_WIDTH and SIDEBAR_DOCK at the top of the file; the header and footer move with the dock" },
 ] as const;

@@ -505,10 +505,11 @@
     background-color: var(--color-action-passive-bg-hover);
   }
 
-  /* The pinned footer runs the sheet's width, its action full width. */
+  /* The pinned footer runs the sheet's width, its action full width, with
+     no rule above it: the list fades out at its end, which is edge
+     enough. */
   .ds-site-header__drawer .ds-drawer__footer {
     padding-block-start: var(--padding-300);
-    border-block-start: var(--border-025) solid var(--color-divider);
   }
 }
 

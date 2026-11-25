@@ -161,6 +161,14 @@
 }
 
 /* Get started fills the drawer's floor, in thumb reach. */
+/* The drawer's foot: the assistant over Get started, each full width. */
+.drawerActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  width: 100%;
+}
+
 .drawerCta {
   width: 100%;
 }

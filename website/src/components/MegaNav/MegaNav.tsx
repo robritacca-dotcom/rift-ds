@@ -187,13 +187,29 @@ export default function MegaNav() {
       }
       drawerEntries={drawerEntries}
       drawerFooter={
-        <Button
-          className={styles.drawerCta}
-          label="Get started"
-          variant="primary"
-          href="/docs/get-started"
-          onClick={() => setMenuOpen(false)}
-        />
+        // The assistant sits over Get started in thumb reach too: the bar's
+        // chat circle is the one way in on a phone otherwise, and it sits
+        // under the open sheet's header. The menu closes as the chat opens.
+        <div className={styles.drawerActions}>
+          <AiButton
+            className={styles.drawerCta}
+            icon="forum"
+            label={`Ask ${ASSISTANT_NAME}`}
+            onPointerEnter={preloadChatWidget}
+            onFocus={preloadChatWidget}
+            onClick={() => {
+              setMenuOpen(false);
+              setChatOpen(true);
+            }}
+          />
+          <Button
+            className={styles.drawerCta}
+            label="Get started"
+            variant="primary"
+            href="/docs/get-started"
+            onClick={() => setMenuOpen(false)}
+          />
+        </div>
       }
       drawerOpen={menuOpen}
       onDrawerOpenChange={setMenuOpen}

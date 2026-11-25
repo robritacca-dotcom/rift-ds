@@ -44,8 +44,8 @@ export default function MegaNav() {
   // Inside SiteFrame the bar offers the frame's layout switcher.
   const inFrame = useInSiteFrame();
   usePreloadWhenIdle(DeferredShowcaseCover.preload);
-  // On a phone the drawer is the whole screen and the bar gives up its look
-  // controls, so the drawer carries them as drill-in rows.
+  // On a phone the drawer is the whole screen, with room to name what
+  // Resources holds; the Appearance rows show at every width.
   const phone = useTakeoverViewport();
   const drawerEntries = useDrawerEntries(phone);
 
@@ -169,8 +169,8 @@ export default function MegaNav() {
         </>
       }
       wideActions={<GetStartedSplit />}
-      // The drawer opens on search, then the sections, Resources and (on a
-      // phone) Appearance, with Get started pinned at its foot in thumb
+      // The drawer opens on search, then the sections, Resources and
+      // Appearance, with Get started pinned at its foot in thumb
       // reach. The split button's other ways in are Resources' rows.
       drawerHeader={
         <button

@@ -134,8 +134,10 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
 
 /**
  * The header drawer's rows after the sections: Resources drills into the
- * links off-site, and on a phone, where the bar gives up its look
- * controls, the Appearance group follows.
+ * links off-site, then the Appearance group. It is there at every width the
+ * menu opens at: on a phone the bar has given those controls up, and on a
+ * tablet, where the bar still shows them as small circles, the menu is the
+ * roomier way to reach them, with their current values named.
  */
 export function useDrawerEntries(phone: boolean): NavStackEntry[] {
   const appearance = useAppearanceSection();
@@ -146,5 +148,5 @@ export function useDrawerEntries(phone: boolean): NavStackEntry[] {
     // drawer's narrower row does not.
     items: [{ id: "resources", label: "Resources", ...(phone ? { value: "GitHub, npm, Figma" } : {}), items: RESOURCES }],
   };
-  return phone ? [resources, appearance] : [resources];
+  return [resources, appearance];
 }

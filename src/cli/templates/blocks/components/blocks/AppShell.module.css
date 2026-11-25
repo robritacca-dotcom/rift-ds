@@ -1,7 +1,8 @@
 /* The app shell's layout, in one of the three app shell modes (flush,
    floating or inset; AppShell.tsx's SHELL_LAYOUT picks it). Every value is
    a rift-ds token or a property of its shell recipe, except the sidebar's
-   own widths (64px collapsed, 280px expanded) and its mobile menu button
+   own widths (80px collapsed in panel mode, the default, or 64px in
+   accordion mode; 280px expanded) and its mobile menu button
    (40px), which are the AppSidebar component's geometry. */
 
 .shell {
@@ -22,6 +23,10 @@
      marker (AppShell.tsx's SHELL_LAYOUT) picks the mode, and AppSidebar
      brings the recipe's stylesheet with it. */
   background-color: var(--ds-shell-plane);
+}
+
+.shell:has(:global(.ds-app-sidebar--panel-mode:not(.ds-app-sidebar--expanded))) {
+  --shell-rail: 80px;
 }
 
 .shell:has(:global(.ds-app-sidebar--expanded)) {

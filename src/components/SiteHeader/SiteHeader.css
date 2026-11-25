@@ -461,9 +461,9 @@
   align-items: center;
 }
 
-/* The drawer's scroll area hangs out by the stack's row inset, so the
+/* The drawer's scroll area hangs out by the menu's row inset, so the
    fills sit in the gutter and every label lands on the brand's start
-   line. The scroll area itself moves, not the stack inside it, so nothing
+   line. The scroll area itself moves, not the menu inside it, so nothing
    overflows it sideways. */
 .ds-site-header__drawer .ds-drawer__body {
   margin-inline: calc(-1 * var(--padding-300));

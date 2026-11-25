@@ -12,7 +12,7 @@
 .ds-drill-menu {
   /* How far a row's content sits in from the row's own edge. A host that
      lines the labels up with something above it (a header's brand) hangs
-     the stack out by this much, so the fills sit in the gutter and the
+     the menu out by this much, so the fills sit in the gutter and the
      words sit on the line. */
   --ds-drill-menu-inset: var(--padding-300);
   /* Touch-tall rows: a control height and one step, so a thumb lands. */
@@ -156,7 +156,7 @@
 
 /* One shape per row: the fill spans the row, the chevron sits inside it.
    Hover applies only where the device hovers, so a tap leaves none
-   behind, and not while the stack settles after a step (`data-settling`,
+   behind, and not while the menu settles after a step (`data-settling`,
    until the pointer next moves), so the control that lands under a still
    pointer does not light up. */
 .ds-drill-menu__row {

@@ -1,7 +1,8 @@
 /* ============================================
    APP SIDEBAR — collapsible navigation
-   Collapsed: 64px icon-only rail
-   Expanded: 280px with labels, accordion, profile
+   Collapsed: 80px labelled rail (panel mode, the
+   default) or 64px icon rail (accordion mode)
+   Expanded: 280px with labels, profile
    ============================================ */
 
 @layer rift.tokens, rift.preset, rift.components;
@@ -943,7 +944,7 @@
   z-index: 2;
   flex: none;
   height: 100%;
-  margin-inline-end: calc(-1 * var(--ds-sub-nav-panel-width, 240px));
+  margin-inline-end: calc(-1 * var(--ds-sub-nav-panel-width, var(--ds-sidebar-panel-width, 240px)));
   transition:
     margin var(--motion-duration-slow) var(--motion-ease-emphasized),
     opacity var(--motion-duration-base) var(--motion-ease-standard),
@@ -966,7 +967,7 @@
   height: calc(100% - var(--ds-sidebar-float-inset, 20px) * 2);
   margin-block: var(--ds-sidebar-float-inset, 20px);
   margin-inline-start: var(--gap-300);
-  margin-inline-end: calc(-1 * (var(--ds-sub-nav-panel-width, 240px) + var(--gap-300)));
+  margin-inline-end: calc(-1 * (var(--ds-sub-nav-panel-width, var(--ds-sidebar-panel-width, 240px)) + var(--gap-300)));
 }
 
 .ds-app-sidebar__panel--contained.ds-app-sidebar__panel--floating.ds-app-sidebar__panel--visible {

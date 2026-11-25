@@ -37,6 +37,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | drawerOpenLabel | `string` | no | `'Open menu'` | The accessible name of the menu button that opens the drawer. |
 | drawerTitle | `string` | no | `'Menu'` | The drawer's title, naming the dialog. Shown at its top when there is no `brand`; with one, the brand takes its place and the title is read only by assistive tech. |
 | drawerCloseLabel | `string` | no | `'Close menu'` | The accessible name of the drawer's close button. |
+| drawerBackLabel | `((title: string) => string)` | no | `` (title) => `Back to ${title}` `` | The drawer's back row's accessible name, given the title of the level it returns to, for a site in another language. The drill menu's own default. |
+| drawerOverviewLabel | `((label: string) => string)` | no | `` (label) => `${label} overview` `` | The text of the overview row a drilled level opens with when its row has a page of its own, given that row's label, for a site in another language. The drill menu's own default. |
 | width | `"contained" \| "full"` | no | `undefined` | How wide the bar's contents run, read from the shell recipe's width axis. `contained` centres them in the contained width (1440px, or the nearest `--ds-shell-contained-width`) with the side gutter, lining up with a contained page below; `full` runs them edge to edge, the gutter aside. Leave it out and the bar fills whatever box the host gives it, with no gutter of its own; inside a SiteLayout it follows the layout's `headerWidth` instead. |
 | className | `string` | no | `''` | Additional CSS classes on the `<header>`. |
 
@@ -91,7 +93,7 @@ interface DrillMenuItem {
   external?: boolean;
   /**
    * Makes the row an action rather than a link, such as a pick or a copy.
-   * The stack stays on its level; a choice list's rows set `selected` too.
+   * The menu stays on its level; a choice list's rows set `selected` too.
    */
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }

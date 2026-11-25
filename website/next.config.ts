@@ -74,7 +74,7 @@ const nextConfig: NextConfig = {
       { source: "/components/sidebar-panel.md", destination: "/components/sub-nav-panel.md", permanent: true },
       { source: "/schema/components/sidebar-panel.json", destination: "/schema/components/sub-nav-panel.json", permanent: true },
       { source: "/r/sidebar-panel.json", destination: "/r/sub-nav-panel.json", permanent: true },
-      // NavStack was renamed DrillMenu before it shipped to npm; its page was live; its page, markdown, schema and registry item keep resolving.
+      // NavStack was renamed DrillMenu before it shipped to npm, but its page was live, so its page, markdown, schema and registry item keep resolving.
       { source: "/components/nav-stack", destination: "/components/drill-menu", permanent: true },
       { source: "/components/nav-stack.md", destination: "/components/drill-menu.md", permanent: true },
       { source: "/schema/components/nav-stack.json", destination: "/schema/components/drill-menu.json", permanent: true },

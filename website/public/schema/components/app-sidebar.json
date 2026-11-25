@@ -6,7 +6,7 @@
   "label": "App sidebar",
   "slug": "app-sidebar",
   "category": "layout",
-  "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.",
+  "description": "Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section.",
   "client": true,
   "importPath": "rift-ds/components/AppSidebar/AppSidebar",
   "barrel": "main",
@@ -297,6 +297,22 @@
           "required": false,
           "description": "The phone drawer's menu: the accessible name of its navigation, and what\nthe back row says on every second level",
           "default": "Menu"
+        },
+        {
+          "name": "drawerBackLabel",
+          "type": "((title: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The phone drawer's back row's accessible name, given the title of the level it\nreturns to, for a site in another language. The drill menu's own default.",
+          "defaultExpression": "(title) => `Back to ${title}`"
+        },
+        {
+          "name": "drawerOverviewLabel",
+          "type": "((label: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The text of the overview row a drilled level opens with when its row has\na page of its own, given that row's label, for a site in another\nlanguage. The drill menu's own default.",
+          "defaultExpression": "(label) => `${label} overview`"
         }
       ]
     }
@@ -340,7 +356,7 @@
     },
     "DrillMenuItem": {
       "kind": "interface",
-      "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The stack stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
+      "definition": "interface DrillMenuItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as \"New\" as a quiet pill. */\n  badge?: string | number;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */\n  title?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: DrillMenuEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The menu stays on its level; a choice list's rows set `selected` too.\n   */\n  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
       "refs": [
         "DrillMenuEntry"
       ]

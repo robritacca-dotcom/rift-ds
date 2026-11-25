@@ -96,7 +96,7 @@ export default function SideNavPage() {
       <div className={`${styles.pageHeader} animate-in`}>
         <h1 className={styles.pageTitle}>Side nav</h1>
         <PageLinks
-          storybookPath="/?path=/docs/components-navlist--docs"
+          storybookPath="/?path=/docs/components-sidenav--docs"
         />
       </div>
 

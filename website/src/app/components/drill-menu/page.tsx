@@ -93,7 +93,7 @@ export default function DrillMenuPage() {
       <PageBreadcrumb />
       <div className={`${styles.pageHeader} animate-in`}>
         <h1 className={styles.pageTitle}>Drill menu</h1>
-        <PageLinks storybookPath="/?path=/docs/components-navstack--docs" />
+        <PageLinks storybookPath="/?path=/docs/components-drillmenu--docs" />
       </div>
 
       <div className={`${styles.introSection} animate-in animate-delay-1`}>

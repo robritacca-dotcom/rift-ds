@@ -23,9 +23,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | items | `DrillMenuEntry[]` | yes |  | The first level's rows and sections. A row with `items` drills into the next level. |
 | currentHref | `string` | no |  | href of the current page: the exactly matching row gets `aria-current="page"` and the current treatment, and every row on the way to it the current treatment. |
 | path | `string[]` | no |  | The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`. |
-| defaultPath | `string[]` | no |  | The path the stack opens on, when it owns its state. Left out, it opens on the deepest level that holds the current page (`currentHref`, or a row marked `current`), so a reader deep in a section reopens the menu where they are; `[]` opens on the first level always. |
+| defaultPath | `string[]` | no |  | The path the menu opens on, when it owns its state. Left out, it opens on the deepest level that holds the current page (`currentHref`, or a row marked `current`), so a reader deep in a section reopens the menu where they are; `[]` opens on the first level always. |
 | onPathChange | `((path: string[]) => void)` | no |  | Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes. |
-| onNavigate | `((item: DrillMenuItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in. |
+| onNavigate | `((item: DrillMenuItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when a link row is followed, alongside native navigation, such as to close the drawer the menu sits in. |
 | header | `ReactNode` | no |  | Content above the first level's rows, such as a search field. |
 | rootLabel | `string` | no | `'Menu'` | The back row's text on the second level, naming the first. |
 | backLabel | `((title: string) => string)` | no | `` (title) => `Back to ${title}` `` | The back row's accessible name, given the title of the level it returns to. Defaults to "Back to <title>". |
@@ -85,7 +85,7 @@ interface DrillMenuItem {
   external?: boolean;
   /**
    * Makes the row an action rather than a link, such as a pick or a copy.
-   * The stack stays on its level; a choice list's rows set `selected` too.
+   * The menu stays on its level; a choice list's rows set `selected` too.
    */
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }

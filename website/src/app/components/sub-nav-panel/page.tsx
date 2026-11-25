@@ -94,7 +94,7 @@ export default function SubNavPanelPage() {
       <PageBreadcrumb />
       <div className={`${styles.pageHeader} animate-in`}>
         <h1 className={styles.pageTitle}>Sub-nav panel</h1>
-        <PageLinks storybookPath="/?path=/docs/components-sidebarpanel--docs" />
+        <PageLinks storybookPath="/?path=/docs/components-subnavpanel--docs" />
       </div>
 
       <div className={`${styles.introSection} animate-in animate-delay-1`}>

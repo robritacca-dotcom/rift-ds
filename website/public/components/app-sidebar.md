@@ -1,6 +1,6 @@
 # App sidebar
 
-Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.
+Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -50,6 +50,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | collapseLabel | `string` | no | `'Collapse sidebar'` | Accessible name of the toggle when it collapses the rail |
 | profileMoreLabel | `string` | no | `'Profile options'` | Accessible name of the profile block's more button |
 | menuLabel | `string` | no | `'Menu'` | The phone drawer's menu: the accessible name of its navigation, and what the back row says on every second level |
+| drawerBackLabel | `((title: string) => string)` | no | `` (title) => `Back to ${title}` `` | The phone drawer's back row's accessible name, given the title of the level it returns to, for a site in another language. The drill menu's own default. |
+| drawerOverviewLabel | `((label: string) => string)` | no | `` (label) => `${label} overview` `` | The text of the overview row a drilled level opens with when its row has a page of its own, given that row's label, for a site in another language. The drill menu's own default. |
 
 ## Keyboard
 
@@ -199,7 +201,7 @@ interface DrillMenuItem {
   external?: boolean;
   /**
    * Makes the row an action rather than a link, such as a pick or a copy.
-   * The stack stays on its level; a choice list's rows set `selected` too.
+   * The menu stays on its level; a choice list's rows set `selected` too.
    */
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }

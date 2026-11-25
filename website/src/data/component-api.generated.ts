@@ -1451,7 +1451,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "App sidebar",
     "slug": "app-sidebar",
     "category": "layout",
-    "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.",
+    "description": "Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section.",
     "client": true,
     "importPath": "rift-ds/components/AppSidebar/AppSidebar",
     "barrel": "main",
@@ -1706,6 +1706,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The phone drawer's menu: the accessible name of its navigation, and what\nthe back row says on every second level",
             "defaultValue": "'Menu'"
+          },
+          {
+            "name": "drawerBackLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "The phone drawer's back row's accessible name, given the title of the level it\nreturns to, for a site in another language. The drill menu's own default.",
+            "defaultValue": "(title) => `Back to ${title}`"
+          },
+          {
+            "name": "drawerOverviewLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "The text of the overview row a drilled level opens with when its row has\na page of its own, given that row's label, for a site in another\nlanguage. The drill menu's own default.",
+            "defaultValue": "(label) => `${label} overview`"
           }
         ]
       }
@@ -9033,7 +9047,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "defaultPath",
             "type": "string[]",
             "required": false,
-            "description": "The path the stack opens on, when it owns its state. Left out, it opens\non the deepest level that holds the current page (`currentHref`, or a\nrow marked `current`), so a reader deep in a section reopens the menu\nwhere they are; `[]` opens on the first level always."
+            "description": "The path the menu opens on, when it owns its state. Left out, it opens\non the deepest level that holds the current page (`currentHref`, or a\nrow marked `current`), so a reader deep in a section reopens the menu\nwhere they are; `[]` opens on the first level always."
           },
           {
             "name": "onPathChange",
@@ -9045,7 +9059,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onNavigate",
             "type": "((item: DrillMenuItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
             "required": false,
-            "description": "Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in.",
+            "description": "Fires when a link row is followed, alongside native navigation, such as to close the drawer the menu sits in.",
             "typeRefs": [
               "DrillMenuItem"
             ]
@@ -17454,6 +17468,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The accessible name of the drawer's close button.",
             "defaultValue": "'Close menu'"
+          },
+          {
+            "name": "drawerBackLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "The drawer's back row's accessible name, given the title of the level it\nreturns to, for a site in another language. The drill menu's own default.",
+            "defaultValue": "(title) => `Back to ${title}`"
+          },
+          {
+            "name": "drawerOverviewLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "The text of the overview row a drilled level opens with when its row has\na page of its own, given that row's label, for a site in another\nlanguage. The drill menu's own default.",
+            "defaultValue": "(label) => `${label} overview`"
           },
           {
             "name": "width",

@@ -91,7 +91,7 @@
       "name": "app-sidebar",
       "type": "registry:ui",
       "title": "App sidebar",
-      "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section."
+      "description": "Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section."
     },
     {
       "name": "area-chart",

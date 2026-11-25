@@ -205,7 +205,7 @@
       "name": "AppSidebar",
       "label": "App sidebar",
       "slug": "app-sidebar",
-      "description": "Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.",
+      "description": "Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section.",
       "category": "layout",
       "client": true,
       "keys": { "by": "component", "note": "Below the mobile breakpoint the rail is a modal drawer: opening moves focus inside, Tab stays inside, and Escape closes it." }

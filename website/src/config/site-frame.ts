@@ -39,7 +39,7 @@ export type SiteFrameSettings = {
   /** The on-this-page rail: floating at the window's end edge, or a column. */
   asidePlacement: "edge" | "column";
   /** The sidebar: the site's own pill list, or the library's SideNav. */
-  sidebar: "site" | "navlist";
+  sidebar: "site" | "side-nav";
 };
 
 /**
@@ -55,7 +55,7 @@ export const SITE_FRAME: SiteFrameSettings = {
   containedWidth: "default",
   sidebarDock: "content",
   asidePlacement: "edge",
-  sidebar: "navlist",
+  sidebar: "side-nav",
 };
 
 /** Whether a route is laid out by the frame: every route with the site's chrome. */

@@ -1233,7 +1233,7 @@ Full-page template pairing the collapsible App sidebar with a content area, in f
 
 ### App sidebar
 
-Collapsible navigation rail with accordion sub-items, a side panel for a third level, category headings, and a profile section.
+Collapsible navigation rail whose sub-items open in a side panel beside it or an accordion beneath their row, with category headings and a profile section.
 
 - Import: `import { AppSidebar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

@@ -86,7 +86,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** With no `defaultPath`, the stack opens on the level that holds the current page, so a reader deep in a section reopens the menu where they are. */
+/** With no `defaultPath`, the menu opens on the level that holds the current page, so a reader deep in a section reopens the menu where they are. */
 export const Default: Story = {
   render: (args) => <SiteMenu onNavigate={args.onNavigate} onPathChange={args.onPathChange} />,
   play: async ({ canvas, userEvent, args }) => {

@@ -5,7 +5,7 @@ import { MOTION_RENDERER_WATCHDOG_MS, MOTION_SHADER_COLOR_CHECK_MS } from '../..
 import { PASSES } from './passes';
 import { warnOnce } from '../../behaviors/devWarning';
 import { sceneProblems } from './assemble';
-import { coloursFor, createRenderer, glyphFontFor } from './renderer';
+import { coloursFor, createRendererWhenLinked, glyphFontFor, type Renderer } from './renderer';
 import { SCENES } from './scenes';
 import { defaultsFor, type ShaderSceneSource, type Values } from './types';
 import './ShaderScene.css';
@@ -223,9 +223,18 @@ export function ShaderScene({
      than the browser keeps would otherwise trade them back and forth, so
      after two the scene waits for the browser to hand its context back. */
   const rebuildsWithoutPaint = React.useRef(0);
+  /* True while the scene's program is compiling. That happens away from the
+     main thread and takes as long as the driver takes, so the watchdog waits
+     it out: it bounds a context that never paints, not a compile. */
+  const compiling = React.useRef(false);
   React.useEffect(() => {
     if (!enabled || gl !== 'pending') return;
-    const timer = window.setTimeout(() => setGaveUp(true), MOTION_RENDERER_WATCHDOG_MS);
+    let timer = 0;
+    const check = () => {
+      if (compiling.current) timer = window.setTimeout(check, MOTION_RENDERER_WATCHDOG_MS);
+      else setGaveUp(true);
+    };
+    timer = window.setTimeout(check, MOTION_RENDERER_WATCHDOG_MS);
     return () => window.clearTimeout(timer);
   }, [enabled, gl]);
   const status: ShaderSceneStatus =
@@ -265,12 +274,6 @@ export function ShaderScene({
       const styles = getComputedStyle(host);
       sceneProblems(definition, PASSES, (property) => styles.getPropertyValue(property).trim() !== '').forEach(warnOnce);
     }
-    const renderer = context
-      ? createRenderer(context, definition, PASSES, (log) => {
-          console.warn(log);
-          reportError.current?.(log);
-        })
-      : null;
     /* A context the browser takes back (a GPU reset, a driver update, too
        many contexts on the page, where the browser drops the one least
        recently drawn, so a scene paused off screen goes first) leaves the
@@ -285,6 +288,11 @@ export function ShaderScene({
     let lost = false;
     let near = false;
     let rebuildFrame = 0;
+    /* The frame loop's switches, which the renderer fills in once it exists:
+       the scene is watched from the start, and draws from the moment its
+       program has linked. */
+    let start = () => {};
+    let stop = () => {};
     const rebuild = () => {
       if (rebuildsWithoutPaint.current >= 2) return;
       rebuildsWithoutPaint.current += 1;
@@ -308,7 +316,7 @@ export function ShaderScene({
       canvas?.removeEventListener('webglcontextlost', onContextLost);
       canvas?.removeEventListener('webglcontextrestored', onContextRestored);
     };
-    if (!host || !canvas || !renderer) {
+    if (!host || !canvas || !context) {
       /* Reported from a frame, not the effect body, so the effect never
          sets state synchronously. */
       const failed = requestAnimationFrame(() => setGl('failed'));
@@ -318,94 +326,8 @@ export function ShaderScene({
       };
     }
 
-    /* What the scene's colours resolve to at the host right now, as text:
-       cheap to read and compare, so the loop can ask whether an upload has
-       gone stale without paying for a full read. */
-    const colourTokens = ['--color-bg-page-primary', ...definition.colours];
-    const colourSignature = () => {
-      const styles = getComputedStyle(host);
-      return [
-        document.documentElement.getAttribute('data-theme'),
-        ...colourTokens.map((token) => styles.getPropertyValue(token).trim()),
-      ].join('|');
-    };
-    let appliedColours = '';
-    let coloursChecked = 0;
-    /* The colours, and for a type scene the face its ramp is drawn in: a
-       preset can change both. */
-    const applyColours = () => {
-      appliedColours = colourSignature();
-      renderer.setColours(coloursFor(host, definition));
-      renderer.setGlyphs(glyphFontFor(host));
-    };
-    /* The drawing buffer is sized inside the frame that paints it, as
-       ShaderField's is, never from the resize observer: setting a canvas's
-       size clears it, and the observer runs after the frame's draw, so a
-       buffer resized there reached the screen empty, a flash of the page
-       ground on every step of a window drag. Compared first, since
-       reallocating is the expensive part. Between throttled frames the old
-       buffer stretches to the new box, which reads as nothing at all. */
-    let ratio = 1;
-    const fit = () => {
-      ratio = Math.min(definition.pixelRatio ?? MAX_PIXEL_RATIO, window.devicePixelRatio || 1);
-      const width = Math.max(1, Math.round(host.clientWidth * ratio));
-      const height = Math.max(1, Math.round(host.clientHeight * ratio));
-      if (canvas.width === width && canvas.height === height) return;
-      canvas.width = width;
-      canvas.height = height;
-    };
-
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let time = 20;
-    let last = performance.now();
-    let frame = 0;
-    let painted = false;
-    const draw = (now: number) => {
-      frame = requestAnimationFrame(draw);
-      if (lost) return;
-      if (painted && now - last < FRAME_MS - 1) return;
-      if (now - coloursChecked >= COLOUR_CHECK_MS) {
-        coloursChecked = now;
-        if (colourSignature() !== appliedColours) applyColours();
-      }
-      const values = liveRef?.current ?? mergedRef.current;
-      const dt = Math.min(0.1, (now - last) / 1000);
-      last = now;
-      if (!still) time += dt * values.speed;
-      fit();
-      renderer.draw(values, time, canvas.width, canvas.height, ratio);
-      if (!painted) {
-        painted = true;
-        rebuildsWithoutPaint.current = 0;
-        setGl('painted');
-      }
-    };
-    /* The loop runs only near the screen, as ShaderField's does: it stops
-       when the scene scrolls away and starts again 200px before it returns,
-       so a page of stages draws only the ones in view. A hidden tab stops
-       requestAnimationFrame by itself. */
-    const start = () => {
-      if (frame) return;
-      last = performance.now();
-      frame = requestAnimationFrame(draw);
-    };
-    const stop = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
-    };
-
-    applyColours();
-    start();
-    /* A code face still on its way draws the ramp in a fallback; draw it
-       again once the fonts land. */
-    let mounted = true;
-    if (definition.glyphs) {
-      document.fonts?.ready.then(() => {
-        if (!mounted) return;
-        renderer.setGlyphs('');
-        renderer.setGlyphs(glyphFontFor(host));
-      });
-    }
+    /* Watched from the start, so a context lost while the program compiles
+       still knows whether the scene is near the screen. */
     const visibilityObserver =
       typeof IntersectionObserver === 'undefined'
         ? null
@@ -421,38 +343,172 @@ export function ShaderScene({
     visibilityObserver?.observe(host);
     if (!visibilityObserver) near = true;
 
-    /* A paused scene (scrolled away) still has to fill a box that changed:
-       one frame at the time it stopped on, sized and painted together. */
-    const sizeObserver = new ResizeObserver(() => {
-      if (frame || lost) return;
-      fit();
-      renderer.draw(liveRef?.current ?? mergedRef.current, time, canvas.width, canvas.height, ratio);
-    });
-    sizeObserver.observe(host);
-    /* A theme flip, a preset and a live override (an inline custom property
-       on the root) all re-read the colours. */
-    const themeObserver = new MutationObserver(applyColours);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme', 'data-brand', 'style'],
-    });
-    /* A stylesheet that finishes loading after the scene mounted changes
-       what the tokens resolve to and announces it only here: `load` does
-       not bubble, so it is caught on the way down. */
-    const onSheetLoad = (event: Event) => {
-      if (event.target instanceof HTMLLinkElement && colourSignature() !== appliedColours) applyColours();
+    /* Everything that needs the program: the colours, the frame loop and
+       what keeps them current. Returns its own teardown. */
+    const run = (renderer: Renderer) => {
+
+      /* What the scene's colours resolve to at the host right now, as text:
+         cheap to read and compare, so the loop can ask whether an upload has
+         gone stale without paying for a full read. */
+      const colourTokens = ['--color-bg-page-primary', ...definition.colours];
+      const colourSignature = () => {
+        const styles = getComputedStyle(host);
+        return [
+          document.documentElement.getAttribute('data-theme'),
+          ...colourTokens.map((token) => styles.getPropertyValue(token).trim()),
+        ].join('|');
+      };
+      let appliedColours = '';
+      let coloursChecked = 0;
+      /* The colours, and for a type scene the face its ramp is drawn in: a
+         preset can change both. */
+      const applyColours = () => {
+        appliedColours = colourSignature();
+        renderer.setColours(coloursFor(host, definition));
+        renderer.setGlyphs(glyphFontFor(host));
+      };
+      /* The drawing buffer is sized inside the frame that paints it, as
+         ShaderField's is, never from the resize observer: setting a canvas's
+         size clears it, and the observer runs after the frame's draw, so a
+         buffer resized there reached the screen empty, a flash of the page
+         ground on every step of a window drag. Compared first, since
+         reallocating is the expensive part. Between throttled frames the old
+         buffer stretches to the new box, which reads as nothing at all. */
+      let ratio = 1;
+      /* The host's box, measured only after the resize observer says it
+         changed. Asking every frame made the browser lay the page out in the
+         middle of whatever else the frame was doing, which on a page that is
+         still mounting is the whole page, once per scene. */
+      let boxWidth = 0;
+      let boxHeight = 0;
+      let boxStale = true;
+      const fit = () => {
+        ratio = Math.min(definition.pixelRatio ?? MAX_PIXEL_RATIO, window.devicePixelRatio || 1);
+        if (boxStale) {
+          boxStale = false;
+          boxWidth = host.clientWidth;
+          boxHeight = host.clientHeight;
+        }
+        const width = Math.max(1, Math.round(boxWidth * ratio));
+        const height = Math.max(1, Math.round(boxHeight * ratio));
+        if (canvas.width === width && canvas.height === height) return;
+        canvas.width = width;
+        canvas.height = height;
+      };
+
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let time = 20;
+      let last = performance.now();
+      let frame = 0;
+      let painted = false;
+      const draw = (now: number) => {
+        frame = requestAnimationFrame(draw);
+        if (lost) return;
+        if (painted && now - last < FRAME_MS - 1) return;
+        if (now - coloursChecked >= COLOUR_CHECK_MS) {
+          coloursChecked = now;
+          if (colourSignature() !== appliedColours) applyColours();
+        }
+        const values = liveRef?.current ?? mergedRef.current;
+        const dt = Math.min(0.1, (now - last) / 1000);
+        last = now;
+        if (!still) time += dt * values.speed;
+        fit();
+        renderer.draw(values, time, canvas.width, canvas.height, ratio);
+        if (!painted) {
+          painted = true;
+          rebuildsWithoutPaint.current = 0;
+          setGl('painted');
+        }
+      };
+      /* The loop runs only near the screen, as ShaderField's does: it stops
+         when the scene scrolls away and starts again 200px before it returns,
+         so a page of stages draws only the ones in view. A hidden tab stops
+         requestAnimationFrame by itself. */
+      start = () => {
+        if (frame) return;
+        last = performance.now();
+        frame = requestAnimationFrame(draw);
+      };
+      stop = () => {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      };
+
+      applyColours();
+      start();
+      /* A code face still on its way draws the ramp in a fallback; draw it
+         again once the fonts land. */
+      let mounted = true;
+      if (definition.glyphs) {
+        document.fonts?.ready.then(() => {
+          if (!mounted) return;
+          renderer.setGlyphs('');
+          renderer.setGlyphs(glyphFontFor(host));
+        });
+      }
+      /* A paused scene (scrolled away) still has to fill a box that changed:
+         one frame at the time it stopped on, sized and painted together. */
+      const sizeObserver = new ResizeObserver(() => {
+        boxStale = true;
+        if (frame || lost) return;
+        fit();
+        renderer.draw(liveRef?.current ?? mergedRef.current, time, canvas.width, canvas.height, ratio);
+      });
+      sizeObserver.observe(host);
+      /* A theme flip, a preset and a live override (an inline custom property
+         on the root) all re-read the colours. */
+      const themeObserver = new MutationObserver(applyColours);
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme', 'data-brand', 'style'],
+      });
+      /* A stylesheet that finishes loading after the scene mounted changes
+         what the tokens resolve to and announces it only here: `load` does
+         not bubble, so it is caught on the way down. */
+      const onSheetLoad = (event: Event) => {
+        if (event.target instanceof HTMLLinkElement && colourSignature() !== appliedColours) applyColours();
+      };
+      document.addEventListener('load', onSheetLoad, true);
+
+      return () => {
+        mounted = false;
+        document.removeEventListener('load', onSheetLoad, true);
+        stop();
+        sizeObserver.disconnect();
+        themeObserver.disconnect();
+        renderer.dispose();
+      };
     };
-    document.addEventListener('load', onSheetLoad, true);
+
+    /* The program compiles and links away from the main thread, and the
+       scene starts when it has: asking sooner would hold the page still
+       for as long as the driver takes (whenProgramLinked). */
+    let teardown: (() => void) | null = null;
+    let failedFrame = 0;
+    compiling.current = true;
+    const cancelBuild = createRendererWhenLinked(
+      context,
+      definition,
+      PASSES,
+      (log) => {
+        console.warn(log);
+        reportError.current?.(log);
+      },
+      (renderer) => {
+        compiling.current = false;
+        if (renderer) teardown = run(renderer);
+        else failedFrame = requestAnimationFrame(() => setGl('failed'));
+      }
+    );
 
     return () => {
-      mounted = false;
+      compiling.current = false;
+      cancelBuild();
+      cancelAnimationFrame(failedFrame);
       unlisten();
-      document.removeEventListener('load', onSheetLoad, true);
-      stop();
       visibilityObserver?.disconnect();
-      sizeObserver.disconnect();
-      themeObserver.disconnect();
-      renderer.dispose();
+      teardown?.();
     };
   }, [definition, custom, liveRef, enabled, restored]);
 

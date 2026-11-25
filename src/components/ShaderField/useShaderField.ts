@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { BLOB_COUNT, fragmentSource, vertexSource } from "./field.glsl";
 import { MOTION_CONTEXT_RESTORE_WAIT_MS, MOTION_SHADER_COLOR_CHECK_MS, MOTION_SHADER_COLOR_FADE_MS } from '../../tokens/motion';
+import { whenProgramLinked } from "../../behaviors/whenProgramLinked";
 
 /** The eight tuneable properties of the field. */
 export interface ShaderParams {
@@ -192,16 +193,13 @@ export function srgbToLinear(c: number): number {
   return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
 }
 
+/* Hands a shader to the driver and asks nothing about the result: the first
+   question would stop the page until the compile is done (whenProgramLinked). */
 function compile(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error("ShaderField compile error:", gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
   return shader;
 }
 
@@ -271,22 +269,51 @@ export function useShaderField(
     let vao: WebGLVertexArrayObject | null = null;
     let loc: Record<string, WebGLUniformLocation | null> = {};
 
-    function initGL(): boolean {
-      if (!gl) return false;
+    /* The program compiles and links away from the main thread, and `ready`
+       hears how it went once it has. `program` stays null until then, which
+       is what keeps every draw a no-op in the meantime. */
+    let cancelLink = () => {};
+    function initGL(ready: (ok: boolean) => void) {
+      if (!gl) return ready(false);
+      cancelLink();
       const vs = compile(gl, gl.VERTEX_SHADER, vertexSource);
       const fs = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
-      if (!vs || !fs) return false;
-      program = gl.createProgram();
-      if (!program) return false;
-      gl.attachShader(program, vs);
-      gl.attachShader(program, fs);
-      gl.linkProgram(program);
-      gl.deleteShader(vs);
-      gl.deleteShader(fs);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error("ShaderField link error:", gl.getProgramInfoLog(program));
+      const linking = gl.createProgram();
+      if (!vs || !fs || !linking) {
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+        gl.deleteProgram(linking);
+        return ready(false);
+      }
+      gl.attachShader(linking, vs);
+      gl.attachShader(linking, fs);
+      gl.linkProgram(linking);
+      cancelLink = whenProgramLinked(gl, linking, () => {
+        cancelLink = () => {};
+        ready(finishGL(linking, vs, fs));
+      });
+    }
+
+    function finishGL(linking: WebGLProgram, vs: WebGLShader, fs: WebGLShader): boolean {
+      if (!gl) return false;
+      if (!gl.getProgramParameter(linking, gl.LINK_STATUS)) {
+        /* A shader that failed to compile fails the link too, and its own
+           log is the one that names the line. */
+        for (const shader of [vs, fs]) {
+          if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error("ShaderField compile error:", gl.getShaderInfoLog(shader));
+          }
+        }
+        console.error("ShaderField link error:", gl.getProgramInfoLog(linking));
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+        gl.deleteProgram(linking);
         return false;
       }
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      if (program) gl.deleteProgram(program);
+      program = linking;
       gl.useProgram(program);
       vao = gl.createVertexArray();
       gl.bindVertexArray(vao);
@@ -396,14 +423,23 @@ export function useShaderField(
        unit it resolves to is uploaded per frame rather than here — this is
        what that computation measures against. */
     let cssWidth = 0;
+    let cssHeight = 0;
+    /* The canvas's box is measured only after the resize observer says it
+       changed: asking every frame made the browser lay the page out in the
+       middle of whatever else the frame was doing. */
+    let boxStale = true;
 
     function resize() {
       if (!gl) return;
       const c = canvas as HTMLCanvasElement;
       const dpr = window.devicePixelRatio || 1;
-      cssWidth = c.clientWidth;
-      const w = Math.max(1, Math.round(c.clientWidth * dpr * RENDER_SCALE));
-      const h = Math.max(1, Math.round(c.clientHeight * dpr * RENDER_SCALE));
+      if (boxStale) {
+        boxStale = false;
+        cssWidth = c.clientWidth;
+        cssHeight = c.clientHeight;
+      }
+      const w = Math.max(1, Math.round(cssWidth * dpr * RENDER_SCALE));
+      const h = Math.max(1, Math.round(cssHeight * dpr * RENDER_SCALE));
       // Compare before reallocating: mobile URL-bar collapse fires resize
       // storms and canvas reallocation is the expensive part.
       if (w === bufWidth && h === bufHeight) return;
@@ -604,6 +640,7 @@ export function useShaderField(
     });
 
     const resizeObserver = new ResizeObserver(() => {
+      boxStale = true;
       if (!running) {
         renderOnce(); // resize() runs inside draw()
       }
@@ -647,7 +684,10 @@ export function useShaderField(
       }, MOTION_CONTEXT_RESTORE_WAIT_MS);
     };
     const onContextRestored = () => {
-      if (initGL()) {
+      // Everything made on the old context died with it.
+      program = null;
+      initGL((ok) => {
+        if (disposed || !ok) return;
         bufWidth = 0; // force reallocation
         bufHeight = 0;
         uploadedBlobs = null; // new program: fresh uniform state
@@ -655,7 +695,7 @@ export function useShaderField(
         setActive(true);
         if (reduceQuery.matches) renderOnce();
         else start();
-      }
+      });
     };
     canvas.addEventListener("webglcontextlost", onContextLost);
     canvas.addEventListener("webglcontextrestored", onContextRestored);
@@ -680,19 +720,25 @@ export function useShaderField(
           queueMicrotask(() => setSupported(false));
         }
       }
-    } else if (initGL()) {
-      // First frame before the reveal, so the cross-fade never shows blank.
-      draw(COLOR_FADE_MS);
-      setActive(true);
-      start();
     } else {
-      // Compile/link failure: report unsupported but fall through to the
-      // normal cleanup registration — observers are already attached.
-      setSupported(false);
+      initGL((ok) => {
+        if (disposed) return;
+        if (!ok) {
+          // Compile/link failure: report unsupported. The observers are
+          // already attached and the cleanup below still releases them.
+          setSupported(false);
+          return;
+        }
+        // First frame before the reveal, so the cross-fade never shows blank.
+        draw(COLOR_FADE_MS);
+        setActive(true);
+        start();
+      });
     }
 
     return () => {
       disposed = true;
+      cancelLink();
       stop();
       window.clearTimeout(restoreTimer);
       redrawRef.current = () => {};

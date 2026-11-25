@@ -6,6 +6,7 @@
  * the live cascade. A scene that prints type (`glyphs`, `ocean`) also gets its ramp
  * as a strip texture, drawn in the theme's code face.
  */
+import { whenProgramLinked } from "../../behaviors/whenProgramLinked";
 import { assemble, VERTEX } from "./assemble";
 import type { Pass, ShaderSceneSource, Values } from "./types";
 import { MAX_COLOURS } from "./types";
@@ -99,23 +100,52 @@ type FloatSetter = [WebGLUniformLocation | null, (values: Values) => number];
 /** Where a compiler or linker log goes; the console by default. */
 type Report = (log: string) => void;
 
-function compile(gl: WebGL2RenderingContext, type: number, source: string, report: Report) {
+/** A program on its way: handed to the driver, its result not yet asked for. */
+type Build = { program: WebGLProgram; vs: WebGLShader; fs: WebGLShader };
+
+function shaderOf(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    report(gl.getShaderInfoLog(shader) ?? "");
-    gl.deleteShader(shader);
-    return null;
-  }
   return shader;
 }
 
 /**
- * Compiles a scene with the passes. A scene that fails to compile or link
- * hands its log to `report` and returns null with nothing left on the
- * context; the log's line numbers are the scene's own (assemble.ts).
+ * Hands a scene with the passes to the driver to compile and link, and asks
+ * nothing about the result: the first question would stop the page until
+ * the work is done (see whenProgramLinked).
+ */
+function begin(gl: WebGL2RenderingContext, scene: ShaderSceneSource, passes: Pass[]): Build | null {
+  const vs = shaderOf(gl, gl.VERTEX_SHADER, VERTEX);
+  const fs = shaderOf(gl, gl.FRAGMENT_SHADER, assemble(scene, passes));
+  const program = gl.createProgram();
+  if (!vs || !fs || !program) {
+    gl.deleteProgram(program);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+    return null;
+  }
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  return { program, vs, fs };
+}
+
+function discard(gl: WebGL2RenderingContext, { program, vs, fs }: Build) {
+  gl.deleteProgram(program);
+  gl.deleteShader(vs);
+  gl.deleteShader(fs);
+  return null;
+}
+
+/**
+ * Compiles a scene with the passes, waiting on the main thread for the
+ * result. For a caller that needs the picture in the same task (the
+ * thumbnail baker); a scene on a page uses `createRendererWhenLinked`. A
+ * scene that fails to compile or link hands its log to `report` and returns
+ * null with nothing left on the context; the log's line numbers are the
+ * scene's own (assemble.ts).
  */
 export function createRenderer(
   gl: WebGL2RenderingContext,
@@ -123,24 +153,61 @@ export function createRenderer(
   passes: Pass[],
   report: Report = (log) => console.warn(log)
 ) {
-  const vs = compile(gl, gl.VERTEX_SHADER, VERTEX, report);
-  const fs = compile(gl, gl.FRAGMENT_SHADER, assemble(scene, passes), report);
-  const program = gl.createProgram();
-  const discard = () => {
-    gl.deleteProgram(program);
-    gl.deleteShader(vs);
-    gl.deleteShader(fs);
-    return null;
+  const build = begin(gl, scene, passes);
+  return build ? finish(gl, build, scene, passes, report) : null;
+}
+
+/** What `createRenderer` returns for a scene that compiled. */
+export type Renderer = NonNullable<ReturnType<typeof createRenderer>>;
+
+/**
+ * `createRenderer` without the wait: the scene compiles and links away from
+ * the main thread, and `ready` gets the renderer once it has, or null for
+ * a scene that failed (its log goes to `report`). Returns a cancel, which
+ * drops the unfinished program; after `ready` it does nothing.
+ */
+export function createRendererWhenLinked(
+  gl: WebGL2RenderingContext,
+  scene: ShaderSceneSource,
+  passes: Pass[],
+  report: Report,
+  ready: (renderer: Renderer | null) => void
+): () => void {
+  const build = begin(gl, scene, passes);
+  if (!build) {
+    ready(null);
+    return () => {};
+  }
+  let waiting = true;
+  const cancelWait = whenProgramLinked(gl, build.program, () => {
+    waiting = false;
+    ready(finish(gl, build, scene, passes, report));
+  });
+  return () => {
+    if (!waiting) return;
+    waiting = false;
+    cancelWait();
+    discard(gl, build);
   };
-  if (!vs || !fs || !program) return discard();
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
+}
+
+/** Reads a finished build's result and, for one that linked, wires its uniforms. */
+function finish(
+  gl: WebGL2RenderingContext,
+  build: Build,
+  scene: ShaderSceneSource,
+  passes: Pass[],
+  report: Report
+) {
+  const { program, vs, fs } = build;
   /* A program that compiled can still fail to link, and one that did would
-     draw nothing while every call succeeded. */
+     draw nothing while every call succeeded. A shader that failed to compile
+     fails the link too, and its own log is the one that names the line. */
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    report(gl.getProgramInfoLog(program) ?? "");
-    return discard();
+    const failed = [vs, fs].filter((shader) => !gl.getShaderParameter(shader, gl.COMPILE_STATUS));
+    if (failed.length > 0) failed.forEach((shader) => report(gl.getShaderInfoLog(shader) ?? ""));
+    else report(gl.getProgramInfoLog(program) ?? "");
+    return discard(gl, build);
   }
   gl.useProgram(program);
   const vao = gl.createVertexArray();

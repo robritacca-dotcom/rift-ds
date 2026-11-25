@@ -117,6 +117,7 @@ export const CHAIN = [
   ['validate-tier-colours', 'build'],
   ['validate-table-styles'],
   ['validate-backdrop-layers'],
+  ['validate-shader-linking'],
   ['validate-chat-widget'],
   ['validate-blocks'],
   ['validate-figma-nodes'],

@@ -145,7 +145,7 @@ interface NavStackItem {
    * routes.
    */
   current?: boolean;
-  /** On an `onSelect` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
+  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
   selected?: boolean;
   /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
   external?: boolean;
@@ -153,7 +153,7 @@ interface NavStackItem {
    * Makes the row an action rather than a link, such as a pick or a copy.
    * The stack stays on its level; a choice list's rows set `selected` too.
    */
-  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 ```
 

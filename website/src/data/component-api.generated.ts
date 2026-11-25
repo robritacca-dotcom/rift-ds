@@ -1702,7 +1702,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "menuLabel",
             "type": "string",
             "required": false,
-            "description": "Back-button text in the mobile drawer's drill-in when the open level\nhas no parent row to name (a top-level item opened with `subNav=\"panel\"`)",
+            "description": "The phone drawer's menu: the accessible name of its navigation, and what\nthe back row says on every second level",
             "defaultValue": "'Menu'"
           }
         ]
@@ -17114,7 +17114,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "onBack",
             "type": "(() => void)",
             "required": false,
-            "description": "Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens"
+            "description": "Renders a back row above the heading and calls this when it is pressed, for a host that drills into the panel as a screen of its own"
           },
           {
             "name": "backLabel",

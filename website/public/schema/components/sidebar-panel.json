@@ -66,7 +66,7 @@
           "type": "(() => void)",
           "typeKind": "function",
           "required": false,
-          "description": "Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens"
+          "description": "Renders a back row above the heading and calls this when it is pressed, for a host that drills into the panel as a screen of its own"
         },
         {
           "name": "backLabel",

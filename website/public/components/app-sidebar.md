@@ -49,7 +49,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | expandLabel | `string` | no | `'Expand sidebar'` | Accessible name of the toggle (and the collapsed logo) when it expands the rail |
 | collapseLabel | `string` | no | `'Collapse sidebar'` | Accessible name of the toggle when it collapses the rail |
 | profileMoreLabel | `string` | no | `'Profile options'` | Accessible name of the profile block's more button |
-| menuLabel | `string` | no | `'Menu'` | Back-button text in the mobile drawer's drill-in when the open level has no parent row to name (a top-level item opened with `subNav="panel"`) |
+| menuLabel | `string` | no | `'Menu'` | The phone drawer's menu: the accessible name of its navigation, and what the back row says on every second level |
 
 ## Keyboard
 
@@ -212,7 +212,7 @@ interface NavStackItem {
    * routes.
    */
   current?: boolean;
-  /** On an `onSelect` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
+  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
   selected?: boolean;
   /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
   external?: boolean;
@@ -220,7 +220,7 @@ interface NavStackItem {
    * Makes the row an action rather than a link, such as a pick or a copy.
    * The stack stays on its level; a choice list's rows set `selected` too.
    */
-  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 ```
 

@@ -22,7 +22,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | defaultOpenKeys | `string[]` | no |  | Keys of the accordion rows open on first render, in addition to the active item's parent |
 | onCollapse | `(() => void)` | no |  | Renders a collapse button beside the heading and calls this when it is pressed |
 | collapseLabel | `string` | no |  | Accessible name of the collapse button. Defaults to "Collapse <title>", or "Collapse panel" when there is no title |
-| onBack | `(() => void)` | no |  | Renders a back row above the heading and calls this when it is pressed; the drill-in navigation on small screens |
+| onBack | `(() => void)` | no |  | Renders a back row above the heading and calls this when it is pressed, for a host that drills into the panel as a screen of its own |
 | backLabel | `string` | no | `'Back'` | Label of the back row |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

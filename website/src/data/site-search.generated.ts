@@ -214,7 +214,7 @@ export const siteSearchSections: readonly SiteSearchSection[] = [
     "url": "https://rift-ds.com/AGENTS.md",
     "title": "AGENTS.md",
     "heading": "AGENTS.md",
-    "body": "You are building React UI with rift-ds 1.36.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists."
+    "body": "You are building React UI with rift-ds 1.37.0. Follow this file before writing any code with it. It was generated from the library's registries, so every name in it exists."
   },
   {
     "url": "https://rift-ds.com/AGENTS.md",

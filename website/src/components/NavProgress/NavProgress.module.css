@@ -1,0 +1,57 @@
+/* The navigation progress bar: a line on the window's top edge, above the
+   header and every overlay, that never takes a press. It is drawn with a
+   transform alone, so it keeps moving on the compositor while the main
+   thread renders the page it is waiting for. */
+.bar {
+  position: fixed;
+  /* ds-allow(physical): the window's top edge, whatever the writing mode. */
+  top: 0;
+  inset-inline: 0;
+  z-index: var(--layer-site-overlay);
+  block-size: var(--border-050);
+  background-color: var(--color-core-accent-mint);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:global([dir="rtl"]) .bar {
+  transform-origin: 100% 50%;
+}
+
+/* Loading: the bar runs most of the way quickly, then creeps, so it always
+   moves and never arrives before the page does. It waits a beat first, so
+   a page that was ready at once shows no bar at all. */
+.bar[data-state="loading"] {
+  opacity: 1;
+  /* ds-allow(motion): a wait of unknown length, not a transition; the long
+     tail is what keeps the bar from stalling on a slow page. */
+  animation: nav-progress-run 12s cubic-bezier(0.05, 0.8, 0.1, 1) var(--motion-duration-fast) both;
+}
+
+/* Done: the bar closes the distance, then fades. */
+.bar[data-state="done"] {
+  transform: scaleX(1);
+  opacity: 0;
+  transition:
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-base) var(--motion-ease-standard) var(--motion-duration-fast);
+}
+
+@keyframes nav-progress-run {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No travel: the line simply shows while the page loads. */
+  .bar[data-state="loading"] {
+    animation: none;
+    transform: scaleX(1);
+  }
+}

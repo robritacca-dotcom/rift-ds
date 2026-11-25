@@ -6,7 +6,7 @@ import type { SiteHeaderDrawerItem } from "rift-ds/components/SiteHeader/SiteHea
 import { componentsSidebarGroups, type MegaItem } from "@/config/navigation";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 import { AUTHOR_NAME, AUTHOR_URL, FIGMA_URL, NPM_URL, REPOSITORY_URL, STORYBOOK_URL } from "@/config/brand.generated";
-import { FigmaIcon, GitHubIcon, NpmIcon, StorybookIcon } from "@/components/BrandIcons/BrandIcons";
+import { AuthorMarkIcon, FigmaIcon, GitHubIcon, NpmIcon, StorybookIcon } from "@/components/BrandIcons/BrandIcons";
 import { themeSegments, useThemeSetting } from "@/components/ThemeToggle/ThemeToggle";
 import { themeTiles } from "@/lib/theme/theme-tiles.generated";
 import { useSiteTheme } from "@/lib/theme/use-theme-overrides";
@@ -38,10 +38,10 @@ const mark = (glyph: React.ReactNode) => <span className={styles.drawerMark}>{gl
 /**
  * Where the system lives off-site, in the order a phone visitor wants it:
  * the repo, the package, the kit and the stories before the agent tooling
- * and the registry, then the author, apart. The landing page's link row
+ * and the registry, then the author. The landing page's link row
  * and the footer's credit, given the room a full-screen menu has.
  */
-const RESOURCES: NavStackEntry[] = [
+const RESOURCES: NavStackItem[] = [
   { label: "GitHub repo", description: "Source, issues and releases", href: REPOSITORY_URL, icon: mark(<GitHubIcon />), external: true },
   { label: "npm package", description: "Install rift-ds", href: NPM_URL, icon: mark(<NpmIcon />), external: true },
   ...(SHOW_FIGMA_LINKS
@@ -51,11 +51,7 @@ const RESOURCES: NavStackEntry[] = [
   { label: "MCP endpoint", description: "Connect a coding agent", href: "/api/mcp", icon: "hub" },
   { label: "AGENTS.md", description: "The agent starter file", href: "/AGENTS.md", icon: "description" },
   { label: "shadcn registry", description: "Add components with the shadcn CLI", href: "/docs/get-started#shadcn-registry", icon: "terminal" },
-  {
-    type: "section",
-    id: "credit",
-    items: [{ label: AUTHOR_NAME, description: "Designed and built by", href: AUTHOR_URL, icon: "person", external: true }],
-  },
+  { label: AUTHOR_NAME, description: "Designed and built by", href: AUTHOR_URL, icon: mark(<AuthorMarkIcon />), external: true },
 ];
 
 /**

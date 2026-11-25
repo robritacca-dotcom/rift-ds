@@ -43,7 +43,7 @@ export interface DrillMenuItem {
   external?: boolean;
   /**
    * Makes the row an action rather than a link, such as a pick or a copy.
-   * The stack stays on its level; a choice list's rows set `selected` too.
+   * The menu stays on its level; a choice list's rows set `selected` too.
    */
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -84,7 +84,7 @@ type DrillMenuOwnProps = {
   /** The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`. */
   path?: string[];
   /**
-   * The path the stack opens on, when it owns its state. Left out, it opens
+   * The path the menu opens on, when it owns its state. Left out, it opens
    * on the deepest level that holds the current page (`currentHref`, or a
    * row marked `current`), so a reader deep in a section reopens the menu
    * where they are; `[]` opens on the first level always.
@@ -92,7 +92,7 @@ type DrillMenuOwnProps = {
   defaultPath?: string[];
   /** Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes. */
   onPathChange?: (path: string[]) => void;
-  /** Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in. */
+  /** Fires when a link row is followed, alongside native navigation, such as to close the drawer the menu sits in. */
   onNavigate?: (item: DrillMenuItem, event: React.MouseEvent<HTMLElement>) => void;
   /** Content above the first level's rows, such as a search field. */
   header?: React.ReactNode;
@@ -176,7 +176,7 @@ export function DrillMenu({
   };
   /* After a step, the new level's control under the pointer (the search
      field where the back row was) would show a hover the reader never
-     gave it. The stack marks itself settling until the pointer next
+     gave it. The menu marks itself settling until the pointer next
      moves, and hover holds off until then; clicks still land. */
   const settle = (from: HTMLElement) => {
     const nav = from.closest<HTMLElement>('.ds-drill-menu');
@@ -209,7 +209,7 @@ export function DrillMenu({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- a step, not the direction, moves focus
   }, [trail.length]);
 
-  // A level starts at its top: the scroll area around the stack (a
+  // A level starts at its top: the scroll area around the menu (a
   // drawer's body) is brought back up to it.
   useEffect(() => {
     if (direction === null) return;
@@ -360,3 +360,14 @@ export function DrillMenu({
     </nav>
   );
 }
+
+/**
+ * Where a DrillMenu will open, given its items and the current page: the
+ * ids of the rows down to the deepest level that holds it. A host that
+ * shows something only on the first level (as SiteHeader's drawer does its
+ * footer) reads it to know where the menu opens. It is part of DrillMenu's
+ * published API, so the Fast Refresh rule that wants a component module to
+ * export only components does not apply to it, as MaskedInput's helpers.
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export { drillMenuPathTo } from './path';

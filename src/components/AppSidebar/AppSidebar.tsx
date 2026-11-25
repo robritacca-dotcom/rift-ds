@@ -230,6 +230,17 @@ type AppSidebarOwnProps = {
    * the back row says on every second level
    */
   menuLabel?: string;
+  /**
+   * The phone drawer's back row's accessible name, given the title of the level it
+   * returns to, for a site in another language. The drill menu's own default.
+   */
+  drawerBackLabel?: (title: string) => string;
+  /**
+   * The text of the overview row a drilled level opens with when its row has
+   * a page of its own, given that row's label, for a site in another
+   * language. The drill menu's own default.
+   */
+  drawerOverviewLabel?: (label: string) => string;
 };
 
 export interface AppSidebarProps
@@ -318,6 +329,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   collapseLabel = 'Collapse sidebar',
   profileMoreLabel = 'Profile options',
   menuLabel = 'Menu',
+  drawerBackLabel = (title) => `Back to ${title}`,
+  drawerOverviewLabel = (label) => `${label} overview`,
   linkComponent,
   ...rest
 }, ref) {
@@ -761,6 +774,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             items={drawerStack}
             defaultPath={drawerPath}
             rootLabel={menuLabel}
+            backLabel={drawerBackLabel}
+            overviewLabel={drawerOverviewLabel}
             navLabel={menuLabel}
             linkComponent={Link}
             onNavigate={(item) => {

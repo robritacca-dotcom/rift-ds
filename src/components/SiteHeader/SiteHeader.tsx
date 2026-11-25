@@ -163,6 +163,17 @@ type SiteHeaderOwnProps = {
   /** The accessible name of the drawer's close button. */
   drawerCloseLabel?: string;
   /**
+   * The drawer's back row's accessible name, given the title of the level it
+   * returns to, for a site in another language. The drill menu's own default.
+   */
+  drawerBackLabel?: (title: string) => string;
+  /**
+   * The text of the overview row a drilled level opens with when its row has
+   * a page of its own, given that row's label, for a site in another
+   * language. The drill menu's own default.
+   */
+  drawerOverviewLabel?: (label: string) => string;
+  /**
    * How wide the bar's contents run, read from the shell recipe's width
    * axis. `contained` centres them in the contained width (1440px, or the
    * nearest `--ds-shell-contained-width`) with the side gutter, lining up
@@ -220,6 +231,8 @@ export function SiteHeader({
   drawerOpenLabel = 'Open menu',
   drawerTitle = 'Menu',
   drawerCloseLabel = 'Close menu',
+  drawerBackLabel = (title) => `Back to ${title}`,
+  drawerOverviewLabel = (label) => `${label} overview`,
   width,
   className = '',
   ref,
@@ -693,6 +706,9 @@ export function SiteHeader({
           header={drawerHeader}
           currentHref={currentHref}
           defaultPath={drawerOpenPath}
+          rootLabel={drawerTitle}
+          backLabel={drawerBackLabel}
+          overviewLabel={drawerOverviewLabel}
           navLabel={navLabel}
           linkComponent={Link}
           onNavigate={() => setDrawerOpen(false)}

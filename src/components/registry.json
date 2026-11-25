@@ -738,10 +738,10 @@
       "name": "Drawer",
       "label": "Drawer",
       "slug": "drawer",
-      "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
+      "description": "An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation.",
       "category": "overlays",
       "client": true,
-      "pattern": "dialog"
+      "partPatterns": [{ "pattern": "dialog", "part": "modal drawer, the default" }]
     },
     {
       "name": "Dropdown",
@@ -1489,7 +1489,7 @@
       "client": true,
       "pattern": "combobox",
       "alternatives": [
-        { "name": "Dropdown", "when": "the label alone is enough to choose by" }
+        { "name": "Dropdown", "when": "a label is enough to choose by, with an icon, a second line or a trailing value at most" }
       ]
     },
     {

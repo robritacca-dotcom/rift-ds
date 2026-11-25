@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 import { AreaChart } from './AreaChart';
+import type { AreaChartProps } from './AreaChart';
+import { Text } from '../Text/Text';
 
 const monthlyData = [
   { month: 'Jan', desktop: 186, mobile: 80 },
@@ -70,4 +73,31 @@ export const WithSummary: Story = {
       { label: 'Avg', value: 408 },
     ],
   },
+};
+
+const ActivePointDemo = (args: AreaChartProps) => {
+  const [active, setActive] = useState<Record<string, unknown> | null>(null);
+  const row = active ?? args.data[args.data.length - 1];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-300)' }}>
+      <Text data-testid="headline">
+        {String(row.month)}: {String(row.desktop)} desktop visitors
+      </Text>
+      <AreaChart {...args} onActiveChange={(datum) => setActive(datum)} />
+    </div>
+  );
+};
+
+/**
+ * `onActiveChange` reports the row of `data` under the pointer or the
+ * keyboard cursor, and null when neither is on the plot, so a headline above
+ * the chart can follow the cursor and fall back to the latest point.
+ */
+export const ActivePoint: Story = {
+  args: {
+    series: [{ dataKey: 'desktop', label: 'Desktop' }],
+    title: undefined,
+    subtitle: undefined,
+  },
+  render: (args) => <ActivePointDemo {...args} />,
 };

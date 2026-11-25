@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
+import { ActiveReporter } from './ActiveReporter';
 import { readTokenPx } from './palette';
 import { useLocale } from '../../behaviors/LocaleProvider';
 import { formatAxisNumber, formatNumber } from '../../behaviors/locale';
@@ -30,6 +31,16 @@ interface ChartTooltipProps {
   barColor: string;
   dataLabel: string;
 }
+
+/**
+ * The `onActiveChange` callback of the charts drawn from one `data` array
+ * over a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row
+ * of `data` and its index, or `null, null` when no point is active.
+ */
+export type ChartActiveHandler = (
+  datum: Record<string, unknown> | null,
+  index: number | null,
+) => void;
 
 export interface ChartSummaryItem {
   /** Label shown above the value */
@@ -67,6 +78,12 @@ type BarChartOwnProps = {
   yAxisFormatter?: (value: number) => string;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
+  /**
+   * Called when the active point changes: with the row of `data` under the
+   * pointer or the keyboard cursor and its index, and with `null, null` once
+   * neither is on the plot. For a headline figure that follows the cursor.
+   */
+  onActiveChange?: ChartActiveHandler;
   /** Additional CSS classes on the wrapper */
   className?: string;
 };
@@ -132,6 +149,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  onActiveChange,
   yAxisFormatter,
   locale: localeProp,
   ...rest
@@ -162,9 +180,14 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(({
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (props: any) => (
-      <ChartTooltip {...props} locale={locale} barColor={resolvedBarColor} dataLabel={dataLabel} />
+      <>
+        {onActiveChange && (
+          <ActiveReporter {...props} data={data} xKey={xKey} onActiveChange={onActiveChange} />
+        )}
+        <ChartTooltip {...props} locale={locale} barColor={resolvedBarColor} dataLabel={dataLabel} />
+      </>
     ),
-    [resolvedBarColor, dataLabel, locale],
+    [resolvedBarColor, dataLabel, locale, data, xKey, onActiveChange],
   );
 
   return (

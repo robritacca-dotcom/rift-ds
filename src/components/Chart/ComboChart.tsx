@@ -11,7 +11,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import type { ChartSummaryItem } from './BarChart';
+import type { ChartActiveHandler, ChartSummaryItem } from './BarChart';
+import { ActiveReporter } from './ActiveReporter';
 import { getChartSeriesColors, readTokenPx } from './palette';
 import { useChartAnimation } from './useChartAnimation';
 import './Chart.css';
@@ -73,6 +74,12 @@ type ComboChartOwnProps = {
   secondaryAxisFormatter?: (value: number) => string;
   /** Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface */
   bare?: boolean;
+  /**
+   * Called when the active point changes: with the row of `data` under the
+   * pointer or the keyboard cursor and its index, and with `null, null` once
+   * neither is on the plot. For a headline figure that follows the cursor.
+   */
+  onActiveChange?: ChartActiveHandler;
   /** Additional CSS classes on the wrapper */
   className?: string;
 };
@@ -139,6 +146,7 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
   height = 350,
   bare = false,
   className = '',
+  onActiveChange,
   yAxisFormatter,
   secondaryAxisFormatter,
   locale: localeProp,
@@ -174,8 +182,15 @@ export const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(({
 
   const renderTooltip = useCallback(
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (props: any) => <ComboTooltip {...props} locale={locale} />,
-    [locale],
+    (props: any) => (
+      <>
+        {onActiveChange && (
+          <ActiveReporter {...props} data={data} xKey={xKey} onActiveChange={onActiveChange} />
+        )}
+        <ComboTooltip {...props} locale={locale} />
+      </>
+    ),
+    [locale, data, xKey, onActiveChange],
   );
 
   return (

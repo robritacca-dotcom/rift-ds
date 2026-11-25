@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { AreaChart } from "rift-ds/components/Chart/AreaChart";
+import { Stat } from "rift-ds/components/Stat/Stat";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -18,6 +19,8 @@ const areaData = [
 ];
 
 export default function AreaChartPage() {
+  const [active, setActive] = useState<Record<string, unknown> | null>(null);
+  const point = active ?? areaData[areaData.length - 1];
   return (
     <div className={styles.dsContent}>
       <PageBreadcrumb />
@@ -61,6 +64,18 @@ export default function AreaChartPage() {
           series={[{ dataKey: "organic", label: "Organic" }]}
           title="Organic traffic"
           subtitle="January to June 2024"
+        />
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="A headline that follows the cursor" />
+        <Stat label={`Organic visits, ${String(point.month)}`} value={String(point.organic)} />
+        <AreaChart
+          data={areaData}
+          xKey="month"
+          series={[{ dataKey: "organic", label: "Organic" }]}
+          onActiveChange={(datum) => setActive(datum)}
+          bare
         />
       </section>
 

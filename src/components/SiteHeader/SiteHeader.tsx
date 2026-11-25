@@ -347,11 +347,11 @@ export function SiteHeader({
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
-  // As the drawer opens, measure where the bar and its menu button sit, so
-  // the drawer's brand row lands on the bar's brand and its close button on
-  // the menu button it replaces, whatever the scroll, the gutter or the
-  // reading direction. Measured on open, not live: a scroll event mid-open
-  // (iOS fires them as the scroll lock engages) must not move the X.
+  // As the drawer opens, measure where the bar sits, so the drawer's brand
+  // row lands on the bar's brand (and its close, at the panel's end, as far
+  // in), whatever the scroll, the gutter or the reading direction. Measured
+  // on open, not live: a scroll event mid-open (iOS fires them as the
+  // scroll lock engages) must not move the brand.
   const placeDrawer = useCallback(() => {
     const bar = barRef.current;
     if (!bar) return;
@@ -366,11 +366,6 @@ export function SiteHeader({
       '--ds-site-header-drawer-top': `${Math.max(barRect.top, 0)}px`,
       '--ds-site-header-drawer-start': `${start(barRect) + inset}px`,
     };
-    const button = menuButtonRef.current?.getBoundingClientRect();
-    if (button && button.width > 0) {
-      offsets['--ds-site-header-close-top'] = `${button.top}px`;
-      offsets['--ds-site-header-close-start'] = `${start(button)}px`;
-    }
     setDrawerOffset(offsets as React.CSSProperties);
   }, []);
 

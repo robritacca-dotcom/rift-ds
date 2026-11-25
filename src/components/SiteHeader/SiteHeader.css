@@ -411,48 +411,32 @@
   width: min(320px, 80vw);
   padding-block-start: var(--ds-site-header-drawer-top, var(--padding-500));
   padding-inline-start: var(--ds-site-header-drawer-start, var(--padding-500));
+  /* The end mirrors the start, so the close sits as far in from the
+     panel's end as the brand from its start. */
+  padding-inline-end: var(--ds-site-header-drawer-start, var(--padding-500));
   /* The floating glass the command palette wears, so the page reaches
-     through the menu frosted rather than behind an opaque sheet. The
-     panel lets its close button out (below); its body still scrolls. */
+     through the menu frosted rather than behind an opaque sheet. */
   background-color: var(--color-bg-glass);
   backdrop-filter: blur(24px);
-  overflow: visible;
 }
 
-/* The drawer's close button swaps with the menu button: it sits on the
-   scrim exactly where the menu button was (measured as the drawer opens),
-   and fades in once the panel has slid home, so the X never travels with
-   it. It stays the drawer's own button, inside its focus trap. */
+/* The drawer's close button sits in the panel's header row, at its end,
+   always inside the panel: the menu button's compact box and glyph, so on
+   a phone, where the sheet is the screen and its end padding is the bar's
+   (below), it lands where the menu button was. */
 .ds-site-header__drawer .ds-drawer__close {
-  position: absolute;
-  inset-block-start: var(--ds-site-header-close-top, var(--padding-500));
-  inset-inline-start: var(--ds-site-header-close-start, auto);
-  /* The menu button's compact box, so the close lands exactly on it. */
   width: var(--control-height-compact);
   height: var(--control-height-compact);
-  /* ds-allow(color): on-scrim furniture, as Lightbox's: the scrim is dark in both themes, so the glyph is white in both. */
-  color: #ffffff;
-  opacity: 0;
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  color: var(--color-icon-primary);
 }
 
-/* The glyph at the menu button's own size, so the swap reads as one icon
-   turning into another. */
 .ds-site-header__drawer .ds-drawer__close .material-symbols-rounded {
   --icon-size: var(--icon-size-600);
-  /* The glyph takes the close's on-scrim white, not IconButton's
-     icon colour, which is dark in light mode and vanished on the scrim. */
   color: inherit;
 }
 
-.ds-site-header__drawer .ds-drawer__panel[data-state="open"] .ds-drawer__close {
-  opacity: 1;
-  transition-delay: var(--motion-duration-slow);
-}
-
 .ds-site-header__drawer .ds-drawer__close:hover {
-  /* ds-allow(color): the hover wash on the always-dark scrim, as Lightbox's controls. */
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--color-action-passive-bg-hover);
 }
 
 /* The footer row starts under the brand, not at the panel's far edge. */
@@ -494,15 +478,6 @@
     backdrop-filter: none;
     padding-block-start: max(var(--ds-site-header-drawer-top, var(--padding-500)), env(safe-area-inset-top));
     padding-block-end: max(var(--padding-500), calc(env(safe-area-inset-bottom) + var(--padding-200)));
-  }
-
-  /* No scrim shows beside a full sheet, so the close takes the page's ink. */
-  .ds-site-header__drawer .ds-drawer__close {
-    color: var(--color-icon-primary);
-  }
-
-  .ds-site-header__drawer .ds-drawer__close:hover {
-    background-color: var(--color-action-passive-bg-hover);
   }
 
   /* The pinned footer runs the sheet's width, its action full width, with

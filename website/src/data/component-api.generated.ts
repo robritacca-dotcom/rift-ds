@@ -14018,7 +14018,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "size",
             "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Row density. `default` is the drawer's 40px top row; `compact` sets\nevery row on the 32px compact control height, for a long sidebar of\npages (a documentation site's hundred entries).",
+            "description": "Row density. `default` sets every row on the default control height; `compact` sets\nevery row on the 32px compact control height, for a long sidebar of\npages (a documentation site's hundred entries).",
             "values": [
               "compact",
               "default"

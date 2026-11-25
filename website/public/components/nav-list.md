@@ -21,7 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | items | `NavListEntry[]` | yes |  | Navigation tree to render: rows, and at the top level, sections of rows. |
-| size | `"default" \| "compact"` | no | `'default'` | Row density. `default` is the drawer's 40px top row; `compact` sets every row on the 32px compact control height, for a long sidebar of pages (a documentation site's hundred entries). |
+| size | `"default" \| "compact"` | no | `'default'` | Row density. `default` sets every row on the default control height; `compact` sets every row on the 32px compact control height, for a long sidebar of pages (a documentation site's hundred entries). |
 | scrollable | `boolean` | no | `false` | Make the list its own scroll area: it fills the height its parent gives it, scrolls inside without carrying the page along at its ends, and brings the current row into view when it first renders. Put it in a column with a fixed or sticky height. |
 | currentHref | `string` | no |  | href of the current page — the exactly matching row gets `aria-current="page"` and the active treatment. |
 | expandedIds | `string[]` | no |  | Controlled list of expanded item ids. |

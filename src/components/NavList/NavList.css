@@ -20,6 +20,8 @@
      their text --padding-300; default rows (a default Button) --padding-500,
      set below. */
   --ds-nav-list-text-inset: var(--padding-300);
+  /* Every row's height, and the chevron's square target at a row's end. */
+  --ds-nav-list-row-height: var(--control-height-default);
   display: flex;
   flex-direction: column;
   gap: var(--gap-050);
@@ -29,14 +31,15 @@
   list-style: none;
 }
 
-/* Every row reserves the toggle's 40px height, so leaf rows (compact
-   Buttons, ~32px) and rows carrying a 40px chevron toggle sit on the same
-   vertical rhythm instead of producing uneven gaps down the list. */
+/* Every row is one height, --ds-nav-list-row-height: the default control
+   height, or the compact one on a compact list. Deeper rows keep the compact
+   Button's smaller face but take the row height, so a parent and its
+   children draw fills of one height on one vertical rhythm. */
 .ds-nav-list__item {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 40px;
+  min-height: var(--ds-nav-list-row-height);
 }
 
 /* ============================================
@@ -46,6 +49,7 @@
    ============================================ */
 
 .ds-nav-list .ds-button {
+  height: var(--ds-nav-list-row-height);
   width: 100%;
   max-width: 100%;
   justify-content: flex-start;
@@ -60,46 +64,56 @@
   white-space: nowrap;
 }
 
-/* A row with a toggle shares its width with the chevron button. */
+/* A row with a toggle is one shape: the label Button runs the full row, so
+   its hover, pressed and current fills span it edge to edge, and the chevron
+   toggle sits over the row's end as a borderless glyph in the same grid
+   cell. The label reserves the toggle's square at its end, so a long label
+   ends in its ellipsis before the chevron. */
 .ds-nav-list__row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: var(--gap-050);
   width: 100%;
 }
 
-.ds-nav-list__row .ds-button {
-  width: auto;
-  flex: 1 1 auto;
-  min-width: 0;
+.ds-nav-list .ds-nav-list__row > .ds-button {
+  grid-area: 1 / 1;
+  padding-inline-end: var(--ds-nav-list-row-height);
+}
+
+/* The chevron's press lands on the row it belongs to: hovering or pressing
+   it fills the whole row, the way hovering the label does. */
+.ds-nav-list__row:has(> .ds-nav-list__toggle:hover) > .ds-button {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-nav-list__row:has(> .ds-nav-list__toggle:active) > .ds-button {
+  background-color: var(--color-action-passive-bg-active);
 }
 
 /* ============================================
    TOGGLE
-   Mirrors IconButton's 40px tertiary recipe.
+   A borderless glyph over the row's end, its own
+   button (aria-expanded) on a square target the
+   row's height, with no fill of its own.
    ============================================ */
 
 .ds-nav-list__toggle {
+  grid-area: 1 / 1;
+  justify-self: end;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  inline-size: var(--ds-nav-list-row-height);
+  block-size: var(--ds-nav-list-row-height);
+  margin: 0;
   padding: 0;
   border: none;
   border-radius: var(--radius-pill);
-  background-color: var(--color-action-passive-bg);
+  background: none;
+  color: inherit;
   cursor: pointer;
-  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.ds-nav-list__toggle:hover {
-  background-color: var(--color-action-passive-bg-hover);
-}
-
-.ds-nav-list__toggle:active {
-  background-color: var(--color-action-passive-bg-active);
 }
 
 .ds-nav-list__toggle:focus-visible {
@@ -169,8 +183,9 @@
 /* ============================================
    COMPACT
    Every row on the 32px compact control height, for a
-   long sidebar: the 40px reservation and toggle step down
-   to match, so a hundred rows read as one quiet column.
+   long sidebar: the row height and the chevron's target
+   step down with it, so a hundred rows read as one quiet
+   column.
    ============================================ */
 
 /* Default size: the top-level rows are default Buttons, so their text sits
@@ -184,13 +199,8 @@
   padding-inline-start: var(--padding-500);
 }
 
-.ds-nav-list--compact .ds-nav-list__item {
-  min-height: var(--control-height-compact);
-}
-
-.ds-nav-list--compact .ds-nav-list__toggle {
-  width: var(--control-height-compact);
-  height: var(--control-height-compact);
+.ds-nav-list--compact {
+  --ds-nav-list-row-height: var(--control-height-compact);
 }
 
 .ds-nav-list--compact .ds-nav-list__sublist {

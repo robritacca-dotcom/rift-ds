@@ -107,9 +107,19 @@ export default function NavStackPage() {
       <section className={styles.section}>
         <SectionTitle title="A site menu" />
         <div className={styles.demo}>
+          <Demo currentHref="#pans" defaultPath={[]} />
+          <p className={styles.note}>
+            The top sections are <code>prominent</code>. Shop drills into its categories and Kitchen into its pages, each level opening with an overview row to the page its row links. The rows on the way to the current page carry the current fill. <code>defaultPath={"{[]}"}</code> opens this one on its first level.
+          </p>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="Opening where the reader is" />
+        <div className={styles.demo}>
           <Demo currentHref="#pans" />
           <p className={styles.note}>
-            The top sections are <code>prominent</code>. Shop drills into its categories and Kitchen into its pages, each level opening with an overview row to the page its row links. The rows on the way to the current page carry the current fill.
+            Given no <code>defaultPath</code>, the stack opens on the deepest level that holds the current page, with that page marked: a reader on Pans reopens the menu on Kitchen, and the back rows lead out from there. A host that shows something only on the first level, as the site header’s drawer does with its footer, reads the same path to know where the stack will open.
           </p>
         </div>
       </section>

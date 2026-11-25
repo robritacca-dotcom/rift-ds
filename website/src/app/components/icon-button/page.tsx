@@ -241,6 +241,28 @@ export default function IconButtonPage() {
         </div>
       </section>
 
+      {/* Glass: every cell over a busy ground */}
+      <section className={styles.section}>
+        <SectionTitle title="Glass" />
+        <p className={styles.introBody}>
+          Set <code>glass</code> when the button sits on a busy ground,
+          such as a map, a chart or a shader scene, as a notification bell
+          in a template’s top bar does. It is Button’s{" "}
+          <code>glass</code> on the icon-only form: the ground behind it is
+          blurred, an outlined or ghost button takes the glass fill at rest,
+          and a filled one lets a little of the ground through its colour.
+          Hover and press are each variant’s own.
+        </p>
+        <div className={styles.glassGround}>
+          <IconButton icon="add" variant="primary" glass label="Add" />
+          <IconButton icon="edit" variant="secondary" glass label="Edit" />
+          <IconButton icon="more_vert" variant="tertiary" glass label="More" />
+          <IconButton icon="tune" variant="primary" tone="neutral" glass label="Filters" />
+          <IconButton icon="notifications" variant="secondary" tone="neutral" glass label="Notifications" />
+          <IconButton icon="delete" variant="secondary" tone="destructive" glass label="Delete" />
+        </div>
+      </section>
+
       {/* Compact */}
       <section className={styles.section}>
         <SectionTitle title="Compact" />

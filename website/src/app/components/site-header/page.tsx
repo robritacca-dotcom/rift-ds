@@ -2,6 +2,8 @@ import React from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { IconButton } from "rift-ds/components/IconButton/IconButton";
+import { Button } from "rift-ds/components/Button/Button";
+import type { NavStackEntry } from "rift-ds/components/NavStack/NavStack";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { ThemeToggle } from "rift-ds/components/ThemeToggle/ThemeToggle";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -49,6 +51,22 @@ const brand = (
 );
 
 const search = <IconButton icon="search" variant="secondary" tone="neutral" label="Search" tooltip={false} />;
+
+/* The folded demo's drawer: a plain row ahead of the first section joins
+   the sections' own list, a section starts a group of its own, and the
+   footer shows on the first level only. */
+const drawerEntries: NavStackEntry[] = [
+  { id: "status", label: "Status", href: "#status" },
+  {
+    type: "section",
+    id: "company",
+    label: "Company",
+    items: [
+      { label: "Careers", href: "#careers", description: "Open roles across the team" },
+      { label: "Press kit", href: "#press", description: "Logos, screenshots and copy" },
+    ],
+  },
+];
 
 /* The condensed demo's two sets: the same controls, then their narrower forms. */
 const fullActions = (
@@ -149,8 +167,33 @@ export default function SiteHeaderPage() {
           the drawer then carries the sidebar&apos;s pages and a reader has one menu.
         </p>
         <div className={`${styles.frame} ${styles.frameNarrow}`}>
-          <SiteHeader brand={brand} sections={SECTIONS} actions={search} sticky={false} navLabel="Example, folded" />
+          <SiteHeader
+            brand={brand}
+            sections={SECTIONS}
+            actions={search}
+            sticky={false}
+            navLabel="Example, folded"
+            drawerHeader={<CommandPaletteTrigger size="compact" className={styles.drawerSearch} />}
+            drawerEntries={drawerEntries}
+            drawerFooter={<Button label="Sign up" variant="primary" href="#signup" className={styles.drawerAction} />}
+          />
         </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionTitle title="The drawer" />
+        <p className={styles.introBody}>
+          Open the folded bar above to see it. The drawer is a NavStack: the sections first, each drilling into its
+          menu&apos;s pages (or its <code>drawerItems</code>), a row with <code>items</code> of its own drilling one level
+          further. <code>drawerHeader</code> sits above the first level, for a search field. <code>drawerEntries</code>{" "}
+          follow the sections: plain rows ahead of the first section join the sections&apos; own list, as Status does
+          here, and a section such as Company starts a group of its own under its heading. <code>drawerFooter</code>{" "}
+          is pinned at the foot in thumb reach, on the first level only, since a level the reader drilled into is
+          about its section. The drawer opens on the level that holds the current page, so a reader deep in a
+          section reopens it where they are, with the first level a back row away. Its close ends the brand row inside
+          the panel at every width: beside the 320px glass panel on a tablet, and where the menu button was on a
+          phone, where the drawer is a solid sheet the whole screen wide, clear of the notch and the home indicator.
+        </p>
       </section>
 
       <ComponentInstallStrip slug="site-header" />

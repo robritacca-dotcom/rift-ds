@@ -102,3 +102,10 @@
   font-weight: var(--font-title-body-weight);
   color: var(--color-text-primary);
 }
+
+/* The folded demo's drawer: the search field and the call to action run
+   the drawer's width. */
+.drawerSearch,
+.drawerAction {
+  width: 100%;
+}

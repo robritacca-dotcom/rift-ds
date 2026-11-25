@@ -62,6 +62,36 @@ const switcherSections = [
   },
 ];
 
+/* A nav longer than the short demo frame, in three groups, the last row's
+   icon a swatch node rather than a glyph. */
+const longSections = [
+  {
+    category: "Analytics",
+    items: [
+      { key: "home", icon: "home", label: "Home" },
+      { key: "realtime", icon: "monitoring", label: "Realtime" },
+      { key: "audience", icon: "groups", label: "Audience" },
+      { key: "acquisition", icon: "conversion_path", label: "Acquisition" },
+      { key: "events", icon: "bolt", label: "Events" },
+      { key: "reports", icon: "description", label: "Reports", badge: 4 },
+    ],
+  },
+  {
+    category: "Account",
+    items: [
+      { key: "support", icon: "headset_mic", label: "Support" },
+      { key: "settings", icon: "settings", label: "Settings" },
+    ],
+  },
+  {
+    category: "Appearance",
+    items: [
+      { key: "theme", icon: <span className={styles.swatch} aria-hidden="true" />, label: "Theme", value: "Ember" },
+      { key: "mode", icon: "dark_mode", label: "Mode", value: "Dark" },
+    ],
+  },
+];
+
 const demoSections = [
   {
     category: "Main",
@@ -187,10 +217,10 @@ export default function AppSidebarPage() {
           Collapsible navigation for app layouts
         </p>
         <p className={styles.introBody}>
-          A two-state sidebar that collapses to a 64px icon rail or expands to 280px with labels, category headings, accordion sub-items with tree-line connectors, and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed, persistentTopSlot keeps the top slot for content with a collapsed form of its own, collapsedFooterSlot stands in for the footer while it is, and a click on the empty space of the collapsed rail expands it; and the layout prop sets how the rail meets the page: flush, floating as a glass card inset from the viewport edges, or inset, flush on the app shell colour beside an inset content surface.
+          A two-state sidebar that collapses to an 80px rail naming each destination under its icon, or expands to 280px with labels, category headings and a profile section at the bottom. Items take an optional count badge; topSlot and footerSlot host consumer content that fades out while collapsed, persistentTopSlot keeps the top slot for content with a collapsed form of its own, collapsedFooterSlot stands in for the footer while it is, and a click on the empty space of the collapsed rail expands it; and the layout prop sets how the rail meets the page: inset, the default, flush on the app shell colour beside an inset content surface; flush, edge to edge behind a hairline; or floating, a glass card inset from the viewport edges.
         </p>
         <p className={styles.introBody}>
-          Navigation runs three levels deep, and subNav picks the shape once per sidebar. In the default accordion mode the second level is the accordion under a row, and a sub-item with children of its own opens them as the third level in a SidebarPanel beside the rail. In panel mode a top-level row opens its sub-items straight into the panel, whose own accordion carries the third level, and the collapsed rail widens to 80px to put a label under every icon. On small screens neither shows a panel: the drawer drills in to a second screen with a back row.
+          Navigation runs three levels deep, and subNav picks the shape once per sidebar. In the default panel mode a top-level row opens its sub-items straight into a SidebarPanel beside the rail, whose own accordion carries the third level, and the collapsed rail is 80px wide to put a label under every icon. In accordion mode the second level is the accordion under a row, the collapsed rail is a 64px icon rail, and a sub-item with children of its own opens them as the third level in the panel. On small screens neither shows a panel: the drawer drills in to a second screen with a back row.
         </p>
       </div>
 
@@ -218,6 +248,24 @@ export default function AppSidebarPage() {
             profile={demoProfile}
             activeKey="dashboard"
             defaultExpanded={false}
+          />
+        </div>
+      </section>
+
+      {/* A long nav on the collapsed rail */}
+      <section className={styles.section}>
+        <SectionTitle title="A long nav" />
+        <p className={styles.sectionBody}>
+          When the rows outgrow the rail, as a long nav or a roomy theme&apos;s taller rows do, the logo and the rows scroll in a block of their own above the profile, which never moves. An end with more beyond it fades out, and the collapsed rail hides its scrollbar, since the fade is the cue. Collapsed, the gaps between groups close up and a short divider on the icons&apos; axis marks each break where the expanded rail names the group. An item&apos;s icon can be a node, such as a theme swatch, centred on the same axis as the glyphs.
+        </p>
+        <div className={`${styles.sidebarDemo} ${styles.sidebarDemoShort}`} data-anchor-ignore>
+          <MockAppContent />
+          <AppSidebar
+            sections={longSections}
+            profile={demoProfile}
+            activeKey="realtime"
+            defaultExpanded={false}
+            showMobileTrigger={false}
           />
         </div>
       </section>
@@ -287,9 +335,9 @@ export default function AppSidebarPage() {
 
       {/* Third level, accordion mode */}
       <section className={styles.section}>
-        <SectionTitle title="Third level" />
+        <SectionTitle title="Accordion mode" />
         <p className={styles.sectionBody}>
-          Reports holds the second level as its accordion. Financial planning has children of its own, so it carries a trailing chevron and opens them in the panel beside the rail. The accordion and the panel holding the current page both start open. Press Financial planning again, or the panel’s collapse control, to close it.
+          With subNav set to accordion, Reports holds the second level as its accordion. Financial planning has children of its own, so it carries a trailing chevron and opens them in the panel beside the rail. The accordion and the panel holding the current page both start open. Press Financial planning again, or the panel’s collapse control, to close it.
         </p>
         <div className={styles.sidebarDemo} data-anchor-ignore>
           <MockAppContent />
@@ -299,6 +347,7 @@ export default function AppSidebarPage() {
             activeKey="reports"
             activeSubKey="planning"
             activeTertiaryKey="budgets"
+            subNav="accordion"
             defaultExpanded={true}
             showMobileTrigger={false}
           />
@@ -309,7 +358,7 @@ export default function AppSidebarPage() {
       <section className={styles.section}>
         <SectionTitle title="Panel mode" />
         <p className={styles.sectionBody}>
-          With subNav set to panel, the collapsed rail is the whole first level, so it widens to 80px and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel carries the selection fill. The layout prop sets how the rail and its panel meet the page.
+          In panel mode, the default, the collapsed rail is the whole first level, so it is 80px wide and names each destination under its icon. Reports opens its sub-items straight into the panel, and Financial planning becomes the panel’s own accordion. The row feeding the open panel carries the selection fill. The layout prop sets how the rail and its panel meet the page.
         </p>
         <div className={styles.layoutSwitch}>
           <SegmentedControl

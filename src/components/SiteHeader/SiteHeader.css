@@ -40,6 +40,13 @@
   z-index: -1;
 }
 
+/* The tint arrives as the page starts to scroll (`tintAfter` is 0 by
+   default) and fades in at the fast step, not the blur's structural one,
+   so the first lines of page text never slide under a half-clear bar. */
+.ds-site-header__blur.ds-progressive-blur::after {
+  transition-duration: var(--motion-duration-fast);
+}
+
 /* Behind an open menu on a full-width bar, a second progressive blur: the
    window's width from the top down past the menu's bottom edge (its height
    measured into --ds-site-header-menu-height as it opens), dissolving below

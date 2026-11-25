@@ -68,12 +68,16 @@ const meta = {
     activeSubKey: { control: 'text' },
     logoText: { control: 'text' },
   },
+  // Most stories below show the accordion on a flush rail, so they name
+  // those; the defaults (panel mode, the inset layout) are the Defaults story.
   args: {
     sections: sampleSections,
     profile: sampleProfile,
     activeKey: 'dashboard',
     logoText: 'Northlight',
     defaultExpanded: true,
+    subNav: 'accordion',
+    layout: 'flush',
   },
   decorators: [
     (Story, ctx) => {
@@ -453,6 +457,82 @@ export const ThirdLevelPanel: Story = {
     activeTertiaryKey: 'budgets',
   },
   parameters: { contentOffset: 280 + 240 },
+};
+
+/** The defaults, with no `subNav` or `layout` given: panel mode, whose collapsed rail names each destination under its icon, on the inset layout's shell colour. */
+export const Defaults: Story = {
+  args: {
+    subNav: undefined,
+    layout: undefined,
+    defaultExpanded: false,
+    sections: threeLevelSections,
+    activeKey: 'reports',
+    activeSubKey: 'standard',
+  },
+  parameters: { contentOffset: 80 + 240 },
+};
+
+/** A nav longer than the rail: the rows scroll in a block of their own above the profile, an end with more beyond it fades out, the collapsed rail hides its scrollbar, a short divider on the icons' axis marks each group break, and the Theme row's icon is a swatch node centred on the glyphs' axis. */
+export const LongNavCollapsed: Story = {
+  args: {
+    subNav: 'panel',
+    layout: undefined,
+    defaultExpanded: false,
+    activeKey: 'realtime',
+    sections: [
+      {
+        category: 'Analytics',
+        items: [
+          { key: 'home', icon: 'home', label: 'Home' },
+          { key: 'realtime', icon: 'monitoring', label: 'Realtime' },
+          { key: 'audience', icon: 'groups', label: 'Audience' },
+          { key: 'acquisition', icon: 'conversion_path', label: 'Acquisition' },
+          { key: 'events', icon: 'bolt', label: 'Events' },
+          { key: 'reports', icon: 'description', label: 'Reports', badge: 4 },
+        ],
+      },
+      {
+        category: 'Account',
+        items: [
+          { key: 'support', icon: 'headset_mic', label: 'Support' },
+          { key: 'settings', icon: 'settings', label: 'Settings' },
+        ],
+      },
+      {
+        category: 'Appearance',
+        items: [
+          {
+            key: 'theme',
+            icon: (
+              <span
+                aria-hidden="true"
+                style={{ display: 'block', width: 20, height: 20, borderRadius: 999, background: 'var(--color-chart-series-3)' }}
+              />
+            ),
+            label: 'Theme',
+            value: 'Ember',
+          },
+          { key: 'mode', icon: 'dark_mode', label: 'Mode', value: 'Dark' },
+        ],
+      },
+    ],
+  },
+  parameters: { contentOffset: 80 },
+  render: (args) => (
+    <div style={{ display: 'flex', height: 480 }}>
+      <AppSidebar {...args} fixed={false} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const top = canvasElement.querySelector('.ds-app-sidebar__top') as HTMLElement;
+    await waitFor(() => expect(top.scrollHeight).toBeGreaterThan(top.clientHeight));
+    // At rest the rows run on below, so the end fades and the start does not.
+    await waitFor(() => expect(top).toHaveAttribute('data-fade-end'));
+    await expect(top).not.toHaveAttribute('data-fade-start');
+    // The collapsed rail draws a divider at each group break.
+    const navs = canvasElement.querySelectorAll('.ds-app-sidebar__sections > .ds-app-sidebar__nav');
+    await expect(getComputedStyle(navs[1], '::before').borderTopStyle).toBe('solid');
+  },
 };
 
 /** `subNav="panel"` skips the accordion: Reports opens its sub-items straight

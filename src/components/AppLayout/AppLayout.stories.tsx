@@ -77,6 +77,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The defaults: the inset layout and the sidebar's panel mode, as the templates draw it. */
 export const Default: Story = {
   args: {
     children: (
@@ -150,7 +151,12 @@ export const InsetFullWidth: Story = {
   args: { ...Inset.args, layout: 'inset', width: 'full' },
 };
 
+/** `layout="flush"`: the rail edge to edge on the shell colour behind a hairline, the content crisp beside it, nothing raised. */
+export const Flush: Story = {
+  args: { ...Default.args, layout: 'flush' },
+};
+
 /** Flush at full width. */
 export const FlushFullWidth: Story = {
-  args: { ...Default.args, width: 'full' },
+  args: { ...Default.args, layout: 'flush', width: 'full' },
 };

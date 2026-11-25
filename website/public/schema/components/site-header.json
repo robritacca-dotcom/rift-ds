@@ -145,8 +145,8 @@
           "type": "number",
           "typeKind": "primitive",
           "required": false,
-          "description": "How far, in pixels, the page scrolls before the page-surface tint fades\nin over the sticky header's blur.",
-          "default": 48
+          "description": "How far, in pixels, the page scrolls before the page-surface tint fades\nin over the sticky header's blur. By default it arrives with the first\npixel of scroll, at the fast step, so page text never slides up under a\nclear bar.",
+          "default": 0
         },
         {
           "name": "linkComponent",

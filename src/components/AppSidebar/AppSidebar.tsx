@@ -113,12 +113,13 @@ type AppSidebarOwnProps = {
   /** Key of the currently active third-level item, listed in the side panel */
   activeTertiaryKey?: string;
   /**
-   * Where an item's sub-items show. `accordion` (the default) opens them under
-   * the row, and a sub-item's own children open in a side panel as level 3.
-   * `panel` skips the accordion: a top-level item opens its sub-items straight
-   * into the side panel, with their children as the panel's accordion, and the
-   * collapsed rail shows each label under its icon. On small screens both
-   * modes drill in inside the drawer instead.
+   * Where an item's sub-items show. `panel` (the default) opens a top-level
+   * item's sub-items straight into the side panel, with their children as
+   * the panel's accordion, and the collapsed rail shows each label under its
+   * icon. `accordion` opens them under the row instead, and a sub-item's own
+   * children open in a side panel as level 3. On small screens both modes
+   * drill in inside the drawer instead.
+   * @default 'panel'
    */
   subNav?: 'accordion' | 'panel';
   /** Whether the side panel starts open when there is one to show */
@@ -146,7 +147,8 @@ type AppSidebarOwnProps = {
    * inset from the edges, as AppLayout's `inset` layout draws it. Inside a
    * host that marks itself a shell (AppLayout, a chat or template page), the
    * rail reads that host's mode from the shell recipe. Defaults to
-   * `flush` (or `floating` while the deprecated `floating` is set).
+   * `inset` (or `floating` while the deprecated `floating` is set).
+   * @default 'inset'
    */
   layout?: AppSidebarLayout;
   /**
@@ -288,7 +290,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   activeKey,
   activeSubKey,
   activeTertiaryKey,
-  subNav = 'accordion',
+  subNav = 'panel',
   defaultPanelOpen = true,
   panelOpen: controlledPanelOpen,
   onPanelOpenChange,
@@ -321,7 +323,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
 }, ref) {
   const baseClass = 'ds-app-sidebar';
   // The deprecated boolean still floats the rail when no layout is given.
-  const layout: AppSidebarLayout = layoutProp ?? (floatingProp ? 'floating' : 'flush');
+  const layout: AppSidebarLayout = layoutProp ?? (floatingProp ? 'floating' : 'inset');
   const floating = layout === 'floating';
   const contained = !fixed;
   const Link = useLinkComponent(linkComponent);

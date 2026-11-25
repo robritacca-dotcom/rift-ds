@@ -138,7 +138,10 @@ type SiteHeaderOwnProps = {
   sticky?: boolean;
   /**
    * How far, in pixels, the page scrolls before the page-surface tint fades
-   * in over the sticky header's blur.
+   * in over the sticky header's blur. By default it arrives with the first
+   * pixel of scroll, at the fast step, so page text never slides up under a
+   * clear bar.
+   * @default 0
    */
   tintAfter?: number;
   /**
@@ -211,7 +214,7 @@ export function SiteHeader({
   foldBelow,
   initialFold = foldBelow ?? 'tablet',
   sticky = true,
-  tintAfter = 48,
+  tintAfter = 0,
   linkComponent,
   navLabel = 'Primary',
   drawerOpenLabel = 'Open menu',

@@ -288,3 +288,17 @@
   }
   .dsContent { max-width: 100%; min-width: 0; }
 }
+
+/* A frame shorter than the long nav, so the collapsed rail scrolls. */
+.sidebarDemoShort {
+  height: 480px;
+}
+
+/* A theme swatch as an item's icon: a node in the glyph's box. */
+.swatch {
+  display: block;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+  border-radius: var(--radius-pill);
+  background: var(--color-chart-series-3);
+}

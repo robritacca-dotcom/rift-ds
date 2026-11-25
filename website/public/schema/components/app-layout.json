@@ -66,7 +66,8 @@
             "panel"
           ],
           "required": false,
-          "description": "Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar)"
+          "description": "Where sub-items show: straight into the sidebar's side panel, or its\naccordion (see AppSidebar).",
+          "default": "panel"
         },
         {
           "name": "defaultExpanded",
@@ -107,8 +108,8 @@
             "inset"
           ],
           "required": false,
-          "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself. How\nwide the content runs is `width`, apart from the mode.",
-          "default": "flush",
+          "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself, and is\nthe default. How wide the content runs is `width`, apart from the mode.",
+          "default": "inset",
           "typeRefs": [
             "AppSidebarLayout"
           ]

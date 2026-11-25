@@ -69,11 +69,11 @@ export default function AppLayoutPage() {
         </p>
         <p className={styles.introBody}>
           A page shell that pairs the App sidebar with a content area. The sidebar
-          collapses to an icon rail; the main region reflows automatically. The layout prop
-          picks one of the three app shell modes the templates and the chat share: flush
-          (the default), the rail on the shell colour behind a hairline with the content crisp
-          beside it; floating, the rail as a glass card; or inset, the content in a
-          raised surface of its own. The component
+          collapses to a labelled rail; the main region reflows automatically. The layout prop
+          picks one of the three app shell modes the templates and the chat share: inset
+          (the default), the content in a raised surface of its own; flush, the rail on the
+          shell colour behind a hairline with the content crisp beside it; or floating, the
+          rail as a glass card. The component
           pins itself to the dark theme by default, which is why the demos below appear
           dark; pass theme=&quot;inherit&quot; to drop the pin and let the layout follow the
           surrounding data-theme like any other component.
@@ -112,7 +112,7 @@ export default function AppLayoutPage() {
           >
             <DemoContent
               heading="Analytics"
-              body="The sidebar starts as a 64px icon rail and expands on demand."
+              body="The sidebar starts as an 80px rail, each destination named under its icon, and expands on demand."
             />
           </AppLayout>
         </div>
@@ -137,20 +137,20 @@ export default function AppLayoutPage() {
         </div>
       </section>
 
-      {/* Inset */}
+      {/* Flush */}
       <section className={styles.section}>
-        <SectionTitle title="Inset layout" />
+        <SectionTitle title="Flush layout" />
         <div className={styles.layoutDemo}>
           <AppLayout
             sections={demoSections}
             profile={demoProfile}
             activeKey="dashboard"
             logoText="Northlight"
-            layout="inset"
+            layout="flush"
           >
             <DemoContent
               heading="Dashboard"
-              body="The rail sits flush on the shell colour, and the content sits in a raised surface that scrolls on its own, contained or full by its own width."
+              body="The rail runs edge to edge on the shell colour behind a hairline, and the content sits crisp beside it, nothing raised."
             />
           </AppLayout>
         </div>

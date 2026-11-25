@@ -20,7 +20,11 @@ type AppLayoutOwnProps = {
   activeSubKey?: string;
   /** Active third-level item key, listed in the sidebar's side panel */
   activeTertiaryKey?: string;
-  /** Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar) */
+  /**
+   * Where sub-items show: straight into the sidebar's side panel, or its
+   * accordion (see AppSidebar).
+   * @default 'panel'
+   */
   subNav?: 'accordion' | 'panel';
   /** Whether sidebar starts expanded */
   defaultExpanded?: boolean;
@@ -32,13 +36,14 @@ type AppLayoutOwnProps = {
   children: React.ReactNode;
   /**
    * How the rail and the content meet the page, one of the three app shell
-   * modes. `flush` (the default) runs the rail edge to edge on the shell
+   * modes. `flush` runs the rail edge to edge on the shell
    * colour behind a hairline, the content centred beside it on the crisp
    * app surface, nothing raised. `floating` floats the rail as a glass card,
    * the content still centred. `inset` runs the rail flush on the shell
    * colour and sets the content in a raised surface (hairline and floating
-   * shadow) inset from the other edges, which scrolls inside itself. How
-   * wide the content runs is `width`, apart from the mode.
+   * shadow) inset from the other edges, which scrolls inside itself, and is
+   * the default. How wide the content runs is `width`, apart from the mode.
+   * @default 'inset'
    */
   layout?: AppSidebarLayout;
   /**
@@ -92,7 +97,7 @@ export const AppLayout = React.forwardRef<HTMLDivElement, AppLayoutProps>(
       logoText,
       logo,
       children,
-      layout = 'flush',
+      layout = 'inset',
       width = 'contained',
       theme = 'dark',
       linkComponent,

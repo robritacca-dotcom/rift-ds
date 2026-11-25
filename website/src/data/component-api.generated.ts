@@ -1356,11 +1356,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "subNav",
             "type": "\"accordion\" | \"panel\"",
             "required": false,
-            "description": "Where sub-items show: the sidebar's accordion, or straight into its side panel (see AppSidebar)",
+            "description": "Where sub-items show: straight into the sidebar's side panel, or its\naccordion (see AppSidebar).",
             "values": [
               "accordion",
               "panel"
-            ]
+            ],
+            "defaultValue": "'panel'"
           },
           {
             "name": "defaultExpanded",
@@ -1391,13 +1392,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` (the default) runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself. How\nwide the content runs is `width`, apart from the mode.",
+            "description": "How the rail and the content meet the page, one of the three app shell\nmodes. `flush` runs the rail edge to edge on the shell\ncolour behind a hairline, the content centred beside it on the crisp\napp surface, nothing raised. `floating` floats the rail as a glass card,\nthe content still centred. `inset` runs the rail flush on the shell\ncolour and sets the content in a raised surface (hairline and floating\nshadow) inset from the other edges, which scrolls inside itself, and is\nthe default. How wide the content runs is `width`, apart from the mode.",
             "values": [
               "floating",
               "flush",
               "inset"
             ],
-            "defaultValue": "'flush'",
+            "defaultValue": "'inset'",
             "typeRefs": [
               "AppSidebarLayout"
             ]
@@ -1498,12 +1499,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "subNav",
             "type": "\"accordion\" | \"panel\"",
             "required": false,
-            "description": "Where an item's sub-items show. `accordion` (the default) opens them under\nthe row, and a sub-item's own children open in a side panel as level 3.\n`panel` skips the accordion: a top-level item opens its sub-items straight\ninto the side panel, with their children as the panel's accordion, and the\ncollapsed rail shows each label under its icon. On small screens both\nmodes drill in inside the drawer instead.",
+            "description": "Where an item's sub-items show. `panel` (the default) opens a top-level\nitem's sub-items straight into the side panel, with their children as\nthe panel's accordion, and the collapsed rail shows each label under its\nicon. `accordion` opens them under the row instead, and a sub-item's own\nchildren open in a side panel as level 3. On small screens both modes\ndrill in inside the drawer instead.",
             "values": [
               "accordion",
               "panel"
             ],
-            "defaultValue": "'accordion'"
+            "defaultValue": "'panel'"
           },
           {
             "name": "defaultPanelOpen",
@@ -1553,12 +1554,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "AppSidebarLayout",
             "required": false,
-            "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`flush` (or `floating` while the deprecated `floating` is set).",
+            "description": "How the rail meets the page, one of the three app shell modes. `flush`\nruns it edge to edge on the shell colour behind a hairline divider,\nnothing raised. `floating` floats it off the viewport edges as a glass card:\ninset with rounded corners, the translucent glass fill over a backdrop\nblur, and the floating shadow (the inset defaults to 20px and is\noverridable via the --ds-sidebar-float-inset custom property). `inset`\nruns it flush on the app shell colour, beside a raised content surface\ninset from the edges, as AppLayout's `inset` layout draws it. Inside a\nhost that marks itself a shell (AppLayout, a chat or template page), the\nrail reads that host's mode from the shell recipe. Defaults to\n`inset` (or `floating` while the deprecated `floating` is set).",
             "values": [
               "floating",
               "flush",
               "inset"
             ],
+            "defaultValue": "'inset'",
             "typeRefs": [
               "AppSidebarLayout"
             ]
@@ -17554,8 +17556,8 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "tintAfter",
             "type": "number",
             "required": false,
-            "description": "How far, in pixels, the page scrolls before the page-surface tint fades\nin over the sticky header's blur.",
-            "defaultValue": "48"
+            "description": "How far, in pixels, the page scrolls before the page-surface tint fades\nin over the sticky header's blur. By default it arrives with the first\npixel of scroll, at the fast step, so page text never slides up under a\nclear bar.",
+            "defaultValue": "0"
           },
           {
             "name": "linkComponent",

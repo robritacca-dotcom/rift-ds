@@ -123,3 +123,20 @@
   }
   .dsContent { max-width: 100%; min-width: 0; }
 }
+
+/* A busy ground for the glass section, Button's page's stripes, so the
+   blur and the glass fill have something to frost. */
+.glassGround {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-400);
+  padding: var(--padding-1000);
+  border-radius: var(--radius-400);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-ambient-2) 0 var(--gap-300),
+    var(--color-ambient-4) var(--gap-300) var(--gap-500),
+    var(--color-ambient-5) var(--gap-500) var(--gap-1000)
+  );
+}

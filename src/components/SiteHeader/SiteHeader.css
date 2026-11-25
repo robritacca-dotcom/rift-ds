@@ -261,21 +261,6 @@
   pointer-events: auto;
 }
 
-/* The hover bridge. Between a pill and its menu lie the bar's lower padding
-   and the gap the menu hangs by, and neither is the pill nor the menu: a
-   pointer that took longer than the hide delay to cross them lost the menu
-   on the way, and the press landed on the page. While a menu is open the
-   wrapper holds that strip too, so the way down never leaves the menu. It
-   stays inside the bar's padding, clear of every control in the row. */
-.ds-site-header__panel:has(> .ds-mega-menu--open)::before {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 100%;
-  block-size: calc(var(--gap-200) + var(--padding-1000) / 2);
-  pointer-events: auto;
-}
-
 /* A full-width bar wider than the contained width keeps its menu at the
    contained width and opens it where the reader is looking: the panel
    starts under the section pills (--ds-site-header-nav-start, measured as

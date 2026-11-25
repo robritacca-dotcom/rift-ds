@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | wideActions | `ReactNode` | no |  | Controls at the bar's end that show only while the pills fit, such as a Get started button. Once the bar folds to its menu button they leave it; put their drawer twin in `drawerFooter`. |
 | drawerFooter | `ReactNode` | no |  | Content for the drawer's footer, such as the controls `wideActions` holds in the bar. It shows on the drawer's first level only: a level the reader drilled into leaves it out. |
 | drawerHeader | `ReactNode` | no |  | Content above the drawer's first level of rows, such as a search field. It leaves when the reader drills in. |
-| drawerEntries | `NavStackEntry[]` | no |  | More of the drawer's first level, after the sections: rows and sections of NavStack entries, such as a row that drills into a site's resources or a group of settings that drill into their choices. |
+| drawerEntries | `NavStackEntry[]` | no |  | More of the drawer's first level, after the sections: rows and sections of NavStack entries, such as a row that drills into a site's resources or a group of settings that drill into their choices. Plain rows ahead of the first section join the sections' own list, with no gap; a section starts a group of its own. |
 | drawerOpen | `boolean` | no |  | Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. |
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer starts open, when the header owns its state. |
 | onDrawerOpenChange | `((open: boolean) => void)` | no |  | Called when the drawer opens or closes, controlled or not. |

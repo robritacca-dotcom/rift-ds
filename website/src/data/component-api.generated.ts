@@ -17496,7 +17496,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "drawerEntries",
             "type": "NavStackEntry[]",
             "required": false,
-            "description": "More of the drawer's first level, after the sections: rows and sections\nof NavStack entries, such as a row that drills into a site's resources\nor a group of settings that drill into their choices.",
+            "description": "More of the drawer's first level, after the sections: rows and sections\nof NavStack entries, such as a row that drills into a site's resources\nor a group of settings that drill into their choices. Plain rows ahead\nof the first section join the sections' own list, with no gap; a\nsection starts a group of its own.",
             "typeRefs": [
               "NavStackEntry"
             ]

@@ -141,12 +141,14 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
  */
 export function useDrawerEntries(phone: boolean): NavStackEntry[] {
   const appearance = useAppearanceSection();
+  // A plain row, so it joins the sections' list right under Docs rather
+  // than standing alone. The full-width sheet has room to name what is
+  // inside; the tablet drawer's narrower row does not.
   const resources: NavStackEntry = {
-    type: "section",
     id: "resources",
-    // The full-width sheet has room to name what is inside; the tablet
-    // drawer's narrower row does not.
-    items: [{ id: "resources", label: "Resources", ...(phone ? { value: "GitHub, npm, Figma" } : {}), items: RESOURCES }],
+    label: "Resources",
+    ...(phone ? { value: "GitHub, npm, Figma" } : {}),
+    items: RESOURCES,
   };
   return [resources, appearance];
 }

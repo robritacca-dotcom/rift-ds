@@ -99,7 +99,9 @@ type SiteHeaderOwnProps = {
   /**
    * More of the drawer's first level, after the sections: rows and sections
    * of NavStack entries, such as a row that drills into a site's resources
-   * or a group of settings that drill into their choices.
+   * or a group of settings that drill into their choices. Plain rows ahead
+   * of the first section join the sections' own list, with no gap; a
+   * section starts a group of its own.
    */
   drawerEntries?: NavStackEntry[];
   /** Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. */
@@ -476,11 +478,17 @@ export function SiteHeader({
     icon: item.icon,
     ...(item.items?.length ? { id: item.href, items: item.items.map(toDrawerRow) } : {}),
   });
+  // Plain rows ahead of the host's first section join the sections' list.
+  const leadRows: NavStackItem[] = [];
+  for (const entry of drawerEntries ?? []) {
+    if ((entry as { type?: string }).type === 'section') break;
+    leadRows.push(entry as NavStackItem);
+  }
   const drawerStack: NavStackEntry[] = [
     {
       type: 'section',
       id: 'sections',
-      items: sections.map((section) => {
+      items: [...sections.map((section) => {
         const pages = section.drawerItems ?? section.mega?.items ?? [];
         return {
           id: section.id,
@@ -489,9 +497,9 @@ export function SiteHeader({
           current: sectionIsCurrent(section, currentHref) || undefined,
           ...(pages.length > 0 ? { items: pages.map(toDrawerRow) } : {}),
         };
-      }),
+      }), ...leadRows],
     },
-    ...(drawerEntries ?? []),
+    ...(drawerEntries ?? []).slice(leadRows.length),
   ];
   // The stack opens on the level that holds the current page, so a reader
   // deep in a section reopens the menu where they are.

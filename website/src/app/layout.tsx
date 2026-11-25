@@ -29,6 +29,7 @@ import { SiteChatMount } from "@/components/SiteChat/SiteChatMount";
 import { SitePaletteMount } from "@/components/SitePalette/SitePaletteMount";
 import { SiteFrameMount } from "@/components/SiteFrame/SiteFrameMount";
 import { ClientNav } from "@/components/ClientNav/ClientNav";
+import { NavProgress } from "@/components/NavProgress/NavProgress";
 import BlurBackground from "@/components/BlurBackground/BlurBackground";
 import { DocumentThemeGuard } from "@/components/DocumentThemeGuard/DocumentThemeGuard";
 
@@ -256,6 +257,10 @@ export default async function RootLayout({
             costs nothing. Pages that want the full-viewport variant say so
             with FullBleedBackground; see globals.css. */}
         <BlurBackground />
+        {/* The line across the top of the window while a navigation is in
+            flight: the old page stays up until the new one is ready, and
+            this is what answers the click meanwhile. */}
+        <NavProgress />
         {/* The chat provider lives here because the root layout never
             remounts on client-side navigation: the transcript, a stream in
             flight, and the draft all survive route changes. The panel mounts

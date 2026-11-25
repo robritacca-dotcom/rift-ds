@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { AreaChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { AreaChart } from 'rift-ds/components/Chart/AreaChart';`
 - Rendering: client component (declares 'use client')
-- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/area-chart
 - Schema: https://rift-ds.com/schema/components/area-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,6 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | yAxisFormatter | `((value: number) => string)` | no |  | Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale. |
 | showLegend | `boolean` | no | `true` | Show the legend under a multi-series chart |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
+| onActiveChange | `ChartActiveHandler` | no |  | Called when the active point changes: with the row of `data` under the pointer or the keyboard cursor and its index, and with `null, null` once neither is on the plot. For a headline figure that follows the cursor. |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
 
 ## Keyboard
@@ -49,6 +50,19 @@ interface AreaSeriesConfig {
   /** Fill opacity (0–1) */
   fillOpacity?: number;
 }
+```
+
+### ChartActiveHandler
+
+The `onActiveChange` callback of the charts drawn from one `data` array
+over a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row
+of `data` and its index, or `null, null` when no point is active.
+
+```ts
+type ChartActiveHandler = (
+  datum: Record<string, unknown> | null,
+  index: number | null,
+) => void;
 ```
 
 ### ChartSummaryItem

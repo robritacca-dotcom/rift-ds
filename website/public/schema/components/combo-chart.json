@@ -143,6 +143,16 @@
           "default": false
         },
         {
+          "name": "onActiveChange",
+          "type": "ChartActiveHandler",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Called when the active point changes: with the row of `data` under the\npointer or the keyboard cursor and its index, and with `null, null` once\nneither is on the plot. For a headline figure that follows the cursor.",
+          "typeRefs": [
+            "ChartActiveHandler"
+          ]
+        },
+        {
           "name": "className",
           "type": "string",
           "typeKind": "primitive",
@@ -154,6 +164,11 @@
     }
   ],
   "types": {
+    "ChartActiveHandler": {
+      "kind": "type",
+      "definition": "type ChartActiveHandler = (\n  datum: Record<string, unknown> | null,\n  index: number | null,\n) => void;",
+      "description": "The `onActiveChange` callback of the charts drawn from one `data` array\nover a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row\nof `data` and its index, or `null, null` when no point is active."
+    },
     "ChartSummaryItem": {
       "kind": "interface",
       "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
@@ -167,6 +182,6 @@
     "note": "The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer."
   },
   "size": {
-    "gzip": 2155
+    "gzip": 2386
   }
 }

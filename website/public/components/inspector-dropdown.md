@@ -63,6 +63,13 @@ interface DropdownOption {
    * or custom element (ReactNode).
    */
   icon?: string | React.ReactNode;
+  /** A second line under the label, in the option row only: an account number, a person's email. */
+  description?: string;
+  /**
+   * Content at the end of the option row, before the chosen mark: a balance,
+   * a count, a Badge. Shown in the row only, never on the closed trigger.
+   */
+  trailing?: React.ReactNode;
   /** Whether this option is disabled */
   disabled?: boolean;
 }

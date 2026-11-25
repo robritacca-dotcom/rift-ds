@@ -154,7 +154,7 @@
     },
     "NavListItem": {
       "kind": "interface",
-      "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   * @default true\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n}"
+      "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   * @default true\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n  /** Icon before the label — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n}"
     },
     "NavListSection": {
       "kind": "interface",
@@ -169,7 +169,8 @@
     "ComponentPropsWithRef": "react",
     "ElementType": "react",
     "HTMLElement": "typescript",
-    "MouseEvent": "react"
+    "MouseEvent": "react",
+    "ReactNode": "react"
   },
   "keyboard": [
     {
@@ -194,6 +195,6 @@
     }
   ],
   "size": {
-    "gzip": 3224
+    "gzip": 3233
   }
 }

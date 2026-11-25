@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { FilterBar } from 'rift-ds';`
 - Deep import: `import { FilterBar } from 'rift-ds/components/FilterBar/FilterBar';`
 - Rendering: client component (declares 'use client')
-- Size: 7.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 7.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/filter-bar
 - Schema: https://rift-ds.com/schema/components/filter-bar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

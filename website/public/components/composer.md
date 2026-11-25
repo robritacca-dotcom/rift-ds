@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { Composer } from 'rift-ds';`
 - Deep import: `import { Composer } from 'rift-ds/components/Composer/Composer';`
 - Rendering: client component (declares 'use client')
-- Size: 11.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 11.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/composer
 - Schema: https://rift-ds.com/schema/components/composer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

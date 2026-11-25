@@ -230,7 +230,7 @@
   "types": {
     "ComboboxOption": {
       "kind": "interface",
-      "definition": "interface ComboboxOption {\n  /** Display label — also the text matched when filtering */\n  label: string;\n  /** Option value */\n  value: string;\n  /** Optional secondary line shown under the label */\n  description?: string;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+      "definition": "interface ComboboxOption {\n  /** Display label — also the text matched when filtering */\n  label: string;\n  /** Option value */\n  value: string;\n  /** Optional secondary line shown under the label */\n  description?: string;\n  /**\n   * Mark drawn before the label in the option row: a Material Symbol name\n   * (string) or a custom element (ReactNode) such as an Avatar or a logo.\n   */\n  icon?: string | React.ReactNode;\n  /**\n   * Content at the end of the option row, before the chosen mark: a balance,\n   * a count, a Badge. Shown in the row only, never in the field.\n   */\n  trailing?: React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
     },
     "ComboboxOptionGroup": {
       "kind": "interface",
@@ -277,7 +277,7 @@
     }
   ],
   "size": {
-    "gzip": 6603
+    "gzip": 6690
   },
   "alternatives": [
     {

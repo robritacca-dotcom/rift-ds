@@ -415,7 +415,7 @@
       "name": "drawer",
       "type": "registry:ui",
       "title": "Drawer",
-      "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation."
+      "description": "An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation."
     },
     {
       "name": "dropdown",

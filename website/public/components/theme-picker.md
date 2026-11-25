@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { ThemePicker } from 'rift-ds';`
 - Deep import: `import { ThemePicker } from 'rift-ds/components/ThemePicker/ThemePicker';`
 - Rendering: client component (declares 'use client')
-- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/theme-picker
 - Schema: https://rift-ds.com/schema/components/theme-picker.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

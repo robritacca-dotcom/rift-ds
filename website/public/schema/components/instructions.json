@@ -79,7 +79,7 @@
   "types": {
     "InstructionStep": {
       "kind": "interface",
-      "definition": "interface InstructionStep {\n  /** Step label/title */\n  label: string;\n  /** Optional step description */\n  description?: string;\n  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */\n  icon?: string | React.ReactNode;\n}"
+      "definition": "interface InstructionStep {\n  /** Step label/title */\n  label: string;\n  /**\n   * What the step says under its label. Plain text is set as a paragraph;\n   * markup (a code block, a figure, a list) is set as a block the step holds.\n   */\n  description?: React.ReactNode;\n  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */\n  icon?: string | React.ReactNode;\n}"
     }
   },
   "externalTypes": {
@@ -89,6 +89,6 @@
     "by": "none"
   },
   "size": {
-    "gzip": 784
+    "gzip": 821
   }
 }

@@ -1,7 +1,7 @@
 {
   "$comment": "The icons in the website's cut of the icon font, and the fingerprints of what it was cut from. Written by scripts/generate-site-icons.mjs; never edited by hand.",
-  "from": "27fc28ca1d0134ad919650061f3b775c40067793f77f96fa73ca1b7ad0adec96",
-  "font": "df4460a90b521671e0ecf600a5d6b079ac20f87798f1ba7daaf5eb299e1a12d6",
+  "from": "64391cd34dc2d7ca1a49b05d1654fa22bdbc785640b5b865bf9208e42eb7a581",
+  "font": "b89e20ff692a3ba190a082a16a2324a990eb48ebea731070b3cb16a84d79327a",
   "icons": [
     "ac_unit",
     "access_time",
@@ -566,6 +566,7 @@
     "query_builder",
     "query_stats",
     "question_answer",
+    "queue",
     "quiz",
     "radio",
     "radio_button_checked",

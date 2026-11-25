@@ -1,6 +1,6 @@
 # Drawer
 
-An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.
+An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { Drawer } from 'rift-ds';`
 - Deep import: `import { Drawer } from 'rift-ds/components/Drawer/Drawer';`
 - Rendering: client component (declares 'use client')
-- Size: 5.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/drawer
 - Schema: https://rift-ds.com/schema/components/drawer.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +26,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | side | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'right'` | Edge the panel slides in from. `left` and `right` are the screen's edges in any reading direction; `start` and `end` follow it, so a `start` drawer opens on the left in English and on the right in Arabic. |
 | size | `"sm" \| "md" \| "lg"` | no | `'md'` | Panel size along the axis it slides on |
 | dismissible | `boolean` | no | `true` | Whether ESC, scrim click, and the close button can dismiss |
+| modal | `boolean` | no | `true` | Whether the drawer takes over the page. `true` (the default) draws the scrim, traps focus, locks scroll and makes the page behind inert. `false` leaves the page live beside the panel, for a detail view that follows a list: no scrim, no trap, and a press outside never closes it. Focus still moves into the panel on open; on close it returns to the opener only if it is still inside the panel. |
+| layout | `"floating" \| "flush"` | no | `'flush'` | How the panel meets the edge. `flush` (the default) runs to the edge with a hairline on the side facing the page; `floating` holds the panel off every edge as a raised, rounded card. |
 | closeLabel | `string` | no | `'Close drawer'` | Accessible name of the close button. |
 | className | `string` | no | `''` | Additional CSS classes — applied to the portal container, not the panel |
 
@@ -33,7 +35,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 
 Every row is pressed by an automated test, in a left-to-right and a right-to-left layout.
 
-Follows the WAI-ARIA dialog pattern (https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
+The modal drawer, the default follows the WAI-ARIA dialog pattern (https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/).
 
 | Key | What it does |
 | --- | --- |

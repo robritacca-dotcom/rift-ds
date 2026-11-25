@@ -294,6 +294,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "kind": "interface",
         "definition": "interface AreaSeriesConfig {\n  /** Key in data for this series */\n  dataKey: string;\n  /** Display name (shown in tooltip and legend) */\n  label: string;\n  /** Area stroke / fill colour — CSS value */\n  color?: string;\n  /** Fill opacity (0–1) */\n  fillOpacity?: number;\n}"
       },
+      "ChartActiveHandler": {
+        "kind": "type",
+        "definition": "type ChartActiveHandler = (\n  datum: Record<string, unknown> | null,\n  index: number | null,\n) => void;",
+        "description": "The `onActiveChange` callback of the charts drawn from one `data` array\nover a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row\nof `data` and its index, or `null, null` when no point is active."
+      },
       "ChartSummaryItem": {
         "kind": "interface",
         "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
@@ -457,6 +462,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "bar-chart": {
     "types": {
+      "ChartActiveHandler": {
+        "kind": "type",
+        "definition": "type ChartActiveHandler = (\n  datum: Record<string, unknown> | null,\n  index: number | null,\n) => void;",
+        "description": "The `onActiveChange` callback of the charts drawn from one `data` array\nover a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row\nof `data` and its index, or `null, null` when no point is active."
+      },
       "ChartSummaryItem": {
         "kind": "interface",
         "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
@@ -697,6 +707,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "combo-chart": {
     "types": {
+      "ChartActiveHandler": {
+        "kind": "type",
+        "definition": "type ChartActiveHandler = (\n  datum: Record<string, unknown> | null,\n  index: number | null,\n) => void;",
+        "description": "The `onActiveChange` callback of the charts drawn from one `data` array\nover a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row\nof `data` and its index, or `null, null` when no point is active."
+      },
       "ChartSummaryItem": {
         "kind": "interface",
         "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
@@ -710,7 +725,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "ComboboxOption": {
         "kind": "interface",
-        "definition": "interface ComboboxOption {\n  /** Display label — also the text matched when filtering */\n  label: string;\n  /** Option value */\n  value: string;\n  /** Optional secondary line shown under the label */\n  description?: string;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+        "definition": "interface ComboboxOption {\n  /** Display label — also the text matched when filtering */\n  label: string;\n  /** Option value */\n  value: string;\n  /** Optional secondary line shown under the label */\n  description?: string;\n  /**\n   * Mark drawn before the label in the option row: a Material Symbol name\n   * (string) or a custom element (ReactNode) such as an Avatar or a logo.\n   */\n  icon?: string | React.ReactNode;\n  /**\n   * Content at the end of the option row, before the chosen mark: a balance,\n   * a count, a Badge. Shown in the row only, never in the field.\n   */\n  trailing?: React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
       },
       "ComboboxOptionGroup": {
         "kind": "interface",
@@ -1318,7 +1333,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "DropdownOption": {
         "kind": "interface",
-        "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+        "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** A second line under the label, in the option row only: an account number, a person's email. */\n  description?: string;\n  /**\n   * Content at the end of the option row, before the chosen mark: a balance,\n   * a count, a Badge. Shown in the row only, never on the closed trigger.\n   */\n  trailing?: React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
       },
       "DropdownOptionGroup": {
         "kind": "interface",
@@ -1663,7 +1678,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "DropdownOption": {
         "kind": "interface",
-        "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+        "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** A second line under the label, in the option row only: an account number, a person's email. */\n  description?: string;\n  /**\n   * Content at the end of the option row, before the chosen mark: a balance,\n   * a count, a Badge. Shown in the row only, never on the closed trigger.\n   */\n  trailing?: React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
       },
       "DropdownOptionGroup": {
         "kind": "interface",
@@ -1697,7 +1712,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "InstructionStep": {
         "kind": "interface",
-        "definition": "interface InstructionStep {\n  /** Step label/title */\n  label: string;\n  /** Optional step description */\n  description?: string;\n  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */\n  icon?: string | React.ReactNode;\n}"
+        "definition": "interface InstructionStep {\n  /** Step label/title */\n  label: string;\n  /**\n   * What the step says under its label. Plain text is set as a paragraph;\n   * markup (a code block, a figure, a list) is set as a block the step holds.\n   */\n  description?: React.ReactNode;\n  /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */\n  icon?: string | React.ReactNode;\n}"
       }
     },
     "externalTypes": {
@@ -1751,6 +1766,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
   },
   "line-chart": {
     "types": {
+      "ChartActiveHandler": {
+        "kind": "type",
+        "definition": "type ChartActiveHandler = (\n  datum: Record<string, unknown> | null,\n  index: number | null,\n) => void;",
+        "description": "The `onActiveChange` callback of the charts drawn from one `data` array\nover a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row\nof `data` and its index, or `null, null` when no point is active."
+      },
       "ChartSummaryItem": {
         "kind": "interface",
         "definition": "interface ChartSummaryItem {\n  /** Label shown above the value */\n  label: string;\n  /** Formatted value to display */\n  value: string | number;\n}"
@@ -2030,7 +2050,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "NavListItem": {
         "kind": "interface",
-        "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   * @default true\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n}"
+        "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   * @default true\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n  /** Icon before the label — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n}"
       },
       "NavListSection": {
         "kind": "interface",
@@ -2045,7 +2065,8 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
       "HTMLElement": "typescript",
-      "MouseEvent": "react"
+      "MouseEvent": "react",
+      "ReactNode": "react"
     }
   },
   "notification-center": {
@@ -2676,6 +2697,11 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "BarSeriesConfig": {
         "kind": "interface",
         "definition": "interface BarSeriesConfig {\n  /** Key in data for this series */\n  dataKey: string;\n  /** Display name (shown in tooltip & legend) */\n  label: string;\n  /** Bar fill colour */\n  color?: string;\n}"
+      },
+      "ChartActiveHandler": {
+        "kind": "type",
+        "definition": "type ChartActiveHandler = (\n  datum: Record<string, unknown> | null,\n  index: number | null,\n) => void;",
+        "description": "The `onActiveChange` callback of the charts drawn from one `data` array\nover a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row\nof `data` and its index, or `null, null` when no point is active."
       },
       "ChartSummaryItem": {
         "kind": "interface",

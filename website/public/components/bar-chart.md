@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { BarChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { BarChart } from 'rift-ds/components/Chart/BarChart';`
 - Rendering: client component (declares 'use client')
-- Size: 1.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/bar-chart
 - Schema: https://rift-ds.com/schema/components/bar-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -28,6 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | height | `number` | no | `350` | Chart area height in pixels |
 | yAxisFormatter | `((value: number) => string)` | no |  | Y-axis tick formatter, such as a currency or a percent. Defaults to a short number in the chart's locale. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
+| onActiveChange | `ChartActiveHandler` | no |  | Called when the active point changes: with the row of `data` under the pointer or the keyboard cursor and its index, and with `null, null` once neither is on the plot. For a headline figure that follows the cursor. |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
 
 ## Keyboard
@@ -35,6 +36,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
+
+### ChartActiveHandler
+
+The `onActiveChange` callback of the charts drawn from one `data` array
+over a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row
+of `data` and its index, or `null, null` when no point is active.
+
+```ts
+type ChartActiveHandler = (
+  datum: Record<string, unknown> | null,
+  index: number | null,
+) => void;
+```
 
 ### ChartSummaryItem
 

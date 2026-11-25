@@ -1526,7 +1526,7 @@ A general-purpose modal for focused tasks, with sizes, an optional footer, and f
 
 ### Drawer
 
-An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.
+An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation.
 
 - Import: `import { Drawer } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

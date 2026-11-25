@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { DropdownMenu } from 'rift-ds';`
 - Deep import: `import { DropdownMenu } from 'rift-ds/components/DropdownMenu/DropdownMenu';`
 - Rendering: client component (declares 'use client')
-- Size: 9.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 9.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/dropdown-menu
 - Schema: https://rift-ds.com/schema/components/dropdown-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

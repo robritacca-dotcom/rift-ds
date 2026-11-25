@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { Dropdown } from 'rift-ds';`
 - Deep import: `import { Dropdown } from 'rift-ds/components/Dropdown/Dropdown';`
 - Rendering: client component (declares 'use client')
-- Size: 4.9 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 5.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/dropdown
 - Schema: https://rift-ds.com/schema/components/dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -86,6 +86,13 @@ interface DropdownOption {
    * or custom element (ReactNode).
    */
   icon?: string | React.ReactNode;
+  /** A second line under the label, in the option row only: an account number, a person's email. */
+  description?: string;
+  /**
+   * Content at the end of the option row, before the chosen mark: a balance,
+   * a count, a Badge. Shown in the row only, never on the closed trigger.
+   */
+  trailing?: React.ReactNode;
   /** Whether this option is disabled */
   disabled?: boolean;
 }

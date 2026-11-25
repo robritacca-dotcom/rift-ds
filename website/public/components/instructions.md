@@ -35,8 +35,11 @@ Nothing here takes focus, so there are no keys. A test holds that.
 interface InstructionStep {
   /** Step label/title */
   label: string;
-  /** Optional step description */
-  description?: string;
+  /**
+   * What the step says under its label. Plain text is set as a paragraph;
+   * markup (a code block, a figure, a list) is set as a block the step holds.
+   */
+  description?: React.ReactNode;
   /** Optional custom icon — Material Symbol name (string) or custom element (ReactNode); defaults to step number */
   icon?: string | React.ReactNode;
 }

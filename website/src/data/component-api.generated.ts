@@ -1783,6 +1783,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "false"
           },
           {
+            "name": "onActiveChange",
+            "type": "ChartActiveHandler",
+            "required": false,
+            "description": "Called when the active point changes: with the row of `data` under the\npointer or the keyboard cursor and its index, and with `null, null` once\nneither is on the plot. For a headline figure that follows the cursor.",
+            "typeRefs": [
+              "ChartActiveHandler"
+            ]
+          },
+          {
             "name": "className",
             "type": "string",
             "required": false,
@@ -3073,6 +3082,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "onActiveChange",
+            "type": "ChartActiveHandler",
+            "required": false,
+            "description": "Called when the active point changes: with the row of `data` under the\npointer or the keyboard cursor and its index, and with `null, null` once\nneither is on the plot. For a headline figure that follows the cursor.",
+            "typeRefs": [
+              "ChartActiveHandler"
+            ]
           },
           {
             "name": "className",
@@ -5295,6 +5313,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "onActiveChange",
+            "type": "ChartActiveHandler",
+            "required": false,
+            "description": "Called when the active point changes: with the row of `data` under the\npointer or the keyboard cursor and its index, and with `null, null` once\nneither is on the plot. For a headline figure that follows the cursor.",
+            "typeRefs": [
+              "ChartActiveHandler"
+            ]
           },
           {
             "name": "className",
@@ -8821,7 +8848,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Drawer",
     "slug": "drawer",
     "category": "overlays",
-    "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
+    "description": "An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation.",
     "client": true,
     "importPath": "rift-ds/components/Drawer/Drawer",
     "barrel": "main",
@@ -8904,6 +8931,24 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Whether ESC, scrim click, and the close button can dismiss",
             "defaultValue": "true"
+          },
+          {
+            "name": "modal",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether the drawer takes over the page. `true` (the default) draws the\nscrim, traps focus, locks scroll and makes the page behind inert. `false`\nleaves the page live beside the panel, for a detail view that follows a\nlist: no scrim, no trap, and a press outside never closes it. Focus still\nmoves into the panel on open; on close it returns to the opener only if\nit is still inside the panel.",
+            "defaultValue": "true"
+          },
+          {
+            "name": "layout",
+            "type": "\"floating\" | \"flush\"",
+            "required": false,
+            "description": "How the panel meets the edge. `flush` (the default) runs to the edge with\na hairline on the side facing the page; `floating` holds the panel off\nevery edge as a raised, rounded card.",
+            "values": [
+              "floating",
+              "flush"
+            ],
+            "defaultValue": "'flush'"
           },
           {
             "name": "closeLabel",
@@ -12737,6 +12782,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "onActiveChange",
+            "type": "ChartActiveHandler",
+            "required": false,
+            "description": "Called when the active point changes: with the row of `data` under the\npointer or the keyboard cursor and its index, and with `null, null` once\nneither is on the plot. For a headline figure that follows the cursor.",
+            "typeRefs": [
+              "ChartActiveHandler"
+            ]
           },
           {
             "name": "className",
@@ -18499,6 +18553,15 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface",
             "defaultValue": "false"
+          },
+          {
+            "name": "onActiveChange",
+            "type": "ChartActiveHandler",
+            "required": false,
+            "description": "Called when the active point changes: with the row of `data` under the\npointer or the keyboard cursor and its index, and with `null, null` once\nneither is on the plot. For a headline figure that follows the cursor.",
+            "typeRefs": [
+              "ChartActiveHandler"
+            ]
           },
           {
             "name": "className",

@@ -8,13 +8,13 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { RichDropdown } from 'rift-ds';`
 - Deep import: `import { RichDropdown } from 'rift-ds/components/RichDropdown/RichDropdown';`
 - Rendering: client component (declares 'use client')
-- Size: 5.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 5.9 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/rich-dropdown
 - Schema: https://rift-ds.com/schema/components/rich-dropdown.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Alternatives
 
-- Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when the label alone is enough to choose by.
+- Use [Dropdown](https://rift-ds.com/components/dropdown.md) instead when a label is enough to choose by, with an icon, a second line or a trailing value at most.
 
 ## RichDropdown props
 

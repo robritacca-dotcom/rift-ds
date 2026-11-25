@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { Combobox } from 'rift-ds';`
 - Deep import: `import { Combobox } from 'rift-ds/components/Combobox/Combobox';`
 - Rendering: client component (declares 'use client')
-- Size: 6.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/combobox
 - Schema: https://rift-ds.com/schema/components/combobox.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -73,6 +73,16 @@ interface ComboboxOption {
   value: string;
   /** Optional secondary line shown under the label */
   description?: string;
+  /**
+   * Mark drawn before the label in the option row: a Material Symbol name
+   * (string) or a custom element (ReactNode) such as an Avatar or a logo.
+   */
+  icon?: string | React.ReactNode;
+  /**
+   * Content at the end of the option row, before the chosen mark: a balance,
+   * a count, a Badge. Shown in the row only, never in the field.
+   */
+  trailing?: React.ReactNode;
   /** Whether this option is disabled */
   disabled?: boolean;
 }

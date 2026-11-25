@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { ComboChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { ComboChart } from 'rift-ds/components/Chart/ComboChart';`
 - Rendering: client component (declares 'use client')
-- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/combo-chart
 - Schema: https://rift-ds.com/schema/components/combo-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -33,6 +33,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | yAxisFormatter | `((value: number) => string)` | no |  | Tick formatter for the bar series' axis, such as a currency. Defaults to a short number in the chart's locale. |
 | secondaryAxisFormatter | `((value: number) => string)` | no |  | Tick formatter for the line series' axis when `secondaryAxis` draws it, such as a percent. Defaults to a short number in the chart's locale. |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
+| onActiveChange | `ChartActiveHandler` | no |  | Called when the active point changes: with the row of `data` under the pointer or the keyboard cursor and its index, and with `null, null` once neither is on the plot. For a headline figure that follows the cursor. |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
 
 ## Keyboard
@@ -40,6 +41,19 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 The chart takes focus and the arrow keys step through its data points, which is the charting engine’s own keyboard layer. Those keys belong to the platform, so no test of this library presses them.
 
 ## Types
+
+### ChartActiveHandler
+
+The `onActiveChange` callback of the charts drawn from one `data` array
+over a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row
+of `data` and its index, or `null, null` when no point is active.
+
+```ts
+type ChartActiveHandler = (
+  datum: Record<string, unknown> | null,
+  index: number | null,
+) => void;
+```
 
 ### ChartSummaryItem
 

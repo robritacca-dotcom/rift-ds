@@ -194,7 +194,7 @@
   "types": {
     "DropdownOption": {
       "kind": "interface",
-      "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
+      "definition": "interface DropdownOption {\n  /** Display label */\n  label: string;\n  /** Option value */\n  value: string;\n  /**\n   * CSS font-family stack to render this option's label in, so a typeface\n   * can preview itself in a font picker. Applies to the option row and to\n   * the closed trigger while the option is selected; omitted, the label\n   * keeps the theme's own face.\n   */\n  font?: string;\n  /**\n   * Icon drawn before the label, in the option row and on the closed\n   * trigger while the option is selected — Material Symbol name (string)\n   * or custom element (ReactNode).\n   */\n  icon?: string | React.ReactNode;\n  /** A second line under the label, in the option row only: an account number, a person's email. */\n  description?: string;\n  /**\n   * Content at the end of the option row, before the chosen mark: a balance,\n   * a count, a Badge. Shown in the row only, never on the closed trigger.\n   */\n  trailing?: React.ReactNode;\n  /** Whether this option is disabled */\n  disabled?: boolean;\n}"
     },
     "DropdownOptionGroup": {
       "kind": "interface",
@@ -241,7 +241,7 @@
     }
   ],
   "size": {
-    "gzip": 4915
+    "gzip": 4964
   },
   "alternatives": [
     {

@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 - Import: `import { StackedBarChart } from 'rift-ds/charts'; // needs the optional recharts peer`
 - Deep import: `import { StackedBarChart } from 'rift-ds/components/Chart/StackedBarChart';`
 - Rendering: client component (declares 'use client')
-- Size: 2.0 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 2.2 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/stacked-bar-chart
 - Schema: https://rift-ds.com/schema/components/stacked-bar-chart.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -26,6 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.36.0. The same dat
 | height | `number` | no | `350` | Chart area height in pixels |
 | yAxisFormatter | `((value: number) => string)` | no |  | Y-axis tick formatter |
 | bare | `boolean` | no | `false` | Strip the card chrome (border, padding, fill) when the chart sits inside another panel that supplies the surface |
+| onActiveChange | `ChartActiveHandler` | no |  | Called when the active point changes: with the row of `data` under the pointer or the keyboard cursor and its index, and with `null, null` once neither is on the plot. For a headline figure that follows the cursor. |
 | className | `string` | no | `''` | Additional CSS classes on the wrapper |
 
 ## Keyboard
@@ -45,6 +46,19 @@ interface BarSeriesConfig {
   /** Bar fill colour */
   color?: string;
 }
+```
+
+### ChartActiveHandler
+
+The `onActiveChange` callback of the charts drawn from one `data` array
+over a shared x-axis (Area, Line, Bar, StackedBar, Combo): the active row
+of `data` and its index, or `null, null` when no point is active.
+
+```ts
+type ChartActiveHandler = (
+  datum: Record<string, unknown> | null,
+  index: number | null,
+) => void;
 ```
 
 ### ChartSummaryItem

@@ -6,7 +6,7 @@
   "label": "Drawer",
   "slug": "drawer",
   "category": "overlays",
-  "description": "An edge-anchored modal panel that slides in from any side, for filter panels, detail views, and mobile navigation.",
+  "description": "An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation.",
   "client": true,
   "importPath": "rift-ds/components/Drawer/Drawer",
   "barrel": "main",
@@ -103,6 +103,26 @@
           "default": true
         },
         {
+          "name": "modal",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Whether the drawer takes over the page. `true` (the default) draws the\nscrim, traps focus, locks scroll and makes the page behind inert. `false`\nleaves the page live beside the panel, for a detail view that follows a\nlist: no scrim, no trap, and a press outside never closes it. Focus still\nmoves into the panel on open; on close it returns to the opener only if\nit is still inside the panel.",
+          "default": true
+        },
+        {
+          "name": "layout",
+          "type": "\"floating\" | \"flush\"",
+          "typeKind": "enum",
+          "values": [
+            "floating",
+            "flush"
+          ],
+          "required": false,
+          "description": "How the panel meets the edge. `flush` (the default) runs to the edge with\na hairline on the side facing the page; `floating` holds the panel off\nevery edge as a raised, rounded card.",
+          "default": "flush"
+        },
+        {
           "name": "closeLabel",
           "type": "string",
           "typeKind": "primitive",
@@ -127,6 +147,7 @@
   "keyboard": [
     {
       "pattern": "dialog",
+      "part": "modal drawer, the default",
       "label": "Dialog",
       "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/",
       "rows": [
@@ -158,6 +179,6 @@
     }
   ],
   "size": {
-    "gzip": 5927
+    "gzip": 6045
   }
 }

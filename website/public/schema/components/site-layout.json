@@ -35,7 +35,7 @@
           "type": "ReactNode",
           "typeKind": "reference",
           "required": false,
-          "description": "The navigation column, usually a scrollable NavList: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`, and set the\nheader's `foldBelow=\"tablet\"` so it folds at the same step), so a\nreader has one menu, never two."
+          "description": "The navigation column, usually a scrollable SideNav: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`, and set the\nheader's `foldBelow=\"tablet\"` so it folds at the same step), so a\nreader has one menu, never two."
         },
         {
           "name": "aside",

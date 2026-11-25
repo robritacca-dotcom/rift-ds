@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import { NavStack, type NavStackEntry } from "rift-ds/components/NavStack/NavStack";
+import { DrillMenu, type DrillMenuEntry } from "rift-ds/components/DrillMenu/DrillMenu";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 
 /* A fictional shop's menu: large sections, a category level, links that
    leave the site, and a setting that drills into its choices. */
-function shopMenu(units: string, setUnits: (value: string) => void): NavStackEntry[] {
+function shopMenu(units: string, setUnits: (value: string) => void): DrillMenuEntry[] {
   return [
     {
       type: "section",
@@ -76,7 +76,7 @@ function Demo({ defaultPath, currentHref }: { defaultPath?: string[]; currentHre
   const [units, setUnits] = useState("Metric");
   return (
     <div className={styles.frame}>
-      <NavStack
+      <DrillMenu
         items={shopMenu(units, setUnits)}
         defaultPath={defaultPath}
         currentHref={currentHref}
@@ -87,19 +87,19 @@ function Demo({ defaultPath, currentHref }: { defaultPath?: string[]; currentHre
   );
 }
 
-export default function NavStackPage() {
+export default function DrillMenuPage() {
   return (
     <div className={styles.dsContent}>
       <PageBreadcrumb />
       <div className={`${styles.pageHeader} animate-in`}>
-        <h1 className={styles.pageTitle}>Nav stack</h1>
+        <h1 className={styles.pageTitle}>Drill menu</h1>
         <PageLinks storybookPath="/?path=/docs/components-navstack--docs" />
       </div>
 
       <div className={`${styles.introSection} animate-in animate-delay-1`}>
         <p className={styles.subDisplay}>A menu that drills in, one level at a time</p>
         <p className={styles.introBody}>
-          Nav stack is the menu a phone needs. Each level fills the space it is given, a row with children opens the next level in its place, and a back row names where it returns to. Rows are a thumb tall and every label starts on one line, so a deep site reads as a few short lists rather than one long one. The site header puts it in its drawer, which fills the screen on a phone.
+          Drill menu is the menu a phone needs. Each level fills the space it is given, a row with children opens the next level in its place, and a back row names where it returns to. Rows are a thumb tall and every label starts on one line, so a deep site reads as a few short lists rather than one long one. The site header puts it in its drawer, which fills the screen on a phone.
         </p>
       </div>
 
@@ -143,7 +143,7 @@ export default function NavStackPage() {
         </div>
       </section>
 
-      <ComponentInstallStrip slug="nav-stack" />
+      <ComponentInstallStrip slug="drill-menu" />
     </div>
   );
 }

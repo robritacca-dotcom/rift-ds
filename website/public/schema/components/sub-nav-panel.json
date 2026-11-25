@@ -2,28 +2,28 @@
   "$schema": "https://rift-ds.com/schema/component.schema.json",
   "version": "1.37.1",
   "kind": "component",
-  "name": "SidebarPanel",
-  "label": "Sidebar panel",
-  "slug": "sidebar-panel",
+  "name": "SubNavPanel",
+  "label": "Sub-nav panel",
+  "slug": "sub-nav-panel",
   "category": "layout",
   "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
   "client": true,
-  "importPath": "rift-ds/components/SidebarPanel/SidebarPanel",
+  "importPath": "rift-ds/components/SubNavPanel/SubNavPanel",
   "barrel": "main",
-  "docsUrl": "https://rift-ds.com/components/sidebar-panel",
-  "markdownUrl": "https://rift-ds.com/components/sidebar-panel.md",
+  "docsUrl": "https://rift-ds.com/components/sub-nav-panel",
+  "markdownUrl": "https://rift-ds.com/components/sub-nav-panel.md",
   "exports": [
     {
-      "component": "SidebarPanel",
+      "component": "SubNavPanel",
       "props": [
         {
           "name": "items",
-          "type": "SidebarPanelItem[]",
+          "type": "SubNavPanelItem[]",
           "typeKind": "array",
           "required": true,
           "description": "Items to list, optionally grouped with `group` and nested one level with `children`",
           "typeRefs": [
-            "SidebarPanelItem"
+            "SubNavPanelItem"
           ]
         },
         {
@@ -31,7 +31,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named \"Section navigation\".\nNote: this shadows the native `title` tooltip attribute, which SidebarPanel does not expose."
+          "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named \"Section navigation\".\nNote: this shadows the native `title` tooltip attribute, which SubNavPanel does not expose."
         },
         {
           "name": "activeKey",
@@ -111,9 +111,9 @@
       "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
       "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
     },
-    "SidebarPanelItem": {
+    "SubNavPanelItem": {
       "kind": "interface",
-      "definition": "interface SidebarPanelItem {\n  /** Unique key for this item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, such as what a choice does */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices, whether this row is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. Picking a choice is an action, so the panel stays open */\n  selected?: boolean;\n  /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */\n  group?: string;\n  /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */\n  children?: SidebarPanelItem[];\n}"
+      "definition": "interface SubNavPanelItem {\n  /** Unique key for this item */\n  key: string;\n  /** Display label */\n  label: string;\n  /** Renders the item as a real link to this URL instead of a button. Ignored when the item has children, whose row is the accordion toggle */\n  href?: string;\n  /** Click handler — also fires on a link item, so a consumer can route client-side */\n  onClick?: () => void;\n  /** Trailing pill, e.g. unread items. A count takes the count badge colours; a word stays a quiet pill */\n  badge?: string | number;\n  /** A second line under the label, such as what a choice does */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch */\n  icon?: string | React.ReactNode;\n  /** In a list of choices, whether this row is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. Picking a choice is an action, so the panel stays open */\n  selected?: boolean;\n  /** Group heading this item sits under; consecutive items sharing a group render beneath one heading */\n  group?: string;\n  /** Nested items — turns this row into an accordion. One level deep: grandchildren are not rendered */\n  children?: SubNavPanelItem[];\n}"
     }
   },
   "externalTypes": {

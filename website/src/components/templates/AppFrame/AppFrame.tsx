@@ -5,7 +5,7 @@
  * templates carousel's Mobile mode, or the playground's Mobile stage): an iOS large-title TopAppBar where the web top bar was, and
  * a floating glass BottomNav built from the template's own nav, with the
  * assistant on its search circle, and a menu button opening a full-screen
- * drawer with the whole sidebar as a NavStack (its entity switcher, every
+ * drawer with the whole sidebar as a DrillMenu (its entity switcher, every
  * destination drilling in as the rail's phone drawer does, the profile), so nothing the rail carries is out of reach on the phone. It
  * is the mobile dashboard's chrome, so every template previews as an app
  * rather than a narrow website. The preview's frame is the phone's screen,
@@ -24,7 +24,7 @@ import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
-import { NavStack, type NavStackEntry, type NavStackItem } from "rift-ds/components/NavStack/NavStack";
+import { DrillMenu, type DrillMenuEntry, type DrillMenuItem } from "rift-ds/components/DrillMenu/DrillMenu";
 import {
   BottomNav,
   type BottomNavItem,
@@ -86,14 +86,14 @@ export type AppFrameMenu = {
   activeKey: string;
   profile?: AppSidebarProfile;
   /** Rows above the destinations, as the rail draws its switcher under the brand: the entity switcher as a row that drills into its choices. */
-  topEntries?: NavStackEntry[];
+  topEntries?: DrillMenuEntry[];
 };
 
 /* The rail's sections as the drawer's levels, the way AppSidebar's own
    phone drawer draws them: each section under its heading, a row with
    children drilling into them, a choice keeping the drawer open, and a
    demo destination a hash, as the rail's are. */
-const subRow = (sub: AppSidebarSubItem): NavStackItem => ({
+const subRow = (sub: AppSidebarSubItem): DrillMenuItem => ({
   id: sub.key,
   label: sub.label,
   description: sub.description,
@@ -106,13 +106,13 @@ const subRow = (sub: AppSidebarSubItem): NavStackItem => ({
       : { href: sub.href ?? `#${sub.key}` }),
 });
 
-const menuEntries = (menu: AppFrameMenu): NavStackEntry[] => [
+const menuEntries = (menu: AppFrameMenu): DrillMenuEntry[] => [
   ...(menu.topEntries ?? []),
   ...menu.sections.map((section, index) => ({
     type: "section" as const,
     id: `section-${index}`,
     label: section.category,
-    items: section.items.map((item): NavStackItem => ({
+    items: section.items.map((item): DrillMenuItem => ({
       id: item.key,
       label: item.label,
       icon: item.icon,
@@ -146,7 +146,7 @@ function AppFrameMenuDrawer({ menu, open, onOpenChange }: { menu: AppFrameMenu; 
         )
       }
     >
-      <NavStack
+      <DrillMenu
         items={menuEntries(menu)}
         currentHref={`#${menu.activeKey}`}
         navLabel={menu.title}

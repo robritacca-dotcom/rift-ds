@@ -512,7 +512,7 @@
   gap: var(--gap-050);
 }
 
-/* The rails' one group heading, AppSidebar's category and SidebarPanel's
+/* The rails' one group heading, AppSidebar's category and SubNavPanel's
    group label: paragraph small in the tertiary text, mixed case. Its
    20px line is the overline's it replaced, so the rhythm below is
    unchanged. On the rail's leading line, the logo's. The vertical padding

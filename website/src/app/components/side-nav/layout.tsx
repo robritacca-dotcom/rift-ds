@@ -3,8 +3,8 @@ import { componentPageMetadata } from "@/config/navigation";
 
 // Title and description come from src/components/registry.json — the single
 // place a component's one-line summary lives.
-export const metadata = componentPageMetadata("nav-stack");
+export const metadata = componentPageMetadata("side-nav");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <ComponentPageLayout slug="nav-stack">{children}</ComponentPageLayout>;
+  return <ComponentPageLayout slug="side-nav">{children}</ComponentPageLayout>;
 }

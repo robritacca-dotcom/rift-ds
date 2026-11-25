@@ -130,7 +130,7 @@
 /* ============================================
    SIDEBAR
    Sticks below the header and holds the window's
-   height, so a scrollable NavList inside scrolls on
+   height, so a scrollable SideNav inside scrolls on
    its own. Docked to the edge it carries the gutter
    on its start side and a hairline on its end.
    ============================================ */
@@ -155,18 +155,18 @@
   padding-inline: var(--ds-shell-gutter) var(--padding-300);
 }
 
-/* Optical alignment: a NavList's words line up with the header's brand,
+/* Optical alignment: a SideNav's words line up with the header's brand,
    not its row fills, so the list hangs out by its own text inset and the
    fills sit in the gutter. A host's own list sets the same hook to join in. */
-.ds-site-layout__sidebar > .ds-nav-list,
+.ds-site-layout__sidebar > .ds-side-nav,
 .ds-site-layout__sidebar > [data-ds-sidebar-hang] {
-  width: calc(100% + var(--ds-nav-list-text-inset, 0px));
-  margin-inline-start: calc(-1 * var(--ds-nav-list-text-inset, 0px));
+  width: calc(100% + var(--ds-side-nav-text-inset, 0px));
+  margin-inline-start: calc(-1 * var(--ds-side-nav-text-inset, 0px));
   /* The same optical rule on the block axis: a scrollable list keeps room
-     at its top for its fade (--ds-nav-list-block-inset); pulling the list
+     at its top for its fade (--ds-side-nav-block-inset); pulling the list
      up by it starts the first row level with the page's first line, the
      breadcrumb or the title. */
-  margin-block-start: calc(-1 * var(--ds-nav-list-block-inset, 0px));
+  margin-block-start: calc(-1 * var(--ds-side-nav-block-inset, 0px));
 }
 
 /* Docked to the edge, the content sits the column gap off the divider,

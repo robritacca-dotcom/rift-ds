@@ -1601,20 +1601,20 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "drawerTopEntries",
-            "type": "NavStackEntry[]",
+            "type": "DrillMenuEntry[]",
             "required": false,
-            "description": "Rows above the sections in the phone drawer, in NavStack's shape, such\nas a switcher that drills into its choices. When set, the drawer shows\nthese in `topSlot`'s place, since a dropdown has no room to open on a\nfull-screen menu.",
+            "description": "Rows above the sections in the phone drawer, in DrillMenu's shape, such\nas a switcher that drills into its choices. When set, the drawer shows\nthese in `topSlot`'s place, since a dropdown has no room to open on a\nfull-screen menu.",
             "typeRefs": [
-              "NavStackEntry"
+              "DrillMenuEntry"
             ]
           },
           {
             "name": "drawerBottomEntries",
-            "type": "NavStackEntry[]",
+            "type": "DrillMenuEntry[]",
             "required": false,
-            "description": "Rows after the sections in the phone drawer, in NavStack's shape, such\nas appearance settings that drill into their choices. When set, the\ndrawer shows these in `footerSlot`'s place.",
+            "description": "Rows after the sections in the phone drawer, in DrillMenu's shape, such\nas appearance settings that drill into their choices. When set, the\ndrawer shows these in `footerSlot`'s place.",
             "typeRefs": [
-              "NavStackEntry"
+              "DrillMenuEntry"
             ]
           },
           {
@@ -8996,6 +8996,116 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "DrillMenu",
+    "label": "Drill menu",
+    "slug": "drill-menu",
+    "category": "navigation",
+    "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.",
+    "client": true,
+    "importPath": "rift-ds/components/DrillMenu/DrillMenu",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "DrillMenu",
+        "props": [
+          {
+            "name": "items",
+            "type": "DrillMenuEntry[]",
+            "required": true,
+            "description": "The first level's rows and sections. A row with `items` drills into the next level.",
+            "typeRefs": [
+              "DrillMenuEntry"
+            ]
+          },
+          {
+            "name": "currentHref",
+            "type": "string",
+            "required": false,
+            "description": "href of the current page: the exactly matching row gets `aria-current=\"page\"` and the current treatment, and every row on the way to it the current treatment."
+          },
+          {
+            "name": "path",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`."
+          },
+          {
+            "name": "defaultPath",
+            "type": "string[]",
+            "required": false,
+            "description": "The path the stack opens on, when it owns its state. Left out, it opens\non the deepest level that holds the current page (`currentHref`, or a\nrow marked `current`), so a reader deep in a section reopens the menu\nwhere they are; `[]` opens on the first level always."
+          },
+          {
+            "name": "onPathChange",
+            "type": "((path: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes."
+          },
+          {
+            "name": "onNavigate",
+            "type": "((item: DrillMenuItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
+            "required": false,
+            "description": "Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in.",
+            "typeRefs": [
+              "DrillMenuItem"
+            ]
+          },
+          {
+            "name": "header",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content above the first level's rows, such as a search field."
+          },
+          {
+            "name": "rootLabel",
+            "type": "string",
+            "required": false,
+            "description": "The back row's text on the second level, naming the first.",
+            "defaultValue": "'Menu'"
+          },
+          {
+            "name": "backLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "The back row's accessible name, given the title of the level it returns to. Defaults to \"Back to <title>\".",
+            "defaultValue": "(title) => `Back to ${title}`"
+          },
+          {
+            "name": "overviewLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "The overview row's text on a level whose row has an `href`, given that row's label. Defaults to \"<label> overview\".",
+            "defaultValue": "(label) => `${label} overview`"
+          },
+          {
+            "name": "navLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the `<nav>` landmark.",
+            "defaultValue": "'Menu'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "Dropdown",
     "label": "Dropdown",
     "slug": "dropdown",
@@ -13946,231 +14056,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
-    "name": "NavList",
-    "label": "Nav list",
-    "slug": "nav-list",
-    "category": "navigation",
-    "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
-    "client": true,
-    "importPath": "rift-ds/components/NavList/NavList",
-    "barrel": "main",
-    "exports": [
-      {
-        "component": "NavList",
-        "props": [
-          {
-            "name": "items",
-            "type": "NavListEntry[]",
-            "required": true,
-            "description": "Navigation tree to render: rows, and at the top level, sections of rows.",
-            "typeRefs": [
-              "NavListEntry"
-            ]
-          },
-          {
-            "name": "size",
-            "type": "\"default\" | \"compact\"",
-            "required": false,
-            "description": "Row density. `default` sets every row on the default control height; `compact` sets\nevery row on the 32px compact control height, for a long sidebar of\npages (a documentation site's hundred entries).",
-            "values": [
-              "compact",
-              "default"
-            ],
-            "defaultValue": "'default'"
-          },
-          {
-            "name": "scrollable",
-            "type": "boolean",
-            "required": false,
-            "description": "Make the list its own scroll area: it fills the height its parent\ngives it, scrolls inside without carrying the page along at its ends,\nand brings the current row into view when it first renders. Put it in\na column with a fixed or sticky height.",
-            "defaultValue": "false"
-          },
-          {
-            "name": "currentHref",
-            "type": "string",
-            "required": false,
-            "description": "href of the current page — the exactly matching row gets `aria-current=\"page\"` and the active treatment."
-          },
-          {
-            "name": "expandedIds",
-            "type": "string[]",
-            "required": false,
-            "description": "Controlled list of expanded item ids."
-          },
-          {
-            "name": "defaultExpandedIds",
-            "type": "string[]",
-            "required": false,
-            "description": "Initially expanded item ids (uncontrolled). The branch and the\ncollapsible section that hold the current page start open as well, so a\nreader landing deep in a long tree sees where they are."
-          },
-          {
-            "name": "onExpandedChange",
-            "type": "((expandedIds: string[]) => void)",
-            "required": false,
-            "description": "Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes."
-          },
-          {
-            "name": "multiple",
-            "type": "boolean",
-            "required": false,
-            "description": "Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in.",
-            "defaultValue": "false"
-          },
-          {
-            "name": "onNavigate",
-            "type": "((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
-            "required": false,
-            "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list.",
-            "typeRefs": [
-              "NavListItem"
-            ]
-          },
-          {
-            "name": "expandLabel",
-            "type": "((label: string) => string)",
-            "required": false,
-            "description": "Accessible name of a collapsed row's or section's toggle, given its label. Defaults to \"Expand <label>\".",
-            "defaultValue": "(label) => `Expand ${label}`"
-          },
-          {
-            "name": "collapseLabel",
-            "type": "((label: string) => string)",
-            "required": false,
-            "description": "Accessible name of an expanded row's or section's toggle, given its label. Defaults to \"Collapse <label>\".",
-            "defaultValue": "(label) => `Collapse ${label}`"
-          },
-          {
-            "name": "linkComponent",
-            "type": "LinkComponent",
-            "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
-            "typeRefs": [
-              "LinkComponent"
-            ]
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "required": false,
-            "description": "Additional CSS classes",
-            "defaultValue": "''"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "kind": "component",
-    "name": "NavStack",
-    "label": "Nav stack",
-    "slug": "nav-stack",
-    "category": "navigation",
-    "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.",
-    "client": true,
-    "importPath": "rift-ds/components/NavStack/NavStack",
-    "barrel": "main",
-    "exports": [
-      {
-        "component": "NavStack",
-        "props": [
-          {
-            "name": "items",
-            "type": "NavStackEntry[]",
-            "required": true,
-            "description": "The first level's rows and sections. A row with `items` drills into the next level.",
-            "typeRefs": [
-              "NavStackEntry"
-            ]
-          },
-          {
-            "name": "currentHref",
-            "type": "string",
-            "required": false,
-            "description": "href of the current page: the exactly matching row gets `aria-current=\"page\"` and the current treatment, and every row on the way to it the current treatment."
-          },
-          {
-            "name": "path",
-            "type": "string[]",
-            "required": false,
-            "description": "The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`."
-          },
-          {
-            "name": "defaultPath",
-            "type": "string[]",
-            "required": false,
-            "description": "The path the stack opens on, when it owns its state. Left out, it opens\non the deepest level that holds the current page (`currentHref`, or a\nrow marked `current`), so a reader deep in a section reopens the menu\nwhere they are; `[]` opens on the first level always."
-          },
-          {
-            "name": "onPathChange",
-            "type": "((path: string[]) => void)",
-            "required": false,
-            "description": "Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes."
-          },
-          {
-            "name": "onNavigate",
-            "type": "((item: NavStackItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
-            "required": false,
-            "description": "Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in.",
-            "typeRefs": [
-              "NavStackItem"
-            ]
-          },
-          {
-            "name": "header",
-            "type": "ReactNode",
-            "required": false,
-            "description": "Content above the first level's rows, such as a search field."
-          },
-          {
-            "name": "rootLabel",
-            "type": "string",
-            "required": false,
-            "description": "The back row's text on the second level, naming the first.",
-            "defaultValue": "'Menu'"
-          },
-          {
-            "name": "backLabel",
-            "type": "((title: string) => string)",
-            "required": false,
-            "description": "The back row's accessible name, given the title of the level it returns to. Defaults to \"Back to <title>\".",
-            "defaultValue": "(title) => `Back to ${title}`"
-          },
-          {
-            "name": "overviewLabel",
-            "type": "((label: string) => string)",
-            "required": false,
-            "description": "The overview row's text on a level whose row has an `href`, given that row's label. Defaults to \"<label> overview\".",
-            "defaultValue": "(label) => `${label} overview`"
-          },
-          {
-            "name": "navLabel",
-            "type": "string",
-            "required": false,
-            "description": "The accessible name of the `<nav>` landmark.",
-            "defaultValue": "'Menu'"
-          },
-          {
-            "name": "linkComponent",
-            "type": "LinkComponent",
-            "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
-            "typeRefs": [
-              "LinkComponent"
-            ]
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "required": false,
-            "description": "Additional CSS classes.",
-            "defaultValue": "''"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "kind": "component",
     "name": "NotificationCenter",
     "label": "Notification centre",
     "slug": "notification-center",
@@ -17011,69 +16896,107 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
-    "name": "SidebarPanel",
-    "label": "Sidebar panel",
-    "slug": "sidebar-panel",
-    "category": "layout",
-    "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
+    "name": "SideNav",
+    "label": "Side nav",
+    "slug": "side-nav",
+    "category": "navigation",
+    "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
     "client": true,
-    "importPath": "rift-ds/components/SidebarPanel/SidebarPanel",
+    "importPath": "rift-ds/components/SideNav/SideNav",
     "barrel": "main",
     "exports": [
       {
-        "component": "SidebarPanel",
+        "component": "SideNav",
         "props": [
           {
             "name": "items",
-            "type": "SidebarPanelItem[]",
+            "type": "SideNavEntry[]",
             "required": true,
-            "description": "Items to list, optionally grouped with `group` and nested one level with `children`",
+            "description": "Navigation tree to render: rows, and at the top level, sections of rows.",
             "typeRefs": [
-              "SidebarPanelItem"
+              "SideNavEntry"
             ]
           },
           {
-            "name": "title",
-            "type": "string",
+            "name": "size",
+            "type": "\"default\" | \"compact\"",
             "required": false,
-            "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named \"Section navigation\".\nNote: this shadows the native `title` tooltip attribute, which SidebarPanel does not expose."
+            "description": "Row density. `default` sets every row on the default control height; `compact` sets\nevery row on the 32px compact control height, for a long sidebar of\npages (a documentation site's hundred entries).",
+            "values": [
+              "compact",
+              "default"
+            ],
+            "defaultValue": "'default'"
           },
           {
-            "name": "activeKey",
-            "type": "string",
+            "name": "scrollable",
+            "type": "boolean",
             "required": false,
-            "description": "Key of the item for the current page. Its accordion parent starts open"
+            "description": "Make the list its own scroll area: it fills the height its parent\ngives it, scrolls inside without carrying the page along at its ends,\nand brings the current row into view when it first renders. Put it in\na column with a fixed or sticky height.",
+            "defaultValue": "false"
           },
           {
-            "name": "defaultOpenKeys",
+            "name": "currentHref",
+            "type": "string",
+            "required": false,
+            "description": "href of the current page — the exactly matching row gets `aria-current=\"page\"` and the active treatment."
+          },
+          {
+            "name": "expandedIds",
             "type": "string[]",
             "required": false,
-            "description": "Keys of the accordion rows open on first render, in addition to the active item's parent"
+            "description": "Controlled list of expanded item ids."
           },
           {
-            "name": "onCollapse",
-            "type": "(() => void)",
+            "name": "defaultExpandedIds",
+            "type": "string[]",
             "required": false,
-            "description": "Renders a collapse button beside the heading and calls this when it is pressed"
+            "description": "Initially expanded item ids (uncontrolled). The branch and the\ncollapsible section that hold the current page start open as well, so a\nreader landing deep in a long tree sees where they are."
+          },
+          {
+            "name": "onExpandedChange",
+            "type": "((expandedIds: string[]) => void)",
+            "required": false,
+            "description": "Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes."
+          },
+          {
+            "name": "multiple",
+            "type": "boolean",
+            "required": false,
+            "description": "Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "onNavigate",
+            "type": "((item: SideNavItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
+            "required": false,
+            "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list.",
+            "typeRefs": [
+              "SideNavItem"
+            ]
+          },
+          {
+            "name": "expandLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "Accessible name of a collapsed row's or section's toggle, given its label. Defaults to \"Expand <label>\".",
+            "defaultValue": "(label) => `Expand ${label}`"
           },
           {
             "name": "collapseLabel",
-            "type": "string",
+            "type": "((label: string) => string)",
             "required": false,
-            "description": "Accessible name of the collapse button. Defaults to \"Collapse <title>\", or \"Collapse panel\" when there is no title"
+            "description": "Accessible name of an expanded row's or section's toggle, given its label. Defaults to \"Collapse <label>\".",
+            "defaultValue": "(label) => `Collapse ${label}`"
           },
           {
-            "name": "onBack",
-            "type": "(() => void)",
+            "name": "linkComponent",
+            "type": "LinkComponent",
             "required": false,
-            "description": "Renders a back row above the heading and calls this when it is pressed, for a host that drills into the panel as a screen of its own"
-          },
-          {
-            "name": "backLabel",
-            "type": "string",
-            "required": false,
-            "description": "Label of the back row",
-            "defaultValue": "'Back'"
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router; passed on to each row's Button. Wins over a\nLinkProvider's; a plain `<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           },
           {
             "name": "className",
@@ -17081,15 +17004,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": "''"
-          },
-          {
-            "name": "linkComponent",
-            "type": "LinkComponent",
-            "required": false,
-            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
-            "typeRefs": [
-              "LinkComponent"
-            ]
           }
         ]
       }
@@ -17441,11 +17355,11 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "drawerEntries",
-            "type": "NavStackEntry[]",
+            "type": "DrillMenuEntry[]",
             "required": false,
-            "description": "More of the drawer's first level, after the sections: rows and sections\nof NavStack entries, such as a row that drills into a site's resources\nor a group of settings that drill into their choices. Plain rows ahead\nof the first section join the sections' own list, with no gap; a\nsection starts a group of its own.",
+            "description": "More of the drawer's first level, after the sections: rows and sections\nof DrillMenu entries, such as a row that drills into a site's resources\nor a group of settings that drill into their choices. Plain rows ahead\nof the first section join the sections' own list, with no gap; a\nsection starts a group of its own.",
             "typeRefs": [
-              "NavStackEntry"
+              "DrillMenuEntry"
             ]
           },
           {
@@ -17593,7 +17507,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "sidebar",
             "type": "ReactNode",
             "required": false,
-            "description": "The navigation column, usually a scrollable NavList: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`, and set the\nheader's `foldBelow=\"tablet\"` so it folds at the same step), so a\nreader has one menu, never two."
+            "description": "The navigation column, usually a scrollable SideNav: the wide-screen\nform of the site's sub-navigation. Sticks below the header; below\n960px it leaves the page, and the header's own menu carries the same\npages (give each SiteHeader section its `drawerItems`, and set the\nheader's `foldBelow=\"tablet\"` so it folds at the same step), so a\nreader has one menu, never two."
           },
           {
             "name": "aside",
@@ -19004,6 +18918,92 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "Additional CSS classes",
             "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "SubNavPanel",
+    "label": "Sub-nav panel",
+    "slug": "sub-nav-panel",
+    "category": "layout",
+    "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.",
+    "client": true,
+    "importPath": "rift-ds/components/SubNavPanel/SubNavPanel",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "SubNavPanel",
+        "props": [
+          {
+            "name": "items",
+            "type": "SubNavPanelItem[]",
+            "required": true,
+            "description": "Items to list, optionally grouped with `group` and nested one level with `children`",
+            "typeRefs": [
+              "SubNavPanelItem"
+            ]
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "Heading at the top of the panel, usually the label of the item that opened it. Also the panel's accessible name, after a native `aria-label`; with neither, the panel is named \"Section navigation\".\nNote: this shadows the native `title` tooltip attribute, which SubNavPanel does not expose."
+          },
+          {
+            "name": "activeKey",
+            "type": "string",
+            "required": false,
+            "description": "Key of the item for the current page. Its accordion parent starts open"
+          },
+          {
+            "name": "defaultOpenKeys",
+            "type": "string[]",
+            "required": false,
+            "description": "Keys of the accordion rows open on first render, in addition to the active item's parent"
+          },
+          {
+            "name": "onCollapse",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Renders a collapse button beside the heading and calls this when it is pressed"
+          },
+          {
+            "name": "collapseLabel",
+            "type": "string",
+            "required": false,
+            "description": "Accessible name of the collapse button. Defaults to \"Collapse <title>\", or \"Collapse panel\" when there is no title"
+          },
+          {
+            "name": "onBack",
+            "type": "(() => void)",
+            "required": false,
+            "description": "Renders a back row above the heading and calls this when it is pressed, for a host that drills into the panel as a screen of its own"
+          },
+          {
+            "name": "backLabel",
+            "type": "string",
+            "required": false,
+            "description": "Label of the back row",
+            "defaultValue": "'Back'"
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
           }
         ]
       }

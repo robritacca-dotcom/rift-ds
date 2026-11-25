@@ -3,8 +3,8 @@ import { componentPageMetadata } from "@/config/navigation";
 
 // Title and description come from src/components/registry.json — the single
 // place a component's one-line summary lives.
-export const metadata = componentPageMetadata("sidebar-panel");
+export const metadata = componentPageMetadata("sub-nav-panel");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <ComponentPageLayout slug="sidebar-panel">{children}</ComponentPageLayout>;
+  return <ComponentPageLayout slug="sub-nav-panel">{children}</ComponentPageLayout>;
 }

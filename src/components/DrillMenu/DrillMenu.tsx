@@ -5,11 +5,11 @@ import { useLinkComponent, type LinkComponent } from '../../behaviors/LinkProvid
 import { mirrorClass } from '../../behaviors/direction';
 import { ChosenMark } from '../Dropdown/Dropdown';
 import '../../behaviors/direction.css';
-import { holdsCurrent, idOf, isSection, navStackPathTo, rowsOf } from './path';
-import './NavStack.css';
+import { holdsCurrent, idOf, isSection, drillMenuPathTo, rowsOf } from './path';
+import './DrillMenu.css';
 import '../../fonts/material-symbols.css';
 
-export interface NavStackItem {
+export interface DrillMenuItem {
   /** Row text. */
   label: string;
   /**
@@ -30,7 +30,7 @@ export interface NavStackItem {
   /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
   title?: string;
   /** Rows on the level this row opens. A row with items drills in instead of navigating. */
-  items?: NavStackEntry[];
+  items?: DrillMenuEntry[];
   /**
    * Marks the row as the page being viewed, regardless of the exact match
    * against `currentHref`, for a section that stays current on its child
@@ -52,13 +52,13 @@ export interface NavStackItem {
  * A group of rows under an optional heading: one level's resources or
  * settings, say, set apart from the rows above it.
  */
-export interface NavStackSection {
+export interface DrillMenuSection {
   /** Marks the entry as a section rather than a row. */
   type: 'section';
   /** The heading over the rows. Leave it out for a group set apart by space alone. */
   label?: string;
   /** The section's rows. */
-  items: NavStackItem[];
+  items: DrillMenuItem[];
   /**
    * `prominent` draws the rows in the heading-3 style on a taller row, for
    * a menu that wants its top level louder. The site header's and the app
@@ -71,14 +71,14 @@ export interface NavStackSection {
 }
 
 /** An entry on a level: a row, or a section of rows. */
-export type NavStackEntry = NavStackItem | NavStackSection;
+export type DrillMenuEntry = DrillMenuItem | DrillMenuSection;
 
 const isCount = (badge: string | number) => typeof badge === 'number' || /^\d+\+?$/.test(badge);
 
-/** Props owned by NavStack itself — everything else falls through to the `<nav>`. */
-type NavStackOwnProps = {
+/** Props owned by DrillMenu itself — everything else falls through to the `<nav>`. */
+type DrillMenuOwnProps = {
   /** The first level's rows and sections. A row with `items` drills into the next level. */
-  items: NavStackEntry[];
+  items: DrillMenuEntry[];
   /** href of the current page: the exactly matching row gets `aria-current="page"` and the current treatment, and every row on the way to it the current treatment. */
   currentHref?: string;
   /** The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`. */
@@ -93,7 +93,7 @@ type NavStackOwnProps = {
   /** Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes. */
   onPathChange?: (path: string[]) => void;
   /** Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in. */
-  onNavigate?: (item: NavStackItem, event: React.MouseEvent<HTMLElement>) => void;
+  onNavigate?: (item: DrillMenuItem, event: React.MouseEvent<HTMLElement>) => void;
   /** Content above the first level's rows, such as a search field. */
   header?: React.ReactNode;
   /** The back row's text on the second level, naming the first. */
@@ -114,9 +114,9 @@ type NavStackOwnProps = {
   className?: string;
 };
 
-export interface NavStackProps
-  extends NavStackOwnProps,
-    Omit<React.ComponentPropsWithRef<'nav'>, keyof NavStackOwnProps> {}
+export interface DrillMenuProps
+  extends DrillMenuOwnProps,
+    Omit<React.ComponentPropsWithRef<'nav'>, keyof DrillMenuOwnProps> {}
 
 
 /**
@@ -130,7 +130,7 @@ export interface NavStackProps
  * The path is uncontrolled by default (`defaultPath`) or controlled with
  * `path` and `onPathChange`.
  */
-export function NavStack({
+export function DrillMenu({
   items,
   currentHref,
   path: pathProp,
@@ -146,9 +146,9 @@ export function NavStack({
   className = '',
   ref,
   ...rest
-}: NavStackProps) {
+}: DrillMenuProps) {
   const Link = useLinkComponent(linkComponent);
-  const [ownPath, setOwnPath] = useState<string[]>(() => defaultPath ?? navStackPathTo(items, currentHref));
+  const [ownPath, setOwnPath] = useState<string[]>(() => defaultPath ?? drillMenuPathTo(items, currentHref));
   const path = pathProp ?? ownPath;
   // Which way the last step went; null until the first step, so the first
   // render neither animates nor moves focus.
@@ -159,7 +159,7 @@ export function NavStack({
   const returnTo = useRef<string | null>(null);
 
   // Walk the path; a stale id (the items changed under it) stops the walk.
-  const trail: NavStackItem[] = [];
+  const trail: DrillMenuItem[] = [];
   let entries = items;
   for (const id of path) {
     const next = rowsOf(entries).find((row) => idOf(row) === id && row.items);
@@ -179,7 +179,7 @@ export function NavStack({
      gave it. The stack marks itself settling until the pointer next
      moves, and hover holds off until then; clicks still land. */
   const settle = (from: HTMLElement) => {
-    const nav = from.closest<HTMLElement>('.ds-nav-stack');
+    const nav = from.closest<HTMLElement>('.ds-drill-menu');
     if (!nav) return;
     nav.setAttribute('data-settling', '');
     const done = () => {
@@ -188,7 +188,7 @@ export function NavStack({
     };
     nav.addEventListener('pointermove', done);
   };
-  const drillIn = (item: NavStackItem) => {
+  const drillIn = (item: DrillMenuItem) => {
     setDirection('in');
     returnTo.current = null;
     setPath([...trail.map(idOf), idOf(item)]);
@@ -204,7 +204,7 @@ export function NavStack({
   useLayoutEffect(() => {
     if (direction === null) return;
     const back = returnTo.current;
-    const row = back ? levelRef.current?.querySelector<HTMLElement>(`[data-nav-stack-id="${CSS.escape(back)}"]`) : null;
+    const row = back ? levelRef.current?.querySelector<HTMLElement>(`[data-drill-menu-id="${CSS.escape(back)}"]`) : null;
     (row ?? titleRef.current ?? levelRef.current?.querySelector<HTMLElement>('a, button'))?.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- a step, not the direction, moves focus
   }, [trail.length]);
@@ -225,55 +225,55 @@ export function NavStack({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- a step, not the direction, scrolls
   }, [trail.length]);
 
-  const renderRow = (item: NavStackItem, variant: 'default' | 'prominent' = 'default') => {
+  const renderRow = (item: DrillMenuItem, variant: 'default' | 'prominent' = 'default') => {
     const id = idOf(item);
     const drills = Boolean(item.items);
     const isCurrent = holdsCurrent(item, currentHref);
     const exact = !drills && (item.current || (currentHref != null && item.href === currentHref));
     const classes = [
-      'ds-nav-stack__row',
-      variant === 'prominent' && 'ds-nav-stack__row--prominent',
-      isCurrent && 'ds-nav-stack__row--current',
+      'ds-drill-menu__row',
+      variant === 'prominent' && 'ds-drill-menu__row--prominent',
+      isCurrent && 'ds-drill-menu__row--current',
     ]
       .filter(Boolean)
       .join(' ');
     const trailing = drills ? (
-      <span className="ds-nav-stack__chevron material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
+      <span className="ds-drill-menu__chevron material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
         chevron_right
       </span>
     ) : item.selected ? (
-      <ChosenMark className="ds-nav-stack__chosen" />
+      <ChosenMark className="ds-drill-menu__chosen" />
     ) : item.external ? (
-      <span className="ds-nav-stack__external material-symbols-rounded" aria-hidden="true">
+      <span className="ds-drill-menu__external material-symbols-rounded" aria-hidden="true">
         arrow_outward
       </span>
     ) : null;
     const body = (
       <>
         {item.icon != null && (
-          <span className="ds-nav-stack__icon" aria-hidden="true">
+          <span className="ds-drill-menu__icon" aria-hidden="true">
             {typeof item.icon === 'string' ? <span className={`material-symbols-rounded ${mirrorClass(item.icon)}`}>{item.icon}</span> : item.icon}
           </span>
         )}
-        <span className="ds-nav-stack__text">
-          <span className="ds-nav-stack__label">{item.label}</span>
-          {item.description && <span className="ds-nav-stack__description">{item.description}</span>}
+        <span className="ds-drill-menu__text">
+          <span className="ds-drill-menu__label">{item.label}</span>
+          {item.description && <span className="ds-drill-menu__description">{item.description}</span>}
         </span>
         {item.badge !== undefined && (
-          <span className={`ds-nav-stack__badge${isCount(item.badge) ? ' ds-nav-stack__badge--count' : ''}`}>{item.badge}</span>
+          <span className={`ds-drill-menu__badge${isCount(item.badge) ? ' ds-drill-menu__badge--count' : ''}`}>{item.badge}</span>
         )}
-        {item.value && <span className="ds-nav-stack__value">{item.value}</span>}
-        {trailing && <span className="ds-nav-stack__trail">{trailing}</span>}
+        {item.value && <span className="ds-drill-menu__value">{item.value}</span>}
+        {trailing && <span className="ds-drill-menu__trail">{trailing}</span>}
       </>
     );
 
     if (drills || item.onClick || !item.href) {
       return (
-        <li key={id} className="ds-nav-stack__item">
+        <li key={id} className="ds-drill-menu__item">
           <button
             type="button"
             className={classes}
-            data-nav-stack-id={id}
+            data-drill-menu-id={id}
             aria-pressed={item.selected !== undefined && !drills ? item.selected : undefined}
             onClick={(event) => {
               if (drills) {
@@ -289,11 +289,11 @@ export function NavStack({
       );
     }
     return (
-      <li key={id} className="ds-nav-stack__item">
+      <li key={id} className="ds-drill-menu__item">
         <Link
           href={item.href}
           className={classes}
-          data-nav-stack-id={id}
+          data-drill-menu-id={id}
           aria-current={exact ? 'page' : undefined}
           {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           onClick={(event: React.MouseEvent<HTMLElement>) => onNavigate?.(item, event)}
@@ -306,7 +306,7 @@ export function NavStack({
 
   // Rows outside any section gather into unnamed groups between sections,
   // so every row sits in a list.
-  const groups: { key: string; section?: NavStackSection; rows: NavStackItem[] }[] = [];
+  const groups: { key: string; section?: DrillMenuSection; rows: DrillMenuItem[] }[] = [];
   entries.forEach((entry, index) => {
     if (isSection(entry)) groups.push({ key: entry.id ?? entry.label ?? `section-${index}`, section: entry, rows: entry.items });
     else {
@@ -317,43 +317,43 @@ export function NavStack({
   });
 
   return (
-    <nav {...rest} ref={ref} aria-label={navLabel} className={['ds-nav-stack', className].filter(Boolean).join(' ')}>
+    <nav {...rest} ref={ref} aria-label={navLabel} className={['ds-drill-menu', className].filter(Boolean).join(' ')}>
       <div
         ref={levelRef}
         key={trail.map(idOf).join('/') || 'root'}
-        className={['ds-nav-stack__level', direction && `ds-nav-stack__level--${direction}`]
+        className={['ds-drill-menu__level', direction && `ds-drill-menu__level--${direction}`]
           .filter(Boolean)
           .join(' ')}
       >
         {level ? (
-          <div className="ds-nav-stack__head">
-            <button type="button" className="ds-nav-stack__back" aria-label={backLabel(parent ? parent.title ?? parent.label : rootLabel)} onClick={(event) => {
+          <div className="ds-drill-menu__head">
+            <button type="button" className="ds-drill-menu__back" aria-label={backLabel(parent ? parent.title ?? parent.label : rootLabel)} onClick={(event) => {
                 settle(event.currentTarget);
                 stepOut();
               }}>
-              <span className="ds-nav-stack__back-chevron material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
+              <span className="ds-drill-menu__back-chevron material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
                 chevron_left
               </span>
               <span>{parent ? parent.title ?? parent.label : rootLabel}</span>
             </button>
-            <h2 ref={titleRef} tabIndex={-1} className="ds-nav-stack__title">
+            <h2 ref={titleRef} tabIndex={-1} className="ds-drill-menu__title">
               {level.title ?? level.label}
             </h2>
           </div>
         ) : (
-          header && <div className="ds-nav-stack__header">{header}</div>
+          header && <div className="ds-drill-menu__header">{header}</div>
         )}
 
         {level?.href && (
-          <ul className="ds-nav-stack__list">
+          <ul className="ds-drill-menu__list">
             {renderRow({ label: overviewLabel(level.label), href: level.href, icon: level.icon, id: `${idOf(level)}#overview` })}
           </ul>
         )}
 
         {groups.map(({ key, section, rows }) => (
-          <section key={key} className="ds-nav-stack__section">
-            {section?.label && <h3 className="ds-nav-stack__section-label">{section.label}</h3>}
-            <ul className="ds-nav-stack__list">{rows.map((item) => renderRow(item, section?.variant))}</ul>
+          <section key={key} className="ds-drill-menu__section">
+            {section?.label && <h3 className="ds-drill-menu__section-label">{section.label}</h3>}
+            <ul className="ds-drill-menu__list">{rows.map((item) => renderRow(item, section?.variant))}</ul>
           </section>
         ))}
       </div>

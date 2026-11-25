@@ -1,5 +1,5 @@
 /* ============================================
-   NAV STACK COMPONENT
+   DRILL MENU COMPONENT
    A drill-in menu for a phone: one level at a
    time, touch-tall rows on one start line, a
    back row naming where it returns to.
@@ -9,20 +9,20 @@
 
 @layer rift.components {
 
-.ds-nav-stack {
+.ds-drill-menu {
   /* How far a row's content sits in from the row's own edge. A host that
      lines the labels up with something above it (a header's brand) hangs
      the stack out by this much, so the fills sit in the gutter and the
      words sit on the line. */
-  --ds-nav-stack-inset: var(--padding-300);
+  --ds-drill-menu-inset: var(--padding-300);
   /* Touch-tall rows: a control height and one step, so a thumb lands. */
-  --ds-nav-stack-row: calc(var(--control-height-default) + var(--padding-200));
-  --ds-nav-stack-row-prominent: calc(var(--control-height-default) + var(--padding-400));
+  --ds-drill-menu-row: calc(var(--control-height-default) + var(--padding-200));
+  --ds-drill-menu-row-prominent: calc(var(--control-height-default) + var(--padding-400));
   display: block;
   color: var(--color-text-primary);
 }
 
-.ds-nav-stack__level {
+.ds-drill-menu__level {
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);
@@ -31,22 +31,22 @@
 
 /* A step slides the new level in along the reading direction: from the
    end going in, from the start coming back. */
-.ds-nav-stack__level--in {
-  animation: ds-nav-stack-in var(--motion-duration-base) var(--motion-ease-entrance);
+.ds-drill-menu__level--in {
+  animation: ds-drill-menu-in var(--motion-duration-base) var(--motion-ease-entrance);
 }
 
-.ds-nav-stack__level--out {
-  animation: ds-nav-stack-out var(--motion-duration-base) var(--motion-ease-entrance);
+.ds-drill-menu__level--out {
+  animation: ds-drill-menu-out var(--motion-duration-base) var(--motion-ease-entrance);
 }
 
-@keyframes ds-nav-stack-in {
+@keyframes ds-drill-menu-in {
   from {
     opacity: 0;
     transform: translateX(calc(var(--ds-inline-sign, 1) * var(--gap-500)));
   }
 }
 
-@keyframes ds-nav-stack-out {
+@keyframes ds-drill-menu-out {
   from {
     opacity: 0;
     transform: translateX(calc(var(--ds-inline-sign, 1) * -1 * var(--gap-500)));
@@ -57,20 +57,20 @@
    HEAD — back row and level title
    ============================================ */
 
-.ds-nav-stack__head {
+.ds-drill-menu__head {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--gap-100);
 }
 
-.ds-nav-stack__back {
+.ds-drill-menu__back {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-050);
-  min-height: var(--ds-nav-stack-row);
+  min-height: var(--ds-drill-menu-row);
   /* The chevron's side takes one step less (the icon side of a box). */
-  padding-inline: var(--padding-100) var(--ds-nav-stack-inset);
+  padding-inline: var(--padding-100) var(--ds-drill-menu-inset);
   border: none;
   border-radius: var(--radius-pill);
   background: transparent;
@@ -84,23 +84,23 @@
 }
 
 @media (hover: hover) {
-  .ds-nav-stack:not([data-settling]) .ds-nav-stack__back:hover {
+  .ds-drill-menu:not([data-settling]) .ds-drill-menu__back:hover {
     background-color: var(--color-action-passive-bg-hover);
   }
 }
 
-.ds-nav-stack__back:focus-visible {
+.ds-drill-menu__back:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
 }
 
-.ds-nav-stack__back-chevron {
+.ds-drill-menu__back-chevron {
   --icon-size: var(--icon-size-600);
 }
 
-.ds-nav-stack__title {
+.ds-drill-menu__title {
   margin: 0;
-  padding-inline: var(--ds-nav-stack-inset);
+  padding-inline: var(--ds-drill-menu-inset);
   font-family: var(--font-heading-2-family);
   font-size: var(--font-heading-2-size);
   font-weight: var(--font-heading-2-weight);
@@ -109,32 +109,32 @@
   color: var(--color-text-heading);
 }
 
-.ds-nav-stack__title:focus {
+.ds-drill-menu__title:focus {
   outline: none;
 }
 
-.ds-nav-stack__title:focus-visible {
+.ds-drill-menu__title:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: 2px;
   border-radius: var(--radius-100);
 }
 
-.ds-nav-stack__header {
-  padding-inline: var(--ds-nav-stack-inset);
+.ds-drill-menu__header {
+  padding-inline: var(--ds-drill-menu-inset);
 }
 
 /* ============================================
    SECTIONS AND ROWS
    ============================================ */
 
-.ds-nav-stack__section {
+.ds-drill-menu__section {
   display: flex;
   flex-direction: column;
 }
 
-.ds-nav-stack__section-label {
+.ds-drill-menu__section-label {
   margin: 0;
-  padding: 0 var(--ds-nav-stack-inset) var(--gap-100);
+  padding: 0 var(--ds-drill-menu-inset) var(--gap-100);
   font-family: var(--font-paragraph-sm-emphasis-family);
   font-size: var(--font-paragraph-sm-emphasis-size);
   font-weight: var(--font-paragraph-sm-emphasis-weight);
@@ -142,7 +142,7 @@
   color: var(--color-text-tertiary);
 }
 
-.ds-nav-stack__list {
+.ds-drill-menu__list {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -150,7 +150,7 @@
   list-style: none;
 }
 
-.ds-nav-stack__item {
+.ds-drill-menu__item {
   display: flex;
 }
 
@@ -159,13 +159,13 @@
    behind, and not while the stack settles after a step (`data-settling`,
    until the pointer next moves), so the control that lands under a still
    pointer does not light up. */
-.ds-nav-stack__row {
+.ds-drill-menu__row {
   display: flex;
   align-items: center;
   gap: var(--gap-300);
   width: 100%;
-  min-height: var(--ds-nav-stack-row);
-  padding: var(--padding-100) var(--ds-nav-stack-inset);
+  min-height: var(--ds-drill-menu-row);
+  padding: var(--padding-100) var(--ds-drill-menu-inset);
   border: none;
   border-radius: var(--radius-300);
   background: transparent;
@@ -182,27 +182,27 @@
 }
 
 @media (hover: hover) {
-  .ds-nav-stack:not([data-settling]) .ds-nav-stack__row:hover {
+  .ds-drill-menu:not([data-settling]) .ds-drill-menu__row:hover {
     background-color: var(--color-action-passive-bg-hover);
   }
 }
 
-.ds-nav-stack__row:active {
+.ds-drill-menu__row:active {
   background-color: var(--color-action-passive-bg-active);
 }
 
-.ds-nav-stack__row:focus-visible {
+.ds-drill-menu__row:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
 }
 
 /* Where the reader is: a quiet fill, never the action colour. */
-.ds-nav-stack__row--current {
+.ds-drill-menu__row--current {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-nav-stack__row--prominent {
-  min-height: var(--ds-nav-stack-row-prominent);
+.ds-drill-menu__row--prominent {
+  min-height: var(--ds-drill-menu-row-prominent);
   font-family: var(--font-heading-3-family);
   font-size: var(--font-heading-3-size);
   font-weight: var(--font-heading-3-weight);
@@ -211,11 +211,11 @@
 }
 
 /* A two-line row takes the taller row. */
-.ds-nav-stack__row:has(.ds-nav-stack__description) {
-  min-height: var(--ds-nav-stack-row-prominent);
+.ds-drill-menu__row:has(.ds-drill-menu__description) {
+  min-height: var(--ds-drill-menu-row-prominent);
 }
 
-.ds-nav-stack__icon {
+.ds-drill-menu__icon {
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -225,21 +225,21 @@
   --icon-size: var(--icon-size-600);
 }
 
-.ds-nav-stack__text {
+.ds-drill-menu__text {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 0;
 }
 
-.ds-nav-stack__label,
-.ds-nav-stack__description {
+.ds-drill-menu__label,
+.ds-drill-menu__description {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.ds-nav-stack__description {
+.ds-drill-menu__description {
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
@@ -247,7 +247,7 @@
   color: var(--color-text-tertiary);
 }
 
-.ds-nav-stack__value {
+.ds-drill-menu__value {
   flex-shrink: 1;
   min-width: 0;
   max-width: 50%;
@@ -263,7 +263,7 @@
 
 /* A count on the count badge pair, the "how many" mark AppSidebar,
    BottomNav and TableToolbar share; a word on a quiet pill. */
-.ds-nav-stack__badge {
+.ds-drill-menu__badge {
   flex-shrink: 0;
   padding: var(--padding-050) var(--padding-200);
   border-radius: var(--radius-pill);
@@ -275,18 +275,18 @@
   line-height: var(--font-caption-line-height);
 }
 
-.ds-nav-stack__badge--count {
+.ds-drill-menu__badge--count {
   background-color: var(--color-count-badge-bg);
   color: var(--color-count-badge-text);
 }
 
 /* On a filled row the quiet pill steps back to the page ground. */
-.ds-nav-stack:not([data-settling]) .ds-nav-stack__row:hover .ds-nav-stack__badge:not(.ds-nav-stack__badge--count),
-.ds-nav-stack__row--current .ds-nav-stack__badge:not(.ds-nav-stack__badge--count) {
+.ds-drill-menu:not([data-settling]) .ds-drill-menu__row:hover .ds-drill-menu__badge:not(.ds-drill-menu__badge--count),
+.ds-drill-menu__row--current .ds-drill-menu__badge:not(.ds-drill-menu__badge--count) {
   background-color: var(--color-bg-page-primary);
 }
 
-.ds-nav-stack__trail {
+.ds-drill-menu__trail {
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -294,8 +294,8 @@
   color: var(--color-icon-primary);
 }
 
-.ds-nav-stack__chevron,
-.ds-nav-stack__external {
+.ds-drill-menu__chevron,
+.ds-drill-menu__external {
   --icon-size: var(--icon-size-600);
 }
 

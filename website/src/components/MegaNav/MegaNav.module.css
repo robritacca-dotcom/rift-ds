@@ -135,9 +135,9 @@
 }
 
 /* Hover where the device hovers, and not while the drawer's stack is
-   settling after a step back to this level (NavStack's data-settling). */
+   settling after a step back to this level (DrillMenu's data-settling). */
 @media (hover: hover) {
-  :global(.ds-nav-stack:not([data-settling])) .drawerSearch:hover {
+  :global(.ds-drill-menu:not([data-settling])) .drawerSearch:hover {
     border-color: var(--color-input-border-hover);
   }
 }

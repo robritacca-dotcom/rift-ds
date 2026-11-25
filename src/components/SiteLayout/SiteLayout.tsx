@@ -13,7 +13,7 @@ type SiteLayoutOwnProps = {
    */
   header?: React.ReactNode;
   /**
-   * The navigation column, usually a scrollable NavList: the wide-screen
+   * The navigation column, usually a scrollable SideNav: the wide-screen
    * form of the site's sub-navigation. Sticks below the header; below
    * 960px it leaves the page, and the header's own menu carries the same
    * pages (give each SiteHeader section its `drawerItems`, and set the

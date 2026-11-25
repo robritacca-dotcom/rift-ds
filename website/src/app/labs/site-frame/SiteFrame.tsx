@@ -123,7 +123,7 @@ export default function SiteFrameLab({ children }: { children: ReactNode }) {
             />
             <p className={styles.note}>{widthNote}</p>
             <Lever label="Frame: header, sidebar, footer" value={dock} onChange={set("sidebarDock")} options={[["content", "Contained"], ["edge", "Edge to edge"]]} />
-            <Lever label="Sidebar" value={sidebarKind} onChange={set("sidebar")} options={[["site", "Site's own"], ["navlist", "NavList"]]} />
+            <Lever label="Sidebar" value={sidebarKind} onChange={set("sidebar")} options={[["site", "Site's own"], ["navlist", "SideNav"]]} />
             <Lever label="On this page" value={asidePlacement} onChange={set("asidePlacement")} options={[["edge", "Floating"], ["column", "Column"]]} />
           </div>
         )}

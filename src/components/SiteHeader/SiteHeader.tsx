@@ -9,8 +9,8 @@ import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import { IconButton } from '../IconButton/IconButton';
 import { Drawer } from '../Drawer/Drawer';
 import { MegaMenu, type MegaMenuItem, type MegaMenuShowcase } from '../MegaMenu/MegaMenu';
-import { NavStack, type NavStackEntry, type NavStackItem } from '../NavStack/NavStack';
-import { navStackPathTo } from '../NavStack/path';
+import { DrillMenu, type DrillMenuEntry, type DrillMenuItem } from '../DrillMenu/DrillMenu';
+import { drillMenuPathTo } from '../DrillMenu/path';
 import { ProgressiveBlur } from '../ProgressiveBlur/ProgressiveBlur';
 import '../../behaviors/shell.css';
 import './SiteHeader.css';
@@ -98,12 +98,12 @@ type SiteHeaderOwnProps = {
   drawerHeader?: React.ReactNode;
   /**
    * More of the drawer's first level, after the sections: rows and sections
-   * of NavStack entries, such as a row that drills into a site's resources
+   * of DrillMenu entries, such as a row that drills into a site's resources
    * or a group of settings that drill into their choices. Plain rows ahead
    * of the first section join the sections' own list, with no gap; a
    * section starts a group of its own.
    */
-  drawerEntries?: NavStackEntry[];
+  drawerEntries?: DrillMenuEntry[];
   /** Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. */
   drawerOpen?: boolean;
   /** Whether the drawer starts open, when the header owns its state. */
@@ -474,7 +474,7 @@ export function SiteHeader({
 
   // The drawer is a stack: the sections first and large, each with pages
   // drilling into its own level, then whatever the host adds below them.
-  const toDrawerRow = (item: SiteHeaderDrawerItem): NavStackItem => ({
+  const toDrawerRow = (item: SiteHeaderDrawerItem): DrillMenuItem => ({
     label: item.label,
     href: item.href,
     description: item.description,
@@ -482,12 +482,12 @@ export function SiteHeader({
     ...(item.items?.length ? { id: item.href, items: item.items.map(toDrawerRow) } : {}),
   });
   // Plain rows ahead of the host's first section join the sections' list.
-  const leadRows: NavStackItem[] = [];
+  const leadRows: DrillMenuItem[] = [];
   for (const entry of drawerEntries ?? []) {
     if ((entry as { type?: string }).type === 'section') break;
-    leadRows.push(entry as NavStackItem);
+    leadRows.push(entry as DrillMenuItem);
   }
-  const drawerStack: NavStackEntry[] = [
+  const drawerStack: DrillMenuEntry[] = [
     {
       type: 'section',
       id: 'sections',
@@ -506,7 +506,7 @@ export function SiteHeader({
   ];
   // The stack opens on the level that holds the current page, so a reader
   // deep in a section reopens the menu where they are.
-  const drawerOpenPath = navStackPathTo(drawerStack, currentHref);
+  const drawerOpenPath = drillMenuPathTo(drawerStack, currentHref);
   const drawerOnFirstLevel = (drawerDepth ?? drawerOpenPath.length) === 0;
 
   const classes = [
@@ -687,7 +687,7 @@ export function SiteHeader({
           )
         }
       >
-        <NavStack
+        <DrillMenu
           key={drawerOpen ? 'open' : 'closed'}
           items={drawerStack}
           header={drawerHeader}

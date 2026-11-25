@@ -64,6 +64,21 @@ const nextConfig: NextConfig = {
       { source: "/components/circular-button.md", destination: "/components/icon-button.md", permanent: true },
       { source: "/schema/components/circular-button.json", destination: "/schema/components/icon-button.json", permanent: true },
       { source: "/r/circular-button.json", destination: "/r/icon-button.json", permanent: true },
+      // NavList was renamed SideNav; its page, markdown, schema and registry item keep resolving.
+      { source: "/components/nav-list", destination: "/components/side-nav", permanent: true },
+      { source: "/components/nav-list.md", destination: "/components/side-nav.md", permanent: true },
+      { source: "/schema/components/nav-list.json", destination: "/schema/components/side-nav.json", permanent: true },
+      { source: "/r/nav-list.json", destination: "/r/side-nav.json", permanent: true },
+      // SidebarPanel was renamed SubNavPanel; its page, markdown, schema and registry item keep resolving.
+      { source: "/components/sidebar-panel", destination: "/components/sub-nav-panel", permanent: true },
+      { source: "/components/sidebar-panel.md", destination: "/components/sub-nav-panel.md", permanent: true },
+      { source: "/schema/components/sidebar-panel.json", destination: "/schema/components/sub-nav-panel.json", permanent: true },
+      { source: "/r/sidebar-panel.json", destination: "/r/sub-nav-panel.json", permanent: true },
+      // NavStack was renamed DrillMenu before it shipped to npm; its page was live; its page, markdown, schema and registry item keep resolving.
+      { source: "/components/nav-stack", destination: "/components/drill-menu", permanent: true },
+      { source: "/components/nav-stack.md", destination: "/components/drill-menu.md", permanent: true },
+      { source: "/schema/components/nav-stack.json", destination: "/schema/components/drill-menu.json", permanent: true },
+      { source: "/r/nav-stack.json", destination: "/r/drill-menu.json", permanent: true },
       // Nav, the legacy top bar, was removed in favour of SiteHeader; its
       // page, markdown, schema and registry item resolve to Site header's.
       { source: "/components/nav", destination: "/components/site-header", permanent: true },

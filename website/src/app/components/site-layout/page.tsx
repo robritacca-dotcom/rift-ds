@@ -16,7 +16,7 @@ const USAGE = `<SiteLayout
   asidePlacement="column"
   readingWidth
   header={<SiteHeader brand="Acme" sections={sections} foldBelow="tablet" />}
-  sidebar={<NavList items={pages} size="compact" scrollable currentHref={path} />}
+  sidebar={<SideNav items={pages} size="compact" scrollable currentHref={path} />}
   aside={<AnchorNav fromHeadings={{ root: '#main' }} />}
   footer={<SiteFooter columns={columns} />}
 >
@@ -68,7 +68,7 @@ export default function SiteLayoutPage() {
         <SectionTitle title="Layout levers" />
         <p className={styles.demoText}>
           Every lever is a prop on SiteLayout or, for the room a docked panel takes, a custom property on it, so
-          a swap is one value changed in one place. A NavList in the sidebar hangs by its own text inset, so its
+          a swap is one value changed in one place. A SideNav in the sidebar hangs by its own text inset, so its
           words line up with the header&apos;s brand, and a host that narrows the page itself (padding on the
           body for a docked chat) moves the edge aside with <code>--ds-site-layout-aside-inset</code>. The widths read the
           shell recipe&apos;s width axis, the same one AppLayout and the templates read, apart from any shell mode.

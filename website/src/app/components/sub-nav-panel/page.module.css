@@ -72,7 +72,7 @@
   border: var(--border-025) solid var(--color-bg-container-border);
 }
 
-.panelDemo :global(.ds-sidebar-panel) {
+.panelDemo :global(.ds-sub-nav-panel) {
   border-right: var(--border-025) solid var(--color-bg-container-border);
 }
 

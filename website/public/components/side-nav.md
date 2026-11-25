@@ -1,26 +1,26 @@
-# Nav list
+# Side nav
 
 Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
-- Import: `import { NavList } from 'rift-ds';`
-- Deep import: `import { NavList } from 'rift-ds/components/NavList/NavList';`
+- Import: `import { SideNav } from 'rift-ds';`
+- Deep import: `import { SideNav } from 'rift-ds/components/SideNav/SideNav';`
 - Rendering: client component (declares 'use client')
 - Size: 3.2 kB gzipped with everything it imports, peer dependencies not counted
-- Live docs: https://rift-ds.com/components/nav-list
-- Schema: https://rift-ds.com/schema/components/nav-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+- Live docs: https://rift-ds.com/components/side-nav
+- Schema: https://rift-ds.com/schema/components/side-nav.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Alternatives
 
-- Use [Nav stack](https://rift-ds.com/components/nav-stack.md) instead when the menu fills a phone screen and each branch should open as a level of its own.
+- Use [Drill menu](https://rift-ds.com/components/drill-menu.md) instead when the menu fills a phone screen and each branch should open as a level of its own.
 
-## NavList props
+## SideNav props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| items | `NavListEntry[]` | yes |  | Navigation tree to render: rows, and at the top level, sections of rows. |
+| items | `SideNavEntry[]` | yes |  | Navigation tree to render: rows, and at the top level, sections of rows. |
 | size | `"default" \| "compact"` | no | `'default'` | Row density. `default` sets every row on the default control height; `compact` sets every row on the 32px compact control height, for a long sidebar of pages (a documentation site's hundred entries). |
 | scrollable | `boolean` | no | `false` | Make the list its own scroll area: it fills the height its parent gives it, scrolls inside without carrying the page along at its ends, and brings the current row into view when it first renders. Put it in a column with a fixed or sticky height. |
 | currentHref | `string` | no |  | href of the current page — the exactly matching row gets `aria-current="page"` and the active treatment. |
@@ -28,7 +28,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | defaultExpandedIds | `string[]` | no |  | Initially expanded item ids (uncontrolled). The branch and the collapsible section that hold the current page start open as well, so a reader landing deep in a long tree sees where they are. |
 | onExpandedChange | `((expandedIds: string[]) => void)` | no |  | Fires with the full new list of expanded ids whenever a toggle is pressed, in both controlled and uncontrolled modes. |
 | multiple | `boolean` | no | `false` | Allow several branches expanded at once. Default false: expanding one collapses its siblings, never the section or the rows it sits in. |
-| onNavigate | `((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. |
+| onNavigate | `((item: SideNavItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list. |
 | expandLabel | `((label: string) => string)` | no | `` (label) => `Expand ${label}` `` | Accessible name of a collapsed row's or section's toggle, given its label. Defaults to "Expand <label>". |
 | collapseLabel | `((label: string) => string)` | no | `` (label) => `Collapse ${label}` `` | Accessible name of an expanded row's or section's toggle, given its label. Defaults to "Collapse <label>". |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router; passed on to each row's Button. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
@@ -66,18 +66,18 @@ are; a router whose link takes `to` instead needs a one-line adapter:
 type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 ```
 
-### NavListEntry
+### SideNavEntry
 
 A top-level entry: a row, or a section of rows.
 
 ```ts
-type NavListEntry = NavListItem | NavListSection;
+type SideNavEntry = SideNavItem | SideNavSection;
 ```
 
-### NavListItem
+### SideNavItem
 
 ```ts
-interface NavListItem {
+interface SideNavItem {
   /** Row text. */
   label: string;
   /** Link destination — every row is a real link. */
@@ -85,7 +85,7 @@ interface NavListItem {
   /** Stable identity for expansion state and aria wiring. Defaults to `href`. */
   id?: string;
   /** Child rows, indented one level. Nesting is supported three levels deep. */
-  items?: NavListItem[];
+  items?: SideNavItem[];
   /**
    * When false, an item with children renders no toggle and its children stay
    * visible — a permanent group rather than a collapsible section.
@@ -105,20 +105,20 @@ interface NavListItem {
 }
 ```
 
-### NavListSection
+### SideNavSection
 
 A titled section of rows: a heading over its items, the way a long
 documentation sidebar groups its pages. Sections sit only at the top
 level; their items nest like any others.
 
 ```ts
-interface NavListSection {
+interface SideNavSection {
   /** Marks the entry as a section rather than a row. */
   type: 'section';
   /** The section's heading. */
   label: string;
   /** The section's rows. */
-  items: NavListItem[];
+  items: SideNavItem[];
   /**
    * Stable identity for its expansion state. Defaults to the label. In
    * `expandedIds`, `defaultExpandedIds` and `onExpandedChange` a section

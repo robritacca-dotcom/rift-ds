@@ -84,7 +84,7 @@ const CONTROL_PART_SUFFIXES = [
   '__option-check',
 ];
 // `__toggle` alone is not in the list: an expand/collapse button (AppSidebar,
-// NavList, CodeBlock, ThreadPanel, BentoTile) is a toggle too, and none of
+// SideNav, CodeBlock, ThreadPanel, BentoTile) is a toggle too, and none of
 // them draws a switch.
 
 const GLYPH_STAND_INS =

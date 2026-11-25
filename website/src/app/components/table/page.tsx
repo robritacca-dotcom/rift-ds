@@ -257,7 +257,7 @@ export default function TablePage() {
               { key: "description", header: "Description" },
             ]}
             rows={[
-              { id: "items", cells: { prop: "items", type: "NavListEntry[]", description: "Navigation tree to render." } },
+              { id: "items", cells: { prop: "items", type: "SideNavEntry[]", description: "Navigation tree to render." } },
               { id: "size", cells: { prop: "size", type: "'default' | 'compact'", description: "Row density." } },
               { id: "change", cells: { prop: "onExpandedChange", type: "(expandedIds: string[]) => void", description: "Fires with the new list of expanded ids." } },
             ]}

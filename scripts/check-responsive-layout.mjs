@@ -162,8 +162,8 @@ const ACCEPTED = [
   },
   {
     kind: 'overlap',
-    selector: 'div.ds-nav-list__row > a.ds-button',
-    reason: 'A row with children is one shape: its link and its chevron toggle share one grid cell, the toggle painted above the link and taking the tap, and the link reserving the toggle\'s width so its text never runs under it (src/components/NavList/NavList.css, ROWS and TOGGLE).',
+    selector: 'div.ds-side-nav__row > a.ds-button',
+    reason: 'A row with children is one shape: its link and its chevron toggle share one grid cell, the toggle painted above the link and taking the tap, and the link reserving the toggle\'s width so its text never runs under it (src/components/SideNav/SideNav.css, ROWS and TOGGLE).',
   },
   {
     kind: 'spill',

@@ -9,7 +9,7 @@ import keyboard from './keyboard-patterns.json';
  *
  *   name        the exported component name; also the folder under
  *               src/components unless `folder` says otherwise
- *   label       the display name — "Nav list" for the NavList folder
+ *   label       the display name — "Side nav" for the SideNav folder
  *   slug        the website route segment — stored, not derived, so a
  *               name-to-slug exception stays plain data rather than a
  *               special case duplicated across validators
@@ -49,7 +49,7 @@ import keyboard from './keyboard-patterns.json';
 export interface ComponentMeta {
   /** Folder under src/components, and the exported component name */
   name: string;
-  /** Display name — may differ from `name` (NavList → "Nav list") */
+  /** Display name — may differ from `name` (SideNav → "Side nav") */
   label: string;
   /** Website route segment under /components */
   slug: string;

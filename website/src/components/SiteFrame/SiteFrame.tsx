@@ -4,7 +4,7 @@
  * SiteFrame: the site's chrome as the library's SiteLayout, around every
  * framed page (SiteFrameMount in the root layout). The real header
  * (MegaNav, with the layout switcher this frame enables), a sidebar of the
- * section's pages (the library's NavList by default, or the site's own
+ * section's pages (the library's SideNav by default, or the site's own
  * Sidebar, by `settings.sidebar`), the page's article, the on-this-page
  * rail (the library's AnchorNav reading the article's h2s) and the real
  * footer, laid out by SiteFrameSettings (website/src/config/site-frame.ts
@@ -18,7 +18,7 @@
 
 import type { ReactNode } from "react";
 import { SiteLayout } from "rift-ds/components/SiteLayout/SiteLayout";
-import { NavList, type NavListEntry } from "rift-ds/components/NavList/NavList";
+import { SideNav, type SideNavEntry } from "rift-ds/components/SideNav/SideNav";
 import { AnchorNav } from "rift-ds/components/AnchorNav/AnchorNav";
 import MegaNav from "@/components/MegaNav/MegaNav";
 import Sidebar, { type SidebarLink, type SidebarLinkGroup } from "@/components/Sidebar/Sidebar";
@@ -54,7 +54,7 @@ export interface SiteFrameProps {
   mainId?: string;
 }
 
-const toNavList = (nav: SiteFrameNav): NavListEntry[] => [
+const toSideNav = (nav: SiteFrameNav): SideNavEntry[] => [
   ...nav.links.map((link) => ({ label: link.label, href: link.href })),
   ...nav.groups.map((group) => ({
     type: "section" as const,
@@ -83,7 +83,7 @@ export default function SiteFrame({
       />
     </div>
   ) : (
-    <NavList items={toNavList(nav)} size="compact" scrollable currentHref={currentHref} />
+    <SideNav items={toSideNav(nav)} size="compact" scrollable currentHref={currentHref} />
   );
 
   return (

@@ -685,6 +685,16 @@
       "markdownUrl": "https://rift-ds.com/components/drawer.md"
     },
     {
+      "name": "DrillMenu",
+      "label": "Drill menu",
+      "slug": "drill-menu",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/drill-menu.json",
+      "docsUrl": "https://rift-ds.com/components/drill-menu",
+      "markdownUrl": "https://rift-ds.com/components/drill-menu.md"
+    },
+    {
       "name": "Dropdown",
       "label": "Dropdown",
       "slug": "dropdown",
@@ -1185,26 +1195,6 @@
       "markdownUrl": "https://rift-ds.com/components/model-picker.md"
     },
     {
-      "name": "NavList",
-      "label": "Nav list",
-      "slug": "nav-list",
-      "category": "navigation",
-      "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/nav-list.json",
-      "docsUrl": "https://rift-ds.com/components/nav-list",
-      "markdownUrl": "https://rift-ds.com/components/nav-list.md"
-    },
-    {
-      "name": "NavStack",
-      "label": "Nav stack",
-      "slug": "nav-stack",
-      "category": "navigation",
-      "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/nav-stack.json",
-      "docsUrl": "https://rift-ds.com/components/nav-stack",
-      "markdownUrl": "https://rift-ds.com/components/nav-stack.md"
-    },
-    {
       "name": "NotificationCenter",
       "label": "Notification centre",
       "slug": "notification-center",
@@ -1495,14 +1485,14 @@
       "markdownUrl": "https://rift-ds.com/components/shader-scene.md"
     },
     {
-      "name": "SidebarPanel",
-      "label": "Sidebar panel",
-      "slug": "sidebar-panel",
-      "category": "layout",
+      "name": "SideNav",
+      "label": "Side nav",
+      "slug": "side-nav",
+      "category": "navigation",
       "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/sidebar-panel.json",
-      "docsUrl": "https://rift-ds.com/components/sidebar-panel",
-      "markdownUrl": "https://rift-ds.com/components/sidebar-panel.md"
+      "schemaUrl": "https://rift-ds.com/schema/components/side-nav.json",
+      "docsUrl": "https://rift-ds.com/components/side-nav",
+      "markdownUrl": "https://rift-ds.com/components/side-nav.md"
     },
     {
       "name": "SignaturePad",
@@ -1683,6 +1673,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/streaming-text.json",
       "docsUrl": "https://rift-ds.com/components/streaming-text",
       "markdownUrl": "https://rift-ds.com/components/streaming-text.md"
+    },
+    {
+      "name": "SubNavPanel",
+      "label": "Sub-nav panel",
+      "slug": "sub-nav-panel",
+      "category": "layout",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/sub-nav-panel.json",
+      "docsUrl": "https://rift-ds.com/components/sub-nav-panel",
+      "markdownUrl": "https://rift-ds.com/components/sub-nav-panel.md"
     },
     {
       "name": "Swatch",

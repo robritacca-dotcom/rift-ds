@@ -35,8 +35,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | persistentTopSlot | `boolean` | no | `false` | Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
-| drawerTopEntries | `NavStackEntry[]` | no |  | Rows above the sections in the phone drawer, in NavStack's shape, such as a switcher that drills into its choices. When set, the drawer shows these in `topSlot`'s place, since a dropdown has no room to open on a full-screen menu. |
-| drawerBottomEntries | `NavStackEntry[]` | no |  | Rows after the sections in the phone drawer, in NavStack's shape, such as appearance settings that drill into their choices. When set, the drawer shows these in `footerSlot`'s place. |
+| drawerTopEntries | `DrillMenuEntry[]` | no |  | Rows above the sections in the phone drawer, in DrillMenu's shape, such as a switcher that drills into its choices. When set, the drawer shows these in `topSlot`'s place, since a dropdown has no room to open on a full-screen menu. |
+| drawerBottomEntries | `DrillMenuEntry[]` | no |  | Rows after the sections in the phone drawer, in DrillMenu's shape, such as appearance settings that drill into their choices. When set, the drawer shows these in `footerSlot`'s place. |
 | footerAction | `ReactNode` | no |  | One primary action at the rail's foot, below the profile and full width, as the site header's drawer pins its call to action: in the expanded rail and the phone drawer alike, where it stays in view while the levels above it scroll. The collapsed rail has no room for it, so it fades out with the labels and is inert. |
 | collapsedFooterSlot | `ReactNode` | no |  | Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert |
 | className | `string` | no | `''` | Additional CSS classes |
@@ -154,37 +154,18 @@ interface AppSidebarSubItem {
 }
 ```
 
-### LinkComponent
-
-A component that renders a link in place of a plain `<a>`, such as a router's.
-
-```ts
-type LinkComponent = React.ElementType<LinkComponentProps>;
-```
-
-### LinkComponentProps
-
-The props a link component receives: every anchor attribute, the ref, and
-an `href` that is always a string. Next.js's `Link` takes these as they
-are; a router whose link takes `to` instead needs a one-line adapter:
-`({ href, ...props }) => <RouterLink to={href} {...props} />`.
-
-```ts
-type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
-```
-
-### NavStackEntry
+### DrillMenuEntry
 
 An entry on a level: a row, or a section of rows.
 
 ```ts
-type NavStackEntry = NavStackItem | NavStackSection;
+type DrillMenuEntry = DrillMenuItem | DrillMenuSection;
 ```
 
-### NavStackItem
+### DrillMenuItem
 
 ```ts
-interface NavStackItem {
+interface DrillMenuItem {
   /** Row text. */
   label: string;
   /**
@@ -205,7 +186,7 @@ interface NavStackItem {
   /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
   title?: string;
   /** Rows on the level this row opens. A row with items drills in instead of navigating. */
-  items?: NavStackEntry[];
+  items?: DrillMenuEntry[];
   /**
    * Marks the row as the page being viewed, regardless of the exact match
    * against `currentHref`, for a section that stays current on its child
@@ -224,19 +205,19 @@ interface NavStackItem {
 }
 ```
 
-### NavStackSection
+### DrillMenuSection
 
 A group of rows under an optional heading: one level's resources or
 settings, say, set apart from the rows above it.
 
 ```ts
-interface NavStackSection {
+interface DrillMenuSection {
   /** Marks the entry as a section rather than a row. */
   type: 'section';
   /** The heading over the rows. Leave it out for a group set apart by space alone. */
   label?: string;
   /** The section's rows. */
-  items: NavStackItem[];
+  items: DrillMenuItem[];
   /**
    * `prominent` draws the rows in the heading-3 style on a taller row, for
    * a menu that wants its top level louder. The site header's and the app
@@ -247,6 +228,25 @@ interface NavStackSection {
   /** Stable identity for the React key. Defaults to the label. */
   id?: string;
 }
+```
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 ```
 
 Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `HTMLButtonElement` (typescript), `MouseEvent` (react), `ReactNode` (react).

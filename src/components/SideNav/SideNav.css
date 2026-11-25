@@ -1,5 +1,5 @@
 /* ============================================
-   NAV LIST COMPONENT
+   SIDE NAV COMPONENT
    Vertical navigation link list for drawers and
    side menus. Rows are tertiary Buttons — their
    shape, sizing, and states live in Button.css;
@@ -11,7 +11,7 @@
 
 @layer rift.components {
 
-.ds-nav-list {
+.ds-side-nav {
   /* How far a row's text sits in from the row's own edge (the rows are
      compact tertiary Buttons, the headings share their inset). A host that
      lines the list's text up with something above it, a header's brand,
@@ -19,9 +19,9 @@
      words sit on the line (SiteLayout's sidebar does). Compact rows inset
      their text --padding-300; default rows (a default Button) --padding-500,
      set below. */
-  --ds-nav-list-text-inset: var(--padding-300);
+  --ds-side-nav-text-inset: var(--padding-300);
   /* Every row's height, and the chevron's square target at a row's end. */
-  --ds-nav-list-row-height: var(--control-height-default);
+  --ds-side-nav-row-height: var(--control-height-default);
   display: flex;
   flex-direction: column;
   gap: var(--gap-050);
@@ -31,15 +31,15 @@
   list-style: none;
 }
 
-/* Every row is one height, --ds-nav-list-row-height: the default control
+/* Every row is one height, --ds-side-nav-row-height: the default control
    height, or the compact one on a compact list. Deeper rows keep the compact
    Button's smaller face but take the row height, so a parent and its
    children draw fills of one height on one vertical rhythm. */
-.ds-nav-list__item {
+.ds-side-nav__item {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: var(--ds-nav-list-row-height);
+  min-height: var(--ds-side-nav-row-height);
 }
 
 /* ============================================
@@ -48,15 +48,15 @@
    truncate with an ellipsis.
    ============================================ */
 
-.ds-nav-list .ds-button {
-  height: var(--ds-nav-list-row-height);
+.ds-side-nav .ds-button {
+  height: var(--ds-side-nav-row-height);
   width: 100%;
   max-width: 100%;
   justify-content: flex-start;
   text-align: start;
 }
 
-.ds-nav-list .ds-button__text {
+.ds-side-nav .ds-button__text {
   min-width: 0;
   flex: 0 1 auto;
   overflow: hidden;
@@ -69,25 +69,25 @@
    toggle sits over the row's end as a borderless glyph in the same grid
    cell. The label reserves the toggle's square at its end, so a long label
    ends in its ellipsis before the chevron. */
-.ds-nav-list__row {
+.ds-side-nav__row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
   width: 100%;
 }
 
-.ds-nav-list .ds-nav-list__row > .ds-button {
+.ds-side-nav .ds-side-nav__row > .ds-button {
   grid-area: 1 / 1;
-  padding-inline-end: var(--ds-nav-list-row-height);
+  padding-inline-end: var(--ds-side-nav-row-height);
 }
 
 /* The chevron's press lands on the row it belongs to: hovering or pressing
    it fills the whole row, the way hovering the label does. */
-.ds-nav-list__row:has(> .ds-nav-list__toggle:hover) > .ds-button {
+.ds-side-nav__row:has(> .ds-side-nav__toggle:hover) > .ds-button {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-nav-list__row:has(> .ds-nav-list__toggle:active) > .ds-button {
+.ds-side-nav__row:has(> .ds-side-nav__toggle:active) > .ds-button {
   background-color: var(--color-action-passive-bg-active);
 }
 
@@ -98,15 +98,15 @@
    row's height, with no fill of its own.
    ============================================ */
 
-.ds-nav-list__toggle {
+.ds-side-nav__toggle {
   grid-area: 1 / 1;
   justify-self: end;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--ds-nav-list-row-height);
-  block-size: var(--ds-nav-list-row-height);
+  inline-size: var(--ds-side-nav-row-height);
+  block-size: var(--ds-side-nav-row-height);
   margin: 0;
   padding: 0;
   border: none;
@@ -116,19 +116,19 @@
   cursor: pointer;
 }
 
-.ds-nav-list__toggle:focus-visible {
+.ds-side-nav__toggle:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
 }
 
-.ds-nav-list__chevron {
+.ds-side-nav__chevron {
   --icon-size: var(--icon-size-500);
   color: var(--color-icon-primary);
   line-height: 1;
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
 }
 
-.ds-nav-list__toggle[aria-expanded='true'] .ds-nav-list__chevron {
+.ds-side-nav__toggle[aria-expanded='true'] .ds-side-nav__chevron {
   transform: rotate(180deg);
 }
 
@@ -138,7 +138,7 @@
    handled by the motion-token contract.
    ============================================ */
 
-.ds-nav-list__panel {
+.ds-side-nav__panel {
   display: grid;
   grid-template-rows: 0fr;
   margin-top: 0;
@@ -149,7 +149,7 @@
 
 /* Open panels take the list's item gap above them, so the first child sits
    the same distance from its parent row as any two siblings do. */
-.ds-nav-list__panel--open {
+.ds-side-nav__panel--open {
   grid-template-rows: 1fr;
   margin-top: var(--gap-050);
 }
@@ -158,7 +158,7 @@
    SUBLIST — one indent step per nesting level
    ============================================ */
 
-.ds-nav-list__sublist {
+.ds-side-nav__sublist {
   display: flex;
   flex-direction: column;
   gap: var(--gap-050);
@@ -170,13 +170,13 @@
   list-style: none;
 }
 
-.ds-nav-list__sublist .ds-nav-list__sublist {
+.ds-side-nav__sublist .ds-side-nav__sublist {
   padding-inline-start: var(--gap-500);
 }
 
 /* Permanent (non-collapsible) groups render their sublist directly under the
    row, with no panel — give it the same item gap the panel carries when open. */
-.ds-nav-list__item > .ds-nav-list__sublist {
+.ds-side-nav__item > .ds-side-nav__sublist {
   margin-top: var(--gap-050);
 }
 
@@ -191,23 +191,23 @@
 /* Default size: the top-level rows are default Buttons, so their text sits
    --padding-500 in; the hang and the section headings follow it, so the
    headings sit on the rows' leading line at either size. */
-.ds-nav-list:not(.ds-nav-list--compact) {
-  --ds-nav-list-text-inset: var(--padding-500);
+.ds-side-nav:not(.ds-side-nav--compact) {
+  --ds-side-nav-text-inset: var(--padding-500);
 }
 
-.ds-nav-list:not(.ds-nav-list--compact) .ds-nav-list__heading {
+.ds-side-nav:not(.ds-side-nav--compact) .ds-side-nav__heading {
   padding-inline-start: var(--padding-500);
 }
 
-.ds-nav-list--compact {
-  --ds-nav-list-row-height: var(--control-height-compact);
+.ds-side-nav--compact {
+  --ds-side-nav-row-height: var(--control-height-compact);
 }
 
-.ds-nav-list--compact .ds-nav-list__sublist {
+.ds-side-nav--compact .ds-side-nav__sublist {
   padding-inline-start: var(--padding-400);
 }
 
-.ds-nav-list__badge {
+.ds-side-nav__badge {
   margin-inline-start: auto;
 }
 
@@ -219,17 +219,17 @@
    full-width quiet button with the chevron at its end.
    ============================================ */
 
-.ds-nav-list__section {
+.ds-side-nav__section {
   display: flex;
   flex-direction: column;
 }
 
-.ds-nav-list__section + .ds-nav-list__section,
-.ds-nav-list__item + .ds-nav-list__section {
+.ds-side-nav__section + .ds-side-nav__section,
+.ds-side-nav__item + .ds-side-nav__section {
   margin-block-start: var(--gap-500);
 }
 
-.ds-nav-list__heading {
+.ds-side-nav__heading {
   display: flex;
   align-items: center;
   gap: var(--gap-200);
@@ -242,11 +242,11 @@
   color: var(--color-text-tertiary);
 }
 
-.ds-nav-list--compact .ds-nav-list__heading {
+.ds-side-nav--compact .ds-side-nav__heading {
   padding-inline: var(--padding-300);
 }
 
-.ds-nav-list__heading--toggle {
+.ds-side-nav__heading--toggle {
   width: 100%;
   margin: 0;
   padding-inline-end: var(--padding-200);
@@ -258,26 +258,26 @@
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard), color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.ds-nav-list__heading--toggle:hover {
+.ds-side-nav__heading--toggle:hover {
   background-color: var(--color-action-passive-bg-hover);
   color: var(--color-text-secondary);
 }
 
-.ds-nav-list__heading--toggle:focus-visible {
+.ds-side-nav__heading--toggle:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
 }
 
-.ds-nav-list__heading-text {
+.ds-side-nav__heading-text {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-.ds-nav-list__heading--toggle[aria-expanded='true'] .ds-nav-list__chevron {
+.ds-side-nav__heading--toggle[aria-expanded='true'] .ds-side-nav__chevron {
   transform: rotate(180deg);
 }
 
-.ds-nav-list__section-list {
+.ds-side-nav__section-list {
   display: flex;
   flex-direction: column;
   gap: var(--gap-050);
@@ -296,11 +296,11 @@
    scrollbar comes and goes.
    ============================================ */
 
-.ds-nav-list--scrollable {
+.ds-side-nav--scrollable {
   /* How far the content fades in or out at an end with more to scroll. */
-  --ds-nav-list-fade: var(--gap-1000);
-  --ds-nav-list-fade-start: 0px;
-  --ds-nav-list-fade-end: 0px;
+  --ds-side-nav-fade: var(--gap-1000);
+  --ds-side-nav-fade-start: 0px;
+  --ds-side-nav-fade-end: 0px;
   flex-wrap: nowrap;
   height: 100%;
   min-height: 0;
@@ -309,8 +309,8 @@
   /* Room at both ends for the fade, a hook so a host can line the first
      row up with something beside it (SiteLayout's sidebar pulls the list up
      by it, so the first row starts level with the page's first line). */
-  --ds-nav-list-block-inset: var(--padding-200);
-  padding-block: var(--ds-nav-list-block-inset);
+  --ds-side-nav-block-inset: var(--padding-200);
+  padding-block: var(--ds-side-nav-block-inset);
   /* The scrollbar stays out of sight until the list scrolls. */
   scrollbar-width: none;
   /* The ends fade only when there is more past them, so a list at its top
@@ -319,48 +319,48 @@
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent,
-    black var(--ds-nav-list-fade-start),
-    black calc(100% - var(--ds-nav-list-fade-end)),
+    black var(--ds-side-nav-fade-start),
+    black calc(100% - var(--ds-side-nav-fade-end)),
     transparent
   );
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    black var(--ds-nav-list-fade-start),
-    black calc(100% - var(--ds-nav-list-fade-end)),
+    black var(--ds-side-nav-fade-start),
+    black calc(100% - var(--ds-side-nav-fade-end)),
     transparent
   );
 }
 
 /* A fixed-height column scrolls its rows rather than squeezing them: a
    flex child would otherwise shrink to fit and the rows would overlap. */
-.ds-nav-list--scrollable > * {
+.ds-side-nav--scrollable > * {
   flex-shrink: 0;
 }
 
-.ds-nav-list--scrollable[data-fade-start] {
-  --ds-nav-list-fade-start: var(--ds-nav-list-fade);
+.ds-side-nav--scrollable[data-fade-start] {
+  --ds-side-nav-fade-start: var(--ds-side-nav-fade);
 }
 
-.ds-nav-list--scrollable[data-fade-end] {
-  --ds-nav-list-fade-end: var(--ds-nav-list-fade);
+.ds-side-nav--scrollable[data-fade-end] {
+  --ds-side-nav-fade-end: var(--ds-side-nav-fade);
 }
 
-.ds-nav-list--scrollable::-webkit-scrollbar {
+.ds-side-nav--scrollable::-webkit-scrollbar {
   width: 0;
 }
 
 /* While it scrolls: a thin thumb on no track, gone again once it settles. */
-.ds-nav-list--scrollable[data-scrolling] {
+.ds-side-nav--scrollable[data-scrolling] {
   scrollbar-width: thin;
   scrollbar-color: var(--color-bg-container-border) transparent;
 }
 
-.ds-nav-list--scrollable[data-scrolling]::-webkit-scrollbar {
+.ds-side-nav--scrollable[data-scrolling]::-webkit-scrollbar {
   width: var(--padding-150);
 }
 
-.ds-nav-list--scrollable[data-scrolling]::-webkit-scrollbar-thumb {
+.ds-side-nav--scrollable[data-scrolling]::-webkit-scrollbar-thumb {
   border-radius: var(--radius-pill);
   background: var(--color-bg-container-border);
 }

@@ -24,7 +24,7 @@ import { AnchorNav } from 'rift-ds/components/AnchorNav/AnchorNav';
 import { BackToTop } from 'rift-ds/components/BackToTop/BackToTop';
 import { Breadcrumb, type BreadcrumbItem } from 'rift-ds/components/Breadcrumb/Breadcrumb';
 import { CommandPaletteTrigger } from 'rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger';
-import { NavList, type NavListEntry } from 'rift-ds/components/NavList/NavList';
+import { SideNav, type SideNavEntry } from 'rift-ds/components/SideNav/SideNav';
 import { SiteFooter, type SiteFooterColumn } from 'rift-ds/components/SiteFooter/SiteFooter';
 import { SiteHeader, type SiteHeaderSection } from 'rift-ds/components/SiteHeader/SiteHeader';
 import { SiteLayout } from 'rift-ds/components/SiteLayout/SiteLayout';
@@ -47,7 +47,7 @@ const COMPONENT_PAGES = [
   'Combobox', 'Dialog', 'Drawer', 'Dropdown menu', 'Field', 'Input', 'Menubar', 'Pagination', 'Popover', 'Select',
   'Slider', 'Switch', 'Table', 'Tabs', 'Toast', 'Tooltip',
 ];
-const NAV: NavListEntry[] = [
+const NAV: SideNavEntry[] = [
   {
     type: 'section',
     label: 'Getting started',
@@ -154,7 +154,7 @@ export function DocsShell({ currentHref, breadcrumb, children }: DocsShellProps)
         />
       }
       sidebar={
-        <NavList
+        <SideNav
           items={NAV}
           size="compact"
           scrollable

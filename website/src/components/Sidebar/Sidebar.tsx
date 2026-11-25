@@ -29,7 +29,7 @@ interface SidebarProps {
 }
 
 /**
- * The site's own pill sidebar. The site frame uses the library's NavList by
+ * The site's own pill sidebar. The site frame uses the library's SideNav by
  * default (SITE_FRAME.sidebar in website/src/config/site-frame.ts); this
  * stays as the frame's other sidebar option, which /labs/site-frame offers
  * for comparison.

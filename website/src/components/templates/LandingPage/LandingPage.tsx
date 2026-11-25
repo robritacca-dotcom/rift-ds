@@ -62,7 +62,7 @@ import { DropdownMenu } from "rift-ds/components/DropdownMenu/DropdownMenu";
 import { Gauge } from "rift-ds/components/Gauge/Gauge";
 import { Input } from "rift-ds/components/Input/Input";
 import { Meter } from "rift-ds/components/Meter/Meter";
-import { NavList } from "rift-ds/components/NavList/NavList";
+import { SideNav } from "rift-ds/components/SideNav/SideNav";
 import { ProgressiveBlur } from "rift-ds/components/ProgressiveBlur/ProgressiveBlur";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
 import { Sparkline } from "rift-ds/components/Sparkline/Sparkline";
@@ -759,7 +759,7 @@ export default function LandingPage() {
           </div>
         }
       >
-        <NavList
+        <SideNav
           items={NAV.map((item) => ({ label: item, href: `#${item.toLowerCase()}` }))}
           onNavigate={() => setMenuOpen(false)}
         />

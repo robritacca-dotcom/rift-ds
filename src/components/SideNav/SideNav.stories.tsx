@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
-import { NavList, type NavListEntry } from './NavList';
+import { SideNav, type SideNavEntry } from './SideNav';
 
 const flatItems = [
   { label: 'Overview', href: '#overview' },
@@ -54,8 +54,8 @@ const threeLevelItems = [
 ];
 
 const meta = {
-  title: 'Components/NavList',
-  component: NavList,
+  title: 'Components/SideNav',
+  component: SideNav,
   parameters: {
     layout: 'padded',
   },
@@ -64,7 +64,7 @@ const meta = {
     multiple: { control: 'boolean' },
     currentHref: { control: 'text' },
   },
-} satisfies Meta<typeof NavList>;
+} satisfies Meta<typeof SideNav>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -116,7 +116,7 @@ export const Controlled: Story = {
   },
   render: function ControlledStory(args) {
     const [expandedIds, setExpandedIds] = useState<string[]>(['guides']);
-    return <NavList {...args} expandedIds={expandedIds} onExpandedChange={setExpandedIds} />;
+    return <SideNav {...args} expandedIds={expandedIds} onExpandedChange={setExpandedIds} />;
   },
 };
 
@@ -215,7 +215,7 @@ const PAGES = [
 const slug = (label: string) => label.toLowerCase().replace(/ /g, '-');
 
 /** A documentation sidebar: titled sections, a long run of pages, a nested branch and badges. */
-const DOCS_NAV: NavListEntry[] = [
+const DOCS_NAV: SideNavEntry[] = [
   {
     type: 'section',
     label: 'Getting started',
@@ -269,7 +269,7 @@ export const DocsSidebar: Story = {
   },
   render: (args) => (
     <nav aria-label="Documentation" style={{ height: 480, width: 260, display: 'flex', flexDirection: 'column' }}>
-      <NavList {...args} />
+      <SideNav {...args} />
     </nav>
   ),
 };

@@ -9,10 +9,10 @@ import { BREAKPOINT_MOBILE_PX, BREAKPOINT_TABLET_PX, mediaAbove, mediaBelow } fr
 import { Avatar } from '../Avatar/Avatar';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import type { PixelInk } from '../PixelAvatar/PixelAvatar';
-import { SidebarPanel } from '../SidebarPanel/SidebarPanel';
+import { SubNavPanel } from '../SubNavPanel/SubNavPanel';
 import { warnOnce } from '../../behaviors/devWarning';
-import { NavStack, type NavStackEntry, type NavStackItem } from '../NavStack/NavStack';
-import type { SidebarPanelItem } from '../SidebarPanel/SidebarPanel';
+import { DrillMenu, type DrillMenuEntry, type DrillMenuItem } from '../DrillMenu/DrillMenu';
+import type { SubNavPanelItem } from '../SubNavPanel/SubNavPanel';
 import { Tooltip } from '../Tooltip/Tooltip';
 import '../../behaviors/shell.css';
 import './AppSidebar.css';
@@ -175,18 +175,18 @@ type AppSidebarOwnProps = {
   /** Rendered above the profile block; fades out while collapsed */
   footerSlot?: React.ReactNode;
   /**
-   * Rows above the sections in the phone drawer, in NavStack's shape, such
+   * Rows above the sections in the phone drawer, in DrillMenu's shape, such
    * as a switcher that drills into its choices. When set, the drawer shows
    * these in `topSlot`'s place, since a dropdown has no room to open on a
    * full-screen menu.
    */
-  drawerTopEntries?: NavStackEntry[];
+  drawerTopEntries?: DrillMenuEntry[];
   /**
-   * Rows after the sections in the phone drawer, in NavStack's shape, such
+   * Rows after the sections in the phone drawer, in DrillMenu's shape, such
    * as appearance settings that drill into their choices. When set, the
    * drawer shows these in `footerSlot`'s place.
    */
-  drawerBottomEntries?: NavStackEntry[];
+  drawerBottomEntries?: DrillMenuEntry[];
   /**
    * One primary action at the rail's foot, below the profile and full width,
    * as the site header's drawer pins its call to action: in the expanded
@@ -276,7 +276,7 @@ function DefaultLogo() {
  * **Collapsed** (64 px): icon-only buttons, logo mark, avatar.
  * **Expanded** (280 px): labels, category headings, accordion
  * sub-items with tree-line connectors, and a profile section.
- * A third level opens in a `SidebarPanel` beside the rail (see `subNav`).
+ * A third level opens in a `SubNavPanel` beside the rail (see `subNav`).
  *
  * The forwarded ref and any unrecognised props target the `<nav>` (the rail,
  * and the drawer on small screens). The landmark is labelled "App
@@ -391,7 +391,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      roomier theme's taller rows), and fades out at whichever end has more
      past it, so the last row meets a fade rather than a hard cut against
      the profile. The edges are written straight to the DOM, so a scroll
-     re-renders nothing (NavList's scrollable rule). */
+     re-renders nothing (SideNav's scrollable rule). */
   const topRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     const top = topRef.current;
@@ -502,7 +502,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   /* Resolve the source to what the panel shows. Accordion mode passes the
      sub-item's children without their own children: three levels is the
      cap, so a fourth never renders. */
-  let panelSource: { label: string; parentLabel?: string; items: SidebarPanelItem[] } | undefined;
+  let panelSource: { label: string; parentLabel?: string; items: SubNavPanelItem[] } | undefined;
   for (const section of sections) {
     for (const item of section.items) {
       if (isPanelMode && item.key === panelSourceKey && item.children?.length) {
@@ -534,7 +534,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   const panelVisible = Boolean(panelSource) && isPanelOpen;
   const panelId = useId();
 
-  /* The phone drawer draws its own levels (a NavStack, below), so opening
+  /* The phone drawer draws its own levels (a DrillMenu, below), so opening
      it only flips the flag. */
   const openMobile = useCallback(() => setMobileOpen(true), []);
 
@@ -556,7 +556,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      controls and an open menu inside the rail keep their own jobs. Only
      attached while it can fire, so the host's own handler runs alone the
      rest of the time. */
-  /* The phone drawer is a NavStack: the sections as its first level, a
+  /* The phone drawer is a DrillMenu: the sections as its first level, a
      row with children drilling into them (both subNav modes), a sub-item
      with children one level further, the panel's groups as headed
      sections, and the host's drawer entries before and after. A row with
@@ -564,8 +564,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      once its onClick has run, since in an app a row is a destination. It
      opens on the level that holds the current page. */
   const drawerClicks = new Map<string, (() => void) | undefined>();
-  const subEntries = (subs: AppSidebarSubItem[], deeper: boolean): NavStackEntry[] => {
-    const entries: NavStackEntry[] = [];
+  const subEntries = (subs: AppSidebarSubItem[], deeper: boolean): DrillMenuEntry[] => {
+    const entries: DrillMenuEntry[] = [];
     for (const sub of subs) {
       const row = subRow(sub, deeper);
       const last = entries[entries.length - 1];
@@ -576,7 +576,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
     }
     return entries;
   };
-  const subRow = (sub: AppSidebarSubItem, deeper: boolean): NavStackItem => {
+  const subRow = (sub: AppSidebarSubItem, deeper: boolean): DrillMenuItem => {
     drawerClicks.set(sub.key, sub.onClick);
     return {
       id: sub.key,
@@ -595,7 +595,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             : { onClick: () => { sub.onClick?.(); closeMobile(); } }),
     };
   };
-  const itemRow = (item: AppSidebarItem): NavStackItem => {
+  const itemRow = (item: AppSidebarItem): DrillMenuItem => {
     drawerClicks.set(item.key, item.onClick);
     return {
       id: item.key,
@@ -617,7 +617,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           : { onClick: () => { item.onClick?.(); closeMobile(); } }),
     };
   };
-  const drawerStack: NavStackEntry[] = mobileOpen
+  const drawerStack: DrillMenuEntry[] = mobileOpen
     ? [
         ...(drawerTopEntries ?? []),
         ...sections.map((section, si) => ({
@@ -754,9 +754,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           </div>
         )}
 
-        {/* The phone drawer: every level as a NavStack */}
+        {/* The phone drawer: every level as a DrillMenu */}
         {mobileOpen ? (
-          <NavStack
+          <DrillMenu
             className={`${baseClass}__drawer-stack`}
             items={drawerStack}
             defaultPath={drawerPath}
@@ -1079,7 +1079,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           source so it can slide; inert while hidden. CSS keeps it off small
           screens, where the drawer's drill-in shows the same level. */}
       {panelSource && !mobileOpen && (
-        <SidebarPanel
+        <SubNavPanel
           linkComponent={Link}
           key={panelSourceKey}
           id={panelId}

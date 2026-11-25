@@ -1279,14 +1279,6 @@ Heading with a divider line and optional trailing content for organising page se
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/section-title.md
 
-### Sidebar panel
-
-Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.
-
-- Import: `import { SidebarPanel } from 'rift-ds';`
-- Rendering: client component (declares 'use client')
-- Contract: https://rift-ds.com/components/sidebar-panel.md
-
 ### Site layout
 
 The frame of a docs or marketing site: header, sidebar, content, aside and footer, with the page's width and the sidebar's dock set apart.
@@ -1310,6 +1302,14 @@ Children in one direction, a column or a row, with a gap from the scale between 
 - Import: `import { Stack } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/stack.md
+
+### Sub-nav panel
+
+Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting.
+
+- Import: `import { SubNavPanel } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/sub-nav-panel.md
 
 ### Toolbar
 
@@ -1391,6 +1391,14 @@ Hierarchical navigation trail showing the user's location within the site.
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/breadcrumb.md
 
+### Drill menu
+
+A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.
+
+- Import: `import { DrillMenu } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/drill-menu.md
+
 ### Entity switcher
 
 Switcher for the company, team, or account a screen is scoped to, with a logo, icon, or initials mark and levels that drill in.
@@ -1415,22 +1423,6 @@ A persistent row of menus, like an app's File, Edit and View, with arrow keys al
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/menubar.md
 
-### Nav list
-
-Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.
-
-- Import: `import { NavList } from 'rift-ds';`
-- Rendering: client component (declares 'use client')
-- Contract: https://rift-ds.com/components/nav-list.md
-
-### Nav stack
-
-A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.
-
-- Import: `import { NavStack } from 'rift-ds';`
-- Rendering: client component (declares 'use client')
-- Contract: https://rift-ds.com/components/nav-stack.md
-
 ### Pagination
 
 Numbered page navigation with ellipses and a compact readout, or links to the previous and next page of a sequence.
@@ -1438,6 +1430,14 @@ Numbered page navigation with ellipses and a compact readout, or links to the pr
 - Import: `import { Pagination } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/pagination.md
+
+### Side nav
+
+Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.
+
+- Import: `import { SideNav } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/side-nav.md
 
 ### Site footer
 

@@ -1,31 +1,31 @@
-# Nav stack
+# Drill menu
 
 A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
-- Import: `import { NavStack } from 'rift-ds';`
-- Deep import: `import { NavStack } from 'rift-ds/components/NavStack/NavStack';`
+- Import: `import { DrillMenu } from 'rift-ds';`
+- Deep import: `import { DrillMenu } from 'rift-ds/components/DrillMenu/DrillMenu';`
 - Rendering: client component (declares 'use client')
 - Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
-- Live docs: https://rift-ds.com/components/nav-stack
-- Schema: https://rift-ds.com/schema/components/nav-stack.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
+- Live docs: https://rift-ds.com/components/drill-menu
+- Schema: https://rift-ds.com/schema/components/drill-menu.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
 ## Alternatives
 
-- Use [Nav list](https://rift-ds.com/components/nav-list.md) instead when the list sits in a sidebar beside the page and branches should open in place.
+- Use [Side nav](https://rift-ds.com/components/side-nav.md) instead when the list sits in a sidebar beside the page and branches should open in place.
 
-## NavStack props
+## DrillMenu props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| items | `NavStackEntry[]` | yes |  | The first level's rows and sections. A row with `items` drills into the next level. |
+| items | `DrillMenuEntry[]` | yes |  | The first level's rows and sections. A row with `items` drills into the next level. |
 | currentHref | `string` | no |  | href of the current page: the exactly matching row gets `aria-current="page"` and the current treatment, and every row on the way to it the current treatment. |
 | path | `string[]` | no |  | The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`. |
 | defaultPath | `string[]` | no |  | The path the stack opens on, when it owns its state. Left out, it opens on the deepest level that holds the current page (`currentHref`, or a row marked `current`), so a reader deep in a section reopens the menu where they are; `[]` opens on the first level always. |
 | onPathChange | `((path: string[]) => void)` | no |  | Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes. |
-| onNavigate | `((item: NavStackItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in. |
+| onNavigate | `((item: DrillMenuItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)` | no |  | Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in. |
 | header | `ReactNode` | no |  | Content above the first level's rows, such as a search field. |
 | rootLabel | `string` | no | `'Menu'` | The back row's text on the second level, naming the first. |
 | backLabel | `((title: string) => string)` | no | `` (title) => `Back to ${title}` `` | The back row's accessible name, given the title of the level it returns to. Defaults to "Back to <title>". |
@@ -40,37 +40,18 @@ Its rows are links and buttons, and the browser owns Tab, Enter and Space. A ste
 
 ## Types
 
-### LinkComponent
-
-A component that renders a link in place of a plain `<a>`, such as a router's.
-
-```ts
-type LinkComponent = React.ElementType<LinkComponentProps>;
-```
-
-### LinkComponentProps
-
-The props a link component receives: every anchor attribute, the ref, and
-an `href` that is always a string. Next.js's `Link` takes these as they
-are; a router whose link takes `to` instead needs a one-line adapter:
-`({ href, ...props }) => <RouterLink to={href} {...props} />`.
-
-```ts
-type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
-```
-
-### NavStackEntry
+### DrillMenuEntry
 
 An entry on a level: a row, or a section of rows.
 
 ```ts
-type NavStackEntry = NavStackItem | NavStackSection;
+type DrillMenuEntry = DrillMenuItem | DrillMenuSection;
 ```
 
-### NavStackItem
+### DrillMenuItem
 
 ```ts
-interface NavStackItem {
+interface DrillMenuItem {
   /** Row text. */
   label: string;
   /**
@@ -91,7 +72,7 @@ interface NavStackItem {
   /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
   title?: string;
   /** Rows on the level this row opens. A row with items drills in instead of navigating. */
-  items?: NavStackEntry[];
+  items?: DrillMenuEntry[];
   /**
    * Marks the row as the page being viewed, regardless of the exact match
    * against `currentHref`, for a section that stays current on its child
@@ -110,19 +91,19 @@ interface NavStackItem {
 }
 ```
 
-### NavStackSection
+### DrillMenuSection
 
 A group of rows under an optional heading: one level's resources or
 settings, say, set apart from the rows above it.
 
 ```ts
-interface NavStackSection {
+interface DrillMenuSection {
   /** Marks the entry as a section rather than a row. */
   type: 'section';
   /** The heading over the rows. Leave it out for a group set apart by space alone. */
   label?: string;
   /** The section's rows. */
-  items: NavStackItem[];
+  items: DrillMenuItem[];
   /**
    * `prominent` draws the rows in the heading-3 style on a taller row, for
    * a menu that wants its top level louder. The site header's and the app
@@ -133,6 +114,25 @@ interface NavStackSection {
   /** Stable identity for the React key. Defaults to the label. */
   id?: string;
 }
+```
+
+### LinkComponent
+
+A component that renders a link in place of a plain `<a>`, such as a router's.
+
+```ts
+type LinkComponent = React.ElementType<LinkComponentProps>;
+```
+
+### LinkComponentProps
+
+The props a link component receives: every anchor attribute, the ref, and
+an `href` that is always a string. Next.js's `Link` takes these as they
+are; a router whose link takes `to` instead needs a one-line adapter:
+`({ href, ...props }) => <RouterLink to={href} {...props} />`.
+
+```ts
+type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 ```
 
 Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `HTMLButtonElement` (typescript), `HTMLElement` (typescript), `MouseEvent` (react), `ReactNode` (react).

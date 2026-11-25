@@ -171,7 +171,7 @@
     color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-/* Hover is the tertiary family's wash, as on a tertiary Button, a NavList
+/* Hover is the tertiary family's wash, as on a tertiary Button, a SideNav
    row and the MegaMenu's rows: a container fill can match the page floor
    in a light theme and vanish. */
 .ds-site-header__pill:hover {
@@ -495,7 +495,7 @@
   }
 }
 
-/* The list does the scrolling, as NavList's scrollable mode: no scrollbar
+/* The list does the scrolling, as SideNav's scrollable mode: no scrollbar
    until it moves and its ends fading out, the sidebar's treatment, so the
    drawer's body only gives it the height. */
 .ds-site-header__drawer .ds-drawer__body {

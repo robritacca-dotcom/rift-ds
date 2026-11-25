@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import { NavList, type NavListEntry } from "rift-ds/components/NavList/NavList";
+import { SideNav, type SideNavEntry } from "rift-ds/components/SideNav/SideNav";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -10,7 +10,7 @@ import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentI
 
 const DOCS_PAGES = ["Accordion", "Alert", "Avatar", "Badge", "Breadcrumb", "Button", "Calendar", "Card", "Checkbox", "Code block", "Combobox", "Dialog", "Drawer", "Dropdown menu", "Field", "Input", "Kbd", "Menubar", "Pagination", "Popover", "Select", "Slider", "Switch", "Table", "Tabs", "Toast", "Tooltip"];
 
-const DOCS_NAV: NavListEntry[] = [
+const DOCS_NAV: SideNavEntry[] = [
   {
     type: "section",
     label: "Getting started",
@@ -80,7 +80,7 @@ const staticGroupItems = [
 function ControlledExample() {
   const [expandedIds, setExpandedIds] = useState<string[]>(["guides"]);
   return (
-    <NavList
+    <SideNav
       items={nestedItems}
       expandedIds={expandedIds}
       onExpandedChange={setExpandedIds}
@@ -89,12 +89,12 @@ function ControlledExample() {
   );
 }
 
-export default function NavListPage() {
+export default function SideNavPage() {
   return (
     <div className={styles.dsContent}>
       <PageBreadcrumb />
       <div className={`${styles.pageHeader} animate-in`}>
-        <h1 className={styles.pageTitle}>Nav list</h1>
+        <h1 className={styles.pageTitle}>Side nav</h1>
         <PageLinks
           storybookPath="/?path=/docs/components-navlist--docs"
         />
@@ -105,7 +105,7 @@ export default function NavListPage() {
           Navigation links as a vertical list
         </p>
         <p className={styles.introBody}>
-          Nav list renders navigation trees for drawers and side menus. Every row is a real link built on the tertiary Button, so shape, sizing, and states match the rest of the system, and sections expand with a separate chevron toggle: tapping the label navigates, tapping the chevron expands.
+          Side nav renders navigation trees for drawers and side menus. Every row is a real link built on the tertiary Button, so shape, sizing, and states match the rest of the system, and sections expand with a separate chevron toggle: tapping the label navigates, tapping the chevron expands.
         </p>
       </div>
 
@@ -113,7 +113,7 @@ export default function NavListPage() {
       <section className={styles.section}>
         <SectionTitle title="Basic list" />
         <div style={{ maxWidth: "360px" }}>
-          <NavList items={basicItems} aria-label="Basic example" />
+          <SideNav items={basicItems} aria-label="Basic example" />
         </div>
       </section>
 
@@ -121,7 +121,7 @@ export default function NavListPage() {
       <section className={styles.section}>
         <SectionTitle title="Nested sections" />
         <div style={{ maxWidth: "360px" }}>
-          <NavList
+          <SideNav
             items={nestedItems}
             defaultExpandedIds={["guides"]}
             aria-label="Nested example"
@@ -133,7 +133,7 @@ export default function NavListPage() {
       <section className={styles.section}>
         <SectionTitle title="Current page" />
         <div style={{ maxWidth: "360px" }}>
-          <NavList
+          <SideNav
             items={basicItems}
             currentHref="#guides"
             aria-label="Current page example"
@@ -153,7 +153,7 @@ export default function NavListPage() {
       <section className={styles.section}>
         <SectionTitle title="Static group" />
         <div style={{ maxWidth: "360px" }}>
-          <NavList items={staticGroupItems} aria-label="Static group example" />
+          <SideNav items={staticGroupItems} aria-label="Static group example" />
         </div>
       </section>
 
@@ -161,7 +161,7 @@ export default function NavListPage() {
       <section className={styles.section}>
         <SectionTitle title="Icons" />
         <div style={{ maxWidth: "360px" }}>
-          <NavList
+          <SideNav
             items={[
               { label: "Overview", href: "#icons-overview", icon: "home" },
               { label: "Guides", href: "#icons-guides", icon: "menu_book" },
@@ -178,7 +178,7 @@ export default function NavListPage() {
         <SectionTitle title="A long sidebar" />
         <div className={styles.kitDemo}>
           <nav aria-label="Documentation example" className={styles.kitFrame}>
-            <NavList items={DOCS_NAV} size="compact" scrollable currentHref="#components-menubar" />
+            <SideNav items={DOCS_NAV} size="compact" scrollable currentHref="#components-menubar" />
           </nav>
           <p className={styles.kitNote}>
             Compact rows, titled sections, a badge, and its own scroll: <code>scrollable</code> keeps the scroll inside the list at both ends and brings the current page into view on load. The branch that holds the current page starts open.
@@ -186,7 +186,7 @@ export default function NavListPage() {
         </div>
       </section>
 
-      <ComponentInstallStrip slug="nav-list" />
+      <ComponentInstallStrip slug="side-nav" />
     </div>
   );
 }

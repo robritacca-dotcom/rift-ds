@@ -2,14 +2,14 @@ import type React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AnchorNav } from '../AnchorNav/AnchorNav';
 import { Heading } from '../Heading/Heading';
-import { NavList, type NavListEntry } from '../NavList/NavList';
+import { SideNav, type SideNavEntry } from '../SideNav/SideNav';
 import { Prose } from '../Prose/Prose';
 import { SiteFooter } from '../SiteFooter/SiteFooter';
 import { SiteHeader } from '../SiteHeader/SiteHeader';
 import { SiteLayout } from './SiteLayout';
 
 const PAGES = ['Accordion', 'Alert', 'Avatar', 'Badge', 'Button', 'Card', 'Checkbox', 'Dialog', 'Menubar', 'Table', 'Tabs', 'Tooltip'];
-const NAV: NavListEntry[] = [
+const NAV: SideNavEntry[] = [
   {
     type: 'section',
     label: 'Getting started',
@@ -67,7 +67,7 @@ const meta = {
     <SiteLayout
       {...args}
       header={<SiteHeader brand="Acme" sticky={false} sections={[{ id: 'docs', label: 'Docs', href: '#docs' }, { id: 'blog', label: 'Blog', href: '#blog' }]} currentHref="#docs" />}
-      sidebar={<NavList items={NAV} size="compact" scrollable currentHref="#installation" />}
+      sidebar={<SideNav items={NAV} size="compact" scrollable currentHref="#installation" />}
       aside={
         <AnchorNav
           fromHeadings={{ root: '#site-layout-article' }}
@@ -102,7 +102,7 @@ export const FloatingAside: Story = {
     <SiteLayout
       {...args}
       header={<SiteHeader brand="Acme" width="full" sticky={false} sections={[{ id: 'docs', label: 'Docs', href: '#docs' }]} currentHref="#docs" />}
-      sidebar={<NavList items={NAV} size="compact" scrollable currentHref="#installation" />}
+      sidebar={<SideNav items={NAV} size="compact" scrollable currentHref="#installation" />}
       aside={<AnchorNav fromHeadings={{ root: '#site-layout-article' }} variant="floating" />}
     />
   ),

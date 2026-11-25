@@ -4,7 +4,7 @@
  * The docs template: the Button page of Halyard, a fictional React UI kit's
  * documentation site, built from the design system alone. It is the
  * proving ground for the site pieces: SiteLayout's frame, SiteHeader on the
- * width axis, a long sectioned NavList as the sidebar, the article's code,
+ * width axis, a long sectioned SideNav as the sidebar, the article's code,
  * reference and guideline pieces, an on-this-page rail read from the
  * headings, and SiteFooter. Its job is to be looked at and iterated on, so
  * a fault found here is fixed in the component, never patched in this file.
@@ -76,7 +76,7 @@ import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Instructions } from "rift-ds/components/Instructions/Instructions";
 import { Link } from "rift-ds/components/Link/Link";
 import { DropdownMenu, type DropdownMenuEntry } from "rift-ds/components/DropdownMenu/DropdownMenu";
-import { NavList, type NavListEntry } from "rift-ds/components/NavList/NavList";
+import { SideNav, type SideNavEntry } from "rift-ds/components/SideNav/SideNav";
 import { Pagination } from "rift-ds/components/Pagination/Pagination";
 import { Prose } from "rift-ds/components/Prose/Prose";
 import { Rating } from "rift-ds/components/Rating/Rating";
@@ -111,7 +111,7 @@ const COMPONENT_PAGES = [
 ];
 const slug = (label: string) => `#${label.toLowerCase().replace(/ /g, "-")}`;
 
-const NAV: NavListEntry[] = [
+const NAV: SideNavEntry[] = [
   {
     type: "section",
     label: "Getting started",
@@ -360,7 +360,7 @@ export default function Docs({ usageLines, variantLines }: DocsProps) {
         />
       }
       sidebar={
-        <NavList
+        <SideNav
           items={NAV}
           size="compact"
           scrollable

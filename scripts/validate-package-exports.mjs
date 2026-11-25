@@ -223,8 +223,8 @@ for (const [key, target] of Object.entries(expected)) {
  * a consumer needs — belongs here with a reason rather than a subpath.
  */
 const INTERNAL_MODULES = new Map([
-  ['src/components/NavStack/path.ts',
-    'the tree walks NavStack takes (where the stack opens on the current page), shared with SiteHeader so its drawer footer knows the opening level; NavStack is the public surface'],
+  ['src/components/DrillMenu/path.ts',
+    'the tree walks DrillMenu takes (where the stack opens on the current page), shared with SiteHeader so its drawer footer knows the opening level; DrillMenu is the public surface'],
   ['src/components/DatePicker/calendar.ts',
     'the date helpers and grid keys DatePicker and DateRangePicker share; the pickers are the public surface'],
   ['src/components/EventCalendar/eventTime.ts',

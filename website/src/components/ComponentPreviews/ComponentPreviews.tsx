@@ -1686,7 +1686,7 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
-  "nav-list": () => (
+  "side-nav": () => (
     <>
       <div aria-hidden="true" style={{ width: "180px", display: "flex", flexDirection: "column", gap: "var(--gap-050)" }}>
         <Button
@@ -1708,7 +1708,7 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
-  "nav-stack": () => (
+  "drill-menu": () => (
     <>
       <div aria-hidden="true" style={{ width: "180px", display: "flex", flexDirection: "column", gap: "var(--gap-100)" }}>
         <span style={{ display: "flex", alignItems: "center", gap: "var(--gap-050)", fontSize: "11px", color: "var(--color-text-secondary)" }}>
@@ -2050,7 +2050,7 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
-  "sidebar-panel": () => (
+  "sub-nav-panel": () => (
     <>
       <div className={styles.previewColumn} style={{ gap: "3px", width: "130px" }}>
         <span style={{ fontSize: "8px", fontWeight: 600, letterSpacing: "0.08em", color: "var(--color-text-secondary)", padding: "0 6px 4px" }}>REPORTS</span>

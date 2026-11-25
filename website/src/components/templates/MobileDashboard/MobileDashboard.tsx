@@ -17,8 +17,8 @@
  *   Liquid Glass capsule floating over the content at full size throughout
  *   (no minimise on scroll). Neither is fixed to the viewport:
  *   both ride the app area, so the framed phone carries them inside it.
- * - The menu button opens a left Drawer holding a NavList, the drawer
- *   pattern NavList's own doc names; the profile is Avatar initials.
+ * - The menu button opens a left Drawer holding a SideNav, the drawer
+ *   pattern SideNav's own doc names; the profile is Avatar initials.
  * - The stage is a single column of Panels on the dashboard rung set: the
  *   marketing dashboard's KPI tiles two up, its ad spend chart, its channel
  *   share bars, and its campaigns as a list, because a data table does not
@@ -47,7 +47,7 @@ import { Button } from "rift-ds/components/Button/Button";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
 import { EmptyState } from "rift-ds/components/EmptyState/EmptyState";
 import { LegendTile } from "rift-ds/components/LegendTile/LegendTile";
-import { NavList } from "rift-ds/components/NavList/NavList";
+import { SideNav } from "rift-ds/components/SideNav/SideNav";
 import { Panel } from "rift-ds/components/Panel/Panel";
 import { ProgressBar } from "rift-ds/components/ProgressBar/ProgressBar";
 import { SegmentedControl } from "rift-ds/components/SegmentedControl/SegmentedControl";
@@ -715,7 +715,7 @@ export default function MobileDashboard() {
           </div>
         }
       >
-        <NavList
+        <SideNav
           items={MENU}
           currentHref="#marketing"
           onNavigate={(_, event) => {

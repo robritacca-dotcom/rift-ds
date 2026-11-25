@@ -3,7 +3,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { IconButton } from "rift-ds/components/IconButton/IconButton";
 import { Button } from "rift-ds/components/Button/Button";
-import type { NavStackEntry } from "rift-ds/components/NavStack/NavStack";
+import type { DrillMenuEntry } from "rift-ds/components/DrillMenu/DrillMenu";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { ThemeToggle } from "rift-ds/components/ThemeToggle/ThemeToggle";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
@@ -55,7 +55,7 @@ const search = <IconButton icon="search" variant="secondary" tone="neutral" labe
 /* The folded demo's drawer: a plain row ahead of the first section joins
    the sections' own list, a section starts a group of its own, and the
    footer shows on the first level only. */
-const drawerEntries: NavStackEntry[] = [
+const drawerEntries: DrillMenuEntry[] = [
   { id: "status", label: "Status", href: "#status" },
   {
     type: "section",
@@ -183,7 +183,7 @@ export default function SiteHeaderPage() {
       <section className={styles.section}>
         <SectionTitle title="The drawer" />
         <p className={styles.introBody}>
-          Open the folded bar above to see it. The drawer is a NavStack: the sections first, each drilling into its
+          Open the folded bar above to see it. The drawer is a DrillMenu: the sections first, each drilling into its
           menu&apos;s pages (or its <code>drawerItems</code>), a row with <code>items</code> of its own drilling one level
           further. <code>drawerHeader</code> sits above the first level, for a search field. <code>drawerEntries</code>{" "}
           follow the sections: plain rows ahead of the first section join the sections&apos; own list, as Status does

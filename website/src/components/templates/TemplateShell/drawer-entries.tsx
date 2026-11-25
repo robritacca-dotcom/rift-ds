@@ -1,6 +1,6 @@
 "use client";
 
-import type { NavStackEntry, NavStackItem } from "rift-ds/components/NavStack/NavStack";
+import type { DrillMenuEntry, DrillMenuItem } from "rift-ds/components/DrillMenu/DrillMenu";
 import type { EntitySwitcherItem } from "rift-ds/components/EntitySwitcher/EntitySwitcher";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import styles from "./TemplateShell.module.css";
@@ -48,8 +48,8 @@ export function entitySwitcherEntries({
   value?: string;
   onPick: (id: string, item: EntitySwitcherItem) => void;
   label: string;
-}): NavStackEntry[] {
-  const choice = (item: EntitySwitcherItem, asAll = false): NavStackItem => ({
+}): DrillMenuEntry[] {
+  const choice = (item: EntitySwitcherItem, asAll = false): DrillMenuItem => ({
     id: asAll ? `${item.id}#self` : item.id,
     label: item.name,
     description: item.description,
@@ -57,7 +57,7 @@ export function entitySwitcherEntries({
     selected: item.id === value,
     onClick: () => onPick(item.id, item),
   });
-  const row = (item: EntitySwitcherItem): NavStackItem =>
+  const row = (item: EntitySwitcherItem): DrillMenuItem =>
     item.children?.length
       ? {
           id: item.id,

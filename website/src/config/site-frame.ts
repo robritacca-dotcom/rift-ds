@@ -38,13 +38,13 @@ export type SiteFrameSettings = {
   sidebarDock: "content" | "edge";
   /** The on-this-page rail: floating at the window's end edge, or a column. */
   asidePlacement: "edge" | "column";
-  /** The sidebar: the site's own pill list, or the library's NavList. */
+  /** The sidebar: the site's own pill list, or the library's SideNav. */
   sidebar: "site" | "navlist";
 };
 
 /**
  * The settings the frame draws with: the page contained beside its
- * sidebar, the library's NavList as the sidebar, the rail floating at the
+ * sidebar, the library's SideNav as the sidebar, the rail floating at the
  * edge. The
  * reader's layout pick (the header's layout switcher, offered only inside
  * the frame; lib/siteFrameLayout.ts holds the presets and the stored pick)

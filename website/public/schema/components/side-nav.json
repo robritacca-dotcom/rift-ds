@@ -2,28 +2,28 @@
   "$schema": "https://rift-ds.com/schema/component.schema.json",
   "version": "1.37.1",
   "kind": "component",
-  "name": "NavList",
-  "label": "Nav list",
-  "slug": "nav-list",
+  "name": "SideNav",
+  "label": "Side nav",
+  "slug": "side-nav",
   "category": "navigation",
   "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
   "client": true,
-  "importPath": "rift-ds/components/NavList/NavList",
+  "importPath": "rift-ds/components/SideNav/SideNav",
   "barrel": "main",
-  "docsUrl": "https://rift-ds.com/components/nav-list",
-  "markdownUrl": "https://rift-ds.com/components/nav-list.md",
+  "docsUrl": "https://rift-ds.com/components/side-nav",
+  "markdownUrl": "https://rift-ds.com/components/side-nav.md",
   "exports": [
     {
-      "component": "NavList",
+      "component": "SideNav",
       "props": [
         {
           "name": "items",
-          "type": "NavListEntry[]",
+          "type": "SideNavEntry[]",
           "typeKind": "array",
           "required": true,
           "description": "Navigation tree to render: rows, and at the top level, sections of rows.",
           "typeRefs": [
-            "NavListEntry"
+            "SideNavEntry"
           ]
         },
         {
@@ -84,12 +84,12 @@
         },
         {
           "name": "onNavigate",
-          "type": "((item: NavListItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
+          "type": "((item: SideNavItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
           "typeKind": "function",
           "required": false,
           "description": "Fires when any link is clicked, alongside native navigation — e.g. to close the drawer that contains the list.",
           "typeRefs": [
-            "NavListItem"
+            "SideNavItem"
           ]
         },
         {
@@ -143,25 +143,25 @@
       "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
       "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
     },
-    "NavListEntry": {
+    "SideNavEntry": {
       "kind": "type",
-      "definition": "type NavListEntry = NavListItem | NavListSection;",
+      "definition": "type SideNavEntry = SideNavItem | SideNavSection;",
       "description": "A top-level entry: a row, or a section of rows.",
       "refs": [
-        "NavListItem",
-        "NavListSection"
+        "SideNavItem",
+        "SideNavSection"
       ]
     },
-    "NavListItem": {
+    "SideNavItem": {
       "kind": "interface",
-      "definition": "interface NavListItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: NavListItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   * @default true\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n  /** Icon before the label — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n}"
+      "definition": "interface SideNavItem {\n  /** Row text. */\n  label: string;\n  /** Link destination — every row is a real link. */\n  href: string;\n  /** Stable identity for expansion state and aria wiring. Defaults to `href`. */\n  id?: string;\n  /** Child rows, indented one level. Nesting is supported three levels deep. */\n  items?: SideNavItem[];\n  /**\n   * When false, an item with children renders no toggle and its children stay\n   * visible — a permanent group rather than a collapsible section.\n   * @default true\n   */\n  collapsible?: boolean;\n  /**\n   * Forces the current-page treatment on this row regardless of the exact\n   * match against `currentHref` — for prefix-matched sections that should\n   * stay current on their child routes.\n   */\n  current?: boolean;\n  /** A short tag after the label, such as \"New\" or \"Beta\", drawn as a neutral Badge. */\n  badge?: string;\n  /** Icon before the label — Material Symbol name (string) or custom element (ReactNode) */\n  icon?: string | React.ReactNode;\n}"
     },
-    "NavListSection": {
+    "SideNavSection": {
       "kind": "interface",
-      "definition": "interface NavListSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The section's heading. */\n  label: string;\n  /** The section's rows. */\n  items: NavListItem[];\n  /**\n   * Stable identity for its expansion state. Defaults to the label. In\n   * `expandedIds`, `defaultExpandedIds` and `onExpandedChange` a section\n   * appears as `section:<id>`, so its id never collides with a row's.\n   */\n  id?: string;\n  /**\n   * Let the reader fold the section under its heading. Unlike a row with\n   * `items`, which folds unless told not to, a section is a plain label\n   * unless told to fold.\n   * @default false\n   */\n  collapsible?: boolean;\n}",
+      "definition": "interface SideNavSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The section's heading. */\n  label: string;\n  /** The section's rows. */\n  items: SideNavItem[];\n  /**\n   * Stable identity for its expansion state. Defaults to the label. In\n   * `expandedIds`, `defaultExpandedIds` and `onExpandedChange` a section\n   * appears as `section:<id>`, so its id never collides with a row's.\n   */\n  id?: string;\n  /**\n   * Let the reader fold the section under its heading. Unlike a row with\n   * `items`, which folds unless told not to, a section is a plain label\n   * unless told to fold.\n   * @default false\n   */\n  collapsible?: boolean;\n}",
       "description": "A titled section of rows: a heading over its items, the way a long\ndocumentation sidebar groups its pages. Sections sit only at the top\nlevel; their items nest like any others.",
       "refs": [
-        "NavListItem"
+        "SideNavItem"
       ]
     }
   },
@@ -199,9 +199,9 @@
   },
   "alternatives": [
     {
-      "name": "NavStack",
+      "name": "DrillMenu",
       "when": "the menu fills a phone screen and each branch should open as a level of its own",
-      "schemaUrl": "https://rift-ds.com/schema/components/nav-stack.json"
+      "schemaUrl": "https://rift-ds.com/schema/components/drill-menu.json"
     }
   ]
 }

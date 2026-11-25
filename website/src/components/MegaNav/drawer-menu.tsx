@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { NavStackEntry, NavStackItem } from "rift-ds/components/NavStack/NavStack";
+import type { DrillMenuEntry, DrillMenuItem } from "rift-ds/components/DrillMenu/DrillMenu";
 import type { SiteHeaderDrawerItem } from "rift-ds/components/SiteHeader/SiteHeader";
 import { componentsSidebarGroups, type MegaItem } from "@/config/navigation";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
@@ -41,7 +41,7 @@ const mark = (glyph: React.ReactNode) => <span className={styles.drawerMark}>{gl
  * and the registry, then the author. The landing page's link row
  * and the footer's credit, given the room a full-screen menu has.
  */
-const RESOURCES: NavStackItem[] = [
+const RESOURCES: DrillMenuItem[] = [
   { label: "GitHub repo", description: "Source, issues and releases", href: REPOSITORY_URL, icon: mark(<GitHubIcon />), external: true },
   { label: "npm package", description: "Install rift-ds", href: NPM_URL, icon: mark(<NpmIcon />), external: true },
   ...(SHOW_FIGMA_LINKS
@@ -62,7 +62,7 @@ const RESOURCES: NavStackItem[] = [
  * switchers use, and the stack stays on its level so the reader sees the
  * page change behind the row.
  */
-export function useAppearanceSection({ background: withBackground = true }: { background?: boolean } = {}): NavStackEntry {
+export function useAppearanceSection({ background: withBackground = true }: { background?: boolean } = {}): DrillMenuEntry {
   const brand = useSyncExternalStore(subscribeBrand, readBrand, () => SERVED_THEME_ID);
   const tiles = themeTiles(useSiteTheme() === "dark" ? "dark" : "light");
   const tile = tiles.find((t) => t.value === brand) ?? tiles[0];
@@ -74,7 +74,7 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
     <span className={styles.drawerSwatch} style={{ backgroundColor: color, borderRadius: radius }} />
   );
 
-  const theme: NavStackItem = {
+  const theme: DrillMenuItem = {
     id: "theme",
     label: "Theme",
     icon: swatch(tile.color ?? "currentColor", tile.swatchRadius),
@@ -94,7 +94,7 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
       { type: "section", items: [{ label: "Make your own", description: "Opens the playground", href: "/playground", icon: "add" }] },
     ],
   };
-  const backgroundRow: NavStackItem = {
+  const backgroundRow: DrillMenuItem = {
     id: "background",
     label: "Background",
     icon: background.icon,
@@ -117,7 +117,7 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
       },
     ],
   };
-  const modeRow: NavStackItem = {
+  const modeRow: DrillMenuItem = {
     id: "mode",
     label: "Mode",
     icon: mode.icon,
@@ -147,12 +147,12 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
  * tablet, where the bar still shows them as small circles, the menu is the
  * roomier way to reach them, with their current values named.
  */
-export function useDrawerEntries(phone: boolean): NavStackEntry[] {
+export function useDrawerEntries(phone: boolean): DrillMenuEntry[] {
   const appearance = useAppearanceSection();
   // A plain row, so it joins the sections' list right under Docs rather
   // than standing alone. The full-width sheet has room to name what is
   // inside; the tablet drawer's narrower row does not.
-  const resources: NavStackEntry = {
+  const resources: DrillMenuEntry = {
     id: "resources",
     label: "Resources",
     ...(phone ? { value: "GitHub, npm, Figma" } : {}),

@@ -418,6 +418,12 @@
       "description": "An edge-anchored panel that slides in from any side, modal by default or resting beside a live page, for filter panels, detail views, and mobile navigation."
     },
     {
+      "name": "drill-menu",
+      "type": "registry:ui",
+      "title": "Drill menu",
+      "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out."
+    },
+    {
       "name": "dropdown",
       "type": "registry:ui",
       "title": "Dropdown",
@@ -718,18 +724,6 @@
       "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row."
     },
     {
-      "name": "nav-list",
-      "type": "registry:ui",
-      "title": "Nav list",
-      "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll."
-    },
-    {
-      "name": "nav-stack",
-      "type": "registry:ui",
-      "title": "Nav stack",
-      "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out."
-    },
-    {
       "name": "notification-center",
       "type": "registry:ui",
       "title": "Notification centre",
@@ -904,10 +898,10 @@
       "description": "A WebGL2 scene, from a night horizon to a spiral galaxy or one of your own in GLSL, in the theme's field colours, with fades, vignette and grain."
     },
     {
-      "name": "sidebar-panel",
+      "name": "side-nav",
       "type": "registry:ui",
-      "title": "Sidebar panel",
-      "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting."
+      "title": "Side nav",
+      "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll."
     },
     {
       "name": "signature-pad",
@@ -1016,6 +1010,12 @@
       "type": "registry:ui",
       "title": "Streaming text",
       "description": "Progressive reveal for text arriving in chunks, with a blinking cursor while more is coming."
+    },
+    {
+      "name": "sub-nav-panel",
+      "type": "registry:ui",
+      "title": "Sub-nav panel",
+      "description": "Secondary navigation column listing one section's pages, with group headings and one level of accordion nesting."
     },
     {
       "name": "swatch",

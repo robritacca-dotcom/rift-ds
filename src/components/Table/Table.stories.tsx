@@ -431,7 +431,7 @@ export const PropsReference: Story = {
         id: 'items',
         cells: {
           prop: <>items <Badge label="Required" variant="neutral" /></>,
-          type: 'NavListEntry[]',
+          type: 'SideNavEntry[]',
           default: '–',
           description: 'Navigation tree to render.',
         },

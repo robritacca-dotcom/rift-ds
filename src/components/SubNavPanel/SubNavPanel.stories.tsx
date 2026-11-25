@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { SidebarPanel } from './SidebarPanel';
+import { SubNavPanel } from './SubNavPanel';
 
 const reportItems = [
   { key: 'standard', label: 'Standard reports' },
@@ -22,8 +22,8 @@ const reportItems = [
 ];
 
 const meta = {
-  title: 'Components/SidebarPanel',
-  component: SidebarPanel,
+  title: 'Components/SubNavPanel',
+  component: SubNavPanel,
   parameters: {
     layout: 'fullscreen',
   },
@@ -45,7 +45,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof SidebarPanel>;
+} satisfies Meta<typeof SubNavPanel>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

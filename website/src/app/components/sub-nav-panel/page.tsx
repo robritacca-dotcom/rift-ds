@@ -2,15 +2,15 @@
 
 import React, { useState } from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
-import { SidebarPanel } from "rift-ds/components/SidebarPanel/SidebarPanel";
-import type { SidebarPanelItem } from "rift-ds/components/SidebarPanel/SidebarPanel";
+import { SubNavPanel } from "rift-ds/components/SubNavPanel/SubNavPanel";
+import type { SubNavPanelItem } from "rift-ds/components/SubNavPanel/SubNavPanel";
 import { Button } from "rift-ds/components/Button/Button";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
 import ComponentInstallStrip from "@/components/ComponentInstallStrip/ComponentInstallStrip";
 
-const reportItems: SidebarPanelItem[] = [
+const reportItems: SubNavPanelItem[] = [
   { key: "standard", label: "Standard reports" },
   { key: "custom", label: "Custom reports" },
   { key: "management", label: "Management reports" },
@@ -28,7 +28,7 @@ const reportItems: SidebarPanelItem[] = [
   },
 ];
 
-const settingsItems: SidebarPanelItem[] = [
+const settingsItems: SubNavPanelItem[] = [
   { key: "profile", label: "Profile", group: "Account" },
   { key: "security", label: "Security", group: "Account" },
   { key: "notifications", label: "Notifications", group: "Account", badge: 3 },
@@ -42,7 +42,7 @@ function CollapseDemo() {
   return (
     <div className={styles.panelDemo}>
       {open ? (
-        <SidebarPanel
+        <SubNavPanel
           items={reportItems}
           title="Reports and analytics"
           activeKey="custom"
@@ -65,7 +65,7 @@ function CollapseDemo() {
 
 function DrillInDemo() {
   const [screen, setScreen] = useState<"menu" | "reports">("reports");
-  const menuItems: SidebarPanelItem[] = [
+  const menuItems: SubNavPanelItem[] = [
     { key: "home", label: "Home" },
     { key: "reports", label: "Reports", onClick: () => setScreen("reports") },
     { key: "clients", label: "Clients" },
@@ -74,7 +74,7 @@ function DrillInDemo() {
   return (
     <div className={styles.panelDemo}>
       {screen === "reports" ? (
-        <SidebarPanel
+        <SubNavPanel
           items={reportItems}
           title="Reports and analytics"
           activeKey="standard"
@@ -82,18 +82,18 @@ function DrillInDemo() {
           backLabel="Menu"
         />
       ) : (
-        <SidebarPanel items={menuItems} title="Menu" activeKey="reports" />
+        <SubNavPanel items={menuItems} title="Menu" activeKey="reports" />
       )}
     </div>
   );
 }
 
-export default function SidebarPanelPage() {
+export default function SubNavPanelPage() {
   return (
     <div className={styles.dsContent}>
       <PageBreadcrumb />
       <div className={`${styles.pageHeader} animate-in`}>
-        <h1 className={styles.pageTitle}>Sidebar panel</h1>
+        <h1 className={styles.pageTitle}>Sub-nav panel</h1>
         <PageLinks storybookPath="/?path=/docs/components-sidebarpanel--docs" />
       </div>
 
@@ -112,7 +112,7 @@ export default function SidebarPanelPage() {
           Flat rows with one accordion. Financial planning stays closed until it is pressed, and its rows hang from a tree line under the label.
         </p>
         <div className={styles.panelDemo} data-anchor-ignore>
-          <SidebarPanel
+          <SubNavPanel
             items={reportItems}
             title="Reports and analytics"
             activeKey="standard"
@@ -126,7 +126,7 @@ export default function SidebarPanelPage() {
           When activeKey names a nested row, the accordion holding it starts open, so the reader lands with their place already showing. Close it and the parent row keeps the emphasis weight.
         </p>
         <div className={styles.panelDemo} data-anchor-ignore>
-          <SidebarPanel
+          <SubNavPanel
             items={reportItems}
             title="Reports and analytics"
             activeKey="budgets"
@@ -140,7 +140,7 @@ export default function SidebarPanelPage() {
           Consecutive items that share a group render under one heading. A badge adds the same count pill the app sidebar uses.
         </p>
         <div className={styles.panelDemo} data-anchor-ignore>
-          <SidebarPanel
+          <SubNavPanel
             items={settingsItems}
             title="Settings"
             activeKey="profile"
@@ -161,14 +161,14 @@ export default function SidebarPanelPage() {
       <section className={styles.section}>
         <SectionTitle title="Back row" />
         <p className={styles.sectionBody}>
-          Passing onBack adds a row above the heading that returns to the level above, for a host that drills into the panel as a screen of its own. The app sidebar’s phone drawer drills in on a nav stack instead. Press Menu, then Reports, to move between the two levels.
+          Passing onBack adds a row above the heading that returns to the level above, for a host that drills into the panel as a screen of its own. The app sidebar’s phone drawer drills in on a drill menu instead. Press Menu, then Reports, to move between the two levels.
         </p>
         <div data-anchor-ignore>
           <DrillInDemo />
         </div>
       </section>
 
-      <ComponentInstallStrip slug="sidebar-panel" />
+      <ComponentInstallStrip slug="sub-nav-panel" />
     </div>
   );
 }

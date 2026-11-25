@@ -1,5 +1,5 @@
 /* ============================================
-   SIDEBAR PANEL — the secondary navigation column
+   SUB-NAV PANEL — the secondary navigation column
    A heading, optional group labels, flat rows and
    one level of accordion nesting. Row geometry
    repeats AppSidebar's sub-items (40px pill rows,
@@ -14,11 +14,11 @@
 /* ============================================
    WRAPPER
    ============================================ */
-.ds-sidebar-panel {
+.ds-sub-nav-panel {
   display: flex;
   flex-direction: column;
   gap: var(--gap-400);
-  width: var(--ds-sidebar-panel-width, 240px);
+  width: var(--ds-sub-nav-panel-width, 240px);
   height: 100%;
   min-height: 0;
   padding: var(--padding-500) 0;
@@ -30,7 +30,7 @@
 /* ============================================
    BACK ROW — the drill-in's way out
    ============================================ */
-.ds-sidebar-panel__back {
+.ds-sub-nav-panel__back {
   display: flex;
   align-items: center;
   gap: var(--gap-100);
@@ -50,11 +50,11 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-sidebar-panel__back:hover {
+.ds-sub-nav-panel__back:hover {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-sidebar-panel__back-icon {
+.ds-sub-nav-panel__back-icon {
   --icon-size: var(--icon-size-600);
   color: inherit;
 }
@@ -62,7 +62,7 @@
 /* ============================================
    HEADER — title + collapse control
    ============================================ */
-.ds-sidebar-panel__header {
+.ds-sub-nav-panel__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -72,7 +72,7 @@
   flex-shrink: 0;
 }
 
-.ds-sidebar-panel__title {
+.ds-sub-nav-panel__title {
   margin: 0;
   font-family: var(--font-overline-family);
   font-size: var(--font-overline-size);
@@ -87,7 +87,7 @@
   overflow-wrap: anywhere;
 }
 
-.ds-sidebar-panel__collapse {
+.ds-sub-nav-panel__collapse {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,11 +109,11 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-sidebar-panel__collapse:hover {
+.ds-sub-nav-panel__collapse:hover {
   background-color: var(--color-action-passive-bg-hover);
 }
 
-.ds-sidebar-panel__collapse .material-symbols-rounded {
+.ds-sub-nav-panel__collapse .material-symbols-rounded {
   --icon-size: var(--icon-size-600);
   color: inherit;
 }
@@ -121,7 +121,7 @@
 /* ============================================
    BODY + GROUPS
    ============================================ */
-.ds-sidebar-panel__body {
+.ds-sub-nav-panel__body {
   display: flex;
   flex-direction: column;
   gap: var(--gap-500);
@@ -131,13 +131,13 @@
   overflow-x: hidden;
 }
 
-.ds-sidebar-panel__group {
+.ds-sub-nav-panel__group {
   display: flex;
   flex-direction: column;
   gap: var(--gap-100);
 }
 
-.ds-sidebar-panel__group-label {
+.ds-sub-nav-panel__group-label {
   padding: 0 var(--padding-500);
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
@@ -147,8 +147,8 @@
   white-space: nowrap;
 }
 
-.ds-sidebar-panel__list,
-.ds-sidebar-panel__nested-list {
+.ds-sub-nav-panel__list,
+.ds-sub-nav-panel__nested-list {
   display: flex;
   flex-direction: column;
   gap: var(--gap-100);
@@ -160,7 +160,7 @@
 /* ============================================
    ROWS
    ============================================ */
-.ds-sidebar-panel__row {
+.ds-sub-nav-panel__row {
   display: flex;
   align-items: center;
   gap: var(--gap-200);
@@ -179,19 +179,19 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-sidebar-panel__row:hover,
-.ds-sidebar-panel__row--active {
+.ds-sub-nav-panel__row:hover,
+.ds-sub-nav-panel__row--active {
   background-color: var(--color-action-passive-bg-active);
 }
 
-.ds-sidebar-panel__row:focus-visible,
-.ds-sidebar-panel__back:focus-visible,
-.ds-sidebar-panel__collapse:focus-visible {
+.ds-sub-nav-panel__row:focus-visible,
+.ds-sub-nav-panel__back:focus-visible,
+.ds-sub-nav-panel__collapse:focus-visible {
   outline: 2px solid var(--color-action-primary-bg);
   outline-offset: -2px;
 }
 
-.ds-sidebar-panel__label {
+.ds-sub-nav-panel__label {
   flex: 1;
   min-width: 0;
   font-family: var(--font-paragraph-family);
@@ -207,28 +207,28 @@
 
 /* The current page and a collapsed accordion hiding it carry the same
    emphasis, so a reader can find their place without opening anything. */
-.ds-sidebar-panel__row--active .ds-sidebar-panel__label,
-.ds-sidebar-panel__row--holds-active .ds-sidebar-panel__label {
+.ds-sub-nav-panel__row--active .ds-sub-nav-panel__label,
+.ds-sub-nav-panel__row--holds-active .ds-sub-nav-panel__label {
   font-family: var(--font-paragraph-emphasis-family);
   font-weight: var(--font-paragraph-emphasis-weight);
 }
 
 /* A row with a second line grows to hold it. */
-.ds-sidebar-panel__row--two-line {
+.ds-sub-nav-panel__row--two-line {
   height: auto;
   min-height: var(--control-height-default);
   padding-block: var(--padding-150);
   border-radius: var(--radius-300);
 }
 
-.ds-sidebar-panel__text {
+.ds-sub-nav-panel__text {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 0;
 }
 
-.ds-sidebar-panel__description {
+.ds-sub-nav-panel__description {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -239,7 +239,7 @@
   color: var(--color-text-tertiary);
 }
 
-.ds-sidebar-panel__icon {
+.ds-sub-nav-panel__icon {
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -249,11 +249,11 @@
   --icon-size: var(--icon-size-500);
 }
 
-.ds-sidebar-panel__chosen {
+.ds-sub-nav-panel__chosen {
   flex-shrink: 0;
 }
 
-.ds-sidebar-panel__badge {
+.ds-sub-nav-panel__badge {
   flex-shrink: 0;
   font-family: var(--font-caption-family);
   font-size: var(--font-caption-size);
@@ -267,20 +267,20 @@
 
 /* On a filled row the pill steps back to the page ground, or it would
    share the row's fill and dissolve into it. */
-.ds-sidebar-panel__row--active .ds-sidebar-panel__badge:not(.ds-sidebar-panel__badge--count),
-.ds-sidebar-panel__row:hover .ds-sidebar-panel__badge:not(.ds-sidebar-panel__badge--count) {
+.ds-sub-nav-panel__row--active .ds-sub-nav-panel__badge:not(.ds-sub-nav-panel__badge--count),
+.ds-sub-nav-panel__row:hover .ds-sub-nav-panel__badge:not(.ds-sub-nav-panel__badge--count) {
   background-color: var(--color-bg-page-primary);
 }
 
 /* A count: a solid pill on the count badge pair, the "how many" mark the
    rail beside it, BottomNav and TableToolbar share, which reads on any
    row fill. A word such as "New" keeps the quiet pill above. */
-.ds-sidebar-panel__badge--count {
+.ds-sub-nav-panel__badge--count {
   color: var(--color-count-badge-text);
   background-color: var(--color-count-badge-bg);
 }
 
-.ds-sidebar-panel__chevron {
+.ds-sub-nav-panel__chevron {
   --icon-size: var(--icon-size-500);
   flex-shrink: 0;
   /* Pulls the glyph's side bearing out, so its ink ends on the same right
@@ -290,7 +290,7 @@
   transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
-.ds-sidebar-panel__chevron--open {
+.ds-sub-nav-panel__chevron--open {
   transform: rotate(180deg);
 }
 
@@ -299,17 +299,17 @@
    The grid-row trick animates to the content's
    own height, with no max-height guess to clip.
    ============================================ */
-.ds-sidebar-panel__nested {
+.ds-sub-nav-panel__nested {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--motion-duration-slow) var(--motion-ease-emphasized);
 }
 
-.ds-sidebar-panel__nested--open {
+.ds-sub-nav-panel__nested--open {
   grid-template-rows: 1fr;
 }
 
-.ds-sidebar-panel__nested-list {
+.ds-sub-nav-panel__nested-list {
   min-height: 0;
   overflow: hidden;
   /* The tree line: aligned under the parent label's first letter, so the
@@ -318,7 +318,7 @@
   padding-top: var(--gap-100);
 }
 
-.ds-sidebar-panel__nested-list::before {
+.ds-sub-nav-panel__nested-list::before {
   content: '';
   position: absolute;
   top: var(--gap-100);
@@ -328,17 +328,17 @@
   background-color: var(--color-bg-container-border);
 }
 
-.ds-sidebar-panel__row--nested {
+.ds-sub-nav-panel__row--nested {
   width: calc(100% - var(--padding-300) * 2 - var(--padding-400));
   margin-inline-start: calc(var(--padding-300) + var(--padding-400));
 }
 
 /* Icons take the colour of the text around them, whatever a consumer
    stylesheet sets on the icon font class globally. */
-.ds-sidebar-panel .material-symbols-rounded {
+.ds-sub-nav-panel .material-symbols-rounded {
   color: inherit;
 }
-.ds-sidebar-panel .ds-sidebar-panel__chevron {
+.ds-sub-nav-panel .ds-sub-nav-panel__chevron {
   color: var(--color-icon-secondary);
 }
 

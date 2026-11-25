@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | wideActions | `ReactNode` | no |  | Controls at the bar's end that show only while the pills fit, such as a Get started button. Once the bar folds to its menu button they leave it; put their drawer twin in `drawerFooter`. |
 | drawerFooter | `ReactNode` | no |  | Content for the drawer's footer, such as the controls `wideActions` holds in the bar. It shows on the drawer's first level only: a level the reader drilled into leaves it out. |
 | drawerHeader | `ReactNode` | no |  | Content above the drawer's first level of rows, such as a search field. It leaves when the reader drills in. |
-| drawerEntries | `NavStackEntry[]` | no |  | More of the drawer's first level, after the sections: rows and sections of NavStack entries, such as a row that drills into a site's resources or a group of settings that drill into their choices. Plain rows ahead of the first section join the sections' own list, with no gap; a section starts a group of its own. |
+| drawerEntries | `DrillMenuEntry[]` | no |  | More of the drawer's first level, after the sections: rows and sections of DrillMenu entries, such as a row that drills into a site's resources or a group of settings that drill into their choices. Plain rows ahead of the first section join the sections' own list, with no gap; a section starts a group of its own. |
 | drawerOpen | `boolean` | no |  | Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. |
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer starts open, when the header owns its state. |
 | onDrawerOpenChange | `((open: boolean) => void)` | no |  | Called when the drawer opens or closes, controlled or not. |
@@ -45,6 +45,82 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 Focusing a section opens its panel, Arrow Down moves into it, and Escape closes it. The component's own stories test these keys.
 
 ## Types
+
+### DrillMenuEntry
+
+An entry on a level: a row, or a section of rows.
+
+```ts
+type DrillMenuEntry = DrillMenuItem | DrillMenuSection;
+```
+
+### DrillMenuItem
+
+```ts
+interface DrillMenuItem {
+  /** Row text. */
+  label: string;
+  /**
+   * Where the row links. On a row with `items` it is the level's landing
+   * page instead: the level opens with an overview row linking to it.
+   */
+  href?: string;
+  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */
+  id?: string;
+  /** A second line under the label, in the secondary text style. */
+  description?: string;
+  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
+  icon?: string | React.ReactNode;
+  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
+  badge?: string | number;
+  /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
+  value?: string;
+  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
+  title?: string;
+  /** Rows on the level this row opens. A row with items drills in instead of navigating. */
+  items?: DrillMenuEntry[];
+  /**
+   * Marks the row as the page being viewed, regardless of the exact match
+   * against `currentHref`, for a section that stays current on its child
+   * routes.
+   */
+  current?: boolean;
+  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
+  selected?: boolean;
+  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
+  external?: boolean;
+  /**
+   * Makes the row an action rather than a link, such as a pick or a copy.
+   * The stack stays on its level; a choice list's rows set `selected` too.
+   */
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+```
+
+### DrillMenuSection
+
+A group of rows under an optional heading: one level's resources or
+settings, say, set apart from the rows above it.
+
+```ts
+interface DrillMenuSection {
+  /** Marks the entry as a section rather than a row. */
+  type: 'section';
+  /** The heading over the rows. Leave it out for a group set apart by space alone. */
+  label?: string;
+  /** The section's rows. */
+  items: DrillMenuItem[];
+  /**
+   * `prominent` draws the rows in the heading-3 style on a taller row, for
+   * a menu that wants its top level louder. The site header's and the app
+   * sidebar's drawers keep the default rows.
+   * @default 'default'
+   */
+  variant?: 'default' | 'prominent';
+  /** Stable identity for the React key. Defaults to the label. */
+  id?: string;
+}
+```
 
 ### LinkComponent
 
@@ -103,82 +179,6 @@ interface MegaMenuShowcase {
    * description carry the meaning, so mark it `aria-hidden`.
    */
   cover?: React.ReactNode;
-}
-```
-
-### NavStackEntry
-
-An entry on a level: a row, or a section of rows.
-
-```ts
-type NavStackEntry = NavStackItem | NavStackSection;
-```
-
-### NavStackItem
-
-```ts
-interface NavStackItem {
-  /** Row text. */
-  label: string;
-  /**
-   * Where the row links. On a row with `items` it is the level's landing
-   * page instead: the level opens with an overview row linking to it.
-   */
-  href?: string;
-  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */
-  id?: string;
-  /** A second line under the label, in the secondary text style. */
-  description?: string;
-  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
-  icon?: string | React.ReactNode;
-  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
-  badge?: string | number;
-  /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
-  value?: string;
-  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
-  title?: string;
-  /** Rows on the level this row opens. A row with items drills in instead of navigating. */
-  items?: NavStackEntry[];
-  /**
-   * Marks the row as the page being viewed, regardless of the exact match
-   * against `currentHref`, for a section that stays current on its child
-   * routes.
-   */
-  current?: boolean;
-  /** On an `onClick` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
-  selected?: boolean;
-  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
-  external?: boolean;
-  /**
-   * Makes the row an action rather than a link, such as a pick or a copy.
-   * The stack stays on its level; a choice list's rows set `selected` too.
-   */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
-```
-
-### NavStackSection
-
-A group of rows under an optional heading: one level's resources or
-settings, say, set apart from the rows above it.
-
-```ts
-interface NavStackSection {
-  /** Marks the entry as a section rather than a row. */
-  type: 'section';
-  /** The heading over the rows. Leave it out for a group set apart by space alone. */
-  label?: string;
-  /** The section's rows. */
-  items: NavStackItem[];
-  /**
-   * `prominent` draws the rows in the heading-3 style on a taller row, for
-   * a menu that wants its top level louder. The site header's and the app
-   * sidebar's drawers keep the default rows.
-   * @default 'default'
-   */
-  variant?: 'default' | 'prominent';
-  /** Stable identity for the React key. Defaults to the label. */
-  id?: string;
 }
 ```
 

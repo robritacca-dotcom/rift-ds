@@ -2,12 +2,12 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, waitFor } from 'storybook/test';
 import { Input } from '../Input/Input';
-import { NavStack, type NavStackEntry } from './NavStack';
+import { DrillMenu, type DrillMenuEntry } from './DrillMenu';
 
 /* A fictional product's site menu: its sections at the default row size,
    as the site header's and the app sidebar's drawers draw them, a group
    that drills into links off-site, and settings that drill into choices. */
-const siteMenu = (mode: string, setMode: (value: string) => void): NavStackEntry[] => [
+const siteMenu = (mode: string, setMode: (value: string) => void): DrillMenuEntry[] => [
   {
     type: 'section',
     items: [
@@ -66,22 +66,22 @@ const siteMenu = (mode: string, setMode: (value: string) => void): NavStackEntry
   },
 ];
 
-function SiteMenu(props: Partial<React.ComponentProps<typeof NavStack>>) {
+function SiteMenu(props: Partial<React.ComponentProps<typeof DrillMenu>>) {
   const [mode, setMode] = useState('System');
   return (
     <div style={{ width: 360, maxWidth: '100%' }}>
-      <NavStack items={siteMenu(mode, setMode)} currentHref="#theming" {...props} />
+      <DrillMenu items={siteMenu(mode, setMode)} currentHref="#theming" {...props} />
     </div>
   );
 }
 
 const meta = {
-  title: 'Components/NavStack',
-  component: NavStack,
+  title: 'Components/DrillMenu',
+  component: DrillMenu,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   args: { items: [], onNavigate: fn(), onPathChange: fn() },
-} satisfies Meta<typeof NavStack>;
+} satisfies Meta<typeof DrillMenu>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -119,7 +119,7 @@ export const FirstLevel: Story = {
 export const ProminentSections: Story = {
   render: () => (
     <div style={{ width: 360, maxWidth: '100%' }}>
-      <NavStack
+      <DrillMenu
         defaultPath={[]}
         items={[
           {

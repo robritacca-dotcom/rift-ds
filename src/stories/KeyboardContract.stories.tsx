@@ -702,8 +702,10 @@ const RUNNERS: Record<PatternId, Runner> = {
 
   dialog: async ({ host, fixture, done }) => {
     const opener = await fixture.open!(host);
+    // The topmost dialog that is shown: one still leaving from an earlier
+    // pass, or one hidden behind it, is not the one this pass opened.
     const dialog = await waitFor(() => {
-      const found = [...document.querySelectorAll('[role="dialog"], [role="alertdialog"]')].at(-1);
+      const found = [...document.querySelectorAll('[role="dialog"], [role="alertdialog"]')].filter(shown).at(-1);
       if (!found) throw new Error('no role="dialog" appeared');
       return found;
     });
@@ -918,13 +920,40 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Runs a contract with motion stopped. The contract is about keys, roles and
+ * focus, never about timing, but an overlay opens and closes through a CSS
+ * transition (a panel is `visibility: hidden` until its open transition
+ * starts, and stays shown until its close transition ends), and the focus
+ * scope retries its initial focus for only a few animation frames. When the
+ * suite runs its files in parallel, a test page in the background is
+ * throttled: transitions barely advance and frames are few, so an overlay
+ * read as "focus never moved in" or "still open after Escape" at random
+ * (the Dialog pattern failed in five of seven full verifies on 2026-11-25,
+ * each time on different overlays). With every transition and animation at
+ * zero, which is what a reader who asks for reduced motion gets, the
+ * overlay's state is settled by the time the next assertion reads it, and
+ * every assertion still holds the component to the same behaviour.
+ */
+const withMotionStopped = async (run: () => Promise<void>) => {
+  const still = document.createElement('style');
+  still.textContent =
+    '*, *::before, *::after { transition-duration: 0s !important; transition-delay: 0s !important; animation-duration: 0s !important; animation-delay: 0s !important; }';
+  document.head.append(still);
+  try {
+    await run();
+  } finally {
+    still.remove();
+  }
+};
+
 const contract = (pattern: PatternId): Story => ({
   render: () => (
     <p style={{ fontFamily: 'var(--font-family-body)', color: 'var(--color-text-secondary)' }}>
       Presses every key of the {keyboard.patterns[pattern].label.toLowerCase()} pattern against {members(pattern).map((member) => member.label).join(', ')}.
     </p>
   ),
-  play: () => runPattern(pattern),
+  play: () => withMotionStopped(() => runPattern(pattern)),
 });
 
 export const TabsPattern = contract('tabs');

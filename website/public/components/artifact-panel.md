@@ -2,7 +2,7 @@
 
 A preview with its source a switch away: the panel a chat opens beside the conversation, or an inline live example on a page.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.37.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: ai
 - Import: `import { ArtifactPanel } from 'rift-ds';`

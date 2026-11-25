@@ -5,7 +5,7 @@ description: Write a WebGL shader scene of your own for the rift-ds ShaderScene 
 
 # Writing a shader scene for rift-ds
 
-Generated from the library's registries at version 1.37.0. `ShaderScene` paints a WebGL2 scene behind a page. Its `scene` prop takes the id of one the library ships or a scene of the project's own, a `ShaderSceneSource`. You write that source. The guide for people is https://rift-ds.com/docs/shaders, and the component's contract is https://rift-ds.com/components/shader-scene.md.
+Generated from the library's registries at version 1.37.1. `ShaderScene` paints a WebGL2 scene behind a page. Its `scene` prop takes the id of one the library ships or a scene of the project's own, a `ShaderSceneSource`. You write that source. The guide for people is https://rift-ds.com/docs/shaders, and the component's contract is https://rift-ds.com/components/shader-scene.md.
 
 ## Before you write one
 

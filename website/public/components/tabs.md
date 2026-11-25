@@ -2,7 +2,7 @@
 
 Tabs with an underline indicator, icons and counts, compact and full-width modes, and panels it can render itself.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.37.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
 - Import: `import { Tabs } from 'rift-ds';`

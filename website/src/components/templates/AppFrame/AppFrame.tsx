@@ -4,9 +4,9 @@
  * The phone-app dressing a template wears in a Mobile preview (the
  * templates carousel's Mobile mode, or the playground's Mobile stage): an iOS large-title TopAppBar where the web top bar was, and
  * a floating glass BottomNav built from the template's own nav, with the
- * assistant on its search circle, and a menu button opening a left Drawer
- * with the whole sidebar (its entity switcher, every destination, the
- * profile), so nothing the rail carries is out of reach on the phone. It
+ * assistant on its search circle, and a menu button opening a full-screen
+ * drawer with the whole sidebar as a NavStack (its entity switcher, every
+ * destination drilling in as the rail's phone drawer does, the profile), so nothing the rail carries is out of reach on the phone. It
  * is the mobile dashboard's chrome, so every template previews as an app
  * rather than a narrow website. The preview's frame is the phone's screen,
  * so the Drawer's portal covers exactly the phone, with none of the mobile
@@ -24,12 +24,12 @@ import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { TopAppBar } from "rift-ds/components/TopAppBar/TopAppBar";
 import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { Drawer } from "rift-ds/components/Drawer/Drawer";
-import { NavList, type NavListItem } from "rift-ds/components/NavList/NavList";
+import { NavStack, type NavStackEntry, type NavStackItem } from "rift-ds/components/NavStack/NavStack";
 import {
   BottomNav,
   type BottomNavItem,
 } from "rift-ds/components/BottomNav/BottomNav";
-import type { AppSidebarProfile, AppSidebarSection } from "rift-ds/components/AppSidebar/AppSidebar";
+import type { AppSidebarProfile, AppSidebarSection, AppSidebarSubItem } from "rift-ds/components/AppSidebar/AppSidebar";
 import styles from "./AppFrame.module.css";
 
 const ATTR = "data-app-frame";
@@ -85,22 +85,46 @@ export type AppFrameMenu = {
   sections: AppSidebarSection[];
   activeKey: string;
   profile?: AppSidebarProfile;
-  /** Drawn above the destinations, as the rail draws it under the brand: the entity switcher. */
-  top?: ReactNode;
+  /** Rows above the destinations, as the rail draws its switcher under the brand: the entity switcher as a row that drills into its choices. */
+  topEntries?: NavStackEntry[];
 };
 
-/* The rail's items as the drawer's list: a demo destination is a hash, as the rail's are. */
-const navItems = (sections: AppSidebarSection[]): NavListItem[] =>
-  sections.flatMap((section) =>
-    section.items.map((item) => ({
+/* The rail's sections as the drawer's levels, the way AppSidebar's own
+   phone drawer draws them: each section under its heading, a row with
+   children drilling into them, a choice keeping the drawer open, and a
+   demo destination a hash, as the rail's are. */
+const subRow = (sub: AppSidebarSubItem): NavStackItem => ({
+  id: sub.key,
+  label: sub.label,
+  description: sub.description,
+  icon: sub.icon,
+  badge: sub.badge,
+  ...(sub.children?.length
+    ? { items: sub.children.map(subRow) }
+    : sub.selected !== undefined
+      ? { selected: sub.selected, onClick: () => sub.onClick?.() }
+      : { href: sub.href ?? `#${sub.key}` }),
+});
+
+const menuEntries = (menu: AppFrameMenu): NavStackEntry[] => [
+  ...(menu.topEntries ?? []),
+  ...menu.sections.map((section, index) => ({
+    type: "section" as const,
+    id: `section-${index}`,
+    label: section.category,
+    items: section.items.map((item): NavStackItem => ({
       id: item.key,
       label: item.label,
-      href: `#${item.key}`,
-      items: item.children?.map((child) => ({ id: child.key, label: child.label, href: `#${child.key}` })),
+      icon: item.icon,
+      badge: item.badge,
+      value: item.value,
+      current: item.key === menu.activeKey || undefined,
+      ...(item.children?.length ? { items: item.children.map(subRow) } : { href: `#${item.key}` }),
     })),
-  );
+  })),
+];
 
-/** The menu drawer: the entity switcher, every destination, and the profile at the foot. */
+/** The menu drawer: a full-screen sheet over the phone, the levels drilling in, the profile at the foot. */
 function AppFrameMenuDrawer({ menu, open, onOpenChange }: { menu: AppFrameMenu; open: boolean; onOpenChange: (open: boolean) => void }) {
   return (
     <Drawer
@@ -109,6 +133,7 @@ function AppFrameMenuDrawer({ menu, open, onOpenChange }: { menu: AppFrameMenu; 
       title={menu.title}
       side="left"
       size="sm"
+      className={styles.menuDrawer}
       footer={
         menu.profile && (
           <div className={styles.menuProfile}>
@@ -121,14 +146,14 @@ function AppFrameMenuDrawer({ menu, open, onOpenChange }: { menu: AppFrameMenu; 
         )
       }
     >
-      {menu.top && <div className={styles.menuTop}>{menu.top}</div>}
-      <NavList
-        items={navItems(menu.sections)}
+      <NavStack
+        items={menuEntries(menu)}
         currentHref={`#${menu.activeKey}`}
-        onNavigate={(item, event) => {
+        navLabel={menu.title}
+        onNavigate={(_item, event) => {
           event.preventDefault();
-          /* A row with children opens them; a destination closes the menu, as the mobile dashboard's does. */
-          if (!item.items?.length) onOpenChange(false);
+          // A destination closes the menu, as the mobile dashboard's does.
+          onOpenChange(false);
         }}
       />
     </Drawer>

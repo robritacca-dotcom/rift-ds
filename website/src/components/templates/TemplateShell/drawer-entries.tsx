@@ -55,7 +55,7 @@ export function entitySwitcherEntries({
     description: item.description,
     icon: mark(item),
     selected: item.id === value,
-    onSelect: () => onPick(item.id, item),
+    onClick: () => onPick(item.id, item),
   });
   const row = (item: EntitySwitcherItem): NavStackItem =>
     item.children?.length

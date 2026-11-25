@@ -64,8 +64,8 @@ function shopMenu(units: string, setUnits: (value: string) => void): NavStackEnt
           icon: "straighten",
           value: units,
           items: [
-            { label: "Metric", description: "Centimetres and kilograms", selected: units === "Metric", onSelect: () => setUnits("Metric") },
-            { label: "Imperial", description: "Inches and pounds", selected: units === "Imperial", onSelect: () => setUnits("Imperial") },
+            { label: "Metric", description: "Centimetres and kilograms", selected: units === "Metric", onClick: () => setUnits("Metric") },
+            { label: "Imperial", description: "Inches and pounds", selected: units === "Imperial", onClick: () => setUnits("Imperial") },
           ],
         },
       ],
@@ -129,7 +129,7 @@ export default function NavStackPage() {
         <div className={styles.demo}>
           <Demo defaultPath={["units"]} />
           <p className={styles.note}>
-            A row with <code>onSelect</code> is an action, not a link. In a list of choices each one sets <code>selected</code>, the chosen one carries the chosen mark, and the row above shows it as its <code>value</code>.
+            A row with <code>onClick</code> is an action, not a link. In a list of choices each one sets <code>selected</code>, the chosen one carries the chosen mark, and the row above shows it as its <code>value</code>.
           </p>
         </div>
       </section>

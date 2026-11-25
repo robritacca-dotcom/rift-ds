@@ -4,9 +4,9 @@
  * The app-shell template family's one shell: merchant sales, the analytics
  * screen, the relay console, the roadmap planner and the team calendar all
  * lay out through it (and the marketing dashboard, now a lab at
- * /labs/marketing). It owns the AppSidebar (with the footer
- * switchers), the main column, the room a docked assistant takes, and the
- * three layouts the footer's layout switch picks between. The rail always
+ * /labs/marketing). It owns the AppSidebar (with its Appearance
+ * section and the All templates action), the main column, the room a docked
+ * assistant takes, and the three layouts the rail's Layout row picks between. The rail always
  * runs in panel mode, purely to demonstrate the secondary nav: a row with
  * children opens them in the side panel, which starts closed.
  *
@@ -41,6 +41,7 @@ import { AppFrameScreen, useAppFrame } from "../AppFrame/AppFrame";
 import { EntitySwitcher, type EntitySwitcherProps } from "rift-ds/components/EntitySwitcher/EntitySwitcher";
 import { useAppearanceRailSection } from "./appearance-section";
 import { entitySwitcherEntries } from "./drawer-entries";
+import { useIsStaged } from "../useStagedProductName";
 import { TemplateShellContext } from "./context";
 import { useTemplateLayout, useTemplateWidth } from "./useTemplateLayout";
 import styles from "./TemplateShell.module.css";
@@ -126,6 +127,9 @@ export default function TemplateShell({
     entitySwitcher?.onValueChange?.(id, item);
   };
   const appearance = useAppearanceRailSection();
+  // A screen staged in the playground is a preview, not a visit: it draws
+  // no way back to the templates index.
+  const staged = useIsStaged();
   const drawerTopEntries =
     entitySwitcher &&
     entitySwitcherEntries({
@@ -179,7 +183,7 @@ export default function TemplateShell({
               // The way back to every template belongs to the prototype,
               // not the app, so it is the rail's one action at its foot
               // (and the phone drawer's) rather than one of the app's rows.
-              footerAction={<Button label="All templates" variant="primary" iconLeft="arrow_back" href="/templates" />}
+              footerAction={staged ? undefined : <Button label="All templates" variant="primary" iconLeft="arrow_back" href="/templates" />}
 
             />
           </div>
@@ -191,10 +195,10 @@ export default function TemplateShell({
           subtitle={frame.subtitle}
           menu={{
             title: sidebar.logoText ?? frame.title,
-            sections: sidebar.sections,
+            sections: [...sidebar.sections, appearance],
             activeKey: sidebar.activeKey ?? "",
             profile: sidebar.profile,
-            top: entitySwitcher && <EntitySwitcher key={entitySwitcher.defaultValue} {...entitySwitcher} />,
+            topEntries: drawerTopEntries,
           }}
         >
           <main

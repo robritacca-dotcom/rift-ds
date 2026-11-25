@@ -59,7 +59,7 @@ const siteMenu = (mode: string, setMode: (value: string) => void): NavStackEntry
         items: ['System', 'Light', 'Dark'].map((option) => ({
           label: option,
           selected: option === mode,
-          onSelect: () => setMode(option),
+          onClick: () => setMode(option),
         })),
       },
     ],

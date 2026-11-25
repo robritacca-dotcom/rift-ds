@@ -80,7 +80,7 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
           description: t.description,
           icon: swatch(t.color ?? "currentColor", t.swatchRadius),
           selected: t.value === brand,
-          onSelect: () => applyBrand(t.value),
+          onClick: () => applyBrand(t.value),
         })),
       },
       { type: "section", items: [{ label: "Make your own", description: "Opens the playground", href: "/playground", icon: "add" }] },
@@ -100,7 +100,7 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
           description: entry.description,
           icon: entry.icon,
           selected: entry.id === background.id,
-          onSelect: () => setSiteBackground(entry.id),
+          onClick: () => setSiteBackground(entry.id),
         })),
       },
       {
@@ -120,7 +120,7 @@ export function useAppearanceSection({ background: withBackground = true }: { ba
       description: segment.description,
       icon: segment.icon,
       selected: segment.value === setting,
-      onSelect: () => setSetting(segment.value),
+      onClick: () => setSetting(segment.value),
     })),
   };
 

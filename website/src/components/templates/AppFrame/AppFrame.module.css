@@ -77,8 +77,18 @@
 
 /* The menu drawer: the entity switcher over the destinations, the profile
    at the foot, as the rail lays them out. */
-.menuTop {
-  margin-block-end: var(--gap-400);
+/* The phone's whole screen, as AppSidebar's phone drawer is on a real
+   phone: a solid sheet whose stack hangs out by its row inset so the
+   labels sit on the title's start line. */
+.menuDrawer :global(.ds-drawer__panel) {
+  width: 100%;
+  max-width: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.menuDrawer :global(.ds-drawer__body) {
+  margin-inline: calc(-1 * var(--padding-300));
 }
 
 .menuProfile {

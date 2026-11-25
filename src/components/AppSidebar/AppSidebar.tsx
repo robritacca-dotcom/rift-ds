@@ -224,8 +224,8 @@ type AppSidebarOwnProps = {
   /** Accessible name of the profile block's more button */
   profileMoreLabel?: string;
   /**
-   * Back-button text in the mobile drawer's drill-in when the open level
-   * has no parent row to name (a top-level item opened with `subNav="panel"`)
+   * The phone drawer's menu: the accessible name of its navigation, and what
+   * the back row says on every second level
    */
   menuLabel?: string;
 };
@@ -565,8 +565,8 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           ? { href: sub.href }
           : sub.selected !== undefined
             ? // A choice: it applies where it is, and the drawer stays on its level.
-              { selected: sub.selected, onSelect: () => sub.onClick?.() }
-            : { onSelect: () => { sub.onClick?.(); closeMobile(); } }),
+              { selected: sub.selected, onClick: () => sub.onClick?.() }
+            : { onClick: () => { sub.onClick?.(); closeMobile(); } }),
     };
   };
   const itemRow = (item: AppSidebarItem): NavStackItem => {
@@ -588,7 +588,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         ? { items: subEntries(item.children, true) }
         : item.href
           ? { href: item.href }
-          : { onSelect: () => { item.onClick?.(); closeMobile(); } }),
+          : { onClick: () => { item.onClick?.(); closeMobile(); } }),
     };
   };
   const drawerStack: NavStackEntry[] = mobileOpen

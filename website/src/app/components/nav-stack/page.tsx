@@ -14,7 +14,6 @@ function shopMenu(units: string, setUnits: (value: string) => void): NavStackEnt
   return [
     {
       type: "section",
-      variant: "prominent",
       items: [
         {
           label: "Shop",
@@ -109,7 +108,7 @@ export default function NavStackPage() {
         <div className={styles.demo}>
           <Demo currentHref="#pans" defaultPath={[]} />
           <p className={styles.note}>
-            The top sections are <code>prominent</code>. Shop drills into its categories and Kitchen into its pages, each level opening with an overview row to the page its row links. The rows on the way to the current page carry the current fill. <code>defaultPath={"{[]}"}</code> opens this one on its first level.
+            The top sections take the default rows, the size the site header’s and the app sidebar’s drawers use; <code>variant="prominent"</code> sets a section in the heading face on a taller row where a menu wants its top level louder. Shop drills into its categories and Kitchen into its pages, each level opening with an overview row to the page its row links. The rows on the way to the current page carry the current fill. <code>defaultPath={"{[]}"}</code> opens this one on its first level.
           </p>
         </div>
       </section>

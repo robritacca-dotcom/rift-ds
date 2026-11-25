@@ -4,12 +4,12 @@ import { expect, fn, waitFor } from 'storybook/test';
 import { Input } from '../Input/Input';
 import { NavStack, type NavStackEntry } from './NavStack';
 
-/* A fictional product's site menu: prominent sections, a group that
-   drills into links off-site, and settings that drill into choices. */
+/* A fictional product's site menu: its sections at the default row size,
+   as the site header's and the app sidebar's drawers draw them, a group
+   that drills into links off-site, and settings that drill into choices. */
 const siteMenu = (mode: string, setMode: (value: string) => void): NavStackEntry[] => [
   {
     type: 'section',
-    variant: 'prominent',
     items: [
       {
         label: 'Guides',
@@ -113,6 +113,28 @@ export const FirstLevel: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('button', { name: /Guides/ })).toBeVisible();
   },
+};
+
+/** `variant="prominent"` sets a section's rows in the heading-3 face on a taller row, for a menu that wants its top level louder than the default rows the site header and the app sidebar use. */
+export const ProminentSections: Story = {
+  render: () => (
+    <div style={{ width: 360, maxWidth: '100%' }}>
+      <NavStack
+        defaultPath={[]}
+        items={[
+          {
+            type: 'section',
+            variant: 'prominent',
+            items: [
+              { label: 'Guides', href: '#guides' },
+              { label: 'Pricing', href: '#pricing' },
+              { label: 'Blog', href: '#blog' },
+            ],
+          },
+        ]}
+      />
+    </div>
+  ),
 };
 
 /** A setting drills into its choices: the chosen one carries the mark and its value shows on the row above. */

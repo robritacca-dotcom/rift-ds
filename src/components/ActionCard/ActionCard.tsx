@@ -13,6 +13,8 @@ export type ActionCardStatus = 'proposed' | 'confirmed' | 'dismissed' | 'undone'
 type ActionCardOwnProps = {
   /** What the change is, with how much it touches: "Cancel orders: 69 orders". Collides with the native `title` tooltip attribute on purpose: the card shows it. */
   title: React.ReactNode;
+  /** Who drafted the change and for whom, a quiet line over the title: "Prepared by Ledger for Sara Ito". Set it wherever the card can be read away from the conversation that made it (an approvals queue, a notification), so an agent's draft is never mistaken for a person's. Shown on the proposal and on a confirmed record that keeps its facts. */
+  preparedBy?: React.ReactNode;
   /** A quiet line under the title: what the change leaves alone, and why ("Left as they are: 2 already shipped"). */
   detail?: React.ReactNode;
   /** What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in. */
@@ -66,6 +68,7 @@ export function ActionCard({
   ref,
   title,
   detail,
+  preparedBy,
   facts,
   icon,
   status = 'proposed',
@@ -89,6 +92,8 @@ export function ActionCard({
     </span>
   ) : null;
 
+  const attribution = preparedBy ? <span className={`${baseClass}__prepared-by`}>{preparedBy}</span> : null;
+
   const factList = facts?.length ? (
     <dl className={`ds-chat-card-facts ${baseClass}__facts`}>
       {facts.map((fact, index) => (
@@ -106,6 +111,7 @@ export function ActionCard({
   if (status === 'confirmed' && factList) {
     return (
       <div {...rest} ref={ref} className={[baseClass, `${baseClass}--confirmed`, `${baseClass}--detailed`, className].filter(Boolean).join(' ')}>
+        {attribution}
         <span className={`${baseClass}__head`}>
           <span className={`${baseClass}__title`} role="status">
             {receipt ?? title}
@@ -148,6 +154,7 @@ export function ActionCard({
 
   return (
     <div {...rest} ref={ref} className={[baseClass, `${baseClass}--proposed`, className].filter(Boolean).join(' ')}>
+      {attribution}
       <span className={`${baseClass}__title`}>
         {mark}
         {title}

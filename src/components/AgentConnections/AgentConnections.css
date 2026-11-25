@@ -1,0 +1,67 @@
+/* ============================================
+   AGENT CONNECTIONS
+   A list of WidgetRows, one per connected agent:
+   the row's own layout, faces and gaps are
+   WidgetRow's (Widget.css), so the list sits in a
+   Widget beside plain rows. This file adds the
+   list, the wrap a narrow row takes, the focus
+   ring a row takes once its Disconnect has gone,
+   and the quieter disconnected record.
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+/* Base */
+
+.ds-agent-connections {
+  min-width: 0;
+}
+
+.ds-agent-connections__list {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-agent-connections__item {
+  min-width: 0;
+  border-radius: var(--radius-300);
+}
+
+/* Narrow rows: the name keeps a floor, stated on the icon scale, and
+   Disconnect wraps to its own line under it, set to the row's end, as
+   DecisionRow's buttons do. */
+.ds-agent-connections__item .ds-widget-row {
+  flex-wrap: wrap;
+  row-gap: var(--gap-200);
+}
+
+.ds-agent-connections__item .ds-widget-row__main {
+  flex-basis: calc(var(--icon-size-1200) * 3);
+}
+
+.ds-agent-connections__item .ds-widget-row__actions {
+  margin-inline-start: auto;
+}
+
+/* States */
+
+/* A row whose Disconnect has gone holds focus itself, in the focus colour
+   every control uses. */
+.ds-agent-connections__item:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+/* A disconnected agent stays as a record: its name steps back to the
+   secondary text colour, so the agents that can still act lead. */
+.ds-agent-connections__item--disconnected .ds-widget-row__title {
+  color: var(--color-text-secondary);
+}
+
+} /* @layer rift.components */

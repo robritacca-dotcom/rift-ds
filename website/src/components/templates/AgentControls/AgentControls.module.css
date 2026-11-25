@@ -1,0 +1,114 @@
+/* Templates: the Keel agent controls screen. Every colour, space, radius,
+   and type style is a semantic token; the only raw values are structural
+   layout sizes (the search width, the hamburger's footprint, breakpoints),
+   which pages own everywhere else on the site. The shell is TemplateShell's;
+   the page is two columns of Widgets under the page header. */
+
+.content {
+  width: 100%;
+  /* This screen's contained width; the shell centres the column at it
+     unless the page runs full width (the shell recipe's width axis). */
+  --ds-shell-contained-width: 1440px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  padding: var(--padding-500) var(--padding-1000) var(--padding-1000);
+}
+
+/* ------------------------------------------------------------- top bar */
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-200);
+}
+
+.search {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* The shortcut hint rides inside the field, over its trailing padding; it
+   is decorative furniture, so it never intercepts the pointer. */
+.searchKbd {
+  position: absolute;
+  top: 50%;
+  inset-inline-end: var(--padding-200);
+  transform: translateY(-50%);
+  display: inline-flex;
+  gap: var(--gap-050);
+  pointer-events: none;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-200);
+}
+
+.searchIconMobile {
+  display: none;
+}
+
+/* --------------------------------------------------------------- board */
+
+/* Two even columns: what waits on the reader and what agents did, then who
+   is connected and how far each may go. Even, because a scope row needs its
+   picker beside its label to read as one line. */
+.board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-500);
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  min-width: 0;
+}
+
+/* The drafts stack as cards, a row's gap apart. */
+.queue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-300);
+}
+
+/* ----------------------------------------------------------- responsive */
+
+/* Below the two-column width the board stacks: the queue and the log
+   first, since they are what the reader acts on. */
+@media (max-width: 1080px) {
+  .content {
+    padding: var(--padding-400);
+  }
+
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Mobile: AppSidebar's fixed hamburger (40px at a 20px viewport inset)
+   overlays this row's start; the search folds to its icon and the actions
+   keep the end, one 40px row. Content-driven literal: the offset is the
+   trigger's geometry, not a layout token. */
+@media (max-width: 768px) {
+  .topBar {
+    padding-inline-start: 56px;
+    justify-content: flex-end;
+    min-height: 40px;
+  }
+
+  .search {
+    display: none;
+  }
+
+  .searchIconMobile {
+    display: inline-flex;
+  }
+}

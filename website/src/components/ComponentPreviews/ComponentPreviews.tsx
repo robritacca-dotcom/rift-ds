@@ -15,6 +15,9 @@ import { AgentStatus } from "rift-ds/components/AgentStatus/AgentStatus";
 import { BentoTileArt } from "rift-ds/components/BentoTile/BentoTileArt";
 import { PixelAvatar } from "rift-ds/components/PixelAvatar/PixelAvatar";
 import { Widget, WidgetRow } from "rift-ds/components/Widget/Widget";
+import { AgentActivity } from "rift-ds/components/AgentActivity/AgentActivity";
+import { AgentConnections } from "rift-ds/components/AgentConnections/AgentConnections";
+import { AgentScope } from "rift-ds/components/AgentScope/AgentScope";
 import { AnimatedNumber } from "rift-ds/components/AnimatedNumber/AnimatedNumber";
 import { StatusDot } from "rift-ds/components/StatusDot/StatusDot";
 import { Toolbar, ToolbarSeparator } from "rift-ds/components/Toolbar/Toolbar";
@@ -314,6 +317,36 @@ const previews: Record<string, () => ReactNode> = {
         ))}
       </div>
     </>
+  ),
+  "agent-activity": () => (
+    <div style={{ width: "260px" }} aria-hidden="true" inert>
+      <AgentActivity
+        entries={[
+          { id: "a", agent: "Ledger", owner: "Sara Ito", action: "Prepared a payment", time: "10:42", outcome: "awaiting" },
+          { id: "b", agent: "Tally", owner: "Omar Haddad", action: "Read a statement", time: "09:15" },
+        ]}
+      />
+    </div>
+  ),
+  "agent-connections": () => (
+    <div style={{ width: "260px" }} aria-hidden="true" inert>
+      <AgentConnections
+        agents={[{ id: "a", name: "Ledger", owner: "Sara Ito" }]}
+        onDisconnect={() => {}}
+      />
+    </div>
+  ),
+  "agent-scope": () => (
+    <div style={{ width: "280px" }} aria-hidden="true" inert>
+      <AgentScope
+        permissions={[
+          { id: "a", label: "Payments", held: "act", approval: true },
+          { id: "b", label: "Cards", held: "act", levels: ["none", "view", "act"] },
+        ]}
+        defaultValue={{ a: "prepare", b: "view" }}
+        hiddenLabel={() => ""}
+      />
+    </div>
   ),
   "agent-plan": () => (
     <>

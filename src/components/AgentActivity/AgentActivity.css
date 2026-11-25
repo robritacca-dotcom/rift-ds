@@ -1,0 +1,50 @@
+/* ============================================
+   AGENT ACTIVITY
+   A log of WidgetRows, one per agent action: the
+   row's own layout, faces and gaps are WidgetRow's
+   (Widget.css), so the log sits in a Widget beside
+   plain rows. This file adds the list and the wrap
+   a narrow row takes.
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+/* Base */
+
+.ds-agent-activity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-agent-activity__item {
+  min-width: 0;
+}
+
+/* An action is a sentence, so it wraps rather than cutting off: the log is
+   read for exactly what was done. */
+.ds-agent-activity__item .ds-widget-row__title {
+  white-space: normal;
+}
+
+/* Narrow rows: the action keeps a floor, stated on the icon scale, and the
+   time and outcome wrap to their own line under it, set to the row's end. */
+.ds-agent-activity__item .ds-widget-row {
+  flex-wrap: wrap;
+  row-gap: var(--gap-100);
+}
+
+.ds-agent-activity__item .ds-widget-row__main {
+  flex-basis: calc(var(--icon-size-1200) * 3);
+}
+
+.ds-agent-activity__item .ds-widget-row__meta {
+  margin-inline-start: auto;
+}
+
+} /* @layer rift.components */

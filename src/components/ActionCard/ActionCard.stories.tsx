@@ -67,6 +67,17 @@ export const WithFacts: Story = {
   },
 };
 
+/** With `preparedBy`: a card read away from its conversation (an approvals queue) says which agent drafted the change and for whom, so a draft is never mistaken for a person's. */
+export const PreparedByAgent: Story = {
+  args: {
+    preparedBy: 'Prepared by Ledger for Sara Ito',
+    title: 'Pay Hollis Supply: $4,200.00',
+    detail: 'From Operating, arriving Thu 27 Nov',
+    icon: 'payments',
+    confirmLabel: 'Approve',
+  },
+};
+
 /** Confirmed with `facts`: the record keeps them under the receipt, so the card the reader confirmed becomes the readout of what it did. */
 export const ConfirmedWithFacts: Story = {
   args: {

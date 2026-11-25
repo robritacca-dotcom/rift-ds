@@ -112,6 +112,17 @@
   --icon-size: var(--icon-size-500);
 }
 
+/* Who drafted the change, set straight over the title as its subline is set
+   under it: a caption, quiet, so the title still leads. */
+.ds-action-card__prepared-by {
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
 /* What the change will do, or did: the recipe's fact list, a text gap off
    the title (and its detail) above it. */
 .ds-action-card__facts {

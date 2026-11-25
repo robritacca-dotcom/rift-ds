@@ -513,6 +513,11 @@ export const templatesSidebarLinks: NavLink[] = [
     description: "A quarterly statement down to the bottom line, against the last",
   },
   {
+    href: "/templates/agent-controls",
+    label: "Agent controls",
+    description: "A bank's Agents screen: drafts waiting on approval, every agent action on record, and how far each agent may go",
+  },
+  {
     href: "/templates/roadmap-planner",
     label: "Roadmap planner",
     description: "A planning tool around the Gantt timeline and its detail rail",

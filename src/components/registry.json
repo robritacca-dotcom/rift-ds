@@ -112,6 +112,27 @@
       "keys": { "by": "none" }
     },
     {
+      "name": "AgentActivity",
+      "label": "Agent activity",
+      "slug": "agent-activity",
+      "description": "What agents did on an account, each entry naming the agent and the person it acted for, with what waits on approval or was blocked.",
+      "category": "ai",
+      "client": false,
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "Timeline", "when": "the entries are steps or events with no agent behind them" }
+      ]
+    },
+    {
+      "name": "AgentConnections",
+      "label": "Agent connections",
+      "slug": "agent-connections",
+      "description": "The agents connected to an account, each with its person, what it may do and when it last acted, and a Disconnect that cuts it off.",
+      "category": "ai",
+      "client": true,
+      "partPatterns": [{ "pattern": "button", "part": "buttons" }]
+    },
+    {
       "name": "AgentPlan",
       "label": "Agent plan",
       "slug": "agent-plan",
@@ -131,6 +152,15 @@
       "category": "ai",
       "client": false,
       "partPatterns": [{ "pattern": "tabs", "part": "tabs" }]
+    },
+    {
+      "name": "AgentScope",
+      "label": "Agent scope",
+      "slug": "agent-scope",
+      "description": "How far an agent may go in each area of an account, from off to act, never past the person who connected it.",
+      "category": "ai",
+      "client": true,
+      "partPatterns": [{ "pattern": "tabs", "part": "level pickers" }]
     },
     {
       "name": "AgentStatus",
@@ -1870,7 +1900,10 @@
       "description": "Ordered sequences: histories and steppers.",
       "category": "data-display",
       "client": false,
-      "keys": { "by": "none" }
+      "keys": { "by": "none" },
+      "alternatives": [
+        { "name": "AgentActivity", "when": "each entry is an action an agent took for a person" }
+      ]
     },
     {
       "name": "Toast",

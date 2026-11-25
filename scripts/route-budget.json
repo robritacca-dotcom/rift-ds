@@ -72,6 +72,9 @@
     "/docs/blocks/sign-in": {
       "css": 159000
     },
+    "/labs/bento": {
+      "js": 457500
+    },
     "/labs/marketing": {
       "js": 594000,
       "css": 160000

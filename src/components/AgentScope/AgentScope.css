@@ -1,0 +1,53 @@
+/* ============================================
+   AGENT SCOPE
+   WidgetRows with a level picker at each end: the
+   row's own layout, faces and gaps are WidgetRow's
+   (Widget.css), so the list sits in a Widget beside
+   plain rows. This file adds the list, the wrap a
+   narrow row takes and the closing count.
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+/* Base */
+
+.ds-agent-scope {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ds-agent-scope__row {
+  min-width: 0;
+}
+
+/* Narrow rows: the label keeps a floor, stated on the icon scale, and the
+   picker wraps to its own line under it, set to the row's end, as
+   DecisionRow's buttons do. */
+.ds-agent-scope__row .ds-widget-row {
+  flex-wrap: wrap;
+  row-gap: var(--gap-200);
+}
+
+.ds-agent-scope__row .ds-widget-row__main {
+  flex-basis: calc(var(--icon-size-1200) * 3);
+}
+
+.ds-agent-scope__row .ds-widget-row__actions {
+  margin-inline-start: auto;
+}
+
+/* The closing count of areas left out: a caption under the last row. */
+.ds-agent-scope__hidden {
+  margin: var(--gap-200) 0 0;
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-line-height);
+  letter-spacing: var(--font-caption-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+} /* @layer rift.components */

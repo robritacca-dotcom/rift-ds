@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { SiteHeader, type SiteHeaderSection } from "rift-ds/components/SiteHeader/SiteHeader";
 import { CommandPaletteTrigger } from "rift-ds/components/CommandPaletteTrigger/CommandPaletteTrigger";
 import { AiButton } from "rift-ds/components/AiButton/AiButton";
-import { preloadChatWidget, useChatWidget } from "rift-ds/chat";
+import { Button } from "rift-ds/components/Button/Button";
+import { preloadChatWidget, useChatWidget, useTakeoverViewport } from "rift-ds/chat";
 import { ASSISTANT_NAME } from "@/config/brand.generated";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import BrandSwitcher from "../BrandSwitcher/BrandSwitcher";
@@ -17,6 +18,7 @@ import { deferComponent, usePreloadWhenIdle } from "rift-ds/behaviors/deferCompo
 import { getNavSections, type MegaShowcase } from "@/config/navigation";
 import SiteLogo from "./SiteLogo";
 import GetStartedSplit from "./GetStartedSplit";
+import { drawerPages, useDrawerEntries } from "./drawer-menu";
 import styles from "./MegaNav.module.css";
 
 /* A closed panel costs nothing: a mega menu's cover is a live drawing (a
@@ -42,6 +44,10 @@ export default function MegaNav() {
   // Inside SiteFrame the bar offers the frame's layout switcher.
   const inFrame = useInSiteFrame();
   usePreloadWhenIdle(DeferredShowcaseCover.preload);
+  // On a phone the drawer is the whole screen and the bar gives up its look
+  // controls, so the drawer carries them as drill-in rows.
+  const phone = useTakeoverViewport();
+  const drawerEntries = useDrawerEntries(phone);
 
   // A navigation closes the drawer, including one the drawer did not start
   // (the back button). The setState reacts to external navigation, which is
@@ -94,7 +100,7 @@ export default function MegaNav() {
             // Pages that need a pointer and a wide screen stay out of the
             // drawer, which only narrow screens see. A showcase page lifted
             // out of the grid is back in the drawer's list (navigation.ts).
-            drawerItems: (section.mega.drawerItems ?? items).filter((item) => !item.desktopOnly),
+            drawerItems: drawerPages((section.mega.drawerItems ?? items).filter((item) => !item.desktopOnly)),
           }
         : {}),
     };
@@ -163,18 +169,31 @@ export default function MegaNav() {
         </>
       }
       wideActions={<GetStartedSplit />}
+      // The drawer opens on search, then the sections, Resources and (on a
+      // phone) Appearance, with Get started pinned at its foot in thumb
+      // reach. The split button's other ways in are Resources' rows.
+      drawerHeader={
+        <button
+          type="button"
+          className={styles.drawerSearch}
+          onClick={() => {
+            setMenuOpen(false);
+            openSitePalette();
+          }}
+        >
+          <span className="material-symbols-rounded" aria-hidden="true">search</span>
+          Search the docs
+        </button>
+      }
+      drawerEntries={drawerEntries}
       drawerFooter={
-        // The drawer floor carries Get started, which folds with the pills,
-        // and at phone widths the look, background and mode controls the
-        // bar gives up, stacked in the bar's order. The look menu opens
-        // upward, since the stack sits on the drawer floor; the background
-        // menu flips up by itself when it has no room below.
-        <div className={styles.drawerFooter}>
-          <BrandSwitcher size="compact" placement="up" align="left" className={styles.drawerOnly} />
-          <BackgroundSwitcher size="compact" align="start" className={styles.drawerOnly} />
-          <ThemeToggle size="compact" className={styles.drawerOnly} />
-          <GetStartedSplit onNavigate={() => setMenuOpen(false)} />
-        </div>
+        <Button
+          className={styles.drawerCta}
+          label="Get started"
+          variant="primary"
+          href="/docs/get-started"
+          onClick={() => setMenuOpen(false)}
+        />
       }
       drawerOpen={menuOpen}
       onDrawerOpenChange={setMenuOpen}

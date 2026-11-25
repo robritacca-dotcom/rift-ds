@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Live docs: https://rift-ds.com/components/nav-list
 - Schema: https://rift-ds.com/schema/components/nav-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Nav stack](https://rift-ds.com/components/nav-stack.md) instead when the menu fills a phone screen and each branch should open as a level of its own.
+
 ## NavList props
 
 | Prop | Type | Required | Default | Description |

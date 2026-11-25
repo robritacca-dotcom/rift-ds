@@ -2069,6 +2069,55 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "nav-stack": {
+    "types": {
+      "LinkComponent": {
+        "kind": "type",
+        "definition": "type LinkComponent = React.ElementType<LinkComponentProps>;",
+        "description": "A component that renders a link in place of a plain `<a>`, such as a router's.",
+        "refs": [
+          "LinkComponentProps"
+        ]
+      },
+      "LinkComponentProps": {
+        "kind": "type",
+        "definition": "type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };",
+        "description": "The props a link component receives: every anchor attribute, the ref, and\nan `href` that is always a string. Next.js's `Link` takes these as they\nare; a router whose link takes `to` instead needs a one-line adapter:\n`({ href, ...props }) => <RouterLink to={href} {...props} />`."
+      },
+      "NavStackEntry": {
+        "kind": "type",
+        "definition": "type NavStackEntry = NavStackItem | NavStackSection;",
+        "description": "An entry on a level: a row, or a section of rows.",
+        "refs": [
+          "NavStackItem",
+          "NavStackSection"
+        ]
+      },
+      "NavStackItem": {
+        "kind": "interface",
+        "definition": "interface NavStackItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: NavStackEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onSelect` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The stack stays on its level; a choice list's rows set `selected` too.\n   */\n  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
+        "refs": [
+          "NavStackEntry"
+        ]
+      },
+      "NavStackSection": {
+        "kind": "interface",
+        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row: a\n   * site menu's top-level sections, read first.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
+        "refs": [
+          "NavStackItem"
+        ]
+      }
+    },
+    "externalTypes": {
+      "ComponentPropsWithRef": "react",
+      "ElementType": "react",
+      "HTMLButtonElement": "typescript",
+      "HTMLElement": "typescript",
+      "MouseEvent": "react",
+      "ReactNode": "react"
+    }
+  },
   "notification-center": {
     "types": {
       "EmptyStateProps": {
@@ -2552,19 +2601,51 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
         "definition": "interface MegaMenuShowcase {\n  /** Where the card links. */\n  href: string;\n  /** A short kicker above the title, set in the overline face. */\n  overline?: string;\n  /** The card's title, followed by a forward arrow. */\n  label: string;\n  /** One or two lines under the title. */\n  description?: string;\n  /**\n   * A drawing that fills the card behind the copy. Decorative: the title and\n   * description carry the meaning, so mark it `aria-hidden`.\n   */\n  cover?: React.ReactNode;\n}",
         "description": "The featured card beside a mega menu's link grid: one link that is the whole card."
       },
+      "NavStackEntry": {
+        "kind": "type",
+        "definition": "type NavStackEntry = NavStackItem | NavStackSection;",
+        "description": "An entry on a level: a row, or a section of rows.",
+        "refs": [
+          "NavStackItem",
+          "NavStackSection"
+        ]
+      },
+      "NavStackItem": {
+        "kind": "interface",
+        "definition": "interface NavStackItem {\n  /** Row text. */\n  label: string;\n  /**\n   * Where the row links. On a row with `items` it is the level's landing\n   * page instead: the level opens with an overview row linking to it.\n   */\n  href?: string;\n  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */\n  id?: string;\n  /** A second line under the label, in the secondary text style. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */\n  icon?: string | React.ReactNode;\n  /** The setting's current value at the row's trailing end, such as \"Dark\", on a row that drills into a list of choices. */\n  value?: string;\n  /** Rows on the level this row opens. A row with items drills in instead of navigating. */\n  items?: NavStackEntry[];\n  /**\n   * Marks the row as the page being viewed, regardless of the exact match\n   * against `currentHref`, for a section that stays current on its child\n   * routes.\n   */\n  current?: boolean;\n  /** On an `onSelect` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */\n  selected?: boolean;\n  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */\n  external?: boolean;\n  /**\n   * Makes the row an action rather than a link, such as a pick or a copy.\n   * The stack stays on its level; a choice list's rows set `selected` too.\n   */\n  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void;\n}",
+        "refs": [
+          "NavStackEntry"
+        ]
+      },
+      "NavStackSection": {
+        "kind": "interface",
+        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row: a\n   * site menu's top-level sections, read first.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
+        "refs": [
+          "NavStackItem"
+        ]
+      },
+      "SiteHeaderDrawerItem": {
+        "kind": "interface",
+        "definition": "interface SiteHeaderDrawerItem {\n  /** Where the row links; on a row with `items`, the overview row's destination. */\n  href: string;\n  /** Row text. */\n  label: string;\n  /** A second line under the label. */\n  description?: string;\n  /** Icon before the label: a Material Symbol name or a custom element. */\n  icon?: string | React.ReactNode;\n  /** The pages on the level this row opens. */\n  items?: SiteHeaderDrawerItem[];\n}",
+        "description": "A page in a section's drawer level. One with `items` drills into a level\nof its own (a category of pages), opening with an overview row to `href`."
+      },
       "SiteHeaderSection": {
         "kind": "interface",
-        "definition": "interface SiteHeaderSection {\n  /** A stable key for the section. */\n  id: string;\n  /** The pill's text. */\n  label: string;\n  /** The section's landing page: where a click on the pill goes. */\n  href: string;\n  /**\n   * A mega menu for the section. Hovering or focusing the pill opens it; its\n   * items are also the section's sub-list in the drawer.\n   */\n  mega?: {\n    /** The panel's link rows. */\n    items: MegaMenuItem[];\n    /** A featured card beside the rows. */\n    showcase?: MegaMenuShowcase;\n  };\n  /**\n   * The section's sub-list in the drawer, when it should differ from its\n   * menu's items: a page that needs a wide screen, say, left out of the\n   * drawer that only narrow screens see. Defaults to the menu's items.\n   */\n  drawerItems?: { href: string; label: string }[];\n  /**\n   * Marks the section as the one being viewed. Left unset, the header works\n   * it out from `currentHref`: the section's own page, a page under it, or\n   * any page its menu lists.\n   */\n  current?: boolean;\n}",
+        "definition": "interface SiteHeaderSection {\n  /** A stable key for the section. */\n  id: string;\n  /** The pill's text. */\n  label: string;\n  /** The section's landing page: where a click on the pill goes. */\n  href: string;\n  /**\n   * A mega menu for the section. Hovering or focusing the pill opens it; its\n   * items are also the section's sub-list in the drawer.\n   */\n  mega?: {\n    /** The panel's link rows. */\n    items: MegaMenuItem[];\n    /** A featured card beside the rows. */\n    showcase?: MegaMenuShowcase;\n  };\n  /**\n   * The section's sub-list in the drawer, when it should differ from its\n   * menu's items: a page that needs a wide screen, say, left out of the\n   * drawer that only narrow screens see. Defaults to the menu's items.\n   */\n  drawerItems?: SiteHeaderDrawerItem[];\n  /**\n   * Marks the section as the one being viewed. Left unset, the header works\n   * it out from `currentHref`: the section's own page, a page under it, or\n   * any page its menu lists.\n   */\n  current?: boolean;\n}",
         "description": "One top-level section of the site: a pill in the bar, a row in the drawer.",
         "refs": [
           "MegaMenuItem",
-          "MegaMenuShowcase"
+          "MegaMenuShowcase",
+          "SiteHeaderDrawerItem"
         ]
       }
     },
     "externalTypes": {
       "ComponentPropsWithRef": "react",
       "ElementType": "react",
+      "HTMLButtonElement": "typescript",
+      "MouseEvent": "react",
       "ReactNode": "react"
     }
   },

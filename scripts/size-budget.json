@@ -7,12 +7,13 @@
     "BentoTile": 14000,
     "DataTable": 77000,
     "ShaderScene": 33000,
+    "SiteHeader": 14000,
     "TableToolbar": 44000,
     "ThreadPanel": 15000,
     "WorldMap": 117000
   },
   "subpaths": {
-    ".": 364000,
+    ".": 368000,
     "./behaviors/LinkProvider": 600,
     "./behaviors/deferComponent": 800,
     "./behaviors/LocaleProvider": 700,

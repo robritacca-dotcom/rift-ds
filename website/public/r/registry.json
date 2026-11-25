@@ -730,6 +730,12 @@
       "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll."
     },
     {
+      "name": "nav-stack",
+      "type": "registry:ui",
+      "title": "Nav stack",
+      "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out."
+    },
+    {
       "name": "notification-center",
       "type": "registry:ui",
       "title": "Notification centre",

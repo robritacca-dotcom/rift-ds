@@ -14084,6 +14084,117 @@ export const componentApi: readonly ComponentApiEntry[] = [
   },
   {
     "kind": "component",
+    "name": "NavStack",
+    "label": "Nav stack",
+    "slug": "nav-stack",
+    "category": "navigation",
+    "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.",
+    "client": true,
+    "importPath": "rift-ds/components/NavStack/NavStack",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "NavStack",
+        "props": [
+          {
+            "name": "items",
+            "type": "NavStackEntry[]",
+            "required": true,
+            "description": "The first level's rows and sections. A row with `items` drills into the next level.",
+            "typeRefs": [
+              "NavStackEntry"
+            ]
+          },
+          {
+            "name": "currentHref",
+            "type": "string",
+            "required": false,
+            "description": "href of the current page: the exactly matching row gets `aria-current=\"page\"` and the current treatment, and every row on the way to it the current treatment."
+          },
+          {
+            "name": "path",
+            "type": "string[]",
+            "required": false,
+            "description": "The ids of the rows drilled into, first level first: `[]` is the first level. Pair with `onPathChange`."
+          },
+          {
+            "name": "defaultPath",
+            "type": "string[]",
+            "required": false,
+            "description": "The path the stack opens on, when it owns its state.",
+            "defaultValue": "[]"
+          },
+          {
+            "name": "onPathChange",
+            "type": "((path: string[]) => void)",
+            "required": false,
+            "description": "Fires with the new path whenever a row drills in or the back row steps out, in both controlled and uncontrolled modes."
+          },
+          {
+            "name": "onNavigate",
+            "type": "((item: NavStackItem, event: MouseEvent<HTMLElement, MouseEvent>) => void)",
+            "required": false,
+            "description": "Fires when a link row is followed, alongside native navigation, such as to close the drawer the stack sits in.",
+            "typeRefs": [
+              "NavStackItem"
+            ]
+          },
+          {
+            "name": "header",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content above the first level's rows, such as a search field."
+          },
+          {
+            "name": "rootLabel",
+            "type": "string",
+            "required": false,
+            "description": "The back row's text on the second level, naming the first.",
+            "defaultValue": "'Menu'"
+          },
+          {
+            "name": "backLabel",
+            "type": "((title: string) => string)",
+            "required": false,
+            "description": "The back row's accessible name, given the title of the level it returns to. Defaults to \"Back to <title>\".",
+            "defaultValue": "(title) => `Back to ${title}`"
+          },
+          {
+            "name": "overviewLabel",
+            "type": "((label: string) => string)",
+            "required": false,
+            "description": "The overview row's text on a level whose row has an `href`, given that row's label. Defaults to \"<label> overview\".",
+            "defaultValue": "(label) => `${label} overview`"
+          },
+          {
+            "name": "navLabel",
+            "type": "string",
+            "required": false,
+            "description": "The accessible name of the `<nav>` landmark.",
+            "defaultValue": "'Menu'"
+          },
+          {
+            "name": "linkComponent",
+            "type": "LinkComponent",
+            "required": false,
+            "description": "The component its links render with, such as Next.js's `Link`, so they\nnavigate through the app's router. Wins over a LinkProvider's; a plain\n`<a>` when neither is set.",
+            "typeRefs": [
+              "LinkComponent"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes.",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
     "name": "NotificationCenter",
     "label": "Notification centre",
     "slug": "notification-center",
@@ -17345,6 +17456,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Content for the drawer's footer, such as the controls `wideActions` holds in the bar."
+          },
+          {
+            "name": "drawerHeader",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Content above the drawer's first level of rows, such as a search field. It leaves when the reader drills in."
+          },
+          {
+            "name": "drawerEntries",
+            "type": "NavStackEntry[]",
+            "required": false,
+            "description": "More of the drawer's first level, after the sections: rows and sections\nof NavStack entries, such as a row that drills into a site's resources\nor a group of settings that drill into their choices.",
+            "typeRefs": [
+              "NavStackEntry"
+            ]
           },
           {
             "name": "drawerOpen",

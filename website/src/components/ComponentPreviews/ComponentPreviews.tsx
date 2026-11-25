@@ -1718,6 +1718,36 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
+  "nav-stack": () => (
+    <>
+      <div aria-hidden="true" style={{ width: "180px", display: "flex", flexDirection: "column", gap: "var(--gap-100)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "var(--gap-050)", fontSize: "11px", color: "var(--color-text-secondary)" }}>
+          <span className="material-symbols-rounded" style={{ fontSize: "14px" }}>chevron_left</span>
+          Menu
+        </span>
+        <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-text-heading)" }}>Guides</span>
+        {["Getting started", "Theming"].map((label, index) => (
+          <span
+            key={label}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "6px 8px",
+              marginInline: "-8px",
+              borderRadius: "var(--radius-300)",
+              fontSize: "12px",
+              color: "var(--color-text-primary)",
+              background: index === 1 ? "var(--color-action-passive-bg-hover)" : "transparent",
+            }}
+          >
+            {label}
+            <span className="material-symbols-rounded" style={{ fontSize: "14px", color: "var(--color-icon-primary)" }}>chevron_right</span>
+          </span>
+        ))}
+      </div>
+    </>
+  ),
   "notification-center": () => (
     <>
       <div aria-hidden="true" style={{ display: "flex", flexDirection: "column", gap: "6px", width: "160px" }}>

@@ -1,7 +1,7 @@
 {
   "$comment": "The icons in the website's cut of the icon font, and the fingerprints of what it was cut from. Written by scripts/generate-site-icons.mjs; never edited by hand.",
-  "from": "64391cd34dc2d7ca1a49b05d1654fa22bdbc785640b5b865bf9208e42eb7a581",
-  "font": "b89e20ff692a3ba190a082a16a2324a990eb48ebea731070b3cb16a84d79327a",
+  "from": "fa9f6d9982f9313be4d40101678f417d8273d7766e0823ce310851e8ca82a7d8",
+  "font": "1ea1845c02914ff27fd7af744e6998f2c9062970cad457f8ae254e8e0386ccb1",
   "icons": [
     "ac_unit",
     "access_time",
@@ -397,6 +397,7 @@
     "keyboard_arrow_right",
     "keyboard_double_arrow_left",
     "keyboard_double_arrow_right",
+    "kitchen",
     "label",
     "label_important",
     "labs",
@@ -649,6 +650,7 @@
     "share",
     "shield",
     "shift",
+    "shop",
     "shopping_bag",
     "shopping_basket",
     "shopping_cart",
@@ -661,6 +663,7 @@
     "sim_card",
     "skateboarding",
     "skeleton",
+    "skillet",
     "skip_next",
     "skip_previous",
     "smart_button",
@@ -823,6 +826,7 @@
     "wind_power",
     "work",
     "workspace_premium",
+    "yard",
     "zoom_in",
     "zoom_out"
   ]

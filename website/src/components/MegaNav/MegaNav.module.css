@@ -123,17 +123,61 @@
 /* ============================================
    DRAWER FOOTER
    ============================================ */
-/* The drawer floor: Get started, which folds with the pills, under the
-   look switcher and the mode toggle at phone widths, where the bar gives
-   them up; stacked in the bar's order and stepped in by one icon step
-   and its gap so each starts on the nav labels' line, as globals.css
-   steps the drawer's list. */
-.drawerFooter {
+/* The drawer's search, drawn as the system's input (its border, radius
+   and height), which opens the palette. */
+.drawerSearch {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--primitive-gap-300);
-  padding-inline-start: calc(var(--icon-size-600) + var(--primitive-gap-200));
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  min-height: calc(var(--control-height-default) + var(--padding-200));
+  padding-inline: var(--padding-300) var(--padding-400);
+  border: var(--border-025) solid var(--color-input-border-primary);
+  border-radius: var(--radius-300);
+  background-color: var(--color-bg-container-primary);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  line-height: var(--font-paragraph-line-height);
+  cursor: pointer;
+}
+
+.drawerSearch:hover {
+  border-color: var(--color-input-border-hover);
+}
+
+.drawerSearch:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+}
+
+.drawerSearch .material-symbols-rounded {
+  --icon-size: var(--icon-size-600);
+  color: var(--color-icon-primary);
+}
+
+/* Get started fills the drawer's floor, in thumb reach. */
+.drawerCta {
+  width: 100%;
+}
+
+/* A brand mark or a theme swatch in a drawer row's icon slot. */
+.drawerMark {
+  display: grid;
+  place-items: center;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+}
+
+.drawerMark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.drawerSwatch {
+  display: block;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
 }
 
 /* ============================================
@@ -146,12 +190,6 @@
    noted above. */
 @media (max-width: 719px) {
   .header .barOnly.barOnly {
-    display: none;
-  }
-}
-
-@media (min-width: 720px) {
-  .drawerOnly.drawerOnly {
     display: none;
   }
 }

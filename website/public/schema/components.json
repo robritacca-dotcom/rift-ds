@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.37.1",
   "package": "rift-ds",
-  "count": 196,
+  "count": 197,
   "components": [
     {
       "name": "Accordion",
@@ -1203,6 +1203,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/nav-list.json",
       "docsUrl": "https://rift-ds.com/components/nav-list",
       "markdownUrl": "https://rift-ds.com/components/nav-list.md"
+    },
+    {
+      "name": "NavStack",
+      "label": "Nav stack",
+      "slug": "nav-stack",
+      "category": "navigation",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/nav-stack.json",
+      "docsUrl": "https://rift-ds.com/components/nav-stack",
+      "markdownUrl": "https://rift-ds.com/components/nav-stack.md"
     },
     {
       "name": "NotificationCenter",

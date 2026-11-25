@@ -106,6 +106,11 @@ export const viewport: Viewport = {
   // Android Chrome honours this; Safari ignores it, and the phone takeover
   // is built not to need it (the package's ChatWidget.css).
   interactiveWidget: "resizes-content",
+  // The page runs under the notch and the home indicator, and anything that
+  // meets those edges (the header drawer's full-screen sheet on a phone)
+  // keeps clear of them with env(safe-area-inset-*), which reads 0 without
+  // this.
+  viewportFit: "cover",
   // Matches the white-floor UI: pure white in light, near-black in dark.
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },

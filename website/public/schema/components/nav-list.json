@@ -196,5 +196,12 @@
   ],
   "size": {
     "gzip": 3233
-  }
+  },
+  "alternatives": [
+    {
+      "name": "NavStack",
+      "when": "the menu fills a phone screen and each branch should open as a level of its own",
+      "schemaUrl": "https://rift-ds.com/schema/components/nav-stack.json"
+    }
+  ]
 }

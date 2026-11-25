@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { SiteHeader } from 'rift-ds';`
 - Deep import: `import { SiteHeader } from 'rift-ds/components/SiteHeader/SiteHeader';`
 - Rendering: client component (declares 'use client')
-- Size: 11.1 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 12.8 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/site-header
 - Schema: https://rift-ds.com/schema/components/site-header.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -23,6 +23,8 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | condensedActions | `ReactNode` | no |  | The same controls drawn narrower, such as an icon-only CommandPaletteTrigger and a `cycle` ThemeToggle. When the full row stops fitting, these take the place of `actions` (the header adds `ds-site-header--condensed`), and the pills fold to the menu button only when the condensed row does not fit either. Without it the header folds as soon as the full row stops fitting. |
 | wideActions | `ReactNode` | no |  | Controls at the bar's end that show only while the pills fit, such as a Get started button. Once the bar folds to its menu button they leave it; put their drawer twin in `drawerFooter`. |
 | drawerFooter | `ReactNode` | no |  | Content for the drawer's footer, such as the controls `wideActions` holds in the bar. |
+| drawerHeader | `ReactNode` | no |  | Content above the drawer's first level of rows, such as a search field. It leaves when the reader drills in. |
+| drawerEntries | `NavStackEntry[]` | no |  | More of the drawer's first level, after the sections: rows and sections of NavStack entries, such as a row that drills into a site's resources or a group of settings that drill into their choices. |
 | drawerOpen | `boolean` | no |  | Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. |
 | defaultDrawerOpen | `boolean` | no | `false` | Whether the drawer starts open, when the header owns its state. |
 | onDrawerOpenChange | `((open: boolean) => void)` | no |  | Called when the drawer opens or closes, controlled or not. |
@@ -104,6 +106,97 @@ interface MegaMenuShowcase {
 }
 ```
 
+### NavStackEntry
+
+An entry on a level: a row, or a section of rows.
+
+```ts
+type NavStackEntry = NavStackItem | NavStackSection;
+```
+
+### NavStackItem
+
+```ts
+interface NavStackItem {
+  /** Row text. */
+  label: string;
+  /**
+   * Where the row links. On a row with `items` it is the level's landing
+   * page instead: the level opens with an overview row linking to it.
+   */
+  href?: string;
+  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */
+  id?: string;
+  /** A second line under the label, in the secondary text style. */
+  description?: string;
+  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
+  icon?: string | React.ReactNode;
+  /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
+  value?: string;
+  /** Rows on the level this row opens. A row with items drills in instead of navigating. */
+  items?: NavStackEntry[];
+  /**
+   * Marks the row as the page being viewed, regardless of the exact match
+   * against `currentHref`, for a section that stays current on its child
+   * routes.
+   */
+  current?: boolean;
+  /** On an `onSelect` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
+  selected?: boolean;
+  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
+  external?: boolean;
+  /**
+   * Makes the row an action rather than a link, such as a pick or a copy.
+   * The stack stays on its level; a choice list's rows set `selected` too.
+   */
+  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+```
+
+### NavStackSection
+
+A group of rows under an optional heading: one level's resources or
+settings, say, set apart from the rows above it.
+
+```ts
+interface NavStackSection {
+  /** Marks the entry as a section rather than a row. */
+  type: 'section';
+  /** The heading over the rows. Leave it out for a group set apart by space alone. */
+  label?: string;
+  /** The section's rows. */
+  items: NavStackItem[];
+  /**
+   * `prominent` draws the rows in the heading-3 style on a taller row: a
+   * site menu's top-level sections, read first.
+   * @default 'default'
+   */
+  variant?: 'default' | 'prominent';
+  /** Stable identity for the React key. Defaults to the label. */
+  id?: string;
+}
+```
+
+### SiteHeaderDrawerItem
+
+A page in a section's drawer level. One with `items` drills into a level
+of its own (a category of pages), opening with an overview row to `href`.
+
+```ts
+interface SiteHeaderDrawerItem {
+  /** Where the row links; on a row with `items`, the overview row's destination. */
+  href: string;
+  /** Row text. */
+  label: string;
+  /** A second line under the label. */
+  description?: string;
+  /** Icon before the label: a Material Symbol name or a custom element. */
+  icon?: string | React.ReactNode;
+  /** The pages on the level this row opens. */
+  items?: SiteHeaderDrawerItem[];
+}
+```
+
 ### SiteHeaderSection
 
 One top-level section of the site: a pill in the bar, a row in the drawer.
@@ -131,7 +224,7 @@ interface SiteHeaderSection {
    * menu's items: a page that needs a wide screen, say, left out of the
    * drawer that only narrow screens see. Defaults to the menu's items.
    */
-  drawerItems?: { href: string; label: string }[];
+  drawerItems?: SiteHeaderDrawerItem[];
   /**
    * Marks the section as the one being viewed. Left unset, the header works
    * it out from `currentHref`: the section's own page, a page under it, or
@@ -141,4 +234,4 @@ interface SiteHeaderSection {
 }
 ```
 
-Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `HTMLButtonElement` (typescript), `MouseEvent` (react), `ReactNode` (react).

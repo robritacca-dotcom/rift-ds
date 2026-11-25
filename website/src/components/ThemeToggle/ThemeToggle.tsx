@@ -6,11 +6,11 @@ import { useColorMode } from "rift-ds/components/ThemeToggle/useColorMode";
 import styles from "./ThemeToggle.module.css";
 import HeaderSwitcher from "../HeaderSwitcher/HeaderSwitcher";
 
-/** The three settings, in the order every theme control shows them. */
+/** The three settings, in the order every theme control shows them, each with the line a list of them shows under its name. */
 export const themeSegments = [
-  { value: "system", label: "System", icon: "routine" },
-  { value: "light", label: "Light", icon: "light_mode" },
-  { value: "dark", label: "Dark", icon: "dark_mode" },
+  { value: "system", label: "System", icon: "routine", description: "Follows your device" },
+  { value: "light", label: "Light", icon: "light_mode", description: "Light surfaces, dark text" },
+  { value: "dark", label: "Dark", icon: "dark_mode", description: "Dark surfaces, light text" },
 ];
 
 /**
@@ -37,6 +37,7 @@ function ThemeMenu({ className, size }: { className?: string; size: "default" | 
       size={size}
       items={themeSegments.map((segment) => ({
         label: segment.label,
+        description: segment.description,
         icon: segment.icon,
         selected: segment.value === current.value,
         onClick: () => setSetting(segment.value),

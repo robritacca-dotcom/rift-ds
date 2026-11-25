@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { BentoTile } from 'rift-ds';`
 - Deep import: `import { BentoTile } from 'rift-ds/components/BentoTile/BentoTile';`
 - Rendering: client component (declares 'use client')
-- Size: 13.2 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 13.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/bento-tile
 - Schema: https://rift-ds.com/schema/components/bento-tile.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

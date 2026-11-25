@@ -470,8 +470,46 @@
   align-items: center;
 }
 
-.ds-site-header__drawer .ds-nav-list {
-  width: 100%;
+/* The drawer's scroll area hangs out by the stack's row inset, so the
+   fills sit in the gutter and every label lands on the brand's start
+   line. The scroll area itself moves, not the stack inside it, so nothing
+   overflows it sideways. */
+.ds-site-header__drawer .ds-drawer__body {
+  margin-inline: calc(-1 * var(--padding-300));
+  padding-inline: 0;
+  overflow-x: hidden;
+}
+
+/* On a phone the drawer is the whole screen: a solid sheet under a bar that
+   keeps the header's seat (the brand where it was, the close where the menu
+   button was), clear of the notch and the home indicator. Glass would put
+   the page's words behind the menu's, so the sheet is the page surface. */
+@media (max-width: 719px) {
+  /* The drawer's own size rule names three classes; this names as many. */
+  .ds-site-header__drawer.ds-drawer .ds-drawer__panel {
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    background-color: var(--color-bg-page-primary);
+    backdrop-filter: none;
+    padding-block-start: max(var(--ds-site-header-drawer-top, var(--padding-500)), env(safe-area-inset-top));
+    padding-block-end: max(var(--padding-500), calc(env(safe-area-inset-bottom) + var(--padding-200)));
+  }
+
+  /* No scrim shows beside a full sheet, so the close takes the page's ink. */
+  .ds-site-header__drawer .ds-drawer__close {
+    color: var(--color-icon-primary);
+  }
+
+  .ds-site-header__drawer .ds-drawer__close:hover {
+    background-color: var(--color-action-passive-bg-hover);
+  }
+
+  /* The pinned footer runs the sheet's width, its action full width. */
+  .ds-site-header__drawer .ds-drawer__footer {
+    padding-block-start: var(--padding-300);
+    border-block-start: var(--border-025) solid var(--color-divider);
+  }
 }
 
 /* The list does the scrolling, as NavList's scrollable mode: no scrollbar

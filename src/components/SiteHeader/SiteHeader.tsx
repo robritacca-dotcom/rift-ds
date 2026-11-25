@@ -9,11 +9,28 @@ import { MOTION_HOVER_HIDE_DELAY_MS } from '../../tokens/motion';
 import { IconButton } from '../IconButton/IconButton';
 import { Drawer } from '../Drawer/Drawer';
 import { MegaMenu, type MegaMenuItem, type MegaMenuShowcase } from '../MegaMenu/MegaMenu';
-import { NavList, type NavListItem } from '../NavList/NavList';
+import { NavStack, type NavStackEntry, type NavStackItem } from '../NavStack/NavStack';
 import { ProgressiveBlur } from '../ProgressiveBlur/ProgressiveBlur';
 import '../../behaviors/shell.css';
 import './SiteHeader.css';
 import '../../fonts/material-symbols.css';
+
+/**
+ * A page in a section's drawer level. One with `items` drills into a level
+ * of its own (a category of pages), opening with an overview row to `href`.
+ */
+export interface SiteHeaderDrawerItem {
+  /** Where the row links; on a row with `items`, the overview row's destination. */
+  href: string;
+  /** Row text. */
+  label: string;
+  /** A second line under the label. */
+  description?: string;
+  /** Icon before the label: a Material Symbol name or a custom element. */
+  icon?: string | React.ReactNode;
+  /** The pages on the level this row opens. */
+  items?: SiteHeaderDrawerItem[];
+}
 
 /** One top-level section of the site: a pill in the bar, a row in the drawer. */
 export interface SiteHeaderSection {
@@ -38,7 +55,7 @@ export interface SiteHeaderSection {
    * menu's items: a page that needs a wide screen, say, left out of the
    * drawer that only narrow screens see. Defaults to the menu's items.
    */
-  drawerItems?: { href: string; label: string }[];
+  drawerItems?: SiteHeaderDrawerItem[];
   /**
    * Marks the section as the one being viewed. Left unset, the header works
    * it out from `currentHref`: the section's own page, a page under it, or
@@ -76,6 +93,14 @@ type SiteHeaderOwnProps = {
   wideActions?: React.ReactNode;
   /** Content for the drawer's footer, such as the controls `wideActions` holds in the bar. */
   drawerFooter?: React.ReactNode;
+  /** Content above the drawer's first level of rows, such as a search field. It leaves when the reader drills in. */
+  drawerHeader?: React.ReactNode;
+  /**
+   * More of the drawer's first level, after the sections: rows and sections
+   * of NavStack entries, such as a row that drills into a site's resources
+   * or a group of settings that drill into their choices.
+   */
+  drawerEntries?: NavStackEntry[];
   /** Whether the folded bar's drawer is open, for a host that owns that state. Pair with `onDrawerOpenChange`. */
   drawerOpen?: boolean;
   /** Whether the drawer starts open, when the header owns its state. */
@@ -175,6 +200,8 @@ export function SiteHeader({
   condensedActions,
   wideActions,
   drawerFooter,
+  drawerHeader,
+  drawerEntries,
   drawerOpen: drawerOpenProp,
   defaultDrawerOpen = false,
   onDrawerOpenChange,
@@ -436,16 +463,33 @@ export function SiteHeader({
     return () => observer.disconnect();
   }, [panelOpen, shownId]);
 
-  const drawerItems: NavListItem[] = sections.map((section) => ({
-    id: section.id,
-    label: section.label,
-    href: section.href,
-    current: sectionIsCurrent(section, currentHref) || undefined,
-    ...((section.drawerItems ?? section.mega?.items ?? []).length > 0
-      ? { items: (section.drawerItems ?? section.mega?.items ?? []).map(({ href, label }) => ({ href, label })) }
-      : {}),
-  }));
-  const currentSectionId = sections.find((s) => sectionIsCurrent(s, currentHref))?.id;
+  // The drawer is a stack: the sections first and large, each with pages
+  // drilling into its own level, then whatever the host adds below them.
+  const toDrawerRow = (item: SiteHeaderDrawerItem): NavStackItem => ({
+    label: item.label,
+    href: item.href,
+    description: item.description,
+    icon: item.icon,
+    ...(item.items?.length ? { id: item.href, items: item.items.map(toDrawerRow) } : {}),
+  });
+  const drawerStack: NavStackEntry[] = [
+    {
+      type: 'section',
+      id: 'sections',
+      variant: 'prominent',
+      items: sections.map((section) => {
+        const pages = section.drawerItems ?? section.mega?.items ?? [];
+        return {
+          id: section.id,
+          label: section.label,
+          href: section.href,
+          current: sectionIsCurrent(section, currentHref) || undefined,
+          ...(pages.length > 0 ? { items: pages.map(toDrawerRow) } : {}),
+        };
+      }),
+    },
+    ...(drawerEntries ?? []),
+  ];
 
   const classes = [
     baseClass,
@@ -625,13 +669,13 @@ export function SiteHeader({
           )
         }
       >
-        <NavList
+        <NavStack
           key={drawerOpen ? 'open' : 'closed'}
-          items={drawerItems}
+          items={drawerStack}
+          header={drawerHeader}
           currentHref={currentHref}
-          defaultExpandedIds={currentSectionId ? [currentSectionId] : []}
+          navLabel={navLabel}
           linkComponent={Link}
-          scrollable
           onNavigate={() => setDrawerOpen(false)}
         />
       </Drawer>

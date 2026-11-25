@@ -295,16 +295,6 @@ html[data-nav-drawer="open"] .ds-chat-launcher__fab {
   z-index: var(--layer-site-chrome);
 }
 
-/* The header drawer's rows already carry the Button's own text inset, so
-   the list steps in by whatever is left of one icon step plus its gap,
-   which sets every label in from the logo's first letter by that much. The
-   same step on the end keeps the rows centred in the panel. The drawer is
-   portaled out of the header, so this lives here rather than in MegaNav's
-   module. */
-.ds-site-header__drawer .ds-nav-list {
-  padding-inline: calc(var(--icon-size-600) + var(--primitive-gap-200) - var(--padding-500));
-}
-
 
 /* ============================================
    BLUR BACKGROUND EFFECTS

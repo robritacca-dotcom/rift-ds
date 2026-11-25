@@ -127,6 +127,7 @@ export * from './components/Meter/Meter';
 export * from './components/ModelPicker/ModelPicker';
 export * from './components/Nav/Nav';
 export * from './components/NavList/NavList';
+export * from './components/NavStack/NavStack';
 export * from './components/NotificationCenter/NotificationCenter';
 export * from './components/NumberInput/NumberInput';
 export * from './components/OrgChart/OrgChart';

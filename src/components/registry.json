@@ -1258,7 +1258,22 @@
       "description": "Vertical navigation links for drawers and long sidebars: sections, three indent levels, expand toggles, a compact size and its own scroll.",
       "category": "navigation",
       "client": true,
-      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }]
+      "partPatterns": [{ "pattern": "disclosure", "part": "collapsible section" }],
+      "alternatives": [
+        { "name": "NavStack", "when": "the menu fills a phone screen and each branch should open as a level of its own" }
+      ]
+    },
+    {
+      "name": "NavStack",
+      "label": "Nav stack",
+      "slug": "nav-stack",
+      "description": "A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.",
+      "category": "navigation",
+      "client": true,
+      "keys": { "by": "platform", "note": "Its rows are links and buttons, and the browser owns Tab, Enter and Space. A step moves focus to the new level’s title, and back to the row it came from on the way out." },
+      "alternatives": [
+        { "name": "NavList", "when": "the list sits in a sidebar beside the page and branches should open in place" }
+      ]
     },
     {
       "name": "NotificationCenter",

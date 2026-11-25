@@ -1,0 +1,268 @@
+/* ============================================
+   NAV STACK COMPONENT
+   A drill-in menu for a phone: one level at a
+   time, touch-tall rows on one start line, a
+   back row naming where it returns to.
+   ============================================ */
+
+@layer rift.tokens, rift.preset, rift.components;
+
+@layer rift.components {
+
+.ds-nav-stack {
+  /* How far a row's content sits in from the row's own edge. A host that
+     lines the labels up with something above it (a header's brand) hangs
+     the stack out by this much, so the fills sit in the gutter and the
+     words sit on the line. */
+  --ds-nav-stack-inset: var(--padding-300);
+  /* Touch-tall rows: a control height and one step, so a thumb lands. */
+  --ds-nav-stack-row: calc(var(--control-height-default) + var(--padding-200));
+  --ds-nav-stack-row-prominent: calc(var(--control-height-default) + var(--padding-400));
+  display: block;
+  color: var(--color-text-primary);
+}
+
+.ds-nav-stack__level {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-500);
+  scroll-margin-block-start: var(--gap-1000);
+}
+
+/* A step slides the new level in along the reading direction: from the
+   end going in, from the start coming back. */
+.ds-nav-stack__level--in {
+  animation: ds-nav-stack-in var(--motion-duration-base) var(--motion-ease-entrance);
+}
+
+.ds-nav-stack__level--out {
+  animation: ds-nav-stack-out var(--motion-duration-base) var(--motion-ease-entrance);
+}
+
+@keyframes ds-nav-stack-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--ds-inline-sign, 1) * var(--gap-500)));
+  }
+}
+
+@keyframes ds-nav-stack-out {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--ds-inline-sign, 1) * -1 * var(--gap-500)));
+  }
+}
+
+/* ============================================
+   HEAD — back row and level title
+   ============================================ */
+
+.ds-nav-stack__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-100);
+}
+
+.ds-nav-stack__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-050);
+  min-height: var(--ds-nav-stack-row);
+  /* The chevron's side takes one step less (the icon side of a box). */
+  padding-inline: var(--padding-100) var(--ds-nav-stack-inset);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-paragraph-emphasis-family);
+  font-size: var(--font-paragraph-emphasis-size);
+  font-weight: var(--font-paragraph-emphasis-weight);
+  line-height: var(--font-paragraph-emphasis-line-height);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-nav-stack__back:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-nav-stack__back:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+.ds-nav-stack__back-chevron {
+  --icon-size: var(--icon-size-600);
+}
+
+.ds-nav-stack__title {
+  margin: 0;
+  padding-inline: var(--ds-nav-stack-inset);
+  font-family: var(--font-heading-2-family);
+  font-size: var(--font-heading-2-size);
+  font-weight: var(--font-heading-2-weight);
+  line-height: var(--font-heading-2-line-height);
+  letter-spacing: var(--font-heading-2-letter-spacing);
+  color: var(--color-text-heading);
+}
+
+.ds-nav-stack__title:focus {
+  outline: none;
+}
+
+.ds-nav-stack__title:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: 2px;
+  border-radius: var(--radius-100);
+}
+
+.ds-nav-stack__header {
+  padding-inline: var(--ds-nav-stack-inset);
+}
+
+/* ============================================
+   SECTIONS AND ROWS
+   ============================================ */
+
+.ds-nav-stack__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-nav-stack__section-label {
+  margin: 0;
+  padding: 0 var(--ds-nav-stack-inset) var(--gap-100);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-nav-stack__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-nav-stack__item {
+  display: flex;
+}
+
+/* One shape per row: the fill spans the row, the chevron sits inside it. */
+.ds-nav-stack__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  width: 100%;
+  min-height: var(--ds-nav-stack-row);
+  padding: var(--padding-100) var(--ds-nav-stack-inset);
+  border: none;
+  border-radius: var(--radius-300);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-paragraph-family);
+  font-size: var(--font-paragraph-size);
+  font-weight: var(--font-paragraph-weight);
+  line-height: var(--font-paragraph-line-height);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-nav-stack__row:hover {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-nav-stack__row:active {
+  background-color: var(--color-action-passive-bg-active);
+}
+
+.ds-nav-stack__row:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* Where the reader is: a quiet fill, never the action colour. */
+.ds-nav-stack__row--current {
+  background-color: var(--color-action-passive-bg-hover);
+}
+
+.ds-nav-stack__row--prominent {
+  min-height: var(--ds-nav-stack-row-prominent);
+  font-family: var(--font-heading-3-family);
+  font-size: var(--font-heading-3-size);
+  font-weight: var(--font-heading-3-weight);
+  line-height: var(--font-heading-3-line-height);
+  letter-spacing: var(--font-heading-3-letter-spacing);
+}
+
+/* A two-line row takes the taller row. */
+.ds-nav-stack__row:has(.ds-nav-stack__description) {
+  min-height: var(--ds-nav-stack-row-prominent);
+}
+
+.ds-nav-stack__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  color: var(--color-icon-primary);
+  --icon-size: var(--icon-size-600);
+}
+
+.ds-nav-stack__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-nav-stack__label,
+.ds-nav-stack__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-nav-stack__description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  color: var(--color-text-tertiary);
+}
+
+.ds-nav-stack__value {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  color: var(--color-text-tertiary);
+}
+
+.ds-nav-stack__trail {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  min-width: var(--icon-size-600);
+  color: var(--color-icon-primary);
+}
+
+.ds-nav-stack__chevron,
+.ds-nav-stack__external {
+  --icon-size: var(--icon-size-600);
+}
+
+} /* @layer rift.components */

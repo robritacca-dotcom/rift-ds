@@ -1355,7 +1355,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (16)
+## Navigation (17)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -1431,6 +1431,14 @@ Vertical navigation links for drawers and long sidebars: sections, three indent 
 - Import: `import { NavList } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/nav-list.md
+
+### Nav stack
+
+A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.
+
+- Import: `import { NavStack } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/nav-stack.md
 
 ### Pagination
 

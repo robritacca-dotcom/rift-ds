@@ -15,10 +15,35 @@
   max-width: 100%;
 }
 
-/* On a phone the links are their icons alone, one row under the title:
-   each label stays in the button, clipped, as its accessible name, the
-   trailing arrow goes, and the box squares around the glyph as an
-   icon-only button's does. */
+/* Compact, the links are their icons alone: each label stays in the
+   button, clipped, as its accessible name, the trailing arrow goes, and
+   the box squares around the glyph as an icon-only button's does.
+   PageLinksRow sets data-compact when the labelled row no longer fits
+   beside the title, so the row sheds its labels before it wraps; on a
+   phone the same form holds from the first paint. */
+.pageLinks[data-compact] {
+  gap: var(--gap-200);
+}
+
+.pageLinks[data-compact] :global(.ds-button) {
+  justify-content: center;
+  width: var(--control-height-compact);
+  padding-inline: 0;
+}
+
+.pageLinks[data-compact] :global(.ds-button__text) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.pageLinks[data-compact] :global(.ds-button__icon--right) {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .pageLinks {
     gap: var(--gap-200);

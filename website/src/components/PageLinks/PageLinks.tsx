@@ -3,7 +3,7 @@ import { Button } from "rift-ds/components/Button/Button";
 import PageAgentDocs from "./PageAgentDocs";
 import PageFigmaLink from "./PageFigmaLink";
 import PageTokenLink from "./PageTokenLink";
-import styles from "./PageLinks.module.css";
+import PageLinksRow from "./PageLinksRow";
 import { STORYBOOK_URL } from "@/config/brand.generated";
 import { SHOW_FIGMA_LINKS } from "@/config/social";
 
@@ -85,7 +85,7 @@ const InstagramIcon = () => (
  */
 export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substackUrl, linkedinUrl, xUrl, instagramUrl }: PageLinksProps) {
   return (
-    <div className={styles.pageLinks}>
+    <PageLinksRow>
       {/* Self-gated: renders only on /components/<slug> pages, where the
           generated markdown contract and the JSON schema exist. */}
       <PageAgentDocs />
@@ -185,6 +185,6 @@ export default function PageLinks({ figmaUrl, storybookPath, githubUrl, substack
           rel="noopener noreferrer"
         />
       )}
-    </div>
+    </PageLinksRow>
   );
 }

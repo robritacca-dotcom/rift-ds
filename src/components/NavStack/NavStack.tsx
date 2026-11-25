@@ -180,6 +180,20 @@ export function NavStack({
     if (pathProp === undefined) setOwnPath(next);
     onPathChange?.(next);
   };
+  /* After a step, the new level's control under the pointer (the search
+     field where the back row was) would show a hover the reader never
+     gave it. The stack marks itself settling until the pointer next
+     moves, and hover holds off until then; clicks still land. */
+  const settle = (from: HTMLElement) => {
+    const nav = from.closest<HTMLElement>('.ds-nav-stack');
+    if (!nav) return;
+    nav.setAttribute('data-settling', '');
+    const done = () => {
+      nav.removeAttribute('data-settling');
+      nav.removeEventListener('pointermove', done);
+    };
+    nav.addEventListener('pointermove', done);
+  };
   const drillIn = (item: NavStackItem) => {
     setDirection('in');
     returnTo.current = null;
@@ -268,7 +282,10 @@ export function NavStack({
             data-nav-stack-id={id}
             aria-pressed={item.selected !== undefined && !drills ? item.selected : undefined}
             onClick={(event) => {
-              if (drills) drillIn(item);
+              if (drills) {
+                settle(event.currentTarget);
+                drillIn(item);
+              }
               else item.onClick?.(event);
             }}
           >
@@ -316,7 +333,10 @@ export function NavStack({
       >
         {level ? (
           <div className="ds-nav-stack__head">
-            <button type="button" className="ds-nav-stack__back" aria-label={backLabel(parent ? parent.title ?? parent.label : rootLabel)} onClick={stepOut}>
+            <button type="button" className="ds-nav-stack__back" aria-label={backLabel(parent ? parent.title ?? parent.label : rootLabel)} onClick={(event) => {
+                settle(event.currentTarget);
+                stepOut();
+              }}>
               <span className="ds-nav-stack__back-chevron material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
                 chevron_left
               </span>

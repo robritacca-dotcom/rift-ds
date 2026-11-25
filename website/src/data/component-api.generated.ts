@@ -17479,7 +17479,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "drawerFooter",
             "type": "ReactNode",
             "required": false,
-            "description": "Content for the drawer's footer, such as the controls `wideActions` holds in the bar."
+            "description": "Content for the drawer's footer, such as the controls `wideActions` holds in the bar. It shows on the drawer's first level only: a level the reader drilled into leaves it out."
           },
           {
             "name": "drawerHeader",

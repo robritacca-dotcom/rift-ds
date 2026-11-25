@@ -83,8 +83,10 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-nav-stack__back:hover {
-  background-color: var(--color-action-passive-bg-hover);
+@media (hover: hover) {
+  .ds-nav-stack:not([data-settling]) .ds-nav-stack__back:hover {
+    background-color: var(--color-action-passive-bg-hover);
+  }
 }
 
 .ds-nav-stack__back:focus-visible {
@@ -152,7 +154,11 @@
   display: flex;
 }
 
-/* One shape per row: the fill spans the row, the chevron sits inside it. */
+/* One shape per row: the fill spans the row, the chevron sits inside it.
+   Hover applies only where the device hovers, so a tap leaves none
+   behind, and not while the stack settles after a step (`data-settling`,
+   until the pointer next moves), so the control that lands under a still
+   pointer does not light up. */
 .ds-nav-stack__row {
   display: flex;
   align-items: center;
@@ -175,8 +181,10 @@
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.ds-nav-stack__row:hover {
-  background-color: var(--color-action-passive-bg-hover);
+@media (hover: hover) {
+  .ds-nav-stack:not([data-settling]) .ds-nav-stack__row:hover {
+    background-color: var(--color-action-passive-bg-hover);
+  }
 }
 
 .ds-nav-stack__row:active {
@@ -272,7 +280,7 @@
 }
 
 /* On a filled row the quiet pill steps back to the page ground. */
-.ds-nav-stack__row:hover .ds-nav-stack__badge:not(.ds-nav-stack__badge--count),
+.ds-nav-stack:not([data-settling]) .ds-nav-stack__row:hover .ds-nav-stack__badge:not(.ds-nav-stack__badge--count),
 .ds-nav-stack__row--current .ds-nav-stack__badge:not(.ds-nav-stack__badge--count) {
   background-color: var(--color-bg-page-primary);
 }

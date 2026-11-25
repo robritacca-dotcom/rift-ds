@@ -91,7 +91,7 @@ type SiteHeaderOwnProps = {
    * their drawer twin in `drawerFooter`.
    */
   wideActions?: React.ReactNode;
-  /** Content for the drawer's footer, such as the controls `wideActions` holds in the bar. */
+  /** Content for the drawer's footer, such as the controls `wideActions` holds in the bar. It shows on the drawer's first level only: a level the reader drilled into leaves it out. */
   drawerFooter?: React.ReactNode;
   /** Content above the drawer's first level of rows, such as a search field. It leaves when the reader drills in. */
   drawerHeader?: React.ReactNode;
@@ -256,8 +256,14 @@ export function SiteHeader({
   const [tinted, setTinted] = useState(false);
   const [drawerOpenState, setDrawerOpenState] = useState(defaultDrawerOpen);
   const drawerOpen = drawerOpenProp ?? drawerOpenState;
+  /* How deep the drawer's menu is. The footer (a site's call to action)
+     belongs to the first level, the index of the site; a level the reader
+     drilled into is about that section, so the footer steps aside there.
+     Every open starts on the first level. */
+  const [drawerDepth, setDrawerDepth] = useState(0);
   const setDrawerOpen = useCallback(
     (next: boolean) => {
+      setDrawerDepth(0);
       lockedGutter.current = next ? window.innerWidth - document.documentElement.clientWidth : 0;
       if (drawerOpenProp === undefined) setDrawerOpenState(next);
       onDrawerOpenChange?.(next);
@@ -476,7 +482,6 @@ export function SiteHeader({
     {
       type: 'section',
       id: 'sections',
-      variant: 'prominent',
       items: sections.map((section) => {
         const pages = section.drawerItems ?? section.mega?.items ?? [];
         return {
@@ -652,7 +657,7 @@ export function SiteHeader({
         closeLabel={drawerCloseLabel}
         side="start"
         size="sm"
-        footer={drawerFooter}
+        footer={drawerDepth === 0 ? drawerFooter : undefined}
         className={`${baseClass}__drawer`}
         style={drawerOffset}
         heading={
@@ -677,6 +682,7 @@ export function SiteHeader({
           navLabel={navLabel}
           linkComponent={Link}
           onNavigate={() => setDrawerOpen(false)}
+          onPathChange={(path) => setDrawerDepth(path.length)}
         />
       </Drawer>
     </header>

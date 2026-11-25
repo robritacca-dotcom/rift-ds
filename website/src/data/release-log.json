@@ -1,6 +1,16 @@
 {
   "releases": [
     {
+      "version": "1.37.1",
+      "date": "2026-11-25",
+      "title": "Shaders that compile without freezing the page",
+      "body": [
+        "ShaderField and ShaderScene no longer hold the page still while their shader compiles. Each asked how the compile went straight after starting it, which stops the main thread until the graphics driver has finished: about a tenth of a second for a small scene and two seconds or more for a large one, longest on Windows, during which the page answered no press, scroll or key. Both now wait away from the main thread and start drawing when the shader is ready.",
+        "A scene reports `pending` until then, so a heavy one appears a moment later than it did and a fallback you paint for `pending` shows for that moment. `onStatusChange` and `onError` report as before.",
+        "SiteHeader’s mega menu stays open while the pointer moves down to it: the strip between a section pill and its menu belonged to neither, so a slow pointer lost the menu and the press landed on the page behind. Nothing in the API changed."
+      ]
+    },
+    {
       "version": "1.37.0",
       "date": "2026-11-24",
       "title": "A drawer beside a live page, rich option rows, charts that report the cursor",

@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.37.1",
   "package": "rift-ds",
-  "count": 196,
+  "count": 199,
   "components": [
     {
       "name": "Accordion",
@@ -45,6 +45,26 @@
       "markdownUrl": "https://rift-ds.com/components/action-readout.md"
     },
     {
+      "name": "AgentActivity",
+      "label": "Agent activity",
+      "slug": "agent-activity",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-activity.json",
+      "docsUrl": "https://rift-ds.com/components/agent-activity",
+      "markdownUrl": "https://rift-ds.com/components/agent-activity.md"
+    },
+    {
+      "name": "AgentConnections",
+      "label": "Agent connections",
+      "slug": "agent-connections",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-connections.json",
+      "docsUrl": "https://rift-ds.com/components/agent-connections",
+      "markdownUrl": "https://rift-ds.com/components/agent-connections.md"
+    },
+    {
       "name": "AgentPlan",
       "label": "Agent plan",
       "slug": "agent-plan",
@@ -63,6 +83,16 @@
       "schemaUrl": "https://rift-ds.com/schema/components/agent-rail.json",
       "docsUrl": "https://rift-ds.com/components/agent-rail",
       "markdownUrl": "https://rift-ds.com/components/agent-rail.md"
+    },
+    {
+      "name": "AgentScope",
+      "label": "Agent scope",
+      "slug": "agent-scope",
+      "category": "ai",
+      "kind": "component",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-scope.json",
+      "docsUrl": "https://rift-ds.com/components/agent-scope",
+      "markdownUrl": "https://rift-ds.com/components/agent-scope.md"
     },
     {
       "name": "AgentStatus",

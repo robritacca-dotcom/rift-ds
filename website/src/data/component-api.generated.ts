@@ -187,6 +187,12 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "What the change is, with how much it touches: \"Cancel orders: 69 orders\". Collides with the native `title` tooltip attribute on purpose: the card shows it."
           },
           {
+            "name": "preparedBy",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Who drafted the change and for whom, a quiet line over the title: \"Prepared by Ledger for Sara Ito\". Set it wherever the card can be read away from the conversation that made it (an approvals queue, a notification), so an agent's draft is never mistaken for a person's. Shown on the proposal and on a confirmed record that keeps its facts."
+          },
+          {
             "name": "detail",
             "type": "ReactNode",
             "required": false,
@@ -345,6 +351,134 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "string | ReactNode",
             "required": false,
             "description": "A leading mark beside the title: a Material Symbol name, or your own element."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "AgentActivity",
+    "label": "Agent activity",
+    "slug": "agent-activity",
+    "category": "ai",
+    "description": "What agents did on an account, each entry naming the agent and the person it acted for, with what waits on approval or was blocked.",
+    "client": false,
+    "importPath": "rift-ds/components/AgentActivity/AgentActivity",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AgentActivity",
+        "props": [
+          {
+            "name": "entries",
+            "type": "AgentActivityEntry[]",
+            "required": true,
+            "description": "The entries, newest first.",
+            "typeRefs": [
+              "AgentActivityEntry"
+            ]
+          },
+          {
+            "name": "attributionLabel",
+            "type": "((agent: string, owner: string) => string)",
+            "required": false,
+            "description": "The line naming who acted, given the agent's and the person's names: \"Ledger for Sara Ito\".",
+            "defaultValue": "(agent, owner) => `${agent} for ${owner}`"
+          },
+          {
+            "name": "outcomeLabels",
+            "type": "Partial<AgentActivityOutcomeLabels>",
+            "required": false,
+            "description": "The words for each outcome's mark. Defaults: none for `done`, then \"Awaiting approval\", \"Declined\" and \"Blocked\".",
+            "typeRefs": [
+              "AgentActivityOutcomeLabels"
+            ]
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "AgentConnections",
+    "label": "Agent connections",
+    "slug": "agent-connections",
+    "category": "ai",
+    "description": "The agents connected to an account, each with its person, what it may do and when it last acted, and a Disconnect that cuts it off.",
+    "client": true,
+    "importPath": "rift-ds/components/AgentConnections/AgentConnections",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AgentConnections",
+        "props": [
+          {
+            "name": "agents",
+            "type": "AgentConnection[]",
+            "required": true,
+            "description": "The connected agents, in the order they are listed.",
+            "typeRefs": [
+              "AgentConnection"
+            ]
+          },
+          {
+            "name": "onDisconnect",
+            "type": "((agent: AgentConnection) => void)",
+            "required": false,
+            "description": "Called by an agent's Disconnect. The host cuts its access at once, then sets its `status` to `disconnected`. Unset, the rows offer no Disconnect.",
+            "typeRefs": [
+              "AgentConnection"
+            ]
+          },
+          {
+            "name": "ownerLabel",
+            "type": "((owner: string) => string)",
+            "required": false,
+            "description": "The line under the agent's name naming its person, given their name: \"For Sara Ito\".",
+            "defaultValue": "(owner) => `For ${owner}`"
+          },
+          {
+            "name": "disconnectLabel",
+            "type": "string",
+            "required": false,
+            "description": "The Disconnect button's words. Defaults to \"Disconnect\".",
+            "defaultValue": "'Disconnect'"
+          },
+          {
+            "name": "disconnectAccessibleLabel",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "The Disconnect button's accessible name, given the agent's name, so a list of them is told apart. Defaults to \"Disconnect Ledger\".",
+            "defaultValue": "(name) => `Disconnect ${name}`"
+          },
+          {
+            "name": "disconnectedLabel",
+            "type": "string",
+            "required": false,
+            "description": "The mark a disconnected agent carries. Defaults to \"Disconnected\".",
+            "defaultValue": "'Disconnected'"
+          },
+          {
+            "name": "disconnectedAnnouncement",
+            "type": "((name: string) => string)",
+            "required": false,
+            "description": "What is announced when an agent is disconnected, given its name. Defaults to \"Ledger disconnected\".",
+            "defaultValue": "(name) => `${name} disconnected`"
           },
           {
             "name": "className",
@@ -540,6 +674,103 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "type": "ReactNode",
             "required": false,
             "description": "Rendered under the pane, outside its scroll — a sign-out row, a quiet hint."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes",
+            "defaultValue": "''"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "component",
+    "name": "AgentScope",
+    "label": "Agent scope",
+    "slug": "agent-scope",
+    "category": "ai",
+    "description": "How far an agent may go in each area of an account, from off to act, never past the person who connected it.",
+    "client": true,
+    "importPath": "rift-ds/components/AgentScope/AgentScope",
+    "barrel": "main",
+    "exports": [
+      {
+        "component": "AgentScope",
+        "props": [
+          {
+            "name": "permissions",
+            "type": "AgentScopePermission[]",
+            "required": true,
+            "description": "The areas an agent can be let into, in the order they are listed.",
+            "typeRefs": [
+              "AgentScopePermission"
+            ]
+          },
+          {
+            "name": "value",
+            "type": "Record<string, AgentScopeLevel>",
+            "required": false,
+            "description": "The level the agent holds in each area, keyed by permission id, for controlled use. An area missing from it is off. Pair with `onValueChange`.",
+            "typeRefs": [
+              "AgentScopeLevel"
+            ]
+          },
+          {
+            "name": "defaultValue",
+            "type": "Record<string, AgentScopeLevel>",
+            "required": false,
+            "description": "The levels to begin with, for uncontrolled use. An agent starts with nothing: an area missing from it is off.",
+            "typeRefs": [
+              "AgentScopeLevel"
+            ]
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: Record<string, AgentScopeLevel>) => void)",
+            "required": false,
+            "description": "Called with every area's level when the reader changes one.",
+            "typeRefs": [
+              "AgentScopeLevel"
+            ]
+          },
+          {
+            "name": "levelLabels",
+            "type": "Partial<AgentScopeLevelLabels>",
+            "required": false,
+            "description": "The words for each level. Defaults to Off, View, Prepare and Act.",
+            "typeRefs": [
+              "AgentScopeLevelLabels"
+            ]
+          },
+          {
+            "name": "approvalLabel",
+            "type": "string",
+            "required": false,
+            "description": "The note an area that moves money adds to its description, in place of `act`. Defaults to \"A person approves\".",
+            "defaultValue": "'A person approves'"
+          },
+          {
+            "name": "hiddenLabel",
+            "type": "((count: string) => string)",
+            "required": false,
+            "description": "The closing line counting the areas left out because the person does not hold them, given the count already written in the locale. Return an empty string to leave it out.",
+            "defaultValue": "(count: string) =>\n  count === '1' ? '1 more area is left out: you don’t hold it yourself.' : `${count} more areas are left out: you don’t hold them yourself.`"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": "Hold every area at its current level.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "required": false,
+            "description": "The BCP 47 locale the closing count is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, then `en-US`."
           },
           {
             "name": "className",
@@ -771,7 +1002,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tooltipPosition",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
             "values": [
@@ -5755,7 +5986,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tooltipPosition",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction.",
             "values": [
@@ -6439,7 +6670,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tooltipPosition",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Where the icon-only form's tooltip sits, as on IconButton.",
             "values": [
@@ -8900,7 +9131,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "side",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Edge the panel slides in from. `left` and `right` are the screen's\nedges in any reading direction; `start` and `end` follow it, so a\n`start` drawer opens on the left in English and on the right in Arabic.",
             "values": [
@@ -11231,7 +11462,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "values": [
@@ -11450,7 +11681,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "tooltipPosition",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Which side the tooltip opens on. `start` and `end` follow the reading direction.",
             "values": [
@@ -15057,7 +15288,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "values": [
@@ -21274,7 +21505,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "position",
-            "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+            "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
             "required": false,
             "description": "Preferred position. `left` and `right` are screen sides; `start` and `end` follow the reading direction, so `end` opens to the right in English and to the left in Arabic.",
             "values": [

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.37.1",
+  "kind": "component",
+  "name": "AgentConnections",
+  "label": "Agent connections",
+  "slug": "agent-connections",
+  "category": "ai",
+  "description": "The agents connected to an account, each with its person, what it may do and when it last acted, and a Disconnect that cuts it off.",
+  "client": true,
+  "importPath": "rift-ds/components/AgentConnections/AgentConnections",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/agent-connections",
+  "markdownUrl": "https://rift-ds.com/components/agent-connections.md",
+  "exports": [
+    {
+      "component": "AgentConnections",
+      "props": [
+        {
+          "name": "agents",
+          "type": "AgentConnection[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The connected agents, in the order they are listed.",
+          "typeRefs": [
+            "AgentConnection"
+          ]
+        },
+        {
+          "name": "onDisconnect",
+          "type": "((agent: AgentConnection) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called by an agent's Disconnect. The host cuts its access at once, then sets its `status` to `disconnected`. Unset, the rows offer no Disconnect.",
+          "typeRefs": [
+            "AgentConnection"
+          ]
+        },
+        {
+          "name": "ownerLabel",
+          "type": "((owner: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The line under the agent's name naming its person, given their name: \"For Sara Ito\".",
+          "defaultExpression": "(owner) => `For ${owner}`"
+        },
+        {
+          "name": "disconnectLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The Disconnect button's words. Defaults to \"Disconnect\".",
+          "default": "Disconnect"
+        },
+        {
+          "name": "disconnectAccessibleLabel",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The Disconnect button's accessible name, given the agent's name, so a list of them is told apart. Defaults to \"Disconnect Ledger\".",
+          "defaultExpression": "(name) => `Disconnect ${name}`"
+        },
+        {
+          "name": "disconnectedLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The mark a disconnected agent carries. Defaults to \"Disconnected\".",
+          "default": "Disconnected"
+        },
+        {
+          "name": "disconnectedAnnouncement",
+          "type": "((name: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "What is announced when an agent is disconnected, given its name. Defaults to \"Ledger disconnected\".",
+          "defaultExpression": "(name) => `${name} disconnected`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "AgentConnection": {
+      "kind": "interface",
+      "definition": "interface AgentConnection {\n  /** A stable key. */\n  id: string;\n  /** The agent's name: \"Ledger\". */\n  name: string;\n  /** The person the agent acts for. Every agent has one: it holds no more than they do, and leaves when they do. */\n  owner: string;\n  /** What the agent may do, in a few words: \"Views balances, prepares payments\". */\n  scope?: string;\n  /** When it last acted, already written: \"Active 2h ago\". */\n  lastActive?: React.ReactNode;\n  /** A leading mark. Defaults to a PixelAvatar drawn from the name. */\n  mark?: React.ReactNode;\n  /** Whether it can still act. A disconnected agent stays listed as a record, with no control. Defaults to `connected`. */\n  status?: 'connected' | 'disconnected';\n}",
+      "description": "One agent connected to an account."
+    }
+  },
+  "externalTypes": {
+    "ReactNode": "react"
+  },
+  "keyboard": [
+    {
+      "pattern": "button",
+      "part": "buttons",
+      "label": "Button",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/button/",
+      "rows": [
+        {
+          "keys": [
+            "Enter"
+          ],
+          "text": "Activates the button."
+        },
+        {
+          "keys": [
+            "Space"
+          ],
+          "text": "Activates the button."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 4313
+  }
+}

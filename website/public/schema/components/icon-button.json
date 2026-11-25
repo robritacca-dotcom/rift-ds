@@ -117,7 +117,7 @@
         },
         {
           "name": "tooltipPosition",
-          "type": "\"top\" | \"bottom\" | \"left\" | \"right\" | \"start\" | \"end\"",
+          "type": "\"start\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"end\"",
           "typeKind": "enum",
           "values": [
             "bottom",

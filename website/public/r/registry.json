@@ -34,6 +34,18 @@
       "description": "What a confirmed change did: a title over a list of facts, worked out from the records as they were just before it."
     },
     {
+      "name": "agent-activity",
+      "type": "registry:ui",
+      "title": "Agent activity",
+      "description": "What agents did on an account, each entry naming the agent and the person it acted for, with what waits on approval or was blocked."
+    },
+    {
+      "name": "agent-connections",
+      "type": "registry:ui",
+      "title": "Agent connections",
+      "description": "The agents connected to an account, each with its person, what it may do and when it last acted, and a Disconnect that cuts it off."
+    },
+    {
       "name": "agent-plan",
       "type": "registry:ui",
       "title": "Agent plan",
@@ -44,6 +56,12 @@
       "type": "registry:ui",
       "title": "Agent rail",
       "description": "The companion rail of an agent product: the agent's portrait over tabbed panes for activity, approvals, automations, and personalization."
+    },
+    {
+      "name": "agent-scope",
+      "type": "registry:ui",
+      "title": "Agent scope",
+      "description": "How far an agent may go in each area of an account, from off to act, never past the person who connected it."
     },
     {
       "name": "agent-status",

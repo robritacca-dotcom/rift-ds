@@ -24,6 +24,13 @@
           "description": "What the change is, with how much it touches: \"Cancel orders: 69 orders\". Collides with the native `title` tooltip attribute on purpose: the card shows it."
         },
         {
+          "name": "preparedBy",
+          "type": "ReactNode",
+          "typeKind": "reference",
+          "required": false,
+          "description": "Who drafted the change and for whom, a quiet line over the title: \"Prepared by Ledger for Sara Ito\". Set it wherever the card can be read away from the conversation that made it (an approvals queue, a notification), so an agent's draft is never mistaken for a person's. Shown on the proposal and on a confirmed record that keeps its facts."
+        },
+        {
           "name": "detail",
           "type": "ReactNode",
           "typeKind": "reference",
@@ -201,7 +208,7 @@
     }
   ],
   "size": {
-    "gzip": 2298
+    "gzip": 2326
   },
   "alternatives": [
     {

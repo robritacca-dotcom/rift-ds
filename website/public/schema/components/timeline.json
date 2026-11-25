@@ -112,5 +112,12 @@
   },
   "size": {
     "gzip": 1430
-  }
+  },
+  "alternatives": [
+    {
+      "name": "AgentActivity",
+      "when": "each entry is an action an agent took for a person",
+      "schemaUrl": "https://rift-ds.com/schema/components/agent-activity.json"
+    }
+  ]
 }

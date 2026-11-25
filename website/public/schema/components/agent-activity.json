@@ -1,0 +1,99 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.37.1",
+  "kind": "component",
+  "name": "AgentActivity",
+  "label": "Agent activity",
+  "slug": "agent-activity",
+  "category": "ai",
+  "description": "What agents did on an account, each entry naming the agent and the person it acted for, with what waits on approval or was blocked.",
+  "client": false,
+  "importPath": "rift-ds/components/AgentActivity/AgentActivity",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/agent-activity",
+  "markdownUrl": "https://rift-ds.com/components/agent-activity.md",
+  "exports": [
+    {
+      "component": "AgentActivity",
+      "props": [
+        {
+          "name": "entries",
+          "type": "AgentActivityEntry[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The entries, newest first.",
+          "typeRefs": [
+            "AgentActivityEntry"
+          ]
+        },
+        {
+          "name": "attributionLabel",
+          "type": "((agent: string, owner: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The line naming who acted, given the agent's and the person's names: \"Ledger for Sara Ito\".",
+          "defaultExpression": "(agent, owner) => `${agent} for ${owner}`"
+        },
+        {
+          "name": "outcomeLabels",
+          "type": "Partial<AgentActivityOutcomeLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words for each outcome's mark. Defaults: none for `done`, then \"Awaiting approval\", \"Declined\" and \"Blocked\".",
+          "typeRefs": [
+            "AgentActivityOutcomeLabels"
+          ]
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "AgentActivityEntry": {
+      "kind": "interface",
+      "definition": "interface AgentActivityEntry {\n  /** A stable key. */\n  id: string;\n  /** The agent that acted: \"Ledger\". */\n  agent: string;\n  /** The person it acted for. Every entry names both, so no action reads as the agent's alone. */\n  owner: string;\n  /** What it did, in the past tense, with the amounts and names: \"Prepared a payment of $4,200.00 to Hollis Supply\". */\n  action: string;\n  /** When, already written: \"10:42\", \"Yesterday\". */\n  time?: React.ReactNode;\n  /** How it ended. Defaults to `done`, which carries no mark. */\n  outcome?: AgentActivityOutcome;\n  /** Why it was declined or blocked, in a few words, added to the attribution line: \"Payroll isn’t Sara’s to share\". */\n  reason?: string;\n  /** A leading mark. Defaults to a PixelAvatar drawn from the agent's name, the same one the agent wears in AgentConnections. */\n  mark?: React.ReactNode;\n}",
+      "description": "One thing an agent did, or tried to.",
+      "refs": [
+        "AgentActivityOutcome"
+      ]
+    },
+    "AgentActivityOutcome": {
+      "kind": "type",
+      "definition": "type AgentActivityOutcome = 'done' | 'awaiting' | 'declined' | 'blocked';",
+      "description": "How an agent's action ended: done, waiting on a person's approval, turned down by one, or stopped because the person it acts for does not hold that access."
+    },
+    "AgentActivityOutcomeLabels": {
+      "kind": "type",
+      "definition": "type AgentActivityOutcomeLabels = Record<AgentActivityOutcome, string>;",
+      "description": "The words for each outcome's mark. `done` carries none unless given.",
+      "refs": [
+        "AgentActivityOutcome"
+      ]
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  },
+  "keys": {
+    "by": "none"
+  },
+  "size": {
+    "gzip": 2786
+  },
+  "alternatives": [
+    {
+      "name": "Timeline",
+      "when": "the entries are steps or events with no agent behind them",
+      "schemaUrl": "https://rift-ds.com/schema/components/timeline.json"
+    }
+  ]
+}

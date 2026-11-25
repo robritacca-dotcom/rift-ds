@@ -24,7 +24,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | size | `"default" \| "compact"` | no | `'default'` | Control size, on the row-control scale: `default` is 40px, `compact` 32px. |
 | iconOnly | `boolean` | no | `false` | Fold to the icon alone, an even box the row height across, for a row with no room for the field. The label stays the accessible name. |
 | tooltip | `string \| false` | no |  | The hover and focus tooltip of the icon-only form, which names itself as IconButton does: by default it carries `label`. Pass a string to show different wording, or `false` to opt out. |
-| tooltipPosition | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'bottom'` | Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction. |
+| tooltipPosition | `"start" \| "top" \| "bottom" \| "left" \| "right" \| "end"` | no | `'bottom'` | Which side the tooltip opens on; below by default, since the trigger usually sits in a top bar. `start` and `end` follow the reading direction. |
 | className | `string` | no | `''` | Additional CSS classes |
 
 ## Keyboard

@@ -78,6 +78,48 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       "ReactNode": "react"
     }
   },
+  "agent-activity": {
+    "types": {
+      "AgentActivityEntry": {
+        "kind": "interface",
+        "definition": "interface AgentActivityEntry {\n  /** A stable key. */\n  id: string;\n  /** The agent that acted: \"Ledger\". */\n  agent: string;\n  /** The person it acted for. Every entry names both, so no action reads as the agent's alone. */\n  owner: string;\n  /** What it did, in the past tense, with the amounts and names: \"Prepared a payment of $4,200.00 to Hollis Supply\". */\n  action: string;\n  /** When, already written: \"10:42\", \"Yesterday\". */\n  time?: React.ReactNode;\n  /** How it ended. Defaults to `done`, which carries no mark. */\n  outcome?: AgentActivityOutcome;\n  /** Why it was declined or blocked, in a few words, added to the attribution line: \"Payroll isn’t Sara’s to share\". */\n  reason?: string;\n  /** A leading mark. Defaults to a PixelAvatar drawn from the agent's name, the same one the agent wears in AgentConnections. */\n  mark?: React.ReactNode;\n}",
+        "description": "One thing an agent did, or tried to.",
+        "refs": [
+          "AgentActivityOutcome"
+        ]
+      },
+      "AgentActivityOutcome": {
+        "kind": "type",
+        "definition": "type AgentActivityOutcome = 'done' | 'awaiting' | 'declined' | 'blocked';",
+        "description": "How an agent's action ended: done, waiting on a person's approval, turned down by one, or stopped because the person it acts for does not hold that access."
+      },
+      "AgentActivityOutcomeLabels": {
+        "kind": "type",
+        "definition": "type AgentActivityOutcomeLabels = Record<AgentActivityOutcome, string>;",
+        "description": "The words for each outcome's mark. `done` carries none unless given.",
+        "refs": [
+          "AgentActivityOutcome"
+        ]
+      }
+    },
+    "externalTypes": {
+      "Partial": "typescript",
+      "ReactNode": "react",
+      "Record": "typescript"
+    }
+  },
+  "agent-connections": {
+    "types": {
+      "AgentConnection": {
+        "kind": "interface",
+        "definition": "interface AgentConnection {\n  /** A stable key. */\n  id: string;\n  /** The agent's name: \"Ledger\". */\n  name: string;\n  /** The person the agent acts for. Every agent has one: it holds no more than they do, and leaves when they do. */\n  owner: string;\n  /** What the agent may do, in a few words: \"Views balances, prepares payments\". */\n  scope?: string;\n  /** When it last acted, already written: \"Active 2h ago\". */\n  lastActive?: React.ReactNode;\n  /** A leading mark. Defaults to a PixelAvatar drawn from the name. */\n  mark?: React.ReactNode;\n  /** Whether it can still act. A disconnected agent stays listed as a record, with no control. Defaults to `connected`. */\n  status?: 'connected' | 'disconnected';\n}",
+        "description": "One agent connected to an account."
+      }
+    },
+    "externalTypes": {
+      "ReactNode": "react"
+    }
+  },
   "agent-plan": {
     "types": {
       "AgentPlanStep": {
@@ -110,6 +152,36 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     },
     "externalTypes": {
       "ReactNode": "react"
+    }
+  },
+  "agent-scope": {
+    "types": {
+      "AgentScopeLevel": {
+        "kind": "type",
+        "definition": "type AgentScopeLevel = 'none' | 'view' | 'prepare' | 'act';",
+        "description": "How far an agent may go in one area, lowest first: nothing, look, draft for a person to approve, do it itself."
+      },
+      "AgentScopeLevelLabels": {
+        "kind": "type",
+        "definition": "type AgentScopeLevelLabels = Record<AgentScopeLevel, string>;",
+        "description": "The words for each level, as the segments show them.",
+        "refs": [
+          "AgentScopeLevel"
+        ]
+      },
+      "AgentScopePermission": {
+        "kind": "interface",
+        "definition": "interface AgentScopePermission {\n  /** A stable key: the permission's key in `value`. */\n  id: string;\n  /** The area, in the reader's words: \"Payments\", \"Cards\", \"Statements\". */\n  label: string;\n  /** A quiet line under the label saying what the area covers. */\n  description?: string;\n  /** A leading mark: a Material Symbol name, or your own element. */\n  icon?: string | React.ReactNode;\n  /** The levels this area has, lowest first. Defaults to all four; an area with nothing to draft leaves out `prepare`. */\n  levels?: AgentScopeLevel[];\n  /** The level the connecting person holds here themselves. The agent is never offered more: levels above it are left out, not shown disabled, and an area the person holds at `none` is left out altogether. */\n  held: AgentScopeLevel;\n  /** The area moves money. `act` is never offered, whatever the person holds: the agent drafts, and a person approves each one. */\n  approval?: boolean;\n  /** Hold the area at its current level. */\n  disabled?: boolean;\n}",
+        "description": "One area of the account an agent can be let into.",
+        "refs": [
+          "AgentScopeLevel"
+        ]
+      }
+    },
+    "externalTypes": {
+      "Partial": "typescript",
+      "ReactNode": "react",
+      "Record": "typescript"
     }
   },
   "agent-status": {

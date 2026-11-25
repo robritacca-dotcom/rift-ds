@@ -23,7 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | heading | `ReactNode` | no |  | Content shown in place of the title text, such as a site's logo. The `title` still names the dialog, read by assistive tech from a visually hidden heading. |
 | children | `ReactNode` | no |  | Drawer body content |
 | footer | `ReactNode` | no |  | Optional footer slot — typically a row of Buttons |
-| side | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'right'` | Edge the panel slides in from. `left` and `right` are the screen's edges in any reading direction; `start` and `end` follow it, so a `start` drawer opens on the left in English and on the right in Arabic. |
+| side | `"start" \| "top" \| "bottom" \| "left" \| "right" \| "end"` | no | `'right'` | Edge the panel slides in from. `left` and `right` are the screen's edges in any reading direction; `start` and `end` follow it, so a `start` drawer opens on the left in English and on the right in Arabic. |
 | size | `"sm" \| "md" \| "lg"` | no | `'md'` | Panel size along the axis it slides on |
 | dismissible | `boolean` | no | `true` | Whether ESC, scrim click, and the close button can dismiss |
 | modal | `boolean` | no | `true` | Whether the drawer takes over the page. `true` (the default) draws the scrim, traps focus, locks scroll and makes the page behind inert. `false` leaves the page live beside the panel, for a detail view that follows a list: no scrim, no trap, and a press outside never closes it. Focus still moves into the panel on open; on close it returns to the opener only if it is still inside the panel. |

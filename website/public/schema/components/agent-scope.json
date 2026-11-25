@@ -1,0 +1,184 @@
+{
+  "$schema": "https://rift-ds.com/schema/component.schema.json",
+  "version": "1.37.1",
+  "kind": "component",
+  "name": "AgentScope",
+  "label": "Agent scope",
+  "slug": "agent-scope",
+  "category": "ai",
+  "description": "How far an agent may go in each area of an account, from off to act, never past the person who connected it.",
+  "client": true,
+  "importPath": "rift-ds/components/AgentScope/AgentScope",
+  "barrel": "main",
+  "docsUrl": "https://rift-ds.com/components/agent-scope",
+  "markdownUrl": "https://rift-ds.com/components/agent-scope.md",
+  "exports": [
+    {
+      "component": "AgentScope",
+      "props": [
+        {
+          "name": "permissions",
+          "type": "AgentScopePermission[]",
+          "typeKind": "array",
+          "required": true,
+          "description": "The areas an agent can be let into, in the order they are listed.",
+          "typeRefs": [
+            "AgentScopePermission"
+          ]
+        },
+        {
+          "name": "value",
+          "type": "Record<string, AgentScopeLevel>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The level the agent holds in each area, keyed by permission id, for controlled use. An area missing from it is off. Pair with `onValueChange`.",
+          "typeRefs": [
+            "AgentScopeLevel"
+          ]
+        },
+        {
+          "name": "defaultValue",
+          "type": "Record<string, AgentScopeLevel>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The levels to begin with, for uncontrolled use. An agent starts with nothing: an area missing from it is off.",
+          "typeRefs": [
+            "AgentScopeLevel"
+          ]
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: Record<string, AgentScopeLevel>) => void)",
+          "typeKind": "function",
+          "required": false,
+          "description": "Called with every area's level when the reader changes one.",
+          "typeRefs": [
+            "AgentScopeLevel"
+          ]
+        },
+        {
+          "name": "levelLabels",
+          "type": "Partial<AgentScopeLevelLabels>",
+          "typeKind": "reference",
+          "required": false,
+          "description": "The words for each level. Defaults to Off, View, Prepare and Act.",
+          "typeRefs": [
+            "AgentScopeLevelLabels"
+          ]
+        },
+        {
+          "name": "approvalLabel",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The note an area that moves money adds to its description, in place of `act`. Defaults to \"A person approves\".",
+          "default": "A person approves"
+        },
+        {
+          "name": "hiddenLabel",
+          "type": "((count: string) => string)",
+          "typeKind": "function",
+          "required": false,
+          "description": "The closing line counting the areas left out because the person does not hold them, given the count already written in the locale. Return an empty string to leave it out.",
+          "defaultExpression": "(count: string) =>\n  count === '1' ? '1 more area is left out: you don’t hold it yourself.' : `${count} more areas are left out: you don’t hold them yourself.`"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Hold every area at its current level.",
+          "default": false
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "The BCP 47 locale the closing count is written in, such as `ar-EG`. Defaults to the nearest LocaleProvider's, then `en-US`."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Additional CSS classes",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "types": {
+    "AgentScopeLevel": {
+      "kind": "type",
+      "definition": "type AgentScopeLevel = 'none' | 'view' | 'prepare' | 'act';",
+      "description": "How far an agent may go in one area, lowest first: nothing, look, draft for a person to approve, do it itself."
+    },
+    "AgentScopeLevelLabels": {
+      "kind": "type",
+      "definition": "type AgentScopeLevelLabels = Record<AgentScopeLevel, string>;",
+      "description": "The words for each level, as the segments show them.",
+      "refs": [
+        "AgentScopeLevel"
+      ]
+    },
+    "AgentScopePermission": {
+      "kind": "interface",
+      "definition": "interface AgentScopePermission {\n  /** A stable key: the permission's key in `value`. */\n  id: string;\n  /** The area, in the reader's words: \"Payments\", \"Cards\", \"Statements\". */\n  label: string;\n  /** A quiet line under the label saying what the area covers. */\n  description?: string;\n  /** A leading mark: a Material Symbol name, or your own element. */\n  icon?: string | React.ReactNode;\n  /** The levels this area has, lowest first. Defaults to all four; an area with nothing to draft leaves out `prepare`. */\n  levels?: AgentScopeLevel[];\n  /** The level the connecting person holds here themselves. The agent is never offered more: levels above it are left out, not shown disabled, and an area the person holds at `none` is left out altogether. */\n  held: AgentScopeLevel;\n  /** The area moves money. `act` is never offered, whatever the person holds: the agent drafts, and a person approves each one. */\n  approval?: boolean;\n  /** Hold the area at its current level. */\n  disabled?: boolean;\n}",
+      "description": "One area of the account an agent can be let into.",
+      "refs": [
+        "AgentScopeLevel"
+      ]
+    }
+  },
+  "externalTypes": {
+    "Partial": "typescript",
+    "ReactNode": "react",
+    "Record": "typescript"
+  },
+  "keyboard": [
+    {
+      "pattern": "tabs",
+      "part": "level pickers",
+      "label": "Tabs",
+      "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
+      "rows": [
+        {
+          "keys": [
+            "Tab"
+          ],
+          "text": "Moves focus into the list at the selected tab, and out of the list on the next press."
+        },
+        {
+          "keys": [
+            "ArrowRight"
+          ],
+          "text": "Moves to the next tab and selects it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "ArrowLeft"
+          ],
+          "text": "Moves to the previous tab and selects it.",
+          "inline": true
+        },
+        {
+          "keys": [
+            "End"
+          ],
+          "text": "Moves to the last tab and selects it."
+        },
+        {
+          "keys": [
+            "Home"
+          ],
+          "text": "Moves to the first tab and selects it."
+        }
+      ]
+    }
+  ],
+  "size": {
+    "gzip": 8405
+  }
+}

@@ -26,7 +26,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | copyLabel | `string` | no |  | Accessible name before a copy. Defaults to `copyText`. |
 | copiedLabel | `string` | no | `'Copied'` | Visible text and accessible name for a moment after a copy. |
 | iconOnly | `boolean` | no | `false` | Show only the glyph, with the label in a tooltip, as an IconButton. |
-| tooltipPosition | `"top" \| "bottom" \| "left" \| "right" \| "start" \| "end"` | no | `'top'` | Where the icon-only form's tooltip sits, as on IconButton. |
+| tooltipPosition | `"start" \| "top" \| "bottom" \| "left" \| "right" \| "end"` | no | `'top'` | Where the icon-only form's tooltip sits, as on IconButton. |
 | variant | `"secondary" \| "tertiary"` | no | `'tertiary'` | Visual emphasis, as on Button. |
 | tone | `"default" \| "neutral"` | no | `'default'` | Colour, as on Button: `neutral` draws the secondary outline in the neutral greys rather than the action colour, for a utility control such as a page's "Copy link". |
 | size | `"default" \| "compact"` | no | `'compact'` | Control size, as on Button. |

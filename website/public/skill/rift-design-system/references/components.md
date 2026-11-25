@@ -94,7 +94,7 @@ A set of two-state buttons that can be toggled on or off, supporting text and ic
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/toggle-group.md
 
-## AI (36)
+## AI (39)
 
 Chat, agent, and model surfaces for building AI products, from the composer to the reasoning trace and the diff an agent proposes.
 
@@ -114,6 +114,22 @@ What a confirmed change did: a title over a list of facts, worked out from the r
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/action-readout.md
 
+### Agent activity
+
+What agents did on an account, each entry naming the agent and the person it acted for, with what waits on approval or was blocked.
+
+- Import: `import { AgentActivity } from 'rift-ds';`
+- Rendering: server-renderable (no 'use client')
+- Contract: https://rift-ds.com/components/agent-activity.md
+
+### Agent connections
+
+The agents connected to an account, each with its person, what it may do and when it last acted, and a Disconnect that cuts it off.
+
+- Import: `import { AgentConnections } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/agent-connections.md
+
 ### Agent plan
 
 A collapsible checklist of an agent's task, with live step states and a progress readout.
@@ -129,6 +145,14 @@ The companion rail of an agent product: the agent's portrait over tabbed panes f
 - Import: `import { AgentRail } from 'rift-ds';`
 - Rendering: server-renderable (no 'use client')
 - Contract: https://rift-ds.com/components/agent-rail.md
+
+### Agent scope
+
+How far an agent may go in each area of an account, from off to act, never past the person who connected it.
+
+- Import: `import { AgentScope } from 'rift-ds';`
+- Rendering: client component (declares 'use client')
+- Contract: https://rift-ds.com/components/agent-scope.md
 
 ### Agent status
 

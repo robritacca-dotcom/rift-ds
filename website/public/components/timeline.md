@@ -12,6 +12,10 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Live docs: https://rift-ds.com/components/timeline
 - Schema: https://rift-ds.com/schema/components/timeline.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
+## Alternatives
+
+- Use [Agent activity](https://rift-ds.com/components/agent-activity.md) instead when each entry is an action an agent took for a person.
+
 ## Timeline props
 
 | Prop | Type | Required | Default | Description |

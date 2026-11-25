@@ -21,6 +21,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | title | `ReactNode` | yes |  | What the change is, with how much it touches: "Cancel orders: 69 orders". Collides with the native `title` tooltip attribute on purpose: the card shows it. |
+| preparedBy | `ReactNode` | no |  | Who drafted the change and for whom, a quiet line over the title: "Prepared by Ledger for Sara Ito". Set it wherever the card can be read away from the conversation that made it (an approvals queue, a notification), so an agent's draft is never mistaken for a person's. Shown on the proposal and on a confirmed record that keeps its facts. |
 | detail | `ReactNode` | no |  | A quiet line under the title: what the change leaves alone, and why ("Left as they are: 2 already shipped"). |
 | facts | `ActionReadoutFact[]` | no |  | What the change will do, a line each, as ActionReadout lists what one did: shown over Confirm, then kept, under the receipt, by the confirmed record. A dismissed or undone card is one row and shows none. Write them for the state the card is in. |
 | icon | `string \| ReactNode` | no |  | The mark trailing the title: a Material Symbol name, or your own element. |

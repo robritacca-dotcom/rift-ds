@@ -13,6 +13,8 @@ import PlannerBlock from "../../../src/cli/templates/blocks/app/planner/page";
 import SignInBlock from "../../../src/cli/templates/blocks/app/sign-in/page";
 import ShaderSceneBlock from "../../../src/cli/templates/blocks/app/shader/page";
 import DocsBlock from "../../../src/cli/templates/blocks/app/guide/page";
+import LandingBlock from "../../../src/cli/templates/blocks/app/landing/page";
+import PricingBlock from "../../../src/cli/templates/blocks/app/pricing/page";
 
 export const BLOCK_PREVIEWS: Record<string, ComponentType> = {
   "app-shell": AppShellBlock,
@@ -22,4 +24,6 @@ export const BLOCK_PREVIEWS: Record<string, ComponentType> = {
   "sign-in": SignInBlock,
   "shader-scene": ShaderSceneBlock,
   docs: DocsBlock,
+  landing: LandingBlock,
+  pricing: PricingBlock,
 };

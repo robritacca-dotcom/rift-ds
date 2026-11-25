@@ -1,0 +1,50 @@
+/* The landing page's own layout: the type, colour and spacing inside each
+   section come from the components, so this file only holds the measures
+   a section is set to and the row of customer names. */
+
+.hero {
+  max-width: 720px; /* the hero's column: the headline and the line under it share one measure */
+  margin-inline: auto;
+}
+
+.sectionHead {
+  max-width: 800px; /* a section's heading column: two lines at the display tier */
+}
+
+.plainList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feature {
+  height: 100%;
+}
+
+/* The customer names, in a row that wraps and centres. Replace each name
+   with a logo image of one height and keep the row. */
+
+.customers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-500) var(--gap-1500);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.customer {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  line-height: var(--font-title-body-line-height);
+  color: var(--color-text-tertiary);
+}
+
+@media (max-width: 600px) {
+  .customers {
+    gap: var(--gap-300) var(--gap-1000);
+  }
+}

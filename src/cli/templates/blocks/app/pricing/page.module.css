@@ -1,0 +1,15 @@
+/* The pricing page's own layout is two rules. The plans' grid, the cards
+   and the table come from the components. */
+
+/* A plan's button runs the width of its card. */
+.full {
+  width: 100%;
+}
+
+/* The featured plan's badge sits in its card's header without making that
+   header taller than its neighbours': it gives back its own block padding
+   and border, so every plan's summary, price and button stay level. */
+.tag {
+  display: inline-flex;
+  margin-block: calc(-1 * (var(--padding-050) + var(--border-025)));
+}

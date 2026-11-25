@@ -1,0 +1,66 @@
+/* The marketing shell: the header, the page's bands and the footer in one
+   column the height of the window, so a short page still puts its footer
+   at the bottom. */
+
+.shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-page-primary);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  font-family: var(--font-title-body-family);
+  font-size: var(--font-title-body-size);
+  font-weight: var(--font-title-body-weight);
+  color: var(--color-text-primary);
+}
+
+/* A band runs the window's width and holds its content to one centred
+   column, a gutter in from each edge. The column's width and gutter are
+   the library's page width, set on the shell (data-ds-width and
+   data-ds-contained), which the header and the footer read too, so a
+   band's content starts under the brand. */
+
+.band {
+  padding-block: var(--gap-2000);
+}
+
+.bandLarge {
+  padding-block: var(--gap-3000);
+}
+
+.bandRaised {
+  background-color: var(--color-bg-container-primary);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--ds-shell-contained-width);
+  margin-inline: auto;
+  padding-inline: var(--ds-shell-gutter);
+}
+
+.footer {
+  padding-block: var(--gap-1000);
+}
+
+.innerNarrow {
+  max-width: 720px; /* a reading measure, for a band of copy */
+}
+
+@media (max-width: 768px) {
+  .band {
+    padding-block: var(--gap-1500);
+  }
+
+  .bandLarge {
+    padding-block: var(--gap-2000);
+  }
+}

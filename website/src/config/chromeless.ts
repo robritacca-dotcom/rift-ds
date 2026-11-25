@@ -52,6 +52,8 @@ export const CHROMELESS_ROUTES = new Set([
   "/docs/blocks/sign-in",
   "/docs/blocks/shader-scene",
   "/docs/blocks/docs",
+  "/docs/blocks/landing",
+  "/docs/blocks/pricing",
 ]);
 
 /** Gitignored local labs; every route under it is chromeless and never ships. */

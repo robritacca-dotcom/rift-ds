@@ -85,6 +85,30 @@
         "app/guide/page.module.css",
         "app/guide/PageFeedback.tsx"
       ]
+    },
+    {
+      "name": "landing",
+      "label": "Landing page",
+      "description": "A product's front page in bands: a hero, customer names, features, numbers, quotes, questions and a closing call to act, under a site header and footer.",
+      "route": "/landing",
+      "files": [
+        "components/blocks/MarketingShell.tsx",
+        "components/blocks/MarketingShell.module.css",
+        "app/landing/page.tsx",
+        "app/landing/page.module.css"
+      ]
+    },
+    {
+      "name": "pricing",
+      "label": "Pricing",
+      "description": "Plans side by side with a monthly or yearly choice, each price written for a locale, over a table comparing every feature.",
+      "route": "/pricing",
+      "files": [
+        "components/blocks/MarketingShell.tsx",
+        "components/blocks/MarketingShell.module.css",
+        "app/pricing/page.tsx",
+        "app/pricing/page.module.css"
+      ]
     }
   ]
 }

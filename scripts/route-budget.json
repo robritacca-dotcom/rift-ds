@@ -54,7 +54,13 @@
     "/docs/blocks/docs": {
       "css": 159000
     },
+    "/docs/blocks/landing": {
+      "css": 159000
+    },
     "/docs/blocks/planner": {
+      "css": 159000
+    },
+    "/docs/blocks/pricing": {
       "css": 159000
     },
     "/docs/blocks/settings": {

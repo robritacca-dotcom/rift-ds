@@ -1243,15 +1243,6 @@
       "pattern": "combobox"
     },
     {
-      "name": "Nav",
-      "label": "Nav",
-      "slug": "nav",
-      "description": "A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.",
-      "category": "navigation",
-      "client": false,
-      "partPatterns": [{ "pattern": "button", "part": "items" }]
-    },
-    {
       "name": "NavList",
       "label": "Nav list",
       "slug": "nav-list",

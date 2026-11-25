@@ -2,7 +2,7 @@
   "$schema": "https://rift-ds.com/schema/components-index.schema.json",
   "version": "1.37.1",
   "package": "rift-ds",
-  "count": 197,
+  "count": 196,
   "components": [
     {
       "name": "Accordion",
@@ -1183,16 +1183,6 @@
       "schemaUrl": "https://rift-ds.com/schema/components/model-picker.json",
       "docsUrl": "https://rift-ds.com/components/model-picker",
       "markdownUrl": "https://rift-ds.com/components/model-picker.md"
-    },
-    {
-      "name": "Nav",
-      "label": "Nav",
-      "slug": "nav",
-      "category": "navigation",
-      "kind": "component",
-      "schemaUrl": "https://rift-ds.com/schema/components/nav.json",
-      "docsUrl": "https://rift-ds.com/components/nav",
-      "markdownUrl": "https://rift-ds.com/components/nav.md"
     },
     {
       "name": "NavList",

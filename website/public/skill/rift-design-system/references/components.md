@@ -1355,7 +1355,7 @@ A flat world map from Natural Earth land shapes: token-coloured continents, fram
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/world-map.md
 
-## Navigation (17)
+## Navigation (16)
 
 Top bars, breadcrumbs, tabs, steppers, and pagination for moving through a product.
 
@@ -1414,15 +1414,6 @@ A persistent row of menus, like an app's File, Edit and View, with arrow keys al
 - Import: `import { Menubar } from 'rift-ds';`
 - Rendering: client component (declares 'use client')
 - Contract: https://rift-ds.com/components/menubar.md
-
-### Nav (deprecated)
-
-A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.
-
-- Deprecated: not for new code. Use `SiteHeader` instead.
-- Import: `import { Nav } from 'rift-ds';`
-- Rendering: server-renderable (no 'use client')
-- Contract: https://rift-ds.com/components/nav.md
 
 ### Nav list
 

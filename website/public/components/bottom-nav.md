@@ -23,7 +23,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | search | `BottomNavSearch` | no |  | A destination set apart from the rest, search unless its `icon` says otherwise. On iOS it is its own glass circle beside the bar; elsewhere it joins the bar as the last destination. |
 | minimized | `boolean` | no | `false` | iOS only: shrinks the bar to the selected destination alone, the way the system bar minimises while the page scrolls down. Ignored on other platforms. |
 | fixed | `boolean` | no | `false` | Pins the bar to the bottom of the viewport, above the home-indicator safe area |
-| aria-label | `string` | no | `'Tabs'` | Accessible name of the navigation landmark. Defaults to "Tabs", distinct from Nav's "Main", so a screen carrying both announces two different navs |
+| aria-label | `string` | no | `'Tabs'` | Accessible name of the navigation landmark. Defaults to "Tabs", distinct from a site header's "Primary", so a screen carrying both announces two different navs |
 | badgeLabel | `((badge: string \| number \| true) => string)` | no | `` (badge: number \| string \| true) => badge === true ? ', new' : `, ${badge} new` `` | Visually hidden text read after a destination's label when it carries a badge, given the item's `badge`. Defaults to ", new" for a dot (`true`) and ", 3 new" for a count; the leading comma and space are part of the text. |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |

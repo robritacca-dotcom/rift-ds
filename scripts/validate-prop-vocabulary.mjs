@@ -35,7 +35,7 @@
  *      literal declared as `XProps`, `XProps[]` or `Array<XProps>` (array
  *      elements and the object a `.map(() => ({ ... }))` returns included);
  *      and the entries handed to a prop typed as another component's props
- *      (ButtonGroup's and Nav's `buttons: ButtonProps[]`), followed through a
+ *      (ButtonGroup's `buttons: ButtonProps[]`), followed through a
  *      local constant. A value counts as every literal it can take, so a
  *      conditional's string branches are each checked
  *      (`state={x ? "active" : "default"}` fails on "default"). A component's
@@ -271,7 +271,7 @@ for (const [name, propsMap] of Object.entries(SANCTIONED_DEPRECATED_USES)) {
 }
 
 /*
- * A prop whose type is another component's props (ButtonGroup's and Nav's
+ * A prop whose type is another component's props (ButtonGroup's
  * `buttons: ButtonProps[]`) hands that component its entries, so an array of
  * object literals passed there is checked as that component's call sites.
  * Read from the docgen type name; a Pick<> or Omit<> of the props is not

@@ -3378,7 +3378,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "aria-label",
             "type": "string",
             "required": false,
-            "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom Nav's \"Main\", so a screen carrying both announces two different navs",
+            "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom a site header's \"Primary\", so a screen carrying both announces two\ndifferent navs",
             "defaultValue": "'Tabs'"
           },
           {
@@ -13941,61 +13941,6 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "''"
           }
         ]
-      }
-    ]
-  },
-  {
-    "kind": "component",
-    "name": "Nav",
-    "label": "Nav",
-    "slug": "nav",
-    "category": "navigation",
-    "description": "A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers.",
-    "client": false,
-    "importPath": "rift-ds/components/Nav/Nav",
-    "barrel": "main",
-    "deprecated": "Use `SiteHeader` instead.",
-    "exports": [
-      {
-        "component": "Nav",
-        "props": [
-          {
-            "name": "brandText",
-            "type": "string",
-            "required": false,
-            "description": "Brand/logo text"
-          },
-          {
-            "name": "brandIcon",
-            "type": "ReactNode",
-            "required": false,
-            "description": "Brand icon element (img, svg, etc.)"
-          },
-          {
-            "name": "buttons",
-            "type": "ButtonProps[]",
-            "required": true,
-            "description": "Navigation buttons config — passed directly to ButtonGroup",
-            "typeRefs": [
-              "ButtonGroupProps",
-              "ButtonProps"
-            ]
-          },
-          {
-            "name": "trailing",
-            "type": "ReactNode",
-            "required": false,
-            "description": "Additional elements rendered after the button group (e.g. ToggleSwitch)"
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "required": false,
-            "description": "Additional CSS classes",
-            "defaultValue": "''"
-          }
-        ],
-        "deprecated": "Use `SiteHeader` instead."
       }
     ]
   },

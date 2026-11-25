@@ -71,7 +71,8 @@ type BottomNavOwnProps = {
   fixed?: boolean;
   /**
    * Accessible name of the navigation landmark. Defaults to "Tabs", distinct
-   * from Nav's "Main", so a screen carrying both announces two different navs
+   * from a site header's "Primary", so a screen carrying both announces two
+   * different navs
    */
   'aria-label'?: string;
   /**

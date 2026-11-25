@@ -1686,16 +1686,6 @@ const previews: Record<string, () => ReactNode> = {
       </div>
     </>
   ),
-  "nav": () => (
-    <>
-      <div className={styles.previewRow} style={{ gap: "20px" }}>
-        <Image src="/logos/mark.svg" alt={BRAND_SHORT} width={24} height={24} />
-        <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-text-primary)", letterSpacing: "-0.16px" }}>
-          {BRAND_SHORT}
-        </span>
-      </div>
-    </>
-  ),
   "nav-list": () => (
     <>
       <div aria-hidden="true" style={{ width: "180px", display: "flex", flexDirection: "column", gap: "var(--gap-050)" }}>

@@ -125,7 +125,6 @@ export * from './components/MessageActions/MessageActions';
 export * from './components/MessageCard/MessageCard';
 export * from './components/Meter/Meter';
 export * from './components/ModelPicker/ModelPicker';
-export * from './components/Nav/Nav';
 export * from './components/NavList/NavList';
 export * from './components/NavStack/NavStack';
 export * from './components/NotificationCenter/NotificationCenter';

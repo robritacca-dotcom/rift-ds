@@ -299,7 +299,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "NavStackSection": {
         "kind": "interface",
-        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row: a\n   * site menu's top-level sections, read first.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
         "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
         "refs": [
           "NavStackItem"
@@ -2032,24 +2032,6 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     },
     "externalTypes": {}
   },
-  "nav": {
-    "types": {
-      "ButtonGroupProps": {
-        "kind": "component-props",
-        "component": "ButtonGroup",
-        "see": "get_component(\"ButtonGroup\")"
-      },
-      "ButtonProps": {
-        "kind": "component-props",
-        "component": "Button",
-        "see": "get_component(\"Button\")"
-      }
-    },
-    "externalTypes": {
-      "Array": "typescript",
-      "ReactNode": "react"
-    }
-  },
   "nav-list": {
     "types": {
       "LinkComponent": {
@@ -2128,7 +2110,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "NavStackSection": {
         "kind": "interface",
-        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row: a\n   * site menu's top-level sections, read first.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
         "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
         "refs": [
           "NavStackItem"
@@ -2646,7 +2628,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "NavStackSection": {
         "kind": "interface",
-        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row: a\n   * site menu's top-level sections, read first.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
+        "definition": "interface NavStackSection {\n  /** Marks the entry as a section rather than a row. */\n  type: 'section';\n  /** The heading over the rows. Leave it out for a group set apart by space alone. */\n  label?: string;\n  /** The section's rows. */\n  items: NavStackItem[];\n  /**\n   * `prominent` draws the rows in the heading-3 style on a taller row, for\n   * a menu that wants its top level louder. The site header's and the app\n   * sidebar's drawers keep the default rows.\n   * @default 'default'\n   */\n  variant?: 'default' | 'prominent';\n  /** Stable identity for the React key. Defaults to the label. */\n  id?: string;\n}",
         "description": "A group of rows under an optional heading: one level's resources or\nsettings, say, set apart from the rows above it.",
         "refs": [
           "NavStackItem"

@@ -64,6 +64,12 @@ const nextConfig: NextConfig = {
       { source: "/components/circular-button.md", destination: "/components/icon-button.md", permanent: true },
       { source: "/schema/components/circular-button.json", destination: "/schema/components/icon-button.json", permanent: true },
       { source: "/r/circular-button.json", destination: "/r/icon-button.json", permanent: true },
+      // Nav, the legacy top bar, was removed in favour of SiteHeader; its
+      // page, markdown, schema and registry item resolve to Site header's.
+      { source: "/components/nav", destination: "/components/site-header", permanent: true },
+      { source: "/components/nav.md", destination: "/components/site-header.md", permanent: true },
+      { source: "/schema/components/nav.json", destination: "/schema/components/site-header.json", permanent: true },
+      { source: "/r/nav.json", destination: "/r/site-header.json", permanent: true },
       // The journal became the release log when entries moved to 1:1 with
       // npm releases; the old URL keeps resolving.
       { source: "/project-journal", destination: "/releases", permanent: true },

@@ -718,12 +718,6 @@
       "description": "A model selector for chat surfaces, with per-model descriptions and an optional effort row."
     },
     {
-      "name": "nav",
-      "type": "registry:ui",
-      "title": "Nav",
-      "description": "A legacy plain top bar of brand and page links, superseded by the site header and kept for existing consumers."
-    },
-    {
       "name": "nav-list",
       "type": "registry:ui",
       "title": "Nav list",

@@ -238,8 +238,9 @@ interface NavStackSection {
   /** The section's rows. */
   items: NavStackItem[];
   /**
-   * `prominent` draws the rows in the heading-3 style on a taller row: a
-   * site menu's top-level sections, read first.
+   * `prominent` draws the rows in the heading-3 style on a taller row, for
+   * a menu that wants its top level louder. The site header's and the app
+   * sidebar's drawers keep the default rows.
    * @default 'default'
    */
   variant?: 'default' | 'prominent';

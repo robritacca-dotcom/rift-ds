@@ -84,7 +84,7 @@
           "type": "string",
           "typeKind": "primitive",
           "required": false,
-          "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom Nav's \"Main\", so a screen carrying both announces two different navs",
+          "description": "Accessible name of the navigation landmark. Defaults to \"Tabs\", distinct\nfrom a site header's \"Primary\", so a screen carrying both announces two\ndifferent navs",
           "default": "Tabs"
         },
         {

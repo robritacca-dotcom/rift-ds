@@ -81,7 +81,7 @@ function AgentDocs({ slug }: { slug: string }) {
         label="For agents"
         variant="tertiary"
         size="compact"
-        iconLeft="data_object"
+        iconLeft="smart_toy"
         onClick={() => setOpen(true)}
       />
       <Dialog

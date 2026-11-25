@@ -15,11 +15,32 @@
   max-width: 100%;
 }
 
-/* On a phone the links wrap, and their rows sit close: the buttons carry
-   their own height, so a row step (--gap-100) is enough between them. */
+/* On a phone the links are their icons alone, one row under the title:
+   each label stays in the button, clipped, as its accessible name, the
+   trailing arrow goes, and the box squares around the glyph as an
+   icon-only button's does. */
 @media (max-width: 768px) {
   .pageLinks {
-    row-gap: var(--gap-100);
+    gap: var(--gap-200);
+  }
+
+  .pageLinks :global(.ds-button) {
+    justify-content: center;
+    width: var(--control-height-compact);
+    padding-inline: 0;
+  }
+
+  .pageLinks :global(.ds-button__text) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .pageLinks :global(.ds-button__icon--right) {
+    display: none;
   }
 }
 

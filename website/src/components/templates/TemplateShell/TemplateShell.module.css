@@ -396,3 +396,10 @@
   padding-left: var(--padding-500); /* ds-allow(physical): equal on both sides */
   padding-right: var(--padding-500); /* ds-allow(physical): equal on both sides */
 }
+
+/* An entity's initials tile in a phone drawer row, at the row's icon size. */
+.drawerMark {
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+  font-size: var(--font-caption-size);
+}

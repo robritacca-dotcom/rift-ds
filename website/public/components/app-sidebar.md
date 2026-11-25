@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { AppSidebar } from 'rift-ds';`
 - Deep import: `import { AppSidebar } from 'rift-ds/components/AppSidebar/AppSidebar';`
 - Rendering: client component (declares 'use client')
-- Size: 9.5 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 13.7 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-sidebar
 - Schema: https://rift-ds.com/schema/components/app-sidebar.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -35,6 +35,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 | topSlot | `ReactNode` | no |  | Rendered under the logo row, above the nav; fades out while collapsed |
 | persistentTopSlot | `boolean` | no | `false` | Keeps `topSlot` shown while collapsed instead of fading it, clipped by the sweeping rail as the nav rows are, for content that draws its own collapsed form: a switcher that holds its mark on the rail's axis and fades the rest. The slot carries `data-expanded`, so its content can key off the rail's state |
 | footerSlot | `ReactNode` | no |  | Rendered above the profile block; fades out while collapsed |
+| drawerTopEntries | `NavStackEntry[]` | no |  | Rows above the sections in the phone drawer, in NavStack's shape, such as a switcher that drills into its choices. When set, the drawer shows these in `topSlot`'s place, since a dropdown has no room to open on a full-screen menu. |
+| drawerBottomEntries | `NavStackEntry[]` | no |  | Rows after the sections in the phone drawer, in NavStack's shape, such as appearance settings that drill into their choices. When set, the drawer shows these in `footerSlot`'s place. |
+| footerAction | `ReactNode` | no |  | One primary action at the rail's foot, below the profile and full width, as the site header's drawer pins its call to action: in the expanded rail and the phone drawer alike, where it stays in view while the levels above it scroll. The collapsed rail has no room for it, so it fades out with the labels and is inert. |
 | collapsedFooterSlot | `ReactNode` | no |  | Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert |
 | className | `string` | no | `''` | Additional CSS classes |
 | linkComponent | `LinkComponent` | no |  | The component its links render with, such as Next.js's `Link`, so they navigate through the app's router. Wins over a LinkProvider's; a plain `<a>` when neither is set. |
@@ -110,7 +113,7 @@ interface AppSidebarProfile {
 
 ```ts
 interface AppSidebarSection {
-  /** Optional category label above the group */
+  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */
   category?: string;
   /** Nav items in this section */
   items: AppSidebarItem[];
@@ -162,4 +165,79 @@ are; a router whose link takes `to` instead needs a one-line adapter:
 type LinkComponentProps = React.ComponentPropsWithRef<'a'> & { href: string };
 ```
 
-Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `ReactNode` (react).
+### NavStackEntry
+
+An entry on a level: a row, or a section of rows.
+
+```ts
+type NavStackEntry = NavStackItem | NavStackSection;
+```
+
+### NavStackItem
+
+```ts
+interface NavStackItem {
+  /** Row text. */
+  label: string;
+  /**
+   * Where the row links. On a row with `items` it is the level's landing
+   * page instead: the level opens with an overview row linking to it.
+   */
+  href?: string;
+  /** Stable identity, used in `path`. Defaults to `href`, then `label`. */
+  id?: string;
+  /** A second line under the label, in the secondary text style. */
+  description?: string;
+  /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
+  icon?: string | React.ReactNode;
+  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
+  badge?: string | number;
+  /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
+  value?: string;
+  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
+  title?: string;
+  /** Rows on the level this row opens. A row with items drills in instead of navigating. */
+  items?: NavStackEntry[];
+  /**
+   * Marks the row as the page being viewed, regardless of the exact match
+   * against `currentHref`, for a section that stays current on its child
+   * routes.
+   */
+  current?: boolean;
+  /** On an `onSelect` row in a list of choices, whether it is the chosen one: true carries the chosen mark, and either value sets `aria-pressed`. */
+  selected?: boolean;
+  /** The link leaves the site: it opens in a new tab and carries an outward arrow. */
+  external?: boolean;
+  /**
+   * Makes the row an action rather than a link, such as a pick or a copy.
+   * The stack stays on its level; a choice list's rows set `selected` too.
+   */
+  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+```
+
+### NavStackSection
+
+A group of rows under an optional heading: one level's resources or
+settings, say, set apart from the rows above it.
+
+```ts
+interface NavStackSection {
+  /** Marks the entry as a section rather than a row. */
+  type: 'section';
+  /** The heading over the rows. Leave it out for a group set apart by space alone. */
+  label?: string;
+  /** The section's rows. */
+  items: NavStackItem[];
+  /**
+   * `prominent` draws the rows in the heading-3 style on a taller row: a
+   * site menu's top-level sections, read first.
+   * @default 'default'
+   */
+  variant?: 'default' | 'prominent';
+  /** Stable identity for the React key. Defaults to the label. */
+  id?: string;
+}
+```
+
+Types from other packages: `ComponentPropsWithRef` (react), `ElementType` (react), `HTMLButtonElement` (typescript), `MouseEvent` (react), `ReactNode` (react).

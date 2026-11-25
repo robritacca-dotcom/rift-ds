@@ -47,13 +47,14 @@ const RESOURCES: NavStackItem[] = [
 ];
 
 /**
- * The drawer's rows after the sections: Resources drills into the links
- * off-site, and on a phone, where the bar gives up its look controls, an
- * Appearance group drills into each one's choices. Every pick applies at
- * once through the same helpers the bar's switchers use, and the stack
- * stays on its level so the reader sees the page change behind the row.
+ * The Appearance group a phone menu carries where the bar or the rail has
+ * given up its look controls: Theme, Background (when the page paints one)
+ * and Mode, each a row showing its current value that drills into its
+ * choices. Every pick applies at once through the same helpers the
+ * switchers use, and the stack stays on its level so the reader sees the
+ * page change behind the row.
  */
-export function useDrawerEntries(phone: boolean): NavStackEntry[] {
+export function useAppearanceSection({ background: withBackground = true }: { background?: boolean } = {}): NavStackEntry {
   const brand = useSyncExternalStore(subscribeBrand, readBrand, () => SERVED_THEME_ID);
   const tiles = themeTiles(useSiteTheme() === "dark" ? "dark" : "light");
   const tile = tiles.find((t) => t.value === brand) ?? tiles[0];
@@ -65,6 +66,79 @@ export function useDrawerEntries(phone: boolean): NavStackEntry[] {
     <span className={styles.drawerSwatch} style={{ backgroundColor: color, borderRadius: radius }} />
   );
 
+  const theme: NavStackItem = {
+    id: "theme",
+    label: "Theme",
+    icon: swatch(tile.color ?? "currentColor", tile.swatchRadius),
+    value: tile.label,
+    items: [
+      {
+        type: "section",
+        items: tiles.map((t) => ({
+          id: t.value,
+          label: t.label,
+          description: t.description,
+          icon: swatch(t.color ?? "currentColor", t.swatchRadius),
+          selected: t.value === brand,
+          onSelect: () => applyBrand(t.value),
+        })),
+      },
+      { type: "section", items: [{ label: "Make your own", description: "Opens the playground", href: "/playground", icon: "add" }] },
+    ],
+  };
+  const backgroundRow: NavStackItem = {
+    id: "background",
+    label: "Background",
+    icon: background.icon,
+    value: background.label,
+    items: [
+      {
+        type: "section",
+        items: SITE_BACKGROUNDS.map((entry) => ({
+          id: entry.id,
+          label: entry.label,
+          description: entry.description,
+          icon: entry.icon,
+          selected: entry.id === background.id,
+          onSelect: () => setSiteBackground(entry.id),
+        })),
+      },
+      {
+        type: "section",
+        items: [{ label: "Tune a scene", description: "Opens the playground", href: "/playground?view=shaders", icon: "tune" }],
+      },
+    ],
+  };
+  const modeRow: NavStackItem = {
+    id: "mode",
+    label: "Mode",
+    icon: mode.icon,
+    value: mode.label,
+    items: themeSegments.map((segment) => ({
+      id: segment.value,
+      label: segment.label,
+      description: segment.description,
+      icon: segment.icon,
+      selected: segment.value === setting,
+      onSelect: () => setSetting(segment.value),
+    })),
+  };
+
+  return {
+    type: "section",
+    id: "appearance",
+    label: "Appearance",
+    items: withBackground ? [theme, backgroundRow, modeRow] : [theme, modeRow],
+  };
+}
+
+/**
+ * The header drawer's rows after the sections: Resources drills into the
+ * links off-site, and on a phone, where the bar gives up its look
+ * controls, the Appearance group follows.
+ */
+export function useDrawerEntries(phone: boolean): NavStackEntry[] {
+  const appearance = useAppearanceSection();
   const resources: NavStackEntry = {
     type: "section",
     id: "resources",
@@ -72,73 +146,5 @@ export function useDrawerEntries(phone: boolean): NavStackEntry[] {
     // drawer's narrower row does not.
     items: [{ id: "resources", label: "Resources", ...(phone ? { value: "GitHub, npm, Figma" } : {}), items: RESOURCES }],
   };
-  if (!phone) return [resources];
-
-  return [
-    resources,
-    {
-      type: "section",
-      id: "appearance",
-      label: "Appearance",
-      items: [
-        {
-          id: "theme",
-          label: "Theme",
-          icon: swatch(tile.color ?? "currentColor", tile.swatchRadius),
-          value: tile.label,
-          items: [
-            {
-              type: "section",
-              items: tiles.map((t) => ({
-                id: t.value,
-                label: t.label,
-                description: t.description,
-                icon: swatch(t.color ?? "currentColor", t.swatchRadius),
-                selected: t.value === brand,
-                onSelect: () => applyBrand(t.value),
-              })),
-            },
-            { type: "section", items: [{ label: "Make your own", description: "Opens the playground", href: "/playground", icon: "add" }] },
-          ],
-        },
-        {
-          id: "background",
-          label: "Background",
-          icon: background.icon,
-          value: background.label,
-          items: [
-            {
-              type: "section",
-              items: SITE_BACKGROUNDS.map((entry) => ({
-                id: entry.id,
-                label: entry.label,
-                description: entry.description,
-                icon: entry.icon,
-                selected: entry.id === background.id,
-                onSelect: () => setSiteBackground(entry.id),
-              })),
-            },
-            {
-              type: "section",
-              items: [{ label: "Tune a scene", description: "Opens the playground", href: "/playground?view=shaders", icon: "tune" }],
-            },
-          ],
-        },
-        {
-          id: "mode",
-          label: "Mode",
-          icon: mode.icon,
-          value: mode.label,
-          items: themeSegments.map((segment) => ({
-            id: segment.value,
-            label: segment.label,
-            description: segment.description,
-            icon: segment.icon,
-            selected: segment.value === setting,
-            onSelect: () => setSetting(segment.value),
-          })),
-        },
-      ],
-    },
-  ];
+  return phone ? [resources, appearance] : [resources];
 }

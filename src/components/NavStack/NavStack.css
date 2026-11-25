@@ -252,6 +252,31 @@
   color: var(--color-text-tertiary);
 }
 
+/* A count on the count badge pair, the "how many" mark AppSidebar,
+   BottomNav and TableToolbar share; a word on a quiet pill. */
+.ds-nav-stack__badge {
+  flex-shrink: 0;
+  padding: var(--padding-050) var(--padding-200);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-bg-container-tertiary);
+  color: var(--color-text-secondary);
+  font-family: var(--font-caption-family);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-caption-line-height);
+}
+
+.ds-nav-stack__badge--count {
+  background-color: var(--color-count-badge-bg);
+  color: var(--color-count-badge-text);
+}
+
+/* On a filled row the quiet pill steps back to the page ground. */
+.ds-nav-stack__row:hover .ds-nav-stack__badge:not(.ds-nav-stack__badge--count),
+.ds-nav-stack__row--current .ds-nav-stack__badge:not(.ds-nav-stack__badge--count) {
+  background-color: var(--color-bg-page-primary);
+}
+
 .ds-nav-stack__trail {
   display: grid;
   place-items: center;

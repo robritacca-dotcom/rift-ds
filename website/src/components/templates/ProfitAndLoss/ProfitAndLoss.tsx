@@ -60,6 +60,7 @@ import styles from "./ProfitAndLoss.module.css";
 
 const NAV_SECTIONS: AppSidebarSection[] = [
   {
+    category: "Finance",
     items: [
       { key: "home", icon: "home", label: "Home" },
       { key: "transactions", icon: "receipt_long", label: "Transactions" },
@@ -86,6 +87,7 @@ const NAV_SECTIONS: AppSidebarSection[] = [
     ],
   },
   {
+    category: "Account",
     items: [
       { key: "support", icon: "headset_mic", label: "Support" },
       { key: "settings", icon: "settings", label: "Settings" },

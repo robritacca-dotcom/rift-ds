@@ -44,6 +44,7 @@ import { ProductMark } from "../ProductMark/ProductMark";
 
 const NAV_SECTIONS: AppSidebarSection[] = [
   {
+    category: "Workspace",
     items: [
       { key: "home", icon: "home", label: "Home" },
       { key: "tasks", icon: "task_alt", label: "Tasks" },
@@ -71,6 +72,7 @@ const NAV_SECTIONS: AppSidebarSection[] = [
     ],
   },
   {
+    category: "Account",
     items: [
       { key: "support", icon: "headset_mic", label: "Support" },
       { key: "settings", icon: "settings", label: "Settings" },

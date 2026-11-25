@@ -1598,6 +1598,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "description": "Rendered above the profile block; fades out while collapsed"
           },
           {
+            "name": "drawerTopEntries",
+            "type": "NavStackEntry[]",
+            "required": false,
+            "description": "Rows above the sections in the phone drawer, in NavStack's shape, such\nas a switcher that drills into its choices. When set, the drawer shows\nthese in `topSlot`'s place, since a dropdown has no room to open on a\nfull-screen menu.",
+            "typeRefs": [
+              "NavStackEntry"
+            ]
+          },
+          {
+            "name": "drawerBottomEntries",
+            "type": "NavStackEntry[]",
+            "required": false,
+            "description": "Rows after the sections in the phone drawer, in NavStack's shape, such\nas appearance settings that drill into their choices. When set, the\ndrawer shows these in `footerSlot`'s place.",
+            "typeRefs": [
+              "NavStackEntry"
+            ]
+          },
+          {
+            "name": "footerAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": "One primary action at the rail's foot, below the profile and full width,\nas the site header's drawer pins its call to action: in the expanded\nrail and the phone drawer alike, where it stays in view while the\nlevels above it scroll. The collapsed rail has no room for it, so it\nfades out with the labels and is inert."
+          },
+          {
             "name": "collapsedFooterSlot",
             "type": "ReactNode",
             "required": false,

@@ -177,7 +177,7 @@
     },
     "AppSidebarSection": {
       "kind": "interface",
-      "definition": "interface AppSidebarSection {\n  /** Optional category label above the group */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
+      "definition": "interface AppSidebarSection {\n  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */\n  category?: string;\n  /** Nav items in this section */\n  items: AppSidebarItem[];\n}",
       "refs": [
         "AppSidebarItem"
       ]
@@ -210,7 +210,7 @@
     "note": "The rail is AppSidebar, which carries the layout’s keys. The layout adds none of its own."
   },
   "size": {
-    "gzip": 9826
+    "gzip": 14112
   },
   "alternatives": [
     {

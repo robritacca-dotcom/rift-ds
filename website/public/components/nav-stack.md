@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { NavStack } from 'rift-ds';`
 - Deep import: `import { NavStack } from 'rift-ds/components/NavStack/NavStack';`
 - Rendering: client component (declares 'use client')
-- Size: 6.4 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/nav-stack
 - Schema: https://rift-ds.com/schema/components/nav-stack.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -84,8 +84,12 @@ interface NavStackItem {
   description?: string;
   /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
   icon?: string | React.ReactNode;
+  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
+  badge?: string | number;
   /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
   value?: string;
+  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
+  title?: string;
   /** Rows on the level this row opens. A row with items drills in instead of navigating. */
   items?: NavStackEntry[];
   /**

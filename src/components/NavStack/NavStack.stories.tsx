@@ -144,7 +144,7 @@ export const Controlled: Story = {
 export const WithHeader: Story = {
   render: () => (
     <SiteMenu
-      header={<Input type="search" iconLeft="search" placeholder="Search" ariaLabel="Search" />}
+      header={<Input type="search" iconLeft="search" placeholder="Search" aria-label="Search" />}
     />
   ),
 };

@@ -64,6 +64,7 @@ import { ProductMark } from "../ProductMark/ProductMark";
 
 const NAV_SECTIONS: AppSidebarSection[] = [
   {
+    category: "Console",
     items: [
       { key: "network", icon: "public", label: "Network" },
       {
@@ -91,6 +92,7 @@ const NAV_SECTIONS: AppSidebarSection[] = [
     ],
   },
   {
+    category: "Account",
     items: [
       { key: "support", icon: "headset_mic", label: "Support" },
       { key: "settings", icon: "settings", label: "Settings" },

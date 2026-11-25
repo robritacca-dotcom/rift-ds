@@ -69,6 +69,7 @@ import OrdersTable from "./OrdersTable";
 
 const NAV_SECTIONS: AppSidebarSection[] = [
   {
+    category: "Store",
     items: [
       { key: "sales", icon: "monitoring", label: "Sales" },
       {
@@ -88,6 +89,7 @@ const NAV_SECTIONS: AppSidebarSection[] = [
     ],
   },
   {
+    category: "Account",
     items: [
       { key: "support", icon: "headset_mic", label: "Support" },
       { key: "settings", icon: "settings", label: "Settings" },

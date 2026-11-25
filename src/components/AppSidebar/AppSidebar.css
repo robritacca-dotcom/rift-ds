@@ -1116,13 +1116,15 @@
     inset-inline-start: 0;
     bottom: 0;
     z-index: var(--layer-nav-rail);
-    width: 280px;
+    /* The whole screen, as the site header's phone menu: a solid sheet
+       whose levels drill in, clear of the notch and the home indicator. */
+    width: 100%;
     height: 100dvh;
-    padding: var(--padding-500) 0;
+    padding: max(var(--padding-500), env(safe-area-inset-top)) 0 max(var(--padding-500), env(safe-area-inset-bottom));
     overflow-y: auto;
     background: var(--color-bg-page-primary);
-    border-inline-end: var(--border-025) solid var(--color-bg-container-border);
-    box-shadow: var(--shadow-modal);
+    border-inline-end: none;
+    box-shadow: none;
     animation: ds-app-sidebar-slide-in var(--motion-duration-base) var(--motion-ease-standard);
   }
 }
@@ -1165,7 +1167,7 @@
     z-index: 3;
     height: 100%;
     margin: 0;
-    margin-inline-end: -280px; /* ds-allow(spacing): the drawer's own 280px width, handed back to the row */
+    margin-inline-end: -100%;
   }
 }
 
@@ -1240,6 +1242,75 @@
 
 .ds-app-sidebar__toggle:active::before {
   background-color: var(--color-action-passive-bg-active);
+}
+
+/* ============================================
+   PHONE DRAWER — the NavStack inside it
+   ============================================ */
+
+/* The stack's rows sit a padding step in from the sheet's edge, so their
+   labels land on the logo's start line. */
+.ds-app-sidebar__drawer-stack {
+  padding-inline: var(--padding-400);
+  padding-block-end: var(--padding-500);
+}
+
+/* The sheet's top keeps the logo row, the switcher and the stack a
+   section step apart, not the rail's wider gap. */
+.ds-app-sidebar--mobile-open .ds-app-sidebar__top {
+  gap: var(--gap-500);
+}
+
+.ds-app-sidebar__drawer-avatar {
+  display: grid;
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+}
+
+.ds-app-sidebar__drawer-avatar > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* In the sheet the close and the profile's more button are thumb targets. */
+.ds-app-sidebar--mobile-open .ds-app-sidebar__toggle,
+.ds-app-sidebar--mobile-open .ds-app-sidebar__profile-more {
+  width: calc(var(--control-height-default) + var(--padding-200));
+  height: calc(var(--control-height-default) + var(--padding-200));
+}
+
+/* The rail's one primary action below the profile, its button full
+   width. It fades with the labels as the rail collapses, since a 64px
+   rail has no room for it. */
+.ds-app-sidebar__footer-action {
+  padding-inline: var(--padding-400);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__footer-action {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-app-sidebar__footer-action > * {
+  width: 100%;
+}
+
+/* In the phone sheet it takes over the sheet's bottom padding, clear of
+   the home indicator. */
+.ds-app-sidebar--mobile-open .ds-app-sidebar__footer-action {
+  padding: 0 var(--padding-500) max(var(--padding-500), calc(env(safe-area-inset-bottom) + var(--padding-200)));
+  margin-block-end: calc(-1 * max(var(--padding-500), env(safe-area-inset-bottom)));
+}
+
+/* The sheet's foot (profile and action) is set off from the scrolling
+   levels by a hairline and a step of room, so a row scrolling under it
+   meets an edge, not the profile. */
+.ds-app-sidebar--mobile-open .ds-app-sidebar__bottom {
+  padding-block-start: var(--padding-400);
+  border-block-start: var(--border-025) solid var(--color-divider);
 }
 
 } /* @layer rift.components */

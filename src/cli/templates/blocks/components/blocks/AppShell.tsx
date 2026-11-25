@@ -54,6 +54,7 @@ const PRODUCT_NAME = 'Acme';
 /** The sidebar's navigation. Give an item an `href` (`'/dashboard'`) to make it a link. */
 const NAV_SECTIONS: AppSidebarSection[] = [
   {
+    category: 'Main',
     items: [
       { key: 'home', label: 'Home', icon: 'home' },
       { key: 'dashboard', label: 'Dashboard', icon: 'space_dashboard' },

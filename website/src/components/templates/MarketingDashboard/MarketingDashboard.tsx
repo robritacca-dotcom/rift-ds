@@ -57,6 +57,7 @@ import { useSampleEntities } from "../sampleEntities";
 
 const NAV_SECTIONS: AppSidebarSection[] = [
   {
+    category: "Marketing",
     items: [
       { key: "home", icon: "home", label: "Home", badge: 152 },
       { key: "marketing", icon: "campaign", label: "Marketing" },
@@ -87,6 +88,7 @@ const NAV_SECTIONS: AppSidebarSection[] = [
     ],
   },
   {
+    category: "Account",
     items: [
       { key: "support", icon: "headset_mic", label: "Support" },
       { key: "settings", icon: "settings", label: "Settings" },

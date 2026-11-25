@@ -42,6 +42,7 @@ const sampleSections = [
     ],
   },
   {
+    category: 'Account',
     items: [
       { key: 'settings', icon: 'settings', label: 'Settings' },
       { key: 'help', icon: 'help', label: 'Help & Support' },
@@ -162,6 +163,7 @@ export const WithPixelAvatars: Story = {
     activeKey: 'Northwind Trading',
     sections: [
       {
+        category: 'Main',
         items: [
           { key: 'inbox', icon: 'inbox', label: 'Inbox', badge: 3 },
           { key: 'reports', icon: 'bar_chart', label: 'Reports' },
@@ -421,6 +423,7 @@ const reportsChildren = [
 
 const threeLevelSections = [
   {
+    category: 'Main',
     items: [
       { key: 'home', icon: 'home', label: 'Home' },
       { key: 'create', icon: 'add_circle', label: 'Create' },

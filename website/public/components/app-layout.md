@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same dat
 - Import: `import { AppLayout } from 'rift-ds';`
 - Deep import: `import { AppLayout } from 'rift-ds/components/AppLayout/AppLayout';`
 - Rendering: client component (declares 'use client')
-- Size: 9.8 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 14.1 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/app-layout
 - Schema: https://rift-ds.com/schema/components/app-layout.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -98,7 +98,7 @@ interface AppSidebarProfile {
 
 ```ts
 interface AppSidebarSection {
-  /** Optional category label above the group */
+  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */
   category?: string;
   /** Nav items in this section */
   items: AppSidebarItem[];

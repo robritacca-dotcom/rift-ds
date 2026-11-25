@@ -33,6 +33,7 @@ const demoSections = [
     ],
   },
   {
+    category: "Account",
     items: [{ key: "settings", icon: "settings", label: "Settings" }],
   },
 ];

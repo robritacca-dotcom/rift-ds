@@ -10,6 +10,8 @@ import { Avatar } from '../Avatar/Avatar';
 import { PixelAvatar, distinctPixelInks } from '../PixelAvatar/PixelAvatar';
 import type { PixelInk } from '../PixelAvatar/PixelAvatar';
 import { SidebarPanel } from '../SidebarPanel/SidebarPanel';
+import { warnOnce } from '../../behaviors/devWarning';
+import { NavStack, type NavStackEntry, type NavStackItem } from '../NavStack/NavStack';
 import type { SidebarPanelItem } from '../SidebarPanel/SidebarPanel';
 import { Tooltip } from '../Tooltip/Tooltip';
 import '../../behaviors/shell.css';
@@ -72,7 +74,7 @@ export interface AppSidebarItem {
 }
 
 export interface AppSidebarSection {
-  /** Optional category label above the group */
+  /** The heading above the group. Optional for a single section; with more than one, give each its heading, so every group the gaps set apart is named */
   category?: string;
   /** Nav items in this section */
   items: AppSidebarItem[];
@@ -162,6 +164,27 @@ type AppSidebarOwnProps = {
   persistentTopSlot?: boolean;
   /** Rendered above the profile block; fades out while collapsed */
   footerSlot?: React.ReactNode;
+  /**
+   * Rows above the sections in the phone drawer, in NavStack's shape, such
+   * as a switcher that drills into its choices. When set, the drawer shows
+   * these in `topSlot`'s place, since a dropdown has no room to open on a
+   * full-screen menu.
+   */
+  drawerTopEntries?: NavStackEntry[];
+  /**
+   * Rows after the sections in the phone drawer, in NavStack's shape, such
+   * as appearance settings that drill into their choices. When set, the
+   * drawer shows these in `footerSlot`'s place.
+   */
+  drawerBottomEntries?: NavStackEntry[];
+  /**
+   * One primary action at the rail's foot, below the profile and full width,
+   * as the site header's drawer pins its call to action: in the expanded
+   * rail and the phone drawer alike, where it stays in view while the
+   * levels above it scroll. The collapsed rail has no room for it, so it
+   * fades out with the labels and is inert.
+   */
+  footerAction?: React.ReactNode;
   /** Rendered above the profile block while the rail is collapsed, in `footerSlot`'s place: the same controls at their smallest, such as a SegmentedControl's or ThemeToggle's `cycle` circle, stacked and centred on the rail's axis. The two forms share one cell and crossfade with the rail, and whichever is hidden is inert */
   collapsedFooterSlot?: React.ReactNode;
   /** Additional CSS classes */
@@ -271,6 +294,9 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   topSlot,
   persistentTopSlot = false,
   footerSlot,
+  drawerTopEntries,
+  drawerBottomEntries,
+  footerAction,
   collapsedFooterSlot,
   className = '',
   logo,
@@ -291,6 +317,11 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   const floating = layout === 'floating';
   const contained = !fixed;
   const Link = useLinkComponent(linkComponent);
+  // A gap between groups always carries a heading naming the group, in
+  // the rail and in the phone drawer alike.
+  if (sections.length > 1 && sections.some((section) => !section.category)) {
+    warnOnce('AppSidebar: with more than one section, give each a `category`, so every group the gaps set apart is named.');
+  }
 
   /* The avatar rows' inks, spread across the whole sidebar so neighbours
      differ in colour as well as shape. */
@@ -469,33 +500,13 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
   const panelVisible = Boolean(panelSource) && isPanelOpen;
   const panelId = useId();
 
-  /* In the drawer the panel's level is a second screen: a row with
-     children drills in, the back row returns. Opening the drawer lands on
-     the screen holding the current page. */
-  const [drilled, setDrilled] = useState(false);
-  const focusAfterDrill = useRef<'in' | 'out' | null>(null);
-  const openMobile = useCallback(() => {
-    setDrilled(Boolean(panelSource));
-    setMobileOpen(true);
-  }, [panelSource]);
-  useEffect(() => {
-    const target = focusAfterDrill.current;
-    focusAfterDrill.current = null;
-    if (!target || !drawerRef.current) return;
-    const selector =
-      target === 'in' ? '.ds-sidebar-panel__back' : '[data-panel-source="true"]';
-    drawerRef.current.querySelector<HTMLElement>(selector)?.focus();
-  }, [drilled]);
+  /* The phone drawer draws its own levels (a NavStack, below), so opening
+     it only flips the flag. */
+  const openMobile = useCallback(() => setMobileOpen(true), []);
 
   /** A row with children that feeds the panel was pressed. */
   const selectPanelSource = useCallback(
     (key: string) => {
-      if (mobileOpen) {
-        setPanelSourceKey(key);
-        focusAfterDrill.current = 'in';
-        setDrilled(true);
-        return;
-      }
       if (key === panelSourceKey && isPanelOpen) {
         setPanelOpen(false);
       } else {
@@ -503,7 +514,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
         setPanelOpen(true);
       }
     },
-    [mobileOpen, panelSourceKey, isPanelOpen, setPanelOpen],
+    [panelSourceKey, isPanelOpen, setPanelOpen],
   );
 
   /* Collapsed, the whole rail is an expand target (ThreadPanel's rule): a
@@ -511,6 +522,84 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
      controls and an open menu inside the rail keep their own jobs. Only
      attached while it can fire, so the host's own handler runs alone the
      rest of the time. */
+  /* The phone drawer is a NavStack: the sections as its first level, a
+     row with children drilling into them (both subNav modes), a sub-item
+     with children one level further, the panel's groups as headed
+     sections, and the host's drawer entries before and after. A row with
+     an href is a link; one without is an action that closes the drawer
+     once its onClick has run, since in an app a row is a destination. It
+     opens on the level that holds the current page. */
+  const drawerClicks = new Map<string, (() => void) | undefined>();
+  const subEntries = (subs: AppSidebarSubItem[], deeper: boolean): NavStackEntry[] => {
+    const entries: NavStackEntry[] = [];
+    for (const sub of subs) {
+      const row = subRow(sub, deeper);
+      const last = entries[entries.length - 1];
+      if (sub.group) {
+        if (last && 'type' in last && last.label === sub.group) last.items.push(row);
+        else entries.push({ type: 'section', id: `group-${sub.group}`, label: sub.group, items: [row] });
+      } else entries.push(row);
+    }
+    return entries;
+  };
+  const subRow = (sub: AppSidebarSubItem, deeper: boolean): NavStackItem => {
+    drawerClicks.set(sub.key, sub.onClick);
+    return {
+      id: sub.key,
+      label: sub.label,
+      badge: sub.badge,
+      current: sub.key === activeSubKey || sub.key === activeTertiaryKey || undefined,
+      ...(deeper && sub.children?.length
+        ? { items: subEntries(sub.children, false) }
+        : sub.href
+          ? { href: sub.href }
+          : { onSelect: () => { sub.onClick?.(); closeMobile(); } }),
+    };
+  };
+  const itemRow = (item: AppSidebarItem): NavStackItem => {
+    drawerClicks.set(item.key, item.onClick);
+    return {
+      id: item.key,
+      label: item.label,
+      badge: item.badge,
+      icon: item.pixelAvatar ? (
+        <span className={`${baseClass}__drawer-avatar`}>
+          <PixelAvatar name={avatarSeed(item)} ink={avatarInks.get(item.key)} />
+        </span>
+      ) : (
+        item.icon
+      ),
+      current: item.key === activeKey || undefined,
+      ...(item.children?.length
+        ? { items: subEntries(item.children, true) }
+        : item.href
+          ? { href: item.href }
+          : { onSelect: () => { item.onClick?.(); closeMobile(); } }),
+    };
+  };
+  const drawerStack: NavStackEntry[] = mobileOpen
+    ? [
+        ...(drawerTopEntries ?? []),
+        ...sections.map((section, si) => ({
+          type: 'section' as const,
+          id: `section-${si}`,
+          label: section.category,
+          items: section.items.map(itemRow),
+        })),
+        ...(drawerBottomEntries ?? []),
+      ]
+    : [];
+  let drawerPath: string[] = [];
+  for (const section of sections) {
+    for (const item of section.items) {
+      for (const sub of item.children ?? []) {
+        if (sub.key === activeSubKey) drawerPath = [item.key];
+        if (sub.children?.some((leaf) => leaf.key === activeTertiaryKey))
+          drawerPath = sub.children.length && !isPanelMode ? [item.key, sub.key] : [item.key];
+      }
+    }
+  }
+
   const showExpanded = isExpanded || mobileOpen;
   const expandOnClick = !showExpanded
     ? (event: React.MouseEvent<HTMLElement>) => {
@@ -610,7 +699,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
 
         {/* Consumer slot under the logo row; hidden while collapsed, it is
             inert, unless it persists and draws its own collapsed form */}
-        {topSlot && (
+        {topSlot && !(mobileOpen && drawerTopEntries) && (
           <div
             className={[
               `${baseClass}__top-slot`,
@@ -625,20 +714,19 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
           </div>
         )}
 
-        {/* Drawer drill-in: the panel's level as a second screen */}
-        {mobileOpen && drilled && panelSource ? (
-          <SidebarPanel
+        {/* The phone drawer: every level as a NavStack */}
+        {mobileOpen ? (
+          <NavStack
+            className={`${baseClass}__drawer-stack`}
+            items={drawerStack}
+            defaultPath={drawerPath}
+            rootLabel={menuLabel}
+            navLabel={menuLabel}
             linkComponent={Link}
-            key={panelSourceKey}
-            className={`${baseClass}__drill`}
-            items={panelSource.items}
-            title={panelSource.label}
-            activeKey={activeTertiaryKey ?? activeSubKey}
-            onBack={() => {
-              focusAfterDrill.current = 'out';
-              setDrilled(false);
+            onNavigate={(item) => {
+              if (item.id) drawerClicks.get(item.id)?.();
+              closeMobile();
             }}
-            backLabel={panelSource.parentLabel ?? menuLabel}
           />
         ) : (
         <div className={`${baseClass}__sections`}>
@@ -895,7 +983,7 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             condensedActions rule): the expanded slot fades out as the
             collapsed one fades in, and the hidden form is inert, so no
             invisible control stays in the tab order. */}
-        {(footerSlot || collapsedFooterSlot) && (
+        {(footerSlot || collapsedFooterSlot) && !(mobileOpen && drawerBottomEntries) && (
           <div className={`${baseClass}__footer`}>
             {footerSlot && (
               <div className={`${baseClass}__footer-slot`} inert={!showExpanded}>
@@ -938,6 +1026,11 @@ export const AppSidebar = React.forwardRef<HTMLElement, AppSidebarProps>(functio
             <span className="material-symbols-rounded">more_horiz</span>
           </button>
         </div>
+        )}
+        {footerAction && (
+          <div className={`${baseClass}__footer-action`} inert={!showExpanded}>
+            {footerAction}
+          </div>
         )}
       </div>
     </nav>

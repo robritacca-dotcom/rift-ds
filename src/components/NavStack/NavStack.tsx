@@ -22,8 +22,12 @@ export interface NavStackItem {
   description?: string;
   /** Icon before the label: a Material Symbol name (string) or a custom element, such as a swatch or a brand mark. */
   icon?: string | React.ReactNode;
+  /** A pill after the label: a count (a number, or digits with an optional `+`) on the count badge pair, a word such as "New" as a quiet pill. */
+  badge?: string | number;
   /** The setting's current value at the row's trailing end, such as "Dark", on a row that drills into a list of choices. */
   value?: string;
+  /** The heading of the level this row opens, and the name the back rows below it give that level. Defaults to `label`, for a row whose label is a value (a chosen account) rather than the level's name. */
+  title?: string;
   /** Rows on the level this row opens. A row with items drills in instead of navigating. */
   items?: NavStackEntry[];
   /**
@@ -68,6 +72,7 @@ export interface NavStackSection {
 export type NavStackEntry = NavStackItem | NavStackSection;
 
 const isSection = (entry: NavStackEntry): entry is NavStackSection => (entry as NavStackSection).type === 'section';
+const isCount = (badge: string | number) => typeof badge === 'number' || /^\d+\+?$/.test(badge);
 const idOf = (item: NavStackItem) => item.id ?? item.href ?? item.label;
 
 /** Props owned by NavStack itself — everything else falls through to the `<nav>`. */
@@ -246,6 +251,9 @@ export function NavStack({
           <span className="ds-nav-stack__label">{item.label}</span>
           {item.description && <span className="ds-nav-stack__description">{item.description}</span>}
         </span>
+        {item.badge !== undefined && (
+          <span className={`ds-nav-stack__badge${isCount(item.badge) ? ' ds-nav-stack__badge--count' : ''}`}>{item.badge}</span>
+        )}
         {item.value && <span className="ds-nav-stack__value">{item.value}</span>}
         {trailing && <span className="ds-nav-stack__trail">{trailing}</span>}
       </>
@@ -308,14 +316,14 @@ export function NavStack({
       >
         {level ? (
           <div className="ds-nav-stack__head">
-            <button type="button" className="ds-nav-stack__back" aria-label={backLabel(parent?.label ?? rootLabel)} onClick={stepOut}>
+            <button type="button" className="ds-nav-stack__back" aria-label={backLabel(parent ? parent.title ?? parent.label : rootLabel)} onClick={stepOut}>
               <span className="ds-nav-stack__back-chevron material-symbols-rounded ds-mirror-rtl" aria-hidden="true">
                 chevron_left
               </span>
-              <span>{parent?.label ?? rootLabel}</span>
+              <span>{parent ? parent.title ?? parent.label : rootLabel}</span>
             </button>
             <h2 ref={titleRef} tabIndex={-1} className="ds-nav-stack__title">
-              {level.label}
+              {level.title ?? level.label}
             </h2>
           </div>
         ) : (

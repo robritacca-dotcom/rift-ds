@@ -9,7 +9,9 @@
   inset-inline: 0;
   z-index: var(--layer-site-overlay);
   block-size: var(--border-050);
-  background-color: var(--color-core-accent-mint);
+  /* The action colour, by the owner's call: the line is the answer to a
+     press, so it wears what the press was made on. */
+  background-color: var(--color-action-primary-bg);
   transform: scaleX(0);
   transform-origin: 0 50%;
   opacity: 0;

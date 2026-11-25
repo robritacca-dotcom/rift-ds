@@ -19,7 +19,7 @@ export interface A11yCoverage {
 export const a11yCoverage: A11yCoverage = {
   "stories": 1719,
   "storiedComponents": 195,
-  "behaviourModules": 17,
+  "behaviourModules": 18,
   "modalOverlays": [
     "Alert dialog",
     "App sidebar",

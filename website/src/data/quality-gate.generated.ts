@@ -388,6 +388,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
       {
         "name": "validate-backdrop-layers",
         "text": "No backdrop blur grows past its host or has a hole masked out of it."
+      },
+      {
+        "name": "validate-shader-linking",
+        "text": "A WebGL program is linked without making the page wait for it."
       }
     ]
   },

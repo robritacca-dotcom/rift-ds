@@ -92,12 +92,19 @@
 .stageScroll {
   height: 100%;
   overflow-y: auto;
+  /* A phone draws no scrollbar, so the stage does not either: it scrolls
+     by touch, wheel and keyboard as before. */
+  scrollbar-width: none;
   display: grid;
   align-content: start;
   gap: var(--gap-300);
   padding: var(--padding-400);
   /* Room for the last tile to scroll clear of the bar. */
   padding-bottom: calc(var(--padding-1500) * 3);
+}
+
+.stageScroll::-webkit-scrollbar {
+  display: none;
 }
 
 .tile {

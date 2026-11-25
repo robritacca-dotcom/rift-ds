@@ -105,11 +105,17 @@
   max-width: 390px;
   height: 560px;
   overflow-y: auto;
+  /* A phone draws no scrollbar, so the frame does not either. */
+  scrollbar-width: none;
   padding: var(--padding-300);
   border: var(--border-025) solid var(--color-bg-container-border);
   border-radius: var(--radius-400);
   background-color: var(--color-bg-page-primary);
   box-sizing: border-box;
+}
+
+.frame::-webkit-scrollbar {
+  display: none;
 }
 
 .note {

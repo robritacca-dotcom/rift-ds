@@ -83,11 +83,18 @@
   max-width: 375px;
   height: 560px;
   overflow-y: auto;
+  /* A phone draws no scrollbar, so the stage does not either: it scrolls
+     by touch, wheel and keyboard as before. */
+  scrollbar-width: none;
   /* ds-allow(mockup): hardware-bezel radius of the phone stage, set
      dressing for the demo rather than a UI radius */
   border-radius: 40px;
   border: var(--border-025) solid var(--color-bg-container-border);
   background: var(--color-bg-page-primary);
+}
+
+.stage::-webkit-scrollbar {
+  display: none;
 }
 
 .stageContent {

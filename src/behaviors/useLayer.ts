@@ -59,8 +59,8 @@ type LayerOptions = {
    */
   getElements?: () => (HTMLElement | null | undefined)[];
   /**
-   * A layer that only listens for Escape and never owns a press: a tooltip
-   * or a hover card. (Not addEventListener's `passive`.)
+   * A layer that only listens for Escape and never owns a press: a tooltip,
+   * a hover card or a non-modal Drawer. (Not addEventListener's `passive`.)
    * The outside-press walk passes through it to the layers beneath, and it is
    * never the press owner, so a tooltip showing over an open menu (its own
    * trigger hovered, say) never keeps that menu open or a modal's backdrop

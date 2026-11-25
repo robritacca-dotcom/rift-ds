@@ -27,6 +27,13 @@ const meta = {
     dismissible: {
       control: 'boolean',
     },
+    modal: {
+      control: 'boolean',
+    },
+    layout: {
+      control: 'select',
+      options: ['flush', 'floating'],
+    },
   },
   args: {
     open: false,
@@ -207,4 +214,77 @@ export const NonDismissible: Story = {
       </p>
     </DrawerDemo>
   ),
+};
+
+/**
+ * `layout="floating"` holds the panel off every edge as a raised card. It
+ * is still modal here: the scrim, the focus trap and the scroll lock stay.
+ */
+export const Floating: Story = {
+  render: (args) => (
+    <DrawerDemo {...args} layout="floating" title="Order details" triggerLabel="Open floating">
+      <p style={{ margin: 0 }}>The same drawer, held off the edge by the shell's float gap.</p>
+    </DrawerDemo>
+  ),
+};
+
+const records = ['Northwind order', 'Contoso renewal', 'Fabrikam refund'];
+
+const NonModalDemo = () => {
+  const [record, setRecord] = useState(records[0]);
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-200)' }}>
+        {records.map((name) => (
+          <Button
+            key={name}
+            label={name}
+            variant="secondary"
+            onClick={() => {
+              setRecord(name);
+              setOpen(true);
+            }}
+          />
+        ))}
+      </div>
+      <Drawer
+        open={open}
+        onOpenChange={setOpen}
+        modal={false}
+        layout="floating"
+        size="sm"
+        title={record}
+        description="The list beside this panel stays live."
+      >
+        <p style={{ margin: 0 }}>Choose another row to follow it here, or press Escape to close.</p>
+      </Drawer>
+    </>
+  );
+};
+
+/**
+ * `modal={false}` leaves the page live beside the panel: no scrim, no focus
+ * trap, and a press outside never closes it. The detail view of a list,
+ * where the next row opens without closing the panel first.
+ */
+export const NonModal: Story = {
+  render: () => <NonModalDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Northwind order' }));
+    const panel = await within(document.body).findByRole('dialog');
+    await expect(panel).not.toHaveAttribute('aria-modal');
+    await expect(panel).toHaveAccessibleName('Northwind order');
+    // Focus moves into the panel on open.
+    await waitFor(() => expect(panel.contains(document.activeElement)).toBe(true));
+    // The page beside it is still live, and pressing it does not close the panel.
+    await userEvent.click(canvas.getByRole('button', { name: 'Contoso renewal' }));
+    await expect(panel).toHaveAccessibleName('Contoso renewal');
+    await expect(panel).toHaveAttribute('data-state', 'open');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(panel).toHaveAttribute('data-state', 'closed'));
+    // Focus the reader put on the page stays where they put it.
+    await expect(canvas.getByRole('button', { name: 'Contoso renewal' })).toHaveFocus();
+  },
 };

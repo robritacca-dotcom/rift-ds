@@ -22,10 +22,15 @@ type OpenKey =
   | "large"
   | "long"
   | "locked"
+  | "floating"
+  | "detail"
   | null;
+
+const detailRows = ["Northwind order", "Contoso renewal", "Fabrikam refund"];
 
 export default function DrawerPage() {
   const [open, setOpen] = useState<OpenKey>(null);
+  const [detailRow, setDetailRow] = useState(detailRows[0]);
   const close = () => setOpen(null);
   const isOpen = (key: OpenKey) => open === key;
 
@@ -40,12 +45,14 @@ export default function DrawerPage() {
       <div className={`${styles.introSection} animate-in animate-delay-1`}>
         <p className={styles.subDisplay}>A panel anchored to an edge</p>
         <p className={styles.introBody}>
-          Drawer shares Dialog’s modal contract (focus trap, focus restore,
-          scroll lock, ESC and scrim dismissal) but slides in from a
-          viewport edge instead of scaling from the centre. That makes it
-          the right home for filter panels, detail views, and mobile
-          navigation, where keeping the page visible behind the panel is
-          part of the point.
+          By default Drawer shares Dialog’s modal contract (focus trap,
+          focus restore, scroll lock, ESC and scrim dismissal) but slides in
+          from a viewport edge instead of scaling from the centre. That
+          makes it the right home for filter panels, detail views, and
+          mobile navigation, where keeping the page visible behind the panel
+          is part of the point. With <code>modal=&#123;false&#125;</code> it
+          gives up the scrim and the trap and rests beside a page that stays
+          live.
         </p>
       </div>
 
@@ -216,6 +223,69 @@ export default function DrawerPage() {
         >
           <p style={{ margin: 0 }}>
             The footer action is the only way to close this drawer.
+          </p>
+        </Drawer>
+      </section>
+
+      {/* Floating */}
+      <section className={styles.section}>
+        <SectionTitle title="Floating" />
+        <p className={styles.demoCaption}>
+          With <code>layout=&quot;floating&quot;</code> the panel is held off
+          every edge as a raised, rounded card, the edge of the floating app
+          shell. It is still modal unless you say otherwise.
+        </p>
+        <div className={styles.demoRow}>
+          <Button
+            label="Open floating drawer"
+            variant="secondary"
+            onClick={() => setOpen("floating")}
+          />
+        </div>
+        <Drawer
+          open={isOpen("floating")}
+          onOpenChange={close}
+          layout="floating"
+          title="Order details"
+          description="Everything about order #10482."
+        >
+          <p style={{ margin: 0 }}>The same drawer, held off the edge.</p>
+        </Drawer>
+      </section>
+
+      {/* Beside a live page */}
+      <section className={styles.section}>
+        <SectionTitle title="Beside a live page" />
+        <p className={styles.demoCaption}>
+          With <code>modal=&#123;false&#125;</code> there is no scrim and no
+          focus trap, and the page beside the panel stays live: choose
+          another row and the panel follows it. Escape and the close button
+          still close it; a press outside never does.
+        </p>
+        <div className={styles.demoRow}>
+          {detailRows.map((row) => (
+            <Button
+              key={row}
+              label={row}
+              variant="secondary"
+              onClick={() => {
+                setDetailRow(row);
+                setOpen("detail");
+              }}
+            />
+          ))}
+        </div>
+        <Drawer
+          open={isOpen("detail")}
+          onOpenChange={close}
+          modal={false}
+          layout="floating"
+          size="sm"
+          title={detailRow}
+          description="The list beside this panel stays live."
+        >
+          <p style={{ margin: 0 }}>
+            Choose another row to follow it here, or press Escape to close.
           </p>
         </Drawer>
       </section>

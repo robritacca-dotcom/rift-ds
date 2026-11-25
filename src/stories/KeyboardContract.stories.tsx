@@ -104,7 +104,7 @@ const FIXTURES: Record<string, Fixture> = {
   TimePicker: { story: 'Default' },
   Dialog: { story: 'Default', open: clickFirst('button') },
   AlertDialog: { story: 'Interactive', open: clickFirst('button') },
-  Drawer: { story: 'Default', open: clickFirst('button') },
+  'Drawer:dialog': { story: 'Default', open: clickFirst('button') },
   CommandPalette: { story: 'Default', open: clickFirst('button') },
   Lightbox: { story: 'Default', open: clickFirst('button') },
   TreeView: { story: 'Default' },

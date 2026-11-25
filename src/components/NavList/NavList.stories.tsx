@@ -69,6 +69,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Rows with a leading icon, for a short menu where a picture helps a reader find the row. */
+export const WithIcons: Story = {
+  args: {
+    items: [
+      { label: 'Overview', href: '#overview', icon: 'home' },
+      { label: 'Guides', href: '#guides', icon: 'menu_book' },
+      { label: 'Reference', href: '#reference', icon: 'code', badge: 'New' },
+      { label: 'Settings', href: '#settings', icon: 'settings' },
+    ],
+    currentHref: '#guides',
+  },
+};
+
 export const Default: Story = {
   args: {
     items: flatItems,

@@ -157,6 +157,23 @@ export default function NavListPage() {
         </div>
       </section>
 
+      {/* Icons */}
+      <section className={styles.section}>
+        <SectionTitle title="Icons" />
+        <div style={{ maxWidth: "360px" }}>
+          <NavList
+            items={[
+              { label: "Overview", href: "#icons-overview", icon: "home" },
+              { label: "Guides", href: "#icons-guides", icon: "menu_book" },
+              { label: "Reference", href: "#icons-reference", icon: "code", badge: "New" },
+              { label: "Settings", href: "#icons-settings", icon: "settings" },
+            ]}
+            currentHref="#icons-guides"
+            aria-label="Icons example"
+          />
+        </div>
+      </section>
+
       <section className={styles.section}>
         <SectionTitle title="A long sidebar" />
         <div className={styles.kitDemo}>

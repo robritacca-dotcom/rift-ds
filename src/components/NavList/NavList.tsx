@@ -31,6 +31,8 @@ export interface NavListItem {
   current?: boolean;
   /** A short tag after the label, such as "New" or "Beta", drawn as a neutral Badge. */
   badge?: string;
+  /** Icon before the label — Material Symbol name (string) or custom element (ReactNode) */
+  icon?: string | React.ReactNode;
 }
 
 /**
@@ -282,6 +284,7 @@ export const NavList = React.forwardRef<HTMLUListElement, NavListProps>(
             variant="tertiary"
             size={level === 1 && size === 'default' ? 'default' : 'compact'}
             label={item.label}
+            iconLeft={item.icon}
             iconRight={item.badge ? <Badge className={`${baseClass}__badge`} label={item.badge} variant="neutral" /> : undefined}
             href={item.href}
             linkComponent={linkComponent}

@@ -24,6 +24,25 @@
   margin: 0 calc(-1 * var(--primitive-padding-1000)) calc(-1 * var(--primitive-padding-500));
 }
 
+/* On a phone the page's head is tight: a viewport this short spends its
+   first screen on the header, the breadcrumb, the title and the page's
+   links, so the headroom under the header closes to one step and the
+   page's section rhythm (--gap-2000, which every page module spaces its
+   sections with) steps down once more, to --gap-1000. Scoped to the
+   frame, so the library's tokens and every other surface keep their
+   rhythm. The breadcrumb's pull on the title is PageBreadcrumb's. The
+   landing (data-site-landing) keeps its own air: its hero opens on the
+   theme swatches, not a breadcrumb, and was already right. */
+@media (max-width: 768px) {
+  .frame.frame:not(:has([data-site-landing])) {
+    --ds-site-layout-top-gap: var(--gap-500);
+  }
+
+  .frame:not(:has([data-site-landing])) :global(.ds-site-layout__main) {
+    --gap-2000: var(--gap-1000);
+  }
+}
+
 /* At rest the header's controls sit level with the docked chat's header row
    (its mark, name and buttons), so the two read as one line across the
    window. The bar rests one step higher than the body's top padding leaves

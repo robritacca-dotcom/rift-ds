@@ -15,6 +15,14 @@
   max-width: 100%;
 }
 
+/* On a phone the links wrap, and their rows sit close: the buttons carry
+   their own height, so a row step (--gap-100) is enough between them. */
+@media (max-width: 768px) {
+  .pageLinks {
+    row-gap: var(--gap-100);
+  }
+}
+
 /* Beside a title, the group keeps its one-line width and the title row
    wraps it underneath as a whole when the two no longer fit, rather than
    the group stacking its buttons into a column beside the title (a long

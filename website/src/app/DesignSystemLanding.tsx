@@ -1436,7 +1436,8 @@ export default function DesignSystemLanding() {
     <>
       <ExtendedBackground />
 
-      <div className={styles.page}>
+      {/* data-site-landing keeps the site frame's phone tightening (SiteFrame.module.css) off the landing, whose hero sets its own air. */}
+      <div className={styles.page} data-site-landing="">
         {/* ---------- page header (deliberately light: this is the index of
              the design-system section, so it carries the tagline, the
              section links, the accent swatches and the registry-counted

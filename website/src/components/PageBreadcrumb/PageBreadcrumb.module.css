@@ -1,3 +1,12 @@
 .wrap {
   padding-bottom: var(--primitive-gap-400);
 }
+
+/* On a phone the title sits one step under its breadcrumb rather than the
+   page modules' --primitive-gap-1000: the breadcrumb takes that step back
+   from the gap below it, so the head reads as one block. */
+@media (max-width: 768px) {
+  .wrap {
+    margin-block-end: calc(-1 * var(--gap-500));
+  }
+}

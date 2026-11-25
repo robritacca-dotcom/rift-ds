@@ -81,7 +81,7 @@ export default defineConfig({
         'behaviors/LocaleProvider': 'src/behaviors/LocaleProvider.tsx',
         'behaviors/shortcuts': 'src/behaviors/shortcuts.ts',
         'behaviors/deferComponent': 'src/behaviors/deferComponent.ts',
-        // The chat widget's four subpaths (scripts/package-manifest.mjs owns
+        // The chat widget's subpaths (scripts/package-manifest.mjs owns
         // the list; each carries its own optional peers, externalised below).
         'chat/index': 'src/chat/index.ts',
         'chat/server': 'src/chat/server.ts',
@@ -91,6 +91,7 @@ export default defineConfig({
         'format/index': 'src/format/index.ts',
         'code/index': 'src/code/index.ts',
         'code/highlight': 'src/code/highlight.ts',
+        'markdown/index': 'src/markdown/index.ts',
         'tokens/registry': 'src/tokens/registry.ts',
         'tokens/values': 'src/tokens/values.ts',
         'tokens/motion': 'src/tokens/motion.ts',

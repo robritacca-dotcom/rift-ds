@@ -1,10 +1,11 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import ReactMarkdown, { type ExtraProps } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { AgentStatus } from '../components/AgentStatus/AgentStatus';
-import { CodeBlock, type CodeBlockProps } from '../components/CodeBlock/CodeBlock';
+import type { CodeBlockProps } from '../components/CodeBlock/CodeBlock';
+import { MarkdownCode, MarkdownScrollTable, type MarkdownCodeProps } from '../markdown/mappers';
 import { ChatMessage } from '../components/ChatMessage/ChatMessage';
 import { Prose } from '../components/Prose/Prose';
 import type { PromptSuggestionsProps } from '../components/PromptSuggestions/PromptSuggestions';
@@ -68,57 +69,20 @@ function MarkdownLink({ href, children }: React.ComponentPropsWithoutRef<'a'>) {
   );
 }
 
-/* A fenced block's hast: a `pre` holding one `code` element whose text is
-   the code plus the trailing newline the markdown-to-hast step appends. */
-type HastNode = {
-  type: string;
-  value?: string;
-  tagName?: string;
-  properties?: Record<string, unknown>;
-  children?: HastNode[];
-};
-const hastText = (node: HastNode): string =>
-  node.type === 'text' ? (node.value ?? '') : (node.children ?? []).map(hastText).join('');
-
-/* Fenced code renders as the library CodeBlock, so an install command or a
-   snippet the answer hands over is one click from the clipboard. The language
-   comes from the fence's info string (```bash), when the model wrote one. */
-function MarkdownPre({ node, children, ...props }: React.ComponentPropsWithoutRef<'pre'> & ExtraProps) {
-  const { codeLabel, ...labels } = useContext(CodeBlockLabelsContext) ?? {};
-  const code = (node as HastNode | undefined)?.children?.find(
-    (child) => child.type === 'element' && child.tagName === 'code'
-  );
-  if (!code) return <pre {...props}>{children}</pre>;
-  const classes = code.properties?.className;
-  const language = (Array.isArray(classes) ? classes : [])
-    .map(String)
-    .find((name) => name.startsWith('language-'))
-    ?.slice('language-'.length);
-  return (
-    <CodeBlock
-      {...labels}
-      codeLabel={codeLabel?.(language)}
-      code={hastText(code).replace(/\n$/, '')}
-      language={language}
-    />
-  );
+/* Fenced code and tables are drawn by the shared markdown mappers
+   (rift-ds/markdown), so a reply's code is one click from the clipboard and
+   a wide table is reachable from the keyboard, the same way any other
+   rendered markdown in the system is. The code block's labels arrive by
+   context, since react-markdown calls a module-level components map. */
+function MarkdownPre(props: MarkdownCodeProps) {
+  const labels = useContext(CodeBlockLabelsContext);
+  return <MarkdownCode {...props} labels={labels} />;
 }
 
-/* A markdown table has a natural minimum width that a docked panel cannot
-   meet, and the browser resolves that by breaking headings one letter per
-   line. Prose makes the table its own scroll container so it stays readable,
-   which leaves one thing only the renderer can supply: a scrollable region
-   has to be reachable without a mouse, and Prose styles markup it does not
-   render, so it cannot put `tabIndex` on the element itself. Never swap this
-   for `role="region"` on the table: that replaces the table semantics. */
 const markdownComponents = {
   a: MarkdownLink,
   pre: MarkdownPre,
-  table: ({ children, ...props }: React.ComponentPropsWithoutRef<'table'>) => (
-    <table tabIndex={0} {...props}>
-      {children}
-    </table>
-  ),
+  table: MarkdownScrollTable,
 };
 
 /* One component for the assistant turn in both states. The live turn and

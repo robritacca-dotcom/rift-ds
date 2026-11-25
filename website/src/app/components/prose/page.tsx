@@ -182,9 +182,10 @@ export function Dashboard() {
               A markdown table can be wider than the space it lands in. Rather
               than squeeze the columns until the headings break apart, the
               table becomes its own scroll container and keeps its natural
-              width. Prose styles markup it does not render, so it cannot add a
-              wrapping element: add <code>{`tabIndex={0}`}</code> to the table when
-              the scroll needs to be reachable by keyboard alone.
+              width. Prose styles markup it does not render, so it cannot make
+              the table focusable: map it to <code>MarkdownScrollTable</code> from{" "}
+              <code>rift-ds/markdown</code>, or add <code>{`tabIndex={0}`}</code> to a table
+              you write by hand, when the scroll needs to be reachable by keyboard alone.
             </p>
             <div className={styles.narrowColumn}>
               <Prose size="sm" data-anchor-ignore>

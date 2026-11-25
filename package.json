@@ -59,6 +59,7 @@
     "./format": "./src/format/index.ts",
     "./code": "./src/code/index.ts",
     "./code/highlight": "./src/code/highlight.ts",
+    "./markdown": "./src/markdown/index.ts",
     "./tokens/registry": "./src/tokens/registry.ts",
     "./tokens/values": "./src/tokens/values.ts",
     "./tokens/motion": "./src/tokens/motion.ts",
@@ -70,7 +71,8 @@
     "./package.json": "./package.json",
     "./components/DatePicker/MonthGrid": null,
     "./components/Widget/WidgetDisclosure": null,
-    "./components/DescriptionList/DescriptionListCopy": null
+    "./components/DescriptionList/DescriptionListCopy": null,
+    "./components/Chart/ActiveReporter": null
   },
   "scripts": {
     "validate-registry": "node scripts/run-chain.mjs",

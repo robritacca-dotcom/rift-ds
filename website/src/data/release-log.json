@@ -1,6 +1,17 @@
 {
   "releases": [
     {
+      "version": "1.37.0",
+      "date": "2026-11-24",
+      "title": "A drawer beside a live page, rich option rows, charts that report the cursor",
+      "body": [
+        "Drawer takes `modal={false}`, which leaves the page live beside the panel for a detail view that follows a list: no scrim, no focus trap, and a press outside never closes it. `layout=\"floating\"` holds the panel off every edge as a raised card. Both default to what Drawer did before.",
+        "Dropdown and Combobox options can carry a second line, a leading mark and a trailing value, and the five charts drawn over a shared x-axis take `onActiveChange`, which reports the row under the pointer or the keyboard cursor so a headline can follow it. Instructions takes rich content in a step, a NavList item takes an icon, and CommandPalette highlights the typed match.",
+        "`rift-ds/markdown` is a new subpath: `MarkdownCode`, `MarkdownScrollTable` and `markdownComponents` map a markdown renderer’s code blocks and tables onto the system, with no renderer and no dependencies of its own. Two more blocks, `landing` and `pricing`, scaffold from the init bin.",
+        "Light mode changes in five themes: Zest, Signal, Forest and Blueprint put the page on white, Ember and Signal deepen their action fills until a white label holds AA, and a night ShaderScene is laid onto a light page as ink. Nothing published was removed."
+      ]
+    },
+    {
       "version": "1.36.0",
       "date": "2026-11-23",
       "title": "Your CSS wins, buttons submit, switches start off",

@@ -10,6 +10,7 @@ import { useMounted } from '../../behaviors/useMounted';
 import { useLayer } from '../../behaviors/useLayer';
 import { useFocusScope } from '../../behaviors/useFocusScope';
 import { useScrollLock } from '../../behaviors/useScrollLock';
+import { matchParts } from '../../behaviors/matchParts';
 import { useShortcut, type Shortcut, type ShortcutKeyLabels } from '../../behaviors/shortcuts';
 import { mirrorClass } from '../../behaviors/direction';
 
@@ -104,9 +105,23 @@ export interface CommandPaletteProps
 /** The palette's default toggle: ⌘K and Ctrl+K both, on every platform. */
 const DEFAULT_HOTKEY_KEYS: Shortcut[] = ['meta+k', 'ctrl+k'];
 
+/* The part of a row's text that holds what was typed, drawn stronger. */
+const renderMatch = (text: string, query: string) => {
+  const parts = matchParts(text, query);
+  if (!parts) return text;
+  return (
+    <>
+      {parts[0]}
+      <span className="ds-command-palette__match">{parts[1]}</span>
+      {parts[2]}
+    </>
+  );
+};
+
 /**
  * CommandPalette component — a modal Cmd+K launcher that searches a grouped
- * command list. Filtering matches labels, descriptions, and keywords; the
+ * command list. Filtering matches labels, descriptions, and keywords, and the
+ * part of a row's text that holds what was typed is drawn stronger; the
  * arrow keys move a highlight that stays in view, and Enter runs the command.
  */
 export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPaletteProps>(({
@@ -274,7 +289,14 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
     ? `${generatedId}-command-${activeCommand.id}`
     : undefined;
 
-  const classes = [baseClass, open ? `${baseClass}--open` : '', className]
+  const classes = [
+    baseClass,
+    open ? `${baseClass}--open` : '',
+    // Under manualFiltering the host chose the rows by its own test, so a
+    // row may not hold the query at all: the labels keep full strength.
+    !manualFiltering && query.trim() !== '' ? `${baseClass}--filtered` : '',
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
 
@@ -398,10 +420,10 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
                       )}
 
                       <span className={`${baseClass}__command-text`}>
-                        <span className={`${baseClass}__command-label`}>{command.label}</span>
+                        <span className={`${baseClass}__command-label`}>{renderMatch(command.label, query)}</span>
                         {command.description && (
                           <span className={`${baseClass}__command-description`}>
-                            {command.description}
+                            {renderMatch(command.description, query)}
                           </span>
                         )}
                       </span>

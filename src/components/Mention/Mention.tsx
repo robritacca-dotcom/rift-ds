@@ -6,6 +6,7 @@ import './Mention.css';
 import { mentionListboxId, mentionOptionId, splitMentions } from './mentions';
 import type { MentionItem, MentionSource } from './mentions';
 import { mirrorClass } from '../../behaviors/direction';
+import { matchParts } from '../../behaviors/matchParts';
 
 /* The data shapes and helpers live in a React-free module with a subpath
    of its own (`rift-ds/components/Mention/mentions`), so a Server Component
@@ -133,14 +134,13 @@ export interface MentionMenuProps
     Omit<React.ComponentPropsWithoutRef<'div'>, keyof MentionMenuOwnProps | 'children'> {}
 
 const renderLabel = (label: string, query: string) => {
-  const needle = query.trim().toLowerCase();
-  const at = needle === '' ? -1 : label.toLowerCase().indexOf(needle);
-  if (at < 0) return label;
+  const parts = matchParts(label, query);
+  if (!parts) return label;
   return (
     <>
-      {label.slice(0, at)}
-      <span className="ds-mention-menu__match">{label.slice(at, at + needle.length)}</span>
-      {label.slice(at + needle.length)}
+      {parts[0]}
+      <span className="ds-mention-menu__match">{parts[1]}</span>
+      {parts[2]}
     </>
   );
 };

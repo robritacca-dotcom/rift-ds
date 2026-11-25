@@ -250,6 +250,32 @@
   white-space: nowrap;
 }
 
+/* While a query narrows the list, the typed part of each row's text holds
+   full strength and the labels step back, the way a mention menu marks a
+   match, so a row whose name holds the query reads strongest. Colour
+   carries it as well as weight, because a theme may set both paragraph
+   weights the same. A destructive row keeps its own colour. */
+.ds-command-palette--filtered .ds-command-palette__command-label {
+  color: var(--color-text-secondary);
+}
+
+.ds-command-palette__match {
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  color: var(--color-text-primary);
+}
+
+.ds-command-palette__command-label .ds-command-palette__match {
+  font-weight: inherit;
+}
+
+.ds-command-palette--filtered .ds-command-palette__command--destructive .ds-command-palette__command-label {
+  color: var(--color-action-destructive-text-secondary);
+}
+
+.ds-command-palette__command--destructive .ds-command-palette__command-label .ds-command-palette__match {
+  color: inherit;
+}
+
 /* ============================================
    SHORTCUT KEYS
    ============================================ */

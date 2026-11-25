@@ -601,9 +601,40 @@
 /* The nav sections share one wrapper so the drawer's drill-in can swap
    them for the panel's level as a unit. */
 .ds-app-sidebar__sections {
+  --ds-app-sidebar-section-gap: var(--gap-1000);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-1000);
+  gap: var(--ds-app-sidebar-section-gap);
+  transition: gap var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+/* Collapsed, the headings that name the groups are gone, so the space
+   they sat in closes up and a short divider on the icons' axis marks
+   each break instead. The divider crossfades with the heading as the
+   rail expands, and the gap glides with the rail's own motion. */
+.ds-app-sidebar:not(.ds-app-sidebar--expanded) .ds-app-sidebar__sections {
+  --ds-app-sidebar-section-gap: var(--gap-500);
+}
+
+.ds-app-sidebar__sections > .ds-app-sidebar__nav {
+  position: relative;
+}
+
+.ds-app-sidebar__sections > .ds-app-sidebar__nav + .ds-app-sidebar__nav::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(var(--ds-app-sidebar-section-gap) / -2);
+  inset-inline: 0;
+  inline-size: var(--icon-size-600);
+  margin-inline: auto;
+  border-block-start: var(--border-025) solid var(--color-divider);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.ds-app-sidebar--expanded .ds-app-sidebar__sections > .ds-app-sidebar__nav + .ds-app-sidebar__nav::before {
+  opacity: 0;
 }
 
 /* ============================================

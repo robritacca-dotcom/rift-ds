@@ -364,6 +364,11 @@
   font-family: var(--font-paragraph-sm-family);
   font-size: var(--font-paragraph-sm-size);
   font-weight: var(--font-paragraph-sm-weight);
+  /* Centred on the row with the label and the chevron, in panel mode too,
+     where the row aligns its children to the top for the caption below the
+     icon, at a line height of its own rather than a `normal` one. */
+  align-self: center;
+  line-height: var(--font-paragraph-sm-line-height);
   color: var(--color-text-tertiary);
   opacity: 0;
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import PageBreadcrumb from "@/components/PageBreadcrumb/PageBreadcrumb";
 import { Combobox } from "rift-ds/components/Combobox/Combobox";
+import { Avatar } from "rift-ds/components/Avatar/Avatar";
 import { SectionTitle } from "rift-ds/components/SectionTitle/SectionTitle";
 import PageLinks from "../../../components/PageLinks/PageLinks";
 import styles from "./page.module.css";
@@ -33,6 +34,13 @@ const teammates = [
   { label: "Katherine Johnson", value: "katherine", description: "Research" },
   { label: "Mary Jackson", value: "mary", description: "Research" },
   { label: "Radia Perlman", value: "radia", description: "Networking" },
+];
+
+const assignees = [
+  { label: "Ada Lovelace", value: "ada", description: "Engineering", icon: <Avatar name="Ada Lovelace" size="sm" />, trailing: "3 open" },
+  { label: "Grace Hopper", value: "grace", description: "Engineering", icon: <Avatar name="Grace Hopper" size="sm" />, trailing: "1 open" },
+  { label: "Katherine Johnson", value: "katherine", description: "Research", icon: <Avatar name="Katherine Johnson" size="sm" />, trailing: "5 open" },
+  { label: "Shared queue", value: "queue", description: "Anyone on the team", icon: "inbox", trailing: "12 open" },
 ];
 
 const regionGroups = [
@@ -69,6 +77,7 @@ export default function ComboboxPage() {
   const [multi, setMulti] = useState<string | string[]>(["ca", "jp"]);
   const [grouped, setGrouped] = useState<string | string[]>("");
   const [described, setDescribed] = useState<string | string[]>("");
+  const [rich, setRich] = useState<string | string[]>("");
   const [compact, setCompact] = useState<string | string[]>("");
   const [errored, setErrored] = useState<string | string[]>("");
 
@@ -175,6 +184,24 @@ export default function ComboboxPage() {
             options={teammates}
             value={described}
             onValueChange={setDescribed}
+          />
+        </div>
+      </section>
+
+      {/* Rich options */}
+      <section className={styles.section}>
+        <SectionTitle title="Rich options" />
+        <div className={styles.demoBox}>
+          <p className={styles.demoCaption}>
+            A leading mark and a trailing value beside the description.
+            Filtering still matches the label alone.
+          </p>
+          <Combobox
+            label="Assign to"
+            placeholder="Search teammates…"
+            options={assignees}
+            value={rich}
+            onValueChange={setRich}
           />
         </div>
       </section>

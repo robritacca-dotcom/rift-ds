@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { Combobox } from './Combobox';
+import { Avatar } from '../Avatar/Avatar';
 
 const countries = [
   { label: 'Australia', value: 'au' },
@@ -238,4 +239,23 @@ export const WithErrorText: Story = {
     await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-invalid', 'true');
     await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
   },
+};
+
+/**
+ * A rich row: a leading mark (an icon name or any element, here an Avatar),
+ * the description as the second line, and a value at the row's end.
+ * Filtering still matches on the label alone.
+ */
+export const RichOptions: Story = {
+  args: {
+    label: 'Assign to',
+    placeholder: 'Search teammates…',
+    options: [
+      { label: 'Ada Lovelace', value: 'ada', description: 'Engineering', icon: <Avatar name="Ada Lovelace" size="sm" />, trailing: '3 open' },
+      { label: 'Grace Hopper', value: 'grace', description: 'Engineering', icon: <Avatar name="Grace Hopper" size="sm" />, trailing: '1 open' },
+      { label: 'Katherine Johnson', value: 'katherine', description: 'Research', icon: <Avatar name="Katherine Johnson" size="sm" />, trailing: '5 open' },
+      { label: 'Shared queue', value: 'queue', description: 'Anyone on the team', icon: 'inbox', trailing: '12 open' },
+    ],
+  },
+  render: SingleTemplate,
 };

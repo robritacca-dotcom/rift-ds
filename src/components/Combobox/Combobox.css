@@ -257,6 +257,32 @@
   flex-direction: column;
   gap: var(--gap-050);
   min-width: 0;
+  flex: 1;
+}
+
+/* The rich row, shared with Dropdown's: a leading mark, and a secondary
+   value at the row's end before the chosen mark. The icon side takes the
+   padding step below the text side (Button's rule, design.md). */
+.ds-combobox__option-icon {
+  --icon-size: var(--icon-size-500);
+  color: var(--color-icon-primary);
+  flex-shrink: 0;
+}
+
+.ds-combobox__option:has(.ds-combobox__option-icon) {
+  padding-inline-start: var(--padding-200);
+}
+
+.ds-combobox__option-trailing {
+  flex-shrink: 0;
+  margin-inline-start: var(--gap-200);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
 }
 
 .ds-combobox__option-label {

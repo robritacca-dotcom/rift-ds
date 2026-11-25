@@ -153,6 +153,25 @@ export default function DropdownPage() {
         </div>
       </section>
 
+      {/* Rich options */}
+      <section className={styles.section}>
+        <SectionTitle title="Rich options" />
+        <div className={styles.variantRow}>
+          <div className={styles.variantItem}>
+            <Dropdown
+              label="Workspace"
+              defaultValue="design"
+              options={[
+                { label: "Design", value: "design", icon: "palette", description: "Lisbon", trailing: "12 members" },
+                { label: "Engineering", value: "engineering", icon: "terminal", description: "Toronto", trailing: "48 members" },
+                { label: "Research", value: "research", icon: "science", description: "Nairobi", trailing: "7 members" },
+              ]}
+              helperText="A second line and a trailing value show in the list only."
+            />
+          </div>
+        </div>
+      </section>
+
       {/* States */}
       <section className={styles.section}>
         <SectionTitle title="States" />

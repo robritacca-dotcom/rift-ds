@@ -226,6 +226,46 @@
   align-items: center;
   gap: var(--gap-100);
   min-width: 0;
+  flex: 1;
+}
+
+/* The rich row, shared with Combobox's: a label over a tertiary second
+   line, and a secondary value at the row's end before the chosen mark. A
+   row with a second line gives its leading mark the wider gap. */
+.ds-dropdown__option-content:has(.ds-dropdown__option-text) {
+  gap: var(--gap-200);
+}
+
+.ds-dropdown__option-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-050);
+  min-width: 0;
+}
+
+.ds-dropdown__option-description {
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+.ds-dropdown__option-trailing {
+  flex-shrink: 0;
+  margin-inline-start: var(--gap-400);
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+
+.ds-dropdown__option-trailing + .ds-chosen-mark {
+  margin-inline-start: var(--gap-200);
 }
 
 .ds-dropdown__option-icon {

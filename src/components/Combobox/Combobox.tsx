@@ -7,6 +7,7 @@ import { useAnchoredPosition } from '../../behaviors/useAnchoredPosition';
 import { Field } from '../Field/Field';
 import './Combobox.css';
 import '../../fonts/material-symbols.css';
+import { mirrorClass } from '../../behaviors/direction';
 
 export interface ComboboxOption {
   /** Display label — also the text matched when filtering */
@@ -15,6 +16,16 @@ export interface ComboboxOption {
   value: string;
   /** Optional secondary line shown under the label */
   description?: string;
+  /**
+   * Mark drawn before the label in the option row: a Material Symbol name
+   * (string) or a custom element (ReactNode) such as an Avatar or a logo.
+   */
+  icon?: string | React.ReactNode;
+  /**
+   * Content at the end of the option row, before the chosen mark: a balance,
+   * a count, a Badge. Shown in the row only, never in the field.
+   */
+  trailing?: React.ReactNode;
   /** Whether this option is disabled */
   disabled?: boolean;
 }
@@ -410,12 +421,28 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(({
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => handleSelect(option)}
       >
+        {option.icon &&
+          (typeof option.icon === 'string' ? (
+            <span
+              className={`${baseClass}__option-icon material-symbols-rounded ${mirrorClass(option.icon)}`}
+              aria-hidden="true"
+            >
+              {option.icon}
+            </span>
+          ) : (
+            <span className={`${baseClass}__option-icon`} aria-hidden="true">
+              {option.icon}
+            </span>
+          ))}
         <span className={`${baseClass}__option-text`}>
           <span className={`${baseClass}__option-label`}>{option.label}</span>
           {option.description && (
             <span className={`${baseClass}__option-description`}>{option.description}</span>
           )}
         </span>
+        {option.trailing != null && option.trailing !== false && (
+          <span className={`${baseClass}__option-trailing`}>{option.trailing}</span>
+        )}
         {isSelected && (
           <ChosenMark />
         )}

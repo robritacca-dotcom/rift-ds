@@ -28,6 +28,13 @@ export interface DropdownOption {
    * or custom element (ReactNode).
    */
   icon?: string | React.ReactNode;
+  /** A second line under the label, in the option row only: an account number, a person's email. */
+  description?: string;
+  /**
+   * Content at the end of the option row, before the chosen mark: a balance,
+   * a count, a Badge. Shown in the row only, never on the closed trigger.
+   */
+  trailing?: React.ReactNode;
   /** Whether this option is disabled */
   disabled?: boolean;
 }
@@ -334,6 +341,40 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       }
     }, [focusedIndex, isOpen, inputId]);
 
+    /** What an option row holds: the leading mark, the label over its
+        optional second line, the trailing value, and the chosen mark. */
+    const renderOptionBody = (option: DropdownOption) => (
+      <>
+        <span className={`${baseClass}__option-content`}>
+          {option.icon &&
+            (typeof option.icon === 'string' ? (
+              <span
+                className={`${baseClass}__option-icon material-symbols-rounded ${mirrorClass(option.icon)}`}
+                aria-hidden="true"
+              >
+                {option.icon}
+              </span>
+            ) : (
+              <span className={`${baseClass}__option-icon`} aria-hidden="true">
+                {option.icon}
+              </span>
+            ))}
+          {option.description ? (
+            <span className={`${baseClass}__option-text`}>
+              <span>{option.label}</span>
+              <span className={`${baseClass}__option-description`}>{option.description}</span>
+            </span>
+          ) : (
+            option.label
+          )}
+        </span>
+        {option.trailing != null && option.trailing !== false && (
+          <span className={`${baseClass}__option-trailing`}>{option.trailing}</span>
+        )}
+        {option.value === value && <ChosenMark />}
+      </>
+    );
+
     const activeOptionId =
       isOpen && focusedIndex >= 0 && flatOptions[focusedIndex]
         ? `${inputId}-option-${focusedIndex}`
@@ -447,28 +488,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                               aria-disabled={option.disabled}
                               onClick={() => !option.disabled && handleSelect(option.value)}
                             >
-                              <span className={`${baseClass}__option-content`}>
-                                {option.icon &&
-                                  (typeof option.icon === 'string' ? (
-                                    <span
-                                      className={`${baseClass}__option-icon material-symbols-rounded ${mirrorClass(option.icon)}`}
-                                      aria-hidden="true"
-                                    >
-                                      {option.icon}
-                                    </span>
-                                  ) : (
-                                    <span
-                                      className={`${baseClass}__option-icon`}
-                                      aria-hidden="true"
-                                    >
-                                      {option.icon}
-                                    </span>
-                                  ))}
-                                {option.label}
-                              </span>
-                              {option.value === value && (
-                                <ChosenMark />
-                              )}
+                              {renderOptionBody(option)}
                             </li>
                           );
                         })}
@@ -497,25 +517,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                     aria-disabled={option.disabled}
                     onClick={() => !option.disabled && handleSelect(option.value)}
                   >
-                    <span className={`${baseClass}__option-content`}>
-                      {option.icon &&
-                        (typeof option.icon === 'string' ? (
-                          <span
-                            className={`${baseClass}__option-icon material-symbols-rounded ${mirrorClass(option.icon)}`}
-                            aria-hidden="true"
-                          >
-                            {option.icon}
-                          </span>
-                        ) : (
-                          <span className={`${baseClass}__option-icon`} aria-hidden="true">
-                            {option.icon}
-                          </span>
-                        ))}
-                      {option.label}
-                    </span>
-                    {option.value === value && (
-                      <ChosenMark />
-                    )}
+                    {renderOptionBody(option)}
                   </li>
                 ))}
           </ul>

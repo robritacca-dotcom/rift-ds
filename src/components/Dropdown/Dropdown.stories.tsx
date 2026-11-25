@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { Dropdown } from './Dropdown';
 
 const sampleOptions = [
@@ -246,5 +246,32 @@ export const WithErrorText: Story = {
     const control = canvas.getByLabelText('Theme');
     await expect(control).toHaveAttribute('aria-invalid', 'true');
     await expect(canvas.getByText(ERROR_MESSAGE)).toBeVisible();
+  },
+};
+
+/**
+ * A rich row: a leading mark, a second line under the label, and a value at
+ * the row's end before the chosen mark. The closed trigger shows the mark
+ * and the label only, and typing still finds an option by its label.
+ */
+export const RichOptions: Story = {
+  args: {
+    label: 'Workspace',
+    placeholder: 'Choose a workspace',
+    defaultOpen: true,
+    defaultValue: 'design',
+    options: [
+      { label: 'Design', value: 'design', icon: 'palette', description: 'Lisbon', trailing: '12 members' },
+      { label: 'Engineering', value: 'engineering', icon: 'terminal', description: 'Toronto', trailing: '48 members' },
+      { label: 'Research', value: 'research', icon: 'science', description: 'Nairobi', trailing: '7 members', disabled: true },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const options = within(canvasElement).getAllByRole('option');
+    await expect(options[1]).toHaveTextContent('Engineering');
+    await expect(options[1]).toHaveTextContent('Toronto');
+    await expect(options[1]).toHaveTextContent('48 members');
+    // The trigger keeps to the mark and the label.
+    await expect(within(canvasElement).getByRole('combobox')).not.toHaveTextContent('Lisbon');
   },
 };

@@ -72,7 +72,7 @@ type NavListOwnProps = {
   /** Navigation tree to render: rows, and at the top level, sections of rows. */
   items: NavListEntry[];
   /**
-   * Row density. `default` is the drawer's 40px top row; `compact` sets
+   * Row density. `default` sets every row on the default control height; `compact` sets
    * every row on the 32px compact control height, for a long sidebar of
    * pages (a documentation site's hundred entries).
    */
@@ -125,8 +125,9 @@ const MAX_DEPTH = 3;
  *
  * Every row is a real link, rendered as a tertiary Button so shape, sizing,
  * and interaction states stay identical to every other button in the system.
- * An item with children gets a separate chevron toggle — tapping the label
- * navigates, tapping the chevron expands — and collapsed sublists are `inert`,
+ * An item with children gets a separate chevron toggle, drawn as a glyph
+ * inside the row's one full-width shape: tapping the label navigates, tapping
+ * the chevron expands. Collapsed sublists are `inert`,
  * so they leave the tab order and the accessibility tree. Expansion is
  * uncontrolled by default (`defaultExpandedIds`) or controlled via
  * `expandedIds` + `onExpandedChange`.

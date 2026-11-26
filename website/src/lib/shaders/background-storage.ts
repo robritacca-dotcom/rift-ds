@@ -154,9 +154,12 @@ export type SiteBackgroundEntry = {
    or a title is read against it: at full strength the cloud on a dark
    page outshines the type, and a deep sky on a light page costs dark type
    its contrast. The fire itself is left whole, since the drama is the
-   point of the pick. Home: the scene's own low sun and horizon, so the
-   hot cloud and the burning strip gather low in the band, under the
-   headline and the calls to action rather than behind them. Page: the
+   point of the pick. Home: the scene's own low sun and horizon, the
+   horizon just under the band's foot, so the hot cloud and the glow of
+   the burning strip gather low in the band, under the headline and the
+   calls to action rather than behind them. The plane's height is
+   measured from the horizon, so it is set high enough to keep the
+   corridor below it was fitted to. Page: the
    band is short and the content starts under it, so the horizon is
    dropped out of the band, which a bottom fade would wash out anyway, and
    the sun is raised to the middle of the band and moved out to the side,

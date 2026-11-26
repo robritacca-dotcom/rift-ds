@@ -43,6 +43,9 @@
     "/components/globe": {
       "html": 51000
     },
+    "/components/site-header": {
+      "html": 36000
+    },
     "/components/table-toolbar": {
       "html": 40000,
       "css": 145000

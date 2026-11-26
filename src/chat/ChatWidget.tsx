@@ -148,18 +148,16 @@ export interface ChatWidgetProps {
   /** Narrow insets for phone-width hosts. */
   compact?: boolean;
   /**
-   * Seat the widget as a page in one of the three app shell modes, the ones
-   * AppLayout draws, for a host where the chat is the page (a chat home)
-   * rather than a panel over one. `flush` runs the history rail on the
-   * shell colour behind a hairline with the conversation crisp beside it;
-   * `floating` lifts the rail into a glass card off the edges; `inset` runs
-   * the rail flush on the shell colour and seats the conversation and each
-   * trailing panel in raised surfaces. Left out, the widget draws no shell
-   * of its own and takes its host's ground, as a docked or floating panel
-   * does. A widget narrower than the inline rail's 720px threshold has no
-   * room for a raised mode, so floating and inset lay out flush on the
-   * solid backdrop there, and below the mobile breakpoint every mode gives
-   * way to the plain full-screen chat.
+   * Seat the widget as a page in one of AppLayout's three shell modes, for a
+   * host where the chat is the page (a chat home), not a panel over one.
+   * `flush` runs the history rail on the shell colour behind a hairline
+   * beside the conversation; `floating` lifts the rail into a glass card;
+   * `inset` runs the rail flush and seats the conversation
+   * and each trailing panel in raised surfaces. Left out, the widget draws
+   * no shell and takes its host's ground, as a docked or floating panel
+   * does. Under the inline rail's 720px threshold floating and inset lay
+   * out flush on the solid backdrop, and below the mobile breakpoint every
+   * mode gives way to the plain full-screen chat.
    */
   layout?: ChatLayout;
   /**
@@ -211,6 +209,8 @@ export interface ChatWidgetProps {
   composerActions?: ReactNode;
   /** The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never. */
   composerGlow?: boolean | 'streaming';
+  /** Composer's `glass`, for a chat on a picture or shader. Off by default. */
+  composerGlass?: boolean;
   /** The models the picker offers. The pick rides on each send as a wire value; the server resolves it. Omit for no picker. */
   models?: ChatModelOption[];
   /** The picker's selection before the server has reported its default. Defaults to the first model. */
@@ -476,6 +476,7 @@ export function ChatWidget({
   reasoningLabel,
   awaitingApprovalLabel,
   composerGlow = 'streaming',
+  composerGlass = false,
   tabsProps,
   composerLabels,
   attachmentDropZoneLabels,
@@ -1316,6 +1317,7 @@ export function ChatWidget({
             inline={composerHasActions ? false : 'chat'}
             /* By default the ring is for the agent at work: focus keeps the plain border, so the reply's live status holds the eye. */
             aiGlow={composerGlow}
+            glass={composerGlass}
             value={draft}
             onValueChange={setDraft}
             onSubmit={handleSubmit}

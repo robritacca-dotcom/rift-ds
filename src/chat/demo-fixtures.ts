@@ -116,12 +116,13 @@ export const DEMO_THREADS: ThreadsOptions = {
 };
 
 /** What sits under the composer on the demo's welcome screen. */
-export type DemoWelcomeVariant = 'starters' | 'links' | 'cards' | 'dashboard' | 'none';
+export type DemoWelcomeVariant = 'starters' | 'links' | 'cards' | 'examples' | 'dashboard' | 'none';
 
 export const DEMO_WELCOME_OPTIONS: { value: DemoWelcomeVariant; label: string }[] = [
   { value: 'starters', label: 'Starters' },
   { value: 'links', label: 'Links' },
   { value: 'cards', label: 'Cards' },
+  { value: 'examples', label: 'Examples' },
   { value: 'dashboard', label: 'Dashboard' },
   { value: 'none', label: 'None' },
 ];

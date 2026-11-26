@@ -96,6 +96,14 @@
           "default": "streaming"
         },
         {
+          "name": "glass",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Draws the shell as glass: the translucent glass fill over a backdrop\nblur, for a composer standing on an image or a shader rather than a\nplain page, so what is behind shows through softened. The AI glow's\nhalo, drawn to sit behind an opaque shell, stands down; its ring stays.\nOff by default.",
+          "default": false
+        },
+        {
           "name": "context",
           "type": "ReactNode",
           "typeKind": "reference",
@@ -393,6 +401,6 @@
     "note": "Enter sends, Shift and Enter adds a line, and with a mention list open the arrow keys move through it, Enter or Tab writes the choice and Escape closes it."
   },
   "size": {
-    "gzip": 11197
+    "gzip": 11239
   }
 }

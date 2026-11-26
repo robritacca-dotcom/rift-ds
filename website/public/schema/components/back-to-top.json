@@ -55,6 +55,6 @@
     "note": "A native button: the browser owns Enter and Space, and the press scrolls the page."
   },
   "size": {
-    "gzip": 4728
+    "gzip": 4743
   }
 }

@@ -799,7 +799,7 @@
       "name": "prompt-suggestions",
       "type": "registry:ui",
       "title": "Prompt suggestions",
-      "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards."
+      "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list."
     },
     {
       "name": "prose",

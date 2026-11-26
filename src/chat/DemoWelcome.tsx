@@ -2,7 +2,8 @@
 
 /**
  * What the demo's welcome screen holds under its composer beyond the plain
- * starters: PromptSuggestions as tiles or cards, or a board of Widgets, each
+ * starters: PromptSuggestions as tiles, cards or a numbered list of examples,
+ * or a board of Widgets, each
  * seated in ChatWidget's `widgets` slot. Every prompt here is one the demo
  * script has an answer for, so pressing a tile gets a reply about what the
  * tile said.
@@ -43,6 +44,28 @@ const CARDS: PromptSuggestion[] = [
     description: 'A slot the whole team has free this week.',
   },
 ];
+
+const EXAMPLES: PromptSuggestion[] = [
+  { id: 'Set it all up for me', label: 'Set up the workspace', description: 'Roles, channels and a first project' },
+  { id: 'Which plan fits a team of five?', label: 'Pick a plan', description: 'The one that fits a team of five' },
+  { id: 'Invite my team', label: 'Invite the team', description: 'Three seats are still open' },
+];
+
+/**
+ * A short, numbered list of examples under a heading: the welcome for a
+ * product whose first message is a task, not a question.
+ */
+export function DemoExamples({ onAsk }: { onAsk: (prompt: string) => void }) {
+  return (
+    <PromptSuggestions
+      layout="list"
+      numbered
+      heading="Start from an example"
+      suggestions={EXAMPLES}
+      onValueChange={onAsk}
+    />
+  );
+}
 
 const BOARD_SIGNUPS = [
   { label: 'W1', value: 320 },
@@ -154,6 +177,7 @@ export function DemoWelcome({
   if (variant === 'cards') {
     return <PromptSuggestions layout="cards" aria-label="Things to ask" suggestions={CARDS} onValueChange={onAsk} />;
   }
+  if (variant === 'examples') return <DemoExamples onAsk={onAsk} />;
   if (variant === 'dashboard') return <DemoBoard onAsk={onAsk} />;
   return null;
 }

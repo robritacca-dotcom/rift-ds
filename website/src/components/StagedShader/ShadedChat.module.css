@@ -178,6 +178,21 @@
   opacity: 1;
 }
 
+/* Over a scene the greeting takes the strongest inks the theme has: the
+   ask line the primary text, and the pleasantry and a suggestion set's heading the secondary, in place of
+   the display tier's tone and the tertiary ink. A theme's display tone
+   (Signal's is toned toward its tint) is a choice for a plain page; over a
+   moving scene the words need every step of contrast, so the tone gives
+   way here and only here. */
+.shaded :global(.ds-chat-widget__ask) {
+  color: var(--color-text-primary);
+}
+
+.shaded :global(.ds-chat-widget__hello),
+.shaded :global(.ds-prompt-suggestions__heading) {
+  color: var(--color-text-secondary);
+}
+
 /* The widget's backdrop lever, the one only a chat has, keeps its meaning
    over a scene: `blur` (a chat resting above something) frosts the scene
    as above, and `solid` (a chat that is its own page) closes the frost to

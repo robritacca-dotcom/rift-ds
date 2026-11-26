@@ -1336,7 +1336,9 @@ export const sky: Scene = {
     { key: "planeY", label: "Plane height", min: 0, max: 1, step: 0.01, default: 0.7 },
     { key: "planeTurn", label: "Plane heading", min: -1, max: 1, step: 0.01, default: 0.03 },
     { key: "wind", label: "Wind", min: 0, max: 4, step: 0.05, default: 1 },
-    { key: "horizon", label: "Horizon", min: -0.6, max: 0.4, step: 0.01, default: 0.07 },
+    /* The horizon always lies under the frame: the sky is endless, with no
+       land, and only the glow of the burning strip rises into view. */
+    { key: "horizon", label: "Horizon", min: -0.6, max: -0.02, step: 0.01, default: -0.03 },
     { key: "depth", label: "Sky depth", min: 0, max: 1.5, step: 0.01, default: 1 },
     { key: "sun", label: "Sun", min: 0, max: 2, step: 0.01, default: 1 },
     { key: "fire", label: "Fire", min: 0, max: 1.5, step: 0.01, default: 1 },
@@ -1570,10 +1572,9 @@ vec3 scene(vec2 uv, float t) {
   nightCloud += mix(gold, vec3(1.0), 0.35) * through * 0.55;
   nightCloud = mix(nightHaze, nightCloud, smoothstep(0.0, 0.4, up));
 
-  vec3 col = mix(mix(nightSky, nightCloud, cloud), mix(daySky, dayCloud, cloud), day);
-  /* Below the horizon the land is dark by night and haze by day. */
-  vec3 land = mix(u_ground + flame * burn * 0.03 * reach, dayHaze, day);
-  return mix(land, col, smoothstep(-0.012, 0.012, up));
+  /* No land: the horizon's range keeps it under the frame, so every pixel
+     is sky. */
+  return mix(mix(nightSky, nightCloud, cloud), mix(daySky, dayCloud, cloud), day);
 }
 `,
 };

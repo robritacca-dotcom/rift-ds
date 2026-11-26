@@ -69,6 +69,26 @@
 }
 
 /* ============================================
+   GLASS — the `glass` prop
+   For a composer standing on an image or a shader: the glass fill over
+   the 24px blur the floating tiles wear, so the shell reads as one
+   material with them and what is behind shows through softened. The AI
+   glow's halo is drawn to sit behind an opaque shell; under a translucent
+   one it shows through as a turning smear, so it stands down. The ring
+   on the border stays.
+   ============================================ */
+
+.ds-composer--glass {
+  background-color: var(--color-bg-glass);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+.ds-composer--glass.ds-composer--ai-glow::after {
+  display: none;
+}
+
+/* ============================================
    AI GLOW — the `aiGlow` prop
    The AI gradient ring in place of the shell's border: AiButton's signal
    that a model is at work. By default (`aiGlow="streaming"`) a composer

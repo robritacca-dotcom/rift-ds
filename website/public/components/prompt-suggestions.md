@@ -1,6 +1,6 @@
 # Prompt suggestions
 
-Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.
+Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list.
 
 Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 - Import: `import { PromptSuggestions } from 'rift-ds';`
 - Deep import: `import { PromptSuggestions } from 'rift-ds/components/PromptSuggestions/PromptSuggestions';`
 - Rendering: client component (declares 'use client')
-- Size: 1.7 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 4.3 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/prompt-suggestions
 - Schema: https://rift-ds.com/schema/components/prompt-suggestions.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -18,7 +18,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | --- | --- | --- | --- | --- |
 | suggestions | `PromptSuggestion[]` | yes |  | The suggestions to render, in order. |
 | onValueChange | `((id: string) => void)` | no |  | Fires with the tapped suggestion's `id`, one acknowledgment beat after the tap — the chosen chip pulses and its siblings dim first, so the choice is seen even when selection unmounts the row. |
-| layout | `"wrap" \| "scroll" \| "stack" \| "tiles" \| "cards"` | no |  | How the suggestions are arranged. `scroll` is one line that scrolls sideways behind edge fades. `wrap` runs them across as many lines as they need, for empty-state hero placements. `stack` gives each one its own line, for narrow columns where a wrapped row breaks unevenly and the ragged right edge reads as an accident. `tiles` and `cards` leave the chip behind for an empty-state home screen: `tiles` is an even row of quiet blocks, each an icon over a label and its `description`; `cards` gives each suggestion a tinted cover holding its icon, with the label and description beneath. Both fold to fewer columns as their own width narrows. |
+| layout | `"list" \| "wrap" \| "scroll" \| "stack" \| "tiles" \| "cards"` | no |  | How the suggestions are arranged. `scroll` is one line that scrolls sideways behind edge fades. `wrap` runs them across as many lines as they need, for empty-state hero placements. `stack` gives each one its own line, for narrow columns where a wrapped row breaks unevenly and the ragged right edge reads as an accident. `tiles` and `cards` leave the chip behind for an empty-state home screen: `tiles` is an even row of quiet blocks, each an icon over a label and its `description`; `cards` gives each suggestion a tinted cover holding its icon, with the label and description beneath. Both fold to fewer columns as their own width narrows. `list` gathers them into one panel of full-width rows, each a coloured dot (or its icon), the label and its description on one line, for a short set of examples under a composer. |
+| numbered | `boolean` | no | `false` | Number the `list` rows 1 to 9, each with its digit as a keycap at the row's end, and let that digit pick the row from anywhere on the page outside a text field. Other layouts ignore it, and rows past the ninth carry no number. |
+| heading | `string` | no |  | A short line over the suggestions, such as "Start from an example". It names the list for assistive technology in place of `aria-label`, and the list and the heading are wrapped in a group so the heading sits outside the list. The ref, `className` and every other prop stay on the list itself. |
 | wrap | `boolean` | no | `false` | Legacy alias for `layout="wrap"`; ignored when `layout` is set. Deprecated: Use `layout` instead, which also covers `stack`. |
 | pending | `boolean` | no | `false` | The suggestions are still being generated: shimmer placeholder pills hold their place, matching the current size's chip geometry so nothing shifts when the real chips land. While pending the given `suggestions` are not rendered, the placeholders are hidden from assistive technology, and the row reports `aria-busy` instead. |
 | pendingCount | `number` | no | `3` | How many placeholder pills the pending state holds space with. |
@@ -54,7 +56,7 @@ interface PromptSuggestion {
   label: string;
   /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */
   icon?: string | React.ReactNode;
-  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */
+  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */
   description?: string;
 }
 ```

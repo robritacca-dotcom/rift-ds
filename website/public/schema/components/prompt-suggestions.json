@@ -6,7 +6,7 @@
   "label": "Prompt suggestions",
   "slug": "prompt-suggestions",
   "category": "ai",
-  "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.",
+  "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list.",
   "client": true,
   "importPath": "rift-ds/components/PromptSuggestions/PromptSuggestions",
   "barrel": "main",
@@ -35,17 +35,33 @@
         },
         {
           "name": "layout",
-          "type": "\"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
+          "type": "\"list\" | \"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
           "typeKind": "enum",
           "values": [
             "cards",
+            "list",
             "scroll",
             "stack",
             "tiles",
             "wrap"
           ],
           "required": false,
-          "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows."
+          "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows. `list` gathers them into one panel of full-width rows,\neach a coloured dot (or its icon), the label and its description on one\nline, for a short set of examples under a composer."
+        },
+        {
+          "name": "numbered",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Number the `list` rows 1 to 9, each with its digit as a keycap at the\nrow's end, and let that digit pick the row from anywhere on the page\noutside a text field. Other layouts ignore it, and rows past the ninth\ncarry no number.",
+          "default": false
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "A short line over the suggestions, such as \"Start from an example\". It\nnames the list for assistive technology in place of `aria-label`, and\nthe list and the heading are wrapped in a group so the heading sits\noutside the list. The ref, `className` and every other prop stay on the\nlist itself."
         },
         {
           "name": "wrap",
@@ -130,7 +146,7 @@
   "types": {
     "PromptSuggestion": {
       "kind": "interface",
-      "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
+      "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
       "description": "One tappable suggestion in the row."
     }
   },
@@ -160,6 +176,6 @@
     }
   ],
   "size": {
-    "gzip": 1695
+    "gzip": 4276
   }
 }

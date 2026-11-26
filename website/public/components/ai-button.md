@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 - Import: `import { AiButton } from 'rift-ds';`
 - Deep import: `import { AiButton } from 'rift-ds/components/AiButton/AiButton';`
 - Rendering: client component (declares 'use client')
-- Size: 7.6 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 10.0 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/ai-button
 - Schema: https://rift-ds.com/schema/components/ai-button.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 
@@ -120,7 +120,7 @@ interface PromptSuggestion {
   label: string;
   /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */
   icon?: string | React.ReactNode;
-  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */
+  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */
   description?: string;
 }
 ```

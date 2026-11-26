@@ -8,7 +8,7 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 - Import: `import { DescriptionList } from 'rift-ds';`
 - Deep import: `import { DescriptionList } from 'rift-ds/components/DescriptionList/DescriptionList';`
 - Rendering: server-renderable (no 'use client')
-- Size: 6.5 kB gzipped with everything it imports, peer dependencies not counted
+- Size: 6.4 kB gzipped with everything it imports, peer dependencies not counted
 - Live docs: https://rift-ds.com/components/description-list
 - Schema: https://rift-ds.com/schema/components/description-list.json (JSON, validates against https://rift-ds.com/schema/component.schema.json)
 

@@ -2,12 +2,17 @@
 
 import React from 'react';
 import { Chip } from '../Chip/Chip';
+import { Kbd } from '../Kbd/Kbd';
+import { useShortcut, type Shortcut } from '../../behaviors/shortcuts';
 import { MOTION_EXIT_SYNC_MS } from '../../tokens/motion';
 import './PromptSuggestions.css';
 import '../../behaviors/direction.css';
 import '../../behaviors/visually-hidden.css';
 import '../../fonts/material-symbols.css';
 import { mirrorClass } from '../../behaviors/direction';
+
+/* The keys a numbered list answers to, one per row, in order. */
+const DIGITS: Shortcut[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 /** One tappable suggestion in the row. */
 export interface PromptSuggestion {
@@ -17,7 +22,7 @@ export interface PromptSuggestion {
   label: string;
   /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */
   icon?: string | React.ReactNode;
-  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */
+  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */
   description?: string;
 }
 
@@ -37,9 +42,26 @@ type PromptSuggestionsOwnProps = {
    * of quiet blocks, each an icon over a label and its `description`;
    * `cards` gives each suggestion a tinted cover holding its icon, with the
    * label and description beneath. Both fold to fewer columns as their own
-   * width narrows.
+   * width narrows. `list` gathers them into one panel of full-width rows,
+   * each a coloured dot (or its icon), the label and its description on one
+   * line, for a short set of examples under a composer.
    */
-  layout?: 'scroll' | 'wrap' | 'stack' | 'tiles' | 'cards';
+  layout?: 'scroll' | 'wrap' | 'stack' | 'tiles' | 'cards' | 'list';
+  /**
+   * Number the `list` rows 1 to 9, each with its digit as a keycap at the
+   * row's end, and let that digit pick the row from anywhere on the page
+   * outside a text field. Other layouts ignore it, and rows past the ninth
+   * carry no number.
+   */
+  numbered?: boolean;
+  /**
+   * A short line over the suggestions, such as "Start from an example". It
+   * names the list for assistive technology in place of `aria-label`, and
+   * the list and the heading are wrapped in a group so the heading sits
+   * outside the list. The ref, `className` and every other prop stay on the
+   * list itself.
+   */
+  heading?: string;
   /**
    * Legacy alias for `layout="wrap"`; ignored when `layout` is set.
    * @deprecated Use `layout` instead, which also covers `stack`.
@@ -105,6 +127,8 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       suggestions,
       onValueChange,
       layout,
+      numbered = false,
+      heading,
       wrap = false,
       pending = false,
       pendingCount = 3,
@@ -119,6 +143,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
     ref,
   ) => {
     const baseClass = 'ds-prompt-suggestions';
+    const headingId = React.useId();
 
     /* The tap acknowledgment: the chosen chip gives one small spring pulse
        while its siblings dim, and `onValueChange` fires one beat later —
@@ -160,7 +185,22 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
        button instead of composing Chip. Everything around the item — the
        list semantics, the pending and entrance beats, the tap
        acknowledgment — is the row's and stays shared. */
-    const block = arrangement === 'tiles' ? 'tile' : arrangement === 'cards' ? 'card' : null;
+    const block =
+      arrangement === 'tiles' ? 'tile' : arrangement === 'cards' ? 'card' : arrangement === 'list' ? 'row' : null;
+
+    /* The list's numbers are keys as well as labels: a digit picks its row
+       through the one shortcut listener, never inside a text field, so
+       typing a number into the composer still types it. */
+    const numberedRows = numbered && arrangement === 'list' && !pending && !kept;
+    const numberedSuggestions = numberedRows ? suggestions.slice(0, DIGITS.length) : [];
+    useShortcut(
+      DIGITS.slice(0, numberedSuggestions.length),
+      (event) => {
+        const picked = numberedSuggestions[Number(event.key) - 1];
+        if (picked) choose(picked.id);
+      },
+      { enabled: numberedSuggestions.length > 0, description: 'Pick a suggestion' },
+    );
     const renderIcon = (icon: PromptSuggestion['icon']) =>
       typeof icon === 'string' ? (
         <span className={`${baseClass}__icon material-symbols-rounded ${mirrorClass(icon)}`} aria-hidden="true">
@@ -184,13 +224,15 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
       .filter(Boolean)
       .join(' ');
 
-    return (
+    const list = (
       <div
         {...rest}
         ref={ref}
         className={classes}
         role="list"
-        aria-label={rest['aria-label'] ?? ariaLabel}
+        /* A heading names the list; without one, the label does. */
+        aria-label={heading ? undefined : rest['aria-label'] ?? ariaLabel}
+        aria-labelledby={heading ? headingId : rest['aria-labelledby']}
         /* aria-busy is load-bearing while pending: the placeholders are
            aria-hidden, and a busy list is exempt from the required-children
            rule that an otherwise empty role="list" would fail. */
@@ -215,7 +257,7 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                 )}
               </div>
             ))
-          : suggestions.map((suggestion) => (
+          : suggestions.map((suggestion, index) => (
               <div
                 key={suggestion.id}
                 role="listitem"
@@ -243,6 +285,8 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                       <span className={`${baseClass}__cover`}>
                         {suggestion.icon != null && renderIcon(suggestion.icon)}
                       </span>
+                    ) : block === 'row' && suggestion.icon == null ? (
+                      <span className={`${baseClass}__dot`} aria-hidden="true" />
                     ) : (
                       suggestion.icon != null && renderIcon(suggestion.icon)
                     )}
@@ -256,6 +300,9 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                     </span>
                     {value === suggestion.id && (
                       <span className="ds-visually-hidden"> {chosenLabel}</span>
+                    )}
+                    {numberedRows && index < DIGITS.length && (
+                      <Kbd className={`${baseClass}__key`} size="compact" keys={DIGITS[index]} />
                     )}
                   </button>
                 ) : (
@@ -274,6 +321,16 @@ export const PromptSuggestions = React.forwardRef<HTMLDivElement, PromptSuggesti
                 )}
               </div>
             ))}
+      </div>
+    );
+
+    if (!heading) return list;
+    return (
+      <div className={`${baseClass}-group`}>
+        <div id={headingId} className={`${baseClass}__heading`}>
+          {heading}
+        </div>
+        {list}
       </div>
     );
   },

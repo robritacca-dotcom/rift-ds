@@ -68,6 +68,14 @@ type ComposerOwnProps = {
    */
   aiGlow?: boolean | 'streaming';
   /**
+   * Draws the shell as glass: the translucent glass fill over a backdrop
+   * blur, for a composer standing on an image or a shader rather than a
+   * plain page, so what is behind shows through softened. The AI glow's
+   * halo, drawn to sit behind an opaque shell, stands down; its ring stays.
+   * Off by default.
+   */
+  glass?: boolean;
+  /**
    * Contextual note rendered as a full-width, non-interactive chip — the
    * "what the model is looking at" line a chat host pins over the message
    * ("Looking at “Page name”"). `contextPlacement` decides where it sits.
@@ -262,6 +270,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       inline = false,
       maxRows = inline === true ? 3 : 12,
       aiGlow = 'streaming',
+      glass = false,
       context,
       contextIcon,
       contextPlacement = 'inside',
@@ -687,6 +696,7 @@ export const Composer = React.forwardRef<HTMLTextAreaElement, ComposerProps>(
       baseClass,
       aiGlow ? `${baseClass}--ai-glow` : '',
       aiGlow === true ? `${baseClass}--ai-glow-focus` : '',
+      glass ? `${baseClass}--glass` : '',
       inline === true && size === 'compact' ? `${baseClass}--compact` : '',
       inline ? `${baseClass}--inline` : '',
       inline === 'chat' ? `${baseClass}--inline-chat` : '',

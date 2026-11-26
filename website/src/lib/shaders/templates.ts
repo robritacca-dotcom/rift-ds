@@ -36,6 +36,11 @@ export const TEMPLATES: Template[] = [
     label: "Horizon",
     description: "A planet's limb at night: a sun on the arc, soft layers of light, clouds and ocean.",
     sceneId: "horizon",
+    /* The planet's crown a touch under the scene's own, so on the chat
+       card's welcome the top of the arc lies in the gap under the
+       composer, like Tide's horizon. */
+    scene: { crown: 0.38 },
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false } },
   },
   {
     id: "rift",
@@ -122,6 +127,10 @@ export const TEMPLATES: Template[] = [
     description: "Dusk over still water, smeared like a long exposure: a band of fire on the horizon, mirrored in the water.",
     sceneId: "tide",
     speed: 1,
+    /* The horizon a touch under the scene's own, so on the chat card's
+       welcome it runs through the gap under the composer rather than
+       along its edge. */
+    scene: { horizon: 0.38 },
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.1 } } },
   },
 ];

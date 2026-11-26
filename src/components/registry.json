@@ -1377,7 +1377,7 @@
       "name": "PromptSuggestions",
       "label": "Prompt suggestions",
       "slug": "prompt-suggestions",
-      "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.",
+      "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list.",
       "category": "ai",
       "client": true,
       "partPatterns": [{ "pattern": "button", "part": "suggestions" }]

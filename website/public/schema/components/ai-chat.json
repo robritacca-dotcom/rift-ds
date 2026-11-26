@@ -58,7 +58,7 @@
             "inset"
           ],
           "required": false,
-          "description": "Seat the widget as a page in one of the three app shell modes, the ones\nAppLayout draws, for a host where the chat is the page (a chat home)\nrather than a panel over one. `flush` runs the history rail on the\nshell colour behind a hairline with the conversation crisp beside it;\n`floating` lifts the rail into a glass card off the edges; `inset` runs\nthe rail flush on the shell colour and seats the conversation and each\ntrailing panel in raised surfaces. Left out, the widget draws no shell\nof its own and takes its host's ground, as a docked or floating panel\ndoes. A widget narrower than the inline rail's 720px threshold has no\nroom for a raised mode, so floating and inset lay out flush on the\nsolid backdrop there, and below the mobile breakpoint every mode gives\nway to the plain full-screen chat.",
+          "description": "Seat the widget as a page in one of AppLayout's three shell modes, for a\nhost where the chat is the page (a chat home), not a panel over one.\n`flush` runs the history rail on the shell colour behind a hairline\nbeside the conversation; `floating` lifts the rail into a glass card;\n`inset` runs the rail flush and seats the conversation\nand each trailing panel in raised surfaces. Left out, the widget draws\nno shell and takes its host's ground, as a docked or floating panel\ndoes. Under the inline rail's 720px threshold floating and inset lay\nout flush on the solid backdrop, and below the mobile breakpoint every\nmode gives way to the plain full-screen chat.",
           "typeRefs": [
             "ChatLayout"
           ]
@@ -186,6 +186,14 @@
           "required": false,
           "description": "The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never.",
           "default": "streaming"
+        },
+        {
+          "name": "composerGlass",
+          "type": "boolean",
+          "typeKind": "primitive",
+          "required": false,
+          "description": "Composer's `glass`, for a chat on a picture or shader. Off by default.",
+          "default": false
         },
         {
           "name": "models",
@@ -1627,7 +1635,7 @@
     },
     "PromptSuggestion": {
       "kind": "interface",
-      "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
+      "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
       "description": "One tappable suggestion in the row."
     },
     "PromptSuggestionsProps": {

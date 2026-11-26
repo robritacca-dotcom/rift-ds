@@ -220,6 +220,20 @@ export const Cards: Story = {
 };
 
 /** Blocks hold their place while generating, the same as the chips. */
+/** List: one panel of example rows, each a dot, a label and its description; `numbered` adds keycaps and lets 1 to 9 pick a row outside a text field, and `heading` names the set. */
+export const List: Story = {
+  args: {
+    layout: 'list',
+    numbered: true,
+    heading: 'Start from an example',
+    suggestions: [
+      { id: 'quarter', label: 'Sum up the quarter', description: 'Revenue against plan' },
+      { id: 'invoices', label: 'Chase what is owed', description: 'Overdue invoices and who to nudge' },
+      { id: 'hiring', label: 'Plan the next hire', description: 'Budget, role and timing' },
+    ],
+  },
+};
+
 export const CardsPending: Story = {
   args: {
     layout: 'cards',

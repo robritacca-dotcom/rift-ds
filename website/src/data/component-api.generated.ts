@@ -5903,6 +5903,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "defaultValue": "'streaming'"
           },
           {
+            "name": "glass",
+            "type": "boolean",
+            "required": false,
+            "description": "Draws the shell as glass: the translucent glass fill over a backdrop\nblur, for a composer standing on an image or a shader rather than a\nplain page, so what is behind shows through softened. The AI glow's\nhalo, drawn to sit behind an opaque shell, stands down; its ring stays.\nOff by default.",
+            "defaultValue": "false"
+          },
+          {
             "name": "context",
             "type": "ReactNode",
             "required": false,
@@ -15228,7 +15235,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
     "label": "Prompt suggestions",
     "slug": "prompt-suggestions",
     "category": "ai",
-    "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.",
+    "description": "Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list.",
     "client": true,
     "importPath": "rift-ds/components/PromptSuggestions/PromptSuggestions",
     "barrel": "main",
@@ -15253,16 +15260,30 @@ export const componentApi: readonly ComponentApiEntry[] = [
           },
           {
             "name": "layout",
-            "type": "\"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
+            "type": "\"list\" | \"wrap\" | \"scroll\" | \"stack\" | \"tiles\" | \"cards\"",
             "required": false,
-            "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows.",
+            "description": "How the suggestions are arranged. `scroll` is one line that scrolls\nsideways behind edge fades. `wrap` runs them across as many lines as\nthey need, for empty-state hero placements. `stack` gives each one its\nown line, for narrow columns where a wrapped row breaks unevenly and\nthe ragged right edge reads as an accident. `tiles` and `cards` leave\nthe chip behind for an empty-state home screen: `tiles` is an even row\nof quiet blocks, each an icon over a label and its `description`;\n`cards` gives each suggestion a tinted cover holding its icon, with the\nlabel and description beneath. Both fold to fewer columns as their own\nwidth narrows. `list` gathers them into one panel of full-width rows,\neach a coloured dot (or its icon), the label and its description on one\nline, for a short set of examples under a composer.",
             "values": [
               "cards",
+              "list",
               "scroll",
               "stack",
               "tiles",
               "wrap"
             ]
+          },
+          {
+            "name": "numbered",
+            "type": "boolean",
+            "required": false,
+            "description": "Number the `list` rows 1 to 9, each with its digit as a keycap at the\nrow's end, and let that digit pick the row from anywhere on the page\noutside a text field. Other layouts ignore it, and rows past the ninth\ncarry no number.",
+            "defaultValue": "false"
+          },
+          {
+            "name": "heading",
+            "type": "string",
+            "required": false,
+            "description": "A short line over the suggestions, such as \"Start from an example\". It\nnames the list for assistive technology in place of `aria-label`, and\nthe list and the heading are wrapped in a group so the heading sits\noutside the list. The ref, `className` and every other prop stay on the\nlist itself."
           },
           {
             "name": "wrap",
@@ -22487,7 +22508,7 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "layout",
             "type": "ChatLayout",
             "required": false,
-            "description": "Seat the widget as a page in one of the three app shell modes, the ones\nAppLayout draws, for a host where the chat is the page (a chat home)\nrather than a panel over one. `flush` runs the history rail on the\nshell colour behind a hairline with the conversation crisp beside it;\n`floating` lifts the rail into a glass card off the edges; `inset` runs\nthe rail flush on the shell colour and seats the conversation and each\ntrailing panel in raised surfaces. Left out, the widget draws no shell\nof its own and takes its host's ground, as a docked or floating panel\ndoes. A widget narrower than the inline rail's 720px threshold has no\nroom for a raised mode, so floating and inset lay out flush on the\nsolid backdrop there, and below the mobile breakpoint every mode gives\nway to the plain full-screen chat.",
+            "description": "Seat the widget as a page in one of AppLayout's three shell modes, for a\nhost where the chat is the page (a chat home), not a panel over one.\n`flush` runs the history rail on the shell colour behind a hairline\nbeside the conversation; `floating` lifts the rail into a glass card;\n`inset` runs the rail flush and seats the conversation\nand each trailing panel in raised surfaces. Left out, the widget draws\nno shell and takes its host's ground, as a docked or floating panel\ndoes. Under the inline rail's 720px threshold floating and inset lay\nout flush on the solid backdrop, and below the mobile breakpoint every\nmode gives way to the plain full-screen chat.",
             "values": [
               "floating",
               "flush",
@@ -22606,6 +22627,13 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "required": false,
             "description": "The composer's gradient ring, Composer's `aiGlow`: `'streaming'` (the default) lights it only while a reply is in flight, `true` also on focus, `false` never.",
             "defaultValue": "'streaming'"
+          },
+          {
+            "name": "composerGlass",
+            "type": "boolean",
+            "required": false,
+            "description": "Composer's `glass`, for a chat on a picture or shader. Off by default.",
+            "defaultValue": "false"
           },
           {
             "name": "models",

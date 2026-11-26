@@ -156,7 +156,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "PromptSuggestion": {
         "kind": "interface",
-        "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
+        "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
         "description": "One tappable suggestion in the row."
       }
     },
@@ -2222,7 +2222,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
     "types": {
       "PromptSuggestion": {
         "kind": "interface",
-        "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
+        "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
         "description": "One tappable suggestion in the row."
       }
     },
@@ -3572,7 +3572,7 @@ export const componentTypes: Readonly<Record<string, ComponentTypesApi>> = {
       },
       "PromptSuggestion": {
         "kind": "interface",
-        "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles` and `cards` layouts: what the tile leads to, or the full question a card asks. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
+        "definition": "interface PromptSuggestion {\n  /** Stable identifier passed to `onValueChange`. */\n  id: string;\n  /** The suggestion text shown in the chip. */\n  label: string;\n  /** Optional leading icon — Material Symbol name (string) or custom element (ReactNode). In the `cards` layout it stands in the card's cover. */\n  icon?: string | React.ReactNode;\n  /** A quiet second line under the label, drawn by the `tiles`, `cards` and `list` layouts: what the tile leads to, the full question a card asks, or the rest of a row's line beside its label. The chip layouts have no room for it and leave it out. */\n  description?: string;\n}",
         "description": "One tappable suggestion in the row."
       },
       "PromptSuggestionsProps": {

@@ -325,23 +325,33 @@
   animation: none;
 }
 
-/* The stagger: one instant per pill, capped at the fifth so a long
-   scrolling row does not keep the far end waiting. */
-.ds-prompt-suggestions__item:nth-child(2) {
-  animation-delay: var(--motion-duration-instant);
+/* The stagger: one step per item, capped at the fifth so a long scrolling
+   row does not keep the far end waiting. A pill steps on the instant; a
+   list row on the fast duration, a beat a reader sees, so the examples
+   land one by one. A host that holds the whole set back for an entrance
+   of its own (ChatWidget's welcome slot) sets
+   --ds-prompt-suggestions-entrance-delay, so the first item waits for the
+   set to appear rather than arriving unseen. */
+.ds-prompt-suggestions {
+  --ds-prompt-suggestions-step: var(--motion-duration-instant);
 }
 
-.ds-prompt-suggestions__item:nth-child(3) {
-  animation-delay: calc(var(--motion-duration-instant) * 2);
+.ds-prompt-suggestions--list {
+  --ds-prompt-suggestions-step: var(--motion-duration-fast);
 }
 
-.ds-prompt-suggestions__item:nth-child(4) {
-  animation-delay: calc(var(--motion-duration-instant) * 3);
+.ds-prompt-suggestions__item {
+  --ds-prompt-suggestions-index: 0;
+  animation-delay: calc(
+    var(--ds-prompt-suggestions-entrance-delay, 0s) +
+      var(--ds-prompt-suggestions-index) * var(--ds-prompt-suggestions-step)
+  );
 }
 
-.ds-prompt-suggestions__item:nth-child(n + 5) {
-  animation-delay: calc(var(--motion-duration-instant) * 4);
-}
+.ds-prompt-suggestions__item:nth-child(2) { --ds-prompt-suggestions-index: 1; }
+.ds-prompt-suggestions__item:nth-child(3) { --ds-prompt-suggestions-index: 2; }
+.ds-prompt-suggestions__item:nth-child(4) { --ds-prompt-suggestions-index: 3; }
+.ds-prompt-suggestions__item:nth-child(n + 5) { --ds-prompt-suggestions-index: 4; }
 
 @keyframes ds-prompt-suggestions-pop {
   from {
@@ -548,6 +558,167 @@
   .ds-prompt-suggestions__item:not(.ds-prompt-suggestions__item--kept)
   .ds-prompt-suggestions__card:hover {
   box-shadow: none;
+}
+
+
+/* ============================================
+   HEADING — the `heading` prop
+   A quiet line over the suggestions, in the tertiary ink a step under
+   them so the set leads. It sits outside the list, in a group with it.
+   ============================================ */
+
+.ds-prompt-suggestions-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-200);
+  min-width: 0;
+}
+
+.ds-prompt-suggestions__heading {
+  padding-inline-start: var(--padding-100);
+  font-family: var(--font-paragraph-sm-emphasis-family);
+  font-size: var(--font-paragraph-sm-emphasis-size);
+  font-weight: var(--font-paragraph-sm-emphasis-weight);
+  line-height: var(--font-paragraph-sm-emphasis-line-height);
+  letter-spacing: var(--font-paragraph-sm-emphasis-letter-spacing);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+   LIST — one panel of example rows
+   A short set of examples under a composer: the
+   rows share one panel (the tiles' floating
+   surface and radius) and are split by the
+   panel's own hairline, so the set reads as one
+   object rather than a stack of buttons. Each
+   row is one line: a dot in the cycling pixel
+   ink (or the suggestion's icon), the label, the
+   description in the quieter ink, and, when
+   `numbered`, its digit as a keycap at the end.
+   ============================================ */
+
+.ds-prompt-suggestions--list {
+  flex-direction: column;
+  gap: 0;
+  padding-block: 0;
+  overflow: hidden;
+  border: var(--border-025) solid var(--color-bg-container-border);
+  border-radius: var(--radius-600);
+  background-color: var(--color-bg-container-primary-semi);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+.ds-prompt-suggestions--list .ds-prompt-suggestions__item {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.ds-prompt-suggestions--list .ds-prompt-suggestions__item + .ds-prompt-suggestions__item {
+  border-block-start: var(--border-025) solid var(--color-bg-container-border);
+}
+
+/* Both ends of a row hold a mark (the dot, the keycap), so both take the
+   icon side's step: one 4px step under the text side's padding. */
+.ds-prompt-suggestions__row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-300);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: var(--padding-300);
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ds-prompt-suggestions__row:hover {
+  background-color: var(--color-bg-container-primary);
+}
+
+.ds-prompt-suggestions__row:focus-visible {
+  outline: 2px solid var(--color-action-primary-bg);
+  outline-offset: -2px;
+}
+
+/* The mark's box is the icon box, so a dot and an icon line up the label. */
+.ds-prompt-suggestions__dot {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+}
+
+.ds-prompt-suggestions__dot::before {
+  content: '';
+  width: var(--gap-200);
+  height: var(--gap-200);
+  border-radius: var(--radius-pill);
+  background-color: var(--ds-prompt-suggestions-tint);
+}
+
+.ds-prompt-suggestions__row .ds-prompt-suggestions__icon {
+  flex: none;
+  --icon-size: var(--icon-size-500);
+}
+
+/* Label and description share the line, baseline to baseline; the
+   description gives way first and ends in an ellipsis. */
+.ds-prompt-suggestions__row .ds-prompt-suggestions__text {
+  flex: 1;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--gap-300);
+  white-space: nowrap;
+}
+
+.ds-prompt-suggestions__row .ds-prompt-suggestions__label {
+  flex: none;
+}
+
+.ds-prompt-suggestions__row .ds-prompt-suggestions__description {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-paragraph-sm-family);
+  font-size: var(--font-paragraph-sm-size);
+  font-weight: var(--font-paragraph-sm-weight);
+  line-height: var(--font-paragraph-sm-line-height);
+  letter-spacing: var(--font-paragraph-sm-letter-spacing);
+}
+
+.ds-prompt-suggestions__key {
+  flex: none;
+}
+
+.ds-prompt-suggestions__row--pending {
+  cursor: default;
+  min-height: calc(var(--font-paragraph-sm-emphasis-line-height) + 2 * var(--padding-300));
+}
+
+.ds-prompt-suggestions__row--pending:hover {
+  background-color: transparent;
+}
+
+.ds-prompt-suggestions__item--chosen .ds-prompt-suggestions__row {
+  animation: ds-prompt-suggestions-choose var(--motion-duration-slow) var(--motion-ease-spring);
+}
+
+/* A kept list is a record: nothing answers the pointer, and the taken row
+   keeps the strongest ink while the others fade (the item rule above). */
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__row {
+  cursor: default;
+}
+
+.ds-prompt-suggestions--kept .ds-prompt-suggestions__row:hover {
+  background-color: transparent;
 }
 
 } /* @layer rift.components */

@@ -293,7 +293,7 @@ A model selector for chat surfaces, with per-model descriptions and an optional 
 
 ### Prompt suggestions
 
-Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles or cards.
+Tappable prompt suggestions to start or steer a conversation, as a scrolling or wrapping row, a stack, tiles, cards or a numbered list.
 
 - Import: `import { PromptSuggestions } from 'rift-ds';`
 - Rendering: client component (declares 'use client')

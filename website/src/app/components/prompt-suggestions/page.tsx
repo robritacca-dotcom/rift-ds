@@ -29,7 +29,8 @@ export default function PromptSuggestionsPage() {
           fades, wraps into a block for empty-state hero placements, or
           stacks one per line for narrow columns. For an empty-state home
           screen the same suggestions lay out as tiles or cards, with a
-          line of description under each. Tapping a suggestion fires a
+          line of description under each, or as a numbered list of
+          examples. Tapping a suggestion fires a
           callback with its stable id, never its display text.
         </p>
       </div>
@@ -174,6 +175,28 @@ export default function PromptSuggestionsPage() {
             { id: "tokens", icon: "palette", label: "Tokens", description: "Colour, type and space" },
             { id: "themes", icon: "tune", label: "Themes", description: "Every shipped look" },
             { id: "start", icon: "rocket_launch", label: "Get started", description: "Install and theme" },
+          ]}
+        />
+      </section>
+
+      {/* List */}
+      <section className={styles.section}>
+        <SectionTitle title="List" />
+        <p className={styles.demoText}>
+          A short set of examples in one panel, each row a coloured dot,
+          the label and its description on one line. Numbered, each row
+          ends in its digit as a keycap, and pressing that digit anywhere
+          outside a text field picks the row. A heading over the list
+          names it.
+        </p>
+        <PromptSuggestions
+          layout="list"
+          numbered
+          heading="Start from an example"
+          suggestions={[
+            { id: "page", label: "Build a settings page", description: "Form, sections and a save bar" },
+            { id: "theme", label: "Make a theme", description: "From a colour or a DESIGN.md" },
+            { id: "table", label: "Lay out a data table", description: "Sorting, selection and empty states" },
           ]}
         />
       </section>

@@ -579,13 +579,15 @@ export default function ChatView({
         flow={flow}
         layout={shell}
         backdrop={backdrop}
+        /* Glass while the card stands on a shader, opaque on the plain card. */
+        composerGlass={Boolean(shader)}
         showStarters={welcome === "starters"}
         /* The Welcome lever's other fillings ride the widget slot. The
            dashboard runs long, so it turns the welcome into a page; the
            links and cards fit, hanging under a composer held at the same
            dead centre the starters give it. */
         widgets={
-          welcome === "links" || welcome === "cards" || welcome === "dashboard" ? (
+          welcome === "links" || welcome === "cards" || welcome === "examples" || welcome === "dashboard" ? (
             <DemoWelcome variant={welcome} onAsk={(prompt) => send(prompt)} />
           ) : undefined
         }

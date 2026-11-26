@@ -54,6 +54,27 @@ export const AiGlow: Story = {
   },
 };
 
+/** `glass`: the shell as glass over a picture, the glass fill over a backdrop blur, so the picture shows through softened. Off by default. */
+export const Glass: Story = {
+  args: {
+    glass: true,
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          padding: 48,
+          backgroundImage: `url(${PHOTO_LANDSCAPE})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+};
+
 /** The mini composer: one row at the control height, for AI input inside other content such as a table. Never a chat's composer. */
 export const Inline: Story = {
   args: {

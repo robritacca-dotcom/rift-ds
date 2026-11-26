@@ -31,7 +31,7 @@
       "html": 75000
     },
     "/components/app-sidebar": {
-      "html": 35000
+      "html": 37000
     },
     "/components/composer": {
       "html": 37000
@@ -49,6 +49,9 @@
     "/components/table-toolbar": {
       "html": 40000,
       "css": 145000
+    },
+    "/components/thread-panel": {
+      "html": 32500
     },
     "/components/world-map": {
       "html": 354000
@@ -80,6 +83,9 @@
     "/docs/blocks/sign-in": {
       "css": 159000
     },
+    "/foundations/layout": {
+      "html": 32000
+    },
     "/labs/bento": {
       "js": 506000,
       "css": 142000
@@ -90,7 +96,8 @@
     },
     "/labs/raceway-chat": {
       "js": 555000,
-      "html": 52000
+      "html": 52000,
+      "css": 131000
     },
     "/labs/site-frame": {
       "js": 794000,

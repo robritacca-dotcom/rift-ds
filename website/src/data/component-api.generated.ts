@@ -15276,14 +15276,21 @@ export const componentApi: readonly ComponentApiEntry[] = [
             "name": "numbered",
             "type": "boolean",
             "required": false,
-            "description": "Number the `list` rows 1 to 9, each with its digit as a keycap at the\nrow's end, and let that digit pick the row from anywhere on the page\noutside a text field. Other layouts ignore it, and rows past the ninth\ncarry no number.",
+            "description": "Number the `list` rows 1 to 9, each with its digit as a keycap at the\nrow's end, and let that digit pick the row from anywhere on the page\noutside a text field. Other layouts ignore it, and rows past the ninth\ncarry no number. Two numbered lists on one page share the digits, and\nthe one mounted last answers them.",
             "defaultValue": "false"
           },
           {
-            "name": "heading",
+            "name": "title",
             "type": "string",
             "required": false,
-            "description": "A short line over the suggestions, such as \"Start from an example\". It\nnames the list for assistive technology in place of `aria-label`, and\nthe list and the heading are wrapped in a group so the heading sits\noutside the list. The ref, `className` and every other prop stay on the\nlist itself."
+            "description": "A short line over the suggestions, such as \"Start from an example\". It\nnames the list for assistive technology in place of `aria-label`. Set,\nthe title and the list are wrapped in a group, which becomes the root:\nthe ref, `className` and every other prop land on the group, so spacing\nand placement apply to the whole set. Shadows the native `title`\nattribute, which this element does not use as a tooltip."
+          },
+          {
+            "name": "shortcutLabel",
+            "type": "string",
+            "required": false,
+            "description": "The digits' description in a keyboard-shortcuts help list, for a numbered list. Defaults to \"Pick a suggestion\".",
+            "defaultValue": "'Pick a suggestion'"
           },
           {
             "name": "wrap",

@@ -19,8 +19,9 @@ Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same dat
 | suggestions | `PromptSuggestion[]` | yes |  | The suggestions to render, in order. |
 | onValueChange | `((id: string) => void)` | no |  | Fires with the tapped suggestion's `id`, one acknowledgment beat after the tap — the chosen chip pulses and its siblings dim first, so the choice is seen even when selection unmounts the row. |
 | layout | `"list" \| "wrap" \| "scroll" \| "stack" \| "tiles" \| "cards"` | no |  | How the suggestions are arranged. `scroll` is one line that scrolls sideways behind edge fades. `wrap` runs them across as many lines as they need, for empty-state hero placements. `stack` gives each one its own line, for narrow columns where a wrapped row breaks unevenly and the ragged right edge reads as an accident. `tiles` and `cards` leave the chip behind for an empty-state home screen: `tiles` is an even row of quiet blocks, each an icon over a label and its `description`; `cards` gives each suggestion a tinted cover holding its icon, with the label and description beneath. Both fold to fewer columns as their own width narrows. `list` gathers them into one panel of full-width rows, each a coloured dot (or its icon), the label and its description on one line, for a short set of examples under a composer. |
-| numbered | `boolean` | no | `false` | Number the `list` rows 1 to 9, each with its digit as a keycap at the row's end, and let that digit pick the row from anywhere on the page outside a text field. Other layouts ignore it, and rows past the ninth carry no number. |
-| heading | `string` | no |  | A short line over the suggestions, such as "Start from an example". It names the list for assistive technology in place of `aria-label`, and the list and the heading are wrapped in a group so the heading sits outside the list. The ref, `className` and every other prop stay on the list itself. |
+| numbered | `boolean` | no | `false` | Number the `list` rows 1 to 9, each with its digit as a keycap at the row's end, and let that digit pick the row from anywhere on the page outside a text field. Other layouts ignore it, and rows past the ninth carry no number. Two numbered lists on one page share the digits, and the one mounted last answers them. |
+| title | `string` | no |  | A short line over the suggestions, such as "Start from an example". It names the list for assistive technology in place of `aria-label`. Set, the title and the list are wrapped in a group, which becomes the root: the ref, `className` and every other prop land on the group, so spacing and placement apply to the whole set. Shadows the native `title` attribute, which this element does not use as a tooltip. |
+| shortcutLabel | `string` | no | `'Pick a suggestion'` | The digits' description in a keyboard-shortcuts help list, for a numbered list. Defaults to "Pick a suggestion". |
 | wrap | `boolean` | no | `false` | Legacy alias for `layout="wrap"`; ignored when `layout` is set. Deprecated: Use `layout` instead, which also covers `stack`. |
 | pending | `boolean` | no | `false` | The suggestions are still being generated: shimmer placeholder pills hold their place, matching the current size's chip geometry so nothing shifts when the real chips land. While pending the given `suggestions` are not rendered, the placeholders are hidden from assistive technology, and the row reports `aria-busy` instead. |
 | pendingCount | `number` | no | `3` | How many placeholder pills the pending state holds space with. |
@@ -41,6 +42,8 @@ The suggestions follows the WAI-ARIA button pattern (https://www.w3.org/WAI/ARIA
 | --- | --- |
 | Enter | Activates the button. |
 | Space | Activates the button. |
+
+A numbered list also answers the digits 1 to 9 from anywhere on the page outside a text field, each picking the row it numbers. The component's own stories test these keys.
 
 ## Types
 

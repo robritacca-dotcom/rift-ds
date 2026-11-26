@@ -124,6 +124,14 @@ export const TEMPLATES: Template[] = [
     speed: 1,
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.1 } } },
   },
+  {
+    id: "vice",
+    label: "Vice",
+    description: "A coastal city at night in pixel art: the sun just peeking over the water behind hazy towers, palms leaning in.",
+    sceneId: "vice",
+    speed: 1,
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { on: false } },
+  },
 ];
 
 /** The template a first pick lands on, and the right rail's reset target: the

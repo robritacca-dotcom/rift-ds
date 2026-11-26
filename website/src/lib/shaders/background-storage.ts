@@ -196,7 +196,17 @@ export type SiteBackgroundEntry = {
    onto the fire, about 22px above the horizon in both (0.024 and 0.04),
    where only its densest patch shows, so it never climbs behind the header. Page: the
    land is eased, and a long bottom fade takes the water to the page
-   before the content starts. */
+   before the content starts.
+
+   Vice, both bands: pixel art, so no grain over its blocks and no top
+   fade, and the scrim at 0.45 under the type, since the hero's headline and
+   the page title sit on its sky. Home: the horizon at 0.46 of the tall band
+   puts the skyline just above the hero's stats, with the sun lowered
+   (-0.06) and shrunk (0.75) so only its crown peeks over the water and its
+   glow stays under the headline. Page: the horizon at 0.3 puts the skyline
+   just under the page title, the palms are eased so they frame the title
+   rather than crowd the sidebar, and a long bottom fade takes the bay to
+   the page before the content starts. */
 export const SITE_BACKGROUNDS: readonly SiteBackgroundEntry[] = data.backgrounds as SiteBackgroundEntry[];
 
 export type SiteBackground = string;

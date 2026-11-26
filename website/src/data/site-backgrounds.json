@@ -548,6 +548,60 @@
       }
     },
     {
+      "id": "vice",
+      "label": "Vice",
+      "description": "A pixel city at dusk under palms",
+      "icon": "location_city",
+      "scene": "vice",
+      "home": {
+        "params": {
+          "horizon": 0.46,
+          "sun": 0.75,
+          "sunY": -0.06
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "grain": {
+            "on": false
+          },
+          "scrim": {
+            "on": true,
+            "params": {
+              "amount": 0.45
+            }
+          }
+        }
+      },
+      "page": {
+        "params": {
+          "horizon": 0.3,
+          "palms": 0.8
+        },
+        "passes": {
+          "fadeTop": {
+            "on": false
+          },
+          "fadeBottom": {
+            "params": {
+              "from": 0.1,
+              "to": 0.5
+            }
+          },
+          "grain": {
+            "on": false
+          },
+          "scrim": {
+            "on": true,
+            "params": {
+              "amount": 0.45
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "none",
       "label": "None",
       "description": "No shader, the plain page",

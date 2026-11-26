@@ -87,6 +87,13 @@ const FULL_PASSES = {
 };
 /* The ocean is clear water: no fade, and no grain over its type. */
 /* The sky is painted: no fade, and a heavy grain as the paint's tooth. */
+/* Vice is pixel art: no grain over its blocks. */
+const PIXEL_PASSES = {
+  fadeTop: { on: false },
+  fadeBottom: { on: false },
+  grain: { on: false },
+};
+
 const SKY_PASSES = {
   fadeTop: { on: false },
   fadeBottom: { on: false },
@@ -152,7 +159,9 @@ export default function ShaderScenePage() {
           with a low sun, hot on its lit side and cold in its shade. Galaxy is a spiral seen
           at a slant, a hot core in wound arms, deep in a field of stars. Tide is
           dusk over still water, smeared like a long exposure, with a band of
-          fire on the horizon mirrored in the water. Every scene but the rift is also one of this
+          fire on the horizon mirrored in the water. Vice is a coastal city at
+          night in pixel art, the sun just peeking over the water behind
+          hazy towers, palms leaning in from both edges. Every scene but the rift is also one of this
           site&rsquo;s own backgrounds, picked from the header. One stage a scene and no more: each one is a live
           GL context.
         </p>
@@ -195,6 +204,9 @@ export default function ShaderScenePage() {
           <Stage caption='scene="tide"'>
             <ShaderScene scene="tide" passes={SKY_PASSES} speed={1} />
           </Stage>
+          <Stage caption='scene="vice"'>
+            <ShaderScene scene="vice" passes={PIXEL_PASSES} speed={1} />
+          </Stage>
         </div>
       </section>
 
@@ -233,7 +245,7 @@ export default function ShaderScenePage() {
       <section className={styles.section}>
         <SectionTitle title="Light mode" />
         <p className={styles.demoText}>
-          Every scene but the ocean, the sky and the tide is a night scene: it adds
+          Every scene but the ocean, the sky, the tide and vice is a night scene: it adds
           light to a dark ground. On a light page each one works its light out
           against a dark ground of its own and lays it onto the page as a
           pale tint, so it reads as a soft dawn instead of a dark block.
@@ -241,7 +253,9 @@ export default function ShaderScenePage() {
           page, deep moonlit water on a dark one. So has the sky: a
           golden hour on a light page, the last of a sunset under a night sky on a
           dark one. And so has the tide: a periwinkle evening over pale water
-          on a light page, the last of the light on a dark one. Switch the theme to see
+          on a light page, the last of the light on a dark one. Vice paints its own
+          too: a pastel evening with plum palms on a light page, night with
+          stars on a dark one. Switch the theme to see
           the stages above change. The scene never sets{" "}
           <code>data-theme</code> itself, which would hide a preset&rsquo;s
           colours.

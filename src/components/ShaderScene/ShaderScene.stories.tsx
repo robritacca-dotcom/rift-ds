@@ -58,7 +58,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean', 'sky', 'galaxy', 'tide'] },
+    scene: { control: 'inline-radio', options: ['horizon', 'rift', 'glyphs', 'prism', 'meteors', 'waves', 'aurora', 'highway', 'ocean', 'sky', 'galaxy', 'tide', 'vice'] },
     speed: { control: { type: 'range', min: 0, max: 4, step: 0.05 } },
   },
   args: { scene: 'horizon' },
@@ -160,6 +160,14 @@ export const Tide: Story = {
   args: {
     scene: 'tide',
     passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { params: { amount: 0.1 } } },
+  },
+};
+
+/** Vice: a coastal city at night in pixel art, the sun just peeking over the water behind hazy towers, palms leaning in from both edges. */
+export const Vice: Story = {
+  args: {
+    scene: 'vice',
+    passes: { fadeTop: { on: false }, fadeBottom: { on: false }, grain: { on: false } },
   },
 };
 

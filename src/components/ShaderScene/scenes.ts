@@ -1996,4 +1996,404 @@ vec3 scene(vec2 uv, float t) {
 `,
 };
 
-export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky, galaxy, tide];
+/**
+ * Vice: a coastal city at night drawn as pixel art. The whole frame is
+ * laid on a grid of square blocks, each sampled at its middle, and every
+ * colour is stepped to a short palette, so edges land on the grid and
+ * gradients turn into flat bands; the sky's bands are dithered only along
+ * the seams between them, where pixel art puts it. The sun's crown just
+ * peeks over the water behind the towers, with a tight glow and a long flat
+ * streak; the sky holds its gold and pink low on the horizon and goes to
+ * night above, with single-block stars that twinkle and three decks of flat
+ * cloud. The skyline is smudges in the haze, three depths of towers barely
+ * darker than the sky, the nearest an ink silhouette with a few lights, over
+ * a bay that mirrors it all. Palms lean in from both edges, strong
+ * silhouettes that sway over scrub. It stays dark above the horizon so type
+ * laid over the sky reads. Like the tide it paints its own day, told from
+ * the page ground: on a light page a pastel evening with plum palms, on a
+ * dark one night with stars. It casts the ambient set as the tide does,
+ * except that its fire is the reddest tone rather than the warmest, so a
+ * theme with a coral or a pink paints a pink horizon: the coolest tone is
+ * the high sky, the reddest the fire, the warmest of the rest the sun, and
+ * a violet between the coolest and the reddest the towers and the palms.
+ */
+export const vice: Scene = {
+  id: "vice",
+  label: "Vice",
+  description: "A coastal city at night in pixel art: the sun just peeking over the water behind hazy towers, palms leaning in.",
+  /* Its blocks are hard edges, soft at 1x on a 2x screen. */
+  pixelRatio: 2,
+  /* The whole set: the scene casts it by temperature. */
+  colours: [
+    "--color-ambient-1",
+    "--color-ambient-2",
+    "--color-ambient-3",
+    "--color-ambient-4",
+    "--color-ambient-5",
+    "--color-ambient-6",
+  ],
+  params: [
+    { key: "horizon", label: "Horizon", min: 0.15, max: 0.95, step: 0.01, default: 0.34 },
+    { key: "sun", label: "Sun size", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "sunX", label: "Sun position", min: -1, max: 1, step: 0.01, default: 0.12 },
+    { key: "sunY", label: "Sun height", min: -0.15, max: 0.45, step: 0.01, default: -0.03 },
+    { key: "stripes", label: "Sun bands", min: 0, max: 1.5, step: 0.01, default: 0 },
+    { key: "city", label: "Skyline", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "lights", label: "Lights", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "palms", label: "Palms", min: 0, max: 1.5, step: 0.01, default: 1 },
+    { key: "sway", label: "Sway", min: 0, max: 3, step: 0.05, default: 1 },
+    { key: "clouds", label: "Clouds", min: 0, max: 1.5, step: 0.01, default: 1 },
+    { key: "haze", label: "Haze", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "flare", label: "Sun flare", min: 0, max: 2, step: 0.01, default: 0.35 },
+    { key: "bokeh", label: "Lens light", min: 0, max: 1.5, step: 0.01, default: 0 },
+    { key: "ripple", label: "Ripples", min: 0, max: 2, step: 0.01, default: 1 },
+    { key: "flat", label: "Sky bands", min: 0, max: 1, step: 0.01, default: 1 },
+    { key: "pixel", label: "Pixel size", min: 1, max: 12, step: 1, default: 4 },
+    { key: "colours", label: "Colour steps", min: 3, max: 32, step: 1, default: 14 },
+    { key: "drift", label: "Drift", min: 0, max: 3, step: 0.05, default: 1 },
+  ],
+  glsl: /* glsl */ `
+vec3 vBlue;
+vec3 vViolet;
+vec3 vPink;
+vec3 vCoral;
+vec3 vAmber;
+vec3 vGold;
+vec3 vPalm;
+float vDay;
+float vPx;
+float vAspect;
+float vSx;
+float vSy;
+float vR;
+float vW;
+float vBlk;
+ivec2 vCell;
+
+/* A 4 by 4 ordered dither, the threshold a block steps up at. */
+const int VICE_BAYER[16] = int[16](0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5);
+float viceBayer(ivec2 p) {
+  return (float(VICE_BAYER[(p.y & 3) * 4 + (p.x & 3)]) + 0.5) / 16.0;
+}
+
+float viceLum(vec3 c) {
+  return dot(c, vec3(0.2126, 0.7152, 0.0722));
+}
+
+/* A theme's ambient tone at full brightness, so it reads as a hue; a tone
+   with next to no hue keeps its own value. */
+vec3 viceHue(vec3 c) {
+  float hi = max(c.r, max(c.g, c.b));
+  float chroma = (hi - min(c.r, min(c.g, c.b))) / max(hi, 1e-3);
+  return mix(c, c / max(hi, 1e-3), smoothstep(0.04, 0.2, chroma));
+}
+
+/* A mix made by eye rather than by light. */
+vec3 viceMix(vec3 a, vec3 b, float k) {
+  return pow(mix(pow(max(a, 0.0), vec3(1.0 / 2.2)), pow(max(b, 0.0), vec3(1.0 / 2.2)), k), vec3(2.2));
+}
+
+/* A colour pushed further from its grey, for the saturated sky. */
+vec3 viceSat(vec3 c, float k) {
+  return max(mix(vec3(viceLum(c)), c, k), 0.0);
+}
+
+float viceDk(float night, float day) {
+  return mix(night, day, vDay);
+}
+
+/* Light laid on a base: added on a dark ground, mixed in by eye on a light one. */
+vec3 viceLay(vec3 base, vec3 c, float k) {
+  return mix(base + c * k, viceMix(base, c, clamp(k, 0.0, 1.0)), vDay);
+}
+
+/* The sky a height a above the horizon, in a few flat steps when the
+   sky bands are up: violet overhead, pink, then gold on the water. */
+vec3 viceSky(float x, float a) {
+  float climb = clamp(a / max(1.0 - u_horizon, 0.1), 0.0, 1.0);
+  float fb = climb * 11.0;
+  float seam = step(viceBayer(vCell), smoothstep(0.72, 1.0, fract(fb)));
+  climb = mix(climb, (floor(fb) + seam) / 11.0, u_flat);
+  vec3 low = viceLay(u_ground, viceSat(mix(vCoral, vAmber, 0.35), 1.3), viceDk(0.22, 0.62));
+  vec3 pink = viceLay(u_ground, viceSat(vPink, 1.2), viceDk(0.09, 0.5));
+  vec3 mid = viceLay(u_ground, vViolet, viceDk(0.03, 0.4));
+  vec3 top = viceLay(u_ground, mix(vViolet, vBlue, 0.6), viceDk(0.012, 0.3));
+  vec3 gold = viceLay(u_ground, viceSat(mix(vAmber, vGold, 0.5), 1.2), viceDk(0.4, 0.7));
+  vec3 col = mix(gold, low, smoothstep(0.0, 0.02, climb));
+  col = mix(col, pink, smoothstep(0.02, 0.08, climb));
+  col = mix(col, mid, smoothstep(0.07, 0.22, climb));
+  col = mix(col, top, smoothstep(0.22, 0.7, climb));
+  /* Stars, one block each, cool and warm, twinkling, at night only. */
+  float sr = rnd(vCell + ivec2(900, 900));
+  float star = step(0.995, sr) * smoothstep(0.3, 0.65, climb) * (1.0 - vDay)
+    * step(0.25, fract(vW * 0.15 + sr * 37.0));
+  col = mix(col, mix(vBlue, vGold, step(0.996, sr)) * 1.4 + 0.15, star);
+  float side = exp(-(x - vSx) * (x - vSx) / (0.35 * vAspect * vAspect));
+  col = viceLay(col, mix(vAmber, vGold, 0.3), exp(-a / 0.03) * side * 0.12 * u_haze);
+  col = viceLay(col, mix(vPink, vGold, 0.5), exp(-a / 0.09) * (0.4 + 0.6 * side) * 0.08 * u_haze);
+  return col;
+}
+
+/* One depth of towers along the horizon: how much of the pixel a tower
+   covers, and through win how lit a window under it is. */
+float viceTowers(float x, float up, float cw, float lo, float hi, int seed, out float win) {
+  win = 0.0;
+  float fx = x / cw + 500.0;
+  float cell = floor(fx);
+  float local = fract(fx);
+  ivec2 id = ivec2(int(cell), seed);
+  float r1 = rnd(id);
+  float r2 = rnd(id + ivec2(0, 17));
+  float r3 = rnd(id + ivec2(0, 41));
+  float wf = 0.55 + 0.45 * r2;
+  float off = (1.0 - wf) * r3;
+  float e = vPx / cw;
+  float inX = smoothstep(off - e, off + e, local) * smoothstep(off + wf + e, off + wf - e, local);
+  float centre = (u_sunX * 0.5 - 0.1) * vAspect;
+  float env = exp(-(x - centre) * (x - centre) / (0.18 * vAspect * vAspect + 0.05));
+  float h = mix(lo, hi, r1 * r1) * (0.3 + 0.7 * env) * u_city;
+  h *= r1 > 0.86 ? 1.45 : 1.0;
+  float cover = inX * smoothstep(h + vPx, h - vPx, up);
+  /* A mast on a few of the tall ones. */
+  float mast = step(0.6, r1) * step(0.55, r3);
+  float mx = abs(local - (off + wf * 0.5)) * cw;
+  cover = max(cover, mast * smoothstep(vPx * 1.2, vPx * 0.4, mx) * smoothstep(h * 1.28 + vPx, h * 1.28 - vPx, up));
+  /* Windows on a grid of their own, a few lit, slowly changing hands. */
+  vec2 g = vec2((local - off) * cw / (vBlk * 2.0), up / (vBlk * 3.0));
+  vec2 gc = floor(g);
+  vec2 gf = fract(g);
+  float pane = step(gf.x, 0.5) * step(gf.y, 0.34);
+  float flick = rnd(ivec2(gc) + ivec2(int(cell) * 31, seed * 7 + int(floor(vW * 0.05 + r2 * 9.0))));
+  win = cover * pane * step(0.68, flick) * step(0.02, up) * step(up, h - 0.01);
+  return cover;
+}
+
+/* Everything above the water at a height y: sky, sun, cloud, skyline. The
+   bay reads it again mirrored. */
+vec3 viceAbove(float x, float y) {
+  float up = y - u_horizon;
+  float a = max(up, 0.0);
+  vec3 col = viceSky(x, a);
+
+  /* The sun, low behind the towers, its foot cut by bands that widen and
+     slide slowly down. */
+  vec2 d = vec2(x - vSx, y - vSy);
+  float dd = length(d);
+  float g = clamp((y - (vSy - vR)) / max(2.0 * vR, 1e-3), 0.0, 1.0);
+  vec3 sunCol = mix(viceSat(mix(vGold, vAmber, 0.35), 1.3), mix(vGold, vec3(1.0, 0.95, 0.7), 0.4), smoothstep(0.3, 0.9, g));
+  float disc = smoothstep(vR + vPx, vR - vPx, dd);
+  float rel = (vSy - y) / max(vR, 1e-3);
+  float f = fract(rel * 3.5 + vW * 0.03);
+  float gap = clamp(rel + 0.35, 0.0, 1.35) * 0.4 * u_stripes;
+  float aa = vPx / max(vR, 1e-3) * 5.0;
+  disc *= mix(1.0, smoothstep(gap - aa, gap + aa, f), step(-0.35, rel) * step(0.001, u_stripes));
+  col = viceLay(col, mix(vPink, vGold, 0.45), exp(-max(dd - vR, 0.0) / 0.04) * 0.3 * u_haze * (1.0 - disc));
+  col = mix(col, sunCol, disc * step(0.0, up));
+
+  /* Three decks of flat cloud, far to near: the far deck low, pale and
+     hazed and lit hardest by the sun; the near deck high, darker and
+     larger, burning only along its underside. Each drifts at its own pace. */
+  float skyH = max(1.0 - u_horizon, 0.1);
+  float sunSide = exp(-(x - vSx) * (x - vSx) / (0.3 * vAspect * vAspect));
+  for (int i = 0; i < 3; i++) {
+    float fi = float(i);
+    float centre = 0.03 + (0.1 + 0.28 * fi) * skyH;
+    float spread = 0.035 + 0.03 * fi;
+    float lane = exp(-pow(a - centre, 2.0) / (2.0 * spread * spread)) * smoothstep(0.01, 0.05, a);
+    float sx = 1.8 - 0.45 * fi;
+    float sy = 6.0 - 1.5 * fi;
+    float n = fbm(vec2(x * sx - vW * (0.008 + 0.008 * fi) + fi * 7.3, y * sy + fi * 3.1));
+    float n2 = vnoise(vec2(x * sx * 4.0 - vW * 0.02, y * sy * 3.5 + fi * 11.0));
+    float body = n * 0.8 + n2 * 0.22;
+    float cloud = smoothstep(0.47 - 0.02 * fi, 0.53, body) * smoothstep(0.15, 0.45, lane) * u_clouds;
+    float underside = smoothstep(0.004, -0.02, n - fbm(vec2(x * sx - vW * (0.008 + 0.008 * fi) + fi * 7.3, (y - 0.012) * sy + fi * 3.1)));
+    float far_ = 2.0 - fi;
+    vec3 shade = viceLay(u_ground, mix(mix(vViolet, vBlue, 0.15 * fi), vPink, 0.12 * far_), viceDk(0.03 + 0.03 * far_, 0.32 + 0.06 * far_));
+    vec3 lit = viceLay(u_ground, mix(mix(vPink, vAmber, 0.45), vGold, sunSide * (0.5 - 0.15 * fi)), viceDk(0.22 - 0.06 * fi, 0.6) * exp(-a / 0.12));
+    vec3 cc = mix(shade, lit, underside * (0.6 + 0.4 * sunSide));
+    cc = mix(cc, viceSky(x, centre * 0.3), 0.2 * far_ / 2.0 * min(u_haze, 1.5));
+    col = mix(col, cc, min(1.0, cloud * (0.85 + 0.07 * fi)));
+  }
+
+  /* The flare: a wide bloom round the sun and a long flat streak through it. */
+  float bloom = exp(-dd * dd / (2.0 * 0.09 * 0.09));
+  float streakL = exp(-abs(y - vSy) / 0.005) * exp(-abs(x - vSx) / (0.7 * vAspect));
+  vec3 flareCol = mix(vGold, vec3(1.0, 0.95, 0.85), 0.35);
+  float sunMask = smoothstep(vR + vPx, vR - vPx, dd);
+  col = viceLay(col, flareCol, (bloom * 0.28 * (1.0 - sunMask) + streakL * 0.55) * u_flare * step(0.001, u_sun) * viceDk(1.0, 0.7));
+
+  /* The skyline as smudges in the haze: three depths of towers a little
+     darker than the sky behind them, the farthest nearly gone, the nearest
+     a dusty violet with a few lights, and a band of haze laid over all their
+     feet so they melt into the horizon. */
+  if (up > -0.002 && up < 0.4) {
+    float w0;
+    float w1;
+    float w2;
+    vec3 horizonSky = viceSky(x, 0.015);
+    vec3 dusk = viceLay(u_ground, viceSat(mix(vViolet, vPink, 0.3), 1.15), viceDk(0.12, 0.55));
+    float t0 = viceTowers(x + 0.017, up, 0.026, 0.02, 0.075, 5, w0);
+    float t1 = viceTowers(x + 0.009, up, 0.022, 0.012, 0.055, 3, w1);
+    float t2 = viceTowers(x, up, 0.03, 0.01, 0.042, 11, w2);
+    float haze = min(u_haze, 2.0);
+    col = mix(col, mix(col, dusk, 0.4) * 0.8, t0 * clamp(1.0 - 0.25 * haze, 0.3, 1.0));
+    col = mix(col, mix(col, dusk, 0.6) * 0.62, t1);
+    float shore = smoothstep(0.006 + 0.005 * fbm(vec2(x * 9.0, 1.0)) + vPx, 0.006 - vPx, up);
+    vec3 ink = mix(u_ground * 0.35 + viceSat(vViolet, 1.3) * 0.03, viceMix(u_ground, viceSat(vViolet, 1.2) * 0.3, 0.85), vDay);
+    col = mix(col, ink, max(t2, shore));
+    col = mix(col, mix(vGold, vec3(1.0), 0.3), (w1 * 0.4 + w2) * 0.35 * min(u_lights, 2.0) * step(0.93, rnd(vCell + ivec2(31, 7))) * viceDk(1.0, 0.4));
+    vec3 hazeCol = mix(horizonSky, dusk, 0.6) * 0.8;
+    col = mix(col, hazeCol, exp(-max(up, 0.0) / 0.012) * 0.4 * min(haze, 1.5));
+  }
+  return col;
+}
+
+/* A palm rooted at base, h tall, leaning by lean: how much of the pixel
+   its trunk, crown and fronds cover. */
+float vicePalm(vec2 p, vec2 base, float h, float lean, float seed) {
+  float sway = sin(vW * 0.5 + seed * 2.3) * 0.012 * u_sway * h;
+  float s = (p.y - base.y) / h;
+  float cx = base.x + lean * h * (s * s * 0.7 + s * 0.3) + sway * s * s;
+  float hw = h * mix(0.02, 0.011, clamp(s, 0.0, 1.0));
+  float cover = smoothstep(hw + vPx, hw - vPx, abs(p.x - cx)) * step(0.0, s) * step(s, 1.0);
+  vec2 top = vec2(base.x + lean * h + sway, base.y + h);
+  float L0 = h * 0.42;
+  if (length(p - top) > L0 * 1.25) return cover;
+  cover = max(cover, smoothstep(h * 0.026 + vPx, h * 0.026 - vPx, length(p - top + vec2(0.0, h * 0.02))));
+  for (int k = 0; k < 9; k++) {
+    float fk = float(k);
+    float rk = rnd(ivec2(int(seed * 13.0) + k, 5));
+    float ang = mix(0.1, 3.04, (fk + 0.5) / 9.0) + (rk - 0.5) * 0.3
+      + sin(vW * 0.8 + seed + fk * 1.7) * 0.05 * u_sway;
+    float L = L0 * (0.75 + 0.3 * rk);
+    float droop = 0.55 + 0.4 * rnd(ivec2(int(seed * 13.0) + k, 9));
+    vec2 dir = vec2(cos(ang), sin(ang));
+    vec2 prev = top;
+    float best = 1e9;
+    float bestS = 0.0;
+    for (int j = 1; j <= 7; j++) {
+      float sj = float(j) / 7.0;
+      vec2 q = top + L * dir * sj - vec2(0.0, droop * L * sj * sj);
+      vec2 pa = p - prev;
+      vec2 ba = q - prev;
+      float hseg = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+      float dist = length(pa - ba * hseg);
+      if (dist < best) {
+        best = dist;
+        bestS = (float(j - 1) + hseg) / 7.0;
+      }
+      prev = q;
+    }
+    /* A thin rib, and leaflets off it: slanted strokes towards the tip,
+       longest at the middle of the frond. */
+    float rib = L * 0.012 * (1.0 - 0.7 * bestS);
+    cover = max(cover, smoothstep(rib + vPx, rib - vPx, best));
+    float reach = L * 0.13 * smoothstep(0.02, 0.18, bestS) * (1.0 - 0.85 * bestS * bestS);
+    float sp = L * 0.05;
+    float u = fract((bestS * L - best * 0.9) / sp + seed * 0.37);
+    float leaf = smoothstep(0.3 + vPx / sp, 0.3 - vPx / sp, abs(u - 0.5));
+    cover = max(cover, leaf * smoothstep(reach + vPx, reach - vPx, best));
+  }
+  return cover;
+}
+
+vec3 scene(vec2 uv, float t) {
+  vAspect = u_size.x / u_size.y;
+  /* Pixel art: the whole frame drawn on a grid of blocks, each sampled
+     at its middle, so every edge lands on the grid. */
+  float blk = max(u_pixel, 1.0) * u_ratio;
+  vec2 pix = floor(uv * u_size / blk);
+  vCell = ivec2(pix);
+  uv = (pix + 0.5) * blk / u_size;
+  vBlk = blk / u_size.y;
+  float x = (uv.x - 0.5) * vAspect;
+  vPx = 0.2 * vBlk;
+  vW = t * u_drift;
+  vDay = smoothstep(0.1, 0.45, viceLum(u_ground));
+  /* Tones cast by temperature, as the tide casts them, except that the
+     fire is the reddest tone rather than the warmest, so a theme with a
+     coral or a pink paints a pink sky and a gold one keeps gold for the sun. */
+  vec3 tones[6];
+  int coolest = 0;
+  int warmest = 0;
+  for (int i = 0; i < 6; i++) {
+    tones[i] = viceHue(u_col[i]);
+    float heat = tones[i].r - tones[i].b;
+    if (heat < tones[coolest].r - tones[coolest].b) coolest = i;
+    if (tones[i].r - tones[i].g > tones[warmest].r - tones[warmest].g) warmest = i;
+  }
+  int second = warmest == 0 ? 1 : 0;
+  for (int i = 0; i < 6; i++) {
+    if (i != warmest && tones[i].r - tones[i].b > tones[second].r - tones[second].b) second = i;
+  }
+  vBlue = tones[coolest];
+  vCoral = tones[warmest];
+  vAmber = mix(tones[second], vCoral, 0.25);
+  vGold = mix(vAmber, vec3(1.0, 0.9, 0.6), 0.4);
+  vViolet = viceSat(viceMix(vBlue, vCoral, 0.5), 1.5);
+  vPink = viceSat(viceMix(vCoral, vViolet, 0.4), 1.6);
+  vPalm = mix(u_ground * 0.2 + viceSat(vViolet, 1.3) * 0.018, viceMix(u_ground, viceSat(vViolet, 1.3) * 0.18, 0.94), vDay);
+  vSx = u_sunX * 0.5 * vAspect;
+  vSy = u_horizon + u_sunY;
+  vR = 0.14 * u_sun;
+
+  float up = uv.y - u_horizon;
+  vec3 col;
+  if (up >= 0.0) {
+    col = viceAbove(x, uv.y);
+  } else {
+    /* The bay: the world above mirrored and broken into streaks that
+       close up towards the horizon, the sun a broken column in it. */
+    float d = -up;
+    float depth = 0.3 / (d + 0.03);
+    float ripple = fbm(vec2(x * depth * 0.1 + vW * 0.01, depth * 2.2 - vW * 0.1));
+    float fine = vnoise(vec2(x * depth * 0.45 - vW * 0.03, depth * 7.0 + vW * 0.25));
+    float ry = u_horizon + d + (ripple - 0.5) * 0.03 * d * u_ripple;
+    vec3 refl = viceAbove(x + (fine - 0.5) * 0.012 * u_ripple, ry);
+    vec3 deep = mix(u_ground * 0.8 + vViolet * 0.02, viceMix(u_ground, vViolet * 0.4, 0.6), vDay);
+    float streak = smoothstep(0.3, 0.75, fbm(vec2(x * 1.2 + vW * 0.01, depth * 6.0)));
+    float mirror = exp(-d / 0.28) * mix(1.0, 0.35 + 0.65 * streak, min(1.0, u_ripple));
+    col = mix(deep, refl * viceDk(0.4, 0.92), clamp(mirror, 0.0, 1.0));
+    float column = exp(-(x - vSx) * (x - vSx) / (vR * vR * 0.6 + 1e-4)) * step(0.001, u_sun);
+    float glint = step(0.62, fine) * column * exp(-d / 0.4) * step(vSy - vR, u_horizon + 0.02);
+    col = viceLay(col, mix(vGold, vec3(1.0), 0.3), glint * viceDk(0.9, 0.6));
+    col = mix(col, viceLay(col, mix(vPink, vec3(1.0), 0.4), 0.8), smoothstep(vPx * 1.5, 0.0, d) * 0.6);
+    col = viceLay(col, mix(vPink, vGold, 0.5), exp(-d / 0.02) * 0.12 * u_haze);
+  }
+
+  /* Lens light: a few soft discs near the sun, drifting slowly. */
+  for (int i = 0; i < 5; i++) {
+    float fi = float(i);
+    float along = 0.25 + 0.35 * fi + 0.1 * rnd(ivec2(i, 71));
+    vec2 c = vec2(vSx, vSy) + (vec2(0.0, 0.5) - vec2(vSx, vSy)) * along
+      + vec2(sin(vW * 0.05 + fi) * 0.02, (rnd(ivec2(i, 73)) - 0.5) * 0.06);
+    float r = 0.025 + 0.035 * rnd(ivec2(i, 79));
+    float l = length(vec2(x, uv.y) - c);
+    float b = smoothstep(r, r * 0.8, l) * (0.55 + 0.45 * smoothstep(r * 0.6, r, l));
+    col = viceLay(col, mix(vGold, vPink, rnd(ivec2(i, 83))), b * 0.22 * u_bokeh * viceDk(1.0, 0.7));
+  }
+
+  /* Palms leaning in from both edges, with scrub at their feet. */
+  if (u_palms > 0.0) {
+    vec2 p = vec2(x, uv.y);
+    float half_ = 0.5 * vAspect;
+    float ph = u_palms;
+    float palm = vicePalm(p, vec2(-half_ + 0.05, -0.03), 0.95 * ph, 0.2, 1.0);
+    palm = max(palm, vicePalm(p, vec2(-half_ + 0.17, -0.03), 0.68 * ph, 0.12, 2.0));
+    palm = max(palm, vicePalm(p, vec2(half_ - 0.04, -0.03), 0.9 * ph, -0.22, 3.0));
+    palm = max(palm, vicePalm(p, vec2(half_ - 0.26, -0.03), 0.42 * ph, -0.06, 4.0));
+    float edge = max(smoothstep(-half_ + 0.45, -half_, x), smoothstep(half_ - 0.45, half_, x));
+    float scrub = (0.035 + 0.06 * fbm(vec2(x * 7.0, 3.0)) + 0.03 * vnoise(vec2(x * 40.0, 1.0))) * edge * ph;
+    palm = max(palm, smoothstep(scrub + vPx, scrub - vPx, uv.y));
+    col = mix(col, vPalm, palm);
+  }
+  /* A short palette: each channel stepped to flat colour; the dither is
+     kept for the sky's band edges, where pixel art puts it. */
+  vec3 g = pow(max(col, 0.0), vec3(1.0 / 2.2));
+  g = floor(g * u_colours + 0.5) / u_colours;
+  return pow(clamp(g, 0.0, 1.0), vec3(2.2));
+}
+`,
+};
+
+export const SCENES = [horizon, rift, glyphs, prism, meteors, waves, aurora, highway, ocean, sky, galaxy, tide, vice];

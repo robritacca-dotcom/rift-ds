@@ -32,7 +32,7 @@ const FRAME_MS = 1000 / 30;
 const COLOUR_CHECK_MS = MOTION_SHADER_COLOR_CHECK_MS;
 
 /** The scenes the library ships, picked by id. */
-export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy' | 'tide';
+export type ShaderSceneId = 'horizon' | 'rift' | 'glyphs' | 'prism' | 'meteors' | 'waves' | 'aurora' | 'highway' | 'ocean' | 'sky' | 'galaxy' | 'tide' | 'vice';
 
 /**
  * How the scene resolved, the same three states ShaderField reports.
@@ -57,7 +57,7 @@ type ShaderSceneOwnProps = {
   /**
    * The scene to paint: one of the library's by id, or a scene of your own as
    * a `ShaderSceneSource` (its colour roles, its settings and the GLSL that
-   * paints it). The library's are `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars, and `tide`, dusk over still water smeared like a long exposure, a periwinkle evening on a light page and the last of the light on a dark one. A scene of your own is compared by content, so
+   * paints it). The library's are `horizon`, a planet's limb at night, `rift`, a glowing tear, `glyphs`, soft light printed in type, `prism`, beams of light split into a spectrum, `meteors`, a shower over a planet's edge, `waves`, a rolling sea of points, `highway`, a straight highway at night drawn in light trails, `aurora`, ribbons of colour round a void, `ocean`, open water from above with sea life drawn in type, turquoise on a light page and moonlit on a dark one, `sky`, cloud massed overhead and burning with a low sun, a golden hour on a light page and the last of a sunset under a night sky on a dark one, `galaxy`, a spiral galaxy seen at a slant, deep in a field of stars, `tide`, dusk over still water smeared like a long exposure, a periwinkle evening on a light page and the last of the light on a dark one, and `vice`, a coastal city at night in pixel art, the sun just peeking over the water behind hazy towers and palms leaning in, a pastel evening on a light page and night with stars on a dark one. A scene of your own is compared by content, so
    * an object written inline rebuilds nothing until what it says changes.
    */
   scene?: ShaderSceneId | ShaderSceneSource;

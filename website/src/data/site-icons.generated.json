@@ -1,7 +1,7 @@
 {
   "$comment": "The icons in the website's cut of the icon font, and the fingerprints of what it was cut from. Written by scripts/generate-site-icons.mjs; never edited by hand.",
-  "from": "fa9f6d9982f9313be4d40101678f417d8273d7766e0823ce310851e8ca82a7d8",
-  "font": "1ea1845c02914ff27fd7af744e6998f2c9062970cad457f8ae254e8e0386ccb1",
+  "from": "36fd819b78bcca59c2d336be4bfa63f1b03f53da69333a5611b27ecb2ddc2bf1",
+  "font": "b86c90c8e15f2c3c33109b667269eeebd9594a733368a8229e3ce700caabc552",
   "icons": [
     "ac_unit",
     "access_time",
@@ -233,6 +233,7 @@
     "drag_handle",
     "drag_indicator",
     "draw",
+    "drive_file_rename_outline",
     "dropdown",
     "east",
     "eco",

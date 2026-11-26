@@ -2,7 +2,7 @@
 
 A button that puts a value on the clipboard and confirms it, with text or as an icon alone.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: actions
 - Import: `import { CopyButton } from 'rift-ds';`

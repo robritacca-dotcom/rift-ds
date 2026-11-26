@@ -2,7 +2,7 @@
 
 A drill-in menu for a phone: one level at a time, thumb-tall rows with a second line, a current value or a chosen mark, and a back row naming its way out.
 
-Generated from the rift-ds registry and prop JSDoc, version 1.37.1. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
+Generated from the rift-ds registry and prop JSDoc, version 1.38.0. The same data ships in the package's .d.ts and is served by the MCP endpoint at https://rift-ds.com/api/mcp.
 
 - Category: navigation
 - Import: `import { DrillMenu } from 'rift-ds';`

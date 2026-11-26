@@ -405,6 +405,10 @@ export const QUALITY_GATE: QualityGateGroup[] = [
         "text": "Every repo path, npm script and API symbol a doc or skill names exists."
       },
       {
+        "name": "validate-storybook-paths",
+        "text": "Every Storybook link a docs page writes lands on a story that exists."
+      },
+      {
         "name": "validate-chat-coverage",
         "text": "Every golden-set fact is in the corpus, and every route is covered or excluded with a reason."
       },

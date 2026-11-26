@@ -141,6 +141,7 @@
     "validate-page-prose-width": { "group": "site", "text": "No width cap on a component page's prose." },
     "validate-demo-images": { "group": "site", "text": "Every demo picture comes from the sample set, never a drawn or remote stand-in." },
     "validate-doc-refs": { "group": "site", "text": "Every repo path, npm script and API symbol a doc or skill names exists." },
+    "validate-storybook-paths": { "group": "site", "text": "Every Storybook link a docs page writes lands on a story that exists." },
 
     "npm run lint": { "group": "verify", "text": "ESLint over the library." },
     "npm run build": { "group": "verify", "text": "Runs the whole chain above, then type-checks the library." },

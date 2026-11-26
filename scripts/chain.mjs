@@ -69,6 +69,7 @@ export const CHAIN = [
   ['validate-prop-vocabulary', 'build'],
   ['validate-skills-registry', 'build'],
   ['validate-doc-refs', 'build'],
+  ['validate-storybook-paths', 'build'],
   ['validate-release-log', 'build'],
   ['validate-template-thumbnails', 'build'],
   ['validate-nav-panels', 'build'],

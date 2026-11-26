@@ -137,6 +137,23 @@ function ladder() {
  */
 const ACCEPTED = [
   {
+    kind: 'clipped',
+    selector: 'div.map > div.ds-world-map',
+    routes: ['/templates/analytics'],
+    reason: 'The map fades out at its foot by design; a label that sits in the fade at the widest widths stays readable.',
+  },
+  {
+    kind: 'truncated',
+    selector: 'span.ds-thread-history__title',
+    reason: 'A thread title ends in an ellipsis in a rail of fixed width; the full title is the row\'s accessible name.',
+  },
+  {
+    kind: 'truncated',
+    selector: 'span.ds-app-sidebar__btn-caption',
+    routes: ['/components/ai-chat'],
+    reason: 'The collapsed rail\'s caption under each icon is cut by the rail\'s width by design; the full label is the row\'s name.',
+  },
+  {
     kind: 'truncated',
     selector: 'h3.ds-heading.ds-heading--title-body',
     routes: ['/components/heading'],
